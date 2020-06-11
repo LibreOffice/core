@@ -1356,7 +1356,8 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                     removeGrabLevel();
                     grabPointer(false, true, false);
                     m_pParent->removeGrabLevel();
-                    m_pParent->grabPointer(false, true, false);
+                    bool bParentIsFloatGrabWindow = m_pParent->isFloatGrabWindow();
+                    m_pParent->grabPointer(bParentIsFloatGrabWindow, true, bParentIsFloatGrabWindow);
                 }
             }
             gtk_widget_hide( m_pWindow );
