@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "86b80e62_047ea7c3",
+        "filename": "slideshow/source/inc/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-06-11T17:14:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8f26a02_93d9af6b",
+      "revId": "d7d5837a9d6691118bcb77b9565a65c2f90e7a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f666e307_97b96f46",
         "filename": "slideshow/source/inc/shape.hxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "d7d5837a9d6691118bcb77b9565a65c2f90e7a28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0367e7c8_43d39185",
+        "filename": "slideshow/source/inc/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-06-11T17:14:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f666e307_97b96f46",
+      "revId": "d7d5837a9d6691118bcb77b9565a65c2f90e7a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
