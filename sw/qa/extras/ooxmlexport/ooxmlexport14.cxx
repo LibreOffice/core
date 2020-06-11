@@ -42,6 +42,21 @@ protected:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
+{
+    load(mpTestDocumentPath, "128197_compat14.docx");
+    xmlDocPtr pLayout14 = parseLayoutDump();
+    sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    load(mpTestDocumentPath, "128197_compat15.docx");
+    xmlDocPtr pLayout15 = parseLayoutDump();
+    sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    // In compat mode=14 second line has size of the shape thus entire paragraph height is smaller
+    // So nHeight14 < nHeight15
+    CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
