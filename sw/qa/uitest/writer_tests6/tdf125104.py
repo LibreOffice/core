@@ -36,14 +36,14 @@ class tdf125104(UITestCase):
         self.assertEqual(document.Text.String[0:1], "1")
         self.assertEqual(document.Text.String[2:3], "2")
 
-        ## Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
-        #self.set_combo_layout_format(self.open_page_style_dialog(), "1st, 2nd, 3rd, ...")
-        #self.assertEqual(document.Text.String[0:3], "1st")
-        #self.assertEqual(document.Text.String[4:7], "2nd")
+        # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
+        self.set_combo_layout_format(self.open_page_style_dialog(), "1st, 2nd, 3rd, ...")
+        self.assertEqual(document.Text.String[0:3], "1st")
+        self.assertEqual(document.Text.String[4:7], "2nd")
 
         xDialog = self.open_page_style_dialog()
-        #comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
-        #self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
+        comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
+        self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
         cancelBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(cancelBtn)
 
