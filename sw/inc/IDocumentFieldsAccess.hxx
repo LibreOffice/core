@@ -122,7 +122,7 @@ namespace com::sun::star::uno { class Any; }
     // (Node [ + css::ucb::Content]).
     // A generated list of all fields may be passed along too
     // (if the address != 0 and the pointer == 0 a new list will be returned).
-    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_Int32 nLastCnt) = 0;
 
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) = 0;
 
