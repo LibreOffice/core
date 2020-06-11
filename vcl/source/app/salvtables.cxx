@@ -4805,7 +4805,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
 {
     if (notify_events_disabled())
         return;
-    if (m_xTreeView->GetSelectionMode() == SelectionMode::Single)
+    if (m_xTreeView->GetSelectionMode() == SelectionMode::Single && !m_xTreeView->GetHoverSelection())
         return;
     signal_changed();
 }
