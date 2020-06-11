@@ -126,6 +126,13 @@ namespace slideshow
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags);
+
+            NumberAnimationSharedPtr createSimulatedAnimation( const double                      fDuration,
+                                                               sal_Int16                         nAdditive,
+                                                               const AnimatableShapeSharedPtr&   /*rShape*/,
+                                                               const ShapeManagerSharedPtr&      rShapeManager,
+                                                               const ::basegfx::B2DVector&       rSlideSize,
+                                                               int                               nFlags );
         }
     }
 }
