@@ -368,6 +368,7 @@ public:
     void testTdf59666();
     void testTdf133524();
     void testInconsistentBookmark();
+    void testInsertLongDateFormat();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -577,6 +578,7 @@ public:
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
+    CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7142,6 +7144,18 @@ void SwUiWriterTest::testTdf133524()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u".”";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testInsertLongDateFormat()
+{
+    // only for Hungarian, yet
+    createDoc("tdf133524.fodt");
+    lcl_dispatchCommand(mxComponent, ".uno:InsertDateField", {});
+    // Make sure that the document starts with a field now, and its expanded string value contains space
+    const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
+    // the date format was "YYYY-MM-DD", but now "YYYY. MMM DD."
+    CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
