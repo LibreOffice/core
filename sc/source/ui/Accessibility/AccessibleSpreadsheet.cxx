@@ -1652,12 +1652,4 @@ bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
     return false;
 }
 
-uno::Reference < XAccessible > ScAccessibleSpreadsheet::GetActiveCell()
-{
-    if( m_mapSelectionSend.find( maActiveCell ) != m_mapSelectionSend.end() )
-        return m_mapSelectionSend[maActiveCell];
-    else
-        return getAccessibleCellAt(maActiveCell.Row(), maActiveCell .Col());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

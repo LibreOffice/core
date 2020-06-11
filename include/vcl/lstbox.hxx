@@ -225,8 +225,6 @@ public:
 
     sal_uInt16          GetDisplayLineCount() const;
 
-    void                EnableMirroring();
-
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position
         the point is at.

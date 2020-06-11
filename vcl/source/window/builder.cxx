@@ -628,24 +628,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
-    for (auto const& elem : m_pParserState->m_aTimeFormatterAdjustmentMaps)
-    {
-        TimeField *pTarget = dynamic_cast<TimeField*>(get(elem.m_sID));
-        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
-        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
-        if (pTarget && pAdjustment)
-            mungeAdjustment(*pTarget, *pAdjustment);
-    }
-
-    for (auto const& elem : m_pParserState->m_aDateFormatterAdjustmentMaps)
-    {
-        DateField *pTarget = dynamic_cast<DateField*>(get(elem.m_sID));
-        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
-        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
-        if (pTarget && pAdjustment)
-            mungeAdjustment(*pTarget, *pAdjustment);
-    }
-
     //Set ScrollBar adjustments when everything has been imported
     for (auto const& elem : m_pParserState->m_aScrollAdjustmentMaps)
     {
@@ -1422,18 +1404,6 @@ void VclBuilder::connectFormattedFormatterAdjustment(const OString &id, const OU
 {
     if (!rAdjustment.isEmpty())
         m_pParserState->m_aFormattedFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
-}
-
-void VclBuilder::connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment)
-{
-    if (!rAdjustment.isEmpty())
-        m_pParserState->m_aTimeFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
-}
-
-void VclBuilder::connectDateFormatterAdjustment(const OString &id, const OUString &rAdjustment)
-{
-    if (!rAdjustment.isEmpty())
-        m_pParserState->m_aDateFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
 }
 
 bool VclBuilder::extractAdjustmentToMap(const OString& id, VclBuilder::stringmap& rMap, std::vector<WidgetAdjustmentMap>& rAdjustmentMap)

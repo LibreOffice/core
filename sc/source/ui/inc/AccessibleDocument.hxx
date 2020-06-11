@@ -252,7 +252,6 @@ private:
     static OUString GetCurrentCellDescription();
 
     tools::Rectangle GetVisibleArea_Impl() const;
-    css::uno::Sequence< css::uno::Any > GetScAccFlowToSequence();
 public:
     ScDocument *GetDocument() const ;
     ScAddress   GetCurCellAddress() const;
