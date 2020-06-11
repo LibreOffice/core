@@ -60,6 +60,7 @@
 #include <svl/zformat.hxx>
 #include <IMark.hxx>
 #include <officecfg/Office/Compatibility.hxx>
+#include <ndtxt.hxx>
 
 
 using namespace nsSwDocInfoSubType;
@@ -605,9 +606,19 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
 
             case FN_INSERT_FLD_DATE    :
+            {
                 nInsertType = SwFieldTypesEnum::Date;
                 bIsText = false;
+                // use long date format for Hungarian
+                SwPaM* pCursorPos = rSh.GetCursor();
+                if( pCursorPos )
+                {
+                    LanguageType nLang = pCursorPos->GetPoint()->nNode.GetNode().GetTextNode()->GetLang(pCursorPos->GetPoint()->nContent.GetIndex());
+                    if (nLang == LANGUAGE_HUNGARIAN)
+                        nInsertFormat = rSh.GetNumberFormatter()->GetFormatIndex(NF_DATE_SYSTEM_LONG, nLang);
+                }
                 goto FIELD_INSERT;
+            }
             case FN_INSERT_FLD_TIME    :
                 nInsertType = SwFieldTypesEnum::Time;
                 bIsText = false;

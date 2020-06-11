@@ -375,6 +375,7 @@ public:
     void testTdf133589();
 #endif
     void testInconsistentBookmark();
+    void testInsertLongDateFormat();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -592,7 +593,11 @@ public:
     CPPUNIT_TEST(testTdf128860);
 #if ENABLE_LIBNUMBERTEXT
     CPPUNIT_TEST(testTdf133589);
+<<<<<<< HEAD   (ea2cc6 connectivity: fix mysql test)
 #endif
+=======
+    CPPUNIT_TEST(testInsertLongDateFormat);
+>>>>>>> CHANGE (978353 tdf#134035 sw: insert long date format for Hungarian)
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7318,6 +7323,18 @@ void SwUiWriterTest::testTdf133589()
 #endif
 }
 #endif
+
+void SwUiWriterTest::testInsertLongDateFormat()
+{
+    // only for Hungarian, yet
+    createDoc("tdf133524.fodt");
+    dispatchCommand(mxComponent, ".uno:InsertDateField", {});
+    // Make sure that the document starts with a field now, and its expanded string value contains space
+    const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
+    // the date format was "YYYY-MM-DD", but now "YYYY. MMM DD."
+    CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
+}
 
 #if HAVE_FEATURE_PDFIUM
 void SwUiWriterTest::testInsertPdf()
