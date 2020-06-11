@@ -21,7 +21,7 @@ where
     Class - is the name in the "class Class" declaration
 
 Or to do interactive debugging, run two shells with:
-    SAL_USE_VCLPLUGIN=gen make debugrun
+    LANG=C SAL_USE_VCLPLUGIN=gen make debugrun
     make gb_UITest_DEBUGRUN=T UITest_$2
 
 The SAL_USE_VCLPLUGIN part is unnecessary if you are running on a kde desktop.
