@@ -404,7 +404,10 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
                     auto nNumCols = pConnCell->GetNumcols();
                     if (!nNumCols)
                         throw std::runtime_error("loop in conversion");
-                    nCellEndCol = i + nNumCols - 1;
+                    auto nNewEndCol = i + nNumCols - 1;
+                    if (nNewEndCol > std::numeric_limits<sal_uInt8>::max())
+                        throw std::range_error("column index too large");
+                    nCellEndCol = nNewEndCol;
                     i = nCellEndCol;
                 }
                 xCell = pCellLayout->DoConvertCell(pTable->GetObjectID(),crowid,i);
