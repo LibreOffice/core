@@ -1631,14 +1631,14 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtStartOfSection(rStart))))
+                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection2(rEnd)))))
         && ((rAnchorPos.nNode < rEnd.nNode)
             || (rAnchorPos.nNode == rEnd.nNode
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtEndOfSection(rEnd))));
+                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection2(rStart)))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
