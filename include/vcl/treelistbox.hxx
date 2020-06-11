@@ -726,6 +726,7 @@ public:
 
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
+    bool            GetHoverSelection() const { return mbHoverSelection; }
 
     void            SetForceMakeVisible(bool bEnable);
 
