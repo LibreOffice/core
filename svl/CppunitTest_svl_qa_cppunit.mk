@@ -52,10 +52,8 @@ $(eval $(call gb_CppunitTest_set_include,svl_qa_cppunit,\
 $(eval $(call gb_CppunitTest_use_components,svl_qa_cppunit,\
 	i18npool/util/i18npool \
 	configmgr/source/configmgr \
-	$(if $(filter TRUE,$(ENABLE_LIBNUMBERTEXT)), \
-	    framework/util/fwk \
-	    lingucomponent/source/numbertext/numbertext \
-	) \
+	framework/util/fwk \
+	lingucomponent/source/numbertext/numbertext \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,svl_qa_cppunit))

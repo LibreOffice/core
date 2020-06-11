@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_libnumbertext.h>
 #include <iostream>
 
 #include <osl/file.hxx>
@@ -38,9 +37,7 @@
 
 #include <sal/macros.h>
 
-#if ENABLE_LIBNUMBERTEXT
 #include <Numbertext.hxx>
-#endif
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -70,9 +67,7 @@ namespace
 {
 class NumberText_Impl : public ::cppu::WeakImplHelper<XNumberText, XServiceInfo>
 {
-#if ENABLE_LIBNUMBERTEXT
     Numbertext m_aNumberText;
-#endif
     bool m_bInitialized;
 
     virtual ~NumberText_Impl() override {}
@@ -118,22 +113,14 @@ void NumberText_Impl::EnsureInitialized()
 #else
     aPhysPath += "/";
 #endif
-#if ENABLE_LIBNUMBERTEXT
     OString path = OUStringToOString(aPhysPath, osl_getThreadTextEncoding());
     m_aNumberText.set_prefix(path.getStr());
-#endif
 }
 
-OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale&
-#if ENABLE_LIBNUMBERTEXT
-                                                                            rLocale)
-#else
-)
-#endif
+OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale& rLocale)
 {
     osl::MutexGuard aGuard(GetNumberTextMutex());
     EnsureInitialized();
-#if ENABLE_LIBNUMBERTEXT
     // libnumbertext supports Language + Country tags (separated by "_" or "-")
     LanguageTag aLanguageTag(rLocale);
     OUString aCode(aLanguageTag.getLanguage());
@@ -150,9 +137,6 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     DBG_ASSERT(result, "numbertext: false");
     OString aResult2(Numbertext::wstring2string(aResult).c_str());
     return OUString::fromUtf8(aResult2);
-#else
-    return rText;
-#endif
 }
 
 uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
