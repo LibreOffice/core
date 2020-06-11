@@ -91,7 +91,8 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
                 mxColorNode->getAttributeName(),
                 getShape(),
                 getContext().mpSubsettableShapeManager,
-                getSlideSize() ),
+                getSlideSize(),
+                getContext().mpBox2DWorld ),
             getXAnimateNode() );
 
     case animations::AnimationColorSpace::HSL:
@@ -105,7 +106,8 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
                         mxColorNode->getAttributeName(),
                         getShape(),
                         getContext().mpSubsettableShapeManager,
-                        getSlideSize() )),
+                        getSlideSize(),
+                        getContext().mpBox2DWorld )),
             mxColorNode );
 
     default:

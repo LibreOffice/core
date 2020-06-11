@@ -33,6 +33,7 @@
 #include "propertyanimationnode.hxx"
 #include "animationsetnode.hxx"
 #include "animationpathmotionnode.hxx"
+#include "animationphysicsnode.hxx"
 #include "animationcolornode.hxx"
 #include "animationtransformnode.hxx"
 #include "animationtransitionfilternode.hxx"
@@ -490,6 +491,11 @@ BaseNodeSharedPtr implCreateAnimationNode(
 
     case animations::AnimationNodeType::ANIMATETRANSFORM:
         pCreatedNode = std::make_shared<AnimationTransformNode>(
+                                xNode, rParent, rContext );
+        break;
+
+    case animations::AnimationNodeType::ANIMATEPHYSICS:
+        pCreatedNode = std::make_shared<AnimationPhysicsNode>(
                                 xNode, rParent, rContext );
         break;
 
