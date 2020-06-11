@@ -74,6 +74,21 @@ DECLARE_OOXMLIMPORT_TEST(Tdf130907, "tdf130907.docx")
         sal_Int16(style::ParagraphAdjust::ParagraphAdjust_RIGHT), nHOri3);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
+{
+    load(mpTestDocumentPath, "128197_compat14.docx");
+    xmlDocUniquePtr pLayout14 = parseLayoutDump();
+    sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    load(mpTestDocumentPath, "128197_compat15.docx");
+    xmlDocUniquePtr pLayout15 = parseLayoutDump();
+    sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    // In compat mode=14 second line has size of the shape thus entire paragraph height is smaller
+    // So nHeight14 < nHeight15
+    CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
