@@ -4782,7 +4782,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
     // additionally set the cursor into the row the toggled element is in
     m_xTreeView->pImpl->m_pCursor = pEntry;
 
-    for (int i = 1, nCount = pEntry->ItemCount(); i < nCount; ++i)
+    for (int i = 0, nCount = pEntry->ItemCount(); i < nCount; ++i)
     {
         SvLBoxItem& rItem = pEntry->GetItem(i);
         if (&rItem == pBox)
