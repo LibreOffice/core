@@ -31,8 +31,8 @@ private:
 public:
     SvxNewTableDialog(weld::Window* pParent);
 
-    virtual sal_Int32 getRows() const;
-    virtual sal_Int32 getColumns() const;
+    sal_Int32 getRows() const;
+    sal_Int32 getColumns() const;
 };
 
 class SvxNewTableDialogWrapper : public SvxAbstractNewTableDialog
