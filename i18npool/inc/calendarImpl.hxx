@@ -40,7 +40,7 @@ class CalendarImpl : public cppu::WeakImplHelper
 public:
 
     // Constructors
-    CalendarImpl() {};
+    CalendarImpl();
     CalendarImpl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
 
     /**
