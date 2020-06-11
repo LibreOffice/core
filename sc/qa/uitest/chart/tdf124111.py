@@ -73,7 +73,7 @@ class tdf124111(UITestCase):
     placeMarks = xDialog.getChild("LB_PLACE_TICKS")
 
     self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
-    self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-1")
+    self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "-5")
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
