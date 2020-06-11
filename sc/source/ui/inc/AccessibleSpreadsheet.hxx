@@ -77,7 +77,6 @@ public:
     void VisAreaChanged();
     void FireFirstCellFocus();
 
-    css::uno::Reference < css::accessibility::XAccessible > GetActiveCell();
     bool IsScAddrFormulaSel (const ScAddress &addr) const;
     bool IsFormulaMode();
     ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);

@@ -470,9 +470,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mbIsDropdown        = ( nWinStyle & WB_DROPDOWN );
     mbEdgeBlending      = false;
 
-    // pb: #106948# explicit mirroring for calc
-    mbMirroring         = false;
-
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
@@ -1769,11 +1766,6 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             aImgSz = aImage.GetSizePixel();
             Point aPtImg(gnBorder - mnLeft, nY + ((nEntryHeight - aImgSz.Height()) / 2));
 
-            // pb: #106948# explicit mirroring for calc
-            if (mbMirroring)
-                // right aligned
-                aPtImg.setX( mnMaxWidth + gnBorder - aImgSz.Width() - mnLeft );
-
             if (!IsZoom())
             {
                 rRenderContext.DrawImage(aPtImg, aImage);
@@ -1820,15 +1812,6 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             {
                 long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
                 aTextRect.AdjustLeft(nImageWidth + IMG_TXT_DISTANCE );
-            }
-
-            // pb: #106948# explicit mirroring for calc
-            if (mbMirroring)
-            {
-                // right aligned
-                aTextRect.SetLeft( nMaxWidth + gnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft );
-                if (aImgSz.Width() > 0)
-                    aTextRect.AdjustLeft( -(aImgSz.Width() + IMG_TXT_DISTANCE) );
             }
 
             DrawTextFlags nDrawStyle = ImplGetTextStyle();
@@ -2391,16 +2374,13 @@ void ImplListBox::ImplResizeControls()
     if ( mbHScroll )
         aInnerSz.AdjustHeight( -nSBWidth );
 
-    // pb: #106948# explicit mirroring for calc
-    // Scrollbar on left or right side?
-    bool bMirroring = maLBWindow->IsMirroring();
-    Point aWinPos( bMirroring && mbVScroll ? nSBWidth : 0, 0 );
+    Point aWinPos( 0, 0 );
     maLBWindow->SetPosSizePixel( aWinPos, aInnerSz );
 
     // ScrollBarBox
     if( mbVScroll && mbHScroll )
     {
-        Point aBoxPos( bMirroring ? 0 : aInnerSz.Width(), aInnerSz.Height() );
+        Point aBoxPos( aInnerSz.Width(), aInnerSz.Height() );
         mpScrollBarBox->SetPosSizePixel( aBoxPos, Size( nSBWidth, nSBWidth ) );
         mpScrollBarBox->Show();
     }
@@ -2413,7 +2393,7 @@ void ImplListBox::ImplResizeControls()
     if( mbVScroll )
     {
         // Scrollbar on left or right side?
-        Point aVPos( bMirroring ? 0 : aOutSz.Width() - nSBWidth, 0 );
+        Point aVPos( aOutSz.Width() - nSBWidth, 0 );
         mpVScrollBar->SetPosSizePixel( aVPos, Size( nSBWidth, aInnerSz.Height() ) );
         mpVScrollBar->Show();
     }
@@ -2427,7 +2407,7 @@ void ImplListBox::ImplResizeControls()
     // horizontal ScrollBar
     if( mbHScroll )
     {
-        Point aHPos( ( bMirroring && mbVScroll ) ? nSBWidth : 0, aOutSz.Height() - nSBWidth );
+        Point aHPos( 0, aOutSz.Height() - nSBWidth );
         mpHScrollBar->SetPosSizePixel( aHPos, Size( aInnerSz.Width(), nSBWidth ) );
         mpHScrollBar->Show();
     }
