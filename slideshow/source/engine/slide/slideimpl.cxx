@@ -47,6 +47,7 @@
 #include "userpaintoverlay.hxx"
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
+#include <box2dtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -193,6 +194,7 @@ private:
     LayerManagerSharedPtr                               mpLayerManager;
     std::shared_ptr<ShapeManagerImpl>                 mpShapeManager;
     std::shared_ptr<SubsettableShapeManager>          mpSubsettableShapeManager;
+    box2d::utils::Box2DWorldSharedPtr                   mpBox2DWorld;
 
     /// Contains common objects needed throughout the slideshow
     SlideShowContext                                    maContext;
@@ -316,6 +318,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                         rShapeCursorMap,
                         xDrawPage)),
     mpSubsettableShapeManager( mpShapeManager ),
+    mpBox2DWorld( std::make_shared<box2d::utils::box2DWorld>(
+                        basegfx::B2DSize( getSlideSizeImpl() ) ) ),
     maContext( mpSubsettableShapeManager,
                rEventQueue,
                rEventMultiplexer,
@@ -325,7 +329,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                *this,
                rMediaFileManager,
                rViewContainer,
-               xComponentContext ),
+               xComponentContext,
+               mpBox2DWorld ),
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
                   basegfx::B2DSize( getSlideSizeImpl() ) ),
