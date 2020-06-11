@@ -24,6 +24,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -730,6 +731,13 @@ static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xProperty
 void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
+
+    if (GetWordCompatibilityMode() <= 14)
+    {
+        uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
+        xDocumentSettings->setPropertyValue("MsWordCompMinLineHeightByFly", uno::makeAny(true));
+    }
 
     // Show changes value
     if (xDocProps.is())
