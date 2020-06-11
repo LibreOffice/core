@@ -344,7 +344,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         SwCalc aCalc( *this );
         if( ! IsInReading() )
         {
-            getIDocumentFieldsAccess().FieldsToCalc( aCalc, pNewSectNode->GetIndex(), USHRT_MAX );
+            getIDocumentFieldsAccess().FieldsToCalc(aCalc, pNewSectNode->GetIndex(), SAL_MAX_INT32);
         }
         SwSection& rNewSect = pNewSectNode->GetSection();
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
@@ -715,7 +715,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
         SwCalc aCalc( *this );
         if( !pIdx )
             pIdx = pFormat->GetContent().GetContentIdx();
-        getIDocumentFieldsAccess().FieldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
+        getIDocumentFieldsAccess().FieldsToCalc(aCalc, pIdx->GetIndex(), SAL_MAX_INT32);
 
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag

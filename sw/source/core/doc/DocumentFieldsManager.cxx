@@ -1562,7 +1562,8 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
 #endif
 }
 
-void DocumentFieldsManager::FieldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
+void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
+        sal_uLong const nLastNd, sal_Int32 const nLastCnt)
 {
     // create the sorted list of all SetFields
     mpUpdateFields->MakeFieldList( m_rDoc, mbNewFieldLst, GETFLD_CALC );
