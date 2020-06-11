@@ -68,6 +68,9 @@ constants AnimationNodeType
     /** Defines a command effect. */
     const short COMMAND = 11;
 
+    /** Defines a physics animation */
+    const short ANIMATEPHYSICS = 12;
+
 };
 
 
