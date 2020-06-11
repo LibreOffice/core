@@ -368,6 +368,13 @@ public:
     void testTdf59666();
     void testTdf133524();
     void testInconsistentBookmark();
+<<<<<<< HEAD   (2674d9 tdf#106234 sw: don't justify after centered tabs)
+=======
+    void testInsertLongDateFormat();
+#if HAVE_FEATURE_PDFIUM
+    void testInsertPdf();
+#endif
+>>>>>>> CHANGE (86ed93 tdf#134035 sw: insert long date format for Hungarian)
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -577,6 +584,17 @@ public:
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
+<<<<<<< HEAD   (2674d9 tdf#106234 sw: don't justify after centered tabs)
+=======
+    CPPUNIT_TEST(testTdf128860);
+#if ENABLE_LIBNUMBERTEXT
+    CPPUNIT_TEST(testTdf133589);
+#endif
+    CPPUNIT_TEST(testInsertLongDateFormat);
+#if HAVE_FEATURE_PDFIUM
+    CPPUNIT_TEST(testInsertPdf);
+#endif
+>>>>>>> CHANGE (86ed93 tdf#134035 sw: insert long date format for Hungarian)
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7144,6 +7162,117 @@ void SwUiWriterTest::testTdf133524()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+<<<<<<< HEAD   (2674d9 tdf#106234 sw: don't justify after centered tabs)
+=======
+void SwUiWriterTest::testTdf128860()
+{
+    SwDoc* pDoc = createDoc("tdf128860.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Second level ending quote: ‚word' -> ,word‘
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"‚word");
+    pWrtShell->AutoCorrect(corr, '\'');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"‚word‘");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // Us apostrophe without preceding starting quote: word' -> word’
+    pWrtShell->Insert(u" word");
+    pWrtShell->AutoCorrect(corr, '\'');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" word’";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // But only after letters: word.' -> word.‘
+    pWrtShell->Insert(u" word.");
+    pWrtShell->AutoCorrect(corr, '\'');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" word.‘";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+#if ENABLE_LIBNUMBERTEXT
+void SwUiWriterTest::testTdf133589()
+{
+#if !defined(_WIN32)
+    // Hungarian test document with right-to-left paragraph setting
+    SwDoc* pDoc = createDoc("tdf133589.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // translitere words to Old Hungarian
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"székely");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // disambiguate consonants: asszony -> asz|szony
+    pWrtShell->Insert(u"asszony");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // disambiguate consonants: kosszarv -> kos|szarv
+    // (add explicite ZWSP temporarily for consonant disambiguation, because the requested
+    // hu_HU hyphenation dictionary isn't installed on all testing platform)
+    // pWrtShell->Insert(u"kosszarv");
+    pWrtShell->Insert(u"kos​szarv");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳓𐳛𐳤𐳥𐳀𐳢𐳮 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // transliterate numbers to Old Hungarian
+    pWrtShell->Insert(u"2020");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+#endif
+}
+#endif
+
+void SwUiWriterTest::testInsertLongDateFormat()
+{
+    // only for Hungarian, yet
+    createDoc("tdf133524.fodt");
+    dispatchCommand(mxComponent, ".uno:InsertDateField", {});
+    // Make sure that the document starts with a field now, and its expanded string value contains space
+    const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
+    // the date format was "YYYY-MM-DD", but now "YYYY. MMM DD."
+    CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
+}
+
+#if HAVE_FEATURE_PDFIUM
+void SwUiWriterTest::testInsertPdf()
+{
+    createDoc();
+    SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // insert the PDF into the document
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+                {"FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "hello-world.pdf")}
+                }));
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // Save and load cycle
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+    loadURL(aTempFile.GetURL(), nullptr);
+    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Assert that we have a replacement graphics
+    auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+    CPPUNIT_ASSERT(xReplacementGraphic.is());
+
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    // Assert that the graphic is a PDF
+    CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
+}
+#endif
+
+>>>>>>> CHANGE (86ed93 tdf#134035 sw: insert long date format for Hungarian)
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
