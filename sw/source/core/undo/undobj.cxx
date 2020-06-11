@@ -1536,6 +1536,19 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
     return node == rAnchorPos.nNode && rAnchorPos.nContent == 0;
 }
 
+/// passed start / end position could be on section start / end node
+static bool IsAtEndOfSection2(SwPosition const& rPos)
+{
+    return rPos.nNode.GetNode().IsEndNode()
+        || IsAtEndOfSection(rPos);
+}
+
+static bool IsAtStartOfSection2(SwPosition const& rPos)
+{
+    return rPos.nNode.GetNode().IsStartNode()
+        || IsAtStartOfSection(rPos);
+}
+
 static bool IsNotBackspaceHeuristic(
         SwPosition const& rStart, SwPosition const& rEnd)
 {
@@ -1577,13 +1590,13 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection(rEnd)))))
+                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection2(rEnd)))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection(rStart)))));
+                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection2(rStart)))));
 }
 
 bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
