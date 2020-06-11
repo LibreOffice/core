@@ -293,7 +293,7 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* typ
         DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(type, mXClipboardContent);
         NSData* pBoardData = nullptr;
 
-        if (dp.get() != nullptr)
+        if (dp)
         {
             pBoardData = dp->getSystemData();
             [sender setData: pBoardData forType:const_cast<NSString*>(type)];
