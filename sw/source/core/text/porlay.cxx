@@ -2529,7 +2529,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
             {
                 SwDoc& rDoc = *const_cast<SwDoc*>(rNode.GetDoc());
                 SwCalc aCalc(rDoc);
-                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), USHRT_MAX);
+                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), SAL_MAX_INT32);
 
                 SwSbxValue aValue = aCalc.Calculate(pBookmark->GetHideCondition());
                 if(!aValue.IsVoidValue())

@@ -393,7 +393,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
              !aInsertedSect.GetCondition().isEmpty() )
         {
             SwCalc aCalc( rDoc );
-            rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
+            rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, pInsertedSectNd->GetIndex(), SAL_MAX_INT32);
             bool bRecalcCondHidden =
                     aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool();
             aInsertedSect.SetCondHidden( bRecalcCondHidden );
