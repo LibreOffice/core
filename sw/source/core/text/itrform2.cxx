@@ -327,6 +327,16 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
             m_pCurr->Height( pPor->Height() );
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
+
+        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
+        {
+            // For DOCX with compat=14 the only shape in line defines height of the line inspite of used font
+            if (pLast->IsFlyCntPortion() && pPor->IsTextPortion() && pPor->GetLen() == TextFrameIndex(0))
+            {
+                m_pCurr->SetAscent(pLast->GetAscent());
+                m_pCurr->Height(pLast->Height());
+            }
+        }
     }
 
     // Sometimes chains are constructed (e.g. by hyphenate)
