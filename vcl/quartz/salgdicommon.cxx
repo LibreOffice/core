@@ -924,7 +924,7 @@ bool AquaSalGraphics::drawPolyLine(
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     // #i97317# workaround for Quartz having problems with drawing small polygons
-    if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
+    if( (aRefreshRect.size.width > 0.125) || (aRefreshRect.size.height > 0.125) )
     {
         // use the path to prepare the graphics context
         maContextHolder.saveState();
@@ -987,7 +987,7 @@ bool AquaSalGraphics::drawPolyPolygon(
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     // #i97317# workaround for Quartz having problems with drawing small polygons
-    if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
+    if( (aRefreshRect.size.width > 0.125) || (aRefreshRect.size.height > 0.125) )
     {
         // prepare drawing mode
         CGPathDrawingMode eMode;
