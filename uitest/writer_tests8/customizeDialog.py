@@ -89,4 +89,19 @@ class ConfigureDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf133862(self):
+        self.ui_test.create_doc_in_start_center("writer")
+
+        self.xUITest.executeCommand(".uno:InsertObjectStarMath")
+
+        # Without the fix in place, calling customize dialog after inserting
+        # a formula object would crash
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xcancBtn = xDialog.getChild("cancel")
+        xcancBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
