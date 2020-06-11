@@ -110,7 +110,7 @@ class chartXAxis(UITestCase):
     self.assertEqual(get_state_as_dict(minimum)["Text"], "10.12.2017")
     self.assertEqual(get_state_as_dict(maximum)["Text"], "29.04.2018")
     self.assertEqual(get_state_as_dict(major)["Text"], "19")
-    self.assertEqual(get_state_as_dict(minor)["Text"], "3")
+    self.assertEqual(get_state_as_dict(minor)["Text"], "5")
 
     #Click on tab "positioning".
     tabcontrol = xDialog.getChild("tabcontrol")
@@ -201,7 +201,7 @@ class chartXAxis(UITestCase):
     placeMarks = xDialog.getChild("LB_PLACE_TICKS")
 
     self.assertEqual(get_state_as_dict(crossAxis)["SelectEntryText"], "Value")
-    self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "1")
+    self.assertEqual(get_state_as_dict(crossAxisValue)["Text"], "5")
     self.assertEqual(get_state_as_dict(placeLabels)["SelectEntryText"], "Outside end")
     self.assertEqual(get_state_as_dict(innerMajorTick)["Selected"], "true")
     self.assertEqual(get_state_as_dict(outerMajorTick)["Selected"], "false")

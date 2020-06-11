@@ -130,7 +130,7 @@ class chartWall(UITestCase):
     #change tab "Transparency"
     select_pos(tabcontrol, "2")
     transparency = xDialog.getChild("RBT_TRANS_LINEAR")
-    transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
+    transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #55%
 
     transparency.executeAction("CLICK", tuple())
     transparencyPercent.executeAction("UP", tuple())
@@ -151,10 +151,10 @@ class chartWall(UITestCase):
     select_pos(tabcontrol, "2")
 
     transparency = xDialog.getChild("RBT_TRANS_LINEAR")
-    transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #51%
+    transparencyPercent = xDialog.getChild("MTR_TRANSPARENT")  #55%
 
     self.assertEqual(get_state_as_dict(transparency)["Checked"], "true")
-    self.assertEqual(get_state_as_dict(transparencyPercent)["Text"], "51%")
+    self.assertEqual(get_state_as_dict(transparencyPercent)["Text"], "55%")
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)

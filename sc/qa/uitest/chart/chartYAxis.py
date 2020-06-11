@@ -111,7 +111,7 @@ class chartYAxis(UITestCase):
     self.assertEqual(get_state_as_dict(minimum)["Text"], "1")
     self.assertEqual(get_state_as_dict(maximum)["Text"], "17")
     self.assertEqual(get_state_as_dict(major)["Text"], "1")
-    self.assertEqual(get_state_as_dict(minor)["Text"], "3")
+    self.assertEqual(get_state_as_dict(minor)["Text"], "5")
 
     #Click on tab "positioning".
     tabcontrol = xDialog.getChild("tabcontrol")
