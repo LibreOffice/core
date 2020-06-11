@@ -128,7 +128,7 @@ public:
     virtual void        StateChanged( StateChangedType nType ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void        Select();
+    void                Select();
     void                DoubleClick();
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
