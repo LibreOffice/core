@@ -324,7 +324,8 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                                 "Opacity",
                                 rShape,
                                 rShapeManager,
-                                rSlideSize ),
+                                rSlideSize,
+                                nullptr ),
                             xTransition->getMode() );
                     }
                     break;

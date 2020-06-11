@@ -67,7 +67,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 "Rotate",
                 rShape,
                 getContext().mpSubsettableShapeManager,
-                getSlideSize() ),
+                getSlideSize(),
+                getContext().mpBox2DWorld ),
             getXAnimateNode() );
 
     case animations::AnimationTransformType::SKEWX:
@@ -77,7 +78,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 "SkewX",
                 rShape,
                 getContext().mpSubsettableShapeManager,
-                getSlideSize() ),
+                getSlideSize(),
+                getContext().mpBox2DWorld ),
             getXAnimateNode() );
 
     case animations::AnimationTransformType::SKEWY:
@@ -87,7 +89,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 "SkewY",
                 rShape,
                 getContext().mpSubsettableShapeManager,
-                getSlideSize() ),
+                getSlideSize(),
+                getContext().mpBox2DWorld ),
             getXAnimateNode() );
     }
 }

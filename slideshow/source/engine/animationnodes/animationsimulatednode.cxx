@@ -17,35 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "animationpathmotionnode.hxx"
+#include "animationsimulatednode.hxx"
 #include <animationfactory.hxx>
 
-namespace slideshow::internal {
-
-void AnimationPathMotionNode::dispose()
+namespace slideshow::internal
 {
-    mxPathMotionNode.clear();
+void AnimationSimulatedNode::dispose()
+{
+    mxSimulatedMotionNode.clear();
     AnimationBaseNode::dispose();
 }
 
-AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
+AnimationActivitySharedPtr AnimationSimulatedNode::createActivity() const
 {
-    OUString aString;
-    ENSURE_OR_THROW( (mxPathMotionNode->getPath() >>= aString),
-                      "no string-based SVG:d path found" );
+    double fDuration;
+    ENSURE_OR_THROW((mxSimulatedMotionNode->getDuration() >>= fDuration),
+                    "Couldn't get the animation duration.");
 
-    ActivitiesFactory::CommonParameters const aParms( fillCommonParameters() );
+    ActivitiesFactory::CommonParameters const aParms(fillCommonParameters());
     return ActivitiesFactory::createSimpleActivity(
         aParms,
-        AnimationFactory::createPathMotionAnimation(
-            aString,
-            mxPathMotionNode->getAdditive(),
-            getShape(),
-            getContext().mpSubsettableShapeManager,
-            getSlideSize(),
-            getContext().mpBox2DWorld, 0 ),
-        true );
+        AnimationFactory::createSimulatedAnimation(getContext().mpBox2DWorld, fDuration,
+                                                   getContext().mpSubsettableShapeManager,
+                                                   getSlideSize(), 0),
+        true);
 }
 
 } // namespace slideshow::internal

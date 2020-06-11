@@ -86,6 +86,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
+                getContext().mpBox2DWorld,
                 AnimationFactory::FLAG_NO_SPRITE ),
             aValue );
     }
@@ -109,6 +110,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
+                getContext().mpBox2DWorld,
                 AnimationFactory::FLAG_NO_SPRITE ),
             aValue );
     }
@@ -132,6 +134,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
+                getContext().mpBox2DWorld,
                 AnimationFactory::FLAG_NO_SPRITE ),
             aValue );
     }
@@ -155,6 +158,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
+                getContext().mpBox2DWorld,
                 AnimationFactory::FLAG_NO_SPRITE ),
             aValue );
     }
@@ -178,6 +182,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
+                getContext().mpBox2DWorld,
                 AnimationFactory::FLAG_NO_SPRITE ),
             aValue );
     }
