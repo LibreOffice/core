@@ -20,6 +20,7 @@
 #include <calendarImpl.hxx>
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -32,8 +33,14 @@ namespace i18npool {
 
 #define ERROR RuntimeException()
 
+CalendarImpl::CalendarImpl() : m_xContext(comphelper::getProcessComponentContext())
+{
+}
+
 CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_xContext(rxContext)
 {
+    if (!m_xContext.is())
+        throw ERROR;
 }
 
 CalendarImpl::~CalendarImpl()
