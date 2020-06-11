@@ -1225,10 +1225,6 @@ libo_FUZZ_ARG_ENABLE(ooenv,
     AS_HELP_STRING([--disable-ooenv],
         [Disable ooenv for the instdir installation.]))
 
-libo_FUZZ_ARG_ENABLE(libnumbertext,
-    AS_HELP_STRING([--disable-libnumbertext],
-        [Disable use of numbertext external library.]))
-
 AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
         [Enable link-time optimization. Suitable for (optimised) product builds. Building might take
@@ -10392,40 +10388,26 @@ AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 dnl ===================================================================
 dnl Checking for libnumbertext
 dnl ===================================================================
-AC_MSG_CHECKING([whether to use libnumbertext])
-if test "$enable_libnumbertext" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_LIBNUMBERTEXT=
-    SYSTEM_LIBNUMBERTEXT=
+libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.0])
+if test "$with_system_libnumbertext" = "yes"; then
+    SYSTEM_LIBNUMBERTEXT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libnumbertext`
+    SYSTEM_LIBNUMBERTEXT=YES
 else
-    AC_MSG_RESULT([yes])
-    ENABLE_LIBNUMBERTEXT=TRUE
-    libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.0])
-    if test "$with_system_libnumbertext" = "yes"; then
-        SYSTEM_LIBNUMBERTEXT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libnumbertext`
-        SYSTEM_LIBNUMBERTEXT=YES
-    else
-        SYSTEM_LIBNUMBERTEXT=
-        AC_LANG_PUSH([C++])
-        save_CPPFLAGS=$CPPFLAGS
-        CPPFLAGS="$CPPFLAGS $CXXFLAGS_CXX11"
-        AC_CHECK_HEADERS([codecvt regex])
-        AS_IF([test "x$ac_cv_header_codecvt" != xyes -o "x$ac_cv_header_regex" != xyes],
-                [ ENABLE_LIBNUMBERTEXT=''
-                  LIBNUMBERTEXT_CFLAGS=''
-                  AC_MSG_WARN([No system-provided libnumbertext or codecvt/regex C++11 headers (min. libstdc++ 4.9).
-                               Enable libnumbertext fallback (missing number to number name conversion).])
-                ])
-        CPPFLAGS=$save_CPPFLAGS
-        AC_LANG_POP([C++])
-    fi
-    if test "$ENABLE_LIBNUMBERTEXT" = TRUE; then
-        AC_DEFINE(ENABLE_LIBNUMBERTEXT)
-    fi
+    SYSTEM_LIBNUMBERTEXT=
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    CPPFLAGS="$CPPFLAGS $CXXFLAGS_CXX11"
+    AC_CHECK_HEADERS([codecvt regex])
+    AS_IF([test "x$ac_cv_header_codecvt" != xyes -o "x$ac_cv_header_regex" != xyes],
+            [ LIBNUMBERTEXT_CFLAGS=''
+              AC_MSG_WARN([No system-provided libnumbertext or codecvt/regex C++11 headers (min. libstdc++ 4.9).
+                           Enable libnumbertext fallback (missing number to number name conversion).])
+            ])
+    CPPFLAGS=$save_CPPFLAGS
+    AC_LANG_POP([C++])
 fi
 AC_SUBST(SYSTEM_LIBNUMBERTEXT)
 AC_SUBST(SYSTEM_LIBNUMBERTEXT_DATA)
-AC_SUBST(ENABLE_LIBNUMBERTEXT)
 AC_SUBST(LIBNUMBERTEXT_CFLAGS)
 
 dnl ***************************************
@@ -13420,7 +13402,6 @@ AC_CONFIG_HEADERS([config_host/config_langs.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
-AC_CONFIG_HEADERS([config_host/config_libnumbertext.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])

@@ -19,13 +19,9 @@ $(eval $(call gb_Module_add_targets,libnumbertext,\
 ))
 else
 
-ifeq ($(ENABLE_LIBNUMBERTEXT),TRUE)
-
 $(eval $(call gb_Module_add_targets,libnumbertext,\
 	ExternalProject_libnumbertext \
 ))
-
-endif
 
 endif
 

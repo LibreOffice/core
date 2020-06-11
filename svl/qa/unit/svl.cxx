@@ -8,7 +8,6 @@
  */
 
 #include <sal/types.h>
-#include <config_libnumbertext.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -1415,7 +1414,6 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         sCode = "[DBNum2][$-0404]General\\ ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
-#if ENABLE_LIBNUMBERTEXT
         // tdf#115007 - cardinal/ordinal number names/indicators
         sCode = "[NatNum12]0";
         sExpected = "one hundred twenty-three";
@@ -1447,7 +1445,6 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[NatNum12 YYYY=title year, D=capitalize ordinal]D\" of \"MMMM\", \"YYYY";
         sExpected = "Second of January, Nineteen Hundred";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
-#endif
     }
     { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditional), Japanese, Korean
         // -- Traditional Chinese: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBnum3 -> NatNum3

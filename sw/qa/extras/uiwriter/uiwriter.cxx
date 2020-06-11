@@ -46,7 +46,6 @@
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <config_libnumbertext.h>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -371,9 +370,7 @@ public:
     void testTdf59666();
     void testTdf133524();
     void testTdf128860();
-#if ENABLE_LIBNUMBERTEXT
     void testTdf133589();
-#endif
     void testInconsistentBookmark();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
@@ -590,9 +587,7 @@ public:
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
     CPPUNIT_TEST(testTdf128860);
-#if ENABLE_LIBNUMBERTEXT
     CPPUNIT_TEST(testTdf133589);
-#endif
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7278,7 +7273,6 @@ void SwUiWriterTest::testTdf128860()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
-#if ENABLE_LIBNUMBERTEXT
 void SwUiWriterTest::testTdf133589()
 {
 #if !defined(_WIN32)
@@ -7315,7 +7309,6 @@ void SwUiWriterTest::testTdf133589()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 #endif
 }
-#endif
 
 #if HAVE_FEATURE_PDFIUM
 void SwUiWriterTest::testInsertPdf()

@@ -830,8 +830,6 @@ endef
 
 else # !SYSTEM_LIBNUMBERTEXT
 
-ifneq ($(ENABLE_LIBNUMBERTEXT),)
-
 $(eval $(call gb_Helper_register_packages_for_install,ooo, \
 	libnumbertext_numbertext \
 ))
@@ -841,9 +839,6 @@ $(call gb_LinkTarget_use_package,$(1),libnumbertext_numbertext)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libnumbertext/src) \
 	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DENABLE_LIBNUMBERTEXT \
 )
 
 ifeq ($(COM),MSC)
@@ -860,13 +855,6 @@ $(call gb_LinkTarget_use_external_project,$(1),libnumbertext,full)
 endif
 
 endef
-
-else # !ENABLE_LIBNUMBERTEXT
-
-define gb_LinkTarget__use_libnumbertext
-endef
-
-endif # ENABLE_LIBNUMBERTEXT
 
 endif # SYSTEM_LIBNUMBERTEXT
 
