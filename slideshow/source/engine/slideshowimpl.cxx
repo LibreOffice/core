@@ -85,6 +85,9 @@
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
 
+namespace box2d::utils { class box2DWorld;
+                         typedef ::std::shared_ptr< box2DWorld > Box2DWorldSharedPtr; }
+
 namespace {
 
 /** During animations the update() method tells its caller to call it as
@@ -422,6 +425,7 @@ private:
     ActivitiesQueue                         maActivitiesQueue;
     UserEventQueue                          maUserEventQueue;
     SubsettableShapeManagerSharedPtr        mpDummyPtr;
+    box2d::utils::Box2DWorldSharedPtr       mpBox2DDummyPtr;
 
     std::shared_ptr<SeparateListenerImpl> mpListener;
 
@@ -550,6 +554,7 @@ SlideShowImpl::SlideShowImpl(
                         maEventQueue,
                         *this ),
       mpDummyPtr(),
+      mpBox2DDummyPtr(),
       mpListener(),
       mpRehearseTimingsActivity(),
       mpWaitSymbol(),
@@ -1694,7 +1699,8 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                     *this,
                     *this,
                     maViewContainer,
-                    mxComponentContext) );
+                    mxComponentContext,
+                    mpBox2DDummyPtr ) );
         }
         else if (mpRehearseTimingsActivity)
         {
