@@ -234,6 +234,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
+{
+    load(DATA_DIRECTORY, "tdf132725.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfPara", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    //Without the fix in place, it would crash here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
 {
     load(DATA_DIRECTORY, "tdf126340.odt");
