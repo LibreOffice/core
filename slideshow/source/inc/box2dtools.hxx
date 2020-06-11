@@ -11,6 +11,7 @@
 
 #include "shape.hxx"
 #include "shapeattributelayer.hxx"
+#include "attributemap.hxx"
 #include <unordered_map>
 #include <queue>
 
@@ -155,6 +156,21 @@ private:
     void step(const float fTimeStep = 1.0f / 100.0f, const int nVelocityIterations = 6,
               const int nPositionIterations = 2);
 
+    /// Queue a rotation update on the next step of the box2DWorld for the corresponding body
+    void queueRotationUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+                             const double fAngle);
+
+    /// Queue an angular velocity update for the corresponding body
+    /// to take place after the next step of the box2DWorld
+    void
+    queueAngularVelocityUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+                               const double fAngularVelocity);
+
+    /// Queue an update that changes collision of the corresponding body
+    /// on the next step of the box2DWorld, used for animations that change visibility
+    void queueShapeVisibilityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                    const bool bVisibility);
+
 public:
     box2DWorld(const ::basegfx::B2DVector& rSlideSize);
     ~box2DWorld();
@@ -184,7 +200,7 @@ public:
         @param pShape
         Pointer to the shape to alter the corresponding Box2D body of
      */
-    Box2DBodySharedPtr makeShapeDynamic(const slideshow::internal::ShapeSharedPtr pShape);
+    Box2DBodySharedPtr makeShapeDynamic(const slideshow::internal::ShapeSharedPtr& pShape);
 
     /** Make the Box2D body a dynamic one
 
@@ -193,7 +209,7 @@ public:
         @param pBox2DBody
         Pointer to the Box2D body
      */
-    Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr pBox2DBody);
+    Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody);
 
     /** Make the Box2D body corresponding to the given shape a static one
 
@@ -202,7 +218,7 @@ public:
         @param pShape
         Pointer to the shape to alter the corresponding Box2D body of
      */
-    Box2DBodySharedPtr makeShapeStatic(const slideshow::internal::ShapeSharedPtr pShape);
+    Box2DBodySharedPtr makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape);
 
     /** Make the Box2D body a dynamic one
 
@@ -211,7 +227,7 @@ public:
         @param pBox2DBody
         Pointer to the Box2D body
      */
-    Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr pBox2DBody);
+    Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody);
 
     /// Create a static body from the given shape's bounding box
     Box2DBodySharedPtr
@@ -220,7 +236,7 @@ public:
 
     /// Initiate all the shapes in the current slide in the box2DWorld as static ones
     void
-    initateAllShapesAsStaticBodies(const slideshow::internal::ShapeManagerSharedPtr pShapeManager);
+    initateAllShapesAsStaticBodies(const slideshow::internal::ShapeManagerSharedPtr& pShapeManager);
 
     /// @return whether the box2DWorld has a stepper or not
     bool hasWorldStepper();
@@ -229,27 +245,21 @@ public:
     void setHasWorldStepper(const bool bHasWorldStepper);
 
     /// Queue a position update the next step of the box2DWorld for the corresponding body
-    void queuePositionUpdate(css::uno::Reference<css::drawing::XShape> xShape,
+    void queuePositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                              const ::basegfx::B2DPoint& rOutPos);
 
     /// Queue a linear velocity update for the corresponding body
     /// to take place after the next step of the box2DWorld
-    void queueLinearVelocityUpdate(css::uno::Reference<css::drawing::XShape> xShape,
+    void queueLinearVelocityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                    const ::basegfx::B2DVector& rVelocity);
 
-    /// Queue a rotation update on the next step of the box2DWorld for the corresponding body
-    void queueRotationUpdate(css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-                             const double fAngle);
+    void
+    queueShapeAnimationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                              const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
+                              const slideshow::internal::AttributeType eAttrType);
 
-    /// Queue an angular velocity update for the corresponding body
-    /// to take place after the next step of the box2DWorld
-    void queueAngularVelocityUpdate(css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-                                    const double fAngularVelocity);
-
-    /// Queue an update that changes collision of the corresponding body
-    /// on the next step of the box2DWorld, used for animations that change visibility
-    void queueShapeVisibilityUpdate(css::uno::Reference<css::drawing::XShape> xShape,
-                                    const bool bVisibility);
+    void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                      const slideshow::internal::AttributeType eAttrType);
 };
 
 /// Class that manages a single box2D Body
