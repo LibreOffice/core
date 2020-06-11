@@ -24,6 +24,7 @@
 #undef WB_RIGHT
 #include <msdasc.h>
 
+#include <comphelper/scopeguard.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <initguid.h>
@@ -43,11 +44,13 @@ OUString PromptNew(long hWnd)
 
     // Initialize COM
     hr = ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
-    bool bDoUninit = true;
     if (FAILED(hr) && hr != RPC_E_CHANGED_MODE)
         std::abort();
-    if (hr == RPC_E_CHANGED_MODE)
-        bDoUninit = false;
+    const bool bDoUninit = SUCCEEDED(hr);
+    comphelper::ScopeGuard g([bDoUninit] () {
+        if (bDoUninit)
+            CoUninitialize();
+    });
 
     // Instantiate DataLinks object.
     hr = CoCreateInstance(
@@ -88,8 +91,6 @@ OUString PromptNew(long hWnd)
 
     piTmpConnection->Release( );
     dlPrompt->Release( );
-    if (bDoUninit)
-        CoUninitialize();
     // Don't we need SysFreeString(_result)?
     return o3tl::toU(_result);
 }
