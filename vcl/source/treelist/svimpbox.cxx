@@ -2059,12 +2059,18 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 {
-    SvTreeListEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
+    Point aPos = rMEvt.GetPosPixel();
+    SvTreeListEntry* pEntry = GetClickedEntry(aPos);
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
     {
         m_aSelEng.SelMouseMove(rMEvt);
-        if (m_pView->mbHoverSelection && !m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
-            m_pView->Select(pEntry);
+        if (m_pView->mbHoverSelection)
+        {
+            if (aPos.X() < 0 || aPos.Y() < 0 || aPos.X() > m_aOutputSize.Width() || aPos.Y() > m_aOutputSize.Height())
+                m_pView->SelectAll(false);
+            else if (!m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
+                m_pView->Select(pEntry);
+        }
     }
 }
 
