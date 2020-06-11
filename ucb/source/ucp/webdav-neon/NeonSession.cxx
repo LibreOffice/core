@@ -1822,8 +1822,6 @@ void NeonSession::HandleError( int nError,
                                const OUString & inPath,
                                const DAVRequestEnvironment & rEnv )
 {
-    m_aEnv = DAVRequestEnvironment();
-
     // Map error code to DAVException.
     switch ( nError )
     {
