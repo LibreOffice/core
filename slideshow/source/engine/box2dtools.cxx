@@ -211,7 +211,7 @@ void box2DWorld::processUpdateQueue(const double fPassedTime)
 }
 
 void box2DWorld::initateAllShapesAsStaticBodies(
-    const slideshow::internal::ShapeManagerSharedPtr pShapeManager)
+    const slideshow::internal::ShapeManagerSharedPtr& pShapeManager)
 {
     assert(mpBox2DWorld);
 
@@ -242,8 +242,9 @@ void box2DWorld::setHasWorldStepper(const bool bHasWorldStepper)
     mbHasWorldStepper = bHasWorldStepper;
 }
 
-void box2DWorld::queuePositionUpdate(css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-                                     const basegfx::B2DPoint& rOutPos)
+void box2DWorld::queuePositionUpdate(
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const basegfx::B2DPoint& rOutPos)
 {
     Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
     aQueueElement.maPosition = rOutPos;
@@ -251,7 +252,7 @@ void box2DWorld::queuePositionUpdate(css::uno::Reference<com::sun::star::drawing
 }
 
 void box2DWorld::queueLinearVelocityUpdate(
-    css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const basegfx::B2DVector& rVelocity)
 {
     Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_LINEAR_VELOCITY, 1 };
@@ -259,8 +260,8 @@ void box2DWorld::queueLinearVelocityUpdate(
     maShapeUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueRotationUpdate(css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-                                     const double fAngle)
+void box2DWorld::queueRotationUpdate(
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const double fAngle)
 {
     Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGLE };
     aQueueElement.mfAngle = fAngle;
@@ -268,7 +269,8 @@ void box2DWorld::queueRotationUpdate(css::uno::Reference<com::sun::star::drawing
 }
 
 void box2DWorld::queueAngularVelocityUpdate(
-    css::uno::Reference<com::sun::star::drawing::XShape> xShape, const double fAngularVelocity)
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const double fAngularVelocity)
 {
     Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGULAR_VELOCITY, 1 };
     aQueueElement.mfAngularVelocity = fAngularVelocity;
@@ -276,11 +278,51 @@ void box2DWorld::queueAngularVelocityUpdate(
 }
 
 void box2DWorld::queueShapeVisibilityUpdate(
-    css::uno::Reference<com::sun::star::drawing::XShape> xShape, const bool bVisibility)
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const bool bVisibility)
 {
     Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_VISIBILITY };
     aQueueElement.mbVisibility = bVisibility;
     maShapeUpdateQueue.push(aQueueElement);
+}
+
+void box2DWorld::queueShapeAnimationUpdate(
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
+    const slideshow::internal::AttributeType eAttrType)
+{
+    switch (eAttrType)
+    {
+        case slideshow::internal::AttributeType::Visibility:
+            queueShapeVisibilityUpdate(xShape, pAttrLayer->getVisibility());
+            return;
+        case slideshow::internal::AttributeType::Rotate:
+            queueRotationUpdate(xShape, pAttrLayer->getRotationAngle());
+            return;
+        case slideshow::internal::AttributeType::PosX:
+        case slideshow::internal::AttributeType::PosY:
+            queuePositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
+            return;
+        default:
+            return;
+    }
+}
+
+void box2DWorld::queueShapeAnimationEndUpdate(
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const slideshow::internal::AttributeType eAttrType)
+{
+    switch (eAttrType)
+    {
+        case slideshow::internal::AttributeType::Rotate:
+            queueAngularVelocityUpdate(xShape, 0.0f);
+            return;
+        case slideshow::internal::AttributeType::PosX:
+        case slideshow::internal::AttributeType::PosY:
+            queueLinearVelocityUpdate(xShape, { 0, 0 });
+            return;
+        default:
+            return;
+    }
 }
 
 void box2DWorld::step(const float fTimeStep, const int nVelocityIterations,
@@ -318,14 +360,14 @@ bool box2DWorld::isInitialized()
         return false;
 }
 
-Box2DBodySharedPtr box2DWorld::makeShapeDynamic(const slideshow::internal::ShapeSharedPtr pShape)
+Box2DBodySharedPtr box2DWorld::makeShapeDynamic(const slideshow::internal::ShapeSharedPtr& pShape)
 {
     assert(mpBox2DWorld);
     Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
     return makeBodyDynamic(pBox2DBody);
 }
 
-Box2DBodySharedPtr box2DWorld::makeBodyDynamic(const Box2DBodySharedPtr pBox2DBody)
+Box2DBodySharedPtr box2DWorld::makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody)
 {
     assert(mpBox2DWorld);
     if (pBox2DBody->getType() != BOX2D_DYNAMIC_BODY)
@@ -335,14 +377,14 @@ Box2DBodySharedPtr box2DWorld::makeBodyDynamic(const Box2DBodySharedPtr pBox2DBo
     return pBox2DBody;
 }
 
-Box2DBodySharedPtr box2DWorld::makeShapeStatic(const slideshow::internal::ShapeSharedPtr pShape)
+Box2DBodySharedPtr box2DWorld::makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape)
 {
     assert(mpBox2DWorld);
     Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
     return makeBodyStatic(pBox2DBody);
 }
 
-Box2DBodySharedPtr box2DWorld::makeBodyStatic(const Box2DBodySharedPtr pBox2DBody)
+Box2DBodySharedPtr box2DWorld::makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
 {
     assert(mpBox2DWorld);
     if (pBox2DBody->getType() != BOX2D_STATIC_BODY)

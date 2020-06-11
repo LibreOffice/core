@@ -16,38 +16,39 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
+#include "animationbasenode.hxx"
+#include <com/sun/star/animations/XAnimateMotion.hpp>
 
-#include "animationpathmotionnode.hxx"
-#include <animationfactory.hxx>
-
-namespace slideshow::internal {
-
-void AnimationPathMotionNode::dispose()
+namespace slideshow
 {
-    mxPathMotionNode.clear();
-    AnimationBaseNode::dispose();
-}
-
-AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
+namespace internal
 {
-    OUString aString;
-    ENSURE_OR_THROW( (mxPathMotionNode->getPath() >>= aString),
-                      "no string-based SVG:d path found" );
+class AnimationPhysicsNode : public AnimationBaseNode
+{
+public:
+    AnimationPhysicsNode(const css::uno::Reference<css::animations::XAnimationNode>& xNode,
+                         const BaseContainerNodeSharedPtr& rParent, const NodeContext& rContext)
+        : AnimationBaseNode(xNode, rParent, rContext)
+        , mxPhysicsMotionNode(xNode, css::uno::UNO_QUERY_THROW)
+    {
+    }
 
-    ActivitiesFactory::CommonParameters const aParms( fillCommonParameters() );
-    return ActivitiesFactory::createSimpleActivity(
-        aParms,
-        AnimationFactory::createPathMotionAnimation(
-            aString,
-            mxPathMotionNode->getAdditive(),
-            getShape(),
-            getContext().mpSubsettableShapeManager,
-            getSlideSize(),
-            getContext().mpBox2DWorld, 0 ),
-        true );
-}
+#if defined(DBG_UTIL)
+    virtual const char* getDescription() const override { return "AnimationPhysicsNode"; }
+#endif
 
-} // namespace slideshow::internal
+protected:
+    virtual void dispose() override;
+
+private:
+    virtual AnimationActivitySharedPtr createActivity() const override;
+
+    css::uno::Reference<css::animations::XAnimateMotion> mxPhysicsMotionNode;
+};
+
+} // namespace internal
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

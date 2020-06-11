@@ -24,6 +24,9 @@
 #include <memory>
 
 namespace com::sun::star::uno { class XComponentContext; }
+namespace box2d::utils { class box2DWorld;
+                         typedef ::std::shared_ptr< box2DWorld > Box2DWorldSharedPtr; }
+
 
 
 namespace slideshow
@@ -92,7 +95,8 @@ namespace slideshow
                               CursorManager&                                    rCursorManager,
                               MediaFileManager&                                 rMediaFileManager,
                               const UnoViewContainer&                           rViewContainer,
-                              const css::uno::Reference< css::uno::XComponentContext>&    rComponentContext );
+                              const css::uno::Reference< css::uno::XComponentContext>&    rComponentContext,
+                              box2d::utils::Box2DWorldSharedPtr&                rBox2DWorldPtr );
             void dispose();
 
             std::shared_ptr<SubsettableShapeManager>&     mpSubsettableShapeManager;
@@ -105,6 +109,7 @@ namespace slideshow
             MediaFileManager&                               mrMediaFileManager;
             const UnoViewContainer&                         mrViewContainer;
             css::uno::Reference< css::uno::XComponentContext>   mxComponentContext;
+            box2d::utils::Box2DWorldSharedPtr&              mpBox2DWorld;
         };
     }
 }
