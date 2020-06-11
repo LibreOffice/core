@@ -39,6 +39,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131722, "tdf131722-date-contentcontrol-table.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // Check Date selector placeholder text is retained when at the beginning of the paragraph
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:sdt/w:sdtContent/w:r[2]/w:t", "Enter a date here!");
+    // Check Date selector placeholder text retained when NOT at the beginning of the paragraph
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtContent/w:r[2]/w:t", "Enter a date here!");
+    // Check Date selector placeholder text is retained when at the beginning of the paragraph in a table cell
+    // Before the accompanying fix the first character was lost
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:t", "Enter a date here!");
+    // Check Date selector placeholder text is retained when NOT at the beginning of the paragraph in a table cell
+    // Before the accompanying fix the first character was lost
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[1]/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:t", "Enter a date here!");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

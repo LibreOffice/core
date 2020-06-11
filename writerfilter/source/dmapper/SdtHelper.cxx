@@ -122,7 +122,7 @@ void SdtHelper::createDateContentControl()
                 = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
                   || (m_rDM_Impl.m_nTableDepth > 0);
             if (bIsInTable)
-                xCrsr->goRight(1, false);
+                xCrsr->goRight(0, false);
             xCrsr->gotoEnd(true);
         }
         catch (uno::Exception&)
