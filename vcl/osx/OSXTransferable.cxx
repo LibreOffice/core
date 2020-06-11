@@ -129,7 +129,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
       dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
     }
 
-  if (dp.get() == nullptr)
+  if (!dp)
     {
       throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
                                        static_cast<XTransferable*>(this));

@@ -300,7 +300,7 @@ bool QuartzSalBitmap::AllocateUserData()
         mnBytesPerRow = 0;
     }
 
-    return m_pUserBuffer.get() != nullptr;
+    return bool(m_pUserBuffer);
 }
 
 namespace {
