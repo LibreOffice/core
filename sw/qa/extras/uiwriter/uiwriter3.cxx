@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     dispatchCommand(mxComponent, ".uno:SwBackspace", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     //Without the fix in place, it would crash here
@@ -273,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
