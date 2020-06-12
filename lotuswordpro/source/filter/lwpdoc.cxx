@@ -243,7 +243,7 @@ void LwpDocument::RegisterTextStyles()
                 throw std::runtime_error("loop in register text style");
             pParaStyle->SetFoundry(m_xOwnedFoundry.get());
             pParaStyle->RegisterStyle();
-            pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext().obj().get());
+            pParaStyle = dynamic_cast<LwpTextStyle*>(pParaStyle->GetNext().obj().get());
         }
     }
     ChangeStyleName();//for click here block
