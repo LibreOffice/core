@@ -59,6 +59,7 @@ class SwUndoDelete
     bool m_bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
     bool m_bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
     bool m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
+    bool m_bDisableMakeFrames : 1;
 
     bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
@@ -98,6 +99,8 @@ public:
 
     // SwUndoTableCpyTable needs this information:
     bool IsDelFullPara() const { return m_bDelFullPara; }
+
+    void DisableMakeFrames() { m_bDisableMakeFrames = true; };
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
