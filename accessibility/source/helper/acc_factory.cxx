@@ -57,7 +57,6 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <extended/AccessibleGridControl.hxx>
 #include <vcl/accessibletable.hxx>
-#include <vcl/popupmenuwindow.hxx>
 
 #include <floatingwindowaccessible.hxx>
 
@@ -328,19 +327,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 
         else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
         {
-            // The logic here has to match that of Window::GetAccessibleParentWindow in
-            // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
-            // becoming a11y parents of themselves
-            vcl::Window* pChild = pWindow->GetAccessibleChildWindow(0);
-            if (PopupMenuFloatingWindow::isPopupMenu(pChild))
-            {
-                // Get the accessible context from the child window.
-                Reference<XAccessible> xAccessible = pChild->CreateAccessible();
-                if (xAccessible.is())
-                    xContext = xAccessible->getAccessibleContext();
-            }
-            else
-                xContext = new FloatingWindowAccessible( _pXWindow );
+            xContext = new FloatingWindowAccessible( _pXWindow );
         }
 
         else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )

@@ -22,7 +22,6 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/popupmenuwindow.hxx>
 
 #include <window.h>
 #include <brdwin.hxx>
@@ -130,14 +129,9 @@ vcl::Window* Window::GetAccessibleParentWindow() const
         pParent = pWorkWin;
     }
     // If this is a floating window which has a native border window, then that border should be reported as
-    // the accessible parent, unless the floating window is a PopupMenuFloatingWindow
-
-    // The logic here has to match that of AccessibleFactory::createAccessibleContext in
-    // accessibility/source/helper/acc_factory.cxx to avoid PopupMenuFloatingWindow
-    // becoming a11y parents of themselves
+    // the accessible parent
     else if( GetType() == WindowType::FLOATINGWINDOW &&
-        mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
-        !PopupMenuFloatingWindow::isPopupMenu(this))
+        mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame )
     {
         pParent = mpWindowImpl->mpBorderWindow;
     }

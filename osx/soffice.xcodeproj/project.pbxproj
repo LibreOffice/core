@@ -133,7 +133,6 @@
 		BE2DAD11182FAB5200A4D2F7 /* mnemonicengine.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mnemonicengine.cxx; path = ../vcl/source/window/mnemonicengine.cxx; sourceTree = "<group>"; };
 		BE2DAD12182FAB5200A4D2F7 /* mouseevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mouseevent.cxx; path = ../vcl/source/window/mouseevent.cxx; sourceTree = "<group>"; };
 		BE2DAD13182FAB5200A4D2F7 /* msgbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = msgbox.cxx; path = ../vcl/source/window/msgbox.cxx; sourceTree = "<group>"; };
-		BE2DAD14182FAB5200A4D2F7 /* popupmenuwindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = popupmenuwindow.cxx; path = ../vcl/source/window/popupmenuwindow.cxx; sourceTree = "<group>"; };
 		BE2DAD15182FAB5200A4D2F7 /* printdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printdlg.cxx; path = ../vcl/source/window/printdlg.cxx; sourceTree = "<group>"; };
 		BE2DAD16182FAB5200A4D2F7 /* scrwnd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrwnd.cxx; path = ../vcl/source/window/scrwnd.cxx; sourceTree = "<group>"; };
 		BE2DAD17182FAB5200A4D2F7 /* scrwnd.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = scrwnd.hxx; path = ../vcl/source/window/scrwnd.hxx; sourceTree = "<group>"; };
@@ -802,7 +801,6 @@
 				BE2DAD11182FAB5200A4D2F7 /* mnemonicengine.cxx */,
 				BE2DAD12182FAB5200A4D2F7 /* mouseevent.cxx */,
 				BE2DAD13182FAB5200A4D2F7 /* msgbox.cxx */,
-				BE2DAD14182FAB5200A4D2F7 /* popupmenuwindow.cxx */,
 				BE2DAD15182FAB5200A4D2F7 /* printdlg.cxx */,
 				BE2DAD16182FAB5200A4D2F7 /* scrwnd.cxx */,
 				BE2DAD17182FAB5200A4D2F7 /* scrwnd.hxx */,

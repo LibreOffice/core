@@ -53,7 +53,6 @@
 #include <comphelper/AccessibleImplementationHelper.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
-#include <vcl/popupmenuwindow.hxx>
 
 using namespace css;
 using namespace css::accessibility;
