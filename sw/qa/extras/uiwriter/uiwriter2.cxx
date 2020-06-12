@@ -313,6 +313,154 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    sw::UnoCursorPointer pCursor(
+        pDoc->CreateUnoCursor(SwPosition(SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1))));
+
+    pDoc->getIDocumentContentOperations().InsertString(*pCursor, "foo");
+
+    {
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+        pWrtShell->StartOfSection(false);
+        pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+
+    pCursor->SetMark();
+    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+
+    // replace with more text
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "blahblah", false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Undo();
+
+    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+
+    // replace with less text
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "x", false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetNode().GetTextNode()->GetText());
+
+    rUndoManager.Undo();
+
+    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+
+    // regex replace with paragraph breaks
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "xyz\\n\\nquux\\n", true);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    pWrtShell->StartOfSection(false);
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    // regex replace with paragraph join
+    pWrtShell->StartOfSection(false);
+    pWrtShell->Down(true);
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pWrtShell->GetCursor(), "bar", true);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("bar\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("bar\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    pWrtShell->StartOfSection(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    pWrtShell->StartOfSection(false);
+    pWrtShell->EndOfSection(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");

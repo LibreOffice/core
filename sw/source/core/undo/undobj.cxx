@@ -971,7 +971,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             if (!m_pHistory)
                                 m_pHistory.reset( new SwHistory );
 
-                            if (IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
+                            if (!(DelContentType::Replace & nDelContentType)
+                                && IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
                             {
                                 m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
                                 // reset n so that no Format is skipped
@@ -1002,7 +1003,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     {
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
-                        if (IsDestroyFrameAnchoredAtChar(
+                        if (!(DelContentType::Replace & nDelContentType)
+                            && IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, nDelContentType))
                         {
                             m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
