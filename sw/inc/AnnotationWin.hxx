@@ -102,6 +102,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
 
         OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
+        Outliner* GetOutliner() { return mpOutliner.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
         ScrollBar* Scrollbar() { return mpVScrollbar; }
@@ -197,6 +198,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         /// Find the first annotation for the thread which this annotation is in.
         /// This may be the same annotation as this one.
         SwAnnotationWin*   GetTopReplyNote();
+
+        virtual FactoryFunction GetUITestFactory() const override;
 
     private:
         VclPtr<MenuButton> CreateMenuButton();
