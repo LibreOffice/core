@@ -394,8 +394,6 @@ namespace vclcanvas
             // user coordinates.
             aStrokedPolyPoly.transform( aMatrix );
 
-            const ::tools::PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
-
             // TODO(F2): When using alpha here, must handle that via
             // temporary surface or somesuch.
 
@@ -403,28 +401,17 @@ namespace vclcanvas
             // self-intersections. Therefore, if we would render it
             // via OutDev::DrawPolyPolygon(), on/off fill would
             // generate off areas on those self-intersections.
-            sal_uInt16 nSize( aVCLPolyPoly.Count() );
-
-            for( sal_uInt16 i=0; i<nSize; ++i )
+            for( sal_uInt32 i=0; i<aStrokedPolyPoly.count(); ++i )
             {
-                if( aStrokedPolyPoly.getB2DPolygon( i ).isClosed() ) {
-                    mpOutDevProvider->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
+                if( polygon.isClosed()) {
+                    mpOutDevProvider->getOutDev().DrawPolygon( polygon );
                     if( mp2ndOutDevProvider )
-                        mp2ndOutDevProvider->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                        mp2ndOutDevProvider->getOutDev().DrawPolygon( polygon );
                 } else {
-                    const sal_uInt16 nPolySize = aVCLPolyPoly[i].GetSize();
-                    if( nPolySize ) {
-                        Point rPrevPoint = aVCLPolyPoly[i].GetPoint( 0 );
-                        Point rPoint;
-
-                        for( sal_uInt16 j=1; j<nPolySize; j++ ) {
-                            rPoint = aVCLPolyPoly[i].GetPoint( j );
-                            mpOutDevProvider->getOutDev().DrawLine( rPrevPoint, rPoint );
-                            if( mp2ndOutDevProvider )
-                                mp2ndOutDevProvider->getOutDev().DrawLine( rPrevPoint, rPoint );
-                            rPrevPoint = rPoint;
-                        }
-                    }
+                    mpOutDevProvider->getOutDev().DrawPolyLine( polygon );
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolyLine( polygon );
                 }
             }
         }
