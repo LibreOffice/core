@@ -186,6 +186,7 @@ SwUndoDelete::SwUndoDelete(
     m_bResetPgDesc( false ),
     m_bResetPgBrk( false ),
     m_bFromTableCopy( bCalledByTableCpy )
+    , m_bDisableMakeFrames(false)
 {
 
     m_bCacheComment = false;
@@ -1066,7 +1067,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         SetSaveData(rDoc, *m_pRedlSaveData);
 
     sal_uLong delFullParaEndNode(m_nEndNode);
-    if (m_bDelFullPara && m_pRedlSaveData)
+    if (m_bDelFullPara && m_pRedlSaveData && !m_bDisableMakeFrames)
     {
         SwTextNode * pFirstMergedDeletedTextNode(nullptr);
         SwTextNode *const pNextNode = FindFirstAndNextNode(rDoc, *this,
@@ -1103,7 +1104,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
         }
     }
-    else if (m_aSttStr && (!m_bFromTableCopy || 0 != m_nNode))
+    else if (m_aSttStr && (!m_bFromTableCopy || 0 != m_nNode) && !m_bDisableMakeFrames)
     {
         // only now do we have redlines in the document again; fix up the split
         // frames
@@ -1113,7 +1114,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // create frames after SetSaveData has recreated redlines
-    if (0 != m_nNode)
+    if (0 != m_nNode && !m_bDisableMakeFrames)
     {
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
@@ -1129,7 +1130,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         ::MakeFrames(&rDoc, start, end);
     }
 
-    if (pMovedNode)
+    if (pMovedNode && !m_bDisableMakeFrames)
     {   // probably better do this after creating all frames
         lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
     }
