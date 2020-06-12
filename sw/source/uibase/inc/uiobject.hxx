@@ -16,6 +16,8 @@
 #include "edtwin.hxx"
 #include "navipi.hxx"
 
+#include <AnnotationWin.hxx>
+
 class SwEditWinUIObject : public WindowUIObject
 {
 public:
@@ -59,6 +61,26 @@ protected:
     OUString get_name() const override;
 };
 
+class CommentUIObject : public WindowUIObject
+{
+    VclPtr<sw::annotation::SwAnnotationWin> mxCommentUIObject;
+
+public:
+
+    CommentUIObject(const VclPtr<sw::annotation::SwAnnotationWin>& xCommentUIObject);
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    OUString get_name() const override;
+
+};
 
 #endif
 

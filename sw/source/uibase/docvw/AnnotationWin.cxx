@@ -24,6 +24,8 @@
 
 #include <strings.hrc>
 
+#include <uiobject.hxx>
+
 #include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/scrbar.hxx>
@@ -66,6 +68,8 @@
 
 namespace sw::annotation {
 
+sal_uInt32 SwAnnotationWin::id_number=1;
+
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
@@ -100,6 +104,9 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
     , mpButtonPopup(nullptr)
 {
+    set_id("Comment"+OUString::number(id_number));
+    id_number++;
+
     mpShadow = sidebarwindows::ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
     {
@@ -500,6 +507,11 @@ Date SwAnnotationWin::GetDate() const
 tools::Time SwAnnotationWin::GetTime() const
 {
     return mpField->GetTime();
+}
+
+FactoryFunction SwAnnotationWin::GetUITestFactory() const
+{
+    return CommentUIObject::create;
 }
 
 } // end of namespace sw::annotation
