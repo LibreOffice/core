@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca231d77_8f4b5dff",
+        "filename": "i18npool/source/calendar/calendarImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-12T07:50:50Z",
+      "side": 1,
+      "message": "By the way: would you be interested to do a follow-up here, removing this macro, and providing at least a small piece of information like name of failing function in the exception ctor at every place? it\u0027s a pain to see a RuntimeException somewhere down the stack, that caused something, without a realistic way of knowing where had it originated from (they are thrown right and left throughout the code, so unrealistic to break at every construction of it). Making exceptions meaningful is a noble task! ;-)",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 32
+      },
+      "revId": "ff508f6d8a3e58d29e9e7622006a7103fb0a2849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
