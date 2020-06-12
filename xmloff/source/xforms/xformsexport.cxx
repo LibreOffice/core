@@ -345,7 +345,15 @@ void exportXFormsBinding( SvXMLExport& rExport,
             if( nKey == XML_NAMESPACE_UNKNOWN  ||
                 rMap.GetNameByKey( nKey ) != sURI )
             {
-                rExport.AddAttribute( "xmlns:" + rPrefix, sURI );
+                // add declaration if it doesn't already exist
+                SvXMLAttributeList& rAttrList = rExport.GetAttrList();
+                OUString sName = "xmlns:" + rPrefix;
+                sal_Int16 nFound = rAttrList.GetIndexByName(sName);
+                // duplicate xmlns:script, http://openoffice.org/2000/script seen
+                assert(nFound == -1 || rAttrList.getValueByIndex(nFound) == sURI);
+                if (nFound != -1)
+                    continue;
+                rAttrList.AddAttribute(sName, sURI);
             }
         }
     }
