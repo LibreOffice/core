@@ -1404,7 +1404,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
                 // but now other new/critical LO7.0 code expects it, and perhaps some corner cases still need it as well.
                 // So we skip it only for default outline styles, which are recognized by NumberingManager.
-                if (!GetCurrentParaStyleName().startsWith("Heading "))
+                if (!GetCurrentParaStyleName().startsWith("Heading ") || nListLevel >= pList->GetDefaultParentLevels())
                     pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
             }
             else if ( !pList->isOutlineNumbering(nListLevel) )
