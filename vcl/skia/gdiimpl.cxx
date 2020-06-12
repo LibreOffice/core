@@ -1380,8 +1380,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     // using the rNull, rX, rY points as destinations for the (0,0), (Width,0), (0,Height) source points.
     // Round to pixels, otherwise kMScaleX/Y below could be slightly != 1, causing unnecessary uncached
     // scaling.
-    const basegfx::B2IVector aXRel = basegfx::fround(rX - rNull);
-    const basegfx::B2IVector aYRel = basegfx::fround(rY - rNull);
+    const basegfx::B2DVector aXRel = basegfx::B2DTuple(basegfx::fround(rX - rNull));
+    const basegfx::B2DVector aYRel = basegfx::B2DTuple(basegfx::fround(rY - rNull));
 
     const Size aSize = rSourceBitmap.GetSize();
 
@@ -1389,18 +1389,15 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     SAL_INFO("vcl.skia.trace", "drawtransformedbitmap(" << this << "): " << aSize << " " << rNull
                                                         << ":" << rX << ":" << rY);
 
-    // TODO: How to cache properly skewed images?
-    bool blockCaching = (aXRel.getY() != 0 || aYRel.getX() != 0);
-    const Size imageSize(aXRel.getX(), aYRel.getY());
-    sk_sp<SkImage> imageToDraw
-        = mergeBitmaps(rSkiaBitmap, pSkiaAlphaBitmap, imageSize, blockCaching);
+    const Size imageSize(aXRel.getLength(), aXRel.getLength());
+    sk_sp<SkImage> imageToDraw = mergeBitmaps(rSkiaBitmap, pSkiaAlphaBitmap, imageSize);
     if (!imageToDraw)
         return false;
 
     SkMatrix aMatrix;
     aMatrix.set(SkMatrix::kMScaleX, aXRel.getX() / imageToDraw->width());
-    aMatrix.set(SkMatrix::kMSkewY, aXRel.getY() / aSize.Width());
-    aMatrix.set(SkMatrix::kMSkewX, aYRel.getX() / aSize.Height());
+    aMatrix.set(SkMatrix::kMSkewY, aXRel.getY() / imageToDraw->width());
+    aMatrix.set(SkMatrix::kMSkewX, aYRel.getX() / imageToDraw->height());
     aMatrix.set(SkMatrix::kMScaleY, aYRel.getY() / imageToDraw->height());
     aMatrix.set(SkMatrix::kMTransX, rNull.getX());
     aMatrix.set(SkMatrix::kMTransY, rNull.getY());
