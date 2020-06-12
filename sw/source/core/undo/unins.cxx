@@ -597,7 +597,7 @@ SwUndoReplace::Impl::Impl(
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
     m_pHistory.reset( new SwHistory );
-    DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+    DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(), DelContentType::AllMask | DelContentType::Replace);
 
     m_nSetPos = m_pHistory->Count();
 
@@ -658,40 +658,37 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( nullptr );
     }
 
-    SwIndex aIdx( pNd, m_nSttCnt );
     // don't look at m_sIns for deletion, maybe it was not completely inserted
     {
         rPam.GetPoint()->nNode = *pNd;
         rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
         rPam.SetMark();
-        rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
-        rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), m_nEndCnt );
-        // move it out of the way so it is not registered at deleted node
-        aIdx.Assign(nullptr, 0);
+        rPam.GetPoint()->nNode = m_nSttNd - m_nOffset;
+        rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(), m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
 
-        pDoc->getIDocumentContentOperations().DeleteAndJoin( rPam );
+        // replace only in start node, without regex
+        bool const ret = pDoc->getIDocumentContentOperations().ReplaceRange(rPam, m_sOld, false);
+        assert(ret); (void)ret;
+        if (m_nSttNd != m_nEndNd)
+        {   // in case of regex inserting paragraph breaks, join nodes...
+            assert(rPam.GetMark()->nContent == rPam.GetMark()->nNode.GetNode().GetTextNode()->Len());
+            rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
+            rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(true), m_nEndCnt);
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
+        }
         rPam.DeleteMark();
-        pNd = rPam.GetNode().GetTextNode();
+        pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
         OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
-        aIdx.Assign( pNd, m_nSttCnt );
     }
 
     if( m_bSplitNext )
     {
-        SwPosition aPos( *pNd, aIdx );
+        SwPosition aPos(*pNd, pNd->Len());
         pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
         pNd->RestoreMetadata(m_pMetadataUndoEnd);
         pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
-        aIdx.Assign( pNd, m_nSttCnt );
         // METADATA: restore
         pNd->RestoreMetadata(m_pMetadataUndoStart);
-    }
-
-    if (!m_sOld.isEmpty())
-    {
-        OUString const ins( pNd->InsertText( m_sOld, aIdx ) );
-        assert(ins.getLength() == m_sOld.getLength()); // must succeed
-        (void) ins;
     }
 
     if( m_pHistory )
@@ -720,7 +717,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     rPam.GetPoint()->nNode = m_nSttNd;
-    rPam.GetPoint()->nContent = aIdx;
+    rPam.GetPoint()->nContent = m_nSttCnt;
 }
 
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -746,7 +743,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
         auto xSave = std::make_unique<SwHistory>();
         std::swap(m_pHistory, xSave);
 
-        DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+        DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(), DelContentType::AllMask | DelContentType::Replace);
         m_nSetPos = m_pHistory->Count();
 
         std::swap(xSave, m_pHistory);
@@ -755,7 +752,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     else
     {
         m_pHistory.reset( new SwHistory );
-        DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+        DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(), DelContentType::AllMask | DelContentType::Replace);
         m_nSetPos = m_pHistory->Count();
         if( !m_nSetPos )
         {
