@@ -266,7 +266,6 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 */
 LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
 {
-    //Register all text styles: para styles, character styles
     LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(GetTextStyleHead().obj().get());
     if(pParaStyleHolder)
     {
