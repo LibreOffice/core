@@ -7410,7 +7410,6 @@ include/vcl/pdfextoutdevdata.hxx
 include/vcl/pdfwriter.hxx
 include/vcl/pngread.hxx
 include/vcl/pngwrite.hxx
-include/vcl/popupmenuwindow.hxx
 include/vcl/print.hxx
 include/vcl/prntypes.hxx
 include/vcl/ptrstyle.hxx
@@ -17302,7 +17301,6 @@ vcl/source/window/mnemonic.cxx
 vcl/source/window/mnemonicengine.cxx
 vcl/source/window/mouse.cxx
 vcl/source/window/paint.cxx
-vcl/source/window/popupmenuwindow.cxx
 vcl/source/window/printdlg.cxx
 vcl/source/window/scrwnd.cxx
 vcl/source/window/seleng.cxx
