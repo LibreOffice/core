@@ -48,7 +48,6 @@ core_factory_list = [
     ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
     ("libxoflo.a", "xof_component_getFactory"),
-    ("libxolo.a", "xo_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
