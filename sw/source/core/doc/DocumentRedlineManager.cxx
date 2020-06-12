@@ -25,6 +25,8 @@
 #include <fmtfld.hxx>
 #include <frmtool.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <UndoManager.hxx>
+#include <UndoDelete.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
@@ -889,6 +891,19 @@ namespace
             static_cast<SwPaM&>(m_rRedline) = *m_pCursor;
         }
     };
+
+    auto FixUndoDelete(SwDoc & rDoc) -> void
+    {
+        auto & rUndo(rDoc.GetUndoManager());
+        if (rUndo.DoesUndo())
+        {
+            SwUndo *const pUndo(rUndo.GetLastUndo());
+            assert(pUndo);
+            SwUndoDelete *const pUndoDel(dynamic_cast<SwUndoDelete*>(pUndo));
+            assert(pUndoDel);
+            pUndoDel->DisableMakeFrames(); // tdf#132944
+        }
+    }
 }
 
 namespace sw
@@ -1558,6 +1573,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 }
                                 else
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
+                                FixUndoDelete(m_rDoc);
 
                                 bCompress = true;
                             }
