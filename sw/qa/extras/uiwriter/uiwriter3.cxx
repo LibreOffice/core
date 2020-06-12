@@ -241,39 +241,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:GoToEndOfPara", {});
     Scheduler::ProcessEventsToIdle();
-
     dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:SwBackspace", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     //Without the fix in place, it would crash here
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString("A"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
