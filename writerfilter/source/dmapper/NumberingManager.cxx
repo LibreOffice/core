@@ -400,6 +400,7 @@ const OUString& AbstractListDef::MapListId(OUString const& rId)
 
 ListDef::ListDef( ) : AbstractListDef( )
 {
+    m_nDefaultParentLevels = WW_OUTLINE_MAX + 1;
 }
 
 ListDef::~ListDef( )
@@ -571,6 +572,10 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                     xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
                 }
+
+                // first level with custom pStyle
+                if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && pAbsLevel->GetParaStyle( ) )
+                    m_nDefaultParentLevels = nLevel;
 
                 nLevel++;
             }
