@@ -1141,11 +1141,10 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
             if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
             {
                 // change text ...
-                mxDoc->getIDocumentContentOperations().DeleteAndJoin(*pCursor);
                 // ... and apply language if necessary
                 if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                     SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
-                mxDoc->getIDocumentContentOperations().InsertString(*pCursor, aCurrentNewPortion->sText);
+                mxDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, aCurrentNewPortion->sText, false);
             }
             else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
             {
