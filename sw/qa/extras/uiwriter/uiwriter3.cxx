@@ -558,6 +558,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132420)
     CPPUNIT_ASSERT_EQUAL(12, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
+{
+    load(DATA_DIRECTORY, "tdf132744.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //Without the fix in place, the image wouldn't be pasted
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
