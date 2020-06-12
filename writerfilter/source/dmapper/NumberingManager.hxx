@@ -180,6 +180,9 @@ private:
     /// mapped list style name
     OUString m_StyleName;
 
+    /// not custom outline parent levels
+    sal_Int16 m_nDefaultParentLevels;
+
 public:
     typedef tools::SvRef< ListDef > Pointer;
 
@@ -193,6 +196,8 @@ public:
     // Mapping functions
     OUString GetStyleName() const { return m_StyleName; };
     OUString GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles);
+
+    sal_Int16 GetDefaultParentLevels() const { return m_nDefaultParentLevels; };
 
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
