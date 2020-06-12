@@ -195,6 +195,7 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
         {"RIGHT", KEY_RIGHT},
         {"DELETE", KEY_DELETE},
         {"INSERT", KEY_INSERT},
+        {"SPACE", KEY_SPACE},
         {"BACKSPACE", KEY_BACKSPACE},
         {"RETURN", KEY_RETURN},
         {"HOME", KEY_HOME},
