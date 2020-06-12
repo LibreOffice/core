@@ -16,6 +16,11 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <AnnotationWin.hxx>
+#include <comphelper/string.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+
 SwEditWinUIObject::SwEditWinUIObject(const VclPtr<SwEditWin>& xEditWin):
     WindowUIObject(xEditWin),
     mxEditWin(xEditWin)
@@ -167,6 +172,76 @@ OUString SwNavigationPIUIObject::get_name() const
 {
     return "SwNavigationPIUIObject";
 }
+
+CommentUIObject::CommentUIObject(const VclPtr<sw::annotation::SwAnnotationWin>& xCommentUIObject):
+    WindowUIObject(xCommentUIObject),
+    mxCommentUIObject(xCommentUIObject)
+{
+}
+
+StringMap CommentUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["Author"] = mxCommentUIObject->GetAuthor();
+    aMap["ReadOnly"] = OUString::boolean(mxCommentUIObject->IsReadOnly());
+    aMap["Resolved"] = OUString::boolean(mxCommentUIObject->IsResolved());
+    aMap["Visible"] = OUString::boolean(mxCommentUIObject->IsVisible());
+
+    aMap["Text"] = mxCommentUIObject->GetOutliner()->GetEditEngine().GetText();
+    aMap["SelectedText"] = mxCommentUIObject->GetOutlinerView()->GetEditView().GetSelected();
+    return aMap;
+}
+
+void CommentUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("FROM") != rParameters.end() &&
+                    rParameters.find("TO") != rParameters.end())
+            {
+                long nMin = rParameters.find("FROM")->second.toInt32();
+                long nMax = rParameters.find("TO")->second.toInt32();
+                ESelection aNewSelection( 0 , nMin, mxCommentUIObject->GetOutliner()->GetParagraphCount()-1, nMax );
+                mxCommentUIObject->GetOutlinerView()->SetSelection( aNewSelection );
+            }
+    }
+    else if (rAction == "LEAVE")
+    {
+        mxCommentUIObject->SwitchToFieldPos();
+    }
+    else if (rAction == "HIDE")
+    {
+        mxCommentUIObject->HideNote();
+    }
+    else if (rAction == "SHOW")
+    {
+        mxCommentUIObject->ShowNote();
+    }
+    else if (rAction == "DELETE")
+    {
+        mxCommentUIObject->Delete();
+    }
+    else if (rAction == "RESOLVE")
+    {
+        mxCommentUIObject->SetResolved(true);
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> CommentUIObject::create(vcl::Window* pWindow)
+{
+    sw::annotation::SwAnnotationWin* pCommentUIObject = dynamic_cast<sw::annotation::SwAnnotationWin*>(pWindow);
+    assert(pCommentUIObject);
+    return std::unique_ptr<UIObject>(new CommentUIObject(pCommentUIObject));
+}
+
+OUString CommentUIObject::get_name() const
+{
+    return "CommentUIObject";
+}
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
