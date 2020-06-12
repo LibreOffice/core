@@ -771,9 +771,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOOxmlOutlineNumberTypes, "outline-number
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
-//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
-//I think this unit test is wrong, but I will revert to its original claim.
-    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                        getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                        getProperty<sal_Int32>(getParagraph(2), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                        getProperty<sal_Int32>(getParagraph(3), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                        getProperty<sal_Int32>(getParagraph(4), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
