@@ -514,8 +514,7 @@ LwpSuperTableLayout * LwpTableLayout::GetSuperTableLayout()
  */
 LwpTable *  LwpTableLayout::GetTable()
 {
-    LwpTable *pTable = dynamic_cast<LwpTable *>(m_Content.obj().get());
-    return pTable;
+    return dynamic_cast<LwpTable *>(m_Content.obj().get());
 }
 /**
  * @short   Get column style name by column ID
