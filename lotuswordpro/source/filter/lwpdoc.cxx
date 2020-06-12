@@ -231,19 +231,19 @@ void LwpDocument::RegisterStyle()
 void LwpDocument::RegisterTextStyles()
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = m_xOwnedFoundry
+    LwpDLVListHeadHolder* pTextStyleHolder = m_xOwnedFoundry
         ? dynamic_cast<LwpDLVListHeadHolder*>(m_xOwnedFoundry->GetTextStyleHead().obj().get())
         : nullptr;
-    if(pParaStyleHolder)
+    if(pTextStyleHolder)
     {
-        LwpTextStyle* pParaStyle = dynamic_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID().obj().get());
-        while(pParaStyle)
+        LwpTextStyle* pTextStyle = dynamic_cast<LwpTextStyle*> (pTextStyleHolder->GetHeadID().obj().get());
+        while(pTextStyle)
         {
-            if (pParaStyle->GetFoundry())
+            if (pTextStyle->GetFoundry())
                 throw std::runtime_error("loop in register text style");
-            pParaStyle->SetFoundry(m_xOwnedFoundry.get());
-            pParaStyle->RegisterStyle();
-            pParaStyle = dynamic_cast<LwpTextStyle*>(pParaStyle->GetNext().obj().get());
+            pTextStyle->SetFoundry(m_xOwnedFoundry.get());
+            pTextStyle->RegisterStyle();
+            pTextStyle = dynamic_cast<LwpTextStyle*>(pTextStyle->GetNext().obj().get());
         }
     }
     ChangeStyleName();//for click here block
