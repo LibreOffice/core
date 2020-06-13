@@ -50,16 +50,12 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
-    static INetURLObject    ImplGetURLIgnoreCase(const INetURLObject& rURL);
-
     const OUString&         GetThemeName() const { return aName; }
 
     const INetURLObject&    GetThmURL() const { return maGalleryBinaryEngine.GetThmURL(); }
     const INetURLObject&    GetSdgURL() const { return maGalleryBinaryEngine.GetSdgURL(); }
     const INetURLObject&    GetSdvURL() const { return maGalleryBinaryEngine.GetSdvURL(); }
     const INetURLObject&    GetStrURL() const { return maGalleryBinaryEngine.GetStrURL(); }
-
-    OUString                ReadStrFromIni(const OUString &aKeyName );
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;
