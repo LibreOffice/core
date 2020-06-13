@@ -386,7 +386,7 @@
 #define RID_SVXSTR_COMMANDNAME                      NC_("RID_SVXSTR_COMMANDLABEL", "Command")
 #define RID_SVXSTR_COMMANDTIP                       NC_("RID_SVXSTR_COMMANDLABEL", "Tooltip")
 
-#define RID_SVXSTR_QRCODEDATALONG                   NC_("RID_SVXSTR_QRCODEDATALONG", "Text exceeds the maximum bits for Error Correction, Enter shorter text")
+#define RID_SVXSTR_QRCODEDATALONG                   NC_("RID_SVXSTR_QRCODEDATALONG", "The URL or text is too long for the current error correction level. Either shorten the text or decrease the correction level.")
 #define RID_SVXSTR_DELETEUSERCOLOR1                 NC_("RID_SVXSTR_DELETEUSERCOLOR1", "You can only delete user-defined colors")
 #define RID_SVXSTR_DELETEUSERCOLOR2                 NC_("RID_SVXSTR_DELETEUSERCOLOR2", "Please select the color to delete")
 
