@@ -30,7 +30,10 @@ private:
     INetURLObject aSdvURL;
     INetURLObject aStrURL;
 
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
 public:
+    void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
     void SetThmExtension(INetURLObject aURL);
     void SetSdgExtension(INetURLObject aURL);
     void SetSdvExtension(INetURLObject aURL);
