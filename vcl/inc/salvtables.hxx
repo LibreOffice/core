@@ -323,7 +323,7 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override;
 
-    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override;
+    virtual void connect_mnemonic_activate(const std::function<bool(Widget&)>& rLink) override;
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override;
 

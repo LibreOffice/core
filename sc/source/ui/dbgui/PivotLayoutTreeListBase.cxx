@@ -19,7 +19,18 @@ ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(std::unique_ptr<weld::TreeV
     , mpParent(nullptr)
 {
     mxControl->connect_focus_in(LINK(this, ScPivotLayoutTreeListBase, GetFocusHdl));
-    mxControl->connect_mnemonic_activate(LINK(this, ScPivotLayoutTreeListBase, MnemonicActivateHdl));
+
+    mxControl->connect_mnemonic_activate( [=](weld::Widget&) -> bool
+    {
+        if (!mpParent || !mpParent->mpPreviouslyFocusedListBox)
+            return false;
+        weld::TreeView& rSource = mpParent->mpPreviouslyFocusedListBox->get_widget();
+        int nEntry = rSource.get_cursor_index();
+        if (nEntry != -1)
+            InsertEntryForSourceTarget(rSource, -1);
+        return true;
+    });
+
     mxControl->connect_focus_out(LINK(this, ScPivotLayoutTreeListBase, LoseFocusHdl));
 }
 
@@ -100,17 +111,6 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, GetFocusHdl, weld::Widget&, void)
     if (!mpParent)
         return;
     mpParent->mpPreviouslyFocusedListBox = this;
-}
-
-IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, MnemonicActivateHdl, weld::Widget&, bool)
-{
-    if (!mpParent || !mpParent->mpPreviouslyFocusedListBox)
-        return false;
-    weld::TreeView& rSource = mpParent->mpPreviouslyFocusedListBox->get_widget();
-    int nEntry = rSource.get_cursor_index();
-    if (nEntry != -1)
-        InsertEntryForSourceTarget(rSource, -1);
-    return true;
 }
 
 IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, LoseFocusHdl, weld::Widget&, void)

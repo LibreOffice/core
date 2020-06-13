@@ -87,7 +87,7 @@ class VCL_DLLPUBLIC Widget
 protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
-    Link<Widget&, bool> m_aMnemonicActivateHdl;
+    std::function<bool(Widget&)> m_aMnemonicActivateHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
@@ -188,9 +188,9 @@ public:
     // rLink is called when the mnemonic for the Widget is called.
     // If rLink returns true the Widget will not automatically gain
     // focus as normally occurs
-    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink)
+    virtual void connect_mnemonic_activate(const std::function<bool(Widget&)>& rLink)
     {
-        assert(!m_aMnemonicActivateHdl.IsSet() || !rLink.IsSet());
+        assert(!m_aMnemonicActivateHdl || !rLink);
         m_aMnemonicActivateHdl = rLink;
     }
 

@@ -387,7 +387,7 @@ void SalInstanceWidget::connect_focus_in(const Link<Widget&, void>& rLink)
     weld::Widget::connect_focus_in(rLink);
 }
 
-void SalInstanceWidget::connect_mnemonic_activate(const Link<Widget&, bool>& rLink)
+void SalInstanceWidget::connect_mnemonic_activate(const std::function<bool(Widget&)>& rLink)
 {
     m_xWidget->SetMnemonicActivateHdl(LINK(this, SalInstanceWidget, MnemonicActivateHdl));
     weld::Widget::connect_mnemonic_activate(rLink);
@@ -463,7 +463,7 @@ void SalInstanceWidget::thaw() { m_xWidget->SetUpdateMode(true); }
 
 SalInstanceWidget::~SalInstanceWidget()
 {
-    if (m_aMnemonicActivateHdl.IsSet())
+    if (m_aMnemonicActivateHdl)
         m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&, bool>());
     if (m_bMouseEventListener)
         Application::RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
@@ -600,7 +600,7 @@ IMPL_LINK(SalInstanceWidget, MouseEventListener, VclSimpleEvent&, rEvent, void)
 
 IMPL_LINK_NOARG(SalInstanceWidget, MnemonicActivateHdl, vcl::Window&, bool)
 {
-    return m_aMnemonicActivateHdl.Call(*this);
+    return m_aMnemonicActivateHdl(*this);
 }
 
 namespace

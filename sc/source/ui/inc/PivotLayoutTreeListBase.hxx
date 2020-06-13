@@ -50,7 +50,6 @@ protected:
     ScPivotLayoutDialog* mpParent;
 
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
-    DECL_LINK(MnemonicActivateHdl, weld::Widget&, bool);
     DECL_LINK(LoseFocusHdl, weld::Widget&, void);
 
 public:
