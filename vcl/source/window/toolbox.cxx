@@ -1392,8 +1392,11 @@ bool ToolBox::ImplCalcItem()
                 aRect = aNativeBounds;
                 if( aRect.GetWidth() > nMinWidth )
                     nMinWidth = aRect.GetWidth();
-                if( aRect.GetHeight() > nMinHeight )
-                    nMinHeight = aRect.GetHeight();
+
+                // add an upper and lower margin of 2 pixels around native control if required
+
+                if( aRect.GetHeight() + 4 > nMinHeight )
+                    nMinHeight = aRect.GetHeight() + 4;
                 if( nDropDownArrowWidth < nMinWidth )
                     nDropDownArrowWidth = nMinWidth;
                 if( nMinWidth > mpData->mnMenuButtonWidth )
@@ -1415,8 +1418,11 @@ bool ToolBox::ImplCalcItem()
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;
-            if( aRect.GetHeight() > mnWinHeight )
-                mnWinHeight = aRect.GetHeight();
+
+            // add an upper and lower margin of 2 pixels around native control if required
+
+            if( aRect.GetHeight() + 4 > mnWinHeight )
+                mnWinHeight = aRect.GetHeight() + 4;
         }
         aRect = tools::Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         aReg = aRect;
@@ -1427,8 +1433,11 @@ bool ToolBox::ImplCalcItem()
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;
-            if( aRect.GetHeight() > mnWinHeight )
-                mnWinHeight = aRect.GetHeight();
+
+            // add an upper and lower margin of 2 pixels around native control if required
+
+            if( aRect.GetHeight() + 4 > mnWinHeight )
+                mnWinHeight = aRect.GetHeight() + 4;
         }
         aRect = tools::Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         aReg = aRect;
@@ -1439,8 +1448,11 @@ bool ToolBox::ImplCalcItem()
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;
-            if( aRect.GetHeight() > mnWinHeight )
-                mnWinHeight = aRect.GetHeight();
+
+            // add an upper and lower margin of 2 pixels around native control if required
+
+            if( aRect.GetHeight() + 4 > mnWinHeight )
+                mnWinHeight = aRect.GetHeight() + 4;
         }
     }
 
