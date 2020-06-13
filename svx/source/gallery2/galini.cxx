@@ -17,13 +17,13 @@
 #include <sal/log.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <svx/gallery1.hxx>
+#include <svx/gallerybinaryengine.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
 
-OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
+OUString GalleryBinaryEngine::ReadStrFromIni(const OUString &aKeyName )
 {
     std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
                                 GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),

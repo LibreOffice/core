@@ -51,13 +51,6 @@
 using namespace ::com::sun::star;
 
 
-static bool FileExists( const INetURLObject &rURL, const OUString &rExt )
-{
-    INetURLObject aURL( rURL );
-    aURL.setExtension( rExt );
-    return FileExists( aURL );
-}
-
 const std::pair<sal_uInt16, const char*> aUnlocalized[] =
 {
     { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
@@ -126,15 +119,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if (bCreateUniqueURL)
     {
-        INetURLObject aBaseNoCase( ImplGetURLIgnoreCase( rBaseURL ) );
-        aURL = aBaseNoCase;
-        static sal_Int32 nIdx = 0;
-        while( FileExists( aURL, "thm" ) )
-        { // create new URLs
-            nIdx++;
-            aURL = aBaseNoCase;
-            aURL.setName( aURL.getName() + OUString::number(nIdx));
-        }
+        GalleryBinaryEngine::CreateUniqueURL(rBaseURL,aURL);
     }
 
     maGalleryBinaryEngine.SetThmExtension(aURL);
@@ -144,7 +129,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     SetModified( _bNewFile );
 
-    aName = ReadStrFromIni( "name" );
+    aName = maGalleryBinaryEngine.ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -185,26 +170,6 @@ void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
         rListBox.append_text(SvxResId(aLocalized[i].second));
-}
-
-INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )
-{
-    INetURLObject   aURL( rURL );
-
-    // check original file name
-    if( !FileExists( aURL ) )
-    {
-        // check upper case file name
-        aURL.setName( aURL.getName().toAsciiUpperCase() );
-
-        if(!FileExists( aURL ) )
-        {
-            // check lower case file name
-            aURL.setName( aURL.getName().toAsciiLowerCase() );
-        }
-    }
-
-    return aURL;
 }
 
 void GalleryThemeEntry::SetName( const OUString& rNewName )
