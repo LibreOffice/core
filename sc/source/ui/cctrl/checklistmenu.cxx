@@ -142,7 +142,7 @@ void ScCheckListMenuControl::addSeparator()
     aItem.mbSeparator = true;
     maMenuItems.emplace_back(std::move(aItem));
 
-    mxMenu->append_separator("seperator" + OUString::number(maMenuItems.size()));
+    mxMenu->append_separator("separator" + OUString::number(maMenuItems.size()));
 }
 
 IMPL_LINK(ScCheckListMenuControl, TreeSizeAllocHdl, const Size&, rSize, void)
