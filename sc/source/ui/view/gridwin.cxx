@@ -300,6 +300,11 @@ IMPL_LINK_NOARG(ScFilterListBox, AsyncSelectHdl, void*, void)
 {
     pGridWin->FilterSelect( nSel );
     nAsyncSelectHdl = nullptr;
+    if (!pGridWin)
+    {
+        // tdf#133855 we got disposed by FilterSelect
+        return;
+    }
     pGridWin->ClickExtern();
 }
 
