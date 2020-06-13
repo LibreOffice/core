@@ -5366,7 +5366,8 @@ void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
 long SwCellFrame::GetLayoutRowSpan() const
 {
-    long nRet = GetTabBox()->getRowSpan();
+    const SwTableBox *pTabBox = GetTabBox();
+    long nRet = pTabBox ? pTabBox->getRowSpan() : 0;
     if ( nRet < 1 )
     {
         const SwFrame* pRow = GetUpper();
