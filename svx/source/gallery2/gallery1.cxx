@@ -126,15 +126,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if (bCreateUniqueURL)
     {
-        INetURLObject aBaseNoCase( ImplGetURLIgnoreCase( rBaseURL ) );
-        aURL = aBaseNoCase;
-        static sal_Int32 nIdx = 0;
-        while( FileExists( aURL, "thm" ) )
-        { // create new URLs
-            nIdx++;
-            aURL = aBaseNoCase;
-            aURL.setName( aURL.getName() + OUString::number(nIdx));
-        }
+        maGalleryBinaryEngine.CreateUniqueURL(rBaseURL,aURL);
     }
 
     maGalleryBinaryEngine.SetThmExtension(aURL);
@@ -185,26 +177,6 @@ void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
         rListBox.append_text(SvxResId(aLocalized[i].second));
-}
-
-INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )
-{
-    INetURLObject   aURL( rURL );
-
-    // check original file name
-    if( !FileExists( aURL ) )
-    {
-        // check upper case file name
-        aURL.setName( aURL.getName().toAsciiUpperCase() );
-
-        if(!FileExists( aURL ) )
-        {
-            // check lower case file name
-            aURL.setName( aURL.getName().toAsciiLowerCase() );
-        }
-    }
-
-    return aURL;
 }
 
 void GalleryThemeEntry::SetName( const OUString& rNewName )
