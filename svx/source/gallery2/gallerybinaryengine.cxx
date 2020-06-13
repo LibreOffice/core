@@ -18,30 +18,70 @@
  */
 
 #include <svx/gallerybinaryengine.hxx>
-#include <svx/gallery1.hxx>
+#include <svx/galmisc.hxx>
 
 #include <tools/urlobj.hxx>
+
+static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
+{
+    INetURLObject aURL(rURL);
+    aURL.setExtension(rExt);
+    return FileExists(aURL);
+}
+
+INetURLObject GalleryBinaryEngine::ImplGetURLIgnoreCase(const INetURLObject& rURL)
+{
+    INetURLObject aURL(rURL);
+
+    // check original file name
+    if (!FileExists(aURL))
+    {
+        // check upper case file name
+        aURL.setName(aURL.getName().toAsciiUpperCase());
+
+        if (!FileExists(aURL))
+        {
+            // check lower case file name
+            aURL.setName(aURL.getName().toAsciiLowerCase());
+        }
+    }
+
+    return aURL;
+}
+
+void GalleryBinaryEngine::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
+{
+    INetURLObject aBaseNoCase(ImplGetURLIgnoreCase(rBaseURL));
+    aURL = aBaseNoCase;
+    static sal_Int32 nIdx = 0;
+    while (FileExists(aURL, "thm"))
+    { // create new URLs
+        nIdx++;
+        aURL = aBaseNoCase;
+        aURL.setName(aURL.getName() + OUString::number(nIdx));
+    }
+}
 
 void GalleryBinaryEngine::SetThmExtension(INetURLObject aURL)
 {
     aURL.setExtension("thm");
-    aThmURL = GalleryThemeEntry::ImplGetURLIgnoreCase(aURL);
+    aThmURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryEngine::SetSdgExtension(INetURLObject aURL)
 {
     aURL.setExtension("sdg");
-    aSdgURL = GalleryThemeEntry::ImplGetURLIgnoreCase(aURL);
+    aSdgURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryEngine::SetSdvExtension(INetURLObject aURL)
 {
     aURL.setExtension("sdv");
-    aSdvURL = GalleryThemeEntry::ImplGetURLIgnoreCase(aURL);
+    aSdvURL = ImplGetURLIgnoreCase(aURL);
 }
 
 void GalleryBinaryEngine::SetStrExtension(INetURLObject aURL)
 {
     aURL.setExtension("str");
-    aStrURL = GalleryThemeEntry::ImplGetURLIgnoreCase(aURL);
+    aStrURL = ImplGetURLIgnoreCase(aURL);
 }

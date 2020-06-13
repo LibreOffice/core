@@ -30,7 +30,13 @@ private:
     INetURLObject aSdvURL;
     INetURLObject aStrURL;
 
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
 public:
+    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
+
+    OUString ReadStrFromIni(const OUString& aKeyName);
+
     void SetThmExtension(INetURLObject aURL);
     void SetSdgExtension(INetURLObject aURL);
     void SetSdvExtension(INetURLObject aURL);
