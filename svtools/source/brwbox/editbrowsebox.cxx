@@ -1209,10 +1209,10 @@ namespace svt
 
     void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
-        pCheckBoxPaint->GetBox().SetState(eState);
+        pCheckBoxPaint->get_widget().set_state(eState);
         pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
 
-        pCheckBoxPaint->GetBox().Enable(_bEnabled);
+        pCheckBoxPaint->get_widget().set_sensitive(_bEnabled);
         pCheckBoxPaint->Show();
         pCheckBoxPaint->SetParentUpdateMode( false );
         pCheckBoxPaint->PaintImmediately();

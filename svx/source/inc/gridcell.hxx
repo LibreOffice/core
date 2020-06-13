@@ -48,6 +48,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/button.hxx>
 
 class DbCellControl;
 class Edit;
@@ -680,7 +681,7 @@ private:
 
     void SetList(const css::uno::Any& rItems, bool bComboBox);
     void CreateControl(vcl::Window* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
-    DECL_LINK( OnClick, VclPtr<CheckBox>, void );
+    DECL_LINK( OnClick, weld::Button&, void );
 
     css::uno::Sequence< OUString >  m_aValueList;
     OUString    m_aText;
@@ -915,7 +916,7 @@ class FmXCheckBoxCell : public FmXDataCell,
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners;
     ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
     OUString                            m_aActionCommand;
-    VclPtr<CheckBox>                    m_pBox;
+    weld::CheckButton* m_pBox;
 
 protected:
     virtual ~FmXCheckBoxCell() override;

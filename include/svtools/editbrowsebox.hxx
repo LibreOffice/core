@@ -34,7 +34,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class Button;
-class CheckBox;
 class SpinField;
 
 // EditBrowseBoxFlags (EBBF)
@@ -268,36 +267,31 @@ namespace svt
         DECL_LINK(ModifyHdl, Edit&, void);
     };
 
-
     //= CheckBoxControl
-
-    class SVT_DLLPUBLIC CheckBoxControl final : public Control
+    class SVT_DLLPUBLIC CheckBoxControl final : public InterimItemWindow
     {
-        VclPtr<CheckBox>             pBox;
-        Link<VclPtr<CheckBox>,void>  m_aClickLink;
-        Link<LinkParamNone*,void>    m_aModifyLink;
+        std::unique_ptr<weld::CheckButton> m_xWidget;
+        Link<weld::Button&,void> m_aClickLink;
+        Link<LinkParamNone*,void> m_aModifyLink;
 
     public:
         CheckBoxControl(vcl::Window* pParent);
         virtual ~CheckBoxControl() override;
         virtual void dispose() override;
 
-        virtual void GetFocus() override;
-        virtual bool PreNotify(NotifyEvent& rEvt) override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect) override;
-        virtual void Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
-        virtual void StateChanged( StateChangedType nStateChange ) override;
-        virtual void DataChanged( const DataChangedEvent& _rEvent ) override;
-        virtual void Resize() override;
+//        virtual void GetFocus() override;
+//        virtual bool PreNotify(NotifyEvent& rEvt) override;
+//        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect) override;
+//        virtual void Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
 
-        void SetClickHdl(const Link<VclPtr<CheckBox>,void>& rHdl) {m_aClickLink = rHdl;}
+        void SetClickHdl(const Link<weld::Button&,void>& rHdl) {m_aClickLink = rHdl;}
 
         void SetModifyHdl(const Link<LinkParamNone*,void>& rHdl) {m_aModifyLink = rHdl;}
 
-        CheckBox&   GetBox() {return *pBox;};
+        weld::CheckButton& get_widget() { return *m_xWidget; }
 
     private:
-        DECL_LINK( OnClick, Button*, void );
+        DECL_LINK(OnClick, weld::Button&, void);
     };
 
     //= CheckBoxCellController
@@ -306,7 +300,7 @@ namespace svt
     public:
 
         CheckBoxCellController(CheckBoxControl* pWin);
-        CheckBox& GetCheckBox() const;
+        weld::CheckButton& GetCheckBox() const;
 
         virtual bool IsModified() const override;
         virtual void ClearModified() override;

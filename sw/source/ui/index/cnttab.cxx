@@ -3565,7 +3565,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
     m_sYes = SwResId(STR_AUTOMARK_YES);
     m_sNo = SwResId(STR_AUTOMARK_NO);
 
-    m_aCellCheckBox->GetBox().EnableTriState(false);
+//TODO    m_aCellCheckBox->GetBox().EnableTriState(false);
     m_xController = new ::svt::EditCellController(m_aCellEdit.get());
     m_xCheckController = new ::svt::CheckBoxCellController(m_aCellCheckBox.get());
 
@@ -3717,7 +3717,7 @@ bool SwEntryBrowseBox::SaveModified()
     else
     {
         pController = m_xCheckController.get();
-        bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().IsChecked();
+        bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().get_active();
     }
     const bool bAddEntry = nRow >= m_Entries.size();
     std::unique_ptr<AutoMarkEntry> xNewEntry(bAddEntry ? new AutoMarkEntry : nullptr);
@@ -3759,8 +3759,8 @@ void SwEntryBrowseBox::InitController(
     {
         rController = m_xCheckController;
         ::svt::CellController* pController = m_xCheckController.get();
-        static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().Check(
-                                                            rText == m_sYes );
+        static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().set_active(
+                                                            rText == m_sYes);
      }
 }
 

@@ -166,7 +166,8 @@ namespace svt
 
     //= CheckBoxControl
     CheckBoxControl::CheckBoxControl(vcl::Window* pParent)
-                   :Control(pParent, 0)
+        : InterimItemWindow(pParent, "svt/ui/checkboxcontrol.ui", "CheckBoxControl")
+        , m_xWidget(m_xBuilder->weld_check_button("checkbox"))
     {
         const Wallpaper& rParentBackground = pParent->GetBackground();
         if ( (pParent->GetStyle() & WB_CLIPCHILDREN) || rParentBackground.IsFixed() )
@@ -179,13 +180,14 @@ namespace svt
 
         EnableChildTransparentMode();
 
-        pBox = VclPtr<CheckBox>::Create(this,WB_CENTER|WB_VCENTER);
-        pBox->EnableTriState( true );
-        pBox->SetLegacyNoTextAlign( true );
-        pBox->EnableChildTransparentMode();
-        pBox->SetPaintTransparent( true );
-        pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
-        pBox->Show();
+#if 0
+        m_xWidget->EnableTriState( true );
+        m_xWidget->SetLegacyNoTextAlign( true );
+        m_xWidget->EnableChildTransparentMode();
+        m_xWidget->SetPaintTransparent( true );
+#endif
+        m_xWidget->connect_clicked(LINK(this, CheckBoxControl, OnClick));
+        m_xWidget->show();
     }
 
     CheckBoxControl::~CheckBoxControl()
@@ -195,39 +197,17 @@ namespace svt
 
     void CheckBoxControl::dispose()
     {
-        pBox.disposeAndClear();
-        Control::dispose();
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
     }
 
-
-    IMPL_LINK_NOARG(CheckBoxControl, OnClick, Button*, void)
+    IMPL_LINK_NOARG(CheckBoxControl, OnClick, weld::Button&, void)
     {
-        m_aClickLink.Call(pBox);
+        m_aClickLink.Call(*m_xWidget);
         m_aModifyLink.Call(nullptr);
     }
 
-
-    void CheckBoxControl::Resize()
-    {
-        Control::Resize();
-        pBox->SetPosSizePixel(Point(0,0),GetSizePixel());
-    }
-
-
-    void CheckBoxControl::DataChanged( const DataChangedEvent& _rEvent )
-    {
-        if ( _rEvent.GetType() == DataChangedEventType::SETTINGS )
-            pBox->SetSettings( GetSettings() );
-    }
-
-
-    void CheckBoxControl::StateChanged( StateChangedType nStateChange )
-    {
-        Control::StateChanged(nStateChange);
-        if ( nStateChange == StateChangedType::Zoom )
-            pBox->SetZoom(GetZoom());
-    }
-
+#if 0
     void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     {
         pBox->Draw(pDev, rPos, nFlags);
@@ -239,14 +219,12 @@ namespace svt
             pBox->GrabFocus();
     }
 
-
     void CheckBoxControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect)
     {
         Control::Paint(rRenderContext, rClientRect);
         if (HasFocus())
             ShowFocus(tools::Rectangle());
     }
-
 
     bool CheckBoxControl::PreNotify(NotifyEvent& rEvt)
     {
@@ -263,11 +241,9 @@ namespace svt
         }
         return Control::PreNotify(rEvt);
     }
-
+#endif
 
     //= CheckBoxCellController
-
-
     CheckBoxCellController::CheckBoxCellController(CheckBoxControl* pWin)
         : CellController(pWin)
     {
@@ -279,24 +255,20 @@ namespace svt
         return true;
     }
 
-
-    CheckBox& CheckBoxCellController::GetCheckBox() const
+    weld::CheckButton& CheckBoxCellController::GetCheckBox() const
     {
-        return static_cast<CheckBoxControl &>(GetWindow()).GetBox();
+        return static_cast<CheckBoxControl&>(GetWindow()).get_widget();
     }
-
 
     bool CheckBoxCellController::IsModified() const
     {
-        return GetCheckBox().IsValueChangedFromSaved();
+        return GetCheckBox().get_state_changed_from_saved();
     }
-
 
     void CheckBoxCellController::ClearModified()
     {
-        GetCheckBox().SaveValue();
+        GetCheckBox().save_state();
     }
-
 
     IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
     {
@@ -304,23 +276,17 @@ namespace svt
     }
 
     //= MultiLineEditImplementation
-
-
     OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetText( aSeparator );
     }
-
 
     OUString MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
     }
 
-
     //= EditCellController
-
-
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
