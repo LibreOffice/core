@@ -1,3 +1,4 @@
+svtools/uiconfig/ui/checkboxcontrol.ui://GtkCheckButton[@id='checkbox'] button-no-label
 svtools/uiconfig/ui/editcontrol.ui://GtkEntry[@id='entry'] no-labelled-by
 svtools/uiconfig/ui/graphicexport.ui://GtkSpinButton[@id='compressionjpgnf'] no-labelled-by
 svtools/uiconfig/ui/graphicexport.ui://GtkScale[@id='compressionjpgsb'] no-labelled-by

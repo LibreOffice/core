@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
@@ -134,8 +133,6 @@ void OTableGrantControl::Init()
     if(!m_pCheckCell)
     {
         m_pCheckCell    = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
-        m_pCheckCell->GetBox().EnableTriState(false);
-
         m_pEdit         = VclPtr<Edit>::Create( &GetDataWindow() );
         m_pEdit->SetReadOnly();
         m_pEdit->Enable(false);
@@ -194,7 +191,7 @@ bool OTableGrantControl::IsTabAllowed(bool bForward) const
 }
 
 #define GRANT_REVOKE_RIGHT(what)                \
-    if(m_pCheckCell->GetBox().IsChecked())      \
+    if(m_pCheckCell->get_widget().get_active()) \
         xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,what);\
     else                                        \
         xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
@@ -280,7 +277,7 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
     {
         // get the privileges from the user
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
-        m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nRights));
+        m_pCheckCell->get_widget().set_active(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nRights));
     }
 }
 

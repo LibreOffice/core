@@ -56,7 +56,6 @@
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
-#include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
@@ -1633,11 +1632,6 @@ void DbCheckBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 
         setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT );
         setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT );
-
-        bool bTristate = true;
-        OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
-        static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().EnableTriState( bTristate );
-        static_cast< CheckBoxControl* >( m_pPainter.get() )->GetBox().EnableTriState( bTristate );
     }
     catch( const Exception& )
     {
@@ -1670,7 +1664,7 @@ static void lcl_setCheckBoxState(   const Reference< css::sdb::XColumn >& _rxFie
             DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
-    _pCheckBoxControl->GetBox().SetState(eState);
+    _pCheckBoxControl->get_widget().set_state(eState);
 }
 
 
@@ -1695,14 +1689,14 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 
     sal_Int16 nState = TRISTATE_INDET;
     _rxModel->getPropertyValue( FM_PROP_STATE ) >>= nState;
-    static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().SetState( static_cast< TriState >( nState ) );
+    static_cast< CheckBoxControl* >( m_pWindow.get() )->get_widget().set_state( static_cast< TriState >( nState ) );
 }
 
 
 bool DbCheckBox::commitControl()
 {
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
-                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().GetState() ) ) );
+                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->get_widget().get_state() ) ) );
     return true;
 }
 
@@ -2649,7 +2643,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == css::form::FormComponentType::CHECKBOX)
-        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<VclPtr<CheckBox>,void>() );
+        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<weld::Button&,void>() );
 
 }
 
@@ -2911,8 +2905,8 @@ void DbFilterField::SetText(const OUString& rText)
             else
                 eState = TRISTATE_INDET;
 
-            static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().SetState(eState);
-            static_cast<CheckBoxControl*>(m_pPainter.get())->GetBox().SetState(eState);
+            static_cast<CheckBoxControl*>(m_pWindow.get())->get_widget().set_state(eState);
+            static_cast<CheckBoxControl*>(m_pPainter.get())->get_widget().set_state(eState);
         }   break;
         case css::form::FormComponentType::LISTBOX:
         {
@@ -3059,9 +3053,9 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 }
 
 
-IMPL_LINK_NOARG(DbFilterField, OnClick, VclPtr<CheckBox>, void)
+IMPL_LINK_NOARG(DbFilterField, OnClick, weld::Button&, void)
 {
-    TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().GetState();
+    TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->get_widget().get_state();
     OUStringBuffer aTextBuf;
 
     Reference< XRowSet > xDataSourceRowSet(
@@ -3793,7 +3787,7 @@ FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellC
                 :FmXDataCell( pColumn, std::move(pControl) )
                 ,m_aItemListeners(m_aMutex)
                 ,m_aActionListeners( m_aMutex )
-                ,m_pBox( & static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).GetBox() )
+                ,m_pBox( & static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).get_widget() )
 {
 }
 
@@ -3816,7 +3810,7 @@ void FmXCheckBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<VclPtr<CheckBox>,void>());
+    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<weld::Button&,void>());
     m_pBox = nullptr;
 
     FmXDataCell::disposing();
@@ -3865,10 +3859,9 @@ void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
     if (m_pBox)
     {
         UpdateFromColumn();
-        m_pBox->SetState( static_cast<TriState>(n) );
+        m_pBox->set_state( static_cast<TriState>(n) );
     }
 }
-
 
 sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
 {
@@ -3877,32 +3870,24 @@ sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
     if (m_pBox)
     {
         UpdateFromColumn();
-        return static_cast<sal_Int16>(m_pBox->GetState());
+        return static_cast<sal_Int16>(m_pBox->get_state());
     }
     return TRISTATE_INDET;
 }
 
-
-void SAL_CALL FmXCheckBoxCell::enableTriState( sal_Bool b )
+void SAL_CALL FmXCheckBoxCell::enableTriState( sal_Bool /*b*/ )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if (m_pBox)
-        m_pBox->EnableTriState( b );
 }
-
 
 void SAL_CALL FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& Listener )
 {
     m_aActionListeners.addInterface( Listener );
 }
 
-
 void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActionListener >& Listener )
 {
     m_aActionListeners.removeInterface( Listener );
 }
-
 
 void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
 {
@@ -3914,18 +3899,16 @@ void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
     }
 }
 
-
 void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& Command )
 {
     m_aActionCommand = Command;
 }
 
-
 vcl::Window* FmXCheckBoxCell::getEventWindow() const
 {
-    return m_pBox;
+    //TODO
+    return nullptr;
 }
-
 
 void FmXCheckBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
@@ -3944,7 +3927,7 @@ void FmXCheckBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Wind
             awt::ItemEvent aEvent;
             aEvent.Source = *this;
             aEvent.Highlighted = 0;
-            aEvent.Selected = m_pBox->GetState();
+            aEvent.Selected = m_pBox->get_state();
             m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
         }
         if ( m_aActionListeners.getLength() )
