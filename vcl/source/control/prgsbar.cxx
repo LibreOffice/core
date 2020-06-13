@@ -169,6 +169,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
         if ( IsReallyVisible() )
         {
             Invalidate();
+            PaintImmediately();
         }
     }
     else if ( mnPercent != nNewPercent )
