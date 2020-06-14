@@ -152,7 +152,7 @@ public:
 
     sal_Int16             Size( ) { return sal_Int16( m_aLevels.size( ) ); };
     ListLevel::Pointer    GetLevel( sal_uInt16 nLvl );
-    void                  AddLevel( );
+    void                  AddLevel( sal_uInt16 nLvl );
 
     const ListLevel::Pointer&  GetCurrentLevel( ) const { return m_pCurrentLevel; };
 
