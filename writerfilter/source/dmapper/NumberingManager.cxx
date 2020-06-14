@@ -366,11 +366,14 @@ ListLevel::Pointer AbstractListDef::GetLevel( sal_uInt16 nLvl )
     return pLevel;
 }
 
-void AbstractListDef::AddLevel( )
+void AbstractListDef::AddLevel( sal_uInt16 nLvl )
 {
+    if ( m_aLevels.size() < nLvl+1 )
+        m_aLevels.resize( nLvl+1 );
+
     ListLevel::Pointer pLevel( new ListLevel );
     m_pCurrentLevel = pLevel;
-    m_aLevels.push_back( pLevel );
+    m_aLevels[nLvl] = pLevel;
 }
 
 uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyValues(bool bDefaults)
@@ -381,7 +384,8 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyV
     int nLevels = m_aLevels.size( );
     for ( int i = 0; i < nLevels; i++ )
     {
-        aResult[i] = m_aLevels[i]->GetProperties(bDefaults);
+        if (m_aLevels[i])
+            aResult[i] = m_aLevels[i]->GetProperties(bDefaults);
     }
 
     return result;
@@ -695,14 +699,11 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             AbstractListDef::SetValue( nName );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
-        {
             //add a new level to the level vector and make it the current one
-            m_pCurrentDefinition->AddLevel();
-
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-            if(pProperties)
-                pProperties->resolve(*this);
-        }
+            m_pCurrentDefinition->AddLevel(rVal.getString().toInt32());
+        break;
+        case NS_ooxml::LN_CT_Lvl_ilvl:
+            m_pCurrentDefinition->AddLevel(rVal.getString().toInt32());
         break;
         case NS_ooxml::LN_CT_AbstractNum_abstractNumId:
         {
@@ -728,7 +729,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
                 pCurrentLvl->Insert(
                     PROP_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
-        case NS_ooxml::LN_CT_Lvl_ilvl: //overrides previous level - unsupported
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
         case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
         break;
@@ -890,7 +890,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_AbstractNum_lvl:
             {
-                m_pCurrentDefinition->AddLevel();
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if(pProperties)
                     pProperties->resolve(*this);
