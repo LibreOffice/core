@@ -250,7 +250,7 @@ private:
             //TODO: Arguably, such a call of a `get` member function from within some member
             // function (so that syntactically no caller is mentioned) should already be handled
             // differently when reporting it (just "drop the get()" does not make sense), instead of
-            // being fitered here:
+            // being filtered here:
             return {};
         }
         // CXXMemberCallExpr::getExprLoc happens to return the location following the "." or "->":
