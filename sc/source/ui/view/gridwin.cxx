@@ -317,16 +317,17 @@ namespace {
 class ScFilterFloatingWindow : public FloatingWindow
 {
 public:
-    ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle );
+    ScFilterFloatingWindow(vcl::Window* pParent);
     virtual ~ScFilterFloatingWindow() override;
     virtual void dispose() override;
 };
 
 }
 
-ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
-    FloatingWindow( pParent, nStyle|WB_SYSTEMWINDOW ) // make it a system floater
-    {}
+ScFilterFloatingWindow::ScFilterFloatingWindow(vcl::Window* pParent)
+    : FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW ) // make it a system floater
+{
+}
 
 ScFilterFloatingWindow::~ScFilterFloatingWindow()
 {
@@ -1022,7 +1023,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Place the ListBox directly below the black line of the cell grid
     //  (It looks odd if the line gets hidden...)
 
-    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
     mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::Scenario));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
@@ -1114,7 +1115,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     aPos.AdjustX( -1 );
     aPos.AdjustY( nSizeY - 1 );
 
-    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
+    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
     if (bLOKActive)
     {
         mpFilterFloat->SetLOKNotifier(SfxViewShell::Current());
