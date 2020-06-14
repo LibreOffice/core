@@ -34,7 +34,6 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   --disable-gpg-test \
 		   --disable-gpgsm-test \
 		   --disable-g13-test \
-		   --disable-glibtest \
 		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
@@ -51,7 +50,10 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
+		   --disable-gpgconf-test \
 		   --disable-gpg-test \
+		   --disable-gpgsm-test \
+		   --disable-g13-test \
 		   --enable-languages="cpp" \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
