@@ -510,6 +510,7 @@ bool ValueSet::MouseMove(const MouseEvent& rMouseEvent)
 void ValueSet::QueueReformat()
 {
     queue_resize();
+    RecalcScrollBar();
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
