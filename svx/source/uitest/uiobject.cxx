@@ -12,6 +12,10 @@
 #include <svx/charmap.hxx>
 #include <vcl/layout.hxx>
 
+#include <memory>
+#include <svx/numvset.hxx>
+#include <vcl/layout.hxx>
+
 SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet):
     WindowUIObject(xCharSetWin),
     mpCharSet(pCharSet)
@@ -59,4 +63,49 @@ OUString SvxShowCharSetUIObject::get_name() const
     return "SvxShowCharSetUIObject";
 }
 
+
+SvxNumValueSetUIObject::SvxNumValueSetUIObject(vcl::Window*  xNumValueSetWin , SvxNumValueSet* pNumValueSet):
+    WindowUIObject(xNumValueSetWin),
+    mpNumValueSet(pNumValueSet)
+{
+}
+
+void SvxNumValueSetUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "CHOOSE")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            OUString aIndexStr = rParameters.find("POS")->second;
+            sal_Int32 nIndex = aIndexStr.toInt32();
+            mpNumValueSet->SelectItem(nIndex);
+            mpNumValueSet->Select();
+        }
+    }
+    else
+       WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> SvxNumValueSetUIObject::create(vcl::Window* pWindow)
+{
+    VclDrawingArea* pNumValueSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
+    assert(pNumValueSetWin);
+    return std::unique_ptr<UIObject>(new SvxNumValueSetUIObject(pNumValueSetWin, static_cast<SvxNumValueSet*>(pNumValueSetWin->GetUserData())));
+}
+
+OUString SvxNumValueSetUIObject::get_name() const
+{
+    return "SvxNumValueSetUIObject";
+}
+
+StringMap SvxNumValueSetUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["SelectedItemId"] = OUString::number( mpNumValueSet->GetSelectedItemId() );
+    aMap["SelectedItemPos"] = OUString::number( mpNumValueSet->GetSelectItemPos() );
+    aMap["ItemsCount"] = OUString::number(mpNumValueSet->GetItemCount());
+    aMap["ItemText"] = mpNumValueSet->GetItemText(mpNumValueSet->GetSelectedItemId());
+    return aMap;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
