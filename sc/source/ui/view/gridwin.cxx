@@ -298,8 +298,11 @@ IMPL_LINK_NOARG(ScFilterListBox, SelectHdl, weld::TreeView&, bool)
 
 IMPL_LINK_NOARG(ScFilterListBox, AsyncSelectHdl, void*, void)
 {
-    pGridWin->FilterSelect( nSel );
     nAsyncSelectHdl = nullptr;
+
+    //tdf#133971 hold self-ref until we return
+    VclPtr<ScFilterListBox> xThis(this);
+    pGridWin->FilterSelect(nSel);
     if (!pGridWin)
     {
         // tdf#133855 we got disposed by FilterSelect
