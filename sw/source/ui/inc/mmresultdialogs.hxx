@@ -97,6 +97,9 @@ class SwMMResultEmailDialog : public SfxDialogController
     std::unique_ptr<weld::Button> m_xSendAsPB;
     std::unique_ptr<weld::Widget> m_xAttachmentGroup;
     std::unique_ptr<weld::Entry> m_xAttachmentED;
+    std::unique_ptr<weld::Label> m_xPasswordFT;
+    std::unique_ptr<weld::ComboBox> m_xPasswordLB;
+    std::unique_ptr<weld::CheckButton> m_xPasswordCB;
     std::unique_ptr<weld::RadioButton> m_xSendAllRB;
     std::unique_ptr<weld::RadioButton> m_xFromRB;
     std::unique_ptr<weld::SpinButton> m_xFromNF;
@@ -109,6 +112,7 @@ class SwMMResultEmailDialog : public SfxDialogController
     DECL_LINK(SendAsHdl_Impl, weld::Button&, void);
     DECL_LINK(SendDocumentsHdl_Impl, weld::Button&, void);
     DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void );
 
     void FillInEmailSettings();
 

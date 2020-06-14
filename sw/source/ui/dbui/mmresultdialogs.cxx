@@ -322,6 +322,9 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     , m_xSendAsPB(m_xBuilder->weld_button("sendassettings"))
     , m_xAttachmentGroup(m_xBuilder->weld_widget("attachgroup"))
     , m_xAttachmentED(m_xBuilder->weld_entry("attach"))
+    , m_xPasswordFT(m_xBuilder->weld_label("passwordft"))
+    , m_xPasswordLB(m_xBuilder->weld_combo_box("password"))
+    , m_xPasswordCB(m_xBuilder->weld_check_button("passwordcb"))
     , m_xSendAllRB(m_xBuilder->weld_radio_button("sendallrb"))
     , m_xFromRB(m_xBuilder->weld_radio_button("fromrb"))
     , m_xFromNF(m_xBuilder->weld_spin_button("from"))
@@ -332,6 +335,7 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     m_xCopyToPB->connect_clicked(LINK(this, SwMMResultEmailDialog, CopyToHdl_Impl));
     m_xSendAsPB->connect_clicked(LINK(this, SwMMResultEmailDialog, SendAsHdl_Impl));
     m_xSendAsLB->connect_changed(LINK(this, SwMMResultEmailDialog, SendTypeHdl_Impl));
+    m_xPasswordCB->connect_toggled( LINK( this, SwMMResultEmailDialog, CheckHdl ));
 
     Link<weld::ToggleButton&,void> aLink = LINK(this, SwMMResultEmailDialog, DocumentSelectionHdl_Impl);
     m_xSendAllRB->connect_toggled(aLink);
@@ -340,6 +344,10 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
     aLink.Call(*m_xSendAllRB);
 
     m_xOKButton->connect_clicked(LINK(this, SwMMResultEmailDialog, SendDocumentsHdl_Impl));
+
+    m_xPasswordCB->hide();
+    m_xPasswordFT->hide();
+    m_xPasswordLB->hide();
 
     FillInEmailSettings();
 }
@@ -416,12 +424,18 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     if (xColAccess.is())
         aFields = xColAccess->getElementNames();
 
-    // fill mail address ListBox
+    // fill mail address and password ListBox
     assert(m_xMailToLB->get_count() == 0);
+    assert(m_xPasswordLB->get_count() == 0);
     for (const OUString& rField : std::as_const(aFields))
+    {
         m_xMailToLB->append_text(rField);
+        m_xPasswordLB->append_text(rField);
+    }
 
     m_xMailToLB->set_active(0);
+    m_xPasswordLB->set_active(0);
+
     // then select the right one - may not be available
     const std::vector<std::pair<OUString, int>>& rHeaders = xConfigItem->GetDefaultAddressHeaders();
     OUString sEMailColumn = rHeaders[MM_PART_E_MAIL].first;
@@ -446,6 +460,14 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, weld::ToggleBut
     m_xFromNF->set_sensitive(bEnableFromTo);
     m_xToFT->set_sensitive(bEnableFromTo);
     m_xToNF->set_sensitive(bEnableFromTo);
+}
+
+IMPL_LINK_NOARG(SwMMResultEmailDialog, CheckHdl, weld::ToggleButton&, void)
+{
+    bool bEnable = m_xPasswordCB->get_active();
+
+    m_xPasswordFT->set_sensitive(bEnable);
+    m_xPasswordLB->set_sensitive(bEnable);
 }
 
 IMPL_LINK_NOARG(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, void)
@@ -814,6 +836,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, weld::ComboBox&, rBox, void)
 {
     auto nDocType = rBox.get_active_id().toUInt32();
     bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
+    bool bIsPDF = nDocType == MM_DOCTYPE_PDF;
     m_xSendAsPB->set_sensitive(bEnable);
     m_xAttachmentGroup->set_sensitive(bEnable);
     if(bEnable)
@@ -832,6 +855,21 @@ IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, weld::ComboBox&, rBox, void)
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType( nDocType ));
             m_xAttachmentED->set_text(sAttach);
         }
+    }
+
+    if(bIsPDF)
+    {
+        m_xPasswordCB->show();
+        m_xPasswordFT->show();
+        m_xPasswordLB->show();
+        CheckHdl(*m_xPasswordCB);
+    }
+    else
+    {
+        m_xPasswordCB->hide();
+        m_xPasswordFT->hide();
+        m_xPasswordLB->hide();
+
     }
 }
 
@@ -995,11 +1033,20 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         else
             return; // back to the dialog
     }
+
     OUString sEMailColumn = m_xMailToLB->get_active_text();
     OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( xConfigItem->GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     if(sEMailColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
+    {
+        m_xDialog->response(RET_OK);
+        return;
+    }
+
+    OUString sPasswordColumn = m_xPasswordLB->get_active_text();
+    OSL_ENSURE( !sPasswordColumn.isEmpty(), "No password column selected");
+    if(sPasswordColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sPasswordColumn))
     {
         m_xDialog->response(RET_OK);
         return;
@@ -1082,14 +1129,35 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
         {
             bool withFilterOptions = MM_DOCTYPE_TEXT == nDocType || MM_DOCTYPE_HTML == nDocType;
-            uno::Sequence< beans::PropertyValue > aFilterValues(withFilterOptions ? 2 : 1);
+            bool withPasswordOptions = m_xPasswordCB->get_active();
+
+            sal_Int32 nTarget = xConfigItem->MoveResultSet(rInfo.nDBRow);
+            OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
+            OUString sPassword = lcl_GetColumnValueOf(sPasswordColumn, xColAccess);
+
+            sal_Int32 nOptionCount = (withFilterOptions && withPasswordOptions) ? 4 : withPasswordOptions ? 3 : withFilterOptions ? 2 : 1;
+            sal_Int32 nOpt = 0;
+            uno::Sequence< beans::PropertyValue > aFilterValues(nOptionCount);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
-            pFilterValues[0].Name = "FilterName";
-            pFilterValues[0].Value <<= pSfxFlt->GetFilterName();
+
+            pFilterValues[nOpt].Name = "FilterName";
+            pFilterValues[nOpt].Value <<= pSfxFlt->GetFilterName();
+
             if(withFilterOptions)
             {
-                pFilterValues[1].Name = "FilterOptions";
-                pFilterValues[1].Value <<= sFilterOptions;
+                nOpt++;
+                pFilterValues[nOpt].Name = "FilterOptions";
+                pFilterValues[nOpt].Value <<= sFilterOptions;
+            }
+
+            if(withPasswordOptions)
+            {
+                nOpt++;
+                pFilterValues[nOpt].Name = "EncryptFile";
+                pFilterValues[nOpt].Value <<= true;
+                nOpt++;
+                pFilterValues[nOpt].Name = "DocumentOpenPassword";
+                pFilterValues[nOpt].Value <<= sPassword;
             }
 
             uno::Reference< frame::XStorable > xTempStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
