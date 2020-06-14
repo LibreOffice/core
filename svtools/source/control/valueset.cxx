@@ -696,6 +696,16 @@ void ValueSet::RecalculateItemSizes()
     }
 }
 
+void ValueSet::SetFirstLine(sal_uInt16 nNewFirstLine)
+{
+    if (nNewFirstLine != mnFirstLine)
+    {
+        mnFirstLine = nNewFirstLine;
+        if (mxScrolledWindow)
+            mxScrolledWindow->vadjustment_set_value(mnFirstLine);
+    }
+}
+
 void ValueSet::SelectItem( sal_uInt16 nItemId )
 {
     size_t nItemPos = 0;
@@ -731,12 +741,12 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         sal_uInt16 nNewLine = static_cast<sal_uInt16>(nItemPos / mnCols);
         if ( nNewLine < mnFirstLine )
         {
-            mnFirstLine = nNewLine;
+            SetFirstLine(nNewLine);
             bNewLine = true;
         }
         else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
-            mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
+            SetFirstLine(static_cast<sal_uInt16>(nNewLine-mnVisLines+1));
             bNewLine = true;
         }
     }
@@ -924,12 +934,12 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     if (mnLines <= mnVisLines)
     {
-        mnFirstLine = 0;
+        SetFirstLine(0);
     }
     else
     {
         if (mnFirstLine > o3tl::make_unsigned(mnLines - mnVisLines))
-            mnFirstLine = static_cast<sal_uInt16>(mnLines - mnVisLines);
+            SetFirstLine(static_cast<sal_uInt16>(mnLines - mnVisLines));
     }
 
     // calculate item size
