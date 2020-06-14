@@ -131,7 +131,7 @@ namespace
                 std::cerr
                     << "Treex error: Cannot find title in "
                     << sXhpPath << std::endl;
-                return nullptr;
+                pReturn = nullptr;
             }
             xmlFreeDoc( pXhpFile );
             xmlCleanupParser();
