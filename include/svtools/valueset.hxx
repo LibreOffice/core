@@ -254,6 +254,7 @@ private:
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking(const Point& rPos);
     SVT_DLLPRIVATE void         QueueReformat();
+    SVT_DLLPRIVATE void         SetFirstLine(sal_uInt16 nNewFirstLine); // set mnFirstLine and update scrollbar to match
     SVT_DLLPRIVATE void         RecalcScrollBar();
     DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
