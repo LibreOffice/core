@@ -207,6 +207,7 @@ private:
 public:
     ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                      SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
+    virtual void GetFocus() override;
     virtual ~ScFilterListBox() override;
     virtual void dispose() override;
 
@@ -253,6 +254,13 @@ void ScFilterListBox::dispose()
     pGridWin.clear();
     xTreeView.reset();
     InterimItemWindow::dispose();
+}
+
+void ScFilterListBox::GetFocus()
+{
+    if (xTreeView)
+        xTreeView->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 void ScFilterListBox::EndInit()
