@@ -607,11 +607,12 @@ bool SwCursorShell::ExtendedSelectedAll()
     SwNodes& rNodes = GetDoc()->GetNodes();
     SwNodeIndex nNode = rNodes.GetEndOfAutotext();
     SwContentNode* pStart = rNodes.GoNext(&nNode);
+    if (!pStart)
+        return false;
 
     nNode = rNodes.GetEndOfContent();
     SwContentNode* pEnd = SwNodes::GoPrevious(&nNode);
-
-    if (!pStart || !pEnd)
+    if (!pEnd)
         return false;
 
     SwPosition aStart(*pStart, 0);
