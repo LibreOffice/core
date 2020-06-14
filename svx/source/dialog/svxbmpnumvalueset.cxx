@@ -35,6 +35,8 @@
 
 #include <algorithm>
 
+#include <uiobject.hxx>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -395,6 +397,11 @@ SvxNumValueSet::SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWi
     , ePageType(NumberingPageType::BULLET)
     , pVDev(nullptr)
 {
+}
+
+FactoryFunction SvxNumValueSet::GetUITestFactory() const
+{
+    return SvxNumValueSetUIObject::create;
 }
 
 void SvxNumValueSet::init(NumberingPageType eType)

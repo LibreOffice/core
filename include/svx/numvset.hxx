@@ -81,6 +81,9 @@ public:
                 css::uno::Reference<css::container::XIndexAccess> > const & rOutline,
             css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
             const css::lang::Locale& rLocale);
+
+    virtual FactoryFunction GetUITestFactory() const override;
+
 };
 
 
