@@ -576,17 +576,13 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     switch (pFrameFormat->GetSurround().GetValue())
     {
     case css::text::WrapTextMode_NONE:
-        attrList->add( FSNS( XML_w, XML_wrap), "none");
-        break;
-    case css::text::WrapTextMode_THROUGH:
-        attrList->add( FSNS( XML_w, XML_wrap), "through");
-        break;
-    case css::text::WrapTextMode_PARALLEL:
         attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
         break;
-    case css::text::WrapTextMode_DYNAMIC:
+    case css::text::WrapTextMode_PARALLEL:
+        attrList->add( FSNS( XML_w, XML_wrap), "around");
+        break;
     default:
-        attrList->add( FSNS( XML_w, XML_wrap), "auto");
+        attrList->add( FSNS( XML_w, XML_wrap), "around");
         break;
     }
     attrList->add( FSNS( XML_w, XML_vAnchor), relativeFromV );
