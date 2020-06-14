@@ -2805,7 +2805,35 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )
+    {
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
+
+        if(aFilterName == "writer_pdf_Export" && pNewFile->GetItemSet())
+        {
+            uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions(2);
+            bool bRet = false;
+
+            for(int i = 0 ; i< rArgs.getLength() ; ++i)
+            {
+                auto aProp = rArgs[i];
+                if(aProp.Name == "EncryptFile")
+                {
+                    aSaveToFilterDataOptions[0].Name = aProp.Name;
+                    aSaveToFilterDataOptions[0].Value = aProp.Value;
+                    bRet = true;
+                }
+                if(aProp.Name == "DocumentOpenPassword")
+                {
+                    aSaveToFilterDataOptions[1].Name = aProp.Name;
+                    aSaveToFilterDataOptions[1].Value = aProp.Value;
+                    bRet = true;
+                }
+            }
+
+            if( bRet )
+                pNewFile->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA, uno::makeAny(aSaveToFilterDataOptions)));
+        }
+    }
     else
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT ) );
 
