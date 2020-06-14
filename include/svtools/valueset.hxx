@@ -253,6 +253,7 @@ private:
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking(const Point& rPos);
+    SVT_DLLPRIVATE void         QueueReformat();
     SVT_DLLPRIVATE void         RecalcScrollBar();
     DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
