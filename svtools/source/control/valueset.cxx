@@ -507,6 +507,14 @@ bool ValueSet::MouseMove(const MouseEvent& rMouseEvent)
     return CustomWidgetController::MouseMove(rMouseEvent);
 }
 
+void ValueSet::QueueReformat()
+{
+    queue_resize();
+    mbFormat = true;
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
+}
+
 void ValueSet::RemoveItem( sal_uInt16 nItemId )
 {
     size_t nPos = GetItemPos( nItemId );
@@ -527,11 +535,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         mbNoSelection   = true;
     }
 
-    queue_resize();
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    QueueReformat();
 }
 
 void ValueSet::RecalcScrollBar()
@@ -687,10 +691,7 @@ void ValueSet::RecalculateItemSizes()
     {
         mnUserItemWidth = aLargestItem.Width();
         mnUserItemHeight = aLargestItem.Height();
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
+        QueueReformat();
     }
 }
 
@@ -1456,10 +1457,7 @@ void ValueSet::SetColCount( sal_uInt16 nNewCols )
     if ( mnUserCols != nNewCols )
     {
         mnUserCols = nNewCols;
-        mbFormat = true;
-        queue_resize();
-        if (IsReallyVisible() && IsUpdateMode())
-            Invalidate();
+        QueueReformat();
     }
 }
 
@@ -1636,11 +1634,7 @@ void ValueSet::ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t
         mItemList.push_back( std::move(pItem) );
     }
 
-    queue_resize();
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
+    QueueReformat();
 }
 
 int ValueSet::GetScrollWidth() const
@@ -1690,10 +1684,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     if ( mnUserVisLines != nNewLines )
     {
         mnUserVisLines = nNewLines;
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
+        QueueReformat();
     }
 }
 
@@ -1702,10 +1693,7 @@ void ValueSet::SetItemWidth( long nNewItemWidth )
     if ( mnUserItemWidth != nNewItemWidth )
     {
         mnUserItemWidth = nNewItemWidth;
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
+        QueueReformat();
     }
 }
 
@@ -1727,10 +1715,7 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     if ( mnUserItemHeight != nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
+        QueueReformat();
     }
 }
 
@@ -1762,11 +1747,7 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     if ( GetStyle() & WB_ITEMBORDER )
     {
         mnSpacing = nNewSpacing;
-
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
+        QueueReformat();
     }
 }
 
