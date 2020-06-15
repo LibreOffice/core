@@ -62,6 +62,8 @@ class JSInstanceBuilder : public SalInstanceBuilder
 
 public:
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                      const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;
@@ -79,6 +81,10 @@ public:
     weld_spin_button(const OString& id, bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::CheckButton>
     weld_check_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::DrawingArea>
+    weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
+                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
+                      bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -203,6 +209,18 @@ public:
                   SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual void set_active(bool active) override;
+};
+
+class VCL_DLLPUBLIC JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
+{
+public:
+    JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
+                  SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                  FactoryFunction pUITestFactoryFunction, void* pUserData,
+                  bool bTakeOwnership = false);
+
+    virtual void queue_draw() override;
+    virtual void queue_draw_area(int x, int y, int width, int height) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

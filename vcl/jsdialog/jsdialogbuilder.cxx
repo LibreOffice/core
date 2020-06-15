@@ -76,7 +76,26 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     if (pRoot && pRoot->GetParent())
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
-        m_nWindowId = m_aParentDialog->GetLOKWindowId();
+        if (m_aParentDialog)
+            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+        InsertWindowToMap(m_nWindowId);
+    }
+}
+
+JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                     const OUString& rUIFile,
+                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
+    : SalInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame)
+    , m_nWindowId(0)
+    , m_aParentDialog(nullptr)
+    , m_bHasTopLevelDialog(false)
+{
+    vcl::Window* pRoot = m_xBuilder->get_widget_root();
+    if (pRoot && pRoot->GetParent())
+    {
+        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        if (m_aParentDialog)
+            m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(m_nWindowId);
     }
 }
@@ -272,6 +291,24 @@ std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OS
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::DrawingArea>
+JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl,
+                                     FactoryFunction pUITestFactoryFunction, void* pUserData,
+                                     bool bTakeOwnership)
+{
+    VclDrawingArea* pArea = m_xBuilder->get<VclDrawingArea>(id);
+    auto pWeldWidget = pArea
+                           ? std::make_unique<JSDrawingArea>(
+                                 m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pArea,
+                                 this, rA11yImpl, pUITestFactoryFunction, pUserData, bTakeOwnership)
+                           : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -456,6 +493,28 @@ JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCh
 void JSCheckButton::set_active(bool active)
 {
     SalInstanceCheckButton::set_active(active);
+    notifyDialogState();
+}
+
+JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
+                             SalInstanceBuilder* pBuilder, const a11yref& rAlly,
+                             FactoryFunction pUITestFactoryFunction, void* pUserData,
+                             bool bTakeOwnership)
+    : SalInstanceDrawingArea(pDrawingArea, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
+                             bTakeOwnership)
+    , JSDialogSender(aOwnedToplevel)
+{
+}
+
+void JSDrawingArea::queue_draw()
+{
+    SalInstanceDrawingArea::queue_draw();
+    notifyDialogState();
+}
+
+void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
+{
+    SalInstanceDrawingArea::queue_draw_area(x, y, width, height);
     notifyDialogState();
 }
 

@@ -32,7 +32,9 @@ protected:
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
 public:
-    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                       const css::uno::Reference<css::frame::XFrame>& rFrame
+                       = css::uno::Reference<css::frame::XFrame>());
 
     virtual std::unique_ptr<weld::MessageDialog>
     weld_message_dialog(const OString& id, bool bTakeOwnership = true) override;
