@@ -1221,41 +1221,15 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl() const
     return m_pImpl->aBorder;
 }
 
-namespace
-{
-/// Does the current selection have a shape with an associated signing certificate?
-bool IsSignWithCert(SfxViewShell* pViewShell)
-{
-    uno::Reference<frame::XModel> xModel = pViewShell->GetCurrentDocument();
-    if (!xModel.is())
-    {
-        return false;
-    }
-
-    uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
-    if (!xShapes.is() || xShapes->getCount() < 1)
-    {
-        return false;
-    }
-
-    uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
-    if (!xShapeProps.is())
-    {
-        return false;
-    }
-
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
-    return aMap.find("SignatureCertificate") != aMap.end();
-}
-}
-
 void SfxViewFrame::AppendReadOnlyInfobar()
 {
     bool bSignPDF = m_xObjSh->IsSignPDF();
     bool bSignWithCert = false;
     if (bSignPDF)
     {
-        bSignWithCert = IsSignWithCert(GetViewShell());
+        SfxObjectShell* pObjectShell = GetObjectShell();
+        uno::Reference<security::XCertificate> xCertificate = pObjectShell->GetSignPDFCertificate();
+        bSignWithCert = xCertificate.is();
     }
 
     auto pInfoBar = AppendInfoBar("readonly", "",

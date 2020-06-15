@@ -101,6 +101,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <autoredactdialog.hxx>
 
@@ -405,6 +406,36 @@ bool SfxObjectShell::IsSignPDF() const
     return false;
 }
 
+uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() const
+{
+    uno::Reference<frame::XModel> xModel = GetBaseModel();
+    if (!xModel.is())
+    {
+        return uno::Reference<security::XCertificate>();
+    }
+
+    uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
+    if (!xShapes.is() || xShapes->getCount() < 1)
+    {
+        return uno::Reference<security::XCertificate>();
+    }
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
+    if (!xShapeProps.is())
+    {
+        return uno::Reference<security::XCertificate>();
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
+    auto it = aMap.find("SignatureCertificate");
+    if (it == aMap.end())
+    {
+        return uno::Reference<security::XCertificate>();
+    }
+
+    return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
+}
+
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
@@ -422,7 +453,24 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
         if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, nullptr ) == RET_YES )
-            ( SID_SIGNATURE == nId ) ? SignDocumentContent(pDialogParent) : SignScriptingContent(pDialogParent);
+        {
+            if (SID_SIGNATURE == nId)
+            {
+                uno::Reference<security::XCertificate> xCertificate = GetSignPDFCertificate();
+                if (xCertificate.is())
+                {
+                    SignDocumentContentUsingCertificate(xCertificate);
+                }
+                else
+                {
+                    SignDocumentContent(pDialogParent);
+                }
+            }
+            else
+            {
+                SignScriptingContent(pDialogParent);
+            }
+        }
         return;
     }
 

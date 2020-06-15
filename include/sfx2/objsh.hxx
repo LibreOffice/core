@@ -772,6 +772,9 @@ public:
 
     /// Is this read-only object shell opened via .uno:SignPDF?
     bool IsSignPDF() const;
+
+    /// Gets the certificate that is already picked by the user but not yet used for signing.
+    css::uno::Reference<css::security::XCertificate> GetSignPDFCertificate() const;
 };
 
 #define SFX_GLOBAL_CLASSID \
