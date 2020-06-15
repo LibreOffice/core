@@ -81,6 +81,8 @@
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #ifdef _WIN32
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -102,6 +104,14 @@
 #include <typeinfo>
 #include <rtl/strbuf.hxx>
 #endif
+
+#include <config_gpgme.h>
+#if HAVE_FEATURE_GPGME
+# include <context.h>
+# include <data.h>
+# include <decryptionresult.h>
+#endif
+
 
 using namespace ::com::sun::star;
 
@@ -178,6 +188,40 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
 
 }
 
+namespace
+{
+class EarlyInitThread final : public salhelper::Thread
+{
+public:
+    EarlyInitThread()
+        : salhelper::Thread("EarlyInitThread")
+    {
+    }
+
+    virtual void execute() override
+    {
+        // force initialisation of NSS and GpgME, which spawn a variety of sub-processes
+        // and take quite a while
+        try
+        {
+#if HAVE_FEATURE_NSS
+        css::xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext());
+#endif
+#if HAVE_FEATURE_GPGME
+        GpgME::initializeLibrary();
+        GpgME::checkEngine(GpgME::OpenPGP);
+#endif
+        } catch (css::uno::DeploymentException&)
+        {
+            // this happens during unit test when we don't have the full LO setup
+            TOOLS_WARN_EXCEPTION("vcl", "");
+        }
+    }
+};
+
+std::atomic<EarlyInitThread*> gEarlyInitThread;
+}
+
 int ImplSVMain()
 {
     // The 'real' SVMain()
@@ -221,6 +265,11 @@ int ImplSVMain()
         pSVData->mxAccessBridge.clear();
     }
 
+    if (auto pThread = gEarlyInitThread.exchange(nullptr))
+    {
+        pThread->join();
+        delete pThread;
+    }
     WatchdogThread::stop();
     DeInitVCL();
 
@@ -383,6 +432,13 @@ bool InitVCL()
     // See https://bugs.freedesktop.org/show_bug.cgi?id=11375 for discussion
     unsetenv("DESKTOP_STARTUP_ID");
 #endif
+
+    // no need to use this in unit test mode
+    if (!getenv("LO_TESTNAME"))
+    {
+        gEarlyInitThread = new EarlyInitThread();
+        gEarlyInitThread.load()->launch();
+    }
 
     return true;
 }
