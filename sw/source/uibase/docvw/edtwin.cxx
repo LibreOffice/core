@@ -139,6 +139,10 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -2657,6 +2661,17 @@ KEYINPUT_CHECKTABLE_INSDEL:
     if( pWrdCnt )
         pWrdCnt->UpdateCounts();
 
+    // update outline content visibility button positions
+    // this could probably be optimized to only do this only for visible buttons after current cursor position
+    if (GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        const SwOutlineNodes& rOutlineNodes = GetView().GetWrtShell().GetDoc()->GetNodes().GetOutLineNds();
+        for (SwNode* pOutlineNode : rOutlineNodes)
+        {
+            SwContentFrame* pContentFrame = pOutlineNode->GetTextNode()->getLayoutFrame(nullptr);
+            GetFrameControlsManager().SetOutlineContentVisibilityButton(pContentFrame);
+        }
+    }
 }
 
 /**

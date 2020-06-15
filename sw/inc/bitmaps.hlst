@@ -27,6 +27,8 @@
 #define BMP_REDLINE_TABLECHG                    "sw/res/redline_inserted.png"
 #define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_inserted.png"
 
+#define RID_BMP_OUTLINECONTENT_COLLAPSE         "res/sx18003.png"
+#define RID_BMP_OUTLINECONTENT_EXPAND           "res/sx18002.png"
 #define RID_BMP_COLLAPSE                        "res/sx18002.png"
 #define RID_BMP_EXPAND                          "res/sx18003.png"
 #define RID_BMP_DB                              "sw/res/sx01.png"
