@@ -28,15 +28,13 @@ Function verify_testOptionalsVba() As String
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
-    ' TestLog_ASSERT TestOptVariant(), 123, "TestOptVariant()"
+    TestLog_ASSERT TestOptVariant(), 123, "TestOptVariant()"
     TestLog_ASSERT TestOptVariant(123), 246, "TestOptVariant(123)"
     TestLog_ASSERT TestOptVariant(, 456), 456, "TestOptVariant(, 456)"
     TestLog_ASSERT TestOptVariant(123, 456), 579, "TestOptVariant(123, 456)"
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
-    ' TestLog_ASSERT TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()"
+    TestLog_ASSERT TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()"
     TestLog_ASSERT TestOptVariantByRefByVal(123), 246, "TestOptVariantByRefByVal(123)"
     TestLog_ASSERT TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)"
     TestLog_ASSERT TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)"

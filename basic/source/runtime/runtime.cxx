@@ -2827,6 +2827,8 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     }
     SbxVariable* p = new SbxVariable( eType );
     p->PutDouble( n );
+    // tdf#133913 - create variable with Variant/Type in order to prevent type conversion errors
+    p->ResetFlag( SbxFlagBits::Fixed );
     PushVar( p );
 }
 
