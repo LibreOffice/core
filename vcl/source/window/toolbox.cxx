@@ -189,10 +189,10 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
 
     // reserve DragArea only for dockable toolbars
-    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth() : 0;
+    int dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth() : 0;
 
-    // no shadow border for dockable toolbars
-    int    borderwidth = pWrapper ? 0: 2;
+    // no shadow border for dockable toolbars and toolbars with WB_NOSHADOW bit set, e.g. Calc's formulabar
+    int borderwidth = ( pWrapper || mnWinStyle & WB_NOSHADOW ) ? 0 : 2;
 
     if ( eAlign == WindowAlign::Top )
     {
@@ -551,8 +551,10 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 
     ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
 
-    // draw borders for ordinary toolbars only (not dockable)
-    if( pWrapper )
+    // draw borders for ordinary toolbars only (not dockable), do not draw borders for toolbars with WB_NOSHADOW bit set,
+    // e.g. Calc's formulabar
+
+    if( pWrapper || mnWinStyle & WB_NOSHADOW )
         return;
 
     if (meAlign == WindowAlign::Bottom)
