@@ -138,6 +138,8 @@
 #define IMG_INFO    "dbaccess/res/exinfo.png"
 #define IMG_ADD     "extensions/res/scanner/plus.png"
 #define IMG_REMOVE  "extensions/res/scanner/minus.png"
+#define IMG_COPY    "cmd/sc_copy.png"
+#define IMG_PASTE   "cmd/sc_paste.png"
 
 #define RID_BMP_TREENODE_COLLAPSED  "res/plus.png"
 #define RID_BMP_TREENODE_EXPANDED   "res/minus.png"
