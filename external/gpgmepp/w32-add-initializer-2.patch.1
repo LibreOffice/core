@@ -1,0 +1,15 @@
+Make sure the dbg_help gets initialized with NULL, otherwise it is used later
+with whatever value happens on stack
+
+diff -ur gpgmepp.org/src/w32-io.c gpgmepp/src/w32-io.c
+--- gpgmepp.org/src/w32-io.c
++++ gpgmepp/src/w32-io.c
+@@ -1643,7 +1643,7 @@
+   int i;
+   int any;
+   int count;
+-  void *dbg_help;
++  void *dbg_help = NULL;
+   TRACE_BEG  (DEBUG_SYSIO, "_gpgme_io_select", fds,
+ 	      "nfds=%u, nonblock=%u", nfds, nonblock);
+ 
