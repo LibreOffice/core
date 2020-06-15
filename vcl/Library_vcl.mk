@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
+    gpgmepp \
     libjpeg \
     libeot \
     libpng \
