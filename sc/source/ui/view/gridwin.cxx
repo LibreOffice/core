@@ -278,6 +278,10 @@ IMPL_LINK(ScFilterListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
         bDone = true;
     }
 
+    // nowhere to tab to
+    if (aCode.GetCode() == KEY_TAB)
+        bDone = true;
+
     return bDone;
 }
 
