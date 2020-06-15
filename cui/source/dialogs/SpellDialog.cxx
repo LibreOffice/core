@@ -344,14 +344,14 @@ void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
         m_xDialog->resize_to_request();
 }
 
-void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrentError )
+void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGuard, bool bUseSavedSentence, bool bIgnoreCurrentError)
 {
     //initially or after the last error of a sentence MarkNextError will fail
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
     if(!((!m_xSentenceED->IsUndoEditMode() && m_xSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
-            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell ))))
+            ( bNextSentence = GetNextSentence_Impl(pGuard, bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell ))))
         return;
 
     SpellErrorDescription aSpellErrorDescription;
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
     m_xDialog->freeze();
     //show or hide AutoCorrect depending on the modules abilities
     m_xAutoCorrPB->set_visible(rParent.HasAutoCorrection());
-    SpellContinue_Impl();
+    SpellContinue_Impl(nullptr);
     m_xSentenceED->ResetUndo();
     m_xUndoPB->set_sensitive(false);
 
@@ -506,6 +506,27 @@ IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, weld::TreeView&, bool)
     return true;
 }
 
+/* tdf#132822 start an undo group in ctor and close it in the dtor. This can
+   then be passed to SpellContinue_Impl which can delete it in advance of its
+   natural scope to force closing the undo group if SpellContinue_Impl needs to
+   fetch a new paragraph and discard all undo information which can only be
+   done properly if there are no open undo groups */
+class UndoChangeGroupGuard
+{
+private:
+    SentenceEditWindow_Impl& m_rSentenceED;
+public:
+    UndoChangeGroupGuard(SentenceEditWindow_Impl& rSentenceED)
+        : m_rSentenceED(rSentenceED)
+    {
+        m_rSentenceED.UndoActionStart(SPELLUNDO_CHANGE_GROUP);
+    }
+    ~UndoChangeGroupGuard()
+    {
+        m_rSentenceED.UndoActionEnd();
+    }
+};
+
 IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)
 {
     if (m_xSentenceED->IsUndoEditMode())
@@ -514,11 +535,10 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)
     }
     else
     {
-        m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+        auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
         OUString aString = getReplacementString();
         m_xSentenceED->ChangeMarkedWord(aString, GetSelectedLang_Impl());
-        SpellContinue_Impl();
-        m_xSentenceED->UndoActionEnd();
+        SpellContinue_Impl(&xGuard);
     }
     if(!m_xChangePB->get_sensitive())
         m_xIgnorePB->grab_focus();
@@ -526,7 +546,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
 {
-    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
     OUString aString = getReplacementString();
     LanguageType eLang = GetSelectedLang_Impl();
 
@@ -548,13 +568,12 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
     }
 
     m_xSentenceED->ChangeMarkedWord(aString, eLang);
-    SpellContinue_Impl();
-    m_xSentenceED->UndoActionEnd();
+    SpellContinue_Impl(&xGuard);
 }
 
 IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
 {
-    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
     // add word to IgnoreAll list
     Reference< XDictionary > aXDictionary = LinguMgr::GetIgnoreAllList();
     //in case the error has been changed manually it has to be restored
@@ -594,8 +613,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
         }
     }
 
-    SpellContinue_Impl();
-    m_xSentenceED->UndoActionEnd();
+    SpellContinue_Impl(&xGuard);
 }
 
 IMPL_LINK_NOARG(SpellDialog, UndoHdl, weld::Button&, void)
@@ -644,7 +662,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         case SPELLUNDO_UNDO_EDIT_MODE :
         {
             //refill the dialog with the currently spelled sentence - throw away all changes
-            SpellContinue_Impl(true);
+            SpellContinue_Impl(nullptr, true);
         }
         break;
         case SPELLUNDO_ADD_IGNORE_RULE:
@@ -661,7 +679,7 @@ void SpellDialog::Impl_Restore(bool bUseSavedSentence)
     m_xSentenceED->SetText(OUString());
     m_xSentenceED->ResetModified();
     //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
-    SpellContinue_Impl(bUseSavedSentence);
+    SpellContinue_Impl(nullptr, bUseSavedSentence);
     m_xIgnorePB->set_label(m_sIgnoreOnceST);
 }
 
@@ -678,7 +696,7 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, weld::Button&, void)
         m_xSentenceED->RestoreCurrentError();
 
         // the word is being ignored
-        SpellContinue_Impl( false, true );
+        SpellContinue_Impl(nullptr, false, true);
     }
 }
 
@@ -817,7 +835,7 @@ IMPL_LINK(SpellDialog, AddToDictSelectHdl, const OString&, rIdent, void)
 
 void SpellDialog::AddToDictionaryExecute(const OString& rItemId)
 {
-    m_xSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
+    auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
 
     //GetErrorText() returns the current error even if the text is already
     //manually changed
@@ -858,8 +876,7 @@ void SpellDialog::AddToDictionaryExecute(const OString& rItemId)
     }
 
     // go on
-    SpellContinue_Impl();
-    m_xSentenceED->UndoActionEnd();
+    SpellContinue_Impl(&xGuard);
 }
 
 IMPL_LINK_NOARG(SpellDialog, ModifyHdl, LinkParamNone*, void)
@@ -958,7 +975,7 @@ void SpellDialog::InvalidateDialog()
     SfxModelessDialogController::Deactivate();
 }
 
-bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
+bool SpellDialog::GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGuard, bool bUseSavedSentence, bool bRecheck)
 {
     bool bRet = false;
     if(!bUseSavedSentence)
@@ -995,6 +1012,9 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
             if(!elem.bIsHidden)
                 sText.append(elem.sText);
         }
+        // tdf#132822 fire undo-stack UndoActionEnd to close undo stack because we're about to throw away the paragraph entirely
+        if (pGuard)
+            pGuard->reset();
         m_xSentenceED->SetText(sText.makeStringAndClear());
         sal_Int32 nStartPosition = 0;
         sal_Int32 nEndPosition = 0;
