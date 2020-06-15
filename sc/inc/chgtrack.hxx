@@ -43,6 +43,7 @@ class ScFormulaCell;
 class ScChangeAction;
 class ScChangeTrack;
 class ScAppOptions;
+namespace tools { class JsonWriter; }
 
 class ScActionColorChanger
 {
@@ -1146,7 +1147,7 @@ public:
     SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
     static void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
     /// Get info about all ScChangeAction elements.
-    OUString GetChangeTrackInfo();
+    void GetChangeTrackInfo(tools::JsonWriter&);
 };
 
 #endif
