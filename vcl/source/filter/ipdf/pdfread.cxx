@@ -247,28 +247,27 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
-    FPDF_DOCUMENT pPdfDocument
-        = FPDF_LoadMemDocument(pGfxLink->GetData(), pGfxLink->GetDataSize(), /*password=*/nullptr);
+    auto pPdfDocument = pPdfium->openDocument(pGfxLink->GetData(), pGfxLink->GetDataSize());
+
     if (!pPdfDocument)
         return 0;
 
-    const int nPageCount = FPDF_GetPageCount(pPdfDocument);
+    const int nPageCount = pPdfDocument->getPageCount();
     if (nPageCount <= 0)
         return 0;
 
     for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
     {
-        double fPageWidth = 0;
-        double fPageHeight = 0;
-        if (FPDF_GetPageSizeByIndex(pPdfDocument, nPageIndex, &fPageWidth, &fPageHeight) == 0)
+        basegfx::B2DSize aPageSize = pPdfDocument->getPageSize(nPageIndex);
+        if (aPageSize.getX() <= 0.0 || aPageSize.getY() <= 0.0)
             continue;
 
         // Returned unit is points, convert that to twip
         // 1 pt = 20 twips
         constexpr double pointToTwipconversionRatio = 20;
 
-        long nPageWidth = convertTwipToMm100(fPageWidth * pointToTwipconversionRatio);
-        long nPageHeight = convertTwipToMm100(fPageHeight * pointToTwipconversionRatio);
+        long nPageWidth = convertTwipToMm100(aPageSize.getX() * pointToTwipconversionRatio);
+        long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
             aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);
@@ -281,8 +280,6 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 
         rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight));
     }
-
-    FPDF_CloseDocument(pPdfDocument);
 
     return rGraphics.size();
 #else
