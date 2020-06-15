@@ -129,6 +129,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
     assertXPath(pLayout, "//page", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
+{
+    // Load a document with the ContinuousEndnotes flag turned on.
+    load(DATA_DIRECTORY, "continuous-endnotes-move-backwards.doc");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // We have 2 pages.
+    assertXPath(pLayout, "/root/page", 2);
+    // No endnote container on page 1.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. there were unexpected endnotes on page 1.
+    assertXPath(pLayout, "/root/page[1]/ftncont", 0);
+    // All endnotes are in a container on page 2.
+    assertXPath(pLayout, "/root/page[2]/ftncont", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

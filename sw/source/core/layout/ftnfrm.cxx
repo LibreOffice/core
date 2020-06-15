@@ -750,13 +750,31 @@ SwLayoutFrame *SwFrame::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
     {
         bool bEndn = pFootnote->GetAttr()->GetFootnote().IsEndNote();
         SwFrame* pTmpRef = nullptr;
+        const IDocumentSettingAccess& rSettings
+            = pFootnote->GetAttrSet()->GetDoc()->getIDocumentSettingAccess();
         if( bEndn && pFootnote->IsInSct() )
         {
             SwSectionFrame* pSect = pFootnote->FindSctFrame();
             if( pSect->IsEndnAtEnd() )
+                // Endnotes at the end of the section.
                 pTmpRef = pSect->FindLastContent( SwFindMode::LastCnt );
         }
+        else if (bEndn && rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+        {
+            // Endnotes at the end of the document.
+            SwPageFrame* pPage = getRootFrame()->GetLastPage();
+            assert(pPage);
+            SwFrame* pPrevPage = pPage->GetPrev();
+            if (pPrevPage)
+            {
+                // Have a last but one page, use that since we try to get a preceding frame.
+                assert(pPrevPage->IsPageFrame());
+                pPage = static_cast<SwPageFrame*>(pPrevPage);
+            }
+            pTmpRef = pPage->FindLastBodyContent();
+        }
         if( !pTmpRef )
+            // Endnotes on a separate page.
             pTmpRef = pFootnote->GetRef();
         SwFootnoteBossFrame* pStop = pTmpRef->FindFootnoteBossFrame( !bEndn );
 
