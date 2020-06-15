@@ -82,6 +82,7 @@ const long BUTTON_OFFSET = 2;            // Space between input line and button 
 const long MULTILINE_BUTTON_WIDTH = 20;  // Width of the button which opens multiline dropdown
 const long INPUTWIN_MULTILINES = 6;      // Initial number of lines within multiline dropdown
 const long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
+const long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -163,7 +164,7 @@ static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, const 
 
 ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
-        ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
+        ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN | WB_BORDER | WB_NOSHADOW) ),
         aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),
         pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow     ( *pRuntimeWindow ),
@@ -204,11 +205,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
     }
 
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        InsertSeparator (7);
-    }
-    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
+    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 7);
     SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
     if (!comphelper::LibreOfficeKit::isActive())
@@ -2116,7 +2113,13 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
     , nTipVisible(nullptr)
     , bFormulaMode(false)
 {
-    m_xWidget->set_entry_width_chars(15);
+
+    // Use calculation according to tdf#132338 to align combobox width to width of fontname comboxbox within formatting toolbar;
+    // formatting toolbar is placed above formulabar when using multiple toolbars typically
+
+    m_xWidget->set_entry_width_chars(1);
+    Size aSize(LogicToPixel(Size(POSITION_COMBOBOX_WIDTH * 4, 0), MapMode(MapUnit::MapAppFont)));
+    m_xWidget->set_size_request(aSize.Width(), -1);
     SetSizePixel(m_xContainer->get_preferred_size());
 
     FillRangeNames();
