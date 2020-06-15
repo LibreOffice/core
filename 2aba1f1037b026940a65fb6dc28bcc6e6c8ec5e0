@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "851d8fc8_b26f3613",
+        "filename": "sw/source/uibase/docvw/AnnotationWin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T23:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "706007d9_c88c9dae",
+      "revId": "2aba1f1037b026940a65fb6dc28bcc6e6c8ec5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51d302ad_339e317f",
         "filename": "sw/source/uibase/inc/uiobject.hxx",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "2aba1f1037b026940a65fb6dc28bcc6e6c8ec5e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4a7556c_ee4fb096",
+        "filename": "sw/source/uibase/inc/uiobject.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T23:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51d302ad_339e317f",
+      "revId": "2aba1f1037b026940a65fb6dc28bcc6e6c8ec5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
