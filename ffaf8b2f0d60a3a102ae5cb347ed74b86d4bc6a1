@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "107f31e9_e06bb971",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "Please don\u0027t mix cosmetic changes in lines that are not changed otherwise.",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3218f7a_77a96f4c",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "Please don\u0027t mix cosmetic changes in lines that are not changed otherwise.\n(applies to entire block above).",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef347199_9ccba05b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "This can be shortened to\n\n        default:\n        case 2: return 100.0;\n        case 3: return 1000.0;\n        case 4: return 10000.0;",
+      "range": {
+        "startLine": 2345,
+        "startChar": 0,
+        "endLine": 2350,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "147eca5c_24db7f05",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "Similar, this can be shortened to\n\n        default:\n        case 2: return  \"%\"; // percent\n        case 3: return u\"‰\"; // per mille\n        case 4: return u\"‱\"; // permyriad",
+      "range": {
+        "startLine": 2359,
+        "startChar": 0,
+        "endLine": 2364,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b319d2_a70dac4b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "Same here,\n\n        default  :\n        case \u0027%\u0027 : return 2; // percent\n        case u\u0027‰\u0027: return 3; // per mille\n        case u\u0027‱\u0027: return 4; // permyriad",
+      "range": {
+        "startLine": 2373,
+        "startChar": 0,
+        "endLine": 2376,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ed0ae97_f9dd9306",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4299,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "These if with no spaces inside the parentheses are perfectly fine (and the new preferred style).",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d99bb6e_49d185e9",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "Please don\u0027t hardcode such limits with magic numbers, in this case use\n\n SAL_N_ELEMENTS(D_MAX_D_BY_100)\n\nfor the number of elements in D_MAX_D_BY_100.",
+      "range": {
+        "startLine": 4301,
+        "startChar": 46,
+        "endLine": 4301,
+        "endChar": 47
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57ceb495_005f43e3",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:06:52Z",
+      "side": 1,
+      "message": "I would really refrain from supporting also permyriad, the two characters ‰ and ‱ are, depending on font, visually too similar.",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
