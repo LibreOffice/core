@@ -708,6 +708,24 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         aPaint.setStyle(SkPaint::kFill_Style);
         getDrawCanvas()->drawPath(aPath, aPaint);
+        // There is some code that needlessly subdivides areas into adjacent rectangles,
+        // but Skia doesn't line them up perfectly if AA is enabled (e.g. Cairo, Qt5 do,
+        // but Skia devs claim it's working as intended
+        // https://groups.google.com/d/msg/skia-discuss/NlKpD2X_5uc/Vuwd-kyYBwAJ).
+        // An example is tdf#133016, which triggers SvgStyleAttributes::add_stroke()
+        // implementing a line stroke as a bunch of polygons instead of just one, and
+        // SvgLinearAtomPrimitive2D::create2DDecomposition() creates a gradient
+        // as a series of polygons of gradually changing color. Those places should be
+        // changed, but for now explicitly draw the polygon outline in these cases,
+        // which will fill the holes between polygons left by AA.
+        // TODO: If fTransparency != 0 then this will draw some pixels twice, if that
+        // is a problem then this can be handled by drawing to a temporary surface
+        // and drawing that using the given transparency.
+        if (mParent.getAntiAliasB2DDraw() && mLineColor == SALCOLOR_NONE)
+        {
+            aPaint.setStyle(SkPaint::kStroke_Style);
+            getDrawCanvas()->drawPath(aPath, aPaint);
+        }
     }
     if (mLineColor != SALCOLOR_NONE)
     {
