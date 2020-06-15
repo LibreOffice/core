@@ -1906,23 +1906,32 @@ cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
 # Slide command aliases
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
-cmd/32/insertpagesfield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagesfield.png cmd/32/insertpagecountfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
-cmd/32/insertslidefield.png cmd/32/insertslidenumber.png
+cmd/32/insertslidefield.png cmd/32/insertslidenumberfield.png
+cmd/32/insertslidenumber.png cmd/32/insertslidenumberfield.png
+cmd/32/insertslidesfield.png cmd/32/insertslidecountfield.png
 cmd/32/inserttimefieldfix.png cmd/32/timefield.png
 
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertpagesfield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagesfield.png cmd/lc_insertpagecountfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
-cmd/lc_insertslidefield.png cmd/lc_insertslidenumber.png
+cmd/lc_insertslidefield.png cmd/lc_insertslidenumberfield.png
+cmd/lc_insertslidenumber.png cmd/lc_insertslidenumberfield.png
+cmd/lc_insertslidesfield.png cmd/lc_insertslidecountfield.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagesfield.png cmd/sc_insertpagecountfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
-cmd/sc_insertslidefield.png cmd/sc_insertslidenumber.png
+cmd/sc_insertslidefield.png cmd/sc_insertslidenumberfield.png
+cmd/sc_insertslidenumber.png cmd/sc_insertslidenumberfield.png
+cmd/sc_insertslidesfield.png cmd/sc_insertslidecountfield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 
 # database
