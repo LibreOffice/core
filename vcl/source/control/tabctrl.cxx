@@ -85,7 +85,6 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
-#define HAMBURGER_DIM       28
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -2192,9 +2191,9 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
     m_pOpenMenu = VclPtr<PushButton>::Create( this , WB_CENTER | WB_VCENTER );
-    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
     m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
     m_pOpenMenu->SetModeImage(Image(StockImage::Yes, SV_RESID_BITMAP_NOTEBOOKBAR));
+    m_pOpenMenu->SetSizePixel(m_pOpenMenu->GetOptimalSize());
     m_pOpenMenu->Show();
 }
 
@@ -2301,7 +2300,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     if (!m_pOpenMenu || m_pOpenMenu->isDisposed())
         return false;
 
-    long nMaxWidth = nWidth - HAMBURGER_DIM;
+    const long nHamburgerWidth = m_pOpenMenu->GetSizePixel().Width();
+    long nMaxWidth = nWidth - nHamburgerWidth;
     long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
     long nFullWidth = nShortcutsWidth;
 
@@ -2369,7 +2369,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     long nPosY = (m_nHeaderHeight - m_pOpenMenu->GetSizePixel().getHeight()) / 2;
     // position the menu
-    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, nPosY));
+    m_pOpenMenu->SetPosPixel(Point(nWidth - nHamburgerWidth, nPosY));
 
     return true;
 }
