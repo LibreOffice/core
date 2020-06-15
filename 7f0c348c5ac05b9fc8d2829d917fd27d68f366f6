@@ -22,6 +22,29 @@
       "revId": "7f0c348c5ac05b9fc8d2829d917fd27d68f366f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ef94514_e12ac41c",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-15T12:38:33Z",
+      "side": 1,
+      "message": "Please avoid the leading :: unless required to disambiguate.",
+      "range": {
+        "startLine": 32,
+        "startChar": 13,
+        "endLine": 32,
+        "endChar": 15
+      },
+      "revId": "7f0c348c5ac05b9fc8d2829d917fd27d68f366f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
