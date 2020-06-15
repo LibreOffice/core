@@ -24,6 +24,7 @@ namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace vcl { class Window; }
+namespace tools { class JsonWriter; }
 
 class VirtualDevice;
 
@@ -230,9 +231,8 @@ public:
     /// Implementation for
     /// lok::Document::getCommandValues(".uno:AcceptTrackedChanges") when there
     /// is no matching UNO API.
-    virtual OUString getTrackedChanges()
+    virtual void getTrackedChanges(tools::JsonWriter&)
     {
-        return OUString();
     }
 
     /// Implementation for

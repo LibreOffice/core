@@ -47,6 +47,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <tools/json_writer.hxx>
 #include <algorithm>
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
@@ -4676,34 +4677,31 @@ void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction
 }
 
 /// Get info about a single ScChangeAction element.
-static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAction* pAction, boost::property_tree::ptree& rRedlines)
+static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAction* pAction, tools::JsonWriter& rRedlines)
 {
     if (pAction->GetType() == SC_CAT_CONTENT)
     {
-        boost::property_tree::ptree aRedline;
-        aRedline.put("index", nIndex);
+        auto redlinesNode = rRedlines.startNode("");
+        rRedlines.put("index", nIndex);
 
-        const OUString& sAuthor = pAction->GetUser();
-        aRedline.put("author", sAuthor.toUtf8().getStr());
+        rRedlines.put("author", pAction->GetUser());
 
-        aRedline.put("type", "Modify");
+        rRedlines.put("type", "Modify");
 
-        aRedline.put("comment", pAction->GetComment().toUtf8().getStr());
+        rRedlines.put("comment", pAction->GetComment());
 
         OUString aDescription;
         pAction->GetDescription(aDescription, pDoc, true);
-        aRedline.put("description", aDescription);
+        rRedlines.put("description", aDescription);
 
         OUString sDateTime = utl::toISO8601(pAction->GetDateTimeUTC().GetUNODateTime());
-        aRedline.put("dateTime", sDateTime.toUtf8().getStr());
-
-        rRedlines.push_back(std::make_pair("", aRedline));
+        rRedlines.put("dateTime", sDateTime);
     }
 }
 
-OUString ScChangeTrack::GetChangeTrackInfo()
+void ScChangeTrack::GetChangeTrackInfo(tools::JsonWriter& aRedlines)
 {
-    boost::property_tree::ptree aRedlines;
+    auto redlinesNode = aRedlines.startNode("redlines");
 
     ScChangeAction* pAction = GetFirst();
     if (pAction)
@@ -4717,12 +4715,6 @@ OUString ScChangeTrack::GetChangeTrackInfo()
             lcl_getTrackedChange(pDoc, i++, pAction, aRedlines);
         }
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("redlines", aRedlines);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

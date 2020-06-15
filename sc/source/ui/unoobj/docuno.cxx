@@ -940,17 +940,13 @@ PointerStyle ScModelObj::getPointer()
     return pGridWindow->GetPointer();
 }
 
-OUString ScModelObj::getTrackedChanges()
+void ScModelObj::getTrackedChanges(tools::JsonWriter& rJson)
 {
-    OUString aRet;
-
     if (pDocShell)
     {
         if (ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack())
-            aRet = pChangeTrack->GetChangeTrackInfo();
+            pChangeTrack->GetChangeTrackInfo(rJson);
     }
-
-    return aRet;
 }
 
 void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
