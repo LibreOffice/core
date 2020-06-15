@@ -27,15 +27,13 @@ Function verify_testOptionalsCompatible() As String
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
-    ' TestLog_ASSERT TestOptVariant(), 123, "TestOptVariant()"
+    TestLog_ASSERT TestOptVariant(), 123, "TestOptVariant()"
     TestLog_ASSERT TestOptVariant(123), 246, "TestOptVariant(123)"
     TestLog_ASSERT TestOptVariant(, 456), 456, "TestOptVariant(, 456)"
     TestLog_ASSERT TestOptVariant(123, 456), 579, "TestOptVariant(123, 456)"
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
-    ' TestLog_ASSERT TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()"
+    TestLog_ASSERT TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()"
     TestLog_ASSERT TestOptVariantByRefByVal(123), 246, "TestOptVariantByRefByVal(123)"
     TestLog_ASSERT TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)"
     TestLog_ASSERT TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)"
@@ -44,13 +42,13 @@ Function verify_testOptionalsCompatible() As String
     TestLog_ASSERT TestOptDouble(), 123.4, "TestOptDouble()"
     TestLog_ASSERT TestOptDouble(123.4), 246.8, "TestOptDouble(123.4)"
     TestLog_ASSERT TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)"
-    TestLog_ASSERT Format(TestOptDouble(123.4, 567.8), "0.0"), 691.2, "TestOptDouble(123.4, 567.8)"
+    TestLog_ASSERT CDbl(Format(TestOptDouble(123.4, 567.8), "0.0")), 691.2, "TestOptDouble(123.4, 567.8)"
 
     ' optionals with double datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptDoubleByRefByVal(), 123.4, "TestOptDouble()"
     TestLog_ASSERT TestOptDoubleByRefByVal(123.4), 246.8, "TestOptDouble(123.4)"
     TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)"
-    TestLog_ASSERT Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0"), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)"
+    TestLog_ASSERT CDbl(Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0")), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)"
 
     ' optionals with integer datatypes
     TestLog_ASSERT TestOptInteger(), 123, "TestOptInteger()"
@@ -85,14 +83,14 @@ Function verify_testOptionalsCompatible() As String
     cB.Add (567.8)
     TestLog_ASSERT TestOptObject(), 0, "TestOptObject()"
     TestLog_ASSERT TestOptObject(cA), 579, "TestOptObject(A)"
-    TestLog_ASSERT Format(TestOptObject(, cB), "0.0"), 691.2, "TestOptObject(, B)"
-    TestLog_ASSERT Format(TestOptObject(cA, cB), "0.0"), 1270.2, "TestOptObject(A, B)"
+    TestLog_ASSERT CDbl(Format(TestOptObject(, cB), "0.0")), 691.2, "TestOptObject(, B)"
+    TestLog_ASSERT CDbl(Format(TestOptObject(cA, cB), "0.0")), 1270.2, "TestOptObject(A, B)"
 
     ' optionals with object datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptObjectByRefByVal(), 0, "TestOptObjectByRefByVal()"
     TestLog_ASSERT TestOptObjectByRefByVal(cA), 579, "TestOptObjectByRefByVal(A)"
-    TestLog_ASSERT Format(TestOptObjectByRefByVal(, cB), "0.0"), 691.2, "TestOptObjectByRefByVal(, B)"
-    TestLog_ASSERT Format(TestOptObjectByRefByVal(cA, cB), "0.0"), 1270.2, "TestOptObjectByRefByVal(A, B)"
+    TestLog_ASSERT CDbl(Format(TestOptObjectByRefByVal(, cB), "0.0")), 691.2, "TestOptObjectByRefByVal(, B)"
+    TestLog_ASSERT CDbl(Format(TestOptObjectByRefByVal(cA, cB), "0.0")), 1270.2, "TestOptObjectByRefByVal(A, B)"
 
     ' optionals with array datatypes
     Dim aA(0 To 1) As Integer
@@ -103,14 +101,14 @@ Function verify_testOptionalsCompatible() As String
     aB(1) = 567.8
     TestLog_ASSERT TestOptArray(), 0, "TestOptArray()"
     TestLog_ASSERT TestOptArray(aA), 579, "TestOptArray(A)"
-    TestLog_ASSERT Format(TestOptArray(, aB), "0.0"), 691.2, "TestOptArray(, B)"
-    TestLog_ASSERT Format(TestOptArray(aA, aB), "0.0"), 1270.2, "TestOptArray(A, B)"
+    TestLog_ASSERT CDbl(Format(TestOptArray(, aB), "0.0")), 691.2, "TestOptArray(, B)"
+    TestLog_ASSERT CDbl(Format(TestOptArray(aA, aB), "0.0")), 1270.2, "TestOptArray(A, B)"
 
     ' optionals with array datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()"
     TestLog_ASSERT TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)"
-    TestLog_ASSERT Format(TestOptArrayByRefByVal(, aB), "0.0"), 691.2, "TestOptArrayByRefByVal(, B)"
-    TestLog_ASSERT Format(TestOptArrayByRefByVal(aA, aB), "0.0"), 1270.2, "TestOptArrayByRefByVal(A, B)"
+    TestLog_ASSERT CDbl(Format(TestOptArrayByRefByVal(, aB), "0.0")), 691.2, "TestOptArrayByRefByVal(, B)"
+    TestLog_ASSERT CDbl(Format(TestOptArrayByRefByVal(aA, aB), "0.0")), 1270.2, "TestOptArrayByRefByVal(A, B)"
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testOptionalsCompatible = result
