@@ -32,10 +32,14 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
 
     void testDocument();
     void testPages();
+    void testAnnotationsMadeInEvince();
+    void testAnnotationsMadeInAcrobat();
 
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
     CPPUNIT_TEST(testDocument);
     CPPUNIT_TEST(testPages);
+    CPPUNIT_TEST(testAnnotationsMadeInEvince);
+    CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -94,6 +98,137 @@ void PDFiumLibraryTest::testPages()
 
     auto pPage = pDocument->openPage(0);
     CPPUNIT_ASSERT(pPage);
+}
+
+void PDFiumLibraryTest::testAnnotationsMadeInEvince()
+{
+    OUString aURL = getFullUrl("PangramWithAnnotations.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
+    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    auto pDocument = pPdfium->openDocument(pData, nLength);
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    auto pPage = pDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    CPPUNIT_ASSERT_EQUAL(2, pPage->getAnnotationCount());
+
+    {
+        auto pAnnotation = pPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+
+        OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Annotation test"), aContentsString);
+
+        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
+        auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
+        CPPUNIT_ASSERT(pPopupAnnotation);
+
+        CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationIndex(pPopupAnnotation));
+        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+    }
+}
+
+void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
+{
+    OUString aURL = getFullUrl("PangramAcrobatAnnotations.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
+    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    auto pDocument = pPdfium->openDocument(pData, nLength);
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    auto pPage = pDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    CPPUNIT_ASSERT_EQUAL(4, pPage->getAnnotationCount());
+
+    {
+        auto pAnnotation = pPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+
+        OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("YEEEY"), aContentsString);
+
+        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
+        auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
+        CPPUNIT_ASSERT(pPopupAnnotation);
+
+        CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationIndex(pPopupAnnotation));
+        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(2);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+
+        OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+        CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
+
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Note"), aContentsString);
+
+        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup));
+        auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
+        CPPUNIT_ASSERT(pPopupAnnotation);
+
+        CPPUNIT_ASSERT_EQUAL(3, pPage->getAnnotationIndex(pPopupAnnotation));
+        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(3);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFiumLibraryTest);

@@ -19,12 +19,17 @@
 #include <memory>
 #include <rtl/instance.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <rtl/ustring.hxx>
 
 #include <fpdf_doc.h>
 
 namespace vcl::pdf
 {
+constexpr char constDictionaryKeyTitle[] = "T";
+constexpr char constDictionaryKeyContents[] = "Contents";
+constexpr char constDictionaryKeyPopup[] = "Popup";
+
 class PDFiumDocument;
 
 class VCL_DLLPUBLIC PDFium final
@@ -42,6 +47,26 @@ public:
     OUString getLastError() { return maLastError; }
 
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
+};
+
+class VCL_DLLPUBLIC PDFiumAnnotation final
+{
+private:
+    FPDF_ANNOTATION mpAnnotation;
+
+    PDFiumAnnotation(const PDFiumAnnotation&) = delete;
+    PDFiumAnnotation& operator=(const PDFiumAnnotation&) = delete;
+
+public:
+    PDFiumAnnotation(FPDF_ANNOTATION pAnnotation);
+    ~PDFiumAnnotation();
+    FPDF_ANNOTATION getPointer() { return mpAnnotation; }
+
+    int getSubType();
+    basegfx::B2DRectangle getRectangle();
+    bool hasKey(OString const& rKey);
+    OUString getString(OString const& rKey);
+    std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
 };
 
 class VCL_DLLPUBLIC PDFiumPage final
@@ -64,6 +89,11 @@ public:
         if (mpPage)
             FPDF_ClosePage(mpPage);
     }
+
+    int getAnnotationCount();
+    int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation);
+
+    std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex);
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
