@@ -107,7 +107,7 @@ void SwPaintQueue::Repaint()
         SwQueuedPaint *pPt = s_pPaintQueue;
         do
         {   SwViewShell *pSh = pPt->pSh;
-            SET_CURR_SHELL( pSh );
+            CurrShell aCurr( pSh );
             if ( pSh->IsPreview() )
             {
                 if ( pSh->GetWin() )
@@ -201,7 +201,7 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
 void SwViewShell::ChgAllPageOrientation( Orientation eOri )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     const size_t nAll = GetDoc()->GetPageDescCnt();
     bool bNewOri = eOri != Orientation::Portrait;
@@ -240,7 +240,7 @@ void SwViewShell::ChgAllPageOrientation( Orientation eOri )
 void SwViewShell::ChgAllPageSize( Size const &rSz )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SwDoc* pMyDoc = GetDoc();
     const size_t nAll = pMyDoc->GetPageDescCnt();
@@ -273,7 +273,7 @@ void SwViewShell::ChgAllPageSize( Size const &rSz )
 
 void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SwRootFrame* pMyLayout = GetLayout();
 
@@ -484,7 +484,7 @@ bool SwViewShell::PrintOrPDFExport(
 
     {   // additional scope so that the CurrShell is reset before destroying the shell
 
-        SET_CURR_SHELL( pShell.get() );
+        CurrShell aCurr( pShell.get() );
 
         //JP 01.02.99: Bug 61335 - the ReadOnly flag is never copied
         if( mpOpt->IsReadonly() )
@@ -579,7 +579,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         pSh.reset(new SwViewShell( *pDoc, nullptr, pOpt, &rRenderContext));
 
     {
-        SET_CURR_SHELL( pSh.get() );
+        CurrShell aCurr( pSh.get() );
         pSh->PrepareForPrint( rOptions );
         pSh->SetPrtFormatOption( true );
 

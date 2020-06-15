@@ -114,7 +114,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 
 bool SwEditShell::Delete()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
     if ( !HasReadonlySel() || CursorInsideInputField() )
     {
@@ -155,7 +155,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     if( !pDestShell )
         pDestShell = this;
 
-    SET_CURR_SHELL( pDestShell );
+    CurrShell aCurr( pDestShell );
 
     // List of insert positions for smart insert of block selections
     std::vector< std::shared_ptr<SwPosition> > aInsertList;
@@ -306,7 +306,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
  */
 bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     bool bRet = false;
     if( !HasReadonlySel() )
@@ -341,7 +341,7 @@ bool SwEditShell::DelFullPara()
         // no multi selection
         if( !pCursor->IsMultiSelection() && !HasReadonlySel() )
         {
-            SET_CURR_SHELL( this );
+            CurrShell aCurr( this );
             StartAllAction();
             bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( *pCursor );
             EndAllAction();

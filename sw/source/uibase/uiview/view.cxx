@@ -960,7 +960,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         if (m_pWrtShell->GetDoc()->GetDocumentFieldsManager().containsUpdatableFields())
         {
-            SET_CURR_SHELL(m_pWrtShell.get());
+            CurrShell aCurr(m_pWrtShell.get());
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
             m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
@@ -1166,7 +1166,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     {
         bool bIsOwnDocument = lcl_IsOwnDocument( *this );
 
-        SET_CURR_SHELL(m_pWrtShell.get());
+        CurrShell aCurr(m_pWrtShell.get());
 
         sal_Int32 nPos = 0;
 
@@ -1284,7 +1284,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if (!rSequence.hasElements())
         return;
 
-    SET_CURR_SHELL(m_pWrtShell.get());
+    CurrShell aCurr(m_pWrtShell.get());
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const tools::Rectangle &rVis = GetVisArea();
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();

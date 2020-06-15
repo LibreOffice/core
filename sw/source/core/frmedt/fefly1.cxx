@@ -235,7 +235,7 @@ bool sw_ChkAndSetNewAnchor(
 
 void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     // The frame is new, thus select it.
     // !! Always select the frame, if it's not selected.
@@ -309,7 +309,7 @@ SwFlyFrame* SwFEShell::GetSelectedOrCurrFlyFrame() const
 // Returns non-null pointer, if the current Fly could be anchored to another one (so it is inside)
 const SwFrameFormat* SwFEShell::IsFlyInFly()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if ( !Imp()->HasDrawView() )
         return nullptr;
@@ -370,7 +370,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
 
 void SwFEShell::SetFlyPos( const Point& rAbsPos )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     // Determine reference point in document coordinates
     SwFlyFrame *pFly = GetCurrFlyFrame(false);
@@ -420,7 +420,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 {
     Point aRet;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if ( !Imp()->HasDrawView() )
         return aRet;
@@ -642,7 +642,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchValid,
                            SwFrameFormat *pParent )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -820,7 +820,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                         const SfxItemSet* pFlyAttrSet )
 {
     SwFlyFrameFormat* pFormat = nullptr;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     SwShellCursor *pStartCursor = dynamic_cast<SwShellCursor*>(GetSwCursor());
     SwShellCursor *pCursor = pStartCursor;
@@ -902,7 +902,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
                         SfxItemSet* pFlyAttrSet )
 {
     SwFlyFrameFormat* pFormat = nullptr;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     {
         for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
@@ -931,7 +931,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
 void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
                                const Point& rInsertPosition )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SfxItemSet rFlyAttrSet( GetDoc()->GetAttrPool(), aFrameFormatSetRange );
     rFlyAttrSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
@@ -1040,7 +1040,7 @@ bool SwFEShell::GetFlyFrameAttr( SfxItemSet &rSet ) const
         return false;
     }
 
-    SET_CURR_SHELL( const_cast<SwFEShell*>(this) );
+    CurrShell aCurr( const_cast<SwFEShell*>(this) );
 
     if( !rSet.Set( pFly->GetFormat()->GetAttrSet() ) )
         return false;
@@ -1076,7 +1076,7 @@ bool SwFEShell::GetFlyFrameAttr( SfxItemSet &rSet ) const
 // Attributes of the current fly will change.
 bool SwFEShell::SetFlyFrameAttr( SfxItemSet& rSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     if( rSet.Count() )
@@ -1121,7 +1121,7 @@ SfxItemSet SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFo
 bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 {
     bool bRet = false;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     if ( !rSet.Count() ||
             !Imp()->HasDrawView() )
         return bRet;
@@ -1159,7 +1159,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 // Reset attributes contained in the set.
 void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
     OSL_ENSURE( pFly, "SetFlyFrameAttr, no Fly selected." );
@@ -1210,7 +1210,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
     if( pFly )
     {
         StartAllAction();
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
 
         SwFlyFrameFormat* pFlyFormat = pFly->GetFormat();
         const Point aPt( pFly->getFrameArea().Pos() );
@@ -1770,7 +1770,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection() const
 
 void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     const SdrMarkList *pMrkList;
     if( Imp()->HasDrawView() &&  1 ==

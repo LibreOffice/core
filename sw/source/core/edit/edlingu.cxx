@@ -203,7 +203,7 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
 
     pSh = pShell;
 
-    SET_CURR_SHELL( pSh );
+    CurrShell aCurr( pSh );
 
     OSL_ENSURE(!m_pEnd, "SwLinguIter::Start_ without End?");
 

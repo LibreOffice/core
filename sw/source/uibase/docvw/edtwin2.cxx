@@ -100,7 +100,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if(bQuickBalloon && !rSh.GetViewOptions()->IsShowContentTips())
         return;
     bool bContinue = true;
-    SET_CURR_SHELL(&rSh);
+    CurrShell aCurr(&rSh);
     OUString sText;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
     bool bBalloon = bool(rEvt.GetMode() & HelpEventMode::BALLOON);

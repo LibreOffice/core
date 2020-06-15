@@ -181,7 +181,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
         return;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     // search boxes via the layout
@@ -220,7 +220,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
         return;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if( !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::Col ) )
     {
@@ -273,7 +273,7 @@ bool SwFEShell::DeleteCol()
         return false;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     // search boxes via the layout
@@ -324,7 +324,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         return false;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     // search for boxes via the layout
@@ -445,7 +445,7 @@ TableMergeErr SwFEShell::MergeTab()
         }
         else
         {
-            SET_CURR_SHELL( this );
+            CurrShell aCurr( this );
             StartAllAction();
 
             TableWait aWait(pTableCursor->GetSelectedBoxesCount(), nullptr,
@@ -476,7 +476,7 @@ void SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
         return;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if( bVert && !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::NONE ) )
     {
@@ -618,7 +618,7 @@ void SwFEShell::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly )
     if( !pBox || !pBox->IsInTab() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     do
@@ -669,7 +669,7 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
     if( !pBox || !pBox->IsInTab() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     do
@@ -693,7 +693,7 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const 
     const SwFrame *pBox = GetBox( rPt );
     if( pBox )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         GetDoc()->SetTabRows( rNew, bCurColOnly, static_cast<const SwCellFrame*>(pBox) );
         EndAllActionAndCall();
@@ -702,7 +702,7 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const 
 
 void SwFEShell::SetRowSplit( const SwFormatRowSplit& rNew )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetRowSplit( *getShellCursor( false ), rNew );
     EndAllActionAndCall();
@@ -715,7 +715,7 @@ std::unique_ptr<SwFormatRowSplit> SwFEShell::GetRowSplit() const
 
 void SwFEShell::SetRowHeight( const SwFormatFrameSize &rNew )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetRowHeight( *getShellCursor( false ), rNew );
     EndAllActionAndCall();
@@ -728,7 +728,7 @@ std::unique_ptr<SwFormatFrameSize> SwFEShell::GetRowHeight() const
 
 bool SwFEShell::BalanceRowHeight( bool bTstOnly, const bool bOptimize )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     if( !bTstOnly )
         StartAllAction();
     bool bRet = GetDoc()->BalanceRowHeight( *getShellCursor( false ), bTstOnly, bOptimize );
@@ -739,7 +739,7 @@ bool SwFEShell::BalanceRowHeight( bool bTstOnly, const bool bOptimize )
 
 void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetRowBackground( *getShellCursor( false ), rNew );
     EndAllActionAndCall();
@@ -752,7 +752,7 @@ bool SwFEShell::GetRowBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const
 
 void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetTabBorders( *getShellCursor( false ), rSet );
     EndAllActionAndCall();
@@ -761,7 +761,7 @@ void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
 void SwFEShell::SetTabLineStyle( const Color* pColor, bool bSetLine,
                                  const editeng::SvxBorderLine* pBorderLine )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetTabLineStyle( *getShellCursor( false ),
                                 pColor, bSetLine, pBorderLine );
@@ -775,7 +775,7 @@ void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 
 void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetBoxAttr( *getShellCursor( false ), rNew );
     EndAllActionAndCall();
@@ -791,7 +791,7 @@ bool SwFEShell::GetBoxBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const
 
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetBoxAttr( *getShellCursor( false ), rNew );
     EndAllActionAndCall();
@@ -807,7 +807,7 @@ bool SwFEShell::GetBoxDirection( std::unique_ptr<SvxFrameDirectionItem>& rToFill
 
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetBoxAlign( *getShellCursor( false ), nAlign );
     EndAllActionAndCall();
@@ -824,7 +824,7 @@ void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
     if( !pFrame || !pFrame->IsInTab() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->SetAttr( rNew, *pFrame->ImplFindTabFrame()->GetFormat() );
     EndAllAction(); // no call, nothing changes!
@@ -902,7 +902,7 @@ void SwFEShell::ProtectCells()
     SvxProtectItem aProt( RES_PROTECT );
     aProt.SetContentProtect( true );
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     GetDoc()->SetBoxAttr( *getShellCursor( false ), aProt );
@@ -919,7 +919,7 @@ void SwFEShell::ProtectCells()
 // cancel table selection
 void SwFEShell::UnProtectCells()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwSelBoxes aBoxes;
@@ -946,7 +946,7 @@ void SwFEShell::UnProtectCells()
 
 void SwFEShell::UnProtectTables()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->UnProtectTables( *GetCursor() );
     EndAllActionAndCall();
@@ -1002,7 +1002,7 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
     if( pTab && pTab->GetTable()->GetRowsToRepeat() != nSet )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         GetDoc()->SetRowsToRepeat( *pTab->GetTable(), nSet );
         EndAllActionAndCall();
@@ -1106,7 +1106,7 @@ bool SwFEShell::CheckHeadline( bool bRepeat ) const
 
 void SwFEShell::AdjustCellWidth( const bool bBalance, const bool bNoShrink )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     // switch on wait-cursor, as we do not know how
@@ -1233,7 +1233,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     bool bRet;
     if( !aBoxes.empty() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         bRet = GetDoc()->SetTableAutoFormat(
                 aBoxes, *pTableStyle, bResetDirect, pStyleName != nullptr);
@@ -1286,7 +1286,7 @@ bool SwFEShell::DeleteTableSel()
         return false;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     // search boxes via the layout
@@ -2040,7 +2040,7 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     const SwFrame *pBox = GetBox( rPt );
     if( pBox )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         GetDoc()->SetTabCols( rNew, bCurRowOnly, static_cast<const SwCellFrame*>(pBox) );
         EndAllActionAndCall();
@@ -2127,7 +2127,7 @@ void SwFEShell::SetTableAttr( const SfxItemSet &rNew )
     SwFrame *pFrame = GetCurrFrame();
     if( pFrame && pFrame->IsInTab() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         SwTabFrame *pTab = pFrame->FindTabFrame();
         pTab->GetTable()->SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
@@ -2144,7 +2144,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     if( !pFrame || !pFrame->IsInTab() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     do {

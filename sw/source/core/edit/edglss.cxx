@@ -163,7 +163,7 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
         SwIndex(pContentNode, pContentNode ? pContentNode->Len() : 0));
 
     bool bRet = false;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     pInsDoc->getIDocumentFieldsAccess().LockExpFields();
 

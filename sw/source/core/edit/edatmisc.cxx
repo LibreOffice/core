@@ -31,7 +31,7 @@
 
 void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
 
     StartAllAction();
@@ -111,7 +111,7 @@ static void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNo
 
 void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, const bool bParagraphSetting )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     SwPaM* pCursor = GetCursor();
@@ -150,7 +150,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, con
 
 void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM* pPaM, const bool bParagraphSetting )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
     StartAllAction();
     RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;

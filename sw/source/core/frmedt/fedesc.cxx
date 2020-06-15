@@ -59,7 +59,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     OSL_ENSURE( !GetCursor()->HasMark(), "ChgCurPageDesc only without selection!");
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     while ( pPage )
     {
         pFlow = pPage->FindFirstBodyContent();
@@ -110,7 +110,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 void SwFEShell::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 {
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     //Fix i64842: because Undo has a very special way to handle header/footer content
     // we have to copy the page descriptor before calling ChgPageDesc.
     SwPageDesc aDesc( rChged );

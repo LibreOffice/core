@@ -824,7 +824,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             for(SwViewShell& rShell : pVSh->GetRingContainer())
             {
-                SET_CURR_SHELL( &rShell );
+                CurrShell aCurr( &rShell );
                 if( rShell.IsPreview() )
                 {
                     if( rShell.GetWin() )
