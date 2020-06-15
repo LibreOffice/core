@@ -700,8 +700,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         {
             if (rShape.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
-                SwFormatAnchor pShapeAnch = rShape.GetAnchor();
-                aTextBoxSet.Put(pShapeAnch);
+                const SwFormatAnchor& rShapeAnch = rShape.GetAnchor();
+                aTextBoxSet.Put(rShapeAnch);
             }
 
             switch (pItem->Which())
