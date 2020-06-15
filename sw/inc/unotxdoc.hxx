@@ -436,7 +436,7 @@ public:
     /// @see vcl::ITiledRenderable::getPointer().
     virtual PointerStyle getPointer() override;
     /// @see vcl::ITiledRenderable::getTrackedChanges().
-    OUString getTrackedChanges() override;
+    void getTrackedChanges(tools::Json&) override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
     OUString getTrackedChangeAuthors() override;
 
