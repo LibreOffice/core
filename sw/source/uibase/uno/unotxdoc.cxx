@@ -161,6 +161,7 @@
 #include <redline.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <xmloff/odffields.hxx>
+#include <tools/json_writer.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -3255,9 +3256,9 @@ PointerStyle SwXTextDocument::getPointer()
     return pWrtShell->GetView().GetEditWin().GetPointer();
 }
 
-OUString SwXTextDocument::getTrackedChanges()
+void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
 {
-    boost::property_tree::ptree aTrackedChanges;
+    auto redlinesNode = rJson.startNode("redlines");
 
     // Disable since usability is very low beyond some small number of changes.
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
@@ -3267,19 +3268,17 @@ OUString SwXTextDocument::getTrackedChanges()
             = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
         for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
         {
-            boost::property_tree::ptree aTrackedChange;
-            aTrackedChange.put("index", rRedlineTable[i]->GetId());
-            aTrackedChange.put("author", rRedlineTable[i]->GetAuthorString(1).toUtf8().getStr());
-            aTrackedChange.put("type", SwRedlineTypeToOUString(
-                                           rRedlineTable[i]->GetRedlineData().GetType())
-                                           .toUtf8()
-                                           .getStr());
-            aTrackedChange.put("comment",
-                               rRedlineTable[i]->GetRedlineData().GetComment().toUtf8().getStr());
-            aTrackedChange.put("description", rRedlineTable[i]->GetDescr().toUtf8().getStr());
+            auto redlineNode = rJson.startNode("");
+            rJson.put("index", rRedlineTable[i]->GetId());
+            rJson.put("author", rRedlineTable[i]->GetAuthorString(1));
+            rJson.put("type", SwRedlineTypeToOUString(
+                                           rRedlineTable[i]->GetRedlineData().GetType()));
+            rJson.put("comment",
+                               rRedlineTable[i]->GetRedlineData().GetComment());
+            rJson.put("description", rRedlineTable[i]->GetDescr());
             OUString sDateTime = utl::toISO8601(
                 rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
-            aTrackedChange.put("dateTime", sDateTime.toUtf8().getStr());
+            rJson.put("dateTime", sDateTime);
 
             SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
             SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
@@ -3299,19 +3298,10 @@ OUString SwXTextDocument::getTrackedChanges()
                     aRects.push_back(rNextRect.SVRect().toString());
 
                 const OString sRects = comphelper::string::join("; ", aRects);
-                aTrackedChange.put("textRange", sRects.getStr());
+                rJson.put("textRange", sRects);
             }
-
-            aTrackedChanges.push_back(std::make_pair("", aTrackedChange));
         }
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("redlines", aTrackedChanges);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 OUString SwXTextDocument::getTrackedChangeAuthors()
