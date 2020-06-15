@@ -41,7 +41,7 @@ bool SdPdfFilter::Import()
     const OUString aFileName(
         mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
-    std::vector<std::pair<Graphic, Size>> aGraphics;
+    std::vector<vcl::PDFGraphicResult> aGraphics;
     if (vcl::ImportPDFUnloaded(aFileName, aGraphics) == 0)
         return false;
 
@@ -52,10 +52,10 @@ bool SdPdfFilter::Import()
         mrDocument.DuplicatePage(0);
     }
 
-    for (const std::pair<Graphic, Size>& aPair : aGraphics)
+    for (vcl::PDFGraphicResult const& rPDFGraphicResult : aGraphics)
     {
-        const Graphic& rGraphic = aPair.first;
-        const Size& aSizeHMM = aPair.second;
+        const Graphic& rGraphic = rPDFGraphicResult.maGraphic;
+        const Size& aSizeHMM = rPDFGraphicResult.maSize;
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
         assert(nPageNumber >= 0 && o3tl::make_unsigned(nPageNumber) < aGraphics.size());

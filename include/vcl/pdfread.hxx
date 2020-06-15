@@ -13,13 +13,13 @@
 #include <vector>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <vcl/graph.hxx>
 
 namespace com::sun::star::uno
 {
 template <typename> class Sequence;
 }
 class Bitmap;
-class Graphic;
 
 namespace vcl
 {
@@ -31,10 +31,24 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vecto
 /// Imports a PDF stream into rGraphic as VectorGraphicData.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
 
+struct PDFGraphicResult
+{
+    Graphic maGraphic;
+
+    // Size in HMM
+    Size maSize;
+
+    PDFGraphicResult(Graphic const& rGraphic, Size const& rSize)
+        : maGraphic(rGraphic)
+        , maSize(rSize)
+    {
+    }
+};
+
 /// Import PDF as Graphic images (1 per page), but not loaded yet.
 /// Returns the number of pages read.
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
-                                       std::vector<std::pair<Graphic, Size>>& rGraphics);
+                                       std::vector<PDFGraphicResult>& rGraphics);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
