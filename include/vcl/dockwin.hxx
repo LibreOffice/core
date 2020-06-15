@@ -168,7 +168,7 @@ public:
     Size            GetSizePixel() const;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DockingManager
+class VCL_DLLPUBLIC DockingManager
 {
     std::vector<std::unique_ptr<ImplDockingWindowWrapper, o3tl::default_delete<ImplDockingWindowWrapper>>> mvDockingWindows;
 
