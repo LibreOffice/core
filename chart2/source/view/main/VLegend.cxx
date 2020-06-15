@@ -408,18 +408,62 @@ awt::Size lcl_placeLegendEntries(
                         DrawModelWrapper::removeShape( aTextShapes[nEntry] );
                         aTextShapes.pop_back();
                     }
-                    if( nEntry < nNumberOfEntries )
+                    if( nEntry < nNumberOfEntries && ( nEntry != 0 || nNumberOfColumns != 1 ) )
                     {
                         DrawModelWrapper::removeShape( rEntries[ nEntry ].aSymbol );
                         rEntries.pop_back();
                         nNumberOfEntries--;
                     }
                 }
-                nSumHeight -= aRowHeights[nRow];
-                aRowHeights.pop_back();
-                nRemainingSpace = rRemainingSpace.Height - nSumHeight;
-                if( nRemainingSpace>=0 )
-                    break;
+                if (nRow == 0 && nNumberOfColumns == 1)
+                {
+                    try
+                    {
+                        OUString aLabelString = rEntries[0].aLabel[0]->getString();
+                        const OUString sDots = "...";
+                        ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+                        for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; nNewLen--)
+                        {
+                            OUString aNewLabel = aLabelString.copy(0, nNewLen) + sDots;
+                            Reference<drawing::XShape> xEntry = pShapeFactory->createText(
+                                xTarget, aNewLabel, rTextProperties.first, rTextProperties.second, uno::Any());
+                            nSumHeight = xEntry->getSize().Height;
+                            nRemainingSpace = rRemainingSpace.Height - nSumHeight;
+                            if (nRemainingSpace >= 0)
+                            {
+                                sal_Int32 nWidth = xEntry->getSize().Width + nSymbolPlusDistanceWidth;
+                                if (rRemainingSpace.Width - nWidth >= 0)
+                                {
+                                    aTextShapes.push_back(xEntry);
+                                    rEntries[0].aLabel[0]->setString(aNewLabel);
+                                    aRowHeights[0] = nSumHeight;
+                                    aColumnWidths[0] = nWidth;
+                                    break;
+                                }
+                            }
+                            DrawModelWrapper::removeShape(xEntry);
+                        }
+                        if (aTextShapes.size() == 0)
+                        {
+                            DrawModelWrapper::removeShape(rEntries[0].aSymbol);
+                            rEntries.pop_back();
+                            nNumberOfEntries--;
+                            aRowHeights.pop_back();
+                        }
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("chart2");
+                    }
+                }
+                else
+                {
+                    nSumHeight -= aRowHeights[nRow];
+                    aRowHeights.pop_back();
+                    nRemainingSpace = rRemainingSpace.Height - nSumHeight;
+                    if (nRemainingSpace >= 0)
+                        break;
+                }
             }
             nNumberOfRows = static_cast<sal_Int32>(aRowHeights.size());
         }
