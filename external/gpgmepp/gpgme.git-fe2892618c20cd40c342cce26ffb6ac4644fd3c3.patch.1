@@ -1,0 +1,30 @@
+From fe2892618c20cd40c342cce26ffb6ac4644fd3c3 Mon Sep 17 00:00:00 2001
+From: Andre Heinecke <aheinecke@gnupg.org>
+Date: Mon, 28 Oct 2019 16:00:29 +0100
+Subject: [PATCH 1/1] core,w32: Initialize dbg_help for socket debugging
+
+* src/w32-io.c (_gpgme_io_select): Initialize dbg_help.
+
+--
+This fixes a crash on Windows because dbg_help might
+be used unitialized.
+---
+ src/w32-io.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/w32-io.c b/src/w32-io.c
+index c5c21f59..80978f9a 100644
+--- a/src/w32-io.c
++++ b/src/w32-io.c
+@@ -1643,7 +1643,7 @@ _gpgme_io_select (struct io_select_fd_s *fds, size_t nfds, int nonblock)
+   int i;
+   int any;
+   int count;
+-  void *dbg_help;
++  void *dbg_help = NULL;
+   TRACE_BEG  (DEBUG_SYSIO, "_gpgme_io_select", fds,
+ 	      "nfds=%u, nonblock=%u", nfds, nonblock);
+ 
+-- 
+2.11.0
+
