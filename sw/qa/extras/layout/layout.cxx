@@ -2363,6 +2363,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
     // These failed, if the legend names are empty strings.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf126425)
+{
+    SwDoc* pDoc = createDoc("long_legendentry.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 14
+    // - Actual  : 12
+    // i.e. the text of the chart legend lost.
+    assertXPath(pXmlDoc, "//textarray", 14);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123268)
 {
     SwDoc* pDoc = createDoc("tdf123268.odt");
