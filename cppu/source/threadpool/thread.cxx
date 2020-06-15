@@ -163,8 +163,7 @@ namespace cppu_threadpool {
                     //        It does not make sense to dispose a call in this state.
                     //        That's way we put it a disposeid, that can't be used otherwise.
                     m_pQueue->enter(
-                        sal::static_int_cast< sal_Int64 >(
-                            reinterpret_cast< sal_IntPtr >(this)),
+                        this,
                         true );
 
                     if( m_pQueue->isEmpty() )

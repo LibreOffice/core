@@ -45,7 +45,7 @@ namespace cppu_threadpool {
         m_nToDo ++;
     }
 
-    void *JobQueue::enter( sal_Int64 nDisposeId , bool bReturnWhenNoJob )
+    void *JobQueue::enter( void const * nDisposeId , bool bReturnWhenNoJob )
     {
         void *pReturn = nullptr;
         {
@@ -77,7 +77,7 @@ namespace cppu_threadpool {
                 // synchronize with add and dispose calls
                 MutexGuard guard( m_mutex );
 
-                if( 0 == m_lstCallstack.front() )
+                if( nullptr == m_lstCallstack.front() )
                 {
                     // disposed !
                     if (!m_lstJob.empty() && m_lstJob.front().doRequest == nullptr) {
@@ -89,7 +89,7 @@ namespace cppu_threadpool {
                     }
                     if( m_lstJob.empty()
                         && (m_lstCallstack.empty()
-                            || m_lstCallstack.front() != 0) )
+                            || m_lstCallstack.front() != nullptr) )
                     {
                         m_cndWait.reset();
                     }
@@ -103,7 +103,7 @@ namespace cppu_threadpool {
                     m_lstJob.pop_front();
                 }
                 if( m_lstJob.empty()
-                    && (m_lstCallstack.empty() || m_lstCallstack.front() != 0) )
+                    && (m_lstCallstack.empty() || m_lstCallstack.front() != nullptr) )
                 {
                     m_cndWait.reset();
                 }
@@ -133,14 +133,14 @@ namespace cppu_threadpool {
         return pReturn;
     }
 
-    void JobQueue::dispose( sal_Int64 nDisposeId )
+    void JobQueue::dispose( void const * nDisposeId )
     {
         MutexGuard guard( m_mutex );
         for( auto& rId : m_lstCallstack )
         {
             if( rId == nDisposeId )
             {
-                rId = 0;
+                rId = nullptr;
             }
         }
 

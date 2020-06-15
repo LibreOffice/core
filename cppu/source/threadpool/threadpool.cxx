@@ -66,19 +66,19 @@ namespace cppu_threadpool
         SAL_WARN_IF( !m_vector.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_vector.size() << " left");
     }
 
-    void DisposedCallerAdmin::dispose( sal_Int64 nDisposeId )
+    void DisposedCallerAdmin::dispose( void const * nDisposeId )
     {
         MutexGuard guard( m_mutex );
         m_vector.push_back( nDisposeId );
     }
 
-    void DisposedCallerAdmin::destroy( sal_Int64 nDisposeId )
+    void DisposedCallerAdmin::destroy( void const * nDisposeId )
     {
         MutexGuard guard( m_mutex );
         m_vector.erase(std::remove(m_vector.begin(), m_vector.end(), nDisposeId), m_vector.end());
     }
 
-    bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
+    bool DisposedCallerAdmin::isDisposed( void const * nDisposeId )
     {
         MutexGuard guard( m_mutex );
         return (std::find(m_vector.begin(), m_vector.end(), nDisposeId) != m_vector.end());
@@ -95,7 +95,7 @@ namespace cppu_threadpool
         SAL_WARN_IF( m_mapQueue.size(), "cppu.threadpool", "ThreadIdHashMap:  " << m_mapQueue.size() << " left");
     }
 
-    void ThreadPool::dispose( sal_Int64 nDisposeId )
+    void ThreadPool::dispose( void const * nDisposeId )
     {
         m_DisposedCallerAdmin->dispose( nDisposeId );
 
@@ -113,7 +113,7 @@ namespace cppu_threadpool
         }
     }
 
-    void ThreadPool::destroy( sal_Int64 nDisposeId )
+    void ThreadPool::destroy( void const * nDisposeId )
     {
         m_DisposedCallerAdmin->destroy( nDisposeId );
     }
@@ -296,7 +296,7 @@ namespace cppu_threadpool
         }
     }
 
-    void * ThreadPool::enter( const ByteSequence & aThreadId , sal_Int64 nDisposeId )
+    void * ThreadPool::enter( const ByteSequence & aThreadId , void const * nDisposeId )
     {
         JobQueue *pQueue = nullptr;
         {
@@ -415,8 +415,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     *ppJob =
         getThreadPool( hPool )->enter(
             pThreadId,
-            sal::static_int_cast< sal_Int64 >(
-                reinterpret_cast< sal_IntPtr >(hPool)) );
+            hPool );
     rtl_byte_sequence_release( pThreadId );
     uno_releaseIdFromCurrentThread();
 }
@@ -447,8 +446,7 @@ extern "C" void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     getThreadPool(hPool)->dispose(
-        sal::static_int_cast< sal_Int64 >(
-            reinterpret_cast< sal_IntPtr >(hPool)) );
+        hPool );
 }
 
 extern "C" void SAL_CALL
@@ -456,8 +454,7 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     ThreadPoolHolder p( getThreadPool(hPool) );
     p->destroy(
-        sal::static_int_cast< sal_Int64 >(
-            reinterpret_cast< sal_IntPtr >(hPool)) );
+        hPool );
 
     bool empty;
     {
