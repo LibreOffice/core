@@ -95,6 +95,10 @@ namespace
             return IMG_ADD;
         else if (sType == "gtk-remove")
             return IMG_REMOVE;
+        else if (sType == "gtk-copy")
+            return IMG_COPY;
+        else if (sType == "gtk-paste")
+            return IMG_PASTE;
         return OUString();
     }
 
@@ -1040,6 +1044,18 @@ namespace
     {
         OUString sIconName;
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("icon-name"));
+        if (aFind != rMap.end())
+        {
+            sIconName = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sIconName;
+    }
+
+    OUString extractStockId(VclBuilder::stringmap &rMap)
+    {
+        OUString sIconName;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock-id"));
         if (aFind != rMap.end())
         {
             sIconName = aFind->second;
@@ -2216,6 +2232,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 pToolBox->SetQuickHelpText(nItemId, sTooltip);
 
             OUString sIconName(extractIconName(rMap));
+            if (sIconName.isEmpty())
+                sIconName = mapStockToImageResource(extractStockId(rMap));
             if (!sIconName.isEmpty())
                 pToolBox->SetItemImage(nItemId, FixedImage::loadThemeImage(sIconName));
 
