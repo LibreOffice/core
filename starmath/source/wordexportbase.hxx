@@ -49,6 +49,9 @@ protected:
     virtual void HandleBrace(const SmBraceNode* pNode, int nLevel) = 0;
     virtual void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) = 0;
     virtual void HandleBlank() = 0;
+    const SmNode* GetTree() const { return m_pTree; }
+
+private:
     const SmNode* const m_pTree;
 };
 

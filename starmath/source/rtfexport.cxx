@@ -24,12 +24,12 @@ SmRtfExport::SmRtfExport(const SmNode* pIn)
 
 void SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
-    if (!m_pTree)
+    if (!GetTree())
         return;
     m_pBuffer = &rBuffer;
     m_nEncoding = nEncoding;
     m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_MOMATH " ");
-    HandleNode(m_pTree, 0);
+    HandleNode(GetTree(), 0);
     m_pBuffer->append("}"); // moMath
 }
 
