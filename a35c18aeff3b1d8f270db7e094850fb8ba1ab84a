@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c13e642_92bb4049",
+        "filename": "include/vcl/PrinterSupport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-15T11:55:55Z",
+      "side": 1,
+      "message": "For new files, please use the latest boilerplate from TEMPLATE.SOURCECODE.HEADER, instead of copying outdated one from another file.",
+      "revId": "a35c18aeff3b1d8f270db7e094850fb8ba1ab84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
