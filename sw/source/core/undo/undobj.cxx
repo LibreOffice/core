@@ -1524,7 +1524,9 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
     SwContentNode *const pNode(SwNodes::GoPrevious(&node));
     assert(pNode);
     assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
-    return node == rAnchorPos.nNode && rAnchorPos.nContent == pNode->Len();
+    return node == rAnchorPos.nNode
+        // at-para fly has no SwIndex!
+        && (rAnchorPos.nContent == pNode->Len() || rAnchorPos.nContent.GetIdxReg() == nullptr);
 }
 
 static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
