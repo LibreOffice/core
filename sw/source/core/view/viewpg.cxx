@@ -78,7 +78,7 @@ void SwViewShell::PrintProspect(
     // create a new shell for the printer
     SwViewShell aShell( *this, nullptr, pPrinter );
 
-    SET_CURR_SHELL( &aShell );
+    CurrShell aCurr( &aShell );
 
     aShell.PrepareForPrint( rPrintData );
 

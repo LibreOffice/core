@@ -342,7 +342,7 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
 
 void SwEditShell::SetTableBoxFormulaAttrs( const SfxItemSet& rSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwSelBoxes aBoxes;
     if( IsTableMode() )
         ::GetTableSelCrs( *this, aBoxes );

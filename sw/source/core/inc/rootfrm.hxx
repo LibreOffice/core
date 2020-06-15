@@ -141,8 +141,8 @@ class SAL_DLLPUBLIC_RTTI SwRootFrame: public SwLayoutFrame
      * know the active shell.
      * this is approximated by setting the pointer mpCurrShell when a
      * shell gets the focus (FEShell). Additionally the pointer will be
-     * set temporarily by SwCurrShell typically via  SET_CURR_SHELL
-     * The macro and class can be found in the SwViewShell. These object can
+     * set temporarily by SwCurrShell typically via  CurrShell
+     * The class can be found in the SwViewShell. These object can
      * be created nested (also for different kinds of Shells). They are
      * collected into the Array mpCurrShells.
      * Furthermore it can happen that a shell is activated while a curshell

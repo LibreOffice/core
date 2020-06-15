@@ -267,7 +267,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
     const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->areMarkHandlesHidden() )
         Imp()->StartAction();
 
@@ -467,7 +467,7 @@ void SwViewShell::ImplLockPaint()
 
 void SwViewShell::ImplUnlockPaint( bool bVirDev )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     if ( GetWin() && GetWin()->IsVisible() )
     {
         if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
@@ -639,7 +639,7 @@ bool SwViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
  */
 void SwViewShell::UpdateFields(bool bCloseDB)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     bool bCursor = dynamic_cast<const SwCursorShell*>( this ) !=  nullptr;
     if ( bCursor )
@@ -658,7 +658,7 @@ void SwViewShell::UpdateFields(bool bCloseDB)
 /** update all charts for which any table exists */
 void SwViewShell::UpdateAllCharts()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // Start-/EndAction handled in the SwDoc-Method!
     GetDoc()->UpdateAllCharts();
 }
@@ -693,7 +693,7 @@ void SwViewShell::LayoutIdle()
             return;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
 #ifdef DBG_UTIL
     // If Test5 has been set, the IdleFormatter is disabled.
@@ -976,7 +976,7 @@ void SwViewShell::CalcLayout()
     // (except the Page Preview apparently only has a non-subclassed ViewShell)
     assert((typeid(*this) == typeid(SwViewShell)) || mnStartAction);
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwWait aWait( *GetDoc()->GetDocShell(), true );
 
     // Preserve top of the text frame cache.
@@ -1096,7 +1096,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
          Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
         Imp()->DelRegion();
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     bool bScrolled = false;
 
@@ -1796,7 +1796,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             }
 
             mbPaintInProgress = true;
-            SET_CURR_SHELL( this );
+            CurrShell aCurr( this );
             SwRootFrame::SetNoVirDev( true );
 
             //We don't want to Clip to and from, we trust that all are limited
@@ -2015,7 +2015,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
          !GetViewOptions()->IsWhitespaceHidden() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     OSL_ENSURE( GetLayout(), "Layout not ready" );
 
@@ -2153,7 +2153,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         return;
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     bool bReformat   = false;
 

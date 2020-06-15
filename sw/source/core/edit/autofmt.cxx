@@ -2697,7 +2697,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
 {
     std::unique_ptr<SwWait> pWait;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     StartUndo( SwUndoId::AUTOFORMAT );
 
@@ -2733,7 +2733,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
 
 void SwEditShell::AutoFormatBySplitNode()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwPaM* pCursor = GetCursor();
     if( pCursor->IsMultiSelection() || !pCursor->Move( fnMoveBackward, GoInNode ) )
         return;

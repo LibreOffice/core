@@ -501,7 +501,7 @@ bool SwCursorShell::bColumnChange()
 
 bool SwCursorShell::UpDown( bool bUp, sal_uInt16 nCnt )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
 
     bool bTableMode = IsTableMode();
@@ -532,7 +532,7 @@ bool SwCursorShell::UpDown( bool bUp, sal_uInt16 nCnt )
 bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     m_eMvState = CursorMoveState::LeftMargin; // status for Cursor travelling - GetModelPositionForViewPoint
 
     const bool bTableMode = IsTableMode();
@@ -638,7 +638,7 @@ bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
     if( !m_pCurrentCursor->HasMark() || !m_pCurrentCursor->IsNoContent() )
     {
         SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
 
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
         Point& rPt = m_pCurrentCursor->GetPtPos();
@@ -759,7 +759,7 @@ bool SwCursorShell::IsInHeaderFooter( bool* pbInHeader ) const
 
 int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SwShellCursor* pCursor = getShellCursor( bBlock );
     SwPosition aPos( *pCursor->GetPoint() );
@@ -991,7 +991,7 @@ bool SwCursorShell::TestCurrPam(
     const Point & rPt,
     bool bTstHit )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     // check if the SPoint is in a table selection
     if( m_pTableCursor )
@@ -1186,7 +1186,7 @@ void collectUIInformation(const OUString& aPage)
 
 bool SwCursorShell::GotoPage( sal_uInt16 nPage )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
     bool bRet = GetLayout()->SetCurrPage( m_pCurrentCursor, nPage ) &&
@@ -1208,7 +1208,7 @@ void SwCursorShell::GetCharRectAt(SwRect& rRect, const SwPosition* pPos)
 void SwCursorShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
                               bool bAtCursorPos, const bool bCalcFrame )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // page number: first visible page or the one at the cursor
     const SwContentFrame* pCFrame;
     const SwPageFrame *pPg = nullptr;
@@ -1227,7 +1227,7 @@ void SwCursorShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
 
 sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty()
 {
-    SET_CURR_SHELL(this);
+    CurrShell aCurr(this);
     // page number: first visible page or the one at the cursor
     const SwContentFrame* pCFrame = GetCurrFrame(/*bCalcFrame*/true);
     const SwPageFrame* pPg = nullptr;
@@ -1251,7 +1251,7 @@ sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty()
 
 sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // page number: first visible page or the one at the cursor
     const SwPageFrame *pPg = Imp()->GetFirstVisPage(GetOut());
     if( pPg )
@@ -1289,7 +1289,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
 
 sal_uInt16 SwCursorShell::GetPageCnt()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // return number of pages
     return GetLayout()->GetPageNum();
 }
@@ -1358,7 +1358,7 @@ bool SwCursorShell::GoNextCursor()
     if( !m_pCurrentCursor->IsMultiSelection() )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     m_pCurrentCursor = m_pCurrentCursor->GetNext();
 
@@ -1377,7 +1377,7 @@ bool SwCursorShell::GoPrevCursor()
     if( !m_pCurrentCursor->IsMultiSelection() )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     m_pCurrentCursor = m_pCurrentCursor->GetPrev();
 
@@ -1407,7 +1407,7 @@ bool SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
 void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     // always switch off all cursors when painting
     SwRect aRect( rRect );
@@ -1452,7 +1452,7 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void SwCursorShell::VisPortChgd( const SwRect & rRect )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bVis; // switch off all cursors when scrolling
 
     // if a cursor is visible then hide the SV cursor
@@ -1486,7 +1486,7 @@ void SwCursorShell::VisPortChgd( const SwRect & rRect )
 */
 void SwCursorShell::UpdateCursorPos()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     ++mnStartAction;
     SwShellCursor* pShellCursor = getShellCursor( true );
     Size aOldSz( GetDocSize() );
@@ -1566,7 +1566,7 @@ class SwNotifyAccAboutInvalidTextSelections
 
 void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     ClearUpCursors();
 
     if (ActionPend())
@@ -2363,7 +2363,7 @@ void SwCursorShell::HideCursors()
     // if cursor is visible then hide SV cursor
     if( m_pVisibleCursor->IsVisible() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         m_pVisibleCursor->Hide();
     }
     // revoke inversion of SSelection
@@ -2376,7 +2376,7 @@ void SwCursorShell::ShowCursors( bool bCursorVis )
     if( !m_bHasFocus || m_bAllProtect || m_bBasicHideCursor )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwShellCursor* pCurrentCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
     pCurrentCursor->Show(nullptr);
 
@@ -2408,7 +2408,7 @@ void SwCursorShell::HideCursor()
     {
         m_bSVCursorVis = false;
         // possibly reverse selected areas!!
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         m_pCurrentCursor->SetShowTextInputFieldOverlay( false );
         m_pVisibleCursor->Hide();
 
@@ -2441,7 +2441,7 @@ void SwCursorShell::ShellGetFocus()
 /** Get current frame in which the cursor is positioned. */
 SwContentFrame *SwCursorShell::GetCurrFrame( const bool bCalcFrame ) const
 {
-    SET_CURR_SHELL( const_cast<SwCursorShell*>(this) );
+    CurrShell aCurr( const_cast<SwCursorShell*>(this) );
     SwContentFrame *pRet = nullptr;
     SwContentNode *pNd = m_pCurrentCursor->GetContentNode();
     if ( pNd )
@@ -2642,7 +2642,7 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
 */
 bool SwCursorShell::SetVisibleCursor( const Point &rPt )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     Point aPt( rPt );
     SwPosition aPos( *m_pCurrentCursor->GetPoint() );
     SwCursorMoveState aTmpState( CursorMoveState::SetOnlyText );
@@ -2932,7 +2932,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // only keep the position of the current cursor of the copy shell
     m_pCurrentCursor = new SwShellCursor( *this, *(rShell.m_pCurrentCursor->GetPoint()) );
     m_pCurrentCursor->GetContentNode()->Add( this );
@@ -2969,7 +2969,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // create initial cursor and set it to first content position
     SwNodes& rNds = rDoc.GetNodes();
 

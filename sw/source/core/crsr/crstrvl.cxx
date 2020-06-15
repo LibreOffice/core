@@ -80,7 +80,7 @@ void SwCursorShell::MoveCursorToNum()
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
     if( ActionPend() )
         return;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     // try to set cursor onto this position, at half of the char-
     // SRectangle's height
     Point aPt( m_pCurrentCursor->GetPtPos() );
@@ -136,7 +136,7 @@ bool SwCursorShell::GotoHeaderText()
 
     if( pFrame )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         // get header frame
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursor *pTmpCursor = getShellCursor( true );
@@ -169,7 +169,7 @@ bool SwCursorShell::GotoFooterText()
         if( pLower )
         {
             SwCursor *pTmpCursor = getShellCursor( true );
-            SET_CURR_SHELL( this );
+            CurrShell aCurr( this );
             // get position in footer
             SwCallLink aLk( *this ); // watch Cursor-Moves
             SwCursorSaveState aSaveState( *pTmpCursor );
@@ -195,7 +195,7 @@ bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
     SwDoc *pMyDoc = GetDoc();
     const SwPageDesc* pDesc = nullptr;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if( SIZE_MAX == nDescNo )
     {
@@ -515,7 +515,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
 
     if( bFnd )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -619,7 +619,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
 
     if( bFnd )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -637,7 +637,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
 const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
                                             SwTOXSearch eDir )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -850,7 +850,7 @@ bool SwCursorShell::MoveFieldType(
     }
     const SetGetExpField& rFnd = **it;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *pCursor );
 
@@ -871,7 +871,7 @@ bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
              || !sw::IsFieldDeletedInModel(
                  GetDoc()->getIDocumentRedlineAccess(), *pTextField)))
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
 
         SwCursor* pCursor = getShellCursor( true );
@@ -1003,7 +1003,7 @@ void SwCursorShell::GotoOutline( SwOutlineNodes::size_type nIdx )
 {
     SwCursor* pCursor = getShellCursor( true );
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *pCursor );
 
@@ -1020,7 +1020,7 @@ bool SwCursorShell::GotoOutline( const OUString& rName )
 {
     SwCursor* pCursor = getShellCursor( true );
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *pCursor );
 
@@ -1088,7 +1088,7 @@ bool SwCursorShell::GotoNextOutline()
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *pCursor );
     pCursor->GetPoint()->nNode = *pNd;
@@ -1148,7 +1148,7 @@ bool SwCursorShell::GotoPrevOutline()
         {
             SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
         }
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
         pCursor->GetPoint()->nNode = *pNd;
@@ -1197,7 +1197,7 @@ bool SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     if( rOutlNds.empty() )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
 
     if( nSttPos > nEndPos ) // parameters switched?
@@ -1250,7 +1250,7 @@ bool SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
 bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -1283,7 +1283,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                    bool bSetCursor,
                                    SwRect* pFieldRect )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     if( !IsTableMode() )
@@ -1973,7 +1973,7 @@ bool SwContentAtPos::IsInRTLText()const
 bool SwCursorShell::SelectText( const sal_Int32 nStart,
                                  const sal_Int32 nEnd )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     SwCallLink aLk( *this );
@@ -1998,7 +1998,7 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
                                      bool bExpand,
                                      const SwTextAttr* pTextAttr )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     if( !IsTableMode() )
@@ -2030,7 +2030,7 @@ bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
     {
         SwCursor* pCursor = getShellCursor( true );
 
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
 
@@ -2053,7 +2053,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
                                 SwRect& rRect, sal_Int16& rOrient )
 {
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     if (!IsTableMode() && !HasSelection()
@@ -2079,7 +2079,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
 
 bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
 
     if (!IsTableMode() && !HasSelection()
@@ -2227,7 +2227,7 @@ const SwRangeRedline* SwCursorShell::SelNextRedline()
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -2247,7 +2247,7 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -2340,7 +2340,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArr
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
 
         const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
         const SwRangeRedline* pTmp = rTable[ nArrPos ];
@@ -2544,7 +2544,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     const SwFlyFrameFormat* pFndFormat = aCmpPos.GetFlyFormat();
     if( pFndAttr || pFndFormat )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         SwCallLink aLk( *this );
 
         // found a text attribute ?

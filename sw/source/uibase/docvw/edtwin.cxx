@@ -375,7 +375,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if( !rSh.VisArea().Width() )
         return;
 
-    SET_CURR_SHELL(&rSh);
+    CurrShell aCurr(&rSh);
 
     if ( IsChainMode() )
     {
@@ -2900,7 +2900,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if( rSh.FinishOLEObj() )
         return; // end InPlace and the click doesn't count anymore
 
-    SET_CURR_SHELL( &rSh );
+    CurrShell aCurr( &rSh );
 
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
@@ -3818,7 +3818,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
 
-    SET_CURR_SHELL( &rSh );
+    CurrShell aCurr( &rSh );
 
     //aPixPt == Point in Pixel, relative to ChildWin
     //aDocPt == Point in Twips, document coordinates
@@ -4282,7 +4282,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     m_rView.SetNumRuleNodeFromDoc(nullptr);
 
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    SET_CURR_SHELL( &rSh );
+    CurrShell aCurr( &rSh );
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
@@ -5220,7 +5220,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if((!pChildWin || pChildWin->GetView() != &m_rView) &&
                 !rSh.IsDrawCreate() && !IsDrawAction())
             {
-                SET_CURR_SHELL( &rSh );
+                CurrShell aCurr( &rSh );
                 if (!m_pApplyTempl)
                 {
                     if (g_bNoInterrupt)

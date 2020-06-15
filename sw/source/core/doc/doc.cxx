@@ -770,7 +770,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     if (nPostItMode == SwPostItMode::NONE || nPostItCount <= 0)
         return;
 
-    SET_CURR_SHELL( rData.m_pPostItShell.get() );
+    CurrShell aCurr( rData.m_pPostItShell.get() );
 
     // clear document and move to end of it
     SwDoc & rPostItDoc(*rData.m_pPostItShell->GetDoc());

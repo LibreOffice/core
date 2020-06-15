@@ -76,7 +76,7 @@ void SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
         SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
         if( pCnt )
         {
-            SET_CURR_SHELL( this );
+            CurrShell aCurr( this );
             SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
             SwCursorSaveState aSaveState( *m_pCurrentCursor );
 

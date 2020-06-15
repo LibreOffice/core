@@ -343,7 +343,7 @@ bool SwCursorShell::GotoPrevFootnoteAnchor()
 /// jump from border to anchor
 void SwCursorShell::GotoFlyAnchor()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     const SwFrame* pFrame = GetCurrFrame();
     do {
         pFrame = pFrame->GetUpper();

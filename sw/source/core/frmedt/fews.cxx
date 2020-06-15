@@ -82,7 +82,7 @@ void SwFEShell::EndAllActionAndCall()
 // Determine the Content's nearest to the point
 Point SwFEShell::GetContentPos( const Point& rPoint, bool bNext ) const
 {
-    SET_CURR_SHELL( const_cast<SwFEShell*>(this) );
+    CurrShell aCurr( const_cast<SwFEShell*>(this) );
     return GetLayout()->GetNextPrevContentPos( rPoint, bNext );
 }
 
@@ -518,7 +518,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
     if( !HasSelection() )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     bool bRet = false;
     StartAllAction();
     if(IsTableMode())

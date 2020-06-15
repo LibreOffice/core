@@ -1060,7 +1060,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         ShowVScrollbar(bShowV);
     m_pVScrollbar->SetAuto(bAuto);
 
-    SET_CURR_SHELL( m_pWrtShell.get() );
+    CurrShell aCurr( m_pWrtShell.get() );
     bool bRepeat = false;
     long nCnt = 0;
 

@@ -125,7 +125,7 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
     if( !pType->HasWriterListeners() )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     StartUndo( SwUndoId::DELETE );
     Push();
@@ -147,7 +147,7 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
 /// add a field at the cursor position
 void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     SwFormatField aField( rField );
 
@@ -203,7 +203,7 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
 
 void SwEditShell::UpdateOneField(SwField &rField)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     {
         // If there are no selections so take the value of the current cursor position.
@@ -322,7 +322,7 @@ void SwEditShell::ChangeDBFields( const std::vector<OUString>& rOldNames,
 /// Update all expression fields
 void SwEditShell::UpdateExpFields(bool bCloseDB)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
     if (bCloseDB)

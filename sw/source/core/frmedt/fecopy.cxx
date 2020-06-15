@@ -446,7 +446,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     OSL_ENSURE( this == pDestShell || !pDestShell->IsObjSelected(),
             "Dest-Shell cannot be in Obj-Mode" );
 
-    SET_CURR_SHELL( pDestShell );
+    CurrShell aCurr( pDestShell );
 
     pDestShell->StartAllAction();
     pDestShell->GetDoc()->getIDocumentFieldsAccess().LockExpFields();
@@ -675,7 +675,7 @@ namespace {
 
 bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     OSL_ENSURE( pClpDoc, "no clipboard document"  );
     // then till end of the nodes array
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -1128,7 +1128,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     aCpyPam.SetMark();
     *aCpyPam.GetMark() = *GetCursor()->GetPoint();
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     StartAllAction();
     GetDoc()->getIDocumentFieldsAccess().LockExpFields();
@@ -1300,7 +1300,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
 
 void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     StartUndo();
 
@@ -1524,7 +1524,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 
 bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SdrObject* pObj = nullptr;
     SdrView *pView = Imp()->GetDrawView();
 

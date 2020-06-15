@@ -134,7 +134,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
     const SwTabFrame* pMasterTabFrame = pTabFrame->IsFollow() ? pTabFrame->FindMaster( true ) : pTabFrame;
     const SwTable* pTable = pTabFrame->GetTable();
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     const SwTableBox* pStt = nullptr;
     const SwTableBox* pEnd = nullptr;
@@ -260,7 +260,7 @@ bool SwCursorShell::SelTable()
     const SwTabFrame* pMasterTabFrame = pTableFrame->IsFollow() ? pTableFrame->FindMaster( true ) : pTableFrame;
     const SwTableNode* pTableNd = pTableFrame->GetTable()->GetTableNode();
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if( !m_pTableCursor )
     {
@@ -302,7 +302,7 @@ bool SwCursorShell::SelTableBox()
     if( pStartNode == nullptr )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     // create a table cursor, if there isn't one already
     if( !m_pTableCursor )
