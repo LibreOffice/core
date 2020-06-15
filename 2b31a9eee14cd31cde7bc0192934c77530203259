@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "92f02f94_f6e87b3d",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T21:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78208cc7_942d2fcf",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f805c9a3_80390bd4",
         "filename": "sw/qa/uitest/writer_tests/comments.py",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c24932_1575dac7",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T21:15:13Z",
+      "side": 1,
+      "message": "Sorry, I will add the assert in the new patch",
+      "parentUuid": "f805c9a3_80390bd4",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "99219843_aa7b2be6",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T21:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5508e6cb_f43d0a7e",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7daebe3_931e7164",
         "filename": "sw/qa/uitest/writer_tests/comments.py",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "cf074d52_1dd555aa",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T21:15:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7daebe3_931e7164",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10a24db8_88f2cc24",
         "filename": "sw/qa/uitest/writer_tests/comments.py",
         "patchSetId": 4
@@ -84,6 +156,24 @@
       "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc01ce0f_52d12ccf",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-15T21:15:13Z",
+      "side": 1,
+      "message": "I will try to explain this better in the next patch",
+      "parentUuid": "10a24db8_88f2cc24",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
