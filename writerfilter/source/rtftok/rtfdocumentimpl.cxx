@@ -1709,12 +1709,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
 
 bool findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
 {
-    for (auto& rProperty : rProperties)
-    {
-        if (rProperty.Name == rName)
-            return true;
-    }
-    return false;
+    return std::any_of(
+        rProperties.begin(), rProperties.end(),
+        [&rName](const beans::PropertyValue& rProperty) { return rProperty.Name == rName; });
 }
 
 void RTFDocumentImpl::backupTableRowProperties()
