@@ -33,6 +33,7 @@
 #include <set>
 
 namespace svx{ class SpellUndoAction_Impl;}
+class UndoChangeGroupGuard;
 
 // forward ---------------------------------------------------------------
 
@@ -189,7 +190,7 @@ private:
     int             InitUserDicts();
     void            UpdateBoxes_Impl(bool bCallFromSelectHdl = false);
     void            Init_Impl();
-    void            SpellContinue_Impl(bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
+    void            SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGuard = nullptr, bool UseSavedSentence = false, bool bIgnoreCurrentError = false );
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
     void            ToplevelFocusChanged();
     void            Impl_Restore(bool bUseSavedSentence);
@@ -198,7 +199,7 @@ private:
 
     /** Retrieves the next sentence.
      */
-    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the current sentence*/);
+    bool            GetNextSentence_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGuard, bool bUseSavedSentence, bool bRecheck /*for rechecking the current sentence*/);
     /** Corrects all errors that have been selected to be changed always
      */
     static bool     ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
