@@ -2825,8 +2825,10 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             case '@': eType = SbxCURRENCY; break;
         }
     }
-    SbxVariable* p = new SbxVariable( eType );
+    // tdf#133913 - create variable with Variant/Type in order to prevent type conversion errors
+    SbxVariable* p = new SbxVariable;
     p->PutDouble( n );
+    p->Convert( eType );
     PushVar( p );
 }
 
