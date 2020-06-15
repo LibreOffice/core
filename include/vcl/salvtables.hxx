@@ -22,7 +22,9 @@ protected:
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
 public:
-    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                       const css::uno::Reference<css::frame::XFrame>& rFrame
+                       = css::uno::Reference<css::frame::XFrame>());
 
     VclBuilder& get_builder() const;
 
@@ -44,7 +46,7 @@ public:
                                                       bool bTakeOwnership = true) override;
 
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id,
-                                                      bool bTakeOwnership = true) override;
+                                                      bool bTakeOwnership = false) override;
 
     virtual std::unique_ptr<weld::Container> weld_container(const OString& id,
                                                             bool bTakeOwnership = false) override;
@@ -134,8 +136,8 @@ public:
                                                           bool bTakeOwnership = false) override;
 
     virtual std::unique_ptr<weld::DrawingArea>
-    weld_drawing_area(const OString& id, const a11yref& rA11yImpl,
-                      FactoryFunction pUITestFactoryFunction, void* pUserData,
+    weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
+                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
                       bool bTakeOwnership = false) override;
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString& id,
@@ -487,7 +489,8 @@ public:
 
     virtual void response(int nResponse) override;
 
-    virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override;
+    virtual void add_button(const OUString& rText, int nResponse,
+                            const OString& rHelpId = OString()) override;
 
     virtual void set_modal(bool bModal) override;
 
@@ -799,7 +802,7 @@ public:
 
     virtual void set_entry_max_length(int /*nChars*/) override;
 
-    virtual void set_entry_completion(bool, bool) override;
+    virtual void set_entry_completion(bool, bool bCaseSensitive = false) override;
 
     virtual ~SalInstanceComboBoxWithoutEdit() override;
 };
@@ -836,7 +839,7 @@ public:
 
     virtual void set_entry_max_length(int nChars) override;
 
-    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive) override;
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) override;
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override;
 
@@ -949,6 +952,62 @@ public:
     virtual bool get_inconsistent() const override;
 
     virtual ~SalInstanceCheckButton() override;
+};
+
+class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
+{
+protected:
+    VclPtr<VclDrawingArea> m_xDrawingArea;
+
+    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
+    DECL_LINK(PaintHdl, target_and_area, void);
+    DECL_LINK(ResizeHdl, const Size&, void);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
+    DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+
+    // SalInstanceWidget has a generic listener for all these
+    // events, ignore the ones we have specializations for
+    // in VclDrawingArea
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+
+    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent) override;
+
+    virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override;
+
+public:
+    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
+                           const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
+                           void* pUserData, bool bTakeOwnership);
+
+    virtual void queue_draw() override;
+
+    virtual void queue_draw_area(int x, int y, int width, int height) override;
+
+    virtual void queue_resize() override;
+
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override;
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void set_cursor(PointerStyle ePointerStyle) override;
+
+    virtual a11yref get_accessible_parent() override;
+
+    virtual a11yrelationset get_accessible_relation_set() override;
+
+    virtual Point get_accessible_location() override;
+
+    virtual ~SalInstanceDrawingArea() override;
+
+    virtual OutputDevice& get_ref_device() override;
 };
 
 #endif
