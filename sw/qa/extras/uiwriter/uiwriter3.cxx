@@ -55,6 +55,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
+{
+    load(DATA_DIRECTORY, "tdf132321.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the button form would have also been deleted
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 {
     load(DATA_DIRECTORY, "tdf126626.docx");
