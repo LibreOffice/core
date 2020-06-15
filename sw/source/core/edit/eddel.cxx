@@ -31,6 +31,7 @@
 #include <edimp.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
+#include <undobj.hxx>
 #include <SwRewriter.hxx>
 #include <globals.hrc>
 
@@ -41,8 +42,12 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 {
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // only for selections
-    if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
+    if (!rPam.HasMark()
+        || (*rPam.GetPoint() == *rPam.GetMark()
+            && !IsFlySelectedByCursor(*GetDoc(), *rPam.Start(), *rPam.End())))
+    {
         return;
+    }
 
     // Is the selection in a table? Then delete only the content of the selected boxes.
     // Here, there are two cases:
