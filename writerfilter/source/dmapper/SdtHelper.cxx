@@ -200,11 +200,9 @@ sal_Int32 SdtHelper::getInteropGrabBagSize() const { return m_aGrabBag.size(); }
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
-    for (const beans::PropertyValue& i : m_aGrabBag)
-        if (i.Name == rValueName)
-            return true;
-
-    return false;
+    return std::any_of(
+        m_aGrabBag.begin(), m_aGrabBag.end(),
+        [&rValueName](const beans::PropertyValue& i) { return i.Name == rValueName; });
 }
 
 } // namespace writerfilter::dmapper
