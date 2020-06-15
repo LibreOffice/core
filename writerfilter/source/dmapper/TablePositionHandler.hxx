@@ -32,9 +32,9 @@ namespace dmapper
 /// Handler for floating table positioning
 class TablePositionHandler : public LoggedProperties
 {
-    OUString m_aVertAnchor;
+    OUString m_aVertAnchor{ "margin" };
     OUString m_aYSpec;
-    OUString m_aHorzAnchor;
+    OUString m_aHorzAnchor{ "text" };
     OUString m_aXSpec;
     sal_Int32 m_nY = 0;
     sal_Int32 m_nX = 0;
