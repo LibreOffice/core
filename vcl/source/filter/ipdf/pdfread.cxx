@@ -224,7 +224,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     return true;
 }
 
-size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics)
+size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
 {
 #if HAVE_FEATURE_PDFIUM
     std::unique_ptr<SvStream> xStream(
