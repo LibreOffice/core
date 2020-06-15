@@ -71,6 +71,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <tabcol.hxx>
 #include <wrtsh.hxx>
+#include <undobj.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace com::sun::star;
@@ -2501,7 +2502,10 @@ void SwCursorShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 bool SwCursorShell::HasSelection() const
 {
     const SwPaM* pCursor = getShellCursor( true );
-    return IsTableMode() || ( pCursor->HasMark() && *pCursor->GetPoint() != *pCursor->GetMark() );
+    return IsTableMode()
+        || (pCursor->HasMark() &&
+                (*pCursor->GetPoint() != *pCursor->GetMark()
+                || IsFlySelectedByCursor(*GetDoc(), *pCursor->Start(), *pCursor->End())));
 }
 
 void SwCursorShell::CallChgLnk()

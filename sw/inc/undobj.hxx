@@ -152,6 +152,9 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
 bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType = DelContentType::AllMask);
+/// check at-char and at-para flys in rDoc
+bool IsFlySelectedByCursor(SwDoc const & rDoc,
+        SwPosition const & rStart, SwPosition const & rEnd);
 
 // This class has to be inherited into an Undo-object if it saves content
 // for Redo/Undo...

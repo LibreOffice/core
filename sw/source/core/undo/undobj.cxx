@@ -1645,4 +1645,33 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                     || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection2(rStart)))));
 }
 
+bool IsFlySelectedByCursor(SwDoc const & rDoc,
+        SwPosition const & rStart, SwPosition const & rEnd)
+{
+    for (SwFrameFormat const*const pFly : *rDoc.GetSpzFrameFormats())
+    {
+        SwFormatAnchor const& rAnchor(pFly->GetAnchor());
+        switch (rAnchor.GetAnchorId())
+        {
+            case RndStdIds::FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_PARA:
+            {
+                SwPosition const*const pAnchorPos(rAnchor.GetContentAnchor());
+                // can this really be null?
+                if (pAnchorPos != nullptr
+                    && ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                        ? IsDestroyFrameAnchoredAtChar(*pAnchorPos, rStart, rEnd)
+                        : IsSelectFrameAnchoredAtPara(*pAnchorPos, rStart, rEnd)))
+                {
+                    return true;
+                }
+            }
+            break;
+            default: // other types not relevant
+            break;
+        }
+    }
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

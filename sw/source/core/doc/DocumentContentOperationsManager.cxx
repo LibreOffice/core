@@ -4062,8 +4062,11 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 {
     SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
-    if( !rPam.HasMark() || *pStt >= *pEnd )
+    if (!rPam.HasMark()
+        || (*pStt == *pEnd && !IsFlySelectedByCursor(m_rDoc, *pStt, *pEnd)))
+    {
         return false;
+    }
 
     if( m_rDoc.GetAutoCorrExceptWord() )
     {
