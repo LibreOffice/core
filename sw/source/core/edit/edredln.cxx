@@ -32,7 +32,7 @@ void SwEditShell::SetRedlineFlags( RedlineFlags eMode )
 {
     if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
         EndAllAction();
@@ -65,7 +65,7 @@ static void lcl_InvalidateAll( SwViewShell* pSh )
 
 bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
@@ -76,7 +76,7 @@ bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
 
 bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
@@ -87,7 +87,7 @@ bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
 
 bool SwEditShell::AcceptRedlinesInSelection()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCursor(), true );
     EndAllAction();
@@ -96,7 +96,7 @@ bool SwEditShell::AcceptRedlinesInSelection()
 
 bool SwEditShell::RejectRedlinesInSelection()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCursor(), true );
     EndAllAction();
@@ -127,7 +127,7 @@ void SwEditShell::UpdateRedlineAttr()
 {
     if( IDocumentRedlineAccess::IsShowChanges(GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags()) )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
 
         GetDoc()->getIDocumentRedlineAccess().UpdateRedlineAttr();

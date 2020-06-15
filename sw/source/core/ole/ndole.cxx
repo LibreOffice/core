@@ -661,7 +661,7 @@ void SwOLENode::SetChanged()
 
     for(SwViewShell& rShell : pVSh->GetRingContainer())
     {
-        SET_CURR_SHELL(&rShell);
+        CurrShell aCurr(&rShell);
 
         if(rShell.VisArea().IsOver(aFrameArea) && OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType())
         {

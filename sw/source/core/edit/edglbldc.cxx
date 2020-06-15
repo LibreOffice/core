@@ -134,7 +134,7 @@ void SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -173,7 +173,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -213,7 +213,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -236,7 +236,7 @@ void SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
     StartUndo( SwUndoId::START );
 
@@ -304,7 +304,7 @@ bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
         ( nFromPos <= nInsPos && nInsPos <= nToPos ) )
         return false;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -336,7 +336,7 @@ void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SttCursorMove();
 
     SwPaM* pCursor = GetCursor();

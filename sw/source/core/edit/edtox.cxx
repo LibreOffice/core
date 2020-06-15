@@ -74,7 +74,7 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
 
 void SwEditShell::DeleteTOXMark( SwTOXMark const * pMark )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     mxDoc->DeleteTOXMark( pMark );
@@ -120,7 +120,7 @@ void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 /// Insert listing and create content
 void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAllAction();
 
     SwDocShell* pDocSh = GetDoc()->GetDocShell();
@@ -156,7 +156,7 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
 
         bool bInIndex = &rTOX == GetCurTOX();
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
 
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );

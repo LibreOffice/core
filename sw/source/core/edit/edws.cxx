@@ -255,7 +255,7 @@ SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
                                 sal_Unicode cChar )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     StartAllAction();
 
@@ -282,7 +282,7 @@ void SwEditShell::SetNewDoc()
 
 OUString SwEditShell::GetPrevAutoCorrWord(SvxAutoCorrect& rACorr)
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     OUString sRet;
     SwPaM* pCursor = getShellCursor( true );
@@ -299,7 +299,7 @@ OUString SwEditShell::GetPrevAutoCorrWord(SvxAutoCorrect& rACorr)
 
 std::vector<OUString> SwEditShell::GetChunkForAutoText()
 {
-    SET_CURR_SHELL(this);
+    CurrShell aCurr(this);
 
     std::vector<OUString> aRet;
     SwPaM* pCursor = getShellCursor(true);

@@ -308,7 +308,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             }
         }
 
-        SET_CURR_SHELL(pSh);
+        CurrShell aCurr(pSh);
         pSh->SetNewDoc();   // Avoid performance problems
 
         // Remember Flys of this site

@@ -189,7 +189,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
         mpImp->InitPagePreviewLayout();
     }
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     static_cast<SwHiddenTextFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
@@ -247,7 +247,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     if( nFlags & VSHELLFLAG_SHARELAYOUT )
         mpLayout = rShell.mpLayout;
 
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     bool bModified = mxDoc->getIDocumentState().IsModified();
 
@@ -283,7 +283,7 @@ SwViewShell::~SwViewShell()
         = mxDoc ? &mxDoc->getIDocumentLayoutAccess() : nullptr;
 
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         mbPaintWorks = false;
 
         // i#9684 Stopping the animated graphics is not

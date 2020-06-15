@@ -178,7 +178,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     SwDrawView *pDView = Imp()->GetDrawView();
     if(!pDView)
         return false;
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     StartAction();    // action is necessary to assure only one AttrChgdNotify
                       // (e.g. due to Unmark->MarkListHasChgd) arrives
 
@@ -1282,7 +1282,7 @@ bool SwFEShell::IsInsideSelectedObj( const Point &rPt )
 
 bool SwFEShell::IsObjSelectable( const Point& rPt )
 {
-    SET_CURR_SHELL(this);
+    CurrShell aCurr(this);
     SwDrawView *pDView = Imp()->GetDrawView();
     bool bRet = false;
     if( pDView )
@@ -1300,7 +1300,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
 SdrObject* SwFEShell::GetObjAt( const Point& rPt )
 {
     SdrObject* pRet = nullptr;
-    SET_CURR_SHELL(this);
+    CurrShell aCurr(this);
     SwDrawView *pDView = Imp()->GetDrawView();
     if( pDView )
     {
@@ -1317,7 +1317,7 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
 // Test if there is an object at that position and if it should be selected.
 bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
-    SET_CURR_SHELL(this);
+    CurrShell aCurr(this);
     SwDrawView *pDrawView = Imp()->GetDrawView();
     bool bRet(false);
 
@@ -2518,7 +2518,7 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
     const SwFlyFrameFormat* pFlyFormat = mxDoc->FindFlyByName( rName, aChkArr[ eType]);
     if( pFlyFormat )
     {
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
 
         SwFlyFrame* pFrame = SwIterator<SwFlyFrame,SwFormat>( *pFlyFormat ).First();
         if( pFrame )
@@ -2682,7 +2682,7 @@ bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
 
 void SwFEShell::SetObjAttr( const SfxItemSet& rSet )
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if ( !rSet.Count() )
     {
@@ -2713,7 +2713,7 @@ bool SwFEShell::IsAlignPossible() const
 
 void SwFEShell::CheckUnboundObjects()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )

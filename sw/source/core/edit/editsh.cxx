@@ -604,7 +604,7 @@ void *SwEditShell::GetIMapInventor() const
 Graphic SwEditShell::GetIMapGraphic() const
 {
     // returns always a graphic if the cursor is in a Fly
-    SET_CURR_SHELL( const_cast<SwEditShell*>(this) );
+    CurrShell aCurr( const_cast<SwEditShell*>(this) );
     Graphic aRet;
     SwPaM* pCursor = GetCursor();
     if ( !pCursor->HasMark() )
@@ -895,7 +895,7 @@ const SwFootnoteInfo& SwEditShell::GetFootnoteInfo() const
 void SwEditShell::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 {
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     GetDoc()->SetFootnoteInfo(rInfo);
     CallChgLnk();
     EndAllAction();
@@ -909,7 +909,7 @@ const SwEndNoteInfo& SwEditShell::GetEndNoteInfo() const
 void SwEditShell::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     GetDoc()->SetEndNoteInfo(rInfo);
     EndAllAction();
 }
@@ -922,7 +922,7 @@ const SwLineNumberInfo& SwEditShell::GetLineNumberInfo() const
 void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
 {
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     GetDoc()->SetLineNumberInfo(rInfo);
     AddPaintRect( GetLayout()->getFrameArea() );
     EndAllAction();
@@ -964,7 +964,7 @@ OUString SwEditShell::DeleteExtTextInput( bool bInsText )
         OUString sTmp;
         SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
-        SET_CURR_SHELL( this );
+        CurrShell aCurr( this );
         StartAllAction();
         pDel->SetInsText( bInsText );
         SetOverwriteCursor( pDel->IsOverwriteCursor() );
@@ -989,7 +989,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         return;
 
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     if( !rData.IsOnlyCursorChanged() )
         pInput->SetInputData( rData );
@@ -1018,7 +1018,7 @@ void SwEditShell::TransliterateText( TransliterationFlags nType )
 {
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     StartAllAction();
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SwPaM* pCursor = GetCursor();
     if( pCursor->GetNext() != pCursor )

@@ -1665,7 +1665,7 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
     , m_aNavigationMgr(*this)
 {
     BITFLD_INI_LIST
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
 
     SetSfxViewShell( static_cast<SfxViewShell *>(&rShell) );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
@@ -1684,7 +1684,7 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
     , m_aNavigationMgr(*this)
 {
     BITFLD_INI_LIST
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     SetSfxViewShell( static_cast<SfxViewShell *>(&rShell) );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
 
@@ -1697,7 +1697,7 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
 
 SwWrtShell::~SwWrtShell()
 {
-    SET_CURR_SHELL( this );
+    CurrShell aCurr( this );
     while(IsModePushed())
         PopMode();
     while(PopCursor(false))

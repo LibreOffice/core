@@ -210,7 +210,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         SwWait aWait( static_cast<SwDocShell&>(*xDocSh), true );
 
-        SET_CURR_SHELL(pSh);
+        CurrShell aCurr(pSh);
         pSh->SetLabelDoc(rItem.m_bSynchron);
         pSh->DoUndo( false );
         pSh->StartAllAction();

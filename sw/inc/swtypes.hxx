@@ -96,10 +96,6 @@ const sal_uInt8 MAXLEVEL = 10;
 
 const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 
-// Some helper functions as macros or inlines.
-
-#define SET_CURR_SHELL( shell ) CurrShell aCurr( shell )
-
 // pPathFinder is initialized by the UI.
 // The class delivers all paths needed.
 extern SwPathFinder *pPathFinder;
