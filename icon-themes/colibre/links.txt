@@ -1191,27 +1191,21 @@ cmd/sc_nextpage.png cmd/sc_nextrecord.png
 cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
 # >|
-cmd/32/gotoend.png cmd/32/lastrecord.png
 cmd/32/gotoendofdoc.png cmd/32/lastrecord.png
 cmd/32/lastpage.png cmd/32/lastrecord.png
 
-cmd/lc_gotoend.png cmd/lc_lastrecord.png
 cmd/lc_gotoendofdoc.png cmd/lc_lastrecord.png
 cmd/lc_lastpage.png cmd/lc_lastrecord.png
 
-cmd/sc_gotoend.png cmd/sc_lastrecord.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastrecord.png
 cmd/sc_lastpage.png cmd/sc_lastrecord.png
 
 # |<
 cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
-cmd/32/gotostartoftable.png cmd/32/firstrecord.png
 
 cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
-cmd/lc_gotostartoftable.png cmd/lc_firstrecord.png
 
 cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
-cmd/sc_gotostartoftable.png cmd/sc_firstrecord.png
 
 # Hyperlink
 cmd/32/hyperlinkdialog.png cmd/32/inserthyperlink.png
@@ -2066,6 +2060,7 @@ res/lc10851.png cmd/lc_inserthyperlinkcontrol.png
 res/lc10853.png cmd/lc_recsearch.png
 res/library_16.png cmd/sc_viewdatasourcebrowser.png
 res/lx03131.png res/lx03126.png
+res/lx03135.png svx/res/galnorl.png
 res/lx03137.png res/lx03125.png
 res/lx03139.png cmd/32/newhtmldoc.png
 res/lx03140.png res/lx03125.png
@@ -2148,8 +2143,8 @@ res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
 res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
-res/sc_helperdialog.png cmd/sc_helpindex.png
 res/sx03131.png res/sx03126.png
+res/sx03135.png svx/res/galnors.png
 res/sx03137.png res/sx03125.png
 res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03140.png res/sx03125.png
@@ -2332,6 +2327,8 @@ sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-functions-small.png cmd/sc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
 sfx2/res/symphony/sidebar-gallery-small.png cmd/sc_gallery.png
+sfx2/res/symphony/sidebar-imganim-large.png cmd/lc_diaeffect.png
+sfx2/res/symphony/sidebar-imganim-small.png cmd/sc_diaeffect.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
 sfx2/res/symphony/sidebar-navigator-small.png cmd/sc_navigator.png
 sfx2/res/symphony/sidebar-property-large.png cmd/lc_configuredialog.png
