@@ -125,9 +125,9 @@ public:
     FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox);
     ~FlatFndBox();
 
-    bool            IsSymmetric() const { return bSym;  }
-    sal_uInt16          GetRows()     const { return nRows; }
-    sal_uInt16          GetCols()     const { return nCols; }
+    bool            IsSymmetric() const { return m_bSym;  }
+    sal_uInt16          GetRows()     const { return m_nRows; }
+    sal_uInt16          GetCols()     const { return m_nCols; }
 
     const FndBox_*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
@@ -141,19 +141,19 @@ private:
     sal_uInt16          GetRowCount(const FndBox_& rBox);
     void                FillFlat(const FndBox_&, bool bLastBox=false);
 
-    SwDoc*              pDoc;
-    std::unique_ptr<FndBox_ const *[]> pArr;
-    std::vector<std::unique_ptr<SfxItemSet>> ppItemSets;
+    SwDoc*              m_pDoc;
+    std::unique_ptr<FndBox_ const *[]> m_pArr;
+    std::vector<std::unique_ptr<SfxItemSet>> m_ppItemSets;
 
-    sal_uInt16          nRows;
-    sal_uInt16          nCols;
-    sal_uInt16          nRow;
-    sal_uInt16          nCol;
+    sal_uInt16          m_nRows;
+    sal_uInt16          m_nCols;
+    sal_uInt16          m_nRow;
+    sal_uInt16          m_nCol;
 
-    bool            bSym;
+    bool            m_bSym;
 };
 
-inline bool FlatFndBox::HasItemSets() const { return !ppItemSets.empty(); }
+inline bool FlatFndBox::HasItemSets() const { return !m_ppItemSets.empty(); }
 
 #endif
 

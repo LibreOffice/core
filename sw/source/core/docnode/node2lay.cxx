@@ -425,7 +425,7 @@ SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos ) const
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
-    : pImpl( new SwNode2LayImpl( rNd, nIdx, false ) )
+    : m_pImpl( new SwNode2LayImpl( rNd, nIdx, false ) )
 {
 }
 
@@ -443,12 +443,12 @@ void SwNode2LayoutSaveUpperFrames::RestoreUpperFrames(
 
 SwFrame* SwNode2Layout::NextFrame()
 {
-    return pImpl->NextFrame();
+    return m_pImpl->NextFrame();
 }
 
 SwLayoutFrame* SwNode2Layout::UpperFrame( SwFrame* &rpFrame, const SwNode &rNode )
 {
-    return pImpl->UpperFrame( rpFrame, rNode );
+    return m_pImpl->UpperFrame( rpFrame, rNode );
 }
 
 SwNode2Layout::~SwNode2Layout()
@@ -461,7 +461,7 @@ SwNode2LayoutSaveUpperFrames::~SwNode2LayoutSaveUpperFrames()
 
 SwFrame* SwNode2Layout::GetFrame( const Point* pDocPos ) const
 {
-    return pImpl->GetFrame( pDocPos );
+    return m_pImpl->GetFrame( pDocPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

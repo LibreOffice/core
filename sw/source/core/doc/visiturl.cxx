@@ -30,7 +30,7 @@
 #include <docsh.hxx>
 
 SwURLStateChanged::SwURLStateChanged( SwDoc* pD )
-    : pDoc( pD )
+    : m_pDoc( pD )
 {
     StartListening( *INetURLHistory::GetOrCreate() );
 }
@@ -42,21 +42,21 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( dynamic_cast<const INetURLHistoryHint*>(&rHint) && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( dynamic_cast<const INetURLHistoryHint*>(&rHint) && m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // This URL has been changed:
         const INetURLObject* pIURL = static_cast<const INetURLHistoryHint&>(rHint).GetObject();
         OUString sURL( pIURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ) ), sBkmk;
 
-        SwEditShell* pESh = pDoc->GetEditShell();
+        SwEditShell* pESh = m_pDoc->GetEditShell();
 
-        if( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() &&
+        if( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->GetMedium() &&
             // If this is our Doc, we can also have local jumps!
-            pDoc->GetDocShell()->GetMedium()->GetName() == sURL )
+            m_pDoc->GetDocShell()->GetMedium()->GetName() == sURL )
             sBkmk = "#" + pIURL->GetMark();
 
         bool bAction = false, bUnLockView = false;
-        for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
+        for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
         {
             const SwFormatINetFormat* pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
             if( pFormatItem != nullptr &&
