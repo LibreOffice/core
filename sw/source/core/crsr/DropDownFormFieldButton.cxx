@@ -10,6 +10,7 @@
 #include <DropDownFormFieldButton.hxx>
 #include <edtwin.hxx>
 #include <bookmrk.hxx>
+#include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/settings.hxx>
@@ -53,6 +54,7 @@ private:
     sw::mark::IFieldmark* m_pFieldmark;
 
     DECL_LINK(MyListBoxHandler, weld::TreeView&, bool);
+    DECL_STATIC_LINK(SwFieldDialog, KeyInputHdl, const KeyEvent&, bool);
 
 public:
     SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, long nMinListWidth);
@@ -109,6 +111,7 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
     lbSize.setWidth(std::max(lbSize.Width(), nMinListWidth));
     m_xListBox->SetSizePixel(lbSize);
     rTreeView.connect_row_activated(LINK(this, SwFieldDialog, MyListBoxHandler));
+    rTreeView.connect_key_press(LINK(this, SwFieldDialog, KeyInputHdl));
     m_xListBox->Show();
 
     rTreeView.grab_focus();
@@ -145,6 +148,16 @@ IMPL_LINK(SwFieldDialog, MyListBoxHandler, weld::TreeView&, rBox, bool)
     EndPopupMode();
 
     return true;
+}
+
+IMPL_STATIC_LINK(SwFieldDialog, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
+{
+    bool bDone = false;
+    vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
+    // nowhere to tab to
+    if (aCode.GetCode() == KEY_TAB)
+        bDone = true;
+    return bDone;
 }
 
 DropDownFormFieldButton::DropDownFormFieldButton(SwEditWin* pEditWin,
