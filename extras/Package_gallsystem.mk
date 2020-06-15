@@ -10,18 +10,15 @@
 $(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
 $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/gallery,\
-	sg1.sdg \
-	sg1.sdv \
-	sg1.thm \
-	sg4.sdg \
-	sg4.sdv \
-	sg4.thm \
-	sg24.sdg \
-	sg24.sdv \
-	sg24.thm \
-	sg36.sdg \
-	sg36.sdv \
-	sg36.thm \
+	bullets.sdg \
+	bullets.sdv \
+	bullets.thm \
+	symbolshapes.sdg \
+	symbolshapes.sdv \
+	symbolshapes.thm \
+	fontwork.sdg \
+	fontwork.sdv \
+	fontwork.thm \
 ))
 
 # vim: set noet sw=4 ts=4:
