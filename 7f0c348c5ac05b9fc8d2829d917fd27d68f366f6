@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fcab52f_06e360bb",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-06-15T11:20:38Z",
+      "side": 1,
+      "message": "I understand SID_STYLE_FAMILY1 detects change in Character Style, is there a SID for cursor change position ?",
+      "range": {
+        "startLine": 76,
+        "startChar": 13,
+        "endLine": 76,
+        "endChar": 30
+      },
+      "revId": "7f0c348c5ac05b9fc8d2829d917fd27d68f366f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
