@@ -207,6 +207,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_backend_test \
     CppunitTest_vcl_blocklistparser_test \
     CppunitTest_vcl_type_serializer_test \
+    CppunitTest_vcl_pdfium_library_test \
 ))
 
 ifeq ($(USING_X11),TRUE)

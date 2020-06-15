@@ -13,7 +13,7 @@
 #if HAVE_FEATURE_PDFIUM
 
 #include <vcl/filter/PDFiumLibrary.hxx>
-#include <fpdf_doc.h>
+#include <fpdf_edit.h>
 
 namespace vcl::pdf
 {
@@ -28,6 +28,77 @@ PDFium::PDFium()
 }
 
 PDFium::~PDFium() { FPDF_DestroyLibrary(); }
+
+std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSize)
+{
+    std::unique_ptr<PDFiumDocument> pPDFiumDocument;
+
+    FPDF_DOCUMENT pDocument = FPDF_LoadMemDocument(pData, nSize, /*password=*/nullptr);
+
+    if (!pDocument)
+    {
+        switch (FPDF_GetLastError())
+        {
+            case FPDF_ERR_SUCCESS:
+                break;
+            case FPDF_ERR_UNKNOWN:
+                break;
+            case FPDF_ERR_FILE:
+                break;
+            case FPDF_ERR_FORMAT:
+                break;
+            case FPDF_ERR_PASSWORD:
+                break;
+            case FPDF_ERR_SECURITY:
+                break;
+            case FPDF_ERR_PAGE:
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        pPDFiumDocument = std::make_unique<PDFiumDocument>(pDocument);
+    }
+
+    return pPDFiumDocument;
+}
+
+PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
+    : mpPdfDocument(pPdfDocument)
+{
+}
+
+PDFiumDocument::~PDFiumDocument()
+{
+    if (mpPdfDocument)
+        FPDF_CloseDocument(mpPdfDocument);
+}
+
+std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
+{
+    std::unique_ptr<PDFiumPage> pPDFiumPage;
+    FPDF_PAGE pPage = FPDF_LoadPage(mpPdfDocument, nIndex);
+    if (pPage)
+    {
+        pPDFiumPage = std::make_unique<PDFiumPage>(pPage);
+    }
+    return pPDFiumPage;
+}
+
+basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
+{
+    basegfx::B2DSize aSize;
+    FS_SIZEF aPDFSize;
+    if (FPDF_GetPageSizeByIndexF(mpPdfDocument, nIndex, &aPDFSize))
+    {
+        aSize = basegfx::B2DSize(aPDFSize.width, aPDFSize.height);
+    }
+    return aSize;
+}
+
+int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
 } // end vcl::pdf
 
