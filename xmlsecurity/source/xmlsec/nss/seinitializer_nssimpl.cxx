@@ -34,6 +34,7 @@ using namespace com::sun::star;
 SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
     m_xContext = rxContext;
+    initNSS( m_xContext );
 }
 
 SEInitializer_NssImpl::~SEInitializer_NssImpl()
