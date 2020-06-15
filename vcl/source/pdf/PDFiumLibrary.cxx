@@ -13,6 +13,7 @@
 #if HAVE_FEATURE_PDFIUM
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <fpdf_annot.h>
 #include <fpdf_edit.h>
 
 namespace vcl::pdf
@@ -108,6 +109,78 @@ basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
 
 int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
+int PDFiumPage::getAnnotationCount() { return FPDFPage_GetAnnotCount(mpPage); }
+
+int PDFiumPage::getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation)
+{
+    return FPDFPage_GetAnnotIndex(mpPage, rAnnotation->getPointer());
+}
+
+std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
+{
+    std::unique_ptr<PDFiumAnnotation> pPDFiumAnnotation;
+    FPDF_ANNOTATION pAnnotation = FPDFPage_GetAnnot(mpPage, nIndex);
+    if (pAnnotation)
+    {
+        pPDFiumAnnotation = std::make_unique<PDFiumAnnotation>(pAnnotation);
+    }
+    return pPDFiumAnnotation;
+}
+
+PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
+    : mpAnnotation(pAnnotation)
+{
+}
+
+PDFiumAnnotation::~PDFiumAnnotation()
+{
+    if (mpAnnotation)
+        FPDFPage_CloseAnnot(mpAnnotation);
+}
+
+int PDFiumAnnotation::getSubType() { return FPDFAnnot_GetSubtype(mpAnnotation); }
+
+basegfx::B2DRectangle PDFiumAnnotation::getRectangle()
+{
+    basegfx::B2DRectangle aB2DRectangle;
+    FS_RECTF aRect;
+    if (FPDFAnnot_GetRect(mpAnnotation, &aRect))
+    {
+        aB2DRectangle = basegfx::B2DRectangle(aRect.left, aRect.top, aRect.right, aRect.bottom);
+    }
+    return aB2DRectangle;
+}
+
+bool PDFiumAnnotation::hasKey(OString const& rKey)
+{
+    return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());
+}
+
+OUString PDFiumAnnotation::getString(OString const& rKey)
+{
+    OUString rString;
+    unsigned long nSize = FPDFAnnot_GetStringValue(mpAnnotation, rKey.getStr(), nullptr, 0);
+    if (nSize > 2)
+    {
+        std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nSize]);
+        unsigned long nStringSize = FPDFAnnot_GetStringValue(
+            mpAnnotation, rKey.getStr(), reinterpret_cast<FPDF_WCHAR*>(pText.get()), nSize);
+        if (nStringSize > 0)
+            rString = OUString(pText.get());
+    }
+    return rString;
+}
+
+std::unique_ptr<PDFiumAnnotation> PDFiumAnnotation::getLinked(OString const& rKey)
+{
+    std::unique_ptr<PDFiumAnnotation> pPDFiumAnnotation;
+    FPDF_ANNOTATION pAnnotation = FPDFAnnot_GetLinkedAnnot(mpAnnotation, rKey.getStr());
+    if (pAnnotation)
+    {
+        pPDFiumAnnotation = std::make_unique<PDFiumAnnotation>(pAnnotation);
+    }
+    return pPDFiumAnnotation;
+}
 } // end vcl::pdf
 
 #endif // HAVE_FEATURE_PDFIUM
