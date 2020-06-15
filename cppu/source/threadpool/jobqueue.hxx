@@ -47,8 +47,8 @@ namespace cppu_threadpool
 
         void add( void *pThreadSpecificData, RequestFun * doRequest );
 
-        void *enter( sal_Int64 nDisposeId , bool bReturnWhenNoJob = false );
-        void dispose( sal_Int64 nDisposeId );
+        void *enter( void const * nDisposeId , bool bReturnWhenNoJob = false );
+        void dispose( void const * nDisposeId );
 
         void suspend();
         void resume();
@@ -60,7 +60,7 @@ namespace cppu_threadpool
     private:
         mutable ::osl::Mutex m_mutex;
         std::deque < struct Job > m_lstJob;
-        std::deque<sal_Int64>  m_lstCallstack;
+        std::deque<void const *>  m_lstCallstack;
         sal_Int32 m_nToDo;
         bool m_bSuspended;
         osl::Condition m_cndWait;

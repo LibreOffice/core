@@ -84,13 +84,13 @@ namespace cppu_threadpool {
 
         static DisposedCallerAdminHolder const & getInstance();
 
-        void dispose( sal_Int64 nDisposeId );
-        void destroy( sal_Int64 nDisposeId );
-        bool isDisposed( sal_Int64 nDisposeId );
+        void dispose( void const * nDisposeId );
+        void destroy( void const * nDisposeId );
+        bool isDisposed( void const * nDisposeId );
 
     private:
         ::osl::Mutex m_mutex;
-        std::vector< sal_Int64 > m_vector;
+        std::vector< void const * > m_vector;
     };
 
     class ThreadAdmin
@@ -120,8 +120,8 @@ namespace cppu_threadpool {
         ThreadPool();
         virtual ~ThreadPool() override;
 
-        void dispose( sal_Int64 nDisposeId );
-        void destroy( sal_Int64 nDisposeId );
+        void dispose( void const * nDisposeId );
+        void destroy( void const * nDisposeId );
 
         bool addJob( const ::rtl::ByteSequence &aThreadId,
                      bool bAsynchron,
@@ -129,7 +129,7 @@ namespace cppu_threadpool {
                      RequestFun * doRequest );
 
         void prepare( const ::rtl::ByteSequence &aThreadId );
-        void * enter( const ::rtl::ByteSequence &aThreadId, sal_Int64 nDisposeId );
+        void * enter( const ::rtl::ByteSequence &aThreadId, void const * nDisposeId );
 
         /********
          * @return true, if queue could be successfully revoked.
