@@ -53,7 +53,7 @@
 
 using namespace ::com::sun::star;
 
-SwLayoutCache::SwLayoutCache() : nLockCount( 0 ) {}
+SwLayoutCache::SwLayoutCache() : m_nLockCount( 0 ) {}
 
 /*
  *  Reading and writing of the layout cache.
@@ -68,12 +68,12 @@ SwLayoutCache::SwLayoutCache() : nLockCount( 0 ) {}
 
 void SwLayoutCache::Read( SvStream &rStream )
 {
-    if( !pImpl )
+    if( !m_pImpl )
     {
-        pImpl.reset( new SwLayCacheImpl );
-        if( !pImpl->Read( rStream ) )
+        m_pImpl.reset( new SwLayCacheImpl );
+        if( !m_pImpl->Read( rStream ) )
         {
-            pImpl.reset();
+            m_pImpl.reset();
         }
     }
 }
@@ -325,7 +325,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 #ifdef DBG_UTIL
 bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
-    if( !pImpl )
+    if( !m_pImpl )
         return true;
     const SwRootFrame *pRootFrame = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRootFrame )
@@ -338,7 +338,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
         while( pPage )
         {
-            if( nIndex >= pImpl->size() )
+            if( nIndex >= m_pImpl->size() )
                 return false;
 
             const SwLayoutFrame* pLay = pPage->FindBodyCont();
@@ -357,12 +357,12 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                     {
                         bool bFollow = static_cast<const SwTextFrame*>(pTmp)->IsFollow();
                         nNdIdx -= nStartOfContent;
-                        if( pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
+                        if( m_pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
                             SW_LAYCACHE_IO_REC_PARA !=
-                            pImpl->GetBreakType( nIndex ) ||
+                            m_pImpl->GetBreakType( nIndex ) ||
                             (bFollow
                               ? sal_Int32(static_cast<const SwTextFrame*>(pTmp)->GetOffset())
-                              : COMPLETE_STRING) != pImpl->GetBreakOfst(nIndex))
+                              : COMPLETE_STRING) != m_pImpl->GetBreakOfst(nIndex))
                         {
                             return false;
                         }
@@ -396,10 +396,10 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                         if( nNdIdx > nStartOfContent )
                         {
                             nNdIdx -= nStartOfContent;
-                            if( pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
+                            if( m_pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
                                 SW_LAYCACHE_IO_REC_TABLE !=
-                                pImpl->GetBreakType( nIndex ) ||
-                               nOfst != pImpl->GetBreakOfst( nIndex ) )
+                                m_pImpl->GetBreakType( nIndex ) ||
+                               nOfst != m_pImpl->GetBreakOfst( nIndex ) )
                             {
                                 return false;
                             }
@@ -442,13 +442,13 @@ void SwLayoutCache::ClearImpl()
 {
     if( !IsLocked() )
     {
-        pImpl.reset();
+        m_pImpl.reset();
     }
 }
 
 SwLayoutCache::~SwLayoutCache()
 {
-    OSL_ENSURE( !nLockCount, "Deleting a locked SwLayoutCache!?" );
+    OSL_ENSURE( !m_nLockCount, "Deleting a locked SwLayoutCache!?" );
 }
 
 /// helper class to create not nested section frames for nested sections.

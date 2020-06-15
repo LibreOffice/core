@@ -735,21 +735,21 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
 /// Generate two-dimensional array of FndBoxes
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBoxRef) :
-    pDoc(pDocPtr),
-    nRow(0),
-    nCol(0)
+    m_pDoc(pDocPtr),
+    m_nRow(0),
+    m_nCol(0)
 { // If the array is symmetric
-    bSym = CheckLineSymmetry(rBoxRef);
-    if( bSym )
+    m_bSym = CheckLineSymmetry(rBoxRef);
+    if( m_bSym )
     {
         // Determine column/row count
-        nCols = GetColCount(rBoxRef);
-        nRows = GetRowCount(rBoxRef);
+        m_nCols = GetColCount(rBoxRef);
+        m_nRows = GetRowCount(rBoxRef);
 
         // Create linear array
-        size_t nCount = static_cast<size_t>(nRows) * nCols;
-        pArr = std::make_unique<FndBox_ const *[]>(nCount);
-        memset(pArr.get(), 0, sizeof(const FndBox_*) * nCount);
+        size_t nCount = static_cast<size_t>(m_nRows) * m_nCols;
+        m_pArr = std::make_unique<FndBox_ const *[]>(nCount);
+        memset(m_pArr.get(), 0, sizeof(const FndBox_*) * nCount);
 
         FillFlat( rBoxRef );
     }
@@ -860,12 +860,12 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
     const FndLines_t& rLines = rBox.GetLines();
 
     // Iterate over Lines
-    sal_uInt16 nOldRow = nRow;
+    sal_uInt16 nOldRow = m_nRow;
     for (const auto & pLine : rLines)
     {
         // The Boxes of a Line
         const FndBoxes_t& rBoxes = pLine->GetBoxes();
-        sal_uInt16 nOldCol = nCol;
+        sal_uInt16 nOldCol = m_nCol;
         for( FndBoxes_t::size_type j = 0; j < rBoxes.size(); ++j )
         {
             // Check the Box if it's an atomic one
@@ -874,8 +874,8 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
             if( pBox->GetLines().empty() )
             {
                 // save it
-                sal_uInt16 nOff = nRow * nCols + nCol;
-                pArr[nOff] = pBox;
+                sal_uInt16 nOff = m_nRow * m_nCols + m_nCol;
+                m_pArr[nOff] = pBox;
 
                 // Save the Formula/Format/Value values
                 const SwFrameFormat* pFormat = pBox->GetBox()->GetFrameFormat();
@@ -884,17 +884,17 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
                     auto pSet = std::make_unique<SfxItemSet>(
-                        pDoc->GetAttrPool(),
+                        m_pDoc->GetAttrPool(),
                         svl::Items<
                             RES_VERT_ORIENT, RES_VERT_ORIENT,
                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
                     pSet->Put( pFormat->GetAttrSet() );
-                    if( ppItemSets.empty() )
+                    if( m_ppItemSets.empty() )
                     {
-                        size_t nCount = static_cast<size_t>(nRows) * nCols;
-                        ppItemSets.resize(nCount);
+                        size_t nCount = static_cast<size_t>(m_nRows) * m_nCols;
+                        m_ppItemSets.resize(nCount);
                     }
-                    ppItemSets[nOff] = std::move(pSet);
+                    m_ppItemSets[nOff] = std::move(pSet);
                 }
 
                 bModRow = true;
@@ -904,31 +904,31 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                 // Iterate recursively over the Lines of a Box
                 FillFlat( *pBox, ( j+1 == rBoxes.size() ) );
             }
-            nCol++;
+            m_nCol++;
         }
         if(bModRow)
-            nRow++;
-        nCol = nOldCol;
+            m_nRow++;
+        m_nCol = nOldCol;
     }
     if(!bLastBox)
-        nRow = nOldRow;
+        m_nRow = nOldRow;
 }
 
 /// Access a specific Cell
 const FndBox_* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    sal_uInt16 nOff = n_Row * nCols + n_Col;
-    const FndBox_* pTmp = pArr[nOff];
+    sal_uInt16 nOff = n_Row * m_nCols + n_Col;
+    const FndBox_* pTmp = m_pArr[nOff];
 
-    OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "invalid array access");
+    OSL_ENSURE(n_Col < m_nCols && n_Row < m_nRows && pTmp, "invalid array access");
     return pTmp;
 }
 
 const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    OSL_ENSURE( ppItemSets.empty() || ( n_Col < nCols && n_Row < nRows), "invalid array access");
+    OSL_ENSURE( m_ppItemSets.empty() || ( n_Col < m_nCols && n_Row < m_nRows), "invalid array access");
 
-    return !ppItemSets.empty() ? ppItemSets[unsigned(n_Row * nCols) + n_Col].get() : nullptr;
+    return !m_ppItemSets.empty() ? m_ppItemSets[unsigned(n_Row * m_nCols) + n_Col].get() : nullptr;
 }
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const

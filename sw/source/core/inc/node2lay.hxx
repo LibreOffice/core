@@ -53,7 +53,7 @@ class Point;
 
 class SwNode2Layout
 {
-    std::unique_ptr<SwNode2LayImpl> pImpl;
+    std::unique_ptr<SwNode2LayImpl> m_pImpl;
 public:
     /// Use this ctor for inserting before/after rNd
     /// @param nIdx is the index of the to-be-inserted Node

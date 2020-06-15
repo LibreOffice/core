@@ -26,7 +26,7 @@ class SwDoc;
 
 class SwURLStateChanged : public SfxListener
 {
-    SwDoc* pDoc;
+    SwDoc* m_pDoc;
 public:
     SwURLStateChanged( SwDoc* pD );
     virtual ~SwURLStateChanged() override;
