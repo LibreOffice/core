@@ -118,6 +118,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
+#include <tools/json.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/floatwin.hxx>
@@ -4633,47 +4634,45 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     uno::Reference<document::XRedlinesSupplier> xRedlinesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
-    std::stringstream aStream;
+    tools::Json aJson;
     // We want positions of the track changes also which is not possible from
     // UNO. Enable positioning information for text documents only for now, so
     // construct the tracked changes JSON from inside the sw/, not here using UNO
     if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT && xRedlinesSupplier.is())
     {
+        aJson.StartNode("redlines");
         uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
-        boost::property_tree::ptree aRedlines;
         for (size_t nIndex = 0; xRedlines->hasMoreElements(); ++nIndex)
         {
             uno::Reference<beans::XPropertySet> xRedline(xRedlines->nextElement(), uno::UNO_QUERY);
-            boost::property_tree::ptree aRedline;
-            aRedline.put("index", nIndex);
+            aJson.StartNode("");
+            aJson.put("index", nIndex);
 
             OUString sAuthor;
             xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;
-            aRedline.put("author", sAuthor.toUtf8().getStr());
+            aJson.put("author", sAuthor);
 
             OUString sType;
             xRedline->getPropertyValue("RedlineType") >>= sType;
-            aRedline.put("type", sType.toUtf8().getStr());
+            aJson.put("type", sType);
 
             OUString sComment;
             xRedline->getPropertyValue("RedlineComment") >>= sComment;
-            aRedline.put("comment", sComment.toUtf8().getStr());
+            aJson.put("comment", sComment);
 
             OUString sDescription;
             xRedline->getPropertyValue("RedlineDescription") >>= sDescription;
-            aRedline.put("description", sDescription.toUtf8().getStr());
+            aJson.put("description", sDescription);
 
             util::DateTime aDateTime;
             xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
             OUString sDateTime = utl::toISO8601(aDateTime);
-            aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+            aJson.put("dateTime", sDateTime);
 
-            aRedlines.push_back(std::make_pair("", aRedline));
+            aJson.EndNode();
         }
 
-        boost::property_tree::ptree aTree;
-        aTree.add_child("redlines", aRedlines);
-        boost::property_tree::write_json(aStream, aTree);
+        aJson.EndNode();
     }
     else
     {
@@ -4683,12 +4682,10 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
             SetLastExceptionMsg("Document doesn't support tiled rendering");
             return nullptr;
         }
-        OUString aTrackedChanges = pDoc->getTrackedChanges();
-        aStream << aTrackedChanges.toUtf8();
+        pDoc->getTrackedChanges(aJson);
     }
 
-    char* pJson = strdup(aStream.str().c_str());
-    return pJson;
+    return aJson.ExtractData();
 }
 
 
