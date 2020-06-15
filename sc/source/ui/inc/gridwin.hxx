@@ -82,6 +82,8 @@ struct SpellCallbackInfo;
 // predefines
 namespace sdr::overlay { class OverlayObjectList; }
 
+class ScFilterFloatingWindow;
+
 class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
     // ScFilterListBox is always used for selection list
@@ -152,7 +154,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     std::unique_ptr<ScNoteMarker, o3tl::default_delete<ScNoteMarker>> mpNoteMarker;
 
     VclPtr<ScFilterListBox>          mpFilterBox;
-    VclPtr<FloatingWindow>           mpFilterFloat;
+    VclPtr<ScFilterFloatingWindow>   mpFilterFloat;
     VclPtr<ScCheckListMenuWindow>    mpAutoFilterPopup;
     VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;

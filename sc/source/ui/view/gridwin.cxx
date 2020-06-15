@@ -308,21 +308,25 @@ IMPL_LINK_NOARG(ScFilterListBox, AsyncSelectHdl, void*, void)
     pGridWin->ClickExtern();
 }
 
-namespace {
-
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
 {
+private:
+    bool m_bGridHadMouseCaptured;
 public:
     ScFilterFloatingWindow(vcl::Window* pParent);
     virtual ~ScFilterFloatingWindow() override;
     virtual void dispose() override;
-};
 
-}
+    bool MouseWasCaptured() const
+    {
+        return m_bGridHadMouseCaptured;
+    }
+};
 
 ScFilterFloatingWindow::ScFilterFloatingWindow(vcl::Window* pParent)
     : FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW ) // make it a system floater
+    , m_bGridHadMouseCaptured(pParent->IsMouseCaptured())
 {
 }
 
@@ -537,6 +541,10 @@ IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
 {
     if (mpFilterBox)
         mpFilterBox->SetCancelled();     // cancel select
+    // restore the mouse capture state of the GridWindow to
+    // what it was at initial popup time
+    if (mpFilterFloat->MouseWasCaptured())
+        CaptureMouse();
     GrabFocus();
 }
 
@@ -977,6 +985,9 @@ void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayou
 
     mpFilterBox->SetSizePixel(aSize);
     mpFilterFloat->SetOutputSizePixel(aSize);
+
+    if (IsMouseCaptured())
+        ReleaseMouse();
     mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus);
 }
 
@@ -1067,11 +1078,6 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         rFilterBox.select(nPos);
     }
     mpFilterBox->EndInit();
-
-    // Scenario selection comes from MouseButtonDown:
-    // The next MouseMove on the FilterBox is like a ButtonDown
-    nMouseStatus = SC_GM_FILTER;
-    CaptureMouse();
 }
 
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
@@ -1768,7 +1774,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
-                CaptureMouse();
                 rState.mbActivatePart = false;
                 return;
             }
@@ -1780,7 +1785,14 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     ScRange aScenRange;
     if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
     {
+        CaptureMouse();
+
         DoScenarioMenu( aScenRange );
+
+        // Scenario selection comes from MouseButtonDown:
+        // The next MouseMove on the FilterBox is like a ButtonDown
+        nMouseStatus = SC_GM_FILTER;
+
         return;
     }
 
