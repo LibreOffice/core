@@ -80,6 +80,13 @@ namespace cppu_threadpool {
                 if( 0 == m_lstCallstack.front() )
                 {
                     // disposed !
+                    if (!m_lstJob.empty() && m_lstJob.front().doRequest == nullptr) {
+                        // If this thread was waiting for a remote response, that response may or
+                        // may not have been enqueued; if it has not been enqueued, there cannot be
+                        // another enqueued response, so it is always correct to remove any enqueued
+                        // response here:
+                        m_lstJob.pop_front();
+                    }
                     if( m_lstJob.empty()
                         && (m_lstCallstack.empty()
                             || m_lstCallstack.front() != 0) )
