@@ -28,7 +28,7 @@ SmOoxmlExport::SmOoxmlExport(const SmNode *const pIn, OoxmlVersion const v,
 
 void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer, const sal_Int8 nAlign )
 {
-    if( m_pTree == nullptr )
+    if( GetTree() == nullptr )
         return;
     m_pSerializer = serializer;
 
@@ -66,7 +66,7 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
             m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "right");
         m_pSerializer->endElementNS(XML_m, XML_oMathParaPr);
         m_pSerializer->startElementNS(XML_m, XML_oMath);
-        HandleNode(m_pTree, 0);
+        HandleNode(GetTree(), 0);
         m_pSerializer->endElementNS(XML_m, XML_oMath);
         m_pSerializer->endElementNS(XML_m, XML_oMathPara);
     }
@@ -74,7 +74,7 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
     {
         m_pSerializer->startElementNS(XML_m, XML_oMath,
             FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
-        HandleNode( m_pTree, 0 );
+        HandleNode( GetTree(), 0 );
         m_pSerializer->endElementNS( XML_m, XML_oMath );
     }
 }
