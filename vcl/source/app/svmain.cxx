@@ -81,6 +81,8 @@
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #ifdef _WIN32
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -102,6 +104,14 @@
 #include <typeinfo>
 #include <rtl/strbuf.hxx>
 #endif
+
+#include <config_gpgme.h>
+#if HAVE_FEATURE_GPGME
+# include <context.h>
+# include <data.h>
+# include <decryptionresult.h>
+#endif
+
 
 using namespace ::com::sun::star;
 
@@ -177,6 +187,28 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
     return osl_Signal_ActCallNextHdl;
 
 }
+
+class EarlyCryptoInitThread final : public salhelper::Thread
+{
+public:
+    EarlyCryptoInitThread()
+        : salhelper::Thread("EarlyCryptoInitThread")
+    {
+    }
+
+    virtual void execute() override
+    {
+        // force initialisation of NSS and GpgME, which spawn a variety of sub-processes
+        // and take quite a while
+#if HAVE_FEATURE_GPGME
+        GpgME::initializeLibrary();
+        GpgME::checkEngine(GpgME::OpenPGP);
+#endif
+#if HAVE_FEATURE_NSS
+        css::xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext());
+#endif
+    }
+};
 
 int ImplSVMain()
 {
@@ -383,6 +415,9 @@ bool InitVCL()
     // See https://bugs.freedesktop.org/show_bug.cgi?id=11375 for discussion
     unsetenv("DESKTOP_STARTUP_ID");
 #endif
+
+    EarlyCryptoInitThread* pEarlyThread = new EarlyCryptoInitThread();
+    pEarlyThread->launch();
 
     return true;
 }
