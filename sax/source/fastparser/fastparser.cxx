@@ -1227,9 +1227,12 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                 nNamespaceToken = GetNamespaceToken( sNamespace );
                 aElementPrefix = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
             }
-            const OUString& rElementLocalName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
+            OUString aElementLocalName( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
             rEvent.msNamespace = sNamespace;
-            rEvent.msElementName = (aElementPrefix.isEmpty())? rElementLocalName : aElementPrefix + ":" + rElementLocalName;
+            if( aElementPrefix.isEmpty() )
+                rEvent.msElementName = std::move(aElementLocalName);
+            else
+                rEvent.msElementName = aElementPrefix + ":" + aElementLocalName;
         }
         else // token is always preferred.
             rEvent.msElementName.clear();
@@ -1305,7 +1308,7 @@ void FastSaxParserImpl::sendPendingCharacters()
     if (rEntity.mbEnableThreads)
     {
         Event& rEvent = rEntity.getEvent( CallbackType::CHARACTERS );
-        rEvent.msChars = sChars;
+        rEvent.msChars = std::move(sChars);
         produce();
     }
     else
