@@ -561,28 +561,9 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     // tdf#132725 - if at-char/at-para flys would be deleted, don't group!
     // DelContentIndex() would be called at the wrong time here, the indexes
     // in the stored SwHistoryTextFlyCnt would be wrong when Undo is invoked
-    for (SwFrameFormat const*const pFly : *pDoc->GetSpzFrameFormats())
+    if (IsFlySelectedByCursor(*pDoc, *pStt, *pEnd))
     {
-        SwFormatAnchor const& rAnchor(pFly->GetAnchor());
-        switch (rAnchor.GetAnchorId())
-        {
-            case RndStdIds::FLY_AT_CHAR:
-            case RndStdIds::FLY_AT_PARA:
-            {
-                SwPosition const*const pAnchorPos(rAnchor.GetContentAnchor());
-                // can this really be null?
-                if (pAnchorPos != nullptr
-                    && ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-                        ? IsDestroyFrameAnchoredAtChar(*pAnchorPos, *pStt, *pEnd)
-                        : IsSelectFrameAnchoredAtPara(*pAnchorPos, *pStt, *pEnd)))
-                {
-                    return false;
-                }
-            }
-            break;
-            default: // other types not relevant
-            break;
-        }
+        return false;
     }
 
     {
