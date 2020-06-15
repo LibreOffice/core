@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78208cc7_942d2fcf",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-15T16:10:40Z",
+      "side": 1,
+      "message": "class names in python should use CamelCase",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f805c9a3_80390bd4",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-15T16:10:40Z",
+      "side": 1,
+      "message": "If you don\u0027t assert anything between the two commands how can you be sure that the commands worked",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5508e6cb_f43d0a7e",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-15T16:10:40Z",
+      "side": 1,
+      "message": "missing space around \"\u003d\"",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7daebe3_931e7164",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-15T16:10:40Z",
+      "side": 1,
+      "message": "Still need to assert something here",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10a24db8_88f2cc24",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-15T16:10:40Z",
+      "side": 1,
+      "message": "Maybe check that the three comment objects are actually removed. Should be a quite straight forward patch and easier to reason about.",
+      "revId": "2b31a9eee14cd31cde7bc0192934c77530203259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
