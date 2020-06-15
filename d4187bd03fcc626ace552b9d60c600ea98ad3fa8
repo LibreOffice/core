@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "660c81ea_984998d8",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:07:05Z",
+      "side": 1,
+      "message": "When loading such in Excel, does it accept two numFmt with identical format strings? i.e. what is written for a normal percent format and a permille format both used is for example\n\n    \u003cnumFmt numFmtId\u003d\"165\" formatCode\u003d\"0.00%\"/\u003e\n    \u003cnumFmt numFmtId\u003d\"166\" formatCode\u003d\"0.00%\"/\u003e",
+      "revId": "d4187bd03fcc626ace552b9d60c600ea98ad3fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1b705e_83b08631",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-06-15T20:07:05Z",
+      "side": 1,
+      "message": "This writes\n\n    \u003cnumber:percentage-style style:name\u003d\"N111\"\u003e\n      \u003cnumber:number number:decimal-places\u003d\"2\" number:min-decimal-places\u003d\"2\" number:min-integer-digits\u003d\"1\"/\u003e\n      \u003cnumber:text\u003e‰\u003c/number:text\u003e\n    \u003c/number:percentage-style\u003e\n\nwhich when loaded in an older version is read as a non-percent number format\n\n 0.00\"‰\"\n\nand a value 4.56 is displayed as\n\n 4.56‰\n\ninstead of 4560.00‰ which is not correct.",
+      "revId": "d4187bd03fcc626ace552b9d60c600ea98ad3fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
