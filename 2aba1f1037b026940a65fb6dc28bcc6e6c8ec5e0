@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "706007d9_c88c9dae",
+        "filename": "sw/source/uibase/docvw/AnnotationWin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-15T16:10:16Z",
+      "side": 1,
+      "message": "Did you consider GetPostItId() instead? See sw/source/uibase/uno/unotxdoc.cxx:3358.",
+      "revId": "2aba1f1037b026940a65fb6dc28bcc6e6c8ec5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51d302ad_339e317f",
+        "filename": "sw/source/uibase/inc/uiobject.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-15T16:10:16Z",
+      "side": 1,
+      "message": "Please always add a one-liner documentation / comment on what the class is meant to do when you add a new class.",
+      "revId": "2aba1f1037b026940a65fb6dc28bcc6e6c8ec5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
