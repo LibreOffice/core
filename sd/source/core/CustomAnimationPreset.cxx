@@ -478,8 +478,8 @@ const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets(
     // Support localization per-view. Currently not useful for Desktop
     // but very much critical for LOK. The cache now is per-language.
     const OUString aLang = comphelper::LibreOfficeKit::isActive()
-                               ? comphelper::LibreOfficeKit::getLanguageTag().getLanguage()
-                               : SvtSysLocaleOptions().GetLanguageTag().getLanguage();
+                               ? comphelper::LibreOfficeKit::getLanguageTag().getBcp47()
+                               : SvtSysLocaleOptions().GetLanguageTag().getBcp47();
 
     SolarMutexGuard aGuard;
     const auto it = mPresetsMap.find(aLang);
