@@ -2329,6 +2329,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
     // These failed, if the legend names are empty strings.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf126425)
+{
+    SwDoc* pDoc = createDoc("long_legendentry.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(pXmlDoc, "(//textarray/text)[13]", "Data series wi...");
+    // This failed, if the text of the legend disappears.
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123268)
 {
     SwDoc* pDoc = createDoc("tdf123268.odt");
