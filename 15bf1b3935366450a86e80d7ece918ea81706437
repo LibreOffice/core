@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf49b476_4d86a022",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-15T08:49:05Z",
+      "side": 1,
+      "message": "it looks like both \"spelled\" and \"spelt\" are OK, according to e.g. Macmillan?",
+      "range": {
+        "startLine": 438,
+        "startChar": 51,
+        "endLine": 438,
+        "endChar": 56
+      },
+      "revId": "15bf1b3935366450a86e80d7ece918ea81706437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
