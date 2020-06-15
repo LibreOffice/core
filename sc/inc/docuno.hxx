@@ -375,7 +375,7 @@ public:
     virtual PointerStyle getPointer() override;
 
     /// @see vcl::ITiledRenderable::getTrackedChanges().
-    OUString getTrackedChanges() override;
+    void getTrackedChanges(tools::JsonWriter&) override;
 
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
