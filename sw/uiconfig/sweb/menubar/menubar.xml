@@ -180,7 +180,7 @@
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:ObjectMenu">
+      <menu:menu menu:id=".uno:ObjectMenu" menu:style="text">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertObject"/>
