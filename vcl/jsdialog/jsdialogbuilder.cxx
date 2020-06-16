@@ -18,6 +18,7 @@
 #include <tools/json_writer.hxx>
 #include <o3tl/deleter.hxx>
 #include <memory>
+#include <vcl/toolbox.hxx>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
     : Idle("JSDialog notify")
@@ -309,6 +310,21 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id,
+                                                               bool bTakeOwnership)
+{
+    ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
+    auto pWeldWidget = pToolBox ? std::make_unique<JSToolbar>(
+                                      m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
+                                      pToolBox, this, bTakeOwnership)
+                                : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -515,6 +531,18 @@ void JSDrawingArea::queue_draw()
 void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
 {
     SalInstanceDrawingArea::queue_draw_area(x, y, width, height);
+    notifyDialogState();
+}
+
+JSToolbar::JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox,
+                     SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceToolbar, ::ToolBox>(aOwnedToplevel, pToolbox, pBuilder, bTakeOwnership)
+{
+}
+
+void JSToolbar::signal_clicked(const OString& rIdent)
+{
+    SalInstanceToolbar::signal_clicked(rIdent);
     notifyDialogState();
 }
 
