@@ -3607,12 +3607,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
         pWindow = getSidebarWindow();
 
-    if (!pWindow)
-    {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
-        return;
-    }
-    else if (aMap.find("id") != aMap.end())
+    if (aMap.find("id") != aMap.end())
     {
         static const OUString sClickAction("CLICK");
         static const OUString sSelectAction("SELECT");
@@ -3725,6 +3720,12 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                 {
                     bContinueWithLOKWindow = true;
                 }
+            }
+
+            if (!pWindow)
+            {
+                SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+                return;
             }
 
             if (!bIsWeldedDialog || bContinueWithLOKWindow)
