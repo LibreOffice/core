@@ -93,7 +93,6 @@
 #include <libeot/libeot.h>
 #endif
 
-using namespace vcl;
 using namespace::com::sun::star;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
@@ -120,12 +119,6 @@ static const double fDivisor = 1000.0;
 
 static double pixelToPoint( double px ) { return px/fDivisor; }
 static sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
-
-const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
-{
-    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
-    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
-};
 
 static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
@@ -268,6 +261,29 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
             appendHex( static_cast<sal_Int8>(aChar & 255 ), rBuffer );
         }
     }
+}
+
+namespace vcl
+{
+const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
+{
+    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
+    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
+};
+
+template < class GEOMETRY >
+static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
+{
+    GEOMETRY aPoint;
+    if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
+    {
+        aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
+    }
+    else
+    {
+        aPoint = OutputDevice::LogicToLogic( _rObject, _rSource, _rDest );
+    }
+    return aPoint;
 }
 
 void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
@@ -775,24 +791,6 @@ bool PDFPage::emit(sal_Int32 nParentObject )
         aLine.append( ']' );
     aLine.append( ">>\nendobj\n\n" );
     return m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
-}
-
-namespace vcl
-{
-template < class GEOMETRY >
-static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
-{
-    GEOMETRY aPoint;
-    if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
-    {
-        aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
-    }
-    else
-    {
-        aPoint = OutputDevice::LogicToLogic( _rObject, _rSource, _rDest );
-    }
-    return aPoint;
-}
 }
 
 void PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const
@@ -5440,7 +5438,6 @@ void PDFWriterImpl::sortWidgets()
     // FIXME: implement tab order in structure tree for PDF 1.5
 }
 
-namespace vcl {
 class PDFStreamIf :
         public cppu::WeakImplHelper< css::io::XOutputStream >
 {
@@ -5453,7 +5450,6 @@ class PDFStreamIf :
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL closeOutput() override;
 };
-}
 
 void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
@@ -11219,6 +11215,7 @@ sal_Int32 ReferenceXObjectEmit::getObject() const
         return m_nFormObject;
     else
         return m_nBitmapObject;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
