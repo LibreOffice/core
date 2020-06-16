@@ -17,15 +17,85 @@
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/propertysequence.hxx>
+#include <sal/log.hxx>
+#include <sfx2/objsh.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 
 #include <pdfio/pdfdocument.hxx>
-#include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+/// If the currently selected shape is a Draw signature line, export that to PDF.
+void GetSignatureLineShape(std::vector<sal_Int8>& rSignatureLineShape)
+{
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    if (!pObjectShell)
+    {
+        return;
+    }
+
+    uno::Reference<frame::XModel> xModel = pObjectShell->GetBaseModel();
+    if (!xModel.is())
+    {
+        return;
+    }
+
+    uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
+    if (!xShapes.is() || xShapes->getCount() < 1)
+    {
+        return;
+    }
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
+    if (!xShapeProps.is())
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
+    auto it = aMap.find("SignatureCertificate");
+    if (it == aMap.end())
+    {
+        return;
+    }
+
+    // We know that we add a signature line shape to an existing PDF at this point.
+
+    uno::Reference<frame::XStorable> xStorable(xModel, uno::UNO_QUERY);
+    if (!xStorable.is())
+    {
+        return;
+    }
+
+    // Export just the signature line.
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
+    aMediaDescriptor["OutputStream"] <<= xStream;
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "Selection", uno::Any(xShapes) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    xStream->flush();
+
+    aStream.Seek(0);
+    rSignatureLineShape = std::vector<sal_Int8>(aStream.GetSize());
+    aStream.ReadBytes(rSignatureLineShape.data(), rSignatureLineShape.size());
+}
+}
 
 PDFSignatureHelper::PDFSignatureHelper() = default;
 
@@ -129,6 +199,9 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
         SAL_WARN("xmlsecurity.helper", "failed to read the document");
         return false;
     }
+
+    std::vector<sal_Int8> aSignatureLineShape;
+    GetSignatureLineShape(aSignatureLineShape);
 
     if (!aDocument.Sign(m_xCertificate, m_aDescription, bAdES))
     {
