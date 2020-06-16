@@ -2984,7 +2984,7 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
         GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
-        window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
+        window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE), 0, 0);
     }
 }
 
