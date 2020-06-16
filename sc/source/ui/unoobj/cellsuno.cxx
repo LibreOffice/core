@@ -9315,7 +9315,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScUniqueCellFormatsObj::createE
     return nullptr;
 }
 
-ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, const ScMyRangeLists& rRangeLists) :
+ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, const std::vector<ScRangeList>& rRangeLists) :
     aRangeLists(rRangeLists),
     pDocShell( pDocSh ),
     nCurrentPosition(0)
