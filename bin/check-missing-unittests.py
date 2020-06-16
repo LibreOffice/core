@@ -20,7 +20,14 @@ def main(ignoredBugs):
             'xlsx': {},
             'xhtml': {},
             'html': {},
-        }
+        },
+        'undo': {
+            'writer': {}
+        },
+        'import': {
+            'calc': {}
+        },
+
     }
     hasTestSet = set()
 
@@ -32,13 +39,15 @@ def main(ignoredBugs):
             ['git', '-C', repoPath, 'rev-parse', 'HEAD'],
             stderr=subprocess.DEVNULL)
     output = subprocess.check_output(
-            ['git', '-C', repoPath, 'log', '--since="2012-01-01', '--name-only' ,'--pretty=format:"%s"'],
+            ['git', '-C', repoPath, 'log', '--since="2012-01-01', '--name-only' ,'--pretty=format:"%s%n%ad"', '--date=format:"%Y/%m/%d"'],
             stderr=subprocess.DEVNULL)
     commits = output.decode('utf-8', 'ignore').split('\n\n')
 
     for commit in reversed(commits):
 
-        summary = commit.split('\n', 1)[0].lower()
+        commitInfo = commit.split('\n')
+
+        summary = commitInfo[0].strip('"').lower()
 
         #Check summary has a bug id
         if 'tdf#' in summary or 'fdo#' in summary:
@@ -63,7 +72,10 @@ def main(ignoredBugs):
             if bugId in hasTestSet:
                 continue
 
-            changedFiles = commit.split('\n', 1)[1]
+            date = commitInfo[1].strip('"')
+            infoList = [date, summary]
+
+            changedFiles = "".join(commitInfo[2:])
             if 'qa' in changedFiles:
                 hasTestSet.add(bugId)
                 continue
@@ -71,22 +83,28 @@ def main(ignoredBugs):
             elif 'sw/source/filter/ww8/docx' in changedFiles or \
                     'writerfilter/source/dmapper' in changedFiles or \
                     'starmath/source/ooxmlimport' in changedFiles:
-                results['export']['docx'][bugId] = summary
+                results['export']['docx'][bugId] = infoList
 
             elif 'sw/source/filter/ww8/ww8' in changedFiles:
-                results['export']['doc'][bugId] = summary
+                results['export']['doc'][bugId] = infoList
 
             elif 'sc/source/filter/excel/xe' in changedFiles:
-                results['export']['xlsx'][bugId] = summary
+                results['export']['xlsx'][bugId] = infoList
 
             elif 'oox/source/export/' in changedFiles:
-                results['export']['pptx'][bugId] = summary
+                results['export']['pptx'][bugId] = infoList
 
             elif 'filter/source/xslt/odf2xhtml/export' in changedFiles:
-                results['export']['xhtml'][bugId] = summary
+                results['export']['xhtml'][bugId] = infoList
 
             elif 'sw/source/filter/html/' in changedFiles:
-                results['export']['html'][bugId] = summary
+                results['export']['html'][bugId] = infoList
+
+            elif 'sw/source/core/undo/' in changedFiles:
+                results['undo']['writer'][bugId] = infoList
+
+            elif 'sc/source/core/tool/interpr' in changedFiles:
+                results['import']['calc'][bugId] = infoList
 
             # Add others here
 
@@ -106,11 +124,11 @@ def main(ignoredBugs):
         print('\n== ' + k + ' ==')
         for k1, v1 in v.items():
             print('\n=== ' + k1 + ' ===')
-            for bugId, summary in v1.items():
+            for bugId, info in v1.items():
                 if bugId not in hasTestSet:
                     print(
-                        "* {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
-                        summary, bugId, bugId))
+                        "# {} - {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
+                        info[0], info[1], bugId, bugId))
     print('\n== ignored bugs ==')
     print(' '.join(ignoredBugs))
     print()
