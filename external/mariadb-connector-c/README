@@ -1,16 +1,8 @@
-Update to new upstream bzr snapshot:
+MariaDB Connector/C
 
-Don't use 'bzr diff', it will not put renames in the diff in a way
-that patch understands.
+https://mariadb.com/kb/en/mariadb-connector-c-release-notes/
+https://downloads.mariadb.com/Connectors/c/
 
-bzr -Ossl.cert_reqs=none branch lp:mariadb-native-client
-mv mariadb-native-client mariadb-native-client.trunk
-cp -R mariadb-native-client.trunk mariadb-native-client.release
-cd mariadb-native-client.release
-bzr revert -r mariadb-native-client-1.0.0
-cd ..
-diff -x .bzr -u --recursive -N mariadb-native-client.release/ mariadb-native-client.trunk/  > /path/to/libreoffice_tree/libmariadb/mariadb-trunk-NNN.patch
-sed -i -e 's@^\([+-]\{3\} \)mariadb-native-client.\(trunk\|release\)/@\1mariadb/@' /path/to/libreoffice_tree/libmariadb/mariadb-trunk-NNN.patch
-dos2unix -f /path/to/libreoffice_tree/libmariadb/mariadb-trunk-NNN.patch
+configs/ generated like this:
 
-regenerate configs
+cmake -DWITH_CURL=OFF -DWITH_SSL=OFF -DWITH_UNIT_TESTS=OFF -DWITH_DYNCOL=OFF .../workdir/UnpackedTarball/mariadb-connector-c/

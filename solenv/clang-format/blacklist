@@ -4623,7 +4623,8 @@ external/clucene/configs/clucene-config-generic.h
 external/libpng/configs/pnglibconf.h
 external/mariadb-connector-c/configs/linux_my_config.h
 external/mariadb-connector-c/configs/mac_my_config.h
-external/mariadb-connector-c/configs/mysql_version.h
+external/mariadb-connector-c/configs/wnt_ma_config.h
+external/mariadb-connector-c/configs/mariadb_version.h
 external/neon/configs/config.h
 external/redland/raptor/raptor2.h
 external/redland/raptor/raptor_config.h
