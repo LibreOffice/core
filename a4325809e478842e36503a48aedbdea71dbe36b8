@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c74f6b92_c25b735c",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-16T17:05:41Z",
+      "side": 1,
+      "message": "can this loop go inside the freeze/thaw?",
+      "revId": "a4325809e478842e36503a48aedbdea71dbe36b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
