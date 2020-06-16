@@ -1,5 +1,5 @@
---- libmariadb/getopt.c
-+++ libmariadb/getopt.c
+--- unittest/libmariadb/getopt.c
++++ unittest/libmariadb/getopt.c
 @@ -38,7 +38,7 @@
  #include <config.h>
  #endif
