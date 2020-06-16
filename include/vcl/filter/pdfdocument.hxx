@@ -344,6 +344,9 @@ class VCL_DLLPUBLIC PDFDocument
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;
 
+    /// Signature line in PDF format, to be consumed by the next Sign() invocation.
+    std::vector<sal_Int8> m_aSignatureLine;
+
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
@@ -397,6 +400,7 @@ public:
     //@{
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
+    void SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine);
     /// Sign the read document with xCertificate in the edit buffer.
     bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate,
               const OUString& rDescription, bool bAdES);
