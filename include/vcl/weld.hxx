@@ -1921,8 +1921,6 @@ class VCL_DLLPUBLIC Toolbar : virtual public Widget
 protected:
     Link<const OString&, void> m_aClickHdl;
 
-    void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
-
 public:
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
@@ -1950,6 +1948,7 @@ public:
     virtual vcl::ImageType get_icon_size() const = 0;
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
+    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
 };
 
 class VCL_DLLPUBLIC SizeGroup
