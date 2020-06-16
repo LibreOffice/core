@@ -4138,71 +4138,6 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkBox" id="GroupB17">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom5">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="toolbar_style">icons</property>
-                                <property name="show_arrow">False</property>
-                                <child>
-                                  <object class="GtkToolButton" id="Home-DesignerDialog">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">center</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="action_name">.uno:DesignerDialog</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom102">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="halign">center</property>
-                                <property name="toolbar_style">icons</property>
-                                <property name="show_arrow">False</property>
-                                <child>
-                                  <object class="GtkToolButton" id="Home-StandardStyle">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles</property>
-                                    <property name="icon_name">cmd/sc_defaultcharstyle.png</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
                         <style>
                           <class name="priority-5"/>
                         </style>
@@ -4226,34 +4161,22 @@
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkBox" id="GroupB85">
+                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom127">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="can_focus">True</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom127">
+                                  <object class="GtkToolButton" id="Home-StylesPreview">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="toolbar_style">icons</property>
-                                    <property name="show_arrow">False</property>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-StyleApply1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="action_name">.uno:StyleApply</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="action_name">.uno:StylesPreview</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="homogeneous">True</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4261,131 +4184,6 @@
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="VclOptionalBox" id="StyleParagraphSection2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="valign">center</property>
-                                <property name="vexpand">True</property>
-                                <child>
-                                  <object class="GtkSeparator" id="separator69">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="margin_top">5</property>
-                                    <property name="margin_bottom">5</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="padding">5</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom134">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="vexpand">True</property>
-                                    <property name="toolbar_style">icons</property>
-                                    <property name="show_arrow">False</property>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-TitleStyle1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles</property>
-                                        <property name="icon_name">cmd/sc_titleparastyle.png</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-H1Style2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</property>
-                                        <property name="icon_name">cmd/sc_heading1parastyle.png</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-H2Style2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</property>
-                                        <property name="icon_name">cmd/sc_heading2parastyle.png</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-H3Style2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</property>
-                                        <property name="icon_name">cmd/sc_heading3parastyle.png</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkToolButton" id="Home-H4Style2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</property>
-                                        <property name="icon_name">cmd/sc_heading4parastyle.png</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSeparator" id="separator70">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="margin_top">5</property>
-                                    <property name="margin_bottom">5</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="padding">5</property>
-                                    <property name="position">5</property>
-                                  </packing>
-                                </child>
-                                <style>
-                                  <class name="priority-3"/>
-                                </style>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
