@@ -16,9 +16,10 @@
 #include <vcl/outdev.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmloff/odffields.hxx>
-
+#include <com/sun/star/text/XTextField.hpp>
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
+#include <officecfg/Office/Writer.hxx>
 
 namespace writerfilter::dmapper
 {
@@ -77,19 +78,50 @@ SdtHelper::~SdtHelper() = default;
 void SdtHelper::createDropDownControl()
 {
     assert(m_bInsideDropDownControl);
-    OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
-    uno::Reference<awt::XControlModel> xControlModel(
-        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.ComboBox"),
-        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
-    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
-    xPropertySet->setPropertyValue("StringItemList",
-                                   uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
 
-    createControlShape(
-        lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
-        xControlModel, uno::Sequence<beans::PropertyValue>());
+    const bool bDropDown
+        = officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::get();
+    const OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
+
+    if (bDropDown)
+    {
+        // create field
+        uno::Reference<css::text::XTextField> xControlModel(
+            m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.TextField.DropDown"),
+            uno::UNO_QUERY);
+
+        // set properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("SelectedItem", uno::makeAny(aDefaultText));
+        xPropertySet->setPropertyValue(
+            "Items", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
+
+        // add it into document
+        m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
+
+        m_bHasElements = true;
+    }
+    else
+    {
+        // create control
+        uno::Reference<awt::XControlModel> xControlModel(
+            m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.ComboBox"),
+            uno::UNO_QUERY);
+
+        // set properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
+        xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
+        xPropertySet->setPropertyValue(
+            "StringItemList", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
+
+        // add it into document
+        createControlShape(
+            lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
+            xControlModel, uno::Sequence<beans::PropertyValue>());
+    }
+
+    // clean up
     m_aDropDownItems.clear();
     m_bInsideDropDownControl = false;
 }
