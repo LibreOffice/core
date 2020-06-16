@@ -3078,7 +3078,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         pGrandparentOutDev->ReMirror( aRect );
 
     // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795
-    StartPopupMode( aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::AllMouseButtonClose );
+    StartPopupMode( aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement | FloatWinPopupFlags::AllMouseButtonClose );
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         mpImplLB->ShowProminentEntry( nPos );
