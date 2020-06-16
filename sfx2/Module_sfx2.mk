@@ -55,4 +55,8 @@ $(eval $(call gb_Module_add_screenshot_targets,sfx2,\
     CppunitTest_sfx2_dialogs_test \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,sfx2,\
+    UITest_sfx2_doc \
+))
+
 # vim: set noet sw=4 ts=4:
