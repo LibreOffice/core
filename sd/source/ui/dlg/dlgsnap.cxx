@@ -81,9 +81,11 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
             auto const n4 = msb->convert_value_to(n3, FieldUnit::NONE);
             return n4;
         };
-    m_xMtrFldX->set_range(map(m_xMtrFldX, aLeftTop.X()), map(m_xMtrFldX, aRightBottom.X()),
+    m_xMtrFldX->set_range(map(m_xMtrFldX, sal_Int32(aLeftTop.X() / aUIScale)),
+                          map(m_xMtrFldX, sal_Int32(aRightBottom.X() / aUIScale)),
                           FieldUnit::NONE);
-    m_xMtrFldY->set_range(map(m_xMtrFldY, aLeftTop.Y()), map(m_xMtrFldY, aRightBottom.Y()),
+    m_xMtrFldY->set_range(map(m_xMtrFldY, sal_Int32(aLeftTop.Y() / aUIScale)),
+                          map(m_xMtrFldY, sal_Int32(aRightBottom.Y() / aUIScale)),
                           FieldUnit::NONE);
 
     // set values
