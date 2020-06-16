@@ -262,6 +262,13 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	-liconv \
 )
 endif
+$(call gb_LinkTarget_use_system_win32_libs,$(1),\
+	ws2_32 \
+	advapi32 \
+	kernel32 \
+	shlwapi \
+	crypt32 \
+)
 
 endef
 define gb_ExternalProject__use_mariadb-connector-c
