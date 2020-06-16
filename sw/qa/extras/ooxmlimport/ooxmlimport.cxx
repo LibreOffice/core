@@ -1367,8 +1367,8 @@ DECLARE_OOXMLIMPORT_TEST(testTdf133448, "tdf133448.docx")
     CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
 
     //Without the fix in place, the graphic's size is 0x0
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(837), aSizePixel.Width);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(598), aSizePixel.Height);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), aSizePixel.Width);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), aSizePixel.Height);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
