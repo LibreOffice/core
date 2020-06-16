@@ -22,7 +22,12 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
+#include <tools/stream.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <comphelper/base64.hxx>
+#include <vcl/virdev.hxx>
 #include <set>
+#include <boost/property_tree/json_parser.hpp>
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window,
                                    public vcl::IContext
@@ -785,6 +790,26 @@ public:
     void SetQueryTooltipHdl(const Link<tools::Rectangle&, OUString>& rLink)
     {
         m_aQueryTooltipHdl = rLink;
+    }
+    boost::property_tree::ptree DumpAsPropertyTree() override
+    {
+        boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+        aTree.put("type", "drawingarea");
+        ScopedVclPtrInstance<VirtualDevice> pDevice;
+        pDevice->SetOutputSize( GetSizePixel() );
+        tools::Rectangle aRect(Point(0,0), GetSizePixel());
+        Paint(*pDevice, aRect);
+        BitmapEx aImage = pDevice->GetBitmapEx( Point(0,0), GetSizePixel() );
+        SvMemoryStream aOStm(65535, 65535);
+
+        if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
+        {
+            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            OUStringBuffer aBuffer("data:image/png;base64,");
+            ::comphelper::Base64::encode(aBuffer, aSeq);
+            aTree.put("image", aBuffer.makeStringAndClear());
+        }
+        return aTree;
     }
 };
 
