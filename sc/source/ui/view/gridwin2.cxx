@@ -486,7 +486,6 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
             else
                 rControl.addMember(rMem.getDisplayName(), rMem.mbVisible);
         }
-        rControl.initMembers();
     }
 
     if (bDimOrientNotPage)
@@ -526,6 +525,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
             rSubMenu.resizeToFitMenuItems();
         }
     }
+
+    rControl.initMembers();
 
     tools::Rectangle aCellRect(rScrPos, rScrSize);
 

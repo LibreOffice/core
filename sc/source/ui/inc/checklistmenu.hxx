@@ -283,7 +283,8 @@ private:
 
     Config maConfig;
     int mnWidthHint; /// min width hint
-    Size maWndSize;  /// whole window size.
+    int mnCheckWidthReq; /// matching width request for mxChecks
+    int mnWndWidth;  /// whole window width.
     Size maMenuSize; /// size of all menu items combined.
     TriState mePrevToggleAllState;
 

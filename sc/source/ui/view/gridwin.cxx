@@ -719,7 +719,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         else
             rControl.addMember(aVal, bSelected);
     }
-    rControl.initMembers();
 
     // Populate the menu.
     rControl.addMenuItem(
@@ -738,6 +737,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
+
+    rControl.initMembers();
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
