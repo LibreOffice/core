@@ -3679,6 +3679,19 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                             bContinueWithLOKWindow = true;
                     }
                 }
+                else if (sControlType == "drawingarea")
+                {
+                    auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
+                    if (pArea)
+                    {
+                        if (sAction == "click")
+                        {
+                            pArea->click(Point(10, 10));
+                        }
+                        else
+                            bContinueWithLOKWindow = true;
+                    }
+                }
                 else if (sControlType == "spinfield")
                 {
                     auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
