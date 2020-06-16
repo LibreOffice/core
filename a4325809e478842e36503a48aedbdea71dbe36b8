@@ -16,6 +16,24 @@
       "revId": "a4325809e478842e36503a48aedbdea71dbe36b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb3cf7fb_6eb37367",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-06-16T19:21:36Z",
+      "side": 1,
+      "message": "no, because freeze disconnects the model from the view so the model can be filled without noisily updating the view about each exciting insertion, and the state for expand/collapse belongs to the view so the model has to be connected to the view for the expand/collapse to work (in GtkTreeView as far as I know)",
+      "parentUuid": "c74f6b92_c25b735c",
+      "revId": "a4325809e478842e36503a48aedbdea71dbe36b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
