@@ -19,23 +19,33 @@
 
 #pragma once
 
-#include <svx/gallerybinaryengineentry.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
 
-class GalleryBinaryEngineEntry;
-
-class SVXCORE_DLLPUBLIC GalleryBinaryEngine
+class SVXCORE_DLLPUBLIC GalleryBinaryEngineEntry
 {
 private:
-    GalleryBinaryEngineEntry* mpGalleryBinaryEngineEntry;
+    INetURLObject aThmURL;
+    INetURLObject aSdgURL;
+    INetURLObject aSdvURL;
+    INetURLObject aStrURL;
 
 public:
-    GalleryBinaryEngine();
-    GalleryBinaryEngineEntry* getGalleryBinaryEngineEntry() const
-    {
-        return mpGalleryBinaryEngineEntry;
-    };
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
+    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
+
+    OUString ReadStrFromIni(const OUString& aKeyName);
+
+    void SetThmExtension(INetURLObject aURL);
+    void SetSdgExtension(INetURLObject aURL);
+    void SetSdvExtension(INetURLObject aURL);
+    void SetStrExtension(INetURLObject aURL);
+
+    const INetURLObject& GetThmURL() const { return aThmURL; }
+    const INetURLObject& GetSdgURL() const { return aSdgURL; }
+    const INetURLObject& GetSdvURL() const { return aSdvURL; }
+    const INetURLObject& GetStrURL() const { return aStrURL; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

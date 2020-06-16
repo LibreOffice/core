@@ -52,10 +52,10 @@ public:
 
     const OUString&         GetThemeName() const { return aName; }
 
-    const INetURLObject&    GetThmURL() const { return maGalleryBinaryEngine.GetThmURL(); }
-    const INetURLObject&    GetSdgURL() const { return maGalleryBinaryEngine.GetSdgURL(); }
-    const INetURLObject&    GetSdvURL() const { return maGalleryBinaryEngine.GetSdvURL(); }
-    const INetURLObject&    GetStrURL() const { return maGalleryBinaryEngine.GetStrURL(); }
+    const INetURLObject&    GetThmURL() const { return maGalleryBinaryEngine.getGalleryBinaryEngineEntry()->GetThmURL(); }
+    const INetURLObject&    GetSdgURL() const { return maGalleryBinaryEngine.getGalleryBinaryEngineEntry()->GetSdgURL(); }
+    const INetURLObject&    GetSdvURL() const { return maGalleryBinaryEngine.getGalleryBinaryEngineEntry()->GetSdvURL(); }
+    const INetURLObject&    GetStrURL() const { return maGalleryBinaryEngine.getGalleryBinaryEngineEntry()->GetStrURL(); }
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;
