@@ -460,7 +460,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mxBtnCancel(mxBuilder->weld_button("cancel"))
     , mxDropDown(mxMenu->create_virtual_device())
     , mnWidthHint(nWidth)
-    , maWndSize()
+    , mnCheckWidthReq(-1)
+    , mnWndWidth(0)
     , mePrevToggleAllState(TRISTATE_INDET)
     , mnSelectedMenu(MENU_NOT_SELECTED)
     , mpDoc(pDoc)
@@ -470,6 +471,9 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
+    if (mnWidthHint != -1)
+        mnCheckWidthReq = mnWidthHint - mxFrame->get_border_width() * 2 - 4;
+
     // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
     // popup isn't a true dialog
     mxButtonBox->sort_native_button_order();
@@ -521,9 +525,10 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
     , mxParentMenu(pParentMenu)
     , mxBox(get("box"))
-    , mxControl(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, nWidth))
     , mnMenuStackLevel(nMenuStackLevel)
 {
+    setDeferredProperties();
+    mxControl.reset(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, nWidth));
     SetBackground(Application::GetSettings().GetStyleSettings().GetMenuColor());
     set_id("check_list_menu");
 }
@@ -576,18 +581,14 @@ void ScCheckListMenuControl::packWindow()
     mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
     mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
 
-    mxChecks->set_size_request(-1, mxChecks->get_height_rows(9));
+    mxChecks->set_size_request(mnCheckWidthReq, mxChecks->get_height_rows(9));
+
     mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
     mnSelectedMenu = 0;
     mxMenu->set_cursor(mnSelectedMenu);
     mxMenu->unselect_all();
 
-    maWndSize = mxContainer->get_preferred_size();
-    if (maWndSize.Width() < mnWidthHint)
-    {
-        mxContainer->set_size_request(mnWidthHint, -1);
-        maWndSize.setWidth(mnWidthHint);
-    }
+    mnWndWidth = mxContainer->get_preferred_size().Width() + mxFrame->get_border_width() * 2 + 4;
 }
 
 void ScCheckListMenuControl::setAllMemberState(bool bSet)
@@ -1291,12 +1292,12 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
         long nLeft = aRect.Left() - aRect.GetWidth();
         aRect.SetLeft( nLeft );
     }
-    else if (maWndSize.Width() < aRect.GetWidth())
+    else if (mnWndWidth < aRect.GetWidth())
     {
         // Target rectangle (i.e. cell width) is wider than the window.
         // Simulate right-aligned launch by modifying the target rectangle
         // size.
-        long nDiff = aRect.GetWidth() - maWndSize.Width();
+        long nDiff = aRect.GetWidth() - mnWndWidth;
         aRect.AdjustLeft(nDiff );
     }
 
