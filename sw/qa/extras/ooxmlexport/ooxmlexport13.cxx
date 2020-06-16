@@ -560,7 +560,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (!mbExported) // importing the ODT, an input field
+    if (!mbExported || getShapes() == 0) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1032,11 +1032,28 @@ DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
 DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
 {
     // Combobox without an item list lost during import
-    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
+    if (getShapes() > 0)
+    {
+        uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
+    }
+    else
+    {
+        // ComboBox was imported as DropDown text field
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
+
+        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aItems.getLength());
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")

@@ -5899,6 +5899,18 @@
             <value>true</value>
           </prop>
         </group>
+        <group oor:name="DOCX">
+          <info>
+            <desc>Contains settings for importing DOCX.</desc>
+          </info>
+          <prop oor:name="ImportComboBoxAsDropDown" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies whether ComboBox form control should be imported as DropDown text field.</desc>
+              <label>Import ComboBox as DropDown</label>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
       </group>
     </group>
     <group oor:name="Numbering">
