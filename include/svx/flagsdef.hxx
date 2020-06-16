@@ -66,7 +66,6 @@ namespace o3tl
 // flags for SvxCharNamePage
 #define SVX_RELATIVE_MODE       0x02
 // flags for SvxCharEffectsPage
-#define SVX_ENABLE_FLASH    0x04
 #define SVX_ENABLE_CHAR_TRANSPARENCY 0x08
 
 

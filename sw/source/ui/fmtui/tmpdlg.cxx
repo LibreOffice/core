@@ -282,7 +282,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     else if (rId == "fonteffect")
     {
-        sal_uInt32 nFlags = SVX_ENABLE_FLASH | SVX_ENABLE_CHAR_TRANSPARENCY;
+        sal_uInt32 nFlags = SVX_ENABLE_CHAR_TRANSPARENCY;
         if( SfxStyleFamily::Char == nType )
             nFlags = nFlags|SVX_PREVIEW_CHARACTER;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
