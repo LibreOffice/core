@@ -25,27 +25,8 @@
 class SVXCORE_DLLPUBLIC GalleryBinaryEngine
 {
 private:
-    INetURLObject aThmURL;
-    INetURLObject aSdgURL;
-    INetURLObject aSdvURL;
-    INetURLObject aStrURL;
-
-    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
-
 public:
-    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
-
-    OUString ReadStrFromIni(const OUString& aKeyName);
-
-    void SetThmExtension(INetURLObject aURL);
-    void SetSdgExtension(INetURLObject aURL);
-    void SetSdvExtension(INetURLObject aURL);
-    void SetStrExtension(INetURLObject aURL);
-
-    const INetURLObject& GetThmURL() const { return aThmURL; }
-    const INetURLObject& GetSdgURL() const { return aSdgURL; }
-    const INetURLObject& GetSdvURL() const { return aSdvURL; }
-    const INetURLObject& GetStrURL() const { return aStrURL; }
+    GalleryBinaryEngine();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
