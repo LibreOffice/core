@@ -714,17 +714,38 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx"
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "Manolo");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "manolo");
 
     // check imported control
-    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
+    if (getShapes() > 0)
+    {
+        uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
 
-    uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+    }
+    else
+    {
+        // ComboBox was imported as DropDown text field
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
+
+        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), getProperty<OUString>(aField, "SelectedItem"));
+
+        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+    }
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCheckBoxControl, "checkbox-control.docx")
