@@ -146,10 +146,11 @@ try
 	(* A start of unchanged LO must take place so Gatekeeper will verify
 	   the signature prior to installing the languagepack
 	*)
-	if application choice is not running then
+	set apppath to POSIX path of choice
+	if application apppath is not running then
 		-- this will flash the startcenter once...
-		tell application choice to activate
-		tell application choice to quit
+		tell application apppath to activate
+		tell application apppath to quit
 	end if
 	do shell script tarCommand
 	
