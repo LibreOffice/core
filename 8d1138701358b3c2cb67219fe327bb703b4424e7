@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0d8884e_861153b5",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-16T07:46:19Z",
+      "side": 1,
+      "message": "Prefix used mp because it\u0027s a pointer.",
+      "range": {
+        "startLine": 31,
+        "startChar": 30,
+        "endLine": 31,
+        "endChar": 56
+      },
+      "revId": "8d1138701358b3c2cb67219fe327bb703b4424e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
