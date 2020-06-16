@@ -16,6 +16,24 @@
       "revId": "153d5b46d888e6b1148a85855b650bdf33c240ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60774f4_3792f453",
+        "filename": "sw/source/uibase/uitest/uiobject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-16T18:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d6f4e4b_ac242852",
+      "revId": "153d5b46d888e6b1148a85855b650bdf33c240ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
