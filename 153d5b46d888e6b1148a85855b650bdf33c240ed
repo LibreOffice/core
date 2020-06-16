@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d6f4e4b_ac242852",
+        "filename": "sw/source/uibase/uitest/uiobject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-16T07:06:15Z",
+      "side": 1,
+      "message": "Nit: we usually go with the \"x\" prefix for some kind of smart pointer, we use \"p\" for raw pointers.",
+      "revId": "153d5b46d888e6b1148a85855b650bdf33c240ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
