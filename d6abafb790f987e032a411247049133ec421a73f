@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aae6c5e_98873b81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-16T06:57:47Z",
+      "side": 1,
+      "message": "What is the rationale for these renamings?",
+      "revId": "d6abafb790f987e032a411247049133ec421a73f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "996cbec0_7edd757a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-16T06:57:47Z",
+      "side": 1,
+      "message": "If these lines reference other commits in the core repo, it is probably more useful to give those commits\u0027 SHAs (and ideally also their commit message summary lines, for context) rather than Gerrit Change-Ids.",
+      "revId": "d6abafb790f987e032a411247049133ec421a73f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c2ab24e_716c48b5",
+        "filename": "extras/Package_gallmytheme.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-16T06:57:47Z",
+      "side": 1,
+      "message": "sg30.sdv and sg30.thm had been installed to presets \"since forever\", while all the others have only been added to this list recently.  Should sg30.sdv and sg30.thm not continue to be installed to presets rather than share?",
+      "revId": "d6abafb790f987e032a411247049133ec421a73f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
