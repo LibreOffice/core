@@ -1180,6 +1180,7 @@ size_t ScCheckListMenuControl::initMembers()
 
     if (!mxChecks->n_children() && !mbHasDates)
     {
+        std::vector<int> aFixedWidths { mnCheckWidthReq };
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
@@ -1188,7 +1189,7 @@ size_t ScCheckListMenuControl::initMembers()
             insertMember(*mxChecks, rIter, maMembers[i]);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
-        });
+        }, mnCheckWidthReq != -1 ? &aFixedWidths : nullptr);
     }
     else
     {
