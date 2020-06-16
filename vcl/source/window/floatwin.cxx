@@ -288,15 +288,33 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
     {
         nArrangeAry[0]  = FloatWinPopupFlags::Up;
         nArrangeAry[1]  = FloatWinPopupFlags::Down;
-        nArrangeAry[2]  = FloatWinPopupFlags::Up;
-        nArrangeAttempts = 3;
+        if (nFlags & FloatWinPopupFlags::NoHorzPlacement)
+        {
+            nArrangeAry[2]  = FloatWinPopupFlags::Up;
+            nArrangeAttempts = 3;
+        }
+        else
+        {
+            nArrangeAry[2]  = FloatWinPopupFlags::Right;
+            nArrangeAry[3]  = FloatWinPopupFlags::Left;
+            nArrangeAry[4]  = FloatWinPopupFlags::Up;
+        }
     }
     else
     {
         nArrangeAry[0]  = FloatWinPopupFlags::Down;
         nArrangeAry[1]  = FloatWinPopupFlags::Up;
-        nArrangeAry[2]  = FloatWinPopupFlags::Down;
-        nArrangeAttempts = 3;
+        if (nFlags & FloatWinPopupFlags::NoHorzPlacement)
+        {
+            nArrangeAry[2]  = FloatWinPopupFlags::Down;
+            nArrangeAttempts = 3;
+        }
+        else
+        {
+            nArrangeAry[2]  = FloatWinPopupFlags::Right;
+            nArrangeAry[3]  = FloatWinPopupFlags::Left;
+            nArrangeAry[4]  = FloatWinPopupFlags::Down;
+        }
     }
 
     sal_uInt16 nArrangeIndex = 0;
