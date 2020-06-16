@@ -55,7 +55,7 @@ SearchResultsDlg::~SearchResultsDlg()
     SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
     if (!pSearchDlg)
         return;
-    pSearchDlg->getDialog()->present();
+    pSearchDlg->Present();
 }
 
 namespace

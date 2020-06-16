@@ -255,6 +255,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
                                   "svx/ui/findreplacedialog.ui", "FindReplaceDialog")
     , rBindings(rBind)
+    , m_aPresentIdle("Bring SvxSearchDialog to Foreground")
     , bWriter(false)
     , bSearch(true)
     , bFormat(false)
@@ -312,6 +313,9 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xAllSheetsCB(m_xBuilder->weld_check_button("allsheets"))
     , m_xCalcStrFT(m_xBuilder->weld_label("entirecells"))
 {
+    m_aPresentIdle.SetTimeout(50);
+    m_aPresentIdle.SetInvokeHandler(LINK(this, SvxSearchDialog, PresentTimeoutHdl_Impl));
+
     m_xSearchTmplLB->make_sorted();
     m_xSearchAttrText->hide();
     m_xSearchLabel->show();
@@ -338,6 +342,18 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     Construct_Impl();
 }
 
+IMPL_LINK_NOARG(SvxSearchDialog, PresentTimeoutHdl_Impl, Timer*, void)
+{
+    getDialog()->present();
+}
+
+void SvxSearchDialog::Present()
+{
+    PresentTimeoutHdl_Impl(nullptr);
+    // tdf#133807 try again in a short timeout
+    m_aPresentIdle.Start();
+}
+
 void SvxSearchDialog::ChildWinDispose()
 {
     rBindings.EnterRegistrations();
@@ -350,6 +366,7 @@ void SvxSearchDialog::ChildWinDispose()
 
 SvxSearchDialog::~SvxSearchDialog()
 {
+    m_aPresentIdle.Stop();
 }
 
 void SvxSearchDialog::Construct_Impl()
