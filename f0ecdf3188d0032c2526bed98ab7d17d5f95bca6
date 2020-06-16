@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7558376_6f348246",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2020-06-16T23:30:54Z",
+      "side": 1,
+      "message": "this is an error",
+      "revId": "f0ecdf3188d0032c2526bed98ab7d17d5f95bca6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
