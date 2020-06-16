@@ -66,7 +66,7 @@ end if
 set found_ooos_all to ""
 -- command might return an error if spotlight is disabled completely
 try
-	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLAPPPRODUCTNAME].app'\"")
+	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]'\"")
 end try
 set found_ooos_all to found_ooos_all & "
 " & chooseMyOwn
