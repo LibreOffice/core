@@ -1161,43 +1161,71 @@ void ScCheckListMenuControl::setHasDates(bool bHasDates)
     mxChecks->set_show_expanders(mbHasDates);
 }
 
+namespace
+{
+    void insertMember(weld::TreeView& rView, weld::TreeIter& rIter, const ScCheckListMember& rMember)
+    {
+        OUString aLabel = rMember.maName;
+        if (aLabel.isEmpty())
+            aLabel = ScResId(STR_EMPTYDATA);
+        rView.set_toggle(rIter, rMember.mbVisible ? TRISTATE_TRUE : TRISTATE_FALSE);
+        rView.set_text(rIter, aLabel, 0);
+    }
+}
+
 size_t ScCheckListMenuControl::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
-    mxChecks->freeze();
-
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
-    std::vector<std::unique_ptr<weld::TreeIter>> aExpandRows;
-
-    for (size_t i = 0; i < n; ++i)
+    if (!mxChecks->n_children() && !mbHasDates)
     {
-        if (maMembers[i].mbDate)
-        {
-            CheckEntry(maMembers[i].maName, maMembers[i].mxParent.get(), maMembers[i].mbVisible);
-            // Expand first node of checked dates
-            if (!maMembers[i].mxParent && IsChecked(maMembers[i].maName,  maMembers[i].mxParent.get()))
-            {
-                std::unique_ptr<weld::TreeIter> xDateEntry = FindEntry(nullptr, maMembers[i].maName);
-                if (xDateEntry)
-                    aExpandRows.emplace_back(std::move(xDateEntry));
-            }
-        }
-        else
-        {
-            OUString aLabel = maMembers[i].maName;
-            if (aLabel.isEmpty())
-                aLabel = ScResId(STR_EMPTYDATA);
-
-            mxChecks->append(xEntry.get());
-            mxChecks->set_toggle(*xEntry, maMembers[i].mbVisible ? TRISTATE_TRUE : TRISTATE_FALSE);
-            mxChecks->set_text(*xEntry, aLabel, 0);
-        }
-
-        if (maMembers[i].mbVisible)
-            ++nVisMemCount;
+        // tdf#134038 insert in the fastest order, this might be backwards so only do it for
+        // the !mbHasDates case where no entry depends on another to exist before getting
+        // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
+        mxChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
+            assert(!maMembers[i].mbDate);
+            insertMember(*mxChecks, rIter, maMembers[i]);
+            if (maMembers[i].mbVisible)
+                ++nVisMemCount;
+        });
     }
+    else
+    {
+        mxChecks->freeze();
+
+        std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
+        std::vector<std::unique_ptr<weld::TreeIter>> aExpandRows;
+
+        for (size_t i = 0; i < n; ++i)
+        {
+            if (maMembers[i].mbDate)
+            {
+                CheckEntry(maMembers[i].maName, maMembers[i].mxParent.get(), maMembers[i].mbVisible);
+                // Expand first node of checked dates
+                if (!maMembers[i].mxParent && IsChecked(maMembers[i].maName,  maMembers[i].mxParent.get()))
+                {
+                    std::unique_ptr<weld::TreeIter> xDateEntry = FindEntry(nullptr, maMembers[i].maName);
+                    if (xDateEntry)
+                        aExpandRows.emplace_back(std::move(xDateEntry));
+                }
+            }
+            else
+            {
+                mxChecks->append(xEntry.get());
+                insertMember(*mxChecks, *xEntry, maMembers[i]);
+            }
+
+            if (maMembers[i].mbVisible)
+                ++nVisMemCount;
+        }
+
+        mxChecks->thaw();
+
+        for (auto& rRow : aExpandRows)
+            mxChecks->expand_row(*rRow);
+    }
+
     if (nVisMemCount == n)
     {
         // all members visible
@@ -1215,11 +1243,6 @@ size_t ScCheckListMenuControl::initMembers()
         mxChkToggleAll->set_state(TRISTATE_INDET);
         mePrevToggleAllState = TRISTATE_INDET;
     }
-
-    mxChecks->thaw();
-
-    for (auto& rRow : aExpandRows)
-        mxChecks->expand_row(*rRow);
 
     if (nVisMemCount)
         mxChecks->select(0);
