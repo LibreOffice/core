@@ -1581,16 +1581,10 @@ void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const &
         return;
 
     // If it does not fit inside, let's put it outside
-    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget,m_pShapeFactory);
-    auto eAlignment = LABEL_ALIGN_CENTER;
-    awt::Point aScreenPosition2D(
-    aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, css::chart::DataLabelPlacement::OUTSIDE
-    , rShapeParam.mfUnitCircleStartAngleDegree, rShapeParam.mfUnitCircleWidthAngleDegree
-    , rShapeParam.mfUnitCircleInnerRadius, rShapeParam.mfUnitCircleOuterRadius, rShapeParam.mfLogicZ+0.5, 0 ));
+    awt::Point aOldPos(rPieLabelInfo.xLabelGroupShape->getPosition());
     basegfx::B2IVector aTranslationVector = rPieLabelInfo.aFirstPosition - rPieLabelInfo.aOrigin;
-    aTranslationVector.setLength(150);
-    aScreenPosition2D.X += aTranslationVector.getX();
-    aScreenPosition2D.Y += aTranslationVector.getY();
+    awt::Point aScreenPosition2D(aOldPos.X + aTranslationVector.getX(),
+        aOldPos.Y + aTranslationVector.getY());
 
     double fAngleDegree = rShapeParam.mfUnitCircleStartAngleDegree + rShapeParam.mfUnitCircleWidthAngleDegree / 2.0;
     ::basegfx::B2IRectangle aBb(lcl_getRect(rPieLabelInfo.xLabelGroupShape));
@@ -1602,29 +1596,34 @@ void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const &
     while (fAngleDegree < 0.0)
         fAngleDegree += 360.0;
 
-    if( fAngleDegree <= 22.5 || fAngleDegree >= 337.5 )
-        aScreenPosition2D.Y -= fLabelHeight / 2;
-    else if( fAngleDegree < 67.5 )
-        aScreenPosition2D.Y -= fLabelHeight;
-    else if( fAngleDegree < 112.5 )
+    if (fAngleDegree <= 22.5 || fAngleDegree >= 337.5)
+        aScreenPosition2D.X += fLabelWidth / 2;
+    else if (fAngleDegree < 67.5)
     {
-        aScreenPosition2D.X -= fLabelWidth / 2;
-        aScreenPosition2D.Y -= fLabelHeight;
+        aScreenPosition2D.X += fLabelWidth / 2;
+        aScreenPosition2D.Y -= fLabelHeight / 2;
     }
+    else if (fAngleDegree < 112.5)
+        aScreenPosition2D.Y -= fLabelHeight / 2;
     else if (fAngleDegree <= 157.5)
     {
-        aScreenPosition2D.X -= fLabelWidth;
-        aScreenPosition2D.Y -= fLabelHeight;
-    }
-    else if (fAngleDegree <= 202.5)
-    {
-        aScreenPosition2D.X -= fLabelWidth;
+        aScreenPosition2D.X -= fLabelWidth / 2;
         aScreenPosition2D.Y -= fLabelHeight / 2;
     }
-    else if (fAngleDegree < 247.5)
-        aScreenPosition2D.X -= fLabelWidth;
-    else if (fAngleDegree < 292.5)
+    else if (fAngleDegree <= 202.5)
         aScreenPosition2D.X -= fLabelWidth / 2;
+    else if (fAngleDegree < 247.5)
+    {
+        aScreenPosition2D.X -= fLabelWidth / 2;
+        aScreenPosition2D.Y += fLabelHeight / 2;
+    }
+    else if (fAngleDegree < 292.5)
+        aScreenPosition2D.Y += fLabelHeight / 2;
+    else
+    {
+        aScreenPosition2D.X += fLabelWidth / 2;
+        aScreenPosition2D.Y += fLabelHeight / 2;
+    }
 
     rPieLabelInfo.xLabelGroupShape->setPosition(aScreenPosition2D);
 }
