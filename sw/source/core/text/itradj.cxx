@@ -287,16 +287,31 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     // #i49277#
     const bool bDoNotJustifyLinesWithManualBreak =
         GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
+    bool bDoNotJustifyTab = false;
 
     SwLinePortion *pPos = pCurrent->GetNextPortion();
 
     while( pPos )
     {
-        if ( bDoNotJustifyLinesWithManualBreak &&
+        if ( ( bDoNotJustifyLinesWithManualBreak || bDoNotJustifyTab ) &&
              pPos->IsBreakPortion() && !IsLastBlock() )
         {
            pCurrent->FinishSpaceAdd();
            break;
+        }
+
+        switch ( pPos->GetWhichPor() )
+        {
+            case PortionType::TabCenter :
+            case PortionType::TabRight :
+            case PortionType::TabDecimal :
+                bDoNotJustifyTab = true;
+                break;
+            case PortionType::TabLeft :
+            case PortionType::Break:
+                bDoNotJustifyTab = false;
+                break;
+            default: break;
         }
 
         if ( pPos->InTextGrp() )
