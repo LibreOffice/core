@@ -1179,6 +1179,7 @@ size_t ScCheckListMenuControl::initMembers()
 
     if (!mbHasDates)
     {
+        std::vector<int> aFixedWidths { mnCheckWidthReq };
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted
@@ -1187,7 +1188,7 @@ size_t ScCheckListMenuControl::initMembers()
             insertMember(*mxChecks, rIter, maMembers[i]);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
-        });
+        }, mnCheckWidthReq != -1 ? &aFixedWidths : nullptr);
     }
     else
     {
