@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48d9e583_ebc72d11",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-16T07:06:58Z",
+      "side": 1,
+      "message": "I supposed that just putting\n\n    p-\u003eResetFlag(SbxFlagBits::Fixed); // make it Variant\n\non this line (without modifying line 2828) would be more efficient - but this also does the right thing.",
+      "range": {
+        "startLine": 2831,
+        "startChar": 4,
+        "endLine": 2831,
+        "endChar": 24
+      },
+      "revId": "1553ce1b1d1298ee9c3b38185752c504210e4520",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
