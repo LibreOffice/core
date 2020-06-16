@@ -35,8 +35,6 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 {
     std::shared_ptr<SalBitmap> xImpBmp = rBitmap.ImplGetSalBitmap();
 
-    assert( xImpBmp && "Forbidden Access to empty bitmap!" );
-
     if( !xImpBmp )
         return;
 
