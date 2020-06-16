@@ -11158,6 +11158,11 @@ public:
     {
         return *m_xDevice;
     }
+
+    void click(Point /*pos*/) override
+    {
+        //TODO
+    }
 };
 
 #define g_signal_handlers_block_by_data(instance, data) \

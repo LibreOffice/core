@@ -1008,6 +1008,8 @@ public:
     virtual ~SalInstanceDrawingArea() override;
 
     virtual OutputDevice& get_ref_device() override;
+
+    virtual void click(Point pos) override;
 };
 
 #endif

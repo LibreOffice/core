@@ -5421,6 +5421,13 @@ OutputDevice& SalInstanceDrawingArea::get_ref_device()
     return *m_xDrawingArea;
 }
 
+void SalInstanceDrawingArea::click(Point pos)
+{
+    MouseEvent aEvent(pos);
+    m_xDrawingArea->MouseButtonDown(aEvent);
+    m_xDrawingArea->MouseButtonUp(aEvent);
+}
+
 IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
     m_aDrawHdl.Call(aPayload);
