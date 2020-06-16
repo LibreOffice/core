@@ -1289,7 +1289,14 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
         // time, return one "flattened" item set that contains all items from
         // all parents.
         std::unique_ptr<SfxItemSet> pRet;
+
+        bool bModifiedEnabled = rDoc.getIDocumentState().IsEnableSetModified();
+        rDoc.getIDocumentState().SetEnableSetModified(false);
+
         FillStyleSheet(FillPreview, &pRet);
+
+        rDoc.getIDocumentState().SetEnableSetModified(bModifiedEnabled);
+
         assert(pRet);
         return pRet;
     }
