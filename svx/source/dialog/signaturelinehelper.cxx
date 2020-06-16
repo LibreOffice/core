@@ -11,7 +11,6 @@
 
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
