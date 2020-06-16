@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f76e272_305286a7",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-16T08:24:54Z",
+      "side": 1,
+      "message": "Please don\u0027t comment out code; if it\u0027s not needed, it should be removed. We always have commit history to find out what was there previously ;-)",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 2
+      },
+      "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
