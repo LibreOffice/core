@@ -24,7 +24,7 @@
 #include <unordered_map>
 
 #include <osl/conditn.hxx>
-
+#include <osl/mutex.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
