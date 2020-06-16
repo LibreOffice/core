@@ -1160,8 +1160,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-typedef std::vector< ScRangeList > ScMyRangeLists;
-
 class ScUniqueCellFormatsObj final : public cppu::WeakImplHelper<
                             css::container::XIndexAccess,
                             css::container::XEnumerationAccess,
@@ -1170,7 +1168,7 @@ class ScUniqueCellFormatsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*                     pDocShell;
-    ScMyRangeLists                  aRangeLists;
+    std::vector<ScRangeList>        aRangeLists;
 
 public:
                             ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -1202,12 +1200,12 @@ class ScUniqueCellFormatsEnumeration final : public cppu::WeakImplHelper<
                                  public SfxListener
 {
 private:
-    ScMyRangeLists                  aRangeLists;
+    std::vector<ScRangeList>        aRangeLists;
     ScDocShell*                     pDocShell;
     sal_Int32                       nCurrentPosition;
 
 public:
-                            ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const ScMyRangeLists& rRangeLists);
+                            ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const std::vector<ScRangeList>& rRangeLists);
     virtual                 ~ScUniqueCellFormatsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
