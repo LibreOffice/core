@@ -3081,7 +3081,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106234)
     pViewShell->Reformat();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // In justified paragraphs, there is justification between left tabulators and page breaks
+    // In justified paragraphs, there is justification between left tabulators and manual line breaks
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/Special", "nType", "PortionType::Margin");
     assertXPathNoAttribute(pXmlDoc, "/root/page/body/txt[1]/Special", "nWidth");
     // but not after centered, right and decimal tabulators
