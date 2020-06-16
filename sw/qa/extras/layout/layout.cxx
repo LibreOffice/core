@@ -3069,6 +3069,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106234)
+{
+    createDoc("tdf106234.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // In justified paragraphs, there is justification between left tabulators and page breaks
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Special", "nType", "PortionType::Margin");
+    assertXPathNoAttribute(pXmlDoc, "/root/page/body/txt[1]/Special", "nWidth");
+    // but not after centered, right and decimal tabulators
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nType", "PortionType::Margin");
+    // This was a justified line, without nWidth
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/Special", "nWidth", "7881");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287b)
 {
     createDoc("tdf120287b.fodt");
