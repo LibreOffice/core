@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed00c7f3_ab49694d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-06-16T12:20:30Z",
+      "side": 1,
+      "message": "The correct format is tdf#127279",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "83e7bbc42ae49c5e5d2beef7ad734a37d36280fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7292442c_8c4af755",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-06-16T12:20:30Z",
+      "side": 1,
+      "message": "“This will align them”",
+      "range": {
+        "startLine": 540,
+        "startChar": 253,
+        "endLine": 540,
+        "endChar": 270
+      },
+      "revId": "83e7bbc42ae49c5e5d2beef7ad734a37d36280fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e997fb46_cdce9aa0",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-06-16T12:20:30Z",
+      "side": 1,
+      "message": "As a drive-by fix, please change the “s” in “style” to lowercase",
+      "range": {
+        "startLine": 655,
+        "startChar": 129,
+        "endLine": 655,
+        "endChar": 130
+      },
+      "revId": "83e7bbc42ae49c5e5d2beef7ad734a37d36280fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
