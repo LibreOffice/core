@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "613fbcdf_2d54ca22",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1002126
+      },
+      "writtenOn": "2020-06-16T12:26:15Z",
+      "side": 1,
+      "message": "Thanks for the heads up!",
+      "parentUuid": "7292442c_8c4af755",
+      "range": {
+        "startLine": 540,
+        "startChar": 253,
+        "endLine": 540,
+        "endChar": 270
+      },
+      "revId": "83e7bbc42ae49c5e5d2beef7ad734a37d36280fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e997fb46_cdce9aa0",
         "filename": "cui/uiconfig/ui/pageformatpage.ui",
         "patchSetId": 2
