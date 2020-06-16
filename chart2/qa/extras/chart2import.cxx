@@ -2521,7 +2521,7 @@ void Chart2ImportTest::testTdf133376()
     CPPUNIT_ASSERT(xDataPointLabel.is());
     // Check the position of the 3rd data point label, which is out from the pie slice
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1466, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1071, aLabelPosition.X, 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
 }
 
