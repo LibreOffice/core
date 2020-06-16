@@ -1007,4 +1007,59 @@ public:
     virtual void click(Point pos) override;
 };
 
+class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
+{
+private:
+    VclPtr<ToolBox> m_xToolBox;
+    std::map<sal_uInt16, VclPtr<vcl::Window>> m_aFloats;
+    std::map<sal_uInt16, VclPtr<PopupMenu>> m_aMenus;
+
+    DECL_LINK(ClickHdl, ToolBox*, void);
+    DECL_LINK(DropdownClick, ToolBox*, void);
+
+public:
+    SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override;
+
+    virtual bool get_item_sensitive(const OString& rIdent) const override;
+
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override;
+
+    virtual bool get_item_visible(const OString& rIdent) const override;
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override;
+
+    virtual bool get_item_active(const OString& rIdent) const override;
+
+    virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) override;
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override;
+
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override;
+
+    virtual int get_n_items() const override;
+
+    virtual OString get_item_ident(int nIndex) const override;
+
+    virtual void set_item_ident(int nIndex, const OString& rIdent) override;
+
+    virtual void set_item_label(int nIndex, const OUString& rLabel) override;
+
+    virtual OUString get_item_label(const OString& rIdent) const override;
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override;
+
+    virtual void set_item_icon(int nIndex,
+                               const css::uno::Reference<css::graphic::XGraphic>& rIcon) override;
+
+    virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override;
+
+    virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) override;
+
+    virtual vcl::ImageType get_icon_size() const override;
+
+    virtual ~SalInstanceToolbar() override;
+};
+
 #endif
