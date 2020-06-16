@@ -1160,6 +1160,8 @@ public:
     virtual ~SalInstanceDrawingArea() override;
 
     virtual OutputDevice& get_ref_device() override;
+
+    virtual void click(Point pos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

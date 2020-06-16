@@ -666,16 +666,6 @@ private:
         if (!m_aMouseMotionHdl.Call(rMEvt))
             Control::MouseMove(rMEvt);
     }
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override
-    {
-        if (!m_aMousePressHdl.Call(rMEvt))
-            Control::MouseButtonDown(rMEvt);
-    }
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) override
-    {
-        if (!m_aMouseReleaseHdl.Call(rMEvt))
-            Control::MouseButtonUp(rMEvt);
-    }
     virtual void KeyInput(const KeyEvent& rKEvt) override
     {
         if (!m_aKeyPressHdl.Call(rKEvt))
@@ -748,6 +738,16 @@ public:
         , m_nDragAction(0)
     {
         SetBackground();
+    }
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override
+    {
+        if (!m_aMousePressHdl.Call(rMEvt))
+            Control::MouseButtonDown(rMEvt);
+    }
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override
+    {
+        if (!m_aMouseReleaseHdl.Call(rMEvt))
+            Control::MouseButtonUp(rMEvt);
     }
     void SetUITestFactory(FactoryFunction pFactoryFunction, void* pUserData)
     {

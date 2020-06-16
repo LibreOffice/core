@@ -12826,6 +12826,11 @@ public:
     {
         return *m_xDevice;
     }
+
+    void click(Point /*pos*/) override
+    {
+        //TODO
+    }
 };
 
 }
