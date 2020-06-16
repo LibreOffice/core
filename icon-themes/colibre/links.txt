@@ -1957,7 +1957,6 @@ dbaccess/res/jo01.png dbaccess/res/pkey.png
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
 dbaccess/res/lc037.png cmd/lc_dbreportdelete.png
 dbaccess/res/lc038.png cmd/lc_dbreportedit.png
-dbaccess/res/linked_text_table.png cmd/sc_dataimport.png
 dbaccess/res/nu07.png cmd/sc_ok.png
 dbaccess/res/nu08.png cmd/sc_cancel.png
 dbaccess/res/one_left.png cmd/sc_prevrecord.png
@@ -2035,6 +2034,7 @@ res/dir-clos.png svtools/res/folder.png
 res/dir-open.png cmd/sc_open.png
 res/extension_plus_26.png cmd/lc_insertplugin.png
 res/extension_plus_32.png cmd/32/insertplugin.png
+res/fp010.png svtools/res/up_small.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png svtools/res/folder.png
 res/folderop.png cmd/sc_open.png
@@ -2074,7 +2074,6 @@ res/lx03155.png res/lx03125.png
 res/lx03156.png res/odt_32_8.png
 res/lx03158.png res/lx03125.png
 res/lx03160.png res/odg_32_8.png
-res/lx03164.png cmd/32/open.png
 res/lx03165.png cmd/32/save.png
 res/lx03167.png cmd/32/openremote.png
 res/lx03188.png cmd/32/dbviewtables.png
@@ -2309,7 +2308,6 @@ sfx2/res/newex.png res/plus.png
 sfx2/res/plus.png res/plus.png
 sfx2/res/search.png cmd/sc_recsearch.png
 sfx2/res/select.png cmd/sc_ok.png
-sfx2/res/signet.png cmd/sc_signature.png
 sfx2/res/sortascending.png cmd/lc_sortascending.png
 sfx2/res/styfam1.png cmd/sc_charfontname.png
 sfx2/res/styfam2.png cmd/sc_controlcodes.png
@@ -2358,10 +2356,6 @@ svtools/res/info_large.png cmd/lc_alignleft.png
 svtools/res/info_small.png cmd/sc_alignleft.png
 svtools/res/my_docs.png cmd/lc_open.png
 svtools/res/new_doc.png cmd/32/newdoc.png
-svtools/res/preview_large.png cmd/lc_printpreview.png
-svtools/res/preview_small.png cmd/sc_printpreview.png
-svtools/res/prnfont.png cmd/sc_charfontname.png
-svtools/res/samples.png cmd/lc_choosedesign.png
 svtools/res/scalfont.png cmd/sc_scaletext.png
 svtools/res/template.png cmd/32/templatemanager.png
 
@@ -2440,7 +2434,7 @@ svx/res/persp3d.png cmd/sc_extrusiondirectionfloater.png
 svx/res/perspective_16.png cmd/sc_extrusiondirectionfloater.png
 svx/res/reloads.png cmd/sc_reload.png
 svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
-svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
+svx/res/signet_11x16.png xmlsecurity/res/signet_11x16.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
@@ -2554,7 +2548,6 @@ cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 # xmlsecurity
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
-xmlsecurity/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
