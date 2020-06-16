@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9175d10a_1b1c1277",
+        "filename": "vcl/source/control/roadmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-16T10:15:22Z",
+      "side": 1,
+      "message": "That check is redundant - delete is guaranteed to cope with a nullptr",
+      "revId": "5ae44c417012ebb459cb767ebb5fecd3dedc53ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
