@@ -24,52 +24,56 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
-#include <svx/gallerybinaryengine.hxx>
+#include <svx/gallerybinaryengineentry.hxx>
 
 #include <cstdio>
 #include <memory>
 #include <vector>
 
-class GalleryBinaryEngine;
+class GalleryBinaryEngineEntry;
 
 class GalleryThemeEntry
 {
 private:
 
-    GalleryBinaryEngine     maGalleryBinaryEngine;
-    OUString                aName;
-    sal_uInt32              nId;
-    bool                    bReadOnly;
-    bool                    bModified;
-    bool                    bThemeNameFromResource;
+    GalleryBinaryEngineEntry*   mpGalleryBinaryEngineEntry;
+    OUString                    aName;
+    sal_uInt32                  nId;
+    bool                        bReadOnly;
+    bool                        bModified;
+    bool                        bThemeNameFromResource;
 
 public:
-                            GalleryThemeEntry( bool bCreateUniqueURL,
-                                               const INetURLObject& rBaseURL,
-                                               const OUString& rName,
-                                               bool bReadOnly, bool bNewFile,
-                                               sal_uInt32 nId, bool bThemeNameFromResource );
+                                GalleryThemeEntry( bool bCreateUniqueURL,
+                                                   const INetURLObject& rBaseURL,
+                                                   const OUString& rName,
+                                                   bool bReadOnly, bool bNewFile,
+                                                   sal_uInt32 nId, bool bThemeNameFromResource );
 
-    const OUString&         GetThemeName() const { return aName; }
+    GalleryBinaryEngineEntry*   createGalleryBinaryEngineEntry();
 
-    const INetURLObject&    GetThmURL() const { return maGalleryBinaryEngine.GetThmURL(); }
-    const INetURLObject&    GetSdgURL() const { return maGalleryBinaryEngine.GetSdgURL(); }
-    const INetURLObject&    GetSdvURL() const { return maGalleryBinaryEngine.GetSdvURL(); }
-    const INetURLObject&    GetStrURL() const { return maGalleryBinaryEngine.GetStrURL(); }
+    GalleryBinaryEngineEntry*   getGalleryBinaryEngineEntry() const { return mpGalleryBinaryEngineEntry; };
 
-    bool                    IsReadOnly() const { return bReadOnly; }
-    bool                    IsDefault() const;
+    const OUString&             GetThemeName() const { return aName; }
 
-    bool                    IsHidden() const { return aName.match("private://gallery/hidden/"); }
+    const INetURLObject&        GetThmURL() const { return mpGalleryBinaryEngineEntry->GetThmURL(); }
+    const INetURLObject&        GetSdgURL() const { return mpGalleryBinaryEngineEntry->GetSdgURL(); }
+    const INetURLObject&        GetSdvURL() const { return mpGalleryBinaryEngineEntry->GetSdvURL(); }
+    const INetURLObject&        GetStrURL() const { return mpGalleryBinaryEngineEntry->GetStrURL(); }
 
-    bool                    IsModified() const { return bModified; }
-    void                    SetModified( bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
+    bool                        IsReadOnly() const { return bReadOnly; }
+    bool                        IsDefault() const;
 
-    void                    SetName( const OUString& rNewName );
-    bool                    IsNameFromResource() const { return bThemeNameFromResource; }
+    bool                        IsHidden() const { return aName.match("private://gallery/hidden/"); }
 
-    sal_uInt32              GetId() const { return nId; }
-    void                    SetId( sal_uInt32 nNewId, bool bResetThemeName );
+    bool                        IsModified() const { return bModified; }
+    void                        SetModified( bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
+
+    void                        SetName( const OUString& rNewName );
+    bool                        IsNameFromResource() const { return bThemeNameFromResource; }
+
+    sal_uInt32                  GetId() const { return nId; }
+    void                        SetId( sal_uInt32 nNewId, bool bResetThemeName );
 };
 
 class SfxListener;

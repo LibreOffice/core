@@ -17,11 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/gallerybinaryengine.hxx>
-#include <svx/galmisc.hxx>
+#pragma once
 
 #include <tools/urlobj.hxx>
+#include <svx/svxdllapi.h>
 
-GalleryBinaryEngine::GalleryBinaryEngine() {}
+class SVXCORE_DLLPUBLIC GalleryBinaryEngineEntry
+{
+private:
+    INetURLObject aThmURL;
+    INetURLObject aSdgURL;
+    INetURLObject aSdvURL;
+    INetURLObject aStrURL;
+
+public:
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
+    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
+
+    OUString ReadStrFromIni(const OUString& aKeyName);
+
+    void SetThmExtension(INetURLObject aURL);
+    void SetSdgExtension(INetURLObject aURL);
+    void SetSdvExtension(INetURLObject aURL);
+    void SetStrExtension(INetURLObject aURL);
+
+    const INetURLObject& GetThmURL() const { return aThmURL; }
+    const INetURLObject& GetSdgURL() const { return aSdgURL; }
+    const INetURLObject& GetSdvURL() const { return aSdvURL; }
+    const INetURLObject& GetStrURL() const { return aStrURL; }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

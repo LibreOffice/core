@@ -41,7 +41,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
-#include <svx/gallerybinaryengine.hxx>
+#include <svx/gallerybinaryengineentry.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -119,17 +119,19 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if (bCreateUniqueURL)
     {
-        GalleryBinaryEngine::CreateUniqueURL(rBaseURL,aURL);
+        GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
     }
 
-    maGalleryBinaryEngine.SetThmExtension(aURL);
-    maGalleryBinaryEngine.SetSdgExtension(aURL);
-    maGalleryBinaryEngine.SetSdvExtension(aURL);
-    maGalleryBinaryEngine.SetStrExtension(aURL);
+    GalleryBinaryEngineEntry* pGalleryBinaryEngineEntry = createGalleryBinaryEngineEntry();
+
+    pGalleryBinaryEngineEntry->SetThmExtension(aURL);
+    pGalleryBinaryEngineEntry->SetSdgExtension(aURL);
+    pGalleryBinaryEngineEntry->SetSdvExtension(aURL);
+    pGalleryBinaryEngineEntry->SetStrExtension(aURL);
 
     SetModified( _bNewFile );
 
-    aName = maGalleryBinaryEngine.ReadStrFromIni( "name" );
+    aName = pGalleryBinaryEngineEntry->ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -161,6 +163,12 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if( aName.isEmpty() )
         aName = rName;
+}
+
+GalleryBinaryEngineEntry* GalleryThemeEntry::createGalleryBinaryEngineEntry()
+{
+    mpGalleryBinaryEngineEntry = new GalleryBinaryEngineEntry;
+    return mpGalleryBinaryEngineEntry;
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
