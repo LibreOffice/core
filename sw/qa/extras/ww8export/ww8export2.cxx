@@ -469,6 +469,13 @@ DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotati
     CPPUNIT_ASSERT_MESSAGE("Line is taller, not wider", aLine.GetHeight() > aLine.GetWidth());
 }
 
+DECLARE_WW8EXPORT_TEST( testTdf129247, "tdf129247.docx" )
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // Without the fix in place, the checkbox wouldn't be exported
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
 {
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
