@@ -23,6 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include "DropdownBox.hxx"
 #include "PriorityHBox.hxx"
+#include <comphelper/lok.hxx>
 
 namespace
 {
@@ -115,7 +116,7 @@ void PriorityHBox::Resize()
     if (!m_bInitialized && SfxViewFrame::Current())
         Initialize();
 
-    if (!m_bInitialized)
+    if (!m_bInitialized || comphelper::LibreOfficeKit::isActive())
     {
         return VclHBox::Resize();
     }
