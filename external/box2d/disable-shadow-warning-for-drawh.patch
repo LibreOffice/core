@@ -1,0 +1,18 @@
+diff -ur box2d/Box2D/Box2D/Box2D.h box2d_patched/Box2D/Box2D/Box2D.h
+--- box2d/Box2D/Box2D/Box2D.h	2014-04-06 03:43:12.000000000 +0300
++++ box2d_patched/Box2D/Box2D/Box2D.h	2020-06-17 18:44:25.920658966 +0300
+@@ -32,7 +32,14 @@
+ // These include files constitute the main Box2D API
+ 
+ #include <Box2D/Common/b2Settings.h>
++#if defined __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wshadow"
++#endif
+ #include <Box2D/Common/b2Draw.h>
++#if defined __GNUC__
++#pragma GCC diagnostic pop
++#endif
+ #include <Box2D/Common/b2Timer.h>
+ 
+ #include <Box2D/Collision/Shapes/b2CircleShape.h>

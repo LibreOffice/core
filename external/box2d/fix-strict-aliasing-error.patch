@@ -1,0 +1,13 @@
+diff -ru box2d/Box2D/Box2D/Common/b2Math.h box2d_patched/Box2D/Box2D/Common/b2Math.h
+--- box2d/Box2D/Box2D/Common/b2Math.h	2014-04-06 03:43:12.000000000 +0300
++++ box2d_patched/Box2D/Box2D/Common/b2Math.h	2020-06-16 07:37:31.713248714 +0300
+@@ -25,8 +25,7 @@
+ /// This function is used to ensure that a floating point number is not a NaN or infinity.
+ inline bool b2IsValid(float32 x)
+ {
+-	int32 ix = *reinterpret_cast<int32*>(&x);
+-	return (ix & 0x7f800000) != 0x7f800000;
++	return isfinite(x);
+ }
+ 
+ /// This is a approximate yet fast inverse square-root.
