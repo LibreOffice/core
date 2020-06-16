@@ -257,6 +257,13 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mariadb-connector-c \
 )
+$(call gb_LinkTarget_use_system_win32_libs,$(1),\
+	ws2_32 \
+	advapi32 \
+	kernel32 \
+	shlwapi \
+	crypt32 \
+)
 
 endef
 define gb_ExternalProject__use_mariadb-connector-c
