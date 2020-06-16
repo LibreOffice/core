@@ -1225,6 +1225,93 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
                          getProperty<OUString>(getParagraph(4), "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
+{
+    load(DATA_DIRECTORY, "tdf76817.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // save it to DOCX
+    reload("Office Open XML Text", "tdf76817.docx");
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell->Reformat();
+
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                         getProperty<sal_Int32>(getParagraph(2), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1"),
+                         getProperty<OUString>(getParagraph(2), "ListLabelString"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                         getProperty<sal_Int32>(getParagraph(4), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"),
+                         getProperty<OUString>(getParagraph(4), "ListLabelString"));
+
+    // set Heading 2 style of paragraph 2 to Heading 1
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 1")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         getProperty<sal_Int32>(getParagraph(2), "OutlineLevel"));
+    // This was "1 Heading" instead of "2 Heading"
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                         getProperty<sal_Int32>(getParagraph(4), "OutlineLevel"));
+    // This was "2.1 Heading"
+    CPPUNIT_ASSERT_EQUAL(OUString("3.1"),
+                         getProperty<OUString>(getParagraph(4), "ListLabelString"));
+
+    // set Heading 1 style of paragraph 3 to Heading 2
+
+    pWrtShell->Down(/*bSelect=*/false);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         getProperty<sal_Int32>(getParagraph(3), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 2")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues2);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                         getProperty<sal_Int32>(getParagraph(3), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"),
+                         getProperty<OUString>(getParagraph(3), "ListLabelString"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(4), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
+                         getProperty<sal_Int32>(getParagraph(4), "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2.2"),
+                         getProperty<OUString>(getParagraph(4), "ListLabelString"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
 {
     load(DATA_DIRECTORY, "tdf76817.docx");

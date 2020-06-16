@@ -577,9 +577,15 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
                 }
 
-                // first level with custom pStyle
-                if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && pAbsLevel->GetParaStyle( ) )
+                // first level without default outline paragraph style
+                const tools::SvRef< StyleSheetEntry >& aParaStyle = pAbsLevel->GetParaStyle();
+                if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && ( !aParaStyle ||
+                    aParaStyle->sConvertedStyleName.getLength() != RTL_CONSTASCII_LENGTH( "Heading 1" ) ||
+                    !aParaStyle->sConvertedStyleName.startsWith("Heading ") ||
+                    aParaStyle->sConvertedStyleName[ RTL_CONSTASCII_LENGTH( "Heading " ) ] - u'1' != nLevel ) )
+                {
                     m_nDefaultParentLevels = nLevel;
+                }
 
                 nLevel++;
             }
