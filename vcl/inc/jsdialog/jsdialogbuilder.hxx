@@ -19,6 +19,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
 
+class ToolBox;
 class ComboBox;
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
@@ -85,6 +86,8 @@ public:
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
                       bool bTakeOwnership = false) override;
+    std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
+                                                bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -221,6 +224,15 @@ public:
 
     virtual void queue_draw() override;
     virtual void queue_draw_area(int x, int y, int width, int height) override;
+};
+
+class VCL_DLLPUBLIC JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
+{
+public:
+    JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
+              bool bTakeOwnership);
+
+    void signal_clicked(const OString& rIdent) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

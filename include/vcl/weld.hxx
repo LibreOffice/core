@@ -2187,7 +2187,6 @@ protected:
     Link<const OString&, void> m_aClickHdl;
     Link<const OString&, void> m_aToggleMenuHdl;
 
-    void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
     void signal_toggle_menu(const OString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }
 
 public:
@@ -2236,6 +2235,7 @@ public:
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
     void connect_menu_toggled(const Link<const OString&, void>& rLink) { m_aToggleMenuHdl = rLink; }
+    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
 };
 
 class VCL_DLLPUBLIC SizeGroup

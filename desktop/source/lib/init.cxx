@@ -3716,6 +3716,19 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                             bContinueWithLOKWindow = true;
                     }
                 }
+                else if (sControlType == "toolbox")
+                {
+                    auto pToolbar = dynamic_cast<weld::Toolbar*>(pWidget);
+                    if (pToolbar)
+                    {
+                        if (sAction == "click")
+                        {
+                            pToolbar->signal_clicked(OUStringToOString(aMap["data"], RTL_TEXTENCODING_ASCII_US));
+                        }
+                        else
+                            bContinueWithLOKWindow = true;
+                    }
+                }
                 else
                 {
                     bContinueWithLOKWindow = true;
