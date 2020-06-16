@@ -202,6 +202,10 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
 
     std::vector<sal_Int8> aSignatureLineShape;
     GetSignatureLineShape(aSignatureLineShape);
+    if (!aSignatureLineShape.empty())
+    {
+        aDocument.SetSignatureLine(aSignatureLineShape);
+    }
 
     if (!aDocument.Sign(m_xCertificate, m_aDescription, bAdES))
     {

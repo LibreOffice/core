@@ -151,6 +151,11 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
     return m_aEditBuffer.good();
 }
 
+void PDFDocument::SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine)
+{
+    m_aSignatureLine = rSignatureLine;
+}
+
 sal_uInt32 PDFDocument::GetNextSignature()
 {
     sal_uInt32 nRet = 0;
@@ -233,6 +238,8 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
 
 sal_Int32 PDFDocument::WriteAppearanceObject()
 {
+    m_aSignatureLine.clear();
+
     // Write appearance object.
     sal_Int32 nAppearanceId = m_aXRef.size();
     XRefEntry aAppearanceEntry;
