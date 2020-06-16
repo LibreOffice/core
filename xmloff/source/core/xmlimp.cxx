@@ -783,7 +783,8 @@ rName
             sal_uInt16 nPrefix =
                 mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
             SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
-            SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+            SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname '"
+                         << aLocalName << "' expected. '" << xContext->GetLocalName() << "' with impl " << getImplementationName() );
         }
 #endif
 
