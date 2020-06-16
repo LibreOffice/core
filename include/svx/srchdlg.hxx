@@ -25,6 +25,7 @@
 #include <svl/srchdefs.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/timer.hxx>
 #include <memory>
 #include <vector>
 
@@ -132,8 +133,12 @@ public:
 
     void SetSearchLabel(const OUString& rStr);
 
+    // bring this window back to the foreground
+    void Present();
+
 private:
     SfxBindings&    rBindings;
+    Timer           m_aPresentIdle;
     bool            bWriter;
     bool            bSearch;
     bool            bFormat;
@@ -255,6 +260,8 @@ private:
     SVX_DLLPRIVATE bool IsOtherOptionsExpanded() const;
 
     SVX_DLLPRIVATE short executeSubDialog(VclAbstractDialog * dialog);
+
+    DECL_DLLPRIVATE_LINK(PresentTimeoutHdl_Impl, Timer*, void);
 };
 
 #endif
