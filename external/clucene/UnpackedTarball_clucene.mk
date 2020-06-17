@@ -46,6 +46,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-mixes-uptemplate-parameter-msvc-14.patch \
 	external/clucene/patches/ostream-wchar_t.patch \
 	external/clucene/patches/heap-buffer-overflow.patch \
+	external/clucene/patches/c++20.patch \
 ))
 
 ifneq ($(OS),WNT)
