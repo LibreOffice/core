@@ -718,7 +718,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
 
         awt::Point aTextShapePos(xTextShape->getPosition());
-        if( rDataSeries.isLabelCustomPos(nPointIndex) )
+        if( m_bPieLabelsAllowToMove && rDataSeries.isLabelCustomPos(nPointIndex) )
         {
             awt::Point aRelPos = rDataSeries.getLabelPosition(aTextShapePos, nPointIndex);
             if( aRelPos.X != -1 )
