@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "abb2552e_081d212a",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-17T20:08:57Z",
+      "side": 1,
+      "message": "I will update this in the next patch",
+      "parentUuid": "6c5d2087_9522f136",
+      "revId": "3a8d66e91954dbcdbe92e5701073ddfbb0bf0ca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfae0391_ce593b5f",
         "filename": "sw/qa/uitest/writer_tests/comments.py",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "3a8d66e91954dbcdbe92e5701073ddfbb0bf0ca4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a7cb202_903cf015",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-17T20:08:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfae0391_ce593b5f",
+      "revId": "3a8d66e91954dbcdbe92e5701073ddfbb0bf0ca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
