@@ -2114,7 +2114,7 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
     , bFormulaMode(false)
 {
 
-    // Use calculation according to tdf#132338 to align combobox width to width of fontname comboxbox within formatting toolbar;
+    // Use calculation according to tdf#132338 to align combobox width to width of fontname combobox within formatting toolbar;
     // formatting toolbar is placed above formulabar when using multiple toolbars typically
 
     m_xWidget->set_entry_width_chars(1);
