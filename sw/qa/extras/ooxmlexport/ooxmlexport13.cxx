@@ -393,6 +393,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePage
     assertXPath(pDump, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "Last line on page 1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocPtr pDump = parseLayoutDump();
+
+    // There are three tabs with default width
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
 {
     //MS Compatibility flag: SplitPgBreakAndParaMark
