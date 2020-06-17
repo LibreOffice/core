@@ -1588,7 +1588,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             Sequence<sal_Int32> aCoordinateSystemResolution = pVCooSys->getCoordinateSystemResolution( rPageSize, m_aPageResolution );
             pSeriesPlotter->setCoordinateSystemResolution( aCoordinateSystemResolution );
         }
-
+        // Do not allow to move data labels in case of pie or donut chart, yet!
+        pSeriesPlotter->setPieLabelsAllowToMove(!bIsPieOrDonut);
         pSeriesPlotter->createShapes();
         m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
     }
@@ -1627,6 +1628,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, aPlotter.get() );
             if(nDimensionCount==2)
                 aPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
+            // Now we can move data labels in case of pie or donut chart!
+            aPlotter->setPieLabelsAllowToMove(bIsPieOrDonut);
             aPlotter->createShapes();
             m_bPointsWereSkipped = m_bPointsWereSkipped || aPlotter->PointsWereSkipped();
         }
