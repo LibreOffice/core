@@ -45,9 +45,11 @@
 #include <conditio.hxx>
 #include <editutil.hxx>
 #include <listenercontext.hxx>
+#include <scopetools.hxx>
 
 #include <math.h>
 #include <memory>
+#include <list>
 
 #define D_MAX_LONG_  double(0x7fffffff)
 
@@ -591,6 +593,25 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nProgress = 0;
     if (pProgress)
         nProgress = pProgress->GetState();
+
+    // Avoid possible repeated calls to StartListeningFormulaCells() (tdf#132165).
+    std::list< sc::DelayStartListeningFormulaCells > delayStartListening;
+    SCCOL delayStartColumn, delayEndColumn;
+    if(bVertical)
+    {
+        delayStartColumn = std::min( nOStart, nOEnd );
+        delayEndColumn = std::max( nOStart, nOEnd );
+    }
+    else
+    {
+        delayStartColumn = std::min( nIStart, nIEnd );
+        delayEndColumn = std::max( nIStart, nIEnd );
+    }
+    for( SCROW col = delayStartColumn; col <= delayEndColumn; ++col )
+    {
+        if( ScColumn* column = FetchColumn( col ))
+            delayStartListening.emplace_back( *column, true );
+    }
 
     //  execute
 
