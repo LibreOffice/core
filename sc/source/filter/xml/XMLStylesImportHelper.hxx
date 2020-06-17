@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESIMPORTHELPER_HXX
 
-#include <simplerangelist.hxx>
+#include <rangelst.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
 
@@ -66,10 +66,10 @@ public:
 struct ScMyCurrencyStyle
 {
     OUString       sCurrency;
-    std::shared_ptr<ScSimpleRangeList> mpRanges;
+    std::shared_ptr<ScRangeList> mpRanges;
 
     ScMyCurrencyStyle() :
-        mpRanges(std::make_shared<ScSimpleRangeList>())
+        mpRanges(std::make_shared<ScRangeList>())
     {}
 };
 
@@ -85,16 +85,16 @@ typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>  ScMyCurrencyStylesSet;
 
 class ScMyStyleRanges
 {
-    std::shared_ptr<ScSimpleRangeList>     mpTextList;
-    std::shared_ptr<ScSimpleRangeList>     mpNumberList;
-    std::shared_ptr<ScSimpleRangeList>     mpTimeList;
-    std::shared_ptr<ScSimpleRangeList>     mpDateTimeList;
-    std::shared_ptr<ScSimpleRangeList>     mpPercentList;
-    std::shared_ptr<ScSimpleRangeList>     mpLogicalList;
-    std::shared_ptr<ScSimpleRangeList>     mpUndefinedList;
+    std::shared_ptr<ScRangeList>     mpTextList;
+    std::shared_ptr<ScRangeList>     mpNumberList;
+    std::shared_ptr<ScRangeList>     mpTimeList;
+    std::shared_ptr<ScRangeList>     mpDateTimeList;
+    std::shared_ptr<ScRangeList>     mpPercentList;
+    std::shared_ptr<ScRangeList>     mpLogicalList;
+    std::shared_ptr<ScRangeList>     mpUndefinedList;
     std::unique_ptr<ScMyCurrencyStylesSet> pCurrencyList;
 
-    static void SetStylesToRanges(const ::std::list<ScRange>& rList,
+    static void SetStylesToRanges(const ScRangeList& rList,
         const OUString* pStyleName, const sal_Int16 nCellType,
         const OUString* pCurrency, ScXMLImport& rImport);
 public:

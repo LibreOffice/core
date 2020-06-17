@@ -469,13 +469,6 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
         {
             SCSIZE nNeeded = mvData.size() + 2;
             SetDefaultIfNotInit( nNeeded );
-            if ( mvData.capacity() < nNeeded )
-            {
-                size_t nLimit = mvData.capacity() + SC_ATTRARRAY_DELTA;
-                if ( nLimit < nNeeded )
-                    nLimit = nNeeded;
-                mvData.reserve(nLimit);
-            }
 
             ScAddress       aAdrStart( nCol, 0, nTab );
             ScAddress       aAdrEnd  ( nCol, 0, nTab );

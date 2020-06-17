@@ -60,6 +60,7 @@ public:
 
     void            InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize );
     void            InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize );
+    void            InsertCol( SCTAB nTab, SCCOL nColPos );
 
     /** For now this method assumes that nTab1 == nTab2
      * The algorithm will be much more complicated if nTab1 != nTab2
@@ -82,6 +83,8 @@ public:
     void            RemoveAll();
 
     ScRange         Combine() const;
+    // Add new range, and do a partial combine up till one row back
+    void            AddAndPartialCombine(const ScRange&);
 
     bool            empty() const { return maRanges.empty(); }
     size_t          size() const { return maRanges.size(); }
