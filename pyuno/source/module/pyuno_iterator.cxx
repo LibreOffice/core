@@ -111,7 +111,6 @@ PyObject* PyUNO_iterator_next( PyObject *self )
     return nullptr;
 }
 
-
 static PyTypeObject PyUNO_iterator_Type =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
@@ -169,6 +168,16 @@ static PyTypeObject PyUNO_iterator_Type =
     , nullptr
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
+#if PY_VERSION_HEX < 0x03090000
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+    , nullptr // tp_print
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+#endif
 #endif
 #endif
 };
@@ -248,7 +257,6 @@ PyObject* PyUNO_list_iterator_next( PyObject *self )
     return nullptr;
 }
 
-
 static PyTypeObject PyUNO_list_iterator_Type =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
@@ -306,6 +314,16 @@ static PyTypeObject PyUNO_list_iterator_Type =
     , nullptr
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
+#if PY_VERSION_HEX < 0x03090000
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+    , nullptr // tp_print
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+#endif
 #endif
 #endif
 };
