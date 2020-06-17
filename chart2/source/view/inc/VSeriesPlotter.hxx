@@ -241,6 +241,7 @@ public:
     //better performance for big data
     void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
+    void setPieLabelsAllowToMove( bool bIsPieOrDonut ) { m_bPieLabelsAllowToMove = bIsPieOrDonut; };
 
     //return the depth for a logic 1
     double  getTransformedDepth() const;
@@ -422,6 +423,7 @@ protected:
     //better performance for big data
     css::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
+    bool m_bPieLabelsAllowToMove;
 
 private:
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
