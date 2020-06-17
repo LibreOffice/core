@@ -159,6 +159,24 @@
       "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31bb0676_dbe21dc4",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T20:15:05Z",
+      "side": 1,
+      "message": "I agree. I will remove permyriad support for next version of these commits.",
+      "parentUuid": "57ceb495_005f43e3",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
