@@ -557,6 +557,10 @@ protected:
     void            ImplEditEntry( SvTreeListEntry* pEntry );
 
     void            AdjustEntryHeightAndRecalc();
+
+    // true if rPos is over the SvTreeListBox body, i.e. not over a
+    // scrollbar
+    VCL_DLLPRIVATE bool PosOverBody(const Point& rPos) const;
 public:
 
     void            SetNoAutoCurEntry( bool b );
