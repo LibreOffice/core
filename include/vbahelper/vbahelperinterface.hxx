@@ -108,7 +108,7 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceWeakImpl : public Inherited
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > > Base;
 public:
-    InheritedHelperInterfaceWeakImpl< Ifc... >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceWeakImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
 
