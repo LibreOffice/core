@@ -121,15 +121,15 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         GalleryBinaryEngine::CreateUniqueURL(rBaseURL,aURL);
     }
-
-    maGalleryBinaryEngine.SetThmExtension(aURL);
-    maGalleryBinaryEngine.SetSdgExtension(aURL);
-    maGalleryBinaryEngine.SetSdvExtension(aURL);
-    maGalleryBinaryEngine.SetStrExtension(aURL);
+    mpGalleryBinaryEngine = createGalleryBinaryEngine();
+    mpGalleryBinaryEngine->SetThmExtension(aURL);
+    mpGalleryBinaryEngine->SetSdgExtension(aURL);
+    mpGalleryBinaryEngine->SetSdvExtension(aURL);
+    mpGalleryBinaryEngine->SetStrExtension(aURL);
 
     SetModified( _bNewFile );
 
-    aName = maGalleryBinaryEngine.ReadStrFromIni( "name" );
+    aName = mpGalleryBinaryEngine->ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -161,6 +161,12 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if( aName.isEmpty() )
         aName = rName;
+}
+
+std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryBinaryEngine()
+{
+    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>();
+    return pGalleryBinaryEngine;
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)

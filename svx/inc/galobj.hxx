@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svx/galmisc.hxx>
+#include <svx/gallerybinaryengine.hxx>
 
 #define S_THUMB 80
 
@@ -44,6 +45,7 @@ enum GalSoundType
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SgaObject
 {
     friend class GalleryTheme;
+    friend class GalleryBinaryEngine;
 
 private:
 
