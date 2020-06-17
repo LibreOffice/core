@@ -4853,11 +4853,24 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // We have to set the correct PaM for Undo, if this PaM starts in a textnode,
             // the undo operation will try to merge this node after removing the table.
             // If we didn't split a textnode, the PaM should start at the inserted table node
-            if( rPos.nContent.GetIndex() == pDestTextNd->Len() )
+            if (rPos.nContent.GetIndex() == 0)
+            {
+                if (bCanMoveBack)
+                {   // Insertion at the first position of a text node. It will not be split, the table
+                    // will be inserted before the text node.
+                    // See below, before the SetInsertRange function of the undo object will be called,
+                    // the CpyPam would be moved to the next content position. This has to be avoided
+                    // We want to be moved to the table node itself thus we have to set bCanMoveBack
+                    // and to manipulate pCopyPam.
+                    bCanMoveBack = false;
+                    pCopyPam->GetPoint()->nNode--;
+                }
+            }
+            else if( rPos.nContent.GetIndex() == pDestTextNd->Len() )
             {    // Insertion at the last position of a textnode (empty or not)
                 ++aInsPos; // The table will be inserted behind the text node
             }
-            else if( rPos.nContent.GetIndex() )
+            else
             {   // Insertion in the middle of a text node, it has to be split
                 // (and joined from undo)
                 bStartIsTextNode = true;
@@ -4887,16 +4900,6 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     rPos.nNode++;
                     aRg.aEnd--;
                 }
-            }
-            else if( bCanMoveBack )
-            {   // Insertion at the first position of a text node. It will not be split, the table
-                // will be inserted before the text node.
-                // See below, before the SetInsertRange function of the undo object will be called,
-                // the CpyPam would be moved to the next content position. This has to be avoided
-                // We want to be moved to the table node itself thus we have to set bCanMoveBack
-                // and to manipulate pCopyPam.
-                bCanMoveBack = false;
-                pCopyPam->GetPoint()->nNode--;
             }
         }
 
