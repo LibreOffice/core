@@ -86,8 +86,6 @@ private:
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
-    std::unique_ptr<SgaObject>  ImplReadSgaObject( GalleryObject const * pEntry );
-    SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
         if (nPos < aObjectList.size())
