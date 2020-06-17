@@ -22,6 +22,30 @@
       "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67f3e637_23060259",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-06-17T05:38:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure if it is needed or not. Reading the history it seems it was added for a redlining check. It fails on cursor left movement when outline frames are folded and current cursor position is at the beginning of the next heading. It also happens when right cursor movement is made when the cursor is at the end of the folded outline heading text frame. Up and down cursor movement over folded frames do not suffer this.",
+      "parentUuid": "5f76e272_305286a7",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 2
+      },
+      "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
