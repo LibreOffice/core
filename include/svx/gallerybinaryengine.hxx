@@ -21,6 +21,9 @@
 
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/galtheme.hxx>
+
+struct GalleryObject;
 
 class SVXCORE_DLLPUBLIC GalleryBinaryEngine
 {
@@ -46,6 +49,10 @@ public:
     const INetURLObject& GetSdgURL() const { return aSdgURL; }
     const INetURLObject& GetSdvURL() const { return aSdvURL; }
     const INetURLObject& GetStrURL() const { return aStrURL; }
+
+    bool ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
+                            OUString& aDestDir,
+                            ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

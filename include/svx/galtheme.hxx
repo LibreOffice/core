@@ -87,7 +87,6 @@ private:
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
     std::unique_ptr<SgaObject>  ImplReadSgaObject( GalleryObject const * pEntry );
-    SAL_DLLPRIVATE bool         ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
