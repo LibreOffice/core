@@ -23,6 +23,7 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/vcompat.hxx>
 
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 {
@@ -88,7 +89,62 @@ void GalleryBinaryEngine::SetStrExtension(INetURLObject aURL)
     aStrURL = ImplGetURLIgnoreCase(aURL);
 }
 
-bool GalleryBinaryEngine::ImplWriteSgaObject(
+std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
+{
+    std::unique_ptr<SgaObject> pSgaObj;
+
+    if (pEntry)
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            sal_uInt32 nInventor;
+
+            // Check to ensure that the file is a valid SGA file
+            pIStm->Seek(pEntry->nOffset);
+            pIStm->ReadUInt32(nInventor);
+
+            if (nInventor == COMPAT_FORMAT('S', 'G', 'A', '3'))
+            {
+                pIStm->Seek(pEntry->nOffset);
+
+                switch (pEntry->eObjKind)
+                {
+                    case SgaObjKind::Bitmap:
+                        pSgaObj.reset(new SgaObjectBmp());
+                        break;
+                    case SgaObjKind::Animation:
+                        pSgaObj.reset(new SgaObjectAnim());
+                        break;
+                    case SgaObjKind::Inet:
+                        pSgaObj.reset(new SgaObjectINet());
+                        break;
+                    case SgaObjKind::SvDraw:
+                        pSgaObj.reset(new SgaObjectSvDraw());
+                        break;
+                    case SgaObjKind::Sound:
+                        pSgaObj.reset(new SgaObjectSound());
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (pSgaObj)
+                {
+                    ReadSgaObject(*pIStm, *pSgaObj);
+                    pSgaObj->ImplUpdateURL(pEntry->aURL);
+                }
+            }
+        }
+    }
+
+    return pSgaObj;
+}
+
+bool GalleryBinaryEngine::implWriteSgaObject(
     const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry, OUString& aDestDir,
     ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList)
 {
@@ -127,4 +183,42 @@ bool GalleryBinaryEngine::ImplWriteSgaObject(
     }
 
     return bRet;
+}
+
+bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
+{
+    INetURLObject aPathURL(GetThmURL());
+
+    aPathURL.removeSegment();
+    aPathURL.removeFinalSlash();
+
+    DBG_ASSERT(aPathURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
+
+    if (FileExists(aPathURL) || CreateDir(aPathURL))
+    {
+#ifdef UNX
+        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+            StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC));
+#else
+        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+            StreamMode::WRITE | StreamMode::TRUNC));
+#endif
+
+        if (pOStm)
+        {
+            WriteGalleryTheme(*pOStm, rTheme);
+            pOStm.reset();
+            return true;
+        }
+
+        return false;
+    }
+    return true;
+}
+
+SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
+{
+    return rTheme.WriteData(rOut);
 }
