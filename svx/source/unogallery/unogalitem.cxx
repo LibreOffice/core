@@ -22,6 +22,7 @@
 #include "unogaltheme.hxx"
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
+#include <svx/gallery1.hxx>
 #include <svx/fmmodel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
@@ -219,7 +220,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
             if( pGalTheme )
             {
-                std::unique_ptr<SgaObject> pObj(pGalTheme->ImplReadSgaObject( implGetObject() ));
+                std::unique_ptr<SgaObject> pObj(pGalTheme->pThm->getGalleryBinaryEngine()->implReadSgaObject( implGetObject() ));
 
                 if( pObj )
                 {
