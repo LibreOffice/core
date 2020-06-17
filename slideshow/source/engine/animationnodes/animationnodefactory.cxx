@@ -480,7 +480,8 @@ BaseNodeSharedPtr implCreateAnimationNode(
         break;
 
     case animations::AnimationNodeType::ANIMATEMOTION:
-        pCreatedNode = std::make_shared<AnimationPathMotionNode>(
+//        pCreatedNode = std::make_shared<AnimationPathMotionNode>(
+        pCreatedNode = std::make_shared<AnimationSimulatedNode>(
                                 xNode, rParent, rContext );
         break;
 
