@@ -371,6 +371,8 @@ private:
 public:
     void SetStyleToRange(const ScRange& rRange, const OUString* pStyleName,
         const sal_Int16 nCellType, const OUString* pCurrency);
+    void SetStyleToRanges(const ScRangeList& rRanges, const OUString* pStyleName,
+        const sal_Int16 nCellType, const OUString* pCurrency);
     bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
     ScMyStyleNumberFormats* GetStyleNumberFormats();

@@ -95,6 +95,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <cellsuno.hxx>
 
 #include <memory>
 #include <utility>
@@ -1343,6 +1344,51 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleN
     aCellRange.EndColumn = rRange.aEnd.Col();
     aCellRange.EndRow = rRange.aEnd.Row();
     AddStyleRange(aCellRange);
+}
+
+void ScXMLImport::SetStyleToRanges(const ScRangeList& rRanges, const OUString* pStyleName,
+                                  const sal_Int16 nCellType, const OUString* pCurrency)
+{
+    if (!mbImportStyles)
+        return;
+
+    if (sPrevStyleName.isEmpty())
+    {
+        nPrevCellType = nCellType;
+        if (pStyleName)
+            sPrevStyleName = *pStyleName;
+        if (pCurrency)
+            sPrevCurrency = *pCurrency;
+        else if (!sPrevCurrency.isEmpty())
+            sPrevCurrency.clear();
+    }
+    else if ((nCellType != nPrevCellType) ||
+        ((pStyleName && *pStyleName != sPrevStyleName) ||
+        (!pStyleName && !sPrevStyleName.isEmpty())) ||
+        ((pCurrency && *pCurrency != sPrevCurrency) ||
+        (!pCurrency && !sPrevCurrency.isEmpty())))
+    {
+        SetStyleToRanges();
+        nPrevCellType = nCellType;
+        if (pStyleName)
+            sPrevStyleName = *pStyleName;
+        else if(!sPrevStyleName.isEmpty())
+            sPrevStyleName.clear();
+        if (pCurrency)
+            sPrevCurrency = *pCurrency;
+        else if(!sPrevCurrency.isEmpty())
+            sPrevCurrency.clear();
+    }
+
+    if (!xSheetCellRanges.is() && GetModel().is())
+    {
+        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+        if (xMultiServiceFactory.is())
+            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY));
+        OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+
+    }
+    static_cast<ScCellRangesObj*>(xSheetCellRanges.get())->SetNewRanges(rRanges);
 }
 
 bool ScXMLImport::SetNullDateOnUnitConverter()
