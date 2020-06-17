@@ -49,7 +49,7 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwip
             return i ? nullptr : &rTabStop;
 
         // If we are starting search from zero position,
-        // than we should include tabstop at zero position
+        // then we should include tabstop at zero position
         if ((nSearchPos == 0) && (rTabStop.GetTabPos() == 0))
             return &rTabStop;
 
