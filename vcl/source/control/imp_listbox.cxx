@@ -457,7 +457,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mbSelectionChanged  = false;
     mbMouseMoveSelect   = false;
     mbMulti             = false;
-    mbStackMode         = false;
     mbGrabFocus         = false;
     mbUserDrawEnabled   = false;
     mbInUserDraw        = false;
@@ -880,27 +879,7 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeaveWindow() )
-    {
-        if ( mbStackMode && IsMouseMoveSelect() && IsReallyVisible() )
-        {
-            if ( rMEvt.GetPosPixel().Y() < 0 )
-            {
-                DeselectAll();
-                mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
-                SetTopEntry( 0 );
-                if ( mbStackMode )
-                {
-                    mbTravelSelect = true;
-                    mnSelectModifier = rMEvt.GetModifier();
-                    ImplCallSelect();
-                    mbTravelSelect = false;
-                }
-
-            }
-        }
-    }
-    else if ( ( ( !mbMulti && IsMouseMoveSelect() ) || mbStackMode ) && mpEntryList->GetEntryCount() )
+    if (!rMEvt.IsLeaveWindow() && !mbMulti && IsMouseMoveSelect() && mpEntryList->GetEntryCount())
     {
         tools::Rectangle aRect( Point(), GetOutputSizePixel() );
         if( aRect.IsInside( rMEvt.GetPosPixel() ) )
@@ -920,19 +899,9 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING ) )
                     {
-                        if ( mbStackMode )
-                        {
-                            mbTravelSelect = true;
-                            mnSelectModifier = rMEvt.GetModifier();
-                            ImplCallSelect();
-                            mbTravelSelect = false;
-                        }
                         // When list box selection change by mouse move, notify
                         // VclEventId::ListboxSelect vcl event.
-                        else
-                        {
-                            maListItemSelectHdl.Call(nullptr);
-                        }
+                        maListItemSelectHdl.Call(nullptr);
                     }
                     mbTrackingSelect = false;
                 }
@@ -946,9 +915,6 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
                 else
                     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
-
-                if ( mbStackMode && ( mpEntryList->GetSelectionAnchor() == LISTBOX_ENTRY_NOTFOUND ) )
-                    mpEntryList->SetSelectionAnchor( 0 );
 
                 StartTracking( StartTrackingFlags::ScrollRepeat );
             }
@@ -1052,45 +1018,30 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
             mpEntryList->SetSelectionAnchor( nSelect );
         }
         // MultiListBox only with CTRL/SHIFT or not in SimpleMode
-        else if( ( !mbSimpleMode /* && !bShift */ ) || ( (mbSimpleMode && ( bCtrl || bShift )) || mbStackMode ) )
+        else if( ( !mbSimpleMode /* && !bShift */ ) || ( mbSimpleMode && ( bCtrl || bShift ) ) )
         {
             // Space for selection change
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
-                bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) || !mpEntryList->IsEntryPosSelected( nSelect );
-                if ( mbStackMode )
-                {
-                    sal_Int32 n;
-                    if ( bSelect )
-                    {
-                        // All entries before nSelect must be selected...
-                        for ( n = 0; n < nSelect; n++ )
-                            SelectEntry( n, true );
-                    }
-                    if ( !bSelect )
-                    {
-                        for ( n = nSelect+1; n < mpEntryList->GetEntryCount(); n++ )
-                            SelectEntry( n, false );
-                    }
-                }
+                bool bSelect = !mpEntryList->IsEntryPosSelected( nSelect );
                 SelectEntry( nSelect, bSelect );
                 mpEntryList->SetLastSelected( nSelect );
-                mpEntryList->SetSelectionAnchor( mbStackMode ? 0 : nSelect );
+                mpEntryList->SetSelectionAnchor( nSelect );
                 if ( !mpEntryList->IsEntryPosSelected( nSelect ) )
                     mpEntryList->SetSelectionAnchor( LISTBOX_ENTRY_NOTFOUND );
                 bFocusChanged = true;
                 bSelectionChanged = true;
             }
             else if( ( ( eLET == LET_TRACKING ) && ( nSelect != mnCurrentPos ) ) ||
-                     ( (bShift||mbStackMode) && ( ( eLET == LET_KEYMOVE ) || ( eLET == LET_MBDOWN ) ) ) )
+                     ( bShift && ( ( eLET == LET_KEYMOVE ) || ( eLET == LET_MBDOWN ) ) ) )
             {
                 mnCurrentPos = nSelect;
                 bFocusChanged = true;
 
                 sal_Int32 nAnchor = mpEntryList->GetSelectionAnchor();
-                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectedEntryCount() || mbStackMode ) )
+                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && mpEntryList->GetSelectedEntryCount() )
                 {
-                    nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectedEntryPos( mpEntryList->GetSelectedEntryCount() - 1 );
+                    nAnchor = mpEntryList->GetSelectedEntryPos( mpEntryList->GetSelectedEntryCount() - 1 );
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
@@ -1260,16 +1211,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectedEntryCount() )
                 {
                     mbTrackingSelect = true;
-                    if ( SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl ) )
-                    {
-                        if ( mbStackMode )
-                        {
-                            mbTravelSelect = true;
-                            mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();
-                            ImplCallSelect();
-                            mbTravelSelect = false;
-                        }
-                    }
+                    SelectEntries(nSelect, LET_TRACKING, bShift, bCtrl);
                     mbTrackingSelect = false;
                 }
             }
@@ -1280,42 +1222,6 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                     mbTrackingSelect = true;
                     SelectEntry( GetEntryList()->GetSelectedEntryPos( 0 ), false );
                     mbTrackingSelect = false;
-                }
-                else if ( mbStackMode )
-                {
-                    if ( ( rTEvt.GetMouseEvent().GetPosPixel().X() > 0 )  && ( rTEvt.GetMouseEvent().GetPosPixel().X() < aRect.Right() ) )
-                    {
-                        if ( ( rTEvt.GetMouseEvent().GetPosPixel().Y() < 0 ) || ( rTEvt.GetMouseEvent().GetPosPixel().Y() > GetOutputSizePixel().Height() ) )
-                        {
-                            bool bSelectionChanged = false;
-                            if ( ( rTEvt.GetMouseEvent().GetPosPixel().Y() < 0 )
-                                   && !mnCurrentPos )
-                            {
-                                if ( mpEntryList->IsEntryPosSelected( 0 ) )
-                                {
-                                    SelectEntry( 0, false );
-                                    bSelectionChanged = true;
-                                    nSelect = LISTBOX_ENTRY_NOTFOUND;
-
-                                }
-                            }
-                            else
-                            {
-                                mbTrackingSelect = true;
-                                bSelectionChanged = SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl );
-                                mbTrackingSelect = false;
-                            }
-
-                            if ( bSelectionChanged )
-                            {
-                                mbSelectionChanged = true;
-                                mbTravelSelect = true;
-                                mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();
-                                ImplCallSelect();
-                                mbTravelSelect = false;
-                            }
-                        }
-                    }
                 }
             }
             mnCurrentPos = nSelect;
@@ -1559,7 +1465,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         {
             if ( !bMod2 && !IsReadOnly() )
             {
-                if( mbMulti && ( !mbSimpleMode || ( mbSimpleMode && bCtrl && !bShift ) || mbStackMode ) )
+                if( mbMulti && ( !mbSimpleMode || ( mbSimpleMode && bCtrl && !bShift ) ) )
                 {
                     nSelect = mnCurrentPos;
                     eLET = LET_KEYSPACE;

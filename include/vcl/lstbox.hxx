@@ -205,7 +205,6 @@ public:
     bool                IsInDropDown() const;
     void                ToggleDropDown();
 
-    void                EnableMultiSelection( bool bMulti, bool bStackSelection );
     void                EnableMultiSelection( bool bMulti );
     bool                IsMultiSelectionEnabled() const;
 
