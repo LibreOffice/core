@@ -1,0 +1,11 @@
+--- src/core/CLucene/util/_bufferedstream.h
++++ src/core/CLucene/util/_bufferedstream.h
+@@ -68,7 +68,7 @@
+     void setMinBufSize(int32_t s) {
+         buffer.makeSpace(s);
+     }
+-    BufferedStreamImpl<T>();
++    BufferedStreamImpl();
+ public:
+     int32_t read(const T*& start, int32_t min, int32_t max);
+     int64_t reset(int64_t pos);
