@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c5d2087_9522f136",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-17T19:28:38Z",
+      "side": 1,
+      "message": "Please check explicitly that the comment is not there anymore.",
+      "revId": "3a8d66e91954dbcdbe92e5701073ddfbb0bf0ca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfae0391_ce593b5f",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-17T19:28:38Z",
+      "side": 1,
+      "message": "I still that it is better to explicitly check that the three comment objects are not in the children anymore.",
+      "revId": "3a8d66e91954dbcdbe92e5701073ddfbb0bf0ca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
