@@ -206,7 +206,6 @@ private:
     bool mbSort : 1;             ///< ListBox sorted
     bool mbTrack : 1;            ///< Tracking
     bool mbMulti : 1;            ///< MultiListBox
-    bool mbStackMode : 1;        ///< StackSelection
     bool mbSimpleMode : 1;       ///< SimpleMode for MultiListBox
     bool mbTravelSelect : 1;     ///< TravelSelect
     bool mbTrackingSelect : 1;   ///< Selected at a MouseMove
@@ -327,13 +326,13 @@ public:
     void            EnableUserDraw( bool bUserDraw ) { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const   { return mbUserDrawEnabled; }
 
-    void            EnableMultiSelection( bool bMulti, bool bStackMode ) { mbMulti = bMulti; mbStackMode = bStackMode; }
+    void            EnableMultiSelection( bool bMulti ) { mbMulti = bMulti; }
     bool            IsMultiSelectionEnabled() const     { return mbMulti; }
 
     void            SetMultiSelectionSimpleMode( bool bSimple ) { mbSimpleMode = bSimple; }
 
     void            EnableMouseMoveSelect( bool bMouseMoveSelect ) { mbMouseMoveSelect = bMouseMoveSelect; }
-    bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
+    bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect; }
 
     Size            CalcSize(sal_Int32 nMaxLines) const;
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
@@ -459,7 +458,7 @@ public:
     bool            IsTravelSelect() const          { return maLBWindow->IsTravelSelect(); }
     bool            IsTrackingSelect() const            { return maLBWindow->IsTrackingSelect(); }
 
-    void            EnableMultiSelection( bool bMulti, bool bStackMode ) { maLBWindow->EnableMultiSelection( bMulti, bStackMode ); }
+    void            EnableMultiSelection( bool bMulti ) { maLBWindow->EnableMultiSelection( bMulti ); }
     bool            IsMultiSelectionEnabled() const     { return maLBWindow->IsMultiSelectionEnabled(); }
 
     void            SetMultiSelectionSimpleMode( bool bSimple ) { maLBWindow->SetMultiSelectionSimpleMode( bSimple ); }

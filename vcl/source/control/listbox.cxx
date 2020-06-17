@@ -1123,12 +1123,7 @@ tools::Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 
 void ListBox::EnableMultiSelection( bool bMulti )
 {
-    EnableMultiSelection( bMulti, false );
-}
-
-void ListBox::EnableMultiSelection( bool bMulti, bool bStackSelection )
-{
-    mpImplLB->EnableMultiSelection( bMulti, bStackSelection );
+    mpImplLB->EnableMultiSelection( bMulti );
 
     // WB_SIMPLEMODE:
     // The MultiListBox behaves just like a normal ListBox
