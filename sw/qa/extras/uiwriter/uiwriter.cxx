@@ -7275,7 +7275,6 @@ void SwUiWriterTest::testTdf128860()
 
 void SwUiWriterTest::testTdf133589()
 {
-#if !defined(_WIN32)
     // Hungarian test document with right-to-left paragraph setting
     SwDoc* pDoc = createDoc("tdf133589.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -7307,7 +7306,6 @@ void SwUiWriterTest::testTdf133589()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-#endif
 }
 
 #if HAVE_FEATURE_PDFIUM

@@ -21,6 +21,7 @@
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
@@ -132,11 +133,27 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
         aCode += "-" + aCountry;
     OString aLangCode(OUStringToOString(aCode, RTL_TEXTENCODING_ASCII_US));
     OString aInput(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-    std::wstring aResult = Numbertext::string2wstring(aInput.getStr());
-    bool result = m_aNumberText.numbertext(aResult, aLangCode.getStr());
+    std::wstring sResult = Numbertext::string2wstring(aInput.getStr());
+    bool result = m_aNumberText.numbertext(sResult, aLangCode.getStr());
     DBG_ASSERT(result, "numbertext: false");
-    OString aResult2(Numbertext::wstring2string(aResult).c_str());
-    return OUString::fromUtf8(aResult2);
+    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());
+#if defined(_WIN32)
+    // workaround to fix non-BMP Unicode characters resulted by wstring limitation
+    if (!aScript.isEmpty() && aScript == "Hung")
+    {
+        OUStringBuffer aFix;
+        for (int i = 0; i < aResult.getLength(); ++i)
+        {
+            sal_Unicode c = aResult[i];
+            if (0x0C80 <= c && c <= 0x0CFF)
+                aFix.append(sal_Unicode(0xD803)).append(sal_Unicode(c + 0xD000));
+            else
+                aFix.append(c);
+        }
+        aResult = aFix.makeStringAndClear();
+    }
+#endif
+    return aResult;
 }
 
 uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
