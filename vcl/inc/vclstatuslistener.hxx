@@ -24,7 +24,7 @@
 template <class T> class VclStatusListener final : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
-    VclStatusListener<T>(T* widget, const OUString& aCommand);
+    VclStatusListener(T* widget, const OUString& aCommand);
 
 private:
     VclPtr<T> mWidget; /** The widget on which actions are performed */
