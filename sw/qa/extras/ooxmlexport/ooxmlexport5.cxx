@@ -756,6 +756,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128646, "tdf128646.docx")
         assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", "val", "false");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104260, "tdf128646.docx")
+{
+    // Without the accidental fix this would fail with:
+    // - Expected: 4356
+    // - Actual  : 10484
+    // i.e. the larger image would be aligned to the right side of the page instead of the cell
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc,"/root/page/body/tab/row/cell/txt[5]/anchored/fly/notxt/infos/bounds", "left", "4356");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119800, "tdf119800.docx")
 {
     // The problem was that not hidden shapes anchored to empty hidden paragraphs were imported as hidden.
