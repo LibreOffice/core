@@ -310,6 +310,51 @@ Label_Range_Join:
         push_back( rNewRange );
 }
 
+void ScRangeList::AddAndPartialCombine( const ScRange& rNewRange )
+{
+    if ( maRanges.empty() )
+    {
+        push_back( rNewRange );
+        return ;
+    }
+
+    // One common usage is to join ranges that actually are top to bottom
+    // appends but the caller doesn't exactly know about it, e.g. when invoked
+    // by ScMarkData::FillRangeListWithMarks(), check for this special case
+    // first and speed up things by not looping over all ranges for each range
+    // to be joined. We don't remember the exact encompassing range that would
+    // have to be updated on refupdates and insertions and deletions, instead
+    // remember just the maximum row used, even independently of the sheet.
+    // This satisfies most use cases.
+
+    const SCROW nRow1 = rNewRange.aStart.Row();
+    if (nRow1 > mnMaxRowUsed + 1)
+    {
+        push_back( rNewRange );
+        return;
+    }
+
+    // scan backwards 2 rows to see if we can merge with anything
+    auto it = maRanges.rbegin();
+    while (it != maRanges.rend() && it->aStart.Row() >= (rNewRange.aStart.Row() - 2))
+    {
+        // Check if we can simply enlarge this range.
+        ScRange & rLast = *it;
+        if (rLast.aEnd.Row() + 1 == nRow1 &&
+                rLast.aStart.Col() == rNewRange.aStart.Col() && rLast.aEnd.Col() == rNewRange.aEnd.Col() &&
+                rLast.aStart.Tab() == rNewRange.aStart.Tab() && rLast.aEnd.Tab() == rNewRange.aEnd.Tab())
+        {
+            const SCROW nRow2 = rNewRange.aEnd.Row();
+            rLast.aEnd.SetRow( nRow2 );
+            mnMaxRowUsed = std::max(mnMaxRowUsed, nRow2);
+            return;
+        }
+        ++it;
+    }
+
+    push_back( rNewRange );
+}
+
 bool ScRangeList::operator==( const ScRangeList& r ) const
 {
     if ( this == &r )
@@ -445,6 +490,32 @@ void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL n
                 SCCOL nNewRangeEndCol = nColPos + nSize - 1;
                 aNewRanges.emplace_back(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
                             nNewRangeEndRow, nTab);
+            }
+        }
+    }
+
+    for(const auto & rRange : aNewRanges)
+    {
+        if(!rRange.IsValid())
+            continue;
+
+        Join(rRange);
+    }
+}
+
+void ScRangeList::InsertCol( SCTAB nTab, SCCOL nCol )
+{
+    std::vector<ScRange> aNewRanges;
+    for(const auto & rRange : maRanges)
+    {
+        if(rRange.aStart.Tab() <= nTab && rRange.aEnd.Tab() >= nTab)
+        {
+            if(rRange.aEnd.Col() == nCol - 1)
+            {
+                SCCOL nNewRangeStartCol = rRange.aEnd.Col() + 1;
+                SCCOL nNewRangeEndCol = nCol;
+                aNewRanges.emplace_back(nNewRangeStartCol, rRange.aStart.Row(), nTab, nNewRangeEndCol,
+                            rRange.aEnd.Row(), nTab);
             }
         }
     }

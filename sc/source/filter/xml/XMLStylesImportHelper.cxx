@@ -55,50 +55,50 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
         case util::NumberFormat::NUMBER:
         {
             if (!mpNumberList)
-                mpNumberList = std::make_shared<ScSimpleRangeList>();
-            mpNumberList->addRange(rRange);
+                mpNumberList = std::make_shared<ScRangeList>();
+            mpNumberList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::TEXT:
         {
             if (!mpTextList)
-                mpTextList = std::make_shared<ScSimpleRangeList>();
-            mpTextList->addRange(rRange);
+                mpTextList = std::make_shared<ScRangeList>();
+            mpTextList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::TIME:
         {
             if (!mpTimeList)
-                mpTimeList = std::make_shared<ScSimpleRangeList>();
-            mpTimeList->addRange(rRange);
+                mpTimeList = std::make_shared<ScRangeList>();
+            mpTimeList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::DATETIME:
         {
             if (!mpDateTimeList)
-                mpDateTimeList = std::make_shared<ScSimpleRangeList>();
-            mpDateTimeList->addRange(rRange);
+                mpDateTimeList = std::make_shared<ScRangeList>();
+            mpDateTimeList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::PERCENT:
         {
             if (!mpPercentList)
-                mpPercentList = std::make_shared<ScSimpleRangeList>();
-            mpPercentList->addRange(rRange);
+                mpPercentList = std::make_shared<ScRangeList>();
+            mpPercentList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::LOGICAL:
         {
             if (!mpLogicalList)
-                mpLogicalList = std::make_shared<ScSimpleRangeList>();
-            mpLogicalList->addRange(rRange);
+                mpLogicalList = std::make_shared<ScRangeList>();
+            mpLogicalList->AddAndPartialCombine(rRange);
         }
         break;
         case util::NumberFormat::UNDEFINED:
         {
             if (!mpUndefinedList)
-                mpUndefinedList = std::make_shared<ScSimpleRangeList>();
-            mpUndefinedList->addRange(rRange);
+                mpUndefinedList = std::make_shared<ScRangeList>();
+            mpUndefinedList->AddAndPartialCombine(rRange);
         }
         break;
         default:
@@ -117,101 +117,84 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const std::optiona
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;
     auto itPair = pCurrencyList->insert(aStyle);
-    itPair.first->mpRanges->addRange(rRange);
+    itPair.first->mpRanges->AddAndPartialCombine(rRange);
 }
 
 void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
 {
     if (mpTextList)
-        mpTextList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpTextList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpNumberList)
-        mpNumberList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpNumberList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpTimeList)
-        mpTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpTimeList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpDateTimeList)
-        mpDateTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpDateTimeList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpPercentList)
-        mpPercentList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpPercentList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpLogicalList)
-        mpLogicalList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpLogicalList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
     if (mpUndefinedList)
-        mpUndefinedList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+        mpUndefinedList->InsertCol(static_cast<SCCOL>(nTab), static_cast<SCTAB>(nCol));
 
     if (pCurrencyList)
     {
         for (auto& rCurrency : *pCurrencyList)
         {
-            rCurrency.mpRanges->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+            rCurrency.mpRanges->InsertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
         }
     }
 }
 
-void ScMyStyleRanges::SetStylesToRanges(const list<ScRange>& rRanges,
+void ScMyStyleRanges::SetStylesToRanges(const ScRangeList& rRanges,
     const OUString* pStyleName, const sal_Int16 nCellType,
     const OUString* pCurrency, ScXMLImport& rImport)
 {
-    for (const auto& rRange : rRanges)
-        rImport.SetStyleToRange(rRange, pStyleName, nCellType, pCurrency);
+   rImport.SetStyleToRanges(rRanges, pStyleName, nCellType, pCurrency);
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport)
 {
     if (mpNumberList)
     {
-        list<ScRange> aList;
-        mpNumberList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::NUMBER, nullptr, rImport);
-        mpNumberList->clear();
+        SetStylesToRanges(*mpNumberList, pStyleName, util::NumberFormat::NUMBER, nullptr, rImport);
+        mpNumberList.reset();
     }
     if (mpTextList)
     {
-        list<ScRange> aList;
-        mpTextList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TEXT, nullptr, rImport);
-        mpTextList->clear();
+        SetStylesToRanges(*mpTextList, pStyleName, util::NumberFormat::TEXT, nullptr, rImport);
+        mpTextList.reset();
     }
     if (mpTimeList)
     {
-        list<ScRange> aList;
-        mpTimeList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, nullptr, rImport);
-        mpTimeList->clear();
+        SetStylesToRanges(*mpTimeList, pStyleName, util::NumberFormat::TIME, nullptr, rImport);
+        mpTimeList.reset();
     }
     if (mpDateTimeList)
     {
-        list<ScRange> aList;
-        mpDateTimeList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATETIME, nullptr, rImport);
-        mpDateTimeList->clear();
+        SetStylesToRanges(*mpDateTimeList, pStyleName, util::NumberFormat::DATETIME, nullptr, rImport);
+        mpDateTimeList.reset();
     }
     if (mpPercentList)
     {
-        list<ScRange> aList;
-        mpPercentList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::PERCENT, nullptr, rImport);
-        mpPercentList->clear();
+        SetStylesToRanges(*mpPercentList, pStyleName, util::NumberFormat::PERCENT, nullptr, rImport);
+        mpPercentList.reset();
     }
     if (mpLogicalList)
     {
-        list<ScRange> aList;
-        mpLogicalList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::LOGICAL, nullptr, rImport);
-        mpLogicalList->clear();
+        SetStylesToRanges(*mpLogicalList, pStyleName, util::NumberFormat::LOGICAL, nullptr, rImport);
+        mpLogicalList.reset();
     }
     if (mpUndefinedList)
     {
-        list<ScRange> aList;
-        mpUndefinedList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::UNDEFINED, nullptr, rImport);
-        mpUndefinedList->clear();
+        SetStylesToRanges(*mpUndefinedList, pStyleName, util::NumberFormat::UNDEFINED, nullptr, rImport);
+        mpUndefinedList.reset();
     }
     if (pCurrencyList)
     {
         for (const auto& rCurrency : *pCurrencyList)
         {
-            list<ScRange> aList;
-            rCurrency.mpRanges->getRangeList(aList);
-            SetStylesToRanges(aList, pStyleName, util::NumberFormat::CURRENCY, &rCurrency.sCurrency, rImport);
+            SetStylesToRanges(*rCurrency.mpRanges, pStyleName, util::NumberFormat::CURRENCY, &rCurrency.sCurrency, rImport);
         }
     }
 }
