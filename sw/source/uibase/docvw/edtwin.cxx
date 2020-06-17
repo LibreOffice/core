@@ -2821,10 +2821,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     // Repaint everything
                     Invalidate();
 
-                    // If the control had not been showing, do not return to the cursor position,
+                    // tdf#84929. If the footer control had not been showing, do not change the cursor position,
                     // because the user may have scrolled to turn on the separator control and
-                    // if the cursor is now off-screen, then the user would need to scroll back again to use the control.
-                    if ( !bSeparatorWasVisible && rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !Application::IsHeadlessModeEnabled() )
+                    // if the cursor cannot be positioned on-screen, then the user would need to scroll back again to use the control.
+                    // This should only be done for the footer. The cursor can always be re-positioned near the header. tdf#134023.
+                    if ( eControl == FrameControlType::Footer && !bSeparatorWasVisible
+                         && rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !Application::IsHeadlessModeEnabled() )
                         return;
                 }
             }
