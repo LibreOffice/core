@@ -185,7 +185,7 @@
 #define FN_SHOW_INLINETOOLTIPS  (FN_VIEW + 60)  /* Show tooltips for tracked changes */
 #define FN_USE_HEADERFOOTERMENU (FN_VIEW + 61)  /* Show advanced header/footer menu */
 #define FN_VIEW_SHOW_WHITESPACE (FN_VIEW + 62)  /* Show header, footer, and pagebreak */
-
+#define FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON (FN_VIEW + 63)  /* Show outline content visibility toggle button */
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
