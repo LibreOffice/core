@@ -103,44 +103,6 @@ void GalleryTheme::ImplCreateSvDrawStorage()
     }
 }
 
-bool GalleryTheme::ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry)
-{
-    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
-    bool        bRet = false;
-
-    if( pOStm )
-    {
-        const sal_uInt32 nOffset = pOStm->Seek( STREAM_SEEK_TO_END );
-
-        rObj.WriteData( *pOStm, m_aDestDir );
-
-        if( !pOStm->GetError() )
-        {
-            GalleryObject* pEntry;
-
-            if( !pExistentEntry )
-            {
-                pEntry = new GalleryObject;
-                if ( nPos < aObjectList.size() )
-                {
-                    aObjectList.emplace( aObjectList.begin() + nPos, pEntry );
-                }
-                else
-                    aObjectList.emplace_back( pEntry );
-            }
-            else
-                pEntry = pExistentEntry;
-
-            pEntry->aURL = rObj.GetURL();
-            pEntry->nOffset = nOffset;
-            pEntry->eObjKind = rObj.GetObjKind();
-            bRet = true;
-        }
-    }
-
-    return bRet;
-}
-
 std::unique_ptr<SgaObject> GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
 {
     std::unique_ptr<SgaObject> pSgaObj;
@@ -390,11 +352,11 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         else if (rObj.GetTitle() == "__<empty>__")
             const_cast<SgaObject&>(rObj).SetTitle("");
 
-        ImplWriteSgaObject(rObj, nInsertPos, &aNewEntry);
+        pThm->getGalleryBinaryEngine()->ImplWriteSgaObject(rObj, nInsertPos, &aNewEntry, m_aDestDir, aObjectList);
         pFoundEntry->nOffset = aNewEntry.nOffset;
     }
     else
-        ImplWriteSgaObject(rObj, nInsertPos, nullptr);
+        pThm->getGalleryBinaryEngine()->ImplWriteSgaObject(rObj, nInsertPos, nullptr, m_aDestDir, aObjectList);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);

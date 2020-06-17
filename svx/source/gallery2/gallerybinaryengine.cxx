@@ -19,7 +19,9 @@
 
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/galmisc.hxx>
+#include <galobj.hxx>
 
+#include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
 
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
@@ -84,4 +86,45 @@ void GalleryBinaryEngine::SetStrExtension(INetURLObject aURL)
 {
     aURL.setExtension("str");
     aStrURL = ImplGetURLIgnoreCase(aURL);
+}
+
+bool GalleryBinaryEngine::ImplWriteSgaObject(
+    const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry, OUString& aDestDir,
+    ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList)
+{
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
+    bool bRet = false;
+
+    if (pOStm)
+    {
+        const sal_uInt32 nOffset = pOStm->Seek(STREAM_SEEK_TO_END);
+
+        rObj.WriteData(*pOStm, aDestDir);
+
+        if (!pOStm->GetError())
+        {
+            GalleryObject* pEntry;
+
+            if (!pExistentEntry)
+            {
+                pEntry = new GalleryObject;
+                if (nPos < aObjectList.size())
+                {
+                    aObjectList.emplace(aObjectList.begin() + nPos, pEntry);
+                }
+                else
+                    aObjectList.emplace_back(pEntry);
+            }
+            else
+                pEntry = pExistentEntry;
+
+            pEntry->aURL = rObj.GetURL();
+            pEntry->nOffset = nOffset;
+            pEntry->eObjKind = rObj.GetObjKind();
+            bRet = true;
+        }
+    }
+
+    return bRet;
 }
