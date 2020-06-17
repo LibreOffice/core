@@ -22,6 +22,30 @@
       "revId": "997a504f33bbd43c02a96a2a593a03e58bd3b72c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad9d9389_fe621092",
+        "filename": "sfx2/inc/bitmaps.hlst",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-17T10:20:15Z",
+      "side": 1,
+      "message": "The images are used only as thumbnails in recentdocsview.cxx.",
+      "parentUuid": "1ca72617_0177d9bc",
+      "range": {
+        "startLine": 70,
+        "startChar": 44,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "997a504f33bbd43c02a96a2a593a03e58bd3b72c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
