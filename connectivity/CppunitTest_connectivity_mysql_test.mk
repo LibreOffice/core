@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,mysql_test))
+$(eval $(call gb_CppunitTest_CppunitTest,connectivity_mysql_test))
 
-$(eval $(call gb_CppunitTest_use_external,mysql_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,connectivity_mysql_test,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,mysql_test, \
+$(eval $(call gb_CppunitTest_add_exception_objects,connectivity_mysql_test, \
     connectivity/qa/connectivity/mysql/mysql \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,mysql_test, \
+$(eval $(call gb_CppunitTest_use_libraries,connectivity_mysql_test, \
     comphelper \
     cppu \
     dbaxml \
@@ -28,16 +28,16 @@ $(eval $(call gb_CppunitTest_use_libraries,mysql_test, \
     xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,mysql_test,\
+$(eval $(call gb_CppunitTest_use_api,connectivity_mysql_test,\
     offapi \
     oovbaapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,mysql_test))
-$(eval $(call gb_CppunitTest_use_vcl,mysql_test))
+$(eval $(call gb_CppunitTest_use_ure,connectivity_mysql_test))
+$(eval $(call gb_CppunitTest_use_vcl,connectivity_mysql_test))
 
-$(eval $(call gb_CppunitTest_use_components,mysql_test,\
+$(eval $(call gb_CppunitTest_use_components,connectivity_mysql_test,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -61,6 +61,6 @@ $(eval $(call gb_CppunitTest_use_components,mysql_test,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,mysql_test))
+$(eval $(call gb_CppunitTest_use_configuration,connectivity_mysql_test))
 
 # vim: set noet sw=4 ts=4:
