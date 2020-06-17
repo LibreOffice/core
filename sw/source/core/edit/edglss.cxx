@@ -232,7 +232,12 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
                         // Selection starts at the first para of the first cell,
                         // but we want to copy the table and the start node before
                         // the first cell as well.
-                        aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
+                        // tdf#133982 tables can be nested
+                        while (SwTableNode const* pTableNode =
+                            aPaM.Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
+                        {
+                            aPaM.Start()->nNode = *pTableNode;
+                        }
                         aPaM.Start()->nContent.Assign(nullptr, 0);
                     }
                     bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true ) || bRet;
