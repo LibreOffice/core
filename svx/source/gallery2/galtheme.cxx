@@ -103,50 +103,6 @@ void GalleryTheme::ImplCreateSvDrawStorage()
     }
 }
 
-std::unique_ptr<SgaObject> GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
-{
-    std::unique_ptr<SgaObject> pSgaObj;
-
-    if( pEntry )
-    {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-
-        if( pIStm )
-        {
-            sal_uInt32 nInventor;
-
-            // Check to ensure that the file is a valid SGA file
-            pIStm->Seek( pEntry->nOffset );
-            pIStm->ReadUInt32( nInventor );
-
-            if( nInventor == COMPAT_FORMAT( 'S', 'G', 'A', '3' ) )
-            {
-                pIStm->Seek( pEntry->nOffset );
-
-                switch( pEntry->eObjKind )
-                {
-                    case SgaObjKind::Bitmap:    pSgaObj.reset(new SgaObjectBmp()); break;
-                    case SgaObjKind::Animation:   pSgaObj.reset(new SgaObjectAnim()); break;
-                    case SgaObjKind::Inet:   pSgaObj.reset(new SgaObjectINet()); break;
-                    case SgaObjKind::SvDraw: pSgaObj.reset(new SgaObjectSvDraw()); break;
-                    case SgaObjKind::Sound:  pSgaObj.reset(new SgaObjectSound()); break;
-
-                    default:
-                    break;
-                }
-
-                if( pSgaObj )
-                {
-                    ReadSgaObject( *pIStm, *pSgaObj );
-                    pSgaObj->ImplUpdateURL( pEntry->aURL );
-                }
-            }
-        }
-    }
-
-    return pSgaObj;
-}
-
 void GalleryTheme::ImplWrite()
 {
     if( pThm->IsModified() )
@@ -342,7 +298,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         // update title of new object if necessary
         if (rObj.GetTitle().isEmpty())
         {
-            std::unique_ptr<SgaObject> pOldObj(ImplReadSgaObject(pFoundEntry));
+            std::unique_ptr<SgaObject> pOldObj(pThm->getGalleryBinaryEngine()->implReadSgaObject(pFoundEntry));
 
             if (pOldObj)
             {
@@ -366,7 +322,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
 
 std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
 {
-    return ImplReadSgaObject(ImplGetGalleryObject(nPos));
+    return pThm->getGalleryBinaryEngine()->implReadSgaObject(ImplGetGalleryObject(nPos));
 }
 
 void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const

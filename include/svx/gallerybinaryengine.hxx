@@ -50,6 +50,7 @@ public:
     const INetURLObject& GetSdvURL() const { return aSdvURL; }
     const INetURLObject& GetStrURL() const { return aStrURL; }
 
+    std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
