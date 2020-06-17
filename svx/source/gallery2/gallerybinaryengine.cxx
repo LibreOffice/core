@@ -23,6 +23,7 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/vcompat.hxx>
 
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 {
@@ -88,7 +89,62 @@ void GalleryBinaryEngine::SetStrExtension(INetURLObject aURL)
     aStrURL = ImplGetURLIgnoreCase(aURL);
 }
 
-bool GalleryBinaryEngine::ImplWriteSgaObject(
+std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
+{
+    std::unique_ptr<SgaObject> pSgaObj;
+
+    if (pEntry)
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            sal_uInt32 nInventor;
+
+            // Check to ensure that the file is a valid SGA file
+            pIStm->Seek(pEntry->nOffset);
+            pIStm->ReadUInt32(nInventor);
+
+            if (nInventor == COMPAT_FORMAT('S', 'G', 'A', '3'))
+            {
+                pIStm->Seek(pEntry->nOffset);
+
+                switch (pEntry->eObjKind)
+                {
+                    case SgaObjKind::Bitmap:
+                        pSgaObj.reset(new SgaObjectBmp());
+                        break;
+                    case SgaObjKind::Animation:
+                        pSgaObj.reset(new SgaObjectAnim());
+                        break;
+                    case SgaObjKind::Inet:
+                        pSgaObj.reset(new SgaObjectINet());
+                        break;
+                    case SgaObjKind::SvDraw:
+                        pSgaObj.reset(new SgaObjectSvDraw());
+                        break;
+                    case SgaObjKind::Sound:
+                        pSgaObj.reset(new SgaObjectSound());
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (pSgaObj)
+                {
+                    ReadSgaObject(*pIStm, *pSgaObj);
+                    pSgaObj->ImplUpdateURL(pEntry->aURL);
+                }
+            }
+        }
+    }
+
+    return pSgaObj;
+}
+
+bool GalleryBinaryEngine::implWriteSgaObject(
     const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry, OUString& aDestDir,
     ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList)
 {
