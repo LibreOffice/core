@@ -29,6 +29,11 @@ namespace com::sun::star::uno
 template <class interface_type> class Reference;
 }
 
+namespace tools
+{
+class Rectangle;
+}
+
 namespace vcl::filter
 {
 class PDFTrailerElement;
@@ -353,10 +358,11 @@ class VCL_DLLPUBLIC PDFDocument
     sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES,
                                    sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset);
     /// Write the appearance object as part of signing.
-    sal_Int32 WriteAppearanceObject();
+    sal_Int32 WriteAppearanceObject(tools::Rectangle& rSignatureRectangle);
     /// Write the annot object as part of signing.
     sal_Int32 WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_Int32 nSignatureId,
-                               sal_Int32 nAppearanceId);
+                               sal_Int32 nAppearanceId,
+                               const tools::Rectangle& rSignatureRectangle);
     /// Write the updated Page object as part of signing.
     bool WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId);
     /// Write the updated Catalog object as part of signing.

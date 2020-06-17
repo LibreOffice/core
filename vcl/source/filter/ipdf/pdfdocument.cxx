@@ -236,8 +236,62 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     return nSignatureId;
 }
 
-sal_Int32 PDFDocument::WriteAppearanceObject()
+sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectangle)
 {
+    if (!m_aSignatureLine.empty())
+    {
+        // Parse the PDF data of signature line: we can set the signature rectangle to non-empty
+        // based on it.
+        SvMemoryStream aPDFStream;
+        aPDFStream.WriteBytes(m_aSignatureLine.data(), m_aSignatureLine.size());
+        aPDFStream.Seek(0);
+        filter::PDFDocument aPDFDocument;
+        if (!aPDFDocument.Read(aPDFStream))
+        {
+            SAL_WARN("vcl.filter",
+                     "PDFDocument::WriteAppearanceObject: failed to read the PDF document");
+            return -1;
+        }
+
+        std::vector<filter::PDFObjectElement*> aPages = aPDFDocument.GetPages();
+        if (aPages.empty())
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: no pages");
+            return -1;
+        }
+
+        filter::PDFObjectElement* pPage = aPages[0];
+        if (!pPage)
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: no page");
+            return -1;
+        }
+
+        // Calculate the bounding box.
+        PDFElement* pMediaBox = pPage->Lookup("MediaBox");
+        auto pMediaBoxArray = dynamic_cast<PDFArrayElement*>(pMediaBox);
+        if (!pMediaBoxArray || pMediaBoxArray->GetElements().size() < 4)
+        {
+            SAL_WARN("vcl.filter",
+                     "PDFDocument::WriteAppearanceObject: MediaBox is not an array of 4");
+            return -1;
+        }
+        const std::vector<PDFElement*>& rMediaBoxElements = pMediaBoxArray->GetElements();
+        auto pWidth = dynamic_cast<PDFNumberElement*>(rMediaBoxElements[2]);
+        if (!pWidth)
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: MediaBox has no width");
+            return -1;
+        }
+        rSignatureRectangle.setWidth(pWidth->GetValue());
+        auto pHeight = dynamic_cast<PDFNumberElement*>(rMediaBoxElements[3]);
+        if (!pHeight)
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: MediaBox has no height");
+            return -1;
+        }
+        rSignatureRectangle.setHeight(pHeight->GetValue());
+    }
     m_aSignatureLine.clear();
 
     // Write appearance object.
@@ -249,14 +303,19 @@ sal_Int32 PDFDocument::WriteAppearanceObject()
     m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
-    m_aEditBuffer.WriteCharPtr("/BBox[0 0 0 0]\n/Length 0\n>>\n");
+    m_aEditBuffer.WriteCharPtr("/BBox[0 0 ");
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
+    m_aEditBuffer.WriteCharPtr(" ");
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
+    m_aEditBuffer.WriteCharPtr("]\n/Length 0\n>>\n");
     m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
 
     return nAppearanceId;
 }
 
 sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_Int32 nSignatureId,
-                                        sal_Int32 nAppearanceId)
+                                        sal_Int32 nAppearanceId,
+                                        const tools::Rectangle& rSignatureRectangle)
 {
     // Decide what identifier to use for the new signature.
     sal_uInt32 nNextSignature = GetNextSignature();
@@ -270,7 +329,11 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
     m_aEditBuffer.WriteUInt32AsString(nAnnotId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
-    m_aEditBuffer.WriteCharPtr("/Rect[0 0 0 0]\n");
+    m_aEditBuffer.WriteCharPtr("/Rect[0 0 ");
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
+    m_aEditBuffer.WriteCharPtr(" ");
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
+    m_aEditBuffer.WriteCharPtr("]\n");
     m_aEditBuffer.WriteCharPtr("/FT/Sig\n");
     m_aEditBuffer.WriteCharPtr("/P ");
     m_aEditBuffer.WriteUInt32AsString(rFirstPage.GetObjectValue());
@@ -807,7 +870,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     sal_Int32 nSignatureId = WriteSignatureObject(
         rDescription, bAdES, nSignatureLastByteRangeOffset, nSignatureContentOffset);
 
-    sal_Int32 nAppearanceId = WriteAppearanceObject();
+    tools::Rectangle aSignatureRectangle;
+    sal_Int32 nAppearanceId = WriteAppearanceObject(aSignatureRectangle);
 
     std::vector<PDFObjectElement*> aPages = GetPages();
     if (aPages.empty() || !aPages[0])
@@ -817,7 +881,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     }
 
     PDFObjectElement& rFirstPage = *aPages[0];
-    sal_Int32 nAnnotId = WriteAnnotObject(rFirstPage, nSignatureId, nAppearanceId);
+    sal_Int32 nAnnotId
+        = WriteAnnotObject(rFirstPage, nSignatureId, nAppearanceId, aSignatureRectangle);
 
     if (!WritePageObject(rFirstPage, nAnnotId))
     {
