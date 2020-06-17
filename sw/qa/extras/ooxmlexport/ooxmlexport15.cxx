@@ -39,6 +39,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    // There are three tabs with default width
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
