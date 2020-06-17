@@ -294,21 +294,29 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     }
     m_aSignatureLine.clear();
 
-    // Write appearance object.
+    // Write appearance object: allocate an ID.
     sal_Int32 nAppearanceId = m_aXRef.size();
+    m_aXRef[nAppearanceId] = XRefEntry();
+
+    // Write the object content.
+    SvMemoryStream aEditBuffer;
+    aEditBuffer.WriteUInt32AsString(nAppearanceId);
+    aEditBuffer.WriteCharPtr(" 0 obj\n");
+    aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
+    aEditBuffer.WriteCharPtr("/BBox[0 0 ");
+    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
+    aEditBuffer.WriteCharPtr(" ");
+    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
+    aEditBuffer.WriteCharPtr("]\n/Length 0\n>>\n");
+    aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
+
+    // Add the object to the doc-level edit buffer and update the offset.
+    aEditBuffer.Seek(0);
     XRefEntry aAppearanceEntry;
     aAppearanceEntry.SetOffset(m_aEditBuffer.Tell());
     aAppearanceEntry.SetDirty(true);
     m_aXRef[nAppearanceId] = aAppearanceEntry;
-    m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
-    m_aEditBuffer.WriteCharPtr(" 0 obj\n");
-    m_aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
-    m_aEditBuffer.WriteCharPtr("/BBox[0 0 ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
-    m_aEditBuffer.WriteCharPtr(" ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
-    m_aEditBuffer.WriteCharPtr("]\n/Length 0\n>>\n");
-    m_aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
+    m_aEditBuffer.WriteStream(aEditBuffer);
 
     return nAppearanceId;
 }
