@@ -881,20 +881,17 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
 
 bool SkiaSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
 {
-    // TODO?
     return false;
 }
 
 bool SkiaSalGraphicsImpl::drawPolygonBezier(sal_uInt32, const SalPoint*, const PolyFlags*)
 {
-    // TODO?
     return false;
 }
 
 bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
                                                 const SalPoint* const*, const PolyFlags* const*)
 {
-    // TODO?
     return false;
 }
 
@@ -1250,11 +1247,7 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray
     invert(aPolygon, eFlags);
 }
 
-bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32)
-{
-    // TODO?
-    return false;
-}
+bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32) { return false; }
 
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
@@ -1440,11 +1433,7 @@ bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHei
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon&, const Gradient&)
-{
-    // TODO?
-    return false;
-}
+bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon&, const Gradient&) { return false; }
 
 static double toRadian(int degree10th) { return (3600 - degree10th) * M_PI / 1800.0; }
 static double toCos(int degree10th) { return SkScalarCos(toRadian(degree10th)); }

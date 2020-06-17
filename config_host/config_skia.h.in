@@ -25,7 +25,6 @@ are the same.
 #define SKIA_USE_BITMAP32 0
 
 
-/* TODO SKIA check all these */
 
 #define SK_SUPPORT_GPU 1
 

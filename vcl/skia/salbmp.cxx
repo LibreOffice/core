@@ -164,7 +164,6 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 
 bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&, bool)
 {
-    // TODO?
     return false;
 }
 
@@ -276,7 +275,6 @@ bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    // TODO?
     return false;
 }
 
@@ -336,7 +334,6 @@ bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    // TODO?
     return false;
 }
 

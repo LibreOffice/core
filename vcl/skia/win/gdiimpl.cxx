@@ -324,7 +324,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     // keep the alpha channel as transparent. Therefore the alpha is actually computed
     // from the difference in the premultiplied red channels when drawn one black and on white.
     // Alpha is computed as "alpha = 1.0 - abs(black.red - white.red)".
-    // TODO I doubt this can be done using Skia, so do it manually here. Fortunately
+    // I doubt this can be done using Skia, so do it manually here. Fortunately
     // the bitmaps should be fairly small and are cached.
     uint32_t* dest = tmpBitmap.getAddr32(0, 0);
     assert(dest == tmpBitmap.getPixels());
