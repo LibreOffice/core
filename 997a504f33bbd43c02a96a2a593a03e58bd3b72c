@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ca72617_0177d9bc",
+        "filename": "sfx2/inc/bitmaps.hlst",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-17T09:36:37Z",
+      "side": 1,
+      "message": "Why do you think that it\u0027s OK to just change something used in many places and in many contexts, to fix something local?\n\nYou are fixing a problem where you used some unrelated images for generation of overlay icons. The images in question were introduced to display a *large* default image in case when a preview is not available (it might be disabled in settings, or the file unavailable, or whatever). The intended display was https://imgur.com/raMKjkR. Now you changed the icons used in the list, and it shows like https://imgur.com/iWC6rdc. And I even don\u0027t know what are other places where this could had regressed!\n\nYou should had introduced another list, pointing to the smaller images that you wanted, and used that list for overlays, not change a list that someone introduced for a different purpose, even less change constants that are very global.",
+      "range": {
+        "startLine": 70,
+        "startChar": 44,
+        "endLine": 76,
+        "endChar": 66
+      },
+      "revId": "997a504f33bbd43c02a96a2a593a03e58bd3b72c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
