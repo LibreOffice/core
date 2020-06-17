@@ -86,8 +86,6 @@ private:
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
-    std::unique_ptr<SgaObject>  ImplReadSgaObject( GalleryObject const * pEntry );
-    SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
         if (nPos < aObjectList.size())
@@ -104,7 +102,6 @@ private:
                                     return SAL_MAX_UINT32;
                                 }
     SAL_DLLPRIVATE static INetURLObject ImplGetURL( const GalleryObject* pObject );
-    SAL_DLLPRIVATE INetURLObject ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
