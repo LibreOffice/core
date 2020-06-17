@@ -534,33 +534,60 @@ void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
 }
 
+namespace
+{
+    MouseEvent TransformEvent(const MouseEvent& rEvent, const vcl::Window* pParent, const vcl::Window* pChild)
+    {
+        return MouseEvent(pParent->ScreenToOutputPixel(pChild->OutputToScreenPixel(rEvent.GetPosPixel())),
+                          rEvent.GetClicks(), rEvent.GetMode(), rEvent.GetButtons(), rEvent.GetModifier());
+    }
+}
+
 void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::WindowMouseButtonDown)
     {
         auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
-        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             m_aMousePressHdl.Call(*pMouseEvent);
+        }
+        else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            m_aMousePressHdl.Call(aTransformedEvent);
         }
     }
     else if (rEvent.GetId() == VclEventId::WindowMouseButtonUp)
     {
         auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
-        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             m_aMouseReleaseHdl.Call(*pMouseEvent);
+        }
+        else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            m_aMouseReleaseHdl.Call(aTransformedEvent);
         }
     }
     else if (rEvent.GetId() == VclEventId::WindowMouseMove)
     {
         auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
-        if (m_xWidget->IsWindowOrChild(rWinEvent.GetWindow()))
+        if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             m_aMouseMotionHdl.Call(*pMouseEvent);
+        }
+        else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
+        {
+            const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
+            const MouseEvent aTransformedEvent(TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
+            m_aMouseMotionHdl.Call(aTransformedEvent);
         }
     }
 }
