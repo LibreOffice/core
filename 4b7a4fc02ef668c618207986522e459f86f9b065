@@ -94,6 +94,30 @@
       "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "946497a9_3f644bf0",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-06-17T20:40:35Z",
+      "side": 1,
+      "message": "Michael, thank you for the response. I had made an inquiry when doing the UNO command for this. https://gerrit.libreoffice.org/c/core/+/93241\n\nI will try to find a solution so the assert does not happen.",
+      "parentUuid": "b24b4def_38617a84",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 2
+      },
+      "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
