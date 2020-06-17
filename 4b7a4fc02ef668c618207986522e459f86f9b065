@@ -46,6 +46,30 @@
       "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f508fc_7d696d8f",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-17T07:15:01Z",
+      "side": 1,
+      "message": "Then let\u0027s ask Michael (who added that in c5abcfdf0c2e98c8f3445a92dd2d71eab23a7268) for comment. At any rate, a removed line is even easier to see (and discuss) in the review than commented out ;-P",
+      "parentUuid": "67f3e637_23060259",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 2
+      },
+      "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
