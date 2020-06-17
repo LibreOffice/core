@@ -11233,6 +11233,12 @@ public:
 
     virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bHighLightTarget) override
     {
+        if (rPos.X() < 0 || rPos.Y() < 0)
+        {
+            // short-circuit to avoid "gtk_tree_view_get_dest_row_at_pos: assertion 'drag_x >= 0'" g_assert
+            return false;
+        }
+
         const bool bAsTree = gtk_tree_view_get_enable_tree_lines(m_pTreeView);
 
         // to keep it simple we'll default to always drop before the current row
