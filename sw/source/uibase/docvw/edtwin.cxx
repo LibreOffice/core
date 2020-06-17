@@ -139,6 +139,11 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
+#include <txtfrm.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -2657,6 +2662,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
     if( pWrdCnt )
         pWrdCnt->UpdateCounts();
 
+    // repaint outline buttons
+    if (GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+        Invalidate();
+    }
 }
 
 /**
@@ -3796,6 +3807,46 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
+    // add/remove outline folding collapse button
+    if (GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        SwContentAtPos aSwContentAtPos(IsAttrAtPos::Outline);
+        if (GetView().GetWrtShell().GetContentAtPos(PixelToLogic(rMEvt.GetPosPixel()), aSwContentAtPos))
+        {
+            if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
+            {
+                SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
+                const SwNodes& rNds = GetView().GetWrtShell().GetDoc()->GetNodes();
+                SwOutlineNodes::size_type nPos;
+                rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos);
+                if (!GetView().GetWrtShell().IsOutlineContentFolded(nPos))
+                    GetFrameControlsManager().SetOutlineContentVisibilityButton(pContentFrame);
+                if (pContentFrame != m_pSavedOutlineFrame)
+                {
+                    if (m_pSavedOutlineFrame)
+                    {
+                        rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos);
+                        if (!GetView().GetWrtShell().IsOutlineContentFolded(nPos))
+                            GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+                    }
+                    m_pSavedOutlineFrame = pContentFrame;
+                }
+            }
+        }
+        else if (m_pSavedOutlineFrame)
+        {
+            // current pointer pos is not over an outline frame
+            // previous frame was an outline frame
+            // remove collapse button if showing
+            const SwNodes& rNds = GetView().GetWrtShell().GetDoc()->GetNodes();
+            SwOutlineNodes::size_type nPos;
+            rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos);
+            if (!GetView().GetWrtShell().IsOutlineContentFolded(nPos))
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            m_pSavedOutlineFrame = nullptr;
+        }
+    }
+
     //ignore key modifiers for format paintbrush
     {
         bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
@@ -3844,6 +3895,18 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     const Point aOldPt( rSh.VisArea().Pos() );
     const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
+
+    if (m_pSavedOutlineFrame && !bInsWin)
+    {
+        // the mouse pointer has left the building
+        // 86 the collapse button if showing
+        const SwNodes& rNds = GetView().GetWrtShell().GetDoc()->GetNodes();
+        SwOutlineNodes::size_type nPos;
+        rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos);
+        if (!GetView().GetWrtShell().IsOutlineContentFolded(nPos))
+            GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+        m_pSavedOutlineFrame = nullptr;
+    }
 
     if( m_pShadCursor && !bInsWin )
     {
