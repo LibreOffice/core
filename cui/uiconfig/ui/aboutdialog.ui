@@ -384,6 +384,7 @@ LibreOffice was based on OpenOffice.org</property>
                   <object class="GtkButton" id="btnCopyVersion">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_left">12</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="aboutdialog|btnCopyVersionTooltip">Copy all version information in English</property>
                     <property name="image">imCopy</property>
@@ -392,7 +393,7 @@ LibreOffice was based on OpenOffice.org</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
+                    <property name="pack_type">start</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
