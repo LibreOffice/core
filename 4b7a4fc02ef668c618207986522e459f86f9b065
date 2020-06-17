@@ -70,6 +70,30 @@
       "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b24b4def_38617a84",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-06-17T09:16:55Z",
+      "side": 1,
+      "message": "please dont remove this. it is an indication that the model position does not correspond to the text frame and either calling code is buggy or the frames aren\u0027t created correctly.",
+      "parentUuid": "77f508fc_7d696d8f",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 2
+      },
+      "revId": "4b7a4fc02ef668c618207986522e459f86f9b065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
