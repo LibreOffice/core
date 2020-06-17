@@ -69,21 +69,43 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
     }
 }
 
+IMPL_LINK(PasswordToOpenModifyDialog, ChangeHdl, weld::Entry&, rEntry, void)
+{
+    weld::Label* pIndicator = nullptr;
+    int nLength = rEntry.get_text().getLength();
+    if (&rEntry == m_xPasswdToOpenED.get())
+        pIndicator = m_xPasswdToOpenInd.get();
+    else if (&rEntry == m_xReenterPasswdToOpenED.get())
+        pIndicator = m_xReenterPasswdToOpenInd.get();
+    else if (&rEntry == m_xPasswdToModifyED.get())
+        pIndicator = m_xPasswdToModifyInd.get();
+    else if (&rEntry == m_xReenterPasswdToModifyED.get())
+        pIndicator = m_xReenterPasswdToModifyInd.get();
+    assert(pIndicator);
+    pIndicator->set_visible(nLength >= m_nMaxPasswdLen);
+}
+
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
     : SfxDialogController(pParent, "cui/ui/password.ui", "PasswordDialog")
     , m_xPasswdToOpenED(m_xBuilder->weld_entry("newpassEntry"))
+    , m_xPasswdToOpenInd(m_xBuilder->weld_label("newpassIndicator"))
     , m_xReenterPasswdToOpenED(m_xBuilder->weld_entry("confirmpassEntry"))
+    , m_xReenterPasswdToOpenInd(m_xBuilder->weld_label("confirmpassIndicator"))
     , m_xOptionsExpander(m_xBuilder->weld_expander("expander"))
     , m_xOk(m_xBuilder->weld_button("ok"))
     , m_xOpenReadonlyCB(m_xBuilder->weld_check_button("readonly"))
     , m_xPasswdToModifyFT(m_xBuilder->weld_label("label7"))
     , m_xPasswdToModifyED(m_xBuilder->weld_entry("newpassroEntry"))
+    , m_xPasswdToModifyInd(m_xBuilder->weld_label("newpassroIndicator"))
     , m_xReenterPasswdToModifyFT(m_xBuilder->weld_label("label8"))
     , m_xReenterPasswdToModifyED(m_xBuilder->weld_entry("confirmropassEntry"))
+    , m_xReenterPasswdToModifyInd(m_xBuilder->weld_label("confirmropassIndicator"))
     , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
     , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
     , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
     , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
+    , m_aIndicatorTemplate(CuiResId(RID_SVXSTR_PASSWORD_LEN_INDICATOR).replaceFirst("%1", OUString::number(nMaxPasswdLen)))
+    , m_nMaxPasswdLen(nMaxPasswdLen)
     , m_bIsPasswordToModify( bIsPasswordToModify )
 {
     m_xOk->connect_clicked(LINK(this, PasswordToOpenModifyDialog, OkBtnClickHdl));
@@ -91,9 +113,17 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     if (nMaxPasswdLen)
     {
         m_xPasswdToOpenED->set_max_length( nMaxPasswdLen );
+        m_xPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
+        m_xPasswdToOpenInd->set_label(m_aIndicatorTemplate);
         m_xReenterPasswdToOpenED->set_max_length( nMaxPasswdLen );
+        m_xReenterPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
+        m_xReenterPasswdToOpenInd->set_label(m_aIndicatorTemplate);
         m_xPasswdToModifyED->set_max_length( nMaxPasswdLen );
+        m_xPasswdToModifyED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
+        m_xPasswdToModifyInd->set_label(m_aIndicatorTemplate);
         m_xReenterPasswdToModifyED->set_max_length( nMaxPasswdLen );
+        m_xReenterPasswdToModifyED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
+        m_xReenterPasswdToModifyInd->set_label(m_aIndicatorTemplate);
     }
 
     m_xPasswdToOpenED->grab_focus();
