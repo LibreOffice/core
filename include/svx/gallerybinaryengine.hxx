@@ -50,9 +50,15 @@ public:
     const INetURLObject& GetSdvURL() const { return aSdvURL; }
     const INetURLObject& GetStrURL() const { return aStrURL; }
 
-    bool ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
+    std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
+    bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
+    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
+    SAL_DLLPRIVATE static INetURLObject
+    implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
+                        ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                        ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
