@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2f188e9_f258807a",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-06-17T08:32:46Z",
+      "side": 1,
+      "message": "The LabelFillHatchName is only mapped for individual data points, so the property added here is likely ignored. But I\u0027m not sure this call is getting any label properties. Doing a similar call in DataLabelConverter::convertFromModel() will not also work at least in the bugdoc because it\u0027s mxModel.mxShapeProp is null. But if do a similar call in the below for-loop, something like :\n\n        if (!pointLabel-\u003emxShapeProp)\n        {\n            PropertySet aChildPropSet(rxDataSeries-\u003egetDataPointByIndex(pointLabel-\u003emnIndex));\n            getFormatter().convertFrameFormatting(aChildPropSet, mrModel.mxShapeProp, OBJECTTYPE_DATALABEL);\n        }\n\n...at least the correct hatch style shows up, but ~everywhere in the chart (including the labels), because the converter it uses does not know the new label property names (but probably it might have set the \"FillHatchStyle\"/\"HatchFill\" properties). But I think we can workaround by having a 1) special FillFormatter/FillProperties like classes or 2) pass special parameters around to adapt them for the label properties so that they do not attempt to set \"other\" properties. But basically we just want to reuse most of FillProperties::pushToPropMap functionality.\n\nBut if you want to go by the older approach, I think you will have to use Reference\u003c uno::XInterface \u003e ChartView::createInstance( const OUString\u0026 aServiceSpecifier ) in oox somehow. With this, the chart2\u0027s list of hatches can be added/amended etc. But we need to see if this api is available in oox via some uno magic.",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 105
+      },
+      "revId": "3ef2bfbbb6a56aa3d8f2bd0675ba2c69125a4e64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
