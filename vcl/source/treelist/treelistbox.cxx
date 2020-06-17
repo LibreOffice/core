@@ -1996,6 +1996,28 @@ void SvTreeListBox::ModelHasCleared()
     SvListView::ModelHasCleared();
 }
 
+bool SvTreeListBox::PosOverBody(const Point& rPos) const
+{
+    if (rPos.X() < 0 || rPos.Y() < 0)
+        return false;
+    Size aSize(GetSizePixel());
+    if (rPos.X() > aSize.Width() || rPos.Y() > aSize.Height())
+        return false;
+    if (pImpl->m_aVerSBar->IsVisible())
+    {
+        tools::Rectangle aRect(pImpl->m_aVerSBar->GetPosPixel(), pImpl->m_aVerSBar->GetSizePixel());
+        if (aRect.IsInside(rPos))
+            return false;
+    }
+    if (pImpl->m_aHorSBar->IsVisible())
+    {
+        tools::Rectangle aRect(pImpl->m_aHorSBar->GetPosPixel(), pImpl->m_aHorSBar->GetSizePixel());
+        if (aRect.IsInside(rPos))
+            return false;
+    }
+    return true;
+}
+
 void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
 {
     if( !nDeltaEntries || !pImpl->m_aVerSBar->IsVisible() )

@@ -130,7 +130,7 @@ public:
     SvTreeListEntry* GetTargetAtPoint(const Point& rPos, bool bHighLightTarget)
     {
         SvTreeListEntry* pOldTargetEntry = pTargetEntry;
-        pTargetEntry = pImpl->GetEntry(rPos);
+        pTargetEntry = PosOverBody(rPos) ? pImpl->GetEntry(rPos) : nullptr;
         if (pOldTargetEntry != pTargetEntry)
             ImplShowTargetEmphasis(pOldTargetEntry, false);
 
