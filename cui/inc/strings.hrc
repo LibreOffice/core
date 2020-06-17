@@ -210,6 +210,7 @@
 #define RID_SVXSTR_TWO_PASSWORDS_MISMATCH           NC_("RID_SVXSTR_TWO_PASSWORDS_MISMATCH", "The confirmation passwords did not match the original passwords. Set the passwords again.")
 #define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON      NC_("RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON", "Please enter a password to open or to modify, or check the open read-only option to continue.")
 #define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2   NC_("RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2", "Set the password by entering the same password in both boxes.")
+#define RID_SVXSTR_PASSWORD_LEN_INDICATOR           NC_("RID_SVXSTR_PASSWORD_LEN_INDICATOR", "Password length limit of %1 reached")
 
 #define STR_AUTOLINK                                NC_("STR_AUTOLINK", "Automatic")
 #define STR_MANUALLINK                              NC_("STR_MANUALLINK", "Manual")
