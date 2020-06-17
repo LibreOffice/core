@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b3dcdf9e_f8d9e163",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "107f31e9_e06bb971",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3218f7a_77a96f4c",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4085e112_39584388",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "f3218f7a_77a96f4c",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "6b076ac6_8d7ca1e3",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "I\u0027m too old fashioned to think about putting first default ;-)\nHowever, this will be removed in next version without permyriad",
+      "parentUuid": "ef347199_9ccba05b",
+      "range": {
+        "startLine": 2345,
+        "startChar": 0,
+        "endLine": 2350,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "147eca5c_24db7f05",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -79,6 +139,30 @@
       "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24fe598b_5098ee43",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "147eca5c_24db7f05",
+      "range": {
+        "startLine": 2359,
+        "startChar": 0,
+        "endLine": 2364,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "0f79dbea_9617ecc7",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2376,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "74b319d2_a70dac4b",
+      "range": {
+        "startLine": 2373,
+        "startChar": 0,
+        "endLine": 2376,
+        "endChar": 7
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ed0ae97_f9dd9306",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -119,6 +227,24 @@
       "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05938c47_a702fa77",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4299,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "OK. I will try to apply this style",
+      "parentUuid": "7ed0ae97_f9dd9306",
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +268,30 @@
       "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f980b0d_599ad914",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4301,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2020-06-17T21:06:29Z",
+      "side": 1,
+      "message": "I keep this trick in mind for future. However, there is no need for next version without permyriad.",
+      "parentUuid": "7d99bb6e_49d185e9",
+      "range": {
+        "startLine": 4301,
+        "startChar": 46,
+        "endLine": 4301,
+        "endChar": 47
+      },
+      "revId": "ffaf8b2f0d60a3a102ae5cb347ed74b86d4bc6a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
