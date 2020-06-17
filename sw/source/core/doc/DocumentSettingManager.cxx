@@ -628,7 +628,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbClippedPictures
     // No mbBackgroundParaOverDrawings
     mbTabOverMargin = rSource.mbTabOverMargin;
-    // No mbTreatSingleColumnBreakAsPageBreak
+    mbTreatSingleColumnBreakAsPageBreak = rSource.mbTreatSingleColumnBreakAsPageBreak;
     mbSurroundTextWrapSmall = rSource.mbSurroundTextWrapSmall;
     mbPropLineSpacingShrinksFirstLine = rSource.mbPropLineSpacingShrinksFirstLine;
     mbSubtractFlys = rSource.mbSubtractFlys;
