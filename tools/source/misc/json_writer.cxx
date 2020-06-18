@@ -22,6 +22,7 @@ JsonWriter::JsonWriter()
     , maBuffer(new char[mSpaceAllocated])
     , mStartNodeCount(0)
     , mPos(maBuffer.get())
+    , mbFirstFieldInNode(true)
 {
     *mPos = '{';
     ++mPos;
@@ -33,6 +34,8 @@ JsonWriter::~JsonWriter() { assert(!maBuffer && "forgot to extract data?"); }
 
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
+    addCommaBeforeField();
+
     auto len = strlen(pNodeName);
     ensureSpace(len + 4);
     *mPos = '"';
@@ -53,6 +56,54 @@ void JsonWriter::endNode()
     ensureSpace(1);
     *mPos = '}';
     ++mPos;
+    mbFirstFieldInNode = false;
+}
+
+ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
+{
+    auto len = strlen(pNodeName);
+    ensureSpace(len + 4);
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pNodeName, len);
+    mPos += len;
+    strncpy(mPos, "\": [ ", 5);
+    mPos += 5;
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+    return ScopedJsonWriterArray(*this);
+}
+
+void JsonWriter::endArray()
+{
+    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
+    --mStartNodeCount;
+    ensureSpace(1);
+    *mPos = ']';
+    ++mPos;
+    mbFirstFieldInNode = false;
+}
+
+ScopedJsonWriterStruct JsonWriter::startStruct()
+{
+    ensureSpace(4);
+    *mPos = '{';
+    ++mPos;
+    *mPos = ' ';
+    ++mPos;
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+    return ScopedJsonWriterStruct(*this);
+}
+
+void JsonWriter::endStruct()
+{
+    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
+    --mStartNodeCount;
+    ensureSpace(1);
+    *mPos = '}';
+    ++mPos;
+    mbFirstFieldInNode = false;
 }
 
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
@@ -219,6 +270,15 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     mPos += 3;
 
     mPos += sprintf(mPos, "%d", nPropVal);
+}
+
+void JsonWriter::putRaw(const OStringBuffer& rRawBuf)
+{
+    addCommaBeforeField();
+
+    ensureSpace(rRawBuf.getLength());
+    memcpy(mPos, rRawBuf.getStr(), rRawBuf.getLength());
+    mPos += rRawBuf.getLength();
 }
 
 void JsonWriter::addCommaBeforeField()

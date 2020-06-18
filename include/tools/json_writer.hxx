@@ -10,6 +10,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <algorithm>
 #include <memory>
 
@@ -22,10 +23,14 @@
 namespace tools
 {
 class ScopedJsonWriterNode;
+class ScopedJsonWriterArray;
+class ScopedJsonWriterStruct;
 
 class TOOLS_DLLPUBLIC JsonWriter
 {
     friend class ScopedJsonWriterNode;
+    friend class ScopedJsonWriterArray;
+    friend class ScopedJsonWriterStruct;
 
     int mSpaceAllocated;
     std::unique_ptr<char[]> maBuffer;
@@ -38,11 +43,16 @@ public:
     ~JsonWriter();
 
     [[nodiscard]] ScopedJsonWriterNode startNode(const char*);
+    [[nodiscard]] ScopedJsonWriterArray startArray(const char*);
+    [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(const char* pPropName, const OUString& rPropValue);
     void put(const char* pPropName, const OString& rPropValue);
     void put(const char* pPropName, const char* pPropVal);
     void put(const char*, int);
+
+    /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
+    void putRaw(const OStringBuffer&);
 
     /** Hands ownership of the the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
@@ -50,6 +60,8 @@ public:
 
 private:
     void endNode();
+    void endArray();
+    void endStruct();
     void addCommaBeforeField();
 
     inline void ensureSpace(int noMoreBytesRequired)
@@ -82,6 +94,42 @@ class ScopedJsonWriterNode
 
 public:
     ~ScopedJsonWriterNode() { mrWriter.endNode(); }
+};
+
+/**
+ * Auto-closes the node.
+ */
+class ScopedJsonWriterArray
+{
+    friend class JsonWriter;
+
+    JsonWriter& mrWriter;
+
+    ScopedJsonWriterArray(JsonWriter& rWriter)
+        : mrWriter(rWriter)
+    {
+    }
+
+public:
+    ~ScopedJsonWriterArray() { mrWriter.endArray(); }
+};
+
+/**
+ * Auto-closes the node.
+ */
+class ScopedJsonWriterStruct
+{
+    friend class JsonWriter;
+
+    JsonWriter& mrWriter;
+
+    ScopedJsonWriterStruct(JsonWriter& rWriter)
+        : mrWriter(rWriter)
+    {
+    }
+
+public:
+    ~ScopedJsonWriterStruct() { mrWriter.endStruct(); }
 };
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
