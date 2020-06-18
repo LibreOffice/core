@@ -493,7 +493,6 @@
                                             <child>
                                               <object class="GtkRadioButton" id="rbAllPages">
                                                 <property name="label" translatable="yes" context="printdialog|rbAllPages">_All pages</property>
-                                                <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
                                                 <property name="halign">start</property>
@@ -523,7 +522,7 @@
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -536,13 +535,12 @@
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <object class="GtkRadioButton" id="rbEvenPages">
                                                 <property name="label" translatable="yes" context="printdialog|rmEvenPages">_Even pages</property>
-                                                <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
                                                 <property name="halign">start</property>
@@ -555,13 +553,11 @@
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">2</property>
-                                                <property name="width">2</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <object class="GtkRadioButton" id="rbOddPages">
                                                 <property name="label" translatable="yes" context="printdialog|rbOddPages">_Odd pages</property>
-                                                <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
                                                 <property name="halign">start</property>
@@ -574,7 +570,6 @@
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">3</property>
-                                                <property name="width">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -590,8 +585,24 @@
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
-                                                <property name="top_attach">4</property>
+                                                <property name="top_attach">3</property>
                                                 <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="evenoddbox">
+                                                <property name="can_focus">False</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="active">0</property>
+                                                <items>
+                                                  <item translatable="yes" context="printdialog|liststore3">Even and Odd Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
+                                                </items>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">4</property>
                                               </packing>
                                             </child>
                                           </object>
