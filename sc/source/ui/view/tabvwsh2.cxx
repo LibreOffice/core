@@ -330,7 +330,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         }
         else
         {
-            aInsertPos = GetViewData().getLOKVisibleArea().Center();
+            ScViewData& rViewData = GetViewData();
+            aInsertPos = rViewData.getLOKVisibleArea().Center();
+            if (comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+                aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
             aInsertPos.setX(sc::TwipsToHMM(aInsertPos.X()));
             aInsertPos.setY(sc::TwipsToHMM(aInsertPos.Y()));
