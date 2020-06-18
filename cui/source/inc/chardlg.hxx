@@ -166,7 +166,6 @@ private:
     bool                       m_bEnableNoneFontColor;
     Color                      m_aOrigFontColor;
     sal_uInt16                 m_nHtmlMode;
-    bool                       m_bUnderlineColorDisabled;
 
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;

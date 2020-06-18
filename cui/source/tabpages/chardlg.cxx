@@ -1266,16 +1266,6 @@ void SvxCharNamePage::EnableSearchMode()
 
 void SvxCharNamePage::DisableControls( sal_uInt16 nDisable )
 {
-    if ( DISABLE_LANGUAGE & nDisable )
-    {
-        if ( m_xWestFontLanguageFT ) m_xWestFontLanguageFT->set_sensitive(false);
-        if ( m_xWestFontLanguageLB ) m_xWestFontLanguageLB->set_sensitive(false);
-        if ( m_xEastFontLanguageFT ) m_xEastFontLanguageFT->set_sensitive(false);
-        if ( m_xEastFontLanguageLB ) m_xEastFontLanguageLB->set_sensitive(false);
-        if ( m_xCTLFontLanguageFT ) m_xCTLFontLanguageFT->set_sensitive(false);
-        if ( m_xCTLFontLanguageLB ) m_xCTLFontLanguageLB->set_sensitive(false);
-    }
-
     if ( DISABLE_HIDE_LANGUAGE & nDisable )
     {
         if ( m_xWestFontLanguageFT ) m_xWestFontLanguageFT->hide();
@@ -1314,7 +1304,6 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
-    , m_bUnderlineColorDisabled(false)
     , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
     , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pController->getDialog()))
     , m_xFontTransparencyFT(m_xBuilder->weld_label("fonttransparencyft"))
@@ -1638,14 +1627,10 @@ void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
     }
     else if (m_xPositionLB.get() != pBox)
     {
-        bool bUEnable = false;
-        if (!m_bUnderlineColorDisabled)
-        {
-            auto nUPos = m_xUnderlineLB->get_active();
-            bUEnable = nUPos > 0;
-            m_xUnderlineColorFT->set_sensitive(bUEnable);
-            m_xUnderlineColorLB->set_sensitive(bUEnable);
-        }
+        auto nUPos = m_xUnderlineLB->get_active();
+        bool bUEnable = nUPos > 0;
+        m_xUnderlineColorFT->set_sensitive(bUEnable);
+        m_xUnderlineColorLB->set_sensitive(bUEnable);
 
         auto nOPos = m_xOverlineLB->get_active();
         bool bOEnable = nOPos > 0;
@@ -2362,17 +2347,6 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
     {
         m_xEffectsFT->set_sensitive(false);
         m_xEffectsLB->set_sensitive(false);
-    }
-
-    if ( ( DISABLE_WORDLINE & nDisable ) == DISABLE_WORDLINE )
-        m_xIndividualWordsBtn->set_sensitive(false);
-
-    if ( ( DISABLE_UNDERLINE_COLOR & nDisable ) == DISABLE_UNDERLINE_COLOR )
-    {
-        // disable the controls
-        m_xUnderlineColorFT->set_sensitive(false);
-        m_xUnderlineColorLB->set_sensitive(false);
-        m_bUnderlineColorDisabled = true;
     }
 }
 
