@@ -51,7 +51,7 @@
 #include <tools/stream.hxx>
 
 #include <outdata.hxx>
-#include <pdf/objectcontainer.hxx>
+#include <vcl/filter/pdfobjectcontainer.hxx>
 #include "pdffontcache.hxx"
 #include "pdfbuildin_fonts.hxx"
 
@@ -949,6 +949,7 @@ i12626
     /// See vcl::PDFObjectContainer::updateObject().
     bool updateObject( sal_Int32 n ) override;
 
+    /// See vcl::PDFObjectContainer::writeBuffer().
     bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes ) override;
     void beginCompression();
     void endCompression();

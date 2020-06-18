@@ -26,6 +26,7 @@
 #include <svl/cryptosign.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/pdfwriter.hxx>
+#include <o3tl/safeint.hxx>
 
 using namespace com::sun::star;
 
@@ -126,6 +127,8 @@ XRefEntry::XRefEntry() = default;
 
 PDFDocument::PDFDocument() = default;
 
+PDFDocument::~PDFDocument() = default;
+
 bool PDFDocument::RemoveSignature(size_t nPosition)
 {
     std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
@@ -149,6 +152,34 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
     m_aEditBuffer.SetStreamSize(m_aEditBuffer.Tell() + 1);
 
     return m_aEditBuffer.good();
+}
+
+sal_Int32 PDFDocument::createObject()
+{
+    sal_Int32 nObject = m_aXRef.size();
+    m_aXRef[nObject] = XRefEntry();
+    return nObject;
+}
+
+bool PDFDocument::updateObject(sal_Int32 nObject)
+{
+    if (o3tl::make_unsigned(nObject) >= m_aXRef.size())
+    {
+        SAL_WARN("vcl.filter", "PDFDocument::updateObject: invalid nObject");
+        return false;
+    }
+
+    XRefEntry aEntry;
+    aEntry.SetOffset(m_aEditBuffer.Tell());
+    aEntry.SetDirty(true);
+    m_aXRef[nObject] = aEntry;
+    return true;
+}
+
+bool PDFDocument::writeBuffer(const void* pBuffer, sal_uInt64 nBytes)
+{
+    std::size_t nWritten = m_aEditBuffer.WriteBytes(pBuffer, nBytes);
+    return nWritten == nBytes;
 }
 
 void PDFDocument::SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine)
