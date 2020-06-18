@@ -11231,7 +11231,7 @@ public:
         weld::TreeView::connect_popup_menu(rLink);
     }
 
-    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bHighLightTarget) override
+    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bDnDMode) override
     {
         if (rPos.X() < 0 || rPos.Y() < 0)
         {
@@ -11267,7 +11267,7 @@ public:
             path = gtk_tree_path_copy(lastpath);
             pos = GTK_TREE_VIEW_DROP_AFTER;
         }
-        else if (gtk_tree_path_compare(path, lastpath) == 0)
+        else if (bDnDMode && gtk_tree_path_compare(path, lastpath) == 0)
         {
             // if we're on the last entry, see if gtk thinks
             // the drop should be before or after it, and if
@@ -11287,7 +11287,7 @@ public:
             gtk_tree_model_get_iter(pModel, &rGtkIter.iter, path);
         }
 
-        if (m_bInDrag && bHighLightTarget) // bHighLightTarget alone might be sufficient
+        if (m_bInDrag && bDnDMode)
         {
             // highlight the row
             gtk_tree_view_set_drag_dest_row(m_pTreeView, path, pos);

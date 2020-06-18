@@ -1178,10 +1178,16 @@ public:
     // call set_column_custom_renderer after setting custom callbacks
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) = 0;
 
-    // for dnd
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult,
-                                     bool bHighLightTarget = true)
-        = 0;
+    /* with bDnDMode false simply return the row under the point
+     *
+     * with bDnDMode true:
+     * a) return the row which should be dropped on, which may
+     *    be different from the row the mouse is over in some backends where
+     *    positioning the mouse on the bottom half of a row indicates to drop
+     *    after the row
+     * b) dnd highlight the dest row
+     */
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode) = 0;
     virtual void unset_drag_dest_row() = 0;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const = 0;
     // for dragging and dropping between TreeViews, return the active source

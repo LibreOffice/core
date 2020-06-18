@@ -455,7 +455,7 @@ sal_Int8 CustomAnimationListDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
     }
 
     return nAccept;
@@ -504,7 +504,7 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
     std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore(mxTreeView->make_iterator());
-    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDndEffectInsertBefore.get()))
+    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDndEffectInsertBefore.get(), true))
         xDndEffectInsertBefore.reset();
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );

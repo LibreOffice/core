@@ -42,7 +42,7 @@ sal_Int8 ScPivotLayoutTreeDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
 {
     // to enable the autoscroll when we're close to the edges
     weld::TreeView& rWidget = m_rTreeView.get_widget();
-    rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+    rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
     return DND_ACTION_MOVE;
 }
 
@@ -55,7 +55,7 @@ sal_Int8 ScPivotLayoutTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt 
 
     std::unique_ptr<weld::TreeIter> xTarget(rWidget.make_iterator());
     int nTargetPos = -1;
-    if (rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
+    if (rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
         nTargetPos = rWidget.get_iter_index_in_parent(*xTarget);
     m_rTreeView.InsertEntryForSourceTarget(*pSource, nTargetPos);
     rWidget.unset_drag_dest_row();
