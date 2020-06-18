@@ -16,6 +16,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
@@ -43,7 +44,7 @@ const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
-std::unique_ptr<WeldedTabbedNotebookbar> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
+std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
@@ -363,7 +364,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         bool bChangedFile = sNewFile != sCurrentFile;
 
         if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
-            || bReloadNotebookbar)
+            || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
         {
             RemoveListeners(pSysWindow);
 
@@ -382,12 +383,16 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
 
-            if ((!m_pNotebookBarWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
+            const SfxViewShell* pViewShell = SfxViewShell::Current();
+
+            bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
+            if ((!hasWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
             {
-                m_pNotebookBarWeldedWrapper.reset(new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
-                                                                              pNotebookBar->GetUIFilePath(),
-                                                                              xFrame));
-                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl));
+                m_pNotebookBarWeldedWrapper.emplace(std::make_pair(pViewShell,
+                        new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
+                                                    pNotebookBar->GetUIFilePath(),
+                                                    xFrame)));
+                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
             }
 
             pNotebookBar->GetParent()->Resize();
@@ -550,9 +555,9 @@ void SfxNotebookBar::ReloadNotebookBar(const OUString& sUIPath)
     }
 }
 
-IMPL_STATIC_LINK_NOARG(SfxNotebookBar, VclDisposeHdl, const void*, void)
+IMPL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, pViewShell, void)
 {
-    m_pNotebookBarWeldedWrapper.reset();
+    m_pNotebookBarWeldedWrapper.erase(pViewShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

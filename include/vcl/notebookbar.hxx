@@ -21,6 +21,7 @@ namespace com::sun::star::ui { class XContextChangeEventListener; }
 
 class NotebookbarContextControl;
 class SystemWindow;
+class SfxViewShell;
 
 /// This implements Widget Layout-based notebook-like menu bar.
 class VCL_DLLPUBLIC NotebookBar final : public Control, public VclBuilderContainer
@@ -50,7 +51,7 @@ public:
     bool IsWelded() { return m_bIsWelded; }
     VclPtr<vcl::Window>& GetMainContainer() { return m_xVclContentArea; }
     OUString GetUIFilePath() { return m_sUIXMLDescription; }
-    void SetDisposeCallback(const Link<const void*, void> rDisposeCallback);
+    void SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell);
 
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
@@ -58,11 +59,12 @@ private:
     std::set<css::uno::Reference<css::frame::XController>> m_alisteningControllers;
     std::vector<NotebookbarContextControl*> m_pContextContainers;
     css::uno::Reference<css::frame::XFrame> mxFrame;
+    const SfxViewShell* m_pViewShell;
 
     VclPtr<vcl::Window> m_xVclContentArea;
     bool m_bIsWelded;
     OUString m_sUIXMLDescription;
-    Link<const void*, void> m_rDisposeLink;
+    Link<const SfxViewShell*, void> m_rDisposeLink;
 
     AllSettings DefaultSettings;
     AllSettings PersonaSettings;
