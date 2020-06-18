@@ -44,7 +44,7 @@ public:
     void put(const char* pPropName, const char* pPropVal);
     void put(const char*, int);
 
-    /** Hands ownership of the the underlying storage buffer to the caller,
+    /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
     char* extractData();
 

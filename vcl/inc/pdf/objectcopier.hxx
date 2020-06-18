@@ -25,7 +25,7 @@ namespace filter
 class PDFObjectElement;
 }
 
-/// Copies objects from one PDF file into an other one.
+/// Copies objects from one PDF file into another one.
 class VCL_DLLPUBLIC PDFObjectCopier
 {
     PDFObjectContainer& m_rContainer;

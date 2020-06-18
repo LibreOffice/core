@@ -234,7 +234,7 @@ void JsonWriter::addCommaBeforeField()
     }
 }
 
-/** Hands ownership of the the underlying storage buffer to the caller,
+/** Hands ownership of the underlying storage buffer to the caller,
   * after this no more document modifications may be written. */
 char* JsonWriter::extractData()
 {
