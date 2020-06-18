@@ -1635,7 +1635,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     SwFrame *const pNext(
                         // if there's a parent section, it has been split
                         // into 2 SwSectionFrame already :(
-                        (   pFrame->GetNext()->IsSctFrame()
+                        (   pFrame->GetNext()
+                         && pFrame->GetNext()->IsSctFrame()
                          && pActualSection->GetUpper()
                          && pActualSection->GetUpper()->GetSectionNode() ==
                              static_cast<SwSectionFrame const*>(pFrame->GetNext())->GetSection()->GetFormat()->GetSectionNode())
