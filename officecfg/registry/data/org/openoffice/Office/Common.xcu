@@ -395,7 +395,7 @@
       <value>https://hub.libreoffice.org/donation/</value>
     </prop>
     <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/ReleaseNotes/</value>
+      <value>https://www.collaboraoffice.com/collabora-office-6-4-release-notes/</value>
     </prop>
   </node>
   <node oor:name="Forms">
