@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_PDF_BITMAPID_HXX
-#define INCLUDED_VCL_INC_PDF_BITMAPID_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/checksum.hxx>
@@ -38,7 +37,5 @@ struct BitmapID
     }
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
