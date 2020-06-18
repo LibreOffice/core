@@ -470,7 +470,7 @@ sal_Int8 SdPageObjsTLVDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
+    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
@@ -507,7 +507,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
+    if (!m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
         return DND_ACTION_NONE;
     int nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget) + 1;
 

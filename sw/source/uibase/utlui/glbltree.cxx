@@ -170,7 +170,7 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     weld::TreeView& rWidget = m_rTreeView.get_widget();
     std::unique_ptr<weld::TreeIter> xDropEntry(rWidget.make_iterator());
-    if (!rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get()))
+    if (!rWidget.get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get(), true))
         xDropEntry.reset();
 
     if (rWidget.get_drag_source() == &rWidget)  // internal drag
@@ -234,7 +234,7 @@ sal_Int8 SwGlobalTreeDropTarget::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     // to enable the autoscroll when we're close to the edges
     weld::TreeView& rWidget = m_rTreeView.get_widget();
-    rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+    rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
 
     sal_Int8 nRet = rEvt.mnAction;
 

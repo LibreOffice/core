@@ -131,7 +131,7 @@ sal_Int8 SfxCommonTemplateDialog_Impl::AcceptDrop(const AcceptDropEvent& rEvt, c
 
     // to enable the autoscroll when we're close to the edges
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
-    pTreeView->get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+    pTreeView->get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
     return DND_ACTION_MOVE;
 }
 
@@ -187,7 +187,7 @@ sal_Int8 SfxCommonTemplateDialog_Impl::ExecuteDrop(const ExecuteDropEvent& rEvt)
         return DND_ACTION_NONE;
 
     std::unique_ptr<weld::TreeIter> xTarget(mxTreeBox->make_iterator());
-    if (!mxTreeBox->get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
+    if (!mxTreeBox->get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
     {
         // if nothing under the mouse, use the last row
         int nChildren = mxTreeBox->n_children();

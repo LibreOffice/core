@@ -4597,9 +4597,9 @@ public:
 
     SvTabListBox& getTreeView() { return *m_xTreeView; }
 
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bHighLightTarget) override
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult, bool bDnDMode) override
     {
-        LclTabListBox* pTreeView = !bHighLightTarget ? dynamic_cast<LclTabListBox*>(m_xTreeView.get()) : nullptr;
+        LclTabListBox* pTreeView = !bDnDMode ? dynamic_cast<LclTabListBox*>(m_xTreeView.get()) : nullptr;
         SvTreeListEntry* pTarget = pTreeView ? pTreeView->GetTargetAtPoint(rPos, false) : m_xTreeView->GetDropTarget(rPos);
 
         if (pTarget && pResult)

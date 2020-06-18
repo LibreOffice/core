@@ -987,7 +987,7 @@ sal_Int8 SwContentTreeDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
     {
         // to enable the autoscroll when we're close to the edges
         weld::TreeView& rWidget = m_rTreeView.get_widget();
-        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+        rWidget.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
     }
 
     return nAccept;
@@ -1034,7 +1034,7 @@ sal_Int8 SwContentTreeDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
 sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
     std::unique_ptr<weld::TreeIter> xDropEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get()))
+    if (!m_xTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDropEntry.get(), true))
         xDropEntry.reset();
 
     if (m_nRootType == ContentTypeId::OUTLINE)

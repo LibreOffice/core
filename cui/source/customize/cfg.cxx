@@ -3172,7 +3172,7 @@ SvxConfigPageFunctionDropTarget::SvxConfigPageFunctionDropTarget(SvxConfigPage&r
 sal_Int8 SvxConfigPageFunctionDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
 {
     // to enable the autoscroll when we're close to the edges
-    m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, nullptr);
+    m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
     return DND_ACTION_MOVE;
 }
 
@@ -3189,7 +3189,7 @@ sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop( const ExecuteDropEvent& r
 
     std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
     int nTargetPos = -1;
-    if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get()))
+    if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
         nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
     m_rTreeView.move_subtree(*xSource, nullptr, nTargetPos);
 
