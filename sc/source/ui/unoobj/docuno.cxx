@@ -915,12 +915,20 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     if (!pViewData)
         return;
 
-    pViewData->SetZoom(Fraction(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_),
-                       Fraction(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_), true);
+    const Fraction newZoomX(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_);
+    const Fraction newZoomY(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_);
+
+    if (pViewData->GetZoomX() == newZoomX && pViewData->GetZoomY() == newZoomY)
+        return;
+
+    pViewData->SetZoom(newZoomX, newZoomY, true);
 
     // refresh our view's take on other view's cursors & selections
     pViewData->GetActiveWin()->updateKitOtherCursors();
     pViewData->GetActiveWin()->updateOtherKitSelections();
+
+    if (ScDrawView* pDrawView = pViewData->GetScDrawView())
+        pDrawView->resetGridOffsetsForAllSdrPageViews();
 }
 
 void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
