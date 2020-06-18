@@ -37,7 +37,7 @@ Renderable::Renderable (BaseWindow* pWin)
 : cppu::WeakComponentImplHelper< css::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
-    m_aUIProperties.resize( 3 );
+    m_aUIProperties.resize( 4 );
 
     // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
@@ -50,17 +50,11 @@ Renderable::Renderable (BaseWindow* pWin)
     // create a choice for the range to print
     OUString aPrintContentName( "PrintContent" );
     const Sequence<OUString> aChoices{IDEResId(RID_STR_PRINTDLG_PRINTALLPAGES),
-                                      IDEResId(RID_STR_PRINTDLG_PRINTPAGES),
-                                      IDEResId(RID_STR_PRINTDLG_PRINTEVENPAGES),
-                                      IDEResId(RID_STR_PRINTDLG_PRINTODDPAGES)};
+                                      IDEResId(RID_STR_PRINTDLG_PRINTPAGES)};
     const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
-                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
-                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2",
-                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3"};
+                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"};
     const Sequence<OUString> aWidgetIds{"rbAllPages",
-                                        "rbRangePages",
-                                        "rbEvenPages",
-                                        "rbOddPages"};
+                                        "rbRangePages"};
     m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
@@ -70,6 +64,16 @@ Renderable::Renderable (BaseWindow* pWin)
     m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
                                                  OUString(), "PageRange",
                                                  OUString(), aPageRangeOpt);
+
+    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintContentName, 0, true);
+    m_aUIProperties[3].Value = setChoiceListControlOpt("evenoddbox",
+                                                        OUString(),
+                                                        uno::Sequence<OUString>(),
+                                                        "EvenOdd",
+                                                        uno::Sequence<OUString>(),
+                                                        0,
+                                                        uno::Sequence< sal_Bool >(),
+                                                        aEvenOddOpt);
 }
 
 Renderable::~Renderable()
@@ -130,6 +134,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
         }
 
         sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+        sal_Int64 nEOContent = getIntValue ("EvenOdd", -1);
         if( nContent == 1 )
         {
             OUString aPageRange( getStringValue( "PageRange" ) );
@@ -141,7 +146,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
                     nCount = nSelCount;
             }
         }
-        else if ( nContent == 2 || nContent == 3 ) // even/odd pages
+        else if ( nEOContent == 1 || nEOContent == 2 ) // even/odd pages
             return static_cast<sal_Int32>( maValidPages.size() );
     }
 
