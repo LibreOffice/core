@@ -438,11 +438,11 @@ public:
     /// @see vcl::ITiledRenderable::getTrackedChanges().
     void getTrackedChanges(tools::JsonWriter&) override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
-    OUString getTrackedChangeAuthors() override;
+    void getTrackedChangeAuthors(tools::JsonWriter& rJsonWriter) override;
 
-    OUString getRulerState() override;
+    void getRulerState(tools::JsonWriter& rJsonWriter) override;
     /// @see vcl::ITiledRenderable::getPostIts().
-    OUString getPostIts() override;
+    void getPostIts(tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::executeFromFieldEvent().
     virtual void executeFromFieldEvent(const StringMap& aArguments) override;

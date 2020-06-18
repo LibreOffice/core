@@ -262,7 +262,7 @@ public:
     /// @see vcl::ITiledRenderable::getPointer().
     virtual PointerStyle getPointer() override;
     /// @see vcl::ITiledRenderable::getPostIts().
-    virtual OUString getPostIts() override;
+    virtual void getPostIts(tools::JsonWriter& /*rJsonWriter*/) override;
     /// @see vcl::ITiledRenderable::selectPart().
     virtual void selectPart(int nPart, int nSelect) override;
     /// @see vcl::ITiledRenderable::moveSelectedParts().

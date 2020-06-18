@@ -49,6 +49,7 @@
 #include <frameformats.hxx>
 #include <shellio.hxx>
 #include <editeng/fontitem.hxx>
+#include <tools/json_writer.hxx>
 
 namespace
 {
@@ -2261,8 +2262,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     // rendering and on the desktop.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    OUString aPostits = pTextDoc->getPostIts();
-    std::stringstream aStream(aPostits.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pTextDoc->getPostIts(aJsonWriter);
+    char* pChar = aJsonWriter.extractData();
+    std::stringstream aStream(pChar);
+    free(pChar);
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))

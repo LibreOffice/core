@@ -49,6 +49,7 @@
 #include <flddat.hxx>
 #include <basesh.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <tools/json_writer.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -1619,8 +1620,9 @@ void SwTiledRenderingTest::testRedlineColors()
     pWrtShell->Insert("zzz");
 
     // Assert that info about exactly one author is returned.
-    OUString aInfo = pXTextDocument->getTrackedChangeAuthors();
-    std::stringstream aStream(aInfo.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pXTextDocument->getTrackedChangeAuthors(aJsonWriter);
+    std::stringstream aStream(aJsonWriter.extractAsOString().getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("authors").size());
