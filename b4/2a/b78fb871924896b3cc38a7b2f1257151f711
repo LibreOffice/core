@@ -1,0 +1,8 @@
+Verified+1: René Engelhard <rene@debian.org>
+Verified+1: Jenkins
+Code-Review+2: Tomáš Chvátal <tchvatal@suse.com>
+Submitted-by: Tomáš Chvátal <tchvatal@suse.com>
+Submitted-at: Thu, 18 Jun 2020 15:07:37 +0200
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/93789
+Project: core
+Branch: refs/heads/master
