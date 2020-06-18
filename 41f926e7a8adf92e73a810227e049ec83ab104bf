@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d185abb0_60f22d02",
+        "filename": "lingucomponent/source/numbertext/numbertext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-18T10:35:30Z",
+      "side": 1,
+      "message": "Possibly better and more robust would be make use of the well-known and used in LO fact that on Windows, std::wstring is UTF-16, exactly as OUString:\n\n    #include \u003co3tl/char16_t2wchar_t.hxx\u003e\n\nand then\n\n    #if defined(_WIN32)\n        OUString aResult \u003d o3tl::toU(sResult.c_str());\n    #else\n        OUString aResult \u003d OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());\n    #endif",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 87
+      },
+      "revId": "41f926e7a8adf92e73a810227e049ec83ab104bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
