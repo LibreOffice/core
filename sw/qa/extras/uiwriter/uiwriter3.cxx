@@ -179,6 +179,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
                          getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
+{
+    load(DATA_DIRECTORY, "tdf133982.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    //Use selectAll 3 times in a row
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    //Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 {
     load(DATA_DIRECTORY, "tdf76636.doc");
