@@ -349,7 +349,7 @@
       <value>https://hub.libreoffice.org/donation/</value>
     </prop>
     <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/ReleaseNotes/</value>
+      <value>https://www.collaboraoffice.com/collabora-office-24.04-release-notes/</value>
     </prop>
     <prop oor:name="CreditsURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/credits/</value>
