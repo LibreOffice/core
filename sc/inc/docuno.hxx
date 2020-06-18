@@ -366,10 +366,10 @@ public:
     virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
 
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
-    virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle) override;
+    virtual void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::getCellCursor().
-    virtual OString getCellCursor() override;
+    virtual void getCellCursor(tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::getPointer().
     virtual PointerStyle getPointer() override;
@@ -381,10 +381,10 @@ public:
     virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
 
     /// @see vcl::ITiledRenderable::getPostIts().
-    OUString getPostIts() override;
+    void getPostIts(tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::getPostItsPos().
-    OUString getPostItsPos() override;
+    void getPostItsPos(tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::completeFunction().
     virtual void completeFunction(const OUString& rFunctionName) override;

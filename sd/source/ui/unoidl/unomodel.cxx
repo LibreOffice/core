@@ -120,6 +120,7 @@
 #include <sfx2/lokcharthelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/json_writer.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -2399,9 +2400,9 @@ Size SdXImpressDocument::getDocumentSize()
     return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
 }
 
-OUString SdXImpressDocument::getPostIts()
+void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aAnnotations;
+    auto commentsNode = rJsonWriter.startNode("comments");
     // Return annotations on master pages too ?
     const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
     SdPage* pPage;
@@ -2412,24 +2413,15 @@ OUString SdXImpressDocument::getPostIts()
 
         for (const uno::Reference<office::XAnnotation>& xAnnotation : aPageAnnotations)
         {
-            boost::property_tree::ptree aAnnotation;
-            aAnnotation.put("id", sd::getAnnotationId(xAnnotation));
-            aAnnotation.put("author", xAnnotation->getAuthor());
-            aAnnotation.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
+            auto commentNode = rJsonWriter.startNode("");
+            rJsonWriter.put("id", sd::getAnnotationId(xAnnotation));
+            rJsonWriter.put("author", xAnnotation->getAuthor());
+            rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
-            aAnnotation.put("text", xText->getString());
-            aAnnotation.put("parthash", OUString(OUString::number(pPage->GetHashCode())));
-
-            aAnnotations.push_back(std::make_pair("", aAnnotation));
+            rJsonWriter.put("text", xText->getString());
+            rJsonWriter.put("parthash", pPage->GetHashCode());
         }
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("comments", aAnnotations);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)

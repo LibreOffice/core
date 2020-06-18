@@ -38,6 +38,7 @@
 #include <vcl/unohelp2.hxx>
 #include <sc.hrc>
 #include <comphelper/string.hxx>
+#include <tools/json_writer.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -1757,7 +1758,9 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     SfxLokHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400));
+    tools::JsonWriter aJsonWriter1;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400), aJsonWriter1);
+    free(aJsonWriter1.extractData());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
@@ -1766,7 +1769,9 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     // Extend area top-to-bottom
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 5400, 19650, 9800));
+    tools::JsonWriter aJsonWriter2;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 5400, 19650, 9800), aJsonWriter2);
+    free(aJsonWriter2.extractData());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
@@ -1775,7 +1780,9 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     // Extend area left-to-right
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    pModelObj->getRowColumnHeaders(tools::Rectangle(5400, 5400, 25050, 9800));
+    tools::JsonWriter aJsonWriter3;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(5400, 5400, 25050, 9800), aJsonWriter3);
+    free(aJsonWriter3.extractData());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
@@ -1855,22 +1862,30 @@ void ScTiledRenderingTest::testRowColumnHeaders()
 
     // ViewRowColumnHeaders test
     SfxLokHelper::setView(nView1);
-    OUString aHeaders1 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    tools::JsonWriter aJsonWriter1;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter1);
+    OString aHeaders1 = aJsonWriter1.extractAsOString();
 
     SfxLokHelper::setView(nView2);
     // 50% zoom
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
     pModelObj->setClientZoom(256, 256, 6636, 6636);
-    OUString aHeaders2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    tools::JsonWriter aJsonWriter2;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter2);
+    OString aHeaders2 = aJsonWriter2.extractAsOString();
 
     // Check vs. view #1
     SfxLokHelper::setView(nView1);
-    OUString aHeaders1_2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    tools::JsonWriter aJsonWriter3;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter3);
+    OString aHeaders1_2 = aJsonWriter3.extractAsOString();
     CPPUNIT_ASSERT_EQUAL(aHeaders1, aHeaders1_2);
 
     // Check vs. view #2
     SfxLokHelper::setView(nView2);
-    OUString aHeaders2_2 = pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695));
+    tools::JsonWriter aJsonWriter4;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter4);
+    OString aHeaders2_2 = aJsonWriter4.extractAsOString();
     CPPUNIT_ASSERT_EQUAL(aHeaders2, aHeaders2_2);
 
     SfxLokHelper::setView(nView1);
