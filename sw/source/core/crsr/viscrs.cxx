@@ -866,7 +866,7 @@ void SwShellTableCursor::FillRects()
         if( !pCNd )
             continue;
 
-        std::pair<Point, bool> const tmp(GetSttPos(), true);
+        std::pair<Point, bool> const tmp(GetSttPos(), false);
         SwFrame* pFrame = pCNd->getLayoutFrame(GetShell()->GetLayout(), nullptr, &tmp);
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
