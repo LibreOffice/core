@@ -51,6 +51,7 @@
 #include <tools/stream.hxx>
 
 #include <outdata.hxx>
+#include <pdf/objectcontainer.hxx>
 #include "pdffontcache.hxx"
 #include "pdfbuildin_fonts.hxx"
 
@@ -609,7 +610,7 @@ enum class Mode { DEFAULT, NOWRITE };
 
 }
 
-class PDFWriterImpl : public VirtualDevice
+class PDFWriterImpl : public VirtualDevice, public PDFObjectContainer
 {
     friend class PDFStreamIf;
 
@@ -816,12 +817,6 @@ i12626
     void writeJPG( JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
     void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
-    /// Copies resources of a given kind from an external page to the output,
-    /// returning what has to be included in the new resource dictionary.
-    OString copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind, std::map<sal_Int32, sal_Int32>& rCopiedResources);
-    /// Copies a single resource from an external document, returns the new
-    /// object ID in our document.
-    sal_Int32 copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject, std::map<sal_Int32, sal_Int32>& rCopiedResources);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
@@ -949,15 +944,12 @@ i12626
 
     /* ensure proper escapement and uniqueness of field names */
     void createWidgetFieldName( sal_Int32 i_nWidgetsIndex, const PDFWriter::AnyWidget& i_rInWidget );
-    /* adds an entry to m_aObjects and returns its index+1,
-     * sets the offset to ~0
-     */
-    sal_Int32 createObject();
-    /* sets the offset of object n to the current position of output file+1
-     */
-    bool updateObject( sal_Int32 n );
+    /// See vcl::PDFObjectContainer::createObject().
+    sal_Int32 createObject() override;
+    /// See vcl::PDFObjectContainer::updateObject().
+    bool updateObject( sal_Int32 n ) override;
 
-    bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes );
+    bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes ) override;
     void beginCompression();
     void endCompression();
     void beginRedirect( SvStream* pStream, const tools::Rectangle& );
