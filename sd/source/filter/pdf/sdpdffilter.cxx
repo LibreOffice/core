@@ -29,6 +29,11 @@
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/text/XText.hpp>
+
+using namespace css;
+
 SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, sd::DrawDocShell& rDocShell)
     : SdFilter(rMedium, rDocShell)
 {
@@ -65,11 +70,28 @@ bool SdPdfFilter::Import()
 
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
-        Point aPosition(0, 0);
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
-                                                 tools::Rectangle(aPosition, aSizeHMM));
+                                                 tools::Rectangle(Point(), aSizeHMM));
         pPage->InsertObject(pSdrGrafObj);
+
+        for (auto const& rPDFAnnotation : rPDFGraphicResult.maAnnotations)
+        {
+            uno::Reference<office::XAnnotation> xAnnotation;
+            pPage->createAnnotation(xAnnotation);
+
+            xAnnotation->setAuthor(rPDFAnnotation.maAuthor);
+
+            uno::Reference<text::XText> xText(xAnnotation->getTextRange());
+            xText->setString(rPDFAnnotation.maText);
+            // position is in mm not 100thmm
+            geometry::RealPoint2D aUnoPosition(rPDFAnnotation.maRectangle.getMinX() / 100.0,
+                                               rPDFAnnotation.maRectangle.getMinY() / 100.00);
+            geometry::RealSize2D aUnoSize(rPDFAnnotation.maRectangle.getWidth() / 100.0,
+                                          rPDFAnnotation.maRectangle.getHeight() / 100.00);
+            xAnnotation->setPosition(aUnoPosition);
+            xAnnotation->setSize(aUnoSize);
+        }
     }
 
     return true;
