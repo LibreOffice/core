@@ -20,6 +20,7 @@
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/datetime.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -298,10 +299,21 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
                     convertPointToMm100(rRectangle.getMaxX()),
                     convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
 
+                OUString sDateTimeString
+                    = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
+                OUString sISO8601String = vcl::pdf::convertPdfDateToISO8601(sDateTimeString);
+
+                css::util::DateTime aDateTime;
+                if (!sISO8601String.isEmpty())
+                {
+                    utl::ISO8601parseDateTime(sISO8601String, aDateTime);
+                }
+
                 PDFGraphicAnnotation aPDFGraphicAnnotation;
                 aPDFGraphicAnnotation.maRectangle = rRectangleHMM;
                 aPDFGraphicAnnotation.maAuthor = sAuthor;
                 aPDFGraphicAnnotation.maText = sText;
+                aPDFGraphicAnnotation.maDateTime = aDateTime;
                 aPDFGraphicAnnotations.push_back(aPDFGraphicAnnotation);
             }
         }
