@@ -1451,29 +1451,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     bool bOutput = IsOutputEnabled();
     EnableOutput();
 
-    double fScaleX = 1;
-    double fScaleY = 1;
-    bool bNeedsScaling = false;
-    if(comphelper::LibreOfficeKit::isActive())
-    {
-        if(GetMapMode().GetMapUnit() != MapUnit::MapPixel &&
-        // Some of the preview windows (SvxPreviewBase) uses different painting (drawinglayer primitives)
-        // For these preview we don't need to scale even though the unit is not pixel.
-        GetMapMode().GetMapUnit() != MapUnit::Map100thMM)
-        {
-            bNeedsScaling = true;
-            // 1000.0 is used to reduce rounding imprecision (Size uses integers)
-            Size aLogicSize = PixelToLogic(Size(1000.0, 1000.0));
-            fScaleX = aLogicSize.Width() / 1000.0;
-            fScaleY = aLogicSize.Height() / 1000.0;
-        }
-    }
-    else
-    {   // TODO: Above scaling was added for LOK only, would be good to check how it works in other use cases
-        SAL_WARN_IF( GetMapMode().GetMapUnit() != MapUnit::MapPixel, "vcl.window", "MapMode must be PIXEL based" );
-        if ( GetMapMode().GetMapUnit() != MapUnit::MapPixel )
-            return;
-    }
+    SAL_WARN_IF( GetMapMode().GetMapUnit() != MapUnit::MapPixel, "vcl.window", "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MapUnit::MapPixel )
+        return;
 
     // preserve graphicsstate
     Push();
@@ -1522,18 +1502,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     else
         SetRefPoint();
     SetLayoutMode( GetLayoutMode() );
-    SetDigitLanguage( GetDigitLanguage() );
 
-    tools::Rectangle aPaintRect;
-    if(bNeedsScaling)
-    {
-        aPaintRect = tools::Rectangle( Point( 0, 0 ),
-            Size(GetOutputSizePixel().Width() * fScaleX, GetOutputSizePixel().Height() * fScaleY)  );
-    }
-    else
-    {
-        aPaintRect = tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
-    }
+    SetDigitLanguage( GetDigitLanguage() );
+    tools::Rectangle aPaintRect(Point(0, 0), GetOutputSizePixel());
     aClipRegion.Intersect( aPaintRect );
     SetClipRegion( aClipRegion );
 
@@ -1543,8 +1514,6 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     if( ! IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & ParentClipMode::NoClip ) )
     {
         Erase(*this);
-        if(bNeedsScaling)
-            aMtf.Scale(fScaleX, fScaleY);
     }
     // foreground
     Paint(*this, aPaintRect);
@@ -1560,8 +1529,6 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                                                 DeviceFormat::DEFAULT,
                                                 DeviceFormat::DEFAULT);
 
-    if(bNeedsScaling)
-        pMaskedDevice->SetMapMode( GetMapMode() );
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
