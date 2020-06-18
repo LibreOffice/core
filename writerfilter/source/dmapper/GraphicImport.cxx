@@ -208,6 +208,7 @@ public:
     bool      bLayoutInCell;
     bool bAllowOverlap = true;
     bool      bOpaque;
+    bool      bBehindDoc;
     bool      bContour;
     bool      bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
@@ -273,6 +274,7 @@ public:
         ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(true)
         ,bOpaque( !rDMapper.IsInHeaderFooter() )
+        ,bBehindDoc(false)
         ,bContour(false)
         ,bContourOutside(true)
         ,nLeftMargin(319)
@@ -371,10 +373,15 @@ public:
     {
         if (zOrder >= 0)
         {
+            // tdf#120760 Send objects with behinddoc=true to the back.
+            sal_Int32 nZOrder = zOrder;
+            if (bBehindDoc && rDomainMapper.IsInHeaderFooter())
+                nZOrder -= SAL_MAX_INT32;
             GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
             bool bOldStyle = eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE;
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder, bOldStyle)));
-            pZOrderHelper->addItem(xGraphicObjectProperties, zOrder);
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
+                uno::makeAny(pZOrderHelper->findZOrder(nZOrder, bOldStyle)));
+            pZOrderHelper->addItem(xGraphicObjectProperties, nZOrder);
         }
     }
 
@@ -609,8 +616,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->zOrder = nIntValue;
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
-            if( nIntValue > 0 )
+            if (nIntValue > 0)
+            {
                 m_pImpl->bOpaque = false;
+                m_pImpl->bBehindDoc = true;
+            }
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;
@@ -1414,7 +1424,6 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::makeAny( GraphicImport_Impl::nFillColor ));
-
             m_pImpl->applyZOrder(xGraphicObjectProperties);
 
             //there seems to be no way to detect the original size via _real_ API
