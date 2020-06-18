@@ -34,6 +34,24 @@
       "revId": "a35c18aeff3b1d8f270db7e094850fb8ba1ab84a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "964abed3_f9264f4c",
+        "filename": "include/vcl/PrinterSupport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-18T09:28:06Z",
+      "side": 1,
+      "message": "The license information should remain accurate, yes.  What I was referring to specifically here are the Emacs and Vim mode lines at the very top/bottom of the file.  Sorry for not being clear.",
+      "parentUuid": "fb4c6e19_89aa1de9",
+      "revId": "a35c18aeff3b1d8f270db7e094850fb8ba1ab84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
