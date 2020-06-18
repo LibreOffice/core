@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbe44480_879f3a95",
+        "filename": "external/libnumbertext/MSVCNonBMPBug.patch1",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-18T13:58:01Z",
+      "side": 1,
+      "message": "László: note BTW that you use a 8-bit string here as path; on Windows, that means that installing LibreOffice anywhere with a directory name containing non-ASC characters would result in failure here. E.g., a user installing to D:\\Программы\\személyes\\LibreOffice.\n\nOn Windows, you either need to make sure to pass UTF-8 path here, and convert to whcar_t* in the function and use API that takes that wide string, or change the function argument to std::wstring and offload conversion to the caller.",
+      "range": {
+        "startLine": 21,
+        "startChar": 21,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "fb55acc7f9c86f6fb95696159ceed177d4b70f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
