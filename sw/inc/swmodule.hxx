@@ -57,6 +57,7 @@ class SvtCTLOptions;
 class SvtUserOptions;
 enum class SwCompareMode;
 struct SwDBData;
+namespace tools { class JsonWriter; }
 
 enum class SvViewOpt {
     DestView,
@@ -198,7 +199,7 @@ public:
     std::size_t         GetRedlineAuthor();
     OUString const &    GetRedlineAuthor(std::size_t nPos);
     /// See SwXTextDocument::getTrackedChangeAuthors().
-    OUString GetRedlineAuthorInfo();
+    void                GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter);
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
     void                SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 

@@ -56,6 +56,7 @@
 #include <IDocumentLayoutAccess.hxx>
 
 #include <tools/color.hxx>
+#include <tools/json_writer.hxx>
 #include <PostItMgr.hxx>
 
 using namespace ::svx;
@@ -433,29 +434,16 @@ static Color lcl_GetAuthorColor(std::size_t nPos)
 }
 
 /// Returns a JSON representation of a redline author.
-static boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_t nIndex)
+void SwModule::GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aRet;
-    aRet.put("index", nIndex);
-    aRet.put("name", rAuthor.toUtf8().getStr());
-    aRet.put("color", sal_uInt32(lcl_GetAuthorColor(nIndex)));
-    return aRet;
-}
-
-OUString SwModule::GetRedlineAuthorInfo()
-{
-    boost::property_tree::ptree aTable;
+    auto authorsNode = rJsonWriter.startNode("authors");
     for (std::size_t nAuthor = 0; nAuthor < m_pAuthorNames.size(); ++nAuthor)
     {
-        boost::property_tree::ptree aAuthor = lcl_AuthorToJson(m_pAuthorNames[nAuthor], nAuthor);
-        aTable.push_back(std::make_pair("", aAuthor));
+        auto authorNode = rJsonWriter.startNode("");
+        rJsonWriter.put("index", nAuthor);
+        rJsonWriter.put("name", m_pAuthorNames[nAuthor]);
+        rJsonWriter.put("color", sal_uInt32(lcl_GetAuthorColor(nAuthor)));
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("authors", aTable);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 std::size_t SwModule::InsertRedlineAuthor(const OUString& rAuthor)

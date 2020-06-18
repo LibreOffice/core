@@ -53,6 +53,7 @@ class ScPageBreakData;
 class SdrHdlList;
 class TabBar;
 namespace com::sun::star::chart2::data { struct HighlightedRange; }
+namespace tools { class JsonWriter; }
 
 enum HeaderType
 {
@@ -591,7 +592,7 @@ public:
     void ResetAutoSpell();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
-    OUString getRowColumnHeaders(const tools::Rectangle& rRectangle);
+    void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter);
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 
     SCROW GetLOKStartHeaderRow() const { return mnLOKStartHeaderRow; }

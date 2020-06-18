@@ -3302,8 +3302,9 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
         SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
-    OUString aComments = pDoc->getPostIts();
-    return strdup(aComments.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pDoc->getPostIts(aJsonWriter);
+    return aJsonWriter.extractData();
 }
 
 /// Returns the JSON representation of the positions of all the comments in the document
@@ -3316,8 +3317,9 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
         SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
-    OUString aComments = pDoc->getPostItsPos();
-    return strdup(aComments.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pDoc->getPostItsPos(aJsonWriter);
+    return aJsonWriter.extractData();
 }
 
 static char* getRulerState(LibreOfficeKitDocument* pThis)
@@ -3329,8 +3331,9 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
         SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
-    OUString state = pDoc->getRulerState();
-    return strdup(state.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pDoc->getRulerState(aJsonWriter);
+    return aJsonWriter.extractData();
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
@@ -4719,8 +4722,9 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
         SetLastExceptionMsg("Document doesn't support tiled rendering");
         return nullptr;
     }
-    OUString aAuthors = pDoc->getTrackedChangeAuthors();
-    return strdup(aAuthors.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pDoc->getTrackedChangeAuthors(aJsonWriter);
+    return aJsonWriter.extractData();
 }
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
@@ -4823,11 +4827,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             aRectangle = tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
         }
 
-        OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
-        if (aHeaders.isEmpty())
-            return nullptr;
-        else
-            return convertOUString(aHeaders);
+        tools::JsonWriter aJsonWriter;
+        pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
+        return aJsonWriter.extractData();
     }
     else if (aCommand.startsWith(aCellCursor))
     {
@@ -4838,7 +4840,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             return nullptr;
         }
         // Ignore command's deprecated parameters.
-        return convertOString(pDoc->getCellCursor());
+        tools::JsonWriter aJsonWriter;
+        pDoc->getCellCursor(aJsonWriter);
+        return aJsonWriter.extractData();
     }
     else if (aCommand.startsWith(aFontSubset))
     {
