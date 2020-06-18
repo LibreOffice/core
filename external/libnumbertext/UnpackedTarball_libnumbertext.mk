@@ -15,4 +15,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
+    external/libnumbertext/MSVCNonBMPBug.patch1 \
+))
+
 # vim: set noet sw=4 ts=4:

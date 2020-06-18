@@ -22,6 +22,7 @@
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
@@ -144,12 +145,20 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     if (!aCountry.isEmpty())
         aCode += "-" + aCountry;
     OString aLangCode(OUStringToOString(aCode, RTL_TEXTENCODING_ASCII_US));
+#if defined(_WIN32)
+    std::wstring sResult(o3tl::toW(rText.getStr()));
+#else
     OString aInput(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-    std::wstring aResult = Numbertext::string2wstring(aInput.getStr());
-    bool result = m_aNumberText.numbertext(aResult, aLangCode.getStr());
+    std::wstring sResult = Numbertext::string2wstring(aInput.getStr());
+#endif
+    bool result = m_aNumberText.numbertext(sResult, aLangCode.getStr());
     DBG_ASSERT(result, "numbertext: false");
-    OString aResult2(Numbertext::wstring2string(aResult).c_str());
-    return OUString::fromUtf8(aResult2);
+#if defined(_WIN32)
+    OUString aResult(o3tl::toU(sResult.c_str()));
+#else
+    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());
+#endif
+    return aResult;
 #else
     return rText;
 #endif
