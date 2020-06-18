@@ -365,75 +365,75 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>I.</DefaultAbbrvName>
+          <DefaultAbbrvName>jan</DefaultAbbrvName>
           <DefaultFullName>január</DefaultFullName>
-          <DefaultNarrowName>jan.</DefaultNarrowName>
+          <DefaultNarrowName>I</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>II.</DefaultAbbrvName>
+          <DefaultAbbrvName>febr</DefaultAbbrvName>
           <DefaultFullName>február</DefaultFullName>
-          <DefaultNarrowName>febr.</DefaultNarrowName>
+          <DefaultNarrowName>II</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>III.</DefaultAbbrvName>
+          <DefaultAbbrvName>márc</DefaultAbbrvName>
           <DefaultFullName>március</DefaultFullName>
-          <DefaultNarrowName>márc.</DefaultNarrowName>
+          <DefaultNarrowName>III</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>IV.</DefaultAbbrvName>
+          <DefaultAbbrvName>ápr</DefaultAbbrvName>
           <DefaultFullName>április</DefaultFullName>
-          <DefaultNarrowName>ápr.</DefaultNarrowName>
+          <DefaultNarrowName>IV</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>V.</DefaultAbbrvName>
+          <DefaultAbbrvName>máj</DefaultAbbrvName>
           <DefaultFullName>május</DefaultFullName>
-          <DefaultNarrowName>máj.</DefaultNarrowName>
+          <DefaultNarrowName>V</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>VI.</DefaultAbbrvName>
+          <DefaultAbbrvName>jún</DefaultAbbrvName>
           <DefaultFullName>június</DefaultFullName>
-          <DefaultNarrowName>jún.</DefaultNarrowName>
+          <DefaultNarrowName>VI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>VII.</DefaultAbbrvName>
+          <DefaultAbbrvName>júl</DefaultAbbrvName>
           <DefaultFullName>július</DefaultFullName>
-          <DefaultNarrowName>júl.</DefaultNarrowName>
+          <DefaultNarrowName>VII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>VIII.</DefaultAbbrvName>
+          <DefaultAbbrvName>aug</DefaultAbbrvName>
           <DefaultFullName>augusztus</DefaultFullName>
-          <DefaultNarrowName>aug.</DefaultNarrowName>
+          <DefaultNarrowName>VIII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>IX.</DefaultAbbrvName>
+          <DefaultAbbrvName>szept</DefaultAbbrvName>
           <DefaultFullName>szeptember</DefaultFullName>
-          <DefaultNarrowName>szept.</DefaultNarrowName>
+          <DefaultNarrowName>IX</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>X.</DefaultAbbrvName>
+          <DefaultAbbrvName>okt</DefaultAbbrvName>
           <DefaultFullName>október</DefaultFullName>
-          <DefaultNarrowName>okt.</DefaultNarrowName>
+          <DefaultNarrowName>X</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>XI.</DefaultAbbrvName>
+          <DefaultAbbrvName>nov</DefaultAbbrvName>
           <DefaultFullName>november</DefaultFullName>
-          <DefaultNarrowName>nov.</DefaultNarrowName>
+          <DefaultNarrowName>XI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>XII.</DefaultAbbrvName>
+          <DefaultAbbrvName>dec</DefaultAbbrvName>
           <DefaultFullName>december</DefaultFullName>
-          <DefaultNarrowName>dec.</DefaultNarrowName>
+          <DefaultNarrowName>XII</DefaultNarrowName>
         </Month>
       </MonthsOfYear>
       <Eras>
