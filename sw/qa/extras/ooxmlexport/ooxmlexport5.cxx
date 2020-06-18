@@ -1319,6 +1319,22 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf112287, "tdf112287.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr","vAnchor","margin");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZOrderInHeader, "tdf120760_ZOrderInHeader.docx")
+{
+    // tdf#120760 Check that the Z-Order of the background is smaller than the front shape's.
+    xmlDocUniquePtr pXml = parseExport("word/header1.xml");
+    if (!pXml)
+        return;
+
+    // Get the Z-Order of the background image and of the shape in front of it.
+    sal_Int32 nBackground = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/w:drawing/wp:anchor", "relativeHeight").toInt32();
+    sal_Int32 nFrontShape = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/mc:AlternateContent[2]"
+        "/mc:Choice/w:drawing/wp:anchor", "relativeHeight").toInt32();
+
+    // Assert that background is in the back.
+    CPPUNIT_ASSERT(nBackground < nFrontShape);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
