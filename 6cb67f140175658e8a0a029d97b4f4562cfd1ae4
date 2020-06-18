@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae10559a_b5eb8384",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-18T07:15:21Z",
+      "side": 1,
+      "message": "What is the reason for this change?",
+      "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
