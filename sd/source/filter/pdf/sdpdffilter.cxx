@@ -91,6 +91,7 @@ bool SdPdfFilter::Import()
                                           rPDFAnnotation.maRectangle.getHeight() / 100.00);
             xAnnotation->setPosition(aUnoPosition);
             xAnnotation->setSize(aUnoSize);
+            xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
         }
     }
 
