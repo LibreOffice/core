@@ -22,6 +22,30 @@
       "revId": "fb55acc7f9c86f6fb95696159ceed177d4b70f6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc873ca2_af70ae23",
+        "filename": "external/libnumbertext/MSVCNonBMPBug.patch1",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-18T14:19:32Z",
+      "side": 1,
+      "message": "Mike: Nice catch! I hope, default LO installation avoids non-ASCII paths, but it must fix this, indeed.",
+      "parentUuid": "dbe44480_879f3a95",
+      "range": {
+        "startLine": 21,
+        "startChar": 21,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "fb55acc7f9c86f6fb95696159ceed177d4b70f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
