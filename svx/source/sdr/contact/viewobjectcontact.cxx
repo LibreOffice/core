@@ -478,6 +478,7 @@ void ViewObjectContact::resetGridOffset()
 
     // also reset sequence to get a re-calculation when GridOffset changes
     mxPrimitive2DSequence.clear();
+    maObjectRange.reset();
 }
 
 }}

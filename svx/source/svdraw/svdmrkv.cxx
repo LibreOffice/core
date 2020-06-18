@@ -50,6 +50,7 @@
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
@@ -2039,7 +2040,7 @@ bool SdrMarkView::getPossibleGridOffsetForSdrObject(
     const sdr::contact::ViewObjectContact& rVOC(pObj->GetViewContact().GetViewObjectContact(
         const_cast<sdr::contact::ObjectContact&>(rObjectContact)));
 
-    rObjectContact.calculateGridOffsetForViewOjectContact(rOffset, rVOC);
+    rOffset = rVOC.getGridOffset();
 
     return !rOffset.equalZero();
 }
