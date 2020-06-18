@@ -16,6 +16,24 @@
       "revId": "a35c18aeff3b1d8f270db7e094850fb8ba1ab84a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb4c6e19_89aa1de9",
+        "filename": "include/vcl/PrinterSupport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-06-18T09:23:36Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused by this, the content was split from another a file, shouldn\u0027t the same copyright be used? I can understand new code, but not stuff I moved to a brand new file, surely?",
+      "parentUuid": "9c13e642_92bb4049",
+      "revId": "a35c18aeff3b1d8f270db7e094850fb8ba1ab84a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
