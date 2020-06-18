@@ -278,7 +278,36 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         Graphic aGraphic(aVectorGraphicDataPtr);
         aGraphic.SetGfxLink(pGfxLink);
 
-        rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight));
+        auto pPage = pPdfDocument->openPage(nPageIndex);
+
+        std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations;
+        for (int nAnnotation = 0; nAnnotation < pPage->getAnnotationCount(); nAnnotation++)
+        {
+            auto pAnnotation = pPage->getAnnotation(nAnnotation);
+            if (pAnnotation && pAnnotation->getSubType() == 1 /*FPDF_ANNOT_TEXT*/
+                && pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup))
+            {
+                OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+                OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+                auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
+
+                basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
+                basegfx::B2DRectangle rRectangleHMM(
+                    convertPointToMm100(rRectangle.getMinX()),
+                    convertPointToMm100(aPageSize.getY() - rRectangle.getMinY()),
+                    convertPointToMm100(rRectangle.getMaxX()),
+                    convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
+
+                PDFGraphicAnnotation aPDFGraphicAnnotation;
+                aPDFGraphicAnnotation.maRectangle = rRectangleHMM;
+                aPDFGraphicAnnotation.maAuthor = sAuthor;
+                aPDFGraphicAnnotation.maText = sText;
+                aPDFGraphicAnnotations.push_back(aPDFGraphicAnnotation);
+            }
+        }
+
+        rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight),
+                               aPDFGraphicAnnotations);
     }
 
     return rGraphics.size();
