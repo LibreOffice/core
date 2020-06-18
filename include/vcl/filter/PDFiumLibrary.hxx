@@ -29,7 +29,7 @@ namespace vcl::pdf
 constexpr char constDictionaryKeyTitle[] = "T";
 constexpr char constDictionaryKeyContents[] = "Contents";
 constexpr char constDictionaryKeyPopup[] = "Popup";
-
+constexpr char constDictionaryKeyModificationDate[] = "M";
 class PDFiumDocument;
 
 class VCL_DLLPUBLIC PDFium final
@@ -120,6 +120,10 @@ struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>,
 {
     std::shared_ptr<PDFium> operator()() { return std::make_shared<PDFium>(); }
 };
+
+// Tools
+
+VCL_DLLPUBLIC OUString convertPdfDateToISO8601(OUString const& rInput);
 
 } // namespace vcl::pdf
 
