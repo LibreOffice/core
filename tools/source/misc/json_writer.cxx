@@ -39,7 +39,7 @@ ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
     ++mPos;
     memcpy(mPos, pNodeName, len);
     mPos += len;
-    strncpy(mPos, "\": { ", 5);
+    memcpy(mPos, "\": { ", 5);
     mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
@@ -66,7 +66,7 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
     mPos += nPropNameLength;
-    strncpy(mPos, "\": \"", 4);
+    memcpy(mPos, "\": \"", 4);
     mPos += 4;
 
     // Convert from UTF-16 to UTF-8 and perform escaping
@@ -125,7 +125,7 @@ void JsonWriter::put(const char* pPropName, const OString& rPropVal)
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
     mPos += nPropNameLength;
-    strncpy(mPos, "\": \"", 4);
+    memcpy(mPos, "\": \"", 4);
     mPos += 4;
 
     // copy and perform escaping
@@ -169,7 +169,7 @@ void JsonWriter::put(const char* pPropName, const char* pPropVal)
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
     mPos += nPropNameLength;
-    strncpy(mPos, "\": \"", 4);
+    memcpy(mPos, "\": \"", 4);
     mPos += 4;
 
     // copy and perform escaping
@@ -215,7 +215,7 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
     mPos += nPropNameLength;
-    strncpy(mPos, "\": ", 3);
+    memcpy(mPos, "\": ", 3);
     mPos += 3;
 
     mPos += sprintf(mPos, "%d", nPropVal);
