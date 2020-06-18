@@ -16,8 +16,9 @@
 #include <vector>
 
 #include <tools/stream.hxx>
-
 #include <vcl/dllapi.h>
+
+#include <vcl/filter/pdfobjectcontainer.hxx>
 
 namespace com::sun::star::security
 {
@@ -325,7 +326,7 @@ public:
  * elements remember their source offset / length, and based on that it's
  * possible to modify the input file.
  */
-class VCL_DLLPUBLIC PDFDocument
+class VCL_DLLPUBLIC PDFDocument : public PDFObjectContainer
 {
     /// This vector owns all elements.
     std::vector<std::unique_ptr<PDFElement>> m_aElements;
@@ -372,6 +373,7 @@ class VCL_DLLPUBLIC PDFDocument
 
 public:
     PDFDocument();
+    virtual ~PDFDocument();
     PDFDocument& operator=(const PDFDocument&) = delete;
     PDFDocument(const PDFDocument&) = delete;
     /// @name Low-level functions, to be used by PDFElement subclasses.
@@ -417,6 +419,13 @@ public:
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
     //@}
+
+    /// See vcl::PDFObjectContainer::createObject().
+    sal_Int32 createObject() override;
+    /// See vcl::PDFObjectContainer::updateObject().
+    bool updateObject(sal_Int32 n) override;
+    /// See vcl::PDFObjectContainer::writeBuffer().
+    bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) override;
 };
 
 } // namespace vcl::filter

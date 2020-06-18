@@ -14,8 +14,7 @@
 #include <sal/types.h>
 #include <tools/stream.hxx>
 #include <vcl/filter/pdfdocument.hxx>
-
-#include <pdf/objectcontainer.hxx>
+#include <vcl/filter/pdfobjectcontainer.hxx>
 
 namespace vcl
 {
