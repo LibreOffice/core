@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_PDF_XMPMETADATA_HXX
-#define INCLUDED_VCL_INC_PDF_XMPMETADATA_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/string.hxx>
@@ -42,7 +41,5 @@ private:
     void write();
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

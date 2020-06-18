@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_PDF_MATRIX3_HXX
-#define INCLUDED_VCL_INC_PDF_MATRIX3_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
@@ -48,7 +47,5 @@ public:
     Point transform(const Point& rPoint) const;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

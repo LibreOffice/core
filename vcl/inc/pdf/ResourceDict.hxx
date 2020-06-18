@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_PDF_RESOURCEDICT_HXX
-#define INCLUDED_VCL_INC_PDF_RESOURCEDICT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
@@ -36,7 +35,5 @@ struct ResourceDict
     void append(OStringBuffer& rBuffer, sal_Int32 nFontDictObject);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
