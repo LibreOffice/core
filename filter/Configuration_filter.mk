@@ -450,6 +450,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu
 	pdf_Portable_Document_Format \
 	writerglobal8 \
 	writerglobal8_template \
+	writer_EPUB_Document \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
@@ -461,6 +462,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters
 	writerglobal8_template \
 	writerglobal8_writer \
 	writerglobal8_HTML \
+	EPUB_globaldocument \
 ))
 
 # fcfg_calc
