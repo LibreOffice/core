@@ -92,7 +92,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
 protected:
 
@@ -330,7 +330,7 @@ public:
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     /// Button hes additional stuff that we need to dump too.
-    boost::property_tree::ptree DumpAsPropertyTree() override;
+    void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
@@ -421,7 +421,7 @@ public:
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     /// Button hes additional stuff that we need to dump too.
-    boost::property_tree::ptree DumpAsPropertyTree() override;
+    void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };

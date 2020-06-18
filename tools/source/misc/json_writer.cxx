@@ -204,7 +204,7 @@ void JsonWriter::put(const char* pPropName, const char* pPropVal)
     ++mPos;
 }
 
-void JsonWriter::put(const char* pPropName, int nPropVal)
+void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
 {
     addCommaBeforeField();
 
@@ -218,7 +218,48 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
-    mPos += sprintf(mPos, "%d", nPropVal);
+    mPos += sprintf(mPos, "%ld", nPropVal);
+}
+
+void JsonWriter::put(const char* pPropName, double fPropVal)
+{
+    addCommaBeforeField();
+
+    OString sPropVal = rtl::math::doubleToString(fPropVal, rtl_math_StringFormat_F, 12, '.');
+
+    auto nPropNameLength = strlen(pPropName);
+    ensureSpace(nPropNameLength + sPropVal.getLength() + 6);
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    strncpy(mPos, "\": ", 3);
+    mPos += 3;
+
+    memcpy(mPos, sPropVal.getStr(), sPropVal.getLength());
+    mPos += sPropVal.getLength();
+}
+
+void JsonWriter::put(const char* pPropName, bool nPropVal)
+{
+    addCommaBeforeField();
+
+    auto nPropNameLength = strlen(pPropName);
+    ensureSpace(nPropNameLength + 5 + 6);
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    strncpy(mPos, "\": ", 3);
+    mPos += 3;
+
+    const char* pVal;
+    if (nPropVal)
+        pVal = "true";
+    else
+        pVal = "false";
+    memcpy(mPos, pVal, strlen(pVal));
+    mPos += strlen(pVal);
 }
 
 void JsonWriter::addCommaBeforeField()

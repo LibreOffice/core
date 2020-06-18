@@ -366,7 +366,7 @@ public:
     virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateField : public SpinField, public DateFormatter

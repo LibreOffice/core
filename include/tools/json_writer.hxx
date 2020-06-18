@@ -42,7 +42,15 @@ public:
     void put(const char* pPropName, const OUString& rPropValue);
     void put(const char* pPropName, const OString& rPropValue);
     void put(const char* pPropName, const char* pPropVal);
-    void put(const char*, int);
+    void put(const char* pPropName, const std::string& rPropValue)
+    {
+        put(pPropName, rPropValue.data());
+    }
+    void put(const char* pPropName, sal_Int32 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_uInt32 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_Int64);
+    void put(const char* pPropName, bool);
+    void put(const char* pPropName, double);
 
     /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */

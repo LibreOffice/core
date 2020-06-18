@@ -99,7 +99,7 @@ public:
         return m_bVerticalContainer;
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
@@ -330,7 +330,7 @@ private:
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 public:
     VclGrid(vcl::Window *pParent)
         : VclContainer(pParent)
@@ -442,7 +442,7 @@ public:
     virtual const vcl::Window *get_child() const override;
     vcl::Window *get_label_widget();
     const vcl::Window *get_label_widget() const;
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;

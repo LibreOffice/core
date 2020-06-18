@@ -55,7 +55,7 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     // constructor/destructor
     AlignmentPropertyPanel(

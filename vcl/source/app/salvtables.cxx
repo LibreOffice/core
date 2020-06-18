@@ -501,7 +501,7 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_
 }
 
 void SalInstanceWidget::connect_get_property_tree(
-    const Link<boost::property_tree::ptree&, void>& rLink)
+    const Link<tools::JsonWriter&, void>& rLink)
 {
     m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
 }
