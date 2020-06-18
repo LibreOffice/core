@@ -997,6 +997,11 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     SdrObject& rSdrObject,
     basegfx::B2DVector& rTarget) const
 {
+    if (comphelper::LibreOfficeKit::isActive() &&
+            !comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        return false;
+
     ScGridWindow* pGridWin(pViewData->GetActiveWin());
 
     if(nullptr == pGridWin)
@@ -1181,6 +1186,13 @@ namespace sdr::contact
 
         bool ObjectContactOfScDrawView::supportsGridOffsets() const
         {
+            // Except when scPrintTwipsMsgs flag is active,
+            // Calc in LOK mode directly sets pixel-aligned logical coordinates for draw-objects.
+            if (comphelper::LibreOfficeKit::isActive() &&
+                !comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+                return false;
+
             // no GridOffset support for printer
             if(isOutputToPrinter())
             {

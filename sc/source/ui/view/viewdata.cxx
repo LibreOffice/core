@@ -2436,6 +2436,21 @@ Point ScViewData::GetPrintTwipsPos(SCCOL nCol, SCROW nRow) const
     return Point(nPosX, nPosY);
 }
 
+Point ScViewData::GetPrintTwipsPosFromTileTwips(const Point& rTileTwipsPos) const
+{
+    const long nPixelX = static_cast<long>(rTileTwipsPos.X() * nPPTX);
+    const long nPixelY = static_cast<long>(rTileTwipsPos.Y() * nPPTY);
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+
+    // The following call (with bTestMerge = false) will not modify any members.
+    const_cast<ScViewData*>(this)->GetPosFromPixel(nPixelX, nPixelY, SC_SPLIT_TOPLEFT, nCol, nRow, false /* bTestMerge */);
+    const Point aPixCellPos = GetScrPos(nCol, nRow, SC_SPLIT_TOPLEFT, true /* bAllowNeg */);
+    const Point aTileTwipsCellPos(aPixCellPos.X() / nPPTX, aPixCellPos.Y() / nPPTY);
+    const Point aPrintTwipsCellPos = GetPrintTwipsPos(nCol, nRow);
+    return aPrintTwipsCellPos + (rTileTwipsPos - aTileTwipsCellPos);
+}
+
 OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned) const
 {
     const bool bPosSizeInPixels = bPixelAligned;
