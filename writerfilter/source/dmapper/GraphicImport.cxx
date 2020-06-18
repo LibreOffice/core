@@ -208,6 +208,7 @@ public:
     bool      bLayoutInCell;
     bool bAllowOverlap = true;
     bool      bOpaque;
+    bool      bBehindDoc;
     bool      bContour;
     bool      bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
@@ -273,6 +274,7 @@ public:
         ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(true)
         ,bOpaque( !rDMapper.IsInHeaderFooter() )
+        ,bBehindDoc(false)
         ,bContour(false)
         ,bContourOutside(true)
         ,nLeftMargin(319)
@@ -609,8 +611,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->zOrder = nIntValue;
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
-            if( nIntValue > 0 )
+            if (nIntValue > 0)
+            {
                 m_pImpl->bOpaque = false;
+                m_pImpl->bBehindDoc = true;
+            }
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;
@@ -896,6 +901,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyMargins(xShapeProps);
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_pImpl->bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
+                        // If this shape should be behind the text, also send it behind everything else.
+                        if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.IsInHeaderFooter())
+                            m_pImpl->zOrder = 1;
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
                         xShapeProps->setPropertyValue("AllowOverlap",
@@ -1414,7 +1422,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::makeAny( GraphicImport_Impl::nFillColor ));
-
+            // If this shape should be behind the text, also send it behind everything else.
+            if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.IsInHeaderFooter())
+                m_pImpl->zOrder = 1;
             m_pImpl->applyZOrder(xGraphicObjectProperties);
 
             //there seems to be no way to detect the original size via _real_ API
