@@ -10,6 +10,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
+#include <algorithm>
 #include <memory>
 
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
