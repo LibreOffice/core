@@ -600,7 +600,10 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
 
     GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
 
-    getIDocumentState().SetModified();
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {   // TODO is this ever needed?
+        getIDocumentState().SetModified();
+    }
 }
 
 void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
