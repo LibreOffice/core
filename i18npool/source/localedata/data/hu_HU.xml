@@ -117,19 +117,19 @@
       <FormatCode>YYYY". "MMMM D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY.MM.DD.</FormatCode>
+      <FormatCode>YY. MM. DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>YYYY.MM.DD.</FormatCode>
+      <FormatCode>YYYY. MM. DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>YY". "MMM D.</FormatCode>
+      <FormatCode>YY". "MMM. D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
       <FormatCode>YYYY". "MM". "DD.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>YYYY". "MMM D.</FormatCode>
+      <FormatCode>YYYY". "MMM. D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>YYYY". "MMMMM D.</FormatCode>
@@ -141,7 +141,7 @@
       <FormatCode>YY-MM-DD, NN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>YYYY". "MMM D., NNN</FormatCode>
+      <FormatCode>YYYY". "MMM. D., NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
       <FormatCode>YYYY". "MMMMM D., NNN</FormatCode>
@@ -163,7 +163,7 @@
       <FormatCode>YYYY-MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>MMM D.</FormatCode>
+      <FormatCode>MMM. D.</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
@@ -301,10 +301,10 @@
       <FormatCode>YY-MM-DD HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>YYYY.MM.DD. HH:MM:SS</FormatCode>
+      <FormatCode>YYYY. MM. DD. HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
-      <FormatCode>YYYY.MM.DD. HH:MM</FormatCode>
+      <FormatCode>YYYY. MM. DD. HH:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -365,75 +365,75 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>I.</DefaultAbbrvName>
+          <DefaultAbbrvName>jan</DefaultAbbrvName>
           <DefaultFullName>január</DefaultFullName>
-          <DefaultNarrowName>jan.</DefaultNarrowName>
+          <DefaultNarrowName>I</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>II.</DefaultAbbrvName>
+          <DefaultAbbrvName>febr</DefaultAbbrvName>
           <DefaultFullName>február</DefaultFullName>
-          <DefaultNarrowName>febr.</DefaultNarrowName>
+          <DefaultNarrowName>II</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>III.</DefaultAbbrvName>
+          <DefaultAbbrvName>márc</DefaultAbbrvName>
           <DefaultFullName>március</DefaultFullName>
-          <DefaultNarrowName>márc.</DefaultNarrowName>
+          <DefaultNarrowName>III</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>IV.</DefaultAbbrvName>
+          <DefaultAbbrvName>ápr</DefaultAbbrvName>
           <DefaultFullName>április</DefaultFullName>
-          <DefaultNarrowName>ápr.</DefaultNarrowName>
+          <DefaultNarrowName>IV</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>V.</DefaultAbbrvName>
+          <DefaultAbbrvName>máj</DefaultAbbrvName>
           <DefaultFullName>május</DefaultFullName>
-          <DefaultNarrowName>máj.</DefaultNarrowName>
+          <DefaultNarrowName>V</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>VI.</DefaultAbbrvName>
+          <DefaultAbbrvName>jún</DefaultAbbrvName>
           <DefaultFullName>június</DefaultFullName>
-          <DefaultNarrowName>jún.</DefaultNarrowName>
+          <DefaultNarrowName>VI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>VII.</DefaultAbbrvName>
+          <DefaultAbbrvName>júl</DefaultAbbrvName>
           <DefaultFullName>július</DefaultFullName>
-          <DefaultNarrowName>júl.</DefaultNarrowName>
+          <DefaultNarrowName>VII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>VIII.</DefaultAbbrvName>
+          <DefaultAbbrvName>aug</DefaultAbbrvName>
           <DefaultFullName>augusztus</DefaultFullName>
-          <DefaultNarrowName>aug.</DefaultNarrowName>
+          <DefaultNarrowName>VIII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>IX.</DefaultAbbrvName>
+          <DefaultAbbrvName>szept</DefaultAbbrvName>
           <DefaultFullName>szeptember</DefaultFullName>
-          <DefaultNarrowName>szept.</DefaultNarrowName>
+          <DefaultNarrowName>IX</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>X.</DefaultAbbrvName>
+          <DefaultAbbrvName>okt</DefaultAbbrvName>
           <DefaultFullName>október</DefaultFullName>
-          <DefaultNarrowName>okt.</DefaultNarrowName>
+          <DefaultNarrowName>X</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>XI.</DefaultAbbrvName>
+          <DefaultAbbrvName>nov</DefaultAbbrvName>
           <DefaultFullName>november</DefaultFullName>
-          <DefaultNarrowName>nov.</DefaultNarrowName>
+          <DefaultNarrowName>XI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>XII.</DefaultAbbrvName>
+          <DefaultAbbrvName>dec</DefaultAbbrvName>
           <DefaultFullName>december</DefaultFullName>
-          <DefaultNarrowName>dec.</DefaultNarrowName>
+          <DefaultNarrowName>XII</DefaultNarrowName>
         </Month>
       </MonthsOfYear>
       <Eras>
