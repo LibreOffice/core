@@ -10,6 +10,7 @@
 #include <tools/json_writer.hxx>
 #include <stdio.h>
 #include <cstring>
+#include <rtl/strbuf.hxx>
 
 namespace tools
 {
@@ -22,6 +23,7 @@ JsonWriter::JsonWriter()
     , mpBuffer(static_cast<char*>(malloc(mSpaceAllocated)))
     , mStartNodeCount(0)
     , mPos(mpBuffer)
+    , mbFirstFieldInNode(true)
 {
     *mPos = '{';
     ++mPos;
@@ -38,7 +40,10 @@ JsonWriter::~JsonWriter()
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
     auto len = strlen(pNodeName);
-    ensureSpace(len + 4);
+    ensureSpace(len + 6);
+
+    addCommaBeforeField();
+
     *mPos = '"';
     ++mPos;
     memcpy(mPos, pNodeName, len);
@@ -57,15 +62,70 @@ void JsonWriter::endNode()
     ensureSpace(1);
     *mPos = '}';
     ++mPos;
+    mbFirstFieldInNode = false;
+}
+
+ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
+{
+    auto len = strlen(pNodeName);
+    ensureSpace(len + 6);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pNodeName, len);
+    mPos += len;
+    strncpy(mPos, "\": [ ", 5);
+    mPos += 5;
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+    return ScopedJsonWriterArray(*this);
+}
+
+void JsonWriter::endArray()
+{
+    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
+    --mStartNodeCount;
+    ensureSpace(1);
+    *mPos = ']';
+    ++mPos;
+    mbFirstFieldInNode = false;
+}
+
+ScopedJsonWriterStruct JsonWriter::startStruct()
+{
+    ensureSpace(6);
+
+    addCommaBeforeField();
+
+    *mPos = '{';
+    ++mPos;
+    *mPos = ' ';
+    ++mPos;
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+    return ScopedJsonWriterStruct(*this);
+}
+
+void JsonWriter::endStruct()
+{
+    assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
+    --mStartNodeCount;
+    ensureSpace(1);
+    *mPos = '}';
+    ++mPos;
+    mbFirstFieldInNode = false;
 }
 
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 {
-    addCommaBeforeField();
-
     auto nPropNameLength = strlen(pPropName);
     auto nWorstCasePropValLength = rPropVal.getLength() * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 6);
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
     *mPos = '"';
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
@@ -120,11 +180,12 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 
 void JsonWriter::put(const char* pPropName, const OString& rPropVal)
 {
-    addCommaBeforeField();
-
     auto nPropNameLength = strlen(pPropName);
     auto nWorstCasePropValLength = rPropVal.getLength();
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 6);
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
     *mPos = '"';
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
@@ -163,12 +224,13 @@ void JsonWriter::put(const char* pPropName, const OString& rPropVal)
 
 void JsonWriter::put(const char* pPropName, const char* pPropVal)
 {
-    addCommaBeforeField();
-
     auto nPropNameLength = strlen(pPropName);
     auto nPropValLength = strlen(pPropVal);
     auto nWorstCasePropValLength = nPropValLength * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 6);
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
     *mPos = '"';
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
@@ -210,11 +272,12 @@ void JsonWriter::put(const char* pPropName, const char* pPropVal)
 
 void JsonWriter::put(const char* pPropName, int nPropVal)
 {
-    addCommaBeforeField();
-
     auto nPropNameLength = strlen(pPropName);
     auto nWorstCasePropValLength = 32;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 6);
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
     *mPos = '"';
     ++mPos;
     memcpy(mPos, pPropName, nPropNameLength);
@@ -223,6 +286,16 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     mPos += 3;
 
     mPos += sprintf(mPos, "%d", nPropVal);
+}
+
+void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)
+{
+    ensureSpace(rRawBuf.getLength() + 2);
+
+    addCommaBeforeField();
+
+    memcpy(mPos, rRawBuf.getStr(), rRawBuf.getLength());
+    mPos += rRawBuf.getLength();
 }
 
 void JsonWriter::addCommaBeforeField()
@@ -238,12 +311,24 @@ void JsonWriter::addCommaBeforeField()
     }
 }
 
+void JsonWriter::reallocBuffer(int noMoreBytesRequired)
+{
+    int currentUsed = mPos - mpBuffer;
+    auto newSize = std::max<int>(mSpaceAllocated * 2, (currentUsed + noMoreBytesRequired) * 2);
+    char* pNew = static_cast<char*>(malloc(newSize));
+    memcpy(pNew, mpBuffer, currentUsed);
+    free(mpBuffer);
+    mpBuffer = pNew;
+    mPos = mpBuffer + currentUsed;
+}
+
 /** Hands ownership of the underlying storage buffer to the caller,
   * after this no more document modifications may be written. */
 char* JsonWriter::extractData()
 {
     assert(mStartNodeCount == 0 && "did not close all nodes");
     assert(mpBuffer && "data already extracted");
+    ensureSpace(2);
     // add closing brace
     *mPos = '}';
     ++mPos;
@@ -253,6 +338,14 @@ char* JsonWriter::extractData()
     char* pRet = nullptr;
     std::swap(pRet, mpBuffer);
     return pRet;
+}
+
+OString JsonWriter::extractAsOString()
+{
+    char* pChar = extractData();
+    OString ret(pChar);
+    free(pChar);
+    return ret;
 }
 
 } // namespace tools

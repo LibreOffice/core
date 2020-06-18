@@ -17,6 +17,7 @@
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/json_writer.hxx>
 
 #include <wrtsh.hxx>
 
@@ -855,8 +856,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
     dispatchCommand(mxComponent, ".uno:Copy", {});
     Scheduler::ProcessEventsToIdle();
 
-    OUString aPostits = pTextDoc->getPostIts();
-    std::stringstream aStream(aPostits.toUtf8().getStr());
+    tools::JsonWriter aJsonWriter;
+    pTextDoc->getPostIts(aJsonWriter);
+    char* pChar = aJsonWriter.extractData();
+    std::stringstream aStream(pChar);
+    free(pChar);
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))

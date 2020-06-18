@@ -173,9 +173,8 @@ public:
      * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
      * @return a JSON describing position/content of rows/columns
      */
-    virtual OUString getRowColumnHeaders(const tools::Rectangle& /*rRectangle*/)
+    virtual void getRowColumnHeaders(const tools::Rectangle& /*rRectangle*/, tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OUString();
     }
 
     /**
@@ -183,9 +182,8 @@ public:
      * current' views' co-ordinate system.
      * (This could maybe also be used for tables in Writer/Impress in future?)
      */
-    virtual OString getCellCursor()
+    virtual void getCellCursor(tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OString();
     }
 
     virtual PointerStyle getPointer() = 0;
@@ -237,30 +235,26 @@ public:
 
     /// Implementation for
     /// lok::Document::getCommandValues(".uno:TrackedChangeAuthors").
-    virtual OUString getTrackedChangeAuthors()
+    virtual void getTrackedChangeAuthors(tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OUString();
     }
 
     /// Implementation for
     /// lok::Document::getCommandValues(".uno:ViewAnnotations");
-    virtual OUString getPostIts()
+    virtual void getPostIts(tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OUString();
     }
 
     /// Implementation for
     /// lok::Document::getCommandValues(".uno:ViewAnnotationsPosition");
-    virtual OUString getPostItsPos()
+    virtual void getPostItsPos(tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OUString();
     }
 
     /// Implementation for
     /// lok::Document::getCommandValues(".uno:RulerState");
-    virtual OUString getRulerState()
+    virtual void getRulerState(tools::JsonWriter& /*rJsonWriter*/)
     {
-        return OUString();
     }
 
     /*

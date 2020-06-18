@@ -18,6 +18,7 @@ class SwViewShell;
 class View;
 namespace vcl { class Window; }
 class SwEditWin;
+namespace tools { class JsonWriter; }
 
 /**
  * An horizontal ruler with a control for comment panel visibility for Writer.
@@ -42,7 +43,7 @@ public:
      * \param rRect ignored
      */
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    std::string CreateJsonNotification();
+    void CreateJsonNotification(tools::JsonWriter& rJsonWriter);
 
 private:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility

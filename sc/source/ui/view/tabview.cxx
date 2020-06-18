@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
+#include <tools/json_writer.hxx>
 
 #include <pagedata.hxx>
 #include <tabview.hxx>
@@ -2358,7 +2359,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
 void lcl_createGroupsData(
         SCCOLROW nHeaderIndex, SCCOLROW nEnd, long nSizePx, long nTotalPx,
         const ScOutlineArray& rArray, std::vector<size_t>& rGroupIndexes,
-        std::vector<long>& rGroupStartPositions, OUString& rGroupsBuffer)
+        std::vector<long>& rGroupStartPositions, OStringBuffer& rGroupsBuffer)
 {
     const size_t nGroupDepth = rArray.GetDepth();
     // create string data for group controls
@@ -2390,20 +2391,20 @@ void lcl_createGroupsData(
                 // nHeaderIndex is the end col/row of a group or is the last col/row and a group started and not yet ended
 
                 // append a new group control data
-                if (rGroupsBuffer.endsWith("}"))
+                auto len = rGroupsBuffer.getLength();
+                if (len && rGroupsBuffer[len-1] == '}')
                 {
-                    rGroupsBuffer += ", ";
+                    rGroupsBuffer.append(", ");
                 }
 
                 bool bGroupHidden = pEntry->IsHidden();
 
-                OUString aGroupData = "{ \"level\": \"" + OUString::number(nLevel + 1) + "\", "
-                    "\"index\": \"" + OUString::number(nIndex) + "\", "
-                    "\"startPos\": \"" + OUString::number(rGroupStartPositions[nLevel]) + "\", "
-                    "\"endPos\": \"" + OUString::number(nTotalPx) + "\", "
-                    "\"hidden\": \"" + OUString::number(bGroupHidden ? 1 : 0) + "\" }";
-
-                rGroupsBuffer += aGroupData;
+                rGroupsBuffer
+                    .append("{ \"level\": ").append(sal_Int32(nLevel + 1)).append(", ")
+                    .append("\"index\": ").append(sal_Int32(nIndex)).append(", ")
+                    .append("\"startPos\": ").append(rGroupStartPositions[nLevel]).append(", ")
+                    .append("\"endPos\": ").append(nTotalPx).append(", ")
+                    .append("\"hidden\": ").append(sal_Int32(bGroupHidden ? 1 : 0)).append(" }");
 
                 // look for the next visible group control at level nLevel
                 bool bFound = false;
@@ -2431,19 +2432,18 @@ void lcl_createGroupsData(
 
 } // anonymous namespace
 
-OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
+void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if (!pDoc)
-        return OUString();
+        return;
 
     if (rRectangle.IsEmpty())
-        return OUString();
+        return;
 
     bool bRangeHeaderSupport = comphelper::LibreOfficeKit::isRangeHeaders();
 
-    OUStringBuffer aBuffer(256);
-    aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
+    rJsonWriter.put("commandName", ".uno:ViewRowColumnHeaders");
 
     SCTAB nTab = aViewData.GetTabNo();
     SCROW nStartRow = -1;
@@ -2551,54 +2551,55 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     /// 3) create string data for rows
 
-    aBuffer.append("\"rows\": [\n");
-
     long nTotalPixels = nStartHeightPx;
-    SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
-            << nStartRow << " start height: " << nTotalPixels);
-
-    if (nStartRow != nEndRow)
-    {
-        OUString aText = OUString::number(nStartRow + 1);
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\", ");
-        aBuffer.append("\"groupLevels\": \"").append(OUString::number(nRowGroupDepth)).append("\" }");
-    }
-
-    OUString aRowGroupsBuffer = "\"rowGroups\": [\n";
-    std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
     long nPrevSizePx = -1;
-    for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
+    OStringBuffer aRowGroupsBuffer = "\"rowGroups\": [\n";
     {
-        // nSize will be 0 for hidden rows.
-        const long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
-        nTotalPixels += nSizePx;
+        auto rowsNode = rJsonWriter.startArray("rows");
 
-        if (bRangeHeaderSupport && nRowGroupDepth > 0)
+        SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
+                << nStartRow << " start height: " << nTotalPixels);
+
+        if (nStartRow != nEndRow)
         {
-            lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalPixels,
-                                 *pRowArray, aRowGroupIndexes, aRowGroupStartPositions,
-                                 aRowGroupsBuffer);
+            auto node = rJsonWriter.startStruct();
+            rJsonWriter.put("text", nStartRow + 1);
+            rJsonWriter.put("size",nTotalPixels);
+            rJsonWriter.put("groupLevels", nRowGroupDepth);
         }
 
-        if (bRangeHeaderSupport && nRow < nEndRow && nSizePx == nPrevSizePx)
-            continue;
-        nPrevSizePx = nSizePx;
+        std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
+        for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
+        {
+            // nSize will be 0 for hidden rows.
+            const long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
+            nTotalPixels += nSizePx;
 
-        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
-        aBuffer.append(", ");
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\" }");
+            if (bRangeHeaderSupport && nRowGroupDepth > 0)
+            {
+                lcl_createGroupsData(nRow, nEndRow, nSizePx, nTotalPixels,
+                                     *pRowArray, aRowGroupIndexes, aRowGroupStartPositions,
+                                     aRowGroupsBuffer);
+            }
+
+            if (bRangeHeaderSupport && nRow < nEndRow && nSizePx == nPrevSizePx)
+                continue;
+            nPrevSizePx = nSizePx;
+
+            auto node = rJsonWriter.startStruct();
+            rJsonWriter.put("text", pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow));
+            rJsonWriter.put("size", nTotalPixels);
+        }
+
+        aRowGroupsBuffer.append("]");
     }
-
-    aRowGroupsBuffer += "]";
-    aBuffer.append("]");
     if (nRowGroupDepth > 0)
-        aBuffer.append(",\n").append(aRowGroupsBuffer);
+    {
+        aRowGroupsBuffer.append(",\n");
+        rJsonWriter.putRaw(aRowGroupsBuffer.getStr());
+    }
     ///  end collecting ROWS
 
-
-    aBuffer.append(",\n");
 
     /// *** start collecting COLS ***
 
@@ -2628,8 +2629,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         mnLOKStartHeaderCol = nStartCol;
         mnLOKEndHeaderCol = nEndCol;
     }
-
-    aBuffer.ensureCapacity( aBuffer.getCapacity() + (50 * (nEndCol - nStartCol + 1)) );
 
     long nVisibleCols = nEndCol - nStartCol;
     if (nVisibleCols < 10)
@@ -2693,55 +2692,55 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     }
 
     /// 3) create string data for columns
-
-    aBuffer.append("\"columns\": [\n");
-
-    nTotalPixels = nStartWidthPx;
-    SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
-            << nStartRow << " start width: " << nTotalPixels);
-
-    if (nStartCol != nEndCol)
+    OStringBuffer aColGroupsBuffer = "\"columnGroups\": [\n";
     {
-        OUString aText = OUString::number(nStartCol + 1);
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\", ");
-        aBuffer.append("\"groupLevels\": \"").append(OUString::number(nColGroupDepth)).append("\" }");
+        auto columnsNode = rJsonWriter.startArray("columns");
+
+        nTotalPixels = nStartWidthPx;
+        SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
+                << nStartRow << " start width: " << nTotalPixels);
+
+        if (nStartCol != nEndCol)
+        {
+            auto node = rJsonWriter.startStruct();
+            rJsonWriter.put("text", nStartCol + 1);
+            rJsonWriter.put("size", nTotalPixels);
+            rJsonWriter.put("groupLevels", nColGroupDepth);
+        }
+
+        std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
+        nPrevSizePx = -1;
+        for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
+        {
+            // nSize will be 0 for hidden columns.
+            const long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
+            nTotalPixels += nSizePx;
+
+            if (bRangeHeaderSupport && nColGroupDepth > 0)
+                lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalPixels,
+                                     *pColArray, aColGroupIndexes,
+                                     aColGroupStartPositions, aColGroupsBuffer);
+
+            if (bRangeHeaderSupport && nCol < nEndCol && nSizePx == nPrevSizePx)
+                continue;
+            nPrevSizePx = nSizePx;
+
+            OUString aText = bRangeHeaderSupport ?
+                    OUString::number(nCol + 1) : pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+
+            auto node = rJsonWriter.startStruct();
+            rJsonWriter.put("text", aText);
+            rJsonWriter.put("size", nTotalPixels);
+        }
+
+        aColGroupsBuffer.append("]");
     }
-
-    OUString aColGroupsBuffer = "\"columnGroups\": [\n";
-    std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
-    nPrevSizePx = -1;
-    for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
-    {
-        // nSize will be 0 for hidden columns.
-        const long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
-        nTotalPixels += nSizePx;
-
-        if (bRangeHeaderSupport && nColGroupDepth > 0)
-            lcl_createGroupsData(nCol, nEndCol, nSizePx, nTotalPixels,
-                                 *pColArray, aColGroupIndexes,
-                                 aColGroupStartPositions, aColGroupsBuffer);
-
-        if (bRangeHeaderSupport && nCol < nEndCol && nSizePx == nPrevSizePx)
-            continue;
-        nPrevSizePx = nSizePx;
-
-        OUString aText = bRangeHeaderSupport ?
-                OUString::number(nCol + 1) : pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
-
-        aBuffer.append(", ");
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels)).append("\" }");
-    }
-
-    aColGroupsBuffer += "]";
-    aBuffer.append("]");
     if (nColGroupDepth > 0)
-        aBuffer.append(",\n").append(aColGroupsBuffer);
+    {
+        aColGroupsBuffer.append(",\n");
+        rJsonWriter.putRaw(aColGroupsBuffer.getStr());
+    }
     ///  end collecting COLs
-
-    aBuffer.append("\n}");
-    OUString sRet = aBuffer.makeStringAndClear();
 
     vcl::Region aNewVisArea(
             tools::Rectangle(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
@@ -2753,8 +2752,6 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         UpdateVisibleRange();
         UpdateFormulas(aChangedArea.Left(), aChangedArea.Top(), aChangedArea.Right(), aChangedArea.Bottom());
     }
-
-    return sRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
