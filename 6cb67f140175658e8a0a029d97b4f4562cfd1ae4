@@ -16,6 +16,24 @@
       "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5977e133_581c016f",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1002567
+      },
+      "writtenOn": "2020-06-18T08:28:43Z",
+      "side": 1,
+      "message": "register asm is a gcc\u0027ism and it\u0027s not supported by clang. It results in a crash on FreeBSD.\nThe asm should probably be:\n    asm volatile(\n        \"mov %0, x8\\n\"\n        \"mov %1, x9\\n\"\n        \"mov %2, x10\\n\"\n        : \"\u003dr\" (indirectRet), \"\u003dr\" (functionIndex), \"\u003dr\" (vtableOffset)\n        ::);",
+      "parentUuid": "ae10559a_b5eb8384",
+      "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
