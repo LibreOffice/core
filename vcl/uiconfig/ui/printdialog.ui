@@ -555,7 +555,18 @@
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">2</property>
-                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkEntry" id="evenpagerange">
+                                                <property name="can_focus">True</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="placeholder_text" translatable="yes" context="printdialog|evenpagerange">Range e.g.: 1-5, 7-9</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -574,7 +585,18 @@
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">3</property>
-                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkEntry" id="oddpagerange">
+                                                <property name="can_focus">True</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="placeholder_text" translatable="yes" context="printdialog|oddpagerange">Range e.g.: 1-5, 7-9</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">3</property>
                                               </packing>
                                             </child>
                                             <child>

@@ -176,8 +176,8 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
     const int nRTLOpts = bRTL ? 1 : 0;
-    const int nNumProps = nRTLOpts + (bWeb ? 14 : 18);
-    m_aUIProperties.resize( nNumProps );
+    const int nNumProps = nRTLOpts + (bWeb ? 16 : 20);
+    m_aUIProperties.resize( nNumProps);
     int nIdx = 0;
 
     // load the writer PrinterOptions into the custom tab
@@ -311,6 +311,18 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                       "PageRange",
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
+    vcl::PrinterOptionsHelper::UIControlOptions aEvenPageRangeOpt( aPrintRangeName, 2, true );
+    m_aUIProperties[nIdx++].Value = setEditControlOpt("evenpagerange", OUString(),
+                                                      ".HelpID:vcl:PrintDialog:EvenPageRange:Edit",
+                                                      "EvenPageRange",
+                                                      OUString(),
+                                                      aEvenPageRangeOpt);
+    vcl::PrinterOptionsHelper::UIControlOptions aOddPageRangeOpt( aPrintRangeName, 3, true );
+    m_aUIProperties[nIdx++].Value = setEditControlOpt("oddpagerange", OUString(),
+                                                      ".HelpID:vcl:PrintDialog:OddPageRange:Edit",
+                                                      "OddPageRange",
+                                                      OUString(),
+                                                      aOddPageRangeOpt);
 
     // create a list box for notes content
     const SwPostItMode nPrintPostIts = rDefaultPrintData.GetPrintPostIts();

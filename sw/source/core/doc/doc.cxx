@@ -726,7 +726,11 @@ void SwDoc::CalculatePagesForPrinting(
         // 4 -> print selection
         if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange" );
-        if (4 == nContent)
+        else if (2 == nContent)
+            aPageRange = rOptions.getStringValue( "EvenPageRange" );
+        else if (3 == nContent)
+            aPageRange = rOptions.getStringValue( "OddPageRange" );
+        else if (4 == nContent)
         {
             // note that printing selections is actually implemented by copying
             // the selection to a new temporary document and printing all of that one.
