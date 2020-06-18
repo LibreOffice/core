@@ -856,6 +856,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         SwPosition aPos( aIdx );
         if( !m_bDelFullPara )
         {
+            assert(!m_bTableDelLastNd || pInsNd->IsTextNode());
             if( pInsNd->IsTableNode() )
             {
                 pInsNd = rDoc.GetNodes().MakeTextNode( aIdx,
@@ -1042,8 +1043,11 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
     // delete the temporarily added Node
-    if( pInsNd )
+    if (pInsNd && !m_bTableDelLastNd)
+    {
+        assert(&aIdx.GetNode() == pInsNd);
         rDoc.GetNodes().Delete( aIdx );
+    }
     if( m_pRedlSaveData )
         SetSaveData(rDoc, *m_pRedlSaveData);
 
@@ -1133,6 +1137,15 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     if (pMovedNode && !m_bDisableMakeFrames)
     {   // probably better do this after creating all frames
         lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
+    }
+
+    // tdf#134021 only after MakeFrames(), because it may be the only node
+    // that has layout frames
+    if (pInsNd && m_bTableDelLastNd)
+    {
+        assert(&aIdx.GetNode() == pInsNd);
+        SwPaM tmp(aIdx, aIdx);
+        rDoc.getIDocumentContentOperations().DelFullPara(tmp);
     }
 
     AddUndoRedoPaM(rContext, true);
