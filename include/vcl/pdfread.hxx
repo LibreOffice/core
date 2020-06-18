@@ -14,6 +14,7 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 
 namespace com::sun::star::uno
 {
@@ -31,16 +32,27 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vecto
 /// Imports a PDF stream into rGraphic as VectorGraphicData.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
 
+struct PDFGraphicAnnotation
+{
+    OUString maAuthor;
+    OUString maText;
+    // In HMM
+    basegfx::B2DRectangle maRectangle;
+};
+
 struct PDFGraphicResult
 {
     Graphic maGraphic;
-
     // Size in HMM
     Size maSize;
 
-    PDFGraphicResult(Graphic const& rGraphic, Size const& rSize)
+    std::vector<PDFGraphicAnnotation> maAnnotations;
+
+    PDFGraphicResult(Graphic const& rGraphic, Size const& rSize,
+                     std::vector<PDFGraphicAnnotation> const& aAnnotations)
         : maGraphic(rGraphic)
         , maSize(rSize)
+        , maAnnotations(aAnnotations)
     {
     }
 };
