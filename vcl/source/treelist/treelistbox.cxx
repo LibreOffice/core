@@ -1377,6 +1377,9 @@ SvTreeListBox::~SvTreeListBox()
 
 void SvTreeListBox::dispose()
 {
+    if (IsMouseCaptured())
+        ReleaseMouse();
+
     if( pImpl )
     {
         pImpl->CallEventListeners( VclEventId::ObjectDying );
