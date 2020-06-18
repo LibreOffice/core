@@ -205,6 +205,9 @@ static SvxFont GetFontFromItems(const SvxFontItem* pFontItem, Size aPixelFontSiz
 void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
+    if (!pShell)
+        return;
+
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
     SfxStyleSheetBase* pStyle = nullptr;
 
