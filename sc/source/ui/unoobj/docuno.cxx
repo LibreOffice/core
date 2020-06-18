@@ -250,7 +250,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
-    sal_Int32 nNumProps= 9, nIdx = 0;
+    sal_Int32 nNumProps= 10, nIdx = 0;
 
     m_aUIProperties.resize(nNumProps);
 
@@ -298,21 +298,15 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create a choice for the range to print
     OUString aPrintRangeName( "PrintRange" );
-    aChoices.realloc( 4 );
-    aHelpIds.realloc( 4 );
-    uno::Sequence< OUString > aWidgetIds( 4 );
+    aChoices.realloc( 2 );
+    aHelpIds.realloc( 2 );
+    uno::Sequence< OUString > aWidgetIds( 2 );
     aChoices[0] = ScResId( SCSTR_PRINTOPT_PRINTALLPAGES );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
     aWidgetIds[0] = "rbAllPages";
     aChoices[1] = ScResId( SCSTR_PRINTOPT_PRINTPAGES );
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
     aWidgetIds[1] = "rbRangePages";
-    aChoices[2] = ScResId( SCSTR_PRINTOPT_PRINTEVENPAGES );
-    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:2";
-    aWidgetIds[2] = "rbEvenPages";
-    aChoices[3] = ScResId( SCSTR_PRINTOPT_PRINTODDPAGES );
-    aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:3";
-    aWidgetIds[3] = "rbOddPages";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
@@ -324,6 +318,16 @@ ScPrintUIOptions::ScPrintUIOptions()
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange", OUString(), aPageRangeOpt);
+
+    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, 0, true);
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
+                                                           OUString(),
+                                                           uno::Sequence<OUString>(),
+                                                           "EvenOdd",
+                                                           uno::Sequence<OUString>(),
+                                                           0,
+                                                           uno::Sequence< sal_Bool >(),
+                                                           aEvenOddOpt);
 
     assert(nIdx == nNumProps);
 }
@@ -1409,7 +1413,8 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
-    sal_Int32 nPrintRange = 0;          // all pages / pages / even pages / odd pages
+    sal_Int32 nPrintRange = 0;          // all pages / pages
+    sal_Int32 nEOContent = 0;          // even pages / odd pages
     OUString aPageRange;           // "pages" edit value
 
     for( const auto& rOption : rOptions )
@@ -1429,6 +1434,10 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         else if ( rOption.Name == "PrintRange" )
         {
             rOption.Value >>= nPrintRange;
+        }
+        else if ( rOption.Name == "EvenOdd" )
+        {
+            rOption.Value >>= nEOContent;
         }
         else if ( rOption.Name == "PrintContent" )
         {
@@ -1593,6 +1602,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     maValidPages.clear();
 
     sal_Int32 nContent = 0;
+    sal_Int32 nEOContent = 0;
     bool bSinglePageSheets = false;
     for ( const auto& rValue : rOptions)
     {
@@ -1604,6 +1614,10 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         {
             rValue.Value >>= bSinglePageSheets;
         }
+        else if ( rValue.Name == "EvenOdd" )
+        {
+            rValue.Value >>= nEOContent;
+        }
     }
 
     if (bSinglePageSheets)
@@ -1611,8 +1625,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         return pDocShell->GetDocument().GetTableCount();
     }
 
-    bool bIsPrintEvenPages = nContent != 3;
-    bool bIsPrintOddPages = nContent != 2;
+    bool bIsPrintEvenPages = (nEOContent != 2 && nContent == 0) || nContent != 0;
+    bool bIsPrintOddPages = (nEOContent != 1 && nContent == 0) || nContent != 0;
 
     for ( sal_Int32 nPage = 1; nPage <= nPages; nPage++ )
     {
@@ -1622,7 +1636,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
 
     sal_Int32 nSelectCount = static_cast<sal_Int32>( maValidPages.size() );
 
-    if ( nContent == 2 || nContent == 3 ) // even pages / odd pages
+    if ( nEOContent == 1 || nEOContent == 2 ) // even pages / odd pages
         return nSelectCount;
 
     if ( !aPagesStr.isEmpty() )
@@ -1824,19 +1838,23 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pPrintFunc->SetRenderFlag( true );
 
         sal_Int32 nContent = 0;
+        sal_Int32 nEOContent = 0;
         for ( const auto& rValue : rOptions)
         {
             if ( rValue.Name == "PrintRange" )
             {
                 rValue.Value >>= nContent;
-                break;
+            }
+            else if ( rValue.Name == "EvenOdd" )
+            {
+                rValue.Value >>= nEOContent;
             }
         }
 
         MultiSelection aPage;
         aPage.SetTotalRange( Range(0,RANGE_MAX) );
 
-        bool bOddOrEven = nContent == 2 || nContent == 3; // even pages or odd pages
+        bool bOddOrEven = (nContent == 0 && nEOContent == 1) || (nContent == 1 && nEOContent == 2); // even pages or odd pages
         // tdf#127682 when odd/even allow nRenderer of 0 even when maValidPages is empty
         // to allow PrinterController::abortJob to spool an empty page as part of
         // its abort procedure
@@ -2054,19 +2072,23 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         pPrintFunc->SetExclusivelyDrawOleAndDrawObjects();
 
     sal_Int32 nContent = 0;
+    sal_Int32 nEOContent = 0;
     for ( const auto& rValue : rOptions)
     {
         if ( rValue.Name == "PrintRange" )
         {
             rValue.Value >>= nContent;
-            break;
+        }
+        else if ( rValue.Name == "EvenOdd" )
+        {
+            rValue.Value >>= nEOContent;
         }
     }
 
     MultiSelection aPage;
     aPage.SetTotalRange( Range(0,RANGE_MAX) );
 
-    bool bOddOrEven = nContent == 2 || nContent == 3; // even pages or odd pages
+    bool bOddOrEven = (nContent == 0 && nEOContent == 1) || (nContent == 0 && nEOContent == 2); // even pages or odd pages
     // tdf#127682 when odd/even allow nRenderer of 0 even when maValidPages is empty
     // to allow PrinterController::abortJob to spool an empty page as part of
     // its abort procedure

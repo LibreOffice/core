@@ -176,8 +176,8 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
     const int nRTLOpts = bRTL ? 1 : 0;
-    const int nNumProps = nRTLOpts + (bWeb ? 14 : 18);
-    m_aUIProperties.resize( nNumProps );
+    const int nNumProps = nRTLOpts + (bWeb ? 15 : 19);
+    m_aUIProperties.resize( nNumProps);
     int nIdx = 0;
 
     // load the writer PrinterOptions into the custom tab
@@ -274,10 +274,10 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     const OUString aPrintRangeName( "PrintContent" );
-    uno::Sequence< OUString > aChoices( 5 );
-    uno::Sequence< sal_Bool > aChoicesDisabled( 5 );
-    uno::Sequence< OUString > aHelpIds( 5 );
-    uno::Sequence< OUString > aWidgetIds( 5 );
+    uno::Sequence< OUString > aChoices( 3 );
+    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
+    uno::Sequence< OUString > aHelpIds( 3 );
+    uno::Sequence< OUString > aWidgetIds( 3 );
     aChoices[0] = SwResId( STR_PRINTOPTUI_PRINTALLPAGES );
     aChoicesDisabled[0] = false;
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
@@ -286,22 +286,14 @@ SwPrintUIOptions::SwPrintUIOptions(
     aChoicesDisabled[1] = false;
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "rbRangePages";
-    aChoices[2] = SwResId( STR_PRINTOPTUI_PRINTEVENPAGES );
-    aChoicesDisabled[2] = false; //better disable for 1 page only
+    aChoices[2] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
+    aChoicesDisabled[2] = !bHasSelection;
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
-    aWidgetIds[2] = "rbEvenPages";
-    aChoices[3] = SwResId( STR_PRINTOPTUI_PRINTODDPAGES );
-    aChoicesDisabled[3] = false; //better disable for 1 page only
-    aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3";
-    aWidgetIds[3] = "rbOddPages";
-    aChoices[4] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
-    aChoicesDisabled[4] = !bHasSelection;
-    aHelpIds[4] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:4";
-    aWidgetIds[4] = "rbRangeSelection";
+    aWidgetIds[2] = "rbRangeSelection";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices,
-                                                        bHasSelection ? 4 : 0,
+                                                        bHasSelection ? 2 : 0,
                                                         aChoicesDisabled);
 
     // show an Edit dependent on "Pages" selected
@@ -311,6 +303,16 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                       "PageRange",
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
+
+    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
+                                                           OUString(),
+                                                           uno::Sequence<OUString>(),
+                                                           "EvenOdd",
+                                                           uno::Sequence<OUString>(),
+                                                           0,
+                                                           uno::Sequence< sal_Bool >(),
+                                                           aEvenOddOpt);
 
     // create a list box for notes content
     const SwPostItMode nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
@@ -385,9 +387,9 @@ bool SwPrintUIOptions::IsPrintLeftPages() const
     // 0: left and right pages
     // 1: left pages only
     // 2: right pages only
-    sal_Int64 nLRPages = getIntValue( "PrintContent", 0 /* default: all */ );
-    bool bRes = nLRPages != 3;
-    bRes = getBoolValue( "PrintContent", bRes /* <- default value if property is not found */ );
+    sal_Int64 nEOPages = getIntValue( "EvenOdd", 0 /* default: all */ );
+    bool bRes = nEOPages != 2;
+    bRes = getBoolValue( "EvenOdd", bRes /* <- default value if property is not found */ );
     return bRes;
 }
 
@@ -396,9 +398,9 @@ bool SwPrintUIOptions::IsPrintRightPages() const
     // take care of different property names for the option.
     // for compatibility the old name should win (may still be used for PDF export or via Uno API)
 
-    sal_Int64 nLRPages = getIntValue( "PrintContent", 0 /* default: all */ );
-    bool bRes = nLRPages != 2;
-    bRes = getBoolValue( "PrintContent", bRes /* <- default value if property is not found */ );
+    sal_Int64 nEOPages = getIntValue( "EvenOdd", 0 /* default: all */ );
+    bool bRes = nEOPages != 1;
+    bRes = getBoolValue( "EvenOdd", bRes /* <- default value if property is not found */ );
     return bRes;
 }
 
