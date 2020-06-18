@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06f68ddf_2f531ca3",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-18T13:29:20Z",
+      "side": 1,
+      "message": "is this too ambiguous and hard to understand?",
+      "range": {
+        "startLine": 596,
+        "startChar": 12,
+        "endLine": 598,
+        "endChar": 49
+      },
+      "revId": "04d9cd54ffc30e87fc7e4a6f38d2c20dd04db090",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
