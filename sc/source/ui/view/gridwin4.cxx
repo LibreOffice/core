@@ -35,6 +35,11 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include <tabvwsh.hxx>
 
 #include <gridwin.hxx>
@@ -1247,6 +1252,63 @@ namespace
         nTopLeftTileIndex = nStartIndex;
         nBottomRightTileIndex = nEndIndex;
     }
+
+    class ScLOKProxyObjectContact final : public sdr::contact::ObjectContactOfPageView
+    {
+    private:
+        sdr::contact::ObjectContact& mrRealObjectContact;
+
+    public:
+        explicit ScLOKProxyObjectContact(
+            sdr::contact::ObjectContact& rRealOC,
+            SdrPageWindow& rPageWindow,
+            const sal_Char* pDebugName) :
+            ObjectContactOfPageView(rPageWindow, pDebugName),
+            mrRealObjectContact(rRealOC)
+        {
+        }
+
+        virtual bool supportsGridOffsets() const override { return true; }
+
+        virtual void calculateGridOffsetForViewOjectContact(
+            basegfx::B2DVector& rTarget,
+            const sdr::contact::ViewObjectContact& rClient) const override
+        {
+            SdrObject* pTargetSdrObject(rClient.GetViewContact().TryToGetSdrObject());
+            if (pTargetSdrObject)
+                rTarget = pTargetSdrObject->GetViewContact().GetViewObjectContact(mrRealObjectContact).getGridOffset();
+        }
+    };
+
+    class ScLOKDrawView : public FmFormView
+    {
+    public:
+        ScLOKDrawView(OutputDevice* pOut, ScViewData* pData) :
+            FmFormView(*pData->GetDocument()->GetDrawLayer(), pOut),
+            pScDrawView(pData ? pData->GetScDrawView() : nullptr)
+        {
+        }
+
+        virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
+                SdrPageWindow& rPageWindow, const sal_Char* pDebugName) const override
+        {
+            if (!pScDrawView)
+                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
+
+            SdrPageView* pPageView(pScDrawView->GetSdrPageView());
+            if (!pPageView)
+                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
+
+            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
+            if (!pSdrPageWindow)
+                return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);
+
+            return new ScLOKProxyObjectContact(pSdrPageWindow->GetObjectContact(), rPageWindow, pDebugName);
+        }
+
+    private:
+        ScDrawView* pScDrawView;
+    };
 } // anonymous namespace
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
@@ -1367,7 +1429,12 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (pModel)
     {
-        mpLOKDrawView.reset(
+        bool bPrintTwipsMsgs = comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+        mpLOKDrawView.reset(bPrintTwipsMsgs ?
+            new ScLOKDrawView(
+                &rDevice,
+                pViewData) :
             new FmFormView(
                 *pModel,
                 &rDevice));
@@ -1378,7 +1445,6 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // draw the content
     DrawContent(rDevice, aTabInfo, aOutputData, true);
-
     rDevice.SetMapMode(aOriginalMode);
 
     // Flag drawn formula cells "unchanged".

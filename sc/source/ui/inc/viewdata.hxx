@@ -606,6 +606,7 @@ public:
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const;
     /// returns the position (top-left corner) of the requested cell in print twips coordinates.
     Point           GetPrintTwipsPos( SCCOL nCol, SCROW nRow ) const;
+    Point           GetPrintTwipsPosFromTileTwips(const Point& rTileTwipsPos) const;
 
     /// return json for our cursor position.
     OString         describeCellCursor() const { return describeCellCursorAt(GetCurX(), GetCurY()); }
