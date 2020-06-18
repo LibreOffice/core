@@ -351,6 +351,7 @@ public:
     void testTdf116403();
     void testHtmlCopyImages();
     void testTdf116789();
+    void testTdf133982();
     void testTdf117225();
     void testTdf91801();
 
@@ -555,6 +556,7 @@ public:
     CPPUNIT_TEST(testTdf116403);
     CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST(testTdf116789);
+    CPPUNIT_TEST(testTdf133982);
     CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST(testTdf91801);
     CPPUNIT_TEST_SUITE_END();
@@ -6653,6 +6655,31 @@ void SwUiWriterTest::testTdf116789()
     }
     // This failed, we got two different SwXCell for the same bookmark anchor text.
     CPPUNIT_ASSERT_EQUAL(xText1, xText2);
+}
+
+void SwUiWriterTest::testTdf133982()
+{
+    load(DATA_DIRECTORY, "tdf133982.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    //Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 void SwUiWriterTest::testTdf117225()
