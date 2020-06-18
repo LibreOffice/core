@@ -818,11 +818,13 @@ void DesktopLOKTest::testHiddenRowHeaders()
 
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aPayload.str().c_str());
+    SAL_WARN("desktop", "xxxxxxx " << pJSON);
     std::stringstream aStream(pJSON);
-    free(pJSON);
+    SAL_WARN("desktop", aStream.str());
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
+    free(pJSON);
     sal_Int32 nPrevious = 0;
     sal_Int32 nIndex = 0;
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))

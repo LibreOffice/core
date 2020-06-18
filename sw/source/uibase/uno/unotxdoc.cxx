@@ -3304,21 +3304,21 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
     }
 }
 
-OUString SwXTextDocument::getTrackedChangeAuthors()
+void SwXTextDocument::getTrackedChangeAuthors(tools::JsonWriter& rJsonWriter)
 {
-    return SW_MOD()->GetRedlineAuthorInfo();
+    SW_MOD()->GetRedlineAuthorInfo(rJsonWriter);
 }
 
-OUString SwXTextDocument::getRulerState()
+void SwXTextDocument::getRulerState(tools::JsonWriter& rJsonWriter)
 {
     SwView* pView = pDocShell->GetView();
-    return OUString::fromUtf8(dynamic_cast<SwCommentRuler&>(pView->GetHRuler()).CreateJsonNotification().c_str());
+    dynamic_cast<SwCommentRuler&>(pView->GetHRuler()).CreateJsonNotification(rJsonWriter);
 }
 
-OUString SwXTextDocument::getPostIts()
+void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 {
     SolarMutexGuard aGuard;
-    boost::property_tree::ptree aAnnotations;
+    auto commentsNode = rJsonWriter.startNode("comments");
     for (auto const& sidebarItem : *pDocShell->GetView()->GetPostItMgr())
     {
         sw::annotation::SwAnnotationWin* pWin = sidebarItem->pPostIt.get();
@@ -3344,25 +3344,16 @@ OUString SwXTextDocument::getPostIts()
         }
         const OString sRects = comphelper::string::join("; ", aRects);
 
-        boost::property_tree::ptree aAnnotation;
-        aAnnotation.put("id", pField->GetPostItId());
-        aAnnotation.put("parent", pWin->CalcParent());
-        aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
-        aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
-        aAnnotation.put("resolved", pField->GetResolved() ? "true" : "false");
-        aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
-        aAnnotation.put("anchorPos", aSVRect.toString());
-        aAnnotation.put("textRange", sRects.getStr());
-
-        aAnnotations.push_back(std::make_pair("", aAnnotation));
+        auto commentNode = rJsonWriter.startNode("");
+        rJsonWriter.put("id", pField->GetPostItId());
+        rJsonWriter.put("parent", pWin->CalcParent());
+        rJsonWriter.put("author", pField->GetPar1());
+        rJsonWriter.put("text", pField->GetPar2());
+        rJsonWriter.put("resolved", pField->GetResolved() ? "true" : "false");
+        rJsonWriter.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
+        rJsonWriter.put("anchorPos", aSVRect.toString());
+        rJsonWriter.put("textRange", sRects);
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("comments", aAnnotations);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)

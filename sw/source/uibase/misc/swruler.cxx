@@ -21,6 +21,7 @@
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <tools/json_writer.hxx>
 #include <strings.hrc>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -232,10 +233,8 @@ void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
     Invalidate();
 }
 
-std::string SwCommentRuler::CreateJsonNotification()
+void SwCommentRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree jsonNotif;
-
     // Note that GetMargin1(), GetMargin2(), GetNullOffset(), and GetPageOffset() return values in
     // pixels. Not twips. So "converting" the returned values with convertTwipToMm100() is quite
     // wrong. (Also, even if the return values actually were in twips, it is questionable why we
@@ -252,35 +251,30 @@ std::string SwCommentRuler::CreateJsonNotification()
     // without LibreOfficeKit::isActive().) But in both web-based Online and in the iOS app, the
     // zoom level from the point of view of this code here apparently does not change even if one
     // zooms from the Online code's point of view.
-    jsonNotif.put("margin1", convertTwipToMm100(GetMargin1()));
-    jsonNotif.put("margin2", convertTwipToMm100(GetMargin2()));
-    jsonNotif.put("leftOffset", convertTwipToMm100(GetNullOffset()));
-    jsonNotif.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+    rJsonWriter.put("margin1", convertTwipToMm100(GetMargin1()));
+    rJsonWriter.put("margin2", convertTwipToMm100(GetMargin2()));
+    rJsonWriter.put("leftOffset", convertTwipToMm100(GetNullOffset()));
+    rJsonWriter.put("pageOffset", convertTwipToMm100(GetPageOffset()));
 
     // GetPageWidth() on the other hand does return a value in twips.
     // So here convertTwipToMm100() really does produce actual mm100. Fun.
-    jsonNotif.put("pageWidth", convertTwipToMm100(GetPageWidth()));
+    rJsonWriter.put("pageWidth", convertTwipToMm100(GetPageWidth()));
 
-    boost::property_tree::ptree tabs;
-
-    // The RulerTab array elements that GetTabs() returns have their nPos field in twips. So these
-    // too are actual mm100.
-    for (auto const& tab : GetTabs())
     {
-        boost::property_tree::ptree element;
-        element.put("position", convertTwipToMm100(tab.nPos));
-        element.put("style", tab.nStyle);
-        tabs.push_back(std::make_pair("", element));
+        auto tabsNode = rJsonWriter.startNode("tabs");
+
+        // The RulerTab array elements that GetTabs() returns have their nPos field in twips. So these
+        // too are actual mm100.
+        for (auto const& tab : GetTabs())
+        {
+            auto tabNode = rJsonWriter.startNode("");
+            rJsonWriter.put("position", convertTwipToMm100(tab.nPos));
+            rJsonWriter.put("style", tab.nStyle);
+        }
     }
 
-    jsonNotif.add_child("tabs", tabs);
-
     RulerUnitData aUnitData = GetCurrentRulerUnit();
-    jsonNotif.put("unit", aUnitData.aUnitStr);
-
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, jsonNotif);
-    return aStream.str();
+    rJsonWriter.put("unit", aUnitData.aUnitStr);
 }
 
 void SwCommentRuler::NotifyKit()
@@ -288,9 +282,10 @@ void SwCommentRuler::NotifyKit()
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    const std::string test = CreateJsonNotification();
+    tools::JsonWriter aJsonWriter;
+    CreateJsonNotification(aJsonWriter);
     mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE,
-                                                               test.c_str());
+                                                               aJsonWriter.extractData());
 }
 
 void SwCommentRuler::Update()

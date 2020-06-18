@@ -12,6 +12,11 @@
 #include <rtl/ustring.hxx>
 #include <algorithm>
 
+namespace rtl
+{
+class OStringBuffer;
+}
+
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
  *
  * (1) Minimal allocations/re-allocations/copying
@@ -21,10 +26,14 @@
 namespace tools
 {
 class ScopedJsonWriterNode;
+class ScopedJsonWriterArray;
+class ScopedJsonWriterStruct;
 
 class TOOLS_DLLPUBLIC JsonWriter
 {
     friend class ScopedJsonWriterNode;
+    friend class ScopedJsonWriterArray;
+    friend class ScopedJsonWriterStruct;
 
     int mSpaceAllocated;
     char* mpBuffer;
@@ -37,32 +46,36 @@ public:
     ~JsonWriter();
 
     [[nodiscard]] ScopedJsonWriterNode startNode(const char*);
+    [[nodiscard]] ScopedJsonWriterArray startArray(const char*);
+    [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(const char* pPropName, const OUString& rPropValue);
     void put(const char* pPropName, const OString& rPropValue);
     void put(const char* pPropName, const char* pPropVal);
     void put(const char*, int);
 
+    /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
+    void putRaw(const rtl::OStringBuffer&);
+
     /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
     char* extractData();
+    OString extractAsOString();
 
 private:
     void endNode();
+    void endArray();
+    void endStruct();
     void addCommaBeforeField();
+    void reallocBuffer(int noMoreBytesRequired);
 
+    // this part inline to speed up the fast path
     inline void ensureSpace(int noMoreBytesRequired)
     {
+        assert(mpBuffer && "already extracted data");
         int currentUsed = mPos - mpBuffer;
         if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
-        {
-            auto newSize = std::max(mSpaceAllocated * 2, (currentUsed + noMoreBytesRequired) * 2);
-            char* pNew = static_cast<char*>(malloc(newSize));
-            memcpy(pNew, mpBuffer, currentUsed);
-            free(mpBuffer);
-            mpBuffer = pNew;
-            mPos = mpBuffer;
-        }
+            reallocBuffer(noMoreBytesRequired);
     }
 };
 
@@ -82,6 +95,42 @@ class ScopedJsonWriterNode
 
 public:
     ~ScopedJsonWriterNode() { mrWriter.endNode(); }
+};
+
+/**
+ * Auto-closes the node.
+ */
+class ScopedJsonWriterArray
+{
+    friend class JsonWriter;
+
+    JsonWriter& mrWriter;
+
+    ScopedJsonWriterArray(JsonWriter& rWriter)
+        : mrWriter(rWriter)
+    {
+    }
+
+public:
+    ~ScopedJsonWriterArray() { mrWriter.endArray(); }
+};
+
+/**
+ * Auto-closes the node.
+ */
+class ScopedJsonWriterStruct
+{
+    friend class JsonWriter;
+
+    JsonWriter& mrWriter;
+
+    ScopedJsonWriterStruct(JsonWriter& rWriter)
+        : mrWriter(rWriter)
+    {
+    }
+
+public:
+    ~ScopedJsonWriterStruct() { mrWriter.endStruct(); }
 };
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

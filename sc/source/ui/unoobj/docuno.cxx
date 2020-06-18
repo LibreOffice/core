@@ -47,6 +47,7 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/multisel.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
@@ -895,34 +896,35 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     pViewData->GetActiveWin()->updateOtherKitSelections();
 }
 
-OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
+void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
 
     if (!pViewData)
-        return OUString();
+        return;
 
     ScTabView* pTabView = pViewData->GetView();
     if (!pTabView)
-        return OUString();
+        return;
 
-    return pTabView->getRowColumnHeaders(rRectangle);
+    pTabView->getRowColumnHeaders(rRectangle, rJsonWriter);
 }
 
-OString ScModelObj::getCellCursor()
+void ScModelObj::getCellCursor(tools::JsonWriter& rJsonWriter)
 {
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
 
     if (!pViewData)
-        return OString();
+        return;
 
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
     if (!pGridWindow)
-        return OString();
+        return;
 
-    return "{ \"commandName\": \".uno:CellCursor\", \"commandValues\": \"" + pGridWindow->getCellCursor() + "\" }";
+    rJsonWriter.put("commandName", ".uno:CellCursor");
+    rJsonWriter.put("commandValues", pGridWindow->getCellCursor());
 }
 
 PointerStyle ScModelObj::getPointer()
@@ -975,25 +977,25 @@ void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHid
         pFunc->SetOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
-OUString ScModelObj::getPostIts()
+void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
 {
     if (!pDocShell)
-        return OUString();
+        return;
 
     ScDocument& rDoc = pDocShell->GetDocument();
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
-    boost::property_tree::ptree aAnnotations;
+    auto commentsNode = rJsonWriter.startNode("comments");
     for (const sc::NoteEntry& aNote : aNotes)
     {
-        boost::property_tree::ptree aAnnotation;
+        auto commentNode = rJsonWriter.startNode("");
 
-        aAnnotation.put("id", aNote.mpNote->GetId());
-        aAnnotation.put("tab", aNote.maPos.Tab());
-        aAnnotation.put("author", aNote.mpNote->GetAuthor());
-        aAnnotation.put("dateTime", aNote.mpNote->GetDate());
-        aAnnotation.put("text", aNote.mpNote->GetText());
+        rJsonWriter.put("id", aNote.mpNote->GetId());
+        rJsonWriter.put("tab", aNote.maPos.Tab());
+        rJsonWriter.put("author", aNote.mpNote->GetAuthor());
+        rJsonWriter.put("dateTime", aNote.mpNote->GetDate());
+        rJsonWriter.put("text", aNote.mpNote->GetText());
 
         // Calculating the cell cursor position
         ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1012,36 +1014,27 @@ OUString ScModelObj::getPostIts()
             tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                             Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
-            aAnnotation.put("cellPos", aRect.toString());
+            rJsonWriter.put("cellPos", aRect.toString());
         }
-
-        aAnnotations.push_back(std::make_pair("", aAnnotation));
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("comments", aAnnotations);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
-OUString ScModelObj::getPostItsPos()
+void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
 {
     if (!pDocShell)
-        return OUString();
+        return;
 
     ScDocument& rDoc = pDocShell->GetDocument();
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
-    boost::property_tree::ptree aAnnotations;
+    auto commentsNode = rJsonWriter.startNode("commentsPos");
     for (const sc::NoteEntry& aNote : aNotes)
     {
-        boost::property_tree::ptree aAnnotation;
+        auto commentNode = rJsonWriter.startNode("");
 
-        aAnnotation.put("id", aNote.mpNote->GetId());
-        aAnnotation.put("tab", aNote.maPos.Tab());
+        rJsonWriter.put("id", aNote.mpNote->GetId());
+        rJsonWriter.put("tab", aNote.maPos.Tab());
 
         // Calculating the cell cursor position
         ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1060,18 +1053,9 @@ OUString ScModelObj::getPostItsPos()
             tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                             Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
-            aAnnotation.put("cellPos", aRect.toString());
+            rJsonWriter.put("cellPos", aRect.toString());
         }
-
-        aAnnotations.push_back(std::make_pair("", aAnnotation));
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("commentsPos", aAnnotations);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 void ScModelObj::completeFunction(const OUString& rFunctionName)
