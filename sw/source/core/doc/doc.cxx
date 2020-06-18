@@ -669,7 +669,7 @@ void SwDoc::CalculatePagesForPrinting(
     sal_Int32 nDocPageCount )
 {
     const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
-    const bool bPrintSelection = nContent == 4;
+    const bool bPrintSelection = nContent == 2;
 
     // properties to take into account when calculating the set of pages
     // (PDF export UI does not allow for selecting left or right pages only)
@@ -726,11 +726,12 @@ void SwDoc::CalculatePagesForPrinting(
         // 4 -> print selection
         if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange" );
-        if (4 == nContent)
+
+        if (2 == nContent)
         {
             // note that printing selections is actually implemented by copying
             // the selection to a new temporary document and printing all of that one.
-            // Thus for Writer "PrintContent" must never be 4.
+            // Thus for Writer "PrintContent" must never be 2.
             // See SwXTextDocument::GetRenderDoc for evaluating if a selection is to be
             // printed and for creating the temporary document.
         }
@@ -913,9 +914,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // PageContent :
     // 0 -> print all pages (default if aPageRange is empty)
     // 1 -> print range according to PageRange
-    // 2 -> print even pages
-    // 3 -> print odd pages
-    // 4 -> print selection
+    // 2 -> print selection
     const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
     if (nContent == 1)
         aPageRange = rOptions.getStringValue( "PageRange" );
