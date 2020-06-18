@@ -101,11 +101,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     }
 }
 
-JSInstanceBuilder::~JSInstanceBuilder()
-{
-    if (m_nWindowId && m_bHasTopLevelDialog)
-        GetLOKWeldWidgetsMap().erase(m_nWindowId);
-}
+JSInstanceBuilder::~JSInstanceBuilder() { GetLOKWeldWidgetsMap().erase(m_nWindowId); }
 
 std::map<vcl::LOKWindowId, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
 {
