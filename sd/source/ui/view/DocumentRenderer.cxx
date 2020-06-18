@@ -186,14 +186,14 @@ namespace {
 
         bool IsPrintFrontPage() const
         {
-            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            return nInclude != 2;
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "EvenOdd", 0 ));
+            return nInclude != 1;
         }
 
         bool IsPrintBackPage() const
         {
-            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            return nInclude != 3;
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "EvenOdd", 0 ));
+            return nInclude != 2;
         }
 
         bool IsPaperBin() const
@@ -211,7 +211,7 @@ namespace {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
             OUString sFullRange = "1-" + OUString::number(nPageCount);
 
-            if (nContent == 0 || nContent == 2 || nContent == 3 ) // all pages/slides || even pages/slides || odd pages/slides
+            if (nContent == 0) // all pages/slides
             {
                 return sFullRange;
             }
@@ -222,7 +222,7 @@ namespace {
                 return sValue.isEmpty() ? sFullRange : sValue;
             }
 
-            if (nContent == 4 && // selection
+            if (nContent == 2 && // selection
                 nCurrentPageIndex >= 0)
             {
                 return OUString::number(nCurrentPageIndex + 1);
@@ -632,18 +632,14 @@ namespace {
                                 nPrintRange ) );
 */
             OUString aPrintRangeName( "PrintContent" );
-            aHelpIds.realloc( 5 );
+            aHelpIds.realloc( 3 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
             aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
             aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ;
-            aHelpIds[3] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3" ;
-            aHelpIds[4] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:4" ;
-            aWidgetIds.realloc( 5 );
+            aWidgetIds.realloc( 3 );
             aWidgetIds[0] = "rbAllPages";
             aWidgetIds[1] = "rbRangePages";
-            aWidgetIds[2] = "rbEvenPages";
-            aWidgetIds[3] = "rbOddPages";
-            aWidgetIds[4] = "rbRangeSelection";
+            aWidgetIds[2] = "rbRangeSelection";
 
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                 aHelpIds, aPrintRangeName,
@@ -656,6 +652,10 @@ namespace {
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit", "PageRange",
                                 aPageRange, aPageRangeOpt));
+            vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
+            AddDialogControl(vcl::PrinterOptionsHelper::setChoiceListControlOpt("evenoddbox", "",
+                                uno::Sequence<OUString>(), "EvenOdd", uno::Sequence<OUString>(),
+                                0, uno::Sequence<sal_Bool>(), aEvenOddOpt));
         }
 
         void AddDialogControl( const Any& i_rCtrl )
