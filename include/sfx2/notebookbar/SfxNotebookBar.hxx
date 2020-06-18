@@ -12,12 +12,14 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <map>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxBindings;
 class SfxViewFrame;
+class SfxViewShell;
 class SystemWindow;
 class WeldedTabbedNotebookbar;
 
@@ -60,9 +62,10 @@ public:
 private:
     static bool m_bLock;
     static bool m_bHide;
-    static std::unique_ptr<WeldedTabbedNotebookbar> m_pNotebookBarWeldedWrapper;
 
-    DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const void*, void);
+    static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>> m_pNotebookBarWeldedWrapper;
+
+    DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };
 
 } // namespace sfx2

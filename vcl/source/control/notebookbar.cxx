@@ -56,6 +56,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
                          const NotebookBarAddonsItem& aNotebookBarAddonsItem)
     : Control(pParent)
     , m_pEventListener(new NotebookBarContextChangeEventListener(this))
+    , m_pViewShell(nullptr)
     , m_bIsWelded(false)
     , m_sUIXMLDescription(rUIXMLDescription)
 {
@@ -105,9 +106,10 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     UpdateBackground();
 }
 
-void NotebookBar::SetDisposeCallback(const Link<const void*, void> rDisposeCallback)
+void NotebookBar::SetDisposeCallback(const Link<const SfxViewShell*, void> rDisposeCallback, const SfxViewShell* pViewShell)
 {
     m_rDisposeLink = rDisposeCallback;
+    m_pViewShell = pViewShell;
 }
 
 NotebookBar::~NotebookBar()
@@ -123,7 +125,7 @@ void NotebookBar::dispose()
     m_pSystemWindow.clear();
 
     if (m_rDisposeLink.IsSet())
-        m_rDisposeLink.Call(nullptr);
+        m_rDisposeLink.Call(m_pViewShell);
 
     if (m_bIsWelded)
         m_xVclContentArea.disposeAndClear();
@@ -224,6 +226,9 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
 
 void NotebookBar::ControlListenerForCurrentController(bool bListen)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     auto xController = mxFrame->getController();
     if(bListen)
     {
@@ -251,6 +256,9 @@ void NotebookBar::ControlListenerForCurrentController(bool bListen)
 
 void NotebookBar::StopListeningAllControllers()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     auto xMultiplexer(
         css::ui::ContextChangeEventMultiplexer::get(comphelper::getProcessComponentContext()));
     xMultiplexer->removeAllContextChangeEventListeners(m_pEventListener);
