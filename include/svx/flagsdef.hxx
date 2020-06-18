@@ -54,11 +54,6 @@ namespace o3tl
 #define SVX_HIDESHADOWCTL   0x01
 
 #define DISABLE_CASEMAP             (sal_uInt16(0x0001))
-#define DISABLE_WORDLINE            (sal_uInt16(0x0002))
-#define DISABLE_BLINK               (sal_uInt16(0x0004))
-#define DISABLE_UNDERLINE_COLOR     (sal_uInt16(0x0008))
-
-#define DISABLE_LANGUAGE            (sal_uInt16(0x0010))
 #define DISABLE_HIDE_LANGUAGE       (sal_uInt16(0x0020))
 
 // flags for SvxCharBasePage's child class
