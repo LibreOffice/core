@@ -21,7 +21,7 @@
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>
@@ -132,26 +132,18 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     if (!aCountry.isEmpty())
         aCode += "-" + aCountry;
     OString aLangCode(OUStringToOString(aCode, RTL_TEXTENCODING_ASCII_US));
+#if defined(_WIN32)
+    std::wstring sResult(o3tl::toW(rText.getStr()));
+#else
     OString aInput(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
     std::wstring sResult = Numbertext::string2wstring(aInput.getStr());
+#endif
     bool result = m_aNumberText.numbertext(sResult, aLangCode.getStr());
     DBG_ASSERT(result, "numbertext: false");
-    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());
 #if defined(_WIN32)
-    // workaround to fix non-BMP Unicode characters resulted by wstring limitation
-    if (!aScript.isEmpty() && aScript == "Hung")
-    {
-        OUStringBuffer aFix;
-        for (int i = 0; i < aResult.getLength(); ++i)
-        {
-            sal_Unicode c = aResult[i];
-            if (0x0C80 <= c && c <= 0x0CFF)
-                aFix.append(sal_Unicode(0xD803)).append(sal_Unicode(c + 0xD000));
-            else
-                aFix.append(c);
-        }
-        aResult = aFix.makeStringAndClear();
-    }
+    OUString aResult(o3tl::toU(sResult.c_str()));
+#else
+    OUString aResult = OUString::fromUtf8(Numbertext::wstring2string(sResult).c_str());
 #endif
     return aResult;
 }
