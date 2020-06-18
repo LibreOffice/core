@@ -178,6 +178,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     m_xOutputSet.reset(new SfxAllItemSet(pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool()));
     m_xShowSet->Show();
     m_xSearchSet->Hide();
+    for (;;);
 }
 
 short SvxCharacterMap::run()
