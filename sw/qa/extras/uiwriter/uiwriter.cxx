@@ -5655,6 +5655,27 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf132944)
+{
+    load(DATA_DIRECTORY, "tdf132944.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the document would have had 2 pages
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
     createDoc("tdf106701_tabOverMarginAutotab.doc");
