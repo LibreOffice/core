@@ -15,6 +15,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 
 namespace com::sun::star::uno
 {
@@ -38,6 +39,7 @@ struct PDFGraphicAnnotation
     OUString maText;
     // In HMM
     basegfx::B2DRectangle maRectangle;
+    css::util::DateTime maDateTime;
 };
 
 struct PDFGraphicResult

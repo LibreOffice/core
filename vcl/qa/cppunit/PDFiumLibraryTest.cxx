@@ -16,6 +16,9 @@
 
 #include <unotest/bootstrapfixturebase.hxx>
 #include <unotest/directories.hxx>
+#include <unotools/datetime.hxx>
+
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -34,12 +37,14 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     void testPages();
     void testAnnotationsMadeInEvince();
     void testAnnotationsMadeInAcrobat();
+    void testTools();
 
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
     CPPUNIT_TEST(testDocument);
     CPPUNIT_TEST(testPages);
     CPPUNIT_TEST(testAnnotationsMadeInEvince);
     CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
+    CPPUNIT_TEST(testTools);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -144,6 +149,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
 
         CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationIndex(pPopupAnnotation));
         CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+
+        OUString sDateTimeString
+            = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
+        CPPUNIT_ASSERT_EQUAL(OUString("D:20200612201322+02'00"), sDateTimeString);
     }
 
     {
@@ -229,6 +238,22 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
     }
+}
+
+void PDFiumLibraryTest::testTools()
+{
+    OUString sConverted = vcl::pdf::convertPdfDateToISO8601("D:20200612201322+02'00");
+
+    css::util::DateTime aDateTime;
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(sConverted, aDateTime));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2020), aDateTime.Year);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), aDateTime.Month);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(12), aDateTime.Day);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), aDateTime.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(13), aDateTime.Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(22), aDateTime.Seconds);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aDateTime.NanoSeconds);
+    CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PDFiumLibraryTest);
