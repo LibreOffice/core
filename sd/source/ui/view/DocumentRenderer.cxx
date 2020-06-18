@@ -211,7 +211,7 @@ namespace {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
             OUString sFullRange = "1-" + OUString::number(nPageCount);
 
-            if (nContent == 0 || nContent == 2 || nContent == 3 ) // all pages/slides || even pages/slides || odd pages/slides
+            if (nContent == 0) // all pages/slides
             {
                 return sFullRange;
             }
@@ -219,6 +219,18 @@ namespace {
             if (nContent == 1) // range
             {
                 OUString sValue = mrProperties.getStringValue("PageRange");
+                return sValue.isEmpty() ? sFullRange : sValue;
+            }
+
+            if (nContent == 2) // range for even
+            {
+                OUString sValue = mrProperties.getStringValue("EvenPageRange");
+                return sValue.isEmpty() ? sFullRange : sValue;
+            }
+
+            if (nContent == 3) // range for odd
+            {
+                OUString sValue = mrProperties.getStringValue("OddPageRange");
                 return sValue.isEmpty() ? sFullRange : sValue;
             }
 
@@ -656,6 +668,14 @@ namespace {
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit", "PageRange",
                                 aPageRange, aPageRangeOpt));
+            vcl::PrinterOptionsHelper::UIControlOptions aEvenPageRangeOpt( aPrintRangeName, 2, true );
+            AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("evenpagerange", "",
+                                ".HelpID:vcl:PrintDialog:EvenPageRange:Edit", "EvenPageRange",
+                                "", aEvenPageRangeOpt));
+            vcl::PrinterOptionsHelper::UIControlOptions aOddPageRangeOpt( aPrintRangeName, 3, true );
+            AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("oddpagerange", "",
+                                ".HelpID:vcl:PrintDialog:OddPageRange:Edit", "OddPageRange",
+                                "", aOddPageRangeOpt));
         }
 
         void AddDialogControl( const Any& i_rCtrl )
