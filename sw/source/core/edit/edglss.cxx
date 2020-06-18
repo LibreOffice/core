@@ -237,6 +237,11 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
                         {
                             aPaM.Start()->nNode = *pTableNode;
                         }
+                        while (SwSectionNode const* pSectionNode =
+                            aPaM.Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
+                        {
+                            aPaM.Start()->nNode = *pSectionNode;
+                        }
                         aPaM.Start()->nContent.Assign(nullptr, 0);
                     }
                     bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, SwCopyFlags::CheckPosInFly)
