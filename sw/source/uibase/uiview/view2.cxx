@@ -139,6 +139,9 @@
 
 #include <memory>
 
+#include <ndtxt.hxx>
+#include <FrameControlsManager.hxx>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -1119,6 +1122,39 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->SetDefault( *pItem );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
+        }
+        break;
+        case FN_OUTLINE_MODE:
+        {
+            m_bOutlineMode = !m_bOutlineMode;
+            if(m_bOutlineMode)
+            {
+                m_bWasReadOnly = GetDocShell()->IsReadOnly();
+                if (!GetDocShell()->IsReadOnly())
+                    GetDocShell()->SetReadOnlyUI(true);
+                // outline nodes might have been removed
+                // pass SetOutlineContentVisibilityButton nullptr to remove buttons that no longer have outline nodes
+                GetEditWin().GetFrameControlsManager().SetOutlineContentVisibilityButton(nullptr);
+                GetEditWin().Invalidate();
+            }
+            else
+            {
+                if (!m_bWasReadOnly)
+                    GetDispatcher().Execute(SID_EDITDOC);
+                SwNodes& rNodes = GetDocShell()->GetDoc()->GetNodes();
+                const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+                for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+                {
+                    bool bOutlineContentVisibleAttr = true;
+                    rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    if (!bOutlineContentVisibleAttr)
+                    {
+                        // unfold and then set outline content visible attr to false for persistence
+                        GetWrtShell().ToggleOutlineContentVisibility(nPos);
+                        rOutlineNodes[nPos]->GetTextNode()->SetAttrOutlineContentVisible(false);
+                    }
+                }
+            }
         }
         break;
         case FN_NAV_ELEMENT:

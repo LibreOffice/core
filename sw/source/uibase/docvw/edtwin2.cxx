@@ -49,6 +49,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
+#include <FrameControlsManager.hxx>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
@@ -429,6 +430,18 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if( bPaintShadowCursor )
         m_pShadCursor->Paint();
+
+    if (pWrtShell->GetView().IsOutlineMode())
+    {
+        // set expand buttons
+        for (SwNode* pNd : pWrtShell->GetDoc()->GetNodes().GetOutLineNds())
+        {
+            bool bOutlineContentVisibleAttr = true;
+            pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+            if (!bOutlineContentVisibleAttr)
+                GetFrameControlsManager().SetOutlineContentVisibilityButton(pNd->GetTextNode());
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
