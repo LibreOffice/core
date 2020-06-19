@@ -235,18 +235,13 @@ gb_GLOBALDEFS += -DNDEBUG \
 
 endif
 
-ifeq ($(gb_DEBUGLEVEL),0)
-
 ifeq ($(ENABLE_SAL_LOG),TRUE)
 gb_GLOBALDEFS += -DSAL_LOG_INFO \
 				 -DSAL_LOG_WARN \
 
 endif
 
-else
-gb_GLOBALDEFS += -DSAL_LOG_INFO \
-				 -DSAL_LOG_WARN \
-
+ifneq ($(gb_DEBUGLEVEL),0)
 ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
 gb_GLOBALDEFS += -DDEBUG \
 
