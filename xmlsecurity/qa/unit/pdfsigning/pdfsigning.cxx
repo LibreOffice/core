@@ -14,6 +14,7 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -36,7 +37,7 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/pdfsigning/data/";
 }
 
 /// Testsuite for the PDF signing feature.
-class PDFSigningTest : public test::BootstrapFixture
+class PDFSigningTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
@@ -56,6 +57,7 @@ protected:
 public:
     PDFSigningTest();
     void setUp() override;
+    void tearDown() override;
 };
 
 PDFSigningTest::PDFSigningTest() {}
@@ -66,17 +68,13 @@ void PDFSigningTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
 
-#ifndef _WIN32
-    // Set up cert8.db and key3.db in workdir/CppunitTest/
-    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
-    OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
-    OUString aTargetPath;
-    osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
-    setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
-#endif
+    MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_pdfsigning");
+}
+
+void PDFSigningTest::tearDown()
+{
+    MacrosTest::tearDownNssGpg();
+    test::BootstrapFixture::tearDown();
 }
 
 std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount,
