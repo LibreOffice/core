@@ -26,6 +26,8 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -50,6 +52,16 @@
 #include <sfx2/docfilt.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/configuration.hxx>
+#include <svx/signaturelinehelper.hxx>
+#include <sfx2/viewsh.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
+
+#if HAVE_FEATURE_PDFIUM
+#include <fpdf_annot.h>
+#include <fpdfview.h>
+#include <cpp/fpdf_scopers.h>
+#endif
 
 using namespace com::sun::star;
 
@@ -622,6 +634,70 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::NOSIGNATURES),
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
+
+#if HAVE_FEATURE_PDFIUM
+CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
+{
+    // Given: copy the test document to a temporary file, as it'll be modified.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "add-visible-signature.pdf";
+    OUString aURL = aTempFile.GetURL();
+    osl::File::RC eRet = osl::File::copy(aSourceURL, aURL);
+    CPPUNIT_ASSERT_EQUAL(osl::File::RC::E_None, eRet);
+
+    // Open it.
+    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.drawing.DrawingDocument", aArgs);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+
+    // Add a signature line.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+    xShape->setPosition(awt::Point(1000, 15000));
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+
+    // Select it and assign a certificate.
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
+                                                                uno::UNO_QUERY);
+    xSelectionSupplier->select(uno::makeAny(xShape));
+    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+        = mxSecurityContext->getSecurityEnvironment()->getPersonalCertificates();
+    if (!aCertificates.hasElements())
+    {
+        return;
+    }
+    SdrView* pView = SfxViewShell::Current()->GetDrawView();
+    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificates[0]);
+
+    // When: do the actual signing.
+    pObjectShell->SignDocumentContentUsingCertificate(aCertificates[0]);
+
+    // Then: count the # of shapes on the signature widget/annotation.
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
+    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 0
+    // i.e. the signature was there, but it was empty / not visible.
+    CPPUNIT_ASSERT_EQUAL(4, FPDFAnnot_GetObjectCount(pAnnot.get()));
+}
+#endif
 
 #endif
 
