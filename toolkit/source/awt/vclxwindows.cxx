@@ -45,7 +45,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
