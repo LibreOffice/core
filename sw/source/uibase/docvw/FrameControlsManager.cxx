@@ -17,6 +17,8 @@
 #include <viewopt.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <txtfrm.hxx>
+#include <OutlineContentVisibilityWin.hxx>
 
 using namespace std;
 
@@ -170,6 +172,38 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
     assert(pButton != nullptr);
     pButton->SetOffset(aTopRightPixel);
     pControl->ShowAll( bShow );
+}
+
+void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwContentFrame* pContentFrame)
+{
+    // Check if we already have the control
+    SwFrameControlPtr pControl;
+
+    SwFrameControlPtrMap& rControls = m_aControls[FrameControlType::Outline];
+
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pContentFrame);
+    if (lb != rControls.end() && !(rControls.key_comp()(pContentFrame, lb->first)))
+    {
+        pControl = lb->second;
+    }
+    else
+    {
+        SwFrameControlPtr pNewControl =
+                std::make_shared<SwFrameControl>(VclPtr<SwOutlineContentVisibilityWin>::Create(
+                                        m_pEditWin, pContentFrame).get());
+        rControls.insert(lb, make_pair(pContentFrame, pNewControl));
+        pControl.swap(pNewControl);
+    }
+
+    SwOutlineContentVisibilityWin* pWin = dynamic_cast<SwOutlineContentVisibilityWin *>(pControl->GetWindow());
+    assert(pWin != nullptr) ;
+    pWin->Set();
+
+    // show expand button immediatly
+    if (pWin->GetSymbol() == SymbolType::ARROW_RIGHT)
+        pWin->Show();
+    else if (pWin->GetSymbol() == SymbolType::ARROW_DOWN && !pWin->IsVisible())
+        pWin->ShowAll(true);
 }
 
 SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
