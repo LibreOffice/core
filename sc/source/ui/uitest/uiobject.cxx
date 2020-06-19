@@ -192,8 +192,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "LAUNCH")
     {
-        auto itr = rParameters.find("AUTOFILTER");
-        if (itr != rParameters.end())
+        if ( rParameters.find("AUTOFILTER") != rParameters.end())
         {
             auto itrCol = rParameters.find("COL");
             if (itrCol == rParameters.end())
@@ -211,6 +210,25 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SCROW nRow = itrRow->second.toUInt32();
             SCCOL nCol = itrCol->second.toUInt32();
             mxGridWindow->LaunchAutoFilterMenu(nCol, nRow);
+        }
+        else if ( rParameters.find("SELECTMENU") != rParameters.end())
+        {
+            auto itrCol = rParameters.find("COL");
+            if (itrCol == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing COL parameter");
+                return;
+            }
+
+            auto itrRow = rParameters.find("ROW");
+            if (itrRow == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing ROW parameter");
+                return;
+            }
+            SCROW nRow = itrRow->second.toUInt32();
+            SCCOL nCol = itrCol->second.toUInt32();
+            mxGridWindow->LaunchDataSelectMenu(nCol, nRow);
         }
     }
     else if (rAction == "SIDEBAR")
