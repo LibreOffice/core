@@ -741,7 +741,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-    : SwNumberPortion( OUStringChar(cBullet) + rBulletFollowedBy,
+    : SwNumberPortion( cBullet ? OUStringChar(cBullet) + rBulletFollowedBy : rBulletFollowedBy,
                        std::move(pFont), bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {
