@@ -183,6 +183,26 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_CONTENT">Outline Content Visibility</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="outlinecontent">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator1511">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
