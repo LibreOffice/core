@@ -18,6 +18,11 @@
 
 interface BaseTextEditView
 {
+    FN_OUTLINE_MODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_REFRESH_VIEW // status(final|play)
     [
         ExecMethod = Execute ;

@@ -100,6 +100,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
 
+#include <ndtxt.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1034,6 +1036,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( !m_pVScrollbar->IsVisible( true ) )
         ShowVScrollbar( false );
 
+    m_bWasReadOnly = rDocSh.IsReadOnly();
+
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 
@@ -1639,6 +1643,23 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             case SfxHintId::ModeChanged:
                 {
+                    if (m_bOutlineMode && !GetDocShell()->IsReadOnly())
+                    {
+                        const SwOutlineNodes& rOutlineNodes = GetDocShell()->GetDoc()->GetNodes().GetOutLineNds();
+                        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+                        {
+                            bool bOutlineContentVisibleAttr = true;
+                            rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                            if (!bOutlineContentVisibleAttr)
+                            {
+                                // unfold and then re-set outline content visible attr to false
+                                GetWrtShell().ToggleOutlineContentVisibility(nPos);
+                                rOutlineNodes[nPos]->GetTextNode()->SetAttrOutlineContentVisible(false);
+                            }
+                        }
+                        GetEditWin().Invalidate();
+                        m_bOutlineMode = false;
+                    }
                     // Modal mode change-over?
                     bool bModal = GetDocShell()->IsInModalMode();
                     m_pHRuler->SetActive( !bModal );

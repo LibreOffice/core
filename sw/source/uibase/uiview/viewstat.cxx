@@ -70,6 +70,9 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case FN_OUTLINE_MODE:
+                rSet.Put(SfxBoolItem(nWhich, m_bOutlineMode));
+            break;
             case FN_NAV_ELEMENT:
                 // used to update all instances of this control
                 rSet.InvalidateItem( nWhich );
