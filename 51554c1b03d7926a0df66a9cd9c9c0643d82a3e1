@@ -16,6 +16,24 @@
       "revId": "51554c1b03d7926a0df66a9cd9c9c0643d82a3e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e3ae5b6_9accdb33",
+        "filename": "include/tools/json_writer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-19T13:42:25Z",
+      "side": 1,
+      "message": "I think it\u0027s unlikely we will ever be be able to do an actual in-place realloc, since we are doubling in size.\n\nOf course, it would be nice if we had a smarter malloc API that told use how much memory it had __actually__ allocated to us.",
+      "parentUuid": "dd832e5a_bec79d14",
+      "revId": "51554c1b03d7926a0df66a9cd9c9c0643d82a3e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
