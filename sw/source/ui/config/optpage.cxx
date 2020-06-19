@@ -99,6 +99,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))
     , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
     , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
+    , m_xShowOutlineContentVisibilityButton(m_xBuilder->weld_check_button("outlinecontentvisibilitybutton"))
     , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
 {
@@ -198,6 +199,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xVRulerRightCBox->set_active(pElemAttr->m_bVertRulerRight);
         m_xSmoothCBox->set_active(pElemAttr->m_bSmoothScroll);
         m_xShowInlineTooltips->set_active(pElemAttr->m_bShowInlineTooltips);
+        m_xShowOutlineContentVisibilityButton->set_active(pElemAttr->m_bShowOutlineContentVisibilityButton);
         m_xFieldHiddenCB->set_active( pElemAttr->m_bFieldHiddenText );
         m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
     }
@@ -222,6 +224,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.m_bVertRulerRight       = m_xVRulerRightCBox->get_active();
     aElem.m_bSmoothScroll         = m_xSmoothCBox->get_active();
     aElem.m_bShowInlineTooltips   = m_xShowInlineTooltips->get_active();
+    aElem.m_bShowOutlineContentVisibilityButton = m_xShowOutlineContentVisibilityButton->get_active();
     aElem.m_bFieldHiddenText      = m_xFieldHiddenCB->get_active();
     aElem.m_bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
 
