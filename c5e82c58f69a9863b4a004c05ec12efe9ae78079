@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3ae790e_d41bae9e",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-06-19T11:26:11Z",
+      "side": 1,
+      "message": "this bit doesn\u0027t look right. There should be no reason to modify weld.hxx when adding a new dialog.",
+      "revId": "c5e82c58f69a9863b4a004c05ec12efe9ae78079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
