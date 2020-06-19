@@ -2949,7 +2949,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUserFieldTypeLanguage)
     OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
     aOptions.SetLocaleConfigString("de-DE");
     aOptions.Commit();
-    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+    comphelper::ScopeGuard g1([&aOptions, &sLocaleConfigString] {
         aOptions.SetLocaleConfigString(sLocaleConfigString);
         aOptions.Commit();
     });
@@ -2962,6 +2962,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUserFieldTypeLanguage)
     // 123,456.00 transform chain.
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
                 "1,234.56");
+
+    discardDumpedLayout();
+
+    // Now change the system locale to English (before this was failing, 1234,56 -> 0.00)
+    aOptions.SetLocaleConfigString("en-GB");
+    aOptions.Commit();
+    comphelper::ScopeGuard g2([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    pViewShell->UpdateFields();
+    pXmlDoc = parseLayoutDump();
+    // We expect, that the field value is not changed. Otherwise there is a problem:
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
+                "1,234.56");
+
+    discardDumpedLayout();
+
+    // Now change the system locale to German
+    aOptions.SetLocaleConfigString("de-DE");
+    aOptions.Commit();
+    comphelper::ScopeGuard g3([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+    pViewShell->UpdateFields();
+    pXmlDoc = parseLayoutDump();
+    // We expect, that the field value is not changed. Otherwise there is a problem:
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
+                "1,234.56");
+
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
