@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba039bf9_bb63d10a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "please use `css` instead of `::com::sun::star`",
+      "range": {
+        "startLine": 50,
+        "startChar": 14,
+        "endLine": 50,
+        "endChar": 30
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7801cd5e_c670551f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "This should obviously be 2?",
+      "range": {
+        "startLine": 51,
+        "startChar": 77,
+        "endLine": 51,
+        "endChar": 78
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2eb7738_4f948d86",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "`p` means \"pointer-like object\". This is a vector, rather aStyleNames?",
+      "range": {
+        "startLine": 99,
+        "startChar": 38,
+        "endLine": 99,
+        "endChar": 39
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f86ad1cc_3345a2ea",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "what does \"m\" stand for? maybe more telling name would be xStyleProps?",
+      "range": {
+        "startLine": 117,
+        "startChar": 57,
+        "endLine": 117,
+        "endChar": 58
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb6b364f_9abf179f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "Starting from this line, you are listing known properties, and get their values. This is inefficient, and will result in duplicating code.\n\nInstead, ask the property set for getPropertySetInfo(), and use its methods to get the list of all properties. Then for each of them, get the values. Then introduce a function that would take a property name and value pair, and return a string (for now) that will be inserted into the control. The function may have a list of known properties, which it knows how to format (e.g., for colors, it might use OUString::number() call with base equal to 16, to produce hex strings instead of decimals). But for unknown properties, it would still return a default result (the name plus the value in no particular format).\n\nPrepending the leading whitespace to the function result would be performed here.",
+      "range": {
+        "startLine": 121,
+        "startChar": 16,
+        "endLine": 121,
+        "endChar": 94
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca4c1df_7742504d",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-19T15:10:14Z",
+      "side": 1,
+      "message": "Please avoid any \"using\" directives. We are cleaning up them gradually; please use namespaces explicitly.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
