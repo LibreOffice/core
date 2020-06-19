@@ -1407,7 +1407,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     SAL_INFO("vcl.skia.trace", "drawtransformedbitmap(" << this << "): " << aSize << " " << rNull
                                                         << ":" << rX << ":" << rY);
 
-    const Size imageSize(aXRel.getLength(), aXRel.getLength());
+    const Size imageSize(aXRel.getLength(), aYRel.getLength());
     sk_sp<SkImage> imageToDraw = mergeBitmaps(rSkiaBitmap, pSkiaAlphaBitmap, imageSize);
     if (!imageToDraw)
         return false;
