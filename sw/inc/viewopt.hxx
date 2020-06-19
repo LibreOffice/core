@@ -28,6 +28,8 @@
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
 
+#include <svtools/miscopt.hxx>
+
 class SwRect;
 namespace vcl { class Window; }
 class OutputDevice;
@@ -63,9 +65,10 @@ enum class ViewOptFlags1 : sal_uInt32 {
     ShowInlineTooltips = 0x10000000, //tooltips on tracked changes
     ViewMetachars = 0x20000000,
     Pageback      = 0x40000000,
+    ShowOutlineContentVisibilityButton = 0x80000000
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcfff> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0xF7dfcfff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -290,6 +293,12 @@ public:
         { return bool(m_nCoreOptions & ViewOptFlags1::UseHeaderFooterMenu ); }
     void SetUseHeaderFooterMenu( bool b )
         { SetCoreOption(b, ViewOptFlags1::UseHeaderFooterMenu); }
+
+    //show/hide outline content visibility button
+    bool IsShowOutlineContentVisibilityButton() const
+        { SvtMiscOptions aMiscOptions; return aMiscOptions.IsExperimentalMode() && (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton); }
+    void SetShowOutlineContentVisibilityButton(bool b)
+        { SetCoreOption(b, ViewOptFlags1::ShowOutlineContentVisibilityButton); }
 
     bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&
