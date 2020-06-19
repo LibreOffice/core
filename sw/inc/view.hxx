@@ -247,6 +247,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bMakeSelectionVisible : 1; // transport the bookmark selection
     bool m_bInitOnceCompleted = false;
 
+    bool m_bOutlineMode = false;
+    bool m_bWasReadOnly;
+
     /// LibreOfficeKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
     SwTwips         m_nLOKPageUpDownOffset;
@@ -582,6 +585,8 @@ public:
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
     long InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
+
+    bool IsOutlineMode() { return m_bOutlineMode; }
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.
