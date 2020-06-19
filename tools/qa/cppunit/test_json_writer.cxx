@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <cppunit/extensions/HelperMacros.h>
 #include <test/bootstrapfixture.hxx>
 #include <rtl/ustring.hxx>
@@ -44,7 +48,11 @@ void JsonWriterTest::test1()
         aJson.put("int", 12);
     }
 
-    std::unique_ptr<char[]> result(aJson.extractData());
+    struct Free
+    {
+        void operator()(void* p) const { std::free(p); }
+    };
+    std::unique_ptr<char, Free> result(aJson.extractData());
 
     CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", \"ostring\": \"val2\", "
                                      "\"charptr\": \"val3\", \"int\": 12}}"),

@@ -19,9 +19,9 @@ constexpr int DEFAULT_BUFFER_SIZE = 2048;
 
 JsonWriter::JsonWriter()
     : mSpaceAllocated(DEFAULT_BUFFER_SIZE)
-    , maBuffer(new char[mSpaceAllocated])
+    , mpBuffer(static_cast<char*>(malloc(mSpaceAllocated)))
     , mStartNodeCount(0)
-    , mPos(maBuffer.get())
+    , mPos(mpBuffer)
 {
     *mPos = '{';
     ++mPos;
@@ -29,7 +29,11 @@ JsonWriter::JsonWriter()
     ++mPos;
 }
 
-JsonWriter::~JsonWriter() { assert(!maBuffer && "forgot to extract data?"); }
+JsonWriter::~JsonWriter()
+{
+    assert(!mpBuffer && "forgot to extract data?");
+    free(mpBuffer);
+}
 
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
@@ -239,14 +243,16 @@ void JsonWriter::addCommaBeforeField()
 char* JsonWriter::extractData()
 {
     assert(mStartNodeCount == 0 && "did not close all nodes");
-    assert(maBuffer && "data already extracted");
+    assert(mpBuffer && "data already extracted");
     // add closing brace
     *mPos = '}';
     ++mPos;
     // null-terminate
     *mPos = 0;
     mPos = nullptr;
-    return maBuffer.release();
+    char* pRet = nullptr;
+    std::swap(pRet, mpBuffer);
+    return pRet;
 }
 
 } // namespace tools
