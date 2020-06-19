@@ -34,7 +34,7 @@
 #include <vcl/IPrioritable.hxx>
 #include <vcl/ivctrl.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
