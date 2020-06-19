@@ -30,8 +30,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/toolkit/fixed.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
