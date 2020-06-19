@@ -7428,6 +7428,33 @@ void SwUiWriterTest::testTdf38394()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf133990)
+{
+    load(DATA_DIRECTORY, "tdf133990.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    //Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134021)
 {
     load(DATA_DIRECTORY, "tdf134021.docx");
