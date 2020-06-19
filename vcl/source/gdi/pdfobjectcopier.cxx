@@ -13,8 +13,11 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <tools/stream.hxx>
+#include <tools/zcodec.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
+
+#include "pdfwriter_impl.hxx"
 
 namespace vcl
 {
@@ -35,8 +38,8 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     sal_Int32 nObject = m_rContainer.createObject();
     // Remember what is the ID of this object in our output.
     rCopiedResources[rObject.GetObjectValue()] = nObject;
-    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::copyExternalResource: " << rObject.GetObjectValue()
-                                                                      << " -> " << nObject);
+    SAL_INFO("vcl.pdfwriter", "PDFObjectCopier::copyExternalResource: " << rObject.GetObjectValue()
+                                                                        << " -> " << nObject);
 
     OStringBuffer aLine;
     aLine.append(nObject);
@@ -266,6 +269,67 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
     sRet.append(">>");
 
     return sRet.makeStringAndClear();
+}
+
+void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OStringBuffer& rLine)
+{
+    // Maps from source object id (PDF image) to target object id (export result).
+    std::map<sal_Int32, sal_Int32> aCopiedResources;
+
+    rLine.append(" /Resources <<");
+    static const std::initializer_list<OString> aKeys
+        = { "ColorSpace", "ExtGState", "Font", "XObject", "Shading" };
+    for (const auto& rKey : aKeys)
+    {
+        rLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
+    }
+    rLine.append(">>");
+}
+
+sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*>& rContentStreams,
+                                           SvMemoryStream& rStream, bool& rCompressed)
+{
+    for (auto pContent : rContentStreams)
+    {
+        filter::PDFStreamElement* pPageStream = pContent->GetStream();
+        if (!pPageStream)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFObjectCopier::copyPageStreams: contents has no stream");
+            continue;
+        }
+
+        SvMemoryStream& rPageStream = pPageStream->GetMemory();
+
+        auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
+        if (pFilter)
+        {
+            if (pFilter->GetValue() != "FlateDecode")
+            {
+                continue;
+            }
+
+            SvMemoryStream aMemoryStream;
+            ZCodec aZCodec;
+            rPageStream.Seek(0);
+            aZCodec.BeginCompression();
+            aZCodec.Decompress(rPageStream, aMemoryStream);
+            if (!aZCodec.EndCompression())
+            {
+                SAL_WARN("vcl.pdfwriter", "PDFObjectCopier::copyPageStreams: decompression failed");
+                continue;
+            }
+
+            rStream.WriteBytes(aMemoryStream.GetData(), aMemoryStream.GetSize());
+        }
+        else
+        {
+            rStream.WriteBytes(rPageStream.GetData(), rPageStream.GetSize());
+        }
+    }
+
+    rCompressed = PDFWriterImpl::compressStream(&rStream);
+
+    return rStream.Tell();
 }
 }
 
