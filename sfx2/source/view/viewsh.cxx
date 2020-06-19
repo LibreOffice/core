@@ -1092,6 +1092,8 @@ SfxViewShell::SfxViewShell
         maLOKLocale = SfxLokHelper::getDefaultLanguage();
 
         maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
+        if (maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE)
+            vcl::Window::setLOKMobilePhone(true);
 
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())
