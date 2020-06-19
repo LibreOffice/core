@@ -20,6 +20,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_BASECONTAINERNODE_HXX
 
 #include "basenode.hxx"
+#include <box2dtools.hxx>
 
 namespace slideshow {
 namespace internal {
@@ -47,6 +48,17 @@ public:
     virtual void showState() const override;
     virtual const char* getDescription() const override { return "BaseContainerNode"; }
 #endif
+
+    box2d::utils::Box2DWorldSharedPtr getBox2DWorld() {
+        if( getParentNode() )
+            return getParentNode()->getBox2DWorld();
+        else
+            return mpBox2DWorld; }
+    void createBox2DWorld( ::basegfx::B2DVector rSlideSize ) {
+        if( getParentNode() )
+            getParentNode()->createBox2DWorld( rSlideSize );
+        else
+            if( !mpBox2DWorld ) mpBox2DWorld = std::make_shared<box2d::utils::box2DWorld>( rSlideSize ) ;}
 
 protected:
     // overrides from BaseNode
@@ -83,10 +95,12 @@ protected:
         }
     }
 
+
     typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
     VectorOfNodes       maChildren;
     ::std::size_t       mnFinishedChildren;
     double       mnLeftIterations;
+    box2d::utils::Box2DWorldSharedPtr mpBox2DWorld;
 
 private:
     const bool          mbRepeatIndefinite;

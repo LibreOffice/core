@@ -29,6 +29,7 @@
 #include "pairanimation.hxx"
 
 #include "shapemanager.hxx"
+#include <box2dtools.hxx>
 
 /* Definition of AnimationFactory class */
 
@@ -127,7 +128,8 @@ namespace slideshow
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags);
 
-            NumberAnimationSharedPtr createSimulatedAnimation( const double                      fDuration,
+            NumberAnimationSharedPtr createSimulatedAnimation( const box2d::utils::Box2DWorldSharedPtr  pBox2DWorld,
+                                                               const double                      fDuration,
                                                                sal_Int16                         nAdditive,
                                                                const AnimatableShapeSharedPtr&   /*rShape*/,
                                                                const ShapeManagerSharedPtr&      rShapeManager,

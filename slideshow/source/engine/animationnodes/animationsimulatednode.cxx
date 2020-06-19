@@ -38,7 +38,7 @@ AnimationActivitySharedPtr AnimationSimulatedNode::createActivity() const
     return ActivitiesFactory::createSimpleActivity(
         aParms,
         AnimationFactory::createSimulatedAnimation(
-            fDuration, mxSimulatedMotionNode->getAdditive(), getShape(),
+            mpBox2DWorld, fDuration, mxSimulatedMotionNode->getAdditive(), getShape(),
             getContext().mpSubsettableShapeManager, getSlideSize(), 0),
         true);
 }

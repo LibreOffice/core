@@ -345,7 +345,8 @@ namespace slideshow::internal
             class SimulatedAnimation : public NumberAnimation
             {
             public:
-                SimulatedAnimation( const double                 fDuration,
+                SimulatedAnimation( box2d::utils::Box2DWorldSharedPtr pBox2DWorld,
+                                    const double                 fDuration,
                                     sal_Int16                    nAdditive,
                                     const ShapeManagerSharedPtr& rShapeManager,
                                     const ::basegfx::B2DVector&  rSlideSize,
@@ -360,7 +361,7 @@ namespace slideshow::internal
                     mbAnimationStarted( false ),
                     mnAdditive( nAdditive ),
                     mpBox2DBody(),
-                    mpBox2DWorld(),
+                    mpBox2DWorld(pBox2DWorld),
                     mfPreviousElapsedTime(0.00f)
                 {
                     ENSURE_OR_THROW( rShapeManager,
@@ -388,24 +389,24 @@ namespace slideshow::internal
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    mpBox2DWorld = std::make_shared<box2d::utils::box2DWorld>( maPageSize );
+//                    mpBox2DWorld = std::make_shared<box2d::utils::box2DWorld>( maPageSize );
                     mpBox2DBody = std::make_shared<box2d::utils::box2DBody>( mpBox2DWorld->createDynamicBodyFromBoundingBox(
-                                                                            rShape, rAttrLayer) );
+                                                                             rShape, rAttrLayer) );
 
-                    auto pXShapeHash = mpShapeManager->getXShapeToShapeMapPtr();
+//                    auto pXShapeHash = mpShapeManager->getXShapeToShapeMapPtr();
 
                     // iterate over shapes in the current slide
-                    for( auto aIt = pXShapeHash->begin(); aIt != pXShapeHash->end(); aIt++ )
-                    {
-                        ShapeSharedPtr pShape = aIt->second;
+//                    for( auto aIt = pXShapeHash->begin(); aIt != pXShapeHash->end(); aIt++ )
+//                    {
+//                        ShapeSharedPtr pShape = aIt->second;
 
-                        if( pShape->isVisible()
-                         && pShape->getPriority() != rShape->getPriority() // checking against our main animation shape
-                         && pShape->isForeground() )
-                        {
-                            mpBox2DWorld->createStaticBodyFromBoundingBox( pShape );
-                        }
-                    }
+//                        if( pShape->isVisible()
+//                         && pShape->getPriority() != rShape->getPriority() // checking against our main animation shape
+//                         && pShape->isForeground() )
+//                        {
+//                            mpBox2DWorld->createStaticBodyFromBoundingBox( pShape );
+//                        }
+//                    }
 
                     ENSURE_OR_THROW( rShape,
                                       "SimulatedAnimation::start(): Invalid shape" );
@@ -1389,14 +1390,15 @@ namespace slideshow::internal
                                    nFlags );
         }
 
-        NumberAnimationSharedPtr AnimationFactory::createSimulatedAnimation(  const double                      fDuration,
+        NumberAnimationSharedPtr AnimationFactory::createSimulatedAnimation(  const box2d::utils::Box2DWorldSharedPtr  pBox2DWorld,
+                                                                              const double                      fDuration,
                                                                               sal_Int16                         nAdditive,
                                                                               const AnimatableShapeSharedPtr&   /*rShape*/,
                                                                               const ShapeManagerSharedPtr&      rShapeManager,
                                                                               const ::basegfx::B2DVector&       rSlideSize,
                                                                               int                               nFlags )
         {
-            return std::make_shared<SimulatedAnimation>( fDuration, nAdditive,
+            return std::make_shared<SimulatedAnimation>( pBox2DWorld, fDuration, nAdditive,
                                    rShapeManager,
                                    rSlideSize,
                                    nFlags );

@@ -20,6 +20,7 @@
 
 #include "animationbasenode.hxx"
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <box2dtools.hxx>
 
 namespace slideshow
 {
@@ -33,6 +34,11 @@ public:
         : AnimationBaseNode(xNode, rParent, rContext)
         , mxSimulatedMotionNode(xNode, css::uno::UNO_QUERY_THROW)
     {
+        if (!(mpBox2DWorld = rParent->getBox2DWorld()))
+        {
+            rParent->createBox2DWorld(getSlideSize());
+            mpBox2DWorld = rParent->getBox2DWorld();
+        }
     }
 
 #if defined(DBG_UTIL)
@@ -46,6 +52,7 @@ private:
     virtual AnimationActivitySharedPtr createActivity() const override;
 
     css::uno::Reference<css::animations::XAnimateMotion> mxSimulatedMotionNode;
+    box2d::utils::Box2DWorldSharedPtr mpBox2DWorld;
 };
 
 } // namespace internal
