@@ -10,6 +10,7 @@
 #ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
 #define INCLUDED_UNOTEST_MACROS_TEST_HXX
 
+#include <config_gpgme.h>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -22,6 +23,11 @@ struct TestMacroInfo
     OUString sMacroUrl;
 };
 
+namespace test
+{
+class Directories;
+}
+
 namespace unotest {
 
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
@@ -32,6 +38,13 @@ public:
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
+    void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
+    void tearDownNssGpg();
+
+private:
+#if HAVE_GPGCONF_SOCKETDIR
+    OString m_gpgconfCommandPrefix;
+#endif
 };
 
 }
