@@ -2007,6 +2007,11 @@ void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
     lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
 
+    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    {
+        rPam.Normalize(false); // tdf#127635 put point at the end of deletion
+    }
+
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
         && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
@@ -2178,10 +2183,17 @@ bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam,
     if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
-    return lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    bool const ret = lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? &DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl
                 : &DocumentContentOperationsManager::DeleteAndJoinImpl,
                 bForceJoinNext );
+
+    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    {
+        rPam.Normalize(false); // tdf#127635 put point at the end of deletion
+    }
+
+    return ret;
 }
 
 // It seems that this is mostly used by SwDoc internals; the only
