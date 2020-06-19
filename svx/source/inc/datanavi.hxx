@@ -20,16 +20,11 @@
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
 #include <config_options.h>
-#include <vcl/builder.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
-#include <vcl/treelistbox.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -80,44 +75,6 @@ namespace svxform
     class XFormsPage;
     class DataNavigatorWindow;
     class AddInstanceDialog;
-
-    class DataTreeListBox : public SvTreeListBox
-    {
-    private:
-        std::unique_ptr<VclBuilder> m_xBuilder;
-        VclPtr<PopupMenu>       m_xMenu;
-        VclPtr<XFormsPage>      m_pXFormsPage;
-        DataGroupType           m_eGroup;
-        sal_uInt16              m_nAddId;
-        sal_uInt16              m_nAddElementId;
-        sal_uInt16              m_nAddAttributeId;
-        sal_uInt16              m_nEditId;
-        sal_uInt16              m_nRemoveId;
-
-    protected:
-        using SvTreeListBox::ExecuteDrop;
-
-    public:
-        DataTreeListBox( vcl::Window* pParent, WinBits nBits );
-        virtual ~DataTreeListBox() override;
-        virtual void dispose() override;
-
-        virtual VclPtr<PopupMenu> CreateContextMenu() override;
-        virtual void            ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) override;
-        virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) override;
-        virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-        virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-
-        void                    SetGroup(DataGroupType _eGroup);
-        void                    SetXFormsPage(XFormsPage* _pPage);
-        void                    SetToolBoxItemIds(sal_uInt16 _nAddId,
-                                                  sal_uInt16 _nAddElementId,
-                                                  sal_uInt16 _nAddAttributeId,
-                                                  sal_uInt16 _nEditId,
-                                                  sal_uInt16 _nRemoveId);
-        void                    DeleteAndClear();
-        void                    RemoveEntry( SvTreeListEntry const * _pEntry );
-    };
 
     class ReplaceString
     {
@@ -208,24 +165,33 @@ namespace svxform
         }
     };
 
-    class XFormsPage : public TabPage
+    class DataTreeDropTarget : public DropTargetHelper
+    {
+    private:
+        virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+        virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
+
+    public:
+        DataTreeDropTarget(weld::TreeView& rWidget);
+    };
+
+    class XFormsPage : public BuilderPage
     {
     private:
         MethodString                m_aMethodString;
         ReplaceString               m_aReplaceString;
 
-        VclPtr<ToolBox>             m_pToolBox;
-        VclPtr<DataTreeListBox>     m_pItemList;
-        sal_uInt16                  m_nAddId;
-        sal_uInt16                  m_nAddElementId;
-        sal_uInt16                  m_nAddAttributeId;
-        sal_uInt16                  m_nEditId;
-        sal_uInt16                  m_nRemoveId;
+        weld::Container* m_pParent;
+        std::unique_ptr<weld::Toolbar> m_xToolBox;
+        std::unique_ptr<weld::TreeView> m_xItemList;
+        std::unique_ptr<weld::TreeIter> m_xScratchIter;
+
+        DataTreeDropTarget m_aDropHelper;
 
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                                     m_xUIHelper;
 
-        VclPtr<DataNavigatorWindow> m_pNaviWin;
+        DataNavigatorWindow*        m_pNaviWin;
         bool                        m_bHasModel;
         DataGroupType               m_eGroup;
         // these strings are not valid on the Submission and Binding Page
@@ -236,34 +202,34 @@ namespace svxform
         OUString                    m_sInstanceURL;
         bool                        m_bLinkOnce;
 
-        DECL_LINK(TbxSelectHdl, ToolBox *, void);
-        DECL_LINK(ItemSelectHdl, SvTreeListBox*, void);
+        DECL_LINK(TbxSelectHdl, const OString&, void);
+        DECL_LINK(ItemSelectHdl, weld::TreeView&, void);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
-        void                        AddChildren(SvTreeListEntry* _pParent,
+        void                        AddChildren(weld::TreeIter* _pParent,
                                                 const css::uno::Reference< css::xml::dom::XNode >& _xNode);
-        bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
-        SvTreeListEntry*            AddEntry( std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement );
-        SvTreeListEntry*            AddEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
+        bool                        DoToolBoxAction(const OString& rToolBoxID);
+        void                        AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet = nullptr);
+        void                        AddEntry(const css::uno::Reference< css::beans::XPropertySet >& _rPropSet, weld::TreeIter* pRet = nullptr);
         void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
         bool                        RemoveEntry();
 
-    protected:
-        virtual bool                EventNotify( NotifyEvent& rNEvt ) override;
+        void                        PrepDnD();
+
+        void                        DeleteAndClearTree();
 
     public:
-        XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
+        XFormsPage(weld::Container* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup);
         virtual ~XFormsPage() override;
-        virtual void dispose() override;
-
-        virtual void                Resize() override;
 
         bool                 HasModel() const { return m_bHasModel; }
-        OUString                    SetModel( const css::uno::Reference< css::xforms::XModel > & _xModel, sal_uInt16 _nPagePos );
-        void                        ClearModel();
-        OUString                    LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
+        OUString             SetModel( const css::uno::Reference< css::xforms::XModel > & _xModel, int _nPagePos );
+        void                 ClearModel();
+        OUString             LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
-        bool                        DoMenuAction( sal_uInt16 _nMenuID );
-        void                        EnableMenuItems( Menu* _pMenu );
+        bool                 DoMenuAction(const OString& rMenuID);
+        void                 EnableMenuItems(weld::Menu* pMenu);
 
         const OUString&      GetInstanceName() const { return m_sInstanceName; }
         const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
@@ -279,22 +245,23 @@ namespace svxform
                              GetXFormsHelper() const { return m_xUIHelper; }
     };
 
-    class DataNavigatorWindow : public vcl::Window, public VclBuilderContainer
+    class DataNavigatorWindow final
     {
     private:
-        VclPtr<ListBox>             m_pModelsBox;
-        VclPtr<MenuButton>          m_pModelBtn;
-        VclPtr<TabControl>          m_pTabCtrl;
-        VclPtr<MenuButton>          m_pInstanceBtn;
+        VclPtr<vcl::Window> m_xParent;
+        std::unique_ptr<weld::ComboBox> m_xModelsBox;
+        std::unique_ptr<weld::MenuButton> m_xModelBtn;
+        std::unique_ptr<weld::Notebook> m_xTabCtrl;
+        std::unique_ptr<weld::MenuButton> m_xInstanceBtn;
 
-        VclPtr<XFormsPage>          m_pInstPage;
-        VclPtr<XFormsPage>          m_pSubmissionPage;
-        VclPtr<XFormsPage>          m_pBindingPage;
+        std::unique_ptr<XFormsPage> m_xInstPage;
+        std::unique_ptr<XFormsPage> m_xSubmissionPage;
+        std::unique_ptr<XFormsPage> m_xBindingPage;
 
         sal_Int32                   m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
-        std::vector< VclPtr<XFormsPage> >
+        std::vector< std::unique_ptr<XFormsPage> >
                                     m_aPageList;
         std::vector< css::uno::Reference< css::container::XContainer >  >
                                     m_aContainerList;
@@ -311,37 +278,35 @@ namespace svxform
         css::uno::Reference< css::frame::XModel >
                                     m_xFrameModel;
 
-        DECL_LINK(            ModelSelectListBoxHdl, ListBox&, void );
-        DECL_LINK(            MenuSelectHdl, MenuButton *, void );
-        DECL_LINK(            MenuActivateHdl, MenuButton *, void );
-        DECL_LINK(            ActivatePageHdl, TabControl*, void);
+        DECL_LINK(            ModelSelectListBoxHdl, weld::ComboBox&, void );
+        DECL_LINK(            MenuSelectHdl, const OString&, void );
+        DECL_LINK(            MenuActivateHdl, weld::ToggleButton&, void );
+        DECL_LINK(            ActivatePageHdl, const OString&, void);
         DECL_LINK(            UpdateHdl, Timer *, void);
-        void ModelSelectHdl(ListBox const *);
-        XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
+        void ModelSelectHdl(const weld::ComboBox*);
+        OString                     GetCurrentPage() const;
+        XFormsPage*                 GetPage(const OString& rCurId);
         void                        LoadModels();
-        void                        SetPageModel();
+        void                        SetPageModel(const OString& rCurId);
         void                        ClearAllPageModels( bool bClearPages );
         void                        InitPages();
         void                        CreateInstancePage( const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq );
         bool                        HasFirstInstancePage() const;
-        sal_uInt16                  GetNewPageId() const;
+        OString                     GetNewPageId() const;
 
-        bool                        IsAdditionalPage(sal_uInt16 nPageId) const;
-
-    protected:
-        virtual void                Resize() override;
-        virtual Size                GetOptimalSize() const override;
+        static bool                 IsAdditionalPage(const OString& rIdent);
 
     public:
-        DataNavigatorWindow( vcl::Window* pParent, SfxBindings const * pBindings );
-        virtual ~DataNavigatorWindow() override;
-        virtual void dispose() override;
+        DataNavigatorWindow(vcl::Window* pParent, weld::Builder& rBuilder, SfxBindings const * pBindings);
+        ~DataNavigatorWindow();
 
         static void                 SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
         void                        AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer > & xContainer );
         void                        AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget );
         void                        RemoveBroadcaster();
+
+        weld::Window*               GetFrameWeld() const { return m_xParent->GetFrameWeld(); }
 
         bool                        IsShowDetails() const { return m_bShowDetails; }
         void                        DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
@@ -350,10 +315,9 @@ namespace svxform
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        VclPtr<DataNavigatorWindow> m_aDataWin;
+        std::unique_ptr<DataNavigatorWindow> m_xDataWin;
 
     protected:
-        virtual void                Resize() override;
         virtual Size                CalcDockingSize( SfxChildAlignment ) override;
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) override;
 
