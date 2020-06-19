@@ -17,7 +17,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/spinfld.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:48 using:
+ Generated on 2020-06-19 17:39:54 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -49,6 +49,7 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
+#include <boost/property_tree/json_parser.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -113,7 +114,6 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -133,6 +133,7 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
 #include <vcl/treelistbox.hxx>
@@ -167,6 +168,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -306,6 +308,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/convert.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/fldunit.hxx>
