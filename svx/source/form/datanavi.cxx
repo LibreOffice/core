@@ -34,14 +34,12 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/treelistentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/layout.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -119,36 +117,28 @@ namespace svxform
             m_xPropSet( _rxSet ) {}
     };
 
-    DataTreeListBox::DataTreeListBox(vcl::Window* pParent, WinBits nBits)
-        : SvTreeListBox(pParent, nBits)
+    DataTreeListBox::DataTreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
+        : m_xTreeView(std::move(xTreeView))
         , m_pXFormsPage(nullptr)
         , m_eGroup(DGTUnknown)
-        , m_nAddId(0)
-        , m_nAddElementId(0)
-        , m_nAddAttributeId(0)
-        , m_nEditId(0)
-        , m_nRemoveId(0)
     {
+#if 0
         EnableContextMenuHandling();
 
         if ( DGTInstance == m_eGroup )
             SetDragDropMode( DragDropMode::CTRL_MOVE |DragDropMode::CTRL_COPY | DragDropMode::APP_COPY );
+#endif
     }
 
     DataTreeListBox::~DataTreeListBox()
     {
-        disposeOnce();
-    }
-
-    void DataTreeListBox::dispose()
-    {
-        DeleteAndClear();
-        m_xMenu.clear();
+        m_xMenu.reset();
         m_xBuilder.reset();
-        m_pXFormsPage.clear();
-        SvTreeListBox::dispose();
+        m_pXFormsPage = nullptr;
+        m_xTreeView.reset();
     }
 
+#if 0
     sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     {
         return DND_ACTION_NONE;
@@ -244,16 +234,7 @@ namespace svxform
 
     void DataTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
     {
-        if (m_xMenu->GetItemId("additem") == _nSelectedPopupEntry)
-            m_pXFormsPage->DoMenuAction(m_nAddId);
-        else if (m_xMenu->GetItemId("addelement") == _nSelectedPopupEntry)
-            m_pXFormsPage->DoMenuAction(m_nAddElementId);
-        else if (m_xMenu->GetItemId("addattribute") == _nSelectedPopupEntry)
-            m_pXFormsPage->DoMenuAction(m_nAddAttributeId);
-        else if (m_xMenu->GetItemId("edit") == _nSelectedPopupEntry)
-            m_pXFormsPage->DoMenuAction(m_nEditId);
-        else if (m_xMenu->GetItemId("delete") == _nSelectedPopupEntry)
-            m_pXFormsPage->DoMenuAction(m_nRemoveId);
+        m_pXFormsPage->DoMenuAction(m_nRemoveId);
     }
 
     void DataTreeListBox::RemoveEntry( SvTreeListEntry const * _pEntry )
@@ -264,143 +245,89 @@ namespace svxform
             SvTreeListBox::GetModel()->Remove( _pEntry );
         }
     }
-
-    void DataTreeListBox::SetGroup(DataGroupType _eGroup)
-    {
-        m_eGroup = _eGroup;
-    }
+#endif
 
     void DataTreeListBox::SetXFormsPage(XFormsPage* _pPage)
     {
         m_pXFormsPage = _pPage;
     }
 
-    void DataTreeListBox::SetToolBoxItemIds(sal_uInt16 _nAddId,
-                           sal_uInt16 _nAddElementId,
-                           sal_uInt16 _nAddAttributeId,
-                           sal_uInt16 _nEditId,
-                           sal_uInt16 _nRemoveId)
+    void XFormsPage::DeleteAndClearTree()
     {
-        m_nAddId = _nAddId;
-        m_nAddElementId = _nAddElementId;
-        m_nAddAttributeId = _nAddAttributeId;
-        m_nEditId = _nEditId;
-        m_nRemoveId = _nRemoveId;
+        m_xItemList->all_foreach([this](weld::TreeIter& rEntry) {
+            delete reinterpret_cast<ItemNode*>(m_xItemList->get_id(rEntry).toInt64());
+            return false;
+        });
+        m_xItemList->clear();
     }
 
-    void DataTreeListBox::DeleteAndClear()
+    XFormsPage::XFormsPage(weld::Container* pPage, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup)
+        : BuilderPage(pPage, nullptr, "svx/ui/xformspage.ui", "XFormsPage")
+        , m_xToolBox(m_xBuilder->weld_toolbar("toolbar"))
+        , m_xItemList(m_xBuilder->weld_tree_view("items"))
+        , m_xScratchIter(m_xItemList->make_iterator())
+        , m_pNaviWin(_pNaviWin)
+        , m_bHasModel(false)
+        , m_eGroup(_eGroup)
+        , m_bLinkOnce(false)
     {
-        sal_uIntPtr i, nCount = GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
-        {
-            SvTreeListEntry* pEntry = GetEntry(i);
-            if ( pEntry )
-                delete static_cast< ItemNode* >( pEntry->GetUserData() );
-        }
-
-        Clear();
-    }
-
-
-
-    VCL_BUILDER_FACTORY_ARGS(DataTreeListBox, WB_BORDER)
-
-    XFormsPage::XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
-
-        TabPage( pParent, "XFormsPage", "svx/ui/xformspage.ui" ),
-        m_pNaviWin      ( _pNaviWin ),
-        m_bHasModel     ( false ),
-        m_eGroup        ( _eGroup ),
-        m_bLinkOnce     ( false )
-
-    {
-        get(m_pToolBox, "toolbar");
-        get(m_pItemList, "items");
+#if 0
         Size aSize(LogicToPixel(Size(63, 100), MapMode(MapUnit::MapAppFont)));
-        m_pItemList->set_width_request(aSize.Width());
-        m_pItemList->set_height_request(aSize.Height());
-
-        m_pItemList->SetGroup(_eGroup);
-        m_pItemList->SetXFormsPage( this );
-
-        m_nAddId = m_pToolBox->GetItemId("TBI_ITEM_ADD");
-        m_nAddElementId = m_pToolBox->GetItemId("TBI_ITEM_ADD_ELEMENT");
-        m_nAddAttributeId = m_pToolBox->GetItemId("TBI_ITEM_ADD_ATTRIBUTE");
-        m_nEditId = m_pToolBox->GetItemId("TBI_ITEM_EDIT");
-        m_nRemoveId = m_pToolBox->GetItemId("TBI_ITEM_REMOVE");
-
-        m_pItemList->SetToolBoxItemIds(m_nAddId, m_nAddElementId, m_nAddAttributeId, m_nEditId, m_nRemoveId);
-
-        m_pToolBox->InsertSeparator(4,5);
-        m_pToolBox->SetItemImage(m_nAddId, Image(StockImage::Yes, RID_SVXBMP_ADD));
-        m_pToolBox->SetItemImage(m_nAddElementId, Image(StockImage::Yes, RID_SVXBMP_ADD_ELEMENT));
-        m_pToolBox->SetItemImage(m_nAddAttributeId, Image(StockImage::Yes, RID_SVXBMP_ADD_ATTRIBUTE));
-        m_pToolBox->SetItemImage(m_nEditId, Image(StockImage::Yes, RID_SVXBMP_EDIT));
-        m_pToolBox->SetItemImage(m_nRemoveId, Image(StockImage::Yes, RID_SVXBMP_REMOVE));
+        m_xItemList->set_width_request(aSize.Width());
+        m_xItemList->set_height_request(aSize.Height());
+#endif
 
         if ( DGTInstance == m_eGroup )
-            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddId ) );
+            m_xToolBox->set_item_visible("additem", false);
         else
         {
-            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddElementId ) );
-            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddAttributeId ) );
+            m_xToolBox->set_item_visible("addelement", false);
+            m_xToolBox->set_item_visible("addattribute", false);
 
             if ( DGTSubmission == m_eGroup )
             {
-                m_pToolBox->SetItemText( m_nAddId, SvxResId( RID_STR_DATANAV_ADD_SUBMISSION ) );
-                m_pToolBox->SetItemText( m_nEditId, SvxResId( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                m_pToolBox->SetItemText( m_nRemoveId, SvxResId( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+                m_xToolBox->set_item_label("additem", SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xToolBox->set_item_label("edit", SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xToolBox->set_item_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                m_pToolBox->SetItemText( m_nAddId, SvxResId( RID_STR_DATANAV_ADD_BINDING ) );
-                m_pToolBox->SetItemText( m_nEditId, SvxResId( RID_STR_DATANAV_EDIT_BINDING ) );
-                m_pToolBox->SetItemText( m_nRemoveId, SvxResId( RID_STR_DATANAV_REMOVE_BINDING ) );
+                m_xToolBox->set_item_label("additem", SvxResId(RID_STR_DATANAV_ADD_BINDING));
+                m_xToolBox->set_item_label("edit", SvxResId(RID_STR_DATANAV_EDIT_BINDING));
+                m_xToolBox->set_item_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
 
-        const Size aTbxSz( m_pToolBox->CalcWindowSizePixel() );
-        m_pToolBox->SetSizePixel( aTbxSz );
-        m_pToolBox->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-        m_pToolBox->SetSelectHdl( LINK( this, XFormsPage, TbxSelectHdl ) );
-        Point aPos = m_pItemList->GetPosPixel();
-        aPos.setY( aTbxSz.Height() );
-        m_pItemList->SetPosPixel( aPos );
+        m_xToolBox->connect_clicked(LINK(this, XFormsPage, TbxSelectHdl));
 
-        m_pItemList->SetSelectHdl( LINK( this, XFormsPage, ItemSelectHdl ) );
-        m_pItemList->SetNodeDefaultImages();
+        m_xItemList->connect_changed(LINK(this, XFormsPage, ItemSelectHdl));
+#if 0
+        m_xItemList->SetNodeDefaultImages();
         WinBits nBits = WB_BORDER | WB_TABSTOP | WB_HIDESELECTION | WB_NOINITIALSELECTION;
         if ( DGTInstance == m_eGroup || DGTSubmission == m_eGroup )
             nBits |= WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT;
-        m_pItemList->SetStyle( m_pItemList->GetStyle() | nBits  );
-        m_pItemList->Show();
-        ItemSelectHdl( m_pItemList );
+        m_xItemList->SetStyle( m_xItemList->GetStyle() | nBits  );
+#endif
+        ItemSelectHdl(*m_xItemList);
     }
 
     XFormsPage::~XFormsPage()
     {
-        disposeOnce();
+        DeleteAndClearTree();
+        m_pNaviWin = nullptr;
     }
 
-    void XFormsPage::dispose()
+    IMPL_LINK(XFormsPage, TbxSelectHdl, const OString&, rIdent, void)
     {
-        m_pToolBox.clear();
-        m_pItemList.clear();
-        m_pNaviWin.clear();
-        TabPage::dispose();
+        DoToolBoxAction(rIdent);
     }
 
-    IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl, ToolBox *, void)
-    {
-        DoToolBoxAction( m_pToolBox->GetCurItemId() );
-    }
-
-    IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl, SvTreeListBox*, void)
+    IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl, weld::TreeView&, void)
     {
         EnableMenuItems( nullptr );
     }
 
-    void XFormsPage::AddChildren(SvTreeListEntry* _pParent,
+    void XFormsPage::AddChildren(weld::TreeIter* _pParent,
         const Reference< css::xml::dom::XNode >& _xNode)
     {
         DBG_ASSERT( m_xUIHelper.is(), "XFormsPage::AddChildren(): invalid UIHelper" );
@@ -416,49 +343,51 @@ namespace svxform
                 {
                     Reference< css::xml::dom::XNode > xChild = xNodeList->item(i);
                     css::xml::dom::NodeType eChildType = xChild->getNodeType();
-                    Image aExpImg, aCollImg;
+                    OUString aExpImg;
                     switch ( eChildType )
                     {
                         case css::xml::dom::NodeType_ATTRIBUTE_NODE:
-                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ATTRIBUTE);
+                            aExpImg = RID_SVXBMP_ATTRIBUTE;
                             break;
                         case css::xml::dom::NodeType_ELEMENT_NODE:
-                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ELEMENT);
+                            aExpImg = RID_SVXBMP_ELEMENT;
                             break;
                         case css::xml::dom::NodeType_TEXT_NODE:
-                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_TEXT);
+                            aExpImg = RID_SVXBMP_TEXT;
                             break;
                         default:
-                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_OTHER);
+                            aExpImg = RID_SVXBMP_OTHER;
                     }
 
                     OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
                     if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
-                        SvTreeListEntry* pEntry = m_pItemList->InsertEntry(
-                            sName, aExpImg, aCollImg, _pParent, false, TREELIST_APPEND, pNode );
+                        OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                        std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->make_iterator();
+                        m_xItemList->insert(_pParent, -1, &sName, &sId, nullptr, nullptr, false, xEntry.get());
+                        m_xItemList->set_image(*xEntry, aExpImg);
+
                         if ( xChild->hasAttributes() )
                         {
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
                             if ( xMap.is() )
                             {
-                                aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ATTRIBUTE);
+                                aExpImg = RID_SVXBMP_ATTRIBUTE;
                                 sal_Int32 j, nMapLen = xMap->getLength();
                                 for ( j = 0; j < nMapLen; ++j )
                                 {
                                     Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
                                     pNode = new ItemNode( xAttr );
-                                    OUString sAttrName =
-                                        m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
-                                    m_pItemList->InsertEntry(
-                                        sAttrName, aExpImg, aCollImg,
-                                        pEntry, false, TREELIST_APPEND, pNode );
+                                    OUString sSubId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                                    OUString sAttrName = m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
+                                    m_xItemList->insert(xEntry.get(), -1, &sAttrName, &sSubId, nullptr, nullptr, false, m_xScratchIter.get());
+                                    m_xItemList->set_image(*m_xScratchIter, aExpImg);
                                 }
                             }
                         }
                         if ( xChild->hasChildNodes() )
-                            AddChildren(pEntry, xChild);
+                            AddChildren(xEntry.get(), xChild);
                     }
                 }
             }
@@ -469,20 +398,20 @@ namespace svxform
         }
     }
 
-    bool XFormsPage::DoToolBoxAction( sal_uInt16 _nToolBoxID ) {
-
+    bool XFormsPage::DoToolBoxAction(const OString& rToolBoxID)
+    {
         bool bHandled = false;
         bool bIsDocModified = false;
         m_pNaviWin->DisableNotify( true );
 
-        if(_nToolBoxID == m_nAddId || _nToolBoxID == m_nAddElementId || _nToolBoxID == m_nAddAttributeId)
+        if (rToolBoxID == "additem" || rToolBoxID == "addelement" || rToolBoxID == "addattribute")
         {
             bHandled = true;
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
             if ( DGTSubmission == m_eGroup )
             {
-                AddSubmissionDialog aDlg(GetFrameWeld(), nullptr, m_xUIHelper);
+                AddSubmissionDialog aDlg(m_pNaviWin->GetFrameWeld(), nullptr, m_xUIHelper);
                 if ( aDlg.run() == RET_OK && aDlg.GetNewSubmission().is() )
                 {
                     try
@@ -490,8 +419,8 @@ namespace svxform
                         Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
                         Reference< XSet > xSubmissions = xModel->getSubmissions();
                         xSubmissions->insert( makeAny( xNewSubmission ) );
-                        SvTreeListEntry* pEntry = AddEntry( xNewSubmission );
-                        m_pItemList->Select( pEntry );
+                        AddEntry(xNewSubmission, m_xScratchIter.get());
+                        m_xItemList->select(*m_xScratchIter);
                         bIsDocModified = true;
                     }
                     catch ( Exception const & )
@@ -503,7 +432,10 @@ namespace svxform
             else
             {
                 DataItemType eType = DITElement;
-                SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
+
+                std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+                bool bEntry = m_xItemList->get_selected(xEntry.get());
+
                 std::unique_ptr<ItemNode> pNode;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
@@ -513,17 +445,17 @@ namespace svxform
                 {
                     if ( !m_sInstanceURL.isEmpty() )
                     {
-                        LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                        LinkedInstanceWarningBox aMsgBox(m_pNaviWin->GetFrameWeld());
                         if (aMsgBox.run() != RET_OK)
                             return bHandled;
                     }
 
-                    DBG_ASSERT( pEntry, "XFormsPage::DoToolBoxAction(): no entry" );
-                    ItemNode* pParentNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                    DBG_ASSERT( bEntry, "XFormsPage::DoToolBoxAction(): no entry" );
+                    ItemNode* pParentNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
                     DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
                     xParentNode = pParentNode->m_xNode;
                     Reference< css::xml::dom::XNode > xNewNode;
-                    if ( m_nAddElementId == _nToolBoxID )
+                    if (rToolBoxID == "addelement")
                     {
                         try
                         {
@@ -565,7 +497,7 @@ namespace svxform
                         if ( xNewNode.is() )
                              xPNode = xNewNode->getParentNode();
                         // attributes don't have parents in the DOM model
-                        DBG_ASSERT( m_nAddAttributeId == _nToolBoxID
+                        DBG_ASSERT( rToolBoxID  == "addattribute"
                                     || xPNode.is(), "XFormsPage::DoToolboxAction(): node not added" );
                     }
                     catch ( Exception const & )
@@ -600,7 +532,7 @@ namespace svxform
                     }
                 }
 
-                AddDataItemDialog aDlg(GetFrameWeld(), pNode.get(), m_xUIHelper);
+                AddDataItemDialog aDlg(m_pNaviWin->GetFrameWeld(), pNode.get(), m_xUIHelper);
                 aDlg.set_title(SvxResId(pResId));
                 aDlg.InitText( eType );
                 short nReturn = aDlg.run();
@@ -608,9 +540,9 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvTreeListEntry* pNewEntry = AddEntry( std::move(pNode), bIsElement );
-                        m_pItemList->MakeVisible( pNewEntry );
-                        m_pItemList->Select( pNewEntry );
+                        AddEntry( std::move(pNode), bIsElement, m_xScratchIter.get());
+                        m_xItemList->scroll_to_row(*m_xScratchIter);
+                        m_xItemList->select(*m_xScratchIter);
                         bIsDocModified = true;
                     }
                     else
@@ -634,8 +566,8 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvTreeListEntry* pNewEntry = AddEntry( xNewBinding );
-                        m_pItemList->Select( pNewEntry );
+                        AddEntry(xNewBinding, m_xScratchIter.get());
+                        m_xItemList->select(*m_xScratchIter);
                         bIsDocModified = true;
                     }
                     else
@@ -653,25 +585,29 @@ namespace svxform
                 }
             }
         }
-        else if(_nToolBoxID == m_nEditId)
+        else if (rToolBoxID == "edit")
         {
             bHandled = true;
-            SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
-            if ( pEntry )
+
+            std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+            bool bEntry = m_xItemList->get_selected(xEntry.get());
+            if ( bEntry )
             {
-                if ( DGTSubmission == m_eGroup && m_pItemList->GetParent( pEntry ) )
-                    pEntry = m_pItemList->GetParent( pEntry );
-                ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                if ( DGTSubmission == m_eGroup && m_xItemList->get_iter_depth(*xEntry) )
+                {
+                    m_xItemList->iter_parent(*xEntry);
+                }
+                ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
                     if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
                     {
-                        LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                        LinkedInstanceWarningBox aMsgBox(m_pNaviWin->GetFrameWeld());
                         if (aMsgBox.run() != RET_OK)
                             return bHandled;
                     }
 
-                    AddDataItemDialog aDlg(GetFrameWeld(), pNode, m_xUIHelper);
+                    AddDataItemDialog aDlg(m_pNaviWin->GetFrameWeld(), pNode, m_xUIHelper);
                     DataItemType eType = DITElement;
                     const char* pResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
@@ -729,13 +665,13 @@ namespace svxform
                             }
                         }
 
-                        m_pItemList->SetEntryText( pEntry, sNewName );
+                        m_xItemList->set_text(*xEntry, sNewName);
                         bIsDocModified = true;
                     }
                 }
                 else
                 {
-                    AddSubmissionDialog aDlg(GetFrameWeld(), pNode, m_xUIHelper);
+                    AddSubmissionDialog aDlg(m_pNaviWin->GetFrameWeld(), pNode, m_xUIHelper);
                     aDlg.set_title(SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
                     if (aDlg.run() == RET_OK)
                     {
@@ -745,12 +681,12 @@ namespace svxform
                 }
             }
         }
-        else if(_nToolBoxID == m_nRemoveId)
+        else if (rToolBoxID == "delete")
         {
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
             {
-                LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                LinkedInstanceWarningBox aMsgBox(m_pNaviWin->GetFrameWeld());
                 if (aMsgBox.run() != RET_OK)
                     return bHandled;
             }
@@ -768,10 +704,15 @@ namespace svxform
         return bHandled;
     }
 
-    SvTreeListEntry* XFormsPage::AddEntry( std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement )
+    void XFormsPage::AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet)
     {
-        SvTreeListEntry* pParent = m_pItemList->FirstSelected();
-        Image aImage(StockImage::Yes, _bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE));
+        if (!pRet)
+            pRet = m_xScratchIter.get();
+
+        std::unique_ptr<weld::TreeIter> xParent(m_xItemList->make_iterator());
+        if (!m_xItemList->get_selected(xParent.get()))
+            xParent.reset();
+        OUString aImage(_bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE));
         OUString sName;
         try
         {
@@ -782,14 +723,17 @@ namespace svxform
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
-        return m_pItemList->InsertEntry(
-            sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode.release() );
+        OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(_pNewNode.release())));
+        m_xItemList->insert(xParent.get(), -1, &sName, &sId, nullptr, nullptr, false, pRet);
+        m_xItemList->set_image(*pRet, aImage);
     }
 
-    SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
+    void XFormsPage::AddEntry(const Reference< XPropertySet >& _rEntry, weld::TreeIter* pRet)
     {
-        SvTreeListEntry* pEntry = nullptr;
-        Image aImage(StockImage::Yes, RID_SVXBMP_ELEMENT);
+        if (!pRet)
+            pRet = m_xScratchIter.get();
+
+        OUString aImage(RID_SVXBMP_ELEMENT);
 
         ItemNode* pNode = new ItemNode( _rEntry );
         OUString sTemp;
@@ -800,29 +744,37 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+                OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                m_xItemList->insert(nullptr, -1, &sTemp, &sId, nullptr, nullptr, false, pRet);
+                m_xItemList->set_image(*pRet, aImage);
+                std::unique_ptr<weld::TreeIter> xRes(m_xItemList->make_iterator());
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
-                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_xItemList->insert(pRet, -1, &sEntry, nullptr, nullptr, nullptr, false, xRes.get());
+                m_xItemList->set_image(*xRes, aImage);
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
                     m_aMethodString.toUI( sTemp );
-                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_xItemList->insert(pRet, -1, &sEntry, nullptr, nullptr, nullptr, false, xRes.get());
+                m_xItemList->set_image(*xRes, aImage);
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
-                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_xItemList->insert(pRet, -1, &sEntry, nullptr, nullptr, nullptr, false, xRes.get());
+                m_xItemList->set_image(*xRes, aImage);
                 // Bind
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_xItemList->insert(pRet, -1, &sEntry, nullptr, nullptr, nullptr, false, xRes.get());
+                m_xItemList->set_image(*xRes, aImage);
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
                     m_aReplaceString.toUI( sTemp );
-                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_xItemList->insert(pRet, -1, &sEntry, nullptr, nullptr, nullptr, false, xRes.get());
+                m_xItemList->set_image(*xRes, aImage);
             }
             catch ( Exception const & )
             {
@@ -838,18 +790,17 @@ namespace svxform
                 sName += sTemp + ": ";
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
-                pEntry = m_pItemList->InsertEntry(
-                    sName, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+
+                OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                m_xItemList->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, false, pRet);
+                m_xItemList->set_image(*pRet, aImage);
             }
             catch ( Exception const & )
             {
                 TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::AddEntry(Ref)" );
             }
         }
-
-        return pEntry;
     }
-
 
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
@@ -859,42 +810,39 @@ namespace svxform
         {
             try
             {
-                SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
+                std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+                m_xItemList->get_selected(xEntry.get());
 
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we
                 // assume the latter case and use the parent
-                if( m_pItemList->GetEntry( pEntry, 0 ) == nullptr )
-                {
-                    pEntry = m_pItemList->GetModel()->GetParent( pEntry );
-                }
+                if (!m_xItemList->iter_has_child(*xEntry))
+                    m_xItemList->iter_parent(*xEntry);
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                m_pItemList->SetEntryText( pEntry, sTemp );
+                m_xItemList->set_text(*xEntry, sTemp);
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                sal_uLong nPos = 0;
-                SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
-                m_pItemList->SetEntryText( pChild, sEntry );
+                m_xItemList->iter_children(*xEntry);
+                m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
-                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
-                m_pItemList->SetEntryText( pChild, sEntry );
+                m_xItemList->iter_next_sibling(*xEntry);
+                m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
-                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
-                m_pItemList->SetEntryText( pChild, sEntry );
+                m_xItemList->iter_next_sibling(*xEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
                     m_aMethodString.toUI( sTemp );
-                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
-                m_pItemList->SetEntryText( pChild, sEntry );
+                m_xItemList->iter_next_sibling(*xEntry);
+                m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
                     m_aReplaceString.toUI( sTemp );
-                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
-                m_pItemList->SetEntryText( pChild, sEntry );
+                m_xItemList->iter_next_sibling(*xEntry);
+                m_xItemList->set_text(*xEntry, sEntry);
             }
             catch ( Exception const & )
             {
@@ -907,13 +855,15 @@ namespace svxform
     bool XFormsPage::RemoveEntry()
     {
         bool bRet = false;
-        SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
-        if ( pEntry &&
-             ( DGTInstance != m_eGroup || m_pItemList->GetParent( pEntry ) ) )
+
+        std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+        bool bEntry = m_xItemList->get_selected(xEntry.get());
+        if ( bEntry &&
+             ( DGTInstance != m_eGroup || m_xItemList->get_iter_depth(*xEntry) ) )
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::RemoveEntry(): no model" );
-            ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
             DBG_ASSERT( pNode, "XFormsPage::RemoveEntry(): no node" );
 
             if ( DGTInstance == m_eGroup )
@@ -925,7 +875,7 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     const char* pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                    std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(m_pNaviWin->GetFrameWeld(),
                                                                              VclMessageType::Question, VclButtonsType::YesNo,
                                                                              SvxResId(pResId)));
                     OUString sMessText = xQBox->get_primary_text();
@@ -934,9 +884,10 @@ namespace svxform
                     xQBox->set_primary_text(sMessText);
                     if (xQBox->run() == RET_YES)
                     {
-                        SvTreeListEntry* pParent = m_pItemList->GetParent( pEntry );
-                        DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
-                        ItemNode* pParentNode = static_cast< ItemNode* >( pParent->GetUserData() );
+                        std::unique_ptr<weld::TreeIter> xParent(m_xItemList->make_iterator(xEntry.get()));
+                        bool bParent = m_xItemList->iter_parent(*xParent);
+                        assert(bParent && "XFormsPage::RemoveEntry(): no parent entry");
+                        ItemNode* pParentNode = reinterpret_cast<ItemNode*>((m_xItemList->get_id(*xParent).toInt64()));
                         DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
 
                         Reference< css::xml::dom::XNode > xPNode;
@@ -969,7 +920,7 @@ namespace svxform
                 {
                     TOOLS_WARN_EXCEPTION( "svx.form", "XFormsPage::RemoveEntry()" );
                 }
-                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(m_pNaviWin->GetFrameWeld(),
                                                                          VclMessageType::Question, VclButtonsType::YesNo,
                                                                          SvxResId(pResId)));
                 OUString sMessText = xQBox->get_primary_text();
@@ -992,14 +943,18 @@ namespace svxform
                 }
             }
 
-            if ( bRet )
-                m_pItemList->RemoveEntry( pEntry );
+            if (bRet)
+            {
+                m_xItemList->remove(*xEntry);
+                delete pNode;
+            }
         }
 
         return bRet;
     }
 
 
+#if 0
     bool XFormsPage::EventNotify( NotifyEvent& rNEvt )
     {
         bool bHandled = false;
@@ -1011,26 +966,16 @@ namespace svxform
             switch ( nCode )
             {
                 case KEY_DELETE:
-                    bHandled = DoMenuAction( m_nRemoveId );
+                    bHandled = DoMenuAction("delete");
                     break;
             }
         }
 
         return bHandled || Window::EventNotify( rNEvt );
     }
+#endif
 
-    void XFormsPage::Resize()
-    {
-        Size aSize = GetOutputSizePixel();
-        Size aTbxSize = m_pToolBox->GetSizePixel();
-        aTbxSize.setWidth( aSize.Width() );
-        m_pToolBox->SetSizePixel( aTbxSize );
-        aSize.AdjustWidth( -4 );
-        aSize.AdjustHeight( -( 4 + aTbxSize.Height() ) );
-        m_pItemList->SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
-    }
-
-    OUString XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
+    OUString XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, int _nPagePos )
     {
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
 
@@ -1042,7 +987,7 @@ namespace svxform
         {
             case DGTInstance :
             {
-                DBG_ASSERT( _nPagePos != TAB_PAGE_NOTFOUND, "XFormsPage::SetModel(): invalid page position" );
+                DBG_ASSERT( _nPagePos != -1, "XFormsPage::SetModel(): invalid page position" );
                 try
                 {
                     Reference< XContainer > xContainer( _xModel->getInstances(), UNO_QUERY );
@@ -1055,7 +1000,7 @@ namespace svxform
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
-                            sal_uInt16 nIter = 0;
+                            int nIter = 0;
                             while ( xNum->hasMoreElements() )
                             {
                                 if ( nIter == _nPagePos )
@@ -1088,7 +1033,7 @@ namespace svxform
 
             case DGTSubmission :
             {
-                DBG_ASSERT( TAB_PAGE_NOTFOUND == _nPagePos, "XFormsPage::SetModel(): invalid page position" );
+                DBG_ASSERT( _nPagePos == -1, "XFormsPage::SetModel(): invalid page position" );
                 try
                 {
                     Reference< XContainer > xContainer( _xModel->getSubmissions(), UNO_QUERY );
@@ -1120,7 +1065,7 @@ namespace svxform
 
             case DGTBinding :
             {
-                DBG_ASSERT( TAB_PAGE_NOTFOUND == _nPagePos, "XFormsPage::SetModel(): invalid page position" );
+                DBG_ASSERT( _nPagePos == -1, "XFormsPage::SetModel(): invalid page position" );
                 try
                 {
                     Reference< XContainer > xContainer( _xModel->getBindings(), UNO_QUERY );
@@ -1133,7 +1078,8 @@ namespace svxform
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
-                            Image aImage(StockImage::Yes, RID_SVXBMP_ELEMENT);
+                            OUString aImage(RID_SVXBMP_ELEMENT);
+                            std::unique_ptr<weld::TreeIter> xRes(m_xItemList->make_iterator());
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
@@ -1148,8 +1094,10 @@ namespace svxform
                                     sEntry += sTemp;
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
-                                    m_pItemList->InsertEntry(
-                                        sEntry, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
+
+                                    OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                                    m_xItemList->insert(nullptr, -1, &sEntry, &sId, nullptr, nullptr, false, xRes.get());
+                                    m_xItemList->set_image(*xRes, aImage);
                                 }
                             }
                         }
@@ -1174,7 +1122,7 @@ namespace svxform
     void XFormsPage::ClearModel()
     {
         m_bHasModel = false;
-        m_pItemList->DeleteAndClear();
+        DeleteAndClearTree();
     }
 
     OUString XFormsPage::LoadInstance(const Sequence< PropertyValue >& _xPropSeq)
@@ -1219,12 +1167,10 @@ namespace svxform
         return sRet;
     }
 
-
-    bool XFormsPage::DoMenuAction( sal_uInt16 _nMenuID )
+    bool XFormsPage::DoMenuAction(const OString& rMenuID)
     {
-        return DoToolBoxAction( _nMenuID );
+        return DoToolBoxAction(rMenuID);
     }
-
 
     void XFormsPage::EnableMenuItems( Menu* _pMenu )
     {
@@ -1232,22 +1178,23 @@ namespace svxform
         bool bEnableEdit = false;
         bool bEnableRemove = false;
 
-        SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
-        if ( pEntry )
+        std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
+        bool bEntry = m_xItemList->get_selected(xEntry.get());
+        if (bEntry)
         {
             bEnableAdd = true;
             bool bSubmitChild = false;
-            if ( DGTSubmission == m_eGroup && m_pItemList->GetParent( pEntry ) )
+            if (DGTSubmission == m_eGroup && m_xItemList->get_iter_depth(*xEntry))
             {
-                pEntry = m_pItemList->GetParent( pEntry );
+                m_xItemList->iter_parent(*xEntry);
                 bSubmitChild = true;
             }
-            ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
             if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
             {
                 bEnableEdit = true;
                 bEnableRemove = !bSubmitChild;
-                if ( DGTInstance == m_eGroup && !m_pItemList->GetParent( pEntry ) )
+                if ( DGTInstance == m_eGroup && !m_xItemList->get_iter_depth(*xEntry) )
                     bEnableRemove = false;
                 if ( pNode->m_xNode.is() )
                 {
@@ -1270,11 +1217,11 @@ namespace svxform
         else if ( m_eGroup != DGTInstance )
             bEnableAdd = true;
 
-        m_pToolBox->EnableItem( m_nAddId, bEnableAdd );
-        m_pToolBox->EnableItem( m_nAddElementId, bEnableAdd );
-        m_pToolBox->EnableItem( m_nAddAttributeId, bEnableAdd );
-        m_pToolBox->EnableItem( m_nEditId, bEnableEdit );
-        m_pToolBox->EnableItem( m_nRemoveId, bEnableRemove );
+        m_xToolBox->set_item_sensitive("additem", bEnableAdd);
+        m_xToolBox->set_item_sensitive("addelement", bEnableAdd);
+        m_xToolBox->set_item_sensitive("addattribute", bEnableAdd);
+        m_xToolBox->set_item_sensitive("edit", bEnableEdit);
+        m_xToolBox->set_item_sensitive("delete", bEnableRemove);
 
         if ( _pMenu )
         {
@@ -1288,9 +1235,9 @@ namespace svxform
         {
             const char* pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
             const char* pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
-            if ( pEntry )
+            if (bEntry)
             {
-                ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
                 if ( pNode && pNode->m_xNode.is() )
                 {
                     try
@@ -1308,8 +1255,8 @@ namespace svxform
                     }
                 }
             }
-            m_pToolBox->SetItemText( m_nEditId, SvxResId( pResId1 ) );
-            m_pToolBox->SetItemText( m_nRemoveId, SvxResId( pResId2 ) );
+            m_xToolBox->set_item_label("edit", SvxResId(pResId1));
+            m_xToolBox->set_item_label("delete", SvxResId(pResId2));
             if ( _pMenu )
             {
                 _pMenu->SetItemText(_pMenu->GetItemId("edit"), SvxResId( pResId1 ) );
@@ -1318,36 +1265,30 @@ namespace svxform
         }
     }
 
-    DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, SfxBindings const * pBindings)
-        : Window(pParent)
-        , m_pInstPage(nullptr)
-        , m_pSubmissionPage(nullptr)
-        , m_pBindingPage(nullptr)
-        , m_nLastSelectedPos(LISTBOX_ENTRY_NOTFOUND)
+    DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, weld::Builder& rBuilder, SfxBindings const * pBindings)
+        : m_xParent(pParent)
+        , m_xModelsBox(rBuilder.weld_combo_box("modelslist"))
+        , m_xModelBtn(rBuilder.weld_menu_button("modelsbutton"))
+        , m_xTabCtrl(rBuilder.weld_notebook("tabcontrol"))
+        , m_xInstanceBtn(rBuilder.weld_menu_button("instances"))
+        , m_nLastSelectedPos(-1)
         , m_bShowDetails(false)
         , m_bIsNotifyDisabled(false)
         , m_xDataListener(new DataListener(this))
     {
-        m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "svx/ui/datanavigator.ui", "DataNavigator"));
-        get(m_pModelsBox, "modelslist");
-        get(m_pModelBtn, "modelsbutton");
-        get(m_pTabCtrl, "tabcontrol");
-        get(m_pInstanceBtn, "instances");
-
         // handler
-        m_pModelsBox->SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectListBoxHdl ) );
-        Link<MenuButton *, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
-        m_pModelBtn->SetSelectHdl( aLink1 );
-        m_pInstanceBtn->SetSelectHdl( aLink1 );
-        Link<MenuButton*,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
-        m_pModelBtn->SetActivateHdl( aLink2 );
-        m_pInstanceBtn->SetActivateHdl( aLink2 );
-        m_pTabCtrl->SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
+        m_xModelsBox->connect_changed( LINK( this, DataNavigatorWindow, ModelSelectListBoxHdl ) );
+        Link<const OString&, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
+        m_xModelBtn->connect_selected(aLink1);
+        m_xInstanceBtn->connect_selected(aLink1);
+        Link<weld::ToggleButton&,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
+        m_xModelBtn->connect_toggled( aLink2 );
+        m_xInstanceBtn->connect_toggled( aLink2 );
+        m_xTabCtrl->connect_enter_page( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
         m_aUpdateTimer.SetTimeout( 2000 );
         m_aUpdateTimer.SetInvokeHandler( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
         // init tabcontrol
-        m_pTabCtrl->Show();
         OString sPageId("instance");
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
@@ -1356,13 +1297,10 @@ namespace svxform
             aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
         }
 
-        Menu* pMenu = m_pInstanceBtn->GetPopupMenu();
-        sal_uInt16 nInstancesDetailsId = pMenu->GetItemId("instancesdetails");
-        pMenu->SetItemBits(nInstancesDetailsId, MenuItemBits::CHECKABLE );
-        pMenu->CheckItem(nInstancesDetailsId, m_bShowDetails );
+        m_xInstanceBtn->set_item_active("instancesdetails", m_bShowDetails);
 
-        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(sPageId));
-        ActivatePageHdl(m_pTabCtrl);
+        m_xTabCtrl->set_current_page(sPageId);
+        ActivatePageHdl(sPageId);
 
         // get our frame
         DBG_ASSERT( pBindings != nullptr,
@@ -1380,22 +1318,17 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
-        disposeOnce();
-    }
-
-    void DataNavigatorWindow::dispose()
-    {
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
-        aViewOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+        aViewOpt.SetPageID(m_xTabCtrl->get_current_page_ident());
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
 
-        m_pInstPage.disposeAndClear();
-        m_pSubmissionPage.disposeAndClear();
-        m_pBindingPage.disposeAndClear();
+        m_xInstPage.reset();
+        m_xSubmissionPage.reset();
+        m_xBindingPage.reset();
 
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
-            m_aPageList[i].disposeAndClear();
+            m_aPageList[i].reset();
         m_aPageList.clear();
 
         Reference< XFrameActionListener > xListener(
@@ -1403,22 +1336,16 @@ namespace svxform
         m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
-        disposeBuilder();
-        m_pModelsBox.clear();
-        m_pModelBtn.clear();
-        m_pTabCtrl.clear();
-        m_pInstanceBtn.clear();
-        vcl::Window::dispose();
     }
 
-
-    IMPL_LINK( DataNavigatorWindow, ModelSelectListBoxHdl, ListBox&, rBox, void )
+    IMPL_LINK( DataNavigatorWindow, ModelSelectListBoxHdl, weld::ComboBox&, rBox, void )
     {
         ModelSelectHdl(&rBox);
     }
-    void DataNavigatorWindow::ModelSelectHdl(ListBox const * pBox)
+
+    void DataNavigatorWindow::ModelSelectHdl(const weld::ComboBox* pBox)
     {
-        sal_Int32 nPos = m_pModelsBox->GetSelectedEntryPos();
+        sal_Int32 nPos = m_xModelsBox->get_active();
         // pBox == NULL, if you want to force a new fill.
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
@@ -1429,12 +1356,12 @@ namespace svxform
         }
     }
 
-    IMPL_LINK( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn, void )
+    IMPL_LINK(DataNavigatorWindow, MenuSelectHdl, const OString&, rIdent, void)
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        sal_Int32 nSelectedPos = m_pModelsBox->GetSelectedEntryPos();
-        OUString sSelectedModel( m_pModelsBox->GetEntry( nSelectedPos ) );
+        sal_Int32 nSelectedPos = m_xModelsBox->get_active();
+        OUString sSelectedModel(m_xModelsBox->get_text(nSelectedPos));
         Reference< css::xforms::XModel > xModel;
         try
         {
@@ -1450,105 +1377,42 @@ namespace svxform
 
         m_bIsNotifyDisabled = true;
 
-        if (m_pModelBtn == pBtn)
+        if (rIdent == "modelsadd")
         {
-            OString sIdent(pBtn->GetCurItemIdent());
-            if (sIdent == "modelsadd")
+            AddModelDialog aDlg(GetFrameWeld(), false);
+            bool bShowDialog = true;
+            while ( bShowDialog )
             {
-                AddModelDialog aDlg(GetFrameWeld(), false);
-                bool bShowDialog = true;
-                while ( bShowDialog )
-                {
-                    bShowDialog = false;
-                    if (aDlg.run() == RET_OK)
-                    {
-                        OUString sNewName = aDlg.GetName();
-                        bool bDocumentData = aDlg.GetModifyDoc();
-
-                        if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
-                        {
-                            // error: model name already exists
-                            std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                                     VclMessageType::Warning, VclButtonsType::Ok,
-                                                                                     SvxResId(RID_STR_DOUBLE_MODELNAME)));
-                            xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
-                            xErrBox->run();
-                            bShowDialog = true;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                // add new model to frame model
-                                Reference< css::xforms::XModel > xNewModel(
-                                    xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
-
-                                Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
-                                xModelProps->setPropertyValue("ExternalData", makeAny( !bDocumentData ) );
-
-                                sal_Int32 nNewPos = m_pModelsBox->InsertEntry( sNewName );
-                                m_pModelsBox->SelectEntryPos( nNewPos );
-                                ModelSelectHdl(m_pModelsBox);
-                                bIsDocModified = true;
-                            }
-                            catch ( Exception const & )
-                            {
-                                TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
-                            }
-                        }
-                    }
-                }
-            }
-            else if (sIdent == "modelsedit")
-            {
-                AddModelDialog aDlg(GetFrameWeld(), true);
-                aDlg.SetName( sSelectedModel );
-
-                bool bDocumentData( false );
-                try
-                {
-                    Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
-                    Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
-                    Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                    bool bExternalData = false;
-                    OSL_VERIFY( xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
-                    bDocumentData = !bExternalData;
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION("svx");
-                }
-                aDlg.SetModifyDoc( bDocumentData );
-
+                bShowDialog = false;
                 if (aDlg.run() == RET_OK)
                 {
-                    if ( aDlg.GetModifyDoc() != bDocumentData )
-                    {
-                        bDocumentData = aDlg.GetModifyDoc();
-                        try
-                        {
-                            Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
-                            Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
-                            Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                            xModelProps->setPropertyValue( "ExternalData", makeAny( !bDocumentData ) );
-                            bIsDocModified = true;
-                        }
-                        catch( const Exception& )
-                        {
-                            DBG_UNHANDLED_EXCEPTION("svx");
-                        }
-                    }
-
                     OUString sNewName = aDlg.GetName();
-                    if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
+                    bool bDocumentData = aDlg.GetModifyDoc();
+
+                    if (m_xModelsBox->find_text(sNewName) != -1)
+                    {
+                        // error: model name already exists
+                        std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                 SvxResId(RID_STR_DOUBLE_MODELNAME)));
+                        xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
+                        xErrBox->run();
+                        bShowDialog = true;
+                    }
+                    else
                     {
                         try
                         {
-                            xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
+                            // add new model to frame model
+                            Reference< css::xforms::XModel > xNewModel(
+                                xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
 
-                            m_pModelsBox->RemoveEntry( nSelectedPos );
-                            nSelectedPos = m_pModelsBox->InsertEntry( sNewName );
-                            m_pModelsBox->SelectEntryPos( nSelectedPos );
+                            Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
+                            xModelProps->setPropertyValue("ExternalData", makeAny( !bDocumentData ) );
+
+                            m_xModelsBox->append_text(sNewName);
+                            m_xModelsBox->set_active(m_xModelsBox->get_count() - 1);
+                            ModelSelectHdl(m_xModelsBox.get());
                             bIsDocModified = true;
                         }
                         catch ( Exception const & )
@@ -1558,168 +1422,218 @@ namespace svxform
                     }
                 }
             }
-            else if (sIdent == "modelsremove")
+        }
+        else if (rIdent == "modelsedit")
+        {
+            AddModelDialog aDlg(GetFrameWeld(), true);
+            aDlg.SetName( sSelectedModel );
+
+            bool bDocumentData( false );
+            try
             {
-                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                         VclMessageType::Question, VclButtonsType::YesNo,
-                                                                         SvxResId( RID_STR_QRY_REMOVE_MODEL)));
-                OUString sText = xQBox->get_primary_text();
-                sText = sText.replaceFirst( MODELNAME, sSelectedModel );
-                xQBox->set_primary_text(sText);
-                if (xQBox->run() == RET_YES)
+                Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                bool bExternalData = false;
+                OSL_VERIFY( xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
+                bDocumentData = !bExternalData;
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
+            aDlg.SetModifyDoc( bDocumentData );
+
+            if (aDlg.run() == RET_OK)
+            {
+                if ( aDlg.GetModifyDoc() != bDocumentData )
+                {
+                    bDocumentData = aDlg.GetModifyDoc();
+                    try
+                    {
+                        Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                        Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                        Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                        xModelProps->setPropertyValue( "ExternalData", makeAny( !bDocumentData ) );
+                        bIsDocModified = true;
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION("svx");
+                    }
+                }
+
+                OUString sNewName = aDlg.GetName();
+                if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
                 {
                     try
                     {
-                        xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
+                        xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
+
+                        m_xModelsBox->remove(nSelectedPos);
+                        m_xModelsBox->append_text(sNewName);
+                        m_xModelsBox->set_active(m_xModelsBox->get_count() - 1);
+                        bIsDocModified = true;
                     }
                     catch ( Exception const & )
                     {
                         TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
                     }
-                    m_pModelsBox->RemoveEntry( nSelectedPos );
-                    if ( m_pModelsBox->GetEntryCount() <= nSelectedPos )
-                        nSelectedPos = m_pModelsBox->GetEntryCount() - 1;
-                    m_pModelsBox->SelectEntryPos( nSelectedPos );
-                    ModelSelectHdl(m_pModelsBox);
-                    bIsDocModified = true;
                 }
             }
-            else
+        }
+        else if (rIdent == "modelsremove")
+        {
+            std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Question, VclButtonsType::YesNo,
+                                                                     SvxResId( RID_STR_QRY_REMOVE_MODEL)));
+            OUString sText = xQBox->get_primary_text();
+            sText = sText.replaceFirst( MODELNAME, sSelectedModel );
+            xQBox->set_primary_text(sText);
+            if (xQBox->run() == RET_YES)
             {
-                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+                try
+                {
+                    xUIHelper->removeModel( m_xFrameModel, sSelectedModel );
+                }
+                catch ( Exception const & )
+                {
+                    TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
+                }
+                m_xModelsBox->remove(nSelectedPos);
+                if (m_xModelsBox->get_count() <= nSelectedPos)
+                    nSelectedPos = m_xModelsBox->get_count() - 1;
+                m_xModelsBox->set_active(nSelectedPos);
+                ModelSelectHdl(m_xModelsBox.get());
+                bIsDocModified = true;
             }
         }
-        else if (m_pInstanceBtn == pBtn)
+        else if (rIdent == "instancesadd")
         {
-            OString sIdent(pBtn->GetCurItemIdent());
-            if (sIdent == "instancesadd")
+            AddInstanceDialog aDlg(GetFrameWeld(), false);
+            if (aDlg.run() == RET_OK)
             {
-                AddInstanceDialog aDlg(GetFrameWeld(), false);
+                //TODO OString sInst = GetNewPageId();
+                OUString sName = aDlg.GetName();
+                OUString sURL = aDlg.GetURL();
+                bool bLinkOnce = aDlg.IsLinkInstance();
+                try
+                {
+                    xUIHelper->newInstance( sName, sURL, !bLinkOnce );
+                }
+                catch ( Exception const & )
+                {
+                    TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
+                }
+                ModelSelectHdl( nullptr );
+#if 0
+                m_xTabCtrl->SetCurPageId( nInst );
+                XFormsPage* pPage = GetCurrentPage( nInst );
+                pPage->SetInstanceName(sName);
+                pPage->SetInstanceURL(sURL);
+                pPage->SetLinkOnce(bLinkOnce);
+                ActivatePageHdl(sInst);
+#endif
+                bIsDocModified = true;
+            }
+        }
+        else if (rIdent == "instancesedit")
+        {
+            OString sIdent;
+            XFormsPage* pPage = GetCurrentPage(sIdent);
+            if ( pPage )
+            {
+                AddInstanceDialog aDlg(GetFrameWeld(), true);
+                aDlg.SetName( pPage->GetInstanceName() );
+                aDlg.SetURL( pPage->GetInstanceURL() );
+                aDlg.SetLinkInstance( pPage->GetLinkOnce() );
+                OUString sOldName = aDlg.GetName();
                 if (aDlg.run() == RET_OK)
                 {
-                    sal_uInt16 nInst = GetNewPageId();
-                    OUString sName = aDlg.GetName();
+                    OUString sNewName = aDlg.GetName();
                     OUString sURL = aDlg.GetURL();
                     bool bLinkOnce = aDlg.IsLinkInstance();
                     try
                     {
-                        xUIHelper->newInstance( sName, sURL, !bLinkOnce );
+                        xUIHelper->renameInstance( sOldName,
+                                                   sNewName,
+                                                   sURL,
+                                                   !bLinkOnce );
                     }
                     catch ( Exception const & )
                     {
                         TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
                     }
-                    ModelSelectHdl( nullptr );
-                    m_pTabCtrl->SetCurPageId( nInst );
-                    XFormsPage* pPage = GetCurrentPage( nInst );
-                    pPage->SetInstanceName(sName);
+                    pPage->SetInstanceName(sNewName);
                     pPage->SetInstanceURL(sURL);
                     pPage->SetLinkOnce(bLinkOnce);
-                    ActivatePageHdl(m_pTabCtrl);
+                    m_xTabCtrl->set_tab_label_text(sIdent, sNewName);
                     bIsDocModified = true;
                 }
             }
-            else if (sIdent == "instancesedit")
+        }
+        else if (rIdent == "instancesremove")
+        {
+            OString sIdent;
+            XFormsPage* pPage = GetCurrentPage(sIdent);
+            if (pPage)
             {
-                sal_uInt16 nId = 0;
-                XFormsPage* pPage = GetCurrentPage( nId );
-                if ( pPage )
+                OUString sInstName = pPage->GetInstanceName();
+                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Question, VclButtonsType::YesNo,
+                                                                         SvxResId(RID_STR_QRY_REMOVE_INSTANCE)));
+                OUString sMessText = xQBox->get_primary_text();
+                sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
+                xQBox->set_primary_text(sMessText);
+                if (xQBox->run() == RET_YES)
                 {
-                    AddInstanceDialog aDlg(GetFrameWeld(), true);
-                    aDlg.SetName( pPage->GetInstanceName() );
-                    aDlg.SetURL( pPage->GetInstanceURL() );
-                    aDlg.SetLinkInstance( pPage->GetLinkOnce() );
-                    OUString sOldName = aDlg.GetName();
-                    if (aDlg.run() == RET_OK)
+                    bool bDoRemove = false;
+                    if (IsAdditionalPage(sIdent))
                     {
-                        OUString sNewName = aDlg.GetName();
-                        OUString sURL = aDlg.GetURL();
-                        bool bLinkOnce = aDlg.IsLinkInstance();
+#if 0
+                        auto aPageListEnd = m_aPageList.end();
+                        auto aFoundPage = std::find( m_aPageList.begin(), aPageListEnd, pPage );
+                        if ( aFoundPage != aPageListEnd )
+                        {
+                            m_aPageList.erase( aFoundPage );
+//TODO                            pPage.disposeAndClear() ;
+                            bDoRemove = true;
+                        }
+#endif
+                    }
+                    else
+                    {
+                        m_xInstPage.reset();
+                        bDoRemove = true;
+                    }
+
+                    if ( bDoRemove )
+                    {
                         try
                         {
-                            xUIHelper->renameInstance( sOldName,
-                                                       sNewName,
-                                                       sURL,
-                                                       !bLinkOnce );
+                            xUIHelper->removeInstance( sInstName );
                         }
-                        catch ( Exception const & )
+                        catch (const Exception&)
                         {
                             TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
                         }
-                        pPage->SetInstanceName(sNewName);
-                        pPage->SetInstanceURL(sURL);
-                        pPage->SetLinkOnce(bLinkOnce);
-                        m_pTabCtrl->SetPageText( nId, sNewName );
+                        m_xTabCtrl->remove_page(sIdent);
+                        m_xTabCtrl->set_current_page("instance");
+                        ModelSelectHdl( nullptr );
                         bIsDocModified = true;
                     }
                 }
             }
-            else if (sIdent == "instancesremove")
-            {
-                sal_uInt16 nId = 0;
-                VclPtr<XFormsPage> pPage = GetCurrentPage( nId );
-                if ( pPage )
-                {
-                    OUString sInstName = pPage->GetInstanceName();
-                    std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                                             VclMessageType::Question, VclButtonsType::YesNo,
-                                                                             SvxResId(RID_STR_QRY_REMOVE_INSTANCE)));
-                    OUString sMessText = xQBox->get_primary_text();
-                    sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
-                    xQBox->set_primary_text(sMessText);
-                    if (xQBox->run() == RET_YES)
-                    {
-                        bool bDoRemove = false;
-                        if (IsAdditionalPage(nId))
-                        {
-                            auto aPageListEnd = m_aPageList.end();
-                            auto aFoundPage = std::find( m_aPageList.begin(), aPageListEnd, pPage );
-                            if ( aFoundPage != aPageListEnd )
-                            {
-                                m_aPageList.erase( aFoundPage );
-                                pPage.disposeAndClear() ;
-                                bDoRemove = true;
-                            }
-                        }
-                        else
-                        {
-                            m_pInstPage.disposeAndClear();
-                            bDoRemove = true;
-                        }
-
-                        if ( bDoRemove )
-                        {
-                            try
-                            {
-                                xUIHelper->removeInstance( sInstName );
-                            }
-                            catch (const Exception&)
-                            {
-                                TOOLS_WARN_EXCEPTION( "svx.form", "DataNavigatorWindow::MenuSelectHdl()" );
-                            }
-                            m_pTabCtrl->RemovePage( nId );
-                            m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("instance"));
-                            ModelSelectHdl( nullptr );
-                            bIsDocModified = true;
-                        }
-                    }
-                }
-            }
-            else if (sIdent == "instancesdetails")
-            {
-                m_bShowDetails = !m_bShowDetails;
-                PopupMenu* pMenu = m_pInstanceBtn->GetPopupMenu();
-                pMenu->CheckItem("instancesdetails", m_bShowDetails );
-                ModelSelectHdl(m_pModelsBox);
-            }
-            else
-            {
-                SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
-            }
+        }
+        else if (rIdent == "instancesdetails")
+        {
+            m_bShowDetails = !m_bShowDetails;
+            m_xInstanceBtn->set_item_active("instancesdetails", m_bShowDetails);
+            ModelSelectHdl(m_xModelsBox.get());
         }
         else
         {
-            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong button" );
+            SAL_WARN( "svx.form", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
         }
 
         m_bIsNotifyDisabled = false;
@@ -1728,28 +1642,26 @@ namespace svxform
             SetDocModified();
     }
 
-    bool DataNavigatorWindow::IsAdditionalPage(sal_uInt16 nId) const
+    bool DataNavigatorWindow::IsAdditionalPage(const OString& rIdent)
     {
-        return m_pTabCtrl->GetPageName(nId).isEmpty();
+        return rIdent.startsWith("additional");
     }
 
-    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn, void )
+    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, weld::ToggleButton&, rBtn, void )
     {
-        Menu* pMenu = pBtn->GetPopupMenu();
-
-        if (m_pInstanceBtn == pBtn)
+        if (m_xInstanceBtn.get() == &rBtn)
         {
-            sal_uInt16 nId(m_pTabCtrl->GetCurPageId());
-            bool bIsInstPage = (IsAdditionalPage(nId) || m_pTabCtrl->GetPageName(nId) == "instance");
-            pMenu->EnableItem( "instancesedit", bIsInstPage );
-            pMenu->EnableItem( "instancesremove",
-                bIsInstPage && m_pTabCtrl->GetPageCount() > MIN_PAGE_COUNT );
-            pMenu->EnableItem( "instancesdetails", bIsInstPage );
+            OString sIdent(m_xTabCtrl->get_current_page_ident());
+            bool bIsInstPage = (IsAdditionalPage(sIdent) || sIdent == "instance");
+            m_xInstanceBtn->set_item_sensitive( "instancesedit", bIsInstPage );
+            m_xInstanceBtn->set_item_sensitive( "instancesremove",
+                bIsInstPage && m_xTabCtrl->get_n_pages() > MIN_PAGE_COUNT );
+            m_xInstanceBtn->set_item_sensitive( "instancesdetails", bIsInstPage );
         }
-        else if (m_pModelBtn == pBtn)
+        else if (m_xModelBtn.get() == &rBtn)
         {
             // we need at least one model!
-            pMenu->EnableItem("modelsremove", m_pModelsBox->GetEntryCount() > 1 );
+            m_xModelBtn->set_item_sensitive("modelsremove", m_xModelsBox->get_count() > 1 );
         }
         else
         {
@@ -1757,13 +1669,13 @@ namespace svxform
         }
     }
 
-    IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl, TabControl*, void)
+    IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl, const OString&, void)
     {
-        sal_uInt16 nId = 0;
-        XFormsPage* pPage = GetCurrentPage( nId );
+        OString sIdent;
+        XFormsPage* pPage = GetCurrentPage(sIdent);
         if ( pPage )
         {
-            m_pTabCtrl->SetTabPage( nId, pPage );
+//TODO            m_xTabCtrl->SetTabPage( nId, pPage );
             if ( m_xDataContainer.is() && !pPage->HasModel() )
                 SetPageModel();
         }
@@ -1774,42 +1686,43 @@ namespace svxform
         ModelSelectHdl( nullptr );
     }
 
-    XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
+    XFormsPage* DataNavigatorWindow::GetCurrentPage( OString& rCurId )
     {
-        rCurId = m_pTabCtrl->GetCurPageId();
-        VclPtr<XFormsPage> pPage;
-        OString sName(m_pTabCtrl->GetPageName(rCurId));
-        if (sName == "submissions")
+        rCurId = m_xTabCtrl->get_current_page_ident();
+        XFormsPage* pPage = nullptr;
+        if (rCurId == "submissions")
         {
-            if ( !m_pSubmissionPage )
-                m_pSubmissionPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTSubmission);
-            pPage = m_pSubmissionPage;
+            if ( !m_xSubmissionPage )
+                m_xSubmissionPage.reset(new XFormsPage(m_xTabCtrl->get_page(rCurId), this, DGTSubmission));
+            pPage = m_xSubmissionPage.get();
         }
-        else if (sName == "bindings")
+        else if (rCurId == "bindings")
         {
-            if ( !m_pBindingPage )
-                m_pBindingPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTBinding);
-            pPage = m_pBindingPage;
+            if ( !m_xBindingPage )
+                m_xBindingPage.reset(new XFormsPage(m_xTabCtrl->get_page(rCurId), this, DGTBinding));
+            pPage = m_xBindingPage.get();
         }
-        else if (sName == "instance")
+        else if (rCurId == "instance")
         {
-            if ( !m_pInstPage )
-                m_pInstPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
-            pPage = m_pInstPage;
+            if ( !m_xInstPage )
+                m_xInstPage.reset(new XFormsPage(m_xTabCtrl->get_page(rCurId), this, DGTInstance));
+            pPage = m_xInstPage.get();
         }
+#if 0
         else
         {
-            sal_uInt16 nPos = m_pTabCtrl->GetPagePos( rCurId );
+            sal_uInt16 nPos = m_xTabCtrl->get_current_page();
             if ( HasFirstInstancePage() && nPos > 0 )
                 nPos--;
             if ( m_aPageList.size() > nPos )
-                pPage = m_aPageList[nPos];
+                pPage = m_aPageList[nPos].get();
             else
             {
-                pPage = VclPtr<XFormsPage>::Create(m_pTabCtrl, this, DGTInstance);
-                m_aPageList.push_back( pPage );
+                m_aPageList.emplace_back(std::make_unique<XFormsPage>(m_xTabCtrl, this, DGTInstance));
+                pPage = m_aPageList.back().get();
             }
         }
+#endif
 
         return pPage;
     }
@@ -1850,7 +1763,7 @@ namespace svxform
                             Any aAny = m_xDataContainer->getByName( rName );
                             Reference< css::xforms::XModel > xFormsModel;
                             if ( aAny >>= xFormsModel )
-                                m_pModelsBox->InsertEntry( xFormsModel->getID() );
+                                m_xModelsBox->append_text(xFormsModel->getID());
                         }
                     }
                 }
@@ -1861,36 +1774,36 @@ namespace svxform
             }
         }
 
-        if ( m_pModelsBox->GetEntryCount() > 0 )
+        if (m_xModelsBox->get_count() > 0)
         {
-            m_pModelsBox->SelectEntryPos(0);
-            ModelSelectHdl(m_pModelsBox);
+            m_xModelsBox->set_active(0);
+            ModelSelectHdl(m_xModelsBox.get());
         }
     }
 
     void DataNavigatorWindow::SetPageModel()
     {
-        OUString sModel( m_pModelsBox->GetSelectedEntry() );
+        OUString sModel(m_xModelsBox->get_active_text());
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
             Reference< css::xforms::XModel > xFormsModel;
             if ( aAny >>= xFormsModel )
             {
-                sal_uInt16 nPagePos = TAB_PAGE_NOTFOUND;
-                sal_uInt16 nId = 0;
-                XFormsPage* pPage = GetCurrentPage( nId );
+                int nPagePos = -1;
+                OString sIdent;
+                XFormsPage* pPage = GetCurrentPage(sIdent);
                 DBG_ASSERT( pPage, "DataNavigatorWindow::SetPageModel(): no page" );
-                if (IsAdditionalPage(nId) || m_pTabCtrl->GetPageName(nId) == "instance")
+                if (IsAdditionalPage(sIdent) || sIdent == "instance")
                 {
                     // instance page
-                    nPagePos = m_pTabCtrl->GetPagePos( nId );
+                    nPagePos = m_xTabCtrl->get_current_page();
                 }
                 m_bIsNotifyDisabled = true;
                 OUString sText = pPage->SetModel( xFormsModel, nPagePos );
                 m_bIsNotifyDisabled = false;
-                if ( !sText.isEmpty() )
-                    m_pTabCtrl->SetPageText( nId, sText );
+                if (!sText.isEmpty())
+                    m_xTabCtrl->set_tab_label_text(sIdent, sText);
             }
         }
         catch (const NoSuchElementException& )
@@ -1905,7 +1818,7 @@ namespace svxform
 
     void DataNavigatorWindow::InitPages()
     {
-        OUString sModel( m_pModelsBox->GetSelectedEntry() );
+        OUString sModel(m_xModelsBox->get_active_text());
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -1954,27 +1867,29 @@ namespace svxform
 
     void DataNavigatorWindow::ClearAllPageModels( bool bClearPages )
     {
-        if ( m_pInstPage )
-            m_pInstPage->ClearModel();
-        if ( m_pSubmissionPage )
-            m_pSubmissionPage->ClearModel();
-        if ( m_pBindingPage )
-            m_pBindingPage->ClearModel();
+        if ( m_xInstPage )
+            m_xInstPage->ClearModel();
+        if ( m_xSubmissionPage )
+            m_xSubmissionPage->ClearModel();
+        if ( m_xBindingPage )
+            m_xBindingPage->ClearModel();
 
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
         {
-            VclPtr<XFormsPage> pPage = m_aPageList[i];
+            XFormsPage* pPage = m_aPageList[i].get();
             pPage->ClearModel();
+#if 0
             if ( bClearPages )
                 pPage.disposeAndClear();
+#endif
         }
 
         if ( bClearPages )
         {
             m_aPageList.clear();
-            while ( m_pTabCtrl->GetPageCount() > MIN_PAGE_COUNT )
-                m_pTabCtrl->RemovePage( m_pTabCtrl->GetPageId( 1 ) );
+            while ( m_xTabCtrl->get_n_pages() > MIN_PAGE_COUNT )
+                m_xTabCtrl->remove_page(m_xTabCtrl->get_page_ident(1));
         }
     }
 
@@ -1986,45 +1901,33 @@ namespace svxform
         if (pProp != _xPropSeq.end())
             pProp->Value >>= sInstName;
 
-        sal_uInt16 nPageId = GetNewPageId();
+        OString sPageId = GetNewPageId();
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            sInstName = "untitled" + OUString::number( nPageId );
+            sInstName = "untitled";
         }
-        m_pTabCtrl->InsertPage( nPageId, sInstName, m_pTabCtrl->GetPageCount() - 2 );
+        m_xTabCtrl->insert_page(sPageId, sInstName, m_xTabCtrl->get_n_pages() - 2);
     }
 
     bool DataNavigatorWindow::HasFirstInstancePage() const
     {
-        return (m_pTabCtrl->GetPageName(m_pTabCtrl->GetPageId(0)) == "instance");
+        return m_xTabCtrl->get_page_ident(0) == "instance";
     }
 
-    sal_uInt16 DataNavigatorWindow::GetNewPageId() const
+    OString DataNavigatorWindow::GetNewPageId()
     {
-        sal_uInt16 i, nMax = 0, nCount = m_pTabCtrl->GetPageCount();
+#if 0
+        sal_uInt16 i, nMax = 0, nCount = m_xTabCtrl->get_n_pages();
         for ( i = 0; i < nCount; ++i )
         {
-            if ( nMax < m_pTabCtrl->GetPageId(i) )
-                nMax = m_pTabCtrl->GetPageId(i);
+            if ( nMax < m_xTabCtrl->GetPageId(i) )
+                nMax = m_xTabCtrl->GetPageId(i);
         }
         return ( nMax + 1 );
-    }
-
-    void DataNavigatorWindow::Resize()
-    {
-        vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-        if (!pChild)
-            return;
-        VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
-    }
-
-    Size DataNavigatorWindow::GetOptimalSize() const
-    {
-        const vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-        if (!pChild)
-            return Window::GetOptimalSize();
-        return VclContainer::getLayoutRequisition(*pChild);
+#else
+        return "additional";
+#endif
     }
 
     void DataNavigatorWindow::SetDocModified()
@@ -2045,8 +1948,8 @@ namespace svxform
                 RemoveBroadcaster();
                 m_xDataContainer.clear();
                 m_xFrameModel.clear();
-                m_pModelsBox->Clear();
-                m_nLastSelectedPos = LISTBOX_ENTRY_NOTFOUND;
+                m_xModelsBox->clear();
+                m_nLastSelectedPos = -1;
                 // for a reload
                 LoadModels();
             }
@@ -2054,7 +1957,6 @@ namespace svxform
                 m_aUpdateTimer.Start();
         }
     }
-
 
     void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
     {
@@ -2076,7 +1978,6 @@ namespace svxform
         m_aEventTargetList.push_back( xTarget );
     }
 
-
     void DataNavigatorWindow::RemoveBroadcaster()
     {
         Reference< XContainerListener > xContainerListener(
@@ -2096,25 +1997,17 @@ namespace svxform
         }
     }
 
-    DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent ) :
-
-        SfxDockingWindow( _pBindings, _pMgr, _pParent,
-                          WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
-        SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *_pBindings ),
-
-        m_aDataWin( VclPtr<DataNavigatorWindow>::Create(this, _pBindings) )
-
+    DataNavigator::DataNavigator(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
+        : SfxDockingWindow(_pBindings, _pMgr, _pParent, "DataNavigator", "svx/ui/datanavigator.ui")
+        , SfxControllerItem(SID_FM_DATANAVIGATOR_CONTROL, *_pBindings)
+        , m_xDataWin(new DataNavigatorWindow(this, *m_xBuilder, _pBindings))
     {
-
         SetText( SvxResId( RID_STR_DATANAVIGATOR ) );
 
-        Size aSize = m_aDataWin->GetOutputSizePixel();
+        Size aSize = GetOptimalSize();
         Size aLogSize = PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
         SfxDockingWindow::SetFloatingSize( aLogSize );
-
-        m_aDataWin->Show();
     }
-
 
     DataNavigator::~DataNavigator()
     {
@@ -2123,7 +2016,7 @@ namespace svxform
 
     void DataNavigator::dispose()
     {
-        m_aDataWin.disposeAndClear();
+        m_xDataWin.reset();
         ::SfxControllerItem::dispose();
         SfxDockingWindow::dispose();
     }
@@ -2132,7 +2025,6 @@ namespace svxform
     {
     }
 
-
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
         if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )
@@ -2140,7 +2032,6 @@ namespace svxform
 
         return SfxDockingWindow::CalcDockingSize( eAlign );
     }
-
 
     SfxChildAlignment DataNavigator::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
     {
@@ -2156,27 +2047,7 @@ namespace svxform
         return eActAlign;
     }
 
-
-    void DataNavigator::Resize()
-    {
-        SfxDockingWindow::Resize();
-
-        Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
-        Size aLogExplSize = aLogOutputSize;
-        aLogExplSize.AdjustWidth( -2 );
-        aLogExplSize.AdjustHeight( -2 );
-
-        Point aExplPos = LogicToPixel(Point(1,1), MapMode(MapUnit::MapAppFont));
-        Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
-
-        m_aDataWin->SetPosSizePixel( aExplPos, aExplSize );
-    }
-
-
-
-
     SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )
-
 
     DataNavigatorManager::DataNavigatorManager(
         vcl::Window* _pParent, sal_uInt16 _nId, SfxBindings* _pBindings, SfxChildWinInfo* _pInfo ) :
