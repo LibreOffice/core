@@ -4818,6 +4818,23 @@ SfxVoidItem PrintPagePreview FN_PRINT_PAGEPREVIEW
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem ToggleOutlineContentVisibility FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem Protect FN_TABLE_SET_READ_ONLY_CELLS
 ()
 [
@@ -7897,6 +7914,24 @@ SfxBoolItem UseHeaderFooterMenu FN_USE_HEADERFOOTERMENU
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+SfxBoolItem ShowOutlineContentVisibilityButton FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
 
 [

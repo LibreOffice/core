@@ -17,6 +17,10 @@
 #include <viewopt.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <txtfrm.hxx>
+#include <OutlineContentVisibilityWin.hxx>
+#include <ndtxt.hxx>
+#include <IDocumentOutlineNodes.hxx>
 
 using namespace std;
 
@@ -33,6 +37,7 @@ SwFrameControlsManager::~SwFrameControlsManager()
 void SwFrameControlsManager::dispose()
 {
     m_aControls.clear();
+    m_aTextNodeContentFrameMap.clear();
 }
 
 SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrame* pFrame )
@@ -170,6 +175,98 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
     assert(pButton != nullptr);
     pButton->SetOffset(aTopRightPixel);
     pControl->ShowAll( bShow );
+}
+
+void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode* pTextNd)
+{
+    // remove entries with outline node keys that are not in the outline nodes list
+    if (pTextNd == nullptr)
+    {
+        IDocumentOutlineNodes::tSortedOutlineNodeList aOutlineNodes;
+        m_pEditWin->GetView().GetWrtShell().getIDocumentOutlineNodesAccess()->getOutlineNodes(aOutlineNodes);
+        std::map<const SwTextNode*, const SwContentFrame*>::iterator it = m_aTextNodeContentFrameMap.begin();
+        while(it != m_aTextNodeContentFrameMap.end())
+        {
+            const SwNode* pNd = it->first;
+            IDocumentOutlineNodes::tSortedOutlineNodeList::iterator i = std::find(aOutlineNodes.begin(), aOutlineNodes.end(), pNd);
+            if (i == aOutlineNodes.end())
+            {
+                RemoveControlsByType(FrameControlType::Outline, it->second);
+                it = m_aTextNodeContentFrameMap.erase(it);
+            }
+            else
+                it++;
+        }
+        return;
+    }
+
+    const SwContentFrame* pContentFrame = pTextNd->getLayoutFrame(nullptr);
+
+    // has node frame changed or been deleted
+    std::map<const SwTextNode*, const SwContentFrame*>::iterator iter = m_aTextNodeContentFrameMap.find(pTextNd);
+    if (iter != m_aTextNodeContentFrameMap.end())
+    {
+        const SwContentFrame* pFrameWas = iter->second;
+        if (pContentFrame != pFrameWas)
+        {
+            // frame does not match frame in map for node
+            RemoveControlsByType(FrameControlType::Outline, pFrameWas);
+            m_aTextNodeContentFrameMap.erase(iter);
+        }
+    }
+    if (pContentFrame && !pContentFrame->IsInDtor())
+    {
+        // frame is not being destroyed and isn't in map
+        m_aTextNodeContentFrameMap.insert(make_pair(pTextNd, pContentFrame));
+    }
+    else
+    {
+        if (pContentFrame)
+        {
+            // frame is being destroyed
+            RemoveControlsByType(FrameControlType::Outline, pContentFrame);
+        }
+        return;
+    }
+
+    // Check if we already have the control
+    SwFrameControlPtr pControl;
+
+    SwFrameControlPtrMap& rControls = m_aControls[FrameControlType::Outline];
+
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pContentFrame);
+    if (lb != rControls.end() && !(rControls.key_comp()(pContentFrame, lb->first)))
+    {
+        pControl = lb->second;
+    }
+    else
+    {
+        SwFrameControlPtr pNewControl =
+                std::make_shared<SwFrameControl>(VclPtr<SwOutlineContentVisibilityWin>::Create(
+                                        m_pEditWin, pContentFrame).get());
+        rControls.insert(lb, make_pair(pContentFrame, pNewControl));
+        pControl.swap(pNewControl);
+    }
+
+    SwOutlineContentVisibilityWin* pWin = dynamic_cast<SwOutlineContentVisibilityWin *>(pControl->GetWindow());
+    assert(pWin != nullptr) ;
+    pWin->Set();
+
+    if (pWin->GetSymbol() == SymbolType::ARROW_RIGHT)
+    {
+        // show expand button immediatly
+        pWin->Show();
+        // outline content might not be folded, this happens on undo, outline moves, and folded outline content reveals
+        SwOutlineNodes::size_type nPos;
+        if (m_pEditWin->GetView().GetWrtShell().GetNodes().GetOutLineNds().Seek_Entry(const_cast<SwTextNode*>(pTextNd), &nPos))
+        {
+            SwNodeIndex aIdx(*pTextNd, 1);
+            if (aIdx.GetNode().IsContentNode() && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+                m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true); // force fold
+        }
+    }
+    else if (!pWin->IsVisible() && pWin->GetSymbol() == SymbolType::ARROW_DOWN)
+        pWin->ShowAll(true);
 }
 
 SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
