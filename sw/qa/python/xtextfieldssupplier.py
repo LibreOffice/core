@@ -69,8 +69,11 @@ class TestXTextFieldsSupplier(unittest.TestCase):
         for masterName in masterNames:
             self.assertTrue(xFieldMasters.hasByName(masterName),
                             "TextFieldMaster has no element " + masterName)
-            self.assertIsNotNone(xFieldMasters.getByName(masterName),
+            master = xFieldMasters.getByName(masterName)
+            self.assertIsNotNone(master,
                                  "can't get " + masterName + " from TextFieldMaster")
+            self.assertIsNotNone(master.getPropertyValue("Name"),
+                                 "can't get Name property from TextFieldMaster " + masterName)
 
         # Ensure that invalid elements are not accessible
         invalidMasterName = "com.sun.star.text.fieldmaster.SetExpression.NoSuchMaster"
