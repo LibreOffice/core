@@ -988,6 +988,9 @@ public:
 
     bool IsNbspRunNext() const { return m_bNbspRunNext; }
 
+    bool IsOutlineContentFolded(const size_t nPos);
+    void ToggleOutlineContentVisibility(const size_t nPos, bool bForceFold = false);
+
     /// Ctor/Dtor.
     SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt );
 

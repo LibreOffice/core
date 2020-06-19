@@ -336,6 +336,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_USE_HEADERFOOTERMENU:
               aBool.SetValue( pOpt->IsUseHeaderFooterMenu() );
             break;
+            case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
+              aBool.SetValue( pOpt->IsShowOutlineContentVisibilityButton() );
+            break;
         }
 
         if( nWhich )
@@ -583,6 +586,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         pOpt->SetUseHeaderFooterMenu( bFlag );
         break;
 
+    case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowOutlineContentVisibilityButton();
+
+        pOpt->SetShowOutlineContentVisibilityButton( bFlag );
+        break;
+
     default:
         OSL_FAIL("wrong request method");
         return;
@@ -615,6 +625,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
+
+    if (nSlot == FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON)
+        GetEditWin().SetOutlineContentVisiblityButtons();
 
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );    //lock visible section

@@ -127,6 +127,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 
     std::unique_ptr<SwFrameControlsManager> m_pFrameControlsManager;
 
+    SwFrame* m_pSavedOutlineFrame = nullptr;
+
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
     inline void     EnterArea();
@@ -287,6 +289,11 @@ public:
     void SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
+
+    const SwFrame* GetSavedOutlineFrame() { return m_pSavedOutlineFrame; }
+    void SetSavedOutlineFrame(SwFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
+
+    void SetOutlineContentVisiblityButtons();
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
