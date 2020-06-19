@@ -120,8 +120,22 @@ namespace svx
     {
         if (mbWideButton)
             return mpTbx->GetItemContentSize(mnBtnId);
-        Image aImage(mpTbx->GetItemImage(mnBtnId));
-        return aImage.GetSizePixel();
+        vcl::ImageType eImageType = GetImageSize();
+        int nHeight(16);
+        switch (eImageType)
+        {
+            case vcl::ImageType::Size16:
+                nHeight = 16;
+                break;
+            case vcl::ImageType::Size26:
+                nHeight = 26;
+                break;
+            case vcl::ImageType::Size32:
+                nHeight = 32;
+                break;
+        }
+        int nWidth = nHeight;
+        return Size(nWidth, nHeight);
     }
 
     ToolboxButtonColorUpdaterBase::~ToolboxButtonColorUpdaterBase()
