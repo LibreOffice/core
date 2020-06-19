@@ -28,6 +28,8 @@
 #include <vcl/pdfwriter.hxx>
 #include <o3tl/safeint.hxx>
 
+#include <pdf/objectcopier.hxx>
+
 using namespace com::sun::star;
 
 namespace vcl::filter
@@ -269,6 +271,10 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
 
 sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectangle)
 {
+    PDFDocument aPDFDocument;
+    filter::PDFObjectElement* pPage = nullptr;
+    std::vector<filter::PDFObjectElement*> aContentStreams;
+
     if (!m_aSignatureLine.empty())
     {
         // Parse the PDF data of signature line: we can set the signature rectangle to non-empty
@@ -276,7 +282,6 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
         SvMemoryStream aPDFStream;
         aPDFStream.WriteBytes(m_aSignatureLine.data(), m_aSignatureLine.size());
         aPDFStream.Seek(0);
-        filter::PDFDocument aPDFDocument;
         if (!aPDFDocument.Read(aPDFStream))
         {
             SAL_WARN("vcl.filter",
@@ -291,7 +296,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
             return -1;
         }
 
-        filter::PDFObjectElement* pPage = aPages[0];
+        pPage = aPages[0];
         if (!pPage)
         {
             SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: no page");
@@ -322,6 +327,17 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
             return -1;
         }
         rSignatureRectangle.setHeight(pHeight->GetValue());
+
+        if (PDFObjectElement* pContentStream = pPage->LookupObject("Contents"))
+        {
+            aContentStreams.push_back(pContentStream);
+        }
+
+        if (aContentStreams.empty())
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::WriteAppearanceObject: no content stream");
+            return -1;
+        }
     }
     m_aSignatureLine.clear();
 
@@ -334,14 +350,45 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     aEditBuffer.WriteUInt32AsString(nAppearanceId);
     aEditBuffer.WriteCharPtr(" 0 obj\n");
     aEditBuffer.WriteCharPtr("<</Type/XObject\n/Subtype/Form\n");
+
+    PDFObjectCopier aCopier(*this);
+    if (!aContentStreams.empty())
+    {
+        OStringBuffer aBuffer;
+        aCopier.copyPageResources(pPage, aBuffer);
+        aEditBuffer.WriteOString(aBuffer.makeStringAndClear());
+    }
+
     aEditBuffer.WriteCharPtr("/BBox[0 0 ");
     aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
     aEditBuffer.WriteCharPtr(" ");
     aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
-    aEditBuffer.WriteCharPtr("]\n/Length 0\n>>\n");
-    aEditBuffer.WriteCharPtr("stream\n\nendstream\nendobj\n\n");
+    aEditBuffer.WriteCharPtr("]\n/Length ");
 
     // Add the object to the doc-level edit buffer and update the offset.
+    SvMemoryStream aStream;
+    bool bCompressed = false;
+    sal_Int32 nLength = 0;
+    if (!aContentStreams.empty())
+    {
+        nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed);
+    }
+    aEditBuffer.WriteOString(OString::number(nLength));
+    if (bCompressed)
+    {
+        aEditBuffer.WriteOString(" /Filter/FlateDecode");
+    }
+
+    aEditBuffer.WriteCharPtr("\n>>\n");
+
+    aEditBuffer.WriteCharPtr("stream\n");
+
+    // Copy the original page streams to the form XObject stream.
+    aStream.Seek(0);
+    aEditBuffer.WriteStream(aStream);
+
+    aEditBuffer.WriteCharPtr("\nendstream\nendobj\n\n");
+
     aEditBuffer.Seek(0);
     XRefEntry aAppearanceEntry;
     aAppearanceEntry.SetOffset(m_aEditBuffer.Tell());
