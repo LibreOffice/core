@@ -40,7 +40,7 @@ namespace svxform
     class DataListener : public DataListener_t
     {
     private:
-        VclPtr<DataNavigatorWindow>        m_pNaviWin;
+        DataNavigatorWindow* m_pNaviWin;
 
     public:
         DataListener( DataNavigatorWindow* pNaviWin );
