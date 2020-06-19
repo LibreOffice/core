@@ -69,3 +69,25 @@ index ce6f1d4..6b1d835 100644
  
  
  if HAVE_W32_SYSTEM
+--- lang/cpp/tests/Makefile.am	2020-06-20 00:43:49.213657887 +0200
++++ lang/cpp/tests/Makefile.am~	2019-01-25 13:27:34.000000000 +0100
+@@ -21,7 +21,7 @@
+ AM_LDFLAGS = -no-install
+ 
+ LDADD = ../../cpp/src/libgpgmepp.la \
++        ../../../src/libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@ \
+-        ../../../src/libgpgme.la @GPG_ERROR_LIBS@ \
+         @LDADD_FOR_TESTS_KLUDGE@ -lstdc++
+ 
+ AM_CPPFLAGS = -I$(top_srcdir)/lang/cpp/src -I$(top_builddir)/src \
+--- lang/cpp/tests/Makefile.in	2020-06-20 00:44:49.542344510 +0200
++++ lang/cpp/tests/Makefile.in~	2020-06-13 00:55:19.021212970 +0200
+@@ -415,7 +415,7 @@
+ top_srcdir = @top_srcdir@
+ AM_LDFLAGS = -no-install
+ LDADD = ../../cpp/src/libgpgmepp.la \
++        ../../../src/libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@ \
+-        ../../../src/libgpgme.la @GPG_ERROR_LIBS@ \
+         @LDADD_FOR_TESTS_KLUDGE@ -lstdc++
+ 
+ AM_CPPFLAGS = -I$(top_srcdir)/lang/cpp/src -I$(top_builddir)/src \
