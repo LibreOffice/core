@@ -1302,6 +1302,7 @@ orientation-landscape
 orientation-portrait
 origin
 orphans
+outline-content-visible
 outline-level
 outline-level-style
 outline-style

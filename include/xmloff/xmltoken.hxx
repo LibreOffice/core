@@ -1386,6 +1386,7 @@ namespace xmloff::token {
         XML_ORIENTATION_PORTRAIT,
         XML_ORIGIN,
         XML_ORPHANS,
+        XML_OUTLINE_CONTENT_VISIBLE,
         XML_OUTLINE_LEVEL,
         XML_OUTLINE_LEVEL_STYLE,
         XML_OUTLINE_STYLE,

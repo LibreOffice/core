@@ -2359,4 +2359,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="text-index-entry-chapter-attrs" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:outline-content-visible">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
