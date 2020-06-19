@@ -81,8 +81,9 @@ struct VclPixelProcessor2D::Impl
 };
 
 VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                         OutputDevice& rOutDev)
-    : VclProcessor2D(rViewInformation, rOutDev)
+                                         OutputDevice& rOutDev,
+                                         const basegfx::BColorModifierStack& rInitStack)
+    : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
     , m_pImpl(new Impl(rOutDev))
 {
     // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
