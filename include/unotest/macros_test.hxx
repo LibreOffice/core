@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <config_gpgme.h>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -26,6 +27,11 @@ struct TestMacroInfo
 };
 
 class BasicDLL;
+
+namespace test
+{
+class Directories;
+}
 
 namespace unotest {
 
@@ -43,11 +49,17 @@ public:
                     const OUString& rCommand,
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
+    void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
+    void tearDownNssGpg();
+
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
 
 private:
     std::unique_ptr<BasicDLL> mpDll;
+#if HAVE_GPGCONF_SOCKETDIR
+    OString m_gpgconfCommandPrefix;
+#endif
 };
 
 }
