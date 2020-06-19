@@ -123,6 +123,11 @@ public:
     VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev);
     virtual ~VclProcessor2D() override;
 
+    void setColorModifierStack(basegfx::BColorModifierStack& rNewStack)
+    {
+        maBColorModifierStack = rNewStack;
+    }
+
     // access to Drawinglayer configuration options
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 
