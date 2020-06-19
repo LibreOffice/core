@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-05-07 20:21:38 using:
+ Generated on 2020-06-19 17:40:03 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -53,6 +53,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -261,7 +262,6 @@
 #include <saltimer.hxx>
 #include <salusereventlist.hxx>
 #include <salvd.hxx>
-#include <vcl/salvtables.hxx>
 #include <svdata.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -297,7 +297,6 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/mnemonic.hxx>
@@ -318,6 +317,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
