@@ -395,6 +395,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale),
                         "", rAlgorithm.isEmpty() ? OUString("") : "collation=" + rAlgorithm));
 
+            // FIXME: apparently we get here in LOKit case only. When the language is Japanese, we pass "ja@collation=phonetic (alphanumeric first)" to ICU
+            // and ICU does not like this (U_ILLEGAL_ARGUMENT_ERROR). Subsequently LOKit crashes, because collator is nullptr.
+            if (!strcmp(icuLocale.getLanguage(), "ja"))
+                icuLocale = icu::Locale::getJapanese();
+
             // load ICU collator
             collator.reset( static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) ) );
             if (! U_SUCCESS(status)) {
