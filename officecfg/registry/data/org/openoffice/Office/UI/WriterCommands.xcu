@@ -398,6 +398,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ShowOutlineContentVisibilityButton" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show outline content visibility button</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Show outline content visibility button</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Go t~o Page...</value>
@@ -3660,6 +3671,17 @@
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Protect bookmarks in current document</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ToggleOutlineContentVisibility" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Outline Content Visibility</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Fold or unfold outline content in document</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
