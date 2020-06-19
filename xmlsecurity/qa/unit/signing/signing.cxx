@@ -78,10 +78,6 @@ protected:
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
-#if HAVE_GPGCONF_SOCKETDIR
-    OString m_gpgconfCommandPrefix;
-#endif
-
 public:
     SigningTest();
     virtual void setUp() override;
@@ -106,48 +102,7 @@ SigningTest::SigningTest() {}
 void SigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
-
-    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
-    OUString aTargetDir
-        = m_directories.getURLFromWorkdir("CppunitTest/xmlsecurity_signing.test.user");
-
-    // Set up cert8.db in workdir/CppunitTest/
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "/cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "/key3.db");
-
-    // Make gpg use our own defined setup & keys
-    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
-    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "/random_seed");
-    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
-    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
-
-    OUString aTargetPath;
-    osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
-
-    OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
-    osl_setEnvironment(mozCertVar.pData, aTargetPath.pData);
-    OUString gpgHomeVar("GNUPGHOME");
-    osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
-
-#if HAVE_GPGCONF_SOCKETDIR
-    auto const ldPath = std::getenv("LIBO_LD_PATH");
-    m_gpgconfCommandPrefix
-        = ldPath == nullptr ? OString() : OStringLiteral("LD_LIBRARY_PATH=") + ldPath + " ";
-    OString path;
-    bool ok = aTargetPath.convertToString(&path, osl_getThreadTextEncoding(),
-                                          RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                                              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
-    // if conversion fails, at least provide a best-effort conversion in the message here, for
-    // context
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTargetPath, RTL_TEXTENCODING_UTF8).getStr(), ok);
-    m_gpgconfCommandPrefix += "GNUPGHOME=" + path + " " GPGME_GPGCONF;
-    // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
-    // behavior will conform to POSIX (and the relevant env var to set is named LD_LIBRARY_PATH), and
-    // (b) gpgconf --create-socketdir should return zero:
-    OString cmd = m_gpgconfCommandPrefix + " --create-socketdir";
-    int res = std::system(cmd.getStr());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
-#endif
+    MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_signing");
 
     // Initialize crypto after setting up the environment variables.
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
@@ -160,14 +115,7 @@ void SigningTest::tearDown()
     if (mxComponent.is())
         mxComponent->dispose();
 
-#if HAVE_GPGCONF_SOCKETDIR
-    // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
-    // behavior will conform to POSIX, and (b) gpgconf --remove-socketdir should return zero:
-    OString cmd = m_gpgconfCommandPrefix + " --remove-socketdir";
-    int res = std::system(cmd.getStr());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
-#endif
-
+    MacrosTest::tearDownNssGpg();
     test::BootstrapFixture::tearDown();
 }
 
