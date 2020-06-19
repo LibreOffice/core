@@ -78,11 +78,6 @@
 #define RID_SVXBMP_LAMP_ON                          "svx/res/lighton.png"
 #define RID_SVXBMP_LAMP_OFF                         "svx/res/light.png"
 
-#define RID_SVXBMP_ADD                              "res/tb01.png"
-#define RID_SVXBMP_ADD_ELEMENT                      "res/tb02.png"
-#define RID_SVXBMP_ADD_ATTRIBUTE                    "res/tb03.png"
-#define RID_SVXBMP_EDIT                             "res/tb04.png"
-#define RID_SVXBMP_REMOVE                           "res/tb05.png"
 #define RID_SVXBMP_ELEMENT                          "res/da03.png"
 #define RID_SVXBMP_ATTRIBUTE                        "res/da04.png"
 #define RID_SVXBMP_TEXT                             "res/da05.png"
