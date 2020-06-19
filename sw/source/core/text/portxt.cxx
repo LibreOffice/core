@@ -37,6 +37,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
+#include <viewopt.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -688,6 +689,28 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawViewOpt( *this, PortionType::InputField );
         SwTextSlot aPaintText( &rInf, this, true, true, OUString() );
         SwTextPortion::Paint( rInf );
+    }
+    else
+    {
+        // highlight empty input field, elsewhere they are completely invisible for the user
+        SwRect aIntersect;
+        rInf.CalcRect(*this, &aIntersect);
+        const sal_uInt16 aAreaWidth = rInf.GetTextSize(OUString(' ')).Width();
+        aIntersect.Left(aIntersect.Left() - aAreaWidth/2);
+        aIntersect.Width(aAreaWidth);
+
+        if (aIntersect.HasArea()
+            && rInf.OnWin()
+            && SwViewOption::IsFieldShadings()
+            && !rInf.GetOpt().IsPagePreview())
+        {
+            OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
+            pOut->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            pOut->SetFillColor(SwViewOption::GetFieldShadingsColor());
+            pOut->SetLineColor();
+            pOut->DrawRect(aIntersect.SVRect());
+            pOut->Pop();
+        }
     }
 }
 
