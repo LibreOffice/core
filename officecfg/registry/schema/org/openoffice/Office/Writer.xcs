@@ -1071,6 +1071,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ShowOutlineContentVisibilityButton" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Writer - View - [Section] Display -->
+          <info>
+            <desc>Enables the writer to show the outline content visibility button.</desc>
+            <label>Show outline content visibility button</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
