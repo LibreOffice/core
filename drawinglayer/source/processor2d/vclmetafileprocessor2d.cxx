@@ -2397,7 +2397,7 @@ void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
     auto pBufferDevice(CreateBufferDevice(aViewRange, 500000, aViewInfo, aRectLogic, aSizePixel));
     if (pBufferDevice)
     {
-        VclPixelProcessor2D aBufferProcessor(aViewInfo, *pBufferDevice);
+        VclPixelProcessor2D aBufferProcessor(aViewInfo, *pBufferDevice, maBColorModifierStack);
 
         // draw content using pixel renderer
         primitive2d::Primitive2DReference aRef(

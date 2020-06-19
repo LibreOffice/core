@@ -102,7 +102,9 @@ class VclPixelProcessor2D final : public VclProcessor2D
 
 public:
     /// constructor/destructor
-    VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev);
+    VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev,
+                        const basegfx::BColorModifierStack& rInitStack
+                        = basegfx::BColorModifierStack());
     virtual ~VclPixelProcessor2D() override;
 };
 } // end of namespace drawinglayer::processor2d
