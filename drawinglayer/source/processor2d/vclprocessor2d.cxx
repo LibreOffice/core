@@ -1485,10 +1485,11 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
 // process support
 
 VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                               OutputDevice& rOutDev)
+                               OutputDevice& rOutDev,
+                               const basegfx::BColorModifierStack& rInitStack)
     : BaseProcessor2D(rViewInformation)
     , mpOutputDevice(&rOutDev)
-    , maBColorModifierStack()
+    , maBColorModifierStack(rInitStack)
     , maCurrentTransformation()
     , maDrawinglayerOpt()
     , mnPolygonStrokePrimitive2D(0)
