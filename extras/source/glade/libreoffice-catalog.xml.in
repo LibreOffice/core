@@ -35,10 +35,6 @@
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
 
-    <glade-widget-class title="DataTreeListBox" name="svxcorelo-DataTreeListBox"
-                        generic-name="DataTreeListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-
     <glade-widget-class title="Notebook switching tabs depending on context" name="sfxlo-NotebookbarTabControl"
                         generic-name="NotebookbarTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
