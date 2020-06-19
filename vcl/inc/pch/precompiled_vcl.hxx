@@ -298,7 +298,6 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/mnemonic.hxx>
@@ -319,6 +318,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
