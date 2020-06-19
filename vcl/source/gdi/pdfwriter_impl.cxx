@@ -8417,9 +8417,6 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        // Maps from source object id (PDF image) to target object id (export result).
-        std::map<sal_Int32, sal_Int32> aCopiedResources;
-
         nWrappedFormObject = createObject();
         // Write the form XObject wrapped below. This is a separate object from
         // the wrapper, this way there is no need to alter the stream contents.
@@ -8457,19 +8454,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             }
         }
 
-        aLine.append(" /Resources <<");
-        static const std::initializer_list<OString> aKeys =
-        {
-            "ColorSpace",
-            "ExtGState",
-            "Font",
-            "XObject",
-            "Shading"
-        };
         PDFObjectCopier aCopier(*this);
-        for (const auto& rKey : aKeys)
-            aLine.append(aCopier.copyExternalResources(*pPage, rKey, aCopiedResources));
-        aLine.append(">>");
+        aCopier.copyPageResources(pPage, aLine);
         aLine.append(" /BBox [ 0 0 ");
         aLine.append(nWidth);
         aLine.append(" ");
@@ -8481,42 +8467,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append(" /Length ");
 
         SvMemoryStream aStream;
-        for (auto pContent : aContentStreams)
-        {
-            filter::PDFStreamElement* pPageStream = pContent->GetStream();
-            if (!pPageStream)
-            {
-                SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: contents has no stream");
-                continue;
-            }
-
-            SvMemoryStream& rPageStream = pPageStream->GetMemory();
-
-            auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
-            if (pFilter)
-            {
-                if (pFilter->GetValue() != "FlateDecode")
-                    continue;
-
-                SvMemoryStream aMemoryStream;
-                ZCodec aZCodec;
-                rPageStream.Seek(0);
-                aZCodec.BeginCompression();
-                aZCodec.Decompress(rPageStream, aMemoryStream);
-                if (!aZCodec.EndCompression())
-                {
-                    SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: decompression failed");
-                    continue;
-                }
-
-                aStream.WriteBytes(aMemoryStream.GetData(), aMemoryStream.GetSize());
-            }
-            else
-                aStream.WriteBytes(rPageStream.GetData(), rPageStream.GetSize());
-        }
-
-        compressStream(&aStream);
-        sal_Int32 nLength = aStream.Tell();
+        bool bCompressed = false;
+        sal_Int32 nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed);
         aLine.append(nLength);
 
         aLine.append(">>\nstream\n");

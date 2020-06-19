@@ -10,7 +10,9 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -42,6 +44,13 @@ public:
     /// object ID in our document.
     sal_Int32 copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject,
                                    std::map<sal_Int32, sal_Int32>& rCopiedResources);
+
+    /// Copies resources of pPage into rLine.
+    void copyPageResources(filter::PDFObjectElement* pPage, OStringBuffer& rLine);
+
+    /// Copies page one or more page streams from rContentStreams into rStream.
+    static sal_Int32 copyPageStreams(std::vector<filter::PDFObjectElement*>& rContentStreams,
+                                     SvMemoryStream& rStream, bool& rCompressed);
 };
 }
 
