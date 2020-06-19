@@ -11,7 +11,6 @@
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <algorithm>
-#include <memory>
 
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
  *
@@ -28,7 +27,7 @@ class TOOLS_DLLPUBLIC JsonWriter
     friend class ScopedJsonWriterNode;
 
     int mSpaceAllocated;
-    std::unique_ptr<char[]> maBuffer;
+    char* mpBuffer;
     int mStartNodeCount;
     char* mPos;
     bool mbFirstFieldInNode;
@@ -54,14 +53,15 @@ private:
 
     inline void ensureSpace(int noMoreBytesRequired)
     {
-        int currentUsed = mPos - maBuffer.get();
+        int currentUsed = mPos - mpBuffer;
         if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
         {
             auto newSize = std::max(mSpaceAllocated * 2, (currentUsed + noMoreBytesRequired) * 2);
-            auto pNew = new char[newSize];
-            memcpy(pNew, maBuffer.get(), currentUsed);
-            maBuffer.reset(pNew);
-            mPos = maBuffer.get();
+            char* pNew = static_cast<char*>(malloc(newSize));
+            memcpy(pNew, mpBuffer, currentUsed);
+            free(mpBuffer);
+            mpBuffer = pNew;
+            mPos = mpBuffer;
         }
     }
 };
