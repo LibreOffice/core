@@ -300,6 +300,7 @@ public:
 #if HAVE_MORE_FONTS
     void testTdf35021_tabOverMarginDemo();
 #endif
+    void testTdf133990();
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
@@ -508,6 +509,7 @@ public:
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
 #endif
+    CPPUNIT_TEST(testTdf133990);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
@@ -5670,6 +5672,33 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
 }
 #endif
+
+void SwUiWriterTest::testTdf133990()
+{
+    load(DATA_DIRECTORY, "tdf133990.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    //Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
 
 void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
