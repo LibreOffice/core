@@ -71,6 +71,7 @@
 #include <numrule.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/intitem.hxx>
 #include <list.hxx>
 #include <sortedobjs.hxx>
@@ -4019,6 +4020,25 @@ bool SwTextNode::IsOutlineStateChanged() const
 void SwTextNode::UpdateOutlineState()
 {
     m_bLastOutlineState = IsOutline();
+}
+
+bool SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
+{
+    SfxGrabBagItem aGrabBagItem(dynamic_cast<const SfxGrabBagItem&>(GetAttr(RES_PARATR_GRABBAG)));
+    auto it = aGrabBagItem.GetGrabBag().find("OutlineContentVisibleAttr");
+    if (it != aGrabBagItem.GetGrabBag().end())
+    {
+        it->second >>= bOutlineContentVisibleAttr;
+        return true;
+    }
+    return false;
+}
+
+void SwTextNode::SetAttrOutlineContentVisible(bool bVisible)
+{
+    SfxGrabBagItem aGrabBagItem(RES_PARATR_GRABBAG);
+    aGrabBagItem.GetGrabBag()["OutlineContentVisibleAttr"] <<= bVisible;
+    GetTextNode()->SetAttr(aGrabBagItem);
 }
 
 int SwTextNode::GetAttrOutlineLevel() const
