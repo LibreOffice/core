@@ -31,7 +31,7 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <toolkit/helper/convert.hxx>
 
 using namespace ::com::sun::star;
