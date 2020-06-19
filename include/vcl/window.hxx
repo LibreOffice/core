@@ -1577,6 +1577,8 @@ public:
     void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<boost::property_tree::ptree&, void>& rLink);
+
+    static void setLOKMobilePhone(bool b);
 };
 
 }
