@@ -3182,6 +3182,8 @@ public:
 
 void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame::XController2 >& xController )
 {
+    DBG_TESTSOLARMUTEX();
+
     // object already disposed?
     if ( impl_isDisposed() )
         return;
@@ -3196,33 +3198,37 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     if (aName.isEmpty())
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC =
+    ::cppu::OInterfaceContainerHelper* pIC1 =
         m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
-    if ( pIC )
+    ::cppu::OInterfaceContainerHelper* pIC2 =
+        m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
     {
-        SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
+        SolarMutexReleaser rel();
 
-        document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, Any() );
+        if ( pIC1 )
+        {
+            SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
 
-        pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
-            NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
-                &document::XDocumentEventListener::documentEventOccured,
-                aDocumentEvent ) );
+            document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, Any() );
+
+            pIC1->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
+                NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
+                    &document::XDocumentEventListener::documentEventOccured,
+                    aDocumentEvent ) );
+        }
+
+        if ( pIC2 )
+        {
+            SAL_INFO("sfx.doc", "SfxEvent: " + aName);
+
+            document::EventObject aEvent( static_cast<frame::XModel*>(this), aName );
+
+            pIC2->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
+                NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
+                    &document::XEventListener::notifyEvent,
+                    aEvent ) );
+        }
     }
-
-    pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
-    if ( pIC )
-    {
-        SAL_INFO("sfx.doc", "SfxEvent: " + aName);
-
-        document::EventObject aEvent( static_cast<frame::XModel*>(this), aName );
-
-        pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
-            NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
-                &document::XEventListener::notifyEvent,
-                aEvent ) );
-    }
-
 }
 
 Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
