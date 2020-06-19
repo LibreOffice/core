@@ -49,6 +49,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
+#include <FrameControlsManager.hxx>
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
@@ -429,6 +430,34 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if( bPaintShadowCursor )
         m_pShadCursor->Paint();
+
+    static bool bShowOutlineVisibilityButtonChgd = true; // WIP to find a better way to do this
+    if (pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        bShowOutlineVisibilityButtonChgd = true;
+        // outline nodes might have been removed so they won't be seen in the loop!
+        // pass SetOutlineContentVisibilityButton nullptr to remove buttons that no longer have outline nodes
+        GetFrameControlsManager().SetOutlineContentVisibilityButton(nullptr);
+
+        const SwOutlineNodes& rOutlineNodes = pWrtShell->GetDoc()->GetNodes().GetOutLineNds();
+        for (size_t nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+        {
+            SwNode* pOutlineNode = rOutlineNodes[nPos];
+            SwContentFrame* pContentFrame = pOutlineNode->GetTextNode()->getLayoutFrame(nullptr);
+            // it is possible that the outline node does not have a content frame - an outline node in a frame that is folded
+            if (pWrtShell->IsOutlineContentFolded(nPos))
+                GetFrameControlsManager().SetOutlineContentVisibilityButton(pOutlineNode->GetTextNode());
+            // unclear why this is needed, seems it is when using navigator to delete
+            else if (pContentFrame && pContentFrame != m_pSavedOutlineFrame)
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, pContentFrame);
+        }
+    }
+    else if (bShowOutlineVisibilityButtonChgd) // only really want to do this once after option is set not to show buttons,
+                                               // WIP to find a better way to do this than using a static bool
+    {
+        bShowOutlineVisibilityButtonChgd = false;
+        GetFrameControlsManager().HideControls(FrameControlType::Outline);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

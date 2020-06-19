@@ -100,6 +100,8 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
+#include <frmtool.hxx>
+
 using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
@@ -1981,6 +1983,109 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if(auto pFormat = pType->FindFormatForField(pPostIt))
             pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
     }
+}
+
+bool SwWrtShell::IsOutlineContentFolded(const size_t nPos)
+{
+    const SwNodes& rNodes = GetDoc()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    assert(nPos < rOutlineNodes.size());
+
+    SwNode* pOutlineNode = rOutlineNodes[nPos];
+    if (pOutlineNode->IsEndNode())
+        return false;
+
+    bool bOutlineContentVisibleAttr = false;
+    if (pOutlineNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr))
+        return !bOutlineContentVisibleAttr;
+
+    return false;
+}
+
+void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
+{
+    const SwNodes& rNodes = GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    assert(nPos < rOutlineNodes.size());
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    if (pSttNd->IsEndNode())
+        return;
+
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    // may need to adjust end node if start node is in table
+    if (pSttNd->GetTableBox())
+    {
+        // limit folding to within table box
+        if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex() )
+            pEndNd = pSttNd->EndOfSectionNode();
+    }
+    // if pSttNd isn't in table but pEndNd is, skip over all outline nodes in table -- this may not be required
+    else if (pEndNd->GetTableBox())
+    {
+        pEndNd = &rNodes.GetEndOfContent();
+        for (size_t nOutlinePos = nPos + 2; nOutlinePos < rOutlineNodes.size(); nOutlinePos++)
+        {
+            if (!(rOutlineNodes[nOutlinePos]->GetTableBox()))
+            {
+                pEndNd = rOutlineNodes[nOutlinePos];
+                break;
+            }
+        }
+    }
+
+    if (IsOutlineContentFolded(nPos) && !bForceFold)
+    {
+        // unfold
+        SwNodeIndex aIdx(*pSttNd, +1);
+        MakeFrames(GetDoc(), aIdx, *pEndNd);
+
+        pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
+
+        // fold any revealed outline nodes with collapsed content
+        for (size_t i = 0; i < rOutlineNodes.size(); i++)
+        {
+            SwNode* pOutlineNd = rOutlineNodes[i];
+            bool bOutlineContentVisibleAttr = true;
+            if (pOutlineNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr))
+            {
+                if (!bOutlineContentVisibleAttr && pOutlineNd->GetTextNode()->getLayoutFrame(nullptr))
+                {
+                    ToggleOutlineContentVisibility(i, true);
+                }
+            }
+        }
+    }
+    else
+    {
+        // hiding or or clearing controls array may be required here
+        // GetView().GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
+
+        // fold
+        for (SwNodeIndex aIdx(*pSttNd, +1); &aIdx.GetNode() != pEndNd; aIdx++)
+        {
+            SwNode* pNd = &aIdx.GetNode();
+            if (pNd->IsContentNode())
+                pNd->GetContentNode()->DelFrames(nullptr);
+            else if (pNd->IsTableNode())
+                pNd->GetTableNode()->DelFrames(nullptr);
+            else if (pNd->IsSectionNode())
+                pNd->GetSectionNode()->DelFrames(nullptr);
+        }
+        pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+    }
+
+    InvalidateLayout(true);
+    GetWin()->Invalidate();
+    bool bIsModified = IsModified();
+    SetModified();
+    if (!bIsModified)
+        ResetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
