@@ -53,7 +53,7 @@
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <extended/AccessibleGridControl.hxx>
 #include <vcl/accessibletable.hxx>

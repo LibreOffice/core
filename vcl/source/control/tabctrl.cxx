@@ -30,7 +30,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/toolkit/controllayout.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <bitmaps.hlst>
