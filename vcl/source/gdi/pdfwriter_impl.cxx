@@ -9649,21 +9649,22 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
 
 void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
-    if( nPageNr < 0 )
+    if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if (nPageNr < 0 || nPageNr >= sal_Int32(m_aPages.size()))
         return;
 
-    m_aNotes.emplace_back( );
-    m_aNotes.back().m_nObject       = createObject();
-    m_aNotes.back().m_aContents     = rNote;
-    m_aNotes.back().m_aRect         = rRect;
+    m_aNotes.emplace_back();
+    auto & rNoteEntry = m_aNotes.back();
+    rNoteEntry.m_nObject = createObject();
+    rNoteEntry.m_aContents = rNote;
+    rNoteEntry.m_aRect = rRect;
     // convert to default user space now, since the mapmode may change
-    m_aPages[nPageNr].convertRect( m_aNotes.back().m_aRect );
+    m_aPages[nPageNr].convertRect(rNoteEntry.m_aRect);
 
     // insert note to page's annotation list
-    m_aPages[ nPageNr ].m_aAnnotations.push_back( m_aNotes.back().m_nObject );
+    m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_nObject);
 }
 
 sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
