@@ -1151,7 +1151,7 @@ bool ObjectFormatter::getTextRotation( const ModelRef< TextBody >& rxTextProp, s
     }
     else
     {
-        return false;
+        return true;
     }
 }
 
