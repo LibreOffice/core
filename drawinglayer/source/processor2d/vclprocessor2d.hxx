@@ -120,7 +120,8 @@ protected:
 
 public:
     // constructor/destructor
-    VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev);
+    VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev,
+                   const basegfx::BColorModifierStack& rInitStack = basegfx::BColorModifierStack());
     virtual ~VclProcessor2D() override;
 
     // access to Drawinglayer configuration options
