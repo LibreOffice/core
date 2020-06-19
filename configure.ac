@@ -4146,6 +4146,9 @@ printf ("hello world\n");
 fi
 AC_SUBST(ENABLE_GDB_INDEX)
 
+if test -z "$enable_sal_log" && test "$ENABLE_DEBUG" = TRUE; then
+    enable_sal_log=yes
+fi
 if test "$enable_sal_log" = yes; then
     ENABLE_SAL_LOG=TRUE
 fi
