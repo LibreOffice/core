@@ -160,6 +160,7 @@ public:
     void testTdf119138MissingAutoTitleDeleted();
     void testStockChartShiftedCategoryPosition();
     void testTdf133376();
+    void testTdf134111();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -268,6 +269,7 @@ public:
     CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
     CPPUNIT_TEST(testTdf133376);
+    CPPUNIT_TEST(testTdf134111);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2499,6 +2501,23 @@ void Chart2ImportTest::testTdf133376()
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1466, aLabelPosition.X, 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
+}
+
+void Chart2ImportTest::testTdf134111()
+{
+    // tdf134111 : To check TextBreak value is true
+    load("/chart2/qa/extras/data/docx/", "tdf134111.docx");
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromWriter(0);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    uno::Reference< chart::XDiagram > mxDiagram(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp(mxDiagram, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+    uno::Reference< beans::XPropertySet > xAxisProp(xAxisXSupp->getXAxis());
+    bool bTextBreak = false;
+    xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
+    // Expected value of 'TextBreak' is true
+    CPPUNIT_ASSERT(bTextBreak);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
