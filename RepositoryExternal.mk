@@ -4157,6 +4157,7 @@ endef
 ifneq ($(ENABLE_PDFIUM),)
 define gb_LinkTarget__use_pdfium
 $(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,pdfium) \
        -I$(call gb_UnpackedTarball_get_dir,pdfium)/public \
        -DCOMPONENT_BUILD \
        $$(INCLUDE) \
