@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1781dc2_ff88825f",
+        "filename": "pyuno/source/loader/pyuno_loader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-19T13:05:34Z",
+      "side": 1,
+      "message": "While at it, we could make all of the above conditional on fileUrl not being empty, to prevent spurious excess spaces separating URLs in the input from introducing empty elements in the output.",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 26
+      },
+      "revId": "844af02198cace3c8f7776602810d8433d0b71d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
