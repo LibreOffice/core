@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c66915cd_71648dd7",
+        "filename": "tools/qa/cppunit/test_json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-19T09:21:24Z",
+      "side": 1,
+      "message": "at least PreparedStatement::setBytes (connectivity/source/drivers/postgresql/pq_preparedstatement.cxx) contains a similar construct; we can consolidate in a follow-up",
+      "revId": "db83eb36331e75dc8e31139269aa55096b665d5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
