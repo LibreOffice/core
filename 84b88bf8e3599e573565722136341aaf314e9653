@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d627f83d_6d50f383",
+        "filename": "slideshow/source/inc/basecontainernode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-19T07:59:57Z",
+      "side": 1,
+      "message": "I\u0027d move the shared world into SlideShowImpl - there\u0027s SlideShowContext as a mixed bag of things ~everyone needs in slideshow, you could pass a ptr around in that struct easily?",
+      "revId": "84b88bf8e3599e573565722136341aaf314e9653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
