@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

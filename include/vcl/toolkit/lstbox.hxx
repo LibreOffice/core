@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_LSTBOX_HXX
 #define INCLUDED_VCL_LSTBOX_HXX
 
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
+
 #include <config_options.h>
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
