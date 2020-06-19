@@ -140,6 +140,7 @@ static void setPythonHome ( const OUString & pythonHome )
 static void prependPythonPath( const OUString & pythonPathBootstrap )
 {
     OUStringBuffer bufPYTHONPATH( 256 );
+    bool bAppendSep = false;
     sal_Int32 nIndex = 0;
     while( true )
     {
@@ -153,17 +154,22 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
         {
             fileUrl = pythonPathBootstrap.copy(nIndex, nNew - nIndex);
         }
+        if (bAppendSep)
+            bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
         OUString systemPath;
         osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
         bufPYTHONPATH.append( systemPath );
-        bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
+        bAppendSep = true;
         if( nNew == -1 )
             break;
         nIndex = nNew + 1;
     }
     const char * oldEnv = getenv( "PYTHONPATH");
     if( oldEnv )
+    {
+        bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
         bufPYTHONPATH.append( OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
+    }
 
     OUString envVar("PYTHONPATH");
     OUString envValue(bufPYTHONPATH.makeStringAndClear());
