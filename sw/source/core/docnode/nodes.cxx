@@ -663,7 +663,11 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     {
                         pSctNd->NodesArrChgd();
                         ++nSectNdCnt;
-                        bNewFrames = false;
+                        // tdf#132326 do not let frames survive in undo nodes
+                        if (!GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
+                        {
+                            bNewFrames = false;
+                        }
                     }
                 }
             }
