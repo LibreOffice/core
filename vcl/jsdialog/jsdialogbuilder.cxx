@@ -1,4 +1,4 @@
-#include <vcl/jsdialog/jsdialogbuilder.hxx>
+#include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>

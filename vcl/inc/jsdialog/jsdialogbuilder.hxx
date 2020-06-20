@@ -23,7 +23,7 @@ public:
     void notifyDialogState();
 };
 
-class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
+class JSInstanceBuilder : public SalInstanceBuilder
 {
     vcl::LOKWindowId m_nWindowId;
 
@@ -48,7 +48,7 @@ public:
 };
 
 template <class BaseInstanceClass, class VclClass>
-class VCL_DLLPUBLIC JSWidget : public BaseInstanceClass, public JSDialogSender
+class JSWidget : public BaseInstanceClass, public JSDialogSender
 {
 public:
     JSWidget(VclPtr<vcl::Window> aOwnedToplevel, VclClass* pObject, SalInstanceBuilder* pBuilder,
@@ -77,7 +77,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC JSLabel : public JSWidget<SalInstanceLabel, FixedText>
+class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
     JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel, SalInstanceBuilder* pBuilder,
@@ -85,14 +85,14 @@ public:
     virtual void set_label(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSButton : public JSWidget<SalInstanceButton, ::Button>
+class JSButton : public JSWidget<SalInstanceButton, ::Button>
 {
 public:
     JSButton(VclPtr<vcl::Window> aOwnedToplevel, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
 };
 
-class VCL_DLLPUBLIC JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
+class JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
 {
 public:
     JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
@@ -100,7 +100,7 @@ public:
     virtual void set_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
+class JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
 public:
     JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
@@ -110,7 +110,7 @@ public:
     virtual void remove(int pos) override;
 };
 
-class VCL_DLLPUBLIC JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
+class JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
 {
 public:
     JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
@@ -121,7 +121,7 @@ public:
     virtual void set_entry_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
+class JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
 {
 public:
     JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
