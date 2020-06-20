@@ -7,17 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
+#ifndef INCLUDED_VCL_WRITERTABBEDNOTEBOOKBAR_HXX
+#define INCLUDED_VCL_WRITERTABBEDNOTEBOOKBAR_HXX
 
-#include <sfx2/dllapi.h>
+#include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 /** Tabbed implementation of NotebookBar for Writer
 */
-class SFX2_DLLPUBLIC WeldedTabbedNotebookbar
+class VCL_DLLPUBLIC WeldedTabbedNotebookbar
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
 
@@ -30,6 +30,6 @@ public:
                             sal_uInt64 nWindowId);
 };
 
-#endif // INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
+#endif // INCLUDED_VCL_SFXNOTEBOOKBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
