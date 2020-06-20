@@ -199,6 +199,7 @@ std::unique_ptr<SwFieldType> SwUserFieldType::Copy() const
 {
     std::unique_ptr<SwUserFieldType> pTmp(new SwUserFieldType( GetDoc(), m_aName ));
     pTmp->m_aContent      = m_aContent;
+    pTmp->m_aContentLang  = m_aContentLang;
     pTmp->m_nType         = m_nType;
     pTmp->m_bValidValue   = m_bValidValue;
     pTmp->m_nValue        = m_nValue;
@@ -242,16 +243,23 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     // See if we need to temporarily switch rCalc's language: in case it
     // differs from the field type locale.
     CharClass* pCharClass = rCalc.GetCharClass();
-    LanguageTag aCalcLanguage = pCharClass->getLanguageTag();
-    LanguageTag aFieldTypeLanguage(GetFieldTypeLanguage());
-    bool bSwitchLanguage = aCalcLanguage != aFieldTypeLanguage;
+    LanguageTag aCharClassLanguage = pCharClass->getLanguageTag();
+    LanguageTag aContentLang(m_aContentLang);
+
+    // for the call of calulate we need the language that was used for putting/setting
+    // the m_aContent string, otherwise the aContent could be interpreted wrongly,
+
+    bool bSwitchLanguage = m_aContentLang != aCharClassLanguage.getBcp47();
+
     if (bSwitchLanguage)
-        pCharClass->setLanguageTag(aFieldTypeLanguage);
+        pCharClass->setLanguageTag(aContentLang);
 
     m_nValue = rCalc.Calculate( m_aContent ).GetDouble();
 
+    // we than have to set the propper char class languageTag again
+
     if (bSwitchLanguage)
-        pCharClass->setLanguageTag(aCalcLanguage);
+        pCharClass->setLanguageTag(aCharClassLanguage);
 
     rCalc.Pop();
 
@@ -293,6 +301,8 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
         if (GetDoc()->IsNumberFormat(rStr, nFormat, fValue))
         {
             SetValue(fValue);
+            LanguageTag aContentLanguage(GetFieldTypeLanguage());
+            m_aContentLang = aContentLanguage.getBcp47();
             m_aContent = DoubleToString(fValue, nFormat);
         }
     }
@@ -332,7 +342,8 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             double fVal = 0;
             rAny >>= fVal;
             m_nValue = fVal;
-
+            LanguageTag aContentLanguage(GetFieldTypeLanguage());
+            m_aContentLang = aContentLanguage.getBcp47();
             m_aContent = DoubleToString(m_nValue, static_cast<sal_uInt16>(GetFieldTypeLanguage()));
         }
         break;
@@ -361,6 +372,7 @@ void SwUserFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserFieldType"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nValue"), BAD_CAST(OString::number(m_nValue).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContent"), BAD_CAST(m_aContent.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContentLang"), BAD_CAST(m_aContentLang.toUtf8().getStr()));
     SwFieldType::dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
