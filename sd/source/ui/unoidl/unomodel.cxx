@@ -1556,24 +1556,18 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
         uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
         uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
 
-        LanguageType eLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
         while( xAnnotationEnumeration->hasMoreElements() )
         {
             uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
 
             geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
             uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
-            util::DateTime aDateTime( xAnnotation->getDateTime() );
-
-            Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
-            ::tools::Time aTime( ::tools::Time::EMPTY );
-            OUString aStr = SvxDateTimeField::GetFormatted( aDate, aTime,
-                                SvxDateFormat::B, SvxTimeFormat::AppDefault,
-                                *(SD_MOD()->GetNumberFormatter()), eLanguage );
 
             vcl::PDFNote aNote;
-            aNote.Title = xAnnotation->getAuthor() + ", " + aStr;
+            aNote.Title = xAnnotation->getAuthor();
             aNote.Contents = xText->getString();
+            aNote.maModificationDate = xAnnotation->getDateTime();
+
             rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
                 static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
         }
