@@ -3418,50 +3418,111 @@ we check in the following sequence:
     return true;
 }
 
+namespace
+{
+
+void appendAnnotationRect(tools::Rectangle const & rRectangle, OStringBuffer & aLine)
+{
+    aLine.append("/Rect[");
+    appendFixedInt(rRectangle.Left(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rRectangle.Top(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rRectangle.Right(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rRectangle.Bottom(), aLine);
+    aLine.append("] ");
+}
+
+void appendObjectID(sal_Int32 nObjectID, OStringBuffer & aLine)
+{
+    aLine.append(nObjectID);
+    aLine.append(" 0 obj\n");
+}
+
+void appendObjectReference(sal_Int32 nObjectID, OStringBuffer & aLine)
+{
+    aLine.append(nObjectID);
+    aLine.append(" 0 R ");
+}
+
+} // end anonymous namespace
+
+void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote)
+{
+    appendObjectID(rNote.m_nObject, aLine);
+
+    aLine.append("<</Type /Annot /Subtype /Text ");
+
+// i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
+// see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
+    if (m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
+        aLine.append("/F 4 ");
+
+    appendAnnotationRect(rNote.m_aRect, aLine);
+
+    aLine.append("/Popup ");
+    appendObjectReference(rNote.m_aPopUpAnnotation.m_nObject, aLine);
+
+    // contents of the note (type text string)
+    aLine.append("/Contents ");
+    appendUnicodeTextStringEncrypt(rNote.m_aContents.Contents, rNote.m_nObject, aLine);
+    aLine.append("\n");
+
+    // optional title
+    if (!rNote.m_aContents.Title.isEmpty())
+    {
+        aLine.append("/T ");
+        appendUnicodeTextStringEncrypt(rNote.m_aContents.Title, rNote.m_nObject, aLine);
+        aLine.append("\n");
+    }
+    aLine.append(">>\n");
+    aLine.append("endobj\n\n");
+}
+
+void PDFWriterImpl::emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnotation const & rPopUp)
+{
+    appendObjectID(rPopUp.m_nObject, aLine);
+    aLine.append("<</Type /Annot /Subtype /Popup ");
+    aLine.append("/Parent ");
+    appendObjectReference(rPopUp.m_nParentObject, aLine);
+    aLine.append(">>\n");
+    aLine.append("endobj\n\n");
+}
+
 bool PDFWriterImpl::emitNoteAnnotations()
 {
     // emit note annotations
     int nAnnots = m_aNotes.size();
     for( int i = 0; i < nAnnots; i++ )
     {
-        const PDFNoteEntry& rNote       = m_aNotes[i];
-        if( ! updateObject( rNote.m_nObject ) )
-            return false;
+        const PDFNoteEntry& rNote = m_aNotes[i];
+        const PDFPopupAnnotation& rPopUp = rNote.m_aPopUpAnnotation;
 
-        OStringBuffer aLine( 1024 );
-        aLine.append( rNote.m_nObject );
-        aLine.append( " 0 obj\n" );
-// i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
-// see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
-        aLine.append( "<</Type/Annot" );
-        if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3 )
-            aLine.append( "/F 4" );
-        aLine.append( "/Subtype/Text/Rect[" );
-
-        appendFixedInt( rNote.m_aRect.Left(), aLine );
-        aLine.append( ' ' );
-        appendFixedInt( rNote.m_aRect.Top(), aLine );
-        aLine.append( ' ' );
-        appendFixedInt( rNote.m_aRect.Right(), aLine );
-        aLine.append( ' ' );
-        appendFixedInt( rNote.m_aRect.Bottom(), aLine );
-        aLine.append( "]" );
-
-        // contents of the note (type text string)
-        aLine.append( "/Contents\n" );
-        appendUnicodeTextStringEncrypt( rNote.m_aContents.Contents, rNote.m_nObject, aLine );
-        aLine.append( "\n" );
-
-        // optional title
-        if( !rNote.m_aContents.Title.isEmpty() )
         {
-            aLine.append( "/T" );
-            appendUnicodeTextStringEncrypt( rNote.m_aContents.Title, rNote.m_nObject, aLine );
-            aLine.append( "\n" );
+            if (!updateObject(rNote.m_nObject))
+                return false;
+
+            OStringBuffer aLine(1024);
+
+            emitTextAnnotationLine(aLine, rNote);
+
+            if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+                return false;
         }
 
-        aLine.append( ">>\nendobj\n\n" );
-        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+        {
+
+            if (!updateObject(rPopUp.m_nObject))
+                return false;
+
+            OStringBuffer aLine(1024);
+
+            emitPopupAnnotationLine(aLine, rPopUp);
+
+            if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+                return false;
+        }
     }
     return true;
 }
@@ -9658,6 +9719,8 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
     m_aNotes.emplace_back();
     auto & rNoteEntry = m_aNotes.back();
     rNoteEntry.m_nObject = createObject();
+    rNoteEntry.m_aPopUpAnnotation.m_nObject = createObject();
+    rNoteEntry.m_aPopUpAnnotation.m_nParentObject = rNoteEntry.m_nObject;
     rNoteEntry.m_aContents = rNote;
     rNoteEntry.m_aRect = rRect;
     // convert to default user space now, since the mapmode may change
@@ -9665,6 +9728,7 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
 
     // insert note to page's annotation list
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_nObject);
+    m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_aPopUpAnnotation.m_nObject);
 }
 
 sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
