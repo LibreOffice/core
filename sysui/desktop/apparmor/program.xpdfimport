@@ -17,9 +17,8 @@
 profile libreoffice-xpdfimport INSTDIR-program/xpdfimport {
   #include <abstractions/base>
 
-  owner /tmp/*              r,     #Seems to need to read file created with pattern /tmp/RRRRRR
-  owner /tmp/lu**           rw,    #makes files like luRRRRR.tmp/lubRRRR.tmp where R is random
-                                   #Note, usually it's lub or luc, don't know why.
+  #include <abstractions/user-tmp>
+
   /usr/share/poppler/**     r,
   /usr/share/libreoffice/share/config/* r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
