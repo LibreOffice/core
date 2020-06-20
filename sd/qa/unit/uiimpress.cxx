@@ -345,6 +345,40 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aGradient.GetStartColor().AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("0000ff"), aGradient.GetEndColor().AsRGBHexString());
 }
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
+{
+    // Error was, that dashes and dots were longer than in MS Office.
+    mxComponent = loadFromDesktop(
+        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf134053_dashdot.pptx"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pShape = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
+
+    // Break line into single dash and dot objects
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    dispatchCommand(mxComponent, ".uno:ConvertIntoMetafile", {});
+    dispatchCommand(mxComponent, ".uno:Break", {});
+
+    // Measure the rendered length of dash, dot and distance
+    SdrObject* pDash = pActualPage->GetObj(0);
+    const tools::Rectangle& rBoundDashRect = pDash->GetCurrentBoundRect();
+    const double fDashLength(rBoundDashRect.GetWidth());
+    SdrObject* pDot = pActualPage->GetObj(1);
+    const tools::Rectangle& rBoundDotRect = pDot->GetCurrentBoundRect();
+    const double fDotLength(rBoundDotRect.GetWidth());
+    const double fDistance(rBoundDotRect.Left() - rBoundDashRect.Right());
+
+    // Because 0% is not possible as dash length (as of June 2020) 1% is used in the fix.
+    // For that a larger delta is here allowed to the ideal value than needed for
+    // rounding errors.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Distance", 2117, fDistance, 12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dot length", 706, fDotLength, 12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dash length", 2822, fDashLength, 12);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

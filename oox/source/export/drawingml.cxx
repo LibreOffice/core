@@ -733,9 +733,10 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
 void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
-
     if (GetProperty(rXPropSet, "LineStyle"))
         mAny >>= aLineStyle;
+
+    const LineCap aLineCap = GetProperty(rXPropSet, "LineCap") ? mAny.get<drawing::LineCap>() : LineCap_BUTT;
 
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nEmuLineWidth = 0;
@@ -746,6 +747,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     drawing::LineDash aLineDash;
     bool bDashSet = false;
     bool bNoFill = false;
+
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
@@ -846,14 +848,10 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             {
                 nColorAlpha = MAX_PERCENT - (mAny.get<sal_Int16>() * PER_PERCENT);
             }
-            if (GetProperty(rXPropSet, "LineCap"))
-            {
-                const LineCap aLineCap = mAny.get<drawing::LineCap>();
-                if (aLineCap == LineCap_ROUND)
-                    cap = "rnd";
-                else if (aLineCap == LineCap_SQUARE)
-                    cap = "sq";
-            }
+            if (aLineCap == LineCap_ROUND)
+                cap = "rnd";
+            else if (aLineCap == LineCap_SQUARE)
+                 cap = "sq";
             break;
     }
 
@@ -899,13 +897,25 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         // start with the longer one. Definitions are in OOXML part 1, 20.1.10.49
         // The tests are strict, for to not catch styles from standard.sod (as of Aug 2019).
         bool bIsConverted = false;
+
         bool bIsRelative(aLineDash.Style == DashStyle_RECTRELATIVE || aLineDash.Style == DashStyle_ROUNDRELATIVE);
         if ( bIsRelative && aLineDash.Dots == 1)
-        {
+        {   // The length were tweaked on import in case of prstDash. Revert it here.
+            sal_uInt32 nDotLen = aLineDash.DotLen;
+            sal_uInt32 nDashLen = aLineDash.DashLen;
+            sal_uInt32 nDistance = aLineDash.Distance;
+            if (aLineCap != LineCap_BUTT && nDistance >= 99)
+            {
+                nDistance -= 99;
+                nDotLen += 99;
+                nDashLen += 99;
+            }
             // LO uses length 0 for 100%, if the attribute is missing in ODF.
             // Other applications might write 100%. Make is unique for the conditions.
-            sal_uInt32 nDotLen = (aLineDash.DotLen == 0) ? 100 : aLineDash.DotLen;
-            sal_uInt32 nDashLen = (aLineDash.DashLen == 0 && aLineDash.Dashes > 0) ? 100 : aLineDash.DashLen;
+            if (nDotLen == 0)
+                nDotLen = 100;
+            if (nDashLen == 0 && aLineDash.Dashes > 0)
+                nDashLen = 100;
             bIsConverted = true;
             if (nDotLen == 100 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 300)
             {
@@ -964,12 +974,21 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             // So set 100% explicitly.
             if (aLineDash.Distance <= 0)
                     fSp = 100.0;
-            if ( aLineDash.Dots > 0 )
+            // In case of custDash, round caps are included in dash length in MS Office. Square caps are added
+            // to dash length, same as in ODF. Change the length values accordingly.
+            if (aLineCap == LineCap_ROUND && fSp > 99.0)
+                fSp -= 99.0;
+
+            if (aLineDash.Dots > 0)
             {
                 double fD = bIsRelative ? aLineDash.DotLen : aLineDash.DotLen * 100.0 / fLineWidth;
                 // LO sets length to 0, if attribute is missing in ODF. Then a relative length of 100% is intended.
                 if (aLineDash.DotLen == 0)
                     fD = 100.0;
+                // Tweak dash length, see above.
+                if (aLineCap == LineCap_ROUND && fSp > 99.0)
+                    fD += 99.0;
+
                 for( i = 0; i < aLineDash.Dots; i ++ )
                 {
                     mpFS->singleElementNS( XML_a, XML_ds,
@@ -983,6 +1002,10 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 // LO sets length to 0, if attribute is missing in ODF. Then a relative length of 100% is intended.
                 if (aLineDash.DashLen == 0)
                     fD = 100.0;
+                // Tweak dash length, see above.
+                if (aLineCap == LineCap_ROUND && fSp > 99.0)
+                    fD += 99.0;
+
                 for( i = 0; i < aLineDash.Dashes; i ++ )
                 {
                     mpFS->singleElementNS( XML_a , XML_ds,
