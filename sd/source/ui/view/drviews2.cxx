@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/lok.hxx>
 
 #include <editeng/contouritem.hxx>
 #include <editeng/editdata.hxx>
@@ -2263,7 +2264,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
-                    if (pOlView)
+                    if (pOlView || comphelper::LibreOfficeKit::isActive())
                     {
                         InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
                                        pHLItem->GetTargetFrame());
