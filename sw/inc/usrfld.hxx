@@ -41,6 +41,8 @@ class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
     OUString  m_aName;
     /// String value type.
     OUString  m_aContent;
+    /// Language used by m_aContents
+    OUString m_aContentLang;
     sal_uInt16  m_nType;
 
 public:
