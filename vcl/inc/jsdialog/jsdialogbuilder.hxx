@@ -6,7 +6,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/salvtables.hxx>
+#include <salvtables.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/button.hxx>
 
