@@ -34,7 +34,7 @@
 #include <framework/addonsoptions.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vector>
-#include <sfx2/notebookbar/WeldedTabbedNotebookbar.hxx>
+#include <vcl/WeldedTabbedNotebookbar.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
