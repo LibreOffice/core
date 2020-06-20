@@ -499,7 +499,19 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
             if( pRequest->isPassword() )
             {
                 if( !pRequest->getPassword().isEmpty() )
+                {
                     eResult = rVerifier.verifyPassword( pRequest->getPassword(), aEncData );
+
+                    // Be nice to copy/pasters: we might have truncated the save password to 15 chars
+                    // (the traditional maximum for MS binary formats - but not necessarily so anymore),
+                    // so attempt a second verification using only the first 15 characters.
+                    if ( eResult != DocPasswordVerifierResult::OK
+                         && eRequestType == DocPasswordRequestType::MS
+                         && pRequest->getPassword().getLength() > 15 )
+                    {
+                        eResult = rVerifier.verifyPassword( pRequest->getPassword().copy(0, 15), aEncData );
+                    }
+                }
                 if (eResult == DocPasswordVerifierResult::OK)
                     aPassword = pRequest->getPassword();
             }
