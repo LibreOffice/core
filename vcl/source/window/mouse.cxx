@@ -439,6 +439,7 @@ void Window::SetMouseTransparent( bool bTransparent )
 
 void Window::CaptureMouse()
 {
+    return;
 
     ImplSVData* pSVData = ImplGetSVData();
 

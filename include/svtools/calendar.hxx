@@ -23,18 +23,11 @@
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
 
-#include <vcl/calendar.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
-class MouseEvent;
-class TrackingEvent;
-class KeyEvent;
-class HelpEvent;
-class DataChangedEvent;
 class FloatingWindow;
-class PushButton;
-class ImplCFieldFloatWin;
-class Button;
+struct ImplCFieldFloatWin;
 
 /*************************************************************************
 
@@ -76,14 +69,13 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) CalendarField final : public DateField
 {
 private:
     VclPtr<ImplCFieldFloatWin> mpFloatWin;
-    VclPtr<Calendar>    mpCalendar;
-    VclPtr<PushButton>  mpTodayBtn;
-    VclPtr<PushButton>  mpNoneBtn;
+    weld::Button*       mpTodayBtn;
+    weld::Button*       mpNoneBtn;
     bool                mbToday;
     bool                mbNone;
 
-                        DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar*, void );
-                        DECL_DLLPRIVATE_LINK( ImplClickHdl, Button*, void );
+                        DECL_DLLPRIVATE_LINK( ImplSelectHdl, weld::Calendar&, void );
+                        DECL_DLLPRIVATE_LINK( ImplClickHdl, weld::Button&, void );
                         DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
 
 public:
@@ -92,7 +84,6 @@ public:
     virtual void        dispose() override;
 
     virtual bool        ShowDropDown( bool bShow ) override;
-    Calendar*           GetCalendar();
 
     void                EnableToday() { mbToday = true; }
     void                EnableNone() { mbNone = true; }

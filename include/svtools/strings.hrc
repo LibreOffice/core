@@ -150,9 +150,6 @@
 #define STR_SVT_INDEXENTRY_PHONETIC_LS          NC_("STR_SVT_INDEXENTRY_PHONETIC_LS", "Phonetic (alphanumeric last, grouped by syllables)")
 #define STR_SVT_INDEXENTRY_PHONETIC_LC          NC_("STR_SVT_INDEXENTRY_PHONETIC_LC", "Phonetic (alphanumeric last, grouped by consonants)")
 
-#define STR_SVT_CALENDAR_TODAY                  NC_("STR_SVT_CALENDAR_TODAY", "Today")
-#define STR_SVT_CALENDAR_NONE                   NC_("STR_SVT_CALENDAR_NONE", "None")
-
 #define STR_SVT_STYLE_LIGHT                     NC_("STR_SVT_STYLE_LIGHT", "Light")
 #define STR_SVT_STYLE_LIGHT_ITALIC              NC_("STR_SVT_STYLE_LIGHT_ITALIC", "Light Italic")
 #define STR_SVT_STYLE_NORMAL                    NC_("STR_SVT_STYLE_NORMAL", "Regular")
