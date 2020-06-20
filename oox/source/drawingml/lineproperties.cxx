@@ -443,6 +443,11 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     sal_Int32 nLineWidth = getLineWidth(); // includes conversion from EMUs to 1/100mm
     rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
+    // line cap type
+    LineCap eLineCap = moLineCap.has() ? lclGetLineCap( moLineCap.get() ) : LineCap_BUTT;
+    if( moLineCap.has() )
+        rPropMap.setProperty( ShapeProperty::LineCap, eLineCap );
+
     // create line dash from preset dash token or dash stop vector (not for invisible line)
     if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
     {
@@ -456,12 +461,25 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             lclConvertCustomDash(aLineDash, maCustomDash);
             lclRecoverStandardDashStyles(aLineDash, nLineWidth);
         }
+
+        // In MS Office (2020) for preset dash style line caps round and square are included in dash length.
+        // For custom dash style round line cap is included, square line cap is added. In ODF line caps are
+        // always added to dash length. Tweak the length accordingly.
+        if (eLineCap == LineCap_ROUND || (eLineCap == LineCap_SQUARE && maCustomDash.empty()))
+        {
+            // Cannot use -100 because that results in 0 length in some cases and
+            // LibreOffice interprets 0 length as 100%.
+            if (aLineDash.DotLen >= 100 || aLineDash.DashLen >= 100)
+                aLineDash.Distance += 99;
+            if (aLineDash.DotLen >= 100)
+                aLineDash.DotLen -= 99;
+            if (aLineDash.DashLen >= 100)
+                aLineDash.DashLen -= 99;
+        }
+
         if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
             eLineStyle = drawing::LineStyle_DASH;
     }
-    // line cap type
-    if( moLineCap.has() )
-        rPropMap.setProperty( ShapeProperty::LineCap, lclGetLineCap( moLineCap.get() ) );
 
     // set final line style property
     rPropMap.setProperty( ShapeProperty::LineStyle, eLineStyle );
