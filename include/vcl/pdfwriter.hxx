@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <memory>
 #include <vector>
@@ -63,6 +64,7 @@ struct PDFNote
 {
     OUString          Title;          // optional title for the popup containing the note
     OUString          Contents;       // contents of the note
+    css::util::DateTime maModificationDate;
 };
 
 class VCL_DLLPUBLIC PDFOutputStream
