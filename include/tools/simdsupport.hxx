@@ -14,6 +14,8 @@
 // code using intrinsics or not. So we have to (re)set them again
 // every time this file has been included.
 
+// In other words... DO NOT ADD "#pragma once" here
+
 #undef LO_SSE2_AVAILABLE
 #undef LO_SSSE3_AVAILABLE
 #undef LO_AVX_AVAILABLE
