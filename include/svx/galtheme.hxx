@@ -114,7 +114,9 @@ public:
 
     SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
+    SAL_DLLPRIVATE GalleryThemeEntry* getGalleryThemeEntry() const { return pThm; };
+
+    const SAL_DLLPRIVATE::std::vector< std::unique_ptr<GalleryObject> >& getObjectList() const { return aObjectList; };
 
     SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
 
@@ -129,6 +131,9 @@ public:
     // used for building gallery themes during compilation:
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
+
+    SAL_DLLPRIVATE const OUString& getDestDir() const { return m_aDestDir; }
+    SAL_DLLPRIVATE const bool& getDestDirRelative() const { return m_bDestDirRelative; }
 
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
     const INetURLObject&        GetSdgURL() const;
@@ -178,7 +183,6 @@ public:
     SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);
 
     bool                        GetGraphic(sal_uInt32 nPos, Graphic& rGraphic);
-    bool                        InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos);
 
     bool                        GetModel(sal_uInt32 nPos, SdrModel& rModel);
     bool                        InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos);
