@@ -92,6 +92,8 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   #include <abstractions/python>
   #include <abstractions/p11-kit>
 
+  #include <abstractions/user-tmp>
+
   #List directories for file browser
   /                                     r,
   /**/                                  r,
@@ -116,7 +118,6 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   owner @{HOME}/.config/soffice.binrc.lock rwk,
   owner @{HOME}/.cache/fontconfig/**    rw,
   owner @{HOME}/.config/gtk-???/bookmarks r,  #Make bookmarks work
-  owner /tmp/psp[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]* rw, #/tmp/psp1534203998 (printing to file)
 
   owner /{,var/}run/user/*/dconf/user   rw,
   owner @{HOME}/.config/dconf/user      r,
