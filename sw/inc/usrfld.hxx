@@ -34,57 +34,55 @@ class SwDoc;
  */
 class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
 {
-    bool    m_bValidValue : 1;
-    bool    m_bDeleted : 1;
+    bool m_bValidValue : 1;
+    bool m_bDeleted : 1;
     /// Float value type.
-    double  m_nValue;
-    OUString  m_aName;
+    double m_nValue;
+    OUString m_aName;
     /// String value type.
-    OUString  m_aContent;
-    sal_uInt16  m_nType;
+    OUString m_aContent;
+    /// Language used by m_aContents
+    OUString m_aContentLang;
+    sal_uInt16 m_nType;
 
 public:
-    SwUserFieldType( SwDoc* pDocPtr, const OUString& );
+    SwUserFieldType(SwDoc* pDocPtr, const OUString&);
 
-    virtual OUString        GetName() const override;
+    virtual OUString GetName() const override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
-    OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);
+    OUString Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);
 
-    OUString                GetContent( sal_uInt32 nFormat = 0 );
-           void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
+    OUString GetContent(sal_uInt32 nFormat = 0);
+    void SetContent(const OUString& rStr, sal_uInt32 nFormat = 0);
 
-    inline bool             IsValid() const;
+    inline bool IsValid() const;
 
-           double           GetValue(SwCalc& rCalc);    // Recalculate member nValue.
-    inline double           GetValue() const;
-    inline void             SetValue(const double nVal);
+    double GetValue(SwCalc& rCalc); // Recalculate member nValue.
+    inline double GetValue() const;
+    inline void SetValue(const double nVal);
 
-    inline sal_uInt16           GetType() const;
-    inline void             SetType(sal_uInt16);
+    inline sal_uInt16 GetType() const;
+    inline void SetType(sal_uInt16);
 
-    bool                    IsDeleted() const       { return m_bDeleted; }
-    void                    SetDeleted( bool b )    { m_bDeleted = b; }
+    bool IsDeleted() const { return m_bDeleted; }
+    void SetDeleted(bool b) { m_bDeleted = b; }
 
-    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
-    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual void QueryValue(css::uno::Any& rVal, sal_uInt16 nMId) const override;
+    virtual void PutValue(const css::uno::Any& rVal, sal_uInt16 nMId) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify(const SfxPoolItem* pOld, const SfxPoolItem* pNew) override;
 };
 
-inline bool SwUserFieldType::IsValid() const
-    { return m_bValidValue; }
+inline bool SwUserFieldType::IsValid() const { return m_bValidValue; }
 
-inline double SwUserFieldType::GetValue() const
-    { return m_nValue; }
+inline double SwUserFieldType::GetValue() const { return m_nValue; }
 
-inline void SwUserFieldType::SetValue(const double nVal)
-    { m_nValue = nVal; }
+inline void SwUserFieldType::SetValue(const double nVal) { m_nValue = nVal; }
 
-inline sal_uInt16 SwUserFieldType::GetType() const
-    { return m_nType; }
+inline sal_uInt16 SwUserFieldType::GetType() const { return m_nType; }
 
 inline void SwUserFieldType::SetType(sal_uInt16 nSub)
 {
@@ -100,30 +98,30 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
  */
 class SwUserField final : public SwValueField
 {
-    sal_uInt16  m_nSubType;
+    sal_uInt16 m_nSubType;
 
-    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
+    virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwUserField(SwUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
 
-    virtual sal_uInt16      GetSubType() const override;
-    virtual void            SetSubType(sal_uInt16 nSub) override;
+    virtual sal_uInt16 GetSubType() const override;
+    virtual void SetSubType(sal_uInt16 nSub) override;
 
-    virtual double          GetValue() const override;
-    virtual void            SetValue( const double& rVal ) override;
+    virtual double GetValue() const override;
+    virtual void SetValue(const double& rVal) override;
 
-    virtual OUString        GetFieldName() const override;
+    virtual OUString GetFieldName() const override;
 
     // Name cannot be changed.
-    virtual OUString        GetPar1() const override;
+    virtual OUString GetPar1() const override;
 
     // Content.
-    virtual OUString        GetPar2() const override;
-    virtual void            SetPar2(const OUString& rStr) override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual OUString GetPar2() const override;
+    virtual void SetPar2(const OUString& rStr) override;
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt16 nWhichId) const override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt16 nWhichId) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
