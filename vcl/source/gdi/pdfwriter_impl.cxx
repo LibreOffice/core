@@ -561,6 +561,49 @@ void PDFWriterImpl::appendNonStrokingColor( const Color& rColor, OStringBuffer& 
     }
 }
 
+namespace
+{
+
+void appendPdfTimeDate(OStringBuffer & rBuffer,
+    sal_Int16 year, sal_uInt16 month, sal_uInt16 day, sal_uInt16 hours, sal_uInt16 minutes, sal_uInt16 seconds, sal_uInt32 tzDelta)
+{
+    rBuffer.append("D:");
+    rBuffer.append(char('0' + ((year / 1000) % 10)));
+    rBuffer.append(char('0' + ((year / 100) % 10)));
+    rBuffer.append(char('0' + ((year / 10) % 10)));
+    rBuffer.append(char('0' + (year % 10)));
+    rBuffer.append(char('0' + ((month / 10) % 10)));
+    rBuffer.append(char('0' + (month % 10)));
+    rBuffer.append(char('0' + ((day / 10) % 10)));
+    rBuffer.append(char('0' + (day % 10)));
+    rBuffer.append(char('0' + ((hours / 10) % 10)));
+    rBuffer.append(char('0' + (hours % 10)));
+    rBuffer.append(char('0' + ((minutes / 10) % 10)));
+    rBuffer.append(char('0' + (minutes % 10)));
+    rBuffer.append(char('0' + ((seconds / 10) % 10)));
+    rBuffer.append(char('0' + (seconds % 10)));
+
+    if (tzDelta == 0)
+    {
+        rBuffer.append("Z");
+    }
+    else
+    {
+        if (tzDelta > 0 )
+            rBuffer.append("+");
+        else
+            rBuffer.append("-");
+
+        rBuffer.append(char('0' + ((tzDelta / 36000) % 10)));
+        rBuffer.append(char('0' + ((tzDelta / 3600) % 10)));
+        rBuffer.append("'");
+        rBuffer.append(char('0' + ((tzDelta / 600) % 6)));
+        rBuffer.append(char('0' + ((tzDelta / 60) % 10)));
+    }
+}
+
+} // end namespace
+
 PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
         :
         m_pWriter( pWriter ),
@@ -1314,46 +1357,20 @@ OString PDFWriter::GetDateTime()
     osl_getSystemTime(&aGMT);
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
     osl_getDateTimeFromTimeValue(&aTVal, &aDT);
-    aRet.append("D:");
-    aRet.append(static_cast<char>('0' + ((aDT.Year / 1000) % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Year / 100) % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Year / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Year % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Month / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Month % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Day / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Day % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Hours / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Hours % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Minutes / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Minutes % 10)));
-    aRet.append(static_cast<char>('0' + ((aDT.Seconds / 10) % 10)));
-    aRet.append(static_cast<char>('0' + (aDT.Seconds % 10)));
 
     sal_uInt32 nDelta = 0;
     if (aGMT.Seconds > aTVal.Seconds)
     {
-        aRet.append("-");
         nDelta = aGMT.Seconds-aTVal.Seconds;
     }
     else if (aGMT.Seconds < aTVal.Seconds)
     {
-        aRet.append("+");
         nDelta = aTVal.Seconds-aGMT.Seconds;
     }
-    else
-        aRet.append("Z");
 
-    if (nDelta)
-    {
-        aRet.append(static_cast<char>('0' + ((nDelta / 36000) % 10)));
-        aRet.append(static_cast<char>('0' + ((nDelta / 3600) % 10)));
-        aRet.append("'");
-        aRet.append(static_cast<char>('0' + ((nDelta / 600) % 6)));
-        aRet.append(static_cast<char>('0' + ((nDelta / 60) % 10)));
-    }
-    aRet.append( "'" );
+    appendPdfTimeDate(aRet, aDT.Year, aDT.Month, aDT.Day, aDT.Hours, aDT.Minutes, aDT.Seconds, nDelta);
 
+    aRet.append("'");
     return aRet.makeStringAndClear();
 }
 
@@ -3463,6 +3480,11 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     aLine.append("/Popup ");
     appendObjectReference(rNote.m_aPopUpAnnotation.m_nObject, aLine);
+
+    auto & rDateTime = rNote.m_aContents.maModificationDate;
+
+    aLine.append("/M ");
+    appendPdfTimeDate(aLine, rDateTime.Year, rDateTime.Month, rDateTime.Day, rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, 0);
 
     // contents of the note (type text string)
     aLine.append("/Contents ");
