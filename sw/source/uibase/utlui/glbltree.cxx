@@ -288,6 +288,8 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         OString sCommand = xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
         if (!sCommand.isEmpty())
             ExecuteContextMenuAction(sCommand);
+
+        bPop = true;
     }
     return bPop;
 }
