@@ -78,7 +78,9 @@ sal_Unicode const MS_DEF = 0x225D;
 sal_Unicode const MS_EQUIV = 0x2261;
 sal_Unicode const MS_PROP = 0x221D;
 sal_Unicode const MS_PARTIAL = 0x2202;
+sal_Unicode const MS_LAPLACE = 0x2112;
 
+sal_Unicode const MS_REPEAT = 0x0052;
 sal_Unicode const MS_SUBSET = 0x2282;
 sal_Unicode const MS_SUPSET = 0x2283;
 sal_Unicode const MS_SUBSETEQ = 0x2286;
@@ -179,11 +181,13 @@ sal_Unicode const MS_LEFTARROW = 0x2190;
 sal_Unicode const MS_UPARROW = 0x2191;
 sal_Unicode const MS_RIGHTARROW = 0x2192;
 sal_Unicode const MS_DOWNARROW = 0x2193;
+
 sal_Unicode const MS_SETN = 0x2115;
 sal_Unicode const MS_SETZ = 0x2124;
 sal_Unicode const MS_SETQ = 0x211A;
 sal_Unicode const MS_SETR = 0x211D;
 sal_Unicode const MS_SETC = 0x2102;
+sal_Unicode const MS_SETP = 0x2119;
 
 sal_Unicode const MS_PERCENT = 0x0025;
 
