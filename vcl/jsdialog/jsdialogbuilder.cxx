@@ -1,4 +1,13 @@
-#include <vcl/jsdialog/jsdialogbuilder.hxx>
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
@@ -58,12 +67,13 @@ std::map<vcl::LOKWindowId, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
     return s_aLOKWeldBuildersMap;
 }
 
-weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
-                                                    const OString& rWidget)
+namespace jsdialog
 {
-    const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
+weld::Widget* FindWeldWidgetsMap(vcl::LOKWindowId nWindowId, const OString& rWidget)
+{
+    const auto it = JSInstanceBuilder::GetLOKWeldWidgetsMap().find(nWindowId);
 
-    if (it != GetLOKWeldWidgetsMap().end())
+    if (it != JSInstanceBuilder::GetLOKWeldWidgetsMap().end())
     {
         auto widgetIt = it->second.find(rWidget);
         if (widgetIt != it->second.end())
@@ -71,6 +81,7 @@ weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
     }
 
     return nullptr;
+}
 }
 
 void JSInstanceBuilder::InsertWindowToMap(int nWindowId)
@@ -366,3 +377,5 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
     SalInstanceMessageDialog::set_secondary_text(rText);
     notifyDialogState();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
