@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/jsdialog/jsdialogbuilder.hxx>
+#include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
@@ -106,11 +106,13 @@ std::map<sal_uInt64, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
     return s_aLOKWeldBuildersMap;
 }
 
-weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
+namespace jsdialog
 {
-    const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
+weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
+{
+    const auto it = JSInstanceBuilder::GetLOKWeldWidgetsMap().find(nWindowId);
 
-    if (it != GetLOKWeldWidgetsMap().end())
+    if (it != JSInstanceBuilder::GetLOKWeldWidgetsMap().end())
     {
         auto widgetIt = it->second.find(rWidget);
         if (widgetIt != it->second.end())
@@ -118,6 +120,7 @@ weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(sal_uInt64 nWindowId, const 
     }
 
     return nullptr;
+}
 }
 
 void JSInstanceBuilder::InsertWindowToMap(sal_uInt64 nWindowId)

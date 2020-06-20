@@ -156,7 +156,7 @@
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/jsdialog/jsdialogbuilder.hxx>
+#include <vcl/jsdialog/builder.hxx>
 
 // Needed for getUndoManager()
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -3603,10 +3603,10 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         try
         {
             OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
-            weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, sControlId);
+            weld::Widget* pWidget = jsdialog::FindWeldWidgetsMap(nWindowId, sControlId);
             if (!pWidget && nWindowId == 0)
             {
-                pWidget = JSInstanceBuilder::FindWeldWidgetsMap(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), sControlId);
+                pWidget = jsdialog::FindWeldWidgetsMap(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), sControlId);
             }
 
             bIsWeldedDialog = pWidget != nullptr;

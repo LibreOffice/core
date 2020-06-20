@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_JSDIALOG_JSDIALOG_HXX
-#define INCLUDED_VCL_INC_JSDIALOG_JSDIALOG_HXX
+#pragma once
 
+#include <vcl/jsdialog/builder.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/sysdata.hxx>
@@ -49,12 +49,15 @@ public:
     void notifyDialogState();
 };
 
-class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
+class JSInstanceBuilder : public SalInstanceBuilder
 {
     sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
     VclPtr<vcl::Window> m_aParentDialog;
     bool m_bHasTopLevelDialog;
+
+    friend VCL_DLLPUBLIC weld::Widget* jsdialog::FindWeldWidgetsMap(sal_uInt64 nWindowId,
+                                                                    const OString& rWidget);
 
     static std::map<sal_uInt64, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(sal_uInt64 nWindowId);
@@ -94,11 +97,10 @@ public:
                                                     VclMessageType eMessageType,
                                                     VclButtonsType eButtonType,
                                                     const OUString& rPrimaryMessage);
-    static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
 };
 
 template <class BaseInstanceClass, class VclClass>
-class VCL_DLLPUBLIC JSWidget : public BaseInstanceClass, public JSDialogSender
+class JSWidget : public BaseInstanceClass, public JSDialogSender
 {
 public:
     JSWidget(VclPtr<vcl::Window> aOwnedToplevel, VclClass* pObject, SalInstanceBuilder* pBuilder,
@@ -127,7 +129,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC JSLabel : public JSWidget<SalInstanceLabel, FixedText>
+class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
     JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel, SalInstanceBuilder* pBuilder,
@@ -135,14 +137,14 @@ public:
     virtual void set_label(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSButton : public JSWidget<SalInstanceButton, ::Button>
+class JSButton : public JSWidget<SalInstanceButton, ::Button>
 {
 public:
     JSButton(VclPtr<vcl::Window> aOwnedToplevel, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
 };
 
-class VCL_DLLPUBLIC JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
+class JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
 {
 public:
     JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
@@ -150,7 +152,7 @@ public:
     virtual void set_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
+class JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
 public:
     JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
@@ -161,7 +163,7 @@ public:
     virtual void set_active(int pos) override;
 };
 
-class VCL_DLLPUBLIC JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
+class JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
 {
 public:
     JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
@@ -173,7 +175,7 @@ public:
     virtual void set_active(int pos) override;
 };
 
-class VCL_DLLPUBLIC JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
+class JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
 {
 public:
     JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
@@ -188,7 +190,7 @@ public:
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override;
 };
 
-class VCL_DLLPUBLIC JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
+class JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
 {
 public:
     JSSpinButton(VclPtr<vcl::Window> aOwnedToplevel, ::FormattedField* pSpin,
@@ -197,7 +199,7 @@ public:
     virtual void set_value(int value) override;
 };
 
-class VCL_DLLPUBLIC JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
+class JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
 {
 public:
     JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -207,7 +209,7 @@ public:
     virtual void set_secondary_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
+class JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
 {
 public:
     JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCheckBox,
@@ -216,7 +218,7 @@ public:
     virtual void set_active(bool active) override;
 };
 
-class VCL_DLLPUBLIC JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
+class JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
 {
 public:
     JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
@@ -228,7 +230,7 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override;
 };
 
-class VCL_DLLPUBLIC JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
+class JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
 public:
     JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
@@ -236,7 +238,5 @@ public:
 
     void signal_clicked(const OString& rIdent) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
