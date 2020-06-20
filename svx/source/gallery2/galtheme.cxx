@@ -443,75 +443,6 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     UnlockBroadcaster();
 }
 
-GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly )
-{
-    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-
-    GalleryThemeEntry*  pRet = nullptr;
-
-    if( FileExists( rURL ) )
-    {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-
-        if( pIStm )
-        {
-            OUString        aThemeName;
-            sal_uInt16      nVersion;
-
-            pIStm->ReadUInt16( nVersion );
-
-            if( nVersion <= 0x00ff )
-            {
-                bool bThemeNameFromResource = false;
-                sal_uInt32      nThemeId = 0;
-
-                OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
-
-                // execute a character conversion
-                if( nVersion >= 0x0004 )
-                {
-                    sal_uInt32  nCount;
-                    sal_uInt16  nTemp16;
-
-                    pIStm->ReadUInt32( nCount ).ReadUInt16( nTemp16 );
-                    pIStm->Seek( STREAM_SEEK_TO_END );
-
-                    // check whether there is a newer version;
-                    // therefore jump back by 520Bytes (8 bytes ID + 512Bytes reserve buffer)
-                    // if this is at all possible.
-                    if( pIStm->Tell() >= 520 )
-                    {
-                        sal_uInt32 nId1, nId2;
-
-                        pIStm->SeekRel( -520 );
-                        pIStm->ReadUInt32( nId1 ).ReadUInt32( nId2 );
-
-                        if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
-                            nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
-                        {
-                            VersionCompat aCompat( *pIStm, StreamMode::READ );
-
-                            pIStm->ReadUInt32( nThemeId );
-
-                            if( aCompat.GetVersion() >= 2 )
-                            {
-                                pIStm->ReadCharAsBool( bThemeNameFromResource );
-                            }
-                        }
-                    }
-                }
-
-                pRet = new GalleryThemeEntry( false, rURL, aThemeName,
-                                              bReadOnly, false, nThemeId,
-                                              bThemeNameFromResource );
-            }
-        }
-    }
-
-    return pRet;
-}
-
 bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
 {
     std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
@@ -592,88 +523,6 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
 
             default:
             break;
-        }
-    }
-
-    return bRet;
-}
-
-bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
-{
-    bool bRet = false;
-
-    if( rGraphic.GetType() != GraphicType::NONE )
-    {
-        ConvertDataFormat nExportFormat = ConvertDataFormat::Unknown;
-        const GfxLink     aGfxLink( rGraphic.GetGfxLink() );
-
-        if( aGfxLink.GetDataSize() )
-        {
-            switch( aGfxLink.GetType() )
-            {
-                case GfxLinkType::EpsBuffer: nExportFormat = ConvertDataFormat::SVM; break;
-                case GfxLinkType::NativeGif: nExportFormat = ConvertDataFormat::GIF; break;
-
-                // #i15508# added BMP type
-                // could not find/trigger a call to this, but should do no harm
-                case GfxLinkType::NativeBmp: nExportFormat = ConvertDataFormat::BMP; break;
-
-                case GfxLinkType::NativeJpg: nExportFormat = ConvertDataFormat::JPG; break;
-                case GfxLinkType::NativePng: nExportFormat = ConvertDataFormat::PNG; break;
-                case GfxLinkType::NativeTif: nExportFormat = ConvertDataFormat::TIF; break;
-                case GfxLinkType::NativeWmf: nExportFormat = ConvertDataFormat::WMF; break;
-                case GfxLinkType::NativeMet: nExportFormat = ConvertDataFormat::MET; break;
-                case GfxLinkType::NativePct: nExportFormat = ConvertDataFormat::PCT; break;
-                case GfxLinkType::NativeSvg: nExportFormat = ConvertDataFormat::SVG; break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            if( rGraphic.GetType() == GraphicType::Bitmap )
-            {
-                if( rGraphic.IsAnimated() )
-                    nExportFormat = ConvertDataFormat::GIF;
-                else
-                    nExportFormat = ConvertDataFormat::PNG;
-            }
-            else
-                nExportFormat = ConvertDataFormat::SVM;
-        }
-
-        const INetURLObject aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::Bitmap, GetParent()->GetUserURL(), aObjectList, nExportFormat ) );
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
-
-        if( pOStm )
-        {
-            pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-
-            if( ConvertDataFormat::SVM == nExportFormat )
-            {
-                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-
-                aMtf.Write( *pOStm );
-                bRet = ( pOStm->GetError() == ERRCODE_NONE );
-            }
-            else
-            {
-                if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
-                {
-                    pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                    bRet = ( pOStm->GetError() == ERRCODE_NONE );
-                }
-                else
-                    bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
-            }
-
-            pOStm.reset();
-        }
-
-        if( bRet )
-        {
-            const SgaObjectBmp aObjBmp( aURL );
-            InsertObject( aObjBmp, nInsertPos );
         }
     }
 
@@ -1010,8 +859,16 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
                 }
             }
 
-            if( !bRet )
-                bRet = InsertGraphic( *pGraphic, nInsertPos );
+            if (!bRet)
+            {
+                INetURLObject aURL2;
+                bRet = pThm->getGalleryBinaryEngine()->InsertGraphic(*pGraphic, GetParent()->GetUserURL(), aObjectList, aURL2);
+                if (bRet)
+                {
+                    const SgaObjectBmp aObjBmp(aURL2);
+                    InsertObject(aObjBmp, nInsertPos);
+                }
+            }
         }
     }
 
@@ -1022,94 +879,6 @@ void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard(GetSystemClipboard());
-}
-
-SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
-{
-    const INetURLObject aRelURL1( GetParent()->GetRelativeURL() );
-    const INetURLObject aRelURL2( GetParent()->GetUserURL() );
-    sal_uInt32          nCount = GetObjectCount();
-    bool                bRel;
-
-    rOStm.WriteUInt16( 0x0004 );
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, pThm->GetThemeName(), RTL_TEXTENCODING_UTF8);
-    rOStm.WriteUInt32( nCount ).WriteUInt16( osl_getThreadTextEncoding() );
-
-    for( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        const GalleryObject* pObj = ImplGetGalleryObject( i );
-        OUString               aPath;
-
-        if( SgaObjKind::SvDraw == pObj->eObjKind )
-        {
-            aPath = GetSvDrawStreamNameFromURL( pObj->aURL );
-            bRel = false;
-        }
-        else
-        {
-            aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            aPath = aPath.copy( 0, std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-            bRel = aPath == aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
-            {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                aPath = aPath.copy( std::min(aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-            }
-            else
-            {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                aPath = aPath.copy( 0, std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-                bRel = aPath == aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength() + 1 ) ) )
-                {
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                    aPath = aPath.copy( std::min(aRelURL2.GetMainURL( INetURLObject::DecodeMechanism::NONE ).getLength(), aPath.getLength()) );
-                }
-                else
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            }
-        }
-
-        if ( !m_aDestDir.isEmpty() )
-        {
-            bool aFound = aPath.indexOf(m_aDestDir) != -1;
-            aPath = aPath.replaceFirst(m_aDestDir, "");
-            if ( aFound )
-                bRel = m_bDestDirRelative;
-            else
-                SAL_WARN( "svx", "failed to replace destdir of '"
-                          << m_aDestDir << "' in '" << aPath << "'");
-        }
-
-        rOStm.WriteBool( bRel );
-        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
-        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( static_cast<sal_uInt16>(pObj->eObjKind) );
-    }
-
-    // more recently, a 512-byte reserve buffer is written,
-    // to recognize them two sal_uInt32-Ids will be written.
-    rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
-
-    const long      nReservePos = rOStm.Tell();
-    std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 2 ));
-
-    rOStm.WriteUInt32( GetId() ).WriteBool( pThm->IsNameFromResource() ); // From version 2 and up
-
-    pCompat.reset();
-
-    // Fill the rest of the buffer.
-    const long  nRest = std::max( 512L - ( static_cast<long>(rOStm.Tell()) - nReservePos ), 0L );
-
-    if( nRest )
-    {
-        std::unique_ptr<char[]> pReserve(new char[ nRest ]);
-        memset( pReserve.get(), 0, nRest );
-        rOStm.WriteBytes(pReserve.get(), nRest);
-    }
-
-    return rOStm;
 }
 
 SvStream& GalleryTheme::ReadData( SvStream& rIStm )

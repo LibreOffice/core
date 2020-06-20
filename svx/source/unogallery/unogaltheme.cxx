@@ -28,6 +28,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/svapp.hxx>
+#include <galobj.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -209,8 +210,13 @@ void SAL_CALL GalleryTheme::update(  )
 
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
-            if( mpTheme->InsertGraphic( aGraphic, nIndex ) )
+            INetURLObject aURL2;
+            if (mpTheme->pThm->getGalleryBinaryEngine()->InsertGraphic(aGraphic, mpTheme->GetParent()->GetUserURL(), mpTheme->getObjectList(), aURL2))
+            {
+                const SgaObjectBmp aObjBmp(aURL2);
+                mpTheme->InsertObject(aObjBmp, nIndex);
                 nRet = nIndex;
+            }
         }
         catch( ... )
         {

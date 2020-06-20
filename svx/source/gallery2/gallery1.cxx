@@ -432,7 +432,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     }
                                 }
 
-                                GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+                                GalleryThemeEntry* pEntry = GalleryBinaryEngine::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
                                     aThemeList.emplace_back( pEntry );
