@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/notebookbar/WeldedTabbedNotebookbar.hxx>
+#include <vcl/WeldedTabbedNotebookbar.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/jsdialog/jsdialogbuilder.hxx>
+#include <jsdialog/jsdialogbuilder.hxx>
 
 WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
     VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
