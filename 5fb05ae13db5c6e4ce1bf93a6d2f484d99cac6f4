@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65dbc0c8_4c73ba19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-20T20:47:31Z",
+      "side": 1,
+      "message": "You should most likely set the name in your git repository with git config.",
+      "revId": "5fb05ae13db5c6e4ce1bf93a6d2f484d99cac6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1767265_b30f9383",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-20T20:47:31Z",
+      "side": 1,
+      "message": "You should write commit messages for future developers and not for the patch reviewers.",
+      "revId": "5fb05ae13db5c6e4ce1bf93a6d2f484d99cac6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
