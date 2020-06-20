@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d253b40_f556524b",
+        "filename": "vcl/source/bitmap/BitmapScaleSuperFilter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-20T12:45:36Z",
+      "side": 1,
+      "message": "Scanline needs to be transmitted by reference, otherwise it is not incremented in the caller\u0027s loop. So effectively you never advance to the next pixel.\n\nThis also goes ever input parameter that uses a Scanline for ever function in ScaleDown24bit, ScaleDown32bit, ScaleUp24bit, ScaleUp32bit",
+      "range": {
+        "startLine": 116,
+        "startChar": 39,
+        "endLine": 116,
+        "endChar": 53
+      },
+      "revId": "a9c3640ecfd64c7177a2e432872d8e64ecfe8852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec3e9f0_144ec1f3",
+        "filename": "vcl/source/bitmap/BitmapScaleSuperFilter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-20T12:45:36Z",
+      "side": 1,
+      "message": "should be nComponent2",
+      "range": {
+        "startLine": 437,
+        "startChar": 78,
+        "endLine": 437,
+        "endChar": 90
+      },
+      "revId": "a9c3640ecfd64c7177a2e432872d8e64ecfe8852",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
