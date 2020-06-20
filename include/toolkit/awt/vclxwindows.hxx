@@ -58,7 +58,6 @@
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <vcl/fmtfield.hxx>
 #include <vcl/image.hxx>
 
 class FormatterBase;
