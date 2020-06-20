@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a784af5_351a0d00",
+        "filename": "desktop/qa/desktop_lib/test_desktop_lib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-20T20:08:32Z",
+      "side": 1,
+      "message": "Leftover?",
+      "revId": "cb95276e6e6bf12a1c06d5c252551e55c788fcb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
