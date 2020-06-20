@@ -231,14 +231,13 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         auto pPDFPage = pPDFDocument->openPage(0);
         CPPUNIT_ASSERT(pPDFPage);
 
-        // TODO: Should be 2 really
-        CPPUNIT_ASSERT_EQUAL(1, pPDFPage->getAnnotationCount());
+        CPPUNIT_ASSERT_EQUAL(2, pPDFPage->getAnnotationCount());
 
         auto pPDFAnnotation1 = pPDFPage->getAnnotation(0);
         CPPUNIT_ASSERT_EQUAL(1, pPDFAnnotation1->getSubType()); // Text annotation
 
-        //auto pPDFAnnotation2 = pPDFPage->getAnnotation(1);
-        //CPPUNIT_ASSERT_EQUAL(16, pPDFAnnotation2->getSubType()); // Pop-up annotation
+        auto pPDFAnnotation2 = pPDFPage->getAnnotation(1);
+        CPPUNIT_ASSERT_EQUAL(16, pPDFAnnotation2->getSubType()); // Pop-up annotation
 
         // Load document again
         mxComponent = loadFromDesktop(aTempFile.GetURL());
@@ -249,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         SdPage* pPage = pNewViewShell->GetActualPage();
         CPPUNIT_ASSERT(pPage);
 
-        //CPPUNIT_ASSERT_EQUAL(false, pPage->getAnnotations().empty());
+        CPPUNIT_ASSERT(!pPage->getAnnotations().empty());
     }
 
 #endif // HAVE_FEATURE_PDFIUM
