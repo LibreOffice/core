@@ -19,12 +19,16 @@
 
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/galmisc.hxx>
-#include <vcl/salctype.hxx>
+#include <svx/gallery1.hxx>
 #include <galobj.hxx>
+#include <vcl/salctype.hxx>
+
+#include <sal/log.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
+#include <osl/thread.hxx>
 
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 {
@@ -333,7 +337,120 @@ GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObjec
     return aNewURL;
 }
 
+SvStream& GalleryBinaryEngine::writeData(
+    SvStream& rOStm, Gallery* pParent, sal_uInt32 nCount, const OUString& aThemeName,
+    const ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList, OUString aDestDir,
+    const bool bDestDirRelative, sal_uInt32& rId, bool& bNameFromResource)
+{
+    const INetURLObject aRelURL1 = pParent->GetRelativeURL();
+    const INetURLObject aRelURL2 = pParent->GetUserURL();
+    bool bRel;
+
+    rOStm.WriteUInt16(0x0004);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aThemeName, RTL_TEXTENCODING_UTF8);
+    rOStm.WriteUInt32(nCount).WriteUInt16(osl_getThreadTextEncoding());
+
+    for (sal_uInt32 i = 0; i < nCount; i++)
+    {
+        const GalleryObject* pObj = nullptr;
+        if (i < rObjectList.size())
+            pObj = rObjectList[i].get();
+
+        OUString aPath;
+
+        if (SgaObjKind::SvDraw == pObj->eObjKind)
+        {
+            aPath = GetSvDrawStreamNameFromURL(pObj->aURL);
+            bRel = false;
+        }
+        else
+        {
+            aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            aPath = aPath.copy(
+                0, std::min(aRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                            aPath.getLength()));
+            bRel = aPath == aRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+            if (bRel
+                && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                    > (aRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength() + 1)))
+            {
+                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = aPath.copy(
+                    std::min(aRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                             aPath.getLength()));
+            }
+            else
+            {
+                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = aPath.copy(
+                    0,
+                    std::min(aRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                             aPath.getLength()));
+                bRel = aPath == aRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+                if (bRel
+                    && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                        > (aRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                           + 1)))
+                {
+                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                    aPath = aPath.copy(std::min(
+                        aRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
+                        aPath.getLength()));
+                }
+                else
+                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            }
+        }
+
+        if (!aDestDir.isEmpty())
+        {
+            bool aFound = aPath.indexOf(aDestDir) != -1;
+            aPath = aPath.replaceFirst(aDestDir, "");
+            if (aFound)
+                bRel = bDestDirRelative;
+            else
+                SAL_WARN("svx",
+                         "failed to replace destdir of '" << aDestDir << "' in '" << aPath << "'");
+        }
+
+        rOStm.WriteBool(bRel);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
+        rOStm.WriteUInt32(pObj->nOffset).WriteUInt16(static_cast<sal_uInt16>(pObj->eObjKind));
+    }
+
+    // more recently, a 512-byte reserve buffer is written,
+    // to recognize them two sal_uInt32-Ids will be written.
+    rOStm.WriteUInt32(COMPAT_FORMAT('G', 'A', 'L', 'R'))
+        .WriteUInt32(COMPAT_FORMAT('E', 'S', 'R', 'V'));
+
+    const long nReservePos = rOStm.Tell();
+    std::unique_ptr<VersionCompat> pCompat(new VersionCompat(rOStm, StreamMode::WRITE, 2));
+
+    rOStm.WriteUInt32(rId).WriteBool(bNameFromResource); // From version 2 and up
+
+    pCompat.reset();
+
+    // Fill the rest of the buffer.
+    const long nRest = std::max(512L - (static_cast<long>(rOStm.Tell()) - nReservePos), 0L);
+
+    if (nRest)
+    {
+        std::unique_ptr<char[]> pReserve(new char[nRest]);
+        memset(pReserve.get(), 0, nRest);
+        rOStm.WriteBytes(pReserve.get(), nRest);
+    }
+
+    return rOStm;
+}
+
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
 {
-    return rTheme.WriteData(rOut);
+    sal_uInt32 rId = rTheme.GetId();
+    bool bNameFromResource = rTheme.getGalleryThemeEntry()->IsNameFromResource();
+    return GalleryBinaryEngine::writeData(rOut, rTheme.GetParent(), rTheme.GetObjectCount(),
+                                          rTheme.getGalleryThemeEntry()->GetThemeName(),
+                                          rTheme.getObjectList(), rTheme.getDestDir(),
+                                          rTheme.getDestDirRelative(), rId, bNameFromResource);
 }
