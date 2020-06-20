@@ -17,49 +17,64 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/floatwin.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
+#include <vcl/dockwin.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
 
-#define CALFIELD_EXTRA_BUTTON_WIDTH         14
-#define CALFIELD_EXTRA_BUTTON_HEIGHT        8
-#define CALFIELD_SEP_X                      6
-#define CALFIELD_BORDERLINE_X               5
-#define CALFIELD_BORDER_YTOP                4
-#define CALFIELD_BORDER_Y                   5
-
-class ImplCFieldFloatWin : public FloatingWindow
+namespace
 {
-private:
-    VclPtr<Calendar>    mpCalendar;
-    VclPtr<PushButton>  mpTodayBtn;
-    VclPtr<PushButton>  mpNoneBtn;
-    VclPtr<FixedLine>   mpFixedLine;
+    class ImplCFieldFloat final
+    {
+    private:
+        std::unique_ptr<weld::Builder> mxBuilder;
+        std::unique_ptr<weld::Container> mxContainer;
+        std::unique_ptr<weld::Calendar> mxCalendar;
+        std::unique_ptr<weld::Button> mxTodayBtn;
+        std::unique_ptr<weld::Button> mxNoneBtn;
 
-public:
-                    explicit ImplCFieldFloatWin( vcl::Window* pParent );
-    virtual         ~ImplCFieldFloatWin() override;
-    virtual void    dispose() override;
+    public:
+        ImplCFieldFloat(vcl::Window* pContainer)
+            : mxBuilder(Application::CreateInterimBuilder(pContainer, "svt/ui/calendar.ui"))
+            , mxContainer(mxBuilder->weld_container("Calendar"))
+            , mxCalendar(mxBuilder->weld_calendar("date"))
+            , mxTodayBtn(mxBuilder->weld_button("today"))
+            , mxNoneBtn(mxBuilder->weld_button("none"))
+        {
+        }
 
-    void            SetCalendar( Calendar* pCalendar )
-                        { mpCalendar = pCalendar; }
+        weld::Calendar* GetCalendar() { return mxCalendar.get(); }
+        weld::Button*   EnableTodayBtn(bool bEnable);
+        weld::Button*   EnableNoneBtn(bool bEnable);
 
-    PushButton*     EnableTodayBtn( bool bEnable );
-    PushButton*     EnableNoneBtn( bool bEnable );
-    void            ArrangeButtons();
+        void GrabFocus()
+        {
+            mxCalendar->grab_focus();
+        }
+    };
+}
 
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+struct ImplCFieldFloatWin : public DockingWindow
+{
+    explicit ImplCFieldFloatWin(vcl::Window* pParent);
+    virtual void dispose() override;
+    virtual ~ImplCFieldFloatWin() override;
+    virtual void GetFocus() override;
+
+    VclPtr<vcl::Window> mxBox;
+    std::unique_ptr<ImplCFieldFloat> mxWidget;
 };
 
-ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
-    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  ),
-    mpCalendar(nullptr), mpTodayBtn(nullptr), mpNoneBtn(nullptr), mpFixedLine(nullptr)
+ImplCFieldFloatWin::ImplCFieldFloatWin(vcl::Window* pParent)
+    : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    , mxBox(get("box"))
 {
+    setDeferredProperties();
+    mxWidget.reset(new ImplCFieldFloat(mxBox.get()));
 }
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
@@ -69,141 +84,34 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 
 void ImplCFieldFloatWin::dispose()
 {
-    mpTodayBtn.disposeAndClear();
-    mpNoneBtn.disposeAndClear();
-    mpFixedLine.disposeAndClear();
-    mpCalendar.clear();
-    FloatingWindow::dispose();
+    mxWidget.reset();
+    mxBox.disposeAndClear();
+    DockingWindow::dispose();
 }
 
-PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
+void ImplCFieldFloatWin::GetFocus()
 {
-    if ( bEnable )
-    {
-        if ( !mpTodayBtn )
-        {
-            mpTodayBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
-            OUString aTodayText(SvtResId(STR_SVT_CALENDAR_TODAY));
-            mpTodayBtn->SetText( aTodayText );
-            Size aSize;
-            aSize.setWidth( mpTodayBtn->GetCtrlTextWidth( mpTodayBtn->GetText() ) );
-            aSize.setHeight( mpTodayBtn->GetTextHeight() );
-            aSize.AdjustWidth(CALFIELD_EXTRA_BUTTON_WIDTH );
-            aSize.AdjustHeight(CALFIELD_EXTRA_BUTTON_HEIGHT );
-            mpTodayBtn->SetSizePixel( aSize );
-            mpTodayBtn->Show();
-        }
-    }
-    else
-    {
-        mpTodayBtn.disposeAndClear();
-    }
-
-    return mpTodayBtn;
+    DockingWindow::GetFocus();
+    if (!mxWidget)
+        return;
+    mxWidget->GrabFocus();
 }
 
-PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
+weld::Button* ImplCFieldFloat::EnableTodayBtn(bool bEnable)
 {
-    if ( bEnable )
-    {
-        if ( !mpNoneBtn )
-        {
-            mpNoneBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
-            OUString aNoneText(SvtResId(STR_SVT_CALENDAR_NONE));
-            mpNoneBtn->SetText( aNoneText );
-            Size aSize;
-            aSize.setWidth( mpNoneBtn->GetCtrlTextWidth( mpNoneBtn->GetText() ) );
-            aSize.setHeight( mpNoneBtn->GetTextHeight() );
-            aSize.AdjustWidth(CALFIELD_EXTRA_BUTTON_WIDTH );
-            aSize.AdjustHeight(CALFIELD_EXTRA_BUTTON_HEIGHT );
-            mpNoneBtn->SetSizePixel( aSize );
-            mpNoneBtn->Show();
-        }
-    }
-    else
-    {
-        mpNoneBtn.disposeAndClear();
-    }
-
-    return mpNoneBtn;
+    mxTodayBtn->set_visible(bEnable);
+    return bEnable ? mxTodayBtn.get() : nullptr;
 }
 
-void ImplCFieldFloatWin::ArrangeButtons()
+weld::Button* ImplCFieldFloat::EnableNoneBtn(bool bEnable)
 {
-    long nBtnHeight = 0;
-    long nBtnWidth  = 0;
-    Size aOutSize   = GetOutputSizePixel();
-    if ( mpTodayBtn && mpNoneBtn )
-    {
-        Size aTodayBtnSize = mpTodayBtn->GetSizePixel();
-        Size aNoneBtnSize  = mpNoneBtn->GetSizePixel();
-        if ( aTodayBtnSize.Width() < aNoneBtnSize.Width() )
-            aTodayBtnSize.setWidth( aNoneBtnSize.Width() );
-        else
-            aNoneBtnSize.setWidth( aTodayBtnSize.Width() );
-        if ( aTodayBtnSize.Height() < aNoneBtnSize.Height() )
-            aTodayBtnSize.setHeight( aNoneBtnSize.Height() );
-        else
-            aNoneBtnSize.setHeight( aTodayBtnSize.Height() );
-
-        nBtnWidth  = aTodayBtnSize.Width() + aNoneBtnSize.Width() + CALFIELD_SEP_X;
-        nBtnHeight = aTodayBtnSize.Height();
-        long nX = (aOutSize.Width()-nBtnWidth)/2;
-        long nY = aOutSize.Height()+CALFIELD_BORDER_Y+CALFIELD_BORDER_YTOP;
-        mpTodayBtn->SetPosSizePixel( Point( nX, nY ), aTodayBtnSize );
-        nX += aTodayBtnSize.Width() + CALFIELD_SEP_X;
-        mpNoneBtn->SetPosSizePixel( Point( nX, nY ), aNoneBtnSize );
-    }
-    else if ( mpTodayBtn )
-    {
-        Size aTodayBtnSize = mpTodayBtn->GetSizePixel();
-        nBtnWidth  = aTodayBtnSize.Width();
-        nBtnHeight = aTodayBtnSize.Height();
-        mpTodayBtn->SetPosPixel( Point( (aOutSize.Width()-nBtnWidth)/2, aOutSize.Height()+CALFIELD_BORDER_Y+CALFIELD_BORDER_YTOP ) );
-    }
-    else if ( mpNoneBtn )
-    {
-        Size aNoneBtnSize  = mpNoneBtn->GetSizePixel();
-        nBtnWidth  = aNoneBtnSize.Width();
-        nBtnHeight = aNoneBtnSize.Height();
-        mpNoneBtn->SetPosPixel( Point( (aOutSize.Width()-nBtnWidth)/2, aOutSize.Height()+CALFIELD_BORDER_Y+CALFIELD_BORDER_YTOP ) );
-    }
-
-    if ( nBtnHeight )
-    {
-        if ( !mpFixedLine )
-        {
-            mpFixedLine = VclPtr<FixedLine>::Create( this );
-            mpFixedLine->Show();
-        }
-        long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
-        mpFixedLine->setPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
-                                      nLineWidth, 2 );
-        aOutSize.AdjustHeight(nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP );
-        SetOutputSizePixel( aOutSize );
-    }
-    else
-    {
-        mpFixedLine.disposeAndClear();
-    }
-}
-
-bool ImplCFieldFloatWin::EventNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        if ( pKEvt->GetKeyCode().GetCode() == KEY_RETURN )
-            mpCalendar->Select();
-    }
-
-    return FloatingWindow::EventNotify( rNEvt );
+    mxNoneBtn->set_visible(bEnable);
+    return bEnable ? mxNoneBtn.get() : nullptr;
 }
 
 CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
     : DateField(pParent, nWinStyle)
     , mpFloatWin(nullptr)
-    , mpCalendar(nullptr)
     , mpTodayBtn(nullptr)
     , mpNoneBtn(nullptr)
     , mbToday(false)
@@ -218,22 +126,20 @@ CalendarField::~CalendarField()
 
 void CalendarField::dispose()
 {
-    mpCalendar.disposeAndClear();
+    mpTodayBtn = nullptr;
+    mpNoneBtn = nullptr;
     mpFloatWin.disposeAndClear();
-    mpTodayBtn.clear();
-    mpNoneBtn.clear();
     DateField::dispose();
 }
 
-IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
+IMPL_LINK(CalendarField, ImplSelectHdl, weld::Calendar&, rCalendar, void)
 {
-    if ( pCalendar->IsTravelSelect() )
-        return;
+    Date aNewDate = rCalendar.get_date();
 
-    mpFloatWin->EndPopupMode();
+    vcl::Window::GetDockingManager()->EndPopupMode(mpFloatWin);
+    mpFloatWin->EnableDocking(false);
     EndDropDown();
     GrabFocus();
-    Date aNewDate = mpCalendar->GetFirstSelectedDate();
     if ( IsEmptyDate() || ( aNewDate != GetDate() ) )
     {
         SetDate( aNewDate );
@@ -242,14 +148,14 @@ IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
     }
 }
 
-IMPL_LINK( CalendarField, ImplClickHdl, Button*, pButton, void )
+IMPL_LINK(CalendarField, ImplClickHdl, weld::Button&, rBtn, void)
 {
-    PushButton* pBtn = static_cast<PushButton*>(pButton);
-    mpFloatWin->EndPopupMode();
+    vcl::Window::GetDockingManager()->EndPopupMode(mpFloatWin);
+    mpFloatWin->EnableDocking(false);
     EndDropDown();
     GrabFocus();
 
-    if ( pBtn == mpTodayBtn )
+    if (&rBtn == mpTodayBtn)
     {
         Date aToday( Date::SYSTEM );
         if ( (aToday != GetDate()) || IsEmptyDate() )
@@ -259,7 +165,7 @@ IMPL_LINK( CalendarField, ImplClickHdl, Button*, pButton, void )
             Modify();
         }
     }
-    else if ( pBtn == mpNoneBtn )
+    else if (&rBtn == mpNoneBtn)
     {
         if ( !IsEmptyDate() )
         {
@@ -274,61 +180,44 @@ IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     EndDropDown();
     GrabFocus();
-    mpCalendar->EndSelection();
 }
 
 bool CalendarField::ShowDropDown( bool bShow )
 {
     if ( bShow )
     {
-        Calendar* pCalendar = GetCalendar();
+        if ( !mpFloatWin )
+            mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
 
         Date aDate = GetDate();
         if ( IsEmptyDate() || !aDate.IsValidAndGregorian() )
         {
             aDate = Date( Date::SYSTEM );
         }
-        pCalendar->SetCurDate( aDate );
-        Point       aPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
-        tools::Rectangle   aRect( aPos, GetSizePixel() );
+        weld::Calendar* pCalendar = mpFloatWin->mxWidget->GetCalendar();
+        pCalendar->set_date( aDate );
+        pCalendar->connect_activated(LINK(this, CalendarField, ImplSelectHdl));
+        mpTodayBtn = mpFloatWin->mxWidget->EnableTodayBtn(mbToday);
+        mpNoneBtn = mpFloatWin->mxWidget->EnableNoneBtn(mbNone);
+        if (mpTodayBtn)
+            mpTodayBtn->connect_clicked( LINK( this, CalendarField, ImplClickHdl ) );
+        if (mpNoneBtn)
+            mpNoneBtn->connect_clicked( LINK( this, CalendarField, ImplClickHdl ) );
+        Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
+        tools::Rectangle aRect(aPos, GetSizePixel());
         aRect.AdjustBottom( -1 );
-        mpCalendar->SetOutputSizePixel( mpCalendar->CalcWindowSizePixel() );
-        mpFloatWin->SetOutputSizePixel( mpCalendar->GetSizePixel() );
-        mpFloatWin->SetCalendar( mpCalendar );
-        mpTodayBtn = mpFloatWin->EnableTodayBtn( mbToday );
-        mpNoneBtn = mpFloatWin->EnableNoneBtn( mbNone );
-        if ( mpTodayBtn )
-            mpTodayBtn->SetClickHdl( LINK( this, CalendarField, ImplClickHdl ) );
-        if ( mpNoneBtn )
-            mpNoneBtn->SetClickHdl( LINK( this, CalendarField, ImplClickHdl ) );
-        mpFloatWin->ArrangeButtons();
-        mpCalendar->EnableCallEverySelect();
-        mpCalendar->StartSelection();
-        mpCalendar->GrabFocus();
-        mpCalendar->Show();
-        mpFloatWin->StartPopupMode( aRect, FloatWinPopupFlags::Down );
+        DockingManager* pDockingManager = vcl::Window::GetDockingManager();
+        mpFloatWin->EnableDocking(true);
+        pDockingManager->SetPopupModeEndHdl(mpFloatWin, LINK(this, CalendarField, ImplPopupModeEndHdl));
+        pDockingManager->StartPopupMode(mpFloatWin, aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
     }
     else
     {
-        mpFloatWin->EndPopupMode( FloatWinPopupEndFlags::Cancel );
-        mpCalendar->EndSelection();
+        vcl::Window::GetDockingManager()->EndPopupMode(mpFloatWin);
+        mpFloatWin->EnableDocking(false);
         EndDropDown();
     }
     return true;
-}
-
-Calendar* CalendarField::GetCalendar()
-{
-    if ( !mpFloatWin )
-    {
-        mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
-        mpFloatWin->SetPopupModeEndHdl( LINK( this, CalendarField, ImplPopupModeEndHdl ) );
-        mpCalendar = VclPtr<Calendar>::Create( mpFloatWin, WB_TABSTOP );
-        mpCalendar->SetPosPixel( Point() );
-        mpCalendar->SetSelectHdl( LINK( this, CalendarField, ImplSelectHdl ) );
-    }
-
-    return mpCalendar;
 }
 
 void CalendarField::StateChanged( StateChangedType nStateChange )
