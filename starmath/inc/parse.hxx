@@ -42,7 +42,7 @@ class SmTextNode;
 
 class SmParser
 {
-    OUString        m_aBufferString;
+    OUString        m_aBufferString; //buffer string
     SmToken         m_aCurToken;
     std::vector<std::unique_ptr<SmErrorDesc>> m_aErrDescList;
     int             m_nCurError;
