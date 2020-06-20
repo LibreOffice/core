@@ -183,6 +183,7 @@
       <menu:menuitem menu:label="ital b" menu:id=".uno:InsertCommandText?Text:string=ital &lt;?&gt; "/>
       <menu:menuitem menu:label="size s b" menu:id=".uno:InsertCommandText?Text:string=size &lt;?&gt; {&lt;?&gt;} "/>
       <menu:menuitem menu:label="font f b" menu:id=".uno:InsertCommandText?Text:string=font &lt;?&gt; {&lt;?&gt;} "/>
+      <menu:menuitem menu:label="color rgb" menu:id=".uno:InsertCommandText?Text:string=color rgb 0 0 0 "/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:BracketsMenu">
@@ -251,6 +252,7 @@
       <menu:menuitem menu:label="Re" menu:id=".uno:InsertCommandText?Text:string=Re "/>
       <menu:menuitem menu:label="Im" menu:id=".uno:InsertCommandText?Text:string=Im "/>
       <menu:menuitem menu:label="wp" menu:id=".uno:InsertCommandText?Text:string=wp "/>
+      <menu:menuitem menu:label="laplace" menu:id=".uno:InsertCommandText?Text:string=laplace "/>
       <menu:menuseparator/>
       <menu:menuitem menu:label="leftarrow" menu:id=".uno:InsertCommandText?Text:string=leftarrow "/>
       <menu:menuitem menu:label="rightarrow" menu:id=".uno:InsertCommandText?Text:string=rightarrow "/>
