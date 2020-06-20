@@ -59,6 +59,10 @@ public:
     implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
                         ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
                         ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+    SvStream& writeData(SvStream& rOStm, Gallery* pParent, sal_uInt32 nCount, OUString aThemeName,
+                        const ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                        OUString aDestDir, const bool bDestDirRelative, sal_uInt32& rId,
+                        bool& bNameFromResource);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

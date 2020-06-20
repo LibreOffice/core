@@ -116,6 +116,10 @@ public:
 
     SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
 
+    SAL_DLLPRIVATE GalleryThemeEntry* getGalleryThemeEntry() const { return pThm; };
+
+    const SAL_DLLPRIVATE::std::vector< std::unique_ptr<GalleryObject> >& getObjectList() const { return aObjectList; };
+
     SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
 
     std::unique_ptr<SgaObject>  AcquireObject(sal_uInt32 nPos);
@@ -129,6 +133,9 @@ public:
     // used for building gallery themes during compilation:
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
+
+    SAL_DLLPRIVATE OUString getDestDir() const { return m_aDestDir; }
+    SAL_DLLPRIVATE const bool& getDestDirRelative() const { return m_bDestDirRelative; }
 
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
     const INetURLObject&        GetSdgURL() const;
