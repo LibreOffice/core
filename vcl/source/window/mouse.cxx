@@ -439,7 +439,6 @@ void Window::SetMouseTransparent( bool bTransparent )
 
 void Window::CaptureMouse()
 {
-
     ImplSVData* pSVData = ImplGetSVData();
 
     // possibly stop tracking
