@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ebb1731_45156e9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-20T08:50:31Z",
+      "side": 1,
+      "message": "doubtful about the commit message - open to suggestions",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "96784d8a6bc7eb4ff6465ca7c5cccf86d9745eae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a6210ed_28df3163",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-20T08:50:31Z",
+      "side": 1,
+      "message": "passing this high number of arguments considered OK?",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 49
+      },
+      "revId": "96784d8a6bc7eb4ff6465ca7c5cccf86d9745eae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
