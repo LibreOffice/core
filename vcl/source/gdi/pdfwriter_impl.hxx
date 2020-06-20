@@ -403,9 +403,17 @@ struct PDFEmbeddedFile
     }
 };
 
+struct PDFPopupAnnotation : public PDFAnnotation
+{
+    /// ID of the parent object.
+    sal_Int32 m_nParentObject;
+};
+
 struct PDFNoteEntry : public PDFAnnotation
 {
     PDFNote m_aContents;
+
+    PDFPopupAnnotation m_aPopUpAnnotation;
 
     PDFNoteEntry()
     {}
@@ -873,10 +881,14 @@ i12626
     bool appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer );
     // write all links
     bool emitLinkAnnotations();
-    /// Write all screen annotations.
+    // Write all screen annotations.
     bool emitScreenAnnotations();
+
+    void emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote);
+    static void emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnotation const & rPopUp);
     // write all notes
     bool emitNoteAnnotations();
+
     // write the appearance streams of a widget
     bool emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDict );
     // clean up radio button "On" values
