@@ -319,8 +319,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                     FmFormModel*    pModel = new FmFormModel();
 
                     pModel->GetItemPool().FreezeIdRanges();
-
-                    if( pGalTheme && pGalTheme->GetModel( pGalTheme->ImplGetGalleryObjectPos( implGetObject() ), *pModel ) )
+                    if( pGalTheme && pGalTheme->pThm->getGalleryBinaryEngine()->getModel( *pModel, pGalTheme->GetSvDrawStorage(), pGalTheme->ImplGetGalleryObject(pGalTheme->ImplGetGalleryObjectPos(implGetObject())) ))
                     {
                         uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pModel ) );
 

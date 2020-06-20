@@ -55,10 +55,30 @@ public:
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
+
     SAL_DLLPRIVATE static INetURLObject
     implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
-                        ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                        const ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
                         ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+
+    SAL_DLLPRIVATE static GalleryThemeEntry* createThemeEntry(const INetURLObject& rURL,
+                                                              bool bReadOnly);
+
+    static bool insertGraphic(const Graphic& rGraphic, const INetURLObject& rUserURL,
+                              const ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                              INetURLObject& aURL);
+
+    bool getModel(SdrModel& rModel, const tools::SvRef<SotStorage>& xStor,
+                  const GalleryObject* pObject);
+    static SAL_DLLPRIVATE bool getModelStream(tools::SvRef<SotStorageStream> const& rxModelStream,
+                                              const tools::SvRef<SotStorage>& xStor,
+                                              const GalleryObject* pObject);
+
+    static SvStream& writeData(SvStream& rOStm, Gallery* pParent, sal_uInt32 nCount,
+                               const OUString& aThemeName,
+                               const ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                               OUString aDestDir, const bool bDestDirRelative, sal_uInt32& rId,
+                               bool& bNameFromResource);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

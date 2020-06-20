@@ -132,7 +132,7 @@ public:
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::SvDraw; }
 };
 
-class SgaObjectBmp: public SgaObject
+class SVXCORE_DLLPUBLIC SgaObjectBmp: public SgaObject
 {
 private:
 

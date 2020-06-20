@@ -86,12 +86,7 @@ private:
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
-    SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
-    {
-        if (nPos < aObjectList.size())
-            return aObjectList[ nPos ].get();
-        return nullptr;
-    }
+
     const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
 
     SAL_DLLPRIVATE sal_uInt32   ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
@@ -101,7 +96,6 @@ private:
                                             return i;
                                     return SAL_MAX_UINT32;
                                 }
-    SAL_DLLPRIVATE static INetURLObject ImplGetURL( const GalleryObject* pObject );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
@@ -114,7 +108,17 @@ public:
 
     SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
+    SAL_DLLPRIVATE GalleryThemeEntry* getGalleryThemeEntry() const { return pThm; };
+
+    const SAL_DLLPRIVATE::std::vector< std::unique_ptr<GalleryObject> >& getObjectList() const { return aObjectList; };
+
+    SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
+    {
+        if (nPos < aObjectList.size())
+            return aObjectList[nPos].get();
+        return nullptr;
+    }
+    SAL_DLLPRIVATE static INetURLObject ImplGetURL(const GalleryObject* pObject);
 
     SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
 
@@ -129,6 +133,9 @@ public:
     // used for building gallery themes during compilation:
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
+
+    SAL_DLLPRIVATE const OUString& getDestDir() const { return m_aDestDir; }
+    SAL_DLLPRIVATE const bool& getDestDirRelative() const { return m_bDestDirRelative; }
 
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
     const INetURLObject&        GetSdgURL() const;
@@ -178,12 +185,9 @@ public:
     SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);
 
     bool                        GetGraphic(sal_uInt32 nPos, Graphic& rGraphic);
-    bool                        InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos);
 
-    bool                        GetModel(sal_uInt32 nPos, SdrModel& rModel);
     bool                        InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream> const & rModelStreamRef);
     SAL_DLLPRIVATE bool         InsertModelStream(const tools::SvRef<SotStorageStream>& rModelStream, sal_uInt32 nInsertPos);
 
     SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL);

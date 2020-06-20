@@ -211,7 +211,7 @@ bool GalleryExplorer::GetSdrObj( const OUString& rThemeName, sal_uInt32 nSdrMode
                     if( nActPos++ == nSdrModelPos )
                     {
                         if( pModel )
-                            bRet = pTheme->GetModel(i, *pModel);
+                            bRet = pTheme->getGalleryThemeEntry()->getGalleryBinaryEngine()->getModel(*pModel, pTheme->GetSvDrawStorage(), pTheme->ImplGetGalleryObject(i));
 
                         if( pThumb )
                             bRet = bRet || pTheme->GetThumb( i, *pThumb );

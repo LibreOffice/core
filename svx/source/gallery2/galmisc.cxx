@@ -40,6 +40,7 @@
 #include <svx/strings.hrc>
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
+#include <svx/gallerybinaryengine.hxx>
 #include <com/sun/star/awt/XProgressMonitor.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -399,7 +400,7 @@ void GalleryTransferable::InitData( bool bLazy )
                     mxModelStream = new SotStorageStream( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
-                    if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, mxModelStream))
+                    if (!mpTheme || !GalleryBinaryEngine::getModelStream(mxModelStream, mpTheme->GetSvDrawStorage(), mpTheme->ImplGetGalleryObject(mnObjectPos)))
                         mxModelStream.clear();
                     else
                         mxModelStream->Seek( 0 );
