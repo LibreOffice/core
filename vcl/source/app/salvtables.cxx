@@ -71,7 +71,7 @@
 #include <bitmaps.hlst>
 #include <calendar.hxx>
 #include <wizdlg.hxx>
-#include <vcl/salvtables.hxx>
+#include <salvtables.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
