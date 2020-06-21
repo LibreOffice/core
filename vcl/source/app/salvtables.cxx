@@ -44,7 +44,6 @@
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/calendar.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -70,6 +69,7 @@
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
+#include <calendar.hxx>
 #include <wizdlg.hxx>
 #include <vcl/salvtables.hxx>
 

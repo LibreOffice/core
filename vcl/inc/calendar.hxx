@@ -115,7 +115,7 @@ calls or by ending a selection.
 
 typedef std::set<sal_Int32> IntDateSet;
 
-class VCL_DLLPUBLIC Calendar final : public Control
+class Calendar final : public Control
 {
     std::unique_ptr<IntDateSet> mpSelectTable;
     std::unique_ptr<IntDateSet> mpOldSelectTable;
@@ -163,29 +163,29 @@ class VCL_DLLPUBLIC Calendar final : public Control
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    VCL_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
-    VCL_DLLPRIVATE void         ImplInitSettings();
+    void         ImplInit( WinBits nWinStyle );
+    void         ImplInitSettings();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    VCL_DLLPRIVATE void         ImplFormat();
+    void         ImplFormat();
     using Window::ImplHitTest;
-    VCL_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
-    VCL_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    VCL_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
+    sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
+    void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
+    void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                                              bool bOther, sal_Int32 nToday);
-    VCL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
-    VCL_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
-    VCL_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
-    VCL_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest );
-    VCL_DLLPRIVATE void         ImplUpdate( bool bCalcNew = false );
+    void         ImplDraw(vcl::RenderContext& rRenderContext);
+    void         ImplUpdateDate( const Date& rDate );
+    void         ImplUpdateSelection( IntDateSet* pOld );
+    void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest );
+    void         ImplUpdate( bool bCalcNew = false );
     using Window::ImplScroll;
-    VCL_DLLPRIVATE void         ImplScroll( bool bPrev );
-    VCL_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
-    VCL_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
-    VCL_DLLPRIVATE void         ImplEndTracking( bool bCancel );
-    VCL_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
+    void         ImplScroll( bool bPrev );
+    void         ImplShowMenu( const Point& rPos, const Date& rDate );
+    void         ImplTracking( const Point& rPos, bool bRepeat );
+    void         ImplEndTracking( bool bCancel );
+    DayOfWeek    ImplGetWeekStart() const;
 
     virtual Size GetOptimalSize() const override;
 public:
