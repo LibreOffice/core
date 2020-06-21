@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1f1e2eb_0e9e8016",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-21T10:55:51Z",
+      "side": 1,
+      "message": "This is still not a good solution. There is still the risk that the 1 second is not enough. We usually try to switch to an event-driven handling in this case or force all pending messages to be processed.",
+      "revId": "77b404f33c87f74605ea8b5616518e26aa26a78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
