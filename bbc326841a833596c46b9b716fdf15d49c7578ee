@@ -22,6 +22,30 @@
       "revId": "bbc326841a833596c46b9b716fdf15d49c7578ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5b3dc50_d775469f",
+        "filename": "sd/source/filter/pdf/sdpdffilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-21T18:29:19Z",
+      "side": 0,
+      "message": "sure but PDFGraphicResult in a later commit gets annotation information",
+      "parentUuid": "c60aaf6c_7375daf0",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 58
+      },
+      "revId": "bbc326841a833596c46b9b716fdf15d49c7578ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
