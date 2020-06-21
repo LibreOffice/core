@@ -30,7 +30,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <sal/log.hxx>
 
-#include <vcl/calendar.hxx>
+#include <calendar.hxx>
 #include <svdata.hxx>
 #include <strings.hrc>
 #include <memory>

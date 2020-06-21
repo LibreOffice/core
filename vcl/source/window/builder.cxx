@@ -23,7 +23,6 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/calendar.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/toolkit/field.hxx>
@@ -62,6 +61,7 @@
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include <calendar.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
 #include <treeglue.hxx>
