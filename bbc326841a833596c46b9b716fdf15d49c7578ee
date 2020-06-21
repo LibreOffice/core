@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c60aaf6c_7375daf0",
+        "filename": "sd/source/filter/pdf/sdpdffilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-21T12:15:30Z",
+      "side": 0,
+      "message": "But this allowed to be rewritten as\n\n    for (const auto\u0026 [rGraphic, rSizeHMM] : aGraphics)\n\nwhich reads better possibly?",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 58
+      },
+      "revId": "bbc326841a833596c46b9b716fdf15d49c7578ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
