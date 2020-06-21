@@ -7330,7 +7330,6 @@ include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/button.hxx
 include/vcl/cairo.hxx
-include/vcl/calendar.hxx
 include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
 include/vcl/commandevent.hxx
@@ -16562,6 +16561,7 @@ vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
+vcl/inc/calendar.hxx
 vcl/inc/canvasbitmap.hxx
 vcl/inc/configsettings.hxx
 vcl/inc/controldata.hxx
