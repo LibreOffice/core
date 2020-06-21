@@ -76,7 +76,7 @@ ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
     ++mPos;
     memcpy(mPos, pNodeName, len);
     mPos += len;
-    strncpy(mPos, "\": [ ", 5);
+    memcpy(mPos, "\": [ ", 5);
     mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
