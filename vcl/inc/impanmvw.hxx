@@ -93,6 +93,14 @@ private:
     bool            isMarked() const { return mbIsMarked; }
 };
 
+namespace vcl { class PaintBufferGuard; }
+
+template<typename T>
+vcl::PaintBufferGuard* GetRenderContext(T*);
+
+template<>
+vcl::PaintBufferGuard* GetRenderContext(vcl::Window* pWindow);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
