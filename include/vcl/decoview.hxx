@@ -105,6 +105,12 @@ public:
     void                DrawHandle(const tools::Rectangle& rRectangle);
 };
 
+template<typename T>
+bool IsWindow(T*);
+
+template<>
+bool IsWindow(vcl::Window*);
+
 #endif // INCLUDED_VCL_DECOVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
