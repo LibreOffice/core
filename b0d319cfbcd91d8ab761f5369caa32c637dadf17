@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84ee1d76_f41f631a",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-21T12:46:10Z",
+      "side": 1,
+      "message": "Possibly not important, but rounding instead of truncating would give more useful results (when 201.95 would become 202, not 201).",
+      "range": {
+        "startLine": 1092,
+        "startChar": 36,
+        "endLine": 1092,
+        "endChar": 70
+      },
+      "revId": "b0d319cfbcd91d8ab761f5369caa32c637dadf17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
