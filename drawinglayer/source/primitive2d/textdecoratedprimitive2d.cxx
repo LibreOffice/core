@@ -235,7 +235,8 @@ namespace drawinglayer::primitive2d
                         aShadow = new ShadowPrimitive2D(
                             aShadowTransform,
                             aShadowColor,
-                            0,          // fShadowBlur = 0, there's no blur for text shadow yet.
+                            0,// fShadowBlur = 0, there's no blur for text shadow yet.
+                            0, // constant color, no transparence.
                             aRetval);
                     }
 
