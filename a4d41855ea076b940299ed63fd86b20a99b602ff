@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e079b04a_c4efb15c",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-06-21T07:32:41Z",
+      "side": 1,
+      "message": "No comment needed here",
+      "revId": "a4d41855ea076b940299ed63fd86b20a99b602ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a6ee57f_900a3a6e",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2688,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-06-21T07:32:41Z",
+      "side": 1,
+      "message": "Don\u0027t leave commented out code. Just remove it.",
+      "revId": "a4d41855ea076b940299ed63fd86b20a99b602ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
