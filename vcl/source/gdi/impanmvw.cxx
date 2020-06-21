@@ -138,17 +138,25 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& r
         rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
 }
 
+template<typename T>
+vcl::PaintBufferGuard* GetRenderContext(T*)
+{
+    return nullptr;
+}
+
+template<>
+vcl::PaintBufferGuard* GetRenderContext(vcl::Window* pWindow)
+{
+    return new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow);
+}
+
 void ImplAnimView::drawToPos( sal_uLong nPos )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
-    std::unique_ptr<vcl::PaintBufferGuard> pGuard;
-    if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
-    {
-        vcl::Window* pWindow = static_cast<vcl::Window*>(mpRenderContext.get());
-        pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
+    std::unique_ptr<vcl::PaintBufferGuard> pGuard(GetRenderContext(pRenderContext.get()));
+    if (pGuard.get())
         pRenderContext = pGuard->GetRenderContext();
-    }
 
     ScopedVclPtrInstance<VirtualDevice> aVDev;
     std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
