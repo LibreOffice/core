@@ -36,7 +36,6 @@ using namespace ::comphelper;
 
 VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar( VCLXWindow* pVCLWindow )
     :VCLXAccessibleComponent( pVCLWindow )
-    ,m_pHeadBar(nullptr)
 {
     m_pHeadBar = GetAs< HeaderBar >();
 }

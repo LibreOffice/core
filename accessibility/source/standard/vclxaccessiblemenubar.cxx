@@ -43,10 +43,6 @@ VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
         if ( m_pWindow )
             m_pWindow->AddEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
     }
-    else
-    {
-        m_pWindow = nullptr;
-    }
 }
 
 
