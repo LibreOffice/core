@@ -34,6 +34,24 @@
       "revId": "77b404f33c87f74605ea8b5616518e26aa26a78c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2855a778_4d3eab93",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-21T21:40:28Z",
+      "side": 1,
+      "message": "This function will make sure that the comment is added as Xisco recommended:\n\nhttps://opengrok.libreoffice.org/xref/core/uitest/uitest/test.py?r\u003d953d2704#51",
+      "parentUuid": "baf9ca56_556ada1a",
+      "revId": "77b404f33c87f74605ea8b5616518e26aa26a78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
