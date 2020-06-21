@@ -11,20 +11,40 @@
 #include <edtwin.hxx>
 #include <bookmrk.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/calendar.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <tools/date.hxx>
 #include <svl/zforlist.hxx>
 
 namespace
 {
+class SwCalendarBox final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::Calendar> m_xCalendar;
+
+public:
+    SwCalendarBox(vcl::Window* pParent)
+        : InterimItemWindow(pParent, "modules/swriter/ui/calendar.ui", "Calendar")
+        , m_xCalendar(m_xBuilder->weld_calendar("date"))
+    {
+    }
+    weld::Calendar& get_widget() { return *m_xCalendar; }
+    virtual ~SwCalendarBox() override { disposeOnce(); }
+    virtual void dispose() override
+    {
+        m_xCalendar.reset();
+        InterimItemWindow::dispose();
+    }
+};
+
 class SwDatePickerDialog : public FloatingWindow
 {
 private:
-    VclPtr<Calendar> m_pCalendar;
+    VclPtr<SwCalendarBox> m_xCalendar;
     sw::mark::DateFieldmark* m_pFieldmark;
     SvNumberFormatter* m_pNumberFormatter;
 
-    DECL_LINK(ImplSelectHdl, Calendar*, void);
+    DECL_LINK(ImplSelectHdl, weld::Calendar&, void);
 
 public:
     SwDatePickerDialog(SwEditWin* parent, sw::mark::DateFieldmark* pFieldmark,
@@ -37,45 +57,50 @@ public:
 SwDatePickerDialog::SwDatePickerDialog(SwEditWin* parent, sw::mark::DateFieldmark* pFieldmark,
                                        SvNumberFormatter* pNumberFormatter)
     : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
-    , m_pCalendar(VclPtr<Calendar>::Create(this, WB_TABSTOP))
+    , m_xCalendar(VclPtr<SwCalendarBox>::Create(this))
     , m_pFieldmark(pFieldmark)
     , m_pNumberFormatter(pNumberFormatter)
 {
+    weld::Calendar& rCalendar = m_xCalendar->get_widget();
+
     if (m_pFieldmark != nullptr)
     {
         std::pair<bool, double> aResult = m_pFieldmark->GetCurrentDate();
         if (aResult.first)
         {
             const Date& rNullDate = m_pNumberFormatter->GetNullDate();
-            m_pCalendar->SetCurDate(rNullDate + sal_Int32(aResult.second));
+            rCalendar.set_date(rNullDate + sal_Int32(aResult.second));
         }
     }
-    m_pCalendar->SetSelectHdl(LINK(this, SwDatePickerDialog, ImplSelectHdl));
-    m_pCalendar->SetOutputSizePixel(m_pCalendar->CalcWindowSizePixel());
-    m_pCalendar->Show();
-    SetOutputSizePixel(m_pCalendar->GetSizePixel());
+
+    Size lbSize(rCalendar.get_preferred_size());
+
+    m_xCalendar->SetSizePixel(lbSize);
+    rCalendar.connect_activated(LINK(this, SwDatePickerDialog, ImplSelectHdl));
+    m_xCalendar->Show();
+
+    rCalendar.grab_focus();
+
+    SetSizePixel(lbSize);
 }
 
 SwDatePickerDialog::~SwDatePickerDialog() { disposeOnce(); }
 
 void SwDatePickerDialog::dispose()
 {
-    m_pCalendar.clear();
+    m_xCalendar.disposeAndClear();
     FloatingWindow::dispose();
 }
 
-IMPL_LINK(SwDatePickerDialog, ImplSelectHdl, Calendar*, pCalendar, void)
+IMPL_LINK(SwDatePickerDialog, ImplSelectHdl, weld::Calendar&, rCalendar, void)
 {
-    if (!pCalendar->IsTravelSelect())
+    if (m_pFieldmark != nullptr)
     {
-        if (m_pFieldmark != nullptr)
-        {
-            const Date& rNullDate = m_pNumberFormatter->GetNullDate();
-            double dDate = pCalendar->GetFirstSelectedDate() - rNullDate;
-            m_pFieldmark->SetCurrentDate(dDate);
-        }
-        EndPopupMode();
+        const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+        double dDate = rCalendar.get_date() - rNullDate;
+        m_pFieldmark->SetCurrentDate(dDate);
     }
+    EndPopupMode();
 }
 
 DateFormFieldButton::DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldmark,
