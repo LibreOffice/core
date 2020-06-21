@@ -576,10 +576,33 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
     }
 }
 
+} // end anonymous namespace
+
+template<typename T>
+bool IsWindow(T*)
+{
+    return false;
+}
+
+template<>
+bool IsWindow(vcl::Window*)
+{
+    return true;
+}
+
+namespace {
+
+vcl::Window* GetWindow(OutputDevice* pOutDev)
+{
+    if (IsWindow(pOutDev))
+        return static_cast<vcl::Window*>(pOutDev);
+    else
+        return nullptr;
+}
 void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
                     const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : nullptr;
+    vcl::Window *const pWin = GetWindow(pDev);
 
     const bool bMenuStyle(nFlags & DrawFrameFlags::Menu);
 
@@ -1011,8 +1034,8 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
-    if(pWin)
+    vcl::Window *const pWin = GetWindow(mpOutDev.get());
+    if (pWin)
     {
         ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
         bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
