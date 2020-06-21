@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "51b40290_15f6029a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-21T12:33:45Z",
+      "side": 1,
+      "message": "\u003e Also there are around 70 properties, some properties like CharFontCharSetAsian, CharFontNameAsian.. might not be required so often as others like \"CharFont\", \"CharHeight\", \"CharUnderline\". and so on. Can we drop them ?\n\nWell - a complex question.\n\nFirst of all: we need a dirty result first, and we need it really soon. 1/4th of GSoC is over, and the initial dump phase takes longer than expected; we will need to make it functional and hopefully pretty - but only after we see it in full length, to realize what we got.\n\nAdditionally, some of the properties\u0027 visibility depend on settings. The ones you mentiond e.g. depend on having Asian and CTL support enabled on Language Settings options page.\n\nBut what\u0027s more important - we should *only* display at each level those settings that *are* defined on that level. I am not sure that UNO provides us a way to see e.g. if a setting is defined in the style of in its parent.\n\nPlus, displaying the settings in the inspector, we are not interested in everything that is defined in any level, but only in things that affect the cursor position. E.g., if an applied paragraph  style defines font name, and an applied character style also defines a font name, both these things should *not* be displayed in the inspector when the font name is also defined as direct formatting!\n\nThis might require to use SfxItemSet directly, allowing to query for the status of an item (like \"not set on this level\").",
+      "parentUuid": "16fa258f_84cb045b",
+      "range": {
+        "startLine": 121,
+        "startChar": 16,
+        "endLine": 121,
+        "endChar": 94
+      },
+      "revId": "bdd84807c7d195df7d39eb84a5b98c6d5a6477c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ca4c1df_7742504d",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
         "patchSetId": 8
