@@ -37,7 +37,7 @@ LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper const & rPar
 : ContextHandler2( rParent )
 , mrLineProperties( rLineProperties )
 {
-    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w );
+    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w, 12700 );
     mrLineProperties.moLineCompound = rAttribs.getToken( XML_cmpd );
     mrLineProperties.moLineCap = rAttribs.getToken( XML_cap );
 }
