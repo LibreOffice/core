@@ -327,9 +327,8 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 & arInfos,
                 infos);
 
-            if (plerr == javaPluginError::NONE)
+            if (plerr == javaPluginError::NONE && !arInfos.empty())
             {
-                assert(!arInfos.empty());
                 aCurrentInfo = std::move(arInfos[0]);
             }
 
