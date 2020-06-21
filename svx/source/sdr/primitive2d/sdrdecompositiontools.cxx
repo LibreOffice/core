@@ -525,9 +525,10 @@ namespace drawinglayer::primitive2d
                         aShadowOffset,
                         rShadow.getColor(),
                         rShadow.getBlur(),
+                        rShadow.getTransparence(),
                         rContent));
 
-                if(0.0 != rShadow.getTransparence())
+                if(0.0 != rShadow.getTransparence() && rShadow.getBlur() == 0)
                 {
                     // create SimpleTransparencePrimitive2D
                     const Primitive2DContainer aTempContent { aRetval[0] };

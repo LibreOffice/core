@@ -35,11 +35,13 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
             double fShadowBlur,
+            double fShadowTransparence,
             const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
-            mfShadowBlur(fShadowBlur)
+            mfShadowBlur(fShadowBlur),
+            mfShadowTransparence(fShadowTransparence)
         {
         }
 
@@ -51,7 +53,8 @@ namespace drawinglayer::primitive2d
 
                 return (getShadowTransform() == rCompare.getShadowTransform()
                     && getShadowColor() == rCompare.getShadowColor()
-                    && getShadowBlur() == rCompare.getShadowBlur());
+                    && getShadowBlur() == rCompare.getShadowBlur()
+                    && getTransparence() == rCompare.getTransparence());
             }
 
             return false;
