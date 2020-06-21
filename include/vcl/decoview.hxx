@@ -29,6 +29,7 @@
 namespace tools { class Rectangle; }
 class Point;
 class Color;
+class StyleSettings;
 
 // Flags for DrawSymbol()
 enum class DrawSymbolFlags
@@ -110,6 +111,12 @@ bool IsWindow(T*);
 
 template<>
 bool IsWindow(vcl::Window*);
+
+template<typename T>
+bool IsMonoFrame(T*, StyleSettings const& rStyleSettings, bool bFlatBorders = true);
+
+template<>
+bool IsMonoFrame(Printer*, StyleSettings const&, bool);
 
 #endif // INCLUDED_VCL_DECOVIEW_HXX
 
