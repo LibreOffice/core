@@ -8454,6 +8454,7 @@ private:
     gulong m_nDaySelectedSignalId;
     gulong m_nDaySelectedDoubleClickSignalId;
     gulong m_nKeyPressEventSignalId;
+    gulong m_nButtonPressEventSignalId;
 
     static void signalDaySelected(GtkCalendar*, gpointer widget)
     {
@@ -8483,6 +8484,16 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    static gboolean signalButton(GtkWidget*, GdkEventButton*, gpointer)
+    {
+        // don't let button press get to parent window, for the case of the
+        // ImplCFieldFloatWin floating window belonging to CalendarField where
+        // the click on the calendar continues to the parent GtkWindow and
+        // closePopup is called by GtkSalFrame::signalButton because the click
+        // window isn't that of the floating parent GtkWindow
+        return true;
+    }
+
 public:
     GtkInstanceCalendar(GtkCalendar* pCalendar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pCalendar), pBuilder, bTakeOwnership)
@@ -8490,6 +8501,7 @@ public:
         , m_nDaySelectedSignalId(g_signal_connect(pCalendar, "day-selected", G_CALLBACK(signalDaySelected), this))
         , m_nDaySelectedDoubleClickSignalId(g_signal_connect(pCalendar, "day-selected-double-click", G_CALLBACK(signalDaySelectedDoubleClick), this))
         , m_nKeyPressEventSignalId(g_signal_connect(pCalendar, "key-press-event", G_CALLBACK(signalKeyPress), this))
+        , m_nButtonPressEventSignalId(g_signal_connect_after(pCalendar, "button-press-event", G_CALLBACK(signalButton), this))
     {
     }
 
@@ -8524,6 +8536,7 @@ public:
 
     virtual ~GtkInstanceCalendar() override
     {
+        g_signal_handler_disconnect(m_pCalendar, m_nButtonPressEventSignalId);
         g_signal_handler_disconnect(m_pCalendar, m_nKeyPressEventSignalId);
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedDoubleClickSignalId);
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedSignalId);
