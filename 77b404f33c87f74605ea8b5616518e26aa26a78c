@@ -16,6 +16,24 @@
       "revId": "77b404f33c87f74605ea8b5616518e26aa26a78c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baf9ca56_556ada1a",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-21T20:01:29Z",
+      "side": 1,
+      "message": "possibly can use xToolkit.processEventsToIdle instead of sleep here",
+      "parentUuid": "e1f1e2eb_0e9e8016",
+      "revId": "77b404f33c87f74605ea8b5616518e26aa26a78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
