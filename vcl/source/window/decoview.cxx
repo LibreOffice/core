@@ -590,6 +590,18 @@ bool IsWindow(vcl::Window*)
     return false;
 }
 
+template<typename T>
+bool IsMonoFrame(T*, StyleSettings const& rStyleSettings, bool bFlatBorders = true)
+{
+    return (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) || bFlatBorders;
+}
+
+template<>
+bool IsMonoFrame(Printer*, StyleSettings const&, bool)
+{
+    return true;
+}
+
 namespace {
 
 vcl::Window* GetWindow(OutputDevice* pOutDev)
@@ -624,9 +636,7 @@ void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
 
     const bool bNoDraw(nFlags & DrawFrameFlags::NoDraw);
 
-    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
-         bFlatBorders )
+    if (IsMonoFrame(pDev, rStyleSettings, bFlatBorders))
         nFlags |= DrawFrameFlags::Mono;
 
     if( nStyle != DrawFrameStyle::NWF &&
@@ -825,8 +835,7 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
     Color                   nColor(rColor);
     mpOutDev->EnableMapMode( false );
 
-    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
+    if (IsMonoFrame(mpOutDev.get(), rStyleSettings))
         nStyle |= DrawSymbolFlags::Mono;
 
     if ( nStyle & DrawSymbolFlags::Mono )
@@ -877,8 +886,7 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
     Color aLightColor = rStyleSettings.GetLightColor();
     Color aShadowColor = rStyleSettings.GetShadowColor();
 
-    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
-         (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
+    if (IsMonoFrame(mpOutDev.get(), rStyleSettings))
     {
         aLightColor = COL_BLACK;
         aShadowColor = COL_BLACK;
