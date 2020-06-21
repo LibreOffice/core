@@ -55,6 +55,7 @@ namespace drawinglayer::primitive2d
             /// the blur radius of the shadow
             double mfShadowBlur;
 
+            double mfShadowTransparence;
 
     public:
             /// constructor
@@ -62,12 +63,14 @@ namespace drawinglayer::primitive2d
                 const basegfx::B2DHomMatrix& rShadowTransform,
                 const basegfx::BColor& rShadowColor,
                 double fShadowBlur,
+                double fShadowTransparence,
                 const Primitive2DContainer& rChildren);
 
             /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
             const basegfx::BColor& getShadowColor() const { return maShadowColor; }
             double getShadowBlur() const { return mfShadowBlur; }
+            double getTransparence() const { return mfShadowTransparence; }
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 

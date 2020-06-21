@@ -75,6 +75,7 @@ namespace drawinglayer::processor3d
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
                         0,  // shadow3d doesn't have rPrimitive.getShadowBlur() yet.
+                        rPrimitive.getShadowTransparence(),
                         aNewSubList);
 
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))

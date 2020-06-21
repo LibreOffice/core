@@ -1087,6 +1087,8 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
     basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
     aBlurRadiusVector *= maCurrentTransformation;
     const double fBlurRadius = aBlurRadiusVector.getLength();
+    // map transparency from 0.0-1.0 to 0-255
+    const sal_uInt8 nTransparency = rCandidate.getTransparence() * 255;
 
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
     if (aBufferDevice.isVisible())
@@ -1104,7 +1106,8 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
 
         BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+        AlphaMask mask
+            = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, nTransparency);
 
         const basegfx::BColor aShadowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
