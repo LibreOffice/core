@@ -37,7 +37,7 @@ LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper const & rPar
 : ContextHandler2( rParent )
 , mrLineProperties( rLineProperties )
 {
-    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w );
+    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w, 12700 );
     mrLineProperties.moLineCompound = rAttribs.getToken( XML_cmpd );
     mrLineProperties.moLineCap = rAttribs.getToken( XML_cap );
 }
@@ -52,6 +52,8 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
     {
         // LineFillPropertiesGroup
         case A_TOKEN( noFill ):
+            mrLineProperties.moLineWidth = 0;
+            [[fallthrough]];
         case A_TOKEN( solidFill ):
         case A_TOKEN( gradFill ):
         case A_TOKEN( pattFill ):
