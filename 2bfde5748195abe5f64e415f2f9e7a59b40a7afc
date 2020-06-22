@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71959cbc_0e25587c",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-22T22:38:01Z",
+      "side": 1,
+      "message": "No way this is something you need to expose to the outside of GalleryTheme.",
+      "range": {
+        "startLine": 113,
+        "startChar": 3,
+        "endLine": 113,
+        "endChar": 119
+      },
+      "revId": "2bfde5748195abe5f64e415f2f9e7a59b40a7afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f06df0b7_c4d7b383",
+        "filename": "svx/source/gallery2/galmisc.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-22T22:38:01Z",
+      "side": 1,
+      "message": "again --- don\u0027t push GalleryBinaryTheme to the outside! It\u0027s not the purpose to remvoe methods but to move functionality!",
+      "range": {
+        "startLine": 403,
+        "startChar": 37,
+        "endLine": 403,
+        "endChar": 56
+      },
+      "revId": "2bfde5748195abe5f64e415f2f9e7a59b40a7afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5619a1f3_9269ccc8",
+        "filename": "svx/source/unogallery/unogalitem.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-22T22:38:01Z",
+      "side": 1,
+      "message": "same here....",
+      "revId": "2bfde5748195abe5f64e415f2f9e7a59b40a7afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50101376_c7f92d87",
+        "filename": "svx/source/unogallery/unogaltheme.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-22T22:38:01Z",
+      "side": 1,
+      "message": "All this must be inside, not outside of GalleryTheme - this is now worse than before. You want to hide things from the outside of GalleryTheme.",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 219,
+        "endChar": 13
+      },
+      "revId": "2bfde5748195abe5f64e415f2f9e7a59b40a7afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
