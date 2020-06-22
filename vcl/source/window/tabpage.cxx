@@ -66,7 +66,7 @@ TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::TABPAGE )
     , IContext()
 {
-    ImplInit( pParent, nStyle );
+    ImplInit( pParent, nStyle | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
 }
 
 TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)

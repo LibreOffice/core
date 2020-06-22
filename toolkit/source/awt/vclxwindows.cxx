@@ -2731,7 +2731,11 @@ void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_FOCUSONCLICK,
-                     0);
+                    BASEPROPERTY_HSCROLL,
+                    BASEPROPERTY_VSCROLL,
+                    BASEPROPERTY_AUTOHSCROLL,
+                    BASEPROPERTY_AUTOVSCROLL,
+        0);
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 

@@ -46,6 +46,10 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+    ImplRegisterProperty(BASEPROPERTY_HSCROLL);
+    ImplRegisterProperty(BASEPROPERTY_VSCROLL);
+    ImplRegisterProperty(BASEPROPERTY_AUTOHSCROLL);
+    ImplRegisterProperty(BASEPROPERTY_AUTOVSCROLL);
 }
 
 OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
