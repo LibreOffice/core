@@ -1528,6 +1528,11 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
     bool bGroupInterpreted = false;
 
+    // The result would possibly depend on a cell without a valid value, bail out
+    // the entire dependency computation.
+    if (rRecursionHelper.IsAbortingDependencyComputation())
+        return false;
+
     if ((mxGroup && !rRecursionHelper.CheckFGIndependence(mxGroup.get())) || !rRecursionHelper.AreGroupsIndependent())
         return bGroupInterpreted;
 
@@ -1545,6 +1550,10 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
         // Reaching here does not necessarily mean a circular reference, so don't set Err:522 here yet.
         // If there is a genuine circular reference, it will be marked so when all groups
         // in the cycle get out of dependency evaluation mode.
+        // But returning without calculation a new value means other cells depending
+        // on this one would use a possibly invalid value, so ensure the dependency
+        // computation is aborted without resetting the dirty flag of any cell.
+        rRecursionHelper.AbortDependencyComputation();
         return bGroupInterpreted;
     }
 
@@ -1954,6 +1963,12 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             return;
         }
         bRunning = bOldRunning;
+
+        // The result may be invalid or depend on another invalid result, just abort
+        // without updating the cell value. Since the dirty flag will not be reset,
+        // the proper value will be computed later.
+        if(pDocument->GetRecursionHelper().IsAbortingDependencyComputation())
+            return;
 
         // #i102616# For single-sheet saving consider only content changes, not format type,
         // because format type isn't set on loading (might be changed later)
