@@ -2289,6 +2289,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf131707)
     assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122225)
+{
+    SwDoc* pDoc = createDoc("tdf122225.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[8]/text",
+                       "Advanced Diploma");
+    // This failed, if the legend label is not "Advanced Diploma".
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
 {
     SwDoc* pDoc = createDoc("tdf125335.odt");
