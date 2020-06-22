@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b574b739_8025bd98",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-22T22:35:38Z",
+      "side": 1,
+      "message": "this here ... there was no need to remove the ImplWrite method. It\u0027s better if you would still leave it and have this in the method.",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 80,
+        "endChar": 35
+      },
+      "revId": "268a886b8010c69aabcab91edc96b3cffb223d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
