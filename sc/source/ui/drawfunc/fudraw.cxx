@@ -739,4 +739,9 @@ bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
     return bIsSizingOrMoving;
 }
 
+void FuDraw::CloseCommentWindow(){
+    ScViewData& rViewData = rViewShell.GetViewData();
+    rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
