@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a42e7e49_5e72b10a",
+        "filename": "starmath/inc/types.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T20:01:51Z",
+      "side": 1,
+      "message": "looks unrelated",
+      "revId": "8142e488ab40045eb707ea93a1f7eb65dddba75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7e6e43_629976e5",
+        "filename": "starmath/inc/types.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T20:01:51Z",
+      "side": 1,
+      "message": "looks unrelated",
+      "revId": "8142e488ab40045eb707ea93a1f7eb65dddba75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
