@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "28335f55_258c1480",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T11:41:29Z",
+      "side": 1,
+      "message": "looks like there is extra stuff here unrelated to the change",
+      "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "144aabeb_be353718",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T11:41:29Z",
+      "side": 1,
+      "message": "no need to use\n   rText.append(OUString::number(r))\njust use\n  rText.append(r)",
+      "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efdc6a7f_f8eaef71",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T11:41:29Z",
+      "side": 1,
+      "message": "Don\u0027t use all-uppercase for this variable name - that normally indicates some kind of constant",
+      "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bf77369b_ebdbb008",
         "filename": "starmath/source/parse.cxx",
         "patchSetId": 13
@@ -13,6 +64,23 @@
       "writtenOn": "2020-06-22T09:39:09Z",
       "side": 1,
       "message": "Why are this, repeat and setP commented out?",
+      "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a831ec30_bcbcc04d",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-22T11:41:29Z",
+      "side": 1,
+      "message": "spetial -\u003e special",
       "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
