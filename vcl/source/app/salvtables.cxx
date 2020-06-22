@@ -2234,6 +2234,8 @@ void SalInstanceNotebook::insert_page(const OString& rIdent, const OUString& rLa
     sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
     sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
     sal_uInt16 nNewPageId = nLastPageId + 1;
+    while (m_xNotebook->GetPagePos(nNewPageId) != TAB_PAGE_NOTFOUND)
+        ++nNewPageId;
     m_xNotebook->InsertPage(nNewPageId, rLabel, nPos == -1 ? TAB_APPEND : nPos);
     VclPtrInstance<TabPage> xPage(m_xNotebook);
     VclPtrInstance<VclGrid> xGrid(xPage);
@@ -2244,6 +2246,13 @@ void SalInstanceNotebook::insert_page(const OString& rIdent, const OUString& rLa
     m_xNotebook->SetTabPage(nNewPageId, xPage);
     m_xNotebook->SetPageName(nNewPageId, rIdent);
     m_aAddedPages.try_emplace(rIdent, xPage, xGrid);
+
+    if (nPos != -1)
+    {
+        unsigned int nPageIndex = static_cast<unsigned int>(nPos);
+        if (nPageIndex < m_aPages.size())
+            m_aPages.insert(m_aPages.begin() + nPageIndex, nullptr);
+    }
 }
 
 int SalInstanceNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }
@@ -2360,6 +2369,13 @@ public:
         xGrid->set_hexpand(true);
         xGrid->set_vexpand(true);
         m_xNotebook->InsertPage(rIdent, rLabel, Image(), "", xGrid, nPos);
+
+        if (nPos != -1)
+        {
+            unsigned int nPageIndex = static_cast<unsigned int>(nPos);
+            if (nPageIndex < m_aPages.size())
+                m_aPages.insert(m_aPages.begin() + nPageIndex, nullptr);
+        }
     }
 
     virtual int get_n_pages() const override { return m_xNotebook->GetPageCount(); }
