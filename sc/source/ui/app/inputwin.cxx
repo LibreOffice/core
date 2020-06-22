@@ -937,7 +937,8 @@ void ScInputBarGroup::Resize()
     long nLeft  = GetPosPixel().X();
 
     Size aSize  = GetSizePixel();
-    aSize.setWidth( std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0)) );
+    //(-10) to allow margin between sidebar and formulabar
+    aSize.setWidth( std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0)) - 10);
 
     maScrollbar->SetPosPixel(Point( aSize.Width() - maButton->GetSizePixel().Width(), maButton->GetSizePixel().Height() ) );
 
