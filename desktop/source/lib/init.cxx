@@ -4769,7 +4769,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
         {
             uno::Reference<beans::XPropertySet> xRedline(xRedlines->nextElement(), uno::UNO_QUERY);
             auto redlineNode = aJson.startNode("");
-            aJson.put("index", nIndex);
+            aJson.put("index", static_cast<sal_Int32>(nIndex));
 
             OUString sAuthor;
             xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;

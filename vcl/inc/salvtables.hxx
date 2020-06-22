@@ -377,8 +377,7 @@ public:
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
 
-    virtual void
-    connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) override;
+    virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) override;
 
     virtual void set_stack_background() override;
 

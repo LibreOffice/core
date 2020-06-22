@@ -52,7 +52,18 @@ public:
     void put(const char* pPropName, const OUString& rPropValue);
     void put(const char* pPropName, const OString& rPropValue);
     void put(const char* pPropName, const char* pPropVal);
-    void put(const char*, int);
+    void put(const char* pPropName, const std::string& rPropValue)
+    {
+        put(pPropName, rPropValue.data());
+    }
+
+    void put(const char* pPropName, sal_uInt16 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_Int16 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_Int32 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_uInt32 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
+    void put(const char* pPropName, sal_Int64);
+    void put(const char* pPropName, bool);
+    void put(const char* pPropName, double);
 
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(const rtl::OStringBuffer&);
@@ -61,6 +72,10 @@ public:
      * after this no more document modifications may be written. */
     char* extractData();
     OString extractAsOString();
+    std::string extractAsStdString();
+
+    /** returns true if the current JSON data matches the string */
+    bool isDataEquals(const std::string&);
 
 private:
     void endNode();

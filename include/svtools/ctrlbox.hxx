@@ -373,7 +373,7 @@ public:
     void grab_focus() { m_xComboBox->grab_focus(); }
     bool has_focus() const { return m_xComboBox->has_focus(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
-    void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
+    void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
     void set_entry_width_chars(int nWidth) { m_xComboBox->set_entry_width_chars(nWidth); }
     void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
     int get_max_mru_count() { return m_xComboBox->get_max_mru_count(); }
@@ -486,7 +486,7 @@ public:
     bool has_focus() const { return m_xComboBox->has_focus(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
     void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }
-    void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
+    void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
 
 private:
     FontSizeBox(const FontSizeBox&) = delete;

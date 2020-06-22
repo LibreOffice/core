@@ -34,6 +34,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/toolboxcontroller.hxx>
+#include <tools/json_writer.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -41,7 +42,6 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 using namespace ::com::sun::star;
 
@@ -125,7 +125,7 @@ protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
-    DECL_LINK(DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
 class SvxFontSizeBox_Impl final : public InterimItemWindow
@@ -337,33 +337,29 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, rTree, void)
+IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
-    boost::property_tree::ptree aEntries;
-
-    for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", m_xWidget->get_text(i));
-        aEntries.push_back(std::make_pair("", aEntry));
+        auto entriesNode = rJsonWriter.startNode("entries");
+        for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", m_xWidget->get_text(i));
+        }
     }
-
-    rTree.add_child("entries", aEntries);
-
-    boost::property_tree::ptree aSelected;
 
     int nActive = m_xWidget->get_active();
-    if (nActive != -1)
+    rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nActive == -1 ? 0 : 1));
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", nActive);
-        aSelected.push_back(std::make_pair("", aEntry));
+        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        if (nActive != -1)
+        {
+            auto node = rJsonWriter.startNode("");
+            rJsonWriter.put("", static_cast<sal_Int32>(nActive));
+        }
     }
 
-    rTree.put("selectedCount", nActive == -1 ? 0 : 1);
-    rTree.add_child("selectedEntries", aSelected);
-
-    rTree.put("command", ".uno:FontHeight");
+    rJsonWriter.put("command", ".uno:FontHeight");
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )

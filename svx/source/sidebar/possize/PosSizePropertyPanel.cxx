@@ -853,14 +853,14 @@ void PosSizePropertyPanel::executeSize()
     }
 }
 
-boost::property_tree::ptree PosSizePropertyPanel::DumpAsPropertyTree()
+void PosSizePropertyPanel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     if (meDlgUnit != GetCurrentUnit(SfxItemState::DEFAULT, nullptr))
     {
         mpBindings->Update( SID_ATTR_METRIC );
     }
 
-    return PanelLayout::DumpAsPropertyTree();
+    PanelLayout::DumpAsPropertyTree(rJsonWriter);
 }
 
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )

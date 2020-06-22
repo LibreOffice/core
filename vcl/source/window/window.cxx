@@ -68,6 +68,7 @@
 #include <unotools/configmgr.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 #include <cassert>
@@ -1768,7 +1769,7 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
 
-void Window::SetDumpAsPropertyTreeHdl(const Link<boost::property_tree::ptree&, void>& rLink)
+void Window::SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink)
 {
     if (mpWindowImpl) // may be called after dispose
     {
@@ -3380,47 +3381,34 @@ const char* windowTypeName(WindowType nWindowType)
 
 }
 
-boost::property_tree::ptree Window::DumpAsPropertyTree()
+void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    // This is for the code in sc/source/ui/sidebar/AlignmentPropertyPanel.cxx.
-    // Also see commit f27c6320e8496d690b5d341d3718430709263a1c
-    // "lok: remove complex rotation / alignment settings"
-    if (get_id() == "textorientbox") {
-        return boost::property_tree::ptree();
-    }
+    rJsonWriter.put("id", get_id());  // TODO could be missing - sort out
+    rJsonWriter.put("type", windowTypeName(GetType()));
+    rJsonWriter.put("text", GetText());
+    rJsonWriter.put("enabled", IsEnabled());
 
-    boost::property_tree::ptree aTree;
-    aTree.put("id", get_id());  // TODO could be missing - sort out
-    aTree.put("type", windowTypeName(GetType()));
-    aTree.put("text", GetText());
-    aTree.put("enabled", IsEnabled());
-
-    boost::property_tree::ptree aChildren;
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
+        auto childrenNode = rJsonWriter.startNode("children");
         while (pChild)
         {
             if (pChild->IsVisible()) {
-                boost::property_tree::ptree aSubTree = pChild->DumpAsPropertyTree();
-                int nLeft = pChild->get_grid_left_attach();
-                int nTop = pChild->get_grid_top_attach();
+                auto childNode = rJsonWriter.startNode("");
+                pChild->DumpAsPropertyTree(rJsonWriter);
+                sal_Int32 nLeft = pChild->get_grid_left_attach();
+                sal_Int32 nTop = pChild->get_grid_top_attach();
                 if (nLeft != -1 && nTop != -1)
                 {
-                    OUString sLeft = OUString::number(nLeft);
-                    OUString sTop = OUString::number(nTop);
-                    aSubTree.put("left", sLeft);
-                    aSubTree.put("top", sTop);
+                    rJsonWriter.put("left", nLeft);
+                    rJsonWriter.put("top", nTop);
                 }
-                aChildren.push_back(std::make_pair("", aSubTree));
             }
             pChild = pChild->mpWindowImpl->mpNext;
         }
-        aTree.add_child("children", aChildren);
     }
 
-    mpWindowImpl->maDumpAsPropertyTreeHdl.Call(aTree);
-
-    return aTree;
+    mpWindowImpl->maDumpAsPropertyTreeHdl.Call(rJsonWriter);
 }
 
 void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
