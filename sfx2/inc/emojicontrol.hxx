@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_EMOJICONTROL_HXX
-#define INCLUDED_SFX2_INC_EMOJICONTROL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/tabctrl.hxx>
 #include <svtools/toolbarmenu.hxx>
-
-#define TAB_FONT_SIZE 15
+#include <vcl/customweld.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 
@@ -24,28 +21,34 @@ class EmojiView;
 class ThumbnailViewItem;
 enum class FILTER_CATEGORY;
 
-class SfxEmojiControl final : public svtools::ToolbarPopup
+class SfxEmojiControl final : public WeldToolbarPopup
+
 {
 public:
-    explicit SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent);
-
+    explicit SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent);
     virtual ~SfxEmojiControl() override;
 
-    virtual void dispose() override;
+    virtual void GrabFocus() override;
 
 private:
-    void ConvertLabelToUnicode(sal_uInt16 nPageId);
+    static void ConvertLabelToUnicode(weld::ToggleButton& rBtn);
 
-    /// Return filter according to the currently selected tab page.
-    FILTER_CATEGORY getCurrentFilter() const;
+    FILTER_CATEGORY getFilter(const weld::Button& rBtn) const;
 
-    DECL_LINK(ActivatePageHdl, TabControl*, void);
+    DECL_LINK(ActivatePageHdl, weld::Button&, void);
     DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
 
-    VclPtr<TabControl>   mpTabControl;
-    VclPtr<EmojiView>    mpEmojiView;
+    std::unique_ptr<weld::ToggleButton> mxPeopleBtn;
+    std::unique_ptr<weld::ToggleButton> mxNatureBtn;
+    std::unique_ptr<weld::ToggleButton> mxFoodBtn;
+    std::unique_ptr<weld::ToggleButton> mxActivityBtn;
+    std::unique_ptr<weld::ToggleButton> mxTravelBtn;
+    std::unique_ptr<weld::ToggleButton> mxObjectsBtn;
+    std::unique_ptr<weld::ToggleButton> mxSymbolsBtn;
+    std::unique_ptr<weld::ToggleButton> mxFlagsBtn;
+    std::unique_ptr<weld::ToggleButton> mxUnicode9Btn;
+    std::unique_ptr<EmojiView> mxEmojiView;
+    std::unique_ptr<weld::CustomWeld> mxEmojiWeld;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

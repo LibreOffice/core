@@ -15,6 +15,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
@@ -22,7 +23,6 @@
 #include <string>
 #include <fstream>
 
-#include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;
 
 bool ViewFilter_Category::isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory)
@@ -60,8 +60,8 @@ bool ViewFilter_Category::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
-EmojiView::EmojiView (vcl::Window *pParent)
-    : ThumbnailView(pParent, WB_TABSTOP | WB_VSCROLL)
+EmojiView::EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow)
+    : SfxThumbnailView(std::move(xWindow), nullptr)
 {
     // locate json data file
     OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
@@ -75,19 +75,28 @@ EmojiView::EmojiView (vcl::Window *pParent)
     msJSONData = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     if(msJSONData.empty())
         return;
-
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
-    vcl::Font aFont = GetControlFont();
-    aFont.SetFamilyName( sFontName );
-    SetControlFont(aFont);
 }
 
-VCL_BUILDER_FACTORY(EmojiView)
+void EmojiView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    SfxThumbnailView::SetDrawingArea(pDrawingArea);
+
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+    {
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
+        vcl::Font aFont = pDrawingArea->get_font();
+        aFont.SetFamilyName(sFontName);
+        OutputDevice& rDevice = pDrawingArea->get_ref_device();
+        pDefaultDevice->SetPointFont(rDevice, aFont);
+    }
+
+    mpItemAttrs->aFontSize.setX(ITEM_MAX_WIDTH - 2*ITEM_PADDING);
+    mpItemAttrs->aFontSize.setY(ITEM_MAX_HEIGHT - 2*ITEM_PADDING);
+}
 
 EmojiView::~EmojiView()
 {
-    disposeOnce();
 }
 
 void EmojiView::Populate()
@@ -155,14 +164,7 @@ void EmojiView::Populate()
     }
 }
 
-void EmojiView::ApplySettings(vcl::RenderContext& rRenderContext)
-{
-    ThumbnailView::ApplySettings(rRenderContext);
-    mpItemAttrs->aFontSize.setX(ITEM_MAX_WIDTH - 2*ITEM_PADDING);
-    mpItemAttrs->aFontSize.setY(ITEM_MAX_HEIGHT - 2*ITEM_PADDING);
-}
-
-void EmojiView::MouseButtonDown( const MouseEvent& rMEvt )
+bool EmojiView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
 
@@ -174,9 +176,11 @@ void EmojiView::MouseButtonDown( const MouseEvent& rMEvt )
         if(pItem)
             maInsertEmojiHdl.Call(pItem);
     }
+
+    return true;
 }
 
-void EmojiView::KeyInput( const KeyEvent& rKEvt )
+bool EmojiView::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
@@ -192,10 +196,10 @@ void EmojiView::KeyInput( const KeyEvent& rKEvt )
 
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
-        return;
+        return true;
     }
 
-    ThumbnailView::KeyInput(rKEvt);
+    return SfxThumbnailView::KeyInput(rKEvt);
 }
 
 void EmojiView::setInsertEmojiHdl(const Link<ThumbnailViewItem*, void> &rLink)
@@ -211,7 +215,7 @@ void EmojiView::AppendItem(const OUString &rTitle, const OUString &rCategory, co
     pItem->setCategory(rCategory);
     pItem->setHelpText(rName);
 
-    ThumbnailView::AppendItem(std::move(pItem));
+    SfxThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
 }

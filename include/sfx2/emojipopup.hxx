@@ -30,6 +30,7 @@ public:
     virtual ~EmojiPopup() override;
 
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
