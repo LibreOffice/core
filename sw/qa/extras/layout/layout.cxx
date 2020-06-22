@@ -2309,6 +2309,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf114163)
     // This failed, if the legend first label is not "Data3". The legend position is right.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122225)
+{
+    SwDoc* pDoc = createDoc("tdf122225.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[8]/text",
+                       "Advanced Diploma");
+    // This failed, if the legend label is not "Advanced Diploma".
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
 {
     SwDoc* pDoc = createDoc("tdf125335.odt");
