@@ -523,7 +523,6 @@ constructor_map = {
 custom_widgets = [
     'ContextVBox',
     'DropdownBox',
-    'EmojiView',
     'ManagedMenuButton',
     'PriorityHBox',
     'PriorityMergedHBox',

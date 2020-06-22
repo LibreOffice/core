@@ -5964,7 +5964,7 @@ private:
     {
         int nOverFlowPages = gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1;
         int nMainPages = gtk_notebook_get_n_pages(m_pNotebook);
-        int nPageIndex = 0;
+        size_t nPageIndex = 0;
         if (!m_bOverFlowBoxIsStart)
             nPageIndex += nMainPages;
 
@@ -5976,8 +5976,11 @@ private:
             OUString sLabel(get_tab_label_text(m_pOverFlowNotebook, 0));
             remove_page(m_pOverFlowNotebook, sIdent);
 
-            GtkWidget* pPage = m_aPages[nPageIndex]->getWidget();
-            insert_page(m_pNotebook, sIdent, sLabel, pPage, -1);
+            if (nPageIndex < m_aPages.size())
+            {
+                GtkWidget* pPage = m_aPages[nPageIndex]->getWidget();
+                insert_page(m_pNotebook, sIdent, sLabel, pPage, -1);
+            }
 
             GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook,
                                                                gtk_notebook_get_nth_page(m_pNotebook, i));

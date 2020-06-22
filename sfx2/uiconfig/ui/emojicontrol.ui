@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkWindow" id="emojictrl">
+  <object class="GtkPopover" id="emojictrl">
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="container">
         <property name="width_request">350</property>
         <property name="height_request">200</property>
         <property name="visible">True</property>
@@ -22,19 +17,34 @@
           <object class="GtkNotebook" id="tabcontrol">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="scrollable">True</property>
-            <property name="enable_popup">True</property>
             <child>
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="sfxlo-EmojiView" id="emoji_view">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin">0</property>
+                  <object class="GtkScrolledWindow" id="people_emoji_win">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="people_emoji_view">
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                            <property name="no_show_all">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -49,7 +59,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
-                <property name="label" translatable="no">1f603</property>
+                <property name="label">1f603</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -60,7 +70,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="nature_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -72,7 +92,7 @@
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f43c</property>
+                <property name="label">1f43c</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -84,7 +104,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="food_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -96,7 +126,7 @@
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f34f</property>
+                <property name="label">1f34f</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -108,7 +138,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="activity_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -119,7 +159,7 @@
               <object class="GtkLabel" id="activity">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f3c8</property>
+                <property name="label">1f3c8</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -131,7 +171,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="travel_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -142,7 +192,7 @@
               <object class="GtkLabel" id="travel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f697</property>
+                <property name="label">1f697</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -154,7 +204,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="objects_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -165,7 +225,7 @@
               <object class="GtkLabel" id="objects">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f4f1</property>
+                <property name="label">1f4f1</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -177,7 +237,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="symbols_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -188,7 +258,7 @@
               <object class="GtkLabel" id="symbols">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f499</property>
+                <property name="label">1f499</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -200,7 +270,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="flags_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -211,7 +291,7 @@
               <object class="GtkLabel" id="flags">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f1ee-1f1f3</property>
+                <property name="label">1f1ee-1f1f3</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -223,7 +303,17 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkIconView" id="unicode_emoji_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -234,7 +324,7 @@
               <object class="GtkLabel" id="unicode9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f939</property>
+                <property name="label">1f939</property>
               </object>
               <packing>
                 <property name="position">8</property>

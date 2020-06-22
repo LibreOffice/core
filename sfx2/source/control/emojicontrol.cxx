@@ -39,61 +39,30 @@ const char FILTER_UNICODE9[]  = "unicode9";
 
 using namespace com::sun::star;
 
-SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "emojictrl", "sfx/ui/emojicontrol.ui")
+SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/emojicontrol.ui", "emojictrl")
+    , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))
+    , mxPeopleView(new EmojiView(m_xBuilder->weld_scrolled_window("people_emoji_win")))
+    , mxPeopleWeld(new weld::CustomWeld(*m_xBuilder, "people_emoji_view", *mxPeopleView))
 {
-    get(mpTabControl, "tabcontrol");
-    get(mpEmojiView, "emoji_view");
+    ConvertLabelToUnicode(FILTER_PEOPLE);
+    ConvertLabelToUnicode(FILTER_NATURE);
+    ConvertLabelToUnicode(FILTER_FOOD);
+    ConvertLabelToUnicode(FILTER_ACTIVITY);
+    ConvertLabelToUnicode(FILTER_TRAVEL);
+    ConvertLabelToUnicode(FILTER_OBJECTS);
+    ConvertLabelToUnicode(FILTER_SYMBOLS);
+    ConvertLabelToUnicode(FILTER_FLAGS);
+    ConvertLabelToUnicode(FILTER_UNICODE9);
 
-    sal_uInt16 nCurPageId = mpTabControl->GetPageId(FILTER_PEOPLE);
-    TabPage *pTabPage = mpTabControl->GetTabPage(nCurPageId);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_NATURE);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_FOOD);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_ACTIVITY);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_TRAVEL);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_OBJECTS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_SYMBOLS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_FLAGS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_UNICODE9);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-
-    vcl::Font rFont = mpTabControl->GetControlFont();
+#if 0
+    vcl::Font rFont = mxTabControl->GetControlFont();
     rFont.SetFontHeight(TAB_FONT_SIZE);
-    mpTabControl->SetControlFont(rFont);
-    pTabPage->Show();
+    mxTabControl->SetControlFont(rFont);
+#endif
 
+#if 0
+    pTabPage->Show();
     mpEmojiView->SetStyle(mpEmojiView->GetStyle() | WB_VSCROLL);
     mpEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
     mpEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
@@ -104,62 +73,60 @@ SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent)
     mpEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
     mpEmojiView->Show();
     mpEmojiView->ShowTooltips(true);
+#endif
 
-    mpTabControl->SetActivatePageHdl(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxTabControl->connect_enter_page(LINK(this, SfxEmojiControl, ActivatePageHdl));
+}
+
+void SfxEmojiControl::GrabFocus()
+{
+    mxTabControl->grab_focus();
 }
 
 SfxEmojiControl::~SfxEmojiControl()
 {
-    disposeOnce();
 }
 
-void SfxEmojiControl::dispose()
+void SfxEmojiControl::ConvertLabelToUnicode(const OString& rPageId)
 {
-    mpTabControl.clear();
-    mpEmojiView.clear();
-
-    ToolbarPopup::dispose();
-}
-
-void SfxEmojiControl::ConvertLabelToUnicode(sal_uInt16 nPageId)
-{
-    OUStringBuffer sHexText = "";
-    OUString sLabel = mpTabControl->GetPageText(nPageId);
+    OUStringBuffer sHexText;
+    OUString sLabel = mxTabControl->get_tab_label_text(rPageId);
     sHexText.appendUtf32(sLabel.toUInt32(16));
-    mpTabControl->SetPageText(nPageId, sHexText.toString());
+    mxTabControl->set_tab_label_text(rPageId, sHexText.toString());
 }
 
 FILTER_CATEGORY SfxEmojiControl::getCurrentFilter() const
 {
-    const sal_uInt16 nCurPageId = mpTabControl->GetCurPageId();
+    const OString sCurPageId = mxTabControl->get_current_page_ident();
 
-    if (nCurPageId == mpTabControl->GetPageId(FILTER_PEOPLE))
+    if (sCurPageId == FILTER_PEOPLE)
         return FILTER_CATEGORY::PEOPLE;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_NATURE))
+    else if (sCurPageId == FILTER_NATURE)
         return FILTER_CATEGORY::NATURE;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_FOOD))
+    else if (sCurPageId == FILTER_FOOD)
         return FILTER_CATEGORY::FOOD;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_ACTIVITY))
+    else if (sCurPageId == FILTER_ACTIVITY)
         return FILTER_CATEGORY::ACTIVITY;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_TRAVEL))
+    else if (sCurPageId == FILTER_TRAVEL)
         return FILTER_CATEGORY::TRAVEL;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_OBJECTS))
+    else if (sCurPageId == FILTER_OBJECTS)
         return FILTER_CATEGORY::OBJECTS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_SYMBOLS))
+    else if (sCurPageId == FILTER_SYMBOLS)
         return FILTER_CATEGORY::SYMBOLS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_FLAGS))
+    else if (sCurPageId == FILTER_FLAGS)
         return FILTER_CATEGORY::FLAGS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_UNICODE9))
+    else if (sCurPageId == FILTER_UNICODE9)
         return FILTER_CATEGORY::UNICODE9;
 
     return FILTER_CATEGORY::PEOPLE;
 }
 
-IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
+IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, const OString&, void)
 {
-    mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
+//    mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
 }
 
+#if 0
 IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
     const OUString& sHexText = pItem->getTitle();
@@ -176,5 +143,6 @@ IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

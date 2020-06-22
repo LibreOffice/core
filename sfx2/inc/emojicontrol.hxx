@@ -7,13 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_EMOJICONTROL_HXX
-#define INCLUDED_SFX2_INC_EMOJICONTROL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/tabctrl.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <vcl/customweld.hxx>
 
 #define TAB_FONT_SIZE 15
 
@@ -21,31 +20,30 @@ namespace com::sun::star::frame { class XFrame; }
 
 class EmojiPopup;
 class EmojiView;
-class ThumbnailViewItem;
 enum class FILTER_CATEGORY;
 
-class SfxEmojiControl final : public svtools::ToolbarPopup
+class SfxEmojiControl final : public WeldToolbarPopup
+
 {
 public:
-    explicit SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent);
-
+    explicit SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent);
     virtual ~SfxEmojiControl() override;
 
-    virtual void dispose() override;
+    virtual void GrabFocus() override;
 
 private:
-    void ConvertLabelToUnicode(sal_uInt16 nPageId);
+    void ConvertLabelToUnicode(const OString& rPageId);
 
     /// Return filter according to the currently selected tab page.
     FILTER_CATEGORY getCurrentFilter() const;
 
-    DECL_LINK(ActivatePageHdl, TabControl*, void);
-    DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
+    DECL_LINK(ActivatePageHdl, const OString&, void);
+//TODO    DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
 
-    VclPtr<TabControl>   mpTabControl;
-    VclPtr<EmojiView>    mpEmojiView;
+    std::unique_ptr<weld::Notebook> mxTabControl;
+    std::unique_ptr<EmojiView> mxPeopleView;
+    std::unique_ptr<weld::CustomWeld> mxPeopleWeld;
+//    VclPtr<EmojiView>    mpEmojiView;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
