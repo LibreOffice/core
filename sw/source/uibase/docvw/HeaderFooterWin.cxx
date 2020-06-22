@@ -44,6 +44,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>

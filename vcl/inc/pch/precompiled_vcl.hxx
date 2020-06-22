@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-06-19 17:40:03 using:
+ Generated on 2020-06-22 09:28:05 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -262,6 +262,7 @@
 #include <saltimer.hxx>
 #include <salusereventlist.hxx>
 #include <salvd.hxx>
+#include <salvtables.hxx>
 #include <svdata.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -283,7 +284,6 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -317,6 +317,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>

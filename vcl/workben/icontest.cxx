@@ -34,7 +34,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/image.hxx>
