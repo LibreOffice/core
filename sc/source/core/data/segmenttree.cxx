@@ -421,7 +421,7 @@ OString ScFlatBoolRowSegments::dumpAsString()
     while (getRangeData(nRow, aRange))
     {
         if (!nRow)
-            aSegment = OStringLiteral(aRange.mbValue ? "1" : "0") + ":";
+            aSegment = (aRange.mbValue ? OStringLiteral("1") : OStringLiteral("0")) + OStringLiteral(":");
         else
             aSegment.clear();
 
@@ -488,7 +488,7 @@ OString ScFlatBoolColSegments::dumpAsString()
     while (getRangeData(nCol, aRange))
     {
         if (!nCol)
-            aSegment = OStringLiteral(aRange.mbValue ? "1" : "0") + ":";
+            aSegment = (aRange.mbValue ? OStringLiteral("1") : OStringLiteral("0")) + OStringLiteral(":");
         else
             aSegment.clear();
 
