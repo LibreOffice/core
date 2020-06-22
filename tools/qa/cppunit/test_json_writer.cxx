@@ -12,6 +12,7 @@
 #include <cstdlib>
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <o3tl/deleter.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
@@ -38,11 +39,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-struct Free
-{
-    void operator()(void* p) const { std::free(p); }
-};
-
 void JsonWriterTest::test1()
 {
     tools::JsonWriter aJson;
@@ -55,7 +51,7 @@ void JsonWriterTest::test1()
         aJson.put("int", 12);
     }
 
-    std::unique_ptr<char, Free> result(aJson.extractData());
+    std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
 
     CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", \"ostring\": \"val2\", "
                                      "\"charptr\": \"val3\", \"int\": 12}}"),
@@ -81,7 +77,7 @@ void JsonWriterTest::test2()
         }
     }
 
-    std::unique_ptr<char, Free> result(aJson.extractData());
+    std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
 
     CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"field1\": \"val1\", \"field2\": \"val2\", "
                                      "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
