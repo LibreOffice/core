@@ -6105,6 +6105,13 @@ private:
         gtk_widget_show(pChild);
         gtk_widget_show(pTabWidget);
 
+        if (nPos != -1)
+        {
+            unsigned int nPageIndex = static_cast<unsigned int>(nPos);
+            if (nPageIndex < m_aPages.size())
+                m_aPages.insert(m_aPages.begin() + nPageIndex, nullptr);
+        }
+
         enable_notify_events();
     }
 
