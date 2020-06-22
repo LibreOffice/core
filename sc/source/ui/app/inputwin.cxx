@@ -919,7 +919,9 @@ void ScInputBarGroup::Resize()
         return;
     }
     Size aSize = GetSizePixel();
-    aSize.setWidth(pParent->GetSizePixel().Width() - GetPosPixel().X() - LEFT_OFFSET);
+    //(-10) to allow margin between sidebar and formulabar
+    long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
+    aSize.setWidth(pParent->GetSizePixel().Width() - GetPosPixel().X() - LEFT_OFFSET - margin);
     aSize.setHeight(maTextWndGroup->GetPixelHeightForLines(maTextWndGroup->GetNumLines()));
     SetSizePixel(aSize);
 
