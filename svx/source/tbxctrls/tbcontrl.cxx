@@ -98,9 +98,9 @@
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 #include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -194,7 +194,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
-    DECL_LINK(DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
     DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
     DECL_LINK(CustomGetSizeHdl, OutputDevice&, Size);
 
@@ -366,7 +366,7 @@ public:
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
-    DECL_LINK(DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
 
 class SvxFontNameBox_Impl final : public InterimItemWindow
@@ -1342,33 +1342,30 @@ Color SvxStyleBox_Base::TestColorsVisible(const Color &FontCol, const Color &Bac
     return retCol;
 }
 
-IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, rTree, void)
+IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
-    boost::property_tree::ptree aEntries;
-
-    for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", m_xWidget->get_text(i));
-        aEntries.push_back(std::make_pair("", aEntry));
+        auto entriesNode = rJsonWriter.startNode("entries");
+        for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", m_xWidget->get_text(i));
+        }
     }
-
-    rTree.add_child("entries", aEntries);
-
-    boost::property_tree::ptree aSelected;
 
     int nActive = m_xWidget->get_active();
+    rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nActive == -1 ? 0 : 1));
 
-    if (nActive != -1)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", nActive);
-        aSelected.push_back(std::make_pair("", aEntry));
+        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        if (nActive != -1)
+        {
+            auto node = rJsonWriter.startNode("");
+            rJsonWriter.put("", static_cast<sal_Int32>(nActive));
+        }
     }
 
-    rTree.put("selectedCount", nActive == -1 ? 0 : 1);
-    rTree.add_child("selectedEntries", aSelected);
-    rTree.put("command", ".uno:StyleApply");
+    rJsonWriter.put("command", ".uno:StyleApply");
 }
 
 static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base* pBox)
@@ -1711,32 +1708,30 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
     }
 }
 
-IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, rTree, void)
+IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
-    boost::property_tree::ptree aEntries;
-
-    for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", m_xWidget->get_text(i));
-        aEntries.push_back(std::make_pair("", aEntry));
+        auto entriesNode = rJsonWriter.startNode("entries");
+        for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", m_xWidget->get_text(i));
+        }
     }
-
-    rTree.add_child("entries", aEntries);
-
-    boost::property_tree::ptree aSelected;
 
     int nSelectedEntry = m_xWidget->get_active();
-    if (nSelectedEntry != -1)
+    rJsonWriter.put("selectedCount", static_cast<sal_Int32>(nSelectedEntry == -1 ? 0 : 1));
+
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", m_xWidget->get_text(nSelectedEntry));
-        aSelected.push_back(std::make_pair("", aEntry));
+        auto selectedNode = rJsonWriter.startNode("selectedEntries");
+        if (nSelectedEntry != -1)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", m_xWidget->get_text(nSelectedEntry));
+        }
     }
 
-    rTree.put("selectedCount", nSelectedEntry == -1 ? 0 : 1);
-    rTree.add_child("selectedEntries", aSelected);
-    rTree.put("command", ".uno:CharFontName");
+    rJsonWriter.put("command", ".uno:CharFontName");
 }
 
 ColorWindow::ColorWindow(const OUString& rCommand,
