@@ -688,6 +688,15 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
+            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA)
+            {
+                // count required height: print area top = top margin + header
+                SwRect aHeaderRect;
+                const SwHeaderFrame* pHeaderFrame = GetPageFrame()->GetHeaderFrame();
+                if (pHeaderFrame)
+                    aHeaderRect = pHeaderFrame->GetPaintArea();
+                nHeight = GetPageFrame()->GetTopMargin() + aHeaderRect.Height();
+            }
             else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
             {
                 // count required height: print area bottom = bottom margin + footer
