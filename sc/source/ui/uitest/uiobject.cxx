@@ -14,14 +14,18 @@
 #include <gridwin.hxx>
 
 #include <viewdata.hxx>
+#include <viewfunc.hxx>
 #include <dbfunc.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
 #include <navipi.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include <appoptio.hxx>
 #include <scmod.hxx>
+#include <fudraw.hxx>
+#include <postit.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -75,6 +79,13 @@ StringMap ScGridWinUIObject::get_state()
 
     aMap["MarkedArea"] = aMarkedAreaString;
 
+    ScDocument* pDoc = mxGridWindow->getViewData()->GetDocument();
+    ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
+    if ( pDoc->HasNote( aPos ) )
+    {
+        aMap["CurrentCellCommentText"] = pDoc->GetNote( aPos )->GetText();
+    }
+
     ScAppOptions aOpt = SC_MOD()->GetAppOptions();
     aMap["Zoom"] = OUString::number( aOpt.GetZoom() );
     return aMap;
@@ -102,6 +113,14 @@ ScTabViewShell* ScGridWinUIObject::getViewShell()
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     return pViewShell;
+}
+
+ScViewFunc* ScGridWinUIObject::getViewFunc()
+{
+    ScViewData* pViewData = mxGridWindow->getViewData();
+    ScViewFunc* pViewFunc = pViewData->GetView();
+
+    return pViewFunc;
 }
 
 void ScGridWinUIObject::execute(const OUString& rAction,
@@ -229,6 +248,28 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SCROW nRow = itrRow->second.toUInt32();
             SCCOL nCol = itrCol->second.toUInt32();
             mxGridWindow->LaunchDataSelectMenu(nCol, nRow);
+        }
+    }
+    else if (rAction == "COMMENT")
+    {
+        if ( rParameters.find("OPEN") != rParameters.end() )
+        {
+            ScViewFunc* pViewFunc = getViewFunc();
+            pViewFunc->EditNote();
+        }
+        else if ( rParameters.find("CLOSE") != rParameters.end() )
+        {
+            FuDraw* pDraw = dynamic_cast<FuDraw*> (getViewFunc()->GetDrawFuncPtr());
+            ScViewData* pViewData = mxGridWindow->getViewData();
+            pViewData->GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
+        }
+        else if ( rParameters.find("SETTEXT") != rParameters.end() )
+        {
+            auto itr = rParameters.find("SETTEXT");
+            const OUString rStr = itr->second;
+            ScDocument* pDoc = mxGridWindow->getViewData()->GetDocument();
+            ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
+            pDoc->GetOrCreateNote( aPos )->SetText( aPos , rStr );
         }
     }
     else if (rAction == "SIDEBAR")
