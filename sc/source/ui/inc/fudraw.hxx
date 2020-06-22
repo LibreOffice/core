@@ -47,6 +47,8 @@ class FuDraw : public FuPoor
     bool IsEditingANote() const;
     bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 
+    void CloseCommentWindow();
+
  private:
     void    DoModifiers(const MouseEvent& rMEvt);
     void    ResetModifiers();
