@@ -19,7 +19,7 @@
 
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
