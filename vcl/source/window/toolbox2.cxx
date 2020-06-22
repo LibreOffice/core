@@ -39,6 +39,7 @@
 #include <toolbox.h>
 
 #include <unotools/confignode.hxx>
+#include <tools/json_writer.hxx>
 
 using namespace vcl;
 
@@ -1745,34 +1746,25 @@ void ToolBox::WillUsePopupMode( bool b )
     mpData->mbWillUsePopupMode = b;
 }
 
-boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
+void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(DockingWindow::DumpAsPropertyTree());
-    boost::property_tree::ptree aChildren;
+    DockingWindow::DumpAsPropertyTree(rJsonWriter);
 
-    boost::property_tree::ptree::const_assoc_iterator found = aTree.find("children");
-    if (found == aTree.not_found())
+    auto childrenNode = rJsonWriter.startNode("children");
+    for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
     {
-        for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
+        ToolBoxItemType type = GetItemType(i);
+        if (type == ToolBoxItemType::BUTTON)
         {
-            ToolBoxItemType type = GetItemType(i);
-            if (type == ToolBoxItemType::BUTTON)
-            {
-                boost::property_tree::ptree aEntry;
-                int nId = GetItemId(i);
-                if (!IsItemVisible(nId))
-                    continue;
-                aEntry.put("type", "toolitem");
-                aEntry.put("text", GetItemText(nId));
-                aEntry.put("command", GetItemCommand(nId));
-                aChildren.push_back(std::make_pair("", aEntry));
-            }
+            auto childNode = rJsonWriter.startNode("");
+            int nId = GetItemId(i);
+            if (!IsItemVisible(nId))
+                continue;
+            rJsonWriter.put("type", "toolitem");
+            rJsonWriter.put("text", GetItemText(nId));
+            rJsonWriter.put("command", GetItemCommand(nId));
         }
-
-        aTree.add_child("children", aChildren);
     }
-
-    return aTree;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
