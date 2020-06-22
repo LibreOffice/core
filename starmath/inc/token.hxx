@@ -44,6 +44,7 @@ enum class TG {
     Limit         = 0x010000,
     FontAttr      = 0x020000
 };
+
 namespace o3tl {
     template<> struct typed_flags<TG> : is_typed_flags<TG, 0x037fff> {};
 }
@@ -100,7 +101,8 @@ enum SmTokenType
     TUNKNOWN,       TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
     TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   TSILVER,
     TGRAY,          TMAROON,        TPURPLE,        TLIME,          TOLIVE,
-    TNAVY,          TTEAL,          TAQUA,          TFUCHSIA,       TINTD
+    TNAVY,          TTEAL,          TAQUA,          TFUCHSIA,       TINTD,
+    TRGB,           TLAPLACE
 };
 
 struct SmToken
