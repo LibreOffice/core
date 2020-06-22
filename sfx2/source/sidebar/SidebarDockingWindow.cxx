@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/gen.hxx>
+#include <tools/json_writer.hxx>
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -68,15 +69,15 @@ public:
             if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
             {
                 // Mobile phone.
-                std::stringstream aStream;
-                boost::property_tree::ptree aTree = m_rSidebarDockingWin.DumpAsPropertyTree();
-                aTree.put("id", m_rSidebarDockingWin.GetLOKWindowId());
-                boost::property_tree::write_json(aStream, aTree);
-                const std::string message = aStream.str();
+                tools::JsonWriter aJsonWriter;
+                m_rSidebarDockingWin.DumpAsPropertyTree(aJsonWriter);
+                aJsonWriter.put("id", m_rSidebarDockingWin.GetLOKWindowId());
+                std::unique_ptr<char[]> data( aJsonWriter.extractData());
+                std::string_view message(data.get());
                 if (message != m_LastNotificationMessage)
                 {
                     m_LastNotificationMessage = message;
-                    pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+                    pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage.c_str());
                 }
             }
 

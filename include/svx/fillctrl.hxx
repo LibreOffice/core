@@ -88,7 +88,7 @@ private:
     DECL_LINK(AttrKeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(TypeKeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ColorKeyInputHdl, const KeyEvent&, bool);
-    DECL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
+    DECL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
     DECL_LINK(AttrFocusHdl, weld::Widget&, void);
     DECL_LINK(TypeFocusHdl, weld::Widget&, void);
 

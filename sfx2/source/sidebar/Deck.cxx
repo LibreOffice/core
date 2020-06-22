@@ -35,7 +35,7 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/svborder.hxx>
-#include <boost/property_tree/ptree.hpp>
+#include <tools/json_writer.hxx>
 #include <sal/log.hxx>
 
 using namespace css;
@@ -194,15 +194,14 @@ void Deck::Resize()
  * Get the ordering as is shown in the layout, and our type as 'deck'
  * also elide nested panel windows.
  */
-boost::property_tree::ptree Deck::DumpAsPropertyTree()
+void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree;
-    aTree.put("id", get_id());  // TODO could be missing - sort out
-    aTree.put("type", "deck");
-    aTree.put("text", GetText());
-    aTree.put("enabled", IsEnabled());
+    rJsonWriter.put("id", get_id());  // TODO could be missing - sort out
+    rJsonWriter.put("type", "deck");
+    rJsonWriter.put("text", GetText());
+    rJsonWriter.put("enabled", IsEnabled());
 
-    boost::property_tree::ptree aPanelNodes;
+    auto childrenNode = rJsonWriter.startNode("children");
     for (auto &it : maPanels)
     {
         if (it->IsLurking())
@@ -216,21 +215,15 @@ boost::property_tree::ptree Deck::DumpAsPropertyTree()
         if (!pWindow)
             continue;
 
-        boost::property_tree::ptree aPanel;
-        aPanel.put("id", it->GetId());
-        aPanel.put("type", "panel");
-        aPanel.put("text", it->GetText());
-        aPanel.put("enabled", it->IsEnabled());
+        auto childNode = rJsonWriter.startNode("");
+        rJsonWriter.put("id", it->GetId());
+        rJsonWriter.put("type", "panel");
+        rJsonWriter.put("text", it->GetText());
+        rJsonWriter.put("enabled", it->IsEnabled());
 
-        boost::property_tree::ptree aChildren;
-        aChildren.push_back(std::make_pair("", pWindow->DumpAsPropertyTree()));
-        aPanel.add_child("children", aChildren);
-
-        aPanelNodes.push_back(std::make_pair("", aPanel));
+        auto children2Node = rJsonWriter.startNode("children");
+        pWindow->DumpAsPropertyTree(rJsonWriter);
     }
-    aTree.add_child("children", aPanelNodes);
-
-    return aTree;
 }
 
 bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)

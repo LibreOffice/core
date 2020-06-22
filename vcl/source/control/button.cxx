@@ -45,6 +45,7 @@
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <boost/property_tree/ptree.hpp>
+#include <tools/json_writer.hxx>
 
 
 using namespace css;
@@ -552,11 +553,10 @@ FactoryFunction Button::GetUITestFactory() const
     return ButtonUIObject::create;
 }
 
-boost::property_tree::ptree Button::DumpAsPropertyTree()
+void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
-    aTree.put("text", GetText());
-    return aTree;
+    Control::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("text", GetText());
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
@@ -2844,11 +2844,10 @@ void RadioButton::ShowFocus(const tools::Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
-boost::property_tree::ptree RadioButton::DumpAsPropertyTree()
+void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(Button::DumpAsPropertyTree());
-    aTree.put("checked", IsChecked());
-    return aTree;
+    Button::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("checked", IsChecked());
 }
 
 FactoryFunction RadioButton::GetUITestFactory() const
@@ -3661,11 +3660,10 @@ void CheckBox::ShowFocus(const tools::Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
-boost::property_tree::ptree CheckBox::DumpAsPropertyTree()
+void CheckBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(Button::DumpAsPropertyTree());
-    aTree.put("checked", IsChecked());
-    return aTree;
+    Button::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("checked", IsChecked());
 }
 
 FactoryFunction CheckBox::GetUITestFactory() const
