@@ -18,7 +18,7 @@
  */
 
 #include <vcl/layout.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/wrkwin.hxx>
