@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 
 namespace vcl
 {

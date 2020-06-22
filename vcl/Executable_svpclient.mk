@@ -22,6 +22,10 @@ $(eval $(call gb_Executable_set_include,svpclient,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
+$(eval $(call gb_Executable_add_defs,svpclient,\
+    -DVCL_INTERNALS \
+))
+
 $(eval $(call gb_Executable_use_libraries,svpclient,\
     tl \
     sal \

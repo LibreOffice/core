@@ -21,11 +21,8 @@
 #define INCLUDED_VCL_FIXED_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/image.hxx>
-
 
 class VCL_DLLPUBLIC FixedText : public Control
 {
@@ -75,16 +72,6 @@ public:
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-class SelectableFixedText final : public Edit
-{
-public:
-    explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle );
-
-    virtual void    LoseFocus() override;
-    virtual void    ApplySettings(vcl::RenderContext&) override;
-};
-
-
 class VCL_DLLPUBLIC FixedLine : public Control
 {
 private:
@@ -114,32 +101,6 @@ public:
 
     virtual Size    GetOptimalSize() const override;
 };
-
-class VCL_DLLPUBLIC FixedBitmap final : public Control
-{
-private:
-    BitmapEx        maBitmap;
-
-    using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize );
-
-public:
-    explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
-
-    virtual void    ApplySettings(vcl::RenderContext&) override;
-
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
-    virtual void    Resize() override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void            SetBitmap( const BitmapEx& rBitmap );
-};
-
 
 class VCL_DLLPUBLIC FixedImage : public Control
 {
