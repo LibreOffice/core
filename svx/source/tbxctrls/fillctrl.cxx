@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/svxids.hrc>
+#include <tools/json_writer.hxx>
 
 #define TMP_STR_BEGIN   "["
 #define TMP_STR_END     "]"
@@ -579,9 +580,9 @@ FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::fr
     SetOptimalSize();
 }
 
-IMPL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, rTree, void)
+IMPL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
-    rTree.put("command", ".uno:FillStyle");
+    rJsonWriter.put("command", ".uno:FillStyle");
 }
 
 void FillControl::ReleaseFocus_Impl()

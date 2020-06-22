@@ -506,7 +506,7 @@ public:
 
     void SetLineSpacing(bool b) { mbLineSpacing = b; }
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )

@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <tools/json_writer.hxx>
 
 
 #ifdef DEBUG
@@ -36,8 +37,6 @@
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-
-#include <boost/property_tree/ptree.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -83,16 +82,13 @@ void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
-boost::property_tree::ptree Panel::DumpAsPropertyTree()
+void Panel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     if (!IsLurking())
     {
-        boost::property_tree::ptree aTree(vcl::Window::DumpAsPropertyTree());
-        aTree.put("type", "panel");
-        return aTree;
+        vcl::Window::DumpAsPropertyTree(rJsonWriter);
+        rJsonWriter.put("type", "panel");
     }
-    else
-        return boost::property_tree::ptree();
 }
 
 void Panel::dispose()

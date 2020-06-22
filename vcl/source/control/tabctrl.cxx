@@ -34,6 +34,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <bitmaps.hlst>
+#include <tools/json_writer.hxx>
 
 #include <controldata.hxx>
 #include <svdata.hxx>
@@ -2160,22 +2161,17 @@ FactoryFunction TabControl::GetUITestFactory() const
     return TabControlUIObject::create;
 }
 
-boost::property_tree::ptree TabControl::DumpAsPropertyTree()
+void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree = Control::DumpAsPropertyTree();
+    Control::DumpAsPropertyTree(rJsonWriter);
 
-    boost::property_tree::ptree aTabs;
+    auto tabsNode = rJsonWriter.startNode("tabs");
     for(auto id : GetPageIDs())
     {
-        boost::property_tree::ptree aTab;
-        aTab.put("text", GetPageText(id));
-        aTab.put("id", id);
-        aTabs.push_back(std::make_pair("", aTab));
+        auto tabNode = rJsonWriter.startNode("");
+        rJsonWriter.put("text", GetPageText(id));
+        rJsonWriter.put("id", id);
     }
-
-    aTree.add_child("tabs", aTabs);
-
-    return aTree;
 }
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;

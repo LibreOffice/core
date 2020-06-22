@@ -66,7 +66,7 @@ public:
         const SfxItemState eState,
         const SfxPoolItem* pState) override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     SfxBindings* GetBindings() { return mpBindings;}
 

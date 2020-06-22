@@ -69,7 +69,7 @@ public:
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual void Resize() override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
