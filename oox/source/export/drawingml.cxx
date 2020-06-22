@@ -3595,7 +3595,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
                 }
                 else if( rOuterShdwProp.Name == "blurRad" )
                 {
-                    sal_Int32 nVal = 0;
+                    sal_Int64 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
                     aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ).getStr() );
                 }
@@ -3779,16 +3779,20 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             if( bHasShadow )
             {
                 Sequence< PropertyValue > aShadowGrabBag( 3 );
-                Sequence< PropertyValue > aShadowAttribsGrabBag( 2 );
+                Sequence< PropertyValue > aShadowAttribsGrabBag( 3 );
 
                 double dX = +0.0, dY = +0.0;
+                sal_Int32 nBlur =0;
                 rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
                 rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+                rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
 
                 aShadowAttribsGrabBag[0].Name = "dist";
                 aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
                 aShadowAttribsGrabBag[1].Name = "dir";
                 aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
+                aShadowAttribsGrabBag[2].Name = "blurRad";
+                aShadowAttribsGrabBag[2].Value <<=  oox::drawingml::convertHmmToEmu(nBlur);
 
                 aShadowGrabBag[0].Name = "Attribs";
                 aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
@@ -3813,8 +3817,11 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 rOuterShdwProp.Value >>= aAttribsProps;
 
                 double dX = +0.0, dY = +0.0;
+                sal_Int32 nBlur =0;
                 rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
                 rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+                rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
+
 
                 for( auto& rAttribsProp : aAttribsProps )
                 {
@@ -3825,6 +3832,10 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                     else if( rAttribsProp.Name == "dir" )
                     {
                         rAttribsProp.Value <<= lcl_CalculateDir(dX, dY);
+                    }
+                    else if( rAttribsProp.Name == "blurRad" )
+                    {
+                        rAttribsProp.Value <<= oox::drawingml::convertHmmToEmu(nBlur);
                     }
                 }
 
