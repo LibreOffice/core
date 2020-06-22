@@ -305,6 +305,16 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
              bListLevelIndentsApplicableAndLabelAlignmentActive ||
              !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
+            if ( nFirstLineOfs < 0 && m_pFrame->IsInTab() &&
+                 nLeft == m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left() &&
+                 !m_pFrame->IsRightToLeft() &&
+                 !bListLevelIndentsApplicableAndLabelAlignmentActive )
+            {
+                // tdf#130218 always show hanging indent in narrow table cells
+                // to avoid hiding the text content of the first line
+                nLeft -= nFirstLineOfs;
+            }
+
             nFirst = nLeft + nFirstLineOfs;
         }
         else
