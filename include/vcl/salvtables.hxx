@@ -1037,6 +1037,8 @@ public:
 
     virtual int get_current_page() const override;
 
+    virtual int get_page_index(const OString& rIdent) const override;
+
     virtual OString get_page_ident(int nPage) const override;
 
     virtual OString get_current_page_ident() const override;

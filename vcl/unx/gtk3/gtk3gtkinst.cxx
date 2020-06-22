@@ -6108,36 +6108,6 @@ private:
         enable_notify_events();
     }
 
-    gint get_page_number(const OString& rIdent) const
-    {
-        auto nMainIndex = get_page_number(m_pNotebook, rIdent);
-        auto nOverFlowIndex = get_page_number(m_pOverFlowNotebook, rIdent);
-
-        if (nMainIndex == -1 && nOverFlowIndex == -1)
-            return -1;
-
-        if (m_bOverFlowBoxIsStart)
-        {
-            if (nOverFlowIndex != -1)
-                return nOverFlowIndex;
-            else
-            {
-                auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
-                return nMainIndex + nOverFlowLen;
-            }
-        }
-        else
-        {
-            if (nMainIndex != -1)
-                return nMainIndex;
-            else
-            {
-                auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
-                return nOverFlowIndex + nMainLen;
-            }
-        }
-    }
-
     void make_overflow_boxes()
     {
         m_pOverFlowBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
@@ -6417,9 +6387,39 @@ public:
         return nPage != -1 ? get_page_ident(nPage) : OString();
     }
 
+    virtual int get_page_index(const OString& rIdent) const override
+    {
+        auto nMainIndex = get_page_number(m_pNotebook, rIdent);
+        auto nOverFlowIndex = get_page_number(m_pOverFlowNotebook, rIdent);
+
+        if (nMainIndex == -1 && nOverFlowIndex == -1)
+            return -1;
+
+        if (m_bOverFlowBoxIsStart)
+        {
+            if (nOverFlowIndex != -1)
+                return nOverFlowIndex;
+            else
+            {
+                auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+                return nMainIndex + nOverFlowLen;
+            }
+        }
+        else
+        {
+            if (nMainIndex != -1)
+                return nMainIndex;
+            else
+            {
+                auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+                return nOverFlowIndex + nMainLen;
+            }
+        }
+    }
+
     virtual weld::Container* get_page(const OString& rIdent) const override
     {
-        int nPage = get_page_number(rIdent);
+        int nPage = get_page_index(rIdent);
         if (nPage < 0)
             return nullptr;
 
@@ -6492,7 +6492,7 @@ public:
 
     virtual void set_current_page(const OString& rIdent) override
     {
-        gint nPage = get_page_number(rIdent);
+        gint nPage = get_page_index(rIdent);
         set_current_page(nPage);
     }
 
