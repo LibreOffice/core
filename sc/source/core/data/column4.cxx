@@ -1677,8 +1677,6 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
             // if intergroup dependency is found, return early.
             if ((mxParentGroup && mxParentGroup->mbPartOfCycle) || !rRecursionHelper.AreGroupsIndependent())
             {
-                // Set pCellStart as dirty as pCellStart may be interpreted in InterpretTail()
-                pCellStart->SetDirtyVar();
                 bAllowThreading = false;
                 return bAnyDirty;
             }
