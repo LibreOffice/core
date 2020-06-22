@@ -330,6 +330,7 @@ public:
     /// If false is returned, then the caller should handle negative difference as (at least) zero difference instead.
     bool CheckPageHeightValidForHideWhitespace(SwTwips nDiff);
 
+    const SwHeaderFrame* GetHeaderFrame() const;
     const SwFooterFrame* GetFooterFrame() const;
 };
 
