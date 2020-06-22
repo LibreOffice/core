@@ -2564,8 +2564,8 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         {
             auto node = rJsonWriter.startStruct();
             rJsonWriter.put("text", nStartRow + 1);
-            rJsonWriter.put("size",nTotalPixels);
-            rJsonWriter.put("groupLevels", nRowGroupDepth);
+            rJsonWriter.put("size", nTotalPixels);
+            rJsonWriter.put("groupLevels", static_cast<sal_Int64>(nRowGroupDepth));
         }
 
         std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
@@ -2703,9 +2703,9 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         if (nStartCol != nEndCol)
         {
             auto node = rJsonWriter.startStruct();
-            rJsonWriter.put("text", nStartCol + 1);
+            rJsonWriter.put("text", static_cast<sal_Int64>(nStartCol + 1));
             rJsonWriter.put("size", nTotalPixels);
-            rJsonWriter.put("groupLevels", nColGroupDepth);
+            rJsonWriter.put("groupLevels", static_cast<sal_Int64>(nColGroupDepth));
         }
 
         std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);

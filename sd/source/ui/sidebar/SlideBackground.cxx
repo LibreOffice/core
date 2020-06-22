@@ -273,14 +273,14 @@ void SlideBackground::Initialize()
     UpdateMarginBox();
 }
 
-boost::property_tree::ptree SlideBackground::DumpAsPropertyTree()
+void SlideBackground::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
 {
     if (mxPaperSizeBox->get_active() == -1)
     {
         mpBindings->Update(SID_ATTR_PAGE_SIZE);
     }
 
-    return Control::DumpAsPropertyTree();
+    Control::DumpAsPropertyTree(rJsonWriter);
 }
 
 void SlideBackground::HandleContextChange(
