@@ -254,7 +254,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MultiListBox final : public ListBox

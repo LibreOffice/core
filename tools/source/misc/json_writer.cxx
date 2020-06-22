@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <rtl/strbuf.hxx>
+#include <rtl/math.hxx>
 
 namespace tools
 {
@@ -270,7 +271,7 @@ void JsonWriter::put(const char* pPropName, const char* pPropVal)
     ++mPos;
 }
 
-void JsonWriter::put(const char* pPropName, int nPropVal)
+void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
 {
     auto nPropNameLength = strlen(pPropName);
     auto nWorstCasePropValLength = 32;
@@ -285,7 +286,49 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
-    mPos += sprintf(mPos, "%d", nPropVal);
+    mPos += sprintf(mPos, "%ld", nPropVal);
+}
+
+void JsonWriter::put(const char* pPropName, double fPropVal)
+{
+    OString sPropVal = rtl::math::doubleToString(fPropVal, rtl_math_StringFormat_F, 12, '.');
+    auto nPropNameLength = strlen(pPropName);
+    ensureSpace(nPropNameLength + sPropVal.getLength() + 8);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    memcpy(mPos, "\": ", 3);
+    mPos += 3;
+
+    memcpy(mPos, sPropVal.getStr(), sPropVal.getLength());
+    mPos += sPropVal.getLength();
+}
+
+void JsonWriter::put(const char* pPropName, bool nPropVal)
+{
+    auto nPropNameLength = strlen(pPropName);
+    ensureSpace(nPropNameLength + 5 + 8);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    memcpy(mPos, "\": ", 3);
+    mPos += 3;
+
+    const char* pVal;
+    if (nPropVal)
+        pVal = "true";
+    else
+        pVal = "false";
+    memcpy(mPos, pVal, strlen(pVal));
+    mPos += strlen(pVal);
 }
 
 void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)
@@ -347,6 +390,20 @@ OString JsonWriter::extractAsOString()
     OString ret(pChar);
     free(pChar);
     return ret;
+}
+
+std::string JsonWriter::extractAsStdString()
+{
+    char* pChar = extractData();
+    std::string ret(pChar);
+    free(pChar);
+    return ret;
+}
+
+bool JsonWriter::isDataEquals(const std::string& s)
+{
+    return s.length() == static_cast<size_t>(mPos - mpBuffer)
+           && memcmp(s.data(), mpBuffer, s.length()) == 0;
 }
 
 } // namespace tools

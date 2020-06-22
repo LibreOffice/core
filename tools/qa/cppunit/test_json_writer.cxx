@@ -48,7 +48,7 @@ void JsonWriterTest::test1()
         aJson.put("oustring", OUString("val1"));
         aJson.put("ostring", OString("val2"));
         aJson.put("charptr", "val3");
-        aJson.put("int", 12);
+        aJson.put("int", static_cast<sal_Int32>(12));
     }
 
     std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());

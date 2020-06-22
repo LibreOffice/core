@@ -34,8 +34,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-#include <boost/property_tree/ptree_fwd.hpp>
-
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -101,6 +99,7 @@ namespace svt { class PopupWindowControllerImpl; }
 namespace weld { class Window; }
 
 template<class T> class VclPtr;
+namespace tools { class JsonWriter; }
 
 enum class TrackingEventFlags
 {
@@ -1212,7 +1211,7 @@ public:
     static bool                         IsLOKWindowsEmpty();
 
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
-    virtual boost::property_tree::ptree DumpAsPropertyTree();
+    virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit. used for LOK
     virtual void LogicMouseButtonDown(const MouseEvent&) {};
@@ -1575,7 +1574,7 @@ public:
     void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
     void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
-    void SetDumpAsPropertyTreeHdl(const Link<boost::property_tree::ptree&, void>& rLink);
+    void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 };
 
 }

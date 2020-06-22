@@ -33,6 +33,7 @@
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <tools/json_writer.hxx>
 
 ListBox::ListBox(WindowType nType)
     : Control(nType)
@@ -1394,33 +1395,29 @@ FactoryFunction ListBox::GetUITestFactory() const
     return ListBoxUIObject::create;
 }
 
-boost::property_tree::ptree ListBox::DumpAsPropertyTree()
+void ListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
-    boost::property_tree::ptree aEntries;
+    Control::DumpAsPropertyTree(rJsonWriter);
 
-    for (int i = 0; i < GetEntryCount(); ++i)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", GetEntry(i));
-        aEntries.push_back(std::make_pair("", aEntry));
+        auto entriesNode = rJsonWriter.startNode("entries");
+        for (int i = 0; i < GetEntryCount(); ++i)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", GetEntry(i));
+        }
     }
 
-    aTree.add_child("entries", aEntries);
+    rJsonWriter.put("selectedCount", GetSelectedEntryCount());
 
-    boost::property_tree::ptree aSelected;
-
-    for (int i = 0; i < GetSelectedEntryCount(); ++i)
     {
-        boost::property_tree::ptree aEntry;
-        aEntry.put("", GetSelectedEntryPos(i));
-        aSelected.push_back(std::make_pair("", aEntry));
+        auto entriesNode = rJsonWriter.startNode("selectedEntries");
+        for (int i = 0; i < GetSelectedEntryCount(); ++i)
+        {
+            auto entryNode = rJsonWriter.startNode("");
+            rJsonWriter.put("", GetSelectedEntryPos(i));
+        }
     }
-
-    aTree.put("selectedCount", GetSelectedEntryCount());
-    aTree.add_child("selectedEntries", aSelected);
-
-    return aTree;
 }
 
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :

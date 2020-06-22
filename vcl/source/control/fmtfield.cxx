@@ -38,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -1091,17 +1092,12 @@ void FormattedField::UseInputStringForFormatting()
     m_bUseInputStringForFormatting = true;
 }
 
-boost::property_tree::ptree FormattedField::DumpAsPropertyTree()
+void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
-    aTree.put("min", rtl::math::doubleToString(GetMinValue(),
-        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
-    aTree.put("max", rtl::math::doubleToString(GetMaxValue(),
-        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
-    aTree.put("value", rtl::math::doubleToString(GetValue(),
-        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
-
-    return aTree;
+    SpinField::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("min", GetMinValue());
+    rJsonWriter.put("max", GetMaxValue());
+    rJsonWriter.put("value", GetValue());
 }
 
 FactoryFunction FormattedField::GetUITestFactory() const
