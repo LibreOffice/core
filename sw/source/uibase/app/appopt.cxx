@@ -237,11 +237,11 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     (!aViewOpt.IsTab( true ) &&  pDocDispItem->bTab) ||
-                    (!aViewOpt.IsBlank( true ) && pDocDispItem->bSpace) ||
-                    (!aViewOpt.IsShowBookmarks(true) && pDocDispItem->bBookmarks) ||
-                    (!aViewOpt.IsParagraph( true ) && pDocDispItem->bParagraphEnd) ||
-                    (!aViewOpt.IsLineBreak( true ) && pDocDispItem->bManualBreak) )
+            if(     (!aViewOpt.IsTab( true ) &&  pDocDispItem->m_bTab) ||
+                    (!aViewOpt.IsBlank( true ) && pDocDispItem->m_bSpace) ||
+                    (!aViewOpt.IsShowBookmarks(true) && pDocDispItem->m_bBookmarks) ||
+                    (!aViewOpt.IsParagraph( true ) && pDocDispItem->m_bParagraphEnd) ||
+                    (!aViewOpt.IsLineBreak( true ) && pDocDispItem->m_bManualBreak) )
             {
                 aViewOpt.SetViewMetaChars(true);
                 if(pBindings)

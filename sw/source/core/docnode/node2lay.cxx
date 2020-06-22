@@ -430,15 +430,15 @@ SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
 }
 
 SwNode2LayoutSaveUpperFrames::SwNode2LayoutSaveUpperFrames(const SwNode& rNd)
-    : pImpl( new SwNode2LayImpl( rNd, rNd.GetIndex(), true ) )
+    : m_pImpl( new SwNode2LayImpl( rNd, rNd.GetIndex(), true ) )
 {
-    pImpl->SaveUpperFrames();
+    m_pImpl->SaveUpperFrames();
 }
 
 void SwNode2LayoutSaveUpperFrames::RestoreUpperFrames(
         SwNodes& rNds, sal_uLong const nStt, sal_uLong const nEnd)
 {
-    pImpl->RestoreUpperFrames( rNds, nStt, nEnd );
+    m_pImpl->RestoreUpperFrames( rNds, nStt, nEnd );
 }
 
 SwFrame* SwNode2Layout::NextFrame()

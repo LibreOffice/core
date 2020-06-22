@@ -26,28 +26,28 @@
 SwDocDisplayItem::SwDocDisplayItem() :
         SfxPoolItem(FN_PARAM_DOCDISP)
 {
-    bParagraphEnd       =
-    bTab                =
-    bSpace              =
-    bNonbreakingSpace   =
-    bSoftHyphen         =
-    bCharHiddenText     =
-    bBookmarks          =
-    bManualBreak        = true;
+    m_bParagraphEnd       =
+    m_bTab                =
+    m_bSpace              =
+    m_bNonbreakingSpace   =
+    m_bSoftHyphen         =
+    m_bCharHiddenText     =
+    m_bBookmarks          =
+    m_bManualBreak        = true;
 };
 
 // Item for the Settings dialog, page document view
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
             SfxPoolItem( FN_PARAM_DOCDISP )
 {
-    bParagraphEnd       = rVOpt.IsParagraph(true);
-    bTab                = rVOpt.IsTab(true);
-    bSpace              = rVOpt.IsBlank(true);
-    bNonbreakingSpace   = rVOpt.IsHardBlank();
-    bSoftHyphen         = rVOpt.IsSoftHyph();
-    bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
-    bBookmarks          = rVOpt.IsShowBookmarks(true);
-    bManualBreak        = rVOpt.IsLineBreak(true);
+    m_bParagraphEnd       = rVOpt.IsParagraph(true);
+    m_bTab                = rVOpt.IsTab(true);
+    m_bSpace              = rVOpt.IsBlank(true);
+    m_bNonbreakingSpace   = rVOpt.IsHardBlank();
+    m_bSoftHyphen         = rVOpt.IsSoftHyph();
+    m_bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
+    m_bBookmarks          = rVOpt.IsShowBookmarks(true);
+    m_bManualBreak        = rVOpt.IsLineBreak(true);
 }
 
 SwDocDisplayItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
@@ -61,26 +61,26 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwDocDisplayItem& rItem = static_cast<const SwDocDisplayItem&>(rAttr);
 
-    return (  bParagraphEnd         == rItem.bParagraphEnd       &&
-              bTab                  == rItem.bTab                &&
-              bSpace                == rItem.bSpace              &&
-              bNonbreakingSpace     == rItem.bNonbreakingSpace   &&
-              bSoftHyphen           == rItem.bSoftHyphen         &&
-              bCharHiddenText       == rItem.bCharHiddenText         &&
-              bBookmarks            == rItem.bBookmarks          &&
-              bManualBreak          == rItem.bManualBreak );
+    return (  m_bParagraphEnd         == rItem.m_bParagraphEnd       &&
+              m_bTab                  == rItem.m_bTab                &&
+              m_bSpace                == rItem.m_bSpace              &&
+              m_bNonbreakingSpace     == rItem.m_bNonbreakingSpace   &&
+              m_bSoftHyphen           == rItem.m_bSoftHyphen         &&
+              m_bCharHiddenText       == rItem.m_bCharHiddenText         &&
+              m_bBookmarks            == rItem.m_bBookmarks          &&
+              m_bManualBreak          == rItem.m_bManualBreak );
 }
 
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 {
-    rVOpt.SetParagraph  (bParagraphEnd      );
-    rVOpt.SetTab        (bTab               );
-    rVOpt.SetBlank      (bSpace             );
-    rVOpt.SetHardBlank  (bNonbreakingSpace  );
-    rVOpt.SetSoftHyph   (bSoftHyphen        );
-    rVOpt.SetShowHiddenChar(bCharHiddenText );
-    rVOpt.SetShowBookmarks(bBookmarks       );
-    rVOpt.SetLineBreak  (bManualBreak       );
+    rVOpt.SetParagraph  (m_bParagraphEnd      );
+    rVOpt.SetTab        (m_bTab               );
+    rVOpt.SetBlank      (m_bSpace             );
+    rVOpt.SetHardBlank  (m_bNonbreakingSpace  );
+    rVOpt.SetSoftHyph   (m_bSoftHyphen        );
+    rVOpt.SetShowHiddenChar(m_bCharHiddenText );
+    rVOpt.SetShowBookmarks(m_bBookmarks       );
+    rVOpt.SetLineBreak  (m_bManualBreak       );
 }
 
 SwElemItem::SwElemItem() :
@@ -185,15 +185,15 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 // Item for Settings dialog, ShadowCursorPage
 SwShadowCursorItem::SwShadowCursorItem()
     : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
-    eMode( SwFillMode::Tab )
-    ,bOn( false )
+    m_eMode( SwFillMode::Tab )
+    ,m_bOn( false )
 {
 }
 
 SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt )
     : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
-    eMode( rVOpt.GetShdwCursorFillMode() )
-    ,bOn( rVOpt.IsShadowCursor() )
+    m_eMode( rVOpt.GetShdwCursorFillMode() )
+    ,m_bOn( rVOpt.IsShadowCursor() )
 
 {
 }
@@ -212,8 +212,8 @@ bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
 
 void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 {
-    rVOpt.SetShadowCursor( bOn );
-    rVOpt.SetShdwCursorFillMode( eMode );
+    rVOpt.SetShadowCursor( m_bOn );
+    rVOpt.SetShdwCursorFillMode( m_eMode );
 }
 
 #ifdef DBG_UTIL
