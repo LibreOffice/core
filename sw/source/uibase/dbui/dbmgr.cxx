@@ -1470,10 +1470,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
                 if(pEvtSrc)
                 {
-                    uno::Reference< uno::XInterface > xRef(
-                        static_cast<text::XMailMergeBroadcaster*>(const_cast<SwXMailMerge*>(pEvtSrc)) );
-                    text::MailMergeEvent aEvt( xRef, xWorkDocSh->GetModel() );
-                    pEvtSrc->LaunchMailMergeEvent( aEvt );
+                    rtl::Reference< SwXMailMerge > xRef(
+                        const_cast<SwXMailMerge*>(pEvtSrc) );
+                    text::MailMergeEvent aEvt( static_cast<text::XMailMergeBroadcaster*>(xRef.get()), xWorkDocSh->GetModel() );
+                    SolarMutexReleaser rel;
+                    xRef->LaunchMailMergeEvent( aEvt );
                 }
 
                 // working copy is merged - prepare final steps depending on merge options
