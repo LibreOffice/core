@@ -2309,6 +2309,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf114163)
     // This failed, if the legend first label is not "Data3". The legend position is right.
 }
 
+<<<<<<< HEAD   (921165 tdf#125893 DOCX import: fix "half" contextual paragraph spac)
+=======
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf131707)
+{
+    createDoc("tdf131707_flyWrap.doc");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds", "top", "2185");
+    // the image should be inside of the cell boundary - so the same top or higher
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122225)
+{
+    SwDoc* pDoc = createDoc("tdf122225.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[8]/text",
+                       "Advanced Diploma");
+    // This failed, if the legend label is not "Advanced Diploma".
+}
+
+>>>>>>> CHANGE (936259 tdf#122225 Chart OOXML import: fix missing legend text)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
 {
     SwDoc* pDoc = createDoc("tdf125335.odt");
