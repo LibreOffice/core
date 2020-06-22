@@ -5674,8 +5674,11 @@ namespace
         {
             OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
-            sal_Int32 nLen = sUniPassword.getLength();
-            if ( nLen <= 15 )
+            // Previously, this simply ignored any passwords that were longer than 15 characters.
+            // Be nice to copy/pasters: we might have truncated the save password to 15 chars
+            // (the traditional maximum for MS binary formats - but not necessarily so anymore)
+            // so at least attempt to decrypt using the first 15 characters.
+            sal_Int32 nLen = std::min(sal_Int32(15), sUniPassword.getLength());
             {
                 sal_uInt16 pPassword[16] = {};
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
