@@ -43,6 +43,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <boost/property_tree/ptree.hpp>
+#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -871,12 +872,11 @@ void NumericField::Last()
     SpinField::Last();
 }
 
-boost::property_tree::ptree NumericField::DumpAsPropertyTree()
+void NumericField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
-    aTree.put("min", GetMin());
-    aTree.put("max", GetMax());
-    return aTree;
+    SpinField::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("min", GetMin());
+    rJsonWriter.put("max", GetMax());
 }
 
 namespace
@@ -1712,17 +1712,15 @@ void MetricField::Last()
     SpinField::Last();
 }
 
-boost::property_tree::ptree MetricField::DumpAsPropertyTree()
+void MetricField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
-    aTree.put("min", GetMin());
-    aTree.put("max", GetMax());
-    aTree.put("unit", FieldUnitToString(GetUnit()));
+    SpinField::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("min", GetMin());
+    rJsonWriter.put("max", GetMax());
+    rJsonWriter.put("unit", FieldUnitToString(GetUnit()));
     OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
         getNum(GetValue(), GetDecimalDigits(), false, false);
-    aTree.put("value", sValue.toUtf8().getStr());
-
-    return aTree;
+    rJsonWriter.put("value", sValue);
 }
 
 FactoryFunction MetricField::GetUITestFactory() const
