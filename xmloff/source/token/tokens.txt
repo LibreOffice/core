@@ -1571,6 +1571,7 @@ shadow-offset-x
 shadow-offset-y
 shadow-slant
 shadow-transparency
+shadow-blur
 shape
 shape-id
 shapes
