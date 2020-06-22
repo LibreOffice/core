@@ -24,7 +24,7 @@
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
