@@ -1354,8 +1354,7 @@ SwXText::insertTextPortion(
         throw  uno::RuntimeException();
     }
     uno::Reference< text::XTextRange > xRet;
-    const uno::Reference< text::XTextCursor > xTextCursor = CreateCursor();
-    xTextCursor->gotoRange(xInsertPosition, false);
+    const uno::Reference<text::XTextCursor> xTextCursor = createTextCursorByRange(xInsertPosition);
 
     const uno::Reference< lang::XUnoTunnel > xRangeTunnel(
             xTextCursor, uno::UNO_QUERY_THROW );
