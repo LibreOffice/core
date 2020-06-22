@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf77369b_ebdbb008",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-06-22T09:39:09Z",
+      "side": 1,
+      "message": "Why are this, repeat and setP commented out?",
+      "revId": "c7cafd0d6968db6012c74392ce21143456fdea21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
