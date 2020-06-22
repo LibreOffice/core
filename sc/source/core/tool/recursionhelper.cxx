@@ -15,6 +15,7 @@ void ScRecursionHelper::Init()
     nRecursionCount    = 0;
     nDependencyComputationLevel = 0;
     bInRecursionReturn = bDoingRecursion = bInIterationReturn = false;
+    bAbortingDependencyComputation = false;
     aInsertPos = GetIterationEnd();
     ResetIteration();
     // Must not force clear aFGList ever.
@@ -193,6 +194,23 @@ void ScRecursionHelper::SetFormulaGroupDepEvalMode(bool bSet)
     assert(aFGList.size() == aInDependencyEvalMode.size());
     assert(aFGList.back()->GetCellGroup());
     aInDependencyEvalMode.back() = bSet;
+}
+
+void ScRecursionHelper::AbortDependencyComputation()
+{
+    assert( nDependencyComputationLevel > 0 );
+    bAbortingDependencyComputation = true;
+}
+
+void ScRecursionHelper::IncDepComputeLevel()
+{
+    ++nDependencyComputationLevel;
+}
+
+void ScRecursionHelper::DecDepComputeLevel()
+{
+    --nDependencyComputationLevel;
+    bAbortingDependencyComputation = false;
 }
 
 void ScRecursionHelper::AddTemporaryGroupCell(ScFormulaCell* cell)

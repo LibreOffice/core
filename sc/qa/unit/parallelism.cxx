@@ -48,6 +48,7 @@ public:
     void testFormulaGroupWithForwardSelfReference();
     void testFormulaGroupsInCyclesAndWithSelfReference();
     void testFormulaGroupsInCyclesAndWithSelfReference2();
+    void testFormulaGroupsInCyclesAndWithSelfReference3();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testFormulaGroupWithForwardSelfReference);
     CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference);
     CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference2);
+    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference3);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -973,6 +975,58 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference2()
         {
             aMsg = "Value at Cell (Col = " + OString::number(nCol + 1) + ", Row = " + OString::number(nRow) + ", Tab = 0)";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), fExpected[nCol][nRow], m_pDoc->GetValue(1 + nCol, nRow, 0));
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference3()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    m_pDoc->SetValue(1, 1, 0, 2.0); // B2 <== 2
+    for (size_t nRow = 1; nRow < 105; ++nRow)
+    {
+        // Formula-group in B3:B104 with first cell "=D2+0.001"
+        if( nRow != 1 )
+            m_pDoc->SetFormula(ScAddress(1, nRow, 0), "=D" + OUString::number(nRow) + "+0.001",
+                formula::FormulaGrammar::GRAM_NATIVE_UI);
+        // Formula-group in C2:C104 with first cell "=B2*1.01011"
+        m_pDoc->SetFormula(ScAddress(2, nRow, 0), "=B" + OUString::number(nRow + 1) + "*1.01011",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        // Formula-group in D2:C104 with first cell "=C2*1.02"
+        m_pDoc->SetFormula(ScAddress(3, nRow, 0), "=C" + OUString::number(nRow + 1) + "*1.02",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    // What happens with tdf#132451 is that the copy&paste C6->C5 really just sets the dirty flag
+    // for C5 and all the cells that depend on it (D5,B6,C6,D6,B7,...), and it also resets
+    // flags marking the C formula group as disabled for parallel calculation because of the cycle.
+    m_pDoc->SetFormula(ScAddress(2, 4, 0), "=B5*1.01011", formula::FormulaGrammar::GRAM_NATIVE_UI);
+    m_pDoc->GetFormulaCell(ScAddress(2,4,0))->GetCellGroup()->mbPartOfCycle = false;
+    m_pDoc->GetFormulaCell(ScAddress(2,4,0))->GetCellGroup()->meCalcState = sc::GroupCalcEnabled;
+
+    m_pDoc->SetAutoCalc(true);
+    // Without the fix, getting value of C5 would try to parallel-interpret formula group in B
+    // from its first dirty cell (B6), which depends on D5, which depends on C5, where the cycle
+    // would be detected and dependency check would bail out. But the result from Interpret()-ing
+    // D5 would be used and D5's dirty flag reset, with D5 value incorrect.
+    m_pDoc->GetValue(2,4,0);
+
+    double fExpected[2][3] = {
+        { 2.19053373572776, 2.21268003179597, 2.25693363243189 },
+        { 2.25793363243189, 2.28076134145577, 2.32637656828489 }
+    };
+    for (size_t nCol = 1; nCol < 4; ++nCol)
+    {
+        for (size_t nRow = 4; nRow < 6; ++nRow)
+        {
+            OString aMsg = "Value at Cell (Col = " + OString::number(nCol) + ", Row = " + OString::number(nRow) + ", Tab = 0)";
+            ASSERT_DOUBLES_EQUAL_MESSAGE(aMsg.getStr(), fExpected[nRow - 4][nCol - 1], m_pDoc->GetValue(nCol, nRow, 0));
         }
     }
 
