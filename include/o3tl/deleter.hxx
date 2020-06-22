@@ -10,6 +10,10 @@
 #ifndef INCLUDED_O3TL_DELETER_HXX
 #define INCLUDED_O3TL_DELETER_HXX
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <com/sun/star/uno/Exception.hpp>
 #include <sal/log.hxx>
 
@@ -42,6 +46,11 @@ template<typename T> struct default_delete
         delete p;
 #endif
     }
+};
+
+struct free_delete
+{
+    void operator()(void* p) { std::free(p); }
 };
 
 template<typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)

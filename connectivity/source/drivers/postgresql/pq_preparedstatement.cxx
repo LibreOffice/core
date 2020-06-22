@@ -40,6 +40,7 @@
 #include "pq_statics.hxx"
 #include "pq_statement.hxx"
 
+#include <o3tl/deleter.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -479,8 +480,7 @@ void PreparedStatement::setBytes(
     checkClosed();
     checkColumnIndex( parameterIndex );
     size_t len;
-    struct Free { void operator ()(void * p) const { free(p); } };
-    std::unique_ptr<unsigned char, Free> escapedString(
+    std::unique_ptr<unsigned char, o3tl::free_delete> escapedString(
         PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len));
     if( ! escapedString )
     {
