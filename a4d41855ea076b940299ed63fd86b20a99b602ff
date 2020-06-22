@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f3a98e69_4c9d427e",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-06-22T06:41:10Z",
+      "side": 1,
+      "message": "I\u0027m still seeing the comment in the latest patchset",
+      "parentUuid": "81d4f225_4b3b0fed",
+      "revId": "a4d41855ea076b940299ed63fd86b20a99b602ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a6ee57f_900a3a6e",
         "filename": "starmath/source/node.cxx",
         "patchSetId": 9
