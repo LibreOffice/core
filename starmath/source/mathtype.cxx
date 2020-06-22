@@ -311,6 +311,9 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2207:
             pC = " nabla ";
             break;
+        case 0x2112:
+            pC = " laplace ";
+            break;
         case 0x2208: // in
         case 0x2209: // notin
             rRet.append(" func ").append(OUStringChar(nChar)).append(" ");
