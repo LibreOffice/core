@@ -76,6 +76,7 @@ public:
     void testTdf126761();
     void testGlow();
     void testSoftEdges();
+    void testShadowBlur();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testTdf126761);
     CPPUNIT_TEST(testGlow);
     CPPUNIT_TEST(testSoftEdges);
+    CPPUNIT_TEST(testShadowBlur);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1303,6 +1305,29 @@ void SdExportTest::testSoftEdges()
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
         "softedge-radius", "0.635cm");
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testShadowBlur()
+{
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/shadow-blur.odg"), ODG);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+
+    sal_Int32 nRad = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowBlur") >>= nRad);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRad); // 11 pt = 388 Hmm
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
+                "family", "graphic");
+    assertXPath(
+            pXmlDoc,
+            "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+            "shadow-blur", "0.388cm");
 
     xDocShRef->DoClose();
 }

@@ -197,6 +197,7 @@ public:
     void testTdf132282();
     void testTdf132201EffectOrder();
     void testShapeSoftEdgeEffect();
+    void testShapeShadowBlurEffect();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -311,6 +312,7 @@ public:
     CPPUNIT_TEST(testTdf132282);
     CPPUNIT_TEST(testTdf132201EffectOrder);
     CPPUNIT_TEST(testShapeSoftEdgeEffect);
+    CPPUNIT_TEST(testShapeShadowBlurEffect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2909,6 +2911,20 @@ void SdOOXMLExportTest2::testShapeSoftEdgeEffect()
     sal_Int32 nRadius = -1;
     xShapeProps->getPropertyValue("SoftEdgeRadius") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
+}
+
+void SdOOXMLExportTest2::testShapeShadowBlurEffect()
+{
+    auto xDocShRef
+            = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-blur-effect.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    bool bHasShadow = false;
+    xShape->getPropertyValue("Shadow") >>= bHasShadow;
+    CPPUNIT_ASSERT(bHasShadow);
+    sal_Int32 nRadius = -1;
+    xShape->getPropertyValue("ShadowBlur") >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 11 pt
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
