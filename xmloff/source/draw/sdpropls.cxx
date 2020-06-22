@@ -151,6 +151,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ShadowYDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 ),
     GMAP( "ShadowColor",                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
+    GMAPV( "ShadowBlur",                     XML_NAMESPACE_LO_EXT, XML_SHADOW_BLUR, XML_TYPE_MEASURE, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // glow attributes
     GMAPV( "GlowEffectRadius",                 XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),

@@ -1655,6 +1655,7 @@ namespace xmloff::token {
         XML_SHADOW_OFFSET_Y,
         XML_SHADOW_SLANT,
         XML_SHADOW_TRANSPARENCY,
+        XML_SHADOW_BLUR,
         XML_SHAPE,
         XML_SHAPE_ID,
         XML_SHAPES,

@@ -1661,6 +1661,7 @@ namespace xmloff::token {
         TOKEN( "shadow-offset-y",                 XML_SHADOW_OFFSET_Y ),
         TOKEN( "shadow-slant",                    XML_SHADOW_SLANT ),
         TOKEN( "shadow-transparency",             XML_SHADOW_TRANSPARENCY ),
+        TOKEN( "shadow-blur",                     XML_SHADOW_BLUR ),
         TOKEN( "shape",                           XML_SHAPE ),
         TOKEN( "shape-id",                        XML_SHAPE_ID ),
         TOKEN( "shapes",                          XML_SHAPES ),
