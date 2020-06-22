@@ -1035,9 +1035,9 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 // clear bitmap with dest color
                 if(aChangedBitmap.GetBitCount() <= 8)
                 {
-                    // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
-                    // erase color is determined and used -> this may be different from what is
-                    // wanted here. Better create a new bitmap with the needed color explicitly
+                    // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
+                    // determined and used -> this may be different from what is wanted here.
+                    // Better create a new bitmap with the needed color explicitly.
                     Bitmap::ScopedReadAccess xReadAccess(aChangedBitmap);
                     OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
 
@@ -1051,10 +1051,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                             &aNewPalette);
                     }
                 }
-                else
-                {
-                    aChangedBitmap.Erase(Color(pReplace->getBColor()));
-                }
+                aChangedBitmap.Erase(Color(pReplace->getBColor()));
             }
             else
             {
