@@ -39,9 +39,19 @@ EmojiPopup::~EmojiPopup()
 {
 }
 
-VclPtr<vcl::Window> EmojiPopup::createVclPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> EmojiPopup::weldPopupWindow()
 {
-    return VclPtr<SfxEmojiControl>::Create(this, pParent);
+    return std::make_unique<SfxEmojiControl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> EmojiPopup::createVclPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SfxEmojiControl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString EmojiPopup::getImplementationName()

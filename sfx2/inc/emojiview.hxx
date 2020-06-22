@@ -49,26 +49,26 @@ private:
 };
 
 
-class EmojiView final : public ThumbnailView
+class EmojiView final : public SfxThumbnailView
 {
 public:
-    EmojiView ( vcl::Window* pParent);
+    EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow);
 
-    virtual ~EmojiView () override;
+    virtual ~EmojiView() override;
 
     // Fill view with emojis
-    void Populate ();
+    void Populate();
 
     void setInsertEmojiHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
     void AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName );
 
 private:
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
     std::string msJSONData;
 

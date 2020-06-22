@@ -39,125 +39,104 @@ const char FILTER_UNICODE9[]  = "unicode9";
 
 using namespace com::sun::star;
 
-SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "emojictrl", "sfx/ui/emojicontrol.ui")
+SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/emojicontrol.ui", "emojictrl")
+    , mxPeopleBtn(m_xBuilder->weld_toggle_button(FILTER_PEOPLE))
+    , mxNatureBtn(m_xBuilder->weld_toggle_button(FILTER_NATURE))
+    , mxFoodBtn(m_xBuilder->weld_toggle_button(FILTER_FOOD))
+    , mxActivityBtn(m_xBuilder->weld_toggle_button(FILTER_ACTIVITY))
+    , mxTravelBtn(m_xBuilder->weld_toggle_button(FILTER_TRAVEL))
+    , mxObjectsBtn(m_xBuilder->weld_toggle_button(FILTER_OBJECTS))
+    , mxSymbolsBtn(m_xBuilder->weld_toggle_button(FILTER_SYMBOLS))
+    , mxFlagsBtn(m_xBuilder->weld_toggle_button(FILTER_FLAGS))
+    , mxUnicode9Btn(m_xBuilder->weld_toggle_button(FILTER_UNICODE9))
+    , mxEmojiView(new EmojiView(m_xBuilder->weld_scrolled_window("emoji_win")))
+    , mxEmojiWeld(new weld::CustomWeld(*m_xBuilder, "emoji_view", *mxEmojiView))
 {
-    get(mpTabControl, "tabcontrol");
-    get(mpEmojiView, "emoji_view");
+    ConvertLabelToUnicode(*mxPeopleBtn);
+    ConvertLabelToUnicode(*mxNatureBtn);
+    ConvertLabelToUnicode(*mxFoodBtn);
+    ConvertLabelToUnicode(*mxActivityBtn);
+    ConvertLabelToUnicode(*mxTravelBtn);
+    ConvertLabelToUnicode(*mxObjectsBtn);
+    ConvertLabelToUnicode(*mxSymbolsBtn);
+    ConvertLabelToUnicode(*mxFlagsBtn);
+    ConvertLabelToUnicode(*mxUnicode9Btn);
 
-    sal_uInt16 nCurPageId = mpTabControl->GetPageId(FILTER_PEOPLE);
-    TabPage *pTabPage = mpTabControl->GetTabPage(nCurPageId);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
+    mxPeopleBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxNatureBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxFoodBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxActivityBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxTravelBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxObjectsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxSymbolsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxFlagsBtn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
+    mxUnicode9Btn->connect_clicked(LINK(this, SfxEmojiControl, ActivatePageHdl));
 
-    nCurPageId = mpTabControl->GetPageId(FILTER_NATURE);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
+    mxEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+    mxEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
 
-    nCurPageId = mpTabControl->GetPageId(FILTER_FOOD);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
+    mxEmojiView->Populate();
+    ActivatePageHdl(*mxPeopleBtn);
 
-    nCurPageId = mpTabControl->GetPageId(FILTER_ACTIVITY);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
+    mxEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
+    mxEmojiView->ShowTooltips(true);
+}
 
-    nCurPageId = mpTabControl->GetPageId(FILTER_TRAVEL);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_OBJECTS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_SYMBOLS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_FLAGS);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-    pTabPage->Show();
-
-    nCurPageId = mpTabControl->GetPageId(FILTER_UNICODE9);
-    mpTabControl->SetTabPage(nCurPageId, pTabPage);
-    ConvertLabelToUnicode(nCurPageId);
-
-    vcl::Font rFont = mpTabControl->GetControlFont();
-    rFont.SetFontHeight(TAB_FONT_SIZE);
-    mpTabControl->SetControlFont(rFont);
-    pTabPage->Show();
-
-    mpEmojiView->SetStyle(mpEmojiView->GetStyle() | WB_VSCROLL);
-    mpEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
-    mpEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
-
-    mpEmojiView->Populate();
-    mpEmojiView->filterItems(ViewFilter_Category(FILTER_CATEGORY::PEOPLE));
-
-    mpEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
-    mpEmojiView->Show();
-    mpEmojiView->ShowTooltips(true);
-
-    mpTabControl->SetActivatePageHdl(LINK(this, SfxEmojiControl, ActivatePageHdl));
+void SfxEmojiControl::GrabFocus()
+{
+    mxEmojiView->GrabFocus();
 }
 
 SfxEmojiControl::~SfxEmojiControl()
 {
-    disposeOnce();
 }
 
-void SfxEmojiControl::dispose()
+void SfxEmojiControl::ConvertLabelToUnicode(weld::ToggleButton& rBtn)
 {
-    mpTabControl.clear();
-    mpEmojiView.clear();
-
-    ToolbarPopup::dispose();
-}
-
-void SfxEmojiControl::ConvertLabelToUnicode(sal_uInt16 nPageId)
-{
-    OUStringBuffer sHexText = "";
-    OUString sLabel = mpTabControl->GetPageText(nPageId);
+    OUStringBuffer sHexText;
+    OUString sLabel = rBtn.get_label();
     sHexText.appendUtf32(sLabel.toUInt32(16));
-    mpTabControl->SetPageText(nPageId, sHexText.toString());
+    rBtn.set_label(sHexText.toString());
 }
 
-FILTER_CATEGORY SfxEmojiControl::getCurrentFilter() const
+FILTER_CATEGORY SfxEmojiControl::getFilter(const weld::Button& rCurPageId) const
 {
-    const sal_uInt16 nCurPageId = mpTabControl->GetCurPageId();
-
-    if (nCurPageId == mpTabControl->GetPageId(FILTER_PEOPLE))
+    if (&rCurPageId == mxPeopleBtn.get())
         return FILTER_CATEGORY::PEOPLE;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_NATURE))
+    else if (&rCurPageId == mxNatureBtn.get())
         return FILTER_CATEGORY::NATURE;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_FOOD))
+    else if (&rCurPageId == mxFoodBtn.get())
         return FILTER_CATEGORY::FOOD;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_ACTIVITY))
+    else if (&rCurPageId == mxActivityBtn.get())
         return FILTER_CATEGORY::ACTIVITY;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_TRAVEL))
+    else if (&rCurPageId == mxTravelBtn.get())
         return FILTER_CATEGORY::TRAVEL;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_OBJECTS))
+    else if (&rCurPageId == mxObjectsBtn.get())
         return FILTER_CATEGORY::OBJECTS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_SYMBOLS))
+    else if (&rCurPageId == mxSymbolsBtn.get())
         return FILTER_CATEGORY::SYMBOLS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_FLAGS))
+    else if (&rCurPageId == mxFlagsBtn.get())
         return FILTER_CATEGORY::FLAGS;
-    else if (nCurPageId == mpTabControl->GetPageId(FILTER_UNICODE9))
+    else if (&rCurPageId == mxUnicode9Btn.get())
         return FILTER_CATEGORY::UNICODE9;
 
     return FILTER_CATEGORY::PEOPLE;
 }
 
-IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
+IMPL_LINK(SfxEmojiControl, ActivatePageHdl, weld::Button&, rButton, void)
 {
-    mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
+    mxPeopleBtn->set_active(&rButton == mxPeopleBtn.get());
+    mxNatureBtn->set_active(&rButton == mxNatureBtn.get());
+    mxFoodBtn->set_active(&rButton == mxFoodBtn.get());
+    mxActivityBtn->set_active(&rButton == mxActivityBtn.get());
+    mxTravelBtn->set_active(&rButton == mxTravelBtn.get());
+    mxObjectsBtn->set_active(&rButton == mxObjectsBtn.get());
+    mxSymbolsBtn->set_active(&rButton == mxSymbolsBtn.get());
+    mxFlagsBtn->set_active(&rButton == mxFlagsBtn.get());
+    mxUnicode9Btn->set_active(&rButton == mxUnicode9Btn.get());
+
+    mxEmojiView->filterItems(ViewFilter_Category(getFilter(rButton)));
 }
 
 IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)

@@ -1986,11 +1986,9 @@ void SfxThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     for (size_t i = 0; i < nItemCount; i++)
     {
         ThumbnailViewItem *const pItem = mItemList[i].get();
-
-        if (pItem->isVisible())
-        {
-            pItem->Paint(pProcessor.get(), mpItemAttrs.get());
-        }
+        if (!pItem->isVisible())
+            continue;
+        pItem->Paint(pProcessor.get(), mpItemAttrs.get());
     }
 
     rRenderContext.Pop();
