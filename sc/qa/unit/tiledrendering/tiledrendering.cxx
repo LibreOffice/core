@@ -109,6 +109,7 @@ public:
     void testJumpToLastRowInvalidation();
     void testSheetGeometryDataInvariance();
     void testSheetGeometryDataCorrectness();
+    void testDeleteCellMultilineContent();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testJumpToLastRowInvalidation);
     CPPUNIT_TEST(testSheetGeometryDataInvariance);
     CPPUNIT_TEST(testSheetGeometryDataCorrectness);
+    CPPUNIT_TEST(testDeleteCellMultilineContent);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -464,6 +466,7 @@ public:
     bool m_bViewLock;
     OString m_sCellFormula;
     boost::property_tree::ptree m_aCommentCallbackResult;
+    OString m_sInvalidateHeader;
 
     ViewCallback(bool bDeleteListenerOnDestruct=true)
         : m_bOwnCursorInvalidated(false),
@@ -569,6 +572,10 @@ public:
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
+        case LOK_CALLBACK_INVALIDATE_HEADER:
+        {
+            m_sInvalidateHeader = pPayload;
+        }
         }
     }
 };
@@ -2238,6 +2245,40 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
     aSGData.parseTest(aGeomStr);
 
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testDeleteCellMultilineContent()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("multiline.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+
+    // view #1
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    aView1.m_sInvalidateHeader = "";
+    ScDocument& rDoc = pDocSh->GetDocument();
+    sal_uInt16 nRow1Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
+
+    // delete multiline cell content in view #1
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // check if the row header has been invalidated and if the involved row is of the expected height
+    CPPUNIT_ASSERT_EQUAL(OString("row"), aView1.m_sInvalidateHeader);
+    sal_uInt16 nRow2Height = rDoc.GetRowHeight(static_cast<SCROW>(0), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL(nRow1Height, nRow2Height);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 

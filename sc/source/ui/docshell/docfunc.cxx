@@ -136,6 +136,7 @@ static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
 bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
     if ( rDoc.IsImportingXML() )
     {
         //  for XML import, all row heights are updated together after importing
@@ -150,6 +151,20 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow   = rRange.aEnd.Row();
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+            {
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+
     ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
@@ -162,6 +177,9 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                             PaintPartFlags::Grid | PaintPartFlags::Left);
+
+    if (comphelper::LibreOfficeKit::isActive())
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pSomeViewForThisDoc, ROW_HEADER, nTab);
 
     return bChanged;
 }
