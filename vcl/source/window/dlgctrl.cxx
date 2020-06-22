@@ -23,7 +23,7 @@
 
 #include "dlgctrl.hxx"
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>

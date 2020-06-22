@@ -89,7 +89,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/field.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fmtfield.hxx>
