@@ -3513,6 +3513,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf113014)
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[5]/text", "3.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130218)
+{
+    SwDoc* pDoc = createDoc("tdf130218.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if hanging first line was hidden
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]/text", "Text");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
 {
     SwDoc* pDoc = createDoc("tdf127235.odt");
