@@ -328,6 +328,12 @@ public:
     /// Is bottom-of-page-frame - bottom-of-text-frame difference valid in case whitespace is hidden?
     /// If false is returned, then the caller should handle negative difference as (at least) zero difference instead.
     bool CheckPageHeightValidForHideWhitespace(SwTwips nDiff);
+<<<<<<< HEAD   (43c056 tdf#133863 tdf#133864 DOCX shape import: width relative to i)
+=======
+
+    const SwHeaderFrame* GetHeaderFrame() const;
+    const SwFooterFrame* GetFooterFrame() const;
+>>>>>>> CHANGE (a85c25 tdf#123324 DOCX import: fix shape height relative to top pag)
 };
 
 inline SwContentFrame *SwPageFrame::FindFirstBodyContent()

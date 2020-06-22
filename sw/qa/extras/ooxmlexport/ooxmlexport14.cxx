@@ -453,6 +453,67 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
 }
 
+<<<<<<< HEAD   (43c056 tdf#133863 tdf#133864 DOCX shape import: width relative to i)
+=======
+DECLARE_OOXMLEXPORT_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.docx")
+{
+    // tdf#126363: check if line with stays the same after export
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
+    if (!pXml)
+        return;
+    // this was 57240 (it differs from the original 57150, losing the preset line width)
+    assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "57150");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
+    uno::Reference<text::XTextRange> xText
+        = getRun(xParagraph, 1, "Wrong font when alone on the line");
+
+    // Without the fix in place this would have become Times New Roman
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Trebuchet MS"),
+        getProperty<OUString>(xText, "CharFontName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
+                         "tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx")
+{
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    // tdf#123324 The height was set relative to page print area top,
+    // but this was handled relative to page height.
+    // Note: page print area top = margin + header height.
+    // In this case the header exists.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredHeight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2551), nAnchoredHeight);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
+                         "tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx")
+{
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
+    // Note: the MSO Word margin = LO margin + LO header height.
+    // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
+
+    // tdf#123324 The height was set relative to page print area top,
+    // but this was handled relative to page height.
+    // Note: page print area top = margin + header height.
+    // In this case the header does not exist, so OpenDocument and OOXML margins are the same.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredHeight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2551), nAnchoredHeight);
+}
+
+>>>>>>> CHANGE (a85c25 tdf#123324 DOCX import: fix shape height relative to top pag)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

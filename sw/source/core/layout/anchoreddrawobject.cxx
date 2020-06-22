@@ -679,7 +679,29 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             tools::Rectangle aPageRect;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
+<<<<<<< HEAD   (43c056 tdf#133863 tdf#133864 DOCX shape import: width relative to i)
                 aPageRect = GetPageFrame()->getFramePrintArea().SVRect();
+=======
+                nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
+            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA)
+            {
+                // count required height: print area top = top margin + header
+                SwRect aHeaderRect;
+                const SwHeaderFrame* pHeaderFrame = GetPageFrame()->GetHeaderFrame();
+                if (pHeaderFrame)
+                    aHeaderRect = pHeaderFrame->GetPaintArea();
+                nHeight = GetPageFrame()->GetTopMargin() + aHeaderRect.Height();
+            }
+            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+            {
+                // count required height: print area bottom = bottom margin + footer
+                SwRect aFooterRect;
+                auto pFooterFrame = GetPageFrame()->GetFooterFrame();
+                if (pFooterFrame)
+                    aFooterRect = pFooterFrame->GetPaintArea();
+                nHeight = GetPageFrame()->GetBottomMargin() + aFooterRect.Height();
+            }
+>>>>>>> CHANGE (a85c25 tdf#123324 DOCX import: fix shape height relative to top pag)
             else
                 aPageRect = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect();
             nTargetHeight = aPageRect.GetHeight( ) * (*GetDrawObj( )->GetRelativeHeight());

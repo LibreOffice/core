@@ -989,6 +989,23 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
+<<<<<<< HEAD   (43c056 tdf#133863 tdf#133864 DOCX shape import: width relative to i)
+=======
+                case NS_ooxml::LN_ST_SizeRelFromV_topMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA));
+                    }
+                    break;
+                case NS_ooxml::LN_ST_SizeRelFromV_bottomMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                    }
+                    break;
+>>>>>>> CHANGE (a85c25 tdf#123324 DOCX import: fix shape height relative to top pag)
                 default:
                     SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: unhandled NS_ooxml::LN_CT_SizeRelV_relativeFrom value: " << nIntValue);
                     break;

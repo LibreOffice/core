@@ -2511,6 +2511,33 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
     return true;
 }
 
+<<<<<<< HEAD   (43c056 tdf#133863 tdf#133864 DOCX shape import: width relative to i)
+=======
+const SwHeaderFrame* SwPageFrame::GetHeaderFrame() const
+{
+    const SwFrame* pLowerFrame = Lower();
+    while (pLowerFrame)
+    {
+        if (pLowerFrame->IsHeaderFrame())
+            return dynamic_cast<const SwHeaderFrame*>(pLowerFrame);
+        pLowerFrame = pLowerFrame->GetNext();
+    }
+    return nullptr;
+}
+
+const SwFooterFrame* SwPageFrame::GetFooterFrame() const
+{
+    const SwFrame* pLowerFrame = Lower();
+    while (pLowerFrame)
+    {
+        if (pLowerFrame->IsFooterFrame())
+            return dynamic_cast<const SwFooterFrame*>(pLowerFrame);
+        pLowerFrame = pLowerFrame->GetNext();
+    }
+    return nullptr;
+}
+
+>>>>>>> CHANGE (a85c25 tdf#123324 DOCX import: fix shape height relative to top pag)
 SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
 {
     if (pPage && pPage->HasGrid())
