@@ -14,6 +14,7 @@ class ScGridWindow;
 class ScDBFunc;
 class ScDrawView;
 class ScTabViewShell;
+class ScViewFunc;
 
 class ScGridWinUIObject : public WindowUIObject
 {
@@ -43,6 +44,7 @@ private:
     ScDBFunc* getDBFunc();
     ScDrawView* getDrawView();
     ScTabViewShell* getViewShell();
+    ScViewFunc* getViewFunc();
 };
 
 class ScNavigatorDlg;
