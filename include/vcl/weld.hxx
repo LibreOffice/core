@@ -374,6 +374,7 @@ protected:
 
 public:
     virtual int get_current_page() const = 0;
+    virtual int get_page_index(const OString& rIdent) const = 0;
     virtual OString get_page_ident(int nPage) const = 0;
     virtual OString get_current_page_ident() const = 0;
     virtual void set_current_page(int nPage) = 0;

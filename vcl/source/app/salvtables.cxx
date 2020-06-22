@@ -2175,12 +2175,21 @@ OString SalInstanceNotebook::get_current_page_ident() const
     return m_xNotebook->GetPageName(m_xNotebook->GetCurPageId());
 }
 
-weld::Container* SalInstanceNotebook::get_page(const OString& rIdent) const
+int SalInstanceNotebook::get_page_index(const OString& rIdent) const
 {
     sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
     sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
     if (nPageIndex == TAB_PAGE_NOTFOUND)
+        return -1;
+    return nPageIndex;
+}
+
+weld::Container* SalInstanceNotebook::get_page(const OString& rIdent) const
+{
+    int nPageIndex = get_page_index(rIdent);
+    if (nPageIndex == -1)
         return nullptr;
+    sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
     TabPage* pPage = m_xNotebook->GetTabPage(nPageId);
     vcl::Window* pChild = pPage->GetChild(0);
     if (m_aPages.size() < nPageIndex + 1U)
@@ -2304,10 +2313,18 @@ public:
 
     virtual OString get_current_page_ident() const override { return m_xNotebook->GetCurPageId(); }
 
-    virtual weld::Container* get_page(const OString& rIdent) const override
+    virtual int get_page_index(const OString& rIdent) const override
     {
         sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(rIdent);
         if (nPageIndex == TAB_PAGE_NOTFOUND)
+            return -1;
+        return nPageIndex;
+    }
+
+    virtual weld::Container* get_page(const OString& rIdent) const override
+    {
+        int nPageIndex = get_page_index(rIdent);
+        if (nPageIndex == -1)
             return nullptr;
         auto pChild = m_xNotebook->GetPage(rIdent);
         if (m_aPages.size() < nPageIndex + 1U)
