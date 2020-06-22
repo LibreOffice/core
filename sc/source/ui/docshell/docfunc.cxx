@@ -153,6 +153,20 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow   = rRange.aEnd.Row();
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pTabViewShell)
+            {
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
+
     ScSizeDeviceProvider aProv( &rDocShell );
     Fraction aOne(1,1);
 
@@ -165,6 +179,9 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, MAXCOL, MAXROW, nTab),
                             PaintPartFlags::Grid | PaintPartFlags::Left);
+
+    if (comphelper::LibreOfficeKit::isActive())
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
 
     return bChanged;
 }
