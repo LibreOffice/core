@@ -69,7 +69,7 @@ public:
     virtual void Resize() override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
 private:
     const OUString msPanelId;

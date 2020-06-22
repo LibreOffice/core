@@ -237,7 +237,7 @@ public:
     void    UseInputStringForFormatting();
     bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 

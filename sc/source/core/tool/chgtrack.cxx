@@ -4682,7 +4682,7 @@ static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAct
     if (pAction->GetType() == SC_CAT_CONTENT)
     {
         auto redlinesNode = rRedlines.startNode("");
-        rRedlines.put("index", nIndex);
+        rRedlines.put("index", static_cast<sal_Int64>(nIndex));
 
         rRedlines.put("author", pAction->GetUser());
 
