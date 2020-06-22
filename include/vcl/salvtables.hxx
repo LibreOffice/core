@@ -16,7 +16,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolkit/combobox.hxx>

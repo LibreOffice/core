@@ -148,7 +148,9 @@
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/uitest/uiobject.hxx>
+#define VCL_INTERNALS 1
 #include <vcl/jsdialog/jsdialogbuilder.hxx>
+#undef VCL_INTERNALS
 
 // Needed for getUndoManager()
 #include <com/sun/star/document/XUndoManager.hpp>
