@@ -976,6 +976,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
+                case NS_ooxml::LN_ST_SizeRelFromV_topMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        // TODO: another UNO API value should be used instead of text::RelOrientation::PAGE_PRINT_AREA,
+                        // but this situation does not created yet, so we use this temporarily
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA));
+                    }
+                    break;
                 case NS_ooxml::LN_ST_SizeRelFromV_bottomMargin:
                     if (m_xShape.is())
                     {

@@ -2512,6 +2512,18 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
     return true;
 }
 
+const SwHeaderFrame* SwPageFrame::GetHeaderFrame() const
+{
+    const SwFrame* pLowerFrame = Lower();
+    while (pLowerFrame)
+    {
+        if (pLowerFrame->IsHeaderFrame())
+            return dynamic_cast<const SwHeaderFrame*>(pLowerFrame);
+        pLowerFrame = pLowerFrame->GetNext();
+    }
+    return nullptr;
+}
+
 const SwFooterFrame* SwPageFrame::GetFooterFrame() const
 {
     const SwFrame* pLowerFrame = Lower();

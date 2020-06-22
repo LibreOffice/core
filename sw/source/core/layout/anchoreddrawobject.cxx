@@ -648,6 +648,17 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
+            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA)
+            {
+                // TODO: another UNO API value should be used instead of text::RelOrientation::PAGE_PRINT_AREA,
+                // but this situation does not created yet, so we use this temporarily
+                SwRect aHeaderRect;
+                const SwHeaderFrame* pHeaderFrame = GetPageFrame()->GetHeaderFrame();
+                if (pHeaderFrame)
+                    aHeaderRect = pHeaderFrame->GetPaintArea();
+                // count required height (the top margin does not change in MSO Word unlike LO Writer if a header exists)
+                nHeight = GetPageFrame()->GetTopMargin() + aHeaderRect.Height();
+            }
             else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
             {
                 // TODO: another UNO API value should be used instead of text::RelOrientation::PAGE_PRINT_AREA_BOTTOM,
