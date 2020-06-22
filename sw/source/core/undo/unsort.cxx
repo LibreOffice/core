@@ -44,9 +44,9 @@ SwSortUndoElement::~SwSortUndoElement()
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     : SwUndo(SwUndoId::SORT_TXT, rRg.GetDoc())
     , SwUndRng(rRg)
-    , nTableNd(0)
+    , m_nTableNode(0)
 {
-    pSortOpt.reset( new SwSortOptions(rOpt) );
+    m_pSortOptions.reset( new SwSortOptions(rOpt) );
 }
 
 SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTableNd,
@@ -55,33 +55,33 @@ SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTabl
 {
     m_nSttNode = nStt;
     m_nEndNode = nEnd;
-    nTableNd   = rTableNd.GetIndex();
+    m_nTableNode   = rTableNd.GetIndex();
 
-    pSortOpt.reset( new SwSortOptions(rOpt) );
+    m_pSortOptions.reset( new SwSortOptions(rOpt) );
     if( bSaveTable )
-        pUndoTableAttr.reset( new SwUndoAttrTable( rTableNd ) );
+        m_pUndoAttrTable.reset( new SwUndoAttrTable( rTableNd ) );
 }
 
 SwUndoSort::~SwUndoSort()
 {
-    pSortOpt.reset();
-    pUndoTableAttr.reset();
+    m_pSortOptions.reset();
+    m_pUndoAttrTable.reset();
 }
 
 void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    if(pSortOpt->bTable)
+    if(m_pSortOptions->bTable)
     {
         // Undo for Table
         RemoveIdxFromSection( rDoc, m_nSttNode, &m_nEndNode );
 
-        if( pUndoTableAttr )
+        if( m_pUndoAttrTable )
         {
-            pUndoTableAttr->UndoImpl(rContext);
+            m_pUndoAttrTable->UndoImpl(rContext);
         }
 
-        SwTableNode* pTableNd = rDoc.GetNodes()[ nTableNd ]->GetTableNode();
+        SwTableNode* pTableNd = rDoc.GetNodes()[ m_nTableNode ]->GetTableNode();
 
         // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
@@ -153,12 +153,12 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if(pSortOpt->bTable)
+    if(m_pSortOptions->bTable)
     {
         // Redo for Table
         RemoveIdxFromSection( rDoc, m_nSttNode, &m_nEndNode );
 
-        SwTableNode* pTableNd = rDoc.GetNodes()[ nTableNd ]->GetTableNode();
+        SwTableNode* pTableNd = rDoc.GetNodes()[ m_nTableNode ]->GetTableNode();
 
         // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
@@ -182,9 +182,9 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             aMovedList.push_back( pSource );
         }
 
-        if( pUndoTableAttr )
+        if( m_pUndoAttrTable )
         {
-            pUndoTableAttr->RedoImpl(rContext);
+            m_pUndoAttrTable->RedoImpl(rContext);
         }
 
         // Restore table frames:
@@ -230,13 +230,13 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // table not repeat capable
-    if(!pSortOpt->bTable)
+    if(!m_pSortOptions->bTable)
     {
         SwPaM *const pPam = & rContext.GetRepeatPaM();
         SwDoc& rDoc = *pPam->GetDoc();
 
         if( !rDoc.IsIdxInTable( pPam->Start()->nNode ) )
-            rDoc.SortText(*pPam, *pSortOpt);
+            rDoc.SortText(*pPam, *m_pSortOptions);
     }
 }
 

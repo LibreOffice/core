@@ -1281,14 +1281,14 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 
     SwDocDisplayItem aDisp;
 
-    aDisp.bParagraphEnd         = m_xParaCB->get_active();
-    aDisp.bTab                  = m_xTabCB->get_active();
-    aDisp.bSpace                = m_xSpacesCB->get_active();
-    aDisp.bNonbreakingSpace     = m_xHSpacesCB->get_active();
-    aDisp.bSoftHyphen           = m_xSHyphCB->get_active();
-    aDisp.bCharHiddenText       = m_xCharHiddenCB->get_active();
-    aDisp.bBookmarks            = m_xBookmarkCB->get_active();
-    aDisp.bManualBreak          = m_xBreakCB->get_active();
+    aDisp.m_bParagraphEnd         = m_xParaCB->get_active();
+    aDisp.m_bTab                  = m_xTabCB->get_active();
+    aDisp.m_bSpace                = m_xSpacesCB->get_active();
+    aDisp.m_bNonbreakingSpace     = m_xHSpacesCB->get_active();
+    aDisp.m_bSoftHyphen           = m_xSHyphCB->get_active();
+    aDisp.m_bCharHiddenText       = m_xCharHiddenCB->get_active();
+    aDisp.m_bBookmarks            = m_xBookmarkCB->get_active();
+    aDisp.m_bManualBreak          = m_xBreakCB->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1329,14 +1329,14 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
                                     reinterpret_cast<const SfxPoolItem**>(&pDocDisplayAttr) );
     if(pDocDisplayAttr)
     {
-        m_xParaCB->set_active( pDocDisplayAttr->bParagraphEnd );
-        m_xTabCB->set_active( pDocDisplayAttr->bTab );
-        m_xSpacesCB->set_active( pDocDisplayAttr->bSpace );
-        m_xHSpacesCB->set_active( pDocDisplayAttr->bNonbreakingSpace );
-        m_xSHyphCB->set_active( pDocDisplayAttr->bSoftHyphen );
-        m_xCharHiddenCB->set_active( pDocDisplayAttr->bCharHiddenText );
-        m_xBookmarkCB->set_active(pDocDisplayAttr->bBookmarks);
-        m_xBreakCB->set_active( pDocDisplayAttr->bManualBreak );
+        m_xParaCB->set_active( pDocDisplayAttr->m_bParagraphEnd );
+        m_xTabCB->set_active( pDocDisplayAttr->m_bTab );
+        m_xSpacesCB->set_active( pDocDisplayAttr->m_bSpace );
+        m_xHSpacesCB->set_active( pDocDisplayAttr->m_bNonbreakingSpace );
+        m_xSHyphCB->set_active( pDocDisplayAttr->m_bSoftHyphen );
+        m_xCharHiddenCB->set_active( pDocDisplayAttr->m_bCharHiddenText );
+        m_xBookmarkCB->set_active(pDocDisplayAttr->m_bBookmarks);
+        m_xBreakCB->set_active( pDocDisplayAttr->m_bManualBreak );
     }
 }
 

@@ -59,10 +59,10 @@ struct SwSortUndoElement
 
 class SwUndoSort : public SwUndo, private SwUndRng
 {
-    std::unique_ptr<SwSortOptions>    pSortOpt;
+    std::unique_ptr<SwSortOptions>    m_pSortOptions;
     std::vector<std::unique_ptr<SwSortUndoElement>> m_SortList;
-    std::unique_ptr<SwUndoAttrTable>  pUndoTableAttr;
-    sal_uLong         nTableNd;
+    std::unique_ptr<SwUndoAttrTable>  m_pUndoAttrTable;
+    sal_uLong         m_nTableNode;
 
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );

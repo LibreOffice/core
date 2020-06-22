@@ -37,21 +37,20 @@ class SwContentOptPage;
 class SwShdwCursorOptionsTabPage;
 enum class SwFillMode;
 
-// OS 12.01.95
-// Item for settings dialog - document view
+/// Item for settings dialog - document view
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
     friend class SwShdwCursorOptionsTabPage;
     friend class SwModule;
 
-    bool bParagraphEnd      :1;
-    bool bTab               :1;
-    bool bSpace             :1;
-    bool bNonbreakingSpace  :1;
-    bool bSoftHyphen        :1;
-    bool bCharHiddenText    :1;
-    bool bBookmarks         :1;
-    bool bManualBreak       :1;
+    bool m_bParagraphEnd      :1;
+    bool m_bTab               :1;
+    bool m_bSpace             :1;
+    bool m_bNonbreakingSpace  :1;
+    bool m_bSoftHyphen        :1;
+    bool m_bCharHiddenText    :1;
+    bool m_bBookmarks         :1;
+    bool m_bManualBreak       :1;
 
 public:
                                 SwDocDisplayItem();
@@ -109,11 +108,11 @@ public:
     virtual bool         operator==( const SfxPoolItem& ) const override;
 };
 
-// Item for settings dialog, ShadowCursorPage
+/// Item for settings dialog, ShadowCursorPage
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
-    SwFillMode eMode;
-    bool bOn;
+    SwFillMode m_eMode;
+    bool m_bOn;
 public:
     SwShadowCursorItem();
     SwShadowCursorItem( const SwViewOption& rVOpt );
@@ -123,11 +122,11 @@ public:
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 
-    SwFillMode GetMode() const          { return eMode; }
-    bool IsOn() const                   { return bOn; }
+    SwFillMode GetMode() const          { return m_eMode; }
+    bool IsOn() const                   { return m_bOn; }
 
-    void SetMode( SwFillMode eM )       { eMode = eM; }
-    void SetOn( bool bFlag )            { bOn = bFlag; }
+    void SetMode( SwFillMode eM )       { m_eMode = eM; }
+    void SetOn( bool bFlag )            { m_bOn = bFlag; }
 };
 
 #ifdef DBG_UTIL

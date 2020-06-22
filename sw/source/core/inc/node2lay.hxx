@@ -67,7 +67,7 @@ public:
 
 class SwNode2LayoutSaveUpperFrames
 {
-    std::unique_ptr<SwNode2LayImpl> pImpl;
+    std::unique_ptr<SwNode2LayImpl> m_pImpl;
 public:
     /// Use this ctor for collecting the UpperFrames
     SwNode2LayoutSaveUpperFrames( const SwNode& rNd );
