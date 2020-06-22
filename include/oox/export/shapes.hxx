@@ -87,9 +87,11 @@ public:
     typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32> ShapeHashMap;
 
 protected:
-    sal_Int32           mnShapeIdMax, mnPictureIdMax;
+    sal_Int32           mnShapeIdMax;
 
     void WriteGraphicObjectShapePart( const css::uno::Reference< css::drawing::XShape >& xShape, const Graphic *pGraphic=nullptr );
+
+    OUString            GetShapeName(const css::uno::Reference< css::drawing::XShape >& xShape);
 
 private:
     sal_Int32           mnXmlNamespace;
