@@ -187,7 +187,7 @@ public:
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 class NotebookBar;

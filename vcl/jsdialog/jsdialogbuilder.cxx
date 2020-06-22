@@ -1,12 +1,12 @@
 #include <vcl/jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
-#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/toolkit/combobox.hxx>
 #include <messagedialog.hxx>
+#include <tools/json_writer.hxx>
 
 void JSDialogSender::notifyDialogState()
 {
@@ -16,12 +16,10 @@ void JSDialogSender::notifyDialogState()
     const vcl::ILibreOfficeKitNotifier* pNotifier = m_aOwnedToplevel->GetLOKNotifier();
     if (pNotifier)
     {
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
-        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        tools::JsonWriter aJsonWriter;
+        m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
+        aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
     }
 }
 
@@ -111,12 +109,10 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
     if (pNotifier)
     {
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
-        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        tools::JsonWriter aJsonWriter;
+        m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
+        aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
     }
 
     return pRet;
