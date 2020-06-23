@@ -971,6 +971,11 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 
 void ScDrawView::resetGridOffsetsForAllSdrPageViews()
 {
+    if (comphelper::LibreOfficeKit::isActive() &&
+        !comphelper::LibreOfficeKit::isCompatFlagSet(
+          comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+      return;
+    
     SdrPageView* pPageView(GetSdrPageView());
 
     if(nullptr != pPageView)

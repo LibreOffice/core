@@ -1290,7 +1290,9 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "smile.png") }
         }));
+    assert(comphelper::LibreOfficeKit::isActive());
     comphelper::dispatchCommand(".uno:InsertGraphic", aArgs);
+    assert(comphelper::LibreOfficeKit::isActive());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
