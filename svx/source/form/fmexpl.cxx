@@ -219,7 +219,7 @@ FmFormData::FmFormData(const Reference< XForm >& _rxForm, FmFormData* _pParent)
     , m_xForm(_rxForm)
 {
     // set images
-    m_aNormalImage = Image(RID_SVXBMP_FORM);
+    m_aNormalImage = RID_SVXBMP_FORM;
 
     // set title
     if (m_xForm.is())
@@ -301,10 +301,10 @@ std::unique_ptr<FmEntryData> FmControlData::Clone()
 }
 
 
-Image FmControlData::GetImage() const
+OUString FmControlData::GetImage() const
 {
     // Default-Image
-    Image aImage(StockImage::Yes, RID_SVXBMP_CONTROL);
+    OUString aImage(RID_SVXBMP_CONTROL);
 
     Reference< XServiceInfo > xInfo( m_xFormComponent, UNO_QUERY );
     if (!m_xFormComponent.is())
@@ -316,91 +316,91 @@ Image FmControlData::GetImage() const
     switch (nObjectType)
     {
     case OBJ_FM_BUTTON:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_BUTTON);
+        aImage = RID_SVXBMP_BUTTON;
         break;
 
     case OBJ_FM_FIXEDTEXT:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_FIXEDTEXT);
+        aImage = RID_SVXBMP_FIXEDTEXT;
         break;
 
     case OBJ_FM_EDIT:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_EDITBOX);
+        aImage = RID_SVXBMP_EDITBOX;
         break;
 
     case OBJ_FM_RADIOBUTTON:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_RADIOBUTTON);
+        aImage = RID_SVXBMP_RADIOBUTTON;
         break;
 
     case OBJ_FM_CHECKBOX:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_CHECKBOX);
+        aImage = RID_SVXBMP_CHECKBOX;
         break;
 
     case OBJ_FM_LISTBOX:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_LISTBOX);
+        aImage = RID_SVXBMP_LISTBOX;
         break;
 
     case OBJ_FM_COMBOBOX:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_COMBOBOX);
+        aImage = RID_SVXBMP_COMBOBOX;
         break;
 
     case OBJ_FM_NAVIGATIONBAR:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_NAVIGATIONBAR);
+        aImage = RID_SVXBMP_NAVIGATIONBAR;
         break;
 
     case OBJ_FM_GROUPBOX:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_GROUPBOX);
+        aImage = RID_SVXBMP_GROUPBOX;
         break;
 
     case OBJ_FM_IMAGEBUTTON:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_IMAGEBUTTON);
+        aImage = RID_SVXBMP_IMAGEBUTTON;
         break;
 
     case OBJ_FM_FILECONTROL:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_FILECONTROL);
+        aImage = RID_SVXBMP_FILECONTROL;
         break;
 
     case OBJ_FM_HIDDEN:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_HIDDEN);
+        aImage = RID_SVXBMP_HIDDEN;
         break;
 
     case OBJ_FM_DATEFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_DATEFIELD);
+        aImage = RID_SVXBMP_DATEFIELD;
         break;
 
     case OBJ_FM_TIMEFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_TIMEFIELD);
+        aImage = RID_SVXBMP_TIMEFIELD;
         break;
 
     case OBJ_FM_NUMERICFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_NUMERICFIELD);
+        aImage = RID_SVXBMP_NUMERICFIELD;
         break;
 
     case OBJ_FM_CURRENCYFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_CURRENCYFIELD);
+        aImage = RID_SVXBMP_CURRENCYFIELD;
         break;
 
     case OBJ_FM_PATTERNFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_PATTERNFIELD);
+        aImage = RID_SVXBMP_PATTERNFIELD;
         break;
 
     case OBJ_FM_IMAGECONTROL:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_IMAGECONTROL);
+        aImage = RID_SVXBMP_IMAGECONTROL;
         break;
 
     case OBJ_FM_FORMATTEDFIELD:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_FORMATTEDFIELD);
+        aImage = RID_SVXBMP_FORMATTEDFIELD;
         break;
 
     case OBJ_FM_GRID:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_GRID);
+        aImage = RID_SVXBMP_GRID;
         break;
 
     case OBJ_FM_SCROLLBAR:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_SCROLLBAR);
+        aImage = RID_SVXBMP_SCROLLBAR;
         break;
 
     case OBJ_FM_SPINBUTTON:
-        aImage = Image(StockImage::Yes, RID_SVXBMP_SPINBUTTON);
+        aImage = RID_SVXBMP_SPINBUTTON;
         break;
     }
 
@@ -435,17 +435,15 @@ namespace svxform
 
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                   vcl::Window* _pParent )
-      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
-      ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
+      : SfxDockingWindow(_pBindings, _pMgr, _pParent, "FormNavigator", "svx/ui/formnavigator.ui")
+      , SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
+      , m_xNavigatorTree(new NavigatorTree(m_xBuilder->weld_tree_view("treeview")))
     {
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
 
-        m_pNavigatorTree = VclPtr<NavigatorTree>::Create( this );
-        m_pNavigatorTree->Show();
         SetText( SvxResId(RID_STR_FMEXPLORER) );
         SfxDockingWindow::SetFloatingSize( Size(200,200) );
     }
-
 
     NavigatorFrame::~NavigatorFrame()
     {
@@ -454,17 +452,15 @@ namespace svxform
 
     void NavigatorFrame::dispose()
     {
-        m_pNavigatorTree.disposeAndClear();
+        m_xNavigatorTree.reset();
         ::SfxControllerItem::dispose();
         SfxDockingWindow::dispose();
     }
 
-
     void NavigatorFrame::UpdateContent( FmFormShell* pFormShell )
     {
-        m_pNavigatorTree->UpdateContent( pFormShell );
+        m_xNavigatorTree->UpdateContent(pFormShell);
     }
-
 
     void NavigatorFrame::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
     {
@@ -480,15 +476,13 @@ namespace svxform
             UpdateContent( nullptr );
     }
 
-
     void NavigatorFrame::GetFocus()
     {
-        if ( m_pNavigatorTree )
-            m_pNavigatorTree->GrabFocus();
+        if (m_xNavigatorTree )
+            m_xNavigatorTree->GrabFocus();
         else
             SfxDockingWindow::GetFocus();
     }
-
 
     bool NavigatorFrame::Close()
     {
@@ -496,13 +490,11 @@ namespace svxform
         return SfxDockingWindow::Close();
     }
 
-
     void NavigatorFrame::FillInfo( SfxChildWinInfo& rInfo ) const
     {
         SfxDockingWindow::FillInfo( rInfo );
         rInfo.bVisible = false;
     }
-
 
     Size NavigatorFrame::CalcDockingSize( SfxChildAlignment eAlign )
     {
@@ -512,7 +504,6 @@ namespace svxform
         return SfxDockingWindow::CalcDockingSize( eAlign );
     }
 
-
     SfxChildAlignment NavigatorFrame::CheckAlignment( SfxChildAlignment _eActAlign, SfxChildAlignment _eAlign )
     {
         if ( ( _eAlign == SfxChildAlignment::LEFT ) || ( _eAlign == SfxChildAlignment::RIGHT ) || ( _eAlign == SfxChildAlignment::NOALIGNMENT ) )
@@ -520,27 +511,7 @@ namespace svxform
         return _eActAlign;
     }
 
-
-    void NavigatorFrame::Resize()
-    {
-        SfxDockingWindow::Resize();
-
-        Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
-        Size aLogExplSize = aLogOutputSize;
-        aLogExplSize.AdjustWidth( -6 );
-        aLogExplSize.AdjustHeight( -6 );
-
-        Point aExplPos = LogicToPixel(Point(3, 3), MapMode(MapUnit::MapAppFont));
-        Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
-
-        m_pNavigatorTree->SetPosSizePixel( aExplPos, aExplSize );
-    }
-
-
-
-
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )
-
 
     NavigatorFrameManager::NavigatorFrameManager( vcl::Window* _pParent, sal_uInt16 _nId,
                                         SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )

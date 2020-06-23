@@ -214,7 +214,7 @@ inline bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats 
 class OFilterExchangeHelper : public OLocalExchangeHelper
 {
 public:
-    OFilterExchangeHelper(vcl::Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+    OFilterExchangeHelper() : OLocalExchangeHelper() { }
 
     OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
 

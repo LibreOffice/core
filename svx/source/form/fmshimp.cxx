@@ -47,6 +47,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
+#include <formnavi.hrc>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
@@ -1009,16 +1010,13 @@ void FmXFormShell::ForceUpdateSelection_Lock()
     }
 }
 
-std::unique_ptr<VclBuilder> FmXFormShell::GetConversionMenu_Lock()
+void FmXFormShell::GetConversionMenu_Lock(weld::Menu& rNewMenu)
 {
-    std::unique_ptr<VclBuilder> pBuilder(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", ""));
-    VclPtr<PopupMenu> pNewMenu(pBuilder->get_menu("menu"));
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
         // the corresponding image at it
-        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(StockImage::Yes, aImgIds[i]));
+        rNewMenu.append(OUString::createFromAscii(aConvertSlots[i]), SvxResId(RID_SVXSW_CONVERTMENU[i]), aImgIds[i]);
     }
-    return pBuilder;
 }
 
 OString FmXFormShell::SlotToIdent(sal_uInt16 nSlot)
@@ -1288,13 +1286,13 @@ bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(const OString& rIden
     return true;    // all other slots: assume "yes"
 }
 
-void FmXFormShell::checkControlConversionSlotsForCurrentSelection_Lock(Menu& rMenu)
+void FmXFormShell::checkControlConversionSlotsForCurrentSelection_Lock(weld::Menu& rMenu)
 {
-    for (sal_uInt16 i = 0; i < rMenu.GetItemCount(); ++i)
+    for (int i = 0, nCount = rMenu.n_children(); i < nCount; ++i)
     {
         // the context is already of a type that corresponds to the entry -> disable
-        const sal_uInt16 nId = rMenu.GetItemId(i);
-        rMenu.EnableItem(nId, canConvertCurrentSelectionToControl_Lock(rMenu.GetItemIdent(nId)));
+        OString sIdent(aConvertSlots[i]);
+        rMenu.set_sensitive(sIdent, canConvertCurrentSelectionToControl_Lock(sIdent));
     }
 }
 

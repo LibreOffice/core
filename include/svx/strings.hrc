@@ -1132,6 +1132,7 @@
 #define RID_STR_PROPERTIES_FORM                             NC_("RID_STR_PROPERTIES_FORM", "Form Properties")
 #define RID_STR_FMEXPLORER                                  NC_("RID_STR_FMEXPLORER", "Form Navigator")
 #define RID_STR_FORM                                        NC_("RID_STR_FORM", "Form")
+#define RID_STR_HIDDEN                                      NC_("RID_STR_HIDDEN", "Hidden")
 #define RID_STR_STDFORMNAME                                 NC_("RID_STR_STDFORMNAME", "Form")
 #define RID_STR_PROPTITLE_HIDDEN                            NC_("RID_STR_PROPTITLE_HIDDEN", "Hidden Control")
 #define RID_STR_CONTROL                                     NC_("RID_STR_CONTROL", "Control")

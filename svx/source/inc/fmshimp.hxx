@@ -34,8 +34,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
-#include <vcl/builder.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/shell.hxx>
@@ -85,6 +83,10 @@ enum class LoadFormsFlags {
 };
 namespace o3tl {
     template<> struct typed_flags<LoadFormsFlags> : is_typed_flags<LoadFormsFlags, 0x0003> {};
+}
+
+namespace weld {
+    class Menu;
 }
 
 // a class iterating through all fields of a form which are bound to a field
@@ -404,13 +406,13 @@ public:
     SAL_DLLPRIVATE void startFiltering_Lock();
     SAL_DLLPRIVATE void stopFiltering_Lock(bool bSave);
 
-        // a menu that contains all ControlConversion entries
-    SAL_DLLPRIVATE static std::unique_ptr<VclBuilder> GetConversionMenu_Lock();
+        // fills rMenu to be a menu that contains all ControlConversion entries
+    SAL_DLLPRIVATE static void GetConversionMenu_Lock(weld::Menu& rMenu);
 
     /// checks whether a given control conversion slot can be applied to the current selection
     SAL_DLLPRIVATE bool canConvertCurrentSelectionToControl_Lock(const OString& rIdent);
     /// enables or disables all conversion slots in a menu, according to the current selection
-    SAL_DLLPRIVATE void checkControlConversionSlotsForCurrentSelection_Lock(Menu& rMenu);
+    SAL_DLLPRIVATE void checkControlConversionSlotsForCurrentSelection_Lock(weld::Menu& rMenu);
     /// executes a control conversion slot for a given object
     SAL_DLLPRIVATE bool executeControlConversionSlot_Lock(const css::uno::Reference< css::form::XFormComponent >& _rxObject, const OString& rIdent);
     /** executes a control conversion slot for the current selection

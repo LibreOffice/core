@@ -30,6 +30,7 @@
 #include <com/sun/star/form/XForms.hpp>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
 
@@ -38,14 +39,10 @@ class SvTreeListBox;
 
 namespace svxform
 {
-
-
-    typedef ::std::set< SvTreeListEntry* >  ListBoxEntrySet;
-
+    typedef ::std::set<std::unique_ptr<weld::TreeIter>> ListBoxEntrySet;
 
     //= OLocalExchange
-
-    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OLocalExchange : public TransferableHelper
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OLocalExchange : public TransferDataContainer
     {
     private:
         Link<OLocalExchange&,void>  m_aClipboardListener;
@@ -64,8 +61,9 @@ namespace svxform
         bool        isDragging() const { return m_bDragging; }
         bool        isClipboardOwner() const { return m_bClipboardOwner; }
 
+        void        setDragging(bool bDragging);
         void        startDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
-        void        copyToClipboard( vcl::Window* _pWindow, const GrantAccess& );
+        void        copyToClipboard(const GrantAccess&);
 
         void        setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { m_aClipboardListener = _rListener; }
 
@@ -83,7 +81,7 @@ namespace svxform
 
     private:
          // don't allow this base class method to be called from outside
-        using TransferableHelper::StartDrag;
+        using TransferDataContainer::StartDrag;
     };
 
 
@@ -93,16 +91,15 @@ namespace svxform
     class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OLocalExchangeHelper
     {
     protected:
-        VclPtr<vcl::Window>            m_pDragSource;
         rtl::Reference<OLocalExchange> m_xTransferable;
 
     public:
-        OLocalExchangeHelper( vcl::Window* _pDragSource );
+        OLocalExchangeHelper();
         virtual ~OLocalExchangeHelper();
 
         void        prepareDrag( );
 
-        void        startDrag( sal_Int8 nDragSourceActions );
+        void        startDrag(vcl::Window* pDragSource, sal_Int8 nDragSourceActions);
         void        copyToClipboard( ) const;
 
         bool    isDragSource() const { return m_xTransferable.is() && m_xTransferable->isDragging(); }
@@ -135,7 +132,7 @@ namespace svxform
                             m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
-        SvTreeListEntry*        m_pFocusEntry;
+        bool        m_bFocusEntry;
 
     protected:
         // updates m_aCurrentFormats with all formats we currently could supply
@@ -151,8 +148,8 @@ namespace svxform
 
         inline const DataFlavorExVector&    GetDataFlavorExVector() const;
 
-        void addSelectedEntry( SvTreeListEntry* _pEntry );
-        void setFocusEntry( SvTreeListEntry* _pFocusEntry );
+        void addSelectedEntry(std::unique_ptr<weld::TreeIter> xEntry);
+        void setFocusEntry(bool _bFocusEntry);
 
         /** notifies the data transfer object that a certain entry has been removed from the owning tree
 
@@ -162,18 +159,18 @@ namespace svxform
             @param  _pEntry
             @return the number of entries remaining in the selection.
         */
-        size_t  onEntryRemoved( SvTreeListEntry* _pEntry );
+        size_t  onEntryRemoved(weld::TreeView* pView, weld::TreeIter* _pEntry);
 
         void setFormsRoot(
             const css::uno::Reference< css::form::XForms >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
-        void buildPathFormat(SvTreeListBox const * pTreeBox, SvTreeListEntry const * pRoot);
+        void buildPathFormat(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot);
             // assembles m_aControlPaths from m_aSelectedEntries
             // (it is assumed that the entries are sorted in m_aSelectedEntries with respect to the neighbor relationship)
 
 
-        void buildListFromPath(SvTreeListBox const * pTreeBox, SvTreeListEntry* pRoot);
+        void buildListFromPath(const weld::TreeView* pTreeBox, weld::TreeIter* pRoot);
             // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
         void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);
@@ -218,7 +215,7 @@ namespace svxform
     class OControlExchangeHelper : public OLocalExchangeHelper
     {
     public:
-        OControlExchangeHelper(vcl::Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+        OControlExchangeHelper() : OLocalExchangeHelper() { }
 
         OControlExchange* operator->() const { return static_cast< OControlExchange* >( m_xTransferable.get() ); }
         OControlExchange& operator*() const { return *static_cast< OControlExchange* >( m_xTransferable.get() ); }
