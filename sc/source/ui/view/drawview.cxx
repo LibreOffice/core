@@ -971,6 +971,11 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 
 void ScDrawView::resetGridOffsetsForAllSdrPageViews()
 {
+    if (comphelper::LibreOfficeKit::isActive() &&
+        !comphelper::LibreOfficeKit::isCompatFlagSet(
+          comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+      return;
+    
     SdrPageView* pPageView(GetSdrPageView());
 
     if(nullptr != pPageView)
@@ -1000,7 +1005,11 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     if (comphelper::LibreOfficeKit::isActive() &&
             !comphelper::LibreOfficeKit::isCompatFlagSet(
                     comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
-        return false;
+    {
+      	rTarget.setX(0);
+      	rTarget.setY(0);
+        return true;
+    }
 
     ScGridWindow* pGridWin(pViewData->GetActiveWin());
 
@@ -1059,6 +1068,14 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     const basegfx::B2DRange& rB2DRange,
     basegfx::B2DVector& rTarget) const
 {
+    if (comphelper::LibreOfficeKit::isActive() &&
+            !comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    {
+      	rTarget.setX(0);
+      	rTarget.setY(0);
+        return true;
+    }
     ScGridWindow* pGridWin(pViewData->GetActiveWin());
 
     if(nullptr == pGridWin || rB2DRange.isEmpty())
