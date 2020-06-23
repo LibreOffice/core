@@ -1337,10 +1337,16 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
     Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
-    // FIXME: compare vs. origZoomX/Y and avoid ?
+    const bool bChangeZoom = (aFracX !=  origZoomX || aFracY != origZoomY);
 
     // page break zoom, and aLogicMode in ScViewData
+    // FIXME: there are issues when SetZoom is called conditionally.
     pViewData->SetZoom(aFracX, aFracY, true);
+    if (bChangeZoom)
+    {
+        if (ScDrawView* pDrawView = pViewData->GetScDrawView())
+            pDrawView->resetGridOffsetsForAllSdrPageViews();
+    }
 
     const double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
     const double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
@@ -1452,6 +1458,11 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pDoc->PrepareFormulaCalc();
 
     pViewData->SetZoom(origZoomX, origZoomY, true);
+    if (bChangeZoom)
+    {
+        if (ScDrawView* pDrawView = pViewData->GetScDrawView())
+            pDrawView->resetGridOffsetsForAllSdrPageViews();
+    }
 }
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
