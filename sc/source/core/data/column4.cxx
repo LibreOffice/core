@@ -1221,8 +1221,7 @@ public:
     void operator() ( size_t /*nRow*/, SvtBroadcaster* p )
     {
         SvtBroadcaster::ListenersType& rLis = p->GetAllListeners();
-        mrListeners.reserve(mrListeners.size() + rLis.size());
-        std::copy(rLis.begin(), rLis.end(), std::back_inserter(mrListeners));
+        mrListeners.insert(mrListeners.end(), rLis.begin(), rLis.end());
     }
 };
 
