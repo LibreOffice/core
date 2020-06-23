@@ -50,6 +50,11 @@ bool SdPdfFilter::Import()
     if (vcl::ImportPDFUnloaded(aFileName, aGraphics) == 0)
         return false;
 
+    bool bWasLocked = mrDocument.isLocked();
+    mrDocument.setLock(true);
+    const bool bSavedUndoEnabled = mrDocument.IsUndoEnabled();
+    mrDocument.EnableUndo(false);
+
     // Add as many pages as we need up-front.
     mrDocument.CreateFirstPages();
     for (size_t i = 0; i < aGraphics.size() - 1; ++i)
@@ -94,7 +99,8 @@ bool SdPdfFilter::Import()
             xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
         }
     }
-
+    mrDocument.setLock(bWasLocked);
+    mrDocument.EnableUndo(bSavedUndoEnabled);
     return true;
 }
 
