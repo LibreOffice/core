@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47a0d5b2_48ae23bc",
+        "filename": "slideshow/source/engine/slide/layermanager.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-23T16:51:58Z",
+      "side": 1,
+      "message": "nice catch here wrt. const-correctness ;)\n\nThen again - if this map is always only gonna be used read-only, and continues to be owned by the Slide/LayerManager - and you\u0027re likely not storing ptrs or references - how about then just returning a const reference here?",
+      "revId": "332375dd47a2343d90dfddddf8d443c3bf76f1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "888b3d48_9e4802be",
+        "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-23T16:51:58Z",
+      "side": 1,
+      "message": "this wouldn\u0027t obviously work then anymore. any other error handling you could think of?",
+      "revId": "332375dd47a2343d90dfddddf8d443c3bf76f1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
