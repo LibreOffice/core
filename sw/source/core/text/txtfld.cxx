@@ -649,11 +649,14 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                 lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt );
 
                 // --> OD 2008-01-23 #newlistelevelattrs#
-                pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
-                                            pTextNd->GetLabelFollowedBy(),
-                                            std::move(pNumFnt),
-                                            bLeft, bCenter, nMinDist,
-                                            bLabelAlignmentPosAndSpaceModeActive );
+                if (rNumFormat.GetBulletChar())
+                {
+                    pRet = new SwBulletPortion(rNumFormat.GetBulletChar(),
+                        pTextNd->GetLabelFollowedBy(),
+                        std::move(pNumFnt),
+                        bLeft, bCenter, nMinDist,
+                        bLabelAlignmentPosAndSpaceModeActive);
+                }
             }
             else
             {
