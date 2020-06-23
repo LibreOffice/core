@@ -72,13 +72,14 @@ enum class ACFlags : sal_uInt32 {
     ChgSglQuotes         = 0x00001000,   // Replace simple quotes
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
     TransliterateRTL     = 0x00004000,   // Transliterate RTL text
+    ChgAngleQuotes       = 0x00008000,   // >>, << -> angle quotes in some languages
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
     WrdSttLstLoad        = 0x80000000,   // Exception list for Word Start loaded
 };
 namespace o3tl {
-    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe0007fff> {};
+    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe000ffff> {};
 }
 
 enum class ACQuotes
