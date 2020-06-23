@@ -1347,10 +1347,11 @@ void ScTable::UndoToTable(
 
         for ( SCCOL i = 0; i < aCol.size(); i++)
         {
+            auto& rDestCol = pDestTab->CreateColumnIfNotExists(i);
             if ( i >= nCol1 && i <= nCol2 )
-                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i]);
+                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rDestCol);
             else
-                aCol[i].CopyToColumn(rCxt, 0, pDocument->MaxRow(), InsertDeleteFlags::FORMULA, false, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(rCxt, 0, pDocument->MaxRow(), InsertDeleteFlags::FORMULA, false, rDestCol);
         }
 
         if (nFlags & InsertDeleteFlags::ATTRIB)
