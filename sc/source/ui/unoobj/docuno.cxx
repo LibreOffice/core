@@ -494,6 +494,32 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
         pDocShell->PostPaint( rRange, PaintPartFlags::Grid );
 }
 
+static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
+                                              const Fraction& rZoomY,
+                                              const SCTAB nTab,
+                                              const ViewShellDocId& rDocId,
+                                              const size_t nMaxIter = 5)
+{
+    size_t nIter = 0;
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            pViewShell && nIter < nMaxIter;
+            (pViewShell = SfxViewShell::GetNext(*pViewShell)), ++nIter)
+    {
+        if (pViewShell->GetDocId() != rDocId)
+            continue;
+
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (!pTabViewShell)
+            continue;
+
+        ScViewData& rData = pTabViewShell->GetViewData();
+        if (rData.GetTabNo() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY)
+            return &rData;
+    }
+
+    return nullptr;
+}
+
 void ScModelObj::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
@@ -505,7 +531,18 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     if (!pViewShell)
         return;
 
-    ScViewData* pViewData = &pViewShell->GetViewData();
+    const ScViewData* pActiveViewData = ScDocShell::GetViewData();
+    Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+
+    // Try to find a view that matches the tile-zoom requested by iterating over
+    // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
+    // and hence avoid grid-offset recomputation on all shapes which is not cheap.
+    ScTabViewShell *pActiveViewShell = pActiveViewData->GetViewShell();
+    ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(aFracX, aFracY,
+            pActiveViewData->GetTabNo(), pActiveViewShell->GetDocId());
+    if (!pViewData)
+        pViewData = ScDocShell::GetViewData();
 
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
