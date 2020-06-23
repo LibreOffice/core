@@ -41,6 +41,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/pdfwriter.hxx>
 
 #include <vcl/uitest/uiobject.hxx>
 
@@ -1247,12 +1248,42 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
     OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
+template <typename T1, typename T2>
+bool IsSameOutDevType(T1*, T2*)
+{
+    return false;
+}
+
+template<>
+bool IsSameOutDevType(OutputDevice*, OutputDevice*)
+{
+    return true;
+}
+
+template<>
+bool IsSameOutDevType(Window*, Window*)
+{
+    return true;
+}
+
+template<>
+bool IsSameOutDevType(VirtualDevice*, VirtualDevice*)
+{
+    return true;
+}
+
+template<>
+bool IsSameOutDevType(PDFWriterImpl*, PDFWriterImpl*)
+{
+    return true;
+}
+
 const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const
 {
     const OutputDevice* pSrcDevChecked;
     if ( this == pSrcDev )
         pSrcDevChecked = nullptr;
-    else if (GetOutDevType() != pSrcDev->GetOutDevType())
+    else if (!IsSameOutDevType(this, pSrcDev))
         pSrcDevChecked = pSrcDev;
     else if (this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow)
         pSrcDevChecked = nullptr;

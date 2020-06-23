@@ -36,6 +36,7 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
+class PDFWriterImpl;
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -1578,6 +1579,21 @@ public:
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<boost::property_tree::ptree&, void>& rLink);
 };
+
+template <typename T1, typename T2>
+bool IsSameOutDevType(T1*, T2*);
+
+template<>
+bool IsSameOutDevType(OutputDevice*, OutputDevice*);
+
+template<>
+bool IsSameOutDevType(Window*, Window*);
+
+template<>
+bool IsSameOutDevType(VirtualDevice*, VirtualDevice*);
+
+template<>
+bool IsSameOutDevType(PDFWriterImpl*, PDFWriterImpl*);
 
 }
 
