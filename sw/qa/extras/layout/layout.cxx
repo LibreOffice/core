@@ -2324,6 +2324,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
     // This failed, if the legend first label is not "Data3". The legend position is bottom.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134247)
+{
+    SwDoc* pDoc = createDoc("legend-itemorder-min.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[14]/text",
+                       "1. adatsor");
+    // This failed, if the legend first label is not "1. adatsor".
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf75659)
 {
     SwDoc* pDoc = createDoc("tdf75659.docx");
