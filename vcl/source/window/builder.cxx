@@ -174,7 +174,9 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile)
 {
-    if (comphelper::LibreOfficeKit::isActive() && rUIFile == "svx/ui/stylespreview.ui")
+    if (comphelper::LibreOfficeKit::isActive()
+        && (rUIFile == "svx/ui/stylespreview.ui"
+        || rUIFile == "modules/scalc/ui/numberbox.ui"))
     {
         return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>());
     }
