@@ -161,6 +161,7 @@ public:
     void testTdf119138MissingAutoTitleDeleted();
     void testStockChartShiftedCategoryPosition();
     void testTdf133376();
+    void testTdf134225();
     void testTdf91250();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
     CPPUNIT_TEST(testTdf133376);
+    CPPUNIT_TEST(testTdf134225);
     CPPUNIT_TEST(testTdf91250);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2523,6 +2525,25 @@ void Chart2ImportTest::testTdf133376()
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1071, aLabelPosition.X, 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
+}
+
+void Chart2ImportTest::testTdf134225()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf134225.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+        "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+    CPPUNIT_ASSERT(xDataPointLabel.is());
+    // Check the position of the 1st data point label, which is out from the pie slice
+    awt::Point aLabelPosition = xDataPointLabel->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5723, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1240, aLabelPosition.Y, 30);
 }
 
 void Chart2ImportTest::testTdf91250()
