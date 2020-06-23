@@ -138,6 +138,11 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     // get format of object
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
 
+    if (0 && SwTextBoxHelper::isTextBox(&rFrameFormat, RES_DRAWFRMFMT))
+    {
+        SwTextBoxHelper::syncFlyAnchorSetting(rFrameFormat);
+    }
+
     // declare and set <pFooter> to footer frame, if object is anchored
     // at a frame belonging to the footer.
     const SwFrame* pFooter = GetAnchorFrame().FindFooterOrHeader();
