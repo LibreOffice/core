@@ -109,6 +109,7 @@ public:
     void testOrgChart2();
     void testTdf131553();
     void testFillColorList();
+    void testTdf134221();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -155,6 +156,7 @@ public:
     CPPUNIT_TEST(testOrgChart2);
     CPPUNIT_TEST(testTdf131553);
     CPPUNIT_TEST(testFillColorList);
+    CPPUNIT_TEST(testTdf134221);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1504,6 +1506,21 @@ void SdImportTestSmartArt::testFillColorList()
     sal_Int32 nGroupTop = xGroup->getPosition().Y;
     sal_Int32 nShapeTop = xShape->getPosition().Y;
     CPPUNIT_ASSERT_GREATER(nGroupTop, nShapeTop);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf134221()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-tdf134221.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShapeB = findChildShapeByText(xGroup, "B");
+    CPPUNIT_ASSERT(xShapeB.is());
+    uno::Reference<beans::XPropertySet> xTxtProps(xShapeB, uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(736),
+        xTxtProps->getPropertyValue("TextUpperDistance").get<sal_Int32>());
 
     xDocShRef->DoClose();
 }
