@@ -36,6 +36,7 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
+class PDFWriterImpl;
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -470,6 +471,24 @@ public:
                                         Color const * pPaintColor = nullptr);
 };
 
+template <typename T>
+long GetPixels(const vcl::Window* pOutDev, T const*, long nPixels);
+
+template <>
+long GetPixels(const vcl::Window* pOutDev, Window const *pDev, long nPixels);
+
+template <>
+long GetPixels(const vcl::Window*, OutputDevice const*, long nPixels);
+
+template <>
+long GetPixels(const vcl::Window*, VirtualDevice const*, long nPixels);
+
+template <>
+long GetPixels(const vcl::Window*, Printer const*, long nPixels);
+
+template <>
+long GetPixels(const vcl::Window*, PDFWriterImpl const*, long nPixels);
+
 class VCL_DLLPUBLIC Window : public ::OutputDevice
 {
     friend class ::vcl::Cursor;
@@ -896,6 +915,7 @@ public:
     void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
     long                                GetDrawPixel( ::OutputDevice const * pDev, long nPixels ) const;
     vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
+
 
     void SetControlFont();
     void SetControlFont( const vcl::Font& rFont );

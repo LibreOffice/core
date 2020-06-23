@@ -560,18 +560,53 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
     return aFont;
 }
 
-long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
+template <typename T>
+long GetPixels(const vcl::Window*, T const*, long nPixels)
+{
+    return nPixels;
+}
+
+template <>
+long GetPixels(const vcl::Window*, OutputDevice const*, long nPixels)
+{
+    return nPixels;
+}
+
+template <>
+long GetPixels(const vcl::Window*, VirtualDevice const*, long nPixels)
+{
+    return nPixels;
+}
+
+template <>
+long GetPixels(const vcl::Window*, Printer const*, long nPixels)
+{
+    return nPixels;
+}
+
+template <>
+long GetPixels(const vcl::Window*, PDFWriterImpl const*, long nPixels)
+{
+    return nPixels;
+}
+
+template <>
+long GetPixels(const vcl::Window* pOutDev, Window const * pWin, long nPixels)
 {
     long nP = nPixels;
-    if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
-    {
-        MapMode aMap( MapUnit::Map100thMM );
-        Size aSz( nP, 0 );
-        aSz = PixelToLogic( aSz, aMap );
-        aSz = pDev->LogicToPixel( aSz, aMap );
-        nP = aSz.Width();
-    }
+
+    MapMode aMap( MapUnit::Map100thMM );
+    Size aSz( nP, 0 );
+    aSz = pOutDev->PixelToLogic( aSz, aMap );
+    aSz = pWin->LogicToPixel( aSz, aMap );
+    nP = aSz.Width();
+
     return nP;
+}
+
+long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
+{
+    return GetPixels(this, pDev, nPixels);
 }
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
