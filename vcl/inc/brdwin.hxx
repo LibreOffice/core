@@ -268,6 +268,9 @@ public:
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
+template <typename T> vcl::Window* GetSmallBorderWindow(T*);
+vcl::Window* GetSmallBorderWindow(vcl::Window* pWin);
+
 class ImplStdBorderWindowView : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;

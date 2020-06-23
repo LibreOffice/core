@@ -403,6 +403,17 @@ ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderW
 {
 }
 
+template <typename T>
+vcl::Window* GetSmallBorderWindow(T*)
+{
+    return nullptr;
+}
+
+vcl::Window* GetSmallBorderWindow(vcl::Window* pWin)
+{
+    return pWin;
+}
+
 void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
 {
     mpOutDev    = pDev;
@@ -410,9 +421,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mnHeight    = nHeight;
     mbNWFBorder = false;
 
-    vcl::Window *pWin = nullptr, *pCtrl = nullptr;
-    if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
-        pWin = static_cast<vcl::Window*>(mpOutDev.get());
+    vcl::Window *pWin = GetSmallBorderWindow(mpOutDev.get());
+    vcl::Window *pCtrl = nullptr;
 
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
