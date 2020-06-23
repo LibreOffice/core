@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_FRMSEL_HRC
+#define INCLUDED_SVX_INC_FRMSEL_HRC
+
+#include <utility>
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+const char* RID_SVXSW_CONVERTMENU[] =
+{
+    NC_("convertmenu|ConvertToEdit", "~Text Box"),
+    NC_("convertmenu|ConvertToButton", "~Button"),
+    NC_("convertmenu|ConvertToFixed", "La~bel field"),
+    NC_("convertmenu|ConvertToList", "L~ist Box"),
+    NC_("convertmenu|ConvertToCheckBox", "~Check Box"),
+    NC_("convertmenu|ConvertToRadio", "~Radio Button"),
+    NC_("convertmenu|ConvertToGroup", "G~roup Box"),
+    NC_("convertmenu|ConvertToCombo", "Combo Bo~x"),
+    NC_("convertmenu|ConvertToImageBtn", "I~mage Button"),
+    NC_("convertmenu|ConvertToFileControl", "~File Selection"),
+    NC_("convertmenu|ConvertToDate", "~Date Field"),
+    NC_("convertmenu|ConvertToTime", "Tim~e Field"),
+    NC_("convertmenu|ConvertToNumeric", "~Numerical Field"),
+    NC_("convertmenu|ConvertToCurrency", "C~urrency Field"),
+    NC_("convertmenu|ConvertToPattern", "~Pattern Field"),
+    NC_("convertmenu|ConvertToImageControl", "Ima~ge Control"),
+    NC_("convertmenu|ConvertToFormatted", "Fo~rmatted Field"),
+    NC_("convertmenu|ConvertToScrollBar", "Scroll bar"),
+    NC_("convertmenu|ConvertToSpinButton", "Spin Button"),
+    NC_("convertmenu|ConvertToNavigationBar", "Navigation Bar")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

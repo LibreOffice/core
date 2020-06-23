@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/formdatamenu \
 	svx/uiconfig/ui/formfielddialog \
 	svx/uiconfig/ui/formlinkwarndialog \
+	svx/uiconfig/ui/formnavigator \
 	svx/uiconfig/ui/formnavimenu \
 	svx/uiconfig/ui/formpropertydialog \
 	svx/uiconfig/ui/functionmenu \
