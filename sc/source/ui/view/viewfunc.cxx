@@ -2753,6 +2753,8 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         if ( (nOldType & SvNumFormatType::SCIENTIFIC) && !bThousand &&
              (pOldEntry->GetFormatIntegerDigits()%3 == 0) && pOldEntry->GetFormatIntegerDigits() > 0 )
             bThousand =  true;
+        if (nOldType & SvNumFormatType::TIME)
+            nLeading = 0;
     }
 
     if (!bError)
@@ -2768,6 +2770,10 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         {
             if (nPrecision)
                 --nPrecision;           // decrement
+            else if (nOldType & SvNumFormatType::TIME)
+            {
+                nLeading = 1;           // remove SS or MMI
+            }
             else
                 bError = true;          // 0 is minimum
         }

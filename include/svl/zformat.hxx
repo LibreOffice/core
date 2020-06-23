@@ -306,7 +306,7 @@ public:
     double GetRoundFractionValue ( double fNumber ) const;
 
     /// Create a format string for time with a new precision
-    OUString GetFormatStringForTimePrecision( int nPrecision ) const;
+    OUString GetFormatStringForTimePrecision( sal_Int16 nPrecision ) const;
 
 
     /** If the count of string elements (substrings, ignoring [modifiers] and
