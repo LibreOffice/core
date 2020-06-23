@@ -24,6 +24,13 @@
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+class VirtualDevice;
+namespace vcl
+{
+    class Window;
+    class PDFWriterImpl;
+}
+
 /* Control Types:
  *
  *   Specify the overall, whole control
@@ -238,6 +245,18 @@ enum class ButtonValue {
     Off,
     Mixed
 };
+
+template <typename T>
+bool EnableNativeWidget(const T&);
+
+template <>
+bool EnableNativeWidget(const vcl::Window& i_rDevice);
+
+template<>
+bool EnableNativeWidget(const vcl::PDFWriterImpl& i_rDevice);
+
+template<>
+bool EnableNativeWidget(const VirtualDevice& i_rDevice);
 
 /* ImplControlValue:
  *

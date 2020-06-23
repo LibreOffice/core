@@ -27,41 +27,45 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 
+#include <pdfwriter_impl.hxx>
 #include <salgdi.hxx>
 
-static bool EnableNativeWidget( const OutputDevice& i_rDevice )
+template <typename T>
+bool EnableNativeWidget(const T&)
 {
-    const OutDevType eType( i_rDevice.GetOutDevType() );
-    switch ( eType )
-    {
+    return false;
+}
 
-    case OUTDEV_WINDOW:
-        {
-            const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &i_rDevice );
-            if (pWindow)
-            {
-                return pWindow->IsNativeWidgetEnabled();
-            }
-            else
-            {
-                SAL_WARN ("vcl.gdi", "Could not cast i_rDevice to Window");
-                assert (pWindow);
-                return false;
-            }
-        }
-
-    case OUTDEV_PDF:
-        [[fallthrough]];
-    case OUTDEV_VIRDEV:
+template <>
+bool EnableNativeWidget(const vcl::Window& i_rDevice)
+{
+    const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &i_rDevice );
+    if (pWindow)
     {
-        const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
-        const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
-        return pPDFData == nullptr;
+        return pWindow->IsNativeWidgetEnabled();
     }
-
-    default:
+    else
+    {
+        SAL_WARN ("vcl.gdi", "Could not cast i_rDevice to Window");
+        assert (pWindow);
         return false;
     }
+}
+
+template<>
+bool EnableNativeWidget(const vcl::PDFWriterImpl& i_rDevice)
+{
+    const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
+    const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
+    return pPDFData == nullptr;
+}
+
+template<>
+bool EnableNativeWidget(const VirtualDevice& i_rDevice)
+{
+    const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
+    const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
+    return pPDFData == nullptr;
 }
 
 ImplControlValue::~ImplControlValue()

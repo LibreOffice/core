@@ -78,7 +78,7 @@
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
 
-#include "pdfwriter_impl.hxx"
+#include <pdfwriter_impl.hxx>
 
 #ifdef _WIN32
 // WinCrypt headers for PDF signing

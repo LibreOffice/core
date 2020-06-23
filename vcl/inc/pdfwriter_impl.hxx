@@ -52,8 +52,8 @@
 
 #include <outdata.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
-#include "pdffontcache.hxx"
-#include "pdfbuildin_fonts.hxx"
+#include <pdffontcache.hxx>
+#include <pdfbuildin_fonts.hxx>
 
 class StyleSettings;
 class FontSelectPattern;
