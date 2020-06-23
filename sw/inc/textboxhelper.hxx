@@ -78,6 +78,9 @@ public:
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
+    /// Sets the flys anchor and position according to the given rShape
+    static void syncFlyAnchorPos(const SwFrameFormat& rShape);
+
     /**
      * If we have an associated TextFrame, then return that.
      *
