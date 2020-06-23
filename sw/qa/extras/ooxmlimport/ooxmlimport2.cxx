@@ -391,7 +391,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'
     // version line is strict horizontal. Checked against MSWord2013, there the line
     // is also not rotated -> the change is to the better, correct the expected result here.
-    CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
+    CPPUNIT_ASSERT_EQUAL(OUString("1690"), aTop);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
