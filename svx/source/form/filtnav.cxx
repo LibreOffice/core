@@ -1056,7 +1056,7 @@ void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCo
 FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
                   ,m_pEditingCurrently( nullptr )
-                  ,m_aControlExchange( this )
+                  ,m_aControlExchange()
                   ,m_aTimerCounter( 0 )
                   ,m_aDropActionType( DA_SCROLLUP )
 {
@@ -1517,7 +1517,6 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
     m_pModel->EnsureEmptyFilterRows( *_pTargetItems->GetParent() );
 }
 
-
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     EndSelection();
@@ -1530,10 +1529,9 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     {
         m_aControlExchange->setDraggedEntries(aItemList);
         m_aControlExchange->setFormItem(pFirstItem);
-        m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
+        m_aControlExchange.startDrag(this, DND_ACTION_COPYMOVE);
     }
 }
-
 
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="menu">
@@ -12,25 +12,9 @@
         <property name="label" translatable="yes" context="formnavimenu|new">_New</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="submenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkMenuItem" id="form">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="formnavimenu|form">Form</property>
-                <property name="use_underline">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="hidden">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="formnavimenu|hidden">Hidden Control</property>
-                <property name="use_underline">True</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
@@ -41,6 +25,12 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="formnavimenu|change">Replace with</property>
         <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="changemenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
