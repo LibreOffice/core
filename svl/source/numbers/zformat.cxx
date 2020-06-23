@@ -5848,29 +5848,196 @@ bool SvNumberformat::IsMinuteSecondFormat() const
 #undef HAS_MINUTE_SECOND
 }
 
-OUString SvNumberformat::GetFormatStringForTimePrecision( int nPrecision ) const
+OUString SvNumberformat::GetFormatStringForTimePrecision( sal_Int16 nPrecision ) const
 {
     OUStringBuffer sString;
+    OUString sTimeSep = rLoc().getTimeSep();
     using comphelper::string::padToLength;
+    constexpr sal_uInt16 k00 = 0x00;    // Nada, Nilch
+    constexpr sal_uInt16 kLB = 0x01;    // '[' Left Bracket
+    constexpr sal_uInt16 kRB = 0x02;    // ']' Right Bracket
+    constexpr sal_uInt16 kTS = 0x04;    // Time Separator
+    constexpr sal_uInt16 kHH = 0x08;    // H or HH
+    constexpr sal_uInt16 kMM = 0x10;    // M or MM
+    constexpr sal_uInt16 kSS = 0x20;    // S or SS
 
+    sal_uInt16 nState = k00;
+    bool bBracketedHH = false;
+    bool bBracketedMM = false;
+    bool bBracketedSS = false;
+    bool bKeyH  = false;
+    bool bKeyMI = false;
+    bool bAddFormat = false;
+    bool bTreatMMI = false;
     sal_uInt16 nNumForCnt = NumFor[0].GetCount();
     auto const & rTypeArray = NumFor[0].Info().nTypeArray;
+
+    // Scan HH, MM and SS
     for (sal_uInt16 j=0; j < nNumForCnt; ++j)
     {
         switch (rTypeArray[j])
         {
+            case NF_SYMBOLTYPE_DEL:
+                {
+                    // '[' or ']' before/after HH or MM or SS
+                    const OUString& rStr = NumFor[0].Info().sStrArray[j];
+                    if (rStr == "[")
+                    {
+                        nState |= kLB;
+                    }
+                    else if ((rStr == "]") && (nState & kLB))
+                    {
+                        switch (rTypeArray[j-1])
+                        {
+                            case NF_KEY_H:
+                            case NF_KEY_HH:
+                                bBracketedHH = true;
+                            break;
+                            case NF_KEY_MI:
+                            case NF_KEY_MMI:
+                                bBracketedMM = true;
+                            break;
+                            case NF_KEY_S:
+                            case NF_KEY_SS:
+                                bBracketedSS = true;
+                            break;
+                            default:
+                            break;
+                        }
+                        nState |= kRB;
+                    }
+                }
+            break;
+            case NF_SYMBOLTYPE_TIMESEP:
+                sTimeSep = NumFor[0].Info().sStrArray[j];
+                nState |= kTS;
+            break;
+            case NF_KEY_H:
+                bKeyH = true;
+            [[fallthrough]];
+            case NF_KEY_HH:
+                nState |= kHH;
+            break;
+            case NF_KEY_MI:
+                bKeyMI = true;
+            [[fallthrough]];
+            case NF_KEY_MMI:
+                nState |= kMM;
+            break;
+            case NF_KEY_S:
+            case NF_KEY_SS:
+                nState |= kSS;
+            break;
+            default:
+            break;
+        }
+    }
+
+    // Decide wether to add or remove SS or MMI
+    if ( (nState == kHH) || (nState == (kLB|kHH|kRB)) ) // if only hour
+    {
+        if (nPrecision > 0) // add MMI
+        {
+            bAddFormat = true;
+            bTreatMMI = true;
+        }
+        nPrecision = 0; // delete nothing
+    }
+    else if ( (nState == (kHH|kTS|kMM)) || (nState == (kLB|kHH|kRB|kTS|kMM)) ) // if hour and minute
+    {
+        if (nPrecision < 0)     // delete MMI
+            bTreatMMI = true;
+        else                    // add SS
+        {
+            bAddFormat = true;
+            nPrecision = 0;
+        }
+    }
+    else if ( (nState != (kHH|kTS|kMM|kSS)) && (nState != (kLB|kHH|kRB|kTS|kMM|kSS)) && nPrecision < 0 ) // if not hour and minute and SS
+        nPrecision = 0; // delete nothing
+    // else if (nPrecision < 0) delete SS; else add decimals to SS
+
+    // Generate format string
+    for (sal_uInt16 j=0; j < nNumForCnt; ++j)
+    {
+        switch (rTypeArray[j])
+        {
+            case NF_KEY_H :
+            case NF_KEY_HH:
+                sString.append( NumFor[0].Info().sStrArray[j] );
+                if (bAddFormat && bTreatMMI) // add MMI
+                {
+                    if (bBracketedHH && j < nNumForCnt-1 && rTypeArray[j+1] == NF_SYMBOLTYPE_DEL)
+                    {
+                        j++;
+                        sString.append( NumFor[0].Info().sStrArray[j] );
+                    }
+                    sString.append( sTimeSep );
+                    sString.append( rScan.GetKeywords()[ (bKeyH ? NF_KEY_MI : NF_KEY_MMI) ] );
+                }
+                break;
+            case NF_KEY_MI :
+            case NF_KEY_MMI:
+                if (nPrecision < 0 && bTreatMMI) // remove MMI
+                {
+                    sal_uInt16 k = j;
+                    if ( k > 0 && bBracketedMM && rTypeArray[k-1] == NF_SYMBOLTYPE_DEL )
+                    {
+                        sString.truncate( sString.getLength() - 1 );    // remove "["
+                        k--;
+                        if ( j < nNumForCnt-1 && rTypeArray[j+1] == NF_SYMBOLTYPE_DEL )
+                            j++;                                        // skip "]"
+                    }
+                    if ( k > 0 && rTypeArray[k-1] == NF_SYMBOLTYPE_TIMESEP )
+                    {
+                        sString.truncate( sString.getLength() - 1 );    // remove ":"
+                    }
+                }
+                else
+                {
+                    sString.append( NumFor[0].Info().sStrArray[j] );
+                    if (bAddFormat && !bTreatMMI) // add SS
+                    {
+                        if (bBracketedMM && j < nNumForCnt-1 && rTypeArray[j+1] == NF_SYMBOLTYPE_DEL)
+                        {
+                            j++;
+                            sString.append( NumFor[0].Info().sStrArray[j] );
+                        }
+                        sString.append( sTimeSep );
+                        sString.append( rScan.GetKeywords()[ (bKeyMI ? NF_KEY_S : NF_KEY_SS) ] );
+                    }
+                }
+                break;
             case NF_KEY_S :
             case NF_KEY_SS:
-                sString.append( NumFor[0].Info().sStrArray[j] );
-                if ( j > 0 && rTypeArray[j-1] == NF_SYMBOLTYPE_DEL && j < nNumForCnt-1 )
+                if (nPrecision < 0 && !bTreatMMI) // remove SS
                 {
-                    j++;
-                    sString.append( NumFor[0].Info().sStrArray[j] );
+                    sal_uInt16 k = j;
+                    if ( k > 0 && bBracketedSS && rTypeArray[k-1] == NF_SYMBOLTYPE_DEL )
+                    {
+                        sString.truncate( sString.getLength() - 1 );    // remove "["
+                        k--;
+                        if ( j < nNumForCnt-1 && rTypeArray[j+1] == NF_SYMBOLTYPE_DEL )
+                            j++;                                        // skip "]"
+                    }
+                    if ( k > 0 && rTypeArray[k-1] == NF_SYMBOLTYPE_TIMESEP )
+                    {
+                        sString.truncate( sString.getLength() - 1 );    // remove ":"
+                    }
                 }
-                if (nPrecision > 0)
+                else
                 {
-                    sString.append( rLoc().getTime100SecSep() );
-                    padToLength(sString, sString.getLength() + nPrecision, '0');
+                    sString.append( NumFor[0].Info().sStrArray[j] );
+                    if ( j > 0 && rTypeArray[j-1] == NF_SYMBOLTYPE_DEL && j < nNumForCnt-1 )
+                    {
+                        j++;
+                        sString.append( NumFor[0].Info().sStrArray[j] ); // add "]"
+                    }
+                    if (nPrecision > 0) // add decimals
+                    {
+                        sString.append( rLoc().getTime100SecSep() );
+                        padToLength(sString, sString.getLength() + nPrecision, '0');
+                    }
                 }
                 break;
             case NF_SYMBOLTYPE_TIME100SECSEP:

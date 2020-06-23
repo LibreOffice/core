@@ -3048,7 +3048,8 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
 
     if (eType & SvNumFormatType::TIME)
     {
-        sString = pFormat->GetFormatStringForTimePrecision( nPrecision );
+        sal_Int16 nPrecisionSeconds = ( nLeadingZeros ? -nLeadingZeros : nPrecision );
+        sString = pFormat->GetFormatStringForTimePrecision( nPrecisionSeconds );
     }
     else if (nLeadingZeros == 0)
     {
