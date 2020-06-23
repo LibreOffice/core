@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_FRMSEL_HRC
+#define INCLUDED_SVX_INC_FRMSEL_HRC
+
+#include <utility>
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+const char* RID_SVXSW_CONVERTMENU[] =
+{
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToEdit", "~Text Box"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToButton", "~Button"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToFixed", "La~bel field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToList", "L~ist Box"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToCheckBox", "~Check Box"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToRadio", "~Radio Button"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToGroup", "G~roup Box"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToCombo", "Combo Bo~x"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToImageBtn", "I~mage Button"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToFileControl", "~File Selection"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToDate", "~Date Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToTime", "Tim~e Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToNumeric", "~Numerical Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToCurrency", "C~urrency Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToPattern", "~Pattern Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToImageControl", "Ima~ge Control"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToFormatted", "Fo~rmatted Field"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToScrollBar", "Scroll bar"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToSpinButton", "Spin Button"),
+    NC_("RID_SVXSW_CONVERTMENU|ConvertToNavigationBar", "Navigation Bar")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

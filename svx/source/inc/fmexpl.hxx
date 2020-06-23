@@ -37,8 +37,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <vcl/treelistbox.hxx>
-
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
@@ -134,7 +132,7 @@ private:
     css::uno::Reference< css::container::XChild >     m_xChild;
 
 protected:
-    Image               m_aNormalImage;
+    OUString            m_aNormalImage;
     OUString            aText;
 
     std::unique_ptr<FmEntryDataList>
@@ -153,7 +151,7 @@ public:
     void    SetText( const OUString& rText ){ aText = rText; }
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
-    const Image&    GetNormalImage() const { return m_aNormalImage; }
+    const OUString& GetNormalImage() const { return m_aNormalImage; }
 
     const OUString& GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
@@ -242,7 +240,7 @@ class FmControlData : public FmEntryData
 {
     css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
 
-    Image GetImage() const;
+    OUString GetImage() const;
 
 public:
 
@@ -359,50 +357,61 @@ namespace svxform
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };
 
+    class NavigatorTree;
 
-    typedef std::set<SvTreeListEntry*> SvLBoxEntrySortedArray;
-
-    class NavigatorTree : public SvTreeListBox, public SfxListener
+    class NavigatorTreeDropTarget : public DropTargetHelper
     {
+    private:
+        NavigatorTree& m_rTreeView;
+
+        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+    public:
+        NavigatorTreeDropTarget(NavigatorTree& rTreeView);
+    };
+
+    typedef std::set<std::unique_ptr<weld::TreeIter>> SvLBoxEntrySortedArray;
+
+    class NavigatorTree final : public SfxListener
+    {
+        std::unique_ptr<weld::TreeView> m_xTreeView;
+        NavigatorTreeDropTarget m_aDropTargetHelper;
+
         enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
         enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
 
-        // when dropping I want to be able to scroll and to expand folders, for this:
-        AutoTimer           m_aDropActionTimer;
         Timer               m_aSynchronizeTimer;
         // the meta-data about my current selection
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
         // the entries which, in the view, are currently marked as "cut" (painted semi-transparent)
         ListBoxEntrySet         m_aCutEntries;
 
-        ::svxform::OControlExchangeHelper   m_aControlExchange;
+        ::svxform::OControlExchangeHelper m_aControlExchange;
 
         std::unique_ptr<NavigatorTreeModel> m_pNavModel;
-        SvTreeListEntry*        m_pRootEntry;
-        SvTreeListEntry*        m_pEditEntry;
+        std::unique_ptr<weld::TreeIter> m_xRootEntry;
+        std::unique_ptr<weld::TreeIter> m_xEditEntry;
 
         ImplSVEvent *       nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
-        Point               m_aTimerTriggered;      // the position at which the DropTimer was switched on
-        DROP_ACTION         m_aDropActionType;
 
         sal_uInt16          m_nSelectLock;
         sal_uInt16          m_nFormsSelected;
         sal_uInt16          m_nControlsSelected;
         sal_uInt16          m_nHiddenControls;      // (the number is included in m_nControlsSelected)
 
-        unsigned short      m_aTimerCounter;
-
         bool            m_bDragDataDirty        : 1;    // ditto
         bool            m_bPrevSelectionMixed   : 1;
         bool            m_bRootSelected         : 1;
         bool            m_bInitialUpdate        : 1;    // am I the first time in the UpdateContent?
         bool            m_bKeyboardCut          : 1;
+        bool            m_bEditing              : 1;
 
-        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry const * pParentEntry, bool bEditName );
-        void            NewForm( SvTreeListEntry const * pParentEntry );
-        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos );
+        FmControlData*  NewControl(const OUString& rServiceName, const weld::TreeIter& rParentEntry, bool bEditName);
+        void            NewForm(const weld::TreeIter& rParentEntry);
+        std::unique_ptr<weld::TreeIter> Insert(FmEntryData* pEntryData, int nRelPos);
         void            Remove( FmEntryData* pEntryData );
 
 
@@ -437,27 +446,29 @@ namespace svxform
         void UnlockSelectionHandling() { --m_nSelectLock; }
         bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
 
+        bool IsEditingActive() const { return m_bEditing; }
+
         static bool IsHiddenControl(FmEntryData const * pEntryData);
 
-        DECL_LINK( OnEdit, void*, void );
-        DECL_LINK( OnDropActionTimer, Timer*, void );
+        DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+        DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
 
-        DECL_LINK( OnEntrySelDesel, SvTreeListBox*, void );
+        DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+        typedef std::pair<const weld::TreeIter&, OUString> IterString;
+        DECL_LINK(EditedEntryHdl, const IterString&, bool);
+
+        DECL_LINK( OnEdit, void*, void );
+
+        DECL_LINK( OnEntrySelDesel, weld::TreeView&, void );
         DECL_LINK( OnSynchronizeTimer, Timer*, void );
 
         DECL_LINK( OnClipboardAction, OLocalExchange&, void );
 
-    protected:
-        virtual void    Command( const CommandEvent& rEvt ) override;
-
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+        DECL_LINK( DragBeginHdl, bool&, bool );
 
     public:
-        NavigatorTree(vcl::Window* pParent );
+        NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView);
         virtual ~NavigatorTree() override;
-        virtual void dispose() override;
 
         void Clear();
         void UpdateContent( FmFormShell* pFormShell );
@@ -465,31 +476,28 @@ namespace svxform
         void MarkViewObj( FmControlData const * pControlData );
         void UnmarkAllViewObj();
 
-        static bool IsFormEntry( SvTreeListEntry const * pEntry );
-        static bool IsFormComponentEntry( SvTreeListEntry const * pEntry );
+        void GrabFocus() { m_xTreeView->grab_focus(); }
+
+        bool IsFormEntry(const weld::TreeIter& rEntry);
+        bool IsFormComponentEntry(const weld::TreeIter& rEntry);
 
         OUString GenerateName( FmEntryData const * pEntryData );
 
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel.get(); }
-        SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
+        std::unique_ptr<weld::TreeIter> FindEntry(FmEntryData* pEntryData);
 
-        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
-        virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
-        virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& ) override;
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-        virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-        virtual void ModelHasRemoved( SvTreeListEntry* _pEntry ) override;
+        weld::TreeView& get_widget() { return *m_xTreeView; }
 
-        using SvTreeListBox::Insert;
-        using SvTreeListBox::ExecuteDrop;
-        using SvTreeListBox::Select;
+        sal_Int8    AcceptDrop(const AcceptDropEvent& rEvt);
+        sal_Int8    ExecuteDrop(const ExecuteDropEvent& rEvt);
 
     private:
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD );
 
         sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, bool _bDnD );
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
         bool        implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden = nullptr );
@@ -498,6 +506,8 @@ namespace svxform
 
         // fills m_aControlExchange in preparation of a DnD or clipboard operation
         bool        implPrepareExchange( sal_Int8 _nAction );
+
+        void        ModelHasRemoved(weld::TreeIter* _pEntry);
 
         void        doPaste();
         void        doCopy();
@@ -510,10 +520,10 @@ namespace svxform
     class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        VclPtr< ::svxform::NavigatorTree> m_pNavigatorTree;
+        std::unique_ptr<NavigatorTree> m_xNavigatorTree;
+//        VclPtr< ::svxform::NavigatorTree> m_pNavigatorTree;
 
     protected:
-        virtual void Resize() override;
         virtual bool Close() override;
         virtual void GetFocus() override;
         virtual Size CalcDockingSize( SfxChildAlignment ) override;
@@ -540,10 +550,7 @@ namespace svxform
                           SfxChildWinInfo *pInfo );
         SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
     };
-
-
 }
-
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 
