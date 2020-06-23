@@ -26,7 +26,8 @@ class VCL_DLLPUBLIC WeldedTabbedNotebookbar
 
 public:
     WeldedTabbedNotebookbar(VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
-                            const css::uno::Reference<css::frame::XFrame>& rFrame);
+                            const css::uno::Reference<css::frame::XFrame>& rFrame,
+                            sal_uInt64 nWindowId);
 };
 
 #endif // INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX

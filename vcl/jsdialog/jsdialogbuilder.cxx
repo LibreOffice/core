@@ -85,7 +85,8 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 
 JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile,
-                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
+                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                     sal_uInt64 nWindowId)
     : SalInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
@@ -97,23 +98,25 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
         m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
+        if (!m_nWindowId && nWindowId)
+            m_nWindowId = nWindowId;
         InsertWindowToMap(m_nWindowId);
     }
 }
 
 JSInstanceBuilder::~JSInstanceBuilder() { GetLOKWeldWidgetsMap().erase(m_nWindowId); }
 
-std::map<vcl::LOKWindowId, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
+std::map<sal_uInt64, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
 {
     // Map to remember the LOKWindowId <-> weld widgets binding.
-    static std::map<vcl::LOKWindowId, WidgetMap> s_aLOKWeldBuildersMap;
+    static std::map<sal_uInt64, WidgetMap> s_aLOKWeldBuildersMap;
 
     return s_aLOKWeldBuildersMap;
 }
 
 namespace jsdialog
 {
-weld::Widget* FindWeldWidgetsMap(vcl::LOKWindowId nWindowId, const OString& rWidget)
+weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
 {
     const auto it = JSInstanceBuilder::GetLOKWeldWidgetsMap().find(nWindowId);
 
@@ -128,13 +131,12 @@ weld::Widget* FindWeldWidgetsMap(vcl::LOKWindowId nWindowId, const OString& rWid
 }
 }
 
-void JSInstanceBuilder::InsertWindowToMap(int nWindowId)
+void JSInstanceBuilder::InsertWindowToMap(sal_uInt64 nWindowId)
 {
     WidgetMap map;
     auto it = GetLOKWeldWidgetsMap().find(nWindowId);
     if (it == GetLOKWeldWidgetsMap().end())
-        GetLOKWeldWidgetsMap().insert(
-            std::map<vcl::LOKWindowId, WidgetMap>::value_type(nWindowId, map));
+        GetLOKWeldWidgetsMap().insert(std::map<sal_uInt64, WidgetMap>::value_type(nWindowId, map));
 }
 
 void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
