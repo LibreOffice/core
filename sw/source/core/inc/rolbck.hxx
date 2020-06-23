@@ -54,6 +54,7 @@ class SwFormatChain;
 class SwNode;
 class SwCharFormat;
 enum class SwFieldIds : sal_uInt16;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -85,6 +86,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) = 0;
     HISTORY_HINT Which() const                     { return m_eWhichId; }
     virtual OUString GetDescription() const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwHistorySetFormat : public SwHistoryHint
@@ -98,6 +100,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     virtual OUString GetDescription() const override;
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwHistoryResetFormat : public SwHistoryHint
@@ -234,6 +237,7 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     SwUndoDelLayFormat* GetUDelLFormat() { return m_pUndo.get(); }
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwHistoryBookmark : public SwHistoryHint
@@ -400,6 +404,8 @@ public:
         const bool bCopyFields );
 
     void CopyFormatAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwRegHistory : public SwClient

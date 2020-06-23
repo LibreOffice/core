@@ -42,6 +42,7 @@ class SwRedlineData;
 class SwRedlineSaveDatas;
 enum class RedlineFlags;
 enum class RndStdIds;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sw {
     class UndoRedoContext;
@@ -191,7 +192,8 @@ protected:
 
 public:
     SwUndoSaveContent();
-    ~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE;
+    virtual ~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 // Save a complete section in nodes-array.
@@ -274,6 +276,8 @@ public:
     static bool IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
         sal_uLong const nStartNode, sal_uLong const nEndNode);
     std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats.get(); }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwUndoInsDoc final : public SwUndoInserts
@@ -307,6 +311,7 @@ protected:
 
 public:
     virtual ~SwUndoFlyBase() override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 };
 

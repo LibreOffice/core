@@ -27,6 +27,7 @@
 
 class SwRedlineSaveDatas;
 class SwTextNode;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -101,6 +102,7 @@ public:
     bool IsDelFullPara() const { return m_bDelFullPara; }
 
     void DisableMakeFrames() { m_bDisableMakeFrames = true; };
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX

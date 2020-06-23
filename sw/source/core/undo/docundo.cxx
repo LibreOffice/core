@@ -19,6 +19,8 @@
 
 #include <UndoManager.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
@@ -649,6 +651,18 @@ bool UndoManager::Redo()
     {
         return impl_DoUndoRedo(UndoOrRedoType::Redo);
     }
+}
+
+void UndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swUndoManager"));
+    SdrUndoManager::dumpAsXml(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xUndoNodes"));
+    m_xUndoNodes->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void UndoManager::EmptyActionsChanged()

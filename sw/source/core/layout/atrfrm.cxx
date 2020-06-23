@@ -577,7 +577,12 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatContent"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(m_pStartNode->GetNode().GetIndex()).getStr()));
+    if (m_pStartNode)
+    {
+        xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("startNode"),
+            BAD_CAST(OString::number(m_pStartNode->GetNode().GetIndex()).getStr()));
+    }
     xmlTextWriterEndElement(pWriter);
 }
 
