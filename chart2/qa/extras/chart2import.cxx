@@ -161,6 +161,7 @@ public:
     void testTdf119138MissingAutoTitleDeleted();
     void testStockChartShiftedCategoryPosition();
     void testTdf133376();
+    void testTdf134225();
     void testTdf91250();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
     CPPUNIT_TEST(testTdf133376);
+    CPPUNIT_TEST(testTdf134225);
     CPPUNIT_TEST(testTdf91250);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2525,6 +2527,30 @@ void Chart2ImportTest::testTdf133376()
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1071, aLabelPosition.X, 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
+}
+
+void Chart2ImportTest::testTdf134225()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf134225.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xDataPointLabel1(getShapeByName(xShapes,
+        "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+    CPPUNIT_ASSERT(xDataPointLabel1.is());
+    awt::Point aLabelPosition1 = xDataPointLabel1->getPosition();
+
+    Reference<drawing::XShape> xDataPointLabel2(getShapeByName(xShapes,
+        "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1"), UNO_SET_THROW);
+    CPPUNIT_ASSERT(xDataPointLabel2.is());
+    awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
+
+    // Check the distance between the position of the 1st data point label and the second one
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1800, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 200);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2123, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 200);
 }
 
 void Chart2ImportTest::testTdf91250()
