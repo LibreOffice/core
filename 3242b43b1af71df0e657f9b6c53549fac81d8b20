@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "58c0b142_0414a54d",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-23T15:44:12Z",
+      "side": 1,
+      "message": "Well, I understand that it\u0027s not standardized so I should use loext for now.\n\nI should reply to that bug tdf#96907 with the proposal, right?",
+      "parentUuid": "a55ee366_a67bb833",
+      "revId": "3242b43b1af71df0e657f9b6c53549fac81d8b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77017794_87e1ff92",
         "filename": "xmloff/source/draw/sdpropls.cxx",
         "patchSetId": 2
