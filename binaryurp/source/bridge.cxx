@@ -976,9 +976,26 @@ void Bridge::sendProtPropRequest(
 void Bridge::makeReleaseCall(
     OUString const & oid, css::uno::TypeDescription const & type)
 {
-    AttachThread att(getThreadPool());
+    //HACK to decouple the processing of release calls from all other threads.  Normally, sending
+    // the release request should use the current thread's TID (via AttachThread), so that that
+    // asynchronous request would be processed by a physical thread that is paired with the physical
+    // thread processing the normal synchronous call stack (see ThreadIdHashMap in
+    // cppu/source/threadpool/threadpool.hxx).  However, that can lead to deadlock when a thread
+    // illegally makes a synchronous UNO call with the SolarMutex locked (e.g.,
+    // SfxBaseModel::postEvent_Impl in sfx2/source/doc/sfxbasemodel.cxx doing documentEventOccurred
+    // and notifyEvent calls), and while that call is on the stack the remote side sends back some
+    // release request on the same logical UNO thread for an object that wants to acquire the
+    // SolarMutex in its destructor (e.g., SwXTextDocument in sw/inc/unotxdoc.hxx holding its
+    // m_pImpl via an sw::UnoImplPtr).  While the correct approach would be to not make UNO calls
+    // with the SolarMutex (or any other mutex) locked, fixing that would probably be a heroic
+    // effort.  So for now live with this hack, hoping that it does not introduce any new issues of
+    // its own:
+    static auto const tid = [] {
+            static sal_Int8 const id[] = {'r', 'e', 'l', 'e', 'a', 's', 'e', 'h', 'a', 'c', 'k'};
+            return rtl::ByteSequence(id, SAL_N_ELEMENTS(id));
+        }();
     sendRequest(
-        att.getTid(), oid, type,
+        tid, oid, type,
         css::uno::TypeDescription("com.sun.star.uno.XInterface::release"),
         std::vector< BinaryAny >());
 }
