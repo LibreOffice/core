@@ -716,6 +716,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
         case FN_UPDATE_ALL:
             {
+                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer
+                    = GetObjectShell()->getEmbeddedObjectContainer();
+                rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
                 SwView&  rTempView = GetView();
                 rSh.EnterStdMode();
                 if( !rSh.GetLinkManager().GetLinks().empty() )

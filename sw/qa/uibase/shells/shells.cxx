@@ -26,16 +26,21 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 
+static char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
+
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
 {
 public:
-    SwDoc* createDoc();
+    SwDoc* createDoc(const char* pName = nullptr);
 };
 
-SwDoc* SwUibaseShellsTest::createDoc()
+SwDoc* SwUibaseShellsTest::createDoc(const char* pName)
 {
-    loadURL("private:factory/swriter", nullptr);
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -110,6 +115,28 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     SvxAdjust eAdjust = rParaAttribs.GetItem(EE_PARA_JUST)->GetAdjust();
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, eAdjust);
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
+{
+    // Load a document with 2 charts in it. The second is down enough that you have to scroll to
+    // trigger its rendering. Previews are missing for both.
+    createDoc("ole-save-preview-update.odt");
+
+    // Explicitly update OLE previews, etc.
+    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+
+    // Save the document and see if we get the previews.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), {});
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+
+    // Without the accompanying fix in place, this test would have failed, because the object
+    // replacements were not generated, even after UpdateAll.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 2"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
