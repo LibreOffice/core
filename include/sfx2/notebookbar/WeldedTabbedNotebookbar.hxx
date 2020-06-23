@@ -13,7 +13,6 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/weldutils.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 /** Tabbed implementation of NotebookBar for Writer
@@ -27,7 +26,8 @@ class SFX2_DLLPUBLIC WeldedTabbedNotebookbar
 
 public:
     WeldedTabbedNotebookbar(VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
-                            const css::uno::Reference<css::frame::XFrame>& rFrame);
+                            const css::uno::Reference<css::frame::XFrame>& rFrame,
+                            sal_uInt64 nWindowId);
 };
 
 #endif // INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX

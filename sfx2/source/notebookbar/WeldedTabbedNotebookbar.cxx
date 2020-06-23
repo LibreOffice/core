@@ -13,9 +13,9 @@
 
 WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
     VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
-    const css::uno::Reference<css::frame::XFrame>& rFrame)
+    const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
     : m_xBuilder(new JSInstanceBuilder(pContainerWindow, VclBuilderContainer::getUIRootDir(),
-                                       rUIFilePath, rFrame))
+                                       rUIFilePath, rFrame, nWindowId))
 {
     m_xContainer = m_xBuilder->weld_container("NotebookBar");
     m_xNotebook = m_xBuilder->weld_notebook("ContextContainer");
