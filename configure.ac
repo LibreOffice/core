@@ -597,6 +597,8 @@ INSTROOTBASESUFFIX=
 INSTROOTCONTENTSUFFIX=
 SDKDIRNAME=sdk
 
+HOST_PLATFORM="$host"
+
 case "$host_os" in
 
 solaris*)
@@ -675,7 +677,7 @@ cygwin*|interix*)
     LINKFLAGSNOUNDEFS=
     ;;
 
-darwin*) # macOS or iOS
+darwin*|macos*) # macOS
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -685,26 +687,45 @@ darwin*) # macOS or iOS
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
-    if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
-        enable_gpgmepp=no
-        _os=iOS
-        test_cups=no
-        enable_mpl_subset=yes
-        enable_lotuswordpro=no
-        enable_coinmp=no
-        enable_lpsolve=no
-        enable_postgresql_sdbc=no
-        enable_extension_integration=no
-        enable_report_builder=no
-        with_ppds=no
-        if test "$enable_ios_simulator" = "yes"; then
-            host=x86_64-apple-darwin
-        fi
-    else
-        _os=Darwin
-        INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
-        INSTROOTCONTENTSUFFIX=/Contents
-        SDKDIRNAME=${PRODUCTNAME}${PRODUCTVERSION}_SDK
+    _os=Darwin
+    INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
+    INSTROOTCONTENTSUFFIX=/Contents
+    SDKDIRNAME=${PRODUCTNAME}${PRODUCTVERSION}_SDK
+    # See comment above the case "$host_os"
+    LINKFLAGSSHL="-dynamiclib -single_module"
+
+    # -fPIC is default
+    PICSWITCH=""
+
+    DLLPOST=".dylib"
+
+    # -undefined error is the default
+    LINKFLAGSNOUNDEFS=""
+;;
+
+ios*) # iOS
+    test_randr=no
+    test_xrender=no
+    test_freetype=no
+    test_fontconfig=no
+    test_dbus=no
+    if test -n "$LODE_HOME" ; then
+        mac_sanitize_path
+        AC_MSG_NOTICE([sanitized the PATH to $PATH])
+    fi
+    enable_gpgmepp=no
+    _os=iOS
+    test_cups=no
+    enable_mpl_subset=yes
+    enable_lotuswordpro=no
+    enable_coinmp=no
+    enable_lpsolve=no
+    enable_postgresql_sdbc=no
+    enable_extension_integration=no
+    enable_report_builder=no
+    with_ppds=no
+    if test "$enable_ios_simulator" = "yes"; then
+        host=x86_64-apple-darwin
     fi
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
@@ -716,6 +737,10 @@ darwin*) # macOS or iOS
 
     # -undefined error is the default
     LINKFLAGSNOUNDEFS=""
+
+    # HOST_PLATFORM is used for external projects and their configury typically doesn't like the "ios" part,
+    # so use arm64-apple-darwin as before for now.
+    HOST_PLATFORM=arm64-apple-darwin
 ;;
 
 freebsd*)
@@ -826,6 +851,8 @@ haiku*)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
 esac
+
+AC_SUBST(HOST_PLATFORM)
 
 if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
@@ -2860,8 +2887,16 @@ if test $_os = Darwin; then
         ;;
     esac
 
+    if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value for Apple Silicon])
+    fi
+
     if test "$with_macosx_version_min_required" = "" ; then
-        with_macosx_version_min_required="10.10";
+        if test "$host_cpu" = x86_64; then
+            with_macosx_version_min_required="10.10";
+        else
+            with_macosx_version_min_required="11.0";
+        fi
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
@@ -2923,13 +2958,23 @@ if test $_os = Darwin; then
         AC_MSG_CHECKING([what C compiler to use])
         CC="`xcrun -find clang`"
         CC_BASE=`first_arg_basename "$CC"`
-        CC+=" -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        if test "$host_cpu" = x86_64; then
+            CC+=" -target x86_64-apple-macos"
+        else
+            CC+=" -target arm64-apple-macos"
+        fi
+        CC+=" $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
         AC_MSG_RESULT([$CC])
 
         AC_MSG_CHECKING([what C++ compiler to use])
         CXX="`xcrun -find clang++`"
         CXX_BASE=`first_arg_basename "$CXX"`
-        CXX+=" -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        if test "$host_cpu" = x86_64; then
+            CXX+=" -target x86_64-apple-macos"
+        else
+            CXX+=" -target arm64-apple-macos"
+        fi
+        CXX+=" $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
         AC_MSG_RESULT([$CXX])
 
         INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
@@ -3280,10 +3325,9 @@ if test "$_os" = "WINNT"; then
         BITNESS_OVERRIDE=64
     fi
 fi
-if test "$_os" = "iOS"; then
+if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
     cross_compiling="yes"
 fi
-
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
 else
@@ -4289,7 +4333,7 @@ cygwin*)
     SCPDEFS="$SCPDEFS -D_MSC_VER"
     ;;
 
-darwin*)
+darwin*|macos*)
     COM=GCC
     USING_X11=
     OS=MACOSX
@@ -4297,22 +4341,14 @@ darwin*)
     P_SEP=:
 
     case "$host_cpu" in
-    arm)
-        AC_MSG_ERROR([Can't build 32-bit code for iOS])
-        ;;
     arm64)
-        OS=iOS
-        RTL_OS=iOS
         if test "$enable_ios_simulator" = "yes"; then
-            AC_MSG_ERROR([iOS simulator is only available in OSX not iOS])
+            OS=iOS
         else
             CPUNAME=ARM64
-            RTL_ARCH=ARM_EABI
-            PLATFORMID=ios_arm64
+            RTL_ARCH=AARCH
+            PLATFORMID=macosx_arm64
         fi
-        ;;
-    i*86)
-        AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         ;;
     x86_64)
         if test "$enable_ios_simulator" = "yes"; then
@@ -4326,6 +4362,28 @@ darwin*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
+    ;;
+
+ios*)
+    COM=GCC
+    USING_X11=
+    OS=iOS
+    RTL_OS=iOS
+    P_SEP=:
+
+    case "$host_cpu" in
+    arm64)
+        if test "$enable_ios_simulator" = "yes"; then
+            AC_MSG_ERROR([iOS simulator is only available in macOS not iOS])
+        fi
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    CPUNAME=ARM64
+    RTL_ARCH=ARM_EABI
+    PLATFORMID=ios_arm64
     ;;
 
 dragonfly*)
