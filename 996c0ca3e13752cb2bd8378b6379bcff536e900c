@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "014d499b_030f3e16",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 5895,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-23T12:24:04Z",
+      "side": 1,
+      "message": "I wonder, if for this backport, we\u0027d need to reverse the flag?",
+      "revId": "996c0ca3e13752cb2bd8378b6379bcff536e900c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
