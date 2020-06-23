@@ -85,8 +85,6 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 namespace vcl {
 
-static bool g_isLOKMobilePhone = false;
-
 Window::Window( WindowType nType )
     : OutputDevice(OUTDEV_WINDOW)
     , mpWindowImpl(new WindowImpl( nType ))
@@ -3387,7 +3385,7 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
     // This is for the code in sc/source/ui/sidebar/AlignmentPropertyPanel.cxx.
     // Also see commit f27c6320e8496d690b5d341d3718430709263a1c
     // "lok: remove complex rotation / alignment settings"
-    if (g_isLOKMobilePhone && get_id() == "textorientbox") {
+    if (get_id() == "textorientbox") {
         return boost::property_tree::ptree();
     }
 
