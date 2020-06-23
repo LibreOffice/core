@@ -333,6 +333,7 @@
 #define RID_SVXSTR_NON_BREAK_SPACE                  NC_("RID_SVXSTR_NON_BREAK_SPACE", "Add non-breaking space before specific punctuation marks in French text")
 #define RID_SVXSTR_ORDINAL                          NC_("RID_SVXSTR_ORDINAL", "Format ordinal numbers suffixes (1st -> 1^st)")
 #define RID_SVXSTR_OLD_HUNGARIAN                    NC_("RID_SVXSTR_OLD_HUNGARIAN", "Transliterate to Old Hungarian if the text direction is from right to left")
+#define RID_SVXSTR_ANGLE_QUOTES                     NC_("RID_SVXSTR_ANGLE_QUOTES", "Replace << and >> with angle quotes")
 #define RID_SVXSTR_DEL_EMPTY_PARA                   NC_("RID_SVXSTR_DEL_EMPTY_PARA", "Remove blank paragraphs")
 #define RID_SVXSTR_USER_STYLE                       NC_("RID_SVXSTR_USER_STYLE", "Replace Custom Styles")
 #define RID_SVXSTR_BULLET                           NC_("RID_SVXSTR_BULLET", "Replace bullets with: %1")

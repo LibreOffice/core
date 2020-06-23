@@ -286,6 +286,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
                     | ACFlags::ChgToEnEmDash
                     | ACFlags::AddNonBrkSpace
                     | ACFlags::TransliterateRTL
+                    | ACFlags::ChgAngleQuotes
                     | ACFlags::ChgWeightUnderl
                     | ACFlags::SetINetAttr
                     | ACFlags::ChgQuotes
@@ -1382,8 +1383,10 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, eLang, eType );
                 break;
             }
-            // tdf#133524 change "<<" and ">>" to double angle quoation marks
-            else if ( IsAutoCorrFlag( ACFlags::ChgQuotes ) && ('<' == cChar || '>' == cChar) &&
+            // tdf#133524 change "<<" and ">>" to double angle quotation marks
+            else if ( IsAutoCorrFlag( ACFlags::ChgQuotes ) &&
+                IsAutoCorrFlag( ACFlags::ChgAngleQuotes ) &&
+                ('<' == cChar || '>' == cChar) &&
                 nInsPos > 0 && cChar == rTxt[ nInsPos-1 ] )
             {
                 const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
