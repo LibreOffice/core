@@ -10,14 +10,14 @@
   <LineEnd>
    <pointSequence>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
-    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="312" polygonFlags="NORMAL"/>
+    <point positionX="312" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="37" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="312" polygonFlags="NORMAL"/>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
@@ -73,14 +73,14 @@
   <LineEnd>
    <pointSequence>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
-    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="312" polygonFlags="NORMAL"/>
+    <point positionX="312" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="37" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="312" polygonFlags="NORMAL"/>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
@@ -136,14 +136,14 @@
   <LineEnd>
    <pointSequence>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
-    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="312" polygonFlags="NORMAL"/>
+    <point positionX="312" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="37" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="312" polygonFlags="NORMAL"/>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
@@ -199,14 +199,14 @@
   <LineEnd>
    <pointSequence>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
-    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="312" polygonFlags="NORMAL"/>
+    <point positionX="312" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="200" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="150" positionY="137" polygonFlags="NORMAL"/>
+    <point positionX="37" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="312" polygonFlags="NORMAL"/>
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
