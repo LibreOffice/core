@@ -57,4 +57,11 @@
     </prop>
   </node>
  </oor:component-data>
+ <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
+  <node oor:name="Security">
+    <prop oor:name="LoadExoticFileFormats">
+      <value>2</value>
+    </prop>
+  </node>
+ </oor:component-data>
 </oor:data>
