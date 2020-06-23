@@ -226,10 +226,9 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
-    class WeakSdrObjectContainerType;
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
-    std::unique_ptr<WeakSdrObjectContainerType> mxNavigationOrder;
+    std::unique_ptr<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
 
     /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.
