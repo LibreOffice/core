@@ -18,6 +18,8 @@
  */
 
 #include <drawingml/chart/plotareamodel.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -53,6 +55,7 @@ DataTableModel::~DataTableModel()
 
 PlotAreaModel::PlotAreaModel()
 {
+    mxShapeProp.create().getFillProperties().moFillType = XML_noFill;
 }
 
 PlotAreaModel::~PlotAreaModel()
