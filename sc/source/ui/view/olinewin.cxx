@@ -123,6 +123,7 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
 
     ScrollRel( nDiff, nStart, nEnd );
     Invalidate( GetRectangle( 0, nInvStart, GetOutputSizeLevel() - 1, nInvEnd ) );
+    PaintImmediately();
 
     // if focus becomes invisible, move it to next visible button
     ImplMoveFocusToVisible( nDiff < 0 );

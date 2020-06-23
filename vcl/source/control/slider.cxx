@@ -571,6 +571,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     {
         if ( ImplDoAction() )
         {
+            PaintImmediately();
             Invalidate();
         }
     }

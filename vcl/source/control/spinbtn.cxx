@@ -193,6 +193,7 @@ void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( mbUpperIn || mbLowerIn )
     {
+        PaintImmediately();
         CaptureMouse();
         if ( mbRepeat )
             maRepeatTimer.Start();
@@ -212,12 +213,14 @@ void SpinButton::MouseButtonUp( const MouseEvent& )
     {
         mbUpperIn   = false;
         Invalidate( maUpperRect );
+        PaintImmediately();
         Up();
     }
     else if ( mbLowerIn )
     {
         mbLowerIn = false;
         Invalidate( maLowerRect );
+        PaintImmediately();
         Down();
     }
 
@@ -235,6 +238,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
         mbUpperIn = false;
         maRepeatTimer.Stop();
         Invalidate( maUpperRect );
+        PaintImmediately();
     }
     else if ( !maLowerRect.IsInside( rMEvt.GetPosPixel() ) &&
               mbLowerIn && mbInitialDown )
@@ -242,6 +246,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
         mbLowerIn = false;
         maRepeatTimer.Stop();
         Invalidate( maLowerRect );
+        PaintImmediately();
     }
     else if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) &&
               !mbUpperIn && mbInitialUp )
@@ -250,6 +255,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
         if ( mbRepeat )
             maRepeatTimer.Start();
         Invalidate( maUpperRect );
+        PaintImmediately();
     }
     else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) &&
               !mbLowerIn && mbInitialDown )
@@ -258,6 +264,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
         if ( mbRepeat )
             maRepeatTimer.Start();
         Invalidate( maLowerRect );
+        PaintImmediately();
     }
 }
 

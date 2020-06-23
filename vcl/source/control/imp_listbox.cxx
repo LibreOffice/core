@@ -2512,6 +2512,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
             && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
             {
                 GetParent()->GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
+                GetParent()->GetWindow( GetWindowType::Border )->PaintImmediately();
             }
         }
     }

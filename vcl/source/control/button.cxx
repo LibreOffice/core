@@ -1461,6 +1461,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 else
                 {
                     pBorder->Invalidate( InvalidateFlags::NoErase );
+                    pBorder->PaintImmediately();
                 }
             }
             else if( (GetStyle() & WB_FLATBUTTON) ||
@@ -2203,6 +2204,7 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     mbChecked = true;
     mpWindowImpl->mnStyle |= WB_TABSTOP;
     Invalidate();
+    PaintImmediately();
     VclPtr<vcl::Window> xWindow = this;
     if ( mbRadioCheck )
         ImplUncheckAllOther();
@@ -2252,6 +2254,7 @@ void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
         StartTracking();
         return;
     }
@@ -2276,6 +2279,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 Invalidate();
+                PaintImmediately();
             }
         }
     }
@@ -2287,6 +2291,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() |= DrawButtonFlags::Pressed;
                 Invalidate();
+                PaintImmediately();
             }
         }
         else
@@ -2295,6 +2300,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() &= ~DrawButtonFlags::Pressed;
                 Invalidate();
+                PaintImmediately();
             }
         }
     }
@@ -2310,12 +2316,14 @@ void RadioButton::KeyInput( const KeyEvent& rKEvt )
         {
             GetButtonState() |= DrawButtonFlags::Pressed;
             Invalidate();
+            PaintImmediately();
         }
     }
     else if ( (GetButtonState() & DrawButtonFlags::Pressed) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
     }
     else
         Button::KeyInput( rKEvt );
@@ -2438,6 +2446,7 @@ void RadioButton::LoseFocus()
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
     }
 
     HideFocus();
@@ -3081,6 +3090,7 @@ void CheckBox::ImplCheck()
 
     VclPtr<vcl::Window> xWindow = this;
     Invalidate();
+    PaintImmediately();
     Toggle();
     if ( xWindow->IsDisposed() )
         return;
@@ -3100,6 +3110,7 @@ void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
         StartTracking();
         return;
     }
@@ -3124,6 +3135,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 Invalidate();
+                PaintImmediately();
             }
         }
     }
@@ -3135,6 +3147,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() |= DrawButtonFlags::Pressed;
                 Invalidate();
+                PaintImmediately();
             }
         }
         else
@@ -3143,6 +3156,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() &= ~DrawButtonFlags::Pressed;
                 Invalidate();
+                PaintImmediately();
             }
         }
     }
@@ -3158,12 +3172,14 @@ void CheckBox::KeyInput( const KeyEvent& rKEvt )
         {
             GetButtonState() |= DrawButtonFlags::Pressed;
             Invalidate();
+            PaintImmediately();
         }
     }
     else if ( (GetButtonState() & DrawButtonFlags::Pressed) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
     }
     else
         Button::KeyInput( rKEvt );
@@ -3328,6 +3344,7 @@ void CheckBox::LoseFocus()
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
+        PaintImmediately();
     }
 
     HideFocus();

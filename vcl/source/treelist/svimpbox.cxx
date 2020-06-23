@@ -379,6 +379,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     ShowCursor( false );
 
     m_nFlags &= ~LBoxFlags::Filling;
+    m_pView->PaintImmediately();
     m_pStartEntry = pNext;
 
     if( nRealDelta >= m_nVisibleCount )
@@ -416,6 +417,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
+    m_pView->PaintImmediately();
     m_pStartEntry = pPrev;
     if( nRealDelta >= m_nVisibleCount )
     {
