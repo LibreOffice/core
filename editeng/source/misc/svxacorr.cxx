@@ -314,6 +314,8 @@ static constexpr sal_Unicode cEnDash = 0x2013;
 static constexpr sal_Unicode cApostrophe = 0x2019;
 static constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
 static constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
+static constexpr sal_Unicode cLeftSingleAngleQuote = 0x2039;
+static constexpr sal_Unicode cRightSingleAngleQuote = 0x203A;
 // stop characters for searching preceding quotes
 // (the first character is also the opening quote we are looking for)
 const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,
@@ -1208,9 +1210,10 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     if ( eType == ACQuotes::DoubleAngleQuote )
     {
+        bool bSwiss = eLang == LANGUAGE_FRENCH_SWISS;
         cRet = ( '<' == cInsChar || ('\"' == cInsChar && !bSttQuote) )
-                ? cLeftDoubleAngleQuote
-                : cRightDoubleAngleQuote;
+                ? ( bSwiss ? cLeftSingleAngleQuote : cLeftDoubleAngleQuote )
+                : ( bSwiss ? cRightSingleAngleQuote : cRightDoubleAngleQuote );
     }
     else if ( eType == ACQuotes::UseApostrophe )
         cRet = cApostrophe;
@@ -1389,6 +1392,8 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
                 if ( eLang.anyOf(
                         LANGUAGE_FINNISH,              // alternative primary level
+                        LANGUAGE_FRENCH_SWISS,         // second level
+                        LANGUAGE_GALICIAN,
                         LANGUAGE_HUNGARIAN,            // second level
                         LANGUAGE_POLISH,               // second level
                         LANGUAGE_PORTUGUESE,           // primary level
