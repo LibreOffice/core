@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1bba3a1_3878b62b",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-23T19:41:59Z",
+      "side": 1,
+      "message": "I think this creates a new note object even if we don\u0027t need it. ScDocument::GetNote should be enough.",
+      "revId": "4593e4086c1cf1ce804e64290201883654c93aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86ee1c2c_164ccce9",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-23T19:41:59Z",
+      "side": 1,
+      "message": "This is partly getViewFunc()",
+      "revId": "4593e4086c1cf1ce804e64290201883654c93aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
