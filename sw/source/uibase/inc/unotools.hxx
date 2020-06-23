@@ -26,12 +26,13 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <swdllapi.h>
 
-#define EX_SHOW_ONLINE_LAYOUT   0x001
-
+#define EX_SHOW_ONLINE_LAYOUT   0x01
 // hard zoom value
 #define EX_SHOW_BUSINESS_CARDS  0x02
 //don't modify page size
 #define EX_SHOW_DEFAULT_PAGE    0x04
+//replace sample toc strings in the template to localized versions
+#define EX_LOCALIZE_TOC_STRINGS 0x08
 
 class SwView;
 

@@ -294,7 +294,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         auto pCursor = comphelper::getUnoTunnelImplementation<OTextCursorHelper>(m_xCursor);
 
         SwDoc *pDoc = pCursor ? pCursor->GetDoc() : nullptr;
-        if (pDoc)
+        if (pDoc && (m_nStyleFlags & EX_LOCALIZE_TOC_STRINGS))
         {
             SwEditShell* pSh = pDoc->GetEditShell();
 
