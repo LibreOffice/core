@@ -225,6 +225,7 @@ public:
     void testTdf127964();
     void testTdf106638();
     void testTdf113198();
+    void testTdf60316();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -331,7 +332,7 @@ public:
     CPPUNIT_TEST(testTdf119187);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
-
+    CPPUNIT_TEST(testTdf60316);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -787,6 +788,37 @@ void SdImportTest::testFillStyleNone()
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
     // 1', i.e. the shape's fill was FillStyle_SOLID, making the text of the shape unreadable.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf60316()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf60316.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+
+    const SdrObject* pObj = pPage->GetObj(0);
+    auto& rFillStyleItem
+        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
+
+    sal_Int32 nColor;
+
+    uno::Reference<drawing::XShape> xChart(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > XPropSet( xChart, uno::UNO_QUERY_THROW );
+    XPropSet->getPropertyValue("FillColor") >>= nColor;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7512015), nColor);
+
     xDocShRef->DoClose();
 }
 
