@@ -36,6 +36,7 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
+class PDFWriterImpl;
 class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
@@ -894,7 +895,24 @@ public:
     void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
     vcl::Font                           GetPointFont(vcl::RenderContext const & rRenderContext) const;
     void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    long                                GetDrawPixel( ::OutputDevice const * pDev, long nPixels ) const;
+    template <typename T>
+    long GetDrawPixel(T const*, long nPixels) const;
+
+    template <>
+    long GetDrawPixel(Window const *pDev, long nPixels) const;
+
+    template <>
+    long GetDrawPixel(OutputDevice const*, long nPixels) const;
+
+    template <>
+    long GetDrawPixel(VirtualDevice const*, long nPixels) const;
+
+    template <>
+    long GetDrawPixel(Printer const*, long nPixels) const;
+
+    template <>
+    long GetDrawPixel(PDFWriterImpl const*, long nPixels) const;
+
     vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
 
     void SetControlFont();

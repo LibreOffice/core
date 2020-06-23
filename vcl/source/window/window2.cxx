@@ -560,20 +560,49 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
     return aFont;
 }
 
-long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
+template <typename T>
+long Window::GetDrawPixel(T const*, long nPixels) const
 {
-    long nP = nPixels;
-    if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
-    {
-        MapMode aMap( MapUnit::Map100thMM );
-        Size aSz( nP, 0 );
-        aSz = PixelToLogic( aSz, aMap );
-        aSz = pDev->LogicToPixel( aSz, aMap );
-        nP = aSz.Width();
-    }
-    return nP;
+    return nPixels;
 }
 
+template <>
+long Window::GetDrawPixel(OutputDevice const*, long nPixels) const
+{
+    return nPixels;
+}
+
+template <>
+long Window::GetDrawPixel(VirtualDevice const*, long nPixels) const
+{
+    return nPixels;
+}
+
+template <>
+long Window::GetDrawPixel(Printer const*, long nPixels) const
+{
+    return nPixels;
+}
+
+template <>
+long Window::GetDrawPixel(PDFWriterImpl const*, long nPixels) const
+{
+    return nPixels;
+}
+
+template <>
+long Window::GetDrawPixel(Window const * pDev, long nPixels) const
+{
+    long nP = nPixels;
+
+    MapMode aMap( MapUnit::Map100thMM );
+    Size aSz( nP, 0 );
+    aSz = PixelToLogic( aSz, aMap );
+    aSz = pDev->LogicToPixel( aSz, aMap );
+    nP = aSz.Width();
+
+    return nP;
+}
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
 {
     if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
