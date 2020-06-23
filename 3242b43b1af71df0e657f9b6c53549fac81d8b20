@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "a55ee366_a67bb833",
+        "filename": "schema/libreoffice/OpenDocument-schema-v1.3+libreoffice.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-06-23T08:38:50Z",
+      "side": 1,
+      "message": "That does not work this way. As long as an attribute is not standardized you need to use a private namespace. Look for \"loext\" in this file.\n\nPlease provide a proposal for the new attribute to the ODF TC. You find a template for such proposal at https://wiki.oasis-open.org/office/ProposalTemplate. You can add the proposal to tdf#96907 and notify me instead of sending it directly to the ODF TC. It is likely me, who have to work on it in the ODF TC, anyway.",
+      "revId": "3242b43b1af71df0e657f9b6c53549fac81d8b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77017794_87e1ff92",
         "filename": "xmloff/source/draw/sdpropls.cxx",
         "patchSetId": 2
