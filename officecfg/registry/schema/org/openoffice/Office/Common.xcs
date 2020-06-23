@@ -1372,6 +1372,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ChangeAngleQuotes" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace << and >> with angle quotes -->
+        <info>
+          <desc>Specifies if &lt;&lt; or &gt;&gt; should be replaced by angle quotes automatically.</desc>
+          <label>Replace angle quotes</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="RemoveDoubleSpaces" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->

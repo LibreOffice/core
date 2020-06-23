@@ -1525,7 +1525,8 @@ enum OfaQuoteOptions
 {
     ADD_NONBRK_SPACE,
     REPLACE_1ST,
-    TRANSLITERATE_RTL
+    TRANSLITERATE_RTL,
+    REPLACE_ANGLE_QUOTES
 };
 
 }
@@ -1546,6 +1547,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     , sNonBrkSpace(CuiResId(RID_SVXSTR_NON_BREAK_SPACE))
     , sOrdinal(CuiResId(RID_SVXSTR_ORDINAL))
     , sTransliterateRTL(CuiResId(RID_SVXSTR_OLD_HUNGARIAN))
+    , sAngleQuotes(CuiResId(RID_SVXSTR_ANGLE_QUOTES))
     , cSglStartQuote(0)
     , cSglEndQuote(0)
     , cStartQuote(0)
@@ -1620,6 +1622,7 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
         pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
         pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
         pAutoCorrect->SetAutoCorrFlag(ACFlags::TransliterateRTL, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgAngleQuotes, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     }
 
     bool bModified = false;
@@ -1644,6 +1647,12 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
         pOpt->bTransliterateRTL = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ACFlags::TransliterateRTL,
                         m_xSwCheckLB->get_toggle(TRANSLITERATE_RTL, CBCOL_SECOND) == TRISTATE_TRUE);
+
+        bCheck = m_xSwCheckLB->get_toggle(REPLACE_ANGLE_QUOTES, CBCOL_FIRST) == TRISTATE_TRUE;
+        bModified |= pOpt->bChgAngleQuotes != bCheck;
+        pOpt->bChgAngleQuotes = bCheck;
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgAngleQuotes,
+                        m_xSwCheckLB->get_toggle(REPLACE_ANGLE_QUOTES, CBCOL_SECOND) == TRISTATE_TRUE);
     }
 
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgQuotes, m_xDoubleTypoCB->get_active());
@@ -1704,6 +1713,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         CreateEntry(*m_xSwCheckLB, sNonBrkSpace, CBCOL_BOTH, 2);
         CreateEntry(*m_xSwCheckLB, sOrdinal, CBCOL_BOTH, 2);
         CreateEntry(*m_xSwCheckLB, sTransliterateRTL, CBCOL_BOTH, 2);
+        CreateEntry(*m_xSwCheckLB, sAngleQuotes, CBCOL_BOTH, 2);
 
         m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, pOpt->bAddNonBrkSpace ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
         m_xSwCheckLB->set_toggle(ADD_NONBRK_SPACE, bool(nFlags & ACFlags::AddNonBrkSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
@@ -1711,6 +1721,8 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         m_xSwCheckLB->set_toggle(REPLACE_1ST, bool(nFlags & ACFlags::ChgOrdinalNumber) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
         m_xSwCheckLB->set_toggle(TRANSLITERATE_RTL, pOpt->bTransliterateRTL ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
         m_xSwCheckLB->set_toggle(TRANSLITERATE_RTL, bool(nFlags & ACFlags::TransliterateRTL) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+        m_xSwCheckLB->set_toggle(REPLACE_ANGLE_QUOTES, pOpt->bChgAngleQuotes ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+        m_xSwCheckLB->set_toggle(REPLACE_ANGLE_QUOTES, bool(nFlags & ACFlags::ChgAngleQuotes) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
 
         m_xSwCheckLB->thaw();
     }
@@ -1731,6 +1743,9 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         m_xCheckLB->append();
         m_xCheckLB->set_toggle(nPos, bool(nFlags & ACFlags::TransliterateRTL) ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xCheckLB->set_text(nPos++, sTransliterateRTL, 0);
+        m_xCheckLB->append();
+        m_xCheckLB->set_toggle(nPos, bool(nFlags & ACFlags::ChgAngleQuotes) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xCheckLB->set_text(nPos++, sAngleQuotes, 0);
 
         m_xCheckLB->thaw();
     }

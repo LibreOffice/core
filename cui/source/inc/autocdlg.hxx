@@ -269,6 +269,7 @@ private:
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
     OUString        sTransliterateRTL;
+    OUString        sAngleQuotes;
 
     sal_UCS4    cSglStartQuote;
     sal_UCS4    cSglEndQuote;
