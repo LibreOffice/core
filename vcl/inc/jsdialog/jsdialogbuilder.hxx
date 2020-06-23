@@ -49,22 +49,24 @@ public:
 
 class JSInstanceBuilder : public SalInstanceBuilder
 {
-    vcl::LOKWindowId m_nWindowId;
+    sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
     VclPtr<vcl::Window> m_aParentDialog;
     bool m_bHasTopLevelDialog;
 
-    friend VCL_DLLPUBLIC weld::Widget* jsdialog::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
+    friend VCL_DLLPUBLIC weld::Widget* jsdialog::FindWeldWidgetsMap(sal_uInt64 nWindowId,
                                                                     const OString& rWidget);
 
-    static std::map<vcl::LOKWindowId, WidgetMap>& GetLOKWeldWidgetsMap();
-    static void InsertWindowToMap(int nWindowId);
+    static std::map<sal_uInt64, WidgetMap>& GetLOKWeldWidgetsMap();
+    static void InsertWindowToMap(sal_uInt64 nWindowId);
     void RememberWidget(const OString& id, weld::Widget* pWidget);
 
 public:
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    /// optional nWindowId is used if getting parent id failed
     JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                      const css::uno::Reference<css::frame::XFrame>& rFrame);
+                      const css::uno::Reference<css::frame::XFrame>& rFrame,
+                      sal_uInt64 nWindowId = 0);
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;

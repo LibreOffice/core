@@ -3623,6 +3623,10 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         {
             OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
             weld::Widget* pWidget = jsdialog::FindWeldWidgetsMap(nWindowId, sControlId);
+            if (!pWidget && nWindowId == 0)
+            {
+                pWidget = jsdialog::FindWeldWidgetsMap(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), sControlId);
+            }
 
             bIsWeldedDialog = pWidget != nullptr;
             bool bContinueWithLOKWindow = false;

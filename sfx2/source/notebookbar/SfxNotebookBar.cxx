@@ -388,10 +388,12 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
             if ((!hasWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
             {
+                sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
                 m_pNotebookBarWeldedWrapper.emplace(std::make_pair(pViewShell,
                         new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
                                                     pNotebookBar->GetUIFilePath(),
-                                                    xFrame)));
+                                                    xFrame,
+                                                    nWindowId)));
                 pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
             }
 
