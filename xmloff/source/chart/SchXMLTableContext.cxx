@@ -306,8 +306,7 @@ void SchXMLTableContext::EndElement()
                     if( !bModified )
                     {
                         SAL_WARN_IF( !aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NOT NULL");
-                        aModifiedRow.reserve( rRow.size());
-                        ::std::copy( rRow.begin(), rRow.end(), ::std::back_inserter( aModifiedRow ));
+                        aModifiedRow.insert( aModifiedRow.end(), rRow.begin(), rRow.end() );
                         SAL_WARN_IF( aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NULL");
                     }
                     SAL_WARN_IF( nDestinationIndex >= aModifiedRow.size(), "xmloff.chart", "nDestinationIndex >= aModifiedRow.size()");
@@ -343,8 +342,7 @@ void SchXMLTableContext::EndElement()
                 if( !bModified )
                 {
                     SAL_WARN_IF( !aDestination.empty(), "xmloff.chart", "aDestination is NOT NULL");
-                    aDestination.reserve( mrTable.aData.size());
-                    ::std::copy( mrTable.aData.begin(), mrTable.aData.end(), ::std::back_inserter( aDestination ));
+                    aDestination.insert( aDestination.end(), mrTable.aData.begin(), mrTable.aData.end());
                     SAL_WARN_IF( aDestination.empty(), "xmloff.chart", "aDestination is NULL");
                 }
                 SAL_WARN_IF( nDestinationIndex >= aDestination.size(), "xmloff.chart", "nDestinationIndex >= aDestination.size()");

@@ -373,7 +373,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
                 {
                     maResourceURLs.push_back(xAnchor->getResourceURL());
                     Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
-                    std::copy(aAnchorURLs.begin(), aAnchorURLs.end(), std::back_inserter(maResourceURLs));
+                    maResourceURLs.insert( maResourceURLs.end(), aAnchorURLs.begin(), aAnchorURLs.end() );
                 }
             }
         }

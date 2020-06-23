@@ -423,7 +423,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    std::copy( _aConnectionData.begin(), _aConnectionData.end(), std::back_inserter( m_vTableConnectionData ));
+    m_vTableConnectionData.insert( m_vTableConnectionData.end(), _aConnectionData.begin(), _aConnectionData.end() );
     // here we are finished, so we can collect the table from connection data
     for (auto const& elem : m_vTableConnectionData)
     {

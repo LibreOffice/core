@@ -388,9 +388,7 @@ void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 
     if (pSet != nullptr)
     {
-        int x = mProperties.size();
-        mProperties.resize(mProperties.size() + pSet->mProperties.size());
-        std::copy(pSet->mProperties.begin(), pSet->mProperties.end(), mProperties.begin() + x);
+        mProperties.insert( mProperties.end(), pSet->mProperties.begin(), pSet->mProperties.end() );
     }
 }
 

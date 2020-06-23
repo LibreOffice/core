@@ -84,22 +84,14 @@ namespace comphelper
            && (_rArguments[1] >>= AllowEmptyPropertyName)
            && (_rArguments[2] >>= AutomaticAddition))
         {
-            std::copy(
-                aTypes.begin(),
-                aTypes.end(),
-                std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
-            );
+            m_aAllowedTypes.insert(aTypes.begin(), aTypes.end());
             m_bAutoAddProperties = AutomaticAddition;
 
         } else {
             ::comphelper::NamedValueCollection aArguments( _rArguments );
 
             if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
-                std::copy(
-                    aTypes.begin(),
-                    aTypes.end(),
-                    std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
-                );
+                m_aAllowedTypes.insert( aTypes.begin(), aTypes.end());
 
             aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
             aArguments.get_ensureType( "AllowEmptyPropertyName",

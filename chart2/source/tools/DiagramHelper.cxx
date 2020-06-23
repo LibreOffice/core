@@ -670,8 +670,7 @@ std::vector< Reference< XDataSeries > >
             {
                 Reference< XDataSeriesContainer > xDSCnt( chartType, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
-                             std::back_inserter( aResult ));
+                aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
             }
         }
     }
@@ -1202,8 +1201,7 @@ Sequence< Reference< XChartType > >
             {
                 Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-                std::copy( aChartTypeSeq.begin(), aChartTypeSeq.end(),
-                             std::back_inserter( aResult ));
+                aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
             }
         }
         catch( const uno::Exception & )

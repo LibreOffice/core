@@ -310,8 +310,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        std::copy( aDataSequences.begin(), aDataSequences.end(),
-                     std::back_inserter( aResult ));
+        aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
     }
 
     return uno::Reference< chart2::data::XDataSource >(
@@ -335,8 +334,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        std::copy( aDataSequences.begin(), aDataSequences.end(),
-                     std::back_inserter( aResult ));
+        aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
     }
 
     return uno::Reference< chart2::data::XDataSource >(

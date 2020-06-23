@@ -1215,7 +1215,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 
             }
             if ( XmlStyleFamily::TABLE_CELL == i.second.second )
-                std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), std::back_inserter( aPropStates ));
+                aPropStates.insert( aPropStates.end(), m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end() );
             if ( !aPropStates.empty() )
                 i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropStates ) );
         }

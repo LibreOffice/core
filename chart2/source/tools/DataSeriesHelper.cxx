@@ -244,8 +244,7 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
         if( xSource.is())
         {
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-            std::copy( aSeq.begin(), aSeq.end(),
-                         std::back_inserter( aSeqVec ));
+            aSeqVec.insert( aSeqVec.end(), aSeq.begin(), aSeq.end() );
         }
     }
 

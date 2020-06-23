@@ -113,15 +113,15 @@ public:
                 rParticle.mPosition[k] = mrDataProvider.clampVariable(k, rParticle.mPosition[k]);
             }
 
-            std::copy(rParticle.mPosition.begin(), rParticle.mPosition.end(),
-                      rParticle.mBestPosition.begin());
+            rParticle.mBestPosition.insert(rParticle.mBestPosition.begin(),
+                                           rParticle.mPosition.begin(), rParticle.mPosition.end());
             rParticle.mBestFitness = rParticle.mCurrentFitness;
 
             if (rParticle.mCurrentFitness > mfBestFitness)
             {
                 mfBestFitness = rParticle.mCurrentFitness;
-                std::copy(rParticle.mPosition.begin(), rParticle.mPosition.end(),
-                          maBestPosition.begin());
+                maBestPosition.insert(maBestPosition.begin(), rParticle.mPosition.begin(),
+                                      rParticle.mPosition.end());
             }
         }
     }
@@ -153,8 +153,9 @@ public:
             if (rParticle.mCurrentFitness > rParticle.mBestFitness)
             {
                 rParticle.mBestFitness = rParticle.mCurrentFitness;
-                std::copy(rParticle.mPosition.begin(), rParticle.mPosition.end(),
-                          rParticle.mBestPosition.begin());
+                rParticle.mBestPosition.insert(rParticle.mBestPosition.begin(),
+                                               rParticle.mPosition.begin(),
+                                               rParticle.mPosition.end());
             }
 
             if (rParticle.mCurrentFitness > mfBestFitness)
@@ -164,8 +165,8 @@ public:
                     bBestChanged = true;
                     mnLastChange = mnGeneration;
                 }
-                std::copy(rParticle.mPosition.begin(), rParticle.mPosition.end(),
-                          maBestPosition.begin());
+                maBestPosition.insert(maBestPosition.begin(), rParticle.mPosition.begin(),
+                                      rParticle.mPosition.end());
                 mfBestFitness = rParticle.mCurrentFitness;
             }
         }

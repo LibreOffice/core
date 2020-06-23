@@ -1373,7 +1373,7 @@ void ScTable::SortReorderByRowRefUpdate(
         FormulaCellCollectAction aAction(aFCells);
         aGrpListenerRanges.executeColumnAction(*pDocument, aAction);
 
-        std::copy(aFCells.begin(), aFCells.end(), std::back_inserter(aListeners));
+        aListeners.insert( aListeners.end(), aFCells.begin(), aFCells.end() );
     }
 
     // Remove any duplicate listener entries.  We must ensure that we notify

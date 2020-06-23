@@ -111,17 +111,13 @@ void Primitive2DContainer::append(const Primitive2DContainer& rSource)
 
 void Primitive2DContainer::append(Primitive2DContainer&& rSource)
 {
-    size_t n = size();
-    resize(n + rSource.size());
-    for (size_t i = 0; i < rSource.size(); ++i)
-    {
-        (*this)[n + i] = std::move(rSource[i]);
-    }
+    this->insert(this->end(), std::make_move_iterator(rSource.begin()),
+                 std::make_move_iterator(rSource.end()));
 }
 
 void Primitive2DContainer::append(const Primitive2DSequence& rSource)
 {
-    std::copy(rSource.begin(), rSource.end(), std::back_inserter(*this));
+    this->insert(this->end(), rSource.begin(), rSource.end());
 }
 
 } // end of namespace drawinglayer::primitive2d

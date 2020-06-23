@@ -175,8 +175,8 @@ ErrCode SwReader::Read( const Reader& rOptions )
         // store for now all Fly's
         if( mpCursor )
         {
-            std::copy(mxDoc->GetSpzFrameFormats()->begin(),
-                mxDoc->GetSpzFrameFormats()->end(), std::back_inserter(aFlyFrameArr));
+            aFlyFrameArr.insert( aFlyFrameArr.end(), mxDoc->GetSpzFrameFormats()->begin(),
+                mxDoc->GetSpzFrameFormats()->end() );
         }
 
         const sal_Int32 nSttContent = pPam->GetPoint()->nContent.GetIndex();

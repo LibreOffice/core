@@ -345,8 +345,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     } while ( false );
 
     // copy the parameters of the sub query to our own parameter array
-    std::copy( pSubQueryParameterColumns->begin(), pSubQueryParameterColumns->end(),
-        std::back_inserter( *m_aParameters ) );
+    m_aParameters->insert( m_aParameters->end(), pSubQueryParameterColumns->begin(), pSubQueryParameterColumns->end() );
 }
 
 

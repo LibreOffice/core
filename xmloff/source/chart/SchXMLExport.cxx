@@ -345,21 +345,6 @@ private:
     OUString m_aRole;
 };
 
-template< typename T >
-    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
-{
-    rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.begin(), rSource.end(),
-                 ::std::back_inserter( rDestination ));
-}
-
-template< typename T >
-    void lcl_SequenceToVector( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
-{
-    rDestination.clear();
-    lcl_SequenceToVectorAppend( rSource, rDestination );
-}
-
 Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
@@ -428,7 +413,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
             if( !xDataSource.is() )
                 continue;
             uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-            lcl_SequenceToVectorAppend( aDataSequences, aContainer );
+            aContainer.insert( aContainer.end(), aDataSequences.begin(), aDataSequences.end() );
         }
     }
 
@@ -678,8 +663,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         }
     }
 
-    ::std::copy( aValuesSequence.begin(), aValuesSequence.end(),
-                 ::std::back_inserter( aResult ));
+    aResult.insert( aResult.end(), aValuesSequence.begin(), aValuesSequence.end() );
     return aResult;
 }
 
@@ -828,7 +812,8 @@ lcl_TableData lcl_getDataForLocalTable(
         tStringVector& rLabels     = bSeriesFromColumns ? aResult.aColumnDescriptions : aResult.aRowDescriptions;
 
         //categories
-        lcl_SequenceToVector( aSimpleCategories, rCategories );
+        rCategories.clear();
+        rCategories.insert( rCategories.begin(), aSimpleCategories.begin(), aSimpleCategories.end() );
         if( !rCategoriesRange.isEmpty() )
         {
             OUString aRange(rCategoriesRange);
@@ -3283,8 +3268,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     if( bVaryColorsByPoint && xColorScheme.is() )
     {
         ::std::set< sal_Int32 > aAttrPointSet;
-        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                        ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+        aAttrPointSet.insert( pPoints, pPoints + aDataPointSeq.getLength() );
         const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
