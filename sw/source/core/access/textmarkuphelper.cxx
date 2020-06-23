@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <ndtxt.hxx>
 #include <wrong.hxx>
@@ -215,11 +216,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
         }
     }
 
-    uno::Sequence< css::accessibility::TextSegment > aTextMarkups(
-                                                    aTmpTextMarkups.size() );
-    std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(), aTextMarkups.begin() );
-
-    return aTextMarkups;
+    return comphelper::containerToSequence(aTmpTextMarkups  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

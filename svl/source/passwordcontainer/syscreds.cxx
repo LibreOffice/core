@@ -172,9 +172,7 @@ void SysCredentialsConfig::initCfg()
     {
         uno::Sequence< OUString > aURLs(
             m_aConfigItem.getSystemCredentialsURLs() );
-        std::copy(aURLs.begin(), aURLs.end(),
-            std::inserter(m_aCfgContainer, m_aCfgContainer.end()));
-
+        m_aCfgContainer.insert( aURLs.begin(), aURLs.end() );
         m_bCfgInited = true;
     }
 }

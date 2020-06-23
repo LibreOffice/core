@@ -454,7 +454,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
             const Sequence< OUString > aNewConv( xDic->getConversions(
                                 rText, nStartPos, nLength,
                                 eDirection, nTextConversionOptions ) );
-            std::copy(aNewConv.begin(), aNewConv.end(), std::back_inserter(aRes));
+            aRes.insert( aRes.end(), aNewConv.begin(), aNewConv.end() );
         }
     }
 

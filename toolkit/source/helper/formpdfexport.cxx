@@ -270,8 +270,7 @@ namespace toolkitform
             if( ! (_rxModel->getPropertyValue( "StringItemList" ) >>= aListEntries) ) {
                 SAL_WARN("toolkit.helper", "getStringItemVector: unable to get property StringItemList");
             }
-            ::std::copy( aListEntries.begin(), aListEntries.end(),
-                         ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
+            _rVector.insert( _rVector.end(), aListEntries.begin(), aListEntries.end() );
         }
     }
 

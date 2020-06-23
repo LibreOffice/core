@@ -488,8 +488,7 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
     lDestination.realloc( (nSourceCount*PROPERTYCOUNT)+nDestinationStep ); // get enough memory for copy operations after nDestination ...
 
     // Copy all items to temp. vector to use fast sort operations :-)
-    lTemp.reserve(nSourceCount);
-    std::copy(lSource.begin(), lSource.end(), std::back_inserter(lTemp));
+    lTemp.insert( lTemp.end(), lSource.begin(), lSource.end() );
 
     // Sort all entries by number ...
     stable_sort( lTemp.begin(), lTemp.end(), CountWithPrefixSort() );

@@ -1228,9 +1228,7 @@ namespace basctl
         OUString aBaseName = _eType == E_SCRIPTS ? OUString("Module") : OUString("Dialog");
 
         Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
-        std::set< OUString > aUsedNamesCheck;
-        std::copy( aUsedNames.begin(), aUsedNames.end(),
-            std::insert_iterator< std::set< OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
+        std::set< OUString > aUsedNamesCheck( aUsedNames.begin(), aUsedNames.end() );
 
         bool bValid = false;
         sal_Int32 i = 1;

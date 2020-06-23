@@ -456,9 +456,7 @@ void InternalDataProvider::adaptMapReferences(
     // erase map values for old index
     m_aSequenceMap.erase( aRange.first, aRange.second );
     // add new entries for values with new index
-    std::copy( aNewElements.begin(), aNewElements.end(),
-                 std::inserter( m_aSequenceMap,
-                                  m_aSequenceMap.upper_bound( rNewRangeRepresentation )));
+    m_aSequenceMap.insert( aNewElements.begin(), aNewElements.end() );
 }
 
 void InternalDataProvider::increaseMapReferences(

@@ -722,8 +722,7 @@ namespace slideshow::internal
 
             // to avoid tons of temporaries, create weak_ptr to Layers
             // beforehand
-            std::vector< LayerWeakPtr > aWeakLayers(maLayers.size());
-            std::copy(maLayers.begin(),maLayers.end(),aWeakLayers.begin());
+            std::vector< LayerWeakPtr > aWeakLayers(maLayers.begin(),maLayers.end());
 
             std::size_t                   nCurrLayerIndex(0);
             bool                          bIsBackgroundLayer(true);

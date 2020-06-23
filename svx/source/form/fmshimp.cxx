@@ -808,12 +808,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
     if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
     {
         // unfortunately, SFX requires sal_uInt16
-        ::std::vector< sal_uInt16 > aSlotIds;
-        aSlotIds.reserve( _rFeatures.size() );
-        ::std::copy( _rFeatures.begin(),
-            _rFeatures.end(),
-            ::std::insert_iterator< ::std::vector< sal_uInt16 > >( aSlotIds, aSlotIds.begin() )
-        );
+        ::std::vector< sal_uInt16 > aSlotIds( _rFeatures.begin(), _rFeatures.end() );
 
         // furthermore, SFX wants a terminating 0
         aSlotIds.push_back( 0 );

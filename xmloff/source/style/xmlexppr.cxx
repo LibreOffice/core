@@ -145,8 +145,7 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
 {
     if (nCount)
     {
-        rVector.resize(nCount, XMLPropertyState(-1));
-        ::std::copy( aPropStates.begin(), aPropStates.end(), rVector.begin() );
+        rVector.insert( rVector.begin(), aPropStates.begin(), aPropStates.end() );
     }
 }
 

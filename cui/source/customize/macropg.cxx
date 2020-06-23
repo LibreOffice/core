@@ -325,14 +325,6 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
     if(!nameReplace.is())
         return;
 
-    Sequence< OUString > eventNames = nameReplace->getElementNames();
-    std::set< OUString > aEventNamesCache;
-    std::copy(
-        eventNames.begin(),
-        eventNames.end(),
-        std::insert_iterator< std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
-    );
-
     for (auto const& displayableEvent : aDisplayNames)
     {
         OUString sEventName( OUString::createFromAscii( displayableEvent.pAsciiEventName ) );

@@ -288,8 +288,7 @@ void AssignmentPersistentData::ImplCommit()
         :ConfigItem("Office.DataAccess/AddressBook")
     {
         Sequence< OUString > aStoredNames = GetNodeNames("Fields");
-        std::copy(aStoredNames.begin(), aStoredNames.end(),
-                  std::inserter(m_aStoredFields, m_aStoredFields.end()));
+        m_aStoredFields.insert(aStoredNames.begin(), aStoredNames.end());
     }
 
     bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
@@ -846,8 +845,7 @@ void AssignmentPersistentData::ImplCommit()
 
 
         // for quicker access
-        ::std::set< OUString > aColumnNameSet;
-        std::copy(aColumnNames.begin(), aColumnNames.end(), std::inserter(aColumnNameSet, aColumnNameSet.end()));
+        ::std::set< OUString > aColumnNameSet(aColumnNames.begin(), aColumnNames.end());
 
         std::vector<OUString>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 

@@ -1388,12 +1388,7 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 
 OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& _rBaseName, bool _bStartWithNumber )
 {
-    std::set< OUString > aUsedNames;
-    std::copy(
-        _rNames.begin(),
-        _rNames.end(),
-        std::insert_iterator< std::set< OUString > >( aUsedNames, aUsedNames.end() )
-    );
+    std::set< OUString > aUsedNames(_rNames.begin(), _rNames.end());
 
     OUString sName( _rBaseName );
     sal_Int32 nPos = 1;

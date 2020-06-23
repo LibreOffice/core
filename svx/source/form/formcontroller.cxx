@@ -3984,9 +3984,7 @@ void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >&
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // for now, just copy the ids of the features, because...
-    ::std::copy( Features.begin(), Features.end(),
-        ::std::insert_iterator< ::std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
-    );
+    m_aInvalidFeatures.insert( Features.begin(), Features.end() );
 
     // ... we will do the real invalidation asynchronously
     if ( !m_aFeatureInvalidationTimer.IsActive() )

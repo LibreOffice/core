@@ -554,7 +554,7 @@ public:
             sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
             const sal_Int8* p = aBuf.getArray();
             const sal_Int8* pEnd = p + nBytes;
-            std::copy(p, pEnd, std::back_inserter(maBytes));
+            maBytes.insert( maBytes.end(), p, pEnd );
             return nBytes;
         };
 

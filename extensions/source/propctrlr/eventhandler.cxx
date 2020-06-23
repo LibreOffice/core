@@ -933,7 +933,7 @@ namespace pcr
             }
 
             // now that they're disambiguated, copy these types into our member
-            std::copy(aListeners.begin(), aListeners.end(), std::back_inserter(_out_rTypes));
+            _out_rTypes.insert( _out_rTypes.end(), aListeners.begin(), aListeners.end() );
         }
         catch( const Exception& )
         {

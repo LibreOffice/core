@@ -116,7 +116,7 @@ ScVbaChartObjects::getChartObjectNames() const
         {
             uno::Reference< table::XTableChartsSupplier > xLocTableChartsSupplier( xSpreadsheets->getByName(rSheetName), uno::UNO_QUERY_THROW );
             const uno::Sequence< OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
-            std::copy(scurchartnames.begin(), scurchartnames.end(), std::back_inserter(aChartNamesVector));
+            aChartNamesVector.insert( aChartNamesVector.end(), scurchartnames.begin(), scurchartnames.end() );
         }
         sChartNames = comphelper::containerToSequence( aChartNamesVector );
     }

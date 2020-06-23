@@ -2220,8 +2220,8 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 
             int nPos = mxLBAnimation->n_children();
 
-            std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
-            std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
+            std::vector< CustomAnimationPresetPtr > aSortedVector =
+                pCategory->maEffects;
 
             for( CustomAnimationPresetPtr& pDescriptor : aSortedVector )
             {

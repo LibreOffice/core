@@ -1756,9 +1756,8 @@ void SwWW8Writer::InsAsString8(ww::bytes &rO, const OUString& rStr,
     OString sTmp(OUStringToOString(rStr, eCodeSet));
     const char *pStart = sTmp.getStr();
     const char *pEnd = pStart + sTmp.getLength();
-    rO.reserve(rO.size() + sTmp.getLength());
 
-    std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
+    rO.insert( rO.end(), pStart, pEnd );
 }
 
 void SwWW8Writer::WriteString16(SvStream& rStrm, const OUString& rStr,

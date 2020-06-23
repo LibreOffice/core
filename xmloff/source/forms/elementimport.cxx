@@ -1388,12 +1388,7 @@ namespace xmloff
                 OSL_ENSURE( aValuePropertyPos->Name == PROPERTY_TEXT, "OTextLikeImport::EndElement: text:p was present, but our value property is *not* 'Text'!" );
                 if ( aValuePropertyPos->Name == PROPERTY_TEXT )
                 {
-                    ::std::copy(
-                        aValuePropertyPos + 1,
-                        m_aValues.end(),
-                        aValuePropertyPos
-                    );
-                    m_aValues.resize( m_aValues.size() - 1 );
+                    m_aValues.erase(aValuePropertyPos);
                 }
             }
 
@@ -1443,12 +1438,7 @@ namespace xmloff
             {
                 // complete remove this property value from the array. Today's "default value" of the "DefaultControl"
                 // property is sufficient
-                ::std::copy(
-                    aDefaultControlPropertyPos + 1,
-                    m_aValues.end(),
-                    aDefaultControlPropertyPos
-                );
-                m_aValues.resize( m_aValues.size() - 1 );
+                m_aValues.erase(aDefaultControlPropertyPos);
             }
         }
     }
