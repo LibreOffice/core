@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <svl/itemiter.hxx>
 #include <svx/svdundo.hxx>
 #include <hintids.hxx>
@@ -58,6 +60,28 @@ SwUndoFlyBase::~SwUndoFlyBase()
         }
         delete m_pFrameFormat;
     }
+}
+
+void SwUndoFlyBase::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoFlyBase"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodePagePos"),
+                                BAD_CAST(OString::number(m_nNodePagePos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nContentPos"),
+                                BAD_CAST(OString::number(m_nContentPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nRndId"),
+                                BAD_CAST(OString::number(static_cast<int>(m_nRndId)).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_bDelFormat"),
+                                BAD_CAST(OString::boolean(m_bDelFormat).getStr()));
+
+    SwUndo::dumpAsXml(pWriter);
+
+    if (m_pFrameFormat)
+    {
+        m_pFrameFormat->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)

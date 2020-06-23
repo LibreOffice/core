@@ -490,9 +490,6 @@ class SwUndoReplace::Impl
 
 public:
     Impl(SwPaM const& rPam, OUString const& rIns, bool const bRegExp);
-    virtual ~Impl()
-    {
-    }
 
     void UndoImpl( ::sw::UndoRedoContext & );
     void RedoImpl( ::sw::UndoRedoContext & );

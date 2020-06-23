@@ -18,6 +18,9 @@
  */
 
 #include <rolbck.hxx>
+
+#include <libxml/xmlwriter.h>
+
 #include <svl/itemiter.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <hints.hxx>
@@ -59,6 +62,16 @@
 OUString SwHistoryHint::GetDescription() const
 {
     return OUString();
+}
+
+void SwHistoryHint::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryHint"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eWhichId"),
+                                BAD_CAST(OString::number(m_eWhichId).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNd )
@@ -131,6 +144,21 @@ OUString SwHistorySetFormat::GetDescription() const
     }
 
     return aResult;
+}
+
+void SwHistorySetFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistorySetFormat"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodeIndex"),
+                                BAD_CAST(OString::number(m_nNodeIndex).getStr()));
+    SwHistoryHint::dumpAsXml(pWriter);
+
+    if (m_pAttr)
+    {
+        m_pAttr->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void SwHistorySetFormat::SetInDoc( SwDoc* pDoc, bool bTmpSet )
@@ -551,6 +579,19 @@ void SwHistoryTextFlyCnt::SetInDoc( SwDoc* pDoc, bool )
     assert(pISCS);
     ::sw::UndoRedoContext context(*pDoc, *pISCS);
     m_pUndo->UndoImpl(context);
+}
+
+void SwHistoryTextFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryTextFlyCnt"));
+    SwHistoryHint::dumpAsXml(pWriter);
+
+    if (m_pUndo)
+    {
+        m_pUndo->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwHistoryBookmark::SwHistoryBookmark(
@@ -1239,6 +1280,21 @@ void SwHistory::CopyFormatAttr(
 
         } while(pItem);
     }
+}
+
+void SwHistory::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistory"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_SwpHstry"));
+    for (const auto& pHistory : m_SwpHstry)
+    {
+        pHistory->dumpAsXml(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void SwHistory::CopyAttr(

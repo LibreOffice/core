@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -176,6 +178,39 @@ bool SwUndoInserts::IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
             || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         && (   nStartNode == pAnchorPos->nNode.GetIndex()
             || nEndNode == pAnchorPos->nNode.GetIndex());
+}
+
+void SwUndoInserts::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoInserts"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s",
+                                      BAD_CAST(typeid(*this).name()));
+
+    SwUndo::dumpAsXml(pWriter);
+    SwUndoSaveContent::dumpAsXml(pWriter);
+
+    if (m_pFrameFormats)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("m_pFrameFormats"));
+        for (const auto& pFormat : *m_pFrameFormats)
+        {
+            pFormat->dumpAsXml(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (!m_FlyUndos.empty())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("m_FlyUndos"));
+        for (const auto& pFly : m_FlyUndos)
+        {
+            pFly->dumpAsXml(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwUndoInserts::~SwUndoInserts()

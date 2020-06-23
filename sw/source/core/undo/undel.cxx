@@ -18,6 +18,9 @@
  */
 
 #include <UndoDelete.hxx>
+
+#include <libxml/xmlwriter.h>
+
 #include <hintids.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/charclass.hxx>
@@ -1311,6 +1314,15 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoDelete::SetTableName(const OUString & rName)
 {
     m_sTableName = rName;
+}
+
+void SwUndoDelete::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDelete"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    SwUndo::dumpAsXml(pWriter);
+    SwUndoSaveContent::dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

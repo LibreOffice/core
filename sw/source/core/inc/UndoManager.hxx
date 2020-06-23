@@ -86,6 +86,7 @@ public:
                                    bool bTryMerg = false) override;
     virtual bool Undo() override;
     virtual bool Redo() override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();
