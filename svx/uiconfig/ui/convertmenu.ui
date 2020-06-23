@@ -110,6 +110,7 @@
         <property name="action_name">.uno:ConvertToTime</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="convertmenu|ConvertToTime">Tim_e Field</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <child>
@@ -118,6 +119,7 @@
         <property name="action_name">.uno:ConvertToNumeric</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="convertmenu|ConvertToNumeric">_Numerical Field</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <child>
