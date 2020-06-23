@@ -27,6 +27,7 @@
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
 #include <frameformats.hxx>
+#include <fmtfollowtextflow.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
@@ -63,6 +64,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
     uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
                                                                 uno::UNO_QUERY);
+    bool bPositioningSuccess = true;
     try
     {
         SdrObject* pSourceSDRShape = pShape->FindRealSdrObject();
@@ -74,6 +76,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     catch (uno::Exception&)
     {
         xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+        bPositioningSuccess = false;
     }
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
@@ -142,6 +145,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+
+    if (!bPositioningSuccess) syncFlyAnchorPos(*pShape);
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
@@ -698,12 +703,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
-            if (rShape.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
-            {
-                SwFormatAnchor pShapeAnch = rShape.GetAnchor();
-                aTextBoxSet.Put(pShapeAnch);
-            }
-
             switch (pItem->Which())
             {
                 case RES_VERT_ORIENT:
@@ -715,10 +714,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     if (!aRect.IsEmpty())
                         aOrient.SetPos(aOrient.GetPos() + aRect.getY());
 
-                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                    {
-                        aOrient.SetRelationOrient(rShape.GetVertOrient().GetRelationOrient());
-                    }
                     aTextBoxSet.Put(aOrient);
 
                     // restore height (shrunk for extending beyond the page bottom - tdf#91260)
@@ -739,10 +734,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     if (!aRect.IsEmpty())
                         aOrient.SetPos(aOrient.GetPos() + aRect.getX());
 
-                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                    {
-                        aOrient.SetRelationOrient(rShape.GetHoriOrient().GetRelationOrient());
-                    }
                     aTextBoxSet.Put(aOrient);
                 }
                 break;
@@ -782,6 +773,39 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
         if (aTextBoxSet.Count())
             pFormat->GetDoc()->SetFlyFrameAttr(*pFormat, aTextBoxSet);
+    }
+}
+
+void SwTextBoxHelper::syncFlyAnchorPos(const SwFrameFormat& rShape)
+{
+    SwFrameFormat* pFlyFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT);
+    if (pFlyFormat)
+    {
+        SfxItemSet aTxBxSet(pFlyFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
+        if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR ||
+            rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA)
+        {
+            aTxBxSet.Put(rShape.GetAnchor());
+            aTxBxSet.Put(rShape.GetFollowTextFlow());
+        }
+        else if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE &&
+            rShape.GetAnchor().GetPageNum() != 0)
+        {
+            aTxBxSet.Put(rShape.GetAnchor());
+            SwFormatHoriOrient aHoriOri(pFlyFormat->GetHoriOrient());
+            aHoriOri.SetRelationOrient(rShape.GetHoriOrient().GetRelationOrient());
+            SwFormatVertOrient aVertOri(pFlyFormat->GetVertOrient());
+            aVertOri.SetRelationOrient(rShape.GetVertOrient().GetRelationOrient());
+            aTxBxSet.Put(aHoriOri);
+            aTxBxSet.Put(aVertOri);
+        }
+        else if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_FLY)
+        {
+            aTxBxSet.Put(rShape.GetAnchor());
+        }
+        if (aTxBxSet.Count())
+            pFlyFormat->GetDoc()->SetFlyFrameAttr(*pFlyFormat, aTxBxSet);
+
     }
 }
 
