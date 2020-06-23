@@ -675,7 +675,7 @@ cygwin*|interix*)
     LINKFLAGSNOUNDEFS=
     ;;
 
-darwin*) # macOS or iOS
+darwin*|macos*) # macOS
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -685,26 +685,45 @@ darwin*) # macOS or iOS
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
-    if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
-        build_for_ios=YES
-        _os=iOS
-        test_cups=no
-        enable_mpl_subset=yes
-        enable_lotuswordpro=no
-        enable_coinmp=no
-        enable_lpsolve=no
-        enable_postgresql_sdbc=no
-        enable_extension_integration=no
-        enable_report_builder=no
-        with_ppds=no
-        if test "$enable_ios_simulator" = "yes"; then
-            host=x86_64-apple-darwin
-        fi
-    else
-        _os=Darwin
-        INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
-        INSTROOTCONTENTSUFFIX=/Contents
-        SDKDIRNAME=${PRODUCTNAME}${PRODUCTVERSION}_SDK
+    _os=Darwin
+    INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
+    INSTROOTCONTENTSUFFIX=/Contents
+    SDKDIRNAME=${PRODUCTNAME}${PRODUCTVERSION}_SDK
+    # See comment above the case "$host_os"
+    LINKFLAGSSHL="-dynamiclib -single_module"
+
+    # -fPIC is default
+    PICSWITCH=""
+
+    DLLPOST=".dylib"
+
+    # -undefined error is the default
+    LINKFLAGSNOUNDEFS=""
+;;
+
+ios*) # iOS
+    test_randr=no
+    test_xrender=no
+    test_freetype=no
+    test_fontconfig=no
+    test_dbus=no
+    if test -n "$LODE_HOME" ; then
+        mac_sanitize_path
+        AC_MSG_NOTICE([sanitized the PATH to $PATH])
+    fi
+    build_for_ios=YES
+    _os=iOS
+    test_cups=no
+    enable_mpl_subset=yes
+    enable_lotuswordpro=no
+    enable_coinmp=no
+    enable_lpsolve=no
+    enable_postgresql_sdbc=no
+    enable_extension_integration=no
+    enable_report_builder=no
+    with_ppds=no
+    if test "$enable_ios_simulator" = "yes"; then
+        host=x86_64-apple-darwin
     fi
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
@@ -4292,22 +4311,14 @@ darwin*)
     P_SEP=:
 
     case "$host_cpu" in
-    arm)
-        AC_MSG_ERROR([Can't build 32-bit code for iOS])
-        ;;
     arm64)
-        OS=iOS
-        RTL_OS=iOS
         if test "$enable_ios_simulator" = "yes"; then
-            AC_MSG_ERROR([iOS simulator is only available in OSX not iOS])
+            OS=iOS
         else
             CPUNAME=ARM64
             RTL_ARCH=ARM_EABI
-            PLATFORMID=ios_arm64
+            PLATFORMID=macosx_arm64
         fi
-        ;;
-    i*86)
-        AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         ;;
     x86_64)
         if test "$enable_ios_simulator" = "yes"; then
@@ -4321,6 +4332,28 @@ darwin*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
+    ;;
+
+ios*)
+    COM=GCC
+    USING_X11=
+    OS=iOS
+    RTL_OS=iOS
+    P_SEP=:
+
+    case "$host_cpu" in
+    arm64)
+        if test "$enable_ios_simulator" = "yes"; then
+            AC_MSG_ERROR([iOS simulator is only available in macOS not iOS])
+        fi
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    CPUNAME=ARM64
+    RTL_ARCH=ARM_EABI
+    PLATFORMID=ios_arm64
     ;;
 
 dragonfly*)
