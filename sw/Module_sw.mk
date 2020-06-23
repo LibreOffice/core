@@ -79,6 +79,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_unowriter \
+    CppunitTest_sw_uibase_shells \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
