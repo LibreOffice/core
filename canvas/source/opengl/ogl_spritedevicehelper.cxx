@@ -281,11 +281,9 @@ namespace oglcanvas
         mpSpriteCanvas->renderRecordedActions();
 
         // render all sprites (in order of priority) on top of that
-        std::vector< ::rtl::Reference<CanvasCustomSprite> > aSprites;
-        std::copy(maActiveSprites.begin(),
-                  maActiveSprites.end(),
-                  std::back_insert_iterator<
-                       std::vector< ::rtl::Reference< CanvasCustomSprite > > >(aSprites));
+        std::vector< ::rtl::Reference<CanvasCustomSprite> > aSprites(
+                    maActiveSprites.begin(),
+                    maActiveSprites.end());
         std::sort(aSprites.begin(),
                   aSprites.end(),
                   SpriteComparator());

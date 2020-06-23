@@ -92,8 +92,7 @@ ImplOPropertySet::ImplOPropertySet()
 
 ImplOPropertySet::ImplOPropertySet( const ImplOPropertySet & rOther )
 {
-    std::copy( rOther.m_aProperties.begin(), rOther.m_aProperties.end(),
-                 std::inserter( m_aProperties, m_aProperties.begin() ));
+    m_aProperties = rOther.m_aProperties;
 
     // clone interface properties
     std::for_each( m_aProperties.begin(), m_aProperties.end(),

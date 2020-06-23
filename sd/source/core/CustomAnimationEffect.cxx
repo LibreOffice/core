@@ -2818,8 +2818,7 @@ void EffectSequenceHelper::setTextReverse( const CustomAnimationTextGroupPtr& pT
     }
     else
     {
-        std::vector< CustomAnimationEffectPtr > aSortedVector(pTextGroup->maEffects.size());
-        std::copy( pTextGroup->maEffects.begin(), pTextGroup->maEffects.end(), aSortedVector.begin() );
+        std::vector< CustomAnimationEffectPtr > aSortedVector( pTextGroup->maEffects.begin(), pTextGroup->maEffects.end() );
         ImplStlTextGroupSortHelper aSortHelper( bTextReverse );
         std::sort( aSortedVector.begin(), aSortedVector.end(), aSortHelper );
 

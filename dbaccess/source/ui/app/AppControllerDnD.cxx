@@ -177,14 +177,10 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
     // be the ancestor or child of another element from the list.
     // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
     // #i33353#
-    std::set< OUString > aDeleteNames;
-        // Note that this implicitly uses std::less< OUString > a comparison operation, which
-        // results in lexicographical order, which is exactly what we need, because "foo" is *before*
-        // any "foo/bar" in this order.
-    std::copy(
-        _rList.begin(), _rList.end(),
-        std::insert_iterator< std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
-    );
+    // Note that this implicitly uses std::less< OUString > a comparison operation, which
+    // results in lexicographical order, which is exactly what we need, because "foo" is *before*
+    // any "foo/bar" in this order.
+    std::set< OUString > aDeleteNames(_rList.begin(), _rList.end());
 
     std::set< OUString >::size_type nCount = aDeleteNames.size();
     for ( std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )

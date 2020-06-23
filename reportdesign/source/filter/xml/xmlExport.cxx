@@ -1210,7 +1210,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         }
 
         ::std::vector< XMLPropertyState > aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(xBorderProp));
-        ::std::copy(aBorderStates.begin(),aBorderStates.end(),::std::back_inserter(aPropertyStates));
+        aPropertyStates.insert( aPropertyStates.end(), aBorderStates.begin(), aBorderStates.end() );
     }
     else
     {

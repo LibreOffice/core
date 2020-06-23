@@ -117,11 +117,11 @@ void SfxCharmapCtrl::getFavCharacterList()
 {
     //retrieve recent character list
     css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    std::copy(rFavCharList.begin(), rFavCharList.end(), std::back_inserter(m_aFavCharList));
+    m_aFavCharList.insert( m_aFavCharList.end(), rFavCharList.begin(), rFavCharList.end() );
 
     //retrieve recent character font list
     css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    std::copy(rFavCharFontList.begin(), rFavCharFontList.end(), std::back_inserter(m_aFavCharFontList));
+    m_aFavCharFontList.insert( m_aFavCharFontList.end(), rFavCharFontList.begin(), rFavCharFontList.end() );
 }
 
 void SfxCharmapCtrl::updateFavCharControl()
@@ -149,11 +149,11 @@ void SfxCharmapCtrl::getRecentCharacterList()
 {
     //retrieve recent character list
     css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
-    std::copy(rRecentCharList.begin(), rRecentCharList.end(), std::back_inserter(m_aRecentCharList));
+    m_aRecentCharList.insert( m_aRecentCharList.end(), rRecentCharList.begin(), rRecentCharList.end() );
 
     //retrieve recent character font list
     css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
-    std::copy(rRecentCharFontList.begin(), rRecentCharFontList.end(), std::back_inserter(m_aRecentCharFontList));
+    m_aRecentCharFontList.insert( m_aRecentCharFontList.end(), rRecentCharFontList.begin(), rRecentCharFontList.end() );
 }
 
 void SfxCharmapCtrl::updateRecentCharControl()

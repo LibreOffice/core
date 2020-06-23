@@ -556,17 +556,14 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
 
 void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
 {
-    ListenerContainer aListenerCopy (maListeners);
+    ListenerContainer aListenerCopy;
 
     {
         osl::MutexGuard aGuard (maMutex);
 
         mbIsCallbackPending = false;
 
-        ::std::copy(
-            maListeners.begin(),
-            maListeners.end(),
-            ::std::back_inserter(aListenerCopy));
+        aListenerCopy = maListeners;
     }
 
     for (const auto& rxListener : aListenerCopy)

@@ -1245,10 +1245,9 @@ void ToolBarList::MakeRequestedToolBarList (std::vector<OUString>& rRequestedToo
     {
         Groups::const_iterator iGroup (maGroups.find(eGroup));
         if (iGroup != maGroups.end())
-            ::std::copy(
+            rRequestedToolBars.insert( rRequestedToolBars.end(),
                 iGroup->second.begin(),
-                iGroup->second.end(),
-                ::std::inserter(rRequestedToolBars,rRequestedToolBars.end()));
+                iGroup->second.end() );
     }
 }
 

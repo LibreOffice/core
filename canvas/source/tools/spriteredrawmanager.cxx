@@ -234,10 +234,7 @@ namespace canvas
         }
 
         // sort sprites after prio
-        VectorOfSprites aSortedSpriteVector;
-        std::copy( maSprites.begin(),
-                     maSprites.end(),
-                     std::back_insert_iterator< VectorOfSprites >(aSortedSpriteVector) );
+        VectorOfSprites aSortedSpriteVector( maSprites.begin(), maSprites.end() );
         std::sort( aSortedSpriteVector.begin(),
                      aSortedSpriteVector.end(),
                      aSpriteComparator );

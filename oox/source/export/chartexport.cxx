@@ -354,8 +354,7 @@ static void lcl_fillCategoriesIntoStringVector(
     {
         rOutCategories.clear();
         Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
-        ::std::copy( aTextData.begin(), aTextData.end(),
-                     ::std::back_inserter( rOutCategories ));
+        rOutCategories.insert( rOutCategories.end(), aTextData.begin(), aTextData.end() );
     }
     else
     {
@@ -376,8 +375,7 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     if( xNumSeq.is())
     {
         Sequence< double > aValues( xNumSeq->getNumericalData());
-        ::std::copy( aValues.begin(), aValues.end(),
-                     ::std::back_inserter( aResult ));
+        aResult.insert( aResult.end(), aValues.begin(), aValues.end() );
     }
     else if( xSeq.is())
     {

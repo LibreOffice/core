@@ -1143,7 +1143,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
 
     if( nNewPos == static_cast<sal_Int32>(aEffectVector.size()) )
     {
-        std::copy(aEffects.begin(), aEffects.end(), std::back_inserter(rSequence));
+        rSequence.insert( rSequence.end(), aEffects.begin(), aEffects.end() );
     }
     else
     {

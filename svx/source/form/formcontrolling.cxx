@@ -424,8 +424,7 @@ namespace svx
             SID_FM_VIEW_AS_GRID
         };
         sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
-        aSupportedFeatures.resize( nFeatureCount );
-        ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
+        aSupportedFeatures.insert( aSupportedFeatures.begin(), pSupportedFeatures, pSupportedFeatures + nFeatureCount );
 
         m_pInvalidationCallback->invalidateFeatures( aSupportedFeatures );
     }
