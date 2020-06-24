@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7756233_cebf2c33",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-24T10:13:15Z",
+      "side": 1,
+      "message": "We better respect the capitalized initial letters.",
+      "range": {
+        "startLine": 308,
+        "startChar": 49,
+        "endLine": 308,
+        "endChar": 86
+      },
+      "revId": "9e82b34dba1e24c2463e18139a7dadc688cff2aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824e18c3_75b96f9e",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-24T10:13:15Z",
+      "side": 1,
+      "message": "Let\u0027s not include this because there is a word \"kontur\" with a different meaning.",
+      "range": {
+        "startLine": 394,
+        "startChar": 3,
+        "endLine": 395,
+        "endChar": 83
+      },
+      "revId": "9e82b34dba1e24c2463e18139a7dadc688cff2aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b759c54f_6ef1dfe9",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-24T10:13:15Z",
+      "side": 1,
+      "message": "Lowercase initial letter?",
+      "range": {
+        "startLine": 407,
+        "startChar": 49,
+        "endLine": 407,
+        "endChar": 54
+      },
+      "revId": "9e82b34dba1e24c2463e18139a7dadc688cff2aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
