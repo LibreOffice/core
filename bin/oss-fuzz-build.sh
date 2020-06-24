@@ -32,6 +32,9 @@ for a in *fuzzer; do
     mv $a $OUT
     mkdir -p $OUT/$a.fonts
     cp $SRC/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    cp $SRC/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-diplomata.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    cp $SRC/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-rougescript.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    cp $SRC/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-STIX2Math.otf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
     #minimal runtime requirements
     cp templateservices.rdb $OUT/$a.services.rdb
     cp types.rdb $OUT/$a.types.rdb
