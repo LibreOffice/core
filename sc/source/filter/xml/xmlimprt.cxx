@@ -1304,48 +1304,6 @@ void ScXMLImport::SetStyleToRanges()
     OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
 
-void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleName,
-                                  const sal_Int16 nCellType, const OUString* pCurrency)
-{
-    if (!mbImportStyles)
-        return;
-
-    if (sPrevStyleName.isEmpty())
-    {
-        nPrevCellType = nCellType;
-        if (pStyleName)
-            sPrevStyleName = *pStyleName;
-        if (pCurrency)
-            sPrevCurrency = *pCurrency;
-        else if (!sPrevCurrency.isEmpty())
-            sPrevCurrency.clear();
-    }
-    else if ((nCellType != nPrevCellType) ||
-        ((pStyleName && *pStyleName != sPrevStyleName) ||
-        (!pStyleName && !sPrevStyleName.isEmpty())) ||
-        ((pCurrency && *pCurrency != sPrevCurrency) ||
-        (!pCurrency && !sPrevCurrency.isEmpty())))
-    {
-        SetStyleToRanges();
-        nPrevCellType = nCellType;
-        if (pStyleName)
-            sPrevStyleName = *pStyleName;
-        else if(!sPrevStyleName.isEmpty())
-            sPrevStyleName.clear();
-        if (pCurrency)
-            sPrevCurrency = *pCurrency;
-        else if(!sPrevCurrency.isEmpty())
-            sPrevCurrency.clear();
-    }
-    table::CellRangeAddress aCellRange;
-    aCellRange.StartColumn = rRange.aStart.Col();
-    aCellRange.StartRow = rRange.aStart.Row();
-    aCellRange.Sheet = rRange.aStart.Tab();
-    aCellRange.EndColumn = rRange.aEnd.Col();
-    aCellRange.EndRow = rRange.aEnd.Row();
-    AddStyleRange(aCellRange);
-}
-
 void ScXMLImport::SetStyleToRanges(const ScRangeList& rRanges, const OUString* pStyleName,
                                   const sal_Int16 nCellType, const OUString* pCurrency)
 {

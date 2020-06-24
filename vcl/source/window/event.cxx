@@ -298,11 +298,6 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
     }
 }
 
-void Window::FireVclEvent( VclSimpleEvent& rEvent )
-{
-    Application::ImplCallEventListeners(rEvent);
-}
-
 void Window::AddEventListener( const Link<VclWindowEvent&,void>& rEventListener )
 {
     mpWindowImpl->maEventListeners.push_back( rEventListener );

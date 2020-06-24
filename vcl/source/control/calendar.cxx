@@ -1502,14 +1502,6 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
     return aRect;
 }
 
-void Calendar::StartSelection()
-{
-    maOldCurDate = maCurDate;
-    mpOldSelectTable.reset(new IntDateSet( *mpSelectTable ));
-
-    mbSelection = true;
-}
-
 void Calendar::EndSelection()
 {
     if ( mbDrag || mbSpinDown || mbSelection )

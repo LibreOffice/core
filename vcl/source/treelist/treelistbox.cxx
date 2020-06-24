@@ -1800,7 +1800,6 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
 
 void SvTreeListBox::CheckButtonHdl()
 {
-    aCheckButtonHdl.Call( this );
     if ( pCheckButtonData )
         pImpl->CallEventListeners( VclEventId::CheckboxToggle, static_cast<void*>(pCheckButtonData->GetActEntry()) );
 }

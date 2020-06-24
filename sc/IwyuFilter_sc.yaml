@@ -1,7 +1,6 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
 blacklist:
-    sc/inc/AccessibleGlobal.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleStateSet.hpp
     sc/inc/addruno.hxx:
