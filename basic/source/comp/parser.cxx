@@ -857,7 +857,6 @@ void SbiParser::AddConstants()
     addStringConst( aPublics, "vbTab", "\x09" );
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
-    // Force length 1 and make char 0 afterwards
     OUString aNullCharStr(u'\0');
     addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }
