@@ -65,6 +65,19 @@ namespace basegfx {
     class B2DTrapezoid;
 }
 
+template <typename T>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const T&, int, int, int, int) const;
+
+template <>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const VirtualDevice& rRefDevice,
+                                int x, int y, int width, int height) const;
+
+template <>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const Window& rRefDevice,
+                                int x, int y, int width, int height) const;
+
+template <>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const Window& rRefDevice,
 class X11SalGraphics final : public SalGraphics
 {
     friend class X11SalGraphicsImpl;

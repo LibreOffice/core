@@ -531,16 +531,30 @@ namespace
     }
 }
 
+template <typename T>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const T&, int, int, int, int) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+template <>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const VirtualDevice& rRefDevice,
+                                int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::X11Surface>(getSysData(rRefDevice), x, y, width, height);
+}
+
+template <>
+cairo::SurfaceSharedPtr CreateSurfaceFactory(const Window& rRefDevice,
+                                int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::X11Surface>(getSysData(rRefDevice), x, y, width, height);
+}
+
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
                                 int x, int y, int width, int height ) const
 {
-    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
-                                               x,y,width,height);
-    if( rRefDevice.IsVirtual() )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
-                                               x,y,width,height);
-    return cairo::SurfaceSharedPtr();
+    return CreateSurfaceFactory(rRefDevice, x, y, width, height);
 }
 
 cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&     rRefDevice,
