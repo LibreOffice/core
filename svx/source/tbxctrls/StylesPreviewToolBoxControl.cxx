@@ -50,7 +50,6 @@ void SAL_CALL StylesPreviewToolBoxControl::dispose()
     SolarMutexGuard aSolarMutexGuard;
     m_xVclBox.disposeAndClear();
     m_xWeldBox.reset();
-    m_pBox = nullptr;
 }
 
 void StylesPreviewToolBoxControl::InitializeStyles(
@@ -151,7 +150,6 @@ StylesPreviewToolBoxControl::createItemWindow(const css::uno::Reference<css::awt
 
             m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(pParent, m_aDefaultStyles,
                                                                  m_xDispatchProvider);
-            m_pBox = m_xVclBox.get();
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
         }
     }

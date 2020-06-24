@@ -1,3 +1,5 @@
+accessibility/source/extended/textwindowaccessibility.cxx:1019
+      const css::uno::Sequence<css::beans::PropertyValue> &
 avmedia/source/vlc/wrapper/Types.hxx:38
     libvlc_event_t p_obj void *
 avmedia/source/vlc/wrapper/Types.hxx:43
@@ -75,11 +77,11 @@ include/sfx2/msg.hxx:132
 include/sfx2/msg.hxx:133
     SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:133
+    SfxType2 nAttribs sal_uInt16
+include/sfx2/msg.hxx:133
     SfxType2 pType const std::type_info *
 include/sfx2/msg.hxx:133
     SfxType2 aAttrib struct SfxTypeAttrib [2]
-include/sfx2/msg.hxx:133
-    SfxType2 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
@@ -107,11 +109,11 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:137
     SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
-    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:137
     SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:137
     SfxType6 pType const std::type_info *
+include/sfx2/msg.hxx:137
+    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:138
     SfxType7 nAttribs sal_uInt16
 include/sfx2/msg.hxx:138
@@ -123,15 +125,15 @@ include/sfx2/msg.hxx:138
 include/sfx2/msg.hxx:139
     SfxType8 aAttrib struct SfxTypeAttrib [8]
 include/sfx2/msg.hxx:139
-    SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
+include/sfx2/msg.hxx:139
+    SfxType8 nAttribs sal_uInt16
 include/sfx2/msg.hxx:139
     SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:140
-    SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:140
     SfxType10 pType const std::type_info *
+include/sfx2/msg.hxx:140
+    SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:140
     SfxType10 aAttrib struct SfxTypeAttrib [10]
 include/sfx2/msg.hxx:140
@@ -181,16 +183,16 @@ include/sfx2/msg.hxx:147
 include/sfx2/msg.hxx:147
     SfxType23 aAttrib struct SfxTypeAttrib [23]
 include/sfx2/msg.hxx:147
-    SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
+include/sfx2/msg.hxx:147
+    SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/svtools/genericunodialog.hxx:156
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:163
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/unotest/macros_test.hxx:50
+include/unotest/macros_test.hxx:59
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
 include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
@@ -252,8 +254,6 @@ pyuno/source/module/pyuno_impl.hxx:137
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/filter/xml/xmlExport.cxx:1231
-      sal_Int32
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:72
@@ -316,13 +316,15 @@ sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:52
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
+sc/source/ui/inc/checklistmenu.hxx:288
+    ScCheckListMenuControl maMenuSize class Size
 sc/source/ui/inc/docsh.hxx:453
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sd/source/ui/animations/CustomAnimationList.hxx:125
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
-sd/source/ui/inc/sdtreelb.hxx:73
+sd/source/ui/inc/sdtreelb.hxx:74
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32
     sd::ZeroconfService port uint
@@ -378,19 +380,21 @@ svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:312
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
+svx/source/inc/datanavi.hxx:189
+    svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
+svx/source/inc/svdpdf.hxx:105
+    ImpSdrPdfImport mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:75
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
-sw/source/core/inc/txtfrm.hxx:223
-    SwTextFrame mbHasBlinkPortions _Bool
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction enum DbgAction
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:287
+sw/source/uibase/inc/conttree.hxx:293
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/swuicnttab.hxx:239
     SwTokenWindow m_aAdjustPositionsIdle class Idle
@@ -440,19 +444,25 @@ vcl/source/gdi/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/source/gdi/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int [256]
+vcl/source/graphic/VectorGraphicSearch.cxx:204
+    VectorGraphicSearch::Implementation mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 vcl/source/uitest/uno/uitest_uno.cxx:34
     (anonymous namespace)::UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5134
+vcl/unx/gtk3/gtk3gtkinst.cxx:5151
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5277
+vcl/unx/gtk3/gtk3gtkinst.cxx:5294
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5285
+vcl/unx/gtk3/gtk3gtkinst.cxx:5302
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>
+xmlsecurity/qa/unit/signing/signing2.cxx:41
+    SigningTest2 mxSEInitializer uno::Reference<xml::crypto::XSEInitializer>
+xmlsecurity/qa/unit/signing/signing2.cxx:42
+    SigningTest2 mxSecurityContext uno::Reference<xml::crypto::XXMLSecurityContext>

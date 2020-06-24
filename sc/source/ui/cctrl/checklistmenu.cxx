@@ -40,7 +40,6 @@ using ::com::sun::star::uno::Reference;
 
 ScCheckListMenuControl::MenuItemData::MenuItemData()
     : mbEnabled(true)
-    , mbSeparator(false)
 {
 }
 
@@ -126,7 +125,6 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
 void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 {
     MenuItemData aItem;
-    aItem.maText = rText;
     aItem.mbEnabled = true;
     aItem.mxAction.reset(pAction);
     maMenuItems.emplace_back(std::move(aItem));
@@ -139,7 +137,6 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 void ScCheckListMenuControl::addSeparator()
 {
     MenuItemData aItem;
-    aItem.mbSeparator = true;
     maMenuItems.emplace_back(std::move(aItem));
 
     mxMenu->append_separator("separator" + OUString::number(maMenuItems.size()));
@@ -168,7 +165,6 @@ ScCheckListMenuWindow* ScCheckListMenuControl::addSubMenuItem(const OUString& rT
     assert(mbCanHaveSubMenu);
 
     MenuItemData aItem;
-    aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
     vcl::Window *pContainer = mxFrame->GetWindow(GetWindowType::FirstChild);
     aItem.mxSubMenuWin.reset(VclPtr<ScCheckListMenuWindow>::Create(pContainer, mpDoc, false, -1, mxFrame->GetMenuStackLevel()+1, mxFrame.get()));
@@ -459,7 +455,6 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mxBtnOk(mxBuilder->weld_button("ok"))
     , mxBtnCancel(mxBuilder->weld_button("cancel"))
     , mxDropDown(mxMenu->create_virtual_device())
-    , mnWidthHint(nWidth)
     , mnCheckWidthReq(-1)
     , mnWndWidth(0)
     , mePrevToggleAllState(TRISTATE_INDET)
@@ -471,8 +466,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
-    if (mnWidthHint != -1)
-        mnCheckWidthReq = mnWidthHint - mxFrame->get_border_width() * 2 - 4;
+    if (nWidth != -1)
+        mnCheckWidthReq = nWidth - mxFrame->get_border_width() * 2 - 4;
 
     // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
     // popup isn't a true dialog

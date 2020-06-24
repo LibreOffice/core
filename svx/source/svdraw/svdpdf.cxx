@@ -114,7 +114,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , maClip()
     , mpPdfDocument(nullptr)
     , mnPageCount(0)
-    , mdPageWidthPts(0)
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())
 {
@@ -216,7 +215,6 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     mfScaleX = mfScaleY = 1.0;
 
     // Store the page dimensions in Points.
-    mdPageWidthPts = dPageWidth;
     mdPageHeightPts = dPageHeight;
 
     Size aPageSize(convertPointToMm100(dPageWidth), convertPointToMm100(dPageHeight));

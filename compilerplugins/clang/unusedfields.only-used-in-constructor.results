@@ -1,3 +1,5 @@
+accessibility/source/extended/textwindowaccessibility.cxx:1019
+      const css::uno::Sequence<css::beans::PropertyValue> &
 avmedia/source/vlc/vlcframegrabber.hxx:35
     avmedia::vlc::VLCFrameGrabber mInstance wrapper::Instance
 avmedia/source/vlc/vlcframegrabber.hxx:36
@@ -132,12 +134,14 @@ cui/source/dialogs/colorpicker.cxx:737
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1408
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/cfgutil.hxx:239
+cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:224
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
 cui/source/inc/cuitabarea.hxx:232
     SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
+cui/source/inc/passwdomdlg.hxx:45
+    PasswordToOpenModifyDialog m_aIndicatorTemplate class rtl::OUString
 cui/source/inc/tabstpge.hxx:85
     SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
 cui/source/inc/tabstpge.hxx:86
@@ -273,13 +277,13 @@ include/sfx2/msg.hxx:138
 include/sfx2/msg.hxx:138
     SfxType7 aAttrib struct SfxTypeAttrib [7]
 include/sfx2/msg.hxx:139
+    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:139
     SfxType8 aAttrib struct SfxTypeAttrib [8]
 include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
 include/sfx2/msg.hxx:139
     SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:139
-    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:140
     SfxType10 pType const std::type_info *
 include/sfx2/msg.hxx:140
@@ -325,9 +329,9 @@ include/sfx2/msg.hxx:146
 include/sfx2/msg.hxx:146
     SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:146
-    SfxType17 aAttrib struct SfxTypeAttrib [17]
-include/sfx2/msg.hxx:146
     SfxType17 nAttribs sal_uInt16
+include/sfx2/msg.hxx:146
+    SfxType17 aAttrib struct SfxTypeAttrib [17]
 include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
@@ -430,8 +434,6 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:236
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
-reportdesign/source/filter/xml/xmlExport.cxx:1231
-      sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:202
@@ -504,15 +506,15 @@ sc/source/filter/html/htmlpars.cxx:3017
     (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mn size_t
-sc/source/filter/inc/htmlpars.hxx:614
+sc/source/filter/inc/htmlpars.hxx:613
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
 sc/source/filter/inc/sheetdatacontext.hxx:52
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/filter/inc/XclImpChangeTrack.hxx:56
     XclImpChangeTrack xInStrm tools::SvRef<SotStorageStream>
-sc/source/filter/inc/xetable.hxx:1006
+sc/source/filter/inc/xetable.hxx:1004
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
-sc/source/filter/inc/xetable.hxx:1007
+sc/source/filter/inc/xetable.hxx:1005
     XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
 sc/source/filter/inc/xiescher.hxx:1206
     XclImpDffPropSet maDummyStrm class SvMemoryStream
@@ -532,6 +534,10 @@ sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
 sc/source/ui/inc/acredlin.hxx:50
     ScAcceptChgDlg aReOpenIdle class Idle
+sc/source/ui/inc/checklistmenu.hxx:285
+    ScCheckListMenuControl mnWidthHint int
+sc/source/ui/inc/checklistmenu.hxx:288
+    ScCheckListMenuControl maMenuSize class Size
 sc/source/ui/inc/msgpool.hxx:35
     ScMessagePool aGlobalStringItem class SfxStringItem
 sc/source/ui/inc/msgpool.hxx:36
@@ -562,17 +568,17 @@ sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
-scripting/source/stringresource/stringresource.cxx:1296
+scripting/source/stringresource/stringresource.cxx:1291
     stringresource::(anonymous namespace)::BinaryInput m_aData Sequence<sal_Int8>
 sd/inc/anminfo.hxx:52
     SdAnimationInfo maSecondSoundFile class rtl::OUString
 sd/source/filter/eppt/epptbase.hxx:348
     PPTWriterBase maFraction class Fraction
-sd/source/filter/ppt/pptin.hxx:81
+sd/source/filter/ppt/pptin.hxx:80
     SdPPTImport maParam struct PowerPointImportParam
 sd/source/ui/animations/CustomAnimationList.hxx:125
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
-sd/source/ui/inc/AccessibleDocumentViewBase.hxx:263
+sd/source/ui/inc/AccessibleDocumentViewBase.hxx:261
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
 sd/source/ui/inc/OutlineBulletDlg.hxx:44
     sd::OutlineBulletDlg m_aInputSet class SfxItemSet
@@ -591,9 +597,9 @@ sd/source/ui/view/viewshel.cxx:1165
 sd/source/ui/view/viewshel.cxx:1166
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    (anonymous namespace)::PDFGrammar::definition simple_type rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    (anonymous namespace)::PDFGrammar::definition simple_type rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
@@ -708,6 +714,8 @@ svx/source/dialog/imapwnd.hxx:87
     IMapWindow maItemInfos struct SfxItemInfo [1]
 svx/source/dialog/weldeditview.cxx:312
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
+svx/source/inc/datanavi.hxx:189
+    svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/stbctrls/pszctrl.cxx:95
     (anonymous namespace)::FunctionPopup_Impl m_aBuilder class VclBuilder
 svx/source/stbctrls/selctrl.cxx:42
@@ -716,6 +724,8 @@ svx/source/stbctrls/zoomctrl.cxx:59
     (anonymous namespace)::ZoomPopup_Impl m_aBuilder class VclBuilder
 svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
+svx/source/svdraw/svdmrkv.cxx:131
+    MarkingSubSelectionOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image [9]
 svx/source/xml/xmleohlp.cxx:68
@@ -724,16 +734,14 @@ svx/source/xml/xmlgrhlp.cxx:87
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
-sw/qa/core/test_ToxTextGenerator.cxx:145
+sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4214
+sw/qa/extras/uiwriter/uiwriter.cxx:4220
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/inc/txtfrm.hxx:223
-    SwTextFrame mbHasBlinkPortions _Bool
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction enum DbgAction
 sw/source/core/text/inftxt.cxx:565
@@ -750,7 +758,7 @@ sw/source/uibase/docvw/romenu.hxx:50
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:287
+sw/source/uibase/inc/conttree.hxx:293
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder class VclBuilder
@@ -792,9 +800,9 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salvtables.hxx:564
+vcl/inc/salvtables.hxx:562
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:938
+vcl/inc/salvtables.hxx:936
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:127
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -842,17 +850,17 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4761
+vcl/unx/gtk3/gtk3gtkinst.cxx:4778
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5134
+vcl/unx/gtk3/gtk3gtkinst.cxx:5151
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5277
+vcl/unx/gtk3/gtk3gtkinst.cxx:5294
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5285
+vcl/unx/gtk3/gtk3gtkinst.cxx:5302
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:12690
+vcl/unx/gtk3/gtk3gtkinst.cxx:12849
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:12696
+vcl/unx/gtk3/gtk3gtkinst.cxx:12855
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

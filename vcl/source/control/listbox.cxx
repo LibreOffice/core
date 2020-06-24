@@ -70,7 +70,6 @@ void ListBox::ImplInitListBoxData()
     mpImplWin       = nullptr;
     mpBtn           = nullptr;
     mnDDHeight      = 0;
-    mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
     mnLineCount     = 0;
     m_nMaxWidthChars = -1;
     mbDDAutoSize    = true;
