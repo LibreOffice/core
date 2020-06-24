@@ -320,6 +320,7 @@ void JsonWriter::reallocBuffer(int noMoreBytesRequired)
     free(mpBuffer);
     mpBuffer = pNew;
     mPos = mpBuffer + currentUsed;
+    mSpaceAllocated = newSize;
 }
 
 /** Hands ownership of the underlying storage buffer to the caller,
