@@ -88,10 +88,7 @@ public:
 
     struct MenuItemData
     {
-        OUString maText;
         bool     mbEnabled:1;
-        bool     mbSeparator:1;
-
         std::shared_ptr<Action> mxAction;
         VclPtr<ScCheckListMenuWindow> mxSubMenuWin;
 
@@ -281,10 +278,8 @@ private:
     std::unique_ptr<Action>       mxPopupEndAction;
 
     Config maConfig;
-    int mnWidthHint; /// min width hint
     int mnCheckWidthReq; /// matching width request for mxChecks
     int mnWndWidth;  /// whole window width.
-    Size maMenuSize; /// size of all menu items combined.
     TriState mePrevToggleAllState;
 
     size_t  mnSelectedMenu;

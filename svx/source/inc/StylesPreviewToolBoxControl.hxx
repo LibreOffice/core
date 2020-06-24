@@ -32,7 +32,6 @@ class SVXCORE_DLLPUBLIC StylesPreviewToolBoxControl final
 {
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
     std::unique_ptr<StylesPreviewWindow_Base> m_xWeldBox;
-    StylesPreviewWindow_Base* m_pBox;
 
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 

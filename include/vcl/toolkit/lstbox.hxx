@@ -88,7 +88,6 @@ private:
     VclPtr<ImplWin>                    mpImplWin;
     VclPtr<ImplBtn>                    mpBtn;
     sal_uInt16                  mnDDHeight;
-    sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
     Link<ListBox&,void>          maSelectHdl;
     sal_uInt16                  mnLineCount;

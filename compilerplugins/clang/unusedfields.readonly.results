@@ -480,7 +480,7 @@ sc/source/ui/vba/vbaformatconditions.hxx:40
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
 sc/source/ui/vba/vbaworksheet.hxx:50
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase> [2]
-sd/inc/Outliner.hxx:281
+sd/inc/Outliner.hxx:286
     SdOutliner mpFirstObj class SdrObject *
 sd/inc/sdmod.hxx:119
     SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
@@ -556,19 +556,19 @@ svtools/source/table/gridtablerenderer.cxx:72
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:43
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:214
+svx/source/inc/datanavi.hxx:181
     svxform::XFormsPage m_aMethodString class svxform::MethodString
-svx/source/inc/datanavi.hxx:215
+svx/source/inc/datanavi.hxx:182
     svxform::XFormsPage m_aReplaceString class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:524
+svx/source/inc/datanavi.hxx:488
     svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
-svx/source/inc/datanavi.hxx:525
+svx/source/inc/datanavi.hxx:489
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/svdpdf.hxx:69
+svx/source/inc/svdpdf.hxx:71
     ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
@@ -720,7 +720,7 @@ vcl/inc/salwtype.hxx:205
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:316
+vcl/inc/svdata.hxx:315
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
@@ -924,7 +924,7 @@ vcl/inc/WidgetThemeLibrary.hxx:150
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
 vcl/source/app/settings.cxx:196
     ImplStyleData maDialogStyle struct DialogStyle
-vcl/source/control/roadmapwizard.cxx:62
+vcl/source/control/roadmapwizard.cxx:63
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
 vcl/source/control/tabctrl.cxx:79
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
@@ -986,7 +986,7 @@ vcl/source/gdi/dibtools.cxx:119
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:120
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:266
+vcl/source/gdi/pdfwriter_impl.hxx:267
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
@@ -1024,5 +1024,5 @@ xmloff/source/chart/SchXMLChartContext.hxx:56
     SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:57
     SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
-xmloff/source/core/xmlexp.cxx:263
+xmloff/source/core/xmlexp.cxx:262
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions

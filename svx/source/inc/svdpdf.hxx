@@ -90,7 +90,6 @@ class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
 
     FPDF_DOCUMENT mpPdfDocument;
     int mnPageCount;
-    double mdPageWidthPts;
     double mdPageHeightPts;
     /// The current transformation matrix, typically used with Form objects.
     basegfx::B2DHomMatrix maCurrentMatrix;

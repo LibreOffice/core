@@ -104,7 +104,6 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
     , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
     , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
     , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
-    , m_aIndicatorTemplate(CuiResId(RID_SVXSTR_PASSWORD_LEN_INDICATOR).replaceFirst("%1", OUString::number(nMaxPasswdLen)))
     , m_nMaxPasswdLen(nMaxPasswdLen)
     , m_bIsPasswordToModify( bIsPasswordToModify )
 {
@@ -112,18 +111,19 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, s
 
     if (nMaxPasswdLen)
     {
+        OUString aIndicatorTemplate(CuiResId(RID_SVXSTR_PASSWORD_LEN_INDICATOR).replaceFirst("%1", OUString::number(nMaxPasswdLen)));
         m_xPasswdToOpenED->set_max_length( nMaxPasswdLen );
         m_xPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
-        m_xPasswdToOpenInd->set_label(m_aIndicatorTemplate);
+        m_xPasswdToOpenInd->set_label(aIndicatorTemplate);
         m_xReenterPasswdToOpenED->set_max_length( nMaxPasswdLen );
         m_xReenterPasswdToOpenED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
-        m_xReenterPasswdToOpenInd->set_label(m_aIndicatorTemplate);
+        m_xReenterPasswdToOpenInd->set_label(aIndicatorTemplate);
         m_xPasswdToModifyED->set_max_length( nMaxPasswdLen );
         m_xPasswdToModifyED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
-        m_xPasswdToModifyInd->set_label(m_aIndicatorTemplate);
+        m_xPasswdToModifyInd->set_label(aIndicatorTemplate);
         m_xReenterPasswdToModifyED->set_max_length( nMaxPasswdLen );
         m_xReenterPasswdToModifyED->connect_changed(LINK(this, PasswordToOpenModifyDialog, ChangeHdl));
-        m_xReenterPasswdToModifyInd->set_label(m_aIndicatorTemplate);
+        m_xReenterPasswdToModifyInd->set_label(aIndicatorTemplate);
     }
 
     m_xPasswdToOpenED->grab_focus();

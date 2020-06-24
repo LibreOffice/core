@@ -42,7 +42,6 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     OUString                    m_aTwoMismatch;
     OUString                    m_aInvalidStateForOkButton;
     OUString                    m_aInvalidStateForOkButton_v2;
-    OUString                    m_aIndicatorTemplate;
 
     int                         m_nMaxPasswdLen;
     bool                        m_bIsPasswordToModify;
