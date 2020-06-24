@@ -40,7 +40,7 @@ void CpuRuntimeDetection_SSSE3::testCpuRuntimeDetection()
 
 void CpuRuntimeDetection_SSSE3::checkSSSE3()
 {
-    // Try some SSSE3 intrinsics calcualtion
+    // Try some SSSE3 intrinsics calculation
     __m128i a = _mm_set1_epi32(3);
     __m128i b = _mm_set1_epi32(3);
     __m128i c = _mm_maddubs_epi16(a, b);

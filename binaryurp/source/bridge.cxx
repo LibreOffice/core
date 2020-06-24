@@ -977,7 +977,7 @@ void Bridge::makeReleaseCall(
     OUString const & oid, css::uno::TypeDescription const & type)
 {
     //HACK to decouple the processing of release calls from all other threads.  Normally, sending
-    // the release request should use the current thread's TID (via AttachThread), so that that
+    // the release request should use the current thread's TID (via AttachThread), so that
     // asynchronous request would be processed by a physical thread that is paired with the physical
     // thread processing the normal synchronous call stack (see ThreadIdHashMap in
     // cppu/source/threadpool/threadpool.hxx).  However, that can lead to deadlock when a thread
