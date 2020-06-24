@@ -23,21 +23,6 @@
 
 #include <vcleventlisteners.hxx>
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::accessibility::XAccessible;
-
-
-VclAccessibleEvent::VclAccessibleEvent( VclEventId n, const Reference<XAccessible>& rxAccessible ) :
-    VclSimpleEvent(n),
-    mxAccessible(rxAccessible)
-{
-}
-
-VclAccessibleEvent::~VclAccessibleEvent()
-{
-}
-
-
 void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
 {
     if ( m_aListeners.empty() )

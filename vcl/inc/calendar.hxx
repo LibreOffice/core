@@ -210,7 +210,6 @@ public:
     void            Select();
 
     Date            GetFirstSelectedDate() const;
-    void            EnableCallEverySelect() { mbAllSel = true; }
 
     void            SetCurDate( const Date& rNewDate );
     void            SetFirstDate( const Date& rNewFirstDate );
@@ -222,10 +221,7 @@ public:
     bool            GetDate( const Point& rPos, Date& rDate ) const;
     tools::Rectangle       GetDateRect( const Date& rDate ) const;
 
-    void            StartSelection();
     void            EndSelection();
-
-    bool            IsTravelSelect() const { return mbTravelSelect; }
 
     Size            CalcWindowSizePixel() const;
 

@@ -121,8 +121,6 @@ public:
     void SetExtraIndent(sal_uInt32 nExtraIndent) { mnExtraIndent = nExtraIndent; }
     sal_uInt32 GetExtraIndent() const { return mnExtraIndent; }
 
-    SvTreeListEntry* GetParent() const { return pParent; }
-
     SvTreeListEntry* NextSibling() const;
     SvTreeListEntry* PrevSibling() const;
     SvTreeListEntry* LastSibling() const;
