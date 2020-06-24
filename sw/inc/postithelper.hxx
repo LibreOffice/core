@@ -102,19 +102,9 @@ public:
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
 
-    SwSidebarItem( const bool aFocus)
-        : pPostIt(nullptr)
-        , bShow(true)
-        , bFocus(aFocus)
-        , bPendingLayout(false)
-        , mLayoutStatus( SwPostItHelper::INVISIBLE )
-        , maLayoutInfo()
-    {
-    }
+    SwSidebarItem( const bool aFocus);
 
-    virtual ~SwSidebarItem()
-    {
-    }
+    virtual ~SwSidebarItem();
 
     SwSidebarItem(SwSidebarItem const &) = default;
     SwSidebarItem(SwSidebarItem &&) = default;
