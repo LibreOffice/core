@@ -3016,6 +3016,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
     assertXPath(pXmlDoc, "//tab/row/cell[1]/txt/Text", "Portion", "Abcd efghijkl");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)
+{
+    createDoc("tdf125893.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 400. The paragraph must have zero top border.
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/infos/prtBounds", "top", "0");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
     createDoc("tdf117188.docx");

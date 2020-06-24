@@ -1425,6 +1425,14 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                          && lcl_getContextualSpacing(pPrevFrame)
                                          && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
 
+            // tdf#125893 always ignore own top margin setting of the actual paragraph
+            // with contextual spacing, if the previous paragraph is identical
+            const bool bHalfContextualSpacing = !bContextualSpacing
+                                         && pAttrs->GetULSpace().GetContext()
+                                         && !lcl_getContextualSpacing(pPrevFrame)
+                                         && lcl_getContextualSpacing(&m_rThis)
+                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+
             // i#11860 - use new method to determine needed spacing
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
@@ -1436,6 +1444,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    bPrevLineSpacingPorportional );
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
+                // FIXME: apply bHalfContextualSpacing for better portability?
                 nUpper = bContextualSpacing ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
                 // i#11859 - consideration of the line spacing
@@ -1479,8 +1488,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             }
             else
             {
-                nUpper = bContextualSpacing ? 0 : std::max(static_cast<long>(nPrevLowerSpace),
-                                                           static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
+                nUpper = bContextualSpacing ? 0 : std::max(static_cast<long>(nPrevLowerSpace), bHalfContextualSpacing
+                                                           ? 0 : static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
+
                 // i#11859 - consideration of the line spacing
                 //      for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
