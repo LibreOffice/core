@@ -460,6 +460,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (xCertificate.is())
                 {
                     SignDocumentContentUsingCertificate(xCertificate);
+
+                    // Reload to show how the PDF actually looks like after signing. This also
+                    // changes "finish signing" on the infobar back to "sign document" as a side
+                    // effect.
+                    SfxViewFrame* pFrame = GetFrame();
+                    if (pFrame)
+                    {
+                        pFrame->GetDispatcher()->Execute(SID_RELOAD);
+                    }
                 }
                 else
                 {
