@@ -81,12 +81,8 @@ Color HexColorControl::GetColor() const
 
     sax::Converter::convertColor(nColor, aStr);
 
-#if 0
-    if (nColor == -1)
-        SetControlBackground(COL_RED);
-    else
-        SetControlBackground();
-#endif
+    m_xEntry->set_message_type(nColor != -1 ? weld::EntryMessageType::Normal
+                                            : weld::EntryMessageType::Error);
 
     return Color(nColor);
 }
