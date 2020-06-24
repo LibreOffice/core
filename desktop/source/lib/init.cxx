@@ -1008,7 +1008,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
                                   int nCharBefore,
                                   int nCharAfter);
 static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
-                               unsigned nLOKWindowId,
+                               unsigned long long int nLOKWindowId,
                                const char* pArguments);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
@@ -3597,7 +3597,7 @@ public:
 
 } // anonymous namespace
 
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
+static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
