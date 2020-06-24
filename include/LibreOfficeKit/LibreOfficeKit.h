@@ -416,7 +416,7 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::sendDialogEvent
     void (*sendDialogEvent) (LibreOfficeKitDocument* pThis,
-                            unsigned nLOKWindowId,
+                            unsigned long long int nLOKWindowId,
                             const char* pArguments);
 
     /// @see lok::Document::renderFontOrientation().
