@@ -28,7 +28,7 @@ canvas/inc/base/graphicdevicebase.hxx:318
 desktop/source/deployment/registry/inc/dp_backenddb.hxx:120
     class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
     "http://openoffi
-include/basegfx/utils/unopolypolygon.hxx:97
+include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
 include/connectivity/sdbcx/IRefreshable.hxx:31
@@ -61,18 +61,30 @@ include/ucbhelper/resultset.hxx:411
 include/unotools/desktopterminationobserver.hxx:36
     _Bool utl::ITerminationListener::queryTermination()const
     1
-include/vbahelper/vbahelperinterface.hxx:77
+include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-include/vcl/treelistbox.hxx:458
-    _Bool SvTreeListBox::NotifyAcceptDrop(class SvTreeListEntry *,)
+QtGui/qaccessible.h:466
+    class QObject * QAccessibleInterface::object()const
+    0
+QtGui/qaccessible.h:467
+    class QWindow * QAccessibleInterface::window()const
+    0
+QtGui/qaccessible.h:479
+    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
+    0
+QtGui/qaccessible.h:483
+    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
+    empty
+QtGui/qaccessible.h:613
+    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
     1
-include/vcl/treelistbox.hxx:493
-    class rtl::OUString SvTreeListBox::GetEntryAltText(class SvTreeListEntry *,)const
-    ""
-include/vcl/treelistbox.hxx:494
-    class rtl::OUString SvTreeListBox::GetEntryLongDescription(class SvTreeListEntry *,)const
-    ""
+QtGui/qaccessible.h:614
+    _Bool QAccessibleTableInterface::isRowSelected(int,)const
+    1
+QtGui/qaccessible.h:620
+    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
+    empty
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty
@@ -82,10 +94,10 @@ sc/source/core/opencl/opbase.hxx:203
 sc/source/ui/vba/vbasheetobject.hxx:117
     class rtl::OUString ScVbaSheetObjectBase::implGetBaseName()const
     "Button"
-sc/source/ui/vba/vbasheetobjects.cxx:141
+sc/source/ui/vba/vbasheetobjects.cxx:142
     class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
     "com.sun.star.drawing.ControlShape"
-slideshow/source/engine/animationfactory.cxx:437
+slideshow/source/engine/animationfactory.cxx:434
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
     empty
 vcl/inc/qt5/Qt5FilePicker.hxx:172
@@ -100,9 +112,6 @@ vcl/inc/salframe.hxx:147
 vcl/inc/salframe.hxx:204
     _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
     0
-vcl/inc/salframe.hxx:264
-    void SalFrame::BeginSheet(class SalFrame *,)const
-    empty
 vcl/inc/salgdiimpl.hxx:119
     _Bool SalGraphicsImpl::drawPolyLineBezier(unsigned int,const struct SalPoint *,const enum PolyFlags *,)
     0
@@ -115,10 +124,10 @@ vcl/inc/salgdiimpl.hxx:129
 vcl/inc/salgdiimpl.hxx:170
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
     0
-vcl/inc/salinst.hxx:92
+vcl/inc/salinst.hxx:93
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:202
+vcl/inc/salinst.hxx:203
     void SalInstance::releaseMainThread()
     empty
 vcl/inc/salmenu.hxx:77
