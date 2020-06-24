@@ -551,10 +551,6 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
     return pContextMenu;
 }
 
-void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 )
-{
-}
-
 IMPL_LINK( DBTreeListBox, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
     if ( rMenuEvent.GetId() == VclEventId::ObjectDying )

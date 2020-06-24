@@ -64,7 +64,7 @@ extensions/source/bibliography/loadlisteneradapter.hxx:111
 include/cppuhelper/propshlp.hxx:326
     void cppu::IEventNotificationHook::fireEvents(int *,int,unsigned char,_Bool,)
     0111
-include/drawinglayer/primitive2d/textbreakuphelper.hxx:60
+include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
     _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
     0111
 include/editeng/editeng.hxx:484
@@ -127,17 +127,65 @@ include/vcl/dndhelp.hxx:72
 include/vcl/opengl/OpenGLContext.hxx:141
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
-include/vcl/treelistbox.hxx:455
+include/vcl/treelistbox.hxx:466
     enum DragDropMode SvTreeListBox::NotifyStartDrag(class TransferDataContainer &,class SvTreeListEntry *,)
-    01
-include/vcl/treelistbox.hxx:458
-    _Bool SvTreeListBox::NotifyAcceptDrop(class SvTreeListEntry *,)
+    00
+include/vcl/treelistbox.hxx:715
+    void SvTreeListBox::ExecuteContextMenuAction(unsigned short,)
     0
-include/vcl/treelistbox.hxx:493
-    class rtl::OUString SvTreeListBox::GetEntryAltText(class SvTreeListEntry *,)const
+QtCore/qmimedata.h:88
+    class QVariant QMimeData::retrieveData(const class QString &,enum QVariant::Type,)const
+    10
+QtGui/qaccessible.h:479
+    int QAccessibleInterface::indexOfChild(const class QAccessibleInterface *,)const
     0
-include/vcl/treelistbox.hxx:494
-    class rtl::OUString SvTreeListBox::GetEntryLongDescription(class SvTreeListEntry *,)const
+QtGui/qaccessible.h:483
+    void QAccessibleInterface::setText(enum QAccessible::Text,const class QString &,)
+    00
+QtGui/qaccessible.h:528
+    void QAccessibleTextInterface::addSelection(int,int,)
+    00
+QtGui/qaccessible.h:529
+    void QAccessibleTextInterface::removeSelection(int,)
+    0
+QtGui/qaccessible.h:530
+    void QAccessibleTextInterface::setSelection(int,int,int,)
+    011
+QtGui/qaccessible.h:538
+    class QString QAccessibleTextInterface::textBeforeOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
+    0000
+QtGui/qaccessible.h:540
+    class QString QAccessibleTextInterface::textAfterOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
+    0000
+QtGui/qaccessible.h:542
+    class QString QAccessibleTextInterface::textAtOffset(int,enum QAccessible::TextBoundaryType,int *,int *,)const
+    0000
+QtGui/qaccessible.h:547
+    class QRect QAccessibleTextInterface::characterRect(int,)const
+    0
+QtGui/qaccessible.h:548
+    int QAccessibleTextInterface::offsetAtPoint(const class QPoint &,)const
+    0
+QtGui/qaccessible.h:613
+    _Bool QAccessibleTableInterface::isColumnSelected(int,)const
+    0
+QtGui/qaccessible.h:614
+    _Bool QAccessibleTableInterface::isRowSelected(int,)const
+    0
+QtGui/qaccessible.h:620
+    void QAccessibleTableInterface::modelChange(class QAccessibleTableModelChangeEvent *,)
+    0
+QtWidgets/qwidget.h:629
+    void QWidget::focusInEvent(class QFocusEvent *,)
+    0
+QtWidgets/qwidget.h:630
+    void QWidget::focusOutEvent(class QFocusEvent *,)
+    0
+QtWidgets/qwidget.h:650
+    void QWidget::dragLeaveEvent(class QDragLeaveEvent *,)
+    0
+QtWidgets/qwidget.h:654
+    void QWidget::showEvent(class QShowEvent *,)
     0
 sc/inc/filter.hxx:82
     void ScFormatFilterPlugin::ScExportHTML(class SvStream &,const class rtl::OUString &,class ScDocument *,const class ScRange &,const unsigned short,_Bool,const class rtl::OUString &,class rtl::OUString &,const class rtl::OUString &,)
@@ -151,13 +199,13 @@ sc/inc/formulagroup.hxx:145
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     0
-sdext/source/pdfimport/inc/contentsink.hxx:150
+sdext/source/pdfimport/inc/contentsink.hxx:151
     void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10
-sdext/source/pdfimport/inc/contentsink.hxx:160
+sdext/source/pdfimport/inc/contentsink.hxx:161
     void pdfi::ContentSink::drawColorMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
     10
-sdext/source/pdfimport/inc/contentsink.hxx:164
+sdext/source/pdfimport/inc/contentsink.hxx:165
     void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     110
 sdext/source/pdfimport/inc/treevisiting.hxx:46
@@ -184,7 +232,7 @@ sdext/source/presenter/PresenterScrollBar.hxx:177
 sdext/source/presenter/PresenterScrollBar.hxx:179
     double sdext::presenter::PresenterScrollBar::GetMinor(const double,const double,)const
     10
-starmath/source/wordexportbase.hxx:37
+starmath/source/wordexportbase.hxx:38
     void SmWordExportBase::HandleText(const class SmNode *,int,)
     10
 sw/inc/calbck.hxx:144
@@ -199,10 +247,10 @@ sw/source/core/access/acccontext.hxx:352
 sw/source/core/inc/txmsrt.hxx:145
     void SwTOXSortTabBase::FillText(class SwTextNode &,const class SwIndex &,unsigned short,const class SwRootFrame *const,)const
     1100
-sw/source/filter/ww8/wrtww8.hxx:799
+sw/source/filter/ww8/wrtww8.hxx:797
     void MSWordExportBase::WriteHyperlinkData(const class sw::mark::IFieldmark &,)
     0
-sw/source/filter/ww8/wrtww8.hxx:864
+sw/source/filter/ww8/wrtww8.hxx:862
     void MSWordExportBase::OutputGrfNode(const class SwGrfNode &,)
     0
 vcl/inc/outdev.h:122
@@ -219,9 +267,6 @@ vcl/inc/salframe.hxx:204
     000
 vcl/inc/salframe.hxx:247
     void SalFrame::BeginSetClipRegion(unsigned int,)
-    0
-vcl/inc/salframe.hxx:264
-    void SalFrame::BeginSheet(class SalFrame *,)const
     0
 vcl/inc/salgdiimpl.hxx:81
     void SalGraphicsImpl::SetXORMode(_Bool,_Bool,)
@@ -241,13 +286,13 @@ vcl/inc/salgdiimpl.hxx:136
 vcl/inc/salgdiimpl.hxx:170
     _Bool SalGraphicsImpl::drawEPS(long,long,long,long,void *,unsigned int,)
     000000
-vcl/inc/salinst.hxx:92
+vcl/inc/salinst.hxx:93
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:125
+vcl/inc/salinst.hxx:126
     void SalInstance::GetPrinterQueueState(struct SalPrinterQueueInfo *,)
     0
-vcl/inc/salinst.hxx:185
+vcl/inc/salinst.hxx:186
     void SalInstance::AddToRecentDocumentList(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
     100
 vcl/inc/salmenu.hxx:71

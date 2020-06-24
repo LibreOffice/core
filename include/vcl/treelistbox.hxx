@@ -710,7 +710,6 @@ public:
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
 
     virtual VclPtr<PopupMenu> CreateContextMenu();
-    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling();
 

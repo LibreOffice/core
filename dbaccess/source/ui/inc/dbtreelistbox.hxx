@@ -109,7 +109,6 @@ namespace dbaui
         virtual bool    DoubleClickHdl() override;
 
         virtual VclPtr<PopupMenu> CreateContextMenu() override;
-        virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
         void            SetEnterKeyHdl(const Link<DBTreeListBox*,void>& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}
 

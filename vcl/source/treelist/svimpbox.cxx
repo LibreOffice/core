@@ -2950,9 +2950,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             if (pPopup)
             {
                 // do action for selected entry in popup menu
-                sal_uInt16 nMenuAction = pPopup->Execute( m_pView, aPopupPos );
-                if ( nMenuAction )
-                    m_pView->ExecuteContextMenuAction( nMenuAction );
+                pPopup->Execute( m_pView, aPopupPos );
                 pPopup.disposeAndClear();
             }
         }

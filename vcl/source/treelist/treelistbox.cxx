@@ -3499,11 +3499,6 @@ VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
     return nullptr;
 }
 
-void SvTreeListBox::ExecuteContextMenuAction( sal_uInt16 )
-{
-    SAL_INFO( "svtools.contnr", "SvTreeListBox::ExecuteContextMenuAction(): now there's happening nothing!" );
-}
-
 void SvTreeListBox::EnableContextMenuHandling()
 {
     assert(pImpl && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
