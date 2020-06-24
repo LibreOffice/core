@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b792e331_9c5c9ef0",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-24T15:37:25Z",
+      "side": 1,
+      "message": "My approach was to avoid crashing when the cell has no comment.\n\nBut I will check first on HasNote() then use GetNote it will be better.",
+      "parentUuid": "a1bba3a1_3878b62b",
+      "revId": "4593e4086c1cf1ce804e64290201883654c93aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86ee1c2c_164ccce9",
         "filename": "sc/source/ui/uitest/uiobject.cxx",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "4593e4086c1cf1ce804e64290201883654c93aaa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52545ec4_498e13cc",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-06-24T15:37:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86ee1c2c_164ccce9",
+      "revId": "4593e4086c1cf1ce804e64290201883654c93aaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
