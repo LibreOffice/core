@@ -633,7 +633,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbTabOverflow
     mbUnbreakableNumberings = rSource.mbUnbreakableNumberings;
     // No mbClippedPictures
-    // No mbBackgroundParaOverDrawings
+    mbBackgroundParaOverDrawings = rSource.mbBackgroundParaOverDrawings;
     mbTabOverMargin = rSource.mbTabOverMargin;
     mbTreatSingleColumnBreakAsPageBreak = rSource.mbTreatSingleColumnBreakAsPageBreak;
     mbSurroundTextWrapSmall = rSource.mbSurroundTextWrapSmall;
