@@ -738,7 +738,6 @@ protected:
             void                        SetCompoundControl( bool bCompound );
 
             void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
-    static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
     virtual bool                        AcquireGraphics() const override;
     virtual void                        ReleaseGraphics( bool bRelease = true ) override;

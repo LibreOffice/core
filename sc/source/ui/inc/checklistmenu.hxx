@@ -184,7 +184,6 @@ private:
         BTN_CANCEL,           // Cancel button
         EDIT_SEARCH,          // Search box
     };
-    void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
     /**
      * Calculate the appropriate window size, the position and size of each

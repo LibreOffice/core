@@ -4396,68 +4396,6 @@ void VclBuilder::mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdj
     rTarget.SetSpinSize(nSpinSize);
 }
 
-void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment)
-{
-    for (auto const& elem : rAdjustment)
-    {
-        const OString &rKey = elem.first;
-        const OUString &rValue = elem.second;
-
-        if (rKey == "upper")
-        {
-            tools::Time aUpper(rValue.toInt32());
-            rTarget.SetMax(aUpper);
-            rTarget.SetLast(aUpper);
-        }
-        else if (rKey == "lower")
-        {
-            tools::Time aLower(rValue.toInt32());
-            rTarget.SetMin(aLower);
-            rTarget.SetFirst(aLower);
-        }
-        else if (rKey == "value")
-        {
-            tools::Time aValue(rValue.toInt32());
-            rTarget.SetTime(aValue);
-        }
-        else
-        {
-            SAL_INFO("vcl.builder", "unhandled property :" << rKey);
-        }
-    }
-}
-
-void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment)
-{
-    for (auto const& elem : rAdjustment)
-    {
-        const OString &rKey = elem.first;
-        const OUString &rValue = elem.second;
-
-        if (rKey == "upper")
-        {
-            Date aUpper(rValue.toInt32());
-            rTarget.SetMax(aUpper);
-            rTarget.SetLast(aUpper);
-        }
-        else if (rKey == "lower")
-        {
-            Date aLower(rValue.toInt32());
-            rTarget.SetMin(aLower);
-            rTarget.SetFirst(aLower);
-        }
-        else if (rKey == "value")
-        {
-            Date aValue(rValue.toInt32());
-            rTarget.SetDate(aValue);
-        }
-        else
-        {
-            SAL_INFO("vcl.builder", "unhandled property :" << rKey);
-        }
-    }
-}
-
 void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
 {
     for (auto const& elem : rAdjustment)

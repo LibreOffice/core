@@ -362,7 +362,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/Accessibility/AccessibleDocumentBase \
     sc/source/ui/Accessibility/AccessibleDocumentPagePreview \
     sc/source/ui/Accessibility/AccessibleEditObject \
-    sc/source/ui/Accessibility/AccessibleGlobal \
     sc/source/ui/Accessibility/AccessiblePageHeader \
     sc/source/ui/Accessibility/AccessiblePageHeaderArea \
     sc/source/ui/Accessibility/AccessiblePreviewCell \

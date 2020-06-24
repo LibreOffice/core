@@ -233,8 +233,6 @@ private:
 
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment);
-    static void     mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment);
-    static void     mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(Slider &rTarget, const Adjustment &rAdjustment);
 

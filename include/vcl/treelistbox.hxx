@@ -195,7 +195,6 @@ class VCL_DLLPUBLIC SvTreeListBox
     friend class SalInstanceEntryTreeView;
 
     std::unique_ptr<SvTreeListBoxImpl> mpImpl;
-    Link<SvTreeListBox*,void>  aCheckButtonHdl;
     Link<SvTreeListBox*,void>  aScrolledHdl;
     Link<SvTreeListBox*,void>  aExpandedHdl;
     Link<SvTreeListBox*,bool>  aExpandingHdl;
@@ -617,7 +616,6 @@ public:
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
-    void            SetCheckButtonHdl( const Link<SvTreeListBox*,void>& rLink )  { aCheckButtonHdl=rLink; }
     virtual void    CheckButtonHdl();
 
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right

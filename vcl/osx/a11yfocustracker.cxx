@@ -76,12 +76,6 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
         {
             pFocusTracker->menu_highlighted( pMenuEvent );
         }
-        else if( const VclAccessibleEvent* pAccEvent = dynamic_cast < const VclAccessibleEvent* > (&rEvent) )
-        {
-            Reference< XAccessible > xAccessible = pAccEvent->GetAccessible();
-            if( xAccessible.is() )
-                pFocusTracker->setFocusedObject( xAccessible );
-        }
         break;
     default:
         break;
