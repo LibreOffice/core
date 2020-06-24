@@ -646,12 +646,6 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
             {
                 handle_menu_highlighted(pMenuEvent);
             }
-            else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(&rEvent))
-            {
-                const uno::Reference< accessibility::XAccessible >& xAccessible = pAccEvent->GetAccessible();
-                if (xAccessible.is())
-                    atk_wrapper_focus_tracker_notify_when_idle(xAccessible);
-            }
             break;
 
         case VclEventId::ToolboxHighlight:

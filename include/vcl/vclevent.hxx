@@ -216,17 +216,6 @@ public:
     sal_uInt16 GetItemPos() const { return mnPos; }
 };
 
-class VCL_DLLPUBLIC VclAccessibleEvent final : public VclSimpleEvent
-{
-public:
-    VclAccessibleEvent( VclEventId n, const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible );
-    virtual ~VclAccessibleEvent() override;
-    const css::uno::Reference< css::accessibility::XAccessible >& GetAccessible() const { return mxAccessible;}
-
-private:
-    css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
-};
-
 #endif // INCLUDED_VCL_VCLEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
