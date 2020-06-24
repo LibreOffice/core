@@ -89,6 +89,18 @@ GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
+template <typename T>
+bool Apply3DEffect(T*)
+{
+    return true;
+}
+
+template <>
+bool Apply3DEffect(Printer*)
+{
+    return false;
+}
+
 void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
@@ -143,10 +155,8 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         pDev->DrawLine( Point( rPos.X(), rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ) );
         pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
 
-        bool bIsPrinter = OUTDEV_PRINTER == pDev->GetOutDevType();
         // if we're drawing onto a printer, spare the 3D effect #i46986#
-
-        if ( !bIsPrinter && !(nDrawFlags & DrawFlags::Mono) )
+        if ( Apply3DEffect(pDev) && !(nDrawFlags & DrawFlags::Mono) )
         {
             pDev->SetLineColor( rStyleSettings.GetLightColor() );
             if (aText.isEmpty())

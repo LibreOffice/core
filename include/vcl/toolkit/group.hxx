@@ -28,6 +28,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
+class Printer;
+
+template <typename T>
+bool Apply3DEffect(T*);
+
+template <>
+bool Apply3DEffect(Printer*);
+
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) GroupBox : public Control
 {
 private:
