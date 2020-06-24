@@ -49,7 +49,7 @@ void JSDialogNotifyIdle::Invoke()
     }
     catch (boost::property_tree::json_parser::json_parser_error& rError)
     {
-        SAL_WARN("vcl.jsdialog", rError.message());
+        SAL_WARN("vcl", rError.message());
     }
 }
 
