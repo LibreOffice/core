@@ -1103,4 +1103,64 @@ public:
     virtual ~SalInstanceCheckButton() override;
 };
 
+class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
+{
+private:
+    VclPtr<VclDrawingArea> m_xDrawingArea;
+
+    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
+    DECL_LINK(PaintHdl, target_and_area, void);
+    DECL_LINK(ResizeHdl, const Size&, void);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
+    DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+    DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
+
+    // SalInstanceWidget has a generic listener for all these
+    // events, ignore the ones we have specializations for
+    // in VclDrawingArea
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+
+    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent) override;
+
+    virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override;
+
+public:
+    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
+                           const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
+                           void* pUserData, bool bTakeOwnership);
+
+    virtual void queue_draw() override;
+
+    virtual void queue_draw_area(int x, int y, int width, int height) override;
+
+    virtual void queue_resize() override;
+
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override;
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void set_cursor(PointerStyle ePointerStyle) override;
+
+    virtual a11yref get_accessible_parent() override;
+
+    virtual a11yrelationset get_accessible_relation_set() override;
+
+    virtual Point get_accessible_location() override;
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
+                                    sal_uInt8 eDNDConstants) override;
+
+    virtual ~SalInstanceDrawingArea() override;
+
+    virtual OutputDevice& get_ref_device() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

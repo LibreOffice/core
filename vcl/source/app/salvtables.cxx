@@ -5583,167 +5583,143 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void) { signal_expanded(); }
 
-namespace
+// SalInstanceWidget has a generic listener for all these
+// events, ignore the ones we have specializations for
+// in VclDrawingArea
+void SalInstanceDrawingArea::HandleEventListener(VclWindowEvent& rEvent)
 {
-class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
-{
-private:
-    VclPtr<VclDrawingArea> m_xDrawingArea;
-
-    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
-    DECL_LINK(PaintHdl, target_and_area, void);
-    DECL_LINK(ResizeHdl, const Size&, void);
-    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
-    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
-    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
-    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
-    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
-    DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
-    DECL_LINK(CommandHdl, const CommandEvent&, bool);
-    DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
-    DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
-
-    // SalInstanceWidget has a generic listener for all these
-    // events, ignore the ones we have specializations for
-    // in VclDrawingArea
-    virtual void HandleEventListener(VclWindowEvent& rEvent) override
-    {
-        if (rEvent.GetId() == VclEventId::WindowResize)
-            return;
-        SalInstanceWidget::HandleEventListener(rEvent);
-    }
-
-    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent) override
-    {
-        if (rEvent.GetId() == VclEventId::WindowMouseButtonDown
-            || rEvent.GetId() == VclEventId::WindowMouseButtonUp
-            || rEvent.GetId() == VclEventId::WindowMouseMove)
-        {
-            return;
-        }
-        SalInstanceWidget::HandleMouseEventListener(rEvent);
-    }
-
-    virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override { return false; }
-
-public:
-    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
-                           const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
-                           void* pUserData, bool bTakeOwnership)
-        : SalInstanceWidget(pDrawingArea, pBuilder, bTakeOwnership)
-        , m_xDrawingArea(pDrawingArea)
-    {
-        m_xDrawingArea->SetAccessible(rAlly);
-        m_xDrawingArea->SetUITestFactory(std::move(pUITestFactoryFunction), pUserData);
-        m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
-        m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
-        m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));
-        m_xDrawingArea->SetMouseMoveHdl(LINK(this, SalInstanceDrawingArea, MouseMoveHdl));
-        m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
-        m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
-        m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
-        m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
-        m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
-        m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
-        m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
-    }
-
-    virtual void queue_draw() override { m_xDrawingArea->Invalidate(); }
-
-    virtual void queue_draw_area(int x, int y, int width, int height) override
-    {
-        m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
-    }
-
-    virtual void queue_resize() override { m_xDrawingArea->queue_resize(); }
-
-    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
-    {
-        weld::Widget::connect_size_allocate(rLink);
-    }
-
-    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
-    {
-        weld::Widget::connect_key_press(rLink);
-    }
-
-    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
-    {
-        weld::Widget::connect_key_release(rLink);
-    }
-
-    virtual void set_cursor(PointerStyle ePointerStyle) override
-    {
-        m_xDrawingArea->SetPointer(ePointerStyle);
-    }
-
-    virtual a11yref get_accessible_parent() override
-    {
-        vcl::Window* pParent = m_xDrawingArea->GetParent();
-        if (pParent)
-            return pParent->GetAccessible();
-        return css::uno::Reference<css::accessibility::XAccessible>();
-    }
-
-    virtual a11yrelationset get_accessible_relation_set() override
-    {
-        utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-        css::uno::Reference<css::accessibility::XAccessibleRelationSet> xSet = pRelationSetHelper;
-        vcl::Window* pWindow = m_xDrawingArea.get();
-        if (pWindow)
-        {
-            vcl::Window* pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
-            if (pLabeledBy && pLabeledBy != pWindow)
-            {
-                css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
-                    pLabeledBy->GetAccessible()
-                };
-                pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
-                    css::accessibility::AccessibleRelationType::LABELED_BY, aSequence));
-            }
-            vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
-            if (pMemberOf && pMemberOf != pWindow)
-            {
-                css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
-                    pMemberOf->GetAccessible()
-                };
-                pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
-                    css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence));
-            }
-        }
-        return xSet;
-    }
-
-    virtual Point get_accessible_location() override
-    {
-        return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
-    }
-
-    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
-                                    sal_uInt8 eDNDConstants) override
-    {
-        m_xDrawingArea->SetDragHelper(rHelper, eDNDConstants);
-    }
-
-    virtual ~SalInstanceDrawingArea() override
-    {
-        m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
-        m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
-        m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
-        m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
-        m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
-        m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, bool>());
-        m_xDrawingArea->SetKeyPressHdl(Link<const KeyEvent&, bool>());
-        m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
-        m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
-        m_xDrawingArea->SetPaintHdl(
-            Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
-    }
-
-    virtual OutputDevice& get_ref_device() override { return *m_xDrawingArea; }
-};
-
+    if (rEvent.GetId() == VclEventId::WindowResize)
+        return;
+    SalInstanceWidget::HandleEventListener(rEvent);
 }
+
+void SalInstanceDrawingArea::HandleMouseEventListener(VclSimpleEvent& rEvent)
+{
+    if (rEvent.GetId() == VclEventId::WindowMouseButtonDown
+        || rEvent.GetId() == VclEventId::WindowMouseButtonUp
+        || rEvent.GetId() == VclEventId::WindowMouseMove)
+    {
+        return;
+    }
+    SalInstanceWidget::HandleMouseEventListener(rEvent);
+}
+
+bool SalInstanceDrawingArea::HandleKeyEventListener(VclWindowEvent& /*rEvent*/) { return false; }
+
+SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, SalInstanceBuilder* pBuilder,
+                        const a11yref& rAlly, FactoryFunction pUITestFactoryFunction,
+                        void* pUserData, bool bTakeOwnership)
+    : SalInstanceWidget(pDrawingArea, pBuilder, bTakeOwnership)
+    , m_xDrawingArea(pDrawingArea)
+{
+    m_xDrawingArea->SetAccessible(rAlly);
+    m_xDrawingArea->SetUITestFactory(std::move(pUITestFactoryFunction), pUserData);
+    m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
+    m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
+    m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));
+    m_xDrawingArea->SetMouseMoveHdl(LINK(this, SalInstanceDrawingArea, MouseMoveHdl));
+    m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
+    m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
+    m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
+    m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
+    m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
+    m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
+    m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
+}
+
+void SalInstanceDrawingArea::queue_draw() { m_xDrawingArea->Invalidate(); }
+
+void SalInstanceDrawingArea::queue_draw_area(int x, int y, int width, int height)
+{
+    m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
+}
+
+void SalInstanceDrawingArea::queue_resize() { m_xDrawingArea->queue_resize(); }
+
+void SalInstanceDrawingArea::connect_size_allocate(const Link<const Size&, void>& rLink)
+{
+    weld::Widget::connect_size_allocate(rLink);
+}
+
+void SalInstanceDrawingArea::connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+{
+    weld::Widget::connect_key_press(rLink);
+}
+
+void SalInstanceDrawingArea::connect_key_release(const Link<const KeyEvent&, bool>& rLink)
+{
+    weld::Widget::connect_key_release(rLink);
+}
+
+void SalInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
+{
+    m_xDrawingArea->SetPointer(ePointerStyle);
+}
+
+a11yref SalInstanceDrawingArea::get_accessible_parent()
+{
+    vcl::Window* pParent = m_xDrawingArea->GetParent();
+    if (pParent)
+        return pParent->GetAccessible();
+    return css::uno::Reference<css::accessibility::XAccessible>();
+}
+
+a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
+{
+    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    css::uno::Reference<css::accessibility::XAccessibleRelationSet> xSet = pRelationSetHelper;
+    vcl::Window* pWindow = m_xDrawingArea.get();
+    if (pWindow)
+    {
+        vcl::Window* pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        if (pLabeledBy && pLabeledBy != pWindow)
+        {
+            css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
+                pLabeledBy->GetAccessible()
+            };
+            pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
+                css::accessibility::AccessibleRelationType::LABELED_BY, aSequence));
+        }
+        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        if (pMemberOf && pMemberOf != pWindow)
+        {
+            css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> aSequence{
+                pMemberOf->GetAccessible()
+            };
+            pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
+                css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence));
+        }
+    }
+    return xSet;
+}
+
+Point SalInstanceDrawingArea::get_accessible_location()
+{
+    return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
+}
+
+void SalInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
+                                sal_uInt8 eDNDConstants)
+{
+    m_xDrawingArea->SetDragHelper(rHelper, eDNDConstants);
+}
+
+SalInstanceDrawingArea::~SalInstanceDrawingArea()
+{
+    m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
+    m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
+    m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
+    m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, bool>());
+    m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, bool>());
+    m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, bool>());
+    m_xDrawingArea->SetKeyPressHdl(Link<const KeyEvent&, bool>());
+    m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
+    m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
+    m_xDrawingArea->SetPaintHdl(
+        Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
+}
+
+OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea; }
 
 IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
