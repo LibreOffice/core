@@ -308,7 +308,7 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell != pThisView && pViewShell->GetDocId() == pThisView-> GetDocId())
+        if (pViewShell != pThisView && (pThisView->GetDocId() == ViewShellDocId(-1) || pViewShell->GetDocId() == pThisView->GetDocId()))
             notifyOtherView(pThisView, pViewShell, nType, rKey, rPayload);
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
