@@ -3764,7 +3764,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     OUString    aLinkFileName, aLinkFilterName;
     tools::Rectangle   aVisArea;
 
-    MSO_BlipFlags eFlags = static_cast<MSO_BlipFlags>(GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault ));
+    auto eFlags = GetPropertyValue(DFF_Prop_pibFlags, mso_blipflagDefault);
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
     bool bGrfRead = false,
 
