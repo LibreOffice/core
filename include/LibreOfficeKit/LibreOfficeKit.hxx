@@ -308,7 +308,7 @@ public:
      * @param nWindowId id of the window to notify
      * @param pArguments arguments of the event.
      */
-    void sendDialogEvent(unsigned nWindowId, const char* pArguments = NULL)
+    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
     {
         mpDoc->pClass->sendDialogEvent(mpDoc, nWindowId, pArguments);
     }
