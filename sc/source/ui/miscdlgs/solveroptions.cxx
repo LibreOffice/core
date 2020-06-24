@@ -268,6 +268,8 @@ void ScSolverOptionsDialog::EditOption()
     {
         m_xIntDialog = std::make_shared<ScSolverIntegerDialog>(m_xDialog.get());
         m_xIntDialog->SetOptionName( pStringItem->GetText() );
+        if (maProperties[nEntry].Name == "EpsilonLevel")
+            m_xIntDialog->SetMax(3);
         m_xIntDialog->SetValue( pStringItem->GetIntValue() );
         weld::DialogController::runAsync(m_xIntDialog, [nEntry, pStringItem, this](sal_Int32 nResult){
             if (nResult == RET_OK)
@@ -345,6 +347,11 @@ void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 void ScSolverIntegerDialog::SetValue( sal_Int32 nValue )
 {
     m_xNfValue->set_value( nValue );
+}
+
+void ScSolverIntegerDialog::SetMax( sal_Int32 nMax )
+{
+    m_xNfValue->set_range(0, nMax);
 }
 
 sal_Int32 ScSolverIntegerDialog::GetValue() const

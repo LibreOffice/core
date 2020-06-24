@@ -103,6 +103,7 @@ public:
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
+    void        SetMax( sal_Int32 nValue );
     sal_Int32   GetValue() const;
 };
 
