@@ -635,7 +635,6 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<std::unique_ptr<FmFilterData
     return nullptr;
 }
 
-
 void FmFilterModel::SetCurrentController(const Reference< XFormController > & xCurrent)
 {
     if ( xCurrent == m_xController )
@@ -651,7 +650,7 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
     {
         Reference< XFilterController > xFilterController( m_xController, UNO_QUERY_THROW );
         const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
-        if ( pItem->GetChildren().size() > o3tl::make_unsigned(nActiveTerm) )
+        if (nActiveTerm != -1 && pItem->GetChildren().size() > o3tl::make_unsigned(nActiveTerm))
         {
             SetCurrentItems( static_cast< FmFilterItems* >( pItem->GetChildren()[ nActiveTerm ].get() ) );
         }
@@ -661,7 +660,6 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
         DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
-
 
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
