@@ -30,6 +30,8 @@
 #define FNTNAME_HELV    "Helvetica"
 #define FNTNAME_COUR    "Courier"
 #define FNTNAME_MATH    FONTNAME_MATH
+#define FNTNAME_MATHBB  FONTNAME_DOUBLE_STROKE
+#define FNTNAME_SCRIPT  FONTNAME_MATH_SCRIPT
 
 
 // symbolic names used as array indices
@@ -51,7 +53,10 @@
 #define FNT_SANS        5
 #define FNT_FIXED       6
 #define FNT_MATH        7
-#define FNT_END         7
+#define FNT_MATHBB      8
+#define FNT_SCRIPT      9
+#define FNT_END         9
+#define FNT_END_CFGITEM 7
 
 // symbolic names used as array indices
 #define DIS_BEGIN                0

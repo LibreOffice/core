@@ -105,7 +105,8 @@ const SmElementDescr SmElementsControl::m_aSetOperationsList[] =
     {RID_XNSUPSETY, RID_XNSUPSETY_HELP}, {RID_XNSUPSETEQY, RID_XNSUPSETEQY_HELP},
     {nullptr, nullptr},
     {RID_EMPTYSET, RID_EMPTYSET_HELP}, {RID_ALEPH, RID_ALEPH_HELP}, {RID_SETN, RID_SETN_HELP},
-    {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP}
+    {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP},
+    {RID_SETP, RID_SETP_HELP},{RID_SETH, RID_SETH_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aFunctionsList[] =
@@ -160,6 +161,9 @@ const SmElementDescr SmElementsControl::m_aOperatorsList[] =
     {nullptr, nullptr},
     {RID_LLLINTX, RID_LLLINTX_HELP}, {RID_LLLINT_FROMX, RID_LLLINT_FROMX_HELP},
     {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP}, {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP},
+    {nullptr, nullptr},
+    {RID_REPEATX, RID_REPEATX_HELP}, {RID_REPEAT_FROMX, RID_REPEAT_FROMX_HELP},
+    {RID_REPEAT_TOX, RID_REPEAT_TOX_HELP}, {RID_REPEAT_FROMTOX, RID_REPEAT_FROMTOX_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aAttributesList[] =
@@ -175,7 +179,8 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_OVERLINEX, RID_OVERLINEX_HELP}, {RID_UNDERLINEX, RID_UNDERLINEX_HELP}, {RID_OVERSTRIKEX, RID_OVERSTRIKEX_HELP},
     {nullptr, nullptr},
     {RID_PHANTOMX, RID_PHANTOMX_HELP}, {RID_BOLDX, RID_BOLDX_HELP}, {RID_ITALX, RID_ITALX_HELP},
-    {RID_SIZEXY, RID_SIZEXY_HELP}, {RID_FONTXY, RID_FONTXY_HELP},
+    {RID_SIZEXY, RID_SIZEXY_HELP}, {RID_FONTXY, RID_FONTXY_HELP}, {RID_MATHBBX, RID_MATHBBX_HELP},
+    {RID_SCRIPTX, RID_SCRIPTX_HELP},
     {nullptr, nullptr},
     {RID_COLORX_BLACK, RID_COLORX_BLACK_HELP}, {RID_COLORX_BLUE, RID_COLORX_BLUE_HELP},
     {RID_COLORX_GREEN, RID_COLORX_GREEN_HELP}, {RID_COLORX_RED, RID_COLORX_RED_HELP},
@@ -184,7 +189,7 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_COLORX_LIME, RID_COLORX_LIME_HELP}, {RID_COLORX_MAROON, RID_COLORX_MAROON_HELP},
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
     {RID_COLORX_PURPLE, RID_COLORX_PURPLE_HELP}, {RID_COLORX_SILVER, RID_COLORX_SILVER_HELP},
-    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP}
+    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP},{RID_COLORX_RGB, RID_COLORX_RGB_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aBracketsList[] =
@@ -225,7 +230,8 @@ const SmElementDescr SmElementsControl::m_aOthersList[] =
     {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
     {RID_EXISTS, RID_EXISTS_HELP}, {RID_NOTEXISTS, RID_NOTEXISTS_HELP}, {RID_FORALL, RID_FORALL_HELP},
     {RID_HBAR, RID_HBAR_HELP}, {RID_LAMBDABAR, RID_LAMBDABAR_HELP}, {RID_RE, RID_RE_HELP},
-    {RID_IM, RID_IM_HELP}, {RID_WP, RID_WP_HELP},
+    {RID_IM, RID_IM_HELP}, {RID_WP, RID_WP_HELP}, {RID_LAPLACE, RID_LAPLACE_HELP},
+    {RID_ICOMPLEX, RID_ICOMPLEX_HELP},{RID_EULERCTE, RID_EULERCTE_HELP},
     {nullptr, nullptr},
     {RID_LEFTARROW, RID_LEFTARROW_HELP}, {RID_RIGHTARROW, RID_RIGHTARROW_HELP}, {RID_UPARROW, RID_UPARROW_HELP},
     {RID_DOWNARROW, RID_DOWNARROW_HELP},
@@ -883,6 +889,10 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "bold B", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ITALX)
                 addElement(aParser, "ital I", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_MATHBBX)
+                addElement(aParser, "size *0.7 font mathbb \"mathbb\"", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_SCRIPTX)
+                addElement(aParser, "font script \"script\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SIZEXY)
                 addElement(aParser, "\"" + SmResId(STR_SIZE) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_FONTXY)
@@ -917,6 +927,8 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_TEAL)
                 addElement(aParser, "color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_RGB)
+                addElement(aParser, "color rgb 0 0 0 { \"" + SmResId(STR_RGB) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNLX)
                 addElement(aParser, "\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNCX)

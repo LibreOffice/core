@@ -131,6 +131,9 @@ task copyUnpackAssets(type: Copy) {
                 "Carlito-*.ttf",
                 "Gen*.ttf",
                 "opens___.ttf"
+                "diplomata.ttf"
+                "rougescript.ttf"
+                "STIX2Math.otf"
         ]
     }
     into('etc/fonts') {

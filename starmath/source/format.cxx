@@ -62,10 +62,12 @@ SmFormat::SmFormat()
     vFont[FNT_FUNCTION] =
     vFont[FNT_NUMBER]   =
     vFont[FNT_TEXT]     =
-    vFont[FNT_SERIF]    = SmFace(FNTNAME_TIMES, aBaseSize);
-    vFont[FNT_SANS]     = SmFace(FNTNAME_HELV,  aBaseSize);
-    vFont[FNT_FIXED]    = SmFace(FNTNAME_COUR,  aBaseSize);
-    vFont[FNT_MATH]     = SmFace(FNTNAME_MATH,  aBaseSize);
+    vFont[FNT_SERIF]    = SmFace(FNTNAME_TIMES,  aBaseSize);
+    vFont[FNT_SANS]     = SmFace(FNTNAME_HELV,   aBaseSize);
+    vFont[FNT_FIXED]    = SmFace(FNTNAME_COUR,   aBaseSize);
+    vFont[FNT_MATH]     = SmFace(FNTNAME_MATH,   aBaseSize);
+    vFont[FNT_MATHBB]   = SmFace(FNTNAME_MATHBB, aBaseSize);
+    vFont[FNT_SCRIPT]   = SmFace(FNTNAME_SCRIPT, aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 
@@ -76,6 +78,8 @@ SmFormat::SmFormat()
     vFont[FNT_SERIF]   .SetItalic(ITALIC_NONE);
     vFont[FNT_SANS]    .SetItalic(ITALIC_NONE);
     vFont[FNT_FIXED]   .SetItalic(ITALIC_NONE);
+    vFont[FNT_MATHBB]   .SetItalic(ITALIC_NONE);
+    vFont[FNT_SCRIPT]   .SetItalic(ITALIC_NONE);
 
     for ( sal_uInt16 i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {

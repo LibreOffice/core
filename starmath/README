@@ -2,3 +2,26 @@ Formula editor code for writer ([[sw]]).
 
 Good overview from the original developer:
 http://www.mail-archive.com/dev@sw.openoffice.org/msg00200.html
+
+Included font diplomata for using command: font mathbb
+Included font rouge script for using command font script
+Included font STIX 2 Math for using command setp seth repeat
+
+Why include those fonts?
+Diplomata: LO does not have a builtin font for doublestroke. For guaranteeing the work of the command it has to guareantee at least one font of that type.
+Rouge script: LO does not have a builtin font for math script. For guaranteeing the work of the command it has to guareantee at least one font of that type.
+STIX 2: Open symbol actually has symbols carences (tdf#134214). Some of them where needed to implement etp, seth, repeat, icomplex, eulercte. Those commands where implemented following https://en.wikipedia.org/wiki/Blackboard_bold. Only those who wouldn't overflow sal_int16 where implemented as builtin symbols.
+
+Could not upload:
+external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-diplomata.ttf
+external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-rougescript.ttf
+external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-STIX2Math.otf
+/home/uv/Downloads/libreoffice/instdir/share/fonts/truetype/diplomata.ttf
+/home/uv/Downloads/libreoffice/instdir/share/fonts/truetype/rougescript.ttf
+/home/uv/Downloads/libreoffice/instdir/share/fonts/truetype/STIX2Math.otf
+/home/uv/Downloads/libreoffice/workdir/CustomTarget/extras/fonts/diplomata.ttf
+/home/uv/Downloads/libreoffice/workdir/CustomTarget/extras/fonts/rougescript.ttf
+/home/uv/Downloads/libreoffice/workdir/CustomTarget/extras/fonts/STIX2Math.otf
+/home/uv/Downloads/libreoffice/instdir/program/resource/common/fonts/diplomata.ttf
+/home/uv/Downloads/libreoffice/instdir/program/resource/common/fonts/rougescript.ttf
+/home/uv/Downloads/libreoffice/instdir/program/resource/common/fonts/STIX2Math.otf
