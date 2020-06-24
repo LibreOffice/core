@@ -5194,7 +5194,7 @@ void SwHTMLParser::InsertLineBreak()
     if( !bCleared && !bBreakItem )
     {
         // If no CLEAR could or should be executed, a line break will be inserted
-        OUString sTmp( u'\x000a' );   // make the Mac happy :-)
+        OUString sTmp( u'\x000a' );
         m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )
