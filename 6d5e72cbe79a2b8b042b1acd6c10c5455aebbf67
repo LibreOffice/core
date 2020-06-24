@@ -69,6 +69,24 @@
       "revId": "6d5e72cbe79a2b8b042b1acd6c10c5455aebbf67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f00dca4_53c28073",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-06-24T06:47:51Z",
+      "side": 1,
+      "message": "\u003e what if the pLast isn\u0027t the only portion in the line, then it could overwrite a previous text portion\u0027s values?\nNot a problem: height is overwritten just for current text portion. But on later steps entire line height is recalculated during m_pCurr-\u003eCalcLine() call",
+      "parentUuid": "6f02240d_2eb1465d",
+      "revId": "6d5e72cbe79a2b8b042b1acd6c10c5455aebbf67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
