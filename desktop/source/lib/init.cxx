@@ -1014,7 +1014,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
                                   int nCharBefore,
                                   int nCharAfter);
 static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
-                               unsigned nLOKWindowId,
+                               long long int nLOKWindowId,
                                const char* pArguments);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
@@ -3570,7 +3570,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
 
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
+static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, long long int nWindowId, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
