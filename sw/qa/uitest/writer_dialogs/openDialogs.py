@@ -101,6 +101,7 @@ dialogs = [
     {"command": ".uno:FootnoteDialog", "closeButton": "cancel"},
     # {"command": ".uno:MailMergeWizard", "closeButton": "cancel"},
         # may hang forever in e_book_client_connect_direct_sync
+        # tested in sw/qa/uitest/writer_tests7/tdf134243.py
     {"command": ".uno:AddressBookSource", "closeButton": "cancel"},
     {"command": ".uno:RunMacro", "closeButton": "cancel"},
     {"command": ".uno:ScriptOrganizer", "closeButton": "close"},
