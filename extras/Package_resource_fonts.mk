@@ -12,5 +12,8 @@ $(eval $(call gb_Package_Package,resource_fonts,$(call gb_CustomTarget_get_workd
 $(eval $(call gb_Package_use_customtarget,resource_fonts,extras/fonts))
 
 $(eval $(call gb_Package_add_file,resource_fonts,$(LIBO_SHARE_RESOURCE_FOLDER)/common/fonts/opens___.ttf,opens___.ttf))
+$(eval $(call gb_Package_add_file,resource_fonts,$(LIBO_SHARE_RESOURCE_FOLDER)/common/fonts/diplomata.ttf,diplomata.ttf))
+$(eval $(call gb_Package_add_file,resource_fonts,$(LIBO_SHARE_RESOURCE_FOLDER)/common/fonts/rougescript.ttf,rougescript.ttf))
+$(eval $(call gb_Package_add_file,resource_fonts,$(LIBO_SHARE_RESOURCE_FOLDER)/common/fonts/STIX2Math.otf,STIX2Math.otf))
 
 # vim: set noet sw=4 ts=4:

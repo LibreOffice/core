@@ -21,7 +21,9 @@
 #define INCLUDED_STARMATH_INC_TYPES_HXX
 
 #include <sal/types.h>
-#define FONTNAME_MATH   "OpenSymbol"
+#define FONTNAME_MATH            "STIX Two Math"
+#define FONTNAME_DOUBLE_STROKE   "Diplomata"
+#define FONTNAME_MATH_SCRIPT     "Rouge Script"
 
 
 enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
@@ -78,6 +80,7 @@ sal_Unicode const MS_DEF = 0x225D;
 sal_Unicode const MS_EQUIV = 0x2261;
 sal_Unicode const MS_PROP = 0x221D;
 sal_Unicode const MS_PARTIAL = 0x2202;
+sal_Unicode const MS_LAPLACE = 0x2112;
 
 sal_Unicode const MS_SUBSET = 0x2282;
 sal_Unicode const MS_SUPSET = 0x2283;
@@ -124,6 +127,7 @@ sal_Unicode const MS_IIINT = 0x222D;
 sal_Unicode const MS_LINT = 0x222E;
 sal_Unicode const MS_LLINT = 0x222F;
 sal_Unicode const MS_LLLINT = 0x2230;
+sal_Unicode const MS_REPEAT = 0x0052;
 
 sal_Unicode const MS_GRAVE = 0x0060;
 sal_Unicode const MS_COMBGRAVE = 0x0300;
@@ -179,11 +183,16 @@ sal_Unicode const MS_LEFTARROW = 0x2190;
 sal_Unicode const MS_UPARROW = 0x2191;
 sal_Unicode const MS_RIGHTARROW = 0x2192;
 sal_Unicode const MS_DOWNARROW = 0x2193;
+
+sal_Unicode const MS_SETC = 0x2102;
+sal_Unicode const MS_SETH = 0x210D;
 sal_Unicode const MS_SETN = 0x2115;
-sal_Unicode const MS_SETZ = 0x2124;
+sal_Unicode const MS_SETP = 0x2119;
 sal_Unicode const MS_SETQ = 0x211A;
 sal_Unicode const MS_SETR = 0x211D;
-sal_Unicode const MS_SETC = 0x2102;
+sal_Unicode const MS_SETZ = 0x2124;
+sal_Unicode const MS_ICOMPLEX = 0x2148;
+sal_Unicode const MS_EULERCTE = 0x2147;
 
 sal_Unicode const MS_PERCENT = 0x0025;
 

@@ -590,6 +590,24 @@
                     "type": "file",
                     "dest-filename": "external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf"
                 }
+                {
+                    "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-diplomata.ttf",
+                    "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-diplomata.ttf"
+                }
+                {
+                    "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-rougescript.ttf",
+                    "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-rougescript.ttf"
+                }
+                {
+                    "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-STIX2Math.otf",
+                    "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-STIX2Math.otf"
+                }
             ],
             "buildsystem": "simple",
             "build-commands": [
