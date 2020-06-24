@@ -40,7 +40,7 @@ void CpuRuntimeDetection_SSE2::testCpuRuntimeDetection()
 
 void CpuRuntimeDetection_SSE2::checkSSE2()
 {
-    // Try some SSE2 intrinsics calcualtion
+    // Try some SSE2 intrinsics calculation
     __m128i a = _mm_set1_epi32(15);
     __m128i b = _mm_set1_epi32(15);
     __m128i c = _mm_xor_si128(a, b);

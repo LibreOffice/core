@@ -330,7 +330,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
 
         if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
         {
-            // For DOCX with compat=14 the only shape in line defines height of the line inspite of used font
+            // For DOCX with compat=14 the only shape in line defines height of the line in spite of used font
             if (pLast->IsFlyCntPortion() && pPor->IsTextPortion() && pPor->GetLen() == TextFrameIndex(0))
             {
                 m_pCurr->SetAscent(pLast->GetAscent());
