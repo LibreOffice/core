@@ -40,6 +40,11 @@ are the same.
 #define SK_ASSUME_GL 1
 #define SK_ASSUME_GL_ES 0
 
+// See https://codereview.chromium.org/2089583002 . This makes raster drawing
+// faster in some cases, it was made conditional because of some tests failing,
+// but if I'm reading the review correctly the code is in fact fine and just
+// those tests needed updating, which presumably has never happened.
+#define SK_DRAWBITMAPRECT_FAST_OFFSET 1
 
 // Enable Skia's internal checks depending on DBG_UTIL mode. ENABLE_SKIA_DEBUG
 // controls whether to build with or without optimizations (set in Makefile).
