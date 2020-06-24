@@ -39,6 +39,7 @@ brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
 ca       0  1027   # Catalan
 ca-valencia     0  2051   # Catalan Valencian
+ckb      0  1170   # Central Kurdish (Sorani)
 cs       0  1029   # Czech
 cy       0  1106   # Welsh
 da       0  1030
