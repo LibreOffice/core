@@ -1774,7 +1774,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
     {
     case text::ControlCharacter::PARAGRAPH_BREAK:
     {
-        const OUString aText( u'\x000D' );  // '\r' does not work on Mac
+        const OUString aText( u'\x000D' );
         insertString( xRange, aText, bAbsorb );
 
         return;
@@ -1824,7 +1824,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
             aRange.nEndPos  = aRange.nStartPos;
 
             pRange->SetSelection( aRange );
-            const OUString aText( u'\x000D' );  // '\r' does not work on Mac
+            const OUString aText( u'\x000D' );
             pRange->setString( aText );
 
             aRange.nStartPos = 0;
