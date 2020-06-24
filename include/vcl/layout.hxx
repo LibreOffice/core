@@ -807,26 +807,7 @@ public:
         m_xTransferHelper = rHelper;
         m_nDragAction = eDNDConstants;
     }
-    boost::property_tree::ptree DumpAsPropertyTree() override
-    {
-        boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
-        aTree.put("type", "drawingarea");
-        ScopedVclPtrInstance<VirtualDevice> pDevice;
-        pDevice->SetOutputSize( GetSizePixel() );
-        tools::Rectangle aRect(Point(0,0), GetSizePixel());
-        Paint(*pDevice, aRect);
-        BitmapEx aImage = pDevice->GetBitmapEx( Point(0,0), GetSizePixel() );
-        SvMemoryStream aOStm(65535, 65535);
-
-        if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
-        {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-            OUStringBuffer aBuffer("data:image/png;base64,");
-            ::comphelper::Base64::encode(aBuffer, aSeq);
-            aTree.put("image", aBuffer.makeStringAndClear());
-        }
-        return aTree;
-    }
+    boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 //Get first window of a pTopLevel window as
