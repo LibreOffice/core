@@ -166,6 +166,12 @@ en-US = "Thai"
 [STR_DESC_MODULE_LANGPACK_TH]
 en-US = "Installs the Thai user interface"
 
+[STR_NAME_MODULE_LANGPACK_CKB]
+en-US = "Central Kurdish"
+
+[STR_DESC_MODULE_LANGPACK_CKB]
+en-US = "Installs the Central Kurdish user interface"
+
 [STR_NAME_MODULE_LANGPACK_CS]
 en-US = "Czech"
 

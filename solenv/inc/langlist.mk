@@ -32,6 +32,7 @@ brx \
 bs \
 ca \
 ca-valencia \
+ckb \
 cs \
 cy \
 da \
