@@ -64,7 +64,7 @@ SmToken::SmToken(SmTokenType eTokenType,
 {
 }
 
-
+//Definition of math keywords
 static const SmTokenTableEntry aTokenTable[] =
 {
     { "abs", TABS, '\0', TG::UnOper, 13 },
@@ -127,6 +127,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "drarrow" , TDRARROW, MS_DRARROW, TG::Standalone, 5},
     { "emptyset" , TEMPTYSET, MS_EMPTYSET, TG::Standalone, 5},
     { "equiv", TEQUIV, MS_EQUIV, TG::Relation, 0},
+    { "eulercte" , TEULERCTE, MS_EULERCTE, TG::Standalone, 5},
     { "exists", TEXISTS, MS_EXISTS, TG::Standalone, 5},
     { "exp", TEXP, '\0', TG::Function, 5},
     { "fact", TFACT, MS_FACT, TG::UnOper, 5},
@@ -146,6 +147,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { "hat", THAT, MS_HAT, TG::Attribute, 5},
     { "hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
+    { "icomplex" , TICOMPLEX, MS_ICOMPLEX, TG::Standalone, 5},
     { "iiint", TIIINT, MS_IIINT, TG::Oper, 5},
     { "iint", TIINT, MS_IINT, TG::Oper, 5},
     { "im" , TIM, MS_IM, TG::Standalone, 5 },
@@ -159,6 +161,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "italic", TITALIC, '\0', TG::FontAttr, 5},
     { "lambdabar" , TLAMBDABAR, MS_LAMBDABAR, TG::Standalone, 5},
     { "langle", TLANGLE, MS_LMATHANGLE, TG::LBrace, 5},
+    { "laplace", TLAPLACE, MS_LAPLACE, TG::Standalone, 5},
     { "lbrace", TLBRACE, MS_LBRACE, TG::LBrace, 5},
     { "lceil", TLCEIL, MS_LCEIL, TG::LBrace, 5},
     { "ldbracket", TLDBRACKET, MS_LDBRACKET, TG::LBrace, 5},
@@ -184,6 +187,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "lt", TLT, MS_LT, TG::Relation, 0},
     { "magenta", TMAGENTA, '\0', TG::Color, 0},
     { "maroon", TMAROON, '\0', TG::Color, 0},
+    { "mathbb", TMATHBB, '\0', TG::Font, 0},
     { "matrix", TMATRIX, '\0', TG::NONE, 5},
     { "minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5},
     { "mline", TMLINE, MS_VERTLINE, TG::NONE, 0},      //! not in TG::RBrace, Level 0
@@ -238,17 +242,22 @@ static const SmTokenTableEntry aTokenTable[] =
     { "rdline", TRDLINE, MS_DVERTLINE, TG::RBrace, 0},
     { "re" , TRE, MS_RE, TG::Standalone, 5 },
     { "red", TRED, '\0', TG::Color, 0},
+    { "repeat" , TREPEAT, MS_REPEAT, TG::Oper, 5},
     { "rfloor", TRFLOOR, MS_RFLOOR, TG::RBrace, 0},  //! 0 to terminate expression
+    { "rgb", TRGB, '\0', TG::Color, 0},
     { "right", TRIGHT, '\0', TG::NONE, 0},
     { "rightarrow" , TRIGHTARROW, MS_RIGHTARROW, TG::Standalone, 5},
     { "rline", TRLINE, MS_VERTLINE, TG::RBrace, 0},  //! 0 to terminate expression
     { "rsub", TRSUB, '\0', TG::Power, 0},
     { "rsup", TRSUP, '\0', TG::Power, 0},
     { "sans", TSANS, '\0', TG::Font, 0},
+    { "script", TSCRIPT, '\0', TG::Font, 0},
     { "serif", TSERIF, '\0', TG::Font, 0},
     { "setC" , TSETC, MS_SETC, TG::Standalone, 5},
+    { "setH" , TSETH, MS_SETH, TG::Standalone, 5},
     { "setminus", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
     { "setN" , TSETN, MS_SETN, TG::Standalone, 5},
+    { "setP" , TSETP, MS_SETP, TG::Standalone, 5},
     { "setQ" , TSETQ, MS_SETQ, TG::Standalone, 5},
     { "setR" , TSETR, MS_SETR, TG::Standalone, 5},
     { "setZ" , TSETZ, MS_SETZ, TG::Standalone, 5},
@@ -297,33 +306,37 @@ static const SmTokenTableEntry aTokenTable[] =
     { "yellow", TYELLOW, '\0', TG::Color, 0}
 };
 
+//Checks if keyword is in the list by SmTokenTableEntry.
 #if !defined NDEBUG
 static bool sortCompare(const SmTokenTableEntry & lhs, const SmTokenTableEntry & rhs)
 {
     return OUString::createFromAscii(lhs.pIdent).compareToIgnoreAsciiCase(OUString::createFromAscii(rhs.pIdent)) < 0;
 }
 #endif
+
+//Checks if keyword is in the list.
 static bool findCompare(const SmTokenTableEntry & lhs, const OUString & s)
 {
     return s.compareToIgnoreAsciiCaseAscii(lhs.pIdent) > 0;
 }
+
+//Returns the SmTokenTableEntry for a keyword
 const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 {
-    static bool bSortKeyWords = false;
-    if( !bSortKeyWords )
+    static bool bSortKeyWords = false; // Flag: RTF-token table has been sorted.
+    if( !bSortKeyWords ) //First time sorts it.
     {
         assert( std::is_sorted( std::begin(aTokenTable), std::end(aTokenTable), sortCompare ) );
         bSortKeyWords = true;
     }
 
-    if (rName.isEmpty())
-        return nullptr;
+    if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
 
+    //Looks for the first keyword after or equal to rName in alphabetical order.
     auto findIter = std::lower_bound( std::begin(aTokenTable), std::end(aTokenTable), rName, findCompare );
-    if ( findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))
-        return &*findIter;
+    if ( findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))return &*findIter; //check is equal
 
-    return nullptr;
+    return nullptr; //not found
 }
 
 namespace {
@@ -333,42 +346,44 @@ bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
 {
     assert(nPos <= rTxt.getLength()); //index out of range
 
-    if (nPos == rTxt.getLength())
-        return true;
+    if (nPos == rTxt.getLength())return true; //This is EOF
 
     sal_Unicode cChar = rTxt[nPos];
 
     // check if 'cChar' is in the delimiter table
     static const sal_Unicode aDelimiterTable[] =
     {
-        ' ',  '\t', '\n', '\r', '+',  '-',  '*',  '/',  '=',  '#',
-        '%',  '\\', '"',  '~',  '`',  '>',  '<',  '&',  '|',  '(',
-        ')',  '{',  '}',  '[',  ']',  '^',  '_'
-    };
+        ' ', '{',  '}',  '(',  ')', '\t', '\n', '\r', '+',  '-',
+        '*',  '/',  '=',  '[',  ']',  '^',  '_',  '#',
+        '%',  '>',  '<',  '&',  '|', '\\', '"',  '~',  '`'
+    };//reordered by usage (by eye) for nanoseconds saving.
+
+    //checks the array
     for (auto const &cDelimiter : aDelimiterTable)
     {
-        if (cDelimiter == cChar)
-            return true;
+        if (cDelimiter == cChar)return true;
     }
 
+    //special chars support
     sal_Int16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
     return ( nTypJp == css::i18n::UnicodeType::SPACE_SEPARATOR ||
              nTypJp == css::i18n::UnicodeType::CONTROL);
 }
 
-}
+}//end namespace
 
+//Text replace onto m_aBufferString
 void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 {
-    assert( nPos + nLen <= m_aBufferString.getLength() );
+    assert( nPos + nLen <= m_aBufferString.getLength() ); //checks if length allows text replace
 
-    m_aBufferString = m_aBufferString.replaceAt( nPos, nLen, rText );
+    m_aBufferString = m_aBufferString.replaceAt( nPos, nLen, rText ); //replace and reindex
     sal_Int32 nChg = rText.getLength() - nLen;
     m_nBufferIndex = m_nBufferIndex + nChg;
     m_nTokenIndex = m_nTokenIndex + nChg;
 }
 
-void SmParser::NextToken()
+void SmParser::NextToken() //Central part of the parser
 {
     // First character may be any alphabetic
     static const sal_Int32 coStartFlags =
@@ -979,7 +994,7 @@ namespace
             aSubArray[i] = rSubNodes[i].release();
         return aSubArray;
     }
-}
+} //end namespace
 
 // grammar
 
@@ -1474,6 +1489,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TFORALL :
         case TPARTIAL :
         case TNABLA :
+        case TLAPLACE :
         case TTOWARD :
         case TDOTSAXIS :
         case TDOTSDIAG :
@@ -1487,12 +1503,16 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 return std::unique_ptr<SmNode>(pNode.release());
             }
 
+        case TSETC :
+        case TSETH :
         case TSETN :
-        case TSETZ :
+        case TSETP :
         case TSETQ :
         case TSETR :
-        case TSETC :
+        case TSETZ :
         case THBAR :
+        case TICOMPLEX:
+        case TEULERCTE:
         case TLAMBDABAR :
         case TBACKEPSILON :
         case TALEPH :
@@ -1646,6 +1666,7 @@ std::unique_ptr<SmNode> SmParser::DoOper()
         case TLINT :
         case TLLINT :
         case TLLLINT :
+        case TREPEAT:
             pNode.reset(new SmMathSymbolNode(m_aCurToken));
             break;
 
@@ -1860,10 +1881,34 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
     // last color rules, get that one
     SmToken  aToken;
     do
-    {   NextToken();
+    {
+
+        NextToken();
 
         if (TokenInGroup(TG::Color))
-        {   aToken = m_aCurToken;
+        {
+            aToken = m_aCurToken;
+            if(m_aCurToken.eType==TRGB){
+                SmToken r,g,b;
+                sal_Int32 nr, ng, nb, nc;
+                NextToken();
+                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+                r = m_aCurToken;
+                NextToken();
+                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+                g = m_aCurToken;
+                NextToken();
+                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+                b = m_aCurToken;
+                nr = r.aText.toInt32();
+                if( nr < 0 || nr > 255 )return DoError(SmParseError::ColorExpected);
+                ng = g.aText.toInt32();
+                if( ng < 0 || ng > 255 )return DoError(SmParseError::ColorExpected);
+                nb = b.aText.toInt32();
+                if( nb < 0 || nb > 255 )return DoError(SmParseError::ColorExpected);
+                nc = nb + 256 * ( ng + nr*256 );
+                aToken.aText = OUString::number(nc);
+            }
             NextToken();
         }
         else

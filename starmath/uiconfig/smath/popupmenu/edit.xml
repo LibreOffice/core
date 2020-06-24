@@ -103,6 +103,8 @@
       <menu:menuitem menu:label="setQ" menu:id=".uno:InsertCommandText?Text:string=setQ "/>
       <menu:menuitem menu:label="setR" menu:id=".uno:InsertCommandText?Text:string=setR "/>
       <menu:menuitem menu:label="setC" menu:id=".uno:InsertCommandText?Text:string=setC "/>
+      <menu:menuitem menu:label="setH" menu:id=".uno:InsertCommandText?Text:string=setH "/>
+      <menu:menuitem menu:label="setP" menu:id=".uno:InsertCommandText?Text:string=setP "/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FunctionsMenu">
@@ -148,6 +150,7 @@
       <menu:menuitem menu:label="lint x" menu:id=".uno:InsertCommandText?Text:string=lint &lt;?&gt; "/>
       <menu:menuitem menu:label="llint x" menu:id=".uno:InsertCommandText?Text:string=llint &lt;?&gt; "/>
       <menu:menuitem menu:label="lllint x" menu:id=".uno:InsertCommandText?Text:string=lllint &lt;?&gt; "/>
+      <menu:menuitem menu:label="repeat x" menu:id=".uno:InsertCommandText?Text:string=repeat &lt;?&gt; "/>
       <menu:menuseparator/>
       <menu:menuitem menu:label="... from a to b" menu:id=".uno:InsertCommandText?Text:string=from{&lt;?&gt;} to{&lt;?&gt;} &lt;?&gt; "/>
       <menu:menuitem menu:label="... from a" menu:id=".uno:InsertCommandText?Text:string=from{&lt;?&gt;} &lt;?&gt; "/>
@@ -183,6 +186,7 @@
       <menu:menuitem menu:label="ital b" menu:id=".uno:InsertCommandText?Text:string=ital &lt;?&gt; "/>
       <menu:menuitem menu:label="size s b" menu:id=".uno:InsertCommandText?Text:string=size &lt;?&gt; {&lt;?&gt;} "/>
       <menu:menuitem menu:label="font f b" menu:id=".uno:InsertCommandText?Text:string=font &lt;?&gt; {&lt;?&gt;} "/>
+      <menu:menuitem menu:label="color rgb" menu:id=".uno:InsertCommandText?Text:string=color rgb 0 0 0 "/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:BracketsMenu">
@@ -251,6 +255,9 @@
       <menu:menuitem menu:label="Re" menu:id=".uno:InsertCommandText?Text:string=Re "/>
       <menu:menuitem menu:label="Im" menu:id=".uno:InsertCommandText?Text:string=Im "/>
       <menu:menuitem menu:label="wp" menu:id=".uno:InsertCommandText?Text:string=wp "/>
+      <menu:menuitem menu:label="laplace" menu:id=".uno:InsertCommandText?Text:string=laplace "/>
+      <menu:menuitem menu:label="Euler's constant" menu:id=".uno:InsertCommandText?Text:string=eulercte "/>
+      <menu:menuitem menu:label="imaginary unit" menu:id=".uno:InsertCommandText?Text:string=icomplex "/>
       <menu:menuseparator/>
       <menu:menuitem menu:label="leftarrow" menu:id=".uno:InsertCommandText?Text:string=leftarrow "/>
       <menu:menuitem menu:label="rightarrow" menu:id=".uno:InsertCommandText?Text:string=rightarrow "/>

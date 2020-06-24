@@ -1719,6 +1719,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     rText.append("{");
+    sal_Int32 nc,r,g,b;
 
     switch (GetToken().eType)
     {
@@ -1819,6 +1820,21 @@ void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
         case TFUCHSIA:
             rText.append("color fuchsia ");
             break;
+        case TRGB:
+            rText.append("color rgb ");
+            nc = GetToken().aText.toInt32();
+            b = nc % 256;
+            nc /= 256;
+            g = nc % 256;
+            nc /= 256;
+            r = nc % 256;
+            rText.append(r);
+            rText.append(" ");
+            rText.append(g);
+            rText.append(" ");
+            rText.append(b);
+            rText.append(" ");
+            break;
         case TSANS:
             rText.append("font sans ");
             break;
@@ -1827,6 +1843,12 @@ void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
             break;
         case TFIXED:
             rText.append("font fixed ");
+            break;
+        case TMATHBB:
+            rText.append("font mathbb ");
+            break;
+        case TSCRIPT:
+            rText.append("font script ");
             break;
         default:
             break;
@@ -1849,6 +1871,8 @@ void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
         case TFIXED:    nFnt = FNT_FIXED;   break;
         case TSANS:     nFnt = FNT_SANS;    break;
         case TSERIF:    nFnt = FNT_SERIF;   break;
+        case TMATHBB:   nFnt = FNT_MATHBB;  break;
+        case TSCRIPT:   nFnt = FNT_SCRIPT;  break;
         default:
             break;
     }
@@ -1866,6 +1890,8 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
     assert(pNode);
+    sal_Int32 nc;
+    Color col_perso_rgb_color = COL_AUTO;
 
     switch (GetToken().eType)
     {   case TSIZE :
@@ -1873,6 +1899,8 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             break;
         case TSANS :
         case TSERIF :
+        case TMATHBB :
+        case TSCRIPT :
         case TFIXED :
             pNode->SetFont(GetFont());
             break;
@@ -1902,6 +1930,15 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TNAVY :    SetColor(COL_BLUE);  break;
         case TAQUA :    SetColor(COL_LIGHTCYAN);  break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
+        case TRGB :
+            nc = GetToken().aText.toInt32();
+            col_perso_rgb_color.SetBlue(nc % 256);
+            nc /= 256;
+            col_perso_rgb_color.SetGreen(nc % 256);
+            nc /= 256;
+            col_perso_rgb_color.SetRed(nc % 256);
+            SetColor(col_perso_rgb_color);
+            break;
 
         default:
             SAL_WARN("starmath", "unknown case");
@@ -2658,7 +2695,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
             static const sal_Unicode cUppercaseOmega = 0x03A9;
             sal_Unicode cChar = rTmp[0];
             // uppercase letters should be straight and lowercase letters italic
-            bItalic = (cUppercaseAlpha > cChar || cChar > cUppercaseOmega);
+            bItalic = cUppercaseAlpha > cChar || cChar > cUppercaseOmega;
         }
     }
 
