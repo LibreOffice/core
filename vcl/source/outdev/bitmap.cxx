@@ -482,7 +482,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
         // ensure 8 bit alpha
         if( aAlphaBitmap.GetBitCount() > 8 )
-            aAlphaBitmap.Convert( BmpConversion::N8BitGreys );
+            aAlphaBitmap.Convert( BmpConversion::N8BitNoConversion );
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
     }
