@@ -3407,7 +3407,7 @@ public:
         if (pImage)
         {
             GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-            GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
+            GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
             gtk_container_add(GTK_CONTAINER(pBox), pImage);
             gtk_container_add(GTK_CONTAINER(pBox), pLabel);
@@ -6098,7 +6098,7 @@ private:
     {
         disable_notify_events();
 
-        GtkWidget *pTabWidget = gtk_label_new(MapToGtkAccelerator(rLabel).getStr());
+        GtkWidget *pTabWidget = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rLabel).getStr());
         gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
 
         gtk_notebook_insert_page(pNotebook, pChild, pTabWidget, nPos);
@@ -7660,7 +7660,7 @@ public:
         if (pImage)
         {
             GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-            GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
+            GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
             gtk_container_add(GTK_CONTAINER(pBox), pImage);
             gtk_container_add(GTK_CONTAINER(pBox), pLabel);
