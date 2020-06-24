@@ -1256,16 +1256,23 @@ static sk_sp<SkImage> mergeBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBit
 {
     sk_sp<SkImage> image;
     OString key;
+    // Probably not much point in caching of just doing a copy.
     if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
-        blockCaching = true; // probably not much point in caching of just doing a copy
-    if (targetSize.Width() > bitmap.GetSize().Width()
-        || targetSize.Height() > bitmap.GetSize().Height())
-        blockCaching = true; // caching enlarging is probably wasteful and not worth it
-    if (bitmap.GetSize().Width() < 100 && bitmap.GetSize().Height() < 100)
-        blockCaching = true; // image too small to be worth caching
+        blockCaching = true;
+    // Caching enlarging is probably wasteful and not worth it.
+    // With Raster it may make a difference though (tdf#134160).
+    if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster
+        && (targetSize.Width() > bitmap.GetSize().Width()
+            || targetSize.Height() > bitmap.GetSize().Height()))
+        blockCaching = true;
+    // Image too small to be worth caching.
+    if (bitmap.GetSize().Width() < 100 && bitmap.GetSize().Height() < 100
+        && targetSize.Width() < 100 && targetSize.Height() < 100)
+        blockCaching = true;
+    // GPU-accelerated shouldn't need caching of applying alpha.
     if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster
         && targetSize == bitmap.GetSize())
-        blockCaching = true; // GPU-accelerated shouldn't need caching of applying alpha
+        blockCaching = true;
     if (!blockCaching)
     {
         OStringBuffer keyBuf;
