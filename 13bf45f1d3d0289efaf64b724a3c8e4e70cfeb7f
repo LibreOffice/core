@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fc55a94_47cb315f",
+        "filename": "include/vcl/layout.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-24T09:48:34Z",
+      "side": 1,
+      "message": "please don\u0027t put methods of this size into headers in /include",
+      "revId": "13bf45f1d3d0289efaf64b724a3c8e4e70cfeb7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
