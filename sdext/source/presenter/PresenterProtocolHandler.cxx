@@ -164,6 +164,15 @@ namespace {
         const sal_Int32 mnSizeChange;
     };
 
+    class ExitPresenterCommand : public Command
+    {
+    public:
+        explicit ExitPresenterCommand(const rtl::Reference<PresenterController>& rpPresenterController);
+        virtual void Execute() override;
+    private:
+        rtl::Reference<PresenterController> mpPresenterController;
+    };
+
 } // end of anonymous namespace
 
 namespace {
@@ -398,6 +407,8 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
         return new SetHelpViewCommand(true, rpPresenterController);
     if (rsURLPath == "ShrinkNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, -1);
+    if (rsURLPath == "ExitPresenter")
+        return new ExitPresenterCommand(rpPresenterController);
 
     return nullptr;
 }
@@ -803,6 +814,21 @@ void NotesFontSizeCommand::Execute()
 Any NotesFontSizeCommand::GetState() const
 {
     return Any();
+}
+
+//===== ExitPresenterCommand ==================================================
+
+ExitPresenterCommand::ExitPresenterCommand (const rtl::Reference<PresenterController>& rpPresenterController)
+: mpPresenterController(rpPresenterController)
+{
+}
+
+void ExitPresenterCommand::Execute()
+{
+    if ( ! mpPresenterController.is())
+        return;
+
+    mpPresenterController->ExitPresenter();
 }
 
 } // end of namespace ::sdext::presenter

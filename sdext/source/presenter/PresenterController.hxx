@@ -110,6 +110,7 @@ public:
     void ShowView (const OUString& rsViewURL);
     void HideView (const OUString& rsViewURL);
     void SwitchMonitors();
+    void ExitPresenter();
     void DispatchUnoCommand (const OUString& rsCommand) const;
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;

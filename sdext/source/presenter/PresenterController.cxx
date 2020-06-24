@@ -1157,6 +1157,20 @@ void PresenterController::SwitchMonitors()
     pScreen->SwitchMonitors();
 }
 
+void PresenterController::ExitPresenter()
+{
+    if( mxController.is() )
+        {
+            Reference< XPresentationSupplier > xPS( mxController->getModel(), UNO_QUERY );
+            if( xPS.is() )
+            {
+                Reference< XPresentation > xP( xPS->getPresentation() );
+                if( xP.is() )
+                    xP->end();
+            }
+        }
+}
+
 } // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

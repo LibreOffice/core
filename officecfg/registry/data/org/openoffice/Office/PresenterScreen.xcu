@@ -618,6 +618,65 @@
               </node>
             </node>
           </node>
+          <node oor:name="q" oor:op="replace">
+            <prop oor:name="Type">
+              <value>VerticalSeparator</value>
+            </prop>
+            <node oor:name="Normal">
+              <node oor:name="Font">
+                <prop oor:name="Color">
+                  <value>76797C</value>
+                </prop>
+              </node>
+            </node>
+          </node>
+          <node oor:name="r" oor:op="replace">
+            <prop oor:name="Name">
+              <value>ExitPresenter</value>
+            </prop>
+            <prop oor:name="Type">
+              <value>Button</value>
+            </prop>
+            <node oor:name="Normal">
+              <prop oor:name="Text">
+                <value xml:lang="en-US">Exit</value>
+              </prop>
+              <node oor:name="Icon">
+                <prop oor:name="NormalFileName">
+                  <value>bitmaps/ButtonExitPresenterNormal.png</value>
+                </prop>
+              </node>
+              <prop oor:name="Action">
+                <value>vnd.org.libreoffice.presenterscreen:ExitPresenter</value>
+              </prop>
+              <node oor:name="Font">
+                <prop oor:name="Size">
+                  <value>12</value>
+                </prop>
+                <prop oor:name="Style">
+                  <value>Bold</value>
+                </prop>
+                <prop oor:name="Color">
+                  <value>B3B7BC</value>
+                </prop>
+                <prop oor:name="Anchor">
+                  <value>Center</value>
+                </prop>
+              </node>
+            </node>
+            <node oor:name="MouseOver">
+              <node oor:name="Icon">
+                <prop oor:name="NormalFileName">
+                  <value>bitmaps/ButtonExitPresenterMouseOver.png</value>
+                </prop>
+              </node>
+              <node oor:name="Font">
+                <prop oor:name="Color">
+                  <value>FFFFFF</value>
+                </prop>
+              </node>
+            </node>
+          </node>
         </node>
       </node>
       <node oor:name="NotesToolBar" oor:op="replace">
