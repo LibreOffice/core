@@ -476,6 +476,13 @@ void FuConstructRectangle::Deactivate()
         return;
     }
 
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() < 1)
+    {
+        // Just switching pages, no signature rectangle yet.
+        return;
+    }
+
     // Finished drawing a signature rectangle, now set it up.
     if (!mpViewShell)
     {
