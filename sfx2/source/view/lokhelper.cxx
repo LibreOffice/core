@@ -69,17 +69,11 @@ int SfxLokHelper::createView()
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
     if (!pViewFrame)
         return -1;
-    SfxViewShell* pPrevViewShell = SfxViewShell::Current();
-    ViewShellDocId nId;
-    if (pPrevViewShell)
-        nId = pPrevViewShell->GetDocId();
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
         return -1;
-    if (pPrevViewShell)
-        pViewShell->SetDocId(nId);
     return static_cast<sal_Int32>(pViewShell->GetViewShellId());
 }
 
@@ -153,20 +147,7 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
 std::size_t SfxLokHelper::getViewsCount()
 {
     SfxApplication* pApp = SfxApplication::Get();
-    if (!pApp)
-        return 0;
-
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
-    const ViewShellDocId nCurrentDocId = pCurrentViewShell ? pCurrentViewShell->GetDocId() : ViewShellDocId(-1);
-    std::size_t n = 0;
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        if (pViewShell->GetDocId() == nCurrentDocId)
-            n++;
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
-    return n;
+    return !pApp ? 0 : pApp->GetViewShells_Impl().size();
 }
 
 bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
@@ -175,43 +156,16 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
     if (!pApp)
         return false;
 
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
-    const ViewShellDocId nCurrentDocId = pCurrentViewShell ? pCurrentViewShell->GetDocId() : ViewShellDocId(-1);
-    std::size_t n = 0;
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
+    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
+    if (rViewArr.size() > nSize)
+        return false;
+
+    for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
-        if (n == nSize)
-            return false;
-        if (pViewShell->GetDocId() == nCurrentDocId)
-        {
-            pArray[n] = static_cast<sal_Int32>(pViewShell->GetViewShellId());
-            n++;
-        }
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
+        SfxViewShell* pViewShell = rViewArr[i];
+        pArray[i] = static_cast<sal_Int32>(pViewShell->GetViewShellId());
     }
     return true;
-}
-
-void SfxLokHelper::setDocumentIdOfView(int nId)
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    assert(pViewShell);
-    if (!pViewShell)
-        return;
-    pViewShell->SetDocId(ViewShellDocId(nId));
-}
-
-int SfxLokHelper::getDocumentIdOfView(int nViewId)
-{
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        if (pViewShell->GetViewShellId() == ViewShellId(nViewId))
-            return static_cast<int>(pViewShell->GetDocId());
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
-    return -1;
 }
 
 LanguageTag SfxLokHelper::getDefaultLanguage()
@@ -298,13 +252,13 @@ void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* 
 
 void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
 {
-    if (DisableCallbacks::disabled())
+    if (SfxLokHelper::getViewsCount() <= 1 || DisableCallbacks::disabled())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell != pThisView && pViewShell->GetDocId() == pThisView-> GetDocId())
+        if (pViewShell != pThisView)
             notifyOtherView(pThisView, pViewShell, nType, rKey, rPayload);
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -417,13 +371,10 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     if (!comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
         return;
 
-    // FIXME: Do we know whether it is the views for the document that is in the "current" view that has changed?
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
+        SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -455,12 +406,10 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
         return;
 
     const auto payload = rPayload.getStr();
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
-            pViewShell->libreOfficeKitViewCallback(nType, payload);
+        pViewShell->libreOfficeKitViewCallback(nType, payload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
