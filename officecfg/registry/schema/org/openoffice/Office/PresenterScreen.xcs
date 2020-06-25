@@ -247,6 +247,11 @@
           <desc>The text to display.</desc>
         </info>
       </prop>
+      <prop oor:name="ButtonWidth" oor:type="xs:int">
+        <info>
+          <desc>The width of a button in the toolbar.</desc>
+        </info>
+      </prop>
       <prop oor:name="Action" oor:type="xs:string">
         <info>
           <desc>Action to execute when a button is triggered.</desc>
