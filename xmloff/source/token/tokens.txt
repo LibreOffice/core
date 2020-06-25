@@ -2621,6 +2621,7 @@ additive
 multiply
 animate
 animateMotion
+animatePhysics
 animateTransform
 animateColor
 transitionFilter

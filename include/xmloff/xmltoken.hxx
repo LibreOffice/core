@@ -2792,6 +2792,7 @@ namespace xmloff::token {
         XML_MULTIPLY,
         XML_ANIMATE,
         XML_ANIMATEMOTION,
+        XML_ANIMATEPHYSICS,
         XML_ANIMATETRANSFORM,
         XML_ANIMATECOLOR,
         XML_TRANSITIONFILTER,
