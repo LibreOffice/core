@@ -355,6 +355,9 @@
               <prop oor:name="Text">
                 <value xml:lang="en-US">Pause</value>
               </prop>
+              <prop oor:name="ButtonWidth">
+                <value>70</value>
+              </prop>
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName">
                   <value>bitmaps/ButtonPauseTimerNormal.png</value>

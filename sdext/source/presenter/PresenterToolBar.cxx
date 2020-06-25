@@ -86,6 +86,7 @@ namespace {
         SharedBitmapDescriptor mpIcon;
         OUString msAction;
         Text maText;
+        sal_Int32 mWidth;
 
         void ReadElementMode (
             const Reference<beans::XPropertySet>& rxProperties,
@@ -1335,7 +1336,8 @@ namespace {
 ElementMode::ElementMode()
     : mpIcon(),
       msAction(),
-      maText()
+      maText(),
+      mWidth(0)
 {
 }
 
@@ -1359,6 +1361,7 @@ void ElementMode::ReadElementMode (
         mpIcon = rpDefaultMode->mpIcon;
         msAction = rpDefaultMode->msAction;
         maText = rpDefaultMode->maText;
+        mWidth = rpDefaultMode->mWidth;
     }
 
     // Read action.
@@ -1375,6 +1378,10 @@ void ElementMode::ReadElementMode (
         xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
                                             : PresenterTheme::SharedFontDescriptor()));
     maText = Text(sText,pFont);
+
+    if(!(PresenterConfigurationAccess::GetProperty(xProperties, "ButtonWidth") >>= mWidth))
+        if(rpDefaultMode != nullptr)
+            mWidth = rpDefaultMode->mWidth;
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
@@ -1469,11 +1476,13 @@ awt::Size Button::CreateBoundingSize (
     {
         geometry::IntegerSize2D aSize (xBitmap->getSize());
         return awt::Size(
-            ::std::max(aSize.Width, sal_Int32(0.5 + aTextBBox.X2 - aTextBBox.X1)),
-            aSize.Height+ nGap + nTextHeight);
+            ::std::max(::std::max(aSize.Width, sal_Int32(0.5 + aTextBBox.X2 - aTextBBox.X1)), mpMode->mWidth),
+            aSize.Height + nGap + nTextHeight);
     }
     else
-        return awt::Size(nTextWidth,nTextHeight);
+    {
+        return awt::Size(::std::max(nTextWidth, mpMode->mWidth), nTextHeight);
+    }
 }
 
 void Button::PaintIcon (
