@@ -2340,7 +2340,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
-
+pp
   <!-- TODO no proposal -->
   <rng:define name="chart-legend-attlist" combine="interleave">
     <rng:optional>
@@ -2418,6 +2418,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:element>
       </rng:zeroOrMore>
     </rng:element>
+  </rng:define>
+
+  <rng:define name="anim-node-physics-animation" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:animatePhysics">
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
 </rng:grammar>
