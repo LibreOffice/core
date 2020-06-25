@@ -421,26 +421,104 @@
   <block-list:block block-list:abbreviated-name="laylon" block-list:name="naylon"/>
   <block-list:block block-list:abbreviated-name="Loğusa" block-list:name="Lohusa"/>
   <block-list:block block-list:abbreviated-name="loğusa" block-list:name="lohusa"/>
+  <block-list:block block-list:abbreviated-name="Mahçup" block-list:name="Mahcup"/>
+  <block-list:block block-list:abbreviated-name="mahçup" block-list:name="mahcup"/>
+  <block-list:block block-list:abbreviated-name="Mahfolmak" block-list:name="Mahvolmak"/>
+  <block-list:block block-list:abbreviated-name="mahfolmak" block-list:name="mahvolmak"/>
+  <block-list:block block-list:abbreviated-name="Mahsuz" block-list:name="Mahsus"/>
+  <block-list:block block-list:abbreviated-name="mahsuz" block-list:name="mahsus"/>
   <block-list:block block-list:abbreviated-name="Makina" block-list:name="Makine"/>
   <block-list:block block-list:abbreviated-name="makina" block-list:name="makine"/>
   <block-list:block block-list:abbreviated-name="Makosen" block-list:name="Mokasen"/>
   <block-list:block block-list:abbreviated-name="makosen" block-list:name="mokasen"/>
+  <block-list:block block-list:abbreviated-name="Maktül" block-list:name="Maktul"/>
+  <block-list:block block-list:abbreviated-name="maktül" block-list:name="maktul"/>
   <block-list:block block-list:abbreviated-name="Malesef" block-list:name="Maalesef"/>
   <block-list:block block-list:abbreviated-name="malesef" block-list:name="maalesef"/>
+  <block-list:block block-list:abbreviated-name="Manüpülasyon" block-list:name="Manipülasyon"/>
+  <block-list:block block-list:abbreviated-name="manüpülasyon" block-list:name="manipülasyon"/>
+  <block-list:block block-list:abbreviated-name="Masus" block-list:name="Mahsus"/>
+  <block-list:block block-list:abbreviated-name="masus" block-list:name="mahsus"/>
+  <block-list:block block-list:abbreviated-name="Matamatik" block-list:name="Matematik"/>
+  <block-list:block block-list:abbreviated-name="matamatik" block-list:name="matematik"/>
+  <block-list:block block-list:abbreviated-name="Mataryal" block-list:name="Materyal"/>
+  <block-list:block block-list:abbreviated-name="mataryal" block-list:name="materyal"/>
   <block-list:block block-list:abbreviated-name="Matba" block-list:name="Matbaa"/>
   <block-list:block block-list:abbreviated-name="matba" block-list:name="matbaa"/>
+  <block-list:block block-list:abbreviated-name="Maydonoz" block-list:name="Maydanoz"/>
+  <block-list:block block-list:abbreviated-name="maydonoz" block-list:name="maydanoz"/>
   <block-list:block block-list:abbreviated-name="Maystro" block-list:name="Maestro"/>
   <block-list:block block-list:abbreviated-name="maystro" block-list:name="maestro"/>
   <block-list:block block-list:abbreviated-name="Mazallah" block-list:name="Maazallah"/>
   <block-list:block block-list:abbreviated-name="mazallah" block-list:name="maazallah"/>
+  <block-list:block block-list:abbreviated-name="Mefta" block-list:name="Mevta"/>
+  <block-list:block block-list:abbreviated-name="mefta" block-list:name="mevta"/>
+  <block-list:block block-list:abbreviated-name="Megolaman" block-list:name="Megaloman"/>
+  <block-list:block block-list:abbreviated-name="megolaman" block-list:name="megaloman"/>
   <block-list:block block-list:abbreviated-name="Megoloman" block-list:name="Megaloman"/>
   <block-list:block block-list:abbreviated-name="megoloman" block-list:name="megaloman"/>
+  <block-list:block block-list:abbreviated-name="Melemen" block-list:name="Menemen"/>
+  <block-list:block block-list:abbreviated-name="melemen" block-list:name="menemen"/>
+  <block-list:block block-list:abbreviated-name="Melhem" block-list:name="Merhem"/>
+  <block-list:block block-list:abbreviated-name="melhem" block-list:name="merhem"/>
+  <block-list:block block-list:abbreviated-name="Menapoz" block-list:name="Menopoz"/>
+  <block-list:block block-list:abbreviated-name="menapoz" block-list:name="menopoz"/>
+  <block-list:block block-list:abbreviated-name="Menecer" block-list:name="Menajer"/>
+  <block-list:block block-list:abbreviated-name="menecer" block-list:name="menajer"/>
+  <block-list:block block-list:abbreviated-name="Menejer" block-list:name="Menajer"/>
+  <block-list:block block-list:abbreviated-name="menejer" block-list:name="menajer"/>
+  <block-list:block block-list:abbreviated-name="Mentalite" block-list:name="Mantalite"/>
+  <block-list:block block-list:abbreviated-name="mentalite" block-list:name="mantalite"/>
+  <block-list:block block-list:abbreviated-name="Menisküs" block-list:name="Menüsküs"/>
+  <block-list:block block-list:abbreviated-name="menisküs" block-list:name="menüsküs"/>
+  <block-list:block block-list:abbreviated-name="Meyva" block-list:name="Meyve"/>
+  <block-list:block block-list:abbreviated-name="meyva" block-list:name="meyve"/>
+  <block-list:block block-list:abbreviated-name="Miğde" block-list:name="Mide"/>
+  <block-list:block block-list:abbreviated-name="miğde" block-list:name="mide"/>
   <block-list:block block-list:abbreviated-name="Minisküs" block-list:name="Menüsküs"/>
   <block-list:block block-list:abbreviated-name="minisküs" block-list:name="menüsküs"/>
+  <block-list:block block-list:abbreviated-name="Mokasen" block-list:name="Makosen"/>
+  <block-list:block block-list:abbreviated-name="mokasen" block-list:name="makosen"/>
+  <block-list:block block-list:abbreviated-name="Motorsiklet" block-list:name="Motosiklet"/>
+  <block-list:block block-list:abbreviated-name="motorsiklet" block-list:name="motosiklet"/>
+  <block-list:block block-list:abbreviated-name="Mozayik" block-list:name="Mozaik"/>
+  <block-list:block block-list:abbreviated-name="mozayik" block-list:name="mozaik"/>
+  <block-list:block block-list:abbreviated-name="Mönü" block-list:name="Menü"/>
+  <block-list:block block-list:abbreviated-name="mönü" block-list:name="menü"/>
+  <block-list:block block-list:abbreviated-name="Muacir" block-list:name="Muhacir"/>
+  <block-list:block block-list:abbreviated-name="muacir" block-list:name="muhacir"/>
+  <block-list:block block-list:abbreviated-name="Muaffak" block-list:name="Muvaffak"/>
+  <block-list:block block-list:abbreviated-name="muaffak" block-list:name="muvaffak"/>
+  <block-list:block block-list:abbreviated-name="Muhattap" block-list:name="Muhatap"/>
+  <block-list:block block-list:abbreviated-name="muhattap" block-list:name="muhatap"/>
+  <block-list:block block-list:abbreviated-name="Mundar" block-list:name="Murdar"/>
+  <block-list:block block-list:abbreviated-name="mundar" block-list:name="murdar"/>
+  <block-list:block block-list:abbreviated-name="Mustarip" block-list:name="Muzdarip"/>
+  <block-list:block block-list:abbreviated-name="mustarip" block-list:name="muzdarip"/>
+  <block-list:block block-list:abbreviated-name="Muşanba" block-list:name="Muşamba"/>
+  <block-list:block block-list:abbreviated-name="muşanba" block-list:name="muşamba"/>
+  <block-list:block block-list:abbreviated-name="Muzur" block-list:name="Muzır"/>
+  <block-list:block block-list:abbreviated-name="muzur" block-list:name="muzır"/>
+  <block-list:block block-list:abbreviated-name="Münübüs" block-list:name="Minibüs"/>
+  <block-list:block block-list:abbreviated-name="münübüs" block-list:name="minibüs"/>
+  <block-list:block block-list:abbreviated-name="Müracat" block-list:name="Müracaat"/>
+  <block-list:block block-list:abbreviated-name="müracat" block-list:name="müracaat"/>
+  <block-list:block block-list:abbreviated-name="Mürivet" block-list:name="Mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="mürivet" block-list:name="mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="Mürüvet" block-list:name="Mürüvvet"/>
+  <block-list:block block-list:abbreviated-name="mürüvet" block-list:name="mürüvvet"/>
   <block-list:block block-list:abbreviated-name="Müsade" block-list:name="Müsaade"/>
   <block-list:block block-list:abbreviated-name="müsade" block-list:name="müsaade"/>
+  <block-list:block block-list:abbreviated-name="Müsayit" block-list:name="Müsait"/>
+  <block-list:block block-list:abbreviated-name="müsayit" block-list:name="müsait"/>
   <block-list:block block-list:abbreviated-name="Müsbet" block-list:name="Müspet"/>
   <block-list:block block-list:abbreviated-name="müsbet" block-list:name="müspet"/>
+  <block-list:block block-list:abbreviated-name="Müsvette" block-list:name="Müsvedde"/>
+  <block-list:block block-list:abbreviated-name="müsvette" block-list:name="müsvedde"/>
+  <block-list:block block-list:abbreviated-name="Mütaakip" block-list:name="Müteakip"/>
+  <block-list:block block-list:abbreviated-name="mütaakip" block-list:name="müteakip"/>
+  <block-list:block block-list:abbreviated-name="Mütahit" block-list:name="Müteahhit"/>
+  <block-list:block block-list:abbreviated-name="mütahit" block-list:name="müteahhit"/>
   <block-list:block block-list:abbreviated-name="Nisbet" block-list:name="Nispet"/>
   <block-list:block block-list:abbreviated-name="nisbet" block-list:name="nispet"/>
   <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
