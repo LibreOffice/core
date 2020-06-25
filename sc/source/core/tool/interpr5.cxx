@@ -325,15 +325,6 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         return nullptr;
     }
 
-    // Clamp the size of the matrix to rows which actually contain data.
-    // For e.g. SUM(IF over an entire column, this can make a big difference.
-    // Limit to ocEqual opcode for now, some opcodes behaviour differently if the
-    // input has empty space.
-    if (nTab1 == nTab2 && pCur->GetOpCode() == ocEqual)
-    {
-        pDok->ShrinkToDataArea(nTab1, nCol1, nRow1, nCol2, nRow2);
-    }
-
     SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
     SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
 
