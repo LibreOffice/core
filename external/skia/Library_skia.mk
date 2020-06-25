@@ -85,10 +85,12 @@ $(eval $(call gb_Library_set_include,skia,\
     -I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/skcms/ \
     -I$(call gb_UnpackedTarball_get_dir,skia)/third_party/vulkanmemoryallocator/ \
     -I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan/ \
+    -I$(SRCDIR)/external/skia/inc/ \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
     external/skia/source/SkMemory_malloc \
+    external/skia/source/skia_compiler \
 ))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
