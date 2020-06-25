@@ -2374,7 +2374,7 @@ uno::Reference< drawing::XShape >
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
                 const uno::Reference<
                 beans::XPropertySet > & xTextProperties,
-                double nRotation, const OUString& aName )
+                double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth )
 {
     //create shape and add to page
     uno::Reference< drawing::XShape > xShape(
@@ -2407,7 +2407,7 @@ uno::Reference< drawing::XShape >
             aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
             aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } ); // sal_Bool
             aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } ); // sal_Bool
-            aValueMap.insert( { "TextMaximumFrameWidth", uno::Any(rSize.Width) } ); // sal_Int32
+            aValueMap.insert({ "TextMaximumFrameWidth", uno::Any(nTextMaxWidth) }); // sal_Int32
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
