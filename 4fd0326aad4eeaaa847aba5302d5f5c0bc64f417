@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "9d29febc_cf148497",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 32
+      },
+      "lineNbr": 7134,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T18:25:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "897c8742_5ad2ea86",
+      "range": {
+        "startLine": 7134,
+        "startChar": 34,
+        "endLine": 7134,
+        "endChar": 43
+      },
+      "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41103166_6c5ee355",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 32
@@ -68,6 +92,30 @@
       "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9746b45_6883a004",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 32
+      },
+      "lineNbr": 7137,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T18:25:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41103166_6c5ee355",
+      "range": {
+        "startLine": 7137,
+        "startChar": 34,
+        "endLine": 7137,
+        "endChar": 55
+      },
+      "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
