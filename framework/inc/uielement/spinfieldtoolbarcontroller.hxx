@@ -56,14 +56,14 @@ class SpinfieldToolbarController final : public ComplexToolbarController
         void Modify();
         void GetFocus();
         void LoseFocus();
-        bool PreNotify( NotifyEvent const & rNEvt );
+        void Activate();
 
+        OUString FormatOutputString(double fValue);
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
         virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
         bool impl_getValue( const css::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
-        OUString impl_formatOutputString( double fValue );
 
         bool              m_bFloat,
                           m_bMaxSet,
