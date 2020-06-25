@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "733b535d_dd9ba96f",
+        "filename": "cui/UIConfig_cui.mk",
+        "patchSetId": 30
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "513b7d81_6a0b4686",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 36
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49cf454a_761ac661",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "dadc233f_7c268acd",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49cf454a_761ac661",
+      "range": {
+        "startLine": 52,
+        "startChar": 13,
+        "endLine": 52,
+        "endChar": 21
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63bea413_a54aa2f7",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-24T09:40:10Z",
       "side": 1,
       "message": "Why not an (unsigned) int instead?",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a7aa54_e5bbf791",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "I use this variable to set the label. So, I need this value as an OUString",
+      "parentUuid": "63bea413_a54aa2f7",
       "range": {
         "startLine": 54,
         "startChar": 4,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "9077d77d_51f14568",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fbd2a82_eedd7b11",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd9ae13a_d71b8e32",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -114,6 +210,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d000f4d8_d4a63d06",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd9ae13a_d71b8e32",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 29
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "da295f11_0d6e3387",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d8466e_1162bf78",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da4142be_974402fd",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -160,6 +304,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daf23d4b_749dd4b6",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da4142be_974402fd",
+      "range": {
+        "startLine": 95,
+        "startChar": 18,
+        "endLine": 95,
+        "endChar": 29
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "891ced18_1b38cfd7",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0739ea_341e2273",
+      "range": {
+        "startLine": 100,
+        "startChar": 18,
+        "endLine": 100,
+        "endChar": 29
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "544dc602_7d700331",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -206,6 +398,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf9f4b51_f59ec7c0",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "544dc602_7d700331",
+      "range": {
+        "startLine": 123,
+        "startChar": 18,
+        "endLine": 123,
+        "endChar": 29
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "c36975a4_ec2a5f0e",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37bb5650_a46ad0ca",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 63
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dce59ce2_3869f9a1",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -252,6 +492,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9844475_901e0f3d",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dce59ce2_3869f9a1",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 44
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "24b4233e_02ce3a48",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42220b32_33e62552",
+      "range": {
+        "startLine": 217,
+        "startChar": 8,
+        "endLine": 217,
+        "endChar": 37
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2406a8fe_5fcac6d9",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -298,6 +586,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db7a58da_d1cd1183",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2406a8fe_5fcac6d9",
+      "range": {
+        "startLine": 226,
+        "startChar": 50,
+        "endLine": 226,
+        "endChar": 57
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "12aab45a_bc588145",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bd72d7f_62f6ca5f",
+      "range": {
+        "startLine": 227,
+        "startChar": 35,
+        "endLine": 227,
+        "endChar": 43
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1698d3bb_f17bcb1f",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 30
@@ -344,6 +680,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d83b1b5_7bfcdf13",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1698d3bb_f17bcb1f",
+      "range": {
+        "startLine": 229,
+        "startChar": 35,
+        "endLine": 229,
+        "endChar": 57
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -393,6 +753,30 @@
     },
     {
       "key": {
+        "uuid": "bb659e5e_583e6e01",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fe13b04_0bbc9fc2",
+      "range": {
+        "startLine": 250,
+        "startChar": 37,
+        "endLine": 250,
+        "endChar": 57
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a98a145d_123d152d",
         "filename": "cui/source/factory/dlgfact.cxx",
         "patchSetId": 30
@@ -416,6 +800,30 @@
     },
     {
       "key": {
+        "uuid": "331a66a8_207c8fa6",
+        "filename": "cui/source/factory/dlgfact.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a98a145d_123d152d",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 30
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0847024_1c791f6a",
         "filename": "cui/source/factory/dlgfact.hxx",
         "patchSetId": 30
@@ -427,6 +835,30 @@
       "writtenOn": "2020-06-24T09:40:10Z",
       "side": 1,
       "message": "You have the same include both in the source and the header files. Best is to have it on the source (cxx) file, and put a forward declaration on top of the header file.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 30
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37340c36_2c5fa7cc",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "There is a problem with using forward declaration due to using std::unique_ptr.",
+      "parentUuid": "b0847024_1c791f6a",
       "range": {
         "startLine": 64,
         "startChar": 0,
@@ -462,6 +894,30 @@
     },
     {
       "key": {
+        "uuid": "0a99bd0b_0e03038c",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2424d35_e8ab7d05",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a003098_2d9772aa",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 30
@@ -482,6 +938,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8b13e0_8ce2273e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 30
+      },
+      "lineNbr": 7134,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a003098_2d9772aa",
+      "range": {
+        "startLine": 7134,
+        "startChar": 34,
+        "endLine": 7134,
+        "endChar": 49
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -508,6 +988,30 @@
     },
     {
       "key": {
+        "uuid": "cf4715ea_b3525c3d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 30
+      },
+      "lineNbr": 7137,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42320681_80930a4d",
+      "range": {
+        "startLine": 7137,
+        "startChar": 34,
+        "endLine": 7137,
+        "endChar": 56
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62afcf45_122dab7b",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 30
@@ -528,6 +1032,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6b2e8ce_b0de4346",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 30
+      },
+      "lineNbr": 7140,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62afcf45_122dab7b",
+      "range": {
+        "startLine": 7140,
+        "startChar": 34,
+        "endLine": 7140,
+        "endChar": 57
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -554,6 +1082,30 @@
     },
     {
       "key": {
+        "uuid": "6651bb4c_b11eaf9d",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00be41ce_87902ace",
+      "range": {
+        "startLine": 418,
+        "startChar": 12,
+        "endLine": 418,
+        "endChar": 102
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "481f251f_2a8f43e6",
         "filename": "sd/source/ui/view/drviews2.cxx",
         "patchSetId": 30
@@ -577,6 +1129,30 @@
     },
     {
       "key": {
+        "uuid": "1ebc9165_c2e17ab9",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 3476,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "481f251f_2a8f43e6",
+      "range": {
+        "startLine": 3476,
+        "startChar": 12,
+        "endLine": 3476,
+        "endChar": 104
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8655dfcc_35cbb26f",
         "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
         "patchSetId": 30
@@ -597,6 +1173,30 @@
       "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec53ba65_14c6e8d7",
+        "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-06-25T09:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8655dfcc_35cbb26f",
+      "range": {
+        "startLine": 80,
+        "startChar": 12,
+        "endLine": 80,
+        "endChar": 77
+      },
+      "revId": "284ddfbc9146ea70a41a625fc9e40f3a0d78e466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
