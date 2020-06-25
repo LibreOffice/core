@@ -22,6 +22,30 @@
       "revId": "fc3a391a898850df5a031949c49a65a76416e7c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba61edfc_7d52d136",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-25T18:00:31Z",
+      "side": 1,
+      "message": "I.e. we don\u0027t want to export \"paragraph-start-margin\", and \"paragraph-left-margin\", because they are not page margins, also these aren\u0027t part of sizeRelH OOXML extension.",
+      "parentUuid": "9ce502a1_38af7c7b",
+      "range": {
+        "startLine": 971,
+        "startChar": 115,
+        "endLine": 971,
+        "endChar": 125
+      },
+      "revId": "fc3a391a898850df5a031949c49a65a76416e7c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
