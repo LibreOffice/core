@@ -11,12 +11,13 @@
 #include <vcl/layout.hxx>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
-                                     const OString& rID)
+                                     const OString& rID, sal_uInt64 nLOKWindowId)
     : Control(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xBuilder.reset(
+        Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, nLOKWindowId));
     m_xContainer = m_xBuilder->weld_container(rID);
 
     SetBackground();
