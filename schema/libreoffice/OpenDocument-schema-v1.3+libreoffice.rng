@@ -2420,4 +2420,151 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="animation-element">
+    <rng:choice>
+      <!-- This is the new one! -->
+      <rng:element name="loext:animatePhysics">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="common-spline-anim-value-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="animate-physics-attlist"/>
+      </rng:element>
+      <!-- This is just copied (had to extend the choice here)! -->
+      <rng:element name="anim:animate">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="common-anim-spline-mode-attlist"/>
+        <rng:ref name="common-spline-anim-value-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+      </rng:element>
+      <rng:element name="anim:set">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-set-values-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+      </rng:element>
+      <rng:element name="anim:animateMotion">
+        <rng:ref name="anim-animate-motion-attlist"/>
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="common-spline-anim-value-attlist"/>
+      </rng:element>
+      <rng:element name="anim:animateColor">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="common-anim-spline-mode-attlist"/>
+        <rng:ref name="common-spline-anim-value-attlist"/>
+        <rng:ref name="anim-animate-color-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+      </rng:element>
+      <rng:element name="anim:animateTransform">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-named-target-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="anim-animate-transform-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+      </rng:element>
+      <rng:element name="anim:transitionFilter">
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:ref name="common-anim-add-accum-attlist"/>
+        <rng:ref name="common-anim-values-attlist"/>
+        <rng:ref name="common-anim-spline-mode-attlist"/>
+        <rng:ref name="anim-transition-filter-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+      </rng:element>
+      <rng:element name="anim:par">
+        <rng:ref name="common-anim-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="common-endsync-timing-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="animation-element"/>
+        </rng:zeroOrMore>
+      </rng:element>
+      <rng:element name="anim:seq">
+        <rng:ref name="common-anim-attlist"/>
+        <rng:ref name="common-endsync-timing-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="animation-element"/>
+        </rng:zeroOrMore>
+      </rng:element>
+      <rng:element name="anim:iterate">
+        <rng:ref name="common-anim-attlist"/>
+        <rng:ref name="anim-iterate-attlist"/>
+        <rng:ref name="common-timing-attlist"/>
+        <rng:ref name="common-endsync-timing-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="animation-element"/>
+        </rng:zeroOrMore>
+      </rng:element>
+      <rng:element name="anim:audio">
+        <rng:ref name="common-anim-attlist"/>
+        <rng:ref name="anim-audio-attlist"/>
+        <rng:ref name="common-basic-timing-attlist"/>
+      </rng:element>
+      <rng:element name="anim:command">
+        <rng:ref name="common-anim-attlist"/>
+        <rng:ref name="anim-command-attlist"/>
+        <rng:ref name="common-begin-end-timing-attlist"/>
+        <rng:ref name="common-anim-target-attlist"/>
+        <rng:zeroOrMore>
+          <rng:element name="anim:param">
+            <rng:attribute name="anim:name">
+              <rng:ref name="string"/>
+            </rng:attribute>
+            <rng:attribute name="anim:value">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:element>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:choice>
+  </rng:define>
+
+  <rng:define name="anim-bounciness">
+    <rng:data type="double">
+      <rng:param name="minExclusive">0</rng:param>
+      <rng:param name="maxInclusive">1</rng:param>
+    </rng:data>
+  </rng:define>
+
+  <rng:define name="nonNegativeDouble">
+    <rng:data type="double">
+      <rng:param name="minInclusive">0</rng:param>
+    </rng:data>
+  </rng:define>
+
+  <rng:define name="animate-physics-attlist">
+    <rng:optional>
+      <!-- default value: 0 -->
+      <rng:attribute name="loext:velocity-x">
+        <rng:ref name="double"/>
+      </rng:attribute>
+      <!-- default value: 0 -->
+      <rng:attribute name="loext:velocity-y">
+        <rng:ref name="double"/>
+      </rng:attribute>
+      <!-- default value: 0.1 -->
+      <rng:attribute name="loext:bounciness">
+        <rng:ref name="anim-bounciness"/>
+      </rng:attribute>
+      <!-- default value: 1 -->
+      <rng:attribute name="loext:density">
+        <rng:ref name="nonNegativeDouble"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
