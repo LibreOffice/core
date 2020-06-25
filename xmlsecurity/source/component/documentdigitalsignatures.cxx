@@ -57,6 +57,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#include <sfx2/digitalsignatures.hxx>
 
 #include <map>
 
@@ -68,7 +69,8 @@ using namespace css::xml::crypto;
 
 class DocumentDigitalSignatures
     : public cppu::WeakImplHelper<css::security::XDocumentDigitalSignatures,
-                                  css::lang::XInitialization, css::lang::XServiceInfo>
+                                  css::lang::XInitialization, css::lang::XServiceInfo>,
+      public sfx2::DigitalSignatures
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
@@ -101,12 +103,14 @@ private:
     chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
-    bool signWithCertificateImpl(
-        css::uno::Reference<css::security::XCertificate> const& xCertificate,
-        css::uno::Reference<css::embed::XStorage> const& xStorage,
-        css::uno::Reference<css::io::XStream> const& xStream, DocumentSignatureMode eMode);
+    bool
+    signWithCertificateImpl(const uno::Reference<frame::XModel>& /*xModel*/,
+                            css::uno::Reference<css::security::XCertificate> const& xCertificate,
+                            css::uno::Reference<css::embed::XStorage> const& xStorage,
+                            css::uno::Reference<css::io::XStream> const& xStream,
+                            DocumentSignatureMode eMode);
 
- public:
+public:
     explicit DocumentDigitalSignatures(
         const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
 
@@ -203,6 +207,13 @@ private:
     {
         mxParentWindow = rParentwindow;
     }
+
+    /// See sfx2::DigitalSignatures::SignModelWithCertificate().
+    bool
+    SignModelWithCertificate(const css::uno::Reference<css::frame::XModel>& xModel,
+                             const css::uno::Reference<css::security::XCertificate>& xCertificate,
+                             const css::uno::Reference<css::embed::XStorage>& xStorage,
+                             const css::uno::Reference<css::io::XStream>& xStream) override;
 };
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
@@ -779,7 +790,19 @@ sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
             css::uno::Reference<css::embed::XStorage> const & xStorage,
             css::uno::Reference<css::io::XStream> const & xStream)
 {
-    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Content);
+    uno::Reference<frame::XModel> xModel;
+    return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
+                                   DocumentSignatureMode::Content);
+}
+
+bool DocumentDigitalSignatures::SignModelWithCertificate(
+    const uno::Reference<frame::XModel>& xModel,
+    const css::uno::Reference<css::security::XCertificate>& xCertificate,
+    const css::uno::Reference<css::embed::XStorage>& xStorage,
+    const css::uno::Reference<css::io::XStream>& xStream)
+{
+    return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
+                                   DocumentSignatureMode::Content);
 }
 
 sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(
@@ -787,7 +810,9 @@ sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(
     css::uno::Reference<css::embed::XStorage> const& xStorage,
     css::uno::Reference<css::io::XStream> const& xStream)
 {
-    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Package);
+    uno::Reference<frame::XModel> xModel;
+    return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
+                                   DocumentSignatureMode::Package);
 }
 
 sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
@@ -795,14 +820,16 @@ sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
     css::uno::Reference<css::embed::XStorage> const& xStorage,
     css::uno::Reference<css::io::XStream> const& xStream)
 {
-    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Macros);
+    uno::Reference<frame::XModel> xModel;
+    return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
+                                   DocumentSignatureMode::Macros);
 }
 
 bool DocumentDigitalSignatures::signWithCertificateImpl(
+    const uno::Reference<frame::XModel>& xModel,
     css::uno::Reference<css::security::XCertificate> const& xCertificate,
     css::uno::Reference<css::embed::XStorage> const& xStorage,
-    css::uno::Reference<css::io::XStream> const& xStream,
-    DocumentSignatureMode eMode)
+    css::uno::Reference<css::io::XStream> const& xStream, DocumentSignatureMode eMode)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),
                "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
@@ -815,6 +842,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
     aSignatureManager.setStore(xStorage);
     aSignatureManager.getSignatureHelper().SetStorage(xStorage, m_sODFVersion);
     aSignatureManager.setSignatureStream(xStream);
+    aSignatureManager.setModel(xModel);
 
     Reference<XXMLSecurityContext> xSecurityContext;
     Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);

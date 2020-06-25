@@ -57,15 +57,9 @@ bool GetSignatureLinePage(const uno::Reference<frame::XModel>& xModel, sal_Int32
 }
 
 /// If the currently selected shape is a Draw signature line, export that to PDF.
-void GetSignatureLineShape(sal_Int32& rPage, std::vector<sal_Int8>& rSignatureLineShape)
+void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int32& rPage,
+                           std::vector<sal_Int8>& rSignatureLineShape)
 {
-    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
-    if (!pObjectShell)
-    {
-        return;
-    }
-
-    uno::Reference<frame::XModel> xModel = pObjectShell->GetBaseModel();
     if (!xModel.is())
     {
         return;
@@ -214,7 +208,8 @@ void PDFSignatureHelper::SetDescription(const OUString& rDescription)
     m_aDescription = rDescription;
 }
 
-bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStream, bool bAdES)
+bool PDFSignatureHelper::Sign(const uno::Reference<frame::XModel>& xModel,
+                              const uno::Reference<io::XInputStream>& xInputStream, bool bAdES)
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     vcl::filter::PDFDocument aDocument;
@@ -226,7 +221,7 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
 
     sal_Int32 nPage = 0;
     std::vector<sal_Int8> aSignatureLineShape;
-    GetSignatureLineShape(nPage, aSignatureLineShape);
+    GetSignatureLineShape(xModel, nPage, aSignatureLineShape);
     if (nPage > 0)
     {
         // UNO page number is 1-based.
