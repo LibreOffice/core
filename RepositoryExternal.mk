@@ -131,6 +131,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,skia)/include/third_party/vulkan \
 	-I$(call gb_UnpackedTarball_get_dir,skia)/tools/gpu \
 	-I$(call gb_UnpackedTarball_get_dir,skia) \
+	-I$(SRCDIR)/external/skia/inc/ \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),skia)
