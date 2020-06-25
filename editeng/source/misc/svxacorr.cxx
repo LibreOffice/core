@@ -321,6 +321,7 @@ static constexpr sal_Unicode cRightSingleAngleQuote = 0x203A;
 const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,
 const sal_Unicode aStopDoubleAngleQuoteEnd[] = { cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0x201D, 0x201E, 0 }; // preceding >>
 const sal_Unicode aStopSingleQuoteEnd[] = { 0x201A, 0x2018, 0x201C, 0x201E, 0 };
+const sal_Unicode aStopSingleQuoteEndRuUa[] = { 0x201E, 0x201C, cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0 };
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
@@ -1355,19 +1356,30 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                     {
                         eType = ACQuotes::DoubleAngleQuote;
                     }
-                    // tdf#128860 use apostrophe outside of second level quotation in Czech, German, Icelandic,
-                    // Slovak and Slovenian instead of the – in this case, bad – closing quotation mark U+2018.
                     else if ( bSingle && nInsPos && !bSttQuote &&
-                        ( primary(eLang) == primary(LANGUAGE_GERMAN) || eLang.anyOf (
-                             LANGUAGE_CZECH,
-                             LANGUAGE_ICELANDIC,
-                             LANGUAGE_SLOVAK,
-                             LANGUAGE_SLOVENIAN ) ) &&
-                        !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEnd[0],  aStopSingleQuoteEnd + 1 ) )
+                        // tdf#128860 use apostrophe outside of second level quotation in Czech, German, Icelandic,
+                        // Slovak and Slovenian instead of the – in this case, bad – closing quotation mark U+2018.
+                        // tdf#123786 the same for Russian and Ukrainian
+                        ( ( eLang.anyOf (
+                                 LANGUAGE_CZECH,
+                                 LANGUAGE_GERMAN,
+                                 LANGUAGE_GERMAN_SWISS,
+                                 LANGUAGE_GERMAN_AUSTRIAN,
+                                 LANGUAGE_GERMAN_LUXEMBOURG,
+                                 LANGUAGE_GERMAN_LIECHTENSTEIN,
+                                 LANGUAGE_ICELANDIC,
+                                 LANGUAGE_SLOVAK,
+                                 LANGUAGE_SLOVENIAN ) &&
+                            !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEnd[0],  aStopSingleQuoteEnd + 1 ) ) ||
+                          ( eLang.anyOf (
+                                 LANGUAGE_RUSSIAN,
+                                 LANGUAGE_UKRAINIAN ) &&
+                            !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEndRuUa[0],  aStopSingleQuoteEndRuUa + 1 ) ) ) )
                     {
                         LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
                         CharClass& rCC = GetCharClass( eLang );
-                        if ( rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEnd[0]) &&
+                        if ( ( rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEnd[0]) ||
+                             rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEndRuUa[0]) ) &&
                              // use apostrophe only after letters, not after digits or punctuation
                              rCC.isLetter(rTxt, nInsPos-1) )
                         {
