@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31e6720c_1b27a6f6",
+        "filename": "cui/source/factory/dlgfact.cxx",
+        "patchSetId": 31
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-25T09:32:08Z",
+      "side": 1,
+      "message": "You still have the same include both in the header and the source file. One of them needs to go.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 30
+      },
+      "revId": "cf377ed309d728930703f6440a35fe3f4b967c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41a54b28_7c0f7e96",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 31
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-25T09:32:08Z",
+      "side": 1,
+      "message": "You are including the header file of this class. So why are you still forward-declaring it here?",
+      "range": {
+        "startLine": 757,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 22
+      },
+      "revId": "cf377ed309d728930703f6440a35fe3f4b967c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
