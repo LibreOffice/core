@@ -247,7 +247,7 @@ public:
                 const css::awt::Point& rPosition,
                 css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
-                double nRotation, const OUString& aName );
+                double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
 
     css::uno::Reference< css::drawing::XShape >
         createInvisibleRectangle(
