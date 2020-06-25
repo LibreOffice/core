@@ -97,6 +97,8 @@ private:
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
     {
+        if (bitmap == nullptr)
+            return stream << "(null)";
         // I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"

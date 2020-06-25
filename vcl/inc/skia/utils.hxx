@@ -122,6 +122,8 @@ template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      const sk_sp<SkImage>& image)
 {
+    if (image == nullptr)
+        return stream << "(null)";
     return stream << *image;
 }
 
