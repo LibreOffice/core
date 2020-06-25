@@ -2901,8 +2901,9 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
         if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
         {
+            // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
-            if (GetProperty(rXPropSet, "TextAutoGrowHeight"))
+            if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, "TextAutoGrowHeight"))
                 mAny >>= bTextAutoGrowHeight;
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
         }
