@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9275ae89_dab09b9a",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 32
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-25T17:18:16Z",
+      "side": 1,
+      "message": "Makes no sense to show extensions that can\u0027t be installed. So better filter out.",
+      "range": {
+        "startLine": 396,
+        "startChar": 95,
+        "endLine": 396,
+        "endChar": 117
+      },
+      "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
