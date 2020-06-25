@@ -219,7 +219,7 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     OUString aCacheFolder = getCacheFolder();
 
     OUString aCacheFile(aCacheFolder + "/opengl_device.log");
-    SvFileStream aOpenGLLogFile(aCacheFile, StreamMode::WRITE);
+    SvFileStream aOpenGLLogFile(aCacheFile, StreamMode::WRITE|StreamMode::TRUNC);
 
     writeToLog(aOpenGLLogFile, "DriverVersion", maDriverVersion);
     writeToLog(aOpenGLLogFile, "DriverDate", maDriverDate);
