@@ -189,6 +189,8 @@ void PDFDocument::SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine)
     m_aSignatureLine = rSignatureLine;
 }
 
+void PDFDocument::SetSignaturePage(size_t nPage) { m_nSignaturePage = nPage; }
+
 sal_uInt32 PDFDocument::GetNextSignature()
 {
     sal_uInt32 nRet = 0;
@@ -960,17 +962,27 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     sal_Int32 nAppearanceId = WriteAppearanceObject(aSignatureRectangle);
 
     std::vector<PDFObjectElement*> aPages = GetPages();
-    if (aPages.empty() || !aPages[0])
+    if (aPages.empty())
     {
         SAL_WARN("vcl.filter", "PDFDocument::Sign: found no pages");
         return false;
     }
 
-    PDFObjectElement& rFirstPage = *aPages[0];
-    sal_Int32 nAnnotId
-        = WriteAnnotObject(rFirstPage, nSignatureId, nAppearanceId, aSignatureRectangle);
+    size_t nPage = 0;
+    if (m_nSignaturePage < aPages.size())
+    {
+        nPage = m_nSignaturePage;
+    }
+    if (!aPages[nPage])
+    {
+        SAL_WARN("vcl.filter", "PDFDocument::Sign: failed to find page #" << nPage);
+        return false;
+    }
 
-    if (!WritePageObject(rFirstPage, nAnnotId))
+    PDFObjectElement& rPage = *aPages[nPage];
+    sal_Int32 nAnnotId = WriteAnnotObject(rPage, nSignatureId, nAppearanceId, aSignatureRectangle);
+
+    if (!WritePageObject(rPage, nAnnotId))
     {
         SAL_WARN("vcl.filter", "PDFDocument::Sign: failed to write the updated Page object");
         return false;
