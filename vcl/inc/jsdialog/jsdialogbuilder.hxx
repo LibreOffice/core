@@ -53,6 +53,7 @@ class JSInstanceBuilder : public SalInstanceBuilder
     /// used in case of tab pages where dialog is not a direct top level
     VclPtr<vcl::Window> m_aParentDialog;
     bool m_bHasTopLevelDialog;
+    bool m_bIsNotebookbar;
 
     friend VCL_DLLPUBLIC weld::Widget* jsdialog::FindWeldWidgetsMap(sal_uInt64 nWindowId,
                                                                     const OString& rWidget);
