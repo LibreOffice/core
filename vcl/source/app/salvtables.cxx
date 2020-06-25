@@ -6140,7 +6140,7 @@ weld::Builder* SalInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     return new SalInstanceBuilder(pParentWidget, rUIRoot, rUIFile);
 }
 
-weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile, sal_uInt64)
 {
     return new SalInstanceBuilder(pParent, rUIRoot, rUIFile);
 }
