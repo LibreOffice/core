@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47fa7eb0_2a33a242",
+        "filename": "sw/qa/uitest/writer_tests7/tdf133348.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-25T09:04:58Z",
+      "side": 1,
+      "message": "Could there be a timing issue here?  \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/62483/\u003e failed spuriously with\n\n  ERROR: test_tdf133348 (tdf133348.tdf133348)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sw/qa/uitest/writer_tests7/tdf133348.py\", line 44, in test_tdf133348\n      self.assertEqual(xEnum.nextElement().Author.strip(), \u0027Known Author\u0027)\n  tdf133348.com.sun.star.container.NoSuchElementException: SwXFieldEnumeration::nextElement",
+      "revId": "9af6c96ced9c564a3625473cde732b0e366f668d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
