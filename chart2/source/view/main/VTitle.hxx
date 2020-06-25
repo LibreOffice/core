@@ -44,7 +44,8 @@ public:
              , const OUString& rCID );
 
     void    createShapes( const css::awt::Point& rPos
-                          , const css::awt::Size& rReferenceSize );
+                          , const css::awt::Size& rReferenceSize
+                          , const css::awt::Size& nTextMaxWidth );
 
     double getRotationAnglePi() const;
     css::awt::Size getUnrotatedSize() const;
