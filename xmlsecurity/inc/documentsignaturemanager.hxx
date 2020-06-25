@@ -44,6 +44,10 @@ namespace embed
 {
 class XStorage;
 }
+namespace frame
+{
+class XModel;
+}
 namespace graphic
 {
 class XGraphic;
@@ -69,6 +73,7 @@ private:
     DocumentSignatureMode const meSignatureMode;
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> m_manifest;
     css::uno::Reference<css::io::XStream> mxSignatureStream;
+    css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::io::XStream> mxTempSignatureStream;
     /// Storage containing all OOXML signatures, unused for ODF.
     css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
@@ -125,6 +130,7 @@ public:
     {
         mxSignatureStream = xSignatureStream;
     }
+    void setModel(const css::uno::Reference<css::frame::XModel>& xModel);
     const css::uno::Reference<css::embed::XStorage>& getStore() const { return mxStore; }
     DocumentSignatureMode getSignatureMode() const { return meSignatureMode; }
     SignatureInformations& getCurrentSignatureInformations()

@@ -42,6 +42,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
@@ -117,6 +118,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/fltrcfg.hxx>
+#include <sfx2/digitalsignatures.hxx>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -3767,8 +3769,9 @@ void SfxMedium::CreateTempFileNoCopy()
     CloseStorage();
 }
 
-bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignature,
-                                                    const Reference<XCertificate>& xCertificate)
+bool SfxMedium::SignDocumentContentUsingCertificate(
+    const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
+    const Reference<XCertificate>& xCertificate)
 {
     bool bChanges = false;
 
@@ -3784,6 +3787,11 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
             comphelper::getProcessComponentContext(), aODFVersion, bHasValidDocumentSignature ) );
+    auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
+    if (!xModelSigner)
+    {
+        return bChanges;
+    }
 
     uno::Reference< embed::XStorage > xWriteableZipStor;
 
@@ -3830,7 +3838,8 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
                 if (GetFilter() && GetFilter()->IsOwnFormat())
                     xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
-                bool bSuccess = xSigner->signDocumentWithCertificate(xCertificate, GetZipStorageToSign_Impl(), xStream);
+                bool bSuccess = xModelSigner->SignModelWithCertificate(
+                    xModel, xCertificate, GetZipStorageToSign_Impl(), xStream);
 
                 if (bSuccess)
                 {
@@ -3850,8 +3859,8 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
                 uno::Reference<io::XStream> xStream;
 
                     // We need read-write to be able to add the signature relation.
-                bool bSuccess =xSigner->signDocumentWithCertificate(
-                        xCertificate, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+                bool bSuccess = xModelSigner->SignModelWithCertificate(
+                    xModel, xCertificate, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
 
                 if (bSuccess)
                 {
@@ -3868,7 +3877,8 @@ bool SfxMedium::SignDocumentContentUsingCertificate(bool bHasValidDocumentSignat
                 // Something not ZIP based: e.g. PDF.
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
                 uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-                if (xSigner->signDocumentWithCertificate(xCertificate, uno::Reference<embed::XStorage>(), xStream))
+                if (xModelSigner->SignModelWithCertificate(
+                        xModel, xCertificate, uno::Reference<embed::XStorage>(), xStream))
                     bChanges = true;
             }
         }
