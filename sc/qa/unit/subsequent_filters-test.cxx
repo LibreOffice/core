@@ -246,6 +246,7 @@ public:
     void testBackgroundColorStandardXLSXML();
     void testTdf131536();
     void testTdf85617();
+    void testTdf134234();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testTdf131536);
     CPPUNIT_TEST(testTdf85617);
+    CPPUNIT_TEST(testTdf134234);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
@@ -3856,6 +3858,19 @@ void ScFiltersTest::testTdf85617()
     ScAddress aPos(2,2,0);
     //Without the fix in place, it would be Err:509
     CPPUNIT_ASSERT_EQUAL(4.5, rDoc.GetValue(aPos));
+}
+
+void ScFiltersTest::testTdf134234()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf134234.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1,0,1)));
+
+    //Without the fix in place, SUMPRODUCT would have returned 0
+    CPPUNIT_ASSERT_EQUAL(36.54, rDoc.GetValue(ScAddress(2,0,1)));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(833), static_cast<sal_uInt32>(rDoc.GetValue(ScAddress(3,0,1))));
 }
 
 void ScFiltersTest::testNamedExpressionsXLSXML()
