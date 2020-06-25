@@ -1605,6 +1605,7 @@ IMPL_LINK_NOARG(SvxConfigPage, ImplUpdateDataHdl, Timer*, void)
 {
     OUString aSearchTerm(m_xSearchEdit->get_text());
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), aSearchTerm, GetSaveInData());
+    SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, weld::Entry&, void)
