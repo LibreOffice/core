@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f3c6919_b11901bb",
+        "filename": "vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-06-25T07:34:58Z",
+      "side": 1,
+      "message": "At least with current master, an `#include \u003ccom/sun/star/ui/dialogs/ControlActions.hpp\u003e` seems to be missing:\n\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx: In member function ‘virtual void Gtk3KDE5FilePicker::setValue(sal_Int16, sal_Int16, const com::sun::star::uno::Any\u0026)’:\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:186:14: error: ‘ControlActions’ has not been declared\n  186 |         case ControlActions::ADD_ITEM:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:189:14: error: ‘ControlActions’ has not been declared\n  189 |         case ControlActions::ADD_ITEMS:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:192:14: error: ‘ControlActions’ has not been declared\n  192 |         case ControlActions::DELETE_ITEM:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:193:14: error: ‘ControlActions’ has not been declared\n  193 |         case ControlActions::SET_SELECT_ITEM:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:196:14: error: ‘ControlActions’ has not been declared\n  196 |         case ControlActions::DELETE_ITEMS:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx: In member function ‘virtual com::sun::star::uno::Any Gtk3KDE5FilePicker::getValue(sal_Int16, sal_Int16)’:\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:232:14: error: ‘ControlActions’ has not been declared\n  232 |         case ControlActions::GET_ITEMS:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:235:14: error: ‘ControlActions’ has not been declared\n  235 |         case ControlActions::GET_SELECTED_ITEM:\n      |              ^~~~~~~~~~~~~~\n/home/michi/development/git/libreoffice/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx:238:14: error: ‘ControlActions’ has not been declared\n  238 |         case ControlActions::GET_SELECTED_ITEM_INDEX:\n      |              ^~~~~~~~~~~~~~\nmake[1]: *** [/home/michi/development/git/libreoffice/solenv/gbuild/LinkTarget.mk:301: /home/michi/development/git/libreoffice/workdir/CxxObject/vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.o] Error 1\nmake[1]: *** Waiting for unfinished jobs....\nmake: *** [Makefile:282: build] Error 2",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 78
+      },
+      "revId": "58b07ed9e746f115532193fe3b83ebcc24b9f654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
