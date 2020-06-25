@@ -2901,9 +2901,14 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
         if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
         {
+            // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
-            if (GetProperty(rXPropSet, "TextAutoGrowHeight"))
+            uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
+            auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(GetSdrObjectFromXShape(xShape)) : nullptr;
+            if (pSdrObjCustomShape && GetProperty(rXPropSet, "TextAutoGrowHeight"))
+            {
                 mAny >>= bTextAutoGrowHeight;
+            }
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
         }
         if (GetDocumentType() == DOCUMENT_PPTX)
