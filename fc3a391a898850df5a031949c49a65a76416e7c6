@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ce502a1_38af7c7b",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-25T17:49:01Z",
+      "side": 1,
+      "message": "I think, we must use PAGE_LEFT here too, but with checking (setting?) HoriMirroredOnEvenPages to convert the OOXML extension to OpenDocument/UNO better, if it\u0027s possible.\n\nSee git grep HoriMirroredOnEvenPages -- writerfilter",
+      "range": {
+        "startLine": 971,
+        "startChar": 115,
+        "endLine": 971,
+        "endChar": 125
+      },
+      "revId": "fc3a391a898850df5a031949c49a65a76416e7c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
