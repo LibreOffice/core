@@ -29,13 +29,20 @@ void SvtBroadcaster::Normalize() const
     if (!mbNormalized)
     {
         // Add() only appends new values, so often the container will be sorted expect for one
-        // or few last items. For larger containers it is much more efficient to just sort
-        // the unsorted part and then merge.
+        // or few last items. For larger containers it is much more efficient to just handle
+        // the unsorted part.
         if(maListeners.size() > 100)
         {
             auto sortedEnd = std::is_sorted_until(maListeners.begin(),maListeners.end());
-            if( o3tl::make_unsigned( sortedEnd - maListeners.begin()) > maListeners.size() * 3 / 4 )
-            {
+            if( maListeners.end() - sortedEnd == 1 )
+            {   // Just one item, insert it in the right place.
+                SvtListener* item = maListeners.back();
+                maListeners.pop_back();
+                maListeners.insert( std::upper_bound( maListeners.begin(), maListeners.end(), item ), item );
+                mbNormalized = true;
+            }
+            else if( o3tl::make_unsigned( sortedEnd - maListeners.begin()) > maListeners.size() * 3 / 4 )
+            {   // Sort the unsorted part and then merge.
                 std::sort( sortedEnd, maListeners.end());
                 std::inplace_merge( maListeners.begin(), sortedEnd, maListeners.end());
                 mbNormalized = true;
