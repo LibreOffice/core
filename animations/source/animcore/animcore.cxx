@@ -291,7 +291,7 @@ private:
     const sal_Int16 mnNodeType;
 
     // for XTypeProvider
-    static std::array<Sequence< Type >*, 12> mpTypes;
+    static std::array<Sequence< Type >*, 13> mpTypes;
 
     // attributes for the XAnimationNode interface implementation
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
@@ -394,7 +394,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 }
 
 
-std::array<Sequence< Type >*, 12> AnimationNode::mpTypes = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+std::array<Sequence< Type >*, 13> AnimationNode::mpTypes = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
 :   maChangeListener(maMutex),
@@ -565,6 +565,16 @@ static OUString getImplementationName_ANIMATEMOTION()
     return "animcore::AnimateMotion";
 }
 
+static Sequence<OUString> getSupportedServiceNames_ANIMATEPHYSICS()
+{
+    return { "com.sun.star.animations.AnimatePhysics" };
+}
+
+static OUString getImplementationName_ANIMATEPHYSICS()
+{
+    return "animcore::AnimatePhysics";
+}
+
 static Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
 {
     return { "com.sun.star.animations.AnimateTransform" };
@@ -658,6 +668,12 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
                 static_cast< XAnimate * >( static_cast< XAnimateMotion * >(this) ),
                 static_cast< XAnimateMotion * >( this ) );
             break;
+        case AnimationNodeType::ANIMATEPHYSICS:
+            aRet = ::cppu::queryInterface(
+                aType,
+                static_cast< XAnimate * >( static_cast< XAnimateMotion * >(this) ),
+                static_cast< XAnimateMotion * >( this ) );
+            break;
         case AnimationNodeType::ANIMATECOLOR:
             aRet = ::cppu::queryInterface(
                 aType,
@@ -717,6 +733,7 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         8, // TRANSITIONFILTER
         8, // AUDIO
         8, // COMMAND
+        8, // ANIMATEPHYSICS
     };
 
     // collect types
@@ -747,6 +764,9 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         pTypeAr[nPos++] = cppu::UnoType<XAnimate>::get();
         break;
     case AnimationNodeType::ANIMATEMOTION:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
+        break;
+    case AnimationNodeType::ANIMATEPHYSICS:
         pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
         break;
     case AnimationNodeType::ANIMATECOLOR:
@@ -817,6 +837,8 @@ OUString AnimationNode::getImplementationName()
         return getImplementationName_ANIMATECOLOR();
     case AnimationNodeType::ANIMATEMOTION:
         return getImplementationName_ANIMATEMOTION();
+    case AnimationNodeType::ANIMATEPHYSICS:
+        return getImplementationName_ANIMATEPHYSICS();
     case AnimationNodeType::TRANSITIONFILTER:
         return getImplementationName_TRANSITIONFILTER();
     case AnimationNodeType::ANIMATETRANSFORM:
@@ -854,6 +876,8 @@ Sequence< OUString > AnimationNode::getSupportedServiceNames()
         return getSupportedServiceNames_ANIMATECOLOR();
     case AnimationNodeType::ANIMATEMOTION:
         return getSupportedServiceNames_ANIMATEMOTION();
+    case AnimationNodeType::ANIMATEPHYSICS:
+        return getSupportedServiceNames_ANIMATEPHYSICS();
     case AnimationNodeType::TRANSITIONFILTER:
         return getSupportedServiceNames_TRANSITIONFILTER();
     case AnimationNodeType::ANIMATETRANSFORM:
@@ -2039,6 +2063,13 @@ com_sun_star_animations_AnimateMotion_get_implementation(css::uno::XComponentCon
                                                              css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATEMOTION));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_animations_AnimatePhysics_get_implementation(css::uno::XComponentContext*,
+                                                             css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ANIMATEPHYSICS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
