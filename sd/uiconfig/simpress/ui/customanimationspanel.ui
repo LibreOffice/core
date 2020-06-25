@@ -290,6 +290,7 @@
                   <item translatable="yes" context="customanimationspanel|categorylb">Exit</item>
                   <item translatable="yes" context="customanimationspanel|categorylb">Motion Paths</item>
                   <item translatable="yes" context="customanimationspanel|categorylb">Misc Effects</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Simulated Motion</item>
                 </items>
               </object>
               <packing>

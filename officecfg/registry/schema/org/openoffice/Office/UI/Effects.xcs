@@ -143,6 +143,11 @@
           <desc>Contains all the categories that don't fit anywhere else."</desc>
         </info>
       </set>
+      <set oor:name="MotionSimulated" oor:node-type="PresetCategory">
+        <info>
+          <desc>Contains the categories for simulated animation effects."</desc>
+        </info>
+      </set>
     </group>
   </component>
 </oor:component-schema>

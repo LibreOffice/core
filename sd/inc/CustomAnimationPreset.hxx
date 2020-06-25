@@ -105,6 +105,7 @@ public:
     SAL_DLLPRIVATE const PresetCategoryList& getExitPresets() const { return maExitPresets; }
     SAL_DLLPRIVATE const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
     SAL_DLLPRIVATE const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getMotionSimulatedPresets() const { return maMotionSimulatedPresets; }
 
     SAL_DLLPRIVATE void changePresetSubType( const CustomAnimationEffectPtr& pEffect, const OUString& rPresetSubType ) const;
 
@@ -127,6 +128,7 @@ private:
     PresetCategoryList maExitPresets;
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
+    PresetCategoryList maMotionSimulatedPresets;
 
     //! Maps per-language the animation presets.
     SAL_DLLPRIVATE static std::map<OUString, CustomAnimationPresets>  mPresetsMap;

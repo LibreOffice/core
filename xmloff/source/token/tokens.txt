@@ -2621,6 +2621,7 @@ additive
 multiply
 animate
 animateMotion
+animateSimulation
 animateTransform
 animateColor
 transitionFilter
@@ -2803,6 +2804,7 @@ entrance
 exit
 emphasis
 motion-path
+motion-simulated
 ole-action
 media-call
 on-click

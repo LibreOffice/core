@@ -585,6 +585,7 @@ void CustomAnimationPane::updateControls()
             case EffectPresetClass::EMPHASIS: nCategoryPos = 1; break;
             case EffectPresetClass::EXIT: nCategoryPos = 2; break;
             case EffectPresetClass::MOTIONPATH: nCategoryPos = 3; break;
+            case EffectPresetClass::MOTIONSIMULATION: nCategoryPos = 5; break;
             default:
                 break;
         }
@@ -2183,6 +2184,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
         case 2:rCategoryList = rPresets.getExitPresets();break;
         case 3:rCategoryList = rPresets.getMotionPathsPresets();break;
         case 4:rCategoryList = rPresets.getMiscPresets();break;
+        case 5:rCategoryList = rPresets.getMotionSimulatedPresets();break;
     }
 
     sal_Int32 nFirstEffect = -1;

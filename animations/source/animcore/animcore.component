@@ -31,6 +31,10 @@
       constructor="com_sun_star_animations_AnimateMotion_get_implementation">
     <service name="com.sun.star.animations.AnimateMotion"/>
   </implementation>
+    <implementation name="animcore::AnimateSimulation"
+      constructor="com_sun_star_animations_AnimateSimulation_get_implementation">
+    <service name="com.sun.star.animations.AnimateSimulation"/>
+  </implementation>
   <implementation name="animcore::AnimateSet"
       constructor="com_sun_star_animations_AnimateSet_get_implementation">
     <service name="com.sun.star.animations.AnimateSet"/>

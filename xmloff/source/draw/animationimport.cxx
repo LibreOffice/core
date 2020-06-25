@@ -459,6 +459,8 @@ AnimationNodeContext::AnimationNodeContext(
                 pServiceName = "com.sun.star.animations.AnimateSet"; break;
             case XML_ANIMATEMOTION:
                 pServiceName = "com.sun.star.animations.AnimateMotion"; break;
+            case XML_ANIMATESIMULATION:
+                pServiceName = "com.sun.star.animations.AnimateSimulation"; break;
             case XML_ANIMATECOLOR:
                 pServiceName = "com.sun.star.animations.AnimateColor"; break;
             case XML_ANIMATETRANSFORM:

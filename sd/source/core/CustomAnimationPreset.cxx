@@ -349,6 +349,8 @@ void CustomAnimationPresets::importResources()
         importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/MotionPaths", maMotionPathsPresets );
 
         importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Misc", maMiscPresets );
+
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/MotionSimulated", maMotionSimulatedPresets );
     }
     catch (const lang::WrappedTargetException&)
     {
@@ -502,6 +504,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
     case EffectPresetClass::EXIT:       pCategoryList = &maExitPresets; break;
     case EffectPresetClass::EMPHASIS:   pCategoryList = &maEmphasisPresets; break;
     case EffectPresetClass::MOTIONPATH: pCategoryList = &maMotionPathsPresets; break;
+    case EffectPresetClass::MOTIONSIMULATION: pCategoryList = &maMotionSimulatedPresets; break;
     default:
         pCategoryList = nullptr;
     }

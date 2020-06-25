@@ -357,6 +357,7 @@ const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectPresetClass[] =
     { XML_MOTION_PATH,  EffectPresetClass::MOTIONPATH },
     { XML_OLE_ACTION,   EffectPresetClass::OLEACTION },
     { XML_MEDIA_CALL,   EffectPresetClass::MEDIACALL },
+    { XML_MOTION_SIMULATED, EffectPresetClass::MOTIONSIMULATION },
     { XML_TOKEN_INVALID, 0 }
 };
 const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectNodeType[] =
@@ -697,6 +698,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         case AnimationNodeType::ANIMATE:
         case AnimationNodeType::SET:
         case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATESIMULATED:
         case AnimationNodeType::ANIMATECOLOR:
         case AnimationNodeType::ANIMATETRANSFORM:
         case AnimationNodeType::TRANSITIONFILTER:
@@ -947,6 +949,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         case AnimationNodeType::ANIMATE:
         case AnimationNodeType::SET:
         case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATESIMULATED:
         case AnimationNodeType::ANIMATECOLOR:
         case AnimationNodeType::ANIMATETRANSFORM:
         case AnimationNodeType::TRANSITIONFILTER:
@@ -1089,6 +1092,10 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         {
             eAttributeName = XML_ANIMATEMOTION;
         }
+        else if( nNodeType == AnimationNodeType::ANIMATESIMULATED )
+        {
+            eAttributeName = XML_ANIMATESIMULATION;
+        }
         else
         {
             OUString sTemp( xAnimate->getAttributeName() );
@@ -1230,6 +1237,15 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
 
             // TODO: origin = ( parent | layout )
+            aTemp = xAnimateMotion->getOrigin();
+        }
+        break;
+
+        case AnimationNodeType::ANIMATESIMULATED:
+        {
+            eElementToken = XML_ANIMATESIMULATION;
+
+            Reference< XAnimateMotion > xAnimateMotion( xAnimate, UNO_QUERY_THROW );
             aTemp = xAnimateMotion->getOrigin();
         }
         break;
@@ -1437,6 +1453,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_HEIGHT:
         case XML_ANIMATETRANSFORM:
         case XML_ANIMATEMOTION:
+        case XML_ANIMATESIMULATION:
         {
             if( auto aString = o3tl::tryAccess<OUString>(rValue) )
             {

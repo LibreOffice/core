@@ -252,6 +252,8 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem(const OUString& aDesc
         msEffectName = SdResId(STR_CUSTOMANIMATION_EMPHASIS); break;
     case EffectPresetClass::MOTIONPATH:
         msEffectName = SdResId(STR_CUSTOMANIMATION_MOTION_PATHS); break;
+    case EffectPresetClass::MOTIONSIMULATION:
+        msEffectName = SdResId(STR_CUSTOMANIMATION_MOTION_SIMULATION); break;
     default:
         msEffectName = SdResId(STR_CUSTOMANIMATION_MISC); break;
     }
@@ -371,6 +373,7 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
     case EffectPresetClass::EMPHASIS:
         sImage = BMP_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
     case EffectPresetClass::MOTIONPATH:
+    case EffectPresetClass::MOTIONSIMULATION:
         sImage = BMP_CUSTOMANIMATION_MOTION_PATH; break;
     case EffectPresetClass::OLEACTION:
         sImage = BMP_CUSTOMANIMATION_OLE; break;
