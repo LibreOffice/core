@@ -192,18 +192,18 @@ void WriterInspectorTextPanel::GetPropertyValues(const beans::Property rProperty
         rString += (iValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
                                                      : OUStringLiteral("normal");
     }
-    else if ((rAny >>= fValue) || fValue)
+    else if ((rAny >>= fValue) && fValue)
     {
         if (rString == "CharWeight     ")
             rString += (fValue > 100) ? OUStringLiteral("bold") : OUStringLiteral("normal");
         else
             rString += OUString::number((round(fValue * 100)) / 100.00);
     }
-    else if ((rAny >>= sValue) || sValue)
+    else if ((rAny >>= sValue) && sValue)
     {
         rString += OUString::number(sValue);
     }
-    else if ((rAny >>= lValue) || lValue)
+    else if ((rAny >>= lValue) && lValue)
     {
         if (rString == "CharColor     ")
             rString += OUString::number(sal_Int16(lValue));
