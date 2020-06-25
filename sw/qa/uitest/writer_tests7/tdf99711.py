@@ -40,7 +40,11 @@ class tdf99711(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
 
+        #wait until the sidebar is available
+        self.ui_test.wait_until_child_is_available(xWriterEdit, 'selectwidth')
         self.assertEqual(get_state_as_dict(xWriterEdit.getChild('selectwidth'))['Text'], '10.00 mm')
+
+        self.ui_test.wait_until_child_is_available(xWriterEdit, 'selectheight')
         self.assertEqual(get_state_as_dict(xWriterEdit.getChild('selectheight'))['Text'], '10.00 mm')
 
         self.xUITest.executeCommand(".uno:Sidebar")
