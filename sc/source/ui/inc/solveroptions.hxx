@@ -111,6 +111,7 @@ class ScSolverValueDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Frame> m_xFrame;
     std::unique_ptr<weld::Entry> m_xEdValue;
+    double m_fMaxValue;
 
 public:
     ScSolverValueDialog(weld::Window* pParent);
@@ -118,6 +119,7 @@ public:
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );
+    void        SetMax( double fValue );
     double      GetValue() const;
 };
 
