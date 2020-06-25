@@ -22,6 +22,52 @@
       "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "897c8742_5ad2ea86",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 32
+      },
+      "lineNbr": 7134,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-25T17:49:16Z",
+      "side": 1,
+      "message": "Put \"...\" at the end. It signals that this command opens a dialog. (Check the EditQrCode example above.)",
+      "range": {
+        "startLine": 7134,
+        "startChar": 34,
+        "endLine": 7134,
+        "endChar": 43
+      },
+      "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41103166_6c5ee355",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 32
+      },
+      "lineNbr": 7137,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-06-25T17:49:16Z",
+      "side": 1,
+      "message": "Put \"...\" at the end. It signals that this command opens a dialog. (Check the EditQrCode example above.)",
+      "range": {
+        "startLine": 7137,
+        "startChar": 34,
+        "endLine": 7137,
+        "endChar": 55
+      },
+      "revId": "4fd0326aad4eeaaa847aba5302d5f5c0bc64f417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
