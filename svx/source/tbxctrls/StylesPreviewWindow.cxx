@@ -26,6 +26,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
@@ -483,7 +484,8 @@ IMPL_LINK(StylesPreviewWindow_Base, GoDown, const OString&, /*rItem*/, void)
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, std::vector<OUString>& aDefaultStyles,
     css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
-    : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox")
+    : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox",
+                        reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, aDefaultStyles, xDispatchProvider)
 {
     SetOptimalSize();

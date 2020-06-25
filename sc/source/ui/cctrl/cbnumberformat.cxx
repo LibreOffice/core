@@ -27,7 +27,7 @@
 #include <sc.hrc>
 
 ScNumberFormat::ScNumberFormat(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/scalc/ui/numberbox.ui", "NumberBox")
+    : InterimItemWindow(pParent, "modules/scalc/ui/numberbox.ui", "NumberBox", reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , m_xWidget(m_xBuilder->weld_combo_box("numbertype"))
 {
     m_xWidget->append_text(ScResId(STR_GENERAL));
