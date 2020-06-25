@@ -72,6 +72,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
@@ -91,6 +92,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
@@ -99,12 +101,19 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         if (!m_nWindowId && nWindowId)
+        {
             m_nWindowId = nWindowId;
+            m_bIsNotebookbar = true;
+        }
         InsertWindowToMap(m_nWindowId);
     }
 }
 
-JSInstanceBuilder::~JSInstanceBuilder() { GetLOKWeldWidgetsMap().erase(m_nWindowId); }
+JSInstanceBuilder::~JSInstanceBuilder()
+{
+    if (m_nWindowId && (m_bHasTopLevelDialog || m_bIsNotebookbar))
+        GetLOKWeldWidgetsMap().erase(m_nWindowId);
+}
 
 std::map<sal_uInt64, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
 {
@@ -144,6 +153,7 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     auto it = GetLOKWeldWidgetsMap().find(m_nWindowId);
     if (it != GetLOKWeldWidgetsMap().end())
     {
+        it->second.erase(id);
         it->second.insert(WidgetMap::value_type(id, pWidget));
     }
 }
