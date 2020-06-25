@@ -248,6 +248,14 @@ void ScSolverOptionsDialog::EditOption()
     {
         m_xValDialog = std::make_shared<ScSolverValueDialog>(m_xDialog.get());
         m_xValDialog->SetOptionName(pStringItem->GetText());
+        if (maProperties[nEntry].Name == "DECR")
+            m_xValDialog->SetMax(1.0);
+        else if (maProperties[nEntry].Name == "DEFactorMax")
+            m_xValDialog->SetMax(1.2);
+        else if (maProperties[nEntry].Name == "DEFactorMin")
+            m_xValDialog->SetMax(1.2);
+        else if (maProperties[nEntry].Name == "PSCL")
+            m_xValDialog->SetMax(0.005);
         m_xValDialog->SetValue(pStringItem->GetDoubleValue());
         weld::DialogController::runAsync(m_xValDialog, [nEntry, pStringItem, this](sal_Int32 nResult){
             if (nResult == RET_OK)
@@ -270,6 +278,8 @@ void ScSolverOptionsDialog::EditOption()
         m_xIntDialog->SetOptionName( pStringItem->GetText() );
         if (maProperties[nEntry].Name == "EpsilonLevel")
             m_xIntDialog->SetMax(3);
+        else if (maProperties[nEntry].Name == "Algorithm")
+            m_xIntDialog->SetMax(1);
         m_xIntDialog->SetValue( pStringItem->GetIntValue() );
         weld::DialogController::runAsync(m_xIntDialog, [nEntry, pStringItem, this](sal_Int32 nResult){
             if (nResult == RET_OK)
@@ -364,6 +374,7 @@ ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)
     , m_xFrame(m_xBuilder->weld_frame("frame"))
     , m_xEdValue(m_xBuilder->weld_entry("value"))
 {
+    ::rtl::math::setNan(&m_fMaxValue);
 }
 
 ScSolverValueDialog::~ScSolverValueDialog()
@@ -382,6 +393,11 @@ void ScSolverValueDialog::SetValue( double fValue )
             ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true ) );
 }
 
+void ScSolverValueDialog::SetMax(double fMax)
+{
+    m_fMaxValue = fMax;
+}
+
 double ScSolverValueDialog::GetValue() const
 {
     OUString aInput = m_xEdValue->get_text();
@@ -390,6 +406,8 @@ double ScSolverValueDialog::GetValue() const
     sal_Int32 nParseEnd = 0;
     double fValue = ScGlobal::getLocaleDataPtr()->stringToDouble( aInput, true, &eStatus, &nParseEnd);
     /* TODO: shouldn't there be some error checking? */
+    if (!std::isnan(m_fMaxValue) && fValue > m_fMaxValue)
+        fValue = m_fMaxValue;
     return fValue;
 }
 
