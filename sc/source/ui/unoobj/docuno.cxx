@@ -502,7 +502,13 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 {
     // There seems to be no clear way of getting the grid window for this
     // particular document, hence we need to hope we get the right window.
+    // FIXME: "hope"? Are you kidding me?
     ScViewData* pViewData = ScDocShell::GetViewData();
+
+    // FIXME
+    if (!pViewData)
+        return;
+
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     // update the size of the area we are painting
