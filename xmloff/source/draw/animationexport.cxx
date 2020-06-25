@@ -697,6 +697,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         case AnimationNodeType::ANIMATE:
         case AnimationNodeType::SET:
         case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATEPHYSICS:
         case AnimationNodeType::ANIMATECOLOR:
         case AnimationNodeType::ANIMATETRANSFORM:
         case AnimationNodeType::TRANSITIONFILTER:
@@ -947,6 +948,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         case AnimationNodeType::ANIMATE:
         case AnimationNodeType::SET:
         case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATEPHYSICS:
         case AnimationNodeType::ANIMATECOLOR:
         case AnimationNodeType::ANIMATETRANSFORM:
         case AnimationNodeType::TRANSITIONFILTER:
@@ -1088,6 +1090,10 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         else if( nNodeType == AnimationNodeType::ANIMATEMOTION )
         {
             eAttributeName = XML_ANIMATEMOTION;
+        }
+        else if( nNodeType == AnimationNodeType::ANIMATEPHYSICS )
+        {
+            eAttributeName = XML_ANIMATEPHYSICS;
         }
         else
         {
@@ -1234,6 +1240,15 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         }
         break;
 
+        case AnimationNodeType::ANIMATEPHYSICS:
+        {
+            eElementToken = XML_ANIMATEPHYSICS;
+
+            Reference< XAnimateMotion > xAnimateMotion( xAnimate, UNO_QUERY_THROW );
+            aTemp = xAnimateMotion->getOrigin();
+        }
+        break;
+
         case AnimationNodeType::ANIMATECOLOR:
         {
             eElementToken = XML_ANIMATECOLOR;
@@ -1295,7 +1310,14 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         break;
         }
 
-        SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, eElementToken, true, true );
+        if( eElementToken == XML_ANIMATEPHYSICS ) // not a standart should use the extension namespace
+        {
+            SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_LO_EXT, eElementToken, true, true );
+        }
+        else
+        {
+            SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, eElementToken, true, true );
+        }
 
     }
     catch (const Exception&)
@@ -1437,6 +1459,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_HEIGHT:
         case XML_ANIMATETRANSFORM:
         case XML_ANIMATEMOTION:
+        case XML_ANIMATEPHYSICS:
         {
             if( auto aString = o3tl::tryAccess<OUString>(rValue) )
             {
