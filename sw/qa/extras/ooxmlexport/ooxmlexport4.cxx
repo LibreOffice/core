@@ -1269,6 +1269,18 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_test
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2408), nAnchoredWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAutoFitForLegacyShapes, "tdf112312_AutoFitForLegacyShapes.odt")
+{
+    // tdf#112312: check if noAutoFit is used instead of spAutoFit even if the TextAutoGrowHeight is set
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr/a:noAutofit");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "a:spAutofit");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
