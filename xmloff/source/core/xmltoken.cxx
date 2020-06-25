@@ -2794,6 +2794,7 @@ namespace xmloff::token {
         TOKEN( "multiply",                  XML_MULTIPLY ),
         TOKEN( "animate",                       XML_ANIMATE ),
         TOKEN( "animateMotion",             XML_ANIMATEMOTION ),
+        TOKEN( "animatePhysics",            XML_ANIMATEPHYSICS ),
         TOKEN( "animateTransform",          XML_ANIMATETRANSFORM ),
         TOKEN( "animateColor",              XML_ANIMATECOLOR ),
         TOKEN( "transitionFilter",          XML_TRANSITIONFILTER ),
