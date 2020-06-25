@@ -39,6 +39,10 @@ class tdf133348(UITestCase):
         xArgs = mkPropertyValues({"Text": "C2"})
         self.xUITest.executeCommandWithParameters(".uno:ReplyComment", xArgs)
 
+        # Wait for async events to be processed
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
+
         xEnum = document.TextFields.createEnumeration()
         self.assertEqual(xEnum.nextElement().Author.strip(), 'Unknown Author')
         self.assertEqual(xEnum.nextElement().Author.strip(), 'Known Author')
