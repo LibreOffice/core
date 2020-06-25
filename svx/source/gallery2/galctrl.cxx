@@ -400,6 +400,7 @@ bool GalleryIconView::KeyInput(const KeyEvent& rKEvt)
 
 bool GalleryIconView::StartDrag()
 {
+    Select();
     return mpParent->StartDrag();
 }
 
