@@ -16,6 +16,24 @@
       "revId": "9af6c96ced9c564a3625473cde732b0e366f668d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b236d76c_424cdfce",
+        "filename": "sw/qa/uitest/writer_tests7/tdf133348.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-06-25T09:17:38Z",
+      "side": 1,
+      "message": "Maybe https://gerrit.libreoffice.org/c/core/+/97097 fixes it ?",
+      "parentUuid": "47fa7eb0_2a33a242",
+      "revId": "9af6c96ced9c564a3625473cde732b0e366f668d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
