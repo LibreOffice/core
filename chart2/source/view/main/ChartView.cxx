@@ -2159,10 +2159,20 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         return apVTitle;
 
     //create title
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
     apVTitle.reset(new VTitle(xTitle));
+=======
+    awt::Size aTextMaxWidth(rPageSize.Width, rPageSize.Height);
+    if (eType == TitleHelper::MAIN_TITLE || eType == TitleHelper::SUB_TITLE)
+    {
+        aTextMaxWidth.Width = static_cast<sal_Int32>(rPageSize.Width * 0.8);
+        aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.5);
+    }
+    apVTitle = std::make_shared<VTitle>(xTitle);
+>>>>>>> CHANGE (4d2f76 tdf#134235 Chart OOXML import: fix long chart title)
     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
     apVTitle->init(xPageShapes, xShapeFactory, aCID);
-    apVTitle->createShapes(awt::Point(0,0), rPageSize);
+    apVTitle->createShapes(awt::Point(0, 0), rPageSize, aTextMaxWidth);
     awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
     awt::Size aTitleSize = apVTitle->getFinalSize();
 
