@@ -231,6 +231,8 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
 
     if (m_nTabstop.has_value())
         aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, *m_nTabstop));
+    else if (bDefaults)
+        aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_LISTTAB_STOP_POSITION, 0));
 
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
