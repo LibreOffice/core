@@ -21,6 +21,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
@@ -37,8 +38,26 @@ using namespace ::com::sun::star;
 
 namespace
 {
+/// Gets the current page of the current view from xModel and puts it to the 1-based rPage.
+bool GetSignatureLinePage(const uno::Reference<frame::XModel>& xModel, sal_Int32& rPage)
+{
+    uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
+    if (!xController.is())
+    {
+        return false;
+    }
+
+    uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(), uno::UNO_QUERY);
+    if (!xPage.is())
+    {
+        return false;
+    }
+
+    return xPage->getPropertyValue("Number") >>= rPage;
+}
+
 /// If the currently selected shape is a Draw signature line, export that to PDF.
-void GetSignatureLineShape(std::vector<sal_Int8>& rSignatureLineShape)
+void GetSignatureLineShape(sal_Int32& rPage, std::vector<sal_Int8>& rSignatureLineShape)
 {
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
     if (!pObjectShell)
@@ -48,6 +67,11 @@ void GetSignatureLineShape(std::vector<sal_Int8>& rSignatureLineShape)
 
     uno::Reference<frame::XModel> xModel = pObjectShell->GetBaseModel();
     if (!xModel.is())
+    {
+        return;
+    }
+
+    if (!GetSignatureLinePage(xModel, rPage))
     {
         return;
     }
@@ -200,8 +224,14 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
         return false;
     }
 
+    sal_Int32 nPage = 0;
     std::vector<sal_Int8> aSignatureLineShape;
-    GetSignatureLineShape(aSignatureLineShape);
+    GetSignatureLineShape(nPage, aSignatureLineShape);
+    if (nPage > 0)
+    {
+        // UNO page number is 1-based.
+        aDocument.SetSignaturePage(nPage - 1);
+    }
     if (!aSignatureLineShape.empty())
     {
         aDocument.SetSignatureLine(aSignatureLineShape);
