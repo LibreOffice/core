@@ -15934,7 +15934,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr);
 }
 
-weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile, sal_uInt64)
 {
     // Create a foreign window which we know is a GtkGrid and make the native widgets a child of that, so we can
     // support GtkWidgets within a vcl::Window

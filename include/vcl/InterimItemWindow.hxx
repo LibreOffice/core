@@ -24,7 +24,8 @@ public:
     virtual void GetFocus() override;
 
 protected:
-    InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
+    InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
+                      sal_uInt64 nLOKWindowId = 0);
 
     // pass keystrokes from our child window through this to handle focus changes correctly
     // returns true if keystroke is consumed
