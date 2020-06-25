@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2eba93cb_ad13fd44",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-25T07:56:29Z",
+      "side": 0,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/97087\u003e \"Rephrase comment\"",
+      "range": {
+        "startLine": 980,
+        "startChar": 91,
+        "endLine": 980,
+        "endChar": 95
+      },
+      "revId": "31a76d64ff91d4dd8606890a8996a6c4400e1c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
