@@ -41,6 +41,10 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 namespace com::sun::star::ucb { class XContent; }
 namespace com::sun::star::util { struct DateTime; }
 namespace com::sun::star::util { struct RevisionTag; }
+namespace com::sun::star::frame
+{
+class XModel;
+}
 namespace ucbhelper { class Content; }
 
 class SvKeyValueIterator;
@@ -261,9 +265,9 @@ public:
                       = css::uno::Reference<css::graphic::XGraphic>(),
                       const OUString& aComment = OUString());
 
-    SAL_DLLPRIVATE bool
-    SignDocumentContentUsingCertificate(bool bHasValidDocumentSignature,
-                 const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    SAL_DLLPRIVATE bool SignDocumentContentUsingCertificate(
+        const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
+        const css::uno::Reference<css::security::XCertificate>& xCertificate);
 
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document

@@ -1928,7 +1928,8 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
         return false;
 
     // 3. Sign
-    bool bSignSuccess = GetMedium()->SignDocumentContentUsingCertificate(HasValidSignatures(), xCertificate);
+    bool bSignSuccess = GetMedium()->SignDocumentContentUsingCertificate(
+        GetBaseModel(), HasValidSignatures(), xCertificate);
 
     // 4. AfterSigning
     AfterSigning(bSignSuccess, false);

@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -359,7 +360,7 @@ bool DocumentSignatureManager::add(
             getPDFSignatureHelper().SetX509Certificate(xCert);
             getPDFSignatureHelper().SetDescription(rDescription);
             uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
-            if (!getPDFSignatureHelper().Sign(xInputStream, bAdESCompliant))
+            if (!getPDFSignatureHelper().Sign(mxModel, xInputStream, bAdESCompliant))
             {
                 SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::Sign() failed");
                 return false;
@@ -682,6 +683,11 @@ uno::Reference<xml::crypto::XXMLSecurityContext> const&
 DocumentSignatureManager::getGpgSecurityContext() const
 {
     return mxGpgSecurityContext;
+}
+
+void DocumentSignatureManager::setModel(const uno::Reference<frame::XModel>& xModel)
+{
+    mxModel = xModel;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
