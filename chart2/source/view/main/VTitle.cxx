@@ -99,7 +99,8 @@ void VTitle::changePosition( const awt::Point& rPos )
 
 void VTitle::createShapes(
       const awt::Point& rPos
-    , const awt::Size& rReferenceSize )
+    , const awt::Size& rReferenceSize
+    , const awt::Size& rTextMaxWidth )
 {
     if(!m_xTitle.is())
         return;
@@ -124,9 +125,16 @@ void VTitle::createShapes(
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
+    sal_Int32 nTextMaxWidth;
+    if (m_fRotationAngleDegree <= 15.0 || m_fRotationAngleDegree >= 345.0
+        || (m_fRotationAngleDegree >= 165.0 && m_fRotationAngleDegree <= 195.0))
+        nTextMaxWidth = rTextMaxWidth.Width;
+    else
+        nTextMaxWidth = rTextMaxWidth.Height;
+
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-    m_xShape =pShapeFactory->createText( m_xTarget, rReferenceSize, rPos, aStringList,
-            xTitleProperties, m_fRotationAngleDegree, m_aCID );
+    m_xShape =pShapeFactory->createText( m_xTarget, rReferenceSize, rPos, aStringList, xTitleProperties,
+                                    m_fRotationAngleDegree, m_aCID, nTextMaxWidth );
 }
 
 } //namespace chart
