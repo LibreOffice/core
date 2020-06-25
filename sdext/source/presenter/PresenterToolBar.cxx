@@ -1459,9 +1459,24 @@ awt::Size Button::CreateBoundingSize (
         return awt::Size();
 
     geometry::RealRectangle2D aTextBBox (mpMode->maText.GetBoundingBox(rxCanvas));
+
+    // tdf#128964 This ensures that if the text of a button changes due to a change in
+    // the state of the button the other buttons of the toolbar do not move. The button is
+    // allotted the maximum size so that it doesn't resize during a change of state.
+    geometry::RealRectangle2D aTextBBoxNormal (mpNormal->maText.GetBoundingBox(rxCanvas));
+    geometry::RealRectangle2D aTextBBoxMouseOver (mpMouseOver->maText.GetBoundingBox(rxCanvas));
+    geometry::RealRectangle2D aTextBBoxSelected (mpSelected->maText.GetBoundingBox(rxCanvas));
+    geometry::RealRectangle2D aTextBBoxDisabled (mpDisabled->maText.GetBoundingBox(rxCanvas));
+    geometry::RealRectangle2D aTextBBoxMouseOverSelected (mpMouseOverSelected->maText.GetBoundingBox(rxCanvas));
+    std::vector<sal_Int32> widths;
+    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxNormal.X2 - aTextBBoxNormal.X1));
+    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOver.X2 - aTextBBoxMouseOver.X1));
+    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxSelected.X2 - aTextBBoxSelected.X1));
+    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxDisabled.X2 - aTextBBoxDisabled.X1));
+    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOverSelected.X2 - aTextBBoxMouseOverSelected.X1));
+
     const sal_Int32 nGap (5);
     sal_Int32 nTextHeight (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
-    sal_Int32 nTextWidth (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.X2 - aTextBBox.X1));
     Reference<rendering::XBitmap> xBitmap;
     if (mpMode->mpIcon)
         xBitmap = mpMode->mpIcon->GetNormalBitmap();
@@ -1469,11 +1484,13 @@ awt::Size Button::CreateBoundingSize (
     {
         geometry::IntegerSize2D aSize (xBitmap->getSize());
         return awt::Size(
-            ::std::max(aSize.Width, sal_Int32(0.5 + aTextBBox.X2 - aTextBBox.X1)),
-            aSize.Height+ nGap + nTextHeight);
+            ::std::max(aSize.Width, *std::max_element(widths.begin(), widths.end())),
+            aSize.Height + nGap + nTextHeight);
     }
     else
-        return awt::Size(nTextWidth,nTextHeight);
+    {
+        return awt::Size(*std::max_element(widths.begin(), widths.end()), nTextHeight);
+    }
 }
 
 void Button::PaintIcon (
