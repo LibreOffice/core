@@ -277,6 +277,7 @@ void SvxToolbarConfigPage::Init()
         comphelper::getProcessComponentContext(),
         m_xFrame, m_aModuleId);
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), OUString(), GetSaveInData());
+    SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
 SaveInData* SvxToolbarConfigPage::CreateSaveInData(
@@ -425,6 +426,8 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, weld::ComboBox&, void )
     OUString aSearchTerm(m_xSearchEdit->get_text());
 
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), aSearchTerm, GetSaveInData());
+
+    SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, weld::Button&, void )
