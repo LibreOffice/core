@@ -91,7 +91,7 @@ namespace SwPostItHelper
     unsigned long getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
 }
 
-class SwSidebarItem
+class SAL_DLLPUBLIC_RTTI SwSidebarItem
 {
 public:
     VclPtr<sw::annotation::SwAnnotationWin> pPostIt;
