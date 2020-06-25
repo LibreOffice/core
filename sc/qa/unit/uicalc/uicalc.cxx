@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <document.hxx>
@@ -87,6 +88,62 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     checkCurrentCell(2, 6);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
+{
+    ScModelObj* pModelObj = createDoc("tdf133326.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Name", uno::Any(OUString("")) }, { "Index", uno::Any(sal_Int32(2)) } }));
+    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 0, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 0, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 0, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+    pDoc->GetFormula(0, 0, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
+
+    // Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pDoc->GetFormula(0, 0, 1, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
