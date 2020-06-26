@@ -20,9 +20,18 @@
 
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <docsh.hxx>
+#include <unordered_map>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
+
+enum StyleType
+{
+    DEFAULTFORMATTING,
+    CHARACTERSTYLES,
+    PARAGRAPHSTYLES
+};
 namespace sw
 {
 namespace sidebar
@@ -49,9 +58,7 @@ public:
 
 private:
     sfx2::sidebar::ControllerItem maCharStyle;
-
-    static void GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
-                                  OUString& rString);
+    sfx2::sidebar::ControllerItem maParaStyle;
 };
 }
 } // end of namespace svx::sidebar
