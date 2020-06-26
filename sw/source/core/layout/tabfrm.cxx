@@ -1054,8 +1054,21 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
+<<<<<<< HEAD   (72ea1f tdf#127778 DOCX import: fix unexpected heading on non-first )
     bool bSplitRowAllowed = pRow->IsRowSplitAllowed() && !IsSplitRowDisabled();
 
+=======
+    bool bSplitRowAllowed = !IsSplitRowDisabled();
+    if ( bSplitRowAllowed && !pRow->IsRowSplitAllowed() )
+    {
+        // A row larger than the entire page ought to be allowed to split regardless of setting,
+        // otherwise it has hidden content and that makes no sense
+        if ( pRow->getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
+            pRow->SetForceRowSplitAllowed( true );
+        else
+            bSplitRowAllowed = false;
+    }
+>>>>>>> CHANGE (784203 tdf#134277 sw table: fix lagging shape at page break)
     // #i29438#
     // #i26945# - Floating screen objects no longer forbid
     // a splitting of the table row.
@@ -3841,11 +3854,16 @@ long CalcHeightWithFlys( const SwFrame *pFrame )
                     // the text flow have to be considered.
                     const SwFrameFormat& rFrameFormat = pAnchoredObj->GetFrameFormat();
                     bool bFollowTextFlow = rFrameFormat.GetFollowTextFlow().GetValue();
+                    bool bIsFarAway = pAnchoredObj->GetObjRect().Top() != FAR_AWAY;
+                    const SwPageFrame* pPageFrm = pTmp->FindPageFrame();
+                    bool bIsAnchoredToTmpFrm = false;
+                    if ( pPageFrm && pPageFrm->IsPageFrame() && pAnchoredObj->GetPageFrame())
+                        bIsAnchoredToTmpFrm = pAnchoredObj->GetPageFrame() == pPageFrm ||
+                        (pPageFrm->GetFormatPage().GetPhyPageNum() == pAnchoredObj->GetPageFrame()->GetFormatPage().GetPhyPageNum() + 1);
                     const bool bConsiderObj =
                         (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
-                            pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
-                            bFollowTextFlow &&
-                            pAnchoredObj->GetPageFrame() == pTmp->FindPageFrame();
+                        bIsFarAway &&
+                        bFollowTextFlow && bIsAnchoredToTmpFrm;
                     bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
                     if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough)
                     {
