@@ -136,9 +136,10 @@ void OTableGrantControl::Init()
         m_pCheckCell    = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
         m_pCheckCell->GetBox().EnableTriState(false);
 
-        m_pEdit         = VclPtr<Edit>::Create( &GetDataWindow() );
-        m_pEdit->SetReadOnly();
-        m_pEdit->Enable(false);
+        m_pEdit = VclPtr<EditControl>::Create(&GetDataWindow());
+        weld::Entry& rEntry = m_pEdit->get_widget();
+        rEntry.set_editable(false);
+        rEntry.set_sensitive(false);
     }
 
     UpdateTables();
@@ -250,7 +251,7 @@ bool OTableGrantControl::SaveModified()
         ::dbtools::showError(::dbtools::SQLExceptionInfo(e),VCLUnoHelper::GetInterface(GetParent()),m_xContext);
     }
     if(bErg && Controller().is())
-        Controller()->ClearModified();
+        Controller()->SaveValue();
     if(!bErg)
         UpdateTables();
 
@@ -275,7 +276,7 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
     OUString sTablename = m_aTableNames[nRow];
     // special case for tablename
     if(nColumnId == COL_TABLE_NAME)
-        m_pEdit->SetText(sTablename);
+        m_pEdit->get_widget().set_text(sTablename);
     else
     {
         // get the privileges from the user

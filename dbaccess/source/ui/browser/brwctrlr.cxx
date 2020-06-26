@@ -1942,7 +1942,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             }
             if (ID_BROWSER_CUT == nId || ID_BROWSER_PASTE == nId)
             {
-                xCurrentController->SetModified();
                 rEdit.Modify();
             }
         }

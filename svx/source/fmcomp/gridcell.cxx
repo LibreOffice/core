@@ -1054,13 +1054,11 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
 {
 }
 
-
 DbTextField::~DbTextField( )
 {
     m_pPainterImplementation.reset();
     m_pEdit.reset();
 }
-
 
 void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
@@ -1106,11 +1104,26 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     }
     else
     {
-        m_pWindow = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pEdit.reset(new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) ));
+        auto xEditControl = VclPtr<EditControl>::Create(&rParent);
+        auto xEditPainter = VclPtr<EditControl>::Create(&rParent);
 
-        m_pPainter = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pPainterImplementation.reset(new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) ));
+        switch (nAlignment)
+        {
+            case awt::TextAlign::RIGHT:
+                xEditControl->get_widget().set_alignment(TxtAlign::Right);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Right);
+                break;
+            case awt::TextAlign::CENTER:
+                xEditControl->get_widget().set_alignment(TxtAlign::Center);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Center);
+                break;
+        }
+
+        m_pWindow = xEditControl;
+        m_pEdit.reset(new EntryImplementation(*xEditControl));
+
+        m_pPainter = xEditPainter;
+        m_pPainterImplementation.reset(new EntryImplementation(*xEditPainter));
     }
 
     if ( WB_LEFT == nStyle )
@@ -1128,7 +1141,6 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
 
     DbLimitedLengthField::Init( rParent, xCursor );
 }
-
 
 CellControllerRef DbTextField::CreateController() const
 {
@@ -2731,7 +2743,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }   break;
         default:
         {
-            m_pWindow  = VclPtr<Edit>::Create(pParent, WB_LEFT);
+            m_pWindow  = VclPtr<EditControl>::Create(pParent);
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
@@ -2741,7 +2753,6 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }
     }
 }
-
 
 void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
@@ -2799,7 +2810,7 @@ CellControllerRef DbFilterField::CreateController() const
             if (m_bFilterList)
                 xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
             else
-                xController = new EditCellController(static_cast<Edit*>(m_pWindow.get()));
+                xController = new EditCellController(static_cast<EditControl*>(m_pWindow.get()));
     }
     return xController;
 }
@@ -3542,11 +3553,10 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
     }
     else
     {
-        m_pEditImplementation = new EditImplementation( static_cast< Edit& >( m_pCellControl->GetWindow() ) );
+        m_pEditImplementation = new EntryImplementation(static_cast<EditControl&>(m_pCellControl->GetWindow()));
         m_bOwnEditImplementation = true;
     }
 }
-
 
 FmXEditCell::~FmXEditCell()
 {
