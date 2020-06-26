@@ -260,10 +260,7 @@ void LwpFribPtr::XFConvert()
         }
             break;
         case FRIB_TAG_SOFTHYPHEN:
-        {
-            OUString sSoftHyphen(u'\x00ad');
-            pFrib->ConvertChars(m_pXFPara,sSoftHyphen);
-        }
+            pFrib->ConvertChars(m_pXFPara,u"\x00ad");
             break;
         case FRIB_TAG_FRAME:
         {
