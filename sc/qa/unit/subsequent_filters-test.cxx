@@ -225,6 +225,7 @@ public:
     void testBnc762542();
 
     void testTdf100458();
+    void testTdf127982();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf110440XLSX();
@@ -378,6 +379,7 @@ public:
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
     CPPUNIT_TEST(testTdf100458);
+    CPPUNIT_TEST(testTdf127982);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
@@ -3721,6 +3723,29 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf127982()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf127982.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, these cells would be empty
+    CPPUNIT_ASSERT_EQUAL(OUString("R1"), rDoc.GetString(ScAddress(3,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R6"), rDoc.GetString(ScAddress(3,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R7"), rDoc.GetString(ScAddress(3,7,0)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("R1"), rDoc.GetString(ScAddress(4,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R6"), rDoc.GetString(ScAddress(4,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R7"), rDoc.GetString(ScAddress(4,7,0)));
+
+    // Without the fix in place, these cells would be empty
+    CPPUNIT_ASSERT_EQUAL(OUString("R1"), rDoc.GetString(ScAddress(4,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R6"), rDoc.GetString(ScAddress(4,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("R7"), rDoc.GetString(ScAddress(4,7,0)));
+
     xDocSh->DoClose();
 }
 
