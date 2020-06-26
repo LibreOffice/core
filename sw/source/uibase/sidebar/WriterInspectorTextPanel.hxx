@@ -20,6 +20,7 @@
 
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <docsh.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
@@ -47,8 +48,11 @@ public:
     virtual void GetControlState(const sal_uInt16 /*nSId*/,
                                  boost::property_tree::ptree& /*rState*/) override{};
 
+    void mUpdateTree(SwDocShell* pDocSh, Mynode& another, OUString sType, int nPos);
+
 private:
     sfx2::sidebar::ControllerItem maCharStyle;
+    sfx2::sidebar::ControllerItem maParaStyle;
 
     static void GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
                                   OUString& rString);

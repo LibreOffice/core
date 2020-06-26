@@ -44,14 +44,26 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(20));
 }
 
-void InspectorTextPanel::updateEntries(std::vector<OUString> store)
+void InspectorTextPanel::FillBox_Impl(Mynode current, weld::TreeIter* pParent)
 {
+    std::unique_ptr<weld::TreeIter> xResult = mxListBoxStyles->make_iterator();
+    const OUString& rName = current.s;
+    mxListBoxStyles->insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, xResult.get());
+
+    for (Mynode cur : current.vec)
+        FillBox_Impl(cur, xResult.get());
+}
+
+void InspectorTextPanel::updateEntries(Mynode another)
+{
+    mxListBoxStyles->freeze();
     mxListBoxStyles->clear();
-    for (OUString& str : store)
-        mxListBoxStyles->append_text(str);
+    FillBox_Impl(another, nullptr);
+    mxListBoxStyles->thaw();
+    mxListBoxStyles->show();
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
