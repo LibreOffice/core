@@ -18,6 +18,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/emptypage \
 	svtools/uiconfig/ui/fileviewmenu \
 	svtools/uiconfig/ui/fixedimagecontrol \
+	svtools/uiconfig/ui/fixedtextcontrol \
 	svtools/uiconfig/ui/graphicexport \
 	svtools/uiconfig/ui/inputbox \
 	svtools/uiconfig/ui/javadisableddialog \
