@@ -231,6 +231,7 @@ public:
     void testTdf132278();
     void testTdf130959();
     void testTdf131380();
+    void testTdf129681();
     void testTdf111974XLSM();
     void testTdf83672XLSX();
 
@@ -383,6 +384,7 @@ public:
     CPPUNIT_TEST(testTdf132278);
     CPPUNIT_TEST(testTdf130959);
     CPPUNIT_TEST(testTdf131380);
+    CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf83672XLSX);
 
@@ -3584,6 +3586,34 @@ void ScFiltersTest::testTdf131380()
     // Would crash without the fix on recalculating
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf129681()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf129681.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Lamb"), rDoc.GetString(ScAddress(4,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Beef"), rDoc.GetString(ScAddress(4,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Pork"), rDoc.GetString(ScAddress(4,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), rDoc.GetString(ScAddress(4,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), rDoc.GetString(ScAddress(4,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(4,7,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(4,8,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Deer"), rDoc.GetString(ScAddress(4,9,0)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(6,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), rDoc.GetString(ScAddress(6,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), rDoc.GetString(ScAddress(6,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), rDoc.GetString(ScAddress(6,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("8"), rDoc.GetString(ScAddress(6,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6,7,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6,8,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6,9,0)));
 
     xDocSh->DoClose();
 }
