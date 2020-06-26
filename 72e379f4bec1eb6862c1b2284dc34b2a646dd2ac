@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da717879_b3f9569b",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-06-26T19:41:56Z",
+      "side": 1,
+      "message": "This is just a workaround, is there a structure where we can store parent-child values ?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 2
+      },
+      "revId": "72e379f4bec1eb6862c1b2284dc34b2a646dd2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
