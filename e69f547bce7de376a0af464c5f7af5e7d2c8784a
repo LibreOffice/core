@@ -22,6 +22,30 @@
       "revId": "e69f547bce7de376a0af464c5f7af5e7d2c8784a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9f6f89_2bb73021",
+        "filename": "vcl/source/gdi/impanmvw.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-06-26T08:17:53Z",
+      "side": 0,
+      "message": "The reason this check was done was because Flush() was originally only implemented in Window. We added Flush() as a function to OutputDevice that did a noop.",
+      "parentUuid": "756267ef_e54b7ac5",
+      "range": {
+        "startLine": 290,
+        "startChar": 12,
+        "endLine": 290,
+        "endChar": 66
+      },
+      "revId": "e69f547bce7de376a0af464c5f7af5e7d2c8784a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
