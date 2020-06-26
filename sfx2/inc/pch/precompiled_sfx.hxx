@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-05-21 16:43:16 using:
+ Generated on 2020-06-26 20:19:27 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -357,6 +357,7 @@
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
