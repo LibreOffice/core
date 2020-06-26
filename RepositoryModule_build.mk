@@ -69,7 +69,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			filter \
 			framework \
 			linguistic \
-			mysqlc \
 			officecfg \
 			package \
 			postprocess \
