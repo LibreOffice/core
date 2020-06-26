@@ -25,6 +25,11 @@ namespace svx
 {
 namespace sidebar
 {
+struct TreeNode
+{
+    OUString sNodeName;
+    std::vector<TreeNode> children;
+};
 class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
 {
 public:
@@ -36,7 +41,8 @@ public:
 
     InspectorTextPanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual void updateEntries(std::vector<OUString> store);
+
+    void updateEntries(const std::vector<TreeNode>& rStore);
 
 private:
     std::unique_ptr<weld::TreeView> mxListBoxStyles;
