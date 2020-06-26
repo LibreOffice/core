@@ -119,7 +119,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                 |   BrowserMode::HLINES      | BrowserMode::VLINES
                 |   BrowserMode::HEADERBAR_NEW   ;
 
-    m_pTextCell     = VclPtr<Edit>::Create(&GetDataWindow(), 0);
+    m_pTextCell     = VclPtr<EditControl>::Create(&GetDataWindow());
     m_pVisibleCell  = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
     m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
     m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());
@@ -1038,7 +1038,7 @@ bool OSelectionBrowseBox::SaveModified()
 
             case BROW_COLUMNALIAS_ROW:
                 strOldCellContents = pEntry->GetFieldAlias();
-                pEntry->SetFieldAlias(m_pTextCell->GetText());
+                pEntry->SetFieldAlias(m_pTextCell->get_widget().get_text());
                 sNewValue = pEntry->GetFieldAlias();
                 break;
             case BROW_FUNCTION_ROW:
@@ -1090,7 +1090,7 @@ bool OSelectionBrowseBox::SaveModified()
                     break;
 
                 sal_uInt16  nIdx = sal_uInt16(nRow - BROW_CRIT1_ROW);
-                OUString aText = comphelper::string::stripStart(m_pTextCell->GetText(), ' ');
+                OUString aText = comphelper::string::stripStart(m_pTextCell->get_widget().get_text(), ' ');
 
                 OUString aCrit;
                 if(!aText.isEmpty())
@@ -2367,8 +2367,12 @@ bool OSelectionBrowseBox::isCutAllowed() const
             break;
         }
         default:
-            bCutAllowed = !m_pTextCell->GetSelected().isEmpty();
+        {
+            weld::Entry& rEntry = m_pTextCell->get_widget();
+            int nStartPos, nEndPos;
+            bCutAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
             break;
+        }
     }
     return bCutAllowed;
 }
@@ -2385,8 +2389,11 @@ void OSelectionBrowseBox::cut()
             break;
         }
         default:
-            m_pTextCell->Cut();
-            m_pTextCell->SetModifyFlag();
+        {
+            weld::Entry& rEntry = m_pTextCell->get_widget();
+            rEntry.cut_clipboard();
+//TODO            m_pTextCell->SetModifyFlag();
+        }
     }
     SaveModified();
     RowModified(GetBrowseRow(nRow), GetCurColumnId());
@@ -2406,8 +2413,12 @@ void OSelectionBrowseBox::paste()
             break;
         }
         default:
-            m_pTextCell->Paste();
-            m_pTextCell->SetModifyFlag();
+        {
+            weld::Entry& rEntry = m_pTextCell->get_widget();
+            rEntry.paste_clipboard();
+            //TODO m_pTextCell->SetModifyFlag();
+            break;
+        }
     }
     RowModified(GetBrowseRow(nRow), GetCurColumnId());
     invalidateUndoRedo();
@@ -2446,7 +2457,11 @@ void OSelectionBrowseBox::copy()
             break;
         }
         default:
-            m_pTextCell->Copy();
+        {
+            weld::Entry& rEntry = m_pTextCell->get_widget();
+            rEntry.copy_clipboard();
+            break;
+        }
     }
 }
 
@@ -2514,8 +2529,9 @@ void OSelectionBrowseBox::enableControl(const OTableFieldDescRef& _rEntry,Window
 
 void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OString& _sHelpId)
 {
-    m_pTextCell->SetText(_sText);
-    m_pTextCell->ClearModifyFlag();
+    weld::Entry& rEntry = m_pTextCell->get_widget();
+    rEntry.set_text(_sText);
+    rEntry.save_value();
     if (!m_pTextCell->HasFocus())
         m_pTextCell->GrabFocus();
 

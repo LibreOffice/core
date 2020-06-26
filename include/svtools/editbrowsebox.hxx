@@ -93,7 +93,9 @@ namespace svt
 
         Control& GetWindow() const { return *const_cast< CellController* >( this )->pWindow; }
 
+#if 0
         virtual void SetModified();
+#endif
         virtual void ClearModified() = 0;
         virtual bool IsModified() const = 0;
 
@@ -140,7 +142,9 @@ namespace svt
         virtual void                ReplaceSelected( const OUString& _rStr ) = 0;
         virtual OUString            GetSelected( LineEnd aSeparator ) const = 0;
 
+#if 0
         virtual void                SetModified() = 0;
+#endif
         virtual bool                IsModified() const = 0;
         virtual void                ClearModified() = 0;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) = 0;
@@ -177,10 +181,32 @@ namespace svt
         virtual void                ReplaceSelected( const OUString& _rStr ) override;
         virtual OUString            GetSelected( LineEnd aSeparator ) const override;
 
+#if 0
         virtual void                SetModified() override;
+#endif
         virtual bool                IsModified() const override;
         virtual void                ClearModified() override;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) override;
+    };
+
+    class SVT_DLLPUBLIC EditControl final : public InterimItemWindow
+    {
+    public:
+        EditControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
+
+        weld::Entry& get_widget() { return *m_xWidget; }
+
+        virtual void dispose() override;
+
+    private:
+        std::unique_ptr<weld::Entry> m_xWidget;
     };
 
     #include <svtools/editimplementation.hxx>
@@ -244,13 +270,16 @@ namespace svt
 
     public:
         EditCellController( Edit* _pEdit );
+        EditCellController( EditControl* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         virtual ~EditCellController( ) override;
 
         const IEditImplementation* GetEditImplementation( ) const { return m_pEditImplementation; }
               IEditImplementation* GetEditImplementation( )       { return m_pEditImplementation; }
 
+#if 0
         virtual void SetModified() override;
+#endif
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
 
@@ -270,7 +299,9 @@ namespace svt
         const SpinField& GetSpinWindow() const;
         SpinField& GetSpinWindow();
 
+#if 0
         virtual void SetModified() override;
+#endif
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
 
@@ -335,6 +366,13 @@ namespace svt
     public:
         ComboBoxControl(vcl::Window* pParent);
 
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
+
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
         virtual void dispose() override;
@@ -367,6 +405,13 @@ namespace svt
 
     public:
         ListBoxControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 

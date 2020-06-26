@@ -1302,11 +1302,11 @@ namespace svt
         return false;
     }
 
-
+#if 0
     void CellController::SetModified()
     {
     }
-
+#endif
 
     bool CellController::MoveAllowed(const KeyEvent&) const
     {

@@ -132,8 +132,8 @@ namespace {
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    VclPtr<Edit>                    m_aCellEdit;
-    VclPtr< ::svt::CheckBoxControl>  m_aCellCheckBox;
+    VclPtr<svt::EditControl> m_aCellEdit;
+    VclPtr<svt::CheckBoxControl> m_aCellCheckBox;
 
     OUString  m_sYes;
     OUString  m_sNo;
@@ -3550,8 +3550,8 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
                            BrowserMode::VLINES |
                            BrowserMode::AUTO_VSCROLL|
                            BrowserMode::HIDECURSOR   )
-    , m_aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
-    , m_aCellCheckBox(VclPtr< ::svt::CheckBoxControl>::Create(&GetDataWindow()))
+    , m_aCellEdit(VclPtr<svt::EditControl>::Create(&GetDataWindow()))
+    , m_aCellCheckBox(VclPtr<svt::CheckBoxControl>::Create(&GetDataWindow()))
     , m_nCurrentRow(0)
     , m_bModified(false)
 {

@@ -3112,8 +3112,10 @@ bool DbGridControl::SaveModified()
     }
     else
     {
+#if 0
         // reset the modified flag...
         Controller()->SetModified();
+#endif
     }
 
     return bOK;

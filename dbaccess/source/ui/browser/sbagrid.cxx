@@ -1320,9 +1320,11 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             return DND_ACTION_NONE;
 
         rEdit.SetText( sDropped );
+#if 0
         xCurrentController->SetModified();
+#endif
         rEdit.Modify();
-            // SetText itself doesn't call a Modify as it isn't a user interaction
+        // SetText itself doesn't call a Modify as it isn't a user interaction
 
         return DND_ACTION_COPY;
     }

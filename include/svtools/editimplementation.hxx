@@ -105,13 +105,13 @@ sal_Int32 GenericEditImplementation< EDIT >::GetMaxTextLen() const
     return m_rEdit.GetMaxTextLen( );
 }
 
-
+#if 0
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetModified()
 {
     m_rEdit.SetModifyFlag();
 }
-
+#endif
 
 template <class EDIT>
 bool GenericEditImplementation< EDIT >::IsModified() const
@@ -125,7 +125,6 @@ void GenericEditImplementation< EDIT >::ClearModified()
 {
     m_rEdit.ClearModifyFlag();
 }
-
 
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<LinkParamNone*,void>& _rLink )
