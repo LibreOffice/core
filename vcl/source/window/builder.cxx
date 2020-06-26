@@ -900,7 +900,7 @@ namespace
     bool extractDrawValue(VclBuilder::stringmap& rMap)
     {
         bool bDrawValue = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find("draw_value");
+        VclBuilder::stringmap::iterator aFind = rMap.find("draw-value");
         if (aFind != rMap.end())
         {
             bDrawValue = toBool(aFind->second);
@@ -924,7 +924,7 @@ namespace
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
         OUString sRet("top");
-        VclBuilder::stringmap::iterator aFind = rMap.find("value_pos");
+        VclBuilder::stringmap::iterator aFind = rMap.find("value-pos");
         if (aFind != rMap.end())
         {
             sRet = aFind->second;
