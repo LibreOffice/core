@@ -79,7 +79,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define CH_HYPH     '-'
+#define CH_HYPH     "-"
 
 #define WRONG_SHOW_MIN       5
 
@@ -2048,7 +2048,6 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // A portion for inserting the separator...
         TextPortion* pHyphPortion = new TextPortion( 0 );
         pHyphPortion->SetKind( PortionKind::HYPHENATOR );
-        OUString aHyphText(CH_HYPH);
         if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {
             TextPortion& rPrev = pParaPortion->GetTextPortions()[nEndPortion];
@@ -2066,7 +2065,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         SeekCursor( pParaPortion->GetNode(), nBreakPos, aFont );
         aFont.SetPhysFont( GetRefDevice() );
         pHyphPortion->GetSize().setHeight( GetRefDevice()->GetTextHeight() );
-        pHyphPortion->GetSize().setWidth( GetRefDevice()->GetTextWidth( aHyphText ) );
+        pHyphPortion->GetSize().setWidth( GetRefDevice()->GetTextWidth( CH_HYPH ) );
 
         pParaPortion->GetTextPortions().Insert(++nEndPortion, pHyphPortion);
     }
@@ -3195,8 +3194,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                             if ( 0x200B == cChar || 0x2060 == cChar )
                                             {
-                                                const OUString aBlank( ' ' );
-                                                long nHalfBlankWidth = aTmpFont.QuickGetTextSize( pOutDev, aBlank, 0, 1 ).Width() / 2;
+                                                long nHalfBlankWidth = aTmpFont.QuickGetTextSize( pOutDev, " ", 0, 1 ).Width() / 2;
 
                                                 const long nAdvanceX = ( nTmpIdx == nTmpEnd ?
                                                                          rTextPortion.GetSize().Width() :
@@ -3377,7 +3375,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 {
                                     if ( rTextPortion.GetExtraValue() )
                                         aText = OUString(rTextPortion.GetExtraValue());
-                                    aText += OUStringChar(CH_HYPH);
+                                    aText += CH_HYPH;
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
 

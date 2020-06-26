@@ -93,7 +93,7 @@ enum class Flags {
 namespace o3tl {
     template<> struct typed_flags<Flags> : is_typed_flags<Flags, 0x07> {};
 }
-static const sal_Unicode cNonBreakingSpace = 0xA0;
+static const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
 
 static const char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
 static const char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
@@ -1231,8 +1231,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     if( eType == ACQuotes::NonBreakingSpace )
     {
-        OUString s( cNonBreakingSpace ); // UNICODE code for no break space
-        if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
+        if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, OUStringChar(cNonBreakingSpace) ))
         {
             if( !bSttQuote )
                 ++nInsPos;
@@ -2003,8 +2002,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
 static bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUString& sWord)
 {
-    OUString sAbk('~');
-    SvStringsISortDtor::const_iterator it = pList->find( sAbk );
+    SvStringsISortDtor::const_iterator it = pList->find( "~" );
     SvStringsISortDtor::size_type nPos = it - pList->begin();
     if( nPos < pList->size() )
     {
