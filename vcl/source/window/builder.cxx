@@ -897,6 +897,18 @@ void VclBuilder::disposeBuilder()
 
 namespace
 {
+    bool extractHasFrame(VclBuilder::stringmap& rMap)
+    {
+        bool bHasFrame = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find("has-frame");
+        if (aFind != rMap.end())
+        {
+            bHasFrame = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bHasFrame;
+    }
+
     bool extractDrawValue(VclBuilder::stringmap& rMap)
     {
         bool bDrawValue = true;
@@ -2142,7 +2154,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkEntry")
     {
-        xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+        WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+        if (extractHasFrame(rMap))
+            nWinStyle |= WB_BORDER;
+        xWindow = VclPtr<Edit>::Create(pParent, nWinStyle);
         BuilderUtils::ensureDefaultWidthChars(rMap);
     }
     else if (name == "GtkNotebook")
