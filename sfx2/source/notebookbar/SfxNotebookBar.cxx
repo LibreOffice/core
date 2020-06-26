@@ -63,7 +63,7 @@ static void NotebookbarAddonValues(
                 if (rProp.Name == MERGE_NOTEBOOKBAR_IMAGEID)
                 {
                     rProp.Value >>= sImage;
-                    aImage = framework::AddonsOptions().GetImageFromURL(sImage, isBigImage);
+                    aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
                 }
             }
             if(!aImage)
@@ -74,7 +74,7 @@ static void NotebookbarAddonValues(
                     if (rProp.Name == MERGE_NOTEBOOKBAR_URL)
                     {
                         rProp.Value >>= sImage;
-                        aImage = framework::AddonsOptions().GetImageFromURL(sImage, isBigImage);
+                        aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
                     }
                 }
             }

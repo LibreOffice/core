@@ -321,7 +321,7 @@ void ToolBarManager::RefreshImages()
             // empty image.
             bool bBigImages = eImageType != vcl::ImageType::Size16;
             if ( !aImage )
-                aImage = framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages);
+                aImage = Image(framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages));
             m_pToolBar->SetItemImage( it.first, aImage );
         }
     }
@@ -1263,7 +1263,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = framework::AddonsOptions().GetImageFromURL( aCmdURLSeq[i], aMiscOptions.AreCurrentSymbolsLarge());
+                aImage = Image(framework::AddonsOptions().GetImageFromURL(aCmdURLSeq[i], aMiscOptions.AreCurrentSymbolsLarge()));
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }

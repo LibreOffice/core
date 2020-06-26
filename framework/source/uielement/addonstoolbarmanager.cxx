@@ -96,11 +96,9 @@ static Image RetrieveImage( Reference< css::frame::XFrame > const & rFrame,
     if (bBigImage)
         eImageType = vcl::ImageType::Size26;
 
-    Image aImage;
-
     if ( !aImageId.isEmpty() )
     {
-        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
+        Image aImage(framework::AddonsOptions().GetImageFromURL(aImageId, bBigImage));
         if ( !!aImage )
             return aImage;
         else
@@ -109,7 +107,7 @@ static Image RetrieveImage( Reference< css::frame::XFrame > const & rFrame,
             return aImage;
     }
 
-    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
+    Image aImage(framework::AddonsOptions().GetImageFromURL(aURL, bBigImage));
     if ( !aImage )
         aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, rFrame, eImageType);
 

@@ -1873,7 +1873,7 @@ void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _
                     OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
                     Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aMenuItemCommand, _xFrame);
                     if ( !aImage )
-                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, false );
+                        aImage = Image(aAddonOptions.GetImageFromURL(aMenuItemCommand, false));
 
                     _pMenu->SetItemImage( nId, aImage );
                 }

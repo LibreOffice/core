@@ -63,7 +63,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
 {
     bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
 
-    Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, true );
+    Image aImage(AddonsOptions().GetImageFromURL(aCommand, bBigImages, true));
 
     // Height will be controlled by scaling according to button height
     m_xToolbar->SetItemImage( m_nID, aImage );
