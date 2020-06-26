@@ -246,6 +246,7 @@ public:
     void testBackgroundColorStandardXLSXML();
     void testTdf131536();
     void testTdf85617();
+    void testTdf130583();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testTdf131536);
     CPPUNIT_TEST(testTdf85617);
+    CPPUNIT_TEST(testTdf130583);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
@@ -3856,6 +3858,26 @@ void ScFiltersTest::testTdf85617()
     ScAddress aPos(2,2,0);
     //Without the fix in place, it would be Err:509
     CPPUNIT_ASSERT_EQUAL(4.5, rDoc.GetValue(aPos));
+}
+
+void ScFiltersTest::testTdf130583()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf130583.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), rDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), rDoc.GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), rDoc.GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(1,4,0)));
+
+    // Without the fix in place, SWITCH would have returned #VALUE!
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), rDoc.GetString(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), rDoc.GetString(ScAddress(4,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(4,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), rDoc.GetString(ScAddress(4,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(4,4,0)));
 }
 
 void ScFiltersTest::testNamedExpressionsXLSXML()
