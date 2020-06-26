@@ -34,7 +34,7 @@ class Point;
 class MultiSelection;
 enum class SwFontScript;
 namespace sw { struct MergedPara; }
-namespace sw::mark { class IBookmark; }
+namespace sw { namespace mark { class IBookmark; }}
 
 #define SPACING_PRECISION_FACTOR 100
 

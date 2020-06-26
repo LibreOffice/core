@@ -219,7 +219,7 @@ void CrashReporter::installExceptionHandler()
         return;
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
-    mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(descriptor, nullptr, dumpCallback, nullptr, true, -1);
+    mpExceptionHandler.reset(new google_breakpad::ExceptionHandler(descriptor, nullptr, dumpCallback, nullptr, true, -1));
 #elif defined WNT
     mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
 #endif

@@ -1701,7 +1701,7 @@ TextFrameIndex SwScriptInfo::NextBookmark(TextFrameIndex const nPos) const
 
 auto SwScriptInfo::GetBookmark(TextFrameIndex const nPos) const -> MarkKind
 {
-    MarkKind ret{0};
+    MarkKind ret; ret = (MarkKind)0;
     for (auto const& it : m_Bookmarks)
     {
         if (nPos == it.first)
