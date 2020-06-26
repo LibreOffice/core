@@ -126,7 +126,8 @@ namespace cppu_threadpool {
         bool addJob( const ::rtl::ByteSequence &aThreadId,
                      bool bAsynchron,
                      void *pThreadSpecificData,
-                     RequestFun * doRequest );
+                     RequestFun * doRequest,
+                     void const * disposeId );
 
         void prepare( const ::rtl::ByteSequence &aThreadId );
         void * enter( const ::rtl::ByteSequence &aThreadId, void const * nDisposeId );

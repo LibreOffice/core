@@ -234,12 +234,16 @@ namespace cppu_threadpool
         const ByteSequence &aThreadId ,
         bool bAsynchron,
         void *pThreadSpecificData,
-        RequestFun * doRequest )
+        RequestFun * doRequest,
+        void const * disposeId )
     {
         bool bCreateThread = false;
         JobQueue *pQueue = nullptr;
         {
             MutexGuard guard( m_mutex );
+            if (m_DisposedCallerAdmin->isDisposed(disposeId)) {
+                return true;
+            }
 
             ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
 
@@ -434,7 +438,7 @@ uno_threadpool_putJob(
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
     sal_Bool bIsOneway ) SAL_THROW_EXTERN_C()
 {
-    if (!getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest ))
+    if (!getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest, hPool ))
     {
         SAL_WARN(
             "cppu.threadpool",
