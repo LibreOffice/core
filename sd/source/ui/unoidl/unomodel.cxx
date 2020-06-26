@@ -118,6 +118,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
@@ -2407,13 +2408,21 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
 
         for (const uno::Reference<office::XAnnotation>& xAnnotation : aPageAnnotations)
         {
-            auto commentNode = rJsonWriter.startNode("");
-            rJsonWriter.put("id", sd::getAnnotationId(xAnnotation));
+            sal_uInt32 nID = sd::getAnnotationId(xAnnotation);
+            OString nodeName = "comment" + OString::number(nID);
+            auto commentNode = rJsonWriter.startNode(nodeName.getStr());
+            rJsonWriter.put("id", nID);
             rJsonWriter.put("author", xAnnotation->getAuthor());
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
             rJsonWriter.put("parthash", pPage->GetHashCode());
+            geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
+            geometry::RealSize2D const & rSize = xAnnotation->getSize();
+            ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            OString sRectangle = aRectangle.toString();
+            rJsonWriter.put("rectangle", sRectangle.getStr());
         }
     }
 }
