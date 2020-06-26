@@ -24,6 +24,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/scrbar.hxx>
 
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
@@ -34,6 +35,17 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
+
+    VclPtr<ScrollBar> mpHScrollBar;
+    VclPtr<ScrollBar> mpVScrollBar;
+    VclPtr<ScrollBarBox> mpScrollBox;
+
+protected:
+    void ImpUpdateSrollBarVis(WinBits nWinStyle);
+    void ImpInitScrollBars();
+    void ImpSetScrollBarRanges();
+    void ImpSetHScrollBarThumbPos();
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
 
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -52,6 +64,12 @@ public:
     virtual void    SetPosPixel(const Point& rNewPos) override;
     virtual void    SetSizePixel(const Size& rNewSize) override;
     virtual Size    GetOptimalSize() const override;
+
+    bool HandleCommand(const CommandEvent& rCEvt);
+    void Enable(bool bEnable);
+    virtual void Resize() override;
+    Size CalcMinimumSize() const;
+    void InitFromStyle(WinBits nWinStyle);
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX
