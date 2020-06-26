@@ -27,10 +27,11 @@
 #include <vcl/fixed.hxx>
 
 class ToolBox;
-class FixedText;
 
 namespace framework
 {
+class FixedTextControl;
+
 class FixedTextToolbarController final : public ComplexToolbarController
 {
 public:
@@ -46,7 +47,7 @@ private:
     virtual css::uno::Sequence<css::beans::PropertyValue>
     getExecuteArgs(sal_Int16 KeyModifier) const override;
 
-    VclPtr<FixedText> m_pFixedTextControl;
+    VclPtr<FixedTextControl> m_pFixedTextControl;
 };
 }
 
