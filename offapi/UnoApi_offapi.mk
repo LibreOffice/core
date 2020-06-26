@@ -2602,7 +2602,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XControllerBorder \
 	XDesktop \
 	XDesktop2 \
-	XDesktopInternal \
 	XDesktopTask \
 	XDispatch \
 	XDispatchHelper \
