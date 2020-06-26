@@ -40,6 +40,8 @@ FixedTextToolbarController::FixedTextToolbarController(
 {
     m_pFixedTextControl = VclPtr<FixedText>::Create(m_xToolbar, WB_NOMULTILINE | WB_VCENTER
                                                                     | WB_LEFT | WB_NOPOINTERFOCUS);
+    m_pFixedTextControl->SetText("DEMO");
+    m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->get_preferred_size());
     m_xToolbar->SetItemWindow(m_nID, m_pFixedTextControl);
     m_xToolbar->SetItemBits(m_nID, ToolBoxItemBits::AUTOSIZE | m_xToolbar->GetItemBits(m_nID));
 }
