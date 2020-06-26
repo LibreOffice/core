@@ -1774,8 +1774,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
     {
     case text::ControlCharacter::PARAGRAPH_BREAK:
     {
-        const OUString aText( u'\x000D' );
-        insertString( xRange, aText, bAbsorb );
+        insertString( xRange, "\x0D", bAbsorb );
 
         return;
     }
@@ -1824,8 +1823,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
             aRange.nEndPos  = aRange.nStartPos;
 
             pRange->SetSelection( aRange );
-            const OUString aText( u'\x000D' );
-            pRange->setString( aText );
+            pRange->setString( "\x0D" );
 
             aRange.nStartPos = 0;
             aRange.nStartPara += 1;
