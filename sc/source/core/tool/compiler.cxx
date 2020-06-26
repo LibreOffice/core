@@ -1901,9 +1901,8 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
         case FormulaGrammar::CONV_ODF :
             if( bNeedsQuote )
             {
-                const OUString one_quote('\'');
                 // escape embedded quotes
-                rString = rString.replaceAll( one_quote, "''" );
+                rString = rString.replaceAll( "'", "''" );
             }
             break;
     }
