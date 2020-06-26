@@ -21,6 +21,15 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
+struct Mynode
+{
+    OUString s;
+    std::vector<Mynode> vec;
+    Mynode(OUString k)
+        : s(k){};
+};
+typedef std::vector<Mynode> MynodeArr;
+
 namespace svx
 {
 namespace sidebar
@@ -36,7 +45,9 @@ public:
 
     InspectorTextPanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual void updateEntries(std::vector<OUString> store);
+
+    virtual void updateEntries(MynodeArr another);
+    void FillBox_Impl(Mynode current, weld::TreeIter* pParent);
 
 private:
     std::unique_ptr<weld::TreeView> mxListBoxStyles;

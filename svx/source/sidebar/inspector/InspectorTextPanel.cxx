@@ -18,6 +18,8 @@
  */
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
+#include <bits/stdc++.h>
+using namespace std;
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -44,14 +46,48 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(27));
 }
 
-void InspectorTextPanel::updateEntries(std::vector<OUString> store)
+void InspectorTextPanel::FillBox_Impl(Mynode current, weld::TreeIter* pParent)
 {
+    std::unique_ptr<weld::TreeIter> xResult = mxListBoxStyles->make_iterator();
+    const OUString& rName = current.s;
+    mxListBoxStyles->insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, xResult.get());
+
+    for (const struct Mynode& cur : current.vec)
+        FillBox_Impl(cur, xResult.get());
+}
+
+void InspectorTextPanel::updateEntries(MynodeArr xStore)
+{
+    mxListBoxStyles->freeze();
     mxListBoxStyles->clear();
-    for (OUString& str : store)
-        mxListBoxStyles->append_text(str);
+    for (Mynode& t : xStore)
+        FillBox_Impl(t, nullptr);
+    mxListBoxStyles->thaw();
+
+    std::unique_ptr<weld::TreeIter> xEntry = mxListBoxStyles->make_iterator();
+    bool bEntry = mxListBoxStyles->get_iter_first(*xEntry);
+
+    // Expand all
+    while (bEntry)
+    {
+        mxListBoxStyles->expand_row(*xEntry);
+        bEntry = mxListBoxStyles->iter_next(*xEntry);
+    }
+
+    // "Default Paragraph Style" is too big, collapse it
+    bEntry = mxListBoxStyles->get_iter_first(*xEntry);
+    while (bEntry)
+    {
+        if (mxListBoxStyles->get_text(*xEntry) == "Default Paragraph Style")
+        {
+            mxListBoxStyles->collapse_row(*xEntry);
+            break;
+        }
+        bEntry = mxListBoxStyles->iter_next(*xEntry);
+    }
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
