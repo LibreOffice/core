@@ -47,7 +47,7 @@ FixedImageToolbarController::FixedImageToolbarController(
 
     bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
 
-    Image aImage = AddonsOptions().GetImageFromURL(aCommand, bBigImages, true);
+    Image aImage(AddonsOptions().GetImageFromURL(aCommand, bBigImages, true));
     m_pFixedImageControl->SetImage(aImage);
     m_pFixedImageControl->SetSizePixel(m_pFixedImageControl->GetOptimalSize());
 

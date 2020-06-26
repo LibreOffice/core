@@ -227,7 +227,7 @@ class AddonsOptions_Impl : public ConfigItem
         OUString                                        GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         OUString                                        GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const { return m_aCachedHelpMenuProperties;}
-        Image                                           GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
+        BitmapEx                                        GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const { return m_aCachedMergeMenuInsContainer;}
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
         bool                                            GetMergeNotebookBarInstructions( const OUString& rNotebookBarName, MergeNotebookBarInstructionContainer& rNotebookBarInstructions ) const;
@@ -243,8 +243,8 @@ class AddonsOptions_Impl : public ConfigItem
 
         struct OneImageEntry
         {
-            Image    aScaled;   ///< cached scaled image
-            Image    aImage;    ///< original un-scaled image
+            BitmapEx aScaled;   ///< cached scaled image
+            BitmapEx aImage;    ///< original un-scaled image
             OUString aURL;      ///< URL in case it is not loaded yet
         };
 
@@ -256,7 +256,7 @@ class AddonsOptions_Impl : public ConfigItem
             // accessed in this order
             OneImageEntry aSizeEntry[2];
             ImageEntry() {}
-            void addImage(ImageSize eSize, const Image &rImage, const OUString &rURL);
+            void addImage(ImageSize eSize, const BitmapEx &rImage, const OUString &rURL);
         };
 
         typedef std::unordered_map< OUString, ImageEntry > ImageManager;
@@ -301,7 +301,7 @@ class AddonsOptions_Impl : public ConfigItem
         bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
         std::unique_ptr<ImageEntry> ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
-        Image                ReadImageFromURL( const OUString& aURL );
+        BitmapEx             ReadImageFromURL( const OUString& aURL );
         bool                 HasAssociatedImages( const OUString& aURL );
         void                 SubstituteVariables( OUString& aURL );
 
@@ -315,7 +315,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         Sequence< OUString > GetPropertyNamesStatusbarItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
-        bool                 CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
+        bool                 CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
         DECL_LINK(NotifyEvent, void*, void);
 
@@ -350,7 +350,7 @@ class AddonsOptions_Impl : public ConfigItem
 };
 
 void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
-                                              const Image &rImage,
+                                              const BitmapEx& rImage,
                                               const OUString &rURL)
 {
     aSizeEntry[static_cast<int>(eSize)].aImage = rImage;
@@ -577,19 +577,19 @@ bool AddonsOptions_Impl::GetMergeNotebookBarInstructions(
 
 //  public method
 
-static Image ScaleImage( const Image &rImage, bool bBig )
+static BitmapEx ScaleImage( const BitmapEx &rImage, bool bBig )
 {
     Size aSize = ToolBox::GetDefaultImageSize(bBig ? ToolBoxButtonSize::Large : ToolBoxButtonSize::Small);
-    BitmapEx aScaleBmp(rImage.GetBitmapEx());
+    BitmapEx aScaleBmp(rImage);
     SAL_INFO("fwk", "Addons: expensive scale image from "
              << aScaleBmp.GetSizePixel() << " to " << aSize);
     aScaleBmp.Scale(aSize, BmpScaleFlag::BestQuality);
-    return Image(aScaleBmp);
+    return aScaleBmp;
 }
 
-Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale )
+BitmapEx AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale )
 {
-    Image aImage;
+    BitmapEx aImage;
 
     SAL_INFO("fwk", "Expensive: Addons GetImageFromURL " << aURL <<
              " big " << (bBig?"big":"little") <<
@@ -1561,9 +1561,9 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
         comphelper::getProcessComponentContext(), aURL);
 }
 
-Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
+BitmapEx AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
-    Image aImage;
+    BitmapEx aImage;
 
     std::unique_ptr<SvStream> pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == ERRCODE_NONE ))
@@ -1583,7 +1583,7 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
             if( !aBitmapEx.IsTransparent() )
                 aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
 
-            aImage = Image(aBitmapEx);
+            aImage = aBitmapEx;
         }
     }
 
@@ -1609,7 +1609,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
         aFileURL.append( ".bmp" );
 
         aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                              Image(), aFileURL.makeStringAndClear() );
+                              BitmapEx(), aFileURL.makeStringAndClear() );
     }
 
     m_aImageManager.emplace( aURL, aImageEntry );
@@ -1632,7 +1632,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
         if ( i < PROPERTYCOUNT_EMBEDDED_IMAGES )
         {
             // Extract image data from the embedded hex binary sequence
-            Image aImage;
+            BitmapEx aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.hasElements() &&
                 ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
@@ -1653,31 +1653,29 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
 
             SubstituteVariables( aImageURL );
 
-            pEntry->addImage(IMGSIZE_BIG, Image(), aImageURL);
+            pEntry->addImage(IMGSIZE_BIG, BitmapEx(), aImageURL);
         }
     }
 
     return pEntry;
 }
 
-bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
+bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
     bool bResult = false;
 
     if ( rBitmapDataSeq.hasElements() )
     {
         SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), StreamMode::STD_READ );
-        BitmapEx        aBitmapEx;
 
-        ReadDIBBitmapEx(aBitmapEx, aMemStream);
+        ReadDIBBitmapEx(rImage, aMemStream);
 
-        if( !aBitmapEx.IsTransparent() )
+        if( !rImage.IsTransparent() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
-            aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+            rImage = BitmapEx( rImage.GetBitmap(), COL_LIGHTMAGENTA );
         }
 
-        rImage = Image( aBitmapEx );
         bResult = true;
     }
 
@@ -1925,7 +1923,7 @@ const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstru
 
 //  public method
 
-Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const
+BitmapEx AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetImageFromURL( aURL, bBig, bNoScale );
@@ -1933,7 +1931,7 @@ Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoS
 
 //  public method
 
-Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
+BitmapEx AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
 {
     return GetImageFromURL( aURL, bBig, false );
 }

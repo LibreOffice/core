@@ -238,8 +238,8 @@ class UNLESS_MERGELIBS(FWE_DLLPUBLIC) AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        Image GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const;
-        Image GetImageFromURL( const OUString& aURL, bool bBig ) const;
+        BitmapEx GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const;
+        BitmapEx GetImageFromURL( const OUString& aURL, bool bBig ) const;
 
     //  private methods
 
