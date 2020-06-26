@@ -298,6 +298,7 @@ if ( system( "git rev-parse --verify HEAD >/dev/null 2>&1" ) == 0 )
 
 # If you want to allow non-ascii filenames set this variable to true.
 my $allownonascii=`git config hooks.allownonascii`;
+chomp $allownonascii;
 
 # Cross platform projects tend to avoid non-ascii filenames; prevent
 # them from being added to the repository. We exploit the fact that the
