@@ -83,8 +83,10 @@ private:
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
     bool mbDisposing:1;
-    mutable bool mbNormalized:1;
+    // Whether maDestructedListeners is sorted or not.
     mutable bool mbDestNormalized:1;
+    // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
+    mutable size_t mnListenersFirstUnsorted;
 };
 
 
