@@ -211,11 +211,11 @@ void OTableEditorCtrl::InitCellController()
     pTypeCell = VclPtr<ListBoxControl>::Create( &GetDataWindow() );
 
     // Cell description
-    pDescrCell = VclPtr<Edit>::Create( &GetDataWindow(), WB_LEFT );
-    pDescrCell->SetMaxTextLen( MAX_DESCR_LEN );
+    pDescrCell = VclPtr<EditControl>::Create(&GetDataWindow());
+    pDescrCell->get_widget().set_max_length(MAX_DESCR_LEN);
 
-    pHelpTextCell = VclPtr<Edit>::Create( &GetDataWindow(), WB_LEFT );
-    pHelpTextCell->SetMaxTextLen( MAX_DESCR_LEN );
+    pHelpTextCell = VclPtr<EditControl>::Create(&GetDataWindow());
+    pHelpTextCell->get_widget().set_max_length(MAX_DESCR_LEN);
 
     pNameCell->SetHelpId(HID_TABDESIGN_NAMECELL);
     pTypeCell->SetHelpId(HID_TABDESIGN_TYPECELL);
@@ -238,8 +238,8 @@ void OTableEditorCtrl::InitCellController()
 void OTableEditorCtrl::ClearModified()
 {
     pNameCell->ClearModifyFlag();
-    pDescrCell->ClearModifyFlag();
-    pHelpTextCell->ClearModifyFlag();
+    pDescrCell->get_widget().save_value();
+    pHelpTextCell->get_widget().save_value();
     pTypeCell->get_widget().save_value();
 }
 
@@ -379,18 +379,23 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
 
             break;
         case HELP_TEXT:
+        {
             if( pActFieldDescr )
                 aInitString = pActFieldDescr->GetHelpText();
-            pHelpTextCell->SetText( aInitString );
-            pHelpTextCell->SaveValue();
+            weld::Entry& rEntry = pHelpTextCell->get_widget();
+            rEntry.set_text(aInitString);
+            rEntry.save_value();
             break;
+        }
         case COLUMN_DESCRIPTION:
+        {
             if( pActFieldDescr )
                 aInitString = pActFieldDescr->GetDescription();
-            pDescrCell->SetText( aInitString );
-            pDescrCell->SaveValue();
+            weld::Entry& rEntry = pDescrCell->get_widget();
+            rEntry.set_text(aInitString);
+            rEntry.save_value();
             break;
-
+        }
     }
 }
 
@@ -526,25 +531,27 @@ void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         case HELP_TEXT:
         {
             // if the current field description is NULL, set Default
+            weld::Entry& rEntry = pHelpTextCell->get_widget();
             if( !pActFieldDescr )
             {
-                pHelpTextCell->SetText(OUString());
-                pHelpTextCell->ClearModifyFlag();
+                rEntry.set_text(OUString());
+                rEntry.save_value();
             }
             else
-                pActFieldDescr->SetHelpText( pHelpTextCell->GetText() );
+                pActFieldDescr->SetHelpText(rEntry.get_text());
             break;
         }
         case COLUMN_DESCRIPTION:
         {
             // Set the default if the field description is null
+            weld::Entry& rEntry = pDescrCell->get_widget();
             if( !pActFieldDescr )
             {
-                pDescrCell->SetText(OUString());
-                pDescrCell->ClearModifyFlag();
+                rEntry.set_text(OUString());
+                rEntry.save_value();
             }
             else
-                pActFieldDescr->SetDescription( pDescrCell->GetText() );
+                pActFieldDescr->SetDescription(rEntry.get_text());
             break;
         }
         case FIELD_PROPERTY_DEFAULT:
@@ -670,9 +677,6 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     // SaveData could create an undo action as well
     GetUndoManager().LeaveListAction();
     RowModified(nRow);
-    CellControllerRef xController(Controller());
-    if(xController.is())
-        xController->SetModified();
 
     // Set the Modify flag
     GetView()->getController().setModified( true );
@@ -1075,16 +1079,23 @@ bool OTableEditorCtrl::IsCutAllowed()
     bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) ||
                             GetView()->getController().isAlterAllowed();
 
-    if(bIsCutAllowed)
+    if (bIsCutAllowed)
     {
+        int nStartPos, nEndPos;
         switch(m_eChildFocus)
         {
             case DESCRIPTION:
-                bIsCutAllowed = !pDescrCell->GetSelected().isEmpty();
+            {
+                weld::Entry& rEntry = pDescrCell->get_widget();
+                bIsCutAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
                 break;
+            }
             case HELPTEXT:
-                bIsCutAllowed = !pHelpTextCell->GetSelected().isEmpty();
+            {
+                weld::Entry& rEntry = pHelpTextCell->get_widget();
+                bIsCutAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
                 break;
+            }
             case NAME:
                 bIsCutAllowed = !pNameCell->GetSelected().isEmpty();
                 break;
@@ -1103,10 +1114,17 @@ bool OTableEditorCtrl::IsCutAllowed()
 bool OTableEditorCtrl::IsCopyAllowed()
 {
     bool bIsCopyAllowed = false;
-    if(m_eChildFocus == DESCRIPTION )
-        bIsCopyAllowed = !pDescrCell->GetSelected().isEmpty();
+    int nStartPos, nEndPos;
+    if (m_eChildFocus == DESCRIPTION )
+    {
+        weld::Entry& rEntry = pDescrCell->get_widget();
+        bIsCopyAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
+    }
     else if(HELPTEXT == m_eChildFocus )
-        bIsCopyAllowed = !pHelpTextCell->GetSelected().isEmpty();
+    {
+        weld::Entry& rEntry = pHelpTextCell->get_widget();
+        bIsCopyAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
+    }
     else if(m_eChildFocus == NAME)
         bIsCopyAllowed = !pNameCell->GetSelected().isEmpty();
     else if(m_eChildFocus == ROW)
@@ -1165,7 +1183,7 @@ void OTableEditorCtrl::cut()
         if(GetView()->getController().isAlterAllowed())
         {
             SaveData(-1,COLUMN_DESCRIPTION);
-            pDescrCell->Cut();
+            pDescrCell->get_widget().cut_clipboard();
             CellModified(-1,COLUMN_DESCRIPTION);
         }
     }
@@ -1174,7 +1192,7 @@ void OTableEditorCtrl::cut()
         if(GetView()->getController().isAlterAllowed())
         {
             SaveData(-1,HELP_TEXT);
-            pHelpTextCell->Cut();
+            pHelpTextCell->get_widget().cut_clipboard();
             CellModified(-1,HELP_TEXT);
         }
     }
@@ -1193,9 +1211,15 @@ void OTableEditorCtrl::copy()
     else if(m_eChildFocus == NAME)
         pNameCell->Copy();
     else if(HELPTEXT == m_eChildFocus )
-        pHelpTextCell->Copy();
+    {
+        weld::Entry& rEntry = pHelpTextCell->get_widget();
+        rEntry.copy_clipboard();
+    }
     else if(m_eChildFocus == DESCRIPTION )
-        pDescrCell->Copy();
+    {
+        weld::Entry& rEntry = pDescrCell->get_widget();
+        rEntry.copy_clipboard();
+    }
 }
 
 void OTableEditorCtrl::paste()
@@ -1219,7 +1243,7 @@ void OTableEditorCtrl::paste()
     {
         if(GetView()->getController().isAlterAllowed())
         {
-            pHelpTextCell->Paste();
+            pHelpTextCell->get_widget().paste_clipboard();
             CellModified();
         }
     }
@@ -1227,7 +1251,7 @@ void OTableEditorCtrl::paste()
     {
         if(GetView()->getController().isAlterAllowed())
         {
-            pDescrCell->Paste();
+            pDescrCell->get_widget().paste_clipboard();
             CellModified();
         }
     }

@@ -51,8 +51,8 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     mutable TTablePrivilegeMap  m_aPrivMap;
     OUString                    m_sUserName;
-    VclPtr< ::svt::CheckBoxControl>     m_pCheckCell;
-    VclPtr<Edit>                        m_pEdit;
+    VclPtr<::svt::CheckBoxControl> m_pCheckCell;
+    VclPtr<::svt::EditControl> m_pEdit;
     long                        m_nDataPos;
     ImplSVEvent *               m_nDeactivateEvent;
 

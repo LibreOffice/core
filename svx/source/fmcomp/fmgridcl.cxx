@@ -1402,7 +1402,7 @@ bool FmGridControl::commit()
     // css::form::component::GridControl
     if (!IsUpdating())
     {
-        if (Controller().is() && Controller()->IsModified())
+        if (Controller().is() && Controller()->IsValueChangedFromSaved())
         {
             if (!SaveModified())
                 return false;
