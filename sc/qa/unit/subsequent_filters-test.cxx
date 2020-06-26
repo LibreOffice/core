@@ -245,6 +245,7 @@ public:
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
     void testTdf131536();
+    void testTdf130583();
     void testTdf85617();
     void testTdf134234();
     void testNamedExpressionsXLSXML();
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testTdf131536);
+    CPPUNIT_TEST(testTdf130583);
     CPPUNIT_TEST(testTdf85617);
     CPPUNIT_TEST(testTdf134234);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
@@ -3847,6 +3849,26 @@ void ScFiltersTest::testTdf131536()
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos2));
     ASSERT_FORMULA_EQUAL(rDoc, aPos2, "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),\"0\"),2,4)"
                                       "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"0\"),4))", nullptr);
+}
+
+void ScFiltersTest::testTdf130583()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf130583.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), rDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), rDoc.GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), rDoc.GetString(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(1,4,0)));
+
+    // Without the fix in place, SWITCH would have returned #VALUE!
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), rDoc.GetString(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), rDoc.GetString(ScAddress(4,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(4,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), rDoc.GetString(ScAddress(4,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(4,4,0)));
 }
 
 void ScFiltersTest::testTdf85617()
