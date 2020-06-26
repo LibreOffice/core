@@ -3049,7 +3049,7 @@ void DbGridControl::RowModified( long nRow )
     if (nRow == m_nCurrentPos && IsEditing())
     {
         CellControllerRef aTmpRef = Controller();
-        aTmpRef->ClearModified();
+        aTmpRef->SaveValue();
         InitController(aTmpRef, m_nCurrentPos, GetCurColumnId());
     }
     EditBrowseBox::RowModified(nRow);
@@ -3097,7 +3097,7 @@ bool DbGridControl::SaveModified()
 
     if (bOK)
     {
-        Controller()->ClearModified();
+        Controller()->SaveValue();
 
         if ( IsValid(m_xCurrentRow) )
         {
@@ -3112,8 +3112,10 @@ bool DbGridControl::SaveModified()
     }
     else
     {
+#if 0
         // reset the modified flag...
         Controller()->SetModified();
+#endif
     }
 
     return bOK;
@@ -3126,7 +3128,7 @@ bool DbGridControl::SaveRow()
     if (!IsValid(m_xCurrentRow) || !IsModified())
         return true;
     // value of the controller was not saved, yet
-    else if (Controller().is() && Controller()->IsModified())
+    else if (Controller().is() && Controller()->IsValueChangedFromSaved())
     {
         if (!SaveModified())
             return false;
