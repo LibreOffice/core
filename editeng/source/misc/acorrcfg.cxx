@@ -340,10 +340,8 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //44
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //46
-        "Format/Option/TransliterateRTL",                               //47
-        "Format/Option/ChangeAngleQuotes"                               //48
     };
-    const int nCount = 49;
+    const int nCount = 47;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -493,8 +491,6 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
                 }
                 break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
-                case 47 : rSwFlags.bTransliterateRTL = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/TransliterateRTL",
-                case 48 : rSwFlags.bChgAngleQuotes = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeAngleQuotes",
             }
         }
     }
@@ -596,11 +592,8 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"
          css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetCharSet())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch())),
+         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch()))});
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
-         css::uno::Any(rSwFlags.bTransliterateRTL)});
-            // "Format/Option/TransliterateRTL"
-
 }
 
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
