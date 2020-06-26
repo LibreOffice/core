@@ -114,7 +114,7 @@ bool SkiaSalBitmap::CreateBitmapData()
 #ifdef DBG_UTIL
         allocate += sizeof(CANARY);
 #endif
-        mBuffer = boost::make_shared<sal_uInt8[]>(allocate);
+        mBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
 #ifdef DBG_UTIL
         // fill with random garbage
         sal_uInt8* buffer = mBuffer.get();
@@ -763,7 +763,7 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
         assert(memcmp(mBuffer.get() + allocate, CANARY, sizeof(CANARY)) == 0);
         allocate += sizeof(CANARY);
 #endif
-        boost::shared_ptr<sal_uInt8[]> newBuffer = boost::make_shared<sal_uInt8[]>(allocate);
+        boost::shared_ptr<sal_uInt8[]> newBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
         memcpy(newBuffer.get(), mBuffer.get(), allocate);
         mBuffer = newBuffer;
     }
