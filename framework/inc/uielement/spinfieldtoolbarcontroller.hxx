@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/event.hxx>
 #include <vcl/vclptr.hxx>
 
 class ToolBox;
@@ -49,10 +48,6 @@ class SpinfieldToolbarController final : public ComplexToolbarController
         virtual void SAL_CALL dispose() override;
 
         // called from SpinfieldControl
-        void Up();
-        void Down();
-        void First();
-        void Last();
         void Modify();
         void GetFocus();
         void LoseFocus();
