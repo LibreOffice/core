@@ -3483,8 +3483,9 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     auto & rDateTime = rNote.m_aContents.maModificationDate;
 
-    aLine.append("/M ");
+    aLine.append("/M (");
     appendPdfTimeDate(aLine, rDateTime.Year, rDateTime.Month, rDateTime.Day, rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, 0);
+    aLine.append(") ");
 
     // contents of the note (type text string)
     aLine.append("/Contents ");
