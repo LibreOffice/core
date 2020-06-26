@@ -1112,6 +1112,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
+{
+    SwDoc* pDoc = createDoc("tdf134277.docx");
+    CPPUNIT_ASSERT(pDoc);
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/metafile/push/push/push/layoutmode[2]");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad position of shape in page break!", 0,
+                                 xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     loadURL("private:factory/swriter", nullptr);
