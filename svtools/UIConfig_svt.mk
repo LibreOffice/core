@@ -29,6 +29,8 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/querydeletedialog \
 	svtools/uiconfig/ui/restartdialog \
 	svtools/uiconfig/ui/spinfieldcontrol \
+	svtools/uiconfig/ui/thineditcontrol \
+	svtools/uiconfig/ui/thinspinfieldcontrol \
 ))
 
 # vim: set noet sw=4 ts=4:

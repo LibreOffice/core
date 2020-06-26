@@ -93,12 +93,12 @@ namespace svt
         }
     }
 
-    bool ComboBoxCellController::IsModified() const
+    bool ComboBoxCellController::IsValueChangedFromSaved() const
     {
         return GetComboBox().get_value_changed_from_saved();
     }
 
-    void ComboBoxCellController::ClearModified()
+    void ComboBoxCellController::SaveValue()
     {
         GetComboBox().save_value();
     }
@@ -149,12 +149,12 @@ namespace svt
         }
     }
 
-    bool ListBoxCellController::IsModified() const
+    bool ListBoxCellController::IsValueChangedFromSaved() const
     {
         return GetListBox().get_value_changed_from_saved();
     }
 
-    void ListBoxCellController::ClearModified()
+    void ListBoxCellController::SaveValue()
     {
         GetListBox().save_value();
     }
@@ -285,18 +285,15 @@ namespace svt
         return static_cast<CheckBoxControl &>(GetWindow()).GetBox();
     }
 
-
-    bool CheckBoxCellController::IsModified() const
+    bool CheckBoxCellController::IsValueChangedFromSaved() const
     {
         return GetCheckBox().IsValueChangedFromSaved();
     }
 
-
-    void CheckBoxCellController::ClearModified()
+    void CheckBoxCellController::SaveValue()
     {
         GetCheckBox().SaveValue();
     }
-
 
     IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
     {
@@ -328,8 +325,6 @@ namespace svt
     }
 
     //= EditCellController
-
-
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
@@ -337,7 +332,6 @@ namespace svt
     {
         m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
     }
-
 
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
@@ -347,6 +341,18 @@ namespace svt
         m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
     }
 
+    IMPL_LINK_NOARG(EntryImplementation, ModifyHdl, weld::Entry&, void)
+    {
+        m_aModifyHdl.Call(nullptr);
+    }
+
+    EditCellController::EditCellController(EditControlBase* pEdit)
+        : CellController(pEdit)
+        , m_pEditImplementation(new EntryImplementation(*pEdit))
+        , m_bOwnImplementation(true)
+    {
+        m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
+    }
 
     EditCellController::~EditCellController( )
     {
@@ -354,18 +360,10 @@ namespace svt
             DELETEZ( m_pEditImplementation );
     }
 
-
-    void EditCellController::SetModified()
+    void EditCellController::SaveValue()
     {
-        m_pEditImplementation->SetModified();
+        m_pEditImplementation->SaveValue();
     }
-
-
-    void EditCellController::ClearModified()
-    {
-        m_pEditImplementation->ClearModified();
-    }
-
 
     bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
@@ -390,12 +388,10 @@ namespace svt
         return bResult;
     }
 
-
-    bool EditCellController::IsModified() const
+    bool EditCellController::IsValueChangedFromSaved() const
     {
-        return m_pEditImplementation->IsModified();
+        return m_pEditImplementation->IsValueChangedFromSaved();
     }
-
 
     IMPL_LINK_NOARG(EditCellController, ModifyHdl, LinkParamNone*, void)
     {
@@ -421,17 +417,10 @@ namespace svt
         return static_cast<SpinField &>(GetWindow());
     }
 
-    void SpinCellController::SetModified()
+    void SpinCellController::SaveValue()
     {
-        GetSpinWindow().SetModifyFlag();
+        GetSpinWindow().SaveValue();
     }
-
-
-    void SpinCellController::ClearModified()
-    {
-        GetSpinWindow().ClearModifyFlag();
-    }
-
 
     bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
@@ -456,10 +445,9 @@ namespace svt
         return bResult;
     }
 
-
-    bool SpinCellController::IsModified() const
+    bool SpinCellController::IsValueChangedFromSaved() const
     {
-        return GetSpinWindow().IsModified();
+        return GetSpinWindow().IsValueChangedFromSaved();
     }
 
     IMPL_LINK_NOARG(SpinCellController, ModifyHdl, Edit&, void)
@@ -468,29 +456,72 @@ namespace svt
     }
 
     //= FormattedFieldCellController
-
-
-    FormattedFieldCellController::FormattedFieldCellController( FormattedField* _pFormatted )
-        :EditCellController( _pFormatted )
+    FormattedFieldCellController::FormattedFieldCellController(FormattedFieldControl* _pFormatted)
+        : EditCellController( _pFormatted )
     {
     }
-
 
     void FormattedFieldCellController::CommitModifications()
     {
-        static_cast< FormattedField& >( GetWindow() ).Commit();
+//TODO        static_cast< FormattedField& >( GetWindow() ).Commit();
     }
 
+    EditControlBase::EditControlBase(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+        : InterimItemWindow(pParent, rUIXMLDescription, rID)
+        , m_pWidget(nullptr)
+    {
+    }
+
+    void EditControlBase::init(weld::Entry* pWidget)
+    {
+        m_pWidget = pWidget;
+        m_pWidget->set_width_chars(1); // so a smaller than default width can be used
+        m_pWidget->connect_key_press(LINK(this, EditControlBase, KeyInputHdl));
+    }
+
+    IMPL_LINK(EditControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    {
+        return ChildKeyInput(rKEvt);
+    }
+
+    void EditControlBase::dispose()
+    {
+        m_pWidget = nullptr;
+        InterimItemWindow::dispose();
+    }
+
+    EditControl::EditControl(vcl::Window* pParent)
+        : EditControlBase(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
+    {
+        init(m_xWidget.get());
+    }
+
+    void EditControl::dispose()
+    {
+        m_xWidget.reset();
+        EditControlBase::dispose();
+    }
+
+    FormattedFieldControl::FormattedFieldControl(vcl::Window* pParent)
+        : EditControlBase(pParent, "svt/ui/thinspinfieldcontrol.ui", "SpinFieldControl") // *thin*spinfieldcontrol has no frame/border
+        , m_xWidget(m_xBuilder->weld_formatted_spin_button("spinbutton"))
+    {
+        init(m_xWidget.get());
+    }
+
+    void FormattedFieldControl::dispose()
+    {
+        m_xWidget.reset();
+        EditControlBase::dispose();
+    }
 
     //= MultiLineTextCell
-
-
     void MultiLineTextCell::Modify()
     {
         GetTextEngine()->SetModified( true );
         VclMultiLineEdit::Modify();
     }
-
 
     bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
     {

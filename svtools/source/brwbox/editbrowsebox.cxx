@@ -434,7 +434,7 @@ namespace svt
         if (rEvt.GetColumnId() == HandleColumnId)
         {   // it was the handle column. save the current cell content if necessary
             // (clicking on the handle column results in selecting the current row)
-            if (IsEditing() && aController->IsModified())
+            if (IsEditing() && aController->IsValueChangedFromSaved())
                 SaveModified();
         }
 
@@ -578,7 +578,7 @@ namespace svt
 
                         case KEY_RETURN:
                             // save the cell content (if necessary)
-                            if (IsEditing() && aController->IsModified() && !SaveModified())
+                            if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
                             {
                                 // maybe we're not visible ...
                                 EnableAndShow();
@@ -639,7 +639,7 @@ namespace svt
                     if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
                     {
                         // save the cell content (if necessary)
-                        if (IsEditing() && aController->IsModified() && !SaveModified())
+                        if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
                         {
                             // maybe we're not visible ...
                             EnableAndShow();
@@ -813,7 +813,7 @@ namespace svt
             return true;
 
         // save the cell content
-        if (IsEditing() && aController->IsModified() && !const_cast<EditBrowseBox *>(this)->SaveModified())
+        if (IsEditing() && aController->IsValueChangedFromSaved() && !const_cast<EditBrowseBox *>(this)->SaveModified())
         {
             // maybe we're not visible ...
             EnableAndShow();
@@ -958,7 +958,7 @@ namespace svt
 
             InitController(aController, nEditRow, nEditCol);
 
-            aController->ClearModified();
+            aController->SaveValue();
             aController->SetModifyHdl(LINK(this,EditBrowseBox,ModifyHdl));
             EnableAndShow();
 
@@ -1278,7 +1278,6 @@ namespace svt
         }
     }
 
-
     void CellController::resume( )
     {
         DBG_ASSERT( bSuspended == !GetWindow().IsVisible(), "CellController::resume: inconsistence!" );
@@ -1290,23 +1289,15 @@ namespace svt
         }
     }
 
-
     void CellController::CommitModifications()
     {
         // nothing to do in this base class
     }
 
-
     bool CellController::WantMouseEvent() const
     {
         return false;
     }
-
-
-    void CellController::SetModified()
-    {
-    }
-
 
     bool CellController::MoveAllowed(const KeyEvent&) const
     {

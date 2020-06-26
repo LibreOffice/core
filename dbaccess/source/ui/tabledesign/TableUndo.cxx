@@ -89,7 +89,7 @@ void OTableDesignCellUndoAct::Undo()
     {
         CellControllerRef xController = m_pTabDgnCtrl->Controller();
         if ( xController.is() )
-            xController->ClearModified();
+            xController->SaveValue();
         m_pTabDgnCtrl->GetView()->getController().setModified(false);
 
     }

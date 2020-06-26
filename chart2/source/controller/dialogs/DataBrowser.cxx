@@ -497,8 +497,8 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
     m_bDataValid( true ),
-    m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
-    m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aNumberEditField(VclPtr<FormattedFieldControl>::Create(&EditBrowseBox::GetDataWindow())),
+    m_aTextEditField(VclPtr<EditControl>::Create(&EditBrowseBox::GetDataWindow())),
     m_pColumnsWin(pColumns),
     m_pColorsWin(pColors),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
@@ -506,8 +506,9 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
 {
     double fNan;
     ::rtl::math::setNan( & fNan );
-    m_aNumberEditField->SetDefaultValue( fNan );
-    m_aNumberEditField->TreatAsNumber( true );
+    weld::FormattedSpinButton& rFormattedField = m_aNumberEditField->get_widget();
+//TODO    rFormattedField.SetDefaultValue(fNan);
+    rFormattedField.treat_as_number(true);
     RenewTable();
 }
 
@@ -860,7 +861,7 @@ void DataBrowser::SetDataFromModel(
         std::make_shared<NumberFormatterWrapper>(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ));
 
-    m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
+    m_aNumberEditField->get_widget().set_formatter(m_spNumberFormatterWrapper->getSvNumberFormatter());
 
     RenewTable();
 
@@ -1114,8 +1115,8 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
 
     if( CellContainsNumbers( nCol ))
     {
-        m_aNumberEditField->UseInputStringForFormatting();
-        m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nCol ));
+//TODO, always on        m_aNumberEditField->UseInputStringForFormatting();
+        m_aNumberEditField->get_widget().set_format_key(GetNumberFormatKey(nCol));
         return m_rNumberEditController.get();
     }
 
@@ -1128,19 +1129,20 @@ void DataBrowser::InitController(
     if( rController == m_rTextEditController )
     {
         OUString aText( GetCellText( nRow, nCol ) );
-        m_aTextEditField->SetText( aText );
-        m_aTextEditField->SetSelection( ::Selection( 0, aText.getLength() ));
+        weld::Entry& rEntry = m_aTextEditField->get_widget();
+        rEntry.set_text(aText);
+        rEntry.select_region(0, -1);
     }
     else if( rController == m_rNumberEditController )
     {
+        weld::FormattedSpinButton& rFormattedField = m_aNumberEditField->get_widget();
         // treat invalid and empty text as Nan
-        m_aNumberEditField->EnableNotANumber( true );
+//TODO        m_aNumberEditField->EnableNotANumber( true );
         if( std::isnan( GetCellNumber( nRow, nCol )))
-            m_aNumberEditField->SetTextValue( OUString());
+            rFormattedField.set_text(OUString());
         else
-            m_aNumberEditField->SetValue( GetCellNumber( nRow, nCol ) );
-        OUString aText( m_aNumberEditField->GetText());
-        m_aNumberEditField->SetSelection( ::Selection( 0, aText.getLength()));
+            rFormattedField.set_value(GetCellNumber(nRow, nCol));
+        rFormattedField.select_region(0, -1);
     }
     else
     {
@@ -1203,14 +1205,15 @@ bool DataBrowser::SaveModified()
             }
             else
             {
-                double fData = m_aNumberEditField->GetValue();
+                double fData = m_aNumberEditField->get_widget().get_value();
                 bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
             }
         }
         break;
         case DataBrowserModel::TEXTORDATE:
         {
-            OUString aText( m_aTextEditField->GetText() );
+            weld::Entry& rEntry = m_aTextEditField->get_widget();
+            OUString aText(rEntry.get_text());
             double fValue = 0.0;
             bChangeValid = false;
             if( isDateTimeString( aText, fValue ) )
@@ -1221,7 +1224,8 @@ bool DataBrowser::SaveModified()
         break;
         case DataBrowserModel::TEXT:
         {
-            OUString aText( m_aTextEditField->GetText());
+            weld::Entry& rEntry = m_aTextEditField->get_widget();
+            OUString aText(rEntry.get_text());
             bChangeValid = m_apDataBrowserModel->setCellText( nCol, nRow, aText );
         }
         break;
@@ -1233,7 +1237,7 @@ bool DataBrowser::SaveModified()
         RowModified( GetCurRow(), GetCurColumnId());
         ::svt::CellController* pCtrl = GetController( GetCurRow(), GetCurColumnId());
         if( pCtrl )
-            pCtrl->ClearModified();
+            pCtrl->SaveValue();
     }
 
     return bChangeValid;

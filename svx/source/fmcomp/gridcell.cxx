@@ -1054,13 +1054,11 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
 {
 }
 
-
 DbTextField::~DbTextField( )
 {
     m_pPainterImplementation.reset();
     m_pEdit.reset();
 }
-
 
 void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
@@ -1106,11 +1104,26 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     }
     else
     {
-        m_pWindow = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pEdit.reset(new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) ));
+        auto xEditControl = VclPtr<EditControl>::Create(&rParent);
+        auto xEditPainter = VclPtr<EditControl>::Create(&rParent);
 
-        m_pPainter = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pPainterImplementation.reset(new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) ));
+        switch (nAlignment)
+        {
+            case awt::TextAlign::RIGHT:
+                xEditControl->get_widget().set_alignment(TxtAlign::Right);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Right);
+                break;
+            case awt::TextAlign::CENTER:
+                xEditControl->get_widget().set_alignment(TxtAlign::Center);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Center);
+                break;
+        }
+
+        m_pWindow = xEditControl;
+        m_pEdit.reset(new EntryImplementation(*xEditControl));
+
+        m_pPainter = xEditPainter;
+        m_pPainterImplementation.reset(new EntryImplementation(*xEditPainter));
     }
 
     if ( WB_LEFT == nStyle )
@@ -1128,7 +1141,6 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
 
     DbLimitedLengthField::Init( rParent, xCursor );
 }
-
 
 CellControllerRef DbTextField::CreateController() const
 {
@@ -1437,12 +1449,10 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     DbLimitedLengthField::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbFormattedField::CreateController() const
 {
-    return new ::svt::FormattedFieldCellController( static_cast< FormattedField* >( m_pWindow.get() ) );
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedFieldControl*>(m_pWindow.get()));
 }
-
 
 void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
 {
@@ -1461,7 +1471,6 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
         DbLimitedLengthField::_propertyChanged( _rEvent );
     }
 }
-
 
 OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
@@ -1510,15 +1519,14 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
     return aText;
 }
 
-
 void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     try
     {
-        FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow.get());
+        weld::FormattedSpinButton& rField = static_cast<FormattedFieldControl*>(m_pWindow.get())->get_widget();
         if (!_rxField.is())
         {   // NULL value -> empty text
-            m_pWindow->SetText(OUString());
+            rField.set_text(OUString());
         }
         else if (m_rColumn.IsNumeric())
         {
@@ -1529,9 +1537,9 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
             // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
-                m_pWindow->SetText(OUString());
+                rField.set_text(OUString());
             else
-                pFormattedWindow->SetValue(dValue);
+                rField.set_value(dValue);
         }
         else
         {
@@ -1539,8 +1547,9 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
             // So simply bind the text from the css::util::NumberFormatter to the correct css::form::component::Form.
             OUString sText( _rxField->getString());
 
-            pFormattedWindow->SetTextFormatted( sText );
-            pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+//TODO            pFormattedWindow->SetTextFormatted( sText );
+            rField.set_text(sText);
+            rField.select_region(0, -1);
         }
     }
     catch( const Exception& )
@@ -1548,7 +1557,6 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
         DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
-
 
 void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -1571,20 +1579,18 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
     }
 }
 
-
 bool DbFormattedField::commitControl()
 {
     Any aNewVal;
-    FormattedField& rField = *static_cast<FormattedField*>(m_pWindow.get());
-    DBG_ASSERT(&rField == m_pWindow, "DbFormattedField::commitControl : can't work with a window other than my own !");
+    weld::FormattedSpinButton& rField = static_cast<FormattedFieldControl*>(m_pWindow.get())->get_widget();
     if (m_rColumn.IsNumeric())
     {
-        if (!rField.GetText().isEmpty())
-            aNewVal <<= rField.GetValue();
+        if (!rField.get_text().isEmpty())
+            aNewVal <<= rField.get_value();
         // an empty string is passed on as void by default, to start with
     }
     else
-        aNewVal <<= rField.GetTextValue();
+        aNewVal <<= rField.get_text();
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_EFFECTIVE_VALUE, aNewVal);
     return true;
@@ -2731,7 +2737,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }   break;
         default:
         {
-            m_pWindow  = VclPtr<Edit>::Create(pParent, WB_LEFT);
+            m_pWindow  = VclPtr<EditControl>::Create(pParent);
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
@@ -2741,7 +2747,6 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }
     }
 }
-
 
 void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
@@ -2799,7 +2804,7 @@ CellControllerRef DbFilterField::CreateController() const
             if (m_bFilterList)
                 xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
             else
-                xController = new EditCellController(static_cast<Edit*>(m_pWindow.get()));
+                xController = new EditCellController(static_cast<EditControl*>(m_pWindow.get()));
     }
     return xController;
 }
@@ -3546,7 +3551,6 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
         m_bOwnEditImplementation = true;
     }
 }
-
 
 FmXEditCell::~FmXEditCell()
 {

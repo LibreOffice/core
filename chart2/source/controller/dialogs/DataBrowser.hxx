@@ -160,8 +160,8 @@ private:
     bool                m_bIsReadOnly;
     bool                m_bDataValid;
 
-    VclPtr<FormattedField>      m_aNumberEditField;
-    VclPtr<Edit>                m_aTextEditField;
+    VclPtr<svt::FormattedFieldControl> m_aNumberEditField;
+    VclPtr<svt::EditControl>    m_aTextEditField;
     weld::Container*            m_pColumnsWin;
     weld::Container*            m_pColorsWin;
 
