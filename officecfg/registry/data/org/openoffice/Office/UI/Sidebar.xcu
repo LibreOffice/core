@@ -397,7 +397,10 @@
 
       <node oor:name="InspectorTextPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Character Styles</value>
+          <value xml:lang="en-US">Styles Inspector</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>InspectorTextPanel</value>
@@ -414,7 +417,7 @@
           <value>private:resource/toolpanel/SwPanelFactory/WriterInspectorTextPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>120</value>
+          <value>100</value>
         </prop>
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
