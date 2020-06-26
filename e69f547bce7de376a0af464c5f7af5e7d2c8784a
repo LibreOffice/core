@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "756267ef_e54b7ac5",
+        "filename": "vcl/source/gdi/impanmvw.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-26T07:45:36Z",
+      "side": 0,
+      "message": "This line makes sure that Flush is only called for windows. Removing it makes calls to Flush for other devices, too; this has two results:\n\n1. A virtual function is called for other devices (some overhead);\n2. If some non-Window class will override Flush, it will be executed.\n\nI don\u0027t know if any of these points are important - just mentioning it here. Possibly it\u0027s even incorrect to avoid the calls for other devices.\n\nOf course, with the current implementation (when Window::Flush is not marked final) the cast on the next line is useless in any case.",
+      "range": {
+        "startLine": 290,
+        "startChar": 12,
+        "endLine": 290,
+        "endChar": 66
+      },
+      "revId": "e69f547bce7de376a0af464c5f7af5e7d2c8784a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
