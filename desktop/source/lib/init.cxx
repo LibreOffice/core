@@ -140,6 +140,7 @@
 #include <vcl/dialog.hxx>
 #include <unicode/uchar.h>
 #include <unotools/configmgr.hxx>
+#include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
@@ -6044,6 +6045,19 @@ public:
     }
 };
 
+static void activateNotebookbar(const OUString& rApp)
+{
+    OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + rApp;
+
+    const utl::OConfigurationTreeRoot aAppNode(xContext, aPath, true);
+
+    if (aAppNode.isValid())
+    {
+        aAppNode.setNodeValue("Active", makeAny(OUString("notebookbar.ui")));
+        aAppNode.commit();
+    }
+}
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
@@ -6056,6 +6070,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     static bool bPreInited = false;
     static bool bUnipoll = false;
     static bool bProfileZones = false;
+    static bool bNotebookbar = false;
 
     { // cf. string lifetime for preinit
         std::vector<OUString> aOpts;
@@ -6076,6 +6091,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else if (it == "sc_print_twips_msgs")
                 comphelper::LibreOfficeKit::setCompatFlag(
                     comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+            else if (it == "notebookbar")
+                bNotebookbar = true;
         }
     }
 
@@ -6349,6 +6366,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         batch->commit();
     }
 #endif
+
+    if (bNotebookbar)
+    {
+        activateNotebookbar("Writer");
+        activateNotebookbar("Calc");
+        activateNotebookbar("Impress");
+    }
 
     return bInitialized;
 }
