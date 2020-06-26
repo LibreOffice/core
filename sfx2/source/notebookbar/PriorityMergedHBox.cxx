@@ -197,8 +197,6 @@ IMPL_LINK(PriorityMergedHBox, PBClickHdl, Button*, /*pButton*/, void)
 
     m_pPopup->hideSeparators(true);
 
-    m_pPopup->getBox()->set_height_request(GetSizePixel().Height());
-
     long x = m_pButton->GetPosPixel().getX();
     long y = m_pButton->GetPosPixel().getY() + GetSizePixel().Height();
     tools::Rectangle aRect(x, y, x, y);
