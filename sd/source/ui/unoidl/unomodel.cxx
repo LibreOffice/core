@@ -118,6 +118,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -2399,14 +2400,21 @@ OUString SdXImpressDocument::getPostIts()
         for (const uno::Reference<office::XAnnotation>& xAnnotation : aPageAnnotations)
         {
             boost::property_tree::ptree aAnnotation;
-            aAnnotation.put("id", sd::getAnnotationId(xAnnotation));
+            sal_uInt32 nID = sd::getAnnotationId(xAnnotation);
+            OString nodeName = "comment" + OString::number(nID);
+            aAnnotation.put("id", nID);
             aAnnotation.put("author", xAnnotation->getAuthor());
             aAnnotation.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             aAnnotation.put("text", xText->getString());
             aAnnotation.put("parthash", OUString(OUString::number(pPage->GetHashCode())));
-
-            aAnnotations.push_back(std::make_pair("", aAnnotation));
+            geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
+            geometry::RealSize2D const & rSize = xAnnotation->getSize();
+            ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            OString sRectangle = aRectangle.toString();
+            aAnnotation.put("rectangle", sRectangle.getStr());
+            aAnnotations.push_back(std::make_pair(nodeName.getStr(), aAnnotation));
         }
     }
 
