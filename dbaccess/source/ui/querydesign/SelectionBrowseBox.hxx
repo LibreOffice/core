@@ -55,7 +55,7 @@ namespace dbaui
 
         long                                m_nSeekRow;
         BrowserMode                         m_nMode;                    // remember the BrowseModes
-        VclPtr<Edit>                               m_pTextCell;
+        VclPtr< ::svt::EditControl>                 m_pTextCell;
         VclPtr< ::svt::CheckBoxControl>             m_pVisibleCell;
         VclPtr< ::svt::ComboBoxControl>             m_pFieldCell;
         VclPtr< ::svt::ListBoxControl>              m_pFunctionCell;
