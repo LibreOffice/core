@@ -2438,9 +2438,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 break; // not for nested group
             OUString str(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             // dmapper expects this as a field, so let's fake something...
-            OUString const field((Destination::INDEXENTRY == rState.getDestination())
-                                     ? OUStringLiteral("XE")
-                                     : OUStringLiteral("TC"));
+            auto const field((Destination::INDEXENTRY == rState.getDestination())
+                                 ? OUStringLiteral("XE")
+                                 : OUStringLiteral("TC"));
             str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
             singleChar(cFieldStart);
             Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
