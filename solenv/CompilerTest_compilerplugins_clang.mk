@@ -31,6 +31,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/dbgunhandledexception \
     compilerplugins/clang/test/dodgyswitch \
     compilerplugins/clang/test/doubleconvert \
+    compilerplugins/clang/test/elidestringvar \
     compilerplugins/clang/test/emptyif \
     compilerplugins/clang/test/expressionalwayszero \
     compilerplugins/clang/test/external \

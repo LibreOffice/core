@@ -67,7 +67,7 @@ public:
                 continue;
             }
             report(DiagnosticsEngine::Warning,
-                   "replace single use of literal OUString variable with the literal",
+                   "replace single use of literal OUString variable with a literal",
                    (*var.second.singleUse)->getExprLoc())
                 << (*var.second.singleUse)->getSourceRange();
             report(DiagnosticsEngine::Note, "literal OUString variable defined here",
@@ -121,6 +121,22 @@ public:
         {
             case 0:
                 break;
+            case 1:
+            {
+                auto const e2 = e1->getArg(0);
+                if (loplugin::TypeCheck(e2->getType())
+                        .Struct("OUStringLiteral")
+                        .Namespace("rtl")
+                        .GlobalNamespace())
+                {
+                    break;
+                }
+                if (e2->isIntegerConstantExpr(compiler.getASTContext()))
+                {
+                    break;
+                }
+                return true;
+            }
             case 2:
             {
                 auto const e2 = e1->getArg(1);
