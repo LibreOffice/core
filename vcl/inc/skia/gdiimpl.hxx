@@ -35,6 +35,7 @@
 class SkiaFlushIdle;
 class GenericSalLayout;
 class SkFont;
+class SkiaSalBitmap;
 
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
@@ -202,6 +203,8 @@ public:
     void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
+    void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader);
+
     enum class GlyphOrientation
     {
         Apply,
@@ -251,8 +254,6 @@ protected:
     // get the height of the device
     int GetHeight() const { return mProvider ? mProvider->GetHeight() : 1; }
 
-    void drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage, Color nMaskColor);
-
     SkCanvas* getXorCanvas();
     void applyXor();
     void addXorRegion(const SkRect& rect)
@@ -264,6 +265,8 @@ protected:
         }
     }
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
+    sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
+                                     const Size targetSize);
 
     // When drawing using GPU, rounding errors may result in off-by-one errors,
     // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
