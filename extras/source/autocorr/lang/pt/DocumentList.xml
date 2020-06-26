@@ -71,6 +71,7 @@
 <block-list:block block-list:abbreviated-name="admição" block-list:name="admissão"/>
 <block-list:block block-list:abbreviated-name="adquado" block-list:name="adequado"/>
 <block-list:block block-list:abbreviated-name="adquados" block-list:name="adequados"/>
+<block-list:block block-list:abbreviated-name="advinhação" block-list:name="adivinhação"/>
 <block-list:block block-list:abbreviated-name="aer" block-list:name="era"/>
 <block-list:block block-list:abbreviated-name="aereo" block-list:name="aéreo"/>
 <block-list:block block-list:abbreviated-name="aereos" block-list:name="aéreos"/>
@@ -416,6 +417,8 @@
 <block-list:block block-list:abbreviated-name="cassifos" block-list:name="cacifos"/>
 <block-list:block block-list:abbreviated-name="cataclisma" block-list:name="cataclismo"/>
 <block-list:block block-list:abbreviated-name="cataclismas" block-list:name="cataclismos"/>
+<block-list:block block-list:abbreviated-name="catastrofe" block-list:name="catástrofe"/>
+<block-list:block block-list:abbreviated-name="catastrofes" block-list:name="catástrofes"/>
 <block-list:block block-list:abbreviated-name="catastrofico" block-list:name="catastrófico"/>
 <block-list:block block-list:abbreviated-name="catastroficos" block-list:name="catastróficos"/>
 <block-list:block block-list:abbreviated-name="catra" block-list:name="carta"/>
@@ -563,6 +566,7 @@
 <block-list:block block-list:abbreviated-name="consciecias" block-list:name="consciências"/>
 <block-list:block block-list:abbreviated-name="consciencia" block-list:name="consciência"/>
 <block-list:block block-list:abbreviated-name="consciencias" block-list:name="consciências"/>
+<block-list:block block-list:abbreviated-name="consegem" block-list:name="conseguem"/>
 <block-list:block block-list:abbreviated-name="consequencia" block-list:name="consequência"/>
 <block-list:block block-list:abbreviated-name="consequencias" block-list:name="consequências"/>
 <block-list:block block-list:abbreviated-name="consertesa" block-list:name="com certeza"/>
@@ -1158,6 +1162,8 @@
 <block-list:block block-list:abbreviated-name="fortuíto" block-list:name="fortuito"/>
 <block-list:block block-list:abbreviated-name="forum" block-list:name="fórum"/>
 <block-list:block block-list:abbreviated-name="foruns" block-list:name="fóruns"/>
+<block-list:block block-list:abbreviated-name="fracaço" block-list:name="fracasso"/>
+<block-list:block block-list:abbreviated-name="fracaços" block-list:name="fracassos"/>
 <block-list:block block-list:abbreviated-name="frente à" block-list:name="frente a"/>
 <block-list:block block-list:abbreviated-name="fulijem" block-list:name="fuligem"/>
 <block-list:block block-list:abbreviated-name="funcionalidad" block-list:name="funcionalidade"/>
@@ -1344,6 +1350,7 @@
 <block-list:block block-list:abbreviated-name="interese" block-list:name="interesse"/>
 <block-list:block block-list:abbreviated-name="interestrelar" block-list:name="interestelar"/>
 <block-list:block block-list:abbreviated-name="interestrelares" block-list:name="interestelares"/>
+<block-list:block block-list:abbreviated-name="interpertar" block-list:name="interpretar"/>
 <block-list:block block-list:abbreviated-name="intertê" block-list:name="entreter"/>
 <block-list:block block-list:abbreviated-name="intertido" block-list:name="entretido"/>
 <block-list:block block-list:abbreviated-name="intertimento" block-list:name="entretimento"/>
@@ -1399,6 +1406,7 @@
 <block-list:block block-list:abbreviated-name="junot" block-list:name="junto"/>
 <block-list:block block-list:abbreviated-name="junots" block-list:name="juntos"/>
 <block-list:block block-list:abbreviated-name="juri" block-list:name="júri"/>
+<block-list:block block-list:abbreviated-name="juris" block-list:name="júris"/>
 <block-list:block block-list:abbreviated-name="kbça" block-list:name="cabeça"/>
 <block-list:block block-list:abbreviated-name="kbças" block-list:name="cabeças"/>
 <block-list:block block-list:abbreviated-name="kd" block-list:name="cada"/>
@@ -1486,6 +1494,7 @@
 <block-list:block block-list:abbreviated-name="matérias primas" block-list:name="matérias-primas"/>
 <block-list:block block-list:abbreviated-name="maximo" block-list:name="máximo"/>
 <block-list:block block-list:abbreviated-name="maxado" block-list:name="machado"/>
+<block-list:block block-list:abbreviated-name="maximisar" block-list:name="maximizar"/>
 <block-list:block block-list:abbreviated-name="maxucar" block-list:name="machucar"/>
 <block-list:block block-list:abbreviated-name="maz" block-list:name="mas"/>
 <block-list:block block-list:abbreviated-name="mbe" block-list:name="bem"/>
@@ -2102,6 +2111,8 @@
 <block-list:block block-list:abbreviated-name="raíses" block-list:name="raízes"/>
 <block-list:block block-list:abbreviated-name="raíz" block-list:name="raiz"/>
 <block-list:block block-list:abbreviated-name="raizes" block-list:name="raízes"/>
+<block-list:block block-list:abbreviated-name="ralizado" block-list:name="realizado"/>
+<block-list:block block-list:abbreviated-name="ralizados" block-list:name="realizados"/>
 <block-list:block block-list:abbreviated-name="rapido" block-list:name="rápido"/>
 <block-list:block block-list:abbreviated-name="rapidos" block-list:name="rápidos"/>
 <block-list:block block-list:abbreviated-name="raxar" block-list:name="rachar"/>
@@ -2264,6 +2275,8 @@
 <block-list:block block-list:abbreviated-name="suicidio" block-list:name="suicídio"/>
 <block-list:block block-list:abbreviated-name="suicidios" block-list:name="suicídios"/>
 <block-list:block block-list:abbreviated-name="sumil" block-list:name="sumiu"/>
+<block-list:block block-list:abbreviated-name="supermacia" block-list:name="supremacia"/>
+<block-list:block block-list:abbreviated-name="supermacias" block-list:name="supremacias"/>
 <block-list:block block-list:abbreviated-name="susseder" block-list:name="suceder"/>
 <block-list:block block-list:abbreviated-name="ta" block-list:name="tá"/>
 <block-list:block block-list:abbreviated-name="tabmém" block-list:name="também"/>
