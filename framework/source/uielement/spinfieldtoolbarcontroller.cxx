@@ -52,6 +52,12 @@ public:
     SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarController* pSpinfieldToolbarController);
     virtual ~SpinfieldControl() override;
     virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
 
     void set_value(double fValue);
 
@@ -84,6 +90,7 @@ public:
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
 
 private:
     std::unique_ptr<weld::FormattedSpinButton> m_xWidget;
@@ -102,6 +109,7 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
     m_xWidget->connect_input(LINK(this, SpinfieldControl, ParseInputHdl));
     m_xWidget->connect_changed(LINK(this, SpinfieldControl, ModifyHdl));
     m_xWidget->connect_activate(LINK(this, SpinfieldControl, ActivateHdl));
+    m_xWidget->connect_key_press(LINK(this, SpinfieldControl, KeyInputHdl));
 
     // so a later narrow size request can stick
     m_xWidget->set_width_chars(3);
@@ -116,6 +124,11 @@ void SpinfieldControl::set_value(double fValue)
     m_xWidget->set_value(fValue);
     m_xWidget->set_text(aOutString);
     m_pSpinfieldToolbarController->Modify();
+}
+
+IMPL_LINK(SpinfieldControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 IMPL_LINK(SpinfieldControl, ParseInputHdl, double*, result, bool)

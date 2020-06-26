@@ -46,6 +46,12 @@ public:
     EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController);
     virtual ~EditControl() override;
     virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
 
     OUString get_text() const { return m_xWidget->get_text(); }
     void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
@@ -58,6 +64,7 @@ private:
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
 };
 
 EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController)
@@ -69,8 +76,14 @@ EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolb
     m_xWidget->connect_focus_out(LINK(this, EditControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, EditControl, ModifyHdl));
     m_xWidget->connect_activate(LINK(this, EditControl, ActivateHdl));
+    m_xWidget->connect_key_press(LINK(this, EditControl, KeyInputHdl));
 
     SetSizePixel(get_preferred_size());
+}
+
+IMPL_LINK(EditControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 EditControl::~EditControl()

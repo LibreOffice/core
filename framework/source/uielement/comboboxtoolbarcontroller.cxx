@@ -47,6 +47,12 @@ public:
     ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController* pComboboxToolbarController);
     virtual ~ComboBoxControl() override;
     virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
 
     void set_active_or_entry_text(const OUString& rText);
     OUString get_active_text() const { return m_xWidget->get_active_text(); }
@@ -62,6 +68,7 @@ public:
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_LINK(ModifyHdl, weld::ComboBox&, void);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
 
 private:
     std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -77,9 +84,15 @@ ComboBoxControl::ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController
     m_xWidget->connect_focus_out(LINK(this, ComboBoxControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, ComboBoxControl, ModifyHdl));
     m_xWidget->connect_entry_activate(LINK(this, ComboBoxControl, ActivateHdl));
+    m_xWidget->connect_key_press(LINK(this, ComboBoxControl, KeyInputHdl));
 
     m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used by ComboboxToolbarController
     SetSizePixel(get_preferred_size());
+}
+
+IMPL_LINK(ComboBoxControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 void ComboBoxControl::set_active_or_entry_text(const OUString& rText)

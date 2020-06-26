@@ -47,6 +47,12 @@ public:
     ListBoxControl(vcl::Window* pParent, DropdownToolbarController* pListBoxListener);
     virtual ~ListBoxControl() override;
     virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
 
     void set_active(int nPos) { m_xWidget->set_active(nPos); }
     void append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
@@ -60,6 +66,7 @@ public:
     DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
 
 private:
     std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -74,9 +81,15 @@ ListBoxControl::ListBoxControl(vcl::Window* pParent, DropdownToolbarController* 
     m_xWidget->connect_focus_in(LINK(this, ListBoxControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, ListBoxControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, ListBoxControl, ModifyHdl));
+    m_xWidget->connect_key_press(LINK(this, ListBoxControl, KeyInputHdl));
 
     m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
     SetSizePixel(get_preferred_size());
+}
+
+IMPL_LINK(ListBoxControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 ListBoxControl::~ListBoxControl()
