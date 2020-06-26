@@ -2157,7 +2157,6 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-
 VclPtr<SpinField> DbDateField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
 {
     // check if there is a DropDown property set to TRUE
@@ -2168,14 +2167,11 @@ VclPtr<SpinField> DbDateField::createField( vcl::Window* _pParent, WinBits _nFie
 
     VclPtr<CalendarField> pField = VclPtr<CalendarField>::Create( _pParent, _nFieldStyle );
 
-    fprintf(stderr, "start EnableToday\n");
     pField->EnableToday();
-    fprintf(stderr, "end EnableToday\n");
     pField->EnableNone();
 
     return pField;
 }
-
 
 void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
