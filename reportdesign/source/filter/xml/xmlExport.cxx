@@ -278,9 +278,8 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     m_xParaPropMapper = new OSpecialHandleXMLExportPropertyMapper( xPropMapper);
 
     const OUString& sFamily( GetXMLToken(XML_PARAGRAPH) );
-    OUString aPrefix( 'P');
     GetAutoStylePool()->AddFamily( XmlStyleFamily::TEXT_PARAGRAPH, sFamily,
-                              m_xParaPropMapper, aPrefix );
+                              m_xParaPropMapper, "P" );
 
     GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
         m_xCellStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
