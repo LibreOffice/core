@@ -84,13 +84,11 @@ void GenericEditImplementation< EDIT >::ReplaceSelected( const OUString& _rStr )
     m_rEdit.ReplaceSelected( _rStr );
 }
 
-
 template <class EDIT>
 OUString GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
 {
     return m_rEdit.GetSelected( );
 }
-
 
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetMaxTextLen( sal_Int32 _nMaxLen )
@@ -98,34 +96,23 @@ void GenericEditImplementation< EDIT >::SetMaxTextLen( sal_Int32 _nMaxLen )
     m_rEdit.SetMaxTextLen( _nMaxLen );
 }
 
-
 template <class EDIT>
 sal_Int32 GenericEditImplementation< EDIT >::GetMaxTextLen() const
 {
     return m_rEdit.GetMaxTextLen( );
 }
 
-
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetModified()
+bool GenericEditImplementation< EDIT >::IsValueChangedFromSaved() const
 {
-    m_rEdit.SetModifyFlag();
+    return m_rEdit.IsValueChangedFromSaved();
 }
 
-
 template <class EDIT>
-bool GenericEditImplementation< EDIT >::IsModified() const
+void GenericEditImplementation< EDIT >::SaveValue()
 {
-    return m_rEdit.IsModified();
+    m_rEdit.SaveValue();
 }
-
-
-template <class EDIT>
-void GenericEditImplementation< EDIT >::ClearModified()
-{
-    m_rEdit.ClearModifyFlag();
-}
-
 
 template <class EDIT>
 void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<LinkParamNone*,void>& _rLink )

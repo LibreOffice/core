@@ -463,8 +463,8 @@ bool OFieldExpressionControl::SaveModified()
                     m_pParent->m_pController->getUndoManager().LeaveListAction();
             }
 
-            if ( Controller().is() )
-                Controller()->ClearModified();
+            if (Controller().is())
+                Controller()->SaveValue();
             if ( GetRowCount() == m_pParent->getGroups()->getCount() )
             {
                 RowInserted( GetRowCount()-1);

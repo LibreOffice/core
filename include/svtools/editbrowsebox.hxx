@@ -29,6 +29,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/vclmedit.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -93,9 +94,8 @@ namespace svt
 
         Control& GetWindow() const { return *const_cast< CellController* >( this )->pWindow; }
 
-        virtual void SetModified();
-        virtual void ClearModified() = 0;
-        virtual bool IsModified() const = 0;
+        virtual void SaveValue() = 0;
+        virtual bool IsValueChangedFromSaved() const = 0;
 
         // commit any current changes. Especially, do any reformatting you need (from input formatting
         // to output formatting) here
@@ -140,9 +140,8 @@ namespace svt
         virtual void                ReplaceSelected( const OUString& _rStr ) = 0;
         virtual OUString            GetSelected( LineEnd aSeparator ) const = 0;
 
-        virtual void                SetModified() = 0;
-        virtual bool                IsModified() const = 0;
-        virtual void                ClearModified() = 0;
+        virtual bool                IsValueChangedFromSaved() const = 0;
+        virtual void                SaveValue() = 0;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) = 0;
     };
 
@@ -177,10 +176,31 @@ namespace svt
         virtual void                ReplaceSelected( const OUString& _rStr ) override;
         virtual OUString            GetSelected( LineEnd aSeparator ) const override;
 
-        virtual void                SetModified() override;
-        virtual bool                IsModified() const override;
-        virtual void                ClearModified() override;
+        virtual bool                IsValueChangedFromSaved() const override;
+        virtual void                SaveValue() override;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) override;
+    };
+
+    class SVT_DLLPUBLIC EditControl final : public InterimItemWindow
+    {
+    public:
+        EditControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
+
+        weld::Entry& get_widget() { return *m_xWidget; }
+
+        virtual void dispose() override;
+
+    private:
+        std::unique_ptr<weld::Entry> m_xWidget;
+
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     };
 
     #include <svtools/editimplementation.hxx>
@@ -244,15 +264,15 @@ namespace svt
 
     public:
         EditCellController( Edit* _pEdit );
+        EditCellController( EditControl* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         virtual ~EditCellController( ) override;
 
         const IEditImplementation* GetEditImplementation( ) const { return m_pEditImplementation; }
               IEditImplementation* GetEditImplementation( )       { return m_pEditImplementation; }
 
-        virtual void SetModified() override;
-        virtual bool IsModified() const override;
-        virtual void ClearModified() override;
+        virtual bool IsValueChangedFromSaved() const override;
+        virtual void SaveValue() override;
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
@@ -270,9 +290,8 @@ namespace svt
         const SpinField& GetSpinWindow() const;
         SpinField& GetSpinWindow();
 
-        virtual void SetModified() override;
-        virtual bool IsModified() const override;
-        virtual void ClearModified() override;
+        virtual bool IsValueChangedFromSaved() const override;
+        virtual void SaveValue() override;
 
     private:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
@@ -319,8 +338,8 @@ namespace svt
         CheckBoxCellController(CheckBoxControl* pWin);
         CheckBox& GetCheckBox() const;
 
-        virtual bool IsModified() const override;
-        virtual void ClearModified() override;
+        virtual bool IsValueChangedFromSaved() const override;
+        virtual void SaveValue() override;
 
     private:
         virtual bool WantMouseEvent() const override;
@@ -334,6 +353,13 @@ namespace svt
 
     public:
         ComboBoxControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
@@ -351,8 +377,8 @@ namespace svt
         ComboBoxCellController(ComboBoxControl* pParent);
         weld::ComboBox& GetComboBox() const { return static_cast<ComboBoxControl&>(GetWindow()).get_widget(); }
 
-        virtual bool IsModified() const override;
-        virtual void ClearModified() override;
+        virtual bool IsValueChangedFromSaved() const override;
+        virtual void SaveValue() override;
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
@@ -367,6 +393,13 @@ namespace svt
 
     public:
         ListBoxControl(vcl::Window* pParent);
+
+        virtual void GetFocus() override
+        {
+            if (m_xWidget)
+                m_xWidget->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
@@ -383,8 +416,8 @@ namespace svt
         ListBoxCellController(ListBoxControl* pParent);
         weld::ComboBox& GetListBox() const { return static_cast<ListBoxControl&>(GetWindow()).get_widget(); }
 
-        virtual bool IsModified() const override;
-        virtual void ClearModified() override;
+        virtual bool IsValueChangedFromSaved() const override;
+        virtual void SaveValue() override;
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
@@ -552,7 +585,7 @@ namespace svt
                                             // return sal_False prevents leaving the cell
         virtual bool SaveRow();         // commit the current row
 
-        virtual bool IsModified() const {return aController.is() && aController->IsModified();}
+        virtual bool IsModified() const {return aController.is() && aController->IsValueChangedFromSaved();}
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);

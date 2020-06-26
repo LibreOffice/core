@@ -498,7 +498,7 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
     m_bIsReadOnly( false ),
     m_bDataValid( true ),
     m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
-    m_aTextEditField( VclPtr<Edit>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aTextEditField(VclPtr<EditControl>::Create(&EditBrowseBox::GetDataWindow())),
     m_pColumnsWin(pColumns),
     m_pColorsWin(pColors),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
@@ -1128,8 +1128,9 @@ void DataBrowser::InitController(
     if( rController == m_rTextEditController )
     {
         OUString aText( GetCellText( nRow, nCol ) );
-        m_aTextEditField->SetText( aText );
-        m_aTextEditField->SetSelection( ::Selection( 0, aText.getLength() ));
+        weld::Entry& rEntry = m_aTextEditField->get_widget();
+        rEntry.set_text(aText);
+        rEntry.select_region(0, -1);
     }
     else if( rController == m_rNumberEditController )
     {
@@ -1210,7 +1211,8 @@ bool DataBrowser::SaveModified()
         break;
         case DataBrowserModel::TEXTORDATE:
         {
-            OUString aText( m_aTextEditField->GetText() );
+            weld::Entry& rEntry = m_aTextEditField->get_widget();
+            OUString aText(rEntry.get_text());
             double fValue = 0.0;
             bChangeValid = false;
             if( isDateTimeString( aText, fValue ) )
@@ -1221,7 +1223,8 @@ bool DataBrowser::SaveModified()
         break;
         case DataBrowserModel::TEXT:
         {
-            OUString aText( m_aTextEditField->GetText());
+            weld::Entry& rEntry = m_aTextEditField->get_widget();
+            OUString aText(rEntry.get_text());
             bChangeValid = m_apDataBrowserModel->setCellText( nCol, nRow, aText );
         }
         break;
@@ -1233,7 +1236,7 @@ bool DataBrowser::SaveModified()
         RowModified( GetCurRow(), GetCurColumnId());
         ::svt::CellController* pCtrl = GetController( GetCurRow(), GetCurColumnId());
         if( pCtrl )
-            pCtrl->ClearModified();
+            pCtrl->SaveValue();
     }
 
     return bChangeValid;

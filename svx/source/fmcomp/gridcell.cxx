@@ -2731,7 +2731,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }   break;
         default:
         {
-            m_pWindow  = VclPtr<Edit>::Create(pParent, WB_LEFT);
+            m_pWindow  = VclPtr<EditControl>::Create(pParent);
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
@@ -2741,7 +2741,6 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
         }
     }
 }
-
 
 void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
