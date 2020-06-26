@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e479f205_708f7773",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T17:03:52Z",
+      "side": 1,
+      "message": "This value means the same, as in Word, see https://issues.oasis-open.org/browse/OFFICE-4073, i.e. footer is not part of (height of) bottom margin here. It\u0027s better to remove this comment later.",
+      "range": {
+        "startLine": 983,
+        "startChar": 0,
+        "endLine": 984,
+        "endChar": 94
+      },
+      "revId": "b3bb05d41c1633ff5efaf7a4e85b0506311b4d98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

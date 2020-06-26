@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3eace0eb_7f6fdc2d",
+        "filename": "sw/source/core/inc/pagefrm.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T17:03:52Z",
+      "side": 1,
+      "message": "Is it possible, that we can get this without API extension? Like positions of the objects anchored to \"page text area\"?",
+      "range": {
+        "startLine": 333,
+        "startChar": 4,
+        "endLine": 333,
+        "endChar": 48
+      },
+      "revId": "df3dfdf5f85d921ffe7fb51fe2a71590b7413758",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be9eedb5_1f30ce7c",
+        "filename": "sw/source/core/layout/anchoreddrawobject.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T17:03:52Z",
+      "side": 1,
+      "message": "There is no difference here between Word and Writer. Page content/PRINT_AREA doesn\u0027t count header/footer, see positions of objects anchored to \"page text area\": footer doesn\u0027t change them.",
+      "range": {
+        "startLine": 660,
+        "startChar": 41,
+        "endLine": 660,
+        "endChar": 124
+      },
+      "revId": "df3dfdf5f85d921ffe7fb51fe2a71590b7413758",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92641b38_864cd027",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T17:03:52Z",
+      "side": 1,
+      "message": "I think, we must use this value, because it covers the same height, see https://issues.oasis-open.org/browse/OFFICE-4073.",
+      "range": {
+        "startLine": 983,
+        "startChar": 24,
+        "endLine": 984,
+        "endChar": 94
+      },
+      "revId": "df3dfdf5f85d921ffe7fb51fe2a71590b7413758",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
