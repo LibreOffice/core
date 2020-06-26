@@ -42,7 +42,7 @@ enum class SvxShadowItemSide;
 const sal_Unicode CH_BLANK = ' ';   // ' ' blank spaces
 const sal_Unicode CH_BREAK = 0x0A;
 const sal_Unicode CH_TAB   = '\t';  // \t
-const sal_Unicode CH_PAR    = 0xB6;     // paragraph
+constexpr OUStringChar CH_PAR = u'\u00B6'; // paragraph
 const sal_Unicode CH_BULLET = 0xB7;     // centered dot
 const sal_Unicode CH_FULL_BLANK = 0x3000;
 const sal_Unicode CH_NB_SPACE = 0xA0;

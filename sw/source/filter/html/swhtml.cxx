@@ -4999,8 +4999,7 @@ void SwHTMLParser::InsertSpacer()
             else
             {
                 NewAttr(m_xAttrTab, &m_xAttrTab->pKerning, SvxKerningItem( static_cast<short>(nSize), RES_CHRATR_KERNING ));
-                OUString aTmp( ' ' );
-                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aTmp );
+                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, " " );
                 EndAttr( m_xAttrTab->pKerning );
             }
         }
@@ -5194,8 +5193,7 @@ void SwHTMLParser::InsertLineBreak()
     if( !bCleared && !bBreakItem )
     {
         // If no CLEAR could or should be executed, a line break will be inserted
-        OUString sTmp( u'\x000a' );
-        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
+        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, "\x0A" );
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )
     {

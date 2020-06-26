@@ -64,7 +64,7 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
         const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
         // draw the pilcrow
-        rInf.DrawText(OUString(CH_PAR), *this);
+        rInf.DrawText(CH_PAR, *this);
 
         const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
     }
