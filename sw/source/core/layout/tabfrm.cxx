@@ -1066,7 +1066,6 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         else
             bSplitRowAllowed = false;
     }
-
     // #i29438#
     // #i26945# - Floating screen objects no longer forbid
     // a splitting of the table row.
@@ -3892,11 +3891,16 @@ long CalcHeightWithFlys( const SwFrame *pFrame )
                     // the text flow have to be considered.
                     const SwFrameFormat& rFrameFormat = pAnchoredObj->GetFrameFormat();
                     bool bFollowTextFlow = rFrameFormat.GetFollowTextFlow().GetValue();
+                    bool bIsFarAway = pAnchoredObj->GetObjRect().Top() != FAR_AWAY;
+                    const SwPageFrame* pPageFrm = pTmp->FindPageFrame();
+                    bool bIsAnchoredToTmpFrm = false;
+                    if ( pPageFrm && pPageFrm->IsPageFrame() && pAnchoredObj->GetPageFrame())
+                        bIsAnchoredToTmpFrm = pAnchoredObj->GetPageFrame() == pPageFrm ||
+                        (pPageFrm->GetFormatPage().GetPhyPageNum() == pAnchoredObj->GetPageFrame()->GetFormatPage().GetPhyPageNum() + 1);
                     const bool bConsiderObj =
                         (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
-                            pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
-                            bFollowTextFlow &&
-                            pAnchoredObj->GetPageFrame() == pTmp->FindPageFrame();
+                        bIsFarAway &&
+                        bFollowTextFlow && bIsAnchoredToTmpFrm;
                     bool bWrapThrough = rFrameFormat.GetSurround().GetValue() == text::WrapTextMode_THROUGH;
                     if (pFrame->IsInTab() && bFollowTextFlow && bWrapThrough)
                     {
