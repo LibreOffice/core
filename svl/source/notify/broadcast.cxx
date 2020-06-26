@@ -24,40 +24,42 @@
 #include <cassert>
 #include <algorithm>
 
+static void sortListeners(std::vector<SvtListener*>& listeners, size_t firstUnsorted)
+{
+    // Add() only appends new values, so often the container will be sorted expect for one
+    // or few last items. For larger containers it is much more efficient to just handle
+    // the unsorted part.
+    auto sortedEnd = firstUnsorted == 0
+        ? std::is_sorted_until(listeners.begin(),listeners.end())
+        : listeners.begin() + firstUnsorted;
+    if( listeners.end() - sortedEnd == 1 )
+    {   // Just one item, insert it in the right place.
+        SvtListener* item = listeners.back();
+        listeners.pop_back();
+        listeners.insert( std::upper_bound( listeners.begin(), listeners.end(), item ), item );
+    }
+    else if( o3tl::make_unsigned( sortedEnd - listeners.begin()) > listeners.size() * 3 / 4 )
+    {   // Sort the unsorted part and then merge.
+        std::sort( sortedEnd, listeners.end());
+        std::inplace_merge( listeners.begin(), sortedEnd, listeners.end());
+    }
+    else
+    {
+        std::sort(listeners.begin(), listeners.end());
+    }
+}
+
 void SvtBroadcaster::Normalize() const
 {
-    if (!mbNormalized)
+    if (mnListenersFirstUnsorted != maListeners.size())
     {
-        // Add() only appends new values, so often the container will be sorted expect for one
-        // or few last items. For larger containers it is much more efficient to just handle
-        // the unsorted part.
-        if(maListeners.size() > 100)
-        {
-            auto sortedEnd = std::is_sorted_until(maListeners.begin(),maListeners.end());
-            if( maListeners.end() - sortedEnd == 1 )
-            {   // Just one item, insert it in the right place.
-                SvtListener* item = maListeners.back();
-                maListeners.pop_back();
-                maListeners.insert( std::upper_bound( maListeners.begin(), maListeners.end(), item ), item );
-                mbNormalized = true;
-            }
-            else if( o3tl::make_unsigned( sortedEnd - maListeners.begin()) > maListeners.size() * 3 / 4 )
-            {   // Sort the unsorted part and then merge.
-                std::sort( sortedEnd, maListeners.end());
-                std::inplace_merge( maListeners.begin(), sortedEnd, maListeners.end());
-                mbNormalized = true;
-            }
-        }
-        if (!mbNormalized)
-        {
-            std::sort(maListeners.begin(), maListeners.end());
-            mbNormalized = true;
-        }
+        sortListeners(maListeners, mnListenersFirstUnsorted);
+        mnListenersFirstUnsorted = maListeners.size();
     }
 
     if (!mbDestNormalized)
     {
-        std::sort(maDestructedListeners.begin(), maDestructedListeners.end());
+        sortListeners(maDestructedListeners, 0);
         mbDestNormalized = true;
     }
 }
@@ -68,9 +70,9 @@ void SvtBroadcaster::Add( SvtListener* p )
     assert(!mbAboutToDie && "called after PrepareForDestruction()?");
     if (mbDisposing || mbAboutToDie)
         return;
-    // only reset mbNormalized if we are going to become unsorted
-    if (!maListeners.empty() && maListeners.back() > p)
-        mbNormalized = false;
+    // Avoid normalizing if the item appended keeps the container sorted.
+    if (maListeners.empty() || (mnListenersFirstUnsorted == maListeners.size() && maListeners.back() < p))
+        ++mnListenersFirstUnsorted;
     maListeners.push_back(p);
 }
 
@@ -81,8 +83,10 @@ void SvtBroadcaster::Remove( SvtListener* p )
 
     if (mbAboutToDie)
     {
+        // only reset mbDestNormalized if we are going to become unsorted
+        if (!maDestructedListeners.empty() && maDestructedListeners.back() > p)
+            mbDestNormalized = false;
         maDestructedListeners.push_back(p);
-        mbDestNormalized = false;
         return;
     }
 
@@ -93,17 +97,23 @@ void SvtBroadcaster::Remove( SvtListener* p )
     if (it != maListeners.end() && *it == p)
     {
         maListeners.erase(it);
+        --mnListenersFirstUnsorted;
     }
 
     if (maListeners.empty())
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(true), mbDestNormalized(true) {}
+SvtBroadcaster::SvtBroadcaster()
+    : mbAboutToDie(false)
+    , mbDisposing(false)
+    , mbDestNormalized(true)
+    , mnListenersFirstUnsorted(0)
+{}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     mbAboutToDie(false), mbDisposing(false),
-    mbNormalized(true), mbDestNormalized(true)
+    mbDestNormalized(true), mnListenersFirstUnsorted(0)
 {
     assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
     assert(!rBC.mbDisposing && "copying an object that is in its destructor?");
