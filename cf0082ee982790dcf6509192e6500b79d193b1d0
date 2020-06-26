@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2fd13da_af818bc4",
+        "filename": "vcl/source/window/decoview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-26T07:34:41Z",
+      "side": 1,
+      "message": "This won\u0027t work as you intend. The compiler does not have information here to put one or the other implementation here depending on the type of the pointer; so it would only be able to put IsWindow(T*) here \u003d\u003e you will always get false.",
+      "range": {
+        "startLine": 597,
+        "startChar": 4,
+        "endLine": 600,
+        "endChar": 23
+      },
+      "revId": "cf0082ee982790dcf6509192e6500b79d193b1d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
