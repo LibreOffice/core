@@ -194,6 +194,7 @@ public:
     void testOptimalHeightReset();
     void testCustomNumFormatHybridCellODS();
     void testTdf121040();
+    void testTdf118624();
 
     void testPrintRangeODS();
     void testOutlineODS();
@@ -349,6 +350,7 @@ public:
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
     CPPUNIT_TEST(testTdf121040);
+    CPPUNIT_TEST(testTdf118624);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
@@ -2921,6 +2923,19 @@ void ScFiltersTest::testTdf121040()
     {
         CPPUNIT_ASSERT_EQUAL(nHeight, rDoc.GetRowHeight(nRow, nTab, false));
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf118624()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf118624.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("RAND() in array/matrix mode shouldn't return the same value",
+            rDoc.GetString(ScAddress(0,0,0)) != rDoc.GetString(ScAddress(0,1,0)));
 
     xDocSh->DoClose();
 }
