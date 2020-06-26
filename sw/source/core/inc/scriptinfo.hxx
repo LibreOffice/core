@@ -35,7 +35,7 @@ class MultiSelection;
 typedef std::vector< sal_Int32 > PositionList;
 enum class SwFontScript;
 namespace sw { struct MergedPara; }
-namespace sw::mark { class IBookmark; }
+namespace sw { namespace mark { class IBookmark; }}
 
 #define SPACING_PRECISION_FACTOR 100
 
