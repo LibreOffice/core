@@ -201,8 +201,15 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         if (!bTextEdit && eHit == SdrHitKind::UrlField && !rMEvt.IsMod2() && !lcl_followHyperlinkAllowed(rMEvt))
             bTextEdit = true;
 
+        bool bPreventModify = mpDocSh->IsReadOnly();
+        if (bPreventModify && mpDocSh->GetSignPDFCertificate().is())
+        {
+            // If the just added signature line shape is selected, allow moving / resizing it.
+            bPreventModify = false;
+        }
+
         if(!bTextEdit
-            && !mpDocSh->IsReadOnly()
+            && !bPreventModify
             && ((mpView->IsMarkedHit(aMDPos, nHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != nullptr)
             && (rMEvt.GetClicks() != 2)
             )
