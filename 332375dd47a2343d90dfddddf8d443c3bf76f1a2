@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "af221603_ecb5ee4e",
+        "filename": "slideshow/source/engine/slide/layermanager.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-06-26T23:07:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47a0d5b2_48ae23bc",
+      "revId": "332375dd47a2343d90dfddddf8d443c3bf76f1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "888b3d48_9e4802be",
         "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
         "patchSetId": 12
@@ -33,6 +51,24 @@
       "revId": "332375dd47a2343d90dfddddf8d443c3bf76f1a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58a81a68_8df4810e",
+        "filename": "slideshow/source/engine/slide/shapemanagerimpl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-06-26T23:07:45Z",
+      "side": 1,
+      "message": "Added an assertion to mpLayerManager, to explicitly state this function shouldn\u0027t be called in such a case.",
+      "parentUuid": "888b3d48_9e4802be",
+      "revId": "332375dd47a2343d90dfddddf8d443c3bf76f1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
