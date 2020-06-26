@@ -45,9 +45,9 @@ namespace dbaui
         std::vector< std::shared_ptr<OTableRow> >*    m_pRowList;
 
         VclPtr<OSQLNameEdit>               pNameCell;
-        VclPtr< ::svt::ListBoxControl>      pTypeCell;
-        VclPtr<Edit>                       pHelpTextCell;
-        VclPtr<Edit>                       pDescrCell;
+        VclPtr<::svt::ListBoxControl>      pTypeCell;
+        VclPtr<::svt::EditControl>         pHelpTextCell;
+        VclPtr<::svt::EditControl>         pDescrCell;
         VclPtr<OTableFieldDescWin>         pDescrWin;          // properties of one column
 
          std::shared_ptr<OTableRow> pActRow;

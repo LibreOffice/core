@@ -1054,13 +1054,11 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
 {
 }
 
-
 DbTextField::~DbTextField( )
 {
     m_pPainterImplementation.reset();
     m_pEdit.reset();
 }
-
 
 void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
@@ -1106,11 +1104,26 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     }
     else
     {
-        m_pWindow = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pEdit.reset(new EditImplementation( *static_cast< Edit* >( m_pWindow.get() ) ));
+        auto xEditControl = VclPtr<EditControl>::Create(&rParent);
+        auto xEditPainter = VclPtr<EditControl>::Create(&rParent);
 
-        m_pPainter = VclPtr<Edit>::Create( &rParent, nStyle );
-        m_pPainterImplementation.reset(new EditImplementation( *static_cast< Edit* >( m_pPainter.get() ) ));
+        switch (nAlignment)
+        {
+            case awt::TextAlign::RIGHT:
+                xEditControl->get_widget().set_alignment(TxtAlign::Right);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Right);
+                break;
+            case awt::TextAlign::CENTER:
+                xEditControl->get_widget().set_alignment(TxtAlign::Center);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Center);
+                break;
+        }
+
+        m_pWindow = xEditControl;
+        m_pEdit.reset(new EntryImplementation(*xEditControl));
+
+        m_pPainter = xEditPainter;
+        m_pPainterImplementation.reset(new EntryImplementation(*xEditPainter));
     }
 
     if ( WB_LEFT == nStyle )
