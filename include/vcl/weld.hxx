@@ -1588,6 +1588,8 @@ class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
 {
 protected:
     Link<FormattedSpinButton&, void> m_aValueChangedHdl;
+    Link<FormattedSpinButton&, void> m_aOutputHdl;
+    Link<double*, bool> m_aInputHdl;
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
@@ -1596,6 +1598,14 @@ public:
     virtual double get_value() const = 0;
     virtual void set_range(double min, double max) = 0;
     virtual void get_range(double& min, double& max) const = 0;
+    virtual void set_increments(double step, double page) = 0;
+
+    void set_min(double min)
+    {
+        double max, dummy;
+        get_range(dummy, max);
+        set_range(min, max);
+    }
 
     void set_max(double max)
     {
@@ -1617,6 +1627,9 @@ public:
     {
         m_aValueChangedHdl = rLink;
     }
+
+    void connect_output(const Link<FormattedSpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
+    void connect_input(const Link<double*, bool>& rLink) { m_aInputHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC Image : virtual public Widget

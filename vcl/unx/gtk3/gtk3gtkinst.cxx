@@ -12128,6 +12128,12 @@ private:
 
     bool signal_output()
     {
+        // allow an explicit handler
+        if (m_aOutputHdl.IsSet())
+        {
+            m_aOutputHdl.Call(*this);
+            return true;
+        }
         if (!m_pFormatter)
             return false;
         double dVal = get_value();
@@ -12157,6 +12163,10 @@ private:
 
     gint signal_input(double* value)
     {
+        // allow an explicit handler
+        if (m_aInputHdl.IsSet())
+            return m_aInputHdl.Call(value) ? 1 : GTK_INPUT_ERROR;
+
         if (!m_pFormatter)
             return 0;
 
@@ -12242,6 +12252,13 @@ public:
     virtual void get_range(double& min, double& max) const override
     {
         gtk_spin_button_get_range(m_pButton, &min, &max);
+    }
+
+    virtual void set_increments(double step, double page) override
+    {
+        disable_notify_events();
+        gtk_spin_button_set_increments(m_pButton, step, page);
+        enable_notify_events();
     }
 
     virtual void set_formatter(SvNumberFormatter* pFormatter) override
