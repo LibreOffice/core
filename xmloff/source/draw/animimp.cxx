@@ -550,7 +550,7 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                     {
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
-                        OUString s = mbTextEffect ? gsTextEffect : gsEffect;
+                        auto const s = mbTextEffect ? gsTextEffect : gsEffect;
                         xSet->setPropertyValue( s, makeAny( eEffect ) );
                         xSet->setPropertyValue( gsSpeed, makeAny( meSpeed ) );
 
