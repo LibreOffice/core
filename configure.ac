@@ -686,7 +686,7 @@ darwin*) # macOS or iOS
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
     if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
-        build_for_ios=YES
+        enable_gpgmepp=no
         _os=iOS
         test_cups=no
         enable_mpl_subset=yes
@@ -1764,6 +1764,11 @@ AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
         [Use system poppler (only needed for PDF import).]),,
     [with_system_poppler="$with_system_libs"])
+
+libo_FUZZ_ARG_ENABLE(gpgmepp,
+    AS_HELP_STRING([--disable-gpgmepp],
+        [Disable building gpgmepp. Do not use in normal cases unless you want to fix potential problems it causes.])
+)
 
 AC_ARG_WITH(system-gpgmepp,
     AS_HELP_STRING([--with-system-gpgmepp],
@@ -4808,11 +4813,11 @@ if test "$cross_compiling" = "yes"; then
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    test "$build_for_ios" = "YES" && sub_conf_opts="$sub_conf_opts build_for_ios=YES"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-cups \
+        --disable-gpgmepp \
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
         --disable-pdfimport \
@@ -11355,9 +11360,9 @@ AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_FMA)
 
 SYSTEM_GPGMEPP=
 
-if test "$build_for_ios" = "YES"; then
-    AC_MSG_CHECKING([whether gpgmepp should be disabled due to iOS])
-    AC_MSG_RESULT([yes])
+if test "$enable_gpgmepp" = no; then
+    AC_MSG_CHECKING([whether to enable gpgmepp])
+    AC_MSG_RESULT([no])
 elif test "$enable_mpl_subset" = "yes"; then
     AC_MSG_CHECKING([whether gpgmepp should be disabled due to building just MPL])
     AC_MSG_RESULT([yes])
