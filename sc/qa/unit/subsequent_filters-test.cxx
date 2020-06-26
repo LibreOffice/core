@@ -224,6 +224,7 @@ public:
 
     void testBnc762542();
 
+    void testTdf103734();
     void testTdf100458();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
@@ -374,6 +375,7 @@ public:
 
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
+    CPPUNIT_TEST(testTdf103734);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
@@ -3675,6 +3677,18 @@ void ScFiltersTest::testRelFormulaValidationXLS()
 
     checkValidationFormula(ScAddress(3, 4, 0), rDoc, "C5");
     checkValidationFormula(ScAddress(5, 8, 0), rDoc, "D7");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf103734()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf103734.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, MAX() would have returned -1.8E+308
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(2,0,0)));
 
     xDocSh->DoClose();
 }
