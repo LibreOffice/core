@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acc5d933_04d776c0",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T11:35:23Z",
+      "side": 1,
+      "message": "It should be better to simplify this loop, for example, first by replacing this with a for() loop on the characters of the original label text.",
+      "range": {
+        "startLine": 427,
+        "startChar": 24,
+        "endLine": 427,
+        "endChar": 60
+      },
+      "revId": "aa6363c211e79b0904d62e30b4fd69b8840fbfc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60a1fbb8_1a0ea02c",
+        "filename": "chart2/source/view/main/VLegend.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-26T11:35:23Z",
+      "side": 1,
+      "message": "to avoid this",
+      "range": {
+        "startLine": 433,
+        "startChar": 32,
+        "endLine": 433,
+        "endChar": 87
+      },
+      "revId": "aa6363c211e79b0904d62e30b4fd69b8840fbfc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
