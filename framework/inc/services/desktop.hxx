@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/frame/XDesktopInternal.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTask.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -43,6 +42,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -90,7 +90,7 @@ enum ELoadState
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
-           css::frame::XDesktopInternal,
+           css::task::XJob, // for internal "shutdown" command
            css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
@@ -285,9 +285,11 @@ class Desktop final : private cppu::BaseMutex,
         /// @throws css::uno::RuntimeException
         bool terminateQuickstarterToo();
 
-        virtual void SAL_CALL shutdown() override;
+        css::uno::Any SAL_CALL execute(css::uno::Sequence<css::beans::NamedValue> const & Arguments)
+            override;
 
     private:
+        void shutdown();
 
         //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,

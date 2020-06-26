@@ -323,6 +323,17 @@ sal_Bool SAL_CALL Desktop::terminate()
     return true;
 }
 
+css::uno::Any Desktop::execute(css::uno::Sequence<css::beans::NamedValue> const & Arguments)
+{
+    if (Arguments.getLength() == 1 && Arguments[0].Name == "shutdown"
+        && !Arguments[0].Value.hasValue())
+    {
+        shutdown();
+        return {};
+    }
+    throw css::lang::IllegalArgumentException("unsupported job request", {}, 0);
+}
+
 void Desktop::shutdown()
 {
     TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);

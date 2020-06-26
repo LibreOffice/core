@@ -71,12 +71,12 @@
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/frame/XDesktopInternal.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -611,8 +611,8 @@ bool Desktop::QueryExit()
 void Desktop::Shutdown()
 {
     Reference<XDesktop2> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
-    Reference<XDesktopInternal> xDesktopInternal(xDesktop, UNO_QUERY_THROW);
-    xDesktopInternal->shutdown();
+    Reference<XJob> xDesktopInternal(xDesktop, UNO_QUERY_THROW);
+    xDesktopInternal->execute({{"shutdown", {}}});
 }
 
 void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
