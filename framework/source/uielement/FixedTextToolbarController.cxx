@@ -20,7 +20,7 @@
 #include <uielement/FixedTextToolbarController.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -33,13 +33,52 @@ using namespace ::com::sun::star::util;
 
 namespace framework
 {
+class FixedTextControl final : public InterimItemWindow
+{
+public:
+    FixedTextControl(vcl::Window* pParent);
+    virtual ~FixedTextControl() override;
+    virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+    OUString get_label() const { return m_xWidget->get_label(); }
+    void set_label(const OUString& rLabel) { return m_xWidget->set_label(rLabel); }
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
+
+private:
+    std::unique_ptr<weld::Label> m_xWidget;
+};
+
+FixedTextControl::FixedTextControl(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "svt/ui/fixedtextcontrol.ui", "FixedTextControl")
+    , m_xWidget(m_xBuilder->weld_label("label"))
+{
+    m_xWidget->connect_key_press(LINK(this, FixedTextControl, KeyInputHdl));
+}
+
+IMPL_LINK(FixedTextControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
+FixedTextControl::~FixedTextControl() { disposeOnce(); }
+
+void FixedTextControl::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
 FixedTextToolbarController::FixedTextToolbarController(
     const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
     ToolBox* pToolbar, sal_uInt16 nID, const OUString& aCommand)
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
 {
-    m_pFixedTextControl = VclPtr<FixedText>::Create(m_xToolbar, WB_NOMULTILINE | WB_VCENTER
-                                                                    | WB_LEFT | WB_NOPOINTERFOCUS);
+    m_pFixedTextControl = VclPtr<FixedTextControl>::Create(m_xToolbar);
     m_xToolbar->SetItemWindow(m_nID, m_pFixedTextControl);
     m_xToolbar->SetItemBits(m_nID, ToolBoxItemBits::AUTOSIZE | m_xToolbar->GetItemBits(m_nID));
 }
@@ -55,7 +94,7 @@ void SAL_CALL FixedTextToolbarController::dispose()
 Sequence<PropertyValue> FixedTextToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs(2);
-    const OUString aSelectedText = m_pFixedTextControl->GetText();
+    const OUString aSelectedText = m_pFixedTextControl->get_label();
 
     // Add key modifier to argument list
     aArgs[0].Name = "KeyModifier";
@@ -79,8 +118,8 @@ void FixedTextToolbarController::executeControlCommand(
         {
             OUString aText;
             rArg.Value >>= aText;
-            m_pFixedTextControl->SetText(aText);
-            m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->GetOptimalSize());
+            m_pFixedTextControl->set_label(aText);
+            m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->get_preferred_size());
 
             // send notification
             notifyTextChanged(aText);
