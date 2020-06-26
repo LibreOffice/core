@@ -20,9 +20,18 @@
 
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <docsh.hxx>
+#include <unordered_map>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
+
+enum StyleType
+{
+    DEFAULTFORMATTING,
+    CHARACTERSTYLES,
+    PARAGRAPHSTYLES
+};
 namespace sw
 {
 namespace sidebar
@@ -49,8 +58,12 @@ public:
 
 private:
     sfx2::sidebar::ControllerItem maCharStyle;
+    sfx2::sidebar::ControllerItem maParaStyle;
 
-    static void GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
+    static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& another,
+                           std::unordered_map<OUString, bool>& maIsDefined, StyleType sType);
+
+    static bool GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
                                   OUString& rString);
 };
 }
