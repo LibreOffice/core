@@ -221,8 +221,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 // Only quoted identifiers are case sensitive, unquoted are case insensitive
 OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
 {
-    OUString aVal('"');
-    return aVal;
+    return "\"";
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
