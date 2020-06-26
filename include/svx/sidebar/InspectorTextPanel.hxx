@@ -21,12 +21,27 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
+class Mynode;
+
+typedef std::vector<std::unique_ptr<Mynode>> MynodeArr;
+class Mynode
+{
+public:
+    OUString s;
+    MynodeArr vec;
+    Mynode(OUString k)
+        : s(k){};
+};
+
 namespace svx
 {
 namespace sidebar
 {
 class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
 {
+protected:
+    MynodeArr xStore;
+
 public:
     virtual ~InspectorTextPanel() override;
     virtual void dispose() override;
@@ -36,7 +51,9 @@ public:
 
     InspectorTextPanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual void updateEntries(std::vector<OUString> store);
+
+    virtual void updateEntries();
+    // void FillBox_Impl(Mynode& current, weld::TreeIter* pParent);
 
 private:
     std::unique_ptr<weld::TreeView> mxListBoxStyles;
