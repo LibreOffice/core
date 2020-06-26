@@ -545,8 +545,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 // Don't show the paragraph mark for collapsed paragraphs, when they are hidden
                 if ( EmptyHeight( ) > 1 )
                 {
-                    const OUString aTmp( CH_PAR );
-                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, 1 );
+                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), CH_PAR, 0, 1 );
                     aDrawInf.SetPos( aPos );
                     aDrawInf.SetSpace( 0 );
                     aDrawInf.SetKanaComp( 0 );

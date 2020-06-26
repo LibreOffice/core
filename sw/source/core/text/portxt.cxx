@@ -778,8 +778,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
         pFontSave.reset(new SwFontSave( rInf, pHoleFont.get() ));
     }
 
-    const OUString aText( ' ' );
-    rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(1));
+    rInf.DrawText(" ", *this, TextFrameIndex(0), TextFrameIndex(1));
 
     pFontSave.reset();
     pHoleFont.reset();

@@ -1357,8 +1357,7 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
         else if ( cChar == CH_TAB )
         {
             // tab receives width of one space
-            OUString sTmp( CH_BLANK );
-            SwDrawTextInfo aDrawInf(pSh, *pOut, sTmp, 0, 1);
+            SwDrawTextInfo aDrawInf(pSh, *pOut, OUStringChar(CH_BLANK), 0, 1);
             nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
             nIdx++;
         }
