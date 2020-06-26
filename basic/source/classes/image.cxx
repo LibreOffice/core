@@ -661,8 +661,7 @@ OUString SbiImage::GetString( short nId ) const
             sal_uInt32 nLen = nNextOff - nOff - 1;
             if( nLen == 1 )
             {
-                OUString aNullCharStr( u'\0');
-                return aNullCharStr;
+                return OUString( u'\0');
             }
         }
         else

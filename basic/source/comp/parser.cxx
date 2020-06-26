@@ -857,8 +857,7 @@ void SbiParser::AddConstants()
     addStringConst( aPublics, "vbTab", "\x09" );
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
-    OUString aNullCharStr(u'\0');
-    addStringConst( aPublics, "vbNullChar", aNullCharStr );
+    addStringConst( aPublics, "vbNullChar", OUString(u'\0') );
 }
 
 // ERROR n
