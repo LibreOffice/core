@@ -132,8 +132,8 @@ namespace {
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    VclPtr<Edit>                    m_aCellEdit;
-    VclPtr< ::svt::CheckBoxControl>  m_aCellCheckBox;
+    VclPtr<svt::EditControl> m_aCellEdit;
+    VclPtr<svt::CheckBoxControl> m_aCellCheckBox;
 
     OUString  m_sYes;
     OUString  m_sNo;
@@ -3550,8 +3550,8 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
                            BrowserMode::VLINES |
                            BrowserMode::AUTO_VSCROLL|
                            BrowserMode::HIDECURSOR   )
-    , m_aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
-    , m_aCellCheckBox(VclPtr< ::svt::CheckBoxControl>::Create(&GetDataWindow()))
+    , m_aCellEdit(VclPtr<svt::EditControl>::Create(&GetDataWindow()))
+    , m_aCellCheckBox(VclPtr<svt::CheckBoxControl>::Create(&GetDataWindow()))
     , m_nCurrentRow(0)
     , m_bModified(false)
 {
@@ -3738,7 +3738,7 @@ bool SwEntryBrowseBox::SaveModified()
         RowInserted(nRow, 1, true, true);
         if(nCol < ITEM_WORDONLY)
         {
-            pController->ClearModified();
+            pController->SaveValue();
             GoToRow( nRow );
         }
     }
@@ -3824,7 +3824,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         pController = m_xController.get();
     else
         pController = m_xCheckController.get();
-    if(pController ->IsModified())
+    if (pController->IsValueChangedFromSaved())
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
@@ -3860,7 +3860,7 @@ bool SwEntryBrowseBox::IsModified()const
         pController = m_xController.get();
     else
         pController = m_xCheckController.get();
-    return pController->IsModified();
+    return pController->IsValueChangedFromSaved();
 }
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, const OUString& rAutoMarkURL,

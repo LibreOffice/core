@@ -1219,7 +1219,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             break;
 
         CellControllerRef xCurrentController = Controller();
-        if (xCurrentController.is() && xCurrentController->IsModified() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
+        if (xCurrentController.is() && xCurrentController->IsValueChangedFromSaved() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
             // the current controller is modified and the user wants to drop in another cell -> no chance
             // (when leaving the modified cell an error may occur - this is deadly while dragging)
             break;
@@ -1320,9 +1320,8 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             return DND_ACTION_NONE;
 
         rEdit.SetText( sDropped );
-        xCurrentController->SetModified();
+        // SetText itself doesn't call a Modify as it isn't a user interaction
         rEdit.Modify();
-            // SetText itself doesn't call a Modify as it isn't a user interaction
 
         return DND_ACTION_COPY;
     }

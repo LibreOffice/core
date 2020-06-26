@@ -27,3 +27,4 @@ svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_opengl'] orphan-labe
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_skia'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='label'] orphan-label
 svtools/uiconfig/ui/spinfieldcontrol.ui://GtkSpinButton[@id='spinbutton'] no-labelled-by
+svtools/uiconfig/ui/thineditcontrol.ui://GtkEntry[@id='entry'] no-labelled-by
