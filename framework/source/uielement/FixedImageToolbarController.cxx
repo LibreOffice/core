@@ -19,9 +19,10 @@
 
 #include <uielement/FixedImageToolbarController.hxx>
 
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <framework/addonsoptions.hxx>
@@ -36,20 +37,59 @@ using namespace ::com::sun::star::util;
 
 namespace framework
 {
-FixedImageToolbarController::FixedImageToolbarController(
-    const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
-    ToolBox* pToolbar, sal_uInt16 nID, const OUString& aCommand)
-    : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
-    , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
+class FixedImageControl final : public InterimItemWindow
 {
-    m_pFixedImageControl = VclPtr<FixedImage>::Create(m_xToolbar, 0);
-    m_xToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
+public:
+    FixedImageControl(vcl::Window* pParent, const OUString& rCommand);
+    virtual ~FixedImageControl() override;
+    virtual void dispose() override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+    DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
+
+private:
+    std::unique_ptr<weld::Image> m_xWidget;
+};
+
+FixedImageControl::FixedImageControl(vcl::Window* pParent, const OUString& rCommand)
+    : InterimItemWindow(pParent, "svt/ui/fixedimagecontrol.ui", "FixedImageControl")
+    , m_xWidget(m_xBuilder->weld_image("image"))
+{
+    m_xWidget->connect_key_press(LINK(this, FixedImageControl, KeyInputHdl));
 
     bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
+    auto xImage
+        = Graphic(AddonsOptions().GetImageFromURL(rCommand, bBigImages, true)).GetXGraphic();
+    m_xWidget->set_image(xImage);
 
-    Image aImage(AddonsOptions().GetImageFromURL(aCommand, bBigImages, true));
-    m_pFixedImageControl->SetImage(aImage);
-    m_pFixedImageControl->SetSizePixel(m_pFixedImageControl->GetOptimalSize());
+    SetSizePixel(get_preferred_size());
+}
+
+IMPL_LINK(FixedImageControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
+FixedImageControl::~FixedImageControl() { disposeOnce(); }
+
+void FixedImageControl::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
+FixedImageToolbarController::FixedImageToolbarController(
+    const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
+    ToolBox* pToolbar, sal_uInt16 nID, const OUString& rCommand)
+    : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, rCommand)
+    , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
+{
+    m_pFixedImageControl = VclPtr<FixedImageControl>::Create(m_xToolbar, rCommand);
+    m_xToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
 
     SvtMiscOptions().AddListenerLink(LINK(this, FixedImageToolbarController, MiscOptionsChanged));
 }
@@ -79,7 +119,7 @@ void FixedImageToolbarController::CheckAndUpdateImages()
     m_eSymbolSize = eNewSymbolSize;
 
     // Refresh images if requested
-    auto aSize(m_pFixedImageControl->GetOptimalSize());
+    ::Size aSize(16, 16);
     if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
     {
         aSize.setWidth(26);
@@ -89,11 +129,6 @@ void FixedImageToolbarController::CheckAndUpdateImages()
     {
         aSize.setWidth(32);
         aSize.setHeight(32);
-    }
-    else
-    {
-        aSize.setWidth(16);
-        aSize.setHeight(16);
     }
     m_pFixedImageControl->SetSizePixel(aSize);
 }
