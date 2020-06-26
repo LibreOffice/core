@@ -29,7 +29,7 @@
 
 class Printer;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) QueueInfo
+class VCL_DLLPUBLIC QueueInfo
 {
     friend class Printer;
 
