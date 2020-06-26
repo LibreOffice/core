@@ -5317,17 +5317,29 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 private:
     VclPtr<FormattedField> m_xButton;
 
+    DECL_LINK(OutputHdl, Edit&, bool);
+    DECL_LINK(InputHdl, sal_Int64*, TriState);
+
 public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership)
         : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
     {
+        m_xButton->SetOutputHdl(LINK(this, SalInstanceFormattedSpinButton, OutputHdl));
+        m_xButton->SetInputHdl(LINK(this, SalInstanceFormattedSpinButton, InputHdl));
+
         // #i6278# allow more decimal places than the output format.  As
         // the numbers shown in the edit fields are used for input, it makes more
         // sense to display the values in the input format rather than the output
         // format.
         m_xButton->UseInputStringForFormatting();
+    }
+
+    virtual ~SalInstanceFormattedSpinButton() override
+    {
+        m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
+        m_xButton->SetOutputHdl(Link<Edit&, bool>());
     }
 
     virtual double get_value() const override { return m_xButton->GetValue(); }
@@ -5344,6 +5356,11 @@ public:
     {
         min = m_xButton->GetMinValue();
         max = m_xButton->GetMaxValue();
+    }
+
+    virtual void set_increments(double step, double /*page*/) override
+    {
+        m_xButton->SetSpinSize(step);
     }
 
     virtual void set_formatter(SvNumberFormatter* pFormatter) override
@@ -5364,6 +5381,28 @@ public:
 
     virtual void set_digits(unsigned int digits) override { m_xButton->SetDecimalDigits(digits); }
 };
+
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, OutputHdl, Edit&, bool)
+{
+    // allow an explicit handler
+    if (!m_aOutputHdl.IsSet())
+        return false;
+    m_aOutputHdl.Call(*this);
+    return true;
+}
+
+IMPL_LINK(SalInstanceFormattedSpinButton, InputHdl, sal_Int64*, pResult, TriState)
+{
+    // allow an explicit handler
+    if (!m_aInputHdl.IsSet())
+        return TRISTATE_INDET;
+
+    double value;
+    TriState eRet = m_aInputHdl.Call(&value) ? TRISTATE_TRUE : TRISTATE_FALSE;
+    if (eRet == TRISTATE_TRUE)
+        *pResult = std::round(value * weld::SpinButton::Power10(m_xButton->GetDecimalDigits()));
+    return eRet;
+}
 
 }
 
