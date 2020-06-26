@@ -23,13 +23,14 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
-class FixedImage;
 
 namespace framework
 {
+class FixedImageControl;
+
 class FixedImageToolbarController final : public ComplexToolbarController
 {
 public:
@@ -47,7 +48,7 @@ private:
 
     DECL_LINK(MiscOptionsChanged, LinkParamNone*, void);
 
-    VclPtr<FixedImage> m_pFixedImageControl;
+    VclPtr<FixedImageControl> m_pFixedImageControl;
     sal_Int16 m_eSymbolSize;
 };
 } // namespace framework
