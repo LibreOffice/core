@@ -66,6 +66,7 @@
 #include <markdata.hxx>
 #include <documentlinkmgr.hxx>
 
+#include <o3tl/make_shared.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -793,7 +794,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_PROVIDER:
         {
-            std::shared_ptr<ScDocument> xDoc(new ScDocument, o3tl::default_delete<ScDocument>());
+            auto xDoc = o3tl::make_shared<ScDocument>();
             xDoc->InsertTab(0, "test");
             ScDocument* pDoc = GetViewData()->GetDocument();
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, pDoc);

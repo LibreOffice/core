@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/fileformat.h>
-#include <o3tl/deleter.hxx>
+#include <o3tl/make_shared.hxx>
 #include <tools/fract.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
@@ -1361,7 +1361,7 @@ bool ImpGraphic::swapOut()
     const INetURLObject aTempFileURL(aTempFile.GetURL());
 
     // Create a swap file
-    std::shared_ptr<ImpSwapFile> pSwapFile(new ImpSwapFile(aTempFileURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
+    auto pSwapFile = o3tl::make_shared<ImpSwapFile>(aTempFileURL, getOriginURL());
 
     bool bResult = false;
 
