@@ -248,7 +248,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
-        const OUString& rFileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
     // methods without content:
@@ -266,9 +265,8 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
-    const OUString& rFileName,
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
-:   SvXMLExport( xContext, "", rFileName, xHandler, static_cast<frame::XModel*>(new SvxSimpleUnoModel()), FieldUnit::CM,
+:   SvXMLExport( xContext, "", /*rFileName*/"", xHandler, static_cast<frame::XModel*>(new SvxSimpleUnoModel()), FieldUnit::CM,
     SvXMLExportFlags::OASIS  |  SvXMLExportFlags::AUTOSTYLES  |  SvXMLExportFlags::CONTENT )
 {
     SvxEditEngineSource aEditSource( pEditEngine );
@@ -319,7 +317,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
             uno::Reference< xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-            rtl::Reference< SvxXMLTextExportComponent > xExporter( new SvxXMLTextExportComponent( xContext, &rEditEngine, rSel, "", xHandler ) );
+            rtl::Reference< SvxXMLTextExportComponent > xExporter( new SvxXMLTextExportComponent( xContext, &rEditEngine, rSel, xHandler ) );
 
             xExporter->exportDoc();
 

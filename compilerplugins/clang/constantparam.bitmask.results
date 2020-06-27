@@ -13,7 +13,7 @@ include/basegfx/polygon/b2dpolygontools.hxx:145
 include/framework/framelistanalyzer.hxx:185
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:463
+include/sfx2/objsh.hxx:464
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:430
@@ -31,6 +31,9 @@ sc/inc/rangeutl.hxx:162
 sc/inc/xmlwrap.hxx:90
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
+sc/source/ui/inc/checklistmenu.hxx:144
+    void ScCheckListMenuControl::StartPopupMode(const class tools::Rectangle &,enum FloatWinPopupFlags)
+    enum FloatWinPopupFlags nPopupModeFlags setBits=0x400 clearBits=0x3ed
 sc/source/ui/view/cellsh1.cxx:103
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700

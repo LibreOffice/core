@@ -138,7 +138,7 @@ public:
     void launch(const tools::Rectangle& rRect);
     void close(bool bOK);
 
-    void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags);
+    void StartPopupMode(const tools::Rectangle& rRect);
     void EndPopupMode();
 
     size_t getSubMenuPos(const ScCheckListMenuControl* pSubMenu);
@@ -200,7 +200,7 @@ private:
     int GetCheckedEntryCount() const;
     void CheckAllChildren(const weld::TreeIter* pEntry, bool bCheck);
 
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu);
+    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer);
 
     std::unique_ptr<weld::TreeIter> FindEntry(const weld::TreeIter* pParent, const OUString& sNode);
 

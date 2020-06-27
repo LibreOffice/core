@@ -139,11 +139,10 @@ public:
 
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
-    const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicStorageHandler> const & xGraphicStorageHandler)
-:   SvXMLExport(rContext, "", rFileName, rHandler, nullptr, FieldUnit::MM_100TH, SvXMLExportFlags::NONE),
+:   SvXMLExport(rContext, "", /*rFileName*/"", rHandler, nullptr, FieldUnit::MM_100TH, SvXMLExportFlags::NONE),
     mxTable( xTable )
 {
 
@@ -281,7 +280,7 @@ bool SvxXMLXTableExportComponent::save(
             xGraphicStorageHandler = xGraphicHelper.get();
 
         // Finally do the export
-        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, "", xWriter, xTable, xGraphicStorageHandler ) );
+        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, xWriter, xTable, xGraphicStorageHandler ) );
         bRet = xExporter->exportTable();
 
         if( xGraphicHelper )

@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
     else
         nSelectedMenu = mxMenu->get_iter_index_in_parent(*mxScratchIter);
 
-    setSelectedMenuItem(nSelectedMenu, true, false);
+    setSelectedMenuItem(nSelectedMenu, true);
 }
 
 void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
@@ -191,22 +191,11 @@ void ScCheckListMenuControl::executeMenuItem(size_t nPos)
     maMenuItems[nPos].mxAction->execute();
 }
 
-void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
+void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)
 {
     if (mnSelectedMenu == nPos)
         // nothing to do.
         return;
-
-    if (bEnsureSubMenu)
-    {
-        // Dismiss any child popup menu windows.
-        if (mnSelectedMenu < maMenuItems.size() &&
-            maMenuItems[mnSelectedMenu].mxSubMenuWin &&
-            maMenuItems[mnSelectedMenu].mxSubMenuWin->IsVisible())
-        {
-            maMenuItems[mnSelectedMenu].mxSubMenuWin->get_widget().ensureSubMenuNotVisible();
-        }
-    }
 
     selectMenuItem(nPos, bSubMenuTimer);
 }
@@ -289,9 +278,9 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
 
     tools::Rectangle aRect = mxMenu->get_row_area(*mxScratchIter);
     ScCheckListMenuControl& rSubMenuControl = pSubMenu->get_widget();
-    rSubMenuControl.StartPopupMode(aRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
+    rSubMenuControl.StartPopupMode(aRect);
     if (bSetMenuPos)
-        rSubMenuControl.setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
+        rSubMenuControl.setSelectedMenuItem(0, false); // select menu item after the popup becomes fully visible.
 
     mxMenu->select(*mxScratchIter);
     rSubMenuControl.GrabFocus();
@@ -397,12 +386,12 @@ void ScCheckListMenuControl::EndPopupMode()
     mxFrame->EnableDocking(false);
 }
 
-void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags)
+void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect)
 {
     mxFrame->EnableDocking(true);
     DockingManager* pDockingManager = vcl::Window::GetDockingManager();
     pDockingManager->SetPopupModeEndHdl(mxFrame, LINK(this, ScCheckListMenuControl, PopupModeEndHdl));
-    pDockingManager->StartPopupMode(mxFrame, rRect, nPopupModeFlags);
+    pDockingManager->StartPopupMode(mxFrame, rRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
 }
 
 void ScCheckListMenuControl::ensureSubMenuNotVisible()
@@ -1320,7 +1309,7 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
         aRect.AdjustLeft(nDiff );
     }
 
-    StartPopupMode(aRect, (FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus));
+    StartPopupMode(aRect);
 }
 
 void ScCheckListMenuControl::close(bool bOK)

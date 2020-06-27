@@ -2320,10 +2320,12 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     }
 }
 
-VclPtr<VirtualDevice> VclMetafileProcessor2D::CreateBufferDevice(
-    const basegfx::B2DRange& rCandidateRange, const double fMaxQuadratPixels,
-    geometry::ViewInformation2D& rViewInfo, tools::Rectangle& rRectLogic, Size& rSizePixel)
+VclPtr<VirtualDevice>
+VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRange,
+                                           geometry::ViewInformation2D& rViewInfo,
+                                           tools::Rectangle& rRectLogic, Size& rSizePixel)
 {
+    constexpr double fMaxQuadratPixels = 500000;
     basegfx::B2DRange aViewRange(rCandidateRange);
     aViewRange.transform(maCurrentTransformation);
     rRectLogic = tools::Rectangle(static_cast<long>(std::floor(aViewRange.getMinX())),
@@ -2394,7 +2396,7 @@ void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
     geometry::ViewInformation2D aViewInfo;
     tools::Rectangle aRectLogic;
     Size aSizePixel;
-    auto pBufferDevice(CreateBufferDevice(aViewRange, 500000, aViewInfo, aRectLogic, aSizePixel));
+    auto pBufferDevice(CreateBufferDevice(aViewRange, aViewInfo, aRectLogic, aSizePixel));
     if (pBufferDevice)
     {
         VclPixelProcessor2D aBufferProcessor(aViewInfo, *pBufferDevice, maBColorModifierStack);
