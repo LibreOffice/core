@@ -56,12 +56,18 @@ void JSDialogNotifyIdle::Invoke()
 
 void JSDialogSender::notifyDialogState() { mpIdleNotify->Start(); }
 
+namespace
+{
+vcl::Window* extract_sal_widget(weld::Widget* pParent)
+{
+    SalInstanceWidget* pInstanceWidget = dynamic_cast<SalInstanceWidget*>(pParent);
+    return pInstanceWidget ? pInstanceWidget->getWidget() : nullptr;
+}
+}
+
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
-    : SalInstanceBuilder(dynamic_cast<SalInstanceWidget*>(pParent)
-                             ? dynamic_cast<SalInstanceWidget*>(pParent)->getWidget()
-                             : nullptr,
-                         rUIRoot, rUIFile)
+    : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_bHasTopLevelDialog(false)
