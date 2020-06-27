@@ -126,7 +126,6 @@ private:
     // data in mBuffer, if it differs from mSize, then there is a scaling operation pending.
     Size mPixelsSize;
     SkFilterQuality mScaleQuality = kHigh_SkFilterQuality; // quality for on-demand scaling
-    bool mDisableScale = false; // used to block our scale()
 #ifdef DBG_UTIL
     int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
 #endif
