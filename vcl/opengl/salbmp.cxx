@@ -356,6 +356,13 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
             determineTextureFormat(mnBits, nFormat, nType);
         }
+        else if( mnBits == 8 && maPalette.IsGreyPalette8Bit() )
+        {
+            // no conversion needed for 8bit grayscale
+            pData = mpUserBuffer.get();
+            nFormat = GL_LUMINANCE;
+            nType = GL_UNSIGNED_BYTE;
+        }
         else
         {
             VCL_GL_INFO( "::CreateTexture - convert from " << mnBits << " to 24 bits" );
@@ -401,7 +408,7 @@ bool OpenGLSalBitmap::ReadTexture()
     xContext->state().scissor().disable();
     xContext->state().stencil().disable();
 
-    if ((mnBits == 8 && maPalette.IsGreyPalette()) || mnBits == 24 || mnBits == 32)
+    if ((mnBits == 8 && maPalette.IsGreyPalette8Bit()) || mnBits == 24 || mnBits == 32)
     {
         determineTextureFormat(mnBits, nFormat, nType);
 
@@ -730,7 +737,7 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
     VCL_GL_INFO("::ConvertToGreyscale");
 
     // avoid re-converting to 8bits.
-    if ( mnBits == 8 && maPalette == Bitmap::GetGreyPalette(256) )
+    if ( mnBits == 8 && maPalette.IsGreyPalette8Bit())
         return true;
 
     OpenGLZone aZone;

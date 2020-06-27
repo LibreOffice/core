@@ -8788,7 +8788,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         aLine.append( "/ColorSpace" );
         if( bTrueColor )
             aLine.append( "/DeviceRGB\n" );
-        else if( aBitmap.HasGreyPalette() )
+        else if( aBitmap.HasGreyPaletteAny() )
         {
             aLine.append( "/DeviceGray\n" );
             if( aBitmap.GetBitCount() == 1 )

@@ -208,7 +208,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     return GetGreyPalette(2);
 }
 
-bool BitmapPalette::IsGreyPalette() const
+bool BitmapPalette::IsGreyPaletteAny() const
 {
     const int nEntryCount = GetEntryCount();
     if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
@@ -231,6 +231,21 @@ bool BitmapPalette::IsGreyPalette() const
               rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue();
     }
     return bRet;
+}
+
+bool BitmapPalette::IsGreyPalette8Bit() const
+{
+    const int nEntryCount = GetEntryCount();
+    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
+        return true;
+    if( nEntryCount != 256 )
+        return false;
+    for (sal_uInt16 i = 0; i < 256; ++i)
+    {
+        if( maBitmapColor[i] != BitmapColor(i, i, i))
+            return false;
+    }
+    return true;
 }
 
 Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
@@ -303,7 +318,7 @@ sal_uInt16 Bitmap::GetBitCount() const
     return 0;
 }
 
-bool Bitmap::HasGreyPalette() const
+bool Bitmap::HasGreyPaletteAny() const
 {
     const sal_uInt16    nBitCount = GetBitCount();
     bool            bRet = nBitCount == 1;
@@ -312,7 +327,20 @@ bool Bitmap::HasGreyPalette() const
 
     if( pIAcc )
     {
-        bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPalette();
+        bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPaletteAny();
+    }
+
+    return bRet;
+}
+
+bool Bitmap::HasGreyPalette8Bit() const
+{
+    bool            bRet = false;
+    ScopedInfoAccess pIAcc(const_cast<Bitmap&>(*this));
+
+    if( pIAcc )
+    {
+        bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPalette8Bit();
     }
 
     return bRet;
