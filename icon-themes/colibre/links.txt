@@ -1618,18 +1618,18 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Outline
 cmd/32/outlinedown.png cmd/32/movedown.png
-cmd/32/outlineleft.png cmd/32/decrementlevel.png
-cmd/32/outlineright.png cmd/32/incrementlevel.png
+cmd/32/outlineleft.png cmd/32/incrementlevel.png
+cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/outlineup.png cmd/32/moveup.png
 
 cmd/lc_outlinedown.png cmd/lc_movedown.png
-cmd/lc_outlineleft.png cmd/lc_decrementlevel.png
-cmd/lc_outlineright.png cmd/lc_incrementlevel.png
+cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
+cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
 
 cmd/sc_outlinedown.png cmd/sc_movedown.png
-cmd/sc_outlineleft.png cmd/sc_decrementlevel.png
-cmd/sc_outlineright.png cmd/sc_incrementlevel.png
+cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
+cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
 
 # Index
