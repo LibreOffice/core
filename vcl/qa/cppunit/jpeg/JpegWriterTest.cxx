@@ -71,7 +71,7 @@ void JpegWriterTest::testWrite8BitGrayscale()
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
     CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, format);
-    CPPUNIT_ASSERT(bitmap.HasGreyPalette());
+    CPPUNIT_ASSERT(bitmap.HasGreyPalette8Bit());
     // Check that the content is valid.
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, access->Width() - 1));
@@ -87,10 +87,11 @@ void JpegWriterTest::testWrite8BitNonGrayscale()
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
     CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, format);
-    // The original image has grayscale palette, just with entries in a different order,
-    // so do not check for non-grayscale, the roundtrip apparently fixes that. What's important
+    // The original image has grayscale palette, just with entries in a different order.
+    // Do not check for grayscale 8bit, the roundtrip apparently fixes that. What's important
     // is the content.
-    // CPPUNIT_ASSERT(!bitmap.HasGreyPalette());
+    CPPUNIT_ASSERT(bitmap.HasGreyPaletteAny());
+    // CPPUNIT_ASSERT(bitmap.HasGreyPalette8Bit());
     // Check that the content is valid.
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access->GetColor(0, access->Width() - 1));

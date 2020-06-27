@@ -351,7 +351,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
     // Avoid the costly SkImage->buffer->SkImage conversion.
     if (!mBuffer && mImage)
     {
-        if (mBitCount == 8 && mPalette == Bitmap::GetGreyPalette(256))
+        if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
             return true;
         sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mPixelsSize);
         SkPaint paint;
@@ -380,7 +380,7 @@ bool SkiaSalBitmap::InterpretAs8Bit()
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    if (mBitCount == 8 && mPalette == Bitmap::GetGreyPalette(256))
+    if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
         return true;
     // This is usually used by AlphaMask, the point is just to treat
     // the content as an alpha channel. This is often used
@@ -695,7 +695,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             }
         }
     }
-    else if (mBitCount == 8 && mPalette.IsGreyPalette())
+    else if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
     {
         for (long y = 0; y < mSize.Height(); ++y)
         {

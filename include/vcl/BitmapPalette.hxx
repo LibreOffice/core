@@ -128,7 +128,10 @@ public:
         return nRetIndex;
     }
 
-    bool IsGreyPalette() const;
+    /// Returns true if the palette is 8-bit grey palette.
+    bool IsGreyPalette8Bit() const;
+    /// Returns true if the paleete is a grey palette (may not be 8-bit).
+    bool IsGreyPaletteAny() const;
 };
 
 #endif // INCLUDED_VCL_BITMAPPALETTE_HXX

@@ -133,7 +133,8 @@ public:
     sal_uInt16              GetBitCount() const;
     inline sal_Int64        GetColorCount() const;
     inline sal_uLong        GetSizeBytes() const;
-    bool                    HasGreyPalette() const;
+    bool                    HasGreyPalette8Bit() const;
+    bool                    HasGreyPaletteAny() const;
     /** get system dependent bitmap data
 
         @param rData
