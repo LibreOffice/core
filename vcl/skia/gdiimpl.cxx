@@ -1361,10 +1361,39 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
+<<<<<<< HEAD   (622bf0 Karasa Jaga: tdf#133753, tdf#133582, tdf#106229)
     sk_sp<SkImage> image
         = mergeBitmaps(static_cast<const SkiaSalBitmap&>(rSourceBitmap),
                        static_cast<const SkiaSalBitmap*>(&rAlphaBitmap), rSourceBitmap.GetSize());
     drawImage(rPosAry, image);
+=======
+    // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
+    // alpha blending or scaling. In GPU mode it is simpler to just use SkShader.
+    SalTwoRect imagePosAry(rPosAry);
+    Size imageSize = rSourceBitmap.GetSize();
+    // If the bitmap will be scaled, prefer to do it in mergeCacheBitmaps(), if possible.
+    if ((rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+        && rPosAry.mnSrcX == 0 && rPosAry.mnSrcY == 0
+        && rPosAry.mnSrcWidth == rSourceBitmap.GetSize().Width()
+        && rPosAry.mnSrcHeight == rSourceBitmap.GetSize().Height())
+    {
+        imagePosAry.mnSrcWidth = imagePosAry.mnDestWidth;
+        imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
+        imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
+    }
+    sk_sp<SkImage> image
+        = mergeCacheBitmaps(static_cast<const SkiaSalBitmap&>(rSourceBitmap),
+                            static_cast<const SkiaSalBitmap*>(&rAlphaBitmap), imageSize);
+    if (image)
+        drawImage(imagePosAry, image);
+    else
+        drawShader(
+            rPosAry,
+            SkShaders::Blend(
+                SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkImage()->makeShader(),
+                static_cast<const SkiaSalBitmap*>(&rAlphaBitmap)->GetAlphaSkImage()->makeShader()));
+>>>>>>> CHANGE (172b91 cache raster scaling also in Skia's drawAlphaBitmap())
     return true;
 }
 
