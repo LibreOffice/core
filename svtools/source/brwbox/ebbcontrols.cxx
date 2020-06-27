@@ -317,6 +317,15 @@ namespace svt
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
     }
 
+    IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, Edit&, void)
+    {
+        m_aModifyHdl.Call(nullptr);
+    }
+
+    IMPL_LINK_NOARG(EditImplementation, ModifyHdl, Edit&, void)
+    {
+        m_aModifyHdl.Call(nullptr);
+    }
 
     //= EditCellController
 
@@ -388,7 +397,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditCellController, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(EditCellController, ModifyHdl, LinkParamNone*, void)
     {
         callModifyHdl();
     }

@@ -3567,7 +3567,7 @@ void FmXEditCell::disposing()
     m_aTextListeners.disposeAndClear(aEvt);
     m_aChangeListeners.disposeAndClear(aEvt);
 
-    m_pEditImplementation->SetModifyHdl( Link<Edit&,void>() );
+    m_pEditImplementation->SetModifyHdl( Link<LinkParamNone*,void>() );
     if ( m_bOwnEditImplementation )
         delete m_pEditImplementation;
     m_pEditImplementation = nullptr;

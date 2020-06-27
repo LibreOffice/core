@@ -28,7 +28,6 @@ GenericEditImplementation< EDIT >::GenericEditImplementation( EDIT& _rEdit )
 {
 }
 
-
 template <class EDIT>
 Control& GenericEditImplementation< EDIT >::GetControl()
 {
@@ -129,9 +128,9 @@ void GenericEditImplementation< EDIT >::ClearModified()
 
 
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<Edit&,void>& _rLink )
+void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<LinkParamNone*,void>& _rLink )
 {
-    m_rEdit.SetModifyHdl( _rLink );
+    m_aModifyHdl = _rLink;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
