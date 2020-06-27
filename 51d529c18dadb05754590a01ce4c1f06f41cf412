@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfdacf78_8d920c39",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-27T09:51:17Z",
+      "side": 0,
+      "message": "Not sure if hiding radio buttons is enough to not be accessible per alt+E, for example.",
+      "range": {
+        "startLine": 545,
+        "startChar": 73,
+        "endLine": 545,
+        "endChar": 77
+      },
+      "revId": "51d529c18dadb05754590a01ce4c1f06f41cf412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
