@@ -19,9 +19,9 @@
 
 #include <skia/salbmp.hxx>
 
+#include <o3tl/make_shared.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/helpers.hxx>
-#include <boost/smart_ptr/make_shared.hpp>
 
 #include <salgdi.hxx>
 #include <salinst.hxx>
@@ -114,7 +114,7 @@ bool SkiaSalBitmap::CreateBitmapData()
 #ifdef DBG_UTIL
         allocate += sizeof(CANARY);
 #endif
-        mBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
+        mBuffer = o3tl::make_shared_array<sal_uInt8>(allocate);
 #ifdef DBG_UTIL
         // fill with random garbage
         sal_uInt8* buffer = mBuffer.get();
@@ -578,7 +578,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     SkBitmap alphaBitmap;
     if (mBuffer && mBitCount <= 8)
     {
-        assert(mBuffer.get());
+        assert(mBuffer);
         verify();
         std::unique_ptr<sal_uInt8[]> data
             = convertDataBitCount(mBuffer.get(), mSize.Width(), mSize.Height(), mBitCount,
@@ -736,7 +736,7 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
         assert(memcmp(mBuffer.get() + allocate, CANARY, sizeof(CANARY)) == 0);
         allocate += sizeof(CANARY);
 #endif
-        boost::shared_ptr<sal_uInt8[]> newBuffer = boost::make_shared_noinit<sal_uInt8[]>(allocate);
+        auto newBuffer = o3tl::make_shared_array<sal_uInt8>(allocate);
         memcpy(newBuffer.get(), mBuffer.get(), allocate);
         mBuffer = newBuffer;
     }
@@ -747,7 +747,7 @@ void SkiaSalBitmap::ResetCachedData()
     SkiaZone zone;
     // There may be a case when only mImage is set and CreatBitmapData() will create
     // mBuffer from it if needed, in that case ResetToSkImage() should be used.
-    assert(mBuffer.get() || !mImage);
+    assert(mBuffer || !mImage);
     mImage.reset();
     mAlphaImage.reset();
 }
