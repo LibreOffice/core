@@ -451,8 +451,29 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                 abort();
             bitmap.setImmutable();
         }
-        // Skia has a format for 8bit grayscale SkBitmap, but it seems to cause a problem
-        // with our PNG loader (tdf#121120), so convert it to RGBA below as well.
+        else if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
+        {
+            // Convert 8bpp gray to 32bpp RGBA/BGRA.
+            // There's also kGray_8_SkColorType, but it's probably simpler to make
+            // GetAsSkBitmap() always return 32bpp SkBitmap and then assume mImage
+            // is always 32bpp too.
+            std::unique_ptr<uint32_t[]> data(
+                new uint32_t[mPixelsSize.Height() * mPixelsSize.Width()]);
+            uint32_t* dest = data.get();
+            for (long y = 0; y < mPixelsSize.Height(); ++y)
+            {
+                const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
+                SkExtendGrayToRGBA(dest, src, mPixelsSize.Width());
+                dest += mPixelsSize.Width();
+            }
+            if (!bitmap.installPixels(
+                    SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(),
+                                         kOpaque_SkAlphaType),
+                    data.release(), mPixelsSize.Width() * 4,
+                    [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
+                abort();
+            bitmap.setImmutable();
+        }
         else
         {
 // Use a macro to hide an unreachable code warning.
@@ -634,6 +655,7 @@ void SkiaSalBitmap::EnsureBitmapData()
     // Try to fill mBuffer from mImage.
     if (!mImage)
         return;
+    assert(mImage->colorType() == kN32_SkColorType);
     SkiaZone zone;
     if (!CreateBitmapData())
         abort();
