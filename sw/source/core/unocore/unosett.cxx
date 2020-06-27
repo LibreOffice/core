@@ -1771,8 +1771,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             OUString sBulletFontName;
             rProp.Value >>= sBulletFontName;
-            SwDocShell* pLclDocShell = pDoc->GetDocShell();
-            if( !sBulletFontName.isEmpty() && pLclDocShell )
+            SwDocShell* pLclDocShell = nullptr;
+            if( !sBulletFontName.isEmpty() && pDoc && (pLclDocShell = pDoc->GetDocShell()) )
             {
                 const SvxFontListItem* pFontListItem =
                         static_cast<const SvxFontListItem* >(pLclDocShell
