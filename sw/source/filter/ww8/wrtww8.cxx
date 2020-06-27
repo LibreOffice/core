@@ -2598,9 +2598,6 @@ void WW8AttributeOutput::TableCellBorders(
             pLastBox = pBox;
         else if( !pBox || *pLastBox != *pBox )
         {
-            if ( !pLastBox )
-                break;
-
             // This cell has different borders than the previous cell,
             // so output the borders for the preceding cell range.
             m_rWW8Export.Out_CellRangeBorders(pLastBox, nSeqStart, n);
