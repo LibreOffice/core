@@ -147,6 +147,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     mSize = src.mSize;
     mPixelsSize = src.mPixelsSize;
     mScanlineSize = src.mScanlineSize;
+    mScaleQuality = src.mScaleQuality;
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
@@ -685,7 +686,7 @@ void SkiaSalBitmap::EnsureBitmapData()
                                                        << "->" << mSize << ":"
                                                        << static_cast<int>(mScaleQuality));
         mPixelsSize = mSize;
-        mScaleQuality = kNone_SkFilterQuality;
+        mScaleQuality = kHigh_SkFilterQuality;
         // Information about the pending scaling has been discarded, so make sure we do not
         // keep around any cached images that would still need scaling.
         ResetCachedDataBySize();
