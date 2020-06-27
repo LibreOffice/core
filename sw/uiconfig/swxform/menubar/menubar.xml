@@ -199,7 +199,7 @@
       <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TableBoundaries" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowGraphics" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ShowWhitespace" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowWhitespace"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations" menu:style="text"/>
