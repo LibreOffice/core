@@ -468,7 +468,7 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     {
         SwSectionFrame const*const pFrame(static_cast<SwSectionFrame const*>(this));
         SwSectionNode const*const pNode(pFrame->GetSection()->GetFormat()->GetSectionNode());
-        xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode->GetIndex());
+        xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode ? pNode->GetIndex() : -1);
     }
     if ( IsTextFrame(  ) )
     {
