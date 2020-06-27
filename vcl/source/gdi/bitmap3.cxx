@@ -849,7 +849,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             case 4:
             {
-                if(HasGreyPalette())
+                if(HasGreyPaletteAny())
                 {
                     rNew.Convert(BmpConversion::N4BitGreys);
                 }
@@ -861,7 +861,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             case 8:
             {
-                if(HasGreyPalette())
+                if(HasGreyPaletteAny())
                 {
                     rNew.Convert(BmpConversion::N8BitGreys);
                 }
