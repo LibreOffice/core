@@ -143,7 +143,7 @@ namespace svt
         virtual void                SetModified() = 0;
         virtual bool                IsModified() const = 0;
         virtual void                ClearModified() = 0;
-        virtual void                SetModifyHdl( const Link<Edit&,void>& _rLink ) = 0;
+        virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) = 0;
     };
 
 
@@ -153,6 +153,8 @@ namespace svt
     class GenericEditImplementation : public IEditImplementation
     {
         EDIT&   m_rEdit;
+    protected:
+        Link<LinkParamNone*,void> m_aModifyHdl;
     public:
         GenericEditImplementation( EDIT& _rEdit );
 
@@ -178,7 +180,7 @@ namespace svt
         virtual void                SetModified() override;
         virtual bool                IsModified() const override;
         virtual void                ClearModified() override;
-        virtual void                SetModifyHdl( const Link<Edit&,void>& _rLink ) override;
+        virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) override;
     };
 
     #include <svtools/editimplementation.hxx>
@@ -209,23 +211,32 @@ namespace svt
 
     //= concrete edit implementations
 
-    typedef GenericEditImplementation< Edit >             EditImplementation;
+    typedef GenericEditImplementation< Edit >             EditImplementation_Base;
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) EditImplementation final : public EditImplementation_Base
+    {
+        DECL_LINK(ModifyHdl, Edit&, void);
+    public:
+        EditImplementation( Edit& _rEdit ) : EditImplementation_Base( _rEdit )
+        {
+            _rEdit.SetModifyHdl(LINK(this, EditImplementation, ModifyHdl));
+        }
+    };
 
     typedef GenericEditImplementation< MultiLineTextCell >  MultiLineEditImplementation_Base;
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineEditImplementation final : public MultiLineEditImplementation_Base
     {
+        DECL_LINK(ModifyHdl, Edit&, void);
     public:
         MultiLineEditImplementation( MultiLineTextCell& _rEdit ) : MultiLineEditImplementation_Base( _rEdit )
         {
+            _rEdit.SetModifyHdl(LINK(this, MultiLineEditImplementation, ModifyHdl));
         }
 
         virtual OUString GetText( LineEnd aSeparator ) const override;
         virtual OUString GetSelected( LineEnd aSeparator ) const override;
     };
 
-
     //= EditCellController
-
     class SVT_DLLPUBLIC EditCellController : public CellController
     {
         IEditImplementation*    m_pEditImplementation;
@@ -246,7 +257,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK(ModifyHdl, Edit&, void);
+        DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
 
