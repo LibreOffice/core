@@ -3722,7 +3722,7 @@ ErrCode SwWW8Writer::WriteStorage()
         {
             // To avoid long paths split and open substorages recursively
             // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
-            SotStorage * pStorage = m_pStg.get();
+            tools::SvRef<SotStorage> pStorage = m_pStg.get();
             OUString sFileName;
             sal_Int32 idx = 0;
             while (pStorage && idx >= 0)
