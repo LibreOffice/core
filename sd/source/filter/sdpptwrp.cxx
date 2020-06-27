@@ -332,7 +332,7 @@ bool SdPPTFilter::Export()
                             break;
                         }
 
-                        SotStorageStream* pStream = pStorage->OpenSotStream(sFileName);
+                        tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
                         if (!pStream)
                         {
                             bRet = false;
