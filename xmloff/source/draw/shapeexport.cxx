@@ -2356,7 +2356,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         uno::Reference<graphic::XGraphic> xGraphic;
         OUString sOutMimeType;
 
-        if (!bIsEmptyPresObj)
         {
             OUString aStreamURL;
             xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
@@ -2395,13 +2394,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
             }
-        }
-        else
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString());
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
         {
