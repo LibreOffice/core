@@ -181,7 +181,7 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = pEvent->pos().x();
+    aEvent.mnX = QGuiApplication::isLeftToRight() ? pEvent->pos().x() : width() - pEvent->pos().x();
     aEvent.mnY = pEvent->pos().y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
