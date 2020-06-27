@@ -59,8 +59,8 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
         OUString sStreamFullName = sPrefix.getLength() ? sPrefix + "/" + aElement.GetName() : aElement.GetName();
         if (aElement.IsStorage())
         {
-            SotStorage * pSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
-            lcl_getListOfStreams(pSubStorage, aStreamsData, sStreamFullName);
+            tools::SvRef<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
+            lcl_getListOfStreams(xSubStorage.get(), aStreamsData, sStreamFullName);
         }
         else
         {
@@ -371,7 +371,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
                 break;
             }
 
-            SotStorageStream* pStream = pStorage->OpenSotStream(sFileName);
+            tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
             if (!pStream)
             {
                 eRet = ERRCODE_IO_GENERAL;
