@@ -150,7 +150,7 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
     static const int bpp[] = { 1, 3, 3, 4, 4 };
     std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * bpp[ static_cast<int>(type) ]] );
 
-    if(type == BitConvert::A8 && bitCount == 8 && palette.IsGreyPalette())
+    if(type == BitConvert::A8 && bitCount == 8 && palette.IsGreyPalette8Bit())
     { // no actual data conversion
         for( int y = 0; y < height; ++y )
             memcpy( data.get() + y * width, src + y * bytesPerRow, width );

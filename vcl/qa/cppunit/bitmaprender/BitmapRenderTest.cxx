@@ -248,7 +248,7 @@ void BitmapRenderTest::testTdf116888()
     CPPUNIT_ASSERT(pAccess);
     const ScanlineFormat eFormat = pAccess->GetScanlineFormat();
     CPPUNIT_ASSERT_EQUAL(ScanlineFormat::N8BitPal, eFormat);
-    CPPUNIT_ASSERT(!aBitmap.HasGreyPalette());
+    CPPUNIT_ASSERT(!aBitmap.HasGreyPaletteAny());
     // HACK: Some rendering backends change white to #FEFEFE while scaling for some reason.
     // That is pretty much white too in practice, so adjust for that.
     BitmapColor white(COL_WHITE);
