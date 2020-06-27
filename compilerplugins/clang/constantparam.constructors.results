@@ -158,10 +158,14 @@ editeng/source/editeng/impedit3.cxx:154
     void lcl_DrawRedLines(class OutputDevice *,long,const class Point &,unsigned long,unsigned long,const long *,const class WrongList *,short,const class Point &,_Bool,_Bool)
     _Bool bVertical
     IsVertical()
-editeng/source/misc/svxacorr.cxx:2666
+editeng/source/misc/svxacorr.cxx:2764
     _Bool SvxAutocorrWordList::CompareSvxAutocorrWordList::operator()(const class SvxAutocorrWord &,const class SvxAutocorrWord &) const
     const class SvxAutocorrWord & lhs
     CompareSvxAutocorrWordList()
+editeng/source/xml/xmltxtexp.cxx:247
+    void (anonymous namespace)::SvxXMLTextExportComponent::SvxXMLTextExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class EditEngine *,const struct ESelection &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
+    const class rtl::OUString & rFileName
+    ""
 emfio/inc/mtftools.hxx:636
     void emfio::MtfTools::ExcludeClipRect(const class tools::Rectangle &)
     const class tools::Rectangle & rRect
@@ -208,11 +212,11 @@ extensions/source/propctrlr/formlinkdialog.hxx:65
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:65
     void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & _sDetailLabel
+    const class rtl::OUString & _sExplanation
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:65
     void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & _sExplanation
+    const class rtl::OUString & _sDetailLabel
     ""
 extensions/source/propctrlr/listselectiondlg.hxx:38
     void pcr::ListSelectionDialog::ListSelectionDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const class rtl::OUString &)
@@ -410,7 +414,7 @@ include/sfx2/docfile.hxx:265
     _Bool SfxMedium::SignDocumentContentUsingCertificate(_Bool,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &)
     _Bool bHasValidDocumentSignature
     HasValidSignatures()
-include/sfx2/objsh.hxx:643
+include/sfx2/objsh.hxx:644
     void SfxObjectShell::DoDraw(class OutputDevice *,const class Point &,const class Size &,const class JobSetup &,unsigned short)
     const class JobSetup & rSetup
     JobSetup()
@@ -486,23 +490,23 @@ include/vcl/graphictools.hxx:278
     void SvtGraphicFill::SvtGraphicFill(const class tools::PolyPolygon &,class Color,double,enum SvtGraphicFill::FillRule,enum SvtGraphicFill::FillType,const struct SvtGraphicFill::Transform &,_Bool,enum SvtGraphicFill::HatchType,class Color,enum SvtGraphicFill::GradientType,class Color,class Color,int,const class Graphic &)
     class Color aFillColor
     Color()
-include/vcl/outdev.hxx:1565
+include/vcl/outdev.hxx:1573
     class Bitmap OutputDevice::GetDownsampledBitmap(const class Size &,const class Point &,const class Size &,const class Bitmap &,long,long)
     const class Point & rSrcPt
     Point()
-include/vcl/print.hxx:652
+include/vcl/print.hxx:654
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setSubgroupControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rHelpId
     ""
-include/vcl/print.hxx:668
+include/vcl/print.hxx:670
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,int,const class com::sun::star::uno::Sequence<unsigned char> &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:679
+include/vcl/print.hxx:681
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:687
+include/vcl/print.hxx:689
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setEditControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
@@ -522,7 +526,7 @@ include/vcl/transfer.hxx:357
     class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &)
     const class rtl::OUString & rDestDoc
     ""
-include/vcl/treelistbox.hxx:706
+include/vcl/treelistbox.hxx:712
     void SvTreeListBox::ShowFocusRect(const class SvTreeListEntry *)
     const class SvTreeListEntry * pEntry
     FirstSelected()
@@ -530,11 +534,11 @@ include/vcl/virdev.hxx:162
     _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
-include/vcl/weld.hxx:576
+include/vcl/weld.hxx:574
     void weld::ComboBoxEntry::ComboBoxEntry(const class rtl::OUString &)
     const class rtl::OUString & rString
     ""
-include/vcl/weld.hxx:653
+include/vcl/weld.hxx:650
     void weld::ComboBox::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
     const class rtl::OUString & rId
     ""
@@ -634,7 +638,7 @@ sc/qa/unit/helper/qahelper.hxx:192
     class tools::SvRef<class ScDocShell> ScBootstrapFixture::saveAndReload(class ScDocShell *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum SfxFilterFlags)
     const class rtl::OUString & rUserData
     ""
-sc/source/core/data/documen3.cxx:1721
+sc/source/core/data/documen3.cxx:1720
     _Bool lcl_AddTwipsWhile(long &,long,int &,int,const class ScTable *,_Bool)
     int nEndRow
     MaxRow()
@@ -694,7 +698,7 @@ sc/source/filter/oox/formulabuffer.cxx:315
     void processSheetFormulaCells(class ScDocumentImport &,struct oox::xls::FormulaBuffer::SheetItem &,class SvNumberFormatter &,const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::ExternalLinkInfo> &,_Bool)
     _Bool bGeneratorKnownGood
     isGeneratorKnownGood()
-sc/source/ui/inc/AccessibleCsvControl.hxx:449
+sc/source/ui/inc/AccessibleCsvControl.hxx:447
     void ScAccessibleCsvCell::ScAccessibleCsvCell(class ScCsvGrid &,const class rtl::OUString &,int,int)
     class ScCsvGrid & rGrid
     implGetGrid()
@@ -714,7 +718,7 @@ sd/source/filter/eppt/pptx-animations.cxx:558
     void (anonymous namespace)::NodeContext::initValid(_Bool,_Bool)
     _Bool bHasValidChild
     initChildNodes()
-sd/source/filter/xml/sdxmlwrp.cxx:147
+sd/source/filter/xml/sdxmlwrp.cxx:137
     const struct (anonymous namespace)::XML_SERVICES * getServices(_Bool,_Bool,unsigned long)
     _Bool bDraw
     IsDraw()
@@ -753,6 +757,10 @@ sdext/source/pdfimport/inc/contentsink.hxx:151
 sdext/source/presenter/PresenterConfigurationAccess.hxx:115
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &)
     const class rtl::OUString & rsPathToNode
+    ""
+sdext/source/presenter/PresenterTheme.cxx:96
+    class std::shared_ptr<class sdext::presenter::PresenterTheme::FontDescriptor> sdext::presenter::(anonymous namespace)::ReadContext::ReadFont(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &,const class std::shared_ptr<class sdext::presenter::PresenterTheme::FontDescriptor> &)
+    const class rtl::OUString & rsFontPath
     ""
 sfx2/source/inc/versdlg.hxx:51
     void SfxVersionDialog::SfxVersionDialog(class weld::Window *,class SfxViewFrame *,_Bool)
@@ -802,6 +810,10 @@ svx/source/inc/treevisitor.hxx:29
     void TreeVisitor::TreeVisitor<ELEMENT, NODEINFO, PROCESSOR>(type-parameter-?-?)
     type-parameter-?-? _nodeInfo
     FormHierarchyComparator()
+svx/source/inc/xmlxtexp.hxx:37
+    void SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::document::XGraphicStorageHandler> &)
+    const class rtl::OUString & rFileName
+    ""
 svx/source/inc/xmlxtexp.hxx:47
     _Bool SvxXMLXTableExportComponent::save(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,class rtl::OUString *)
     const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> & xTable
@@ -858,7 +870,7 @@ sw/source/core/graphic/grfatr.cxx:47
     _Bool lcl_IsHoriOnEvenPages(enum MirrorGraph,_Bool)
     _Bool bToggle
     IsGrfToggle()
-sw/source/core/inc/anchoredobjectposition.hxx:183
+sw/source/core/inc/anchoredobjectposition.hxx:182
     long objectpositioning::SwAnchoredObjectPosition::AdjustVertRelPos(const long,const _Bool,const _Bool,const class SwFrame &,const long,const _Bool,const _Bool) const
     const _Bool bFollowTextFlow
     DoesObjFollowsTextFlow()
@@ -874,7 +886,7 @@ sw/source/core/inc/wrong.hxx:83
     void SwWrongArea::SwWrongArea(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XStringKeyMap> &,int,int,class SwWrongList *)
     const class rtl::OUString & rType
     ""
-sw/source/core/inc/wrong.hxx:329
+sw/source/core/inc/wrong.hxx:325
     void SwWrongList::Insert(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XStringKeyMap> &,int,int,unsigned short)
     const class rtl::OUString & rType
     ""
@@ -922,11 +934,11 @@ sw/source/filter/inc/wrtswtbl.hxx:203
     _Bool SwWriteTableColLess::operator()(const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > &,const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > &)
     const class std::unique_ptr<class SwWriteTableCol, struct std::default_delete<class SwWriteTableCol> > & lhs
     Compare()
-sw/source/filter/ww8/docxattributeoutput.cxx:5909
+sw/source/filter/ww8/docxattributeoutput.cxx:5976
     _Bool (anonymous namespace)::OUStringIgnoreCase::operator()(const class rtl::OUString &,const class rtl::OUString &) const
     const class rtl::OUString & lhs
     Compare()
-sw/source/filter/ww8/docxexport.hxx:278
+sw/source/filter/ww8/docxexport.hxx:276
     void DocxExport::DocxExport(class DocxExportFilter *,class SwDoc *,class std::shared_ptr<class SwUnoCursor> &,class SwPaM *,_Bool,_Bool)
     _Bool bTemplate
     isExportTemplate()
@@ -934,7 +946,7 @@ sw/source/filter/ww8/wrtww8.hxx:265
     void WW8_WrPlcSepx::WriteSepx(class SvStream &) const
     class SvStream & rStrm
     Strm()
-sw/source/filter/ww8/ww8scan.hxx:1531
+sw/source/filter/ww8/ww8scan.hxx:1534
     void WW8Fib::Write(class SvStream &)
     class SvStream & rStrm
     Strm()
@@ -1062,7 +1074,7 @@ vcl/source/edit/vclmedit.cxx:99
     void ImpVclMEdit::Enable(_Bool)
     _Bool bEnable
     IsEnabled()
-vcl/unx/gtk3/gtk3gtkinst.cxx:9017
+vcl/unx/gtk3/gtk3gtkinst.cxx:9028
     _Bool (anonymous namespace)::CompareGtkTreePath::operator()(const struct _GtkTreePath *,const struct _GtkTreePath *) const
     const struct _GtkTreePath * lhs
     Compare()

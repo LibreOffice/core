@@ -95,7 +95,6 @@ public:
     */
     static PresenterTheme::SharedFontDescriptor ReadFont (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxTheme,
-        const OUString& rsFontPath,
         const PresenterTheme::SharedFontDescriptor& rpDefault);
     static PresenterTheme::SharedFontDescriptor ReadFont (
         const Reference<beans::XPropertySet>& rxFontProperties,
@@ -314,7 +313,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::ReadFont (
     const Reference<container::XHierarchicalNameAccess>& rxNode,
     const PresenterTheme::SharedFontDescriptor& rpDefault)
 {
-    return ReadContext::ReadFont(rxNode, OUString(), rpDefault);
+    return ReadContext::ReadFont(rxNode, rpDefault);
 }
 
 bool PresenterTheme::ConvertToColor (
@@ -670,7 +669,6 @@ ReadContext::ReadContext (
 
 PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
     const Reference<container::XHierarchicalNameAccess>& rxNode,
-    const OUString& rsFontPath,
     const PresenterTheme::SharedFontDescriptor& rpDefault)
 {
     if ( ! rxNode.is())
@@ -681,7 +679,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
         Reference<container::XHierarchicalNameAccess> xFont (
             PresenterConfigurationAccess::GetConfigurationNode(
                 rxNode,
-                rsFontPath),
+                /*rsFontPath*/""),
                 UNO_QUERY_THROW);
 
         Reference<beans::XPropertySet> xProperties (xFont, UNO_QUERY_THROW);
@@ -845,7 +843,7 @@ void PaneStyleContainer::ProcessPaneStyle(
 
     Reference<container::XHierarchicalNameAccess> xFontNode (rValues[2], UNO_QUERY);
     pStyle->mpFont = ReadContext::ReadFont(
-        xFontNode, "", PresenterTheme::SharedFontDescriptor());
+        xFontNode, PresenterTheme::SharedFontDescriptor());
 
     Reference<container::XNameAccess> xInnerBorderSizeNode (rValues[3], UNO_QUERY);
     pStyle->maInnerBorderSize = ReadContext::ReadBorderSize(xInnerBorderSizeNode);
@@ -967,7 +965,7 @@ void ViewStyleContainer::ProcessViewStyle(
     Reference<container::XHierarchicalNameAccess> xFontNode (
         PresenterConfigurationAccess::GetProperty(rxProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (
-        ReadContext::ReadFont(xFontNode, "", PresenterTheme::SharedFontDescriptor()));
+        ReadContext::ReadFont(xFontNode, PresenterTheme::SharedFontDescriptor()));
     if (pFont)
         pStyle->mpFont = pFont;
 

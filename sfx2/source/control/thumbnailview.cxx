@@ -48,8 +48,8 @@ using namespace drawinglayer::primitive2d;
 
 constexpr int gnFineness = 5;
 
-ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
-    : Control( pParent, nWinStyle )
+ThumbnailView::ThumbnailView (vcl::Window *pParent)
+    : Control( pParent, WB_TABSTOP )
     , mpItemAttrs(new ThumbnailItemAttributes)
 {
     ImplInit();

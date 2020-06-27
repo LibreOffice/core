@@ -183,7 +183,7 @@ class SFX2_DLLPUBLIC ThumbnailView : public Control, public ThumbnailViewBase
 {
 public:
 
-    ThumbnailView(vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+    ThumbnailView(vcl::Window* pParent);
 
     virtual ~ThumbnailView() override;
     virtual void dispose() override;
