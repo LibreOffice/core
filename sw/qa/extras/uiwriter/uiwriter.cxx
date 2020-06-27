@@ -99,7 +99,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
-#include <o3tl/deleter.hxx>
+#include <o3tl/make_shared.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <paratr.hxx>
@@ -1013,7 +1013,7 @@ void SwUiWriterTest::testExportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
-    std::shared_ptr<SwDoc> xClpDoc(new SwDoc, o3tl::default_delete<SwDoc>());
+    auto xClpDoc = o3tl::make_shared<SwDoc>();
     xClpDoc->SetClipBoard(true);
     pWrtShell->Copy(xClpDoc.get());
 
