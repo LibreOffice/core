@@ -3751,7 +3751,7 @@ ErrCode SwWW8Writer::WriteStorage()
                 break;
             }
 
-            SotStorageStream* pStream = pStorage->OpenSotStream(sFileName);
+            tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
             if (!pStream)
             {
                 nErrorCode = ERRCODE_IO_GENERAL;
