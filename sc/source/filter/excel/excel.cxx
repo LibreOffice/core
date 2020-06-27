@@ -346,7 +346,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         {
             // To avoid long paths split and open substorages recursively
             // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
-            SotStorage * pStorage = xEncryptedRootStrg.get();
+            tools::SvRef<SotStorage> pStorage = xEncryptedRootStrg.get();
             OUString sFileName;
             sal_Int32 idx = 0;
             do
