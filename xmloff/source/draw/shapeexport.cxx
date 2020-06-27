@@ -2867,7 +2867,6 @@ void XMLShapeExport::ImpExportOLE2Shape(
         bool bInternal = false;
         xPropSet->getPropertyValue("IsInternal") >>= bInternal;
 
-        if( !bIsEmptyPresObj )
         {
 
             if ( bInternal )
@@ -2908,14 +2907,6 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
             }
-        }
-        else
-        {
-            // export empty href for empty placeholders to be valid ODF
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, "" );
-            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
 
         enum XMLTokenEnum eElem = sClassId.isEmpty() ? XML_OBJECT : XML_OBJECT_OLE ;
