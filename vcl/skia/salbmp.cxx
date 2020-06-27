@@ -279,7 +279,7 @@ bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
     return false;
 }
 
-bool SkiaSalBitmap::ScalingSupported() const { return !mDisableScale; }
+bool SkiaSalBitmap::ScalingSupported() const { return true; }
 
 bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
 {
@@ -618,46 +618,18 @@ void SkiaSalBitmap::EnsureBitmapData()
 {
     if (mBuffer)
     {
-        if (mSize != mPixelsSize) // pending scaling?
-        {
-            // This will be pixel->pixel scaling, use VCL algorithm, it should be faster than Skia
-            // (no need to possibly convert bpp, it's multithreaded,...).
-            std::shared_ptr<SkiaSalBitmap> src = std::make_shared<SkiaSalBitmap>();
-            if (!src->Create(*this))
-                abort();
-            // force 'src' to use VCL's scaling
-            src->mDisableScale = true;
-            src->mSize = src->mPixelsSize;
-            Bitmap bitmap(src);
-            BmpScaleFlag scaleFlag;
-            switch (mScaleQuality)
-            {
-                case kNone_SkFilterQuality:
-                    scaleFlag = BmpScaleFlag::Fast;
-                    break;
-                case kMedium_SkFilterQuality:
-                    scaleFlag = BmpScaleFlag::Default;
-                    break;
-                case kHigh_SkFilterQuality:
-                    scaleFlag = BmpScaleFlag::BestQuality;
-                    break;
-                default:
-                    abort();
-            }
-            bitmap.Scale(mSize, scaleFlag);
-            assert(dynamic_cast<const SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get()));
-            const SkiaSalBitmap* dest
-                = static_cast<const SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
-            assert(dest->mSize == dest->mPixelsSize);
-            assert(dest->mSize == mSize);
-            SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): pixels scaled "
-                                                           << mPixelsSize << "->" << mSize << ":"
-                                                           << static_cast<int>(mScaleQuality));
-            Destroy();
-            Create(*dest);
-            mDisableScale = false;
-        }
-        return;
+        if (mSize == mPixelsSize)
+            return;
+        // Pending scaling. Create raster SkImage from the bitmap data
+        // at the pixel size and then the code below will scale at the correct
+        // bpp from the image.
+        SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): pixels to be scaled "
+                                                       << mPixelsSize << "->" << mSize << ":"
+                                                       << static_cast<int>(mScaleQuality));
+        Size savedSize = mSize;
+        mSize = mPixelsSize;
+        ResetToSkImage(SkImage::MakeFromBitmap(GetAsSkBitmap()));
+        mSize = savedSize;
     }
     // Try to fill mBuffer from mImage.
     if (!mImage)
