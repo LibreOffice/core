@@ -24,6 +24,7 @@
 #include <vector>
 #include <tools/urlobj.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/deleter.hxx>
 #include <unotools/pathoptions.hxx>
 
 using namespace     ::com::sun::star::container;
@@ -70,7 +71,8 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dial
 
 std::shared_ptr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( weld::Window* pParent )
 {
-    return std::make_shared<SvtFileDialog>(pParent, PickerFlags::PathDialog);
+    return std::shared_ptr<SvtFileDialog>(new SvtFileDialog(pParent, PickerFlags::PathDialog),
+                                          o3tl::default_delete<SvtFileDialog>());
 }
 
 sal_Int16 SvtFolderPicker::implExecutePicker( )

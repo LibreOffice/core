@@ -397,7 +397,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if (!isLOKMobilePhone())
             {
                 // dialog checks, what is in the cell
-                xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr());
+                xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()),
+                              o3tl::default_delete<SfxModelessDialogController>());
             }
             break;
         }

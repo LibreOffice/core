@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace     ::com::sun::star::container;
@@ -435,7 +436,8 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
 {
     PickerFlags nBits = getPickerFlags();
 
-    auto dialog = std::make_shared<SvtFileDialog>(pParent, nBits);
+    std::shared_ptr<SvtFileDialog> dialog(new SvtFileDialog(pParent, nBits),
+                                          o3tl::default_delete<SvtFileDialog>());
 
     // Set StandardDir if present
     if ( !m_aStandardDir.isEmpty())
