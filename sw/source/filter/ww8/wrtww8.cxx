@@ -3728,7 +3728,7 @@ ErrCode SwWW8Writer::WriteStorage()
             SotStorage * pStorage = m_pStg.get();
             OUString sFileName;
             sal_Int32 idx = 0;
-            do
+            while (pStorage && idx >= 0)
             {
                 OUString sPathElem = aStreamData.Name.getToken(0, L'/', idx);
                 if (!sPathElem.isEmpty())
@@ -3744,7 +3744,7 @@ ErrCode SwWW8Writer::WriteStorage()
                             break;
                     }
                 }
-            } while (pStorage && idx >= 0);
+            };
 
             if (!pStorage)
             {
