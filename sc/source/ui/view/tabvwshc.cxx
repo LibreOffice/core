@@ -71,6 +71,7 @@
 #include <PivotLayoutDialog.hxx>
 
 #include <comphelper/lok.hxx>
+#include <o3tl/make_shared.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
@@ -397,7 +398,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if (!isLOKMobilePhone())
             {
                 // dialog checks, what is in the cell
-                xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr());
+                xResult = o3tl::make_shared<ScFormulaDlg>(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr());
             }
             break;
         }
