@@ -290,4 +290,85 @@ class formatBulletsNumbering(UITestCase):
         self.ui_test.close_dialog_through_button(xcancbtn)
 
         self.ui_test.close_doc()
+
+   def test_bullets_and_numbering_selection(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+
+        # Test Bullet Page
+        self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        # Select the BulletPage's Selector
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "0")
+        xBulletPage = xDialog.getChild("PickBulletPage")
+        xselector = xBulletPage.getChild("valueset")
+        self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
+        # Select elemet num 3
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "2")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "3")
+        self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Solid diamond bullets")
+        # Select elemet num 7
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "6")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "7")
+        self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Cross mark bullets")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        # Test other Pages
+        self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        # Select the NumberingPage's Selector
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "1")
+        xNumberingPage = xDialog.getChild("PickNumberingPage")
+        xselector = xNumberingPage.getChild("valueset")
+        self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
+        # Select elemet num 5
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "5"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "4")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "5")
+        self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Uppercase letter A) B) C)")
+        # Select elemet num 8
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "7")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "8")
+        self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Lowercase Roman number i. ii. iii.")
+
+        # Select the OutlinePage's Selector
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "2")
+        xOutlinePage = xDialog.getChild("PickOutlinePage")
+        xselector = xOutlinePage.getChild("valueset")
+        self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
+        # Select elemet num 1
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "0")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "1")
+        self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Numeric, numeric, lowercase letters, solid small circular bullet")
+
+        # Select the GraphicPage's Selector
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "3")
+        xGraphicPage = xDialog.getChild("PickGraphicPage")
+        xselector = xGraphicPage.getChild("valueset")
+        self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "92")
+        # Select elemet num 22
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "22"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "21")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "22")
+        # Select elemet num 73
+        xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "73"}))
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "72")
+        self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "73")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
