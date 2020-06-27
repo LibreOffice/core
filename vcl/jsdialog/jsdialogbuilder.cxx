@@ -252,13 +252,19 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
     }
 }
 
+namespace
+{
+vcl::Window* extract_sal_widget(weld::Widget* pParent)
+{
+    SalInstanceWidget* pInstanceWidget = dynamic_cast<SalInstanceWidget*>(pParent);
+    return pInstanceWidget ? pInstanceWidget->getWidget() : nullptr;
+}
+}
+
 // used for dialogs
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
-    : SalInstanceBuilder(dynamic_cast<SalInstanceWidget*>(pParent)
-                             ? dynamic_cast<SalInstanceWidget*>(pParent)->getWidget()
-                             : nullptr,
-                         rUIRoot, rUIFile)
+    : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
