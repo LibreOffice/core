@@ -196,8 +196,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
     }
 
+    const bool bIsLOKMobilePhone = mpViewShell && mpViewShell->isLOKMobilePhone();
+
     // sigma and equal buttons
-    if (!mpViewShell->isLOKMobilePhone())
+    if (!bIsLOKMobilePhone)
     {
         InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWNONLY, 3);
         InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
@@ -224,7 +226,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     }
 
     // sigma and equal buttons
-    if (!mpViewShell->isLOKMobilePhone())
+    if (!bIsLOKMobilePhone)
     {
         SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
         SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
