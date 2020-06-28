@@ -22,6 +22,30 @@
       "revId": "51d529c18dadb05754590a01ce4c1f06f41cf412",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "944e91d4_00826890",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-28T08:16:46Z",
+      "side": 0,
+      "message": "Yes, needs testing. And the testing needs to be done separateny for GTK and non-GTK (e.g., win or gen) VCL plugins.",
+      "parentUuid": "bfdacf78_8d920c39",
+      "range": {
+        "startLine": 545,
+        "startChar": 73,
+        "endLine": 545,
+        "endChar": 77
+      },
+      "revId": "51d529c18dadb05754590a01ce4c1f06f41cf412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
