@@ -26,6 +26,7 @@
 #include <cstddef>
 
 #include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>

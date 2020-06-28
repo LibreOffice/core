@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 

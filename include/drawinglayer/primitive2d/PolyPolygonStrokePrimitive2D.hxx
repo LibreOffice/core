@@ -22,14 +22,9 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <drawinglayer/attribute/fillhatchattribute.hxx>
-#include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <basegfx/color/bcolor.hxx>
 
 namespace drawinglayer::primitive2d
 {

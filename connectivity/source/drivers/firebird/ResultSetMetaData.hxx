@@ -25,6 +25,7 @@
 #include <ibase.h>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 

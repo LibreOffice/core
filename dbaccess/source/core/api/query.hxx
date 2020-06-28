@@ -22,6 +22,7 @@
 
 #include "querydescriptor.hxx"
 #include <cppuhelper/implbase3.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

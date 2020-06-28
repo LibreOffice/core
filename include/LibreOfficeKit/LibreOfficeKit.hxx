@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <cstddef>
-
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 

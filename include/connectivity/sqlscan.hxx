@@ -19,7 +19,6 @@
 #pragma once
 
 #include <connectivity/IParseContext.hxx>
-#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {
