@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_extensions.h>
+
 #include <align.hxx>
 #include "dlgfact.hxx"
 
@@ -1684,8 +1686,13 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
 VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
     weld::Window* pParent)
 {
+#if HAVE_FEATURE_EXTENSIONS
     return VclPtr<AbstractAdditionsDialog_Impl>::Create(
         std::make_unique<AdditionsDialog>(pParent));
+#else
+    (void) pParent;
+    return VclPtr<AbstractAdditionsDialog>(nullptr);
+#endif
 }
 
 VclPtr<AbstractAboutDialog>
