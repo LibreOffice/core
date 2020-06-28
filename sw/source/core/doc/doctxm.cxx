@@ -2056,19 +2056,4 @@ void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
         pSect->GetFormat()->SetFormatAttr( rSet );
 }
 
-bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
-{
-    switch( rInfo.Which() )
-    {
-    case RES_CONTENT_VISIBLE:
-        {
-            const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
-            if( pSect && pSect->GetFormat() )
-                pSect->GetFormat()->GetInfo( rInfo );
-        }
-        return false;
-    }
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
