@@ -226,6 +226,7 @@ public:
     void testBnc762542();
 
     void testTdf103734();
+    void testTdf98844();
     void testTdf100458();
     void testTdf127982();
     void testTdf100709XLSX();
@@ -382,6 +383,7 @@ public:
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
     CPPUNIT_TEST(testTdf103734);
+    CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf127982);
     CPPUNIT_TEST(testTdf100709XLSX);
@@ -3740,6 +3742,25 @@ void ScFiltersTest::testTdf103734()
 
     // Without the fix in place, MAX() would have returned -1.8E+308
     CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), rDoc.GetString(ScAddress(2,0,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf98844()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf98844.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(47.6227, rDoc.GetValue(ScAddress(0,7,0)));
+    CPPUNIT_ASSERT_EQUAL(48.0, rDoc.GetValue(ScAddress(0,8,0)));
+
+    xDocSh->DoHardRecalc();
+
+    // Without the fix in place, SUM() wouldn't have been updated when
+    // Precision as shown is enabled
+    CPPUNIT_ASSERT_EQUAL(48.0, rDoc.GetValue(ScAddress(0,7,0)));
+    CPPUNIT_ASSERT_EQUAL(48.0, rDoc.GetValue(ScAddress(0,8,0)));
 
     xDocSh->DoClose();
 }
