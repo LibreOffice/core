@@ -519,27 +519,81 @@
   <block-list:block block-list:abbreviated-name="mütaakip" block-list:name="müteakip"/>
   <block-list:block block-list:abbreviated-name="Mütahit" block-list:name="Müteahhit"/>
   <block-list:block block-list:abbreviated-name="mütahit" block-list:name="müteahhit"/>
+  <block-list:block block-list:abbreviated-name="Nalet" block-list:name="Lanet"/>
+  <block-list:block block-list:abbreviated-name="nalet" block-list:name="lanet"/>
+  <block-list:block block-list:abbreviated-name="Naturel" block-list:name="Natürel"/>
+  <block-list:block block-list:abbreviated-name="naturel" block-list:name="natürel"/>
+  <block-list:block block-list:abbreviated-name="Nergiz" block-list:name="Nergis"/>
+  <block-list:block block-list:abbreviated-name="nergiz" block-list:name="nergis"/>
   <block-list:block block-list:abbreviated-name="Nisbet" block-list:name="Nispet"/>
   <block-list:block block-list:abbreviated-name="nisbet" block-list:name="nispet"/>
+  <block-list:block block-list:abbreviated-name="Nötür" block-list:name="Nötr"/>
+  <block-list:block block-list:abbreviated-name="nötür" block-list:name="nötr"/>
+  <block-list:block block-list:abbreviated-name="Oce" block-list:name="Oje"/>
+  <block-list:block block-list:abbreviated-name="oce" block-list:name="oje"/>
   <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
+  <block-list:block block-list:abbreviated-name="Okşizen" block-list:name="Oksijen"/>
+  <block-list:block block-list:abbreviated-name="okşizen" block-list:name="oksijen"/>
+  <block-list:block block-list:abbreviated-name="Oparasyon" block-list:name="Operasyon"/>
+  <block-list:block block-list:abbreviated-name="oparasyon" block-list:name="operasyon"/>
+  <block-list:block block-list:abbreviated-name="Opsayt" block-list:name="Ofsayt"/>
+  <block-list:block block-list:abbreviated-name="opsayt" block-list:name="ofsayt"/>
   <block-list:block block-list:abbreviated-name="Oğmak" block-list:name="Ovmak"/>
   <block-list:block block-list:abbreviated-name="oğmak" block-list:name="ovmak"/>
   <block-list:block block-list:abbreviated-name="Opörler" block-list:name="Hoparlör"/>
   <block-list:block block-list:abbreviated-name="opörler" block-list:name="hoparlör"/>
   <block-list:block block-list:abbreviated-name="Orjinal" block-list:name="Orijinal"/>
   <block-list:block block-list:abbreviated-name="orjinal" block-list:name="orijinal"/>
+  <block-list:block block-list:abbreviated-name="Öğe" block-list:name="Öge"/>
+  <block-list:block block-list:abbreviated-name="öğe" block-list:name="öge"/>
   <block-list:block block-list:abbreviated-name="Ön görmek" block-list:name="Öngörmek"/>
   <block-list:block block-list:abbreviated-name="ön görmek" block-list:name="öngörmek"/>
+  <block-list:block block-list:abbreviated-name="Ötenazi" block-list:name="Ötanazi"/>
+  <block-list:block block-list:abbreviated-name="ötenazi" block-list:name="ötanazi"/>
+  <block-list:block block-list:abbreviated-name="Palyanço" block-list:name="Palyaço"/>
+  <block-list:block block-list:abbreviated-name="palyanço" block-list:name="palyaço"/>
+  <block-list:block block-list:abbreviated-name="Palyoça" block-list:name="Palyaço"/>
+  <block-list:block block-list:abbreviated-name="palyoça" block-list:name="palyaço"/>
   <block-list:block block-list:abbreviated-name="Pantalon" block-list:name="Pantolon"/>
   <block-list:block block-list:abbreviated-name="pantalon" block-list:name="pantolon"/>
+  <block-list:block block-list:abbreviated-name="Parağraf" block-list:name="Paragraf"/>
+  <block-list:block block-list:abbreviated-name="parağraf" block-list:name="paragraf"/>
+  <block-list:block block-list:abbreviated-name="Pardesü" block-list:name="Pardösü"/>
+  <block-list:block block-list:abbreviated-name="pardesü" block-list:name="pardösü"/>
+  <block-list:block block-list:abbreviated-name="Parelel" block-list:name="Paralel"/>
+  <block-list:block block-list:abbreviated-name="parelel" block-list:name="paralel"/>
+  <block-list:block block-list:abbreviated-name="Parende" block-list:name="Perende"/>
+  <block-list:block block-list:abbreviated-name="parende" block-list:name="perende"/>
+  <block-list:block block-list:abbreviated-name="Parlementer" block-list:name="Parlamenter"/>
+  <block-list:block block-list:abbreviated-name="parlementer" block-list:name="parlamenter"/>
+  <block-list:block block-list:abbreviated-name="Parlemento" block-list:name="Parlamento"/>
+  <block-list:block block-list:abbreviated-name="parlemento" block-list:name="parlemento"/>
+  <block-list:block block-list:abbreviated-name="Payton" block-list:name="Fayton"/>
+  <block-list:block block-list:abbreviated-name="payton" block-list:name="fayton"/>
+  <block-list:block block-list:abbreviated-name="Penbe" block-list:name="Pembe"/>
+  <block-list:block block-list:abbreviated-name="penbe" block-list:name="pembe"/>
   <block-list:block block-list:abbreviated-name="Pehriz" block-list:name="Perhiz"/>
   <block-list:block block-list:abbreviated-name="pehriz" block-list:name="perhiz"/>
   <block-list:block block-list:abbreviated-name="Pekçok" block-list:name="Pek çok"/>
   <block-list:block block-list:abbreviated-name="pekçok" block-list:name="pek çok"/>
   <block-list:block block-list:abbreviated-name="Peştemal" block-list:name="Peştamal"/>
   <block-list:block block-list:abbreviated-name="peştemal" block-list:name="peştamal"/>
+  <block-list:block block-list:abbreviated-name="Pisiklet" block-list:name="Bisiklet"/>
+  <block-list:block block-list:abbreviated-name="pisiklet" block-list:name="bisiklet"/>
   <block-list:block block-list:abbreviated-name="Poaça" block-list:name="Poğaça"/>
   <block-list:block block-list:abbreviated-name="poaça" block-list:name="poğaça"/>
+  <block-list:block block-list:abbreviated-name="Proğram" block-list:name="Program"/>
+  <block-list:block block-list:abbreviated-name="proğram" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="Proleterya" block-list:name="Proletarya"/>
+  <block-list:block block-list:abbreviated-name="proleterya" block-list:name="proletarya"/>
+  <block-list:block block-list:abbreviated-name="Promasyon" block-list:name="Promosyon"/>
+  <block-list:block block-list:abbreviated-name="promasyon" block-list:name="promosyon"/>
+  <block-list:block block-list:abbreviated-name="Prooram" block-list:name="Program"/>
+  <block-list:block block-list:abbreviated-name="prooram" block-list:name="program"/>
+  <block-list:block block-list:abbreviated-name="Provakatör" block-list:name="Provokatör"/>
+  <block-list:block block-list:abbreviated-name="provakatör" block-list:name="provokatör"/>
+  <block-list:block block-list:abbreviated-name="Psikiyatrist" block-list:name="Psikiyatr"/>
+  <block-list:block block-list:abbreviated-name="psikiyatrist" block-list:name="psikiyatr"/>
   <block-list:block block-list:abbreviated-name="Restorant" block-list:name="Restoran"/>
   <block-list:block block-list:abbreviated-name="restorant" block-list:name="restoran"/>
   <block-list:block block-list:abbreviated-name="Ropörtaj" block-list:name="Röportaj"/>
@@ -558,6 +612,8 @@
   <block-list:block block-list:abbreviated-name="suç üstü" block-list:name="suçüstü"/>
   <block-list:block block-list:abbreviated-name="Süpriz" block-list:name="Sürpriz"/>
   <block-list:block block-list:abbreviated-name="süpriz" block-list:name="sürpriz"/>
+  <block-list:block block-list:abbreviated-name="Şok olmak" block-list:name="Şoke olmak"/>
+  <block-list:block block-list:abbreviated-name="şok olmak" block-list:name="şoke olmak"/>
   <block-list:block block-list:abbreviated-name="Şöför" block-list:name="şoför"/>
   <block-list:block block-list:abbreviated-name="şöför" block-list:name="şoför"/>
   <block-list:block block-list:abbreviated-name="Tesbih" block-list:name="Tespih"/>
