@@ -112,7 +112,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mbNoLine(false)
     , mbNoFill(false)
     , maClip()
-    , mpPdfDocument(nullptr)
     , mnPageCount(0)
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())
@@ -131,65 +130,46 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     // Load the buffer using pdfium.
     auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
-    mpPdfDocument = FPDF_LoadMemDocument(
-        rVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
-        rVectorGraphicData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);
+    auto* pData = rVectorGraphicData->getVectorGraphicDataArray().getConstArray();
+    sal_Int32 nSize = rVectorGraphicData->getVectorGraphicDataArrayLength();
+    mpPdfDocument = mpPDFium->openDocument(pData, nSize);
     if (!mpPdfDocument)
-    {
-        //TODO: Handle failure to load.
-        switch (FPDF_GetLastError())
-        {
-            case FPDF_ERR_SUCCESS:
-                break;
-            case FPDF_ERR_UNKNOWN:
-                break;
-            case FPDF_ERR_FILE:
-                break;
-            case FPDF_ERR_FORMAT:
-                break;
-            case FPDF_ERR_PASSWORD:
-                break;
-            case FPDF_ERR_SECURITY:
-                break;
-            case FPDF_ERR_PAGE:
-                break;
-            default:
-                break;
-        }
-
         return;
-    }
 
-    mnPageCount = FPDF_GetPageCount(mpPdfDocument);
+    mnPageCount = mpPdfDocument->getPageCount();
 }
 
-ImpSdrPdfImport::~ImpSdrPdfImport() { FPDF_CloseDocument(mpPdfDocument); }
+ImpSdrPdfImport::~ImpSdrPdfImport() = default;
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
 {
-    const int nPageCount = FPDF_GetPageCount(mpPdfDocument);
+    const int nPageCount = mpPdfDocument->getPageCount();
     if (nPageCount > 0 && nPageIndex >= 0 && nPageIndex < nPageCount)
     {
         // Render next page.
-        FPDF_PAGE pPdfPage = FPDF_LoadPage(mpPdfDocument, nPageIndex);
-        if (pPdfPage == nullptr)
+        auto pPdfPage = mpPdfDocument->openPage(nPageIndex);
+        if (!pPdfPage)
             return;
 
-        const double dPageWidth = FPDF_GetPageWidth(pPdfPage);
-        const double dPageHeight = FPDF_GetPageHeight(pPdfPage);
+        basegfx::B2DSize dPageSize = mpPdfDocument->getPageSize(nPageIndex);
+
+        const double dPageWidth = dPageSize.getX();
+        const double dPageHeight = dPageSize.getY();
+
         SetupPageScale(dPageWidth, dPageHeight);
 
         // Load the page text to extract it when we get text elements.
-        FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
+        FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage->getPointer());
 
-        const int nPageObjectCount = FPDFPage_CountObjects(pPdfPage);
+        const int nPageObjectCount = FPDFPage_CountObjects(pPdfPage->getPointer());
         if (pProgrInfo)
             pProgrInfo->SetActionCount(nPageObjectCount);
 
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
-            FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage, nPageObjectIndex);
+            FPDF_PAGEOBJECT pPageObject
+                = FPDFPage_GetObject(pPdfPage->getPointer(), nPageObjectIndex);
             ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
             if (pProgrInfo && pActionsToReport)
             {
@@ -206,7 +186,6 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         }
 
         FPDFText_ClosePage(pTextPage);
-        FPDF_ClosePage(pPdfPage);
     }
 }
 

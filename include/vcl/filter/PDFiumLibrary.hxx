@@ -90,6 +90,8 @@ public:
             FPDF_ClosePage(mpPage);
     }
 
+    FPDF_PAGE getPointer() { return mpPage; }
+
     int getAnnotationCount();
     int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation);
 
