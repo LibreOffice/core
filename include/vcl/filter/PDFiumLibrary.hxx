@@ -20,6 +20,7 @@
 #include <rtl/instance.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 
 #include <fpdf_doc.h>
@@ -87,6 +88,11 @@ public:
 
     int getType();
     OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage);
+
+    int getFormObjectCount();
+    std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex);
+
+    basegfx::B2DHomMatrix getMatrix();
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final

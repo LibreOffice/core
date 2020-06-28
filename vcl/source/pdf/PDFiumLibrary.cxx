@@ -234,6 +234,31 @@ OUString PDFiumPageObject::getText(std::unique_ptr<PDFiumTextPage> const& pTextP
 
 int PDFiumPageObject::getType() { return FPDFPageObj_GetType(mpPageObject); }
 
+int PDFiumPageObject::getFormObjectCount()
+{
+    return FPDFFormObj_CountObjects(mpPageObject);
+    ;
+}
+
+std::unique_ptr<PDFiumPageObject> PDFiumPageObject::getFormObject(int nIndex)
+{
+    std::unique_ptr<PDFiumPageObject> pPDFiumFormObject;
+    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(mpPageObject, nIndex);
+    if (pFormObject)
+    {
+        pPDFiumFormObject = std::make_unique<PDFiumPageObject>(pFormObject);
+    }
+    return pPDFiumFormObject;
+}
+
+basegfx::B2DHomMatrix PDFiumPageObject::getMatrix()
+{
+    FS_MATRIX matrix;
+    FPDFFormObj_GetMatrix(mpPageObject, &matrix);
+    return basegfx::B2DHomMatrix::abcdef(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e,
+                                         matrix.f);
+}
+
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {
