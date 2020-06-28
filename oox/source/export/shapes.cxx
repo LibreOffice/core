@@ -91,7 +91,6 @@ using ::css::frame::XModel;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
-#define IDS(x) OString(#x " " + OString::number(mnShapeIdMax++)).getStr()
 
 namespace oox {
 
@@ -325,7 +324,6 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
     , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
-    , mnPictureIdMax( 1 )
     , mnXmlNamespace( nXmlNamespace )
     , maMapModeSrc( MapUnit::Map100thMM )
     , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
@@ -416,7 +414,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
-                              XML_name, IDS( Freeform ) );
+                              XML_name, GetShapeName(xShape).toUtf8());
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
     if (GetDocumentType() != DOCUMENT_DOCX)
@@ -477,7 +475,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
         pFS->startElementNS(mnXmlNamespace, XML_nvGrpSpPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
                 XML_id, OString::number(GetNewShapeID(xShape)),
-                XML_name, IDS(Group));
+                XML_name, GetShapeName(xShape).toUtf8());
         pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr);
         WriteNonVisualProperties(xShape );
         pFS->endElementNS(mnXmlNamespace, XML_nvGrpSpPr);
@@ -803,7 +801,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, OString::number(GetNewShapeID(xShape)),
-                XML_name, IDS( CustomShape ),
+                XML_name, GetShapeName(xShape).toUtf8(),
                 XML_hidden, isVisible ? nullptr : "1" );
 
         if( GETA( URL ) )
@@ -1061,7 +1059,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, OString::number(GetNewShapeID(xShape)),
-                XML_name, IDS( Ellipse ) );
+                XML_name, GetShapeName(xShape).toUtf8());
         pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
@@ -1195,11 +1193,9 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS(mnXmlNamespace, XML_nvPicPr);
 
-    OUString sName, sDescr, sURL;
-    bool bHaveName, bHaveDesc;
+    OUString sDescr, sURL;
+    bool bHaveDesc;
 
-    if ( ( bHaveName= GetProperty( xShapeProps, "Name" ) ) )
-        mAny >>= sName;
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
     if ( GetProperty( xShapeProps, "URL" ) )
@@ -1207,9 +1203,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(GetNewShapeID(xShape)),
-                          XML_name,   bHaveName
-                                          ? sName.toUtf8()
-                                          : OString("Picture " + OString::number(mnPictureIdMax++)),
+                          XML_name,   GetShapeName(xShape).toUtf8(),
                           XML_descr,  bHaveDesc ? sDescr.toUtf8().getStr() : nullptr );
 
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
@@ -1362,7 +1356,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         pFS->startElementNS(mnXmlNamespace, XML_nvCxnSpPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
             XML_id, OString::number(GetNewShapeID(xShape)),
-            XML_name, IDS(xShape));
+            XML_name, GetShapeName(xShape).toUtf8());
         // non visual connector shape drawing properties
         pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
         WriteConnectorConnections(aConnectorEntry, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
@@ -1415,7 +1409,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
-                              XML_name, IDS( Line ) );
+                              XML_name, GetShapeName(xShape).toUtf8());
     }
     pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
     if (GetDocumentType() != DOCUMENT_DOCX)
@@ -1490,7 +1484,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id, OString::number(GetNewShapeID(xShape)),
-                          XML_name, IDS( Rectangle ) );
+                          XML_name, GetShapeName(xShape).toUtf8());
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
     WriteNonVisualProperties( xShape );
     pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
@@ -1868,7 +1862,7 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id, OString::number(GetNewShapeID(xShape)),
-                          XML_name,   IDS(Table) );
+                          XML_name,   GetShapeName(xShape).toUtf8());
 
     pFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
 
@@ -1897,7 +1891,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
                               XML_id, OString::number(GetNewShapeID(xShape)),
-                              XML_name, IDS(TextShape));
+                              XML_name, GetShapeName(xShape).toUtf8());
         OUString sURL;
         if (GetProperty(xShapeProps, "URL"))
             mAny >>= sURL;
@@ -1960,7 +1954,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
          XML_id, OString::number(GetNewShapeID(xShape)),
-         XML_name, IDS(Formula));
+         XML_name, GetShapeName(xShape).toUtf8());
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
     mpFS->singleElementNS(mnXmlNamespace, XML_nvPr);
     mpFS->endElementNS(mnXmlNamespace, XML_nvSpPr);
@@ -2133,7 +2127,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
 
     mpFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                            XML_id,     OString::number(GetNewShapeID(xShape)),
-                           XML_name,   IDS(Object) );
+                           XML_name,   GetShapeName(xShape).toUtf8());
 
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
 
@@ -2224,6 +2218,18 @@ sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape, ShapeHash
         return -1;
 
     return aIter->second;
+}
+
+OUString ShapeExport::GetShapeName(const Reference<XShape>& xShape)
+{
+    Reference<XPropertySet> rXPropSet(xShape, UNO_QUERY);
+
+    // Empty name keeps the object unnamed.
+    OUString sName;
+
+    if (GetProperty(rXPropSet, "Name"))
+        mAny >>= sName;
+    return sName;
 }
 
 }
