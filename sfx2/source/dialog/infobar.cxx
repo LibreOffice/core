@@ -184,8 +184,8 @@ void SfxCloseButton::setForegroundColor(const basegfx::BColor& rColor)
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
                                    const OUString& sPrimaryMessage,
                                    const OUString& sSecondaryMessage, InfobarType ibType,
-                                   bool bShowCloseButton,
-                                   WinBits nMessageStyle = WB_LEFT | WB_VCENTER)
+                                   WinBits nMessageStyle = WB_LEFT | WB_VCENTER,
+                                   bool bShowCloseButton = true)
     : Window(pParent, WB_DIALOGCONTROL)
     , m_sId(sId)
     , m_eType(ibType)
