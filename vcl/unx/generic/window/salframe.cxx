@@ -2598,7 +2598,7 @@ Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
 
 bool X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
-    SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
+    SalMouseEvent aMouseEvt;
     SalEvent            nEvent = SalEvent::NONE;
     bool                bClosePopups = false;
 
