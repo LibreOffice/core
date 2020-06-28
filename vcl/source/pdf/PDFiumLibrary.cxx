@@ -254,9 +254,65 @@ std::unique_ptr<PDFiumPageObject> PDFiumPageObject::getFormObject(int nIndex)
 
 basegfx::B2DHomMatrix PDFiumPageObject::getMatrix()
 {
+    basegfx::B2DHomMatrix aB2DMatrix;
     double a, b, c, d, e, f;
-    FPDFTextObj_GetMatrix(mpPageObject, &a, &b, &c, &d, &e, &f);
-    return basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    if (FPDFTextObj_GetMatrix(mpPageObject, &a, &b, &c, &d, &e, &f))
+        aB2DMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    return aB2DMatrix;
+}
+
+basegfx::B2DRectangle PDFiumPageObject::getBounds()
+{
+    basegfx::B2DRectangle aB2DRectangle;
+
+    float left = 0;
+    float bottom = 0;
+    float right = 0;
+    float top = 0;
+    if (FPDFPageObj_GetBounds(mpPageObject, &left, &bottom, &right, &top))
+    {
+        aB2DRectangle = basegfx::B2DRectangle(left, top, right, bottom);
+    }
+    return aB2DRectangle;
+}
+
+double PDFiumPageObject::getFontSize() { return FPDFTextObj_GetFontSize(mpPageObject); }
+
+OUString PDFiumPageObject::getFontName()
+{
+    OUString sFontName;
+    const int nFontName = 80 + 1;
+    std::unique_ptr<char[]> pFontName(new char[nFontName]); // + terminating null
+    int nFontNameChars = FPDFTextObj_GetFontName(mpPageObject, pFontName.get(), nFontName);
+    if (nFontName >= nFontNameChars)
+    {
+        sFontName = OUString::createFromAscii(pFontName.get());
+    }
+    return sFontName;
+}
+
+int PDFiumPageObject::getTextRenderMode() { return FPDFTextObj_GetTextRenderMode(mpPageObject); }
+
+Color PDFiumPageObject::getFillColor()
+{
+    Color aColor = COL_TRANSPARENT;
+    unsigned int nR, nG, nB, nA;
+    if (FPDFPageObj_GetFillColor(mpPageObject, &nR, &nG, &nB, &nA))
+    {
+        aColor = Color(0xFF - nA, nR, nG, nB);
+    }
+    return aColor;
+}
+
+Color PDFiumPageObject::getStrokeColor()
+{
+    Color aColor = COL_TRANSPARENT;
+    unsigned int nR, nG, nB, nA;
+    if (FPDFPageObj_GetStrokeColor(mpPageObject, &nR, &nG, &nB, &nA))
+    {
+        aColor = Color(0xFF - nA, nR, nG, nB);
+    }
+    return aColor;
 }
 
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
