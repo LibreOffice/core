@@ -88,7 +88,7 @@ class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
     // clipregion
     basegfx::B2DPolyPolygon maClip;
 
-    FPDF_DOCUMENT mpPdfDocument;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> mpPdfDocument;
     int mnPageCount;
     double mdPageHeightPts;
     /// The current transformation matrix, typically used with Form objects.
