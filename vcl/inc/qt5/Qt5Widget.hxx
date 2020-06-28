@@ -25,8 +25,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
+class QInputEvent;
 class Qt5Frame;
 class Qt5Object;
+struct SalAbstractMouseEvent;
 
 class Qt5Widget : public QWidget
 {
@@ -46,6 +48,9 @@ class Qt5Widget : public QWidget
     static void commitText(Qt5Frame&, const QString& aText);
     static bool handleKeyEvent(Qt5Frame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
     static void handleMouseButtonEvent(const Qt5Frame&, const QMouseEvent*, const ButtonKeyState);
+    static void fillSalAbstractMouseEvent(const Qt5Frame& rFrame, const QInputEvent* pQEvent,
+                                          const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
+                                          SalAbstractMouseEvent& aSalEvent);
 
     virtual bool event(QEvent*) override;
 

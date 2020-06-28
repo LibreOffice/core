@@ -127,10 +127,28 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
+void Qt5Widget::fillSalAbstractMouseEvent(const Qt5Frame& rFrame, const QInputEvent* pQEvent,
+                                          const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
+                                          SalAbstractMouseEvent& aSalEvent)
+{
+    const qreal fRatio = rFrame.devicePixelRatioF();
+    const Point aPos = toPoint(rPos * fRatio);
+
+    aSalEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(nWidth * fRatio) - aPos.X();
+    aSalEvent.mnY = aPos.Y();
+    aSalEvent.mnTime = pQEvent->timestamp();
+    aSalEvent.mnCode = GetKeyModCode(pQEvent->modifiers()) | GetMouseModCode(eButtons);
+}
+
+#define FILL_SAME(rFrame, nWidth)                                                                  \
+    fillSalAbstractMouseEvent(rFrame, pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
+
 void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent* pEvent,
                                        const ButtonKeyState eState)
 {
     SalMouseEvent aEvent;
+    FILL_SAME(rFrame, rFrame.GetQWidget()->width());
+
     switch (pEvent->button())
     {
         case Qt::LeftButton:
@@ -145,16 +163,6 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
         default:
             return;
     }
-
-    const qreal fRatio = rFrame.devicePixelRatioF();
-    const Point aPos = toPoint(pEvent->pos() * fRatio);
-
-    aEvent.mnX = QGuiApplication::isLeftToRight()
-                     ? aPos.X()
-                     : round(rFrame.GetQWidget()->width() * fRatio) - aPos.X();
-    aEvent.mnY = aPos.Y();
-    aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     SalEvent nEventType;
     if (eState == ButtonKeyState::Pressed)
@@ -173,14 +181,9 @@ void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
 
 void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
-    const qreal fRatio = m_rFrame.devicePixelRatioF();
-    const Point aPos = toPoint(pEvent->pos() * fRatio);
-
     SalMouseEvent aEvent;
-    aEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(width() * fRatio) - aPos.X();
-    aEvent.mnY = aPos.Y();
-    aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
+    FILL_SAME(m_rFrame, width());
+
     aEvent.mnButton = 0;
 
     m_rFrame.CallCallback(SalEvent::MouseMove, &aEvent);
@@ -189,15 +192,8 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 
 void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 {
-    const Point aPos = toPoint(pEvent->pos() * m_rFrame.devicePixelRatioF());
-
     SalWheelMouseEvent aEvent;
-    aEvent.mnX = QGuiApplication::isLeftToRight()
-                     ? aPos.X()
-                     : round(width() * m_rFrame.devicePixelRatioF()) - aPos.X();
-    aEvent.mnY = aPos.Y();
-    aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
+    FILL_SAME(m_rFrame, width());
 
     // mouse wheel ticks are 120, which we map to 3 lines.
     // we have to accumulate for touch scroll to keep track of the absolute delta.
