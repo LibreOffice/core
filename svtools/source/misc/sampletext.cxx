@@ -100,7 +100,18 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
         // These fonts claim support for ARMENIAN and a bunch of other stuff they don't support
         return USCRIPT_SIMPLIFIED_HAN;
     }
-
+    else if (rName.startsWith("Noto")) {
+        // These fonts claim support for CJK(Chinese-Japanese-Korean) languages.
+        if (rName.indexOf(" KR") > 0 || rName.indexOf("Korean") > 0) {
+            return USCRIPT_KOREAN;
+        } else if (rName.indexOf(" JP") > 0 || rName.indexOf("Japanese") > 0) {
+            return USCRIPT_JAPANESE;
+        } else if (rName.indexOf(" SC") > 0 || rName.indexOf("S Chinese") > 0) {
+            return USCRIPT_SIMPLIFIED_HAN;
+        } else if (rName.indexOf(" TC") > 0 || rName.indexOf(" HK") > 0 || rName.indexOf("T Chinese") > 0) {
+            return USCRIPT_TRADITIONAL_HAN;
+        }
+    }
     return USCRIPT_INVALID_CODE;
 }
 
@@ -361,6 +372,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             sSampleText = OUString(aGeorgian, SAL_N_ELEMENTS(aGeorgian));
             break;
         }
+        case USCRIPT_JAMO:
         case USCRIPT_HANGUL:
         case USCRIPT_KOREAN:
         {
@@ -555,6 +567,7 @@ static OUString makeRepresentativeTextForScript(UScriptCode eScript)
             sSampleText = OUString(aJa, SAL_N_ELEMENTS(aJa));
             break;
         }
+        case USCRIPT_JAMO:
         case USCRIPT_KOREAN:
         case USCRIPT_HANGUL:
         {
