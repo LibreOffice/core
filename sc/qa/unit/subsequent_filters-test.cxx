@@ -215,6 +215,7 @@ public:
     void testCopyMergedNumberFormats();
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
+    void testTdf44076();
     void testEditEngStrikeThroughXLSX();
     void testRefStringXLSX();
     void testHiddenSheetsXLSX();
@@ -371,6 +372,7 @@ public:
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
+    CPPUNIT_TEST(testTdf44076);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRelFormulaValidationXLS);
@@ -3448,6 +3450,20 @@ void ScFiltersTest::testErrorOnExternalReferences()
     CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoName), static_cast<int>(pFC->GetErrCode()));
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A", "Formula changed");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf44076()
+{
+    ScDocShellRef xDocSh = loadDoc("blank.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    rDoc.SetString(ScAddress(0,0,0), "=(-8)^(1/3)");
+
+    CPPUNIT_ASSERT_EQUAL(-2.0, rDoc.GetValue(ScAddress(0,0,0)));
 
     xDocSh->DoClose();
 }
