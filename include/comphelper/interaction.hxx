@@ -25,7 +25,6 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <vector>

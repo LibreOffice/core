@@ -28,7 +28,6 @@
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <rtl/math.hxx>
-#include <rtl/textenc.h>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <tools/color.hxx>

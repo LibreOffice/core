@@ -208,6 +208,9 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/lang/XComponent.hpp
+    include/basegfx/numeric/ftools.hxx:
+    # MSVC does not compile when this is removed
+    - math.h
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -517,6 +520,8 @@ excludelist:
     - com/sun/star/sdbcx/XColumnsSupplier.hpp
     # Needed for macro defines
     - cppuhelper/supportsservice.hxx
+    # Needed for HAVE_FEATURE_JAVA
+    - rtl/ref.hxx
     include/connectivity/ConnectionWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
@@ -785,6 +790,7 @@ excludelist:
     - com/sun/star/awt/FontDescriptor.hpp
     - com/sun/star/style/LineSpacing.hpp
     - com/sun/star/style/TabStop.hpp
+    - editeng/eeitem.hxx
     include/formula/FormulaOpCodeMapperObj.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -909,3 +915,12 @@ excludelist:
     include/oox/helper/helper.hxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    include/codemaker/global.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/file.hxx
+    include/comphelper/crashzone.hxx:
+    # Needed for sig_atomic_t
+    - csignal
+    include/comphelper/parallelsort.hxx:
+    # Needed when PARALLELSORT_ENABLEPZ is defined
+    - chrono

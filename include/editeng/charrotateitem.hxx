@@ -19,7 +19,6 @@
 #ifndef INCLUDED_EDITENG_CHARROTATEITEM_HXX
 #define INCLUDED_EDITENG_CHARROTATEITEM_HXX
 
-#include <config_options.h>
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 

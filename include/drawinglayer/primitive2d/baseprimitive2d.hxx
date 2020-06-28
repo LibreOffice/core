@@ -22,7 +22,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase.hxx>
-#include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <cppuhelper/basemutex.hxx>

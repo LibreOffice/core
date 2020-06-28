@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <rtl/ref.hxx>
 #include <apitools.hxx>
 
 namespace dbaccess

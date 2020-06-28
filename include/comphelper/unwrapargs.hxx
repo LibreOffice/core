@@ -24,7 +24,6 @@
 
 #include <optional>
 
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

@@ -11,11 +11,8 @@
 #ifndef INCLUDED_OOX_CRYPTO_DOCUMENTENCRYPTION_HXX
 #define INCLUDED_OOX_CRYPTO_DOCUMENTENCRYPTION_HXX
 
-#include <oox/dllapi.h>
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/ustring.hxx>
 
 namespace com::sun::star {
     namespace io { class XStream; }

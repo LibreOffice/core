@@ -21,7 +21,8 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
 
 
 // predefines

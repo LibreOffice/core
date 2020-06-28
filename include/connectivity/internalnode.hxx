@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlnode.hxx>
 
 namespace connectivity

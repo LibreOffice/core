@@ -22,8 +22,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/color/bcolor.hxx>
 #include <tools/color.hxx>
 
 namespace drawinglayer::primitive2d

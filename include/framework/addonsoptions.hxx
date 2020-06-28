@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <sal/types.h>
-#include <vcl/image.hxx>
+#include <vcl/bitmapex.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <framework/fwkdllapi.h>

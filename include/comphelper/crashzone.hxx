@@ -11,8 +11,6 @@
 #define INCLUDED_COMPHELPER_CRASHZONE_H
 
 #include <sal/config.h>
-#include <sal/types.h>
-#include <comphelper/comphelperdllapi.h>
 
 #include <atomic>
 #include <csignal>

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_EDITENG_SECTION_HXX
 #define INCLUDED_EDITENG_SECTION_HXX
 
-#include <editeng/editengdllapi.h>
+#include <sal/types.h>
 
 #include <vector>
 
