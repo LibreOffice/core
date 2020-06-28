@@ -53,6 +53,7 @@
 #include <svtools/langtab.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -323,8 +324,8 @@ void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
     m_xLanguageLB->set_sensitive( bShowChangeAll );
     m_xIgnoreAllPB->set_visible( bShowChangeAll );
 
-    m_xAddToDictMB->set_visible( bShowChangeAll && nDicts > 1);
-    m_xAddToDictPB->set_visible( bShowChangeAll && nDicts <= 1);
+    m_xAddToDictMB->set_visible( bShowChangeAll && nDicts > 1 && !comphelper::LibreOfficeKit::isActive());
+    m_xAddToDictPB->set_visible( bShowChangeAll && nDicts <= 1 && !comphelper::LibreOfficeKit::isActive());
     m_xIgnoreRulePB->set_visible( !bShowChangeAll );
     m_xIgnoreRulePB->set_sensitive(bSpellErrorDescription && !aSpellErrorDescription.sRuleId.isEmpty());
     m_xAutoCorrPB->set_visible( bShowChangeAll && rParent.HasAutoCorrection() );
@@ -817,8 +818,8 @@ int SpellDialog::InitUserDicts()
 
     int nDicts = nItemId-1;
 
-    m_xAddToDictMB->set_visible( nDicts > 1 );
-    m_xAddToDictPB->set_visible( nDicts <= 1 );
+    m_xAddToDictMB->set_visible(nDicts > 1 && !comphelper::LibreOfficeKit::isActive());
+    m_xAddToDictPB->set_visible(nDicts <= 1 && !comphelper::LibreOfficeKit::isActive());
 
     return nDicts;
 }
