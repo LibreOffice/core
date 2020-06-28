@@ -13,6 +13,8 @@
 #include <TConnection.hxx>
 #include "MColumnAlias.hxx"
 
+#include <rtl/ref.hxx>
+
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
 // do we want here namespace too?

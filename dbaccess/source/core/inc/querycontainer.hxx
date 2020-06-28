@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase5.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>

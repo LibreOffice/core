@@ -11,10 +11,7 @@
 #ifndef INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
 #define INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
 
-#include <oox/dllapi.h>
-
-#include <memory>
-
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>

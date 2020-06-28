@@ -30,7 +30,6 @@
 #include <sal/types.h>
 #include <sfx2/basedlgs.hxx>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
 
 class NotifyEvent;
 class SfxBindings;

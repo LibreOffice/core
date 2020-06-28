@@ -24,8 +24,6 @@
 #include <vector>
 #include <set>
 
-#include <stdio.h>
-
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
