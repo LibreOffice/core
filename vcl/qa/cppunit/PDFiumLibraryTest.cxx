@@ -134,10 +134,24 @@ void PDFiumLibraryTest::testPageObjects()
     auto pPageObject = pPage->getObject(0);
     auto pTextPage = pPage->getTextPage();
 
-    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getType());
+    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getType()); // FPDF_PAGEOBJ_TEXT
+
     CPPUNIT_ASSERT_EQUAL(OUString("The quick, brown fox jumps over a lazy dog. DJs flock by when "
                                   "MTV ax quiz prog. Junk MTV quiz "),
                          pPageObject->getText(pTextPage));
+
+    CPPUNIT_ASSERT_EQUAL(12.0, pPageObject->getFontSize());
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), pPageObject->getFontName());
+    CPPUNIT_ASSERT_EQUAL(0, pPageObject->getTextRenderMode()); // FPDF_TEXTRENDERMODE_FILL
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getStrokeColor());
+
+    CPPUNIT_ASSERT_EQUAL(true, pPageObject->getMatrix().isIdentity());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(057.01, pPageObject->getBounds().getMinX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(721.51, pPageObject->getBounds().getMinY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(539.48, pPageObject->getBounds().getMaxX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(732.54, pPageObject->getBounds().getMaxY(), 1E-2);
 }
 
 void PDFiumLibraryTest::testAnnotationsMadeInEvince()

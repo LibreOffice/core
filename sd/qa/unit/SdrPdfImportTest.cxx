@@ -88,6 +88,9 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
 
+    // Check there is one object on the page only
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+
     // Get the first object - there should be only one.
     SdrObject* pObject = pPage->GetObj(0);
     CPPUNIT_ASSERT(pObject);
@@ -109,10 +112,16 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     // Execute the break operation - to turn the PDF into shapes/objects
     pViewShell->GetDrawView()->DoImportMarkedMtf();
 
-    // Check Objects after import
+    // Check there is one object on the page only
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 
+    // Get the object
     SdrObject* pImportedObject = pPage->GetObj(0);
     CPPUNIT_ASSERT(pImportedObject);
+
+    // Check the object position
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(2011, 2098), Size(2106 + 1, 302 + 1)),
+                         pImportedObject->GetLogicRect());
 
     // Object should be a text object containing one paragraph with
     // content "This is PDF!"

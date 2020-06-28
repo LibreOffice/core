@@ -22,6 +22,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
 #include <fpdf_doc.h>
 
@@ -93,6 +94,12 @@ public:
     std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex);
 
     basegfx::B2DHomMatrix getMatrix();
+    basegfx::B2DRectangle getBounds();
+    double getFontSize();
+    OUString getFontName();
+    int getTextRenderMode();
+    Color getFillColor();
+    Color getStrokeColor();
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
