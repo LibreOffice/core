@@ -75,7 +75,7 @@ private:
 public:
     SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sPrimaryMessage,
                      const OUString& sSecondaryMessage, InfobarType InfobarType,
-                     bool bShowCloseButton, WinBits nMessageStyle);
+                     WinBits nMessageStyle, bool bShowCloseButton);
     virtual ~SfxInfoBarWindow() override;
     virtual void dispose() override;
 
