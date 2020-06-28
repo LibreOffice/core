@@ -69,6 +69,41 @@ public:
     std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
 };
 
+class PDFiumTextPage;
+
+class VCL_DLLPUBLIC PDFiumPageObject final
+{
+private:
+    FPDF_PAGEOBJECT mpPageObject;
+
+    PDFiumPageObject(const PDFiumPageObject&) = delete;
+    PDFiumPageObject& operator=(const PDFiumPageObject&) = delete;
+
+public:
+    PDFiumPageObject(FPDF_PAGEOBJECT pPageObject);
+    ~PDFiumPageObject();
+
+    FPDF_PAGEOBJECT getPointer() { return mpPageObject; }
+
+    int getType();
+    OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage);
+};
+
+class VCL_DLLPUBLIC PDFiumTextPage final
+{
+private:
+    FPDF_TEXTPAGE mpTextPage;
+
+    PDFiumTextPage(const PDFiumTextPage&) = delete;
+    PDFiumTextPage& operator=(const PDFiumTextPage&) = delete;
+
+public:
+    PDFiumTextPage(FPDF_TEXTPAGE pTextPage);
+    ~PDFiumTextPage();
+
+    FPDF_TEXTPAGE getPointer() { return mpTextPage; }
+};
+
 class VCL_DLLPUBLIC PDFiumPage final
 {
 private:
@@ -92,10 +127,15 @@ public:
 
     FPDF_PAGE getPointer() { return mpPage; }
 
+    int getObjectCount();
+    std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
+
     int getAnnotationCount();
     int getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation);
 
     std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex);
+
+    std::unique_ptr<PDFiumTextPage> getTextPage();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
