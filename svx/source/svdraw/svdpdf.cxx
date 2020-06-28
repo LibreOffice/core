@@ -677,7 +677,7 @@ void ImpSdrPdfImport::ImportPdfObject(
     switch (nPageObjectType)
     {
         case FPDF_PAGEOBJ_TEXT:
-            ImportText(pPageObject->getPointer(), pTextPage->getPointer(), nPageObjectIndex);
+            ImportText(pPageObject, pTextPage, nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_PATH:
             ImportPath(pPageObject->getPointer(), nPageObjectIndex);
@@ -719,46 +719,24 @@ void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     maCurrentMatrix = aOldMatrix;
 }
 
-void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                                  int /*nPageObjectIndex*/)
 {
-    float left;
-    float bottom;
-    float right;
-    float top;
-    if (!FPDFPageObj_GetBounds(pPageObject, &left, &bottom, &right, &top))
-    {
-        SAL_WARN("sd.filter", "FAILED to get TEXT bounds");
-    }
+    basegfx::B2DRectangle aTextRect = pPageObject->getBounds();
+    basegfx::B2DHomMatrix aMatrix = pPageObject->getMatrix();
 
-    if (left == right || top == bottom)
-        return;
-
-    FS_MATRIX matrix;
-    FPDFTextObj_GetMatrix(pPageObject, &matrix);
     basegfx::B2DHomMatrix aTextMatrix(maCurrentMatrix);
-    basegfx::B2DRange aTextRect(left, top, right, bottom);
+
     aTextRect *= aTextMatrix;
     const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
                                                  aTextRect.getMinY(), aTextRect.getMaxY());
 
-    const int nBytes = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
-    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
+    OUString sText = pPageObject->getText(pTextPage);
 
-    const int nActualBytes = FPDFTextObj_GetText(pPageObject, pTextPage, pText.get(), nBytes);
-    if (nActualBytes <= 0)
-    {
-        return;
-    }
-
-    // Let's rely on null-termination for the length of the string. We
-    // just know the number of bytes the string takes, but in OUString
-    // needs the number of characters.
-    OUString sText(pText.get());
-
-    const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
-    double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
-    double dFontSizeV = fabs(sqrt2(matrix.b, matrix.d) * dFontSize);
+    const double dFontSize = pPageObject->getFontSize();
+    double dFontSizeH = fabs(sqrt2(aMatrix.a(), aMatrix.c()) * dFontSize);
+    double dFontSizeV = fabs(sqrt2(aMatrix.b(), aMatrix.d()) * dFontSize);
 
     dFontSizeH = convertPointToMm100(dFontSizeH);
     dFontSizeV = convertPointToMm100(dFontSizeV);
@@ -772,25 +750,18 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         mbFntDirty = true;
     }
 
-    const int nFontName = 80 + 1;
-    std::unique_ptr<char[]> pFontName(new char[nFontName]); // + terminating null
-    char* pCharFontName = reinterpret_cast<char*>(pFontName.get());
-    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName, nFontName);
-    if (nFontName >= nFontNameChars)
+    OUString sFontName = pPageObject->getFontName();
+    if (!sFontName.isEmpty() && sFontName != aFnt.GetFamilyName())
     {
-        OUString sFontName = OUString::createFromAscii(pFontName.get());
-        if (sFontName != aFnt.GetFamilyName())
-        {
-            aFnt.SetFamilyName(sFontName);
-            mpVD->SetFont(aFnt);
-            mbFntDirty = true;
-        }
+        aFnt.SetFamilyName(sFontName);
+        mpVD->SetFont(aFnt);
+        mbFntDirty = true;
     }
 
     Color aTextColor(COL_TRANSPARENT);
     bool bFill = false;
     bool bUse = true;
-    switch (FPDFTextObj_GetTextRenderMode(pPageObject))
+    switch (pPageObject->getTextRenderMode())
     {
         case FPDF_TEXTRENDERMODE_FILL:
         case FPDF_TEXTRENDERMODE_FILL_CLIP:
@@ -809,11 +780,9 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
     if (bUse)
     {
-        unsigned int nR, nG, nB, nA;
-        bool bRet = bFill ? FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA)
-                          : FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
-        if (bRet)
-            aTextColor = Color(nR, nG, nB);
+        Color aColor = bFill ? pPageObject->getFillColor() : pPageObject->getStrokeColor();
+        if (aColor != COL_TRANSPARENT)
+            aTextColor = aColor.GetRGBColor();
     }
 
     if (aTextColor != mpVD->GetTextColor())
