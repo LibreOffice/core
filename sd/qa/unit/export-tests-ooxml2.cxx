@@ -197,6 +197,7 @@ public:
     void testTdf132282();
     void testTdf132201EffectOrder();
     void testShapeSoftEdgeEffect();
+    void testTdf119223();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -311,6 +312,7 @@ public:
     CPPUNIT_TEST(testTdf132282);
     CPPUNIT_TEST(testTdf132201EffectOrder);
     CPPUNIT_TEST(testShapeSoftEdgeEffect);
+    CPPUNIT_TEST(testTdf119223);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1579,7 +1581,7 @@ void SdOOXMLExportTest2::testTdf114845_rotateShape()
     xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name", "CustomShape 5");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name", "Straight Arrow Connector 9");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm", "flipV", "1");
     double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "x").toDouble();
     double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "y").toDouble();
@@ -2921,6 +2923,38 @@ void SdOOXMLExportTest2::testShapeSoftEdgeEffect()
     sal_Int32 nRadius = -1;
     xShapeProps->getPropertyValue("SoftEdgeRadius") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
+}
+
+void SdOOXMLExportTest2::testTdf119223()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf119223.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeCustomShape']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomePicture']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeFormula']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeLine']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeTextbox']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeTable']");
+
+    assertXPath(pXmlDocRels,
+                "//p:cNvPr[@name='SomeGroup']");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
