@@ -107,9 +107,12 @@ class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
     void checkClip();
     bool isClip() const;
 
-    void ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+    void ImportPdfObject(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                         std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                          int nPageObjectIndex);
-    void ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage, int nPageObjectIndex);
+    void ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
+                    int nPageObjectIndex);
     void ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
     void ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
     void ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage, int nPageObjectIndex);
