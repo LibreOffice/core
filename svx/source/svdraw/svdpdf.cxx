@@ -185,7 +185,7 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
             auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
-            ImportPdfObject(pPageObject->getPointer(), pTextPage->getPointer(), nPageObjectIndex);
+            ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
             if (pProgrInfo && pActionsToReport)
             {
                 (*pActionsToReport)++;
@@ -683,23 +683,24 @@ void ImpSdrPdfImport::checkClip()
 }
 
 bool ImpSdrPdfImport::isClip() const { return !maClip.getB2DRange().isEmpty(); }
-void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
-                                      int nPageObjectIndex)
+void ImpSdrPdfImport::ImportPdfObject(
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage, int nPageObjectIndex)
 {
-    if (pPageObject == nullptr)
+    if (!pPageObject)
         return;
 
-    const int nPageObjectType = FPDFPageObj_GetType(pPageObject);
+    const int nPageObjectType = pPageObject->getType();
     switch (nPageObjectType)
     {
         case FPDF_PAGEOBJ_TEXT:
-            ImportText(pPageObject, pTextPage, nPageObjectIndex);
+            ImportText(pPageObject->getPointer(), pTextPage->getPointer(), nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_PATH:
-            ImportPath(pPageObject, nPageObjectIndex);
+            ImportPath(pPageObject->getPointer(), nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_IMAGE:
-            ImportImage(pPageObject, nPageObjectIndex);
+            ImportImage(pPageObject->getPointer(), nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_SHADING:
             SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
@@ -714,20 +715,20 @@ void ImpSdrPdfImport::ImportPdfObject(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE
     }
 }
 
-void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
+void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                                  int /*nPageObjectIndex*/)
 {
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
     const basegfx::B2DHomMatrix aOldMatrix = maCurrentMatrix;
 
-    double a, b, c, d, e, f;
-    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    maCurrentMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    maCurrentMatrix = pPageObject->getMatrix();
 
-    const int nCount = FPDFFormObj_CountObjects(pPageObject);
+    const int nCount = pPageObject->getFormObjectCount();
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
-        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, nIndex);
+        auto pFormObject = pPageObject->getFormObject(nIndex);
+
         ImportPdfObject(pFormObject, pTextPage, -1);
     }
 
