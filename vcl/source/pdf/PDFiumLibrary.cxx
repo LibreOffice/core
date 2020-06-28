@@ -15,6 +15,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
+#include <fpdf_text.h>
 
 namespace vcl::pdf
 {
@@ -166,6 +167,19 @@ basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
 
 int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
+int PDFiumPage::getObjectCount() { return FPDFPage_CountObjects(mpPage); }
+
+std::unique_ptr<PDFiumPageObject> PDFiumPage::getObject(int nIndex)
+{
+    std::unique_ptr<PDFiumPageObject> pPDFiumPageObject;
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPage, nIndex);
+    if (pPageObject)
+    {
+        pPDFiumPageObject = std::make_unique<PDFiumPageObject>(pPageObject);
+    }
+    return pPDFiumPageObject;
+}
+
 int PDFiumPage::getAnnotationCount() { return FPDFPage_GetAnnotCount(mpPage); }
 
 int PDFiumPage::getAnnotationIndex(std::unique_ptr<PDFiumAnnotation> const& rAnnotation)
@@ -183,6 +197,42 @@ std::unique_ptr<PDFiumAnnotation> PDFiumPage::getAnnotation(int nIndex)
     }
     return pPDFiumAnnotation;
 }
+
+std::unique_ptr<PDFiumTextPage> PDFiumPage::getTextPage()
+{
+    std::unique_ptr<PDFiumTextPage> pPDFiumTextPage;
+    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(mpPage);
+    if (pTextPage)
+    {
+        pPDFiumTextPage = std::make_unique<PDFiumTextPage>(pTextPage);
+    }
+    return pPDFiumTextPage;
+}
+
+PDFiumPageObject::PDFiumPageObject(FPDF_PAGEOBJECT pPageObject)
+    : mpPageObject(pPageObject)
+{
+}
+
+PDFiumPageObject::~PDFiumPageObject() {}
+
+OUString PDFiumPageObject::getText(std::unique_ptr<PDFiumTextPage> const& pTextPage)
+{
+    OUString sReturnText;
+
+    const int nBytes = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), nullptr, 0);
+
+    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
+
+    const int nActualBytes
+        = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), pText.get(), nBytes);
+    if (nActualBytes > 2)
+        sReturnText = OUString(pText.get());
+
+    return sReturnText;
+}
+
+int PDFiumPageObject::getType() { return FPDFPageObj_GetType(mpPageObject); }
 
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
@@ -238,6 +288,18 @@ std::unique_ptr<PDFiumAnnotation> PDFiumAnnotation::getLinked(OString const& rKe
     }
     return pPDFiumAnnotation;
 }
+
+PDFiumTextPage::PDFiumTextPage(FPDF_TEXTPAGE pTextPage)
+    : mpTextPage(pTextPage)
+{
+}
+
+PDFiumTextPage::~PDFiumTextPage()
+{
+    if (mpTextPage)
+        FPDFText_ClosePage(mpTextPage);
+}
+
 } // end vcl::pdf
 
 #endif // HAVE_FEATURE_PDFIUM

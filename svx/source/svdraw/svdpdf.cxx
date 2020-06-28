@@ -160,17 +160,16 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         SetupPageScale(dPageWidth, dPageHeight);
 
         // Load the page text to extract it when we get text elements.
-        FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage->getPointer());
+        auto pTextPage = pPdfPage->getTextPage();
 
-        const int nPageObjectCount = FPDFPage_CountObjects(pPdfPage->getPointer());
+        const int nPageObjectCount = pPdfPage->getObjectCount();
         if (pProgrInfo)
             pProgrInfo->SetActionCount(nPageObjectCount);
 
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
         {
-            FPDF_PAGEOBJECT pPageObject
-                = FPDFPage_GetObject(pPdfPage->getPointer(), nPageObjectIndex);
-            ImportPdfObject(pPageObject, pTextPage, nPageObjectIndex);
+            auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
+            ImportPdfObject(pPageObject->getPointer(), pTextPage->getPointer(), nPageObjectIndex);
             if (pProgrInfo && pActionsToReport)
             {
                 (*pActionsToReport)++;
@@ -184,8 +183,6 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
                 }
             }
         }
-
-        FPDFText_ClosePage(pTextPage);
     }
 }
 

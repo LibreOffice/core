@@ -35,6 +35,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
 
     void testDocument();
     void testPages();
+    void testPageObjects();
     void testAnnotationsMadeInEvince();
     void testAnnotationsMadeInAcrobat();
     void testTools();
@@ -42,6 +43,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
     CPPUNIT_TEST(testDocument);
     CPPUNIT_TEST(testPages);
+    CPPUNIT_TEST(testPageObjects);
     CPPUNIT_TEST(testAnnotationsMadeInEvince);
     CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
     CPPUNIT_TEST(testTools);
@@ -74,9 +76,6 @@ void PDFiumLibraryTest::testDocument()
     auto aSize = pDocument->getPageSize(0);
     CPPUNIT_ASSERT_EQUAL(612.0, aSize.getX());
     CPPUNIT_ASSERT_EQUAL(792.0, aSize.getY());
-
-    auto pPage = pDocument->openPage(0);
-    CPPUNIT_ASSERT(pPage);
 }
 
 void PDFiumLibraryTest::testPages()
@@ -103,6 +102,42 @@ void PDFiumLibraryTest::testPages()
 
     auto pPage = pDocument->openPage(0);
     CPPUNIT_ASSERT(pPage);
+}
+
+void PDFiumLibraryTest::testPageObjects()
+{
+    OUString aURL = getFullUrl("Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
+    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    auto pDocument = pPdfium->openDocument(pData, nLength);
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    auto pPage = pDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    CPPUNIT_ASSERT_EQUAL(12, pPage->getObjectCount());
+
+    auto pPageObject = pPage->getObject(0);
+    auto pTextPage = pPage->getTextPage();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPageObject->getType());
+    CPPUNIT_ASSERT_EQUAL(OUString("The quick, brown fox jumps over a lazy dog. DJs flock by when "
+                                  "MTV ax quiz prog. Junk MTV quiz "),
+                         pPageObject->getText(pTextPage));
 }
 
 void PDFiumLibraryTest::testAnnotationsMadeInEvince()
