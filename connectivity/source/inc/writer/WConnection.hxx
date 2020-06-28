@@ -24,6 +24,7 @@
 #include <file/FConnection.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <rtl/ref.hxx>
 #include <unotools/closeveto.hxx>
 
 namespace com

@@ -21,7 +21,6 @@
 
 #include <rtl/math.h>
 #include <cmath>
-#include <math.h>
 #include <basegfx/basegfxdllapi.h>
 #include <limits>
 #include <algorithm>

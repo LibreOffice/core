@@ -30,6 +30,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <AutoRetrievingBase.hxx>
 #include <osl/module.h>
+#include <rtl/ref.hxx>
 
 
 #include <map>

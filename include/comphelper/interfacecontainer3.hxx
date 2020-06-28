@@ -23,7 +23,6 @@
 
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/comphelperdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 

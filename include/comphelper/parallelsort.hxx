@@ -10,7 +10,6 @@
 #ifndef INCLUDED_COMPHELPER_PARALLELSORT_HXX
 #define INCLUDED_COMPHELPER_PARALLELSORT_HXX
 
-#include <comphelper/comphelperdllapi.h>
 #include <comphelper/threadpool.hxx>
 #include <tools/cpuid.hxx>
 

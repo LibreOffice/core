@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <rtl/ref.hxx>
 #include <datasettings.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

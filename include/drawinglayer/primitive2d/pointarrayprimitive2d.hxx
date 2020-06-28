@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <drawinglayer/drawinglayerdllapi.h>
-
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 

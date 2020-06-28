@@ -11,10 +11,6 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRGLOWATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <o3tl/cow_wrapper.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <tools/color.hxx>
 
 namespace drawinglayer

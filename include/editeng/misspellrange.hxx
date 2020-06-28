@@ -10,7 +10,7 @@
 #ifndef INCLUDED_EDITENG_MISSPELLRANGE_HXX
 #define INCLUDED_EDITENG_MISSPELLRANGE_HXX
 
-#include <editeng/editengdllapi.h>
+#include <sal/types.h>
 
 #include <vector>
 

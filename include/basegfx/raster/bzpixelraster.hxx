@@ -22,6 +22,7 @@
 #include <basegfx/pixel/bpixel.hxx>
 #include <sal/types.h>
 #include <memory>
+#include <cassert>
 #include <string.h>
 
 namespace basegfx

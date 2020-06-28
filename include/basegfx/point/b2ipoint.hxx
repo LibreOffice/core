@@ -20,7 +20,6 @@
 #pragma once
 
 #include <basegfx/tuple/b2ituple.hxx>
-#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {

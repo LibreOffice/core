@@ -24,7 +24,6 @@
 
 #include <map>
 
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <cppuhelper/weakref.hxx>

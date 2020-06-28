@@ -26,6 +26,7 @@
 #include <ibase.h>
 
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
