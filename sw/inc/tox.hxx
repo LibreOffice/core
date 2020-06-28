@@ -427,8 +427,6 @@ public:
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
     virtual ~SwTOXBase() override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
-
     // a kind of CopyCtor - check if the TOXBase is at TOXType of the doc.
     // If not, so create it and copy all other used things.
     void                CopyTOXBase( SwDoc*, const SwTOXBase& );
@@ -525,6 +523,7 @@ public:
 
     SwTOXBase& operator=(const SwTOXBase& rSource);
     void RegisterToTOXType( SwTOXType& rMark );
+    virtual bool IsVisible() const { return true; }
 };
 
 //SwTOXMark

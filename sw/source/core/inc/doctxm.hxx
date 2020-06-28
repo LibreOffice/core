@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCTXM_HXX
 
 #include <tools/gen.hxx>
+#include <hints.hxx>
 #include <tox.hxx>
 #include <section.hxx>
 
@@ -85,6 +86,11 @@ public:
     void UpdatePageNum();               // insert page numbering
 
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
+    bool IsVisible() const override
+    {
+        SwPtrMsgPoolItem aInfo(RES_CONTENT_VISIBLE, nullptr);
+        return GetFormat() && GetFormat()->GetInfo(aInfo);
+    }
 };
 
 struct SwDefTOXBase_Impl

@@ -730,8 +730,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 SwContent* pCnt = new SwTOXBaseContent(
                         this, sTOXNm, nTox, *pBase);
 
-                if( !pBase->GetInfo( aAskItem ) &&
-                    !aAskItem.pObject )     // not visible
+                if(pBase && !pBase->IsVisible())
                     pCnt->SetInvisible();
 
                 m_pMember->insert( std::unique_ptr<SwContent>(pCnt) );
