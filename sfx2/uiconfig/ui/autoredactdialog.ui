@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -24,7 +24,7 @@
     <property name="title" translatable="yes" context="autoredactdialog|AutoRedactDialog">Automatic Redaction</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -158,7 +158,7 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                         <property name="resizable">True</property>
                         <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="autoredactdialog|target">Case Sensitive</property>
+                        <property name="title" translatable="yes" context="autoredactdialog|target">Match Case</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer3"/>
                           <attributes>
