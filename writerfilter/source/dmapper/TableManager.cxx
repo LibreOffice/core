@@ -69,6 +69,40 @@ void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan)
     mTableDataStack.top()->getCurrentRow()->setCurrentGridSpan(nGridSpan);
 }
 
+sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCell)
+{
+    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    if (!pRow || nCell < pRow->getGridBefore() || nCell >= pRow->getCellCount())
+        return SAL_MAX_UINT32;
+
+    // The gridSpans provide a one-based index, so add up all the spans of the PREVIOUS columns,
+    // and that result will provide the first possible zero-based number for the desired column.
+    sal_uInt32 nColumn = 0;
+    for (sal_uInt32 n = 0; n < nCell; ++n)
+        nColumn += pRow->getGridSpan(n);
+    return nColumn;
+}
+
+sal_uInt32 TableManager::findColumnCell(const sal_uInt32 nRow, const sal_uInt32 nCol)
+{
+    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    if (!pRow || nCol < pRow->getGridBefore())
+        return SAL_MAX_UINT32;
+
+    sal_uInt32 nCell = 0;
+    sal_uInt32 nGrids = 0;
+    // The gridSpans give us a one-based index, but requested column is zero-based - so keep that in mind.
+    for (const auto& rSpan : pRow->getGridSpans())
+    {
+        nGrids += rSpan;
+        if (nCol < nGrids)
+            return nCell;
+
+        ++nCell;
+    }
+    return SAL_MAX_UINT32; // must be in gridAfter or invalid column request
+}
+
 void TableManager::endOfRowAction() {}
 
 void TableManager::endOfCellAction() {}
