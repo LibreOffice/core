@@ -40,7 +40,6 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
-    m_aGridBefore(),
     m_nGridAfter(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
@@ -354,7 +353,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 break;
             case NS_ooxml::LN_CT_TrPrBase_gridBefore:
-                m_aGridBefore.back( ) = nIntValue;
+                setCurrentGridBefore( nIntValue );
                 break;
             case NS_ooxml::LN_CT_TrPrBase_gridAfter:
                 m_nGridAfter = nIntValue;
@@ -392,11 +391,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentGrid( )
 {
     return m_aTableGrid.back( );
-}
-
-sal_uInt32 DomainMapperTableManager::getCurrentGridBefore( )
-{
-    return m_aGridBefore.back( );
 }
 
 DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentSpans( )
@@ -469,7 +463,6 @@ void DomainMapperTableManager::startLevel( )
     m_aTmpPosition.push_back( pTmpPosition );
     m_aTmpTableProperties.push_back( pTmpProperties );
     m_nCell.push_back( 0 );
-    m_aGridBefore.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
     TableParagraphVectorPtr pNewParagraphs = std::make_shared<vector<TableParagraph>>();
@@ -503,7 +496,6 @@ void DomainMapperTableManager::endLevel( )
         m_aCellWidths.back()->push_back(*oCurrentWidth);
 
     m_nCell.pop_back( );
-    m_aGridBefore.pop_back( );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
 
@@ -579,7 +571,6 @@ void DomainMapperTableManager::endOfRowAction()
         IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
         sal_uInt32 nTmpCell = m_nCell.back();
-        sal_uInt32 nTmpGridBefore = m_aGridBefore.back();
 
         // endLevel and startLevel are taking care of the non finished row
         // to carry it over to the next table
@@ -592,12 +583,10 @@ void DomainMapperTableManager::endOfRowAction()
         m_aGridSpans.pop_back();
         m_aCellWidths.pop_back();
         m_nCell.pop_back();
-        m_aGridBefore.pop_back();
         m_aTableGrid.push_back(pTmpTableGrid);
         m_aGridSpans.push_back(pTmpGridSpans);
         m_aCellWidths.push_back(pTmpCellWidths);
         m_nCell.push_back(nTmpCell);
-        m_aGridBefore.push_back(nTmpGridBefore);
     }
     // save table style in the first row for comparison
     if ( m_nRow == 0 && pTablePropMap->isSet(META_PROP_TABLE_STYLE_NAME) )
@@ -837,7 +826,6 @@ void DomainMapperTableManager::endOfRowAction()
 
     ++m_nRow;
     m_nCell.back( ) = 0;
-    m_aGridBefore.back( ) = 0;
     getCurrentGrid()->clear();
     rCurrentSpans.clear();
     pCellWidths->clear();
