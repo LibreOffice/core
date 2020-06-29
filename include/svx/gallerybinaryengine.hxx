@@ -22,7 +22,9 @@
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/galtheme.hxx>
+#include <sot/storage.hxx>
 
+class SotStorage;
 struct GalleryObject;
 
 class SVXCORE_DLLPUBLIC GalleryBinaryEngine
@@ -32,6 +34,7 @@ private:
     INetURLObject aSdgURL;
     INetURLObject aSdvURL;
     INetURLObject aStrURL;
+    tools::SvRef<SotStorage> aSvDrawStorageRef;
 
     static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
 
@@ -49,6 +52,9 @@ public:
     const INetURLObject& GetSdgURL() const { return aSdgURL; }
     const INetURLObject& GetSdvURL() const { return aSdvURL; }
     const INetURLObject& GetStrURL() const { return aStrURL; }
+
+    SAL_DLLPRIVATE void ImplCreateSvDrawStorage(bool bReadOnly);
+    SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
