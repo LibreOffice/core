@@ -393,11 +393,6 @@ DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurr
     return m_aTableGrid.back( );
 }
 
-DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentSpans( )
-{
-    return m_aGridSpans.back( );
-}
-
 DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentCellWidths( )
 {
     return m_aCellWidths.back( );
@@ -448,11 +443,9 @@ void DomainMapperTableManager::startLevel( )
     }
 
     IntVectorPtr pNewGrid = std::make_shared<vector<sal_Int32>>();
-    IntVectorPtr pNewSpans = std::make_shared<vector<sal_Int32>>();
     IntVectorPtr pNewCellWidths = std::make_shared<vector<sal_Int32>>();
     TablePositionHandlerPtr pNewPositionHandler;
     m_aTableGrid.push_back( pNewGrid );
-    m_aGridSpans.push_back( pNewSpans );
     m_aCellWidths.push_back( pNewCellWidths );
     m_aTablePositions.push_back( pNewPositionHandler );
     // empty name will be replaced by the table style name, if it exists
@@ -484,7 +477,6 @@ void DomainMapperTableManager::endLevel( )
     }
 
     m_aTableGrid.pop_back( );
-    m_aGridSpans.pop_back( );
 
     // Do the same trick as in startLevel(): pop the value that was pushed too early.
     std::optional<sal_Int32> oCurrentWidth;
@@ -527,7 +519,7 @@ void DomainMapperTableManager::endOfCellAction()
 
     if ( !isInTable() )
         throw std::out_of_range("cell without a table");
-    m_aGridSpans.back()->push_back(m_nGridSpan);
+    addCurrentGridSpan( m_nGridSpan );
     m_nGridSpan = 1;
     ++m_nCell.back( );
 }
@@ -568,7 +560,6 @@ void DomainMapperTableManager::endOfRowAction()
     {
         // Save the grid infos to have them survive the end/start level
         IntVectorPtr pTmpTableGrid = m_aTableGrid.back();
-        IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
         sal_uInt32 nTmpCell = m_nCell.back();
 
@@ -580,11 +571,9 @@ void DomainMapperTableManager::endOfRowAction()
         startLevel();
 
         m_aTableGrid.pop_back();
-        m_aGridSpans.pop_back();
         m_aCellWidths.pop_back();
         m_nCell.pop_back();
         m_aTableGrid.push_back(pTmpTableGrid);
-        m_aGridSpans.push_back(pTmpGridSpans);
         m_aCellWidths.push_back(pTmpCellWidths);
         m_nCell.push_back(nTmpCell);
     }
@@ -636,7 +625,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
     }
 
-    std::vector<sal_Int32>& rCurrentSpans = *getCurrentSpans();
+    std::vector<sal_uInt32>& rCurrentSpans = getCurrentGridSpans();
 
     if( getCurrentGridBefore() )
     {
@@ -715,11 +704,11 @@ void DomainMapperTableManager::endOfRowAction()
             if (nFullWidthRelative == 0)
                 throw o3tl::divide_by_zero();
 
-            ::std::vector< sal_Int32 >::const_iterator aSpansIter = rCurrentSpans.begin();
+            ::std::vector< sal_uInt32 >::const_iterator aSpansIter = rCurrentSpans.begin();
             for( size_t nBorder = 0; nBorder < nWidthsBound; ++nBorder )
             {
                 double fGridWidth = 0.;
-                for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
+                for ( sal_uInt32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
                 double nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
@@ -827,7 +816,6 @@ void DomainMapperTableManager::endOfRowAction()
     ++m_nRow;
     m_nCell.back( ) = 0;
     getCurrentGrid()->clear();
-    rCurrentSpans.clear();
     pCellWidths->clear();
 
     m_nGridAfter = 0;
