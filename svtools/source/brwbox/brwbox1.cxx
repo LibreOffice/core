@@ -776,30 +776,24 @@ OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
     return mvCols[ nItemPos ]->Title();
 }
 
-
 long BrowseBox::GetRowCount() const
 {
     return nRowCount;
 }
 
-
 sal_uInt16 BrowseBox::ColCount() const
 {
-
     return static_cast<sal_uInt16>(mvCols.size());
 }
 
-
 long BrowseBox::ImpGetDataRowHeight() const
 {
-
     BrowseBox *pThis = const_cast<BrowseBox*>(this);
-    pThis->nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 2);
+    pThis->nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 4);
     pThis->Resize();
     pDataWin->Invalidate();
     return nDataRowHeight;
 }
-
 
 void BrowseBox::SetDataRowHeight( long nPixel )
 {
@@ -809,13 +803,11 @@ void BrowseBox::SetDataRowHeight( long nPixel )
     pDataWin->Invalidate();
 }
 
-
 void BrowseBox::SetTitleLines( sal_uInt16 nLines )
 {
 
     nTitleLines = nLines;
 }
-
 
 long BrowseBox::ScrollColumns( long nCols )
 {
