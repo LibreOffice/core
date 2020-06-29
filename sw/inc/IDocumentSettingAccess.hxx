@@ -107,6 +107,7 @@ enum class DocumentSettingId
     PROTECT_BOOKMARKS,
     PROTECT_FIELDS,
     HEADER_SPACING_BELOW_LAST_PARA,
+    FRAME_AUTOWIDTH_WITH_MORE_PARA,
 };
 
  /** Provides access to settings of a document

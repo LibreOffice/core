@@ -4182,6 +4182,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124423)
+{
+    createDoc("tdf124423.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nPageWidth, nFly2Width);
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
+
+    createDoc("tdf124423.odt");
+    pXmlDoc = parseLayoutDump();
+    nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
+    nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly2Width);
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
