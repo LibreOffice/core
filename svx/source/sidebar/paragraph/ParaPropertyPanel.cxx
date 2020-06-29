@@ -254,7 +254,12 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         break;
     }
 
-    if( pState && eState >= SfxItemState::DEFAULT )
+    bool bDisabled = eState == SfxItemState::DISABLED;
+    mxLeftIndent->set_sensitive(!bDisabled);
+    mxRightIndent->set_sensitive(!bDisabled);
+    mxFLineIndent->set_sensitive(!bDisabled);
+
+    if (pState && eState >= SfxItemState::DEFAULT)
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
         maTxtLeft = pSpace->GetTextLeft();
@@ -314,13 +319,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         nfVal = static_cast<long>(mxFLineIndent->normalize( nfVal ));
         mxFLineIndent->set_value( nfVal, FieldUnit::MM_100TH );
     }
-    else if( eState == SfxItemState::DISABLED )
-    {
-        mxLeftIndent->set_sensitive(false);
-        mxRightIndent->set_sensitive(false);
-        mxFLineIndent->set_sensitive(false);
-    }
-    else
+    else if (eState != SfxItemState::DISABLED )
     {
         mxLeftIndent->set_text("");
         mxRightIndent->set_text("");
@@ -334,6 +333,10 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
 {
     mxTopDist->set_max( mxTopDist->normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
     mxBottomDist->set_max( mxBottomDist->normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
+
+    bool bDisabled = eState == SfxItemState::DISABLED;
+    mxTopDist->set_sensitive(!bDisabled);
+    mxBottomDist->set_sensitive(!bDisabled);
 
     if( pState && eState >= SfxItemState::DEFAULT )
     {
@@ -355,12 +358,7 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
         nVal = mxBottomDist->normalize( nVal );
         mxBottomDist->set_value( nVal, FieldUnit::MM_100TH );
     }
-    else if(eState == SfxItemState::DISABLED )
-    {
-        mxTopDist->set_sensitive(false);
-        mxBottomDist->set_sensitive(false);
-    }
-    else
+    else if (eState != SfxItemState::DISABLED )
     {
         mxTopDist->set_text("");
         mxBottomDist->set_text("");
