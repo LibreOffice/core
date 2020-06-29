@@ -232,8 +232,6 @@ protected:
     FncGetPixel mFncGetPixel;
     FncSetPixel mFncSetPixel;
 
-    SAL_DLLPRIVATE bool ImplSetAccessPointers( ScanlineFormat nFormat );
-
 public:
 
     SAL_DLLPRIVATE BitmapBuffer* ImplGetBitmapBuffer() const
@@ -277,6 +275,8 @@ public:
     static void SetPixelForN32BitTcRgbx(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN32BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
 
+    static FncGetPixel GetPixelFunction( ScanlineFormat nFormat );
+    static FncSetPixel SetPixelFunction( ScanlineFormat nFormat );
 };
 
 

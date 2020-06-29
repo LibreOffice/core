@@ -78,11 +78,6 @@ public:
     virtual sal_uInt32  GetDepth () const override;
 };
 
-    bool Bitmap32IsPreMultipled()
-    {
-        auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
-        return pBackendCapabilities->mbSupportsBitmap32;
-    }
 }
 
 SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
@@ -104,55 +99,7 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
     }
 
     // request read access to the pixels
-    switch( RemoveScanline( mpBmpBuffer->mnFormat ) )
-    {
-        case ScanlineFormat::N1BitMsbPal:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;  break;
-        case ScanlineFormat::N1BitLsbPal:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN1BitLsbPal;  break;
-        case ScanlineFormat::N4BitMsnPal:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN4BitMsnPal;  break;
-        case ScanlineFormat::N4BitLsnPal:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN4BitLsnPal;  break;
-        case ScanlineFormat::N8BitPal:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitPal;      break;
-        case ScanlineFormat::N8BitTcMask:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitTcMask;  break;
-        case ScanlineFormat::N24BitTcBgr:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcBgr;  break;
-        case ScanlineFormat::N24BitTcRgb:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcRgb;  break;
-        case ScanlineFormat::N32BitTcAbgr:
-            if (Bitmap32IsPreMultipled())
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcAbgr;
-            else
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcXbgr;
-            break;
-        case ScanlineFormat::N32BitTcArgb:
-            if (Bitmap32IsPreMultipled())
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcArgb;
-            else
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcXrgb;
-            break;
-        case ScanlineFormat::N32BitTcBgra:
-            if (Bitmap32IsPreMultipled())
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcBgra;
-            else
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcBgrx;
-            break;
-        case ScanlineFormat::N32BitTcRgba:
-            if (Bitmap32IsPreMultipled())
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcRgba;
-            else
-                mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcRgbx;
-            break;
-        case ScanlineFormat::N32BitTcMask:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcMask; break;
-        default:
-            OSL_FAIL("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
-            mpFncGetPixel = nullptr;
-        break;
-    }
+    mpFncGetPixel = BitmapReadAccess::GetPixelFunction( mpBmpBuffer->mnFormat );
 }
 
 sal_uInt32
