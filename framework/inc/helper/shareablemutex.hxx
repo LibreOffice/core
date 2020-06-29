@@ -22,7 +22,7 @@
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 namespace framework
 {

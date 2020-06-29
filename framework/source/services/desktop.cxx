@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <services/desktop.hxx>
+#include <framework/desktop.hxx>
 
 #include <loadenv/loadenv.hxx>
 
@@ -321,17 +321,6 @@ sal_Bool SAL_CALL Desktop::terminate()
 #endif
 
     return true;
-}
-
-css::uno::Any Desktop::execute(css::uno::Sequence<css::beans::NamedValue> const & Arguments)
-{
-    if (Arguments.getLength() == 1 && Arguments[0].Name == "shutdown"
-        && !Arguments[0].Value.hasValue())
-    {
-        shutdown();
-        return {};
-    }
-    throw css::lang::IllegalArgumentException("unsupported job request", {}, 0);
 }
 
 void Desktop::shutdown()
@@ -1773,13 +1762,19 @@ rtl::Reference<framework::Desktop> createDesktop(
 
 }
 
+rtl::Reference<framework::Desktop> framework::getDesktop(
+    css::uno::Reference<css::uno::XComponentContext> const & context)
+{
+    static auto const instance = createDesktop(context);
+    return instance;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    static auto const instance = createDesktop(context);
-    return cppu::acquire(instance.get());
+    return cppu::acquire(framework::getDesktop(context).get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

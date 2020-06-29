@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
-#define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
+#pragma once
 
 #include <config_options.h>
-#include <threadhelp/gate.hxx>
-
 #include <osl/mutex.hxx>
-#include <fwidllapi.h>
+
+#include "fwidllapi.h"
+#include "gate.hxx"
 
 namespace framework{
 
@@ -122,7 +121,5 @@ class UNLESS_MERGELIBS(FWI_DLLPUBLIC) TransactionManager
 };      //  class TransactionManager
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

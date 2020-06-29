@@ -42,6 +42,7 @@
 #include "updater.hxx"
 #endif
 
+#include <framework/desktop.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
@@ -71,7 +72,6 @@
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
-#include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
@@ -610,9 +610,7 @@ bool Desktop::QueryExit()
 
 void Desktop::Shutdown()
 {
-    Reference<XDesktop2> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
-    Reference<XJob> xDesktopInternal(xDesktop, UNO_QUERY_THROW);
-    xDesktopInternal->execute({{"shutdown", {}}});
+    framework::getDesktop(::comphelper::getProcessComponentContext())->shutdown();
 }
 
 void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )

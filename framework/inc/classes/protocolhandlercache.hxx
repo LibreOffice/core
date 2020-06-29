@@ -27,7 +27,7 @@
 
 #include <unotools/configitem.hxx>
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 namespace framework{
 

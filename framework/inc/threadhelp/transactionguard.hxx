@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
-#include <threadhelp/transactionmanager.hxx>
+#include <framework/transactionmanager.hxx>
 
 namespace framework{
 

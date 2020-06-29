@@ -26,6 +26,7 @@
 #include <dispatch/windowcommanddispatch.hxx>
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
+#include <framework/framecontainer.hxx>
 #include <framework/titlehelper.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
@@ -33,7 +34,6 @@
 #include <framework/framelistanalyzer.hxx>
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
-#include <classes/framecontainer.hxx>
 
 #include <pattern/window.hxx>
 #include <properties.h>

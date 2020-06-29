@@ -34,7 +34,7 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 namespace framework
 {

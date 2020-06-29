@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
-#define INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -143,7 +142,5 @@ class Gate
 };      //  class Gate
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

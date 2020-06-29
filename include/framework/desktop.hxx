@@ -17,15 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DESKTOP_HXX
-#define INCLUDED_FRAMEWORK_INC_SERVICES_DESKTOP_HXX
+#pragma once
 
 #include <sal/config.h>
 
 #include <memory>
 #include <vector>
 
-#include <classes/framecontainer.hxx>
+#include "framecontainer.hxx"
+#include "fwkdllapi.h"
+#include "transactionmanager.hxx"
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -42,14 +43,13 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <threadhelp/transactionmanager.hxx>
+#include <rtl/ref.hxx>
 #include <unotools/cmdoptions.hxx>
 
 namespace framework{
@@ -90,13 +90,12 @@ enum ELoadState
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
-           css::task::XJob, // for internal "shutdown" command
            css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
 
-class Desktop final : private cppu::BaseMutex,
+class LO_DLLPUBLIC_FWK Desktop final : private cppu::BaseMutex,
                 public Desktop_BASE,
                 public cppu::OPropertySetHelper
 {
@@ -285,12 +284,9 @@ class Desktop final : private cppu::BaseMutex,
         /// @throws css::uno::RuntimeException
         bool terminateQuickstarterToo();
 
-        css::uno::Any SAL_CALL execute(css::uno::Sequence<css::beans::NamedValue> const & Arguments)
-            override;
-
-    private:
         void shutdown();
 
+    private:
         //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
                                                                                                                      css::uno::Any&  aOldValue       ,
@@ -450,8 +446,9 @@ class Desktop final : private cppu::BaseMutex,
 
 };      //  class Desktop
 
-}       //  namespace framework
+LO_DLLPUBLIC_FWK rtl::Reference<Desktop> getDesktop(
+    css::uno::Reference<css::uno::XComponentContext> const & context);
 
-#endif // INCLUDED_FRAMEWORK_INC_SERVICES_DESKTOP_HXX
+}       //  namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
