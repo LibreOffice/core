@@ -97,7 +97,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbDisableOffPagePositioning ( false ),
     mbProtectBookmarks(false),
     mbProtectFields(false),
-    mbHeaderSpacingBelowLastPara(false)
+    mbHeaderSpacingBelowLastPara(false),
+    mbFrameAutowidthWithMorePara(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -229,6 +230,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
+        case DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA: return mbFrameAutowidthWithMorePara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -480,6 +482,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
             break;
+        case DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA:
+            mbFrameAutowidthWithMorePara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -654,6 +659,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbProtectBookmarks
     // No mbProtectFields
     mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
+    mbFrameAutowidthWithMorePara = rSource.mbFrameAutowidthWithMorePara;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -956,6 +962,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("mbHeaderSpacingBelowLastPara"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbHeaderSpacingBelowLastPara).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mbFrameAutowidthWithMorePara"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbFrameAutowidthWithMorePara).getStr()));
     xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);

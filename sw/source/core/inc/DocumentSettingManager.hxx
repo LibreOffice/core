@@ -167,7 +167,7 @@ class DocumentSettingManager :
     bool mbProtectBookmarks;
     bool mbProtectFields;
     bool mbHeaderSpacingBelowLastPara;
-
+    bool mbFrameAutowidthWithMorePara; //tdf#124423
 public:
 
     DocumentSettingManager(SwDoc &rDoc);

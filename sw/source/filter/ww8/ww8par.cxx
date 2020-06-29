@@ -1850,6 +1850,8 @@ void SwWW8ImplReader::ImportDop()
     // tdf#128195
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, true);
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA, true);
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;
