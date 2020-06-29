@@ -184,6 +184,22 @@ private:
     bool                mbShowButton;
 };
 
+// class SortCondition
+
+class SortCondition : public WorkbookHelper
+{
+public:
+    explicit SortCondition( const WorkbookHelper& rHelper );
+
+    void importSortCondition( const AttributeList& rAttribs, sal_Int16 nSheet );
+
+    ScRange maRange; // Column/Row that this sort condition applies to.
+    OUString maSortCustomList; // Sort by a custom list.
+    bool mbDescending;
+};
+
+// class AutoFilter
+
 class AutoFilter : public WorkbookHelper
 {
 public:
@@ -194,17 +210,25 @@ public:
     /** Imports auto filter settings from the AUTOFILTER record. */
     void                importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet );
 
+    void                importSortState( const AttributeList& rAttribs, sal_Int16 nSheet );
+
     /** Creates a new auto filter column and stores it internally. */
     FilterColumn&       createFilterColumn();
 
+    SortCondition&      createSortCondition();
+
     /** Applies the filter to the passed filter descriptor. */
-    void                finalizeImport( const css::uno::Reference< css::sheet::XSheetFilterDescriptor3>& rxFilterDesc );
+    void                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange );
 
 private:
     typedef RefVector< FilterColumn > FilterColumnVector;
 
     FilterColumnVector  maFilterColumns;
     ScRange             maRange;
+
+    ScRange maSortRange; // The whole range of data to sort (not just the sort-by column).
+    typedef RefVector< SortCondition > SortConditionVector;
+    SortConditionVector maSortConditions;
 };
 
 class AutoFilterBuffer : public WorkbookHelper

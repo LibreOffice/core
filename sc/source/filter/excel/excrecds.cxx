@@ -990,6 +990,18 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst, XML_sortState
     if( !maFilterList.IsEmpty() )
         maFilterList.SaveXml( rStrm );
+
+    if (!maSortCustomList.isEmpty())
+    {
+        rWorksheet->startElement(XML_sortState, XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maSortRef));
+
+        rWorksheet->singleElement(XML_sortCondition,
+            XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maSortRef),
+            XML_customList, maSortCustomList.toUtf8().getStr());
+
+        rWorksheet->endElement(XML_sortState);
+    }
+
     rWorksheet->endElement( XML_autoFilter );
 }
 

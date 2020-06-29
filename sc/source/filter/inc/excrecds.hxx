@@ -417,6 +417,9 @@ private:
     rtl::Reference<XclExpAutofilterinfo> m_pFilterInfo;
     ScRange                 maRef;
     bool mbAutoFilter;
+
+    ScRange maSortRef;
+    OUString maSortCustomList;
 };
 
 /** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
