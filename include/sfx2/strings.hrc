@@ -208,6 +208,7 @@
 #define STR_REDACTION_JSON_FILE_FILTER          NC_("STR_REDACTION_JSON_FILE_FILTER", "Target Set (*.json)")
 #define STR_REDACTION_EDIT_TARGET               NC_("STR_REDACTION_EDIT_TARGET", "Edit Target")
 #define STR_REDACTION_TARGET_ADD_ERROR          NC_("STR_REDACTION_TARGET_ADD_ERROR", "An error occurred while adding new target. Please report this incident.")
+#define STR_REDACTION_NO_DRAW_WARNING           NC_("STR_REDACTION_NO_DRAW_WARNING", "Draw module is needed for redaction. Please make sure you have LibreOffice Draw installed and working correctly.")
 
 #define STR_SFX_FILEDLG_ACTUALVERSION           NC_("STR_SFX_FILEDLG_ACTUALVERSION", "Current version")
 #define STR_SFX_EXPLORERFILE_EXPORT             NC_("STR_SFX_EXPLORERFILE_EXPORT", "Export")
