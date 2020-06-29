@@ -41,70 +41,7 @@ bool Bitmap::Erase(const Color& rFillColor)
 
     if (pWriteAcc)
     {
-        const ScanlineFormat nFormat = pWriteAcc->GetScanlineFormat();
-        sal_uInt8 cIndex = 0;
-        bool bFast = false;
-
-        switch (nFormat)
-        {
-            case ScanlineFormat::N1BitMsbPal:
-            case ScanlineFormat::N1BitLsbPal:
-            {
-                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
-                cIndex = (cIndex ? 255 : 0);
-                bFast = true;
-            }
-            break;
-
-            case ScanlineFormat::N4BitMsnPal:
-            case ScanlineFormat::N4BitLsnPal:
-            {
-                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
-                cIndex = cIndex | (cIndex << 4);
-                bFast = true;
-            }
-            break;
-
-            case ScanlineFormat::N8BitPal:
-            {
-                cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
-                bFast = true;
-            }
-            break;
-
-            case ScanlineFormat::N24BitTcBgr:
-            case ScanlineFormat::N24BitTcRgb:
-            {
-                if (rFillColor.GetRed() == rFillColor.GetGreen()
-                    && rFillColor.GetRed() == rFillColor.GetBlue())
-                {
-                    cIndex = rFillColor.GetRed();
-                    bFast = true;
-                }
-                else
-                {
-                    bFast = false;
-                }
-            }
-            break;
-
-            default:
-                bFast = false;
-                break;
-        }
-
-        if (bFast)
-        {
-            const sal_uLong nBufSize = pWriteAcc->GetScanlineSize() * pWriteAcc->Height();
-            memset(pWriteAcc->GetBuffer(), cIndex, nBufSize);
-        }
-        else
-        {
-            const tools::Rectangle aRect(Point(), Size(pWriteAcc->Width(), pWriteAcc->Height()));
-            pWriteAcc->SetFillColor(rFillColor);
-            pWriteAcc->FillRect(aRect);
-        }
-
+        pWriteAcc->Erase(rFillColor);
         bRet = true;
     }
 
