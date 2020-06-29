@@ -53,11 +53,14 @@ class CellData final : public virtual SvRefBase
 
     bool mbOpen;
 
+    sal_uInt32 m_nGridSpan; ///< number of grid columns in the parent table's table grid which this cell defines
+
 public:
     typedef tools::SvRef<CellData> Pointer_t;
 
     CellData(css::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
+        , m_nGridSpan(1)
     {
     }
 
@@ -97,6 +100,9 @@ public:
     const TablePropertyMapPtr& getProperties() const { return mpProps; }
 
     bool isOpen() const { return mbOpen; }
+
+    sal_uInt32 getGridSpan() { return m_nGridSpan; }
+    void setGridSpan( sal_uInt32 nSpan ) { m_nGridSpan = nSpan; }
 };
 
 /**
@@ -236,6 +242,19 @@ public:
 
     sal_uInt32 getGridBefore() { return m_nGridBefore; }
     void setGridBefore(sal_uInt32 nSkipGrids) { m_nGridBefore = nSkipGrids; }
+    sal_uInt32 getGridSpan(sal_uInt32 i) { return mCells[i]->getGridSpan(); }
+    std::vector< sal_uInt32 > getGridSpans()
+    {
+        std::vector< sal_uInt32 > nRet;
+        for (auto const& aCell: mCells)
+            nRet.push_back(aCell->getGridSpan());
+        return nRet;
+    }
+    void setCurrentGridSpan(sal_uInt32 nSpan)
+    {
+        if ( mCells.size() )
+            mCells.back()->setGridSpan(nSpan);
+    }
 };
 
 /**
