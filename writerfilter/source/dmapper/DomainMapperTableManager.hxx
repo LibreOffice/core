@@ -53,7 +53,6 @@ class DomainMapperTableManager : public TableManager
     std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
-    ::std::vector< IntVectorPtr >  m_aGridSpans;
     /// If this is true, then we pushed a width before the next level started, and that should be carried over when starting the next level.
     bool            m_bPushCurrentWidth;
     /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
