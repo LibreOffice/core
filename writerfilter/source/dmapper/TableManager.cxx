@@ -59,6 +59,16 @@ void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
     mTableDataStack.top()->getCurrentRow()->setGridBefore(nSkipGrids);
 }
 
+std::vector<sal_uInt32>& TableManager::getCurrentGridSpans()
+{
+    return mTableDataStack.top()->getCurrentRow()->getGridSpans();
+}
+
+void TableManager::addCurrentGridSpan(sal_uInt32 nGridSpan)
+{
+    mTableDataStack.top()->getCurrentRow()->addGridSpan(nGridSpan);
+}
+
 void TableManager::endOfRowAction() {}
 
 void TableManager::endOfCellAction() {}
@@ -391,6 +401,7 @@ void TableManager::startLevel()
             pTableData2->endCell(mpUnfinishedRow->getCellEnd(i));
         }
         pTableData2->getCurrentRow()->setGridBefore(mpUnfinishedRow->getGridBefore());
+        pTableData2->getCurrentRow()->setGridSpans(mpUnfinishedRow->getGridSpans());
         mpUnfinishedRow.clear();
     }
 
