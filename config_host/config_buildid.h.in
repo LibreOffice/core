@@ -6,5 +6,6 @@ Optional Build ID displayed in the about dialog
 #define CONFIG_BUILDID_H
 
 #undef EXTRA_BUILDID
+#undef PRODUCTFLAVOR
 
 #endif
