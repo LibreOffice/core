@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5ea1285_62715128",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-29T10:43:59Z",
+      "side": 1,
+      "message": "How comes these numbers?",
+      "range": {
+        "startLine": 2140,
+        "startChar": 2,
+        "endLine": 2141,
+        "endChar": 78
+      },
+      "revId": "7406dadcf301c6a955fa25c9b69041fc34a0529a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
