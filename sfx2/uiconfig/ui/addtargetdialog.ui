@@ -228,7 +228,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="checkboxCaseSensitive">
-                <property name="label" translatable="yes" context="addtargetdialog|checkboxCaseSensitive">Case Sensitive</property>
+                <property name="label" translatable="yes" context="addtargetdialog|checkboxCaseSensitive">Match case</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -243,7 +243,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkboxWholeWords">
-                <property name="label" translatable="yes" context="addtargetdialog|checkboxWholeWords">Whole Words Only</property>
+                <property name="label" translatable="yes" context="addtargetdialog|checkboxWholeWords">Whole words only</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
