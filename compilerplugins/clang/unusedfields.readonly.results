@@ -926,7 +926,7 @@ vcl/source/app/settings.cxx:196
     ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:63
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
-vcl/source/control/tabctrl.cxx:79
+vcl/source/control/tabctrl.cxx:80
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
 vcl/source/filter/jpeg/Exif.hxx:53
     Exif::ExifIFD tag sal_uInt8 [2]

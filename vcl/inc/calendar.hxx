@@ -156,7 +156,6 @@ class Calendar final : public Control
                     mbSpinDown:1,
                     mbPrevIn:1,
                     mbNextIn:1,
-                    mbTravelSelect:1,
                     mbAllSel:1;
     Link<Calendar*,void>   maSelectHdl;
     Link<Calendar*,void>   maActivateHdl;
