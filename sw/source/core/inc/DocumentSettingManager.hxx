@@ -162,7 +162,7 @@ class DocumentSettingManager :
     bool mbEmptyDbFieldHidesPara;
     bool mbContinuousEndnotes = false;
     bool mbHeaderSpacingBelowLastPara;
-
+    bool mbFrameAutowidthWithMorePara; //tdf#124423
 public:
 
     DocumentSettingManager(SwDoc &rDoc);
