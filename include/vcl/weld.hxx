@@ -1509,6 +1509,8 @@ public:
     virtual void copy_clipboard() = 0;
     virtual void paste_clipboard() = 0;
 
+    virtual void set_alignment(TxtAlign eXAlign) = 0;
+
     void save_value() { m_sSavedValue = get_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }

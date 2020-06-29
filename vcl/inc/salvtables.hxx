@@ -607,6 +607,8 @@ public:
 
     virtual void paste_clipboard() override;
 
+    virtual void set_alignment(TxtAlign eXAlign) override;
+
     virtual ~SalInstanceEntry() override;
 };
 
