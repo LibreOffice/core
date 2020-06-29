@@ -58,6 +58,11 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
 
     setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
 
+    // tdf#134386 set m_pTemplateProvider before creating any other pages
+    m_pTemplateProvider = static_cast<ChartTypeTabPage*>(GetOrCreatePage(STATE_CHARTTYPE));
+    assert(m_pTemplateProvider && "must exist");
+    m_pDialogModel->setTemplate(m_pTemplateProvider->getCurrentTemplate());
+
     WizardPath aPath = {
         STATE_CHARTTYPE,
         STATE_SIMPLE_RANGE,
@@ -66,10 +71,6 @@ CreationWizard::CreationWizard(weld::Window* pParent, const uno::Reference<frame
     };
 
     declarePath(PATH_FULL, aPath);
-
-    m_pTemplateProvider = static_cast<ChartTypeTabPage*>(GetOrCreatePage(STATE_CHARTTYPE));
-    assert(m_pTemplateProvider && "must exist");
-    m_pDialogModel->setTemplate(m_pTemplateProvider->getCurrentTemplate());
 
     SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
 
