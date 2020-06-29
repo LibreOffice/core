@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aba7d851_ca053c3d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5732,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-06-29T08:54:32Z",
+      "side": 1,
+      "message": "Ah good point.",
+      "parentUuid": "2fae990c_f9427b1c",
+      "range": {
+        "startLine": 5732,
+        "startChar": 4,
+        "endLine": 5732,
+        "endChar": 74
+      },
+      "revId": "7428daca04e26f1020fc1e4c9ad67a317890b3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40ca9d53_70d45a6e",
         "filename": "configure.ac",
         "patchSetId": 1
