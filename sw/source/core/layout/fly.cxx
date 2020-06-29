@@ -72,6 +72,7 @@
 #include <bodyfrm.hxx>
 #include <FrameControlsManager.hxx>
 #include <ndtxt.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2516,6 +2517,12 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     // No autowidth defined for columned frames
     if ( !pFrame || pFrame->IsColumnFrame() )
         return nRet;
+    // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PagePrintArea) if it contains at least 2 paragraphs.
+    if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA) && pFrame && pFrame->GetNext())
+    {
+        const SwPageFrame* pPage = pFrame->FindPageFrame();
+        return pFrame->GetUpper()->IsVertical() ? pPage->getFramePrintArea().Height() : pPage->getFramePrintArea().Width();
+    }
 
     while ( pFrame )
     {
