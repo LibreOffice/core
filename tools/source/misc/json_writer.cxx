@@ -286,7 +286,7 @@ void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
-    mPos += sprintf(mPos, "%ld", nPropVal);
+    mPos += sprintf(mPos, "%" SAL_PRIdINT64, nPropVal);
 }
 
 void JsonWriter::put(const char* pPropName, double fPropVal)
