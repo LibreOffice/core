@@ -576,9 +576,14 @@ VclPtr<vcl::Window> ScModelObj::getDocWindow()
 {
     SolarMutexGuard aGuard;
 
-    // There seems to be no clear way of getting the grid window for this
-    // particular document, hence we need to hope we get the right window.
-    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+
+    // FIXME: Can this happen? What should we do?
+    if (!pViewShell)
+        return VclPtr<vcl::Window>();
+
+    ScViewData* pViewData = &pViewShell->GetViewData();
+
     VclPtr<vcl::Window> pWindow;
     if (pViewData)
     {
@@ -645,9 +650,14 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
 {
     SolarMutexGuard aGuard;
 
-    // There seems to be no clear way of getting the grid window for this
-    // particular document, hence we need to hope we get the right window.
-    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+
+    // FIXME: Can this happen? What should we do?
+    if (!pViewShell)
+        return;
+
+    ScViewData* pViewData = &pViewShell->GetViewData();
+
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     if (!pGridWindow)
@@ -793,15 +803,20 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
-    // There seems to be no clear way of getting the grid window for this
-    // particular document, hence we need to hope we get the right window.
-    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+
+    // FIXME: Can this happen? What should we do?
+    if (!pViewShell)
+        return;
+
+    ScViewData* pViewData = &pViewShell->GetViewData();
+
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
 
-    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell = pViewData->GetViewShell();
     LokChartHelper aChartHelper(pViewShell);
     if (aChartHelper.setGraphicSelection(nType, nX, nY, fPPTX, fPPTY))
         return;
