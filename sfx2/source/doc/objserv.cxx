@@ -51,6 +51,7 @@
 #include <comphelper/string.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/sberrors.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
@@ -601,6 +602,18 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_AUTOREDACTDOC:
         {
+            // Actual redaction takes place on a newly generated Draw document
+            if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    pDialogParent, VclMessageType::Warning, VclButtonsType::Ok,
+                    SfxResId(STR_REDACTION_NO_DRAW_WARNING)));
+
+                xBox->run();
+
+                return;
+            }
+
             SfxAutoRedactDialog aDlg(pDialogParent);
             sal_Int16 nResult = aDlg.run();
 
@@ -625,6 +638,18 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             uno::Reference< lang::XComponent > xSourceDoc( xModel );
 
+            // Actual redaction takes place on a newly generated Draw document
+            if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    pDialogParent, VclMessageType::Warning, VclButtonsType::Ok,
+                    SfxResId(STR_REDACTION_NO_DRAW_WARNING)));
+
+                xBox->run();
+
+                return;
+            }
+
             DocumentToGraphicRenderer aRenderer(xSourceDoc, false);
 
             // Get the page margins of the original doc
@@ -644,6 +669,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
             uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
+
+            if (!xComponent.is())
+            {
+                SAL_WARN("sfx.doc", "SID_REDACTDOC: Failed to load new draw component. loadComponentFromURL returned an empty reference.");
+
+                return;
+            }
 
             // Add the doc pages to the new draw document
             SfxRedactionHelper::addPagesToDraw(xComponent, nPages, aMetaFiles, aPageSizes, aPageMargins, aRedactionTargets, bIsAutoRedact);
