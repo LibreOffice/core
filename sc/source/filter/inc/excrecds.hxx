@@ -417,6 +417,9 @@ private:
     rtl::Reference<XclExpAutofilterinfo> m_pFilterInfo;
     ScRange                 maRef;
     bool mbAutoFilter;
+
+    ScRange maSortRef; // sort area without headers
+    std::vector< std::tuple<ScRange, OUString, bool> > maSortCustomList; // sorted column with list of sorted items
 };
 
 /** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
