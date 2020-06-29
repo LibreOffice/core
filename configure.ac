@@ -5729,6 +5729,10 @@ find_winsdk()
 
 find_msms()
 {
+    if test "$with_package_format" != msi; then
+        return
+    fi
+
     AC_MSG_CHECKING([for MSVC merge modules directory])
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     case "$VCVER" in
