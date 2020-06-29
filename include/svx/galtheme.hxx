@@ -32,7 +32,6 @@
 
 namespace weld { class ComboBox; }
 
-class SotStorage;
 class SotStorageStream;
 
 
@@ -76,7 +75,6 @@ private:
     ::std::vector< std::unique_ptr<GalleryObject> > aObjectList;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
-    tools::SvRef<SotStorage>    aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
     sal_uInt32                  mnThemeLockCount;
@@ -85,7 +83,6 @@ private:
     bool                        bDragging;
     bool                        bAbortActualize;
 
-    SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
         if (nPos < aObjectList.size())
@@ -158,7 +155,6 @@ public:
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
 
     SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
-    SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
 
 public:
 
