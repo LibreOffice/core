@@ -35,6 +35,7 @@
 #include <objectformatter.hxx>
 #include <calbck.hxx>
 #include <dcontact.hxx>
+#include <textboxhelper.hxx>
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -202,6 +203,15 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
             }
         }
         pFormat->SetFormatAttr( aAnchor );  // only set the anchor
+
+        // If the draw format has a TextBox, then set its anchor as well.
+        if (SwFrameFormat* pTextBox
+            = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
+        {
+            SwFormatAnchor aTextBoxAnchor(pTextBox->GetAnchor());
+            aTextBoxAnchor.SetAnchor(aAnchor.GetContentAnchor());
+            pTextBox->SetFormatAttr(aTextBoxAnchor);
+        }
     }
 
     // The node may have several SwTextFrames - for every SwTextFrame a
