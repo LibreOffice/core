@@ -49,6 +49,16 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
 
 bool TableManager::isIgnore() const { return isRowEnd(); }
 
+sal_uInt32 TableManager::getCurrentGridBefore()
+{
+    return mTableDataStack.top()->getCurrentRow()->getGridBefore();
+}
+
+void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
+{
+    mTableDataStack.top()->getCurrentRow()->setGridBefore(nSkipGrids);
+}
+
 void TableManager::endOfRowAction() {}
 
 void TableManager::endOfCellAction() {}
@@ -380,6 +390,7 @@ void TableManager::startLevel()
                                  mpUnfinishedRow->getCellProperties(i));
             pTableData2->endCell(mpUnfinishedRow->getCellEnd(i));
         }
+        pTableData2->getCurrentRow()->setGridBefore(mpUnfinishedRow->getGridBefore());
         mpUnfinishedRow.clear();
     }
 
