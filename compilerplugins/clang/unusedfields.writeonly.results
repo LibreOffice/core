@@ -116,6 +116,40 @@ configmgr/source/components.cxx:162
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/mork/MorkParser.hxx:132
     MorkParser error_ enum MorkErrors
+connectivity/source/drivers/postgresql/pq_statics.hxx:105
+    pq_sdbc_driver::ImplementationStatics types css::uno::Sequence<css::uno::Type>
+connectivity/source/drivers/postgresql/pq_statics.hxx:145
+    pq_sdbc_driver::Statics NO_NULLS class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:146
+    pq_sdbc_driver::Statics NULABLE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:147
+    pq_sdbc_driver::Statics NULLABLE_UNKNOWN class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:148
+    pq_sdbc_driver::Statics SELECT class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:149
+    pq_sdbc_driver::Statics UPDATE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:150
+    pq_sdbc_driver::Statics INSERT class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:151
+    pq_sdbc_driver::Statics DELETE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:152
+    pq_sdbc_driver::Statics RULE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:153
+    pq_sdbc_driver::Statics REFERENCES class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:154
+    pq_sdbc_driver::Statics TRIGGER class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:155
+    pq_sdbc_driver::Statics EXECUTE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:156
+    pq_sdbc_driver::Statics USAGE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:157
+    pq_sdbc_driver::Statics CREATE class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:158
+    pq_sdbc_driver::Statics TEMPORARY class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:191
+    pq_sdbc_driver::Statics KEY_COLUMN class rtl::OUString
+connectivity/source/drivers/postgresql/pq_statics.hxx:215
+    pq_sdbc_driver::Statics HELP_TEXT class rtl::OUString
 connectivity/source/inc/calc/CConnection.hxx:52
     connectivity::calc::OCalcConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 connectivity/source/inc/odbc/OConnection.hxx:55
@@ -284,6 +318,10 @@ framework/inc/uielement/langselectionmenucontroller.hxx:77
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:79
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
+framework/inc/uielement/spinfieldtoolbarcontroller.hxx:64
+    framework::SpinfieldToolbarController m_bMaxSet _Bool
+framework/inc/uielement/spinfieldtoolbarcontroller.hxx:65
+    framework::SpinfieldToolbarController m_bMinSet _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:272
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:276
@@ -414,8 +452,6 @@ include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame void *
 include/vcl/textrectinfo.hxx:32
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/toolkit/lstbox.hxx:91
-    ListBox mnSaveValue sal_Int32
 include/vcl/vclenum.hxx:202
     ItalicMatrix yy double
 include/vcl/vclenum.hxx:202
@@ -560,10 +596,6 @@ sc/source/filter/xml/xmlexternaltabi.hxx:111
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
-sc/source/ui/inc/checklistmenu.hxx:91
-    ScCheckListMenuControl::MenuItemData maText class rtl::OUString
-sc/source/ui/inc/checklistmenu.hxx:93
-    ScCheckListMenuControl::MenuItemData mbSeparator _Bool
 sc/source/ui/inc/datastream.hxx:105
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/drawview.hxx:42
@@ -760,10 +792,6 @@ svx/source/inc/docrecovery.hxx:131
     svx::DocRecovery::TURLInfo Module class rtl::OUString
 svx/source/inc/StylesPreviewToolBoxControl.hxx:34
     StylesPreviewToolBoxControl m_xWeldBox std::unique_ptr<StylesPreviewWindow_Base>
-svx/source/inc/StylesPreviewToolBoxControl.hxx:35
-    StylesPreviewToolBoxControl m_pBox class StylesPreviewWindow_Base *
-svx/source/inc/svdpdf.hxx:93
-    ImpSdrPdfImport mdPageWidthPts double
 svx/source/sdr/attribute/sdrformtextattribute.cxx:153
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp sal_uInt16
 svx/source/sdr/attribute/sdrtextattribute.cxx:49
@@ -986,6 +1014,8 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
 vcl/inc/accel.h:33
     ImplAccelEntry mpAutoAccel class Accelerator *
+vcl/inc/calendar.hxx:159
+    Calendar mbTravelSelect _Bool
 vcl/inc/driverblocklist.hxx:99
     DriverBlocklist::DriverInfo maMsg class rtl::OUString
 vcl/inc/fontselect.hxx:61
@@ -1104,7 +1134,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:12859
+vcl/unx/gtk3/gtk3gtkinst.cxx:12876
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1116,7 +1146,7 @@ writerfilter/source/dmapper/DomainMapperTableHandler.cxx:234
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/dmapper/SettingsTable.cxx:263
+writerfilter/source/dmapper/SettingsTable.cxx:264
     writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
 xmlhelp/source/cxxhelp/provider/databases.hxx:251
     chelp::Databases m_aDatabases chelp::Databases::DatabasesTable

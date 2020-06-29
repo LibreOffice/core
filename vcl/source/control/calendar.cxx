@@ -79,7 +79,6 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbSpinDown              = false;
     mbPrevIn                = false;
     mbNextIn                = false;
-    mbTravelSelect          = false;
     mbAllSel                = false;
 
     OUString aGregorian( "gregorian");
@@ -1134,9 +1133,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     if ( aNewDate != maCurDate )
     {
         SetCurDate( aNewDate );
-        mbTravelSelect = true;
         Select();
-        mbTravelSelect = false;
     }
 
     if (rKEvt.GetKeyCode().GetCode() == KEY_RETURN)

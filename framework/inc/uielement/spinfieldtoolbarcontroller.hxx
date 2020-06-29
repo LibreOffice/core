@@ -60,9 +60,7 @@ class SpinfieldToolbarController final : public ComplexToolbarController
 
         bool impl_getValue( const css::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
 
-        bool              m_bFloat,
-                          m_bMaxSet,
-                          m_bMinSet;
+        bool              m_bFloat;
         double            m_nMax;
         double            m_nMin;
         double            m_nValue;

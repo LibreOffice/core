@@ -1,5 +1,3 @@
-accessibility/source/extended/textwindowaccessibility.cxx:1019
-      const css::uno::Sequence<css::beans::PropertyValue> &
 avmedia/source/vlc/wrapper/Types.hxx:38
     libvlc_event_t p_obj void *
 avmedia/source/vlc/wrapper/Types.hxx:43
@@ -34,10 +32,18 @@ connectivity/source/drivers/evoab2/NStatement.hxx:57
     connectivity::evoab::FieldSort bAscending _Bool
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:30
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-cppu/source/threadpool/threadpool.cxx:361
+cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:60
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
+cui/source/dialogs/AdditionsDialog.cxx:53
+    (anonymous namespace)::AdditionInfo sDescription class rtl::OUString
+cui/source/dialogs/AdditionsDialog.cxx:55
+    (anonymous namespace)::AdditionInfo sReleaseVersion class rtl::OUString
+cui/source/dialogs/AdditionsDialog.cxx:59
+    (anonymous namespace)::AdditionInfo sRating class rtl::OUString
+cui/source/dialogs/AdditionsDialog.cxx:61
+    (anonymous namespace)::AdditionInfo sDownloadURL class rtl::OUString
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
@@ -77,11 +83,11 @@ include/sfx2/msg.hxx:132
 include/sfx2/msg.hxx:133
     SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:133
-    SfxType2 nAttribs sal_uInt16
-include/sfx2/msg.hxx:133
     SfxType2 pType const std::type_info *
 include/sfx2/msg.hxx:133
     SfxType2 aAttrib struct SfxTypeAttrib [2]
+include/sfx2/msg.hxx:133
+    SfxType2 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
@@ -109,11 +115,11 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:137
     SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
+    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:137
     SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:137
     SfxType6 pType const std::type_info *
-include/sfx2/msg.hxx:137
-    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:138
     SfxType7 nAttribs sal_uInt16
 include/sfx2/msg.hxx:138
@@ -316,8 +322,8 @@ sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:52
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/checklistmenu.hxx:288
-    ScCheckListMenuControl maMenuSize class Size
+sc/source/ui/docshell/docfunc.cxx:1550
+      const class ScDPCollection *&
 sc/source/ui/inc/docsh.hxx:453
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
@@ -382,7 +388,7 @@ svx/source/dialog/weldeditview.cxx:312
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:189
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
-svx/source/inc/svdpdf.hxx:105
+svx/source/inc/svdpdf.hxx:104
     ImpSdrPdfImport mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
@@ -402,6 +408,8 @@ sw/source/uibase/inc/uivwimp.hxx:93
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:45
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
+sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx:51
+    sw::sidebar::WriterInspectorTextPanel maCharStyle sfx2::sidebar::ControllerItem
 toolkit/source/awt/stylesettings.cxx:94
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672

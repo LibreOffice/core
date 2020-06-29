@@ -199,8 +199,6 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_bFloat( false )
-    ,   m_bMaxSet( false )
-    ,   m_bMinSet( false )
     ,   m_nMax( 0.0 )
     ,   m_nMin( 0.0 )
     ,   m_nValue( 0.0 )
@@ -402,13 +400,11 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
     {
         m_nMax = aMax.toDouble();
         m_pSpinfieldControl->set_max(m_nMax);
-        m_bMaxSet = true;
     }
     if ( !aMin.isEmpty() )
     {
         m_nMin = aMin.toDouble();
         m_pSpinfieldControl->set_min(m_nMin);
-        m_bMinSet = true;
     }
     if ( !aStep.isEmpty() )
     {
