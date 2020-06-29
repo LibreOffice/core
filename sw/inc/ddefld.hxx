@@ -50,15 +50,15 @@ namespace sw
 // FieldType for DDE
 class SW_DLLPUBLIC SwDDEFieldType final : public SwFieldType
 {
-    OUString aName;
-    OUString aExpansion;
+    OUString m_aName;
+    OUString m_aExpansion;
 
-    tools::SvRef<sfx2::SvBaseLink> refLink;
-    SwDoc* pDoc;
+    tools::SvRef<sfx2::SvBaseLink> m_RefLink;
+    SwDoc* m_pDoc;
 
-    sal_uInt16 nRefCnt;
-    bool bCRLFFlag : 1;
-    bool bDeleted : 1;
+    sal_uInt16 m_nRefCount;
+    bool m_bCRLFFlag : 1;
+    bool m_bDeleted : 1;
 
     SAL_DLLPRIVATE void RefCntChgd();
 
@@ -67,9 +67,9 @@ public:
                     SfxLinkUpdateMode );
     virtual ~SwDDEFieldType() override;
 
-    const OUString& GetExpansion() const               { return aExpansion; }
-    void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
-                                                  bCRLFFlag = false; }
+    const OUString& GetExpansion() const               { return m_aExpansion; }
+    void SetExpansion( const OUString& rStr )   { m_aExpansion = rStr;
+                                                  m_bCRLFFlag = false; }
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual OUString GetName() const override;
@@ -80,25 +80,25 @@ public:
     OUString const & GetCmd() const;
     void SetCmd( const OUString& aStr );
 
-    SfxLinkUpdateMode GetType() const          { return refLink->GetUpdateMode();  }
-    void SetType( SfxLinkUpdateMode nType )    { refLink->SetUpdateMode( nType );  }
+    SfxLinkUpdateMode GetType() const          { return m_RefLink->GetUpdateMode();  }
+    void SetType( SfxLinkUpdateMode nType )    { m_RefLink->SetUpdateMode( nType );  }
 
-    bool IsDeleted() const          { return bDeleted; }
-    void SetDeleted( bool b )       { bDeleted = b; }
+    bool IsDeleted() const          { return m_bDeleted; }
+    void SetDeleted( bool b )       { m_bDeleted = b; }
 
-    void Disconnect()               { refLink->Disconnect(); }
+    void Disconnect()               { m_RefLink->Disconnect(); }
 
-    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
-          ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
+    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *m_RefLink; }
+          ::sfx2::SvBaseLink& GetBaseLink()          { return *m_RefLink; }
 
-    const SwDoc* GetDoc() const     { return pDoc; }
-          SwDoc* GetDoc()           { return pDoc; }
+    const SwDoc* GetDoc() const     { return m_pDoc; }
+          SwDoc* GetDoc()           { return m_pDoc; }
     void SetDoc( SwDoc* pDoc );
 
-    void IncRefCnt() {  if( !nRefCnt++ && pDoc ) RefCntChgd(); }
-    void DecRefCnt() {  if( !--nRefCnt && pDoc ) RefCntChgd(); }
+    void IncRefCnt() {  if( !m_nRefCount++ && m_pDoc ) RefCntChgd(); }
+    void DecRefCnt() {  if( !--m_nRefCount && m_pDoc ) RefCntChgd(); }
 
-    void SetCRLFDelFlag( bool bFlag )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( bool bFlag )    { m_bCRLFFlag = bFlag; }
 };
 
 // DDE-field
