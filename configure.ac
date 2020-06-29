@@ -701,6 +701,11 @@ darwin*|macos*) # macOS
 
     # -undefined error is the default
     LINKFLAGSNOUNDEFS=""
+    if test "$host_cpu" = arm64; then
+        # HOST_PLATFORM is used for external projects and their configury occasionally doesn't like
+        # the "macos" part so be sure to use arm64-apple-darwin for now.
+        HOST_PLATFORM=arm64-apple-darwin
+    fi
 ;;
 
 ios*) # iOS
