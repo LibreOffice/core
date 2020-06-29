@@ -115,6 +115,65 @@ void FilterColumnContext::onStartRecord( SequenceInputStream& rStrm )
     mrFilterColumn.importFilterColumn( rStrm );
 }
 
+// class SortConditionContext
+
+SortConditionContext::SortConditionContext( WorksheetContextBase& rParent, SortCondition& rSortCondition ) :
+    WorksheetContextBase( rParent ),
+    mrSortCondition( rSortCondition )
+{
+}
+
+ContextHandlerRef SortConditionContext::onCreateContext( sal_Int32 , const AttributeList& )
+{
+    return nullptr;
+}
+
+void SortConditionContext::onStartElement( const AttributeList& rAttribs )
+{
+    mrSortCondition.importSortCondition( rAttribs, getSheetIndex() );
+}
+
+ContextHandlerRef SortConditionContext::onCreateRecordContext( sal_Int32 , SequenceInputStream& )
+{
+    return nullptr;
+}
+
+void SortConditionContext::onStartRecord( SequenceInputStream& )
+{
+}
+
+// class SortStateContext
+
+SortStateContext::SortStateContext( WorksheetContextBase& rParent, AutoFilter& rAutoFilter ) :
+    WorksheetContextBase( rParent ),
+    mrAutoFilter( rAutoFilter )
+{
+}
+
+ContextHandlerRef SortStateContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
+{
+    if( getCurrentElement() == XLS_TOKEN( sortState ) ) switch( nElement )
+    {
+        case XLS_TOKEN( sortCondition ):
+            return new SortConditionContext( *this, mrAutoFilter.createSortCondition() );
+    }
+    return nullptr;
+}
+
+void SortStateContext::onStartElement( const AttributeList& rAttribs )
+{
+    mrAutoFilter.importSortState( rAttribs, getSheetIndex() );
+}
+
+ContextHandlerRef SortStateContext::onCreateRecordContext( sal_Int32 , SequenceInputStream& )
+{
+    return nullptr;
+}
+
+void SortStateContext::onStartRecord( SequenceInputStream& )
+{
+}
+
 AutoFilterContext::AutoFilterContext( WorksheetFragmentBase& rFragment, AutoFilter& rAutoFilter ) :
     WorksheetContextBase( rFragment ),
     mrAutoFilter( rAutoFilter )
@@ -123,8 +182,13 @@ AutoFilterContext::AutoFilterContext( WorksheetFragmentBase& rFragment, AutoFilt
 
 ContextHandlerRef AutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
-    if( (getCurrentElement() == XLS_TOKEN( autoFilter )) && (nElement == XLS_TOKEN( filterColumn )) )
-        return new FilterColumnContext( *this, mrAutoFilter.createFilterColumn() );
+    if( getCurrentElement() == XLS_TOKEN( autoFilter ) ) switch( nElement )
+    {
+        case XLS_TOKEN( sortState ):
+            return new SortStateContext( *this, mrAutoFilter );
+        case XLS_TOKEN( filterColumn ):
+            return new FilterColumnContext( *this, mrAutoFilter.createFilterColumn() );
+    }
     return nullptr;
 }
 
