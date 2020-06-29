@@ -127,6 +127,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::makeAny(true));
     m_pImpl->SetDocumentSettingsProperty("HeaderSpacingBelowLastPara",
                                          uno::makeAny(true));
+    m_pImpl->SetDocumentSettingsProperty("FrameAutowidthWithMorePara", uno::makeAny(true));
 
     m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::makeAny(true));
 
