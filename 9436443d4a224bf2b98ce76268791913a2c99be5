@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67b12f70_8cd3a2a1",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-29T19:05:22Z",
+      "side": 1,
+      "message": "This becomes a wall of text. Can\u0027t we drop something like what is LibreOffice or something from the copyright notes? Wouldn\u0027t help to make the dialog wider as it saves one line at max.",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 19
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0223ffa6_a533be03",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-29T19:05:22Z",
+      "side": 1,
+      "message": "Quite a lot \"personal\" and \"use\". How about \"The Personal edition is supported by volunteers and intended for use at home.\"?",
+      "range": {
+        "startLine": 350,
+        "startChar": 73,
+        "endLine": 350,
+        "endChar": 174
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf33e64_1e02913b",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-29T19:05:22Z",
+      "side": 1,
+      "message": "Somewhat inappropriate here, with: Welcome, personal/business disclaimer, drop document tip. Maybe with 2x \\n...",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 26
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
