@@ -6,8 +6,8 @@ MSVC: using SOLARINC
  !ELSE
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
  CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
--CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL
-+CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /wd4127 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL $(SOLARINC)
+-CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL
++CFLAGS      = /I. /I ../lib /I../include /nologo /W4 /EHsc /DWIN32 /FD /c /DBUILDING_LIBCURL $(SOLARINC)
  !ENDIF
  
  LFLAGS     = /nologo /machine:$(MACHINE)
@@ -18,10 +18,10 @@ MSVC: using SOLARINC
 -RC_FLAGS = /dDEBUGBUILD=1 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
 +RC_FLAGS = $(SOLARINC) /dDEBUGBUILD=1 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
  CURL_CC       = $(CC_DEBUG) $(RTLIB_DEBUG)
- CURL_RC_FLAGS = /i../include /dDEBUGBUILD=1 /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ CURL_RC_FLAGS = $(CURL_RC_FLAGS) /i../include /dDEBUGBUILD=1 /Fo $@ $(CURL_SRC_DIR)\curl.rc
  !ELSE
 -RC_FLAGS = /dDEBUGBUILD=0 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
 +RC_FLAGS = $(SOLARINC) /dDEBUGBUILD=0 /Fo $@ $(LIBCURL_SRC_DIR)\libcurl.rc
  CURL_CC       = $(CC_NODEBUG) $(RTLIB)
- CURL_RC_FLAGS = /i../include /dDEBUGBUILD=0 /Fo $@ $(CURL_SRC_DIR)\curl.rc
+ CURL_RC_FLAGS = $(CURL_RC_FLAGS) /i../include /dDEBUGBUILD=0 /Fo $@ $(CURL_SRC_DIR)\curl.rc
  !ENDIF
