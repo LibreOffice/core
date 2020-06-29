@@ -20,7 +20,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 
-#include <services/desktop.hxx>
+#include <framework/desktop.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/NamedValue.hpp>

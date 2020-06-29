@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 namespace framework{
 

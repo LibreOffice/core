@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     $(if $(ENABLE_BREAKPAD),crashreport) \
     deploymentmisc \
     editeng \
+    fwk \
     i18nlangtag \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \

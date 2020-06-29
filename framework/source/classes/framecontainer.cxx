@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <classes/framecontainer.hxx>
+#include <framework/framecontainer.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 

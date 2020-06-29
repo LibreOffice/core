@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 namespace framework{
 

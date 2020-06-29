@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <threadhelp/transactionmanager.hxx>
+#include <framework/transactionmanager.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 

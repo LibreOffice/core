@@ -34,7 +34,7 @@
 #include <i18nlangtag/lang.h>
 #include <svl/languageoptions.hxx>
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
+#include <framework/fwidllapi.h>
 
 #include <functional>
 #include <set>

@@ -19,6 +19,10 @@
 
 $(eval $(call gb_Library_Library,fwk))
 
+$(eval $(call gb_Library_add_defs,fwk,\
+    -DLO_DLLIMPLEMENTATION_FWK \
+))
+
 $(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
 
 $(eval $(call gb_Library_set_include,fwk,\
