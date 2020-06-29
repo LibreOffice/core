@@ -758,6 +758,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             }
         }
 
+        // Note that this is intentionally called "cell" and not "column".
+        // Don't make the mistake that all cell x's will be in the same column.
+        // Both undefined cells (grid before) and merged cells (grid span) in a row will affect the actual column.
         sal_Int32 nCell = 0;
         pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
         beans::PropertyValues* pSingleCellProperties = pCellProperties[nRow].getArray();
@@ -1231,6 +1234,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 TableParagraphVectorPtr pTableParagraphs = m_rDMapper_Impl.getTableManager().getCurrentParagraphs();
                 for (size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
                 {
+                    // Note that this is "cell" since you must not treat it as "column".
                     for (size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
                     {
                         auto rStartPara = m_aTableRanges[nRow][nCell][0];

@@ -533,8 +533,8 @@ void DomainMapperTableManager::endOfCellAction()
     TagLogger::getInstance().element("endOFCellAction");
 #endif
 
-    if (m_aGridSpans.empty())
-        throw std::out_of_range("empty spans");
+    if ( !isInTable() )
+        throw std::out_of_range("cell without a table");
     m_aGridSpans.back()->push_back(m_nGridSpan);
     m_nGridSpan = 1;
     ++m_nCell.back( );
@@ -647,23 +647,23 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
     }
 
-    IntVectorPtr pCurrentSpans = getCurrentSpans( );
+    std::vector<sal_Int32>& rCurrentSpans = *getCurrentSpans();
 
-    if( m_aGridBefore.back() > 0 )
+    if( getCurrentGridBefore() )
     {
         //fill missing gridBefore elements with '1'
-        pCurrentSpans->insert( pCurrentSpans->begin( ), m_aGridBefore.back(), 1 );
+        rCurrentSpans.insert( rCurrentSpans.begin(), getCurrentGridBefore(), 1 );
     }
-    if( pCurrentSpans->size() < m_aGridBefore.back() + m_nCell.back( ))
+    if( rCurrentSpans.size() < getCurrentGridBefore() + m_nCell.back())
     {
         //fill missing elements with '1'
-        pCurrentSpans->insert( pCurrentSpans->end( ), m_aGridBefore.back() + m_nCell.back( ) - pCurrentSpans->size(), 1 );
+        rCurrentSpans.insert( rCurrentSpans.end(), getCurrentGridBefore() + m_nCell.back() - rCurrentSpans.size(), 1 );
     }
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("gridSpans");
     {
-        for (const auto& rGridSpan : *pCurrentSpans)
+        for (const auto& rGridSpan : rCurrentSpans)
         {
             TagLogger::getInstance().startElement("gridSpan");
             TagLogger::getInstance().attribute("span", rGridSpan);
@@ -674,7 +674,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
 
     //calculate number of used grids - it has to match the size of m_aTableGrid
-    size_t nGrids = std::accumulate(pCurrentSpans->begin(), pCurrentSpans->end(), sal::static_int_cast<size_t>(0));
+    size_t nGrids = std::accumulate(rCurrentSpans.begin(), rCurrentSpans.end(), sal::static_int_cast<size_t>(0));
 
     // sj: the grid is having no units... it is containing only relative values.
     // a table with a grid of "1:2:1" looks identical as if the table is having
@@ -715,18 +715,18 @@ void DomainMapperTableManager::endOfRowAction()
                 }
             }
         }
-        uno::Sequence< text::TableColumnSeparator > aSeparators( m_aGridBefore.back() + m_nCell.back( ) - 1 );
+        uno::Sequence< text::TableColumnSeparator > aSeparators( getCurrentGridBefore() + m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         double nLastRelPos = 0.0;
         sal_uInt32 nBorderGridIndex = 0;
 
-        size_t nWidthsBound = m_aGridBefore.back() + m_nCell.back() - 1;
+        size_t nWidthsBound = getCurrentGridBefore() + m_nCell.back() - 1;
         if (nWidthsBound)
         {
             if (nFullWidthRelative == 0)
                 throw o3tl::divide_by_zero();
 
-            ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
+            ::std::vector< sal_Int32 >::const_iterator aSpansIter = rCurrentSpans.begin();
             for( size_t nBorder = 0; nBorder < nWidthsBound; ++nBorder )
             {
                 double fGridWidth = 0.;
@@ -801,9 +801,9 @@ void DomainMapperTableManager::endOfRowAction()
 
             // At incomplete table grids, last cell width can be smaller, than its final width.
             // Correct it based on the last but one column width and their span values.
-            if ( bIsIncompleteGrid && pCurrentSpans->size()-1 == nWidthsBound )
+            if ( bIsIncompleteGrid && rCurrentSpans.size()-1 == nWidthsBound )
             {
-                auto aSpansIter = std::next(pCurrentSpans->begin( ), nWidthsBound - 1);
+                auto aSpansIter = std::next(rCurrentSpans.begin(), nWidthsBound - 1);
                 sal_Int32 nFixLastCellWidth = (*pCellWidths)[nWidthsBound-1] / *aSpansIter * *std::next(aSpansIter);
                 if (nFixLastCellWidth > (*pCellWidths)[nWidthsBound])
                     nFullWidthRelative += nFixLastCellWidth - (*pCellWidths)[nWidthsBound];
@@ -839,7 +839,7 @@ void DomainMapperTableManager::endOfRowAction()
     m_nCell.back( ) = 0;
     m_aGridBefore.back( ) = 0;
     getCurrentGrid()->clear();
-    pCurrentSpans->clear();
+    rCurrentSpans.clear();
     pCellWidths->clear();
 
     m_nGridAfter = 0;
