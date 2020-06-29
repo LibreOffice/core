@@ -1504,6 +1504,11 @@ AC_ARG_WITH(product-name,
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
 
+AC_ARG_WITH(product-flavor,
+    AS_HELP_STRING([--with-product-flavor='My Own Personal Flavor'],
+        [Define the product flavor. Default is Personal.]),
+,with_product_flavor=Personal)
+
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
@@ -2375,6 +2380,15 @@ else
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
+
+AC_MSG_CHECKING([for product flavor])
+if test "$with_product_flavor" = "no"; then
+    PRODUCTFLAVOR=""
+elif test -n "$with_product_flavor"; then
+    PRODUCTFLAVOR="$with_product_flavor"
+fi
+AC_MSG_RESULT([$PRODUCTFLAVOR])
+AC_DEFINE_UNQUOTED([PRODUCTFLAVOR], ["$PRODUCTFLAVOR"])
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build
@@ -12877,7 +12891,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
 BRAND_INTRO_IMAGES="intro.png intro-highres.png"
-brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg about.svg"
+brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg logo_flavor.svg about.svg"
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])

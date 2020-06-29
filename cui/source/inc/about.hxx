@@ -40,6 +40,7 @@ private:
     std::unique_ptr<weld::Label> m_pUILabel;
     std::unique_ptr<weld::Label> m_pLocaleLabel;
     std::unique_ptr<weld::Label> m_pMiscLabel;
+    std::unique_ptr<weld::Label> m_pAboutLabel;
     std::unique_ptr<weld::Label> m_pCopyrightLabel;
 
     static OUString GetVersionString();
