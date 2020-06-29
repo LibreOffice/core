@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb62f0a4_496ff9a8",
+        "filename": "include/vcl/PrinterTransparencyMode.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-29T20:02:33Z",
+      "side": 1,
+      "message": "you can use \"#pragma once\" now",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 9
+      },
+      "revId": "cf77790716a76f3713778099923f933b725341c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
