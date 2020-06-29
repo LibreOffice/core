@@ -3175,6 +3175,26 @@ void SalInstanceEntry::paste_clipboard()
     m_xEntry->Paste();
 }
 
+void SalInstanceEntry::set_alignment(TxtAlign eXAlign)
+{
+    WinBits nAlign(0);
+    switch (eXAlign)
+    {
+        case TxtAlign::Left:
+            nAlign = WB_LEFT;
+            break;
+        case TxtAlign::Center:
+            nAlign = WB_CENTER;
+            break;
+        case TxtAlign::Right:
+            nAlign = WB_RIGHT;
+            break;
+    }
+    WinBits nBits = m_xEntry->GetStyle();
+    nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
+    m_xEntry->SetStyle(nBits & nAlign);
+}
+
 SalInstanceEntry::~SalInstanceEntry()
 {
     if (m_aCursorPositionHdl.IsSet())

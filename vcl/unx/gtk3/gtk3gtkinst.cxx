@@ -8864,6 +8864,24 @@ public:
         enable_notify_events();
     }
 
+    virtual void set_alignment(TxtAlign eXAlign) override
+    {
+        gfloat xalign;
+        switch (eXAlign)
+        {
+            case TxtAlign::Left:
+                xalign = 0.0;
+                break;
+            case TxtAlign::Center:
+                xalign = 0.5;
+                break;
+            case TxtAlign::Right:
+                xalign = 1.0;
+                break;
+        }
+        gtk_entry_set_alignment(m_pEntry, xalign);
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nActivateSignalId);

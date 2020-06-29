@@ -340,6 +340,13 @@ enum class DrawFrameStyle
     NWF                      = 0x0006,
 };
 
+enum class TxtAlign
+{
+    Left,
+    Center,
+    Right
+};
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
