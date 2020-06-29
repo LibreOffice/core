@@ -48,6 +48,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-metalink --without-nghttp2 \
 			--without-libssh --without-brotli \
+			--without-ngtcp2 --without-quiche \
 			--disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
