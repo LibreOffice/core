@@ -35,6 +35,7 @@
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <comphelper/configuration.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -3979,6 +3980,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
 
     // the anchored frame should not have moved
     CPPUNIT_ASSERT_EQUAL(aOrigRect, aRelayoutRect);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124423)
+{
+    struct MSCompatibleFramesAutowidth : public comphelper::ConfigurationProperty<MSCompatibleFramesAutowidth, bool>
+    {
+        static OUString path() { return "/org.openoffice.Office.Compatibility/View/MSCompatibleFramesAutowidth"; }
+        ~MSCompatibleFramesAutowidth() = delete;
+    };
+    auto batch = comphelper::ConfigurationChanges::create();
+
+    MSCompatibleFramesAutowidth::set(true, batch);
+    batch->commit();
+    createDoc("tdf124423.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nPageWidth, nFly2Width);
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
+
+    MSCompatibleFramesAutowidth::set(false, batch);
+    batch->commit();
+    createDoc("tdf124423.docx");
+    pXmlDoc = parseLayoutDump();
+    nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
+    nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly2Width);
+    CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

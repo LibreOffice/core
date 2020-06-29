@@ -179,6 +179,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="MSCompatibleFramesAutowidth" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <!-- See tdf#124423 for rationale -->
+          <desc>Specifies the way autowidth scale the frames, when there are more then 1 paragraphs inside the frame.</desc>
+          <label>Enable it to widen the frames with autowidth (containing at least 2 paragraphs) to max size (PagePrintArea).</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
