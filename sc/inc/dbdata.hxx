@@ -172,8 +172,8 @@ public:
     OUString GetSourceString() const;
     OUString GetOperations() const;
 
-    void        GetSortParam(ScSortParam& rSortParam) const;
-    void        SetSortParam(const ScSortParam& rSortParam);
+    SC_DLLPUBLIC void GetSortParam(ScSortParam& rSortParam) const;
+    SC_DLLPUBLIC void SetSortParam(const ScSortParam& rSortParam);
 
     /** Remember some more settings of ScSortParam, only to be called at
         anonymous DB ranges as it at least overwrites bHasHeader. */
