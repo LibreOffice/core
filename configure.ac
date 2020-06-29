@@ -191,6 +191,17 @@ AC_SUBST(PRODUCTNAME)
 PRODUCTNAME_WITHOUT_SPACES=$(printf %s "$PRODUCTNAME" | sed 's/ //g')
 AC_SUBST(PRODUCTNAME_WITHOUT_SPACES)
 
+AC_MSG_CHECKING([for product flavor])
+PRODUCTFLAVOR="Personal"
+if test "$with_product_flavor" = "no"; then
+    PRODUCTFLAVOR=""
+elif test -n "$with_product_flavor"; then
+    PRODUCTFLAVOR="$with_product_flavor"
+fi
+AC_MSG_RESULT([$PRODUCTFLAVOR])
+AC_SUBST(PRODUCTFLAVOR)
+AC_DEFINE_UNQUOTED([PRODUCTFLAVOR], ["$PRODUCTFLAVOR"])
+
 dnl ===================================================================
 dnl Our version is defined by the AC_INIT() at the top of this script.
 dnl ===================================================================
@@ -1503,6 +1514,11 @@ AC_ARG_WITH(product-name,
     AS_HELP_STRING([--with-product-name='My Own Office Suite'],
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
+
+AC_ARG_WITH(product-flavor,
+    AS_HELP_STRING([--with-product-flavor='My Own Personal Flavor'],
+        [Define the product flavor. Default is Personal.]),
+,with_product_flavor=$PRODUCTFLAVOR)
 
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
