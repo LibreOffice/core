@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_buildid.h>
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <recentdocsview.hxx>
@@ -378,6 +379,12 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),
                                 maWelcomeLine1,
                                 DrawTextFlags::Center);
+
+        if (OString(PRODUCTFLAVOR) == "Personal")
+        {
+            maWelcomeLine2 = SfxResId(STR_PERSONALDESC) + "\n" + SfxResId(STR_WELCOME_LINE2);
+        }
+
         rRenderContext.DrawText(tools::Rectangle(0, nY + 2 * nTextHeight, rSize.Width(), rSize.Height()),
                                 maWelcomeLine2,
                                 DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
