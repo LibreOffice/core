@@ -221,6 +221,9 @@ class SvxSetItem;
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
+#define SID_ATTR_POSTIT_POSITION_X                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 68 )
+#define SID_ATTR_POSTIT_POSITION_Y                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 69 )
+
 #define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
 #define SID_RULER_NULL_OFFSET                           TypedWhichId<SfxPointItem>( SID_SVX_START + 79 )
 #define SID_RULER_BORDERS                               TypedWhichId<SvxRulerItem>( SID_SVX_START + 80 )
