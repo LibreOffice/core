@@ -5617,9 +5617,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                    if the object has no fillstyle, the font color depends to fillstyle of the background */
     {
         Color aDefColor( COL_BLACK );
-        MSO_FillType eFillType = mso_fillSolid;
+        sal_uInt32 eFillType = mso_fillSolid;
         if ( rManager.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
-            eFillType = static_cast<MSO_FillType>(rManager.GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
+            eFillType = rManager.GetPropertyValue(DFF_Prop_fillType, mso_fillSolid);
         else
             eFillType = mso_fillBackground;
         switch( eFillType )
