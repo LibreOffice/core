@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_AUTOFILTERCONTEXT_HXX
 
 #include "excelhandlers.hxx"
+#include "autofilterbuffer.hxx"
 
 namespace oox::xls {
 
@@ -59,6 +60,44 @@ protected:
 private:
     FilterColumn&       mrFilterColumn;
 };
+
+// class SortConditionContext
+
+class SortConditionContext : public WorksheetContextBase
+{
+public:
+    explicit            SortConditionContext( WorksheetContextBase& rFragment, SortCondition& rSortCondition );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
+
+private:
+    SortCondition&      mrSortCondition;
+};
+
+// class SortStateContext
+
+class SortStateContext : public WorksheetContextBase
+{
+public:
+    explicit            SortStateContext( WorksheetContextBase& rFragment, AutoFilter& rAutoFilter );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onStartElement( const AttributeList& rAttribs ) override;
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) override;
+
+private:
+    AutoFilter&         mrAutoFilter;
+};
+
+// class AutoFilterContext
 
 class AutoFilterContext : public WorksheetContextBase
 {
