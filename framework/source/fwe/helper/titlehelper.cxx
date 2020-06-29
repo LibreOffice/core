@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_buildid.h>
 #include <config_features.h>
 
 #include <framework/titlehelper.hxx>
@@ -516,6 +517,13 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     // fdo#70376: We want the window title to contain just the
     // document name (from the above "component title").
     impl_appendProductName      (sTitle);
+
+    if (strlen(PRODUCTFLAVOR))
+    {
+        sTitle.append(' ');
+        sTitle.append(PRODUCTFLAVOR);
+    }
+
     impl_appendModuleName       (sTitle);
     impl_appendDebugVersion     (sTitle);
 #endif
