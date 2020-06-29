@@ -75,7 +75,6 @@ class ComplexToolbarController : public svt::ToolboxController
         };
 
     protected:
-        static sal_Int32 getFontSizePixel( const vcl::Window* pWindow );
         css::uno::Reference< css::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
         void addNotifyInfo( const OUString&                                                        aEventName,
                             const css::uno::Reference< css::frame::XDispatch >& xDispatch,
