@@ -199,28 +199,28 @@ namespace {
 /// Travel between table of content Marks
 class CompareNodeContent
 {
-    sal_uLong nNode;
-    sal_Int32 nContent;
+    sal_uLong m_nNode;
+    sal_Int32 m_nContent;
 public:
     CompareNodeContent( sal_uLong nNd, sal_Int32 nCnt )
-        : nNode( nNd ), nContent( nCnt ) {}
+        : m_nNode( nNd ), m_nContent( nCnt ) {}
 
     bool operator==( const CompareNodeContent& rCmp ) const
-        { return nNode == rCmp.nNode && nContent == rCmp.nContent; }
+        { return m_nNode == rCmp.m_nNode && m_nContent == rCmp.m_nContent; }
     bool operator!=( const CompareNodeContent& rCmp ) const
-        { return nNode != rCmp.nNode || nContent != rCmp.nContent; }
+        { return m_nNode != rCmp.m_nNode || m_nContent != rCmp.m_nContent; }
     bool operator< ( const CompareNodeContent& rCmp ) const
-        { return nNode < rCmp.nNode ||
-            ( nNode == rCmp.nNode && nContent < rCmp.nContent); }
+        { return m_nNode < rCmp.m_nNode ||
+            ( m_nNode == rCmp.m_nNode && m_nContent < rCmp.m_nContent); }
     bool operator<=( const CompareNodeContent& rCmp ) const
-        { return nNode < rCmp.nNode ||
-            ( nNode == rCmp.nNode && nContent <= rCmp.nContent); }
+        { return m_nNode < rCmp.m_nNode ||
+            ( m_nNode == rCmp.m_nNode && m_nContent <= rCmp.m_nContent); }
     bool operator> ( const CompareNodeContent& rCmp ) const
-        { return nNode > rCmp.nNode ||
-            ( nNode == rCmp.nNode && nContent > rCmp.nContent); }
+        { return m_nNode > rCmp.m_nNode ||
+            ( m_nNode == rCmp.m_nNode && m_nContent > rCmp.m_nContent); }
     bool operator>=( const CompareNodeContent& rCmp ) const
-        { return nNode > rCmp.nNode ||
-            ( nNode == rCmp.nNode && nContent >= rCmp.nContent); }
+        { return m_nNode > rCmp.m_nNode ||
+            ( m_nNode == rCmp.m_nNode && m_nContent >= rCmp.m_nContent); }
 };
 
 }

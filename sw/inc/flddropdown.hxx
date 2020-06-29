@@ -60,27 +60,27 @@ class SW_DLLPUBLIC SwDropDownField final : public SwField
     /**
        the possible values (aka items) of the dropdown box
     */
-    std::vector<OUString> aValues;
+    std::vector<OUString> m_aValues;
 
     /**
       the selected item
     */
-    OUString aSelectedItem;
+    OUString m_aSelectedItem;
 
     /**
       the name of the field
     */
-    OUString aName;
+    OUString m_aName;
 
     /**
        help text
      */
-    OUString aHelp;
+    OUString m_aHelp;
 
     /**
        tool tip string
      */
-    OUString aToolTip;
+    OUString m_aToolTip;
 
     /**
        Expands the field.
@@ -181,28 +181,28 @@ public:
 
        @return the selected item
     */
-    const OUString& GetSelectedItem() const { return aSelectedItem;}
+    const OUString& GetSelectedItem() const { return m_aSelectedItem;}
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    const OUString& GetName() const { return aName;}
+    const OUString& GetName() const { return m_aName;}
 
     /**
        Returns the help text of the field.
 
        @return the help text of the field
     */
-    const OUString& GetHelp() const { return aHelp;}
+    const OUString& GetHelp() const { return m_aHelp;}
 
     /**
        Returns the tool tip of the field.
 
        @return the tool tip of the field
      */
-    const OUString& GetToolTip() const { return aToolTip;}
+    const OUString& GetToolTip() const { return m_aToolTip;}
 
     /**
        Sets the selected item.

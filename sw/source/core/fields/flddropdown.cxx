@@ -51,8 +51,8 @@ SwDropDownField::SwDropDownField(SwFieldType * pTyp)
 
 SwDropDownField::SwDropDownField(const SwDropDownField & rSrc)
     : SwField(rSrc.GetTyp(), rSrc.GetFormat(), rSrc.GetLanguage()),
-      aValues(rSrc.aValues), aSelectedItem(rSrc.aSelectedItem),
-      aName(rSrc.aName), aHelp(rSrc.aHelp), aToolTip(rSrc.aToolTip)
+      m_aValues(rSrc.m_aValues), m_aSelectedItem(rSrc.m_aSelectedItem),
+      m_aName(rSrc.m_aName), m_aHelp(rSrc.m_aHelp), m_aToolTip(rSrc.m_aToolTip)
 {
 }
 
@@ -65,8 +65,8 @@ OUString SwDropDownField::ExpandImpl(SwRootFrame const*const) const
     OUString sSelect = GetSelectedItem();
     if (sSelect.isEmpty())
     {
-        vector<OUString>::const_iterator aIt = aValues.begin();
-        if ( aIt != aValues.end())
+        vector<OUString>::const_iterator aIt = m_aValues.begin();
+        if ( aIt != m_aValues.end())
             sSelect = *aIt;
     }
     // if still no list value is available a default text of 10 spaces is to be set
@@ -102,49 +102,49 @@ void SwDropDownField::SetPar2(const OUString & rName)
 
 void SwDropDownField::SetItems(const vector<OUString> & rItems)
 {
-    aValues = rItems;
-    aSelectedItem.clear();
+    m_aValues = rItems;
+    m_aSelectedItem.clear();
 }
 
 void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
 {
-    aValues.clear();
+    m_aValues.clear();
 
-    comphelper::sequenceToContainer(aValues, rItems);
+    comphelper::sequenceToContainer(m_aValues, rItems);
 
-    aSelectedItem.clear();
+    m_aSelectedItem.clear();
 }
 
 uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 {
-    return comphelper::containerToSequence(aValues);
+    return comphelper::containerToSequence(m_aValues);
 }
 
 
 void SwDropDownField::SetSelectedItem(const OUString & rItem)
 {
     vector<OUString>::const_iterator aIt =
-        std::find(aValues.begin(), aValues.end(), rItem);
+        std::find(m_aValues.begin(), m_aValues.end(), rItem);
 
-    if (aIt != aValues.end())
-        aSelectedItem = *aIt;
+    if (aIt != m_aValues.end())
+        m_aSelectedItem = *aIt;
     else
-        aSelectedItem.clear();
+        m_aSelectedItem.clear();
 }
 
 void SwDropDownField::SetName(const OUString & rName)
 {
-    aName = rName;
+    m_aName = rName;
 }
 
 void SwDropDownField::SetHelp(const OUString & rHelp)
 {
-    aHelp = rHelp;
+    m_aHelp = rHelp;
 }
 
 void SwDropDownField::SetToolTip(const OUString & rToolTip)
 {
-    aToolTip = rToolTip;
+    m_aToolTip = rToolTip;
 }
 
 bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
@@ -153,16 +153,16 @@ bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
     switch( nWhich )
     {
     case FIELD_PROP_PAR1:
-        rVal <<= aSelectedItem;
+        rVal <<= m_aSelectedItem;
         break;
     case FIELD_PROP_PAR2:
-        rVal <<= aName;
+        rVal <<= m_aName;
         break;
     case FIELD_PROP_PAR3:
-        rVal <<= aHelp;
+        rVal <<= m_aHelp;
         break;
     case FIELD_PROP_PAR4:
-        rVal <<= aToolTip;
+        rVal <<= m_aToolTip;
         break;
     case FIELD_PROP_STRINGS:
         rVal <<= GetItemSequence();
@@ -189,15 +189,15 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
         break;
 
     case FIELD_PROP_PAR2:
-        rVal >>= aName;
+        rVal >>= m_aName;
         break;
 
     case FIELD_PROP_PAR3:
-        rVal >>= aHelp;
+        rVal >>= m_aHelp;
         break;
 
     case FIELD_PROP_PAR4:
-        rVal >>= aToolTip;
+        rVal >>= m_aToolTip;
         break;
 
     case FIELD_PROP_STRINGS:

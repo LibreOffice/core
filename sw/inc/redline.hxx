@@ -166,7 +166,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     void MoveFromSection(size_t nMyPos);
 
 public:
-    static sal_uInt32 m_nLastId;
+    static sal_uInt32 s_nLastId;
 
     SwRangeRedline( RedlineType eType, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
@@ -175,7 +175,7 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
-        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( m_nLastId++ )
+        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( s_nLastId++ )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;

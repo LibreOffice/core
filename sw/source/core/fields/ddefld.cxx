@@ -188,33 +188,33 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,
                                const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
     : SwFieldType( SwFieldIds::Dde ),
-    aName( rName ), pDoc( nullptr ), nRefCnt( 0 )
+    m_aName( rName ), m_pDoc( nullptr ), m_nRefCount( 0 )
 {
-    bCRLFFlag = bDeleted = false;
-    refLink = new SwIntrnlRefLink( *this, nUpdateType );
+    m_bCRLFFlag = m_bDeleted = false;
+    m_RefLink = new SwIntrnlRefLink( *this, nUpdateType );
     SetCmd( rCmd );
 }
 
 SwDDEFieldType::~SwDDEFieldType()
 {
-    if( pDoc && !pDoc->IsInDtor() )
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
-    refLink->Disconnect();
+    if( m_pDoc && !m_pDoc->IsInDtor() )
+        m_pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
+    m_RefLink->Disconnect();
 }
 
 std::unique_ptr<SwFieldType> SwDDEFieldType::Copy() const
 {
-    std::unique_ptr<SwDDEFieldType> pType(new SwDDEFieldType( aName, GetCmd(), GetType() ));
-    pType->aExpansion = aExpansion;
-    pType->bCRLFFlag = bCRLFFlag;
-    pType->bDeleted = bDeleted;
-    pType->SetDoc( pDoc );
+    std::unique_ptr<SwDDEFieldType> pType(new SwDDEFieldType( m_aName, GetCmd(), GetType() ));
+    pType->m_aExpansion = m_aExpansion;
+    pType->m_bCRLFFlag = m_bCRLFFlag;
+    pType->m_bDeleted = m_bDeleted;
+    pType->SetDoc( m_pDoc );
     return pType;
 }
 
 OUString SwDDEFieldType::GetName() const
 {
-    return aName;
+    return m_aName;
 }
 
 void SwDDEFieldType::SetCmd( const OUString& _aStr )
@@ -225,46 +225,46 @@ void SwDDEFieldType::SetCmd( const OUString& _aStr )
     {
         aStr = aStr.replaceFirst("  ", " ", &nIndex);
     } while (nIndex>=0);
-    refLink->SetLinkSourceName( aStr );
+    m_RefLink->SetLinkSourceName( aStr );
 }
 
 OUString const & SwDDEFieldType::GetCmd() const
 {
-    return refLink->GetLinkSourceName();
+    return m_RefLink->GetLinkSourceName();
 }
 
 void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
 {
-    if( pNewDoc == pDoc )
+    if( pNewDoc == m_pDoc )
         return;
 
-    if( pDoc && refLink.is() )
+    if( m_pDoc && m_RefLink.is() )
     {
-        OSL_ENSURE( !nRefCnt, "How do we get the references?" );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
+        OSL_ENSURE( !m_nRefCount, "How do we get the references?" );
+        m_pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
     }
 
-    pDoc = pNewDoc;
-    if( pDoc && nRefCnt )
+    m_pDoc = pNewDoc;
+    if( m_pDoc && m_nRefCount )
     {
-        refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink.get() );
+        m_RefLink->SetVisible( m_pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
+        m_pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( m_RefLink.get() );
     }
 }
 
 void SwDDEFieldType::RefCntChgd()
 {
-    if( nRefCnt )
+    if( m_nRefCount )
     {
-        refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink.get() );
-        if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-            refLink->Update();
+        m_RefLink->SetVisible( m_pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
+        m_pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( m_RefLink.get() );
+        if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+            m_RefLink->Update();
     }
     else
     {
         Disconnect();
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
+        m_pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
     }
 }
 
@@ -280,7 +280,7 @@ void SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= GetType() == SfxLinkUpdateMode::ALWAYS;
         break;
     case FIELD_PROP_PAR5:
-        rVal <<= aExpansion;
+        rVal <<= m_aExpansion;
         break;
     default:
         assert(false);
@@ -303,7 +303,7 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
                  SfxLinkUpdateMode::ONCALL );
         break;
     case FIELD_PROP_PAR5:
-        rVal >>= aExpansion;
+        rVal >>= m_aExpansion;
         break;
     default:
         assert(false);

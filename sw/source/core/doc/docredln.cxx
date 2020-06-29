@@ -974,13 +974,13 @@ OUString SwRedlineData::GetDescr() const
     return SwResId(STR_REDLINE_ARY[static_cast<int>(GetType())]);
 }
 
-sal_uInt32 SwRangeRedline::m_nLastId = 1;
+sal_uInt32 SwRangeRedline::s_nLastId = 1;
 
 SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     m_pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
     m_pContentSect( nullptr ),
-    m_nId( m_nLastId++ )
+    m_nId( s_nLastId++ )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -992,7 +992,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     m_pRedlineData( new SwRedlineData( rData )),
     m_pContentSect( nullptr ),
-    m_nId( m_nLastId++ )
+    m_nId( s_nLastId++ )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1004,7 +1004,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
     : SwPaM( rPos ),
     m_pRedlineData( new SwRedlineData( rData )),
     m_pContentSect( nullptr ),
-    m_nId( m_nLastId++ )
+    m_nId( s_nLastId++ )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1014,7 +1014,7 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
     m_pRedlineData( new SwRedlineData( *rCpy.m_pRedlineData )),
     m_pContentSect( nullptr ),
-    m_nId( m_nLastId++ )
+    m_nId( s_nLastId++ )
 {
     m_bDelLastPara = false;
     m_bIsVisible = true;
