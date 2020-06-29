@@ -33,6 +33,7 @@
 
 #include <sal/macros.h>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
@@ -389,6 +390,9 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
     Reference< XAnnotation > xAnnotation;
     sal_uInt32 nId = 0;
     OUString sText;
+    sal_Int32 nPositionX = -1;
+    sal_Int32 nPositionY = -1;
+
     if (!pArgs)
         return;
 
@@ -404,13 +408,29 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
     if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
         sText = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
 
-    if (xAnnotation.is() && !sText.isEmpty())
+    if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_POSITION_X, true, &pPoolItem))
+        nPositionX = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+
+    if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_POSITION_Y, true, &pPoolItem))
+        nPositionY = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+
+    if (xAnnotation.is())
     {
         CreateChangeUndo(xAnnotation);
 
-        // TODO: Not allow other authors to change others' comments ?
-        Reference<XText> xText(xAnnotation->getTextRange());
-        xText->setString(sText);
+        if (nPositionX >= 0 && nPositionY >= 0)
+        {
+            double fX = convertTwipToMm100(nPositionX) / 100.0;
+            double fY = convertTwipToMm100(nPositionY) / 100.0;
+            xAnnotation->setPosition({fX, fY});
+        }
+
+        if (!sText.isEmpty())
+        {
+            // TODO: Not allow other authors to change others' comments ?
+            Reference<XText> xText(xAnnotation->getTextRange());
+            xText->setString(sText);
+        }
 
         LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
     }
