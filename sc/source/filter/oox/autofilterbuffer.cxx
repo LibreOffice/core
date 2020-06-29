@@ -39,6 +39,10 @@
 #include <addressconverter.hxx>
 #include <defnamesbuffer.hxx>
 #include <biffhelper.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <sortparam.hxx>
+#include <userlist.hxx>
 
 namespace oox::xls {
 
@@ -529,6 +533,25 @@ ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
     return aSettings;
 }
 
+// SortCondition
+
+SortCondition::SortCondition( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper ),
+    mbDescending( false )
+{
+}
+
+void SortCondition::importSortCondition( const AttributeList& rAttribs, sal_Int16 nSheet )
+{
+    OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
+    AddressConverter::convertToCellRangeUnchecked( maRange, aRangeStr, nSheet );
+
+    maSortCustomList = rAttribs.getString( XML_customList, OUString() );
+    mbDescending = rAttribs.getBool( XML_descending, false );
+}
+
+// AutoFilter
+
 AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -547,6 +570,12 @@ void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet 
     AddressConverter::convertToCellRangeUnchecked( maRange, aBinRange, nSheet );
 }
 
+void AutoFilter::importSortState( const AttributeList& rAttribs, sal_Int16 nSheet )
+{
+    OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
+    AddressConverter::convertToCellRangeUnchecked( maSortRange, aRangeStr, nSheet );
+}
+
 FilterColumn& AutoFilter::createFilterColumn()
 {
     FilterColumnVector::value_type xFilterColumn = std::make_shared<FilterColumn>( *this );
@@ -554,13 +583,22 @@ FilterColumn& AutoFilter::createFilterColumn()
     return *xFilterColumn;
 }
 
-void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFilterDesc )
+SortCondition& AutoFilter::createSortCondition()
 {
-    if( !rxFilterDesc.is() )
+    SortConditionVector::value_type xSortCondition = std::make_shared<SortCondition>( *this );
+    maSortConditions.push_back( xSortCondition );
+    return *xSortCondition;
+}
+
+void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange, sal_Int16 nSheet )
+{
+    // convert filter settings using the filter descriptor of the database range
+    const Reference<XSheetFilterDescriptor3> xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
+    if( !xFilterDesc.is() )
         return;
 
     // set some common properties for the auto filter range
-    PropertySet aDescProps( rxFilterDesc );
+    PropertySet aDescProps( xFilterDesc );
     aDescProps.setProperty( PROP_IsCaseSensitive, false );
     aDescProps.setProperty( PROP_SkipDuplicates, false );
     aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
@@ -631,11 +669,71 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
 
     // insert all filter fields to the filter descriptor
     if( !aFilterFields.empty() )
-        rxFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
+        xFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
 
     // regular expressions
     bool bUseRegExp = obNeedsRegExp.get( false );
     aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
+
+    // sort
+    if (!maSortConditions.empty())
+    {
+        const SortConditionVector::value_type& xSortConditionPointer = *maSortConditions.begin();
+        const SortCondition& rSorConditionLoaded = *xSortConditionPointer;
+
+        ScSortParam aParam;
+        aParam.bUserDef = false;
+        aParam.nUserIndex = 0;
+        aParam.bByRow = false;
+
+        ScUserList* pUserList = ScGlobal::GetUserList();
+        if (!rSorConditionLoaded.maSortCustomList.isEmpty())
+        {
+            for (size_t i=0; pUserList && i < pUserList->size(); i++)
+            {
+                const OUString aEntry((*pUserList)[i].GetString());
+                if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
+                {
+                    aParam.bUserDef = true;
+                    aParam.nUserIndex = i;
+                    break;
+                }
+            }
+        }
+
+        if (!aParam.bUserDef)
+        {
+            pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
+            aParam.bUserDef = true;
+            aParam.nUserIndex = pUserList->size()-1;
+        }
+
+        // set sort parameter if we have detected it
+        if (aParam.bUserDef)
+        {
+            SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+            if (rSorConditionLoaded.mbDescending)
+            {
+                // descending sort - need to enable 1st SortParam slot
+                assert(aParam.GetSortKeyCount() == DEFSORT);
+
+                aParam.maKeyState[0].bDoSort = true;
+                aParam.maKeyState[0].bAscending = false;
+                aParam.maKeyState[0].nField += nStartPos;
+            }
+
+            ScDocument& rDoc = getScDocument();
+            ScDBData* pDBData = rDoc.GetDBAtArea(
+                nSheet,
+                maRange.aStart.Col(), maRange.aStart.Row(),
+                maRange.aEnd.Col(), maRange.aEnd.Row());
+
+            if (pDBData)
+                pDBData->SetSortParam(aParam);
+            else
+                OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
+        }
+    }
 }
 
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
@@ -664,7 +762,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
     // use the same name for the database range as used for the defined name '_FilterDatabase'
     Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
     // first, try to create an auto filter
-    bool bHasAutoFilter = finalizeImport( xDatabaseRange );
+    bool bHasAutoFilter = finalizeImport( xDatabaseRange, nSheet );
     // no success: try to create an advanced filter
     if( bHasAutoFilter || !xDatabaseRange.is() )
         return;
@@ -710,7 +808,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
                                                aCriteriaRange.aEnd.Col(), aCriteriaRange.aEnd.Row() ));
 }
 
-bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )
+bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange, sal_Int16 nSheet )
 {
     AutoFilter* pAutoFilter = getActiveAutoFilter();
     if( pAutoFilter && rxDatabaseRange.is() ) try
@@ -718,9 +816,9 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
         // the property 'AutoFilter' enables the drop-down buttons
         PropertySet aRangeProps( rxDatabaseRange );
         aRangeProps.setProperty( PROP_AutoFilter, true );
-        // convert filter settings using the filter descriptor of the database range
-        Reference< XSheetFilterDescriptor3 > xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
-        pAutoFilter->finalizeImport( xFilterDesc );
+
+        pAutoFilter->finalizeImport( rxDatabaseRange, nSheet );
+
         // return true to indicate enabled autofilter
         return true;
     }
