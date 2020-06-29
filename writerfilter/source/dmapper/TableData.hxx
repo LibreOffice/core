@@ -115,13 +115,19 @@ class RowData final : public virtual SvRefBase
     */
     mutable TablePropertyMapPtr mpProperties;
 
+    sal_uInt32 m_nGridBefore; ///< number of grid columns in the parent table's table grid which must be skipped before the contents of this table row are added to the parent table
+
 public:
     typedef tools::SvRef<RowData> Pointer_t;
 
-    RowData() {}
+    RowData()
+        : m_nGridBefore(0)
+    {
+    }
 
     RowData(const RowData& rRowData)
     : SvRefBase(), mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
+        , m_nGridBefore(rRowData.m_nGridBefore)
     {
     }
 
@@ -226,6 +232,9 @@ public:
     {
         return mpProperties;
     }
+
+    sal_uInt32 getGridBefore() { return m_nGridBefore; }
+    void setGridBefore(sal_uInt32 nSkipGrids) { m_nGridBefore = nSkipGrids; }
 };
 
 /**

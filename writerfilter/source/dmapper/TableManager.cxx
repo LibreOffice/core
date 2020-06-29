@@ -58,6 +58,16 @@ void TableManager::endOfRowAction()
 {
 }
 
+sal_uInt32 TableManager::getCurrentGridBefore()
+{
+    return mTableDataStack.top()->getCurrentRow()->getGridBefore();
+}
+
+void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
+{
+    mTableDataStack.top()->getCurrentRow()->setGridBefore(nSkipGrids);
+}
+
 void TableManager::endOfCellAction()
 {
 }
@@ -371,6 +381,7 @@ void TableManager::startLevel()
             pTableData2->addCell(mpUnfinishedRow->getCellStart(i), mpUnfinishedRow->getCellProperties(i));
             pTableData2->endCell(mpUnfinishedRow->getCellEnd(i));
         }
+        pTableData2->getCurrentRow()->setGridBefore(mpUnfinishedRow->getGridBefore());
         mpUnfinishedRow.clear();
     }
 

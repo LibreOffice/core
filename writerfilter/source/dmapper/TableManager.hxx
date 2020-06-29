@@ -465,6 +465,8 @@ public:
      */
     bool isIgnore() const;
 
+    sal_uInt32 getCurrentGridBefore();
+    void setCurrentGridBefore( sal_uInt32 nSkipGrids );
 
     void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
     void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);
