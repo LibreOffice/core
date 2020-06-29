@@ -368,19 +368,15 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     }
 
     const Sequence<OUString> aPreferredImpls( aAvailImplsMatch->second );
-    const OUString* pCurrImpl = aPreferredImpls.getConstArray();
-    const OUString* const pEndImpl = pCurrImpl + aPreferredImpls.getLength();
+    const OUString* pCurrImpl = aPreferredImpls.begin();
+    const OUString* const pEndImpl = aPreferredImpls.end();
 
     const Sequence<OUString> aAAImpls( aAAImplsMatch->second );
-    const OUString* const pFirstAAImpl = aAAImpls.getConstArray();
-    const OUString* const pEndAAImpl = pFirstAAImpl + aAAImpls.getLength();
 
     const Sequence<OUString> aAccelImpls( aAccelImplsMatch->second );
-    const OUString* const pFirstAccelImpl = aAccelImpls.getConstArray();
-    const OUString* const pEndAccelImpl = pFirstAccelImpl + aAccelImpls.getLength();
 
     // force last entry from impl list, if config flag set
-    if( bForceLastEntry )
+    if (bForceLastEntry && pCurrImpl != pEndImpl)
         pCurrImpl = pEndImpl-1;
 
     while( pCurrImpl != pEndImpl )
@@ -390,8 +386,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         // check whether given canvas service is listed in the
         // sequence of "accelerated canvas implementations"
         const bool bIsAcceleratedImpl(
-            std::any_of(pFirstAccelImpl,
-                         pEndAccelImpl,
+            std::any_of(aAccelImpls.begin(), aAccelImpls.end(),
                          [&aCurrName](OUString const& src)
                          { return aCurrName == src.trim(); }
                 ));
@@ -399,8 +394,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         // check whether given canvas service is listed in the
         // sequence of "antialiasing canvas implementations"
         const bool bIsAAImpl(
-            std::any_of(pFirstAAImpl,
-                         pEndAAImpl,
+            std::any_of(aAAImpls.begin(), aAAImpls.end(),
                          [&aCurrName](OUString const& src)
                          { return aCurrName == src.trim(); }
                 ));
@@ -413,8 +407,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         // http://en.wikipedia.org/wiki/Truth_table#Logical_implication
         if( (!bIsAAImpl || bUseAAEntry) && (!bIsAcceleratedImpl || bUseAcceleratedEntry) )
         {
-            Reference<XInterface> xCanvas(
-                use( pCurrImpl->trim(), args, xContext ) );
+            Reference<XInterface> xCanvas(use(aCurrName, args, xContext));
 
             if(xCanvas.is())
             {
@@ -422,13 +415,12 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                 {
                     // cache entry exists, replace dysfunctional
                     // implementation name
-                    aMatch->second = pCurrImpl->trim();
+                    aMatch->second = aCurrName;
                 }
                 else
                 {
                     // new service name, add new cache entry
-                    m_aCachedImplementations.emplace_back(serviceName,
-                                                                      pCurrImpl->trim());
+                    m_aCachedImplementations.emplace_back(serviceName, aCurrName);
                 }
 
                 return xCanvas;
