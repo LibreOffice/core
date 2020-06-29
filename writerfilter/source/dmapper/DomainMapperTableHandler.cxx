@@ -758,6 +758,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             }
         }
 
+        // Note that this is intentionally called "cell" and not "column".
+        // Don't make the mistake that all cell x's will be in the same column.
+        // Merged cells (grid span) in a row will affect the actual column. (fake cells were added to handle gridBefore)
         sal_Int32 nCell = 0;
         pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
         beans::PropertyValues* pSingleCellProperties = pCellProperties[nRow].getArray();
@@ -905,10 +908,20 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // tdf#129452 Checking if current cell is vertically merged with all the other cells below to the bottom.
                 // This must be done in order to apply the bottom border of the table to the first cell in a vertical merge.
                 bool bMergedVertically = bool(m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE));
-
-                for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
-                    if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nCell) )
-                        bMergedVertically = bool(m_aCellProperties[i][nCell]->getProperty(PROP_VERTICAL_MERGE));
+                if ( bMergedVertically )
+                {
+                    const sal_uInt32 nColumn = m_rDMapper_Impl.getTableManager().findColumn(nRow, nCell);
+                    for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
+                    {
+                        const sal_uInt32 nColumnCell = m_rDMapper_Impl.getTableManager().findColumnCell(i, nColumn);
+                        if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nColumnCell) )
+                        {
+                            bMergedVertically = bool(m_aCellProperties[i][nColumnCell]->getProperty(PROP_VERTICAL_MERGE));
+                        }
+                        else
+                            bMergedVertically = false;
+                    }
+                }
 
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, bMergedVertically );
 
@@ -1231,6 +1244,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 TableParagraphVectorPtr pTableParagraphs = m_rDMapper_Impl.getTableManager().getCurrentParagraphs();
                 for (size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
                 {
+                    // Note that this is "cell" since you must not treat it as "column".
                     for (size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
                     {
                         auto rStartPara = m_aTableRanges[nRow][nCell][0];
