@@ -272,17 +272,6 @@ void ComplexToolbarController::addNotifyInfo(
     Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );
 }
 
-sal_Int32 ComplexToolbarController::getFontSizePixel( const vcl::Window* pWindow )
-{
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    const vcl::Font&     rFont     = rSettings.GetAppFont();
-
-    // Calculate height of the application font used by window
-    sal_Int32 nHeight = sal_Int32( rFont.GetFontHeight() );
-    ::Size aPixelSize = pWindow->LogicToPixel(::Size(0, nHeight), MapMode(MapUnit::MapAppFont));
-    return aPixelSize.Height();
-}
-
 uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromCommand( const OUString& aCommand ) const
 {
     uno::Reference< frame::XDispatch > xDispatch;

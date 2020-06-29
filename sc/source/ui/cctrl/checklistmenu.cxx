@@ -394,18 +394,6 @@ void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect)
     pDockingManager->StartPopupMode(mxFrame, rRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
 }
 
-void ScCheckListMenuControl::ensureSubMenuNotVisible()
-{
-    if (mnSelectedMenu < maMenuItems.size() &&
-        maMenuItems[mnSelectedMenu].mxSubMenuWin &&
-        maMenuItems[mnSelectedMenu].mxSubMenuWin->IsVisible())
-    {
-        maMenuItems[mnSelectedMenu].mxSubMenuWin->get_widget().ensureSubMenuNotVisible();
-    }
-
-    EndPopupMode();
-}
-
 void ScCheckListMenuControl::terminateAllPopupMenus()
 {
     EndPopupMode();

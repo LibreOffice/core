@@ -364,7 +364,6 @@ public:
     bool HasNewCondFormatData() const { return mbHasNewCondFormatData; }
 
 private:
-    void AddStyleRange(const css::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
 
     void ExamineDefaultStyle();

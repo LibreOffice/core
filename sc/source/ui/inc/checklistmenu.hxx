@@ -212,12 +212,6 @@ private:
      */
     void terminateAllPopupMenus();
 
-    /**
-     * Dismiss any visible child submenus when a menu item of a parent menu is
-     * selected.
-     */
-    void ensureSubMenuNotVisible();
-
     void endSubMenu(ScCheckListMenuControl& rSubMenu);
 
     struct SubMenuItemData;

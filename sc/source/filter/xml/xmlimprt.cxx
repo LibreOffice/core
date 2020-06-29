@@ -1221,22 +1221,6 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
     }
 }
 
-void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
-{
-    if (!mbImportStyles)
-        return;
-
-    if (!xSheetCellRanges.is() && GetModel().is())
-    {
-        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-        if (xMultiServiceFactory.is())
-            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY));
-        OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
-
-    }
-    xSheetCellRanges->addRangeAddress(rCellRange, false);
-}
-
 void ScXMLImport::SetStyleToRanges()
 {
     if (!mbImportStyles)
