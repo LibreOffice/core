@@ -5729,10 +5729,6 @@ find_winsdk()
 
 find_msms()
 {
-    if test "$with_package_format" != msi; then
-        return
-    fi
-
     AC_MSG_CHECKING([for MSVC merge modules directory])
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     case "$VCVER" in
@@ -7433,7 +7429,12 @@ AC_ARG_WITH(ucrt-dir,
 UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
-    find_msms
+    for i in $PKGFORMAT; do
+        if test "$i" = msi; then
+            find_msms
+            break
+        fi
+    done
     MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
     MSVC_DLLS="$msvcdlls"
     MSM_PATH=`win_short_path_for_make "$msmdir"`
