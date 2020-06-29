@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AddTargetDialog">
@@ -10,7 +10,7 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -228,7 +228,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="checkboxCaseSensitive">
-                <property name="label" translatable="yes" context="addtargetdialog|checkboxCaseSensitive">Case Sensitive</property>
+                <property name="label" translatable="yes" context="addtargetdialog|checkboxCaseSensitive">Match Case</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
