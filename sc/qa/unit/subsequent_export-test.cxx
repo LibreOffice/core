@@ -206,6 +206,12 @@ public:
     void testTdf129985();
     void testTdf73063();
 
+    xmlDocUniquePtr testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+                                 sal_Int32 nDestFormat);
+    void testTdf95640_ods_to_xlsx();
+    void testTdf95640_ods_to_xlsx_with_standard_list();
+    void testTdf95640_xlsx_to_xlsx();
+
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
     void testRefStringUnspecified();
@@ -364,6 +370,9 @@ public:
     CPPUNIT_TEST(testTdf55417);
     CPPUNIT_TEST(testTdf129985);
     CPPUNIT_TEST(testTdf73063);
+    CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
+    CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
+    CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4290,6 +4299,60 @@ void ScExportTest::testTdf73063()
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
 
     xDocSh->DoClose();
+}
+
+xmlDocUniquePtr ScExportTest::testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+                                           sal_Int32 nDestFormat)
+{
+    ScDocShellRef xShell = loadDoc(rFileName, nSourceFormat);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), nDestFormat);
+    xShell->DoClose();
+
+    return XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+}
+
+void ScExportTest::testTdf95640_ods_to_xlsx()
+{
+    // Roundtripping sort options with user defined list to XLSX
+    xmlDocUniquePtr pDoc = testTdf95640("tdf95640.", FORMAT_ODS, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec");
+}
+
+void ScExportTest::testTdf95640_ods_to_xlsx_with_standard_list()
+{
+    // Roundtripping sort options with user defined list to XLSX
+    xmlDocUniquePtr pDoc = testTdf95640("tdf95640_standard_list.", FORMAT_ODS, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
+}
+
+void ScExportTest::testTdf95640_xlsx_to_xlsx()
+{
+    // XLSX Roundtripping sort options with custom sort list - note
+    // that compared to ODS source documents above, here we _actually_
+    // can use custom lists (beyond the global user defines), like
+    // low, medium, high
+    xmlDocUniquePtr pDoc = testTdf95640("tdf95640.", FORMAT_XLSX, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Low,Medium,High");
 }
 
 void ScExportTest::testTdf88657ODS()

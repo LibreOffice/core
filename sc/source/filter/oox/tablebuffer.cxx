@@ -140,7 +140,7 @@ void Table::applyAutoFilters()
         PropertySet aDocProps( getDocument() );
         Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
         Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
-        maAutoFilters.finalizeImport( xDatabaseRange );
+        maAutoFilters.finalizeImport( xDatabaseRange, maModel.maRange.aStart.Tab() );
     }
     catch( Exception& )
     {

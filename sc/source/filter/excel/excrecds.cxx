@@ -34,6 +34,8 @@
 #include <oox/token/tokens.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
+#include <sortparam.hxx>
+#include <userlist.hxx>
 #include <root.hxx>
 
 #include <xeescher.hxx>
@@ -943,6 +945,45 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
 
         if (maFilterList.IsEmpty () && !bConflict)
             mbAutoFilter = true;
+
+        // get sort criteria
+        {
+            ScSortParam aSortParam;
+            pData->GetSortParam( aSortParam );
+
+            if (aSortParam.bUserDef)
+            {
+                // get sorted area without headers
+                maSortRef = ScRange(
+                    aParam.nCol1, aParam.nRow1 + (aSortParam.bHasHeader? 1 : 0), aParam.nTab,
+                    aParam.nCol2, aParam.nRow2, aParam.nTab );
+
+                // get sorted columns with custom lists
+                ScUserList* pList = ScGlobal::GetUserList();
+                const ScUserListData& rData = (*pList)[aSortParam.nUserIndex];
+
+                // get column index and sorting direction
+                SCCOLROW nField = 0;
+                bool bSortAscending=true;
+                for (const auto & rKey : aSortParam.maKeyState)
+                {
+                    if (rKey.bDoSort)
+                    {
+                        nField = rKey.nField;
+                        bSortAscending = rKey.bAscending;
+                        break;
+                    }
+                }
+
+                // remember sort criteria
+                const ScRange aSortedColumn(
+                    nField, aParam.nRow1 + (aSortParam.bHasHeader? 1 : 0), aParam.nTab,
+                    nField, aParam.nRow2, aParam.nTab );
+                const OUString aItemList = rData.GetString();
+
+                maSortCustomList.emplace_back(aSortedColumn, aItemList, !bSortAscending);
+            }
+        }
     }
 }
 
@@ -1005,6 +1046,29 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst, XML_sortState
     if( !maFilterList.IsEmpty() )
         maFilterList.SaveXml( rStrm );
+
+    if (!maSortCustomList.empty())
+    {
+        rWorksheet->startElement(XML_sortState, XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maSortRef));
+
+        for (const auto & rSortCriteria : maSortCustomList)
+        {
+            if (std::get<2>(rSortCriteria))
+                rWorksheet->singleElement(XML_sortCondition,
+                                          XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
+                                                                          std::get<0>(rSortCriteria)),
+                                          XML_descending, "1",
+                                          XML_customList, std::get<1>(rSortCriteria).toUtf8().getStr());
+            else
+                rWorksheet->singleElement(XML_sortCondition,
+                                          XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
+                                                                          std::get<0>(rSortCriteria)),
+                                          XML_customList, std::get<1>(rSortCriteria).toUtf8().getStr());
+        }
+
+        rWorksheet->endElement(XML_sortState);
+    }
+
     rWorksheet->endElement( XML_autoFilter );
 }
 
