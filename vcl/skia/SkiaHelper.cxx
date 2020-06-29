@@ -36,6 +36,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <SkCanvas.h>
 #include <SkPaint.h>
 #include <SkSurface.h>
+#include <SkGraphics.h>
 #include <skia_compiler.hxx>
 
 #ifdef DBG_UTIL
@@ -237,6 +238,7 @@ bool isVCLSkiaEnabled()
     if (bForceSkia && bSupportsVCLSkia)
     {
         bRet = true;
+        SkGraphics::Init();
         // don't actually block if blacklisted, but log it if enabled, and also get the vendor id
         checkDeviceBlacklisted(true);
     }
@@ -260,7 +262,10 @@ bool isVCLSkiaEnabled()
             bEnable = false;
 
         if (bEnable)
+        {
+            SkGraphics::Init();
             checkDeviceBlacklisted(); // switch to raster if driver is blacklisted
+        }
 
         bRet = bEnable;
     }
