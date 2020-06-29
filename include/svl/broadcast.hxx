@@ -80,13 +80,14 @@ private:
     /// When the broadcaster is about to die, collect listeners that asked for removal.
     mutable ListenersType maDestructedListeners;
 
+    mutable sal_Int32 mnEmptySlots;
+    // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
+    mutable sal_Int32 mnListenersFirstUnsorted;
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
     bool mbDisposing:1;
     // Whether maDestructedListeners is sorted or not.
     mutable bool mbDestNormalized:1;
-    // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
-    mutable size_t mnListenersFirstUnsorted;
 };
 
 
