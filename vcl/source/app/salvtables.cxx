@@ -5311,7 +5311,7 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, ActivateHdl, Edit&, bool)
 {
     // tdf#122348 return pressed to end dialog
     signal_value_changed();
-    return false;
+    return m_aActivateHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, UpDownHdl, SpinField&, void) { signal_value_changed(); }
