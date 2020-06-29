@@ -341,7 +341,7 @@ LibreOffice was based on OpenOffice.org</property>
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="btnReleaseNotes">
-                    <property name="label" translatable="yes" context="aboutdialog|description">Release Notes</property>
+                    <property name="label" translatable="yes" context="aboutdialog|releasenotes">Release Notes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
