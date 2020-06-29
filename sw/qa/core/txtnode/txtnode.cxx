@@ -11,6 +11,10 @@
 
 #include <vcl/gdimtf.hxx>
 
+#include <fmtanchr.hxx>
+#include <frameformats.hxx>
+#include <wrtsh.hxx>
+
 static char const DATA_DIRECTORY[] = "/sw/qa/core/txtnode/data/";
 
 /// Covers sw/source/core/txtnode/ fixes.
@@ -36,6 +40,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     // - Actual  : true
     // i.e. the glyph was rotated further, so it was upside down.
     assertXPath(pXmlDoc, "//font[1]", "vertical", "false");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
+{
+    load(DATA_DIRECTORY, "textbox-copy-anchor.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwDoc aClipboard;
+    pWrtShell->SelAll();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Paste(&aClipboard);
+
+    const SwFrameFormats& rFormats = *pShell->GetDoc()->GetSpzFrameFormats();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 6
+    // i.e. 2 fly frames were copied twice.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rFormats.size());
+
+    SwPosition aDrawAnchor1 = *rFormats[0]->GetAnchor().GetContentAnchor();
+    SwPosition aFlyAnchor1 = *rFormats[1]->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT_EQUAL(aFlyAnchor1.nNode, aDrawAnchor1.nNode);
+    SwPosition aDrawAnchor2 = *rFormats[2]->GetAnchor().GetContentAnchor();
+    SwPosition aFlyAnchor2 = *rFormats[3]->GetAnchor().GetContentAnchor();
+    // This also failed, aFlyAnchor2 was wrong, as it got out of sync with aDrawAnchor2.
+    CPPUNIT_ASSERT_EQUAL(aFlyAnchor2.nNode, aDrawAnchor2.nNode);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

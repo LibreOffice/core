@@ -3788,6 +3788,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             }
         }
 
+        // Ignore TextBoxes, they are already handled in
+        // sw::DocumentLayoutManager::CopyLayoutFormat().
+        if (SwTextBoxHelper::isTextBox(it->GetFormat(), RES_FLYFRMFMT))
+        {
+            it = aSet.erase(it);
+            continue;
+        }
+
         // Copy the format and set the new anchor
         aVecSwFrameFormat.push_back( pDest->getIDocumentLayoutAccess().CopyLayoutFormat( *(*it).GetFormat(),
                 aAnchor, false, true ) );
