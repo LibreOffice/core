@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acf19b79_af67dda7",
+        "filename": "include/xmloff/xmltoken.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-06-29T13:08:17Z",
+      "side": 1,
+      "message": "I would keep the list alphabetically ordered, which means XML_SHADOW_BLUR comes before XML_SHADOW_COLOR.",
+      "revId": "7b8e405815f4945091e2553b1ce5d1929b813fef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67edd64b_80140823",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-06-29T13:08:17Z",
+      "side": 1,
+      "message": "Same here. I suggest to keep is alphabetically ordered.",
+      "revId": "7b8e405815f4945091e2553b1ce5d1929b813fef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
