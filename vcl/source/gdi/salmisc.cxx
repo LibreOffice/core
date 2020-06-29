@@ -26,11 +26,6 @@
 #include <tools/helpers.hxx>
 #include <memory>
 
-#define IMPL_CASE_GET_FORMAT( Format )                          \
-case( ScanlineFormat::Format ):                                 \
-    pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;       \
-break
-
 #define IMPL_CASE_SET_FORMAT( Format, BitCount )                \
 case( ScanlineFormat::Format ):                                 \
 {                                                               \
@@ -270,29 +265,14 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     std::unique_ptr<BitmapBuffer> pDstBuffer(new BitmapBuffer);
 
     // set function for getting pixels
-    switch( RemoveScanline( rSrcBuffer.mnFormat ) )
+    pFncGetPixel = BitmapReadAccess::GetPixelFunction( rSrcBuffer.mnFormat );
+    if( !pFncGetPixel )
     {
-        IMPL_CASE_GET_FORMAT( N1BitMsbPal );
-        IMPL_CASE_GET_FORMAT( N1BitLsbPal );
-        IMPL_CASE_GET_FORMAT( N4BitMsnPal );
-        IMPL_CASE_GET_FORMAT( N4BitLsnPal );
-        IMPL_CASE_GET_FORMAT( N8BitPal );
-        IMPL_CASE_GET_FORMAT( N8BitTcMask );
-        IMPL_CASE_GET_FORMAT( N24BitTcBgr );
-        IMPL_CASE_GET_FORMAT( N24BitTcRgb );
-        IMPL_CASE_GET_FORMAT( N32BitTcAbgr );
-        IMPL_CASE_GET_FORMAT( N32BitTcArgb );
-        IMPL_CASE_GET_FORMAT( N32BitTcBgra );
-        IMPL_CASE_GET_FORMAT( N32BitTcRgba );
-        IMPL_CASE_GET_FORMAT( N32BitTcMask );
-
-        default:
-            // should never come here
-            // initialize pFncGetPixel to something valid that is
-            // least likely to crash
-            pFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;
-            OSL_FAIL( "unknown read format" );
-        break;
+        // should never come here
+        // initialize pFncGetPixel to something valid that is
+        // least likely to crash
+        pFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;
+        OSL_FAIL( "unknown read format" );
     }
 
     // set function for setting pixels
