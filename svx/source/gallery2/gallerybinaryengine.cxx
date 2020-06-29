@@ -22,9 +22,13 @@
 #include <vcl/salctype.hxx>
 #include <galobj.hxx>
 
+#include <sal/log.hxx>
+
 #include <unotools/ucbstreamhelper.hxx>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/diagnose_ex.h>
 
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 {
@@ -32,6 +36,14 @@ static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
     aURL.setExtension(rExt);
     return FileExists(aURL);
 }
+
+void GalleryBinaryEngine::galleryThemeInit(bool bReadOnly)
+{
+    SAL_WARN_IF(aSvDrawStorageRef.is(), "svx", "SotStorage is already initialized");
+    ImplCreateSvDrawStorage(bReadOnly);
+}
+
+void GalleryBinaryEngine::galleryThemeDestroy() { aSvDrawStorageRef.clear(); }
 
 INetURLObject GalleryBinaryEngine::ImplGetURLIgnoreCase(const INetURLObject& rURL)
 {
@@ -331,6 +343,32 @@ GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObjec
     }
 
     return aNewURL;
+}
+
+void GalleryBinaryEngine::ImplCreateSvDrawStorage(bool bReadOnly)
+{
+    try
+    {
+        aSvDrawStorageRef
+            = new SotStorage(false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                             bReadOnly ? StreamMode::READ : StreamMode::STD_READWRITE);
+        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+        if ((aSvDrawStorageRef->GetError() != ERRCODE_NONE) && !bReadOnly)
+            aSvDrawStorageRef = new SotStorage(
+                false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                StreamMode::READ);
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
+        TOOLS_WARN_EXCEPTION("svx", "failed to open: " << GetSdvURL().GetMainURL(
+                                                              INetURLObject::DecodeMechanism::NONE)
+                                                       << "due to");
+    }
+}
+
+const tools::SvRef<SotStorage>& GalleryBinaryEngine::GetSvDrawStorage() const
+{
+    return aSvDrawStorageRef;
 }
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)

@@ -53,6 +53,8 @@ public:
     static std::unique_ptr<GalleryBinaryEngine> createGalleryBinaryEngine();
     const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
 
+    void callGalleryThemeInit();
+
     const OUString&         GetThemeName() const { return aName; }
 
     const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngine->GetThmURL(); }
