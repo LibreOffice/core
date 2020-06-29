@@ -818,8 +818,8 @@ public:
                                                   bool bRemoveAutoFilter = false );
     const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
-    const ScDBData*              GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-    ScDBData*                    GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 

@@ -266,6 +266,29 @@ ScUserList::ScUserList()
                 maData.push_back( std::make_unique<ScUserListData>( aMonthLong ));
         }
     }
+
+    // Custom Sort Order: "Low, Medium, High"
+    {
+        OUStringBuffer aBufferLMH(30);
+        aBufferLMH.append("Low");
+        aBufferLMH.append(cDelimiter);
+        aBufferLMH.append("Medium");
+        aBufferLMH.append(cDelimiter);
+        aBufferLMH.append("High");
+
+        OUStringBuffer aBufferHML(30);
+        aBufferHML.append("High");
+        aBufferHML.append(cDelimiter);
+        aBufferHML.append("Medium");
+        aBufferHML.append(cDelimiter);
+        aBufferHML.append("Low");
+
+        OUString aLMH = aBufferLMH.makeStringAndClear();
+        OUString aHML = aBufferHML.makeStringAndClear();
+
+        maData.push_back( std::make_unique<ScUserListData>( aLMH ));
+        maData.push_back( std::make_unique<ScUserListData>( aHML ));
+    }
 }
 
 ScUserList::ScUserList(const ScUserList& rOther)
