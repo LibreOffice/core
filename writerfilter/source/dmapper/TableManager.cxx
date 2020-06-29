@@ -69,6 +69,49 @@ void TableManager::addCurrentGridSpan( sal_uInt32 nGridSpan )
     mTableDataStack.top()->getCurrentRow()->addGridSpan( nGridSpan );
 }
 
+// The use of gridBefore is practically theoretical, so hopefully the implementation is correct.
+sal_uInt32 TableManager::findColumn( const sal_uInt32 nRow, const sal_uInt32 nCell )
+{
+    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    if ( !pRow || nCell > pRow->getCellCount() || nCell > pRow->getGridSpans().size() )
+        return SAL_MAX_UINT32;
+
+    // The gridSpans provide a one-based index, so add up all the spans of the PREVIOUS columns,
+    // and that result will provide the first possible zero-based number for the desired column.
+    sal_uInt32 nColumn = 0;
+    for ( sal_uInt32 n = 0; n < pRow->getGridBefore() + nCell; ++n )
+        nColumn += pRow->getGridSpans()[n];
+    return nColumn;
+}
+
+sal_uInt32 TableManager::findColumnCell( const sal_uInt32 nRow, const sal_uInt32 nCol )
+{
+    // The columns consists of gridBefore (gridspan=1, not defined by any cell) + grids spaned by each cell + gridAfter.
+    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    if ( !pRow || nCol < pRow->getGridBefore() )
+        return SAL_MAX_UINT32;
+
+    const sal_uInt32 nMaxCell = pRow->getCellCount();
+    sal_uInt32 nCell = 0;
+    sal_uInt32 nGrids = 0;
+    // The gridSpans give us a one-based index, so, but requested column is zero-based - so keep that in mind.
+    // Every cell and gridBefore must have a span. Columns in gridBefore have already returned SAL_MAX_UINT32.
+    for ( const auto& rSpan : pRow->getGridSpans() )
+    {
+        nGrids += rSpan;
+        if ( nCol < nGrids )
+            return nCell;
+
+        // each gridBefore has a span of 1, and is not defined by a cell.
+        if ( nGrids > pRow->getGridBefore() )
+            ++nCell;
+
+        if ( nCell == nMaxCell ) // must be in gridAfter or invalid column request
+            break;
+    }
+    return SAL_MAX_UINT32;
+}
+
 void TableManager::endOfRowAction() {}
 
 void TableManager::endOfCellAction() {}

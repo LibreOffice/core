@@ -908,10 +908,18 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // tdf#129452 Checking if current cell is vertically merged with all the other cells below to the bottom.
                 // This must be done in order to apply the bottom border of the table to the first cell in a vertical merge.
                 bool bMergedVertically = bool(m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE));
-
-                for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
-                    if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nCell) )
-                        bMergedVertically = bool(m_aCellProperties[i][nCell]->getProperty(PROP_VERTICAL_MERGE));
+                if ( bMergedVertically )
+                {
+                    const sal_uInt32 nColumn = m_rDMapper_Impl.getTableManager().findColumn(nRow, nCell);
+                    for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
+                    {
+                        const sal_uInt32 nColumnCell = m_rDMapper_Impl.getTableManager().findColumnCell(i, nColumn);
+                        if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nColumnCell) )
+                        {
+                            bMergedVertically = bool(m_aCellProperties[i][nColumnCell]->getProperty(PROP_VERTICAL_MERGE));
+                        }
+                    }
+                }
 
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, bMergedVertically );
 
