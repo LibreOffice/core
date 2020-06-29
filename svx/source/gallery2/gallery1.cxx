@@ -169,6 +169,11 @@ std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryBinaryEngin
     return pGalleryBinaryEngine;
 }
 
+void GalleryThemeEntry::callGalleryThemeInit()
+{
+    getGalleryBinaryEngine()->galleryThemeInit(IsReadOnly());
+}
+
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)

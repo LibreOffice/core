@@ -70,7 +70,7 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     , bDragging(false)
     , bAbortActualize(false)
 {
-    ImplCreateSvDrawStorage();
+    pThm->callGalleryThemeInit();
 }
 
 GalleryTheme::~GalleryTheme()
@@ -85,24 +85,7 @@ GalleryTheme::~GalleryTheme()
         pEntry.reset();
     }
     aObjectList.clear();
-
-}
-
-void GalleryTheme::ImplCreateSvDrawStorage()
-{
-    try
-    {
-        aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), pThm->IsReadOnly() ? StreamMode::READ : StreamMode::STD_READWRITE );
-        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
-        if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-            aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
-    }
-    catch (const css::ucb::ContentCreationException&)
-    {
-        TOOLS_WARN_EXCEPTION("svx", "failed to open: "
-                  << GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE)
-                  << "due to");
-    }
+    pThm->getGalleryBinaryEngine()->galleryThemeDestroy();
 }
 
 const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rURL )
@@ -237,7 +220,7 @@ void GalleryTheme::RemoveObject(sal_uInt32 nPos)
         KillFile( GetSdgURL() );
 
     if( SgaObjKind::SvDraw == pEntry->eObjKind )
-        aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
     pEntry.reset();
@@ -330,10 +313,10 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         }
         else
         {
-            if ( aSvDrawStorageRef.is() )
+            if ( pThm->getGalleryBinaryEngine()->GetSvDrawStorage().is() )
             {
                 const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
-                tools::SvRef<SotStorageStream>  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
+                tools::SvRef<SotStorageStream>  pIStm = pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->OpenSotStream( aStmName, StreamMode::READ );
 
                 if( pIStm.is() && !pIStm->GetError() )
                 {
@@ -417,8 +400,8 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     try
     {
         tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::STD_READWRITE ) );
-        aSvDrawStorageRef->CopyTo( aTempStorageRef.get() );
-        nStorErr = aSvDrawStorageRef->GetError();
+        pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->CopyTo( aTempStorageRef.get() );
+        nStorErr = pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->GetError();
     }
     catch (const css::ucb::ContentCreationException&)
     {
@@ -430,9 +413,10 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
     if( nStorErr == ERRCODE_NONE )
     {
-        aSvDrawStorageRef.clear();
+        auto aSvDrawStorage = pThm->getGalleryBinaryEngine()->GetSvDrawStorage();
+        aSvDrawStorage.clear();
         CopyFile( aTmpURL, GetSdvURL() );
-        ImplCreateSvDrawStorage();
+        pThm->callGalleryThemeInit();
     }
 
     KillFile( aTmpURL );
@@ -688,7 +672,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
         const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( GetSvDrawStorage() );
+        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
 
         if( xStor.is() )
         {
@@ -710,7 +694,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
 {
     INetURLObject   aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::SvDraw, GetParent()->GetUserURL(), aObjectList) );
-    tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
+    tools::SvRef<SotStorage>    xStor(pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
     bool            bRet = false;
 
     if( xStor.is() )
@@ -760,7 +744,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
         const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( GetSvDrawStorage() );
+        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
 
         if( xStor.is() )
         {
@@ -806,7 +790,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
 bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream, sal_uInt32 nInsertPos)
 {
     INetURLObject   aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::SvDraw, GetParent()->GetUserURL(), aObjectList ) );
-    tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
+    tools::SvRef<SotStorage>    xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
     bool            bRet = false;
 
     if( xStor.is() )
@@ -1254,11 +1238,6 @@ sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
 void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
 bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
-
-const tools::SvRef<SotStorage>& GalleryTheme::GetSvDrawStorage() const
-{
-    return aSvDrawStorageRef;
-}
 
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
 
