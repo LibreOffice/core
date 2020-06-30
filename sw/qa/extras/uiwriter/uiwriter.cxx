@@ -318,6 +318,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf108524();
+    void testTdf134021();
 #if HAVE_MORE_FONTS
     void testTableInSection();
     void testTableInNestedSection();
@@ -525,6 +526,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
+    CPPUNIT_TEST(testTdf134021);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
@@ -6101,6 +6103,34 @@ void SwUiWriterTest::testTdf108524()
     // This was 0, section wasn't split, instead it was only on the first page
     // and it was cut off.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testTdf134021()
+{
+    load(DATA_DIRECTORY, "tdf134021.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
+
+    lcl_dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
 }
 
 void SwUiWriterTest::testLinesInSectionInTable()
