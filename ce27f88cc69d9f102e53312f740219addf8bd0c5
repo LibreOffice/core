@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b80c79d0_3ba37878",
+        "filename": "config_host.mk.in",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "Indeed, removed now, together with the replacement of it in configure.ac.",
+      "parentUuid": "1af20e46_ccf1f9c2",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e4e43ba_e04ba840",
         "filename": "configure.ac",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f519c9e2_7e1b1503",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "The old way worked as well (that\u0027s how the product name works), but you\u0027re right that your proposal is more readable. Done.",
+      "parentUuid": "2e4e43ba_e04ba840",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "fe98af76_d4427785",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "Yes, I just changed it.",
+      "parentUuid": "28d5573d_58f5685d",
+      "range": {
+        "startLine": 94,
+        "startChar": 6,
+        "endLine": 94,
+        "endChar": 13
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3fbdcbe_22a6b51a",
         "filename": "cui/source/dialogs/about.cxx",
         "patchSetId": 7
@@ -73,6 +133,24 @@
       "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a50f3f40_5528ed72",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "Most of our source files end with a newline, this was missing here. But you\u0027re right that doesn\u0027t really belong to the change, I\u0027ll do that separately instead. So removed for now.",
+      "parentUuid": "e3fbdcbe_22a6b51a",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "34a348df_238f7711",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "Right, changed.",
+      "parentUuid": "722d42d3_8f4341a8",
+      "range": {
+        "startLine": 521,
+        "startChar": 8,
+        "endLine": 521,
+        "endChar": 29
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc254ffc_e873975d",
         "filename": "framework/source/fwe/helper/titlehelper.cxx",
         "patchSetId": 7
@@ -119,6 +221,30 @@
       "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6c6abcd_8eb7335a",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T15:44:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc254ffc_e873975d",
+      "range": {
+        "startLine": 523,
+        "startChar": 8,
+        "endLine": 524,
+        "endChar": 37
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
