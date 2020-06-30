@@ -98,11 +98,11 @@ using namespace cppu;
 
 
 // Identifiers for creating the strings for dbg_Properties
-static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
-static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
-static char const ID_DBG_METHODS[] = "Dbg_Methods";
+char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
+char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
+char const ID_DBG_METHODS[] = "Dbg_Methods";
 
-static char const aSeqLevelStr[] = "[]";
+char const aSeqLevelStr[] = "[]";
 
 // Gets the default property for a uno object. Note: There is some
 // redirection built in. The property name specifies the name

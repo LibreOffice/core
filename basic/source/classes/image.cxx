@@ -86,7 +86,7 @@ static void SbiCloseRecord( SvStream& r, sal_uInt64 nOff )
     r.Seek( nPos );
 }
 
-static constexpr sal_uInt32 nUnicodeDataMagicNumber = 0x556E6920; // "Uni " BE
+constexpr sal_uInt32 nUnicodeDataMagicNumber = 0x556E6920; // "Uni " BE
 
 static bool GetToUnicodePoolData(SvStream& r, sal_uInt64 nLen, sal_uInt64 nNext)
 {

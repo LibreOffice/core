@@ -1947,10 +1947,10 @@ void StarBASIC::DetachAllDocBasicItems()
 // #118116 Implementation Collection object
 
 
-static const char pCountStr[]   = "Count";
-static const char pAddStr[]     = "Add";
-static const char pItemStr[]    = "Item";
-static const char pRemoveStr[]  = "Remove";
+const char pCountStr[]   = "Count";
+const char pAddStr[]     = "Add";
+const char pItemStr[]    = "Item";
+const char pRemoveStr[]  = "Remove";
 static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 SbxInfoRef BasicCollection::xAddInfo;

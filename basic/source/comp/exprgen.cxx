@@ -34,7 +34,7 @@ struct OpTable {
 
 }
 
-static const OpTable aOpTable [] = {
+const OpTable aOpTable [] = {
     { EXPON,SbiOpcode::EXP_ },
     { MUL,  SbiOpcode::MUL_ },
     { DIV,  SbiOpcode::DIV_ },

@@ -32,7 +32,7 @@ struct TokenTable { SbiToken t; const char *s; };
 
 }
 
-static const TokenTable aTokTable_Basic [] = {
+const TokenTable aTokTable_Basic [] = {
     { CAT,      "&" },
     { MUL,      "*" },
     { PLUS,     "+" },

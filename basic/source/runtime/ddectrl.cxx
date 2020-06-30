@@ -25,7 +25,7 @@
 #define DDE_FIRSTERR    0x4000
 #define DDE_LASTERR     0x4011
 
-static const ErrCode nDdeErrMap[] =
+const ErrCode nDdeErrMap[] =
 {
     /* DMLERR_ADVACKTIMEOUT       */  ErrCode(0x4000), ERRCODE_BASIC_DDE_TIMEOUT,
     /* DMLERR_BUSY                */  ErrCode(0x4001), ERRCODE_BASIC_DDE_BUSY,
