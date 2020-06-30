@@ -16,6 +16,24 @@
       "revId": "996c0ca3e13752cb2bd8378b6379bcff536e900c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe9f8efb_9f2382ff",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 5895,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-30T21:30:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "014d499b_030f3e16",
+      "revId": "996c0ca3e13752cb2bd8378b6379bcff536e900c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
