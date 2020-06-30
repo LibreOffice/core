@@ -25,10 +25,10 @@
 namespace
 {
 
-static const char lcl_aServiceName_DateScaling[] = "com.sun.star.chart2.DateScaling";
-static const char lcl_aServiceName_InverseDateScaling[] = "com.sun.star.chart2.InverseDateScaling";
+const char lcl_aServiceName_DateScaling[] = "com.sun.star.chart2.DateScaling";
+const char lcl_aServiceName_InverseDateScaling[] = "com.sun.star.chart2.InverseDateScaling";
 
-static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
+const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }
 
 namespace chart

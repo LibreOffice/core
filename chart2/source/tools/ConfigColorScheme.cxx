@@ -34,7 +34,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const char aSeriesPropName[] = "Series";
+const char aSeriesPropName[] = "Series";
 
 } // anonymous namespace
 

@@ -71,7 +71,7 @@ struct AxisLabelPosMap
     css::chart::ChartAxisLabelPosition ePos;
 };
 
-static AxisLabelPosMap const aLabelPosMap[] = {
+AxisLabelPosMap const aLabelPosMap[] = {
     { 0, css::chart::ChartAxisLabelPosition_NEAR_AXIS },
     { 1, css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
     { 2, css::chart::ChartAxisLabelPosition_OUTSIDE_START },

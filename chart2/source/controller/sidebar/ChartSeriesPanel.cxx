@@ -74,7 +74,7 @@ struct LabelPlacementMap
     sal_Int32 nApi;
 };
 
-static LabelPlacementMap const aLabelPlacementMap[] = {
+LabelPlacementMap const aLabelPlacementMap[] = {
     { 0, css::chart::DataLabelPlacement::TOP },
     { 1, css::chart::DataLabelPlacement::BOTTOM },
     { 2, css::chart::DataLabelPlacement::CENTER },

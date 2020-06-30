@@ -85,7 +85,7 @@ InternalData::InternalData()
     , m_aColumnLabels( 0 )
 {}
 
-static const double fDefaultData[] = {
+const double fDefaultData[] = {
     9.10, 3.20, 4.54,
     2.40, 8.80, 9.65,
     3.10, 1.50, 3.70,
