@@ -16,6 +16,24 @@
       "revId": "49d0a137003e031c192cf48ccd1596329abe55ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4f30f0_ad68957d",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T12:00:12Z",
+      "side": 1,
+      "message": "What if I drop the IsDark() check and unconditionally use the non-inverted logo? I would like to keep this change scoped, so not getting into things like changing the background color of the startcenter sidebar. :-)",
+      "parentUuid": "1dae9f42_ef210b64",
+      "revId": "49d0a137003e031c192cf48ccd1596329abe55ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
