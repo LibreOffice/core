@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80db7bfb_bebacd9a",
+        "filename": "accessibility/source/extended/accessiblelistboxentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-06-30T18:54:58Z",
+      "side": 1,
+      "message": "that\u0027s a bit much meaningless detail, how about \"no entry found at given point\"",
+      "revId": "deccb09bde8ade4d9c21c7ec3b4b6704a6025389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
