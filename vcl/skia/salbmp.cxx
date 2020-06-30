@@ -27,6 +27,8 @@
 #include <salinst.hxx>
 #include <scanlinewriter.hxx>
 #include <svdata.hxx>
+#include <bmpfast.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <SkCanvas.h>
 #include <SkImage.h>
@@ -148,6 +150,8 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     mPixelsSize = src.mPixelsSize;
     mScanlineSize = src.mScanlineSize;
     mScaleQuality = src.mScaleQuality;
+    mEraseColorSet = src.mEraseColorSet;
+    mEraseColor = src.mEraseColor;
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
@@ -400,6 +404,17 @@ bool SkiaSalBitmap::InterpretAs8Bit()
     return false;
 }
 
+bool SkiaSalBitmap::Erase(const Color& color)
+{
+    // Optimized variant, just remember the color and apply it when needed,
+    // which may save having to do format conversions (e.g. GetSkImage()
+    // may directly erase the SkImage).
+    ResetCachedData();
+    mEraseColorSet = true;
+    mEraseColor = color;
+    return true;
+}
+
 SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 {
 #ifdef DBG_UTIL
@@ -496,11 +511,28 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
     return bitmap;
 }
 
+static SkColor toSkColor(Color color)
+{
+    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
+                          color.GetBlue());
+}
+
 const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+        assert(surface);
+        surface->getCanvas()->clear(toSkColor(mEraseColor));
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mImage = surface->makeImageSnapshot();
+        SAL_INFO("vcl.skia.trace", "getskimage(" << this << ") from erase color " << mEraseColor);
+        return mImage;
+    }
     if (mPixelsSize != mSize && !mImage
         && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
     {
@@ -554,6 +586,18 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        surface->getCanvas()->clear(SkColorSetARGB(255 - mEraseColor.GetBlue(), 0, 0, 0));
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        SAL_INFO("vcl.skia.trace",
+                 "getalphaskimage(" << this << ") from erase color " << mEraseColor);
+        return mAlphaImage;
+    }
     if (mAlphaImage)
     {
         assert(mSize == mPixelsSize); // data has already been scaled if needed
@@ -636,8 +680,71 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     return mAlphaImage;
 }
 
+// If the bitmap is to be erased, SkShader with the color set is more efficient
+// than creating an image filled with the color.
+bool SkiaSalBitmap::PreferSkShader() const { return mEraseColorSet; }
+
+sk_sp<SkShader> SkiaSalBitmap::GetSkShader() const
+{
+    if (mEraseColorSet)
+        return SkShaders::Color(toSkColor(mEraseColor));
+    return GetSkImage()->makeShader();
+}
+
+sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader() const
+{
+    if (mEraseColorSet)
+        return SkShaders::Color(toSkColor(mEraseColor));
+    return GetAlphaSkImage()->makeShader();
+}
+
+void SkiaSalBitmap::EraseInternal()
+{
+    if (mPixelsSize.IsEmpty())
+        return;
+    BitmapBuffer* bitmapBuffer = AcquireBuffer(BitmapAccessMode::Write);
+    if (bitmapBuffer == nullptr)
+        abort();
+    Color fastColor = mEraseColor;
+    if (!!mPalette)
+        fastColor = mPalette.GetBestIndex(fastColor);
+    if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
+    {
+        FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);
+        assert(bitmapBuffer->mnFormat & ScanlineFormat::TopDown);
+        // Set first scanline, copy to others.
+        Scanline scanline = bitmapBuffer->mpBits;
+        for (long x = 0; x < bitmapBuffer->mnWidth; ++x)
+            setPixel(scanline, x, mEraseColor, bitmapBuffer->maColorMask);
+        for (long y = 1; y < bitmapBuffer->mnHeight; ++y)
+            memcpy(scanline + y * bitmapBuffer->mnScanlineSize, scanline,
+                   bitmapBuffer->mnScanlineSize);
+    }
+    ReleaseBuffer(bitmapBuffer, BitmapAccessMode::Write);
+}
+
 void SkiaSalBitmap::EnsureBitmapData()
 {
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        if (mPixelsSize != mSize)
+        {
+            mPixelsSize = mSize;
+            mBuffer.reset();
+        }
+        mScaleQuality = kHigh_SkFilterQuality;
+        if (!mBuffer && !CreateBitmapData())
+            abort();
+        // Unset now, so that repeated call will return mBuffer.
+        mEraseColorSet = false;
+        EraseInternal();
+        verify();
+        SAL_INFO("vcl.skia.trace",
+                 "ensurebitmapdata(" << this << ") from erase color " << mEraseColor);
+        return;
+    }
+
     if (mBuffer)
     {
         if (mSize == mPixelsSize)
@@ -768,9 +875,6 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
 void SkiaSalBitmap::ResetCachedData()
 {
     SkiaZone zone;
-    // There may be a case when only mImage is set and CreatBitmapData() will create
-    // mBuffer from it if needed, in that case ResetToSkImage() should be used.
-    assert(mBuffer.get() || !mImage);
     mImage.reset();
     mAlphaImage.reset();
 }
@@ -792,6 +896,30 @@ void SkiaSalBitmap::ResetCachedDataBySize()
     if (mAlphaImage
         && (mAlphaImage->width() != mSize.getWidth() || mAlphaImage->height() != mSize.getHeight()))
         mAlphaImage.reset();
+}
+
+OString SkiaSalBitmap::GetImageKey() const
+{
+    if (mEraseColorSet)
+    {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(2) << (255 - mEraseColor.GetTransparency())
+           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+        return OStringLiteral("E") + ss.str().c_str();
+    }
+    return OStringLiteral("I") + OString::number(GetSkImage()->uniqueID());
+}
+
+OString SkiaSalBitmap::GetAlphaImageKey() const
+{
+    if (mEraseColorSet)
+    {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(2) << (255 - mEraseColor.GetTransparency())
+           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+        return OStringLiteral("E") + ss.str().c_str();
+    }
+    return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
 }
 
 #ifdef DBG_UTIL
