@@ -74,12 +74,10 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbCalc                  = true;
     mbFormat                = true;
     mbDrag                  = false;
-    mbSelection             = false;
     mbMenuDown              = false;
     mbSpinDown              = false;
     mbPrevIn                = false;
     mbNextIn                = false;
-    mbAllSel                = false;
 
     OUString aGregorian( "gregorian");
     maCalendarWrapper.loadCalendar( aGregorian,
@@ -945,11 +943,10 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
 
 void Calendar::ImplEndTracking( bool bCancel )
 {
-    bool bSelection = mbSelection;
+    bool bSelection = false;
     bool bSpinDown = mbSpinDown;
 
     mbDrag              = false;
-    mbSelection         = false;
     mbSpinDown          = false;
     mbPrevIn            = false;
     mbNextIn            = false;
@@ -992,8 +989,7 @@ void Calendar::ImplEndTracking( bool bCancel )
         }
     }
 
-    if ( mbAllSel ||
-         (!bCancel && ((maCurDate != maOldCurDate) || (*mpOldSelectTable != *mpSelectTable))) )
+    if ( !bCancel && ((maCurDate != maOldCurDate) || (*mpOldSelectTable != *mpSelectTable)) )
         Select();
 
     if ( !bSelection && (mnWinStyle & WB_TABSTOP) && !bCancel )
@@ -1034,11 +1030,8 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                         maOldCurDate = maCurDate;
                         mpOldSelectTable.reset(new IntDateSet( *mpSelectTable ));
 
-                        if ( !mbSelection )
-                        {
-                            mbDrag = true;
-                            StartTracking();
-                        }
+                        mbDrag = true;
+                        StartTracking();
 
                         ImplMouseSelect( aTempDate, nHitTest );
                     }
@@ -1052,22 +1045,6 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     Control::MouseButtonDown( rMEvt );
-}
-
-void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    if ( rMEvt.IsLeft() && mbSelection )
-        ImplEndTracking( false );
-    else
-        Control::MouseButtonUp( rMEvt );
-}
-
-void Calendar::MouseMove( const MouseEvent& rMEvt )
-{
-    if ( mbSelection && rMEvt.GetButtons() )
-        ImplTracking( rMEvt.GetPosPixel(), false );
-    else
-        Control::MouseMove( rMEvt );
 }
 
 void Calendar::Tracking( const TrackingEvent& rTEvt )
@@ -1217,7 +1194,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        if ( !mbSelection && rCEvt.IsMouseEvent() )
+        if ( rCEvt.IsMouseEvent() )
         {
             Date    aTempDate = maCurDate;
             sal_uInt16  nHitTest = ImplHitTest( rCEvt.GetMousePosPixel(), aTempDate );
@@ -1501,13 +1478,11 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
 void Calendar::EndSelection()
 {
-    if ( mbDrag || mbSpinDown || mbSelection )
+    if ( mbDrag || mbSpinDown )
     {
-        if ( !mbSelection )
-            ReleaseMouse();
+        ReleaseMouse();
 
         mbDrag              = false;
-        mbSelection         = false;
         mbSpinDown          = false;
         mbPrevIn            = false;
         mbNextIn            = false;

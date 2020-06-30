@@ -114,7 +114,7 @@ protected:
     tools::Rectangle            maMarkedPointsRect;
     tools::Rectangle            maMarkedGluePointsRect;
 
-    sal_uInt16                  mnFrameHandlesLimit;
+    static constexpr sal_uInt16 mnFrameHandlesLimit = 50;
 
     SdrDragMode                 meDragMode;      // Persistent
     SdrViewEditMode             meEditMode;      // Persistent
