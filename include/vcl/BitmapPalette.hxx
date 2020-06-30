@@ -130,7 +130,7 @@ public:
 
     /// Returns true if the palette is 8-bit grey palette.
     bool IsGreyPalette8Bit() const;
-    /// Returns true if the paleete is a grey palette (may not be 8-bit).
+    /// Returns true if the palette is a grey palette (may not be 8-bit).
     bool IsGreyPaletteAny() const;
 };
 
