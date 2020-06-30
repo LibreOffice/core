@@ -151,12 +151,10 @@ class Calendar final : public Control
     bool            mbCalc:1,
                     mbFormat:1,
                     mbDrag:1,
-                    mbSelection:1,
                     mbMenuDown:1,
                     mbSpinDown:1,
                     mbPrevIn:1,
-                    mbNextIn:1,
-                    mbAllSel:1;
+                    mbNextIn:1;
     Link<Calendar*,void>   maSelectHdl;
     Link<Calendar*,void>   maActivateHdl;
 
@@ -193,8 +191,6 @@ public:
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
