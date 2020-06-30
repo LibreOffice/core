@@ -57,7 +57,8 @@ private:
                             std::unordered_map<OUString, bool>& maIsDefined, OUString sType);
 
     static bool GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
-                                  OUString& rString);
+                                  OUString& rString, const bool b_IsCJKEnabled,
+                                  const bool b_IsCTLEnabled);
 };
 }
 } // end of namespace svx::sidebar

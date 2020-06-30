@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace sw::sidebar
 {
@@ -82,6 +83,9 @@ void WriterInspectorTextPanel::mUpdateTree(SwDocShell* pDocSh, Mynode* xCurrentT
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
     uno::Reference<beans::XPropertySet> properties(xRange, uno::UNO_QUERY_THROW);
 
+    const bool b_IsCJKEnabled = SvtLanguageOptions().IsCJKFontEnabled();
+    const bool b_IsCTLEnabled = SvtLanguageOptions().IsCTLFontEnabled();
+
     OUString aCurrentStyleName, aDisplayName;
     if (sType == "CHARACTER STYLES")
         properties->getPropertyValue("CharStyleName") >>= aCurrentStyleName;
@@ -129,8 +133,8 @@ void WriterInspectorTextPanel::mUpdateTree(SwDocShell* pDocSh, Mynode* xCurrentT
                     maIsDefined[sPropName] = true;
                     OUString aPropertyValuePair;
                     const uno::Any aAny = xProp1Set->getPropertyValue(sPropName);
-                    WriterInspectorTextPanel::GetPropertyValues(rProperty, aAny,
-                                                                aPropertyValuePair);
+                    WriterInspectorTextPanel::GetPropertyValues(rProperty, aAny, aPropertyValuePair,
+                                                                b_IsCJKEnabled, b_IsCTLEnabled);
                     if (!aPropertyValuePair.isEmpty())
                     {
                         Mynode* xtemP = new Mynode(aPropertyValuePair);
@@ -167,7 +171,8 @@ void WriterInspectorTextPanel::mUpdateTree(SwDocShell* pDocSh, Mynode* xCurrentT
         maIsDefined[sPropName] = true;
 
         const uno::Any aAny = xProp1Set->getPropertyValue(sPropName);
-        if (WriterInspectorTextPanel::GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+        if (WriterInspectorTextPanel::GetPropertyValues(rProperty, aAny, aPropertyValuePair,
+                                                        b_IsCJKEnabled, b_IsCTLEnabled))
         {
             if (!aPropertyValuePair.isEmpty())
             {
@@ -221,10 +226,14 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
 }
 
 bool WriterInspectorTextPanel::GetPropertyValues(const beans::Property rProperty,
-                                                 const uno::Any& rAny, OUString& rString)
+                                                 const uno::Any& rAny, OUString& rString,
+                                                 const bool b_IsCJKEnabled,
+                                                 const bool b_IsCTLEnabled)
 {
     // Hide Asian and Complex properties
-    if (rProperty.Name.indexOf("Asian") != -1 || rProperty.Name.indexOf("Complex") != -1)
+    if (!b_IsCJKEnabled && rProperty.Name.indexOf("Asian") != -1)
+        return false;
+    if (!b_IsCTLEnabled && rProperty.Name.indexOf("Complex") != -1)
         return false;
 
     OUString aValue;
