@@ -41,6 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -163,15 +164,29 @@ namespace drawinglayer::primitive2d
             {
                 // create BitmapEx by extracting from VirtualDevices
                 const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel()));
+                bool useAlphaMask = false;
 #if defined(MACOSX) || defined(IOS)
-                const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                useAlphaMask = true;
 #else
-                const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                // GetBitmap()-> AlphaMask is optimized with SkiaSalBitmap::InterpretAs8Bit(), 1bpp mask is not.
+                if( SkiaHelper::isVCLSkiaEnabled())
+                    useAlphaMask = true;
 #endif
+                BitmapEx bitmap;
+                if( useAlphaMask )
+                {
+                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
+                }
+                else
+                {
+                    const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
+                }
 
                 return Primitive2DReference(
                     new BitmapPrimitive2D(
-                        VCLUnoHelper::CreateVCLXBitmap(BitmapEx(aMainBitmap, aMaskBitmap)),
+                        VCLUnoHelper::CreateVCLXBitmap(bitmap),
                         getTransform()));
             }
 
