@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-05-18 11:43:55 using:
+ Generated on 2020-06-30 17:38:10 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -70,7 +70,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 #endif // PCH_LEVEL >= 2
-#if PCH_LEVEL >= 3
+// PCH_LEVEL >= 3
 #include <include/c/sk_canvas.h>
 #include <include/c/sk_colorspace.h>
 #include <include/c/sk_data.h>
@@ -125,6 +125,7 @@
 #include <include/core/SkOverdrawCanvas.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
+#include <include/core/SkPathBuilder.h>
 #include <include/core/SkPathEffect.h>
 #include <include/core/SkPathMeasure.h>
 #include <include/core/SkPicture.h>
@@ -150,6 +151,7 @@
 #include <include/core/SkStrokeRec.h>
 #include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceCharacterization.h>
+#include <include/core/SkSurfaceProps.h>
 #include <include/core/SkSwizzle.h>
 #include <include/core/SkTextBlob.h>
 #include <include/core/SkTileMode.h>
@@ -195,6 +197,7 @@
 #include <include/effects/SkPictureImageFilter.h>
 #include <include/effects/SkRuntimeEffect.h>
 #include <include/effects/SkShaderMaskFilter.h>
+#include <include/effects/SkStrokeAndFillPathEffect.h>
 #include <include/effects/SkTableColorFilter.h>
 #include <include/effects/SkTableMaskFilter.h>
 #include <include/effects/SkTileImageFilter.h>
@@ -320,6 +323,7 @@
 #include <src/core/SkClipOpPriv.h>
 #include <src/core/SkClipStack.h>
 #include <src/core/SkClipStackDevice.h>
+#include <src/core/SkColorFilterBase.h>
 #include <src/core/SkColorFilterPriv.h>
 #include <src/core/SkColorFilter_Matrix.h>
 #include <src/core/SkColorSpacePriv.h>
@@ -330,6 +334,7 @@
 #include <src/core/SkCoverageModePriv.h>
 #include <src/core/SkCpu.h>
 #include <src/core/SkCubicClipper.h>
+#include <src/core/SkDeferredDisplayListPriv.h>
 #include <src/core/SkDescriptor.h>
 #include <src/core/SkDevice.h>
 #include <src/core/SkDiscardableMemory.h>
@@ -407,7 +412,6 @@
 #include <src/core/SkRasterClip.h>
 #include <src/core/SkRasterPipeline.h>
 #include <src/core/SkReadBuffer.h>
-#include <src/core/SkReader32.h>
 #include <src/core/SkRecord.h>
 #include <src/core/SkRecordDraw.h>
 #include <src/core/SkRecordOpts.h>
@@ -480,7 +484,9 @@
 #include <src/gpu/GrAppliedClip.h>
 #include <src/gpu/GrAuditTrail.h>
 #include <src/gpu/GrAutoLocaleSetter.h>
+#include <src/gpu/GrBackendSurfaceMutableStateImpl.h>
 #include <src/gpu/GrBackendTextureImageGenerator.h>
+#include <src/gpu/GrBackendUtils.h>
 #include <src/gpu/GrBaseContextPriv.h>
 #include <src/gpu/GrBitmapTextureMaker.h>
 #include <src/gpu/GrBlend.h>
@@ -547,6 +553,7 @@
 #include <src/gpu/GrProgramInfo.h>
 #include <src/gpu/GrProxyProvider.h>
 #include <src/gpu/GrRecordingContextPriv.h>
+#include <src/gpu/GrRectanizerPow2.h>
 #include <src/gpu/GrRectanizerSkyline.h>
 #include <src/gpu/GrReducedClip.h>
 #include <src/gpu/GrRenderTarget.h>
@@ -560,11 +567,13 @@
 #include <src/gpu/GrResourceCache.h>
 #include <src/gpu/GrResourceProvider.h>
 #include <src/gpu/GrResourceProviderPriv.h>
+#include <src/gpu/GrRingBuffer.h>
 #include <src/gpu/GrSPIRVUniformHandler.h>
 #include <src/gpu/GrSPIRVVaryingHandler.h>
 #include <src/gpu/GrSWMaskHelper.h>
 #include <src/gpu/GrSamplePatternDictionary.h>
 #include <src/gpu/GrSamplerState.h>
+#include <src/gpu/GrScissorState.h>
 #include <src/gpu/GrSemaphore.h>
 #include <src/gpu/GrShaderCaps.h>
 #include <src/gpu/GrShaderUtils.h>
@@ -599,6 +608,7 @@
 #include <src/gpu/GrTracing.h>
 #include <src/gpu/GrTransferFromRenderTask.h>
 #include <src/gpu/GrTriangulator.h>
+#include <src/gpu/GrUniformDataManager.h>
 #include <src/gpu/GrUserStencilSettings.h>
 #include <src/gpu/GrVertexWriter.h>
 #include <src/gpu/GrWaitRenderTask.h>
@@ -641,6 +651,7 @@
 #include <src/gpu/effects/GrDistanceFieldGeoProc.h>
 #include <src/gpu/effects/GrGaussianConvolutionFragmentProcessor.h>
 #include <src/gpu/effects/GrMatrixConvolutionEffect.h>
+#include <src/gpu/effects/GrMatrixEffect.h>
 #include <src/gpu/effects/GrOvalEffect.h>
 #include <src/gpu/effects/GrPorterDuffXferProcessor.h>
 #include <src/gpu/effects/GrRRectEffect.h>
@@ -664,10 +675,8 @@
 #include <src/gpu/effects/generated/GrHSLToRGBFilterEffect.h>
 #include <src/gpu/effects/generated/GrLumaColorFilterEffect.h>
 #include <src/gpu/effects/generated/GrMagnifierEffect.h>
-#include <src/gpu/effects/generated/GrMatrixEffect.h>
 #include <src/gpu/effects/generated/GrMixerEffect.h>
 #include <src/gpu/effects/generated/GrOverrideInputFragmentProcessor.h>
-#include <src/gpu/effects/generated/GrPremulInputFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrRGBToHSLFilterEffect.h>
 #include <src/gpu/effects/generated/GrRRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrRectBlurEffect.h>
@@ -719,7 +728,6 @@
 #include <src/gpu/ops/GrAALinearizingConvexPathRenderer.h>
 #include <src/gpu/ops/GrAtlasTextOp.h>
 #include <src/gpu/ops/GrClearOp.h>
-#include <src/gpu/ops/GrClearStencilClipOp.h>
 #include <src/gpu/ops/GrDashLinePathRenderer.h>
 #include <src/gpu/ops/GrDashOp.h>
 #include <src/gpu/ops/GrDefaultPathRenderer.h>
@@ -749,16 +757,19 @@
 #include <src/gpu/tessellate/GrFillPathShader.h>
 #include <src/gpu/tessellate/GrMiddleOutPolygonTriangulator.h>
 #include <src/gpu/tessellate/GrMidpointContourParser.h>
+#include <src/gpu/tessellate/GrResolveLevelCounter.h>
 #include <src/gpu/tessellate/GrStencilPathShader.h>
+#include <src/gpu/tessellate/GrStrokeGeometry.h>
 #include <src/gpu/tessellate/GrTessellatePathOp.h>
 #include <src/gpu/tessellate/GrTessellationPathRenderer.h>
+#include <src/gpu/tessellate/GrWangsFormula.h>
 #include <src/gpu/text/GrAtlasManager.h>
 #include <src/gpu/text/GrDistanceFieldAdjustTable.h>
 #include <src/gpu/text/GrSDFMaskFilter.h>
+#include <src/gpu/text/GrSDFTOptions.h>
 #include <src/gpu/text/GrStrikeCache.h>
 #include <src/gpu/text/GrTextBlob.h>
 #include <src/gpu/text/GrTextBlobCache.h>
-#include <src/gpu/text/GrTextContext.h>
 #include <src/gpu/text/GrTextTarget.h>
 #include <src/gpu/vk/GrVkBuffer.h>
 #include <src/gpu/vk/GrVkCaps.h>
@@ -907,6 +918,7 @@
 #include <src/sksl/ir/SkSLNullLiteral.h>
 #include <src/sksl/ir/SkSLPostfixExpression.h>
 #include <src/sksl/ir/SkSLPrefixExpression.h>
+#include <src/sksl/ir/SkSLProgram.h>
 #include <src/sksl/ir/SkSLReturnStatement.h>
 #include <src/sksl/ir/SkSLSection.h>
 #include <src/sksl/ir/SkSLSetting.h>
@@ -941,8 +953,8 @@
 #include <tools/gpu/vk/VkTestUtils.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 #include <vulkan/vulkan_core.h>
-#endif // PCH_LEVEL >= 3
-#if PCH_LEVEL >= 4
-#endif // PCH_LEVEL >= 4
+#include <skia_compiler.hxx>
+// PCH_LEVEL >= 4
+// PCH_LEVEL >= 5
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

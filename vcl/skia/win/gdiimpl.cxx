@@ -277,7 +277,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
     // The data we got is upside-down.
     SkMatrix matrix;
     matrix.preTranslate(0, maRects.mnSrcHeight);
-    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
     canvas8.concat(matrix);
     canvas8.drawBitmap(tmpBitmap, 0, 0, &paint8);
     bitmap8.setImmutable();
@@ -307,7 +307,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
     // The data we got is upside-down.
     SkMatrix matrix;
     matrix.preTranslate(0, maRects.mnSrcHeight);
-    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
     canvas->concat(matrix);
     canvas->drawBitmapRect(tmpBitmap,
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
@@ -358,7 +358,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     // The data we got is upside-down.
     SkMatrix matrix;
     matrix.preTranslate(0, tmpBitmap.height());
-    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
     canvas->concat(matrix);
     canvas->drawBitmap(tmpBitmap, 0, 0, &paint);
     canvas->restore();

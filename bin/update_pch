@@ -633,7 +633,7 @@ def parse_makefile(groups, lines, lineno, lastif, ifstack):
             if EXCLUDE_SYSTEM and ifstack:
                 continue
             file = line + '.' + suffix
-            if ',' in line or '(' in line or ')' in line:
+            if ',' in line or '(' in line or ')' in line or file.startswith('-'):
                 #print('passing: ' + line)
                 pass # $if() probably, or something similar
             else:
