@@ -29,7 +29,7 @@
 namespace dbaui
 {
 
-static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMode::HLINES | BrowserMode::VLINES |
+constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMode::HLINES | BrowserMode::VLINES |
                                     BrowserMode::HIDECURSOR | BrowserMode::HIDESELECT | BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL;
 
 #define COLUMN_ID_FIELDNAME     1

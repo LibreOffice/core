@@ -86,9 +86,9 @@ namespace dbaccess
             return true;
         }
 
-        static const char sRecoveryDataSubStorageName[] = "recovery";
+        const char sRecoveryDataSubStorageName[] = "recovery";
 
-        static const char sObjectMapStreamName[] = "storage-component-map.ini";
+        const char sObjectMapStreamName[] = "storage-component-map.ini";
 
         void lcl_writeObjectMap_throw( const Reference<XComponentContext> & i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )

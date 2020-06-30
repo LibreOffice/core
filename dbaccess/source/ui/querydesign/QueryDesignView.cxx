@@ -65,8 +65,8 @@ using namespace ::com::sun::star::container;
 // please look at the book LargeScale C++ to know why
 namespace
 {
-    static const char C_AND[] = " AND ";
-    static const char C_OR[] = " OR ";
+    const char C_AND[] = " AND ";
+    const char C_OR[] = " OR ";
 
     bool InsertJoin(    const OQueryDesignView* _pView,
                             const ::connectivity::OSQLParseNode *pNode);
