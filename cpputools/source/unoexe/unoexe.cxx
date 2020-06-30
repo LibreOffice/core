@@ -77,7 +77,7 @@ static void out( const OUString & rText )
     }
 }
 
-static const char arUsingText[] =
+const char arUsingText[] =
 "\nusing:\n\n"
 "uno [-c ComponentImplementationName -l LocationUrl | -s ServiceName]\n"
 "    [-u uno:(socket[,host=HostName][,port=nnn]|pipe[,name=PipeName]);<protocol>;Name\n"
