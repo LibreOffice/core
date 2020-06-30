@@ -461,18 +461,16 @@ DECLARE_OOXMLIMPORT_TEST(testN775899, "n775899.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testN777345, "n777345.docx")
 {
-#if !defined(MACOSX)
-#if !defined(_WIN32)
     // The problem was that v:imagedata inside v:rect was ignored.
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
     Graphic aGraphic(xGraphic);
-    // If this changes later, feel free to update it, but make sure it's not
-    // the checksum of a white/transparent placeholder rectangle.
-    // tdf#119180 update needed now
-    CPPUNIT_ASSERT_EQUAL(BitmapChecksum(SAL_CONST_UINT64(15258412514674086030)), aGraphic.GetChecksum());
-#endif
-#endif
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_EQUAL( Size( 17, 16 ), aBitmap.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 16, 15 ));
+    CPPUNIT_ASSERT_EQUAL( Color( 153, 0, 0 ), aBitmap.GetPixelColor( 16, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color( 153, 0, 0 ), aBitmap.GetPixelColor( 0, 15 ));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN778140, "n778140.docx")
