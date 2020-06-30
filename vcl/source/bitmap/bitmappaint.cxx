@@ -36,6 +36,19 @@ bool Bitmap::Erase(const Color& rFillColor)
     if (IsEmpty())
         return true;
 
+    if (mxSalBmp)
+    {
+        // implementation specific replace
+        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Erase(rFillColor))
+        {
+            ImplSetSalBitmap(xImpBmp);
+            maPrefMapMode = MapMode(MapUnit::MapPixel);
+            maPrefSize = xImpBmp->GetSize();
+            return true;
+        }
+    }
+
     BitmapScopedWriteAccess pWriteAcc(*this);
     bool bRet = false;
 

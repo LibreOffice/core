@@ -200,10 +200,14 @@ public:
 #endif
 
     // Default blend mode for SkPaint is SkBlendMode::kSrcOver
+    void drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
+                    SkBlendMode blendMode = SkBlendMode::kSrcOver);
+
     void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
-    void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader);
+    void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
+                    SkBlendMode blendMode = SkBlendMode::kSrcOver);
 
     enum class GlyphOrientation
     {
