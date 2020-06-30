@@ -466,6 +466,11 @@ DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
         text::RelOrientation::PAGE_FRAME , nHRelPos);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf118701, "tdf118701.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("At least one paragraph is missing from the file!", 3, getParagraphs());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
