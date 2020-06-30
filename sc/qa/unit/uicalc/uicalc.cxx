@@ -180,14 +180,18 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124816)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
+    // The actual result is completely unrelated to this test and behaviour of
+    // OFFSET() was changed as of tdf#85551 and here result of that test
+    // document is now Err:502 instead of 0.
+    const OUString aExpectedResult("Err:502");
     checkCurrentCell(3, 9);
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(3, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(aExpectedResult, pDoc->GetString(ScAddress(3, 9, 0)));
 
     //Without the fix, it would crash
     dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(3, 9, 0)));
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(3, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(aExpectedResult, pDoc->GetString(ScAddress(3, 9, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
