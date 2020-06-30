@@ -2080,6 +2080,8 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
                 case ssSkipString:
                 case ssGetReference:
                 case ssSkipReference:
+                case ssGetTableRefItem:
+                case ssGetTableRefColumn:
                     break;
                 default:
                     if (eState == ssGetChar)
@@ -4234,12 +4236,20 @@ bool ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }
-    if (bAsciiNonAlnum && cSymbol[1] == 0)
+
+    // Within a TableRef anything except an unescaped '[' or ']' is an item
+    // or a column specifier, do not attempt to recognize any other single
+    // operator there so even [,] or [+] for a single character column
+    // specifier works. Note that space between two ocTableRefOpen is not
+    // supported (Table[ [ColumnSpec]]), not only here. Note also that Table[]
+    // without any item or column specifier is valid.
+    if (bAsciiNonAlnum && cSymbol[1] == 0 && (eLastOp != ocTableRefOpen || cSymbol[0] == '[' || cSymbol[0] == ']'))
     {
         // Shortcut for operators and separators that need no further checks or upper.
         if (IsOpCode( OUString( cSymbol), bInArray ))
             return true;
     }
+
     if ( bMayBeFuncName )
     {
         // a function name must be followed by a parenthesis
