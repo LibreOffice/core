@@ -33,6 +33,24 @@
       "revId": "114d9f3ad2430c4c7b6eff9c6943afc451ca5271",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1405ba4f_ad9c43e5",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T11:03:06Z",
+      "side": 1,
+      "message": "Done. Now the description reads as: \"The Personal edition is supported by individuals and intended for use at home.\"",
+      "parentUuid": "8d7eca3f_ef4af220",
+      "revId": "114d9f3ad2430c4c7b6eff9c6943afc451ca5271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
