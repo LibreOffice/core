@@ -1394,9 +1394,6 @@ namespace
             nBits |= WB_SIZEABLE;
         if (extractCloseable(rMap))
             nBits |= WB_CLOSEABLE;
-        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        if (!sBorder.isEmpty())
-            nBits |= WB_BORDER;
         if (!extractDecorated(rMap))
             nBits |= WB_OWNERDRAWDECORATION;
         OUString sType(extractTypeHint(rMap));
