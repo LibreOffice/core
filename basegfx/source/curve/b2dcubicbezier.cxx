@@ -30,7 +30,7 @@
 // #i37443#
 #define FACTOR_FOR_UNSHARPEN    (1.6)
 #ifdef DBG_UTIL
-static const double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
+const double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
 
 namespace basegfx

@@ -27,10 +27,10 @@ namespace basegfx::utils
 {
     namespace RectClipFlags
     {
-        static const sal_uInt32 LEFT   = sal_Int32(0x01);
-        static const sal_uInt32 RIGHT  = sal_Int32(0x02);
-        static const sal_uInt32 TOP    = sal_Int32(0x04);
-        static const sal_uInt32 BOTTOM = sal_Int32(0x08);
+        const sal_uInt32 LEFT   = sal_Int32(0x01);
+        const sal_uInt32 RIGHT  = sal_Int32(0x02);
+        const sal_uInt32 TOP    = sal_Int32(0x04);
+        const sal_uInt32 BOTTOM = sal_Int32(0x08);
     }
 
     /** Calc clip mask for Cohen-Sutherland rectangle clip
