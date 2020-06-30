@@ -684,8 +684,6 @@ void SAL_CALL Player::setMediaTime( double fTime )
                       GST_SEEK_FLAG_FLUSH,
                       GST_SEEK_TYPE_SET, gst_position,
                       GST_SEEK_TYPE_NONE, 0 );
-    if( !isPlaying() )
-        gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
     SAL_INFO( "avmedia.gstreamer", AVVERSION "seek to: " << gst_position << " ns original: " << fTime << " s" );
 }
