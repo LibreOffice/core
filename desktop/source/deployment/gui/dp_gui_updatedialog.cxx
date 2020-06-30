@@ -83,8 +83,8 @@ using dp_gui::UpdateDialog;
 
 namespace {
 
-static sal_Unicode const LF = 0x000A;
-static sal_Unicode const CR = 0x000D;
+sal_Unicode const LF = 0x000A;
+sal_Unicode const CR = 0x000D;
 
 #define IGNORED_UPDATES     OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates")
 #define PROPERTY_VERSION    "Version"
