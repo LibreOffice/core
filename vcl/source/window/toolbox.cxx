@@ -2391,26 +2391,27 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
             rRenderContext.SetFillColor(COL_BLACK);
     }
 
-    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
-
     tools::Polygon aPoly(4);
 
-    long width = round(rDropDownRect.getHeight()/5.5) * fScaleFactor; // scale triangle depending on theme/toolbar height with 7 for gtk, 5 for gen
-    long height = round(rDropDownRect.getHeight()/9.5) * fScaleFactor; // 4 for gtk, 3 for gen
-    if (width < 4) width = 4;
-    if (height < 3) height = 3;
+    // the assumption is, that the width always specifies the size of the expected arrow.
+    const long nMargin = round(2 * rRenderContext.GetDPIScaleFactor());
+    const long nSize = rDropDownRect.getWidth() - 2 * nMargin;
+    const long nHalfSize = (nSize + 1) / 2;
+    const long x = rDropDownRect.Left() + nMargin + (bRotate ? (rDropDownRect.getWidth() - nHalfSize) / 2 : 0);
+    const long y = rDropDownRect.Top() + nMargin + (rDropDownRect.getHeight() - (bRotate ? nSize : nHalfSize)) / 2;
 
-    long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
-    long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
-
-    long halfwidth = (width+1)>>1;
     aPoly.SetPoint(Point(x, y), 0);
-    aPoly.SetPoint(Point(x + halfwidth, y + height), 1);
-    aPoly.SetPoint(Point(x + halfwidth*2, y), 2);
+    if (bRotate) // >
+    {
+        aPoly.SetPoint(Point(x, y + nSize), 1);
+        aPoly.SetPoint(Point(x + nHalfSize, y + nHalfSize), 2);
+    }
+    else // v
+    {
+        aPoly.SetPoint(Point(x + nHalfSize, y + nHalfSize), 1);
+        aPoly.SetPoint(Point(x + nSize, y), 2);
+    }
     aPoly.SetPoint(Point(x, y), 3);
-
-    if (bRotate) // TESTME: harder ...
-        aPoly.Rotate(Point(x,y+height/2),2700);
 
     auto aaflags = rRenderContext.GetAntialiasing();
     rRenderContext.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
