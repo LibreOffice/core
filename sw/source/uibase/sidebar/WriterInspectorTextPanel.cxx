@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace sw::sidebar
 {
@@ -62,7 +63,9 @@ static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& r
                               OUString& rString)
 {
     // Hide Asian and Complex properties
-    if (rProperty.Name.indexOf("Asian") != -1 || rProperty.Name.indexOf("Complex") != -1)
+    if (SvtLanguageOptions().IsCJKFontEnabled() && rProperty.Name.indexOf("Asian") != -1)
+        return false;
+    if (SvtLanguageOptions().IsCTLFontEnabled() && rProperty.Name.indexOf("Complex") != -1)
         return false;
 
     OUString aValue;
