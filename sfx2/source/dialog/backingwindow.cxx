@@ -271,7 +271,6 @@ void BackingWindow::initControls()
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
     aWallpaper.SetStyle(WallpaperStyle::BottomRight);
-    aWallpaper.SetColor(aButtonsBackground);
 
     mpButtonsBox->SetBackground(aWallpaper);
 
