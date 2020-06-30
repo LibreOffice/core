@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace sw::sidebar
 {
@@ -59,10 +60,13 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
 }
 
 static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& rAny,
-                              OUString& rString)
+                              OUString& rString, const bool b_IsCJKEnabled,
+                              const bool b_IsCTLEnabled)
 {
     // Hide Asian and Complex properties
-    if (rProperty.Name.indexOf("Asian") != -1 || rProperty.Name.indexOf("Complex") != -1)
+    if (!b_IsCJKEnabled && rProperty.Name.indexOf("Asian") != -1)
+        return false;
+    if (!b_IsCTLEnabled && rProperty.Name.indexOf("Complex") != -1)
         return false;
 
     OUString aValue;
@@ -128,6 +132,9 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertyState> xPropertiesState(xRange, uno::UNO_QUERY_THROW);
 
+    const bool b_IsCJKEnabled = SvtLanguageOptions().IsCJKFontEnabled();
+    const bool b_IsCTLEnabled = SvtLanguageOptions().IsCTLFontEnabled();
+
     uno::Sequence<beans::Property> aProperties
         = xPropertiesSet->getPropertySetInfo()->getProperties();
 
@@ -138,7 +145,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         {
             OUString aPropertyValuePair;
             const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
-            if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+            if (GetPropertyValues(rProperty, aAny, aPropertyValuePair, b_IsCJKEnabled,
+                                  b_IsCTLEnabled))
             {
                 aIsDefined[rProperty.Name] = true;
                 svx::sidebar::TreeNode pTemp;
@@ -175,7 +183,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             {
                 OUString aPropertyValuePair;
                 const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
-                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair, b_IsCJKEnabled,
+                                      b_IsCTLEnabled))
                 {
                     if (aIsDefined[sPropName]) // Already defined in "Direct Formatting" ?
                         aPropertyValuePair = aPropertyValuePair + "  !!<GREY>!!";
@@ -216,7 +225,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             {
                 OUString aPropertyValuePair;
                 const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
-                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair, b_IsCJKEnabled,
+                                      b_IsCTLEnabled))
                 {
                     // Already defined in "Default Formatting" or "Character Styles" or any child Paragraph Style ?
                     if (aIsDefined[sPropName])
