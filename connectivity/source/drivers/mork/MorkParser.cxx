@@ -44,7 +44,7 @@ std::string const g_Empty = "";
 
 const char * const MorkDictColumnMeta = "<(a=c)>";
 
-static const int defaultScope_ = 0x80;
+const int defaultScope_ = 0x80;
 
 MorkParser::MorkParser() :
     columns_(),

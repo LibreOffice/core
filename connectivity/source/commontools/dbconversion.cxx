@@ -152,7 +152,7 @@ namespace dbtools
     }
 
 
-    static const sal_Int32 aDaysInMonth[12] = {   31, 28, 31, 30, 31, 30,
+    const sal_Int32 aDaysInMonth[12] = {   31, 28, 31, 30, 31, 30,
                                             31, 31, 30, 31, 30, 31 };
 
 

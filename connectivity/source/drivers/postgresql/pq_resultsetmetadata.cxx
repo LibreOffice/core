@@ -88,7 +88,7 @@ namespace pq_sdbc_driver
 // };
 
 // is not exported by the postgres header
-const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
+const int PQ_VARHDRSZ = sizeof( sal_Int32 );
 
 static void extractPrecisionAndScale( sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
 {

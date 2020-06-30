@@ -36,7 +36,7 @@ namespace connectivity
         // The SQL dialect in use
         // Has to be used in various isc_* calls.
         // 3: Is IB6 -- minimum required for delimited identifiers.
-        static const int FIREBIRD_SQL_DIALECT = 3;
+        const int FIREBIRD_SQL_DIALECT = 3;
 
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > FirebirdDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);

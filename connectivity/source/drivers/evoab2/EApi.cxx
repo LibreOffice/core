@@ -49,7 +49,7 @@ struct ApiMap
 
 }
 
-static const ApiMap aCommonApiMap[] =
+const ApiMap aCommonApiMap[] =
 {
     SYM_MAP( eds_check_version ),
     SYM_MAP( e_contact_field_name ),
@@ -72,7 +72,7 @@ static const ApiMap aCommonApiMap[] =
 };
 
 //< 3.6 api
-static const ApiMap aOldApiMap[] =
+const ApiMap aOldApiMap[] =
 {
     SYM_MAP( e_book_get_addressbooks ),
     SYM_MAP( e_book_get_uri ),
@@ -85,7 +85,7 @@ static const ApiMap aOldApiMap[] =
 };
 
 //>= 3.6 api
-static const ApiMap aNewApiMap[] =
+const ApiMap aNewApiMap[] =
 {
     SYM_MAP( e_source_registry_list_sources ),
     SYM_MAP( e_source_registry_new_sync ),
@@ -102,13 +102,13 @@ static const ApiMap aNewApiMap[] =
 };
 
 //== indirect read access (3.6 only)
-static const ApiMap aClientApiMap36[] =
+const ApiMap aClientApiMap36[] =
 {
     SYM_MAP( e_book_client_new )
 };
 
 //>= direct read access API (>= 3.8)
-static const ApiMap aClientApiMap38[] =
+const ApiMap aClientApiMap38[] =
 {
     SYM_MAP( e_book_client_connect_direct_sync )
 };

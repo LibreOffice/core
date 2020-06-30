@@ -46,10 +46,10 @@ namespace
 
 namespace connectivity::evoab
 {
-        static sal_Int32    const s_nCOLUMN_SIZE = 256;
-        static sal_Int32    const s_nDECIMAL_DIGITS = 0;
-        static sal_Int32    const s_nNULLABLE = 1;
-        static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
+        sal_Int32    const s_nCOLUMN_SIZE = 256;
+        sal_Int32    const s_nDECIMAL_DIGITS = 0;
+        sal_Int32    const s_nNULLABLE = 1;
+        sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
 
         static ColumnProperty **pFields=nullptr;
         static guint        nFields = 0;

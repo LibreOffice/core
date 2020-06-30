@@ -128,11 +128,11 @@ struct ReflectionImplementations
     struct ImplementationStatics resultSet;
 };
 
-static const sal_Int32 TABLE_INDEX_CATALOG = 0;
-static const sal_Int32 TABLE_INDEX_SCHEMA = 1;
-static const sal_Int32 TABLE_INDEX_NAME = 2;
-static const sal_Int32 TABLE_INDEX_TYPE = 3;
-static const sal_Int32 TABLE_INDEX_REMARKS = 4;
+const sal_Int32 TABLE_INDEX_CATALOG = 0;
+const sal_Int32 TABLE_INDEX_SCHEMA = 1;
+const sal_Int32 TABLE_INDEX_NAME = 2;
+const sal_Int32 TABLE_INDEX_TYPE = 3;
+const sal_Int32 TABLE_INDEX_REMARKS = 4;
 
 struct Statics
 {
