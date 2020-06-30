@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1af20e46_ccf1f9c2",
+        "filename": "config_host.mk.in",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:57:46Z",
+      "side": 1,
+      "message": "This appears to be unused?",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e4e43ba_e04ba840",
         "filename": "configure.ac",
         "patchSetId": 7
