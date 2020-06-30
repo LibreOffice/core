@@ -311,7 +311,7 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     assert(OFFSET_OF(Char4, c) == 3);
 }
 
-static BinaryCompatible_Impl aTest;
+BinaryCompatible_Impl aTest;
 
 #endif
 

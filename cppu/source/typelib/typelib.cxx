@@ -75,7 +75,7 @@ struct AlignSize_Impl
 #endif
 
 // the value of the maximal alignment
-static const sal_Int32 nMaxAlignment = static_cast<sal_Int32>( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
+const sal_Int32 nMaxAlignment = static_cast<sal_Int32>( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
 
 static sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 {
@@ -2355,7 +2355,7 @@ extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
 }
 
 
-static const bool s_aAssignableFromTab[11][11] =
+const bool s_aAssignableFromTab[11][11] =
 {
                           /* from CH,    BO,    BY,    SH,    US,    LO,    UL,    HY,    UH,    FL,    DO */
 /* TypeClass_CHAR */            { true,  false, false, false, false, false, false, false, false, false, false },
