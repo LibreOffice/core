@@ -473,6 +473,20 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     }
 }
 
+bool DomainMapper_Impl::IsLastParaEmpty()
+{
+    bool bRet = true;
+    if (!m_aTextAppendStack.empty() && m_aTextAppendStack.top().xTextAppend)
+    {
+        uno::Reference<text::XTextCursor> xCursor = m_aTextAppendStack.top().xTextAppend->createTextCursor();
+        xCursor->gotoEnd(false);
+        xCursor->goLeft(2, true);
+        auto aString = xCursor->getString();
+        bRet = aString == OUString(SAL_NEWLINE_STRING) + OUString(SAL_NEWLINE_STRING);
+    }
+    return bRet;
+}
+
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_bDiscardHeaderFooter)
