@@ -68,11 +68,11 @@ void SfxStylesInfo_Impl::init(const OUString& rModuleName, const css::uno::Refer
     m_xDoc = xModel;
 }
 
-static const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
-static const char CMDURL_SPART_ONLY    [] = "Style:string=";
-static const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
+const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
+const char CMDURL_SPART_ONLY    [] = "Style:string=";
+const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
-static const char STYLEPROP_UINAME[] = "DisplayName";
+const char STYLEPROP_UINAME[] = "DisplayName";
 
 OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
 {

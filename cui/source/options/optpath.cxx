@@ -98,7 +98,7 @@ struct Handle2CfgNameMapping_Impl
 
 }
 
-static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
+Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 {
     { SvtPathOptions::PATH_AUTOCORRECT, "AutoCorrect" },
     { SvtPathOptions::PATH_AUTOTEXT,    "AutoText" },
