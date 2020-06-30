@@ -30,7 +30,20 @@ void SalBitmap::updateChecksum() const
     if (pBuf)
     {
         nCrc = pBuf->maPalette.GetChecksum();
-        nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+        const int bytesPerPixel = ( pBuf->mnBitCount + 7 ) / 8;
+        if( pBuf->mnFormat & ScanlineFormat::TopDown )
+        {
+            if( pBuf->mnScanlineSize == pBuf->mnWidth * bytesPerPixel )
+                nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            else // Do not include padding with undefined content in the checksum.
+                for( long y = 0; y < pBuf->mnHeight; ++y )
+                    nCrc = vcl_get_checksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, pBuf->mnWidth * bytesPerPixel);
+        }
+        else // Compute checksum in the order of scanlines, to make it consistent between different bitmap implementations.
+        {
+            for( long y = pBuf->mnHeight - 1; y >= 0; --y )
+                nCrc = vcl_get_checksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, pBuf->mnWidth * bytesPerPixel);
+        }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
         pThis->mnChecksum = nCrc;
         pThis->mbChecksumValid = true;
