@@ -133,7 +133,6 @@ IMPL_LINK_NOARG( MediaPlaybackPanel, VolumeSlideHdl, weld::Scale&, void)
 IMPL_LINK_NOARG( MediaPlaybackPanel, SeekHdl, weld::Scale&, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
-    aItem.setState( MediaState::Pause );
     double nTime = 0;
     if (mpMediaItem)
         nTime = mxTimeSlider->get_value() * mpMediaItem->getDuration() / AVMEDIA_TIME_RANGE;
