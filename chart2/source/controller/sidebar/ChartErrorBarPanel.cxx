@@ -112,7 +112,7 @@ struct ErrorBarTypeMap
     sal_Int32 nApi;
 };
 
-static ErrorBarTypeMap const aErrorBarType[] = {
+ErrorBarTypeMap const aErrorBarType[] = {
     { 0, css::chart::ErrorBarStyle::ABSOLUTE },
     { 1, css::chart::ErrorBarStyle::RELATIVE },
     { 2, css::chart::ErrorBarStyle::FROM_DATA },

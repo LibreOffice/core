@@ -48,7 +48,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ElementSelectorToolbarController";
+const char lcl_aServiceName[] = "com.sun.star.comp.chart.ElementSelectorToolbarController";
 }
 
 SelectorListBox::SelectorListBox(vcl::Window* pParent)

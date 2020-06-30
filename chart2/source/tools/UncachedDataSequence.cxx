@@ -41,7 +41,7 @@ using ::chart::impl::UncachedDataSequence_Base;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.UncachedDataSequence";
+const char lcl_aServiceName[] = "com.sun.star.comp.chart.UncachedDataSequence";
 
 enum
 {

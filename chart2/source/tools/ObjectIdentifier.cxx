@@ -52,11 +52,11 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-static const char m_aMultiClick[] = "MultiClick";
-static const char m_aDragMethodEquals[] = "DragMethod=";
-static const char m_aDragParameterEquals[] = "DragParameter=";
-static const char m_aProtocol[] = "CID/";
-static const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
+const char m_aMultiClick[] = "MultiClick";
+const char m_aDragMethodEquals[] = "DragMethod=";
+const char m_aDragParameterEquals[] = "DragParameter=";
+const char m_aProtocol[] = "CID/";
+const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
 
 namespace
 {
