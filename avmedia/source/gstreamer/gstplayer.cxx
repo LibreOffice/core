@@ -679,12 +679,16 @@ void SAL_CALL Player::setMediaTime( double fTime )
 
     gint64 gst_position = llround (fTime * GST_SECOND);
 
+    // tdf#34759: gst_element_seek changes the state to GST_STATE_PAUSED
+    // temporarily, so check beforehand whether we were playing or not
+    const bool bWasPlaying = isPlaying();
+
     gst_element_seek( mpPlaybin, 1.0,
                       GST_FORMAT_TIME,
                       GST_SEEK_FLAG_FLUSH,
                       GST_SEEK_TYPE_SET, gst_position,
                       GST_SEEK_TYPE_NONE, 0 );
-    if( !isPlaying() )
+    if ( !bWasPlaying )
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
     SAL_INFO( "avmedia.gstreamer", AVVERSION "seek to: " << gst_position << " ns original: " << fTime << " s" );
