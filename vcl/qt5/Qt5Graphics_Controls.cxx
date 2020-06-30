@@ -935,8 +935,12 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
             }
             else if (part == ControlPart::Button)
             {
-                contentRect = QRect(boundingRect.left(), boundingRect.top(),
-                                    upscale(25, Round::Ceil), upscale(25, Round::Ceil));
+                QStyleOptionToolButton option;
+                option.arrowType = Qt::NoArrow;
+                option.features = QStyleOptionToolButton::None;
+                option.rect = downscale(QRect({ 0, 0 }, contentRect.size()));
+                contentRect = upscale(
+                    subControlRect(QStyle::CC_ToolButton, &option, QStyle::SC_ToolButton));
                 boundingRect = contentRect;
                 retVal = true;
             }
