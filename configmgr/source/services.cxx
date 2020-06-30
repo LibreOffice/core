@@ -44,7 +44,7 @@ css::uno::Reference< css::uno::XInterface > dummy(
     return css::uno::Reference< css::uno::XInterface >();
 }
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_provider::getImplementationName,
       &configmgr::configuration_provider::getSupportedServiceNames,
       &configmgr::configuration_provider::createFactory, nullptr, 0 },
