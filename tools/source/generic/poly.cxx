@@ -224,7 +224,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
 }
 
 ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-    PolyStyle eStyle, bool bFullCircle )
+    PolyStyle eStyle )
 {
     const long  nWidth = rBound.GetWidth();
     const long  nHeight = rBound.GetHeight();
@@ -268,9 +268,6 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
 
         if( fDiff < 0. )
             fDiff += F_2PI;
-
-        if ( bFullCircle )
-            fDiff = F_2PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
         nPoints = std::max( static_cast<sal_uInt16>( ( fDiff * 0.1591549 ) * nPoints ), sal_uInt16(16) );
@@ -902,7 +899,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY )
 }
 
 Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-                  PolyStyle eStyle, bool bFullCircle ) : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle, bFullCircle))
+                  PolyStyle eStyle ) : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle))
 {
 }
 

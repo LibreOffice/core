@@ -91,8 +91,7 @@ public:
                                  long nRadX, long nRadY );
                         Polygon( const tools::Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
-                                 PolyStyle ePolyStyle = PolyStyle::Arc,
-                                 bool bWholeCircle = false );
+                                 PolyStyle ePolyStyle = PolyStyle::Arc );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints );
