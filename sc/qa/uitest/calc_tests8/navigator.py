@@ -115,3 +115,39 @@ class navigator(UITestCase):
 
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()
+
+
+    def test_tdf134390(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWin = xCalcDoc.getChild("grid_window")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel.executeAction("ROOT", tuple())
+
+        xRow = xNavigatorPanel.getChild('row')
+        xColumn = xNavigatorPanel.getChild('column')
+        self.assertEqual(get_state_as_dict(xColumn)['Value'], '1')
+        self.assertEqual(get_state_as_dict(xRow)['Value'], '1')
+        self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "0")
+        self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], "0")
+
+        xRow.executeAction("UP", tuple())
+        xColumn.executeAction("UP", tuple())
+
+        # Use return to update the current cell
+        xColumn.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+        self.assertEqual(get_state_as_dict(xColumn)['Value'], '2')
+        self.assertEqual(get_state_as_dict(xRow)['Value'], '2')
+
+        self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
+        self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], "1")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+
+        self.ui_test.close_doc()
