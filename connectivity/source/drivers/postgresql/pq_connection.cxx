@@ -584,7 +584,7 @@ static Reference< XInterface >  ConnectionCreateInstance(
 } // end namespace
 
 
-static const struct cppu::ImplementationEntry g_entries[] =
+const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         pq_sdbc_driver::ConnectionCreateInstance, pq_sdbc_driver::ConnectionGetImplementationName,

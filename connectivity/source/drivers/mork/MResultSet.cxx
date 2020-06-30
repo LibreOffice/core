@@ -665,7 +665,7 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
 
 #define WILDCARD "%"
 #define ALT_WILDCARD "*"
-static const sal_Unicode MATCHCHAR = '_';
+const sal_Unicode MATCHCHAR = '_';
 
 void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                     &queryExpression)

@@ -33,7 +33,7 @@ using namespace com::sun::star::sdbcx;
 
 namespace connectivity::mork {
 
-static const int defaultScope = 0x80;
+const int defaultScope = 0x80;
 
 
 OConnection::OConnection(MorkDriver* _pDriver)
