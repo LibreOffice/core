@@ -31,9 +31,6 @@ sc/inc/rangeutl.hxx:162
 sc/inc/xmlwrap.hxx:90
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/inc/checklistmenu.hxx:144
-    void ScCheckListMenuControl::StartPopupMode(const class tools::Rectangle &,enum FloatWinPopupFlags)
-    enum FloatWinPopupFlags nPopupModeFlags setBits=0x400 clearBits=0x3ed
 sc/source/ui/view/cellsh1.cxx:103
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700

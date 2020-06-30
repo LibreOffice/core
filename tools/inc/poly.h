@@ -38,7 +38,7 @@ public:
                     ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound);
                     ImplPolygon( const Point& rCenter, long nRadX, long nRadY );
                     ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-                                    PolyStyle eStyle, bool bFullCircle );
+                                    PolyStyle eStyle );
                     ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1, const Point& rBezPt2,
                                     const Point& rCtrlPt2, sal_uInt16 nPoints );
                     ImplPolygon(const basegfx::B2DPolygon& rPolygon);

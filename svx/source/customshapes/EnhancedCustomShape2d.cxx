@@ -1970,7 +1970,7 @@ static basegfx::B2DPolygon CreateArc( const tools::Rectangle& rRect, const Point
         }
     }
 
-    tools::Polygon aTempPoly( aRect, aStart, aEnd, PolyStyle::Arc, /*bFullCircle*/false );
+    tools::Polygon aTempPoly( aRect, aStart, aEnd, PolyStyle::Arc );
     basegfx::B2DPolygon aRetval;
 
     if ( bClockwise )

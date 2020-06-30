@@ -158,14 +158,10 @@ editeng/source/editeng/impedit3.cxx:154
     void lcl_DrawRedLines(class OutputDevice *,long,const class Point &,unsigned long,unsigned long,const long *,const class WrongList *,short,const class Point &,_Bool,_Bool)
     _Bool bVertical
     IsVertical()
-editeng/source/misc/svxacorr.cxx:2764
+editeng/source/misc/svxacorr.cxx:2782
     _Bool SvxAutocorrWordList::CompareSvxAutocorrWordList::operator()(const class SvxAutocorrWord &,const class SvxAutocorrWord &) const
     const class SvxAutocorrWord & lhs
     CompareSvxAutocorrWordList()
-editeng/source/xml/xmltxtexp.cxx:247
-    void (anonymous namespace)::SvxXMLTextExportComponent::SvxXMLTextExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class EditEngine *,const struct ESelection &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
-    const class rtl::OUString & rFileName
-    ""
 emfio/inc/mtftools.hxx:636
     void emfio::MtfTools::ExcludeClipRect(const class tools::Rectangle &)
     const class tools::Rectangle & rRect
@@ -406,12 +402,12 @@ include/sfx2/dinfdlg.hxx:376
     void CustomPropertiesWindow::AddLine(const class rtl::OUString &,const class com::sun::star::uno::Any &)
     const class rtl::OUString & sName
     ""
-include/sfx2/docfile.hxx:253
+include/sfx2/docfile.hxx:257
     _Bool SfxMedium::SignContents_Impl(class weld::Window *,_Bool,_Bool,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &,const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &,const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &,const class rtl::OUString &)
     _Bool bHasValidDocumentSignature
     HasValidSignatures()
-include/sfx2/docfile.hxx:265
-    _Bool SfxMedium::SignDocumentContentUsingCertificate(_Bool,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &)
+include/sfx2/docfile.hxx:268
+    _Bool SfxMedium::SignDocumentContentUsingCertificate(const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &)
     _Bool bHasValidDocumentSignature
     HasValidSignatures()
 include/sfx2/objsh.hxx:644
@@ -494,19 +490,19 @@ include/vcl/outdev.hxx:1573
     class Bitmap OutputDevice::GetDownsampledBitmap(const class Size &,const class Point &,const class Size &,const class Bitmap &,long,long)
     const class Point & rSrcPt
     Point()
-include/vcl/print.hxx:654
+include/vcl/print.hxx:631
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setSubgroupControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rHelpId
     ""
-include/vcl/print.hxx:670
+include/vcl/print.hxx:647
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,const class rtl::OUString &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,int,const class com::sun::star::uno::Sequence<unsigned char> &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:681
+include/vcl/print.hxx:658
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setRangeControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int,int,int,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
-include/vcl/print.hxx:689
+include/vcl/print.hxx:666
     class com::sun::star::uno::Any vcl::PrinterOptionsHelper::setEditControlOpt(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const struct vcl::PrinterOptionsHelper::UIControlOptions &)
     const class rtl::OUString & i_rTitle
     ""
@@ -526,7 +522,7 @@ include/vcl/transfer.hxx:357
     class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &)
     const class rtl::OUString & rDestDoc
     ""
-include/vcl/treelistbox.hxx:712
+include/vcl/treelistbox.hxx:710
     void SvTreeListBox::ShowFocusRect(const class SvTreeListEntry *)
     const class SvTreeListEntry * pEntry
     FirstSelected()
@@ -534,11 +530,11 @@ include/vcl/virdev.hxx:162
     _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
-include/vcl/weld.hxx:574
+include/vcl/weld.hxx:575
     void weld::ComboBoxEntry::ComboBoxEntry(const class rtl::OUString &)
     const class rtl::OUString & rString
     ""
-include/vcl/weld.hxx:650
+include/vcl/weld.hxx:651
     void weld::ComboBox::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
     const class rtl::OUString & rId
     ""
@@ -557,6 +553,10 @@ include/xmloff/txtparae.hxx:483
 include/xmloff/xmlexp.hxx:279
     void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
     const class rtl::OUString & implementationName
+    ""
+include/xmloff/xmlexp.hxx:279
+    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
+    const class rtl::OUString & rFileName
     ""
 include/xmloff/XMLFontStylesContext.hxx:54
     void XMLFontStylesContext::XMLFontStylesContext(class SvXMLImport &,unsigned short)
@@ -758,10 +758,6 @@ sdext/source/presenter/PresenterConfigurationAccess.hxx:115
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &)
     const class rtl::OUString & rsPathToNode
     ""
-sdext/source/presenter/PresenterTheme.cxx:96
-    class std::shared_ptr<class sdext::presenter::PresenterTheme::FontDescriptor> sdext::presenter::(anonymous namespace)::ReadContext::ReadFont(const class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameAccess> &,const class rtl::OUString &,const class std::shared_ptr<class sdext::presenter::PresenterTheme::FontDescriptor> &)
-    const class rtl::OUString & rsFontPath
-    ""
 sfx2/source/inc/versdlg.hxx:51
     void SfxVersionDialog::SfxVersionDialog(class weld::Window *,class SfxViewFrame *,_Bool)
     _Bool 
@@ -810,11 +806,7 @@ svx/source/inc/treevisitor.hxx:29
     void TreeVisitor::TreeVisitor<ELEMENT, NODEINFO, PROCESSOR>(type-parameter-?-?)
     type-parameter-?-? _nodeInfo
     FormHierarchyComparator()
-svx/source/inc/xmlxtexp.hxx:37
-    void SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::document::XGraphicStorageHandler> &)
-    const class rtl::OUString & rFileName
-    ""
-svx/source/inc/xmlxtexp.hxx:47
+svx/source/inc/xmlxtexp.hxx:46
     _Bool SvxXMLXTableExportComponent::save(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,class rtl::OUString *)
     const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> & xTable
     createInstance()
@@ -1054,15 +1046,15 @@ vcl/source/control/field.cxx:1024
     _Bool ImplMetricProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     _Bool bUseThousandSep
     IsUseThousandSep()
-vcl/source/control/field.cxx:1822
+vcl/source/control/field.cxx:1820
     _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:1822
+vcl/source/control/field.cxx:1820
     _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     _Bool bUseThousandSep
     IsUseThousandSep()
-vcl/source/control/field.cxx:1829
+vcl/source/control/field.cxx:1827
     _Bool ImplCurrencyGetValue(const class rtl::OUString &,long &,unsigned short,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()

@@ -222,6 +222,14 @@ connectivity/inc/sdbcx/VUser.hxx:64
     void connectivity::sdbcx::OUser::OUser(const class rtl::OUString &,_Bool)
     _Bool _bCase
     1
+connectivity/source/drivers/postgresql/pq_connection.cxx:361
+    void pq_sdbc_driver::(anonymous namespace)::cstr_vector::push_back(const char *,enum __sal_NoAcquire)
+    enum __sal_NoAcquire 
+    0
+connectivity/source/drivers/postgresql/pq_resultsetmetadata.hxx:89
+    _Bool pq_sdbc_driver::ResultSetMetaData::getBoolColumnProperty(const class rtl::OUString &,int,_Bool)
+    _Bool def
+    0
 connectivity/source/inc/dbase/DIndex.hxx:115
     _Bool connectivity::dbase::ODbaseIndex::Find(unsigned int,const class connectivity::ORowSetValue &)
     unsigned int nRec
@@ -370,7 +378,7 @@ desktop/source/deployment/gui/dp_gui_updatedialog.hxx:103
     void dp_gui::UpdateDialog::addAdditional(struct dp_gui::UpdateDialog::Index *,_Bool)
     _Bool bEnableCheckBox
     0
-desktop/source/lib/init.cxx:6205
+desktop/source/lib/init.cxx:6235
     struct _LibreOfficeKit * libreofficekit_hook_2(const char *,const char *)
     const char * user_profile_url
     0
@@ -820,12 +828,12 @@ include/editeng/splwrap.hxx:73
     0
 include/editeng/txtrange.hxx:61
     void TextRanger::TextRanger(const class basegfx::B2DPolyPolygon &,const class basegfx::B2DPolyPolygon *,unsigned short,unsigned short,unsigned short,_Bool,_Bool,_Bool)
-    _Bool bVert
-    0
-include/editeng/txtrange.hxx:61
-    void TextRanger::TextRanger(const class basegfx::B2DPolyPolygon &,const class basegfx::B2DPolyPolygon *,unsigned short,unsigned short,unsigned short,_Bool,_Bool,_Bool)
     _Bool bInner
     1
+include/editeng/txtrange.hxx:61
+    void TextRanger::TextRanger(const class basegfx::B2DPolyPolygon &,const class basegfx::B2DPolyPolygon *,unsigned short,unsigned short,unsigned short,_Bool,_Bool,_Bool)
+    _Bool bVert
+    0
 include/filter/msfilter/escherex.hxx:493
     void EscherExAtom::EscherExAtom(class SvStream &,const unsigned short,const unsigned short,const unsigned char)
     const unsigned char nVersion
@@ -962,7 +970,7 @@ include/sfx2/dispatch.hxx:151
     enum ToolbarId SfxDispatcher::GetObjectBarId(unsigned short) const
     unsigned short nPos
     1
-include/sfx2/docfile.hxx:163
+include/sfx2/docfile.hxx:167
     void SfxMedium::DisableFileSync(_Bool)
     _Bool bDisableFileSync
     1
@@ -1376,12 +1384,12 @@ include/test/text/textcontent.hxx:25
     1
 include/test/text/textcontent.hxx:25
     void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
-    const enum com::sun::star::text::WrapTextMode aExpectedWTM
-    0
-include/test/text/textcontent.hxx:25
-    void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
     const enum com::sun::star::text::TextContentAnchorType aNewTCAT
     1
+include/test/text/textcontent.hxx:25
+    void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
+    const enum com::sun::star::text::WrapTextMode aExpectedWTM
+    0
 include/test/text/textcontent.hxx:25
     void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
     const enum com::sun::star::text::WrapTextMode aNewWTM
@@ -1405,6 +1413,10 @@ include/tools/datetime.hxx:43
 include/tools/fract.hxx:45
     void Fraction::Fraction(type-parameter-?-?,type-parameter-?-?,typename enable_if<std::is_integral<T1>::value && std::is_integral<T2>::value, int>::type)
     typename enable_if<std::is_integral<T1>::value && std::is_integral<T2>::value, int>::type 
+    0
+include/tools/poly.hxx:92
+    void tools::Polygon::Polygon(const class tools::Rectangle &,const class Point &,const class Point &,enum PolyStyle,_Bool)
+    _Bool bWholeCircle
     0
 include/tools/stream.hxx:663
     void SvMemoryStream::ObjectOwnsMemory(_Bool)
@@ -1568,11 +1580,11 @@ include/vcl/fieldvalues.hxx:33
     0
 include/vcl/fieldvalues.hxx:53
     double ConvertDoubleValue(long,long,unsigned short,enum FieldUnit,enum FieldUnit)
-    unsigned short nDecDigits
+    long nBaseValue
     0
 include/vcl/fieldvalues.hxx:53
     double ConvertDoubleValue(long,long,unsigned short,enum FieldUnit,enum FieldUnit)
-    long nBaseValue
+    unsigned short nDecDigits
     0
 include/vcl/fmtfield.hxx:126
     void FormattedField::EnableEmptyField(_Bool)
@@ -1686,15 +1698,15 @@ include/vcl/toolkit/combobox.hxx:104
     void ComboBox::EnableUserDraw(_Bool)
     _Bool bUserDraw
     1
-include/vcl/treelistbox.hxx:662
+include/vcl/treelistbox.hxx:660
     void SvTreeListBox::MakeVisible(class SvTreeListEntry *,_Bool)
     _Bool bMoveToTop
     1
-include/vcl/treelistbox.hxx:688
+include/vcl/treelistbox.hxx:686
     unsigned long SvTreeListBox::SelectChildren(class SvTreeListEntry *,_Bool)
     _Bool bSelect
     0
-include/vcl/treelistbox.hxx:698
+include/vcl/treelistbox.hxx:696
     void SvTreeListBox::SetHighlightRange(unsigned short,unsigned short)
     unsigned short nFirstTab
     0
@@ -1726,171 +1738,171 @@ include/vcl/vectorgraphicdata.hxx:91
     void VectorGraphicData::VectorGraphicData(const class rtl::OUString &,enum VectorGraphicDataType)
     enum VectorGraphicDataType eVectorDataType
     0
-include/vcl/weld.hxx:318
+include/vcl/weld.hxx:319
     void weld::ScrolledWindow::hadjustment_configure(int,int,int,int,int,int)
     int step_increment
     1
-include/vcl/weld.hxx:337
+include/vcl/weld.hxx:338
     void weld::ScrolledWindow::vadjustment_configure(int,int,int,int,int,int)
     int lower
     0
-include/vcl/weld.hxx:349
+include/vcl/weld.hxx:350
     void weld::ScrolledWindow::vadjustment_set_lower(int)
     int upper
     0
-include/vcl/weld.hxx:954
+include/vcl/weld.hxx:955
     void weld::TreeView::set_text_emphasis(int,_Bool,int)
     int col
     0
-include/vcl/weld.hxx:955
+include/vcl/weld.hxx:956
     _Bool weld::TreeView::get_text_emphasis(int,int) const
     int col
     0
-include/vcl/weld.hxx:956
+include/vcl/weld.hxx:957
     void weld::TreeView::set_text_align(int,double,int)
     int col
     0
-include/vcl/weld.hxx:1044
+include/vcl/weld.hxx:1045
     void weld::TreeView::set_text_emphasis(const class weld::TreeIter &,_Bool,int)
     int col
     0
-include/vcl/weld.hxx:1045
+include/vcl/weld.hxx:1046
     _Bool weld::TreeView::get_text_emphasis(const class weld::TreeIter &,int) const
     int col
     0
-include/vcl/weld.hxx:1181
+include/vcl/weld.hxx:1182
     void weld::TreeView::set_column_custom_renderer(int,_Bool)
     int nColumn
     0
-include/vcl/weld.hxx:1249
+include/vcl/weld.hxx:1250
     class std::unique_ptr<class weld::TreeIter, struct std::default_delete<class weld::TreeIter> > weld::IconView::make_iterator(const class weld::TreeIter *) const
     const class weld::TreeIter * pOrig
     0
-include/vcl/weld.hxx:2225
+include/vcl/weld.hxx:2241
     class std::unique_ptr<class weld::MessageDialog, struct std::default_delete<class weld::MessageDialog> > weld::Builder::weld_message_dialog(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2228
+include/vcl/weld.hxx:2244
     class std::unique_ptr<class weld::Dialog, struct std::default_delete<class weld::Dialog> > weld::Builder::weld_dialog(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2229
+include/vcl/weld.hxx:2245
     class std::unique_ptr<class weld::Assistant, struct std::default_delete<class weld::Assistant> > weld::Builder::weld_assistant(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2232
+include/vcl/weld.hxx:2248
     class std::unique_ptr<class weld::Widget, struct std::default_delete<class weld::Widget> > weld::Builder::weld_widget(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2233
+include/vcl/weld.hxx:2249
     class std::unique_ptr<class weld::Container, struct std::default_delete<class weld::Container> > weld::Builder::weld_container(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2236
+include/vcl/weld.hxx:2252
     class std::unique_ptr<class weld::Box, struct std::default_delete<class weld::Box> > weld::Builder::weld_box(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2237
+include/vcl/weld.hxx:2253
     class std::unique_ptr<class weld::Paned, struct std::default_delete<class weld::Paned> > weld::Builder::weld_paned(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2238
+include/vcl/weld.hxx:2254
     class std::unique_ptr<class weld::Button, struct std::default_delete<class weld::Button> > weld::Builder::weld_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2239
+include/vcl/weld.hxx:2255
     class std::unique_ptr<class weld::MenuButton, struct std::default_delete<class weld::MenuButton> > weld::Builder::weld_menu_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2243
+include/vcl/weld.hxx:2259
     class std::unique_ptr<class weld::ScrolledWindow, struct std::default_delete<class weld::ScrolledWindow> > weld::Builder::weld_scrolled_window(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2246
+include/vcl/weld.hxx:2262
     class std::unique_ptr<class weld::Notebook, struct std::default_delete<class weld::Notebook> > weld::Builder::weld_notebook(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2251
+include/vcl/weld.hxx:2267
     class std::unique_ptr<class weld::RadioButton, struct std::default_delete<class weld::RadioButton> > weld::Builder::weld_radio_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2254
+include/vcl/weld.hxx:2270
     class std::unique_ptr<class weld::CheckButton, struct std::default_delete<class weld::CheckButton> > weld::Builder::weld_check_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2257
+include/vcl/weld.hxx:2273
     class std::unique_ptr<class weld::LinkButton, struct std::default_delete<class weld::LinkButton> > weld::Builder::weld_link_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2264
+include/vcl/weld.hxx:2280
     class std::unique_ptr<class weld::MetricSpinButton, struct std::default_delete<class weld::MetricSpinButton> > weld::Builder::weld_metric_spin_button(const class rtl::OString &,enum FieldUnit,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2266
+include/vcl/weld.hxx:2282
     class std::unique_ptr<class weld::FormattedSpinButton, struct std::default_delete<class weld::FormattedSpinButton> > weld::Builder::weld_formatted_spin_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2268
+include/vcl/weld.hxx:2284
     class std::unique_ptr<class weld::TimeSpinButton, struct std::default_delete<class weld::TimeSpinButton> > weld::Builder::weld_time_spin_button(const class rtl::OString &,enum TimeFieldFormat,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2270
+include/vcl/weld.hxx:2286
     class std::unique_ptr<class weld::ComboBox, struct std::default_delete<class weld::ComboBox> > weld::Builder::weld_combo_box(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2274
+include/vcl/weld.hxx:2290
     class std::unique_ptr<class weld::IconView, struct std::default_delete<class weld::IconView> > weld::Builder::weld_icon_view(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2276
+include/vcl/weld.hxx:2292
     class std::unique_ptr<class weld::Label, struct std::default_delete<class weld::Label> > weld::Builder::weld_label(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2277
+include/vcl/weld.hxx:2293
     class std::unique_ptr<class weld::TextView, struct std::default_delete<class weld::TextView> > weld::Builder::weld_text_view(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2279
+include/vcl/weld.hxx:2295
     class std::unique_ptr<class weld::Expander, struct std::default_delete<class weld::Expander> > weld::Builder::weld_expander(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2282
+include/vcl/weld.hxx:2298
     class std::unique_ptr<class weld::Scale, struct std::default_delete<class weld::Scale> > weld::Builder::weld_scale(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2283
+include/vcl/weld.hxx:2299
     class std::unique_ptr<class weld::ProgressBar, struct std::default_delete<class weld::ProgressBar> > weld::Builder::weld_progress_bar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2286
+include/vcl/weld.hxx:2302
     class std::unique_ptr<class weld::Spinner, struct std::default_delete<class weld::Spinner> > weld::Builder::weld_spinner(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2288
+include/vcl/weld.hxx:2304
     class std::unique_ptr<class weld::Image, struct std::default_delete<class weld::Image> > weld::Builder::weld_image(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2289
+include/vcl/weld.hxx:2305
     class std::unique_ptr<class weld::Calendar, struct std::default_delete<class weld::Calendar> > weld::Builder::weld_calendar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2292
+include/vcl/weld.hxx:2308
     class std::unique_ptr<class weld::DrawingArea, struct std::default_delete<class weld::DrawingArea> > weld::Builder::weld_drawing_area(const class rtl::OString &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class std::function<class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > (class vcl::Window *)>,void *,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2297
+include/vcl/weld.hxx:2313
     class std::unique_ptr<class weld::EntryTreeView, struct std::default_delete<class weld::EntryTreeView> > weld::Builder::weld_entry_tree_view(const class rtl::OString &,const class rtl::OString &,const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2300
+include/vcl/weld.hxx:2316
     class std::unique_ptr<class weld::Menu, struct std::default_delete<class weld::Menu> > weld::Builder::weld_menu(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2301
+include/vcl/weld.hxx:2317
     class std::unique_ptr<class weld::Toolbar, struct std::default_delete<class weld::Toolbar> > weld::Builder::weld_toolbar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/window.hxx:607
+include/vcl/window.hxx:606
     void vcl::Window::ImplSetMouseTransparent(_Bool)
     _Bool bTransparent
     1
@@ -2000,11 +2012,11 @@ lotuswordpro/source/filter/bento.hxx:203
     0
 lotuswordpro/source/filter/clone.hxx:26
     char & detail::has_clone::check_sig(type-parameter-?-? *,test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, & U::clone> *)
-    test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, & U::clone> * 
+    type-parameter-?-? * 
     0
 lotuswordpro/source/filter/clone.hxx:26
     char & detail::has_clone::check_sig(type-parameter-?-? *,test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, & U::clone> *)
-    type-parameter-?-? * 
+    test<type-parameter-?-? *(type-parameter-?-?::*)(void) const, & U::clone> * 
     0
 lotuswordpro/source/filter/lwpnumericfmt.hxx:112
     void LwpCurrencyInfo::LwpCurrencyInfo(const class rtl::OUString &,_Bool,_Bool)
@@ -2052,11 +2064,11 @@ oox/source/ppt/timenodelistcontext.cxx:103
     0
 oox/source/ppt/timenodelistcontext.cxx:103
     void oox::ppt::(anonymous namespace)::AnimColor::AnimColor(short,int,int,int)
-    int o
+    short cs
     0
 oox/source/ppt/timenodelistcontext.cxx:103
     void oox::ppt::(anonymous namespace)::AnimColor::AnimColor(short,int,int,int)
-    short cs
+    int o
     0
 oox/source/ppt/timenodelistcontext.cxx:103
     void oox::ppt::(anonymous namespace)::AnimColor::AnimColor(short,int,int,int)
@@ -2982,10 +2994,6 @@ sc/source/ui/inc/anyrefdg.hxx:147
     void ScRefHdlrControllerImpl::ScRefHdlrControllerImpl<TBase, bBindRef>(class weld::Window *,const class rtl::OUString &,const class rtl::OString &,const class SfxItemSet *,class SfxBindings *)
     class SfxBindings * pB
     0
-sc/source/ui/inc/checklistmenu.hxx:207
-    void ScCheckListMenuControl::setSelectedMenuItem(unsigned long,_Bool,_Bool)
-    _Bool bEnsureSubMenu
-    0
 sc/source/ui/inc/cliputil.hxx:23
     void PasteFromClipboard(class ScViewData *,class ScTabViewShell *,_Bool)
     _Bool bShowDialog
@@ -3344,16 +3352,16 @@ sfx2/source/inc/workwin.hxx:277
     1
 slideshow/source/engine/opengl/Operation.hxx:226
     class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
-    double T0
-    0
-slideshow/source/engine/opengl/Operation.hxx:226
-    class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
     _Bool bInter
     1
 slideshow/source/engine/opengl/Operation.hxx:226
     class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
     double T1
     1
+slideshow/source/engine/opengl/Operation.hxx:226
+    class std::shared_ptr<class SEllipseTranslate> makeSEllipseTranslate(double,double,double,double,_Bool,double,double)
+    double T0
+    0
 slideshow/source/engine/opengl/Operation.hxx:262
     class std::shared_ptr<class RotateAndScaleDepthByHeight> makeRotateAndScaleDepthByHeight(const struct glm::vec<3, float, glm::packed_highp> &,const struct glm::vec<3, float, glm::packed_highp> &,double,_Bool,_Bool,double,double)
     _Bool bInter
@@ -3450,10 +3458,6 @@ svx/qa/unit/classicshapes.cxx:34
     class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> (anonymous namespace)::ClassicshapesTest::getShape(unsigned char,unsigned char)
     unsigned char nShapeIndex
     0
-svx/source/customshapes/EnhancedCustomShape2d.cxx:1950
-    class basegfx::B2DPolygon CreateArc(const class tools::Rectangle &,const class Point &,const class Point &,const _Bool,_Bool)
-    _Bool bFullCircle
-    0
 svx/source/customshapes/EnhancedCustomShape3d.cxx:129
     enum com::sun::star::drawing::ShadeMode GetShadeMode(const class SdrCustomShapeGeometryItem &,const enum com::sun::star::drawing::ShadeMode)
     const enum com::sun::star::drawing::ShadeMode eDefault
@@ -3474,11 +3478,11 @@ svx/source/inc/celltypes.hxx:59
     void sdr::table::RangeIterator::RangeIterator<T>(const type-parameter-?-? &,const type-parameter-?-? &,_Bool)
     const type-parameter-?-? & rStart
     0
-svx/source/inc/fmexpl.hxx:491
+svx/source/inc/fmexpl.hxx:499
     signed char svxform::NavigatorTree::implExecuteDataTransfer(const class svxform::OControlTransferData &,signed char,const class Point &,_Bool)
     _Bool _bDnD
     1
-svx/source/inc/fmshimp.hxx:251
+svx/source/inc/fmshimp.hxx:253
     void FmXFormShell::didPrepareClose_Lock(_Bool)
     _Bool bDid
     1
@@ -4014,14 +4018,14 @@ vcl/headless/svpgdi.cxx:400
     void (anonymous namespace)::BitmapHelper::BitmapHelper(const class SalBitmap &,const _Bool)
     const _Bool bForceARGB32
     1
-vcl/inc/jsdialog/jsdialogbuilder.hxx:192
-    void JSMessageDialog::JSMessageDialog(class MessageDialog *,class SalInstanceBuilder *,_Bool)
-    class SalInstanceBuilder * pBuilder
-    0
-vcl/inc/jsdialog/jsdialogbuilder.hxx:192
+vcl/inc/jsdialog/jsdialogbuilder.hxx:198
     void JSMessageDialog::JSMessageDialog(class MessageDialog *,class SalInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
     1
+vcl/inc/jsdialog/jsdialogbuilder.hxx:198
+    void JSMessageDialog::JSMessageDialog(class MessageDialog *,class SalInstanceBuilder *,_Bool)
+    class SalInstanceBuilder * pBuilder
+    0
 vcl/inc/listbox.hxx:143
     class rtl::OUString ImplEntryList::GetSelectedEntry(int) const
     int nIndex
@@ -4078,7 +4082,7 @@ vcl/inc/qt5/Qt5VirtualDevice.hxx:42
     void Qt5VirtualDevice::Qt5VirtualDevice(enum DeviceFormat,double)
     double fScale
     1
-vcl/inc/qt5/Qt5Widget.hxx:47
+vcl/inc/qt5/Qt5Widget.hxx:49
     _Bool Qt5Widget::handleKeyEvent(class Qt5Frame &,const class QWidget &,class QKeyEvent *,const enum Qt5Widget::ButtonKeyState)
     const enum Qt5Widget::ButtonKeyState 
     1
@@ -4102,7 +4106,7 @@ vcl/inc/sft.hxx:588
     enum vcl::SFErrCodes CreateT3FromTTGlyphs(struct vcl::TrueTypeFont *,struct _IO_FILE *,const char *,const unsigned short *,unsigned char *,int,int)
     int wmode
     0
-vcl/inc/skia/gdiimpl.hxx:210
+vcl/inc/skia/gdiimpl.hxx:213
     void SkiaSalGraphicsImpl::drawGenericLayout(const class GenericSalLayout &,class Color,const class SkFont &,enum SkiaSalGraphicsImpl::GlyphOrientation)
     enum SkiaSalGraphicsImpl::GlyphOrientation glyphOrientation
     0
@@ -4214,10 +4218,6 @@ vcl/qa/cppunit/BitmapTest.cxx:70
     void assertColorsAreSimilar(int,const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,const class BitmapColor &,const class BitmapColor &)
     int maxDifference
     1
-vcl/skia/gdiimpl.cxx:1254
-    class sk_sp<class SkImage> mergeBitmaps(const class SkiaSalBitmap &,const class SkiaSalBitmap *,const class Size,_Bool)
-    _Bool blockCaching
-    0
 vcl/source/app/salvtables.cxx:1677
     void (anonymous namespace)::SalInstanceAssistant::SalInstanceAssistant(class vcl::RoadmapWizard *,class SalInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
@@ -4310,7 +4310,7 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:4740
     void (anonymous namespace)::GtkInstanceMessageDialog::GtkInstanceMessageDialog(struct _GtkMessageDialog *,class (anonymous namespace)::GtkInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:13716
+vcl/unx/gtk3/gtk3gtkinst.cxx:13738
     int (anonymous namespace)::GtkInstanceComboBox::find_text_including_mru(const class rtl::OUString &,_Bool) const
     _Bool bSearchMRU
     0
@@ -4394,7 +4394,7 @@ xmlscript/source/xmldlg_imexp/exp_share.hxx:223
     void xmlscript::ElementDescriptor::read(const class rtl::OUString &,const class rtl::OUString &,_Bool)
     _Bool forceAttribute
     0
-xmlsecurity/source/component/documentdigitalsignatures.cxx:93
+xmlsecurity/source/component/documentdigitalsignatures.cxx:94
     void (anonymous namespace)::DocumentDigitalSignatures::ImplViewSignatures(const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,enum DocumentSignatureMode,_Bool)
     _Bool bReadOnly
     1
