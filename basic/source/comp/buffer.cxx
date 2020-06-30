@@ -22,7 +22,7 @@
 
 #include <basic/sberrors.hxx>
 
-const static sal_uInt32 UP_LIMIT=0xFFFFFF00;
+const sal_uInt32 UP_LIMIT=0xFFFFFF00;
 
 // The SbiBuffer will be expanded in increments of at least 16 Bytes.
 // This is necessary, because many classes emanate from a buffer length

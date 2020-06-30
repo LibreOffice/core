@@ -47,7 +47,7 @@ struct SbiStatement {
 #define Y   true
 #define N   false
 
-static const SbiStatement StmntTable [] = {
+const SbiStatement StmntTable [] = {
 { ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
 { CALL,     &SbiParser::Call,       N, Y, }, // CALL
 { CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE

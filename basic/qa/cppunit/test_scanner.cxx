@@ -67,12 +67,12 @@ namespace
     CPPUNIT_TEST_SUITE_END();
   };
 
-  static const OUString cr = "\n";
-  static const OUString rem = "REM";
-  static const OUString asdf = "asdf";
-  static const OUString dot = ".";
-  static const OUString goto_ = "goto";
-  static const OUString excl = "!";
+  const OUString cr = "\n";
+  const OUString rem = "REM";
+  const OUString asdf = "asdf";
+  const OUString dot = ".";
+  const OUString goto_ = "goto";
+  const OUString excl = "!";
 
   std::vector<Symbol> getSymbols(const OUString& source, sal_Int32& errors, bool bCompatible = false)
   {
