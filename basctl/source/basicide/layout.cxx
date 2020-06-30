@@ -29,7 +29,7 @@ namespace basctl
 namespace
 {
 // the thickness of the splitting lines
-static long const nSplitThickness = 3;
+long const nSplitThickness = 3;
 } // namespace
 
 // ctor for derived classes
