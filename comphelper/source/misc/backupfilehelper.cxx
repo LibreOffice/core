@@ -48,7 +48,7 @@ using namespace comphelper;
 using namespace css;
 using namespace css::xml::dom;
 
-static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
+const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
 namespace
 {
@@ -353,7 +353,7 @@ namespace
 
     typedef std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
 
-    static const OUStringLiteral gaRegPath { "/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml" };
+    const OUStringLiteral gaRegPath { "/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml" };
 
     class ExtensionInfo
     {

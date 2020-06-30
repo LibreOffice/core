@@ -28,7 +28,7 @@
 namespace comphelper {
 
 namespace {
-    static SolarMutex* g_pSolarMutex = nullptr;
+    SolarMutex* g_pSolarMutex = nullptr;
 }
 
 SolarMutex *SolarMutex::get()
