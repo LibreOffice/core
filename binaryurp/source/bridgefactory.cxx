@@ -200,7 +200,7 @@ void BridgeFactory::disposing() {
 
 namespace {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &binaryurp::BridgeFactory::static_create,
       &binaryurp::BridgeFactory::static_getImplementationName,
       &binaryurp::BridgeFactory::static_getSupportedServiceNames,
