@@ -23,6 +23,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <unotools/tempfile.hxx>
 #include <config_features.h>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Writer.hxx>
+
 
 class Test : public SwModelTestBase
 {
@@ -43,6 +46,8 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
+
+    void verifyComboBoxExport(bool aComboBoxAsDropDown);
 };
 
 DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
@@ -708,27 +713,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76312, "FDO76312.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx")
+void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
 {
-    // check XML
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "manolo");
-
-    // check imported control
-    if (getShapes() > 0)
-    {
-        uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
-
-        CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
-
-        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
-    }
-    else
+    if (aComboBoxAsDropDown)
     {
         // ComboBox was imported as DropDown text field
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -739,13 +726,57 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx"
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), getProperty<OUString>(aField, "SelectedItem"));
-
         uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
         CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
         CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
     }
+    else
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XControlShape> xControl(xShape, uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
+
+        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+    }
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx")
+{
+    // check XML
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "manolo");
+
+    // check imported control
+    verifyComboBoxExport(getShapes() == 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_true)
+{
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);
+    batch->commit();
+
+    load(mpTestDocumentPath, "combobox-control.docx");
+    verifyComboBoxExport(true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
+{
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(false, batch);
+    batch->commit();
+
+    load(mpTestDocumentPath, "combobox-control.docx");
+    verifyComboBoxExport(false);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCheckBoxControl, "checkbox-control.docx")
