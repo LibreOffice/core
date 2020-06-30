@@ -453,6 +453,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf118701, "tdf118701.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("At least one paragraph is missing from the file!", 3, getParagraphs());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
