@@ -195,7 +195,7 @@ struct ExtensionMap
 
 }
 
-static const ExtensionMap aWriterExtensionMap[] =
+const ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   "MS Word 97" },
     { "docm",  "MS Word 2007 XML VBA" },
@@ -213,7 +213,7 @@ static const ExtensionMap aWriterExtensionMap[] =
     { nullptr, nullptr }
 };
 
-static const ExtensionMap aCalcExtensionMap[] =
+const ExtensionMap aCalcExtensionMap[] =
 {
     { "csv",   "Text - txt - csv (StarCalc)" },
     { "fods",  "OpenDocument Spreadsheet Flat XML" },
@@ -229,7 +229,7 @@ static const ExtensionMap aCalcExtensionMap[] =
     { nullptr, nullptr }
 };
 
-static const ExtensionMap aImpressExtensionMap[] =
+const ExtensionMap aImpressExtensionMap[] =
 {
     { "fodp",  "OpenDocument Presentation Flat XML" },
     { "html",  "impress_html_Export" },
@@ -249,7 +249,7 @@ static const ExtensionMap aImpressExtensionMap[] =
     { nullptr, nullptr }
 };
 
-static const ExtensionMap aDrawExtensionMap[] =
+const ExtensionMap aDrawExtensionMap[] =
 {
     { "fodg",  "draw_ODG_FlatXML" },
     { "html",  "draw_html_Export" },

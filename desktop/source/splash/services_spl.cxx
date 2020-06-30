@@ -28,7 +28,7 @@
 
 namespace {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     {
       &desktop::splash::create,
       &desktop::splash::getImplementationName,

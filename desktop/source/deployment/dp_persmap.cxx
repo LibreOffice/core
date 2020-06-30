@@ -35,7 +35,7 @@ using namespace ::rtl;
 namespace dp_misc
 {
 
-static const char PmapMagic[4] = {'P','m','p','1'};
+const char PmapMagic[4] = {'P','m','p','1'};
 
 PersistentMap::PersistentMap( OUString const & url_ )
 :    m_MapFile( expandUnoRcUrl(url_) )

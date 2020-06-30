@@ -70,9 +70,9 @@ using namespace com::sun::star;
 namespace desktop
 {
 
-static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
+const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
+const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
+const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
 static OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
 {
@@ -397,7 +397,7 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject const & dirURL)
 
 #if defined UNX && ! defined MACOSX
 
-static const char XDG_CONFIG_PART[] = "/.config/";
+const char XDG_CONFIG_PART[] = "/.config/";
 
 OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
 {

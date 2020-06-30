@@ -40,19 +40,19 @@
 
 namespace {
 
-static char const namespaceLibreOffice[] =
+char const namespaceLibreOffice[] =
     "http://libreoffice.org/extensions/description/2011";
 
-static char const namespaceOpenOfficeOrg[] =
+char const namespaceOpenOfficeOrg[] =
     "http://openoffice.org/extensions/description/2006";
 
-static char const minimalVersionLibreOffice[] = "LibreOffice-minimal-version";
-static char const maximalVersionLibreOffice[] = "LibreOffice-maximal-version";
+char const minimalVersionLibreOffice[] = "LibreOffice-minimal-version";
+char const maximalVersionLibreOffice[] = "LibreOffice-maximal-version";
 
-static char const minimalVersionOpenOfficeOrg[] =
+char const minimalVersionOpenOfficeOrg[] =
     "OpenOffice.org-minimal-version";
 
-static char const maximalVersionOpenOfficeOrg[] =
+char const maximalVersionOpenOfficeOrg[] =
     "OpenOffice.org-maximal-version";
 
 OUString getLibreOfficeMajorMinorMicro() {

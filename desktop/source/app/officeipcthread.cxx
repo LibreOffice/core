@@ -60,9 +60,9 @@ using namespace ::com::sun::star::frame;
 
 namespace {
 
-static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
-static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
-static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
+char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
+char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
+char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
 
 // Receives packets from the pipe until a packet ends in a NUL character (that
 // will not be included in the returned string) or it cannot read anything (due
