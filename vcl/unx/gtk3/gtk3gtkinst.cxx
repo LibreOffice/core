@@ -8691,7 +8691,9 @@ private:
         pThis->signal_activate();
     }
 
-    void signal_activate()
+protected:
+
+    virtual void signal_activate()
     {
         if (m_aActivateHdl.IsSet())
         {
@@ -12005,6 +12007,12 @@ private:
             return 1;
         }
         return GTK_INPUT_ERROR;
+    }
+
+    virtual void signal_activate() override
+    {
+        gtk_spin_button_update(m_pButton);
+        GtkInstanceEntry::signal_activate();
     }
 
     double toGtk(int nValue) const
