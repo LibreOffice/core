@@ -3497,8 +3497,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
                             && !m_pImpl->GetIsDummyParaAddedForTableInSection()
-                            && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
-                            && !m_pImpl->GetIsPreviousParagraphFramed());
+                            && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE))
+                            && !m_pImpl->GetIsPreviousParagraphFramed() );
 
             const bool bNoNumbering = bRemove || (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && bSingleParagraph);
             PropertyMapPtr xContext = bNoNumbering ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
@@ -3514,7 +3514,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
             m_pImpl->SetParaSectpr(false);
             finishParagraph(bRemove);
-            if (bRemove)
+            if (bRemove  && m_pImpl->IsLastParaEmpty())
                 m_pImpl->RemoveLastParagraph();
         }
         else
