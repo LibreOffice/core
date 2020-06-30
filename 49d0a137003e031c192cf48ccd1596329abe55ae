@@ -34,6 +34,24 @@
       "revId": "49d0a137003e031c192cf48ccd1596329abe55ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143b51ae_6da4886e",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-30T12:47:21Z",
+      "side": 1,
+      "message": "Yes, do it.",
+      "parentUuid": "fc4f30f0_ad68957d",
+      "revId": "49d0a137003e031c192cf48ccd1596329abe55ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
