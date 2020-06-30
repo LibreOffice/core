@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec37ded3_5823e8b1",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T08:58:53Z",
+      "side": 1,
+      "message": "Sure, I can hide the \"what is LibreOffice\" section when flavor\u003d\u003dPersonal.",
+      "parentUuid": "67b12f70_8cd3a2a1",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 19
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0223ffa6_a533be03",
         "filename": "include/sfx2/strings.hrc",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1a3852dc_79572f69",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T08:58:53Z",
+      "side": 1,
+      "message": "I like it. :-)",
+      "parentUuid": "0223ffa6_a533be03",
+      "range": {
+        "startLine": 350,
+        "startChar": 73,
+        "endLine": 350,
+        "endChar": 174
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1cf33e64_1e02913b",
         "filename": "sfx2/source/control/recentdocsview.cxx",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-29T19:05:22Z",
       "side": 1,
       "message": "Somewhat inappropriate here, with: Welcome, personal/business disclaimer, drop document tip. Maybe with 2x \\n...",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 26
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "142605f7_69e6d262",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T08:58:53Z",
+      "side": 1,
+      "message": "I\u0027ll check how easy it is to resurrect the bitmap removed by the tdf#128743 fix (and mention Personal there in some way); then this could be dropped.",
+      "parentUuid": "1cf33e64_1e02913b",
       "range": {
         "startLine": 385,
         "startChar": 0,
