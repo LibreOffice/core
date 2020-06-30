@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea16bc6c_562b59ef",
+        "filename": "sw/qa/core/txtnode/txtnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-30T09:36:36Z",
+      "side": 1,
+      "message": "Can we possibly have an easy-hack to convert most of such bool arguments into telling enums?",
+      "range": {
+        "startLine": 54,
+        "startChar": 25,
+        "endLine": 54,
+        "endChar": 36
+      },
+      "revId": "682e0488df819c191c13a03758fad0690706e508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
