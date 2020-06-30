@@ -1934,7 +1934,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         OUString sAdjustment = extractAdjustment(rMap);
 
-        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK|WB_SPIN|WB_REPEAT;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_3DLOOK|WB_SPIN|WB_REPEAT;
+        if (extractHasFrame(rMap))
+            nBits |= WB_BORDER;
 
         if (m_bLegacy)
         {
