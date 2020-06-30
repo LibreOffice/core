@@ -33,6 +33,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf118701, "tdf118701.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("At least one paragraph is missing from the file!", 3, getParagraphs());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
 {
     // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.

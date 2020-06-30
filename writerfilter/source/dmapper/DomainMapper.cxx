@@ -3516,7 +3516,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
             m_pImpl->SetParaSectpr(false);
             finishParagraph(bRemove);
-            if (bRemove)
+            if (bRemove && m_pImpl->IsLastParaEmpty())
                 m_pImpl->RemoveLastParagraph();
         }
         else

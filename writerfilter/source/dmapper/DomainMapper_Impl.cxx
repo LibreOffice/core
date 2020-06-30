@@ -474,6 +474,22 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     }
 }
 
+bool DomainMapper_Impl::IsLastParaEmpty()
+{
+    bool bRet = true;
+    if (!m_aTextAppendStack.empty() && m_aTextAppendStack.top().xTextAppend)
+    {
+        //creating cursor for finding text content
+        uno::Reference<text::XTextCursor> xCursor = m_aTextAppendStack.top().xTextAppend->createTextCursor();
+        xCursor->gotoEnd(false);
+        //selecting the last 2 characters in the document
+        xCursor->goLeft(2, true);
+        //the last paragraph is empty, if they are newlines
+        bRet = xCursor->getString().match(OUString(SAL_NEWLINE_STRING).concat(SAL_NEWLINE_STRING));
+    }
+    return bRet;
+}
+
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_bDiscardHeaderFooter)
