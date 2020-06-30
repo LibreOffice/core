@@ -1354,12 +1354,14 @@ static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButton
 
 bool ToolBox::ImplCalcItem()
 {
-
     // recalc required ?
     if ( !mbCalc )
         return false;
 
     ImplDisableFlatButtons();
+
+    OutputDevice *pDefault = Application::GetDefaultDevice();
+    float fScaleFactor = pDefault ? pDefault->GetDPIScaleFactor() : 1.0;
 
     long            nDefWidth;
     long            nDefHeight;
@@ -1367,7 +1369,7 @@ bool ToolBox::ImplCalcItem()
     long            nMaxHeight = 0;
     long            nMinWidth   = 6;
     long            nMinHeight  = 6;
-    long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
+    long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH * fScaleFactor;
 #ifdef IOS
     nDropDownArrowWidth *= 3;
 #endif
