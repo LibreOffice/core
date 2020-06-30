@@ -164,6 +164,30 @@
       "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2323e726_dc4565b2",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-30T10:07:11Z",
+      "side": 1,
+      "message": "I just uploaded my current state, I hope all your comments are addressed, except the start center sidebar. I\u0027ll check, perhaps we can just put the LO logo at the bottom left corner (above the help/extensions buttons), that might be a place where it\u0027s visible even with a non-empty recent documents list and does not require restoring the semi-transparent sidebar background. Exploring options... :-)",
+      "parentUuid": "0010c008_be6e74de",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 26
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
