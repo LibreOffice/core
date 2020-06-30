@@ -72,6 +72,7 @@
 #include <svtools/ehdl.hxx>
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
