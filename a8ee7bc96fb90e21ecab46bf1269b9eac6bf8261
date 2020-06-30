@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b02414ff_74f4d9de",
+        "filename": "include/sfx2/infobar.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-30T21:46:42Z",
+      "side": 1,
+      "message": "Urk. Quite shocked the earlier code compiled w/o warnings ;)",
+      "revId": "a8ee7bc96fb90e21ecab46bf1269b9eac6bf8261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c70b892b_8d8e0dd1",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-30T21:46:42Z",
+      "side": 1,
+      "message": "Seeing that now - no default args at the function _definition_ please. Behaviour is quite unintuitive (only calling code in this compilation unit sees the defaults). As the header doesn\u0027t have it, lets simply rid us of it",
+      "revId": "a8ee7bc96fb90e21ecab46bf1269b9eac6bf8261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
