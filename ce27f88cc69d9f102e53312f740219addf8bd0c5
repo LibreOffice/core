@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e4e43ba_e04ba840",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:52:05Z",
+      "side": 1,
+      "message": "Does it work to use $with_product_flavor before the below AC_ARG_WITH(product-flavor,...)?\n\n(Also looks confusing that the below AC_ARG_WITH(product-flavor,...) defines with_product_flavor based on $PRODUCTFLAVOR, which is defined up here based on the $with_product_flavor defined below.)",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d5573d_58f5685d",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:52:05Z",
+      "side": 1,
+      "message": "This could probably use std::string_view instead of OString?",
+      "range": {
+        "startLine": 94,
+        "startChar": 6,
+        "endLine": 94,
+        "endChar": 13
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3fbdcbe_22a6b51a",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:52:05Z",
+      "side": 1,
+      "message": "Why is there a change here?",
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "722d42d3_8f4341a8",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:52:05Z",
+      "side": 1,
+      "message": "Or !std::string_view(PRODUCTFLAVOR).empty() for something guaranteed to consteval?",
+      "range": {
+        "startLine": 521,
+        "startChar": 8,
+        "endLine": 521,
+        "endChar": 29
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc254ffc_e873975d",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-30T13:52:05Z",
+      "side": 1,
+      "message": "Combine these as sTitle.append(\" \" PRODUCTFLAVOR)?",
+      "range": {
+        "startLine": 523,
+        "startChar": 8,
+        "endLine": 524,
+        "endChar": 37
+      },
+      "revId": "ce27f88cc69d9f102e53312f740219addf8bd0c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
