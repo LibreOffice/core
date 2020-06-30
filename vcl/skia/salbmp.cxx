@@ -262,6 +262,7 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 #endif
         mPalette = pBuffer->maPalette;
         ResetCachedData();
+        InvalidateChecksum();
     }
     // Are there any more ground movements underneath us ?
     assert(pBuffer->mnWidth == mSize.Width());
