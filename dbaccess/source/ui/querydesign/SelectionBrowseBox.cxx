@@ -2060,7 +2060,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
     return i;
 }
 
-static const long nVisibleRowMask[] =
+const long nVisibleRowMask[] =
                     {
                             0x0001,
                             0x0002,

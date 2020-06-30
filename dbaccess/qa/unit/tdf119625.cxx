@@ -52,9 +52,8 @@ struct expect_t
    the level we are testing, this test will have to allow for or set
    the destination timezone.
  */
-static const expect_t expect[]
-    = { { 0, 15, 10, 10 }, { 1, 23, 30, 30 }, { 2, 5, 0, 0 },  { 3, 4, 30, 0 },
-        { 4, 3, 15, 10 },  { 5, 5, 0, 0 },    { 6, 3, 22, 22 } };
+const expect_t expect[] = { { 0, 15, 10, 10 }, { 1, 23, 30, 30 }, { 2, 5, 0, 0 },  { 3, 4, 30, 0 },
+                            { 4, 3, 15, 10 },  { 5, 5, 0, 0 },    { 6, 3, 22, 22 } };
 
 void Tdf119625Test::testTime()
 {
