@@ -8319,16 +8319,39 @@ void ScInterpreter::ScOffset()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
-        sal_Int32 nColNew = -1, nRowNew = -1, nColPlus, nRowPlus;
+        bool bNewWidth = false;
+        bool bNewHeight = false;
+        sal_Int32 nColNew = 1, nRowNew = 1;
         if (nParamCount == 5)
-            nColNew = GetInt32();
+        {
+            if (IsMissing())
+                PopError();
+            else
+            {
+                nColNew = GetInt32();
+                bNewWidth = true;
+            }
+        }
         if (nParamCount >= 4)
-            nRowNew = GetInt32WithDefault(-1);
-        nColPlus = GetInt32();
-        nRowPlus = GetInt32();
+        {
+            if (IsMissing())
+                PopError();
+            else
+            {
+                nRowNew = GetInt32();
+                bNewHeight = true;
+            }
+        }
+        sal_Int32 nColPlus = GetInt32();
+        sal_Int32 nRowPlus = GetInt32();
         if (nGlobalError != FormulaError::NONE)
         {
             PushError( nGlobalError);
+            return;
+        }
+        if (nColNew <= 0 || nRowNew <= 0)
+        {
+            PushIllegalArgument();
             return;
         }
         SCCOL nCol1(0);
@@ -8337,17 +8360,12 @@ void ScInterpreter::ScOffset()
         SCCOL nCol2(0);
         SCROW nRow2(0);
         SCTAB nTab2(0);
-        if (nColNew == 0 || nRowNew == 0)
-        {
-            PushIllegalArgument();
-            return;
-        }
         switch (GetStackType())
         {
         case svSingleRef:
         {
             PopSingleRef(nCol1, nRow1, nTab1);
-            if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
+            if (!bNewWidth && !bNewHeight)
             {
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
@@ -8358,10 +8376,6 @@ void ScInterpreter::ScOffset()
             }
             else
             {
-                if (nColNew < 0)
-                    nColNew = 1;
-                if (nRowNew < 0)
-                    nRowNew = 1;
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
                 nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
@@ -8385,7 +8399,7 @@ void ScInterpreter::ScOffset()
             nRow1 = aAbsRef.Row();
             nTab1 = aAbsRef.Tab();
 
-            if (nParamCount == 3 || (nColNew < 0 && nRowNew < 0))
+            if (!bNewWidth && !bNewHeight)
             {
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
@@ -8396,10 +8410,6 @@ void ScInterpreter::ScOffset()
             }
             else
             {
-                if (nColNew < 0)
-                    nColNew = 1;
-                if (nRowNew < 0)
-                    nRowNew = 1;
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
                 nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
@@ -8416,9 +8426,9 @@ void ScInterpreter::ScOffset()
         case svDoubleRef:
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nColNew < 0)
+            if (!bNewWidth)
                 nColNew = nCol2 - nCol1 + 1;
-            if (nRowNew < 0)
+            if (!bNewHeight)
                 nRowNew = nRow2 - nRow1 + 1;
             nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
             nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
@@ -8444,9 +8454,9 @@ void ScInterpreter::ScOffset()
             nCol2 = aAbs.aEnd.Col();
             nRow2 = aAbs.aEnd.Row();
             nTab2 = aAbs.aEnd.Tab();
-            if (nColNew < 0)
+            if (!bNewWidth)
                 nColNew = nCol2 - nCol1 + 1;
-            if (nRowNew < 0)
+            if (!bNewHeight)
                 nRowNew = nRow2 - nRow1 + 1;
             nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
             nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
