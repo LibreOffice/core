@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc336d33_81a3010c",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-06-30T07:39:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be a document compat option? See 9b5805d1ef2b9e9c4e8f389c069807bf4489ea95 for an example.",
+      "range": {
+        "startLine": 2522,
+        "startChar": 0,
+        "endLine": 2522,
+        "endChar": 75
+      },
+      "revId": "ed096a6dda13ab18625f97fbb62262ff0eca54d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
