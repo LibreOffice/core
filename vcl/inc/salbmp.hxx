@@ -86,6 +86,11 @@ public:
         return false;
     }
 
+    virtual bool            Erase( const Color& /*color*/ )
+    {
+        return false;
+    }
+
     void GetChecksum(BitmapChecksum& rChecksum) const
     {
         updateChecksum();

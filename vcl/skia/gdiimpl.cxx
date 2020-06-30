@@ -1009,7 +1009,7 @@ bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap
     // combinedTextureFragmentShader.glsl, the layer is not even alpha values but
     // simply yes-or-no mask.
     // See also blendAlphaBitmap().
-    drawImage(rPosAry, rSkiaBitmap.GetSkImage(), SkBlendMode::kMultiply);
+    drawBitmap(rPosAry, rSkiaBitmap, SkBlendMode::kMultiply);
     return true;
 }
 
@@ -1040,11 +1040,11 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // First do the "( 1 - alpha ) * mask"
     // (no idea how to do "floor", but hopefully not needed in practice).
     sk_sp<SkShader> shaderAlpha
-        = SkShaders::Blend(SkBlendMode::kDstOut, rSkiaMaskBitmap.GetAlphaSkImage()->makeShader(),
-                           rSkiaAlphaBitmap.GetAlphaSkImage()->makeShader());
+        = SkShaders::Blend(SkBlendMode::kDstOut, rSkiaMaskBitmap.GetAlphaSkShader(),
+                           rSkiaAlphaBitmap.GetAlphaSkShader());
     // And now draw the bitmap with "1 - x", where x is the "( 1 - alpha ) * mask".
-    sk_sp<SkShader> shader = SkShaders::Blend(SkBlendMode::kSrcOut, shaderAlpha,
-                                              rSkiaSourceBitmap.GetSkImage()->makeShader());
+    sk_sp<SkShader> shader
+        = SkShaders::Blend(SkBlendMode::kSrcOut, shaderAlpha, rSkiaSourceBitmap.GetSkShader());
     drawShader(rPosAry, shader);
     return true;
 }
@@ -1057,7 +1057,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSalBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSalBitmap);
 
-    drawImage(rPosAry, rSkiaSourceBitmap.GetSkImage());
+    drawBitmap(rPosAry, rSkiaSourceBitmap);
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
@@ -1074,7 +1074,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
     drawShader(rPosAry,
                SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
                                 SkShaders::Color(toSkColor(nMaskColor)),
-                                skiaBitmap.GetAlphaSkImage()->makeShader()));
+                                skiaBitmap.GetAlphaSkShader()));
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
@@ -1227,6 +1227,31 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray
 
 bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32) { return false; }
 
+static void drawBitmapToCanvas(const SkiaSalBitmap& bitmap, SkCanvas* canvas, const SkPaint& paint)
+{
+    if (bitmap.PreferSkShader())
+    {
+        SkPaint paint2(paint);
+        paint2.setShader(bitmap.GetSkShader());
+        canvas->drawPaint(paint2);
+    }
+    else
+        canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
+}
+
+static void drawAlphaBitmapToCanvas(const SkiaSalBitmap& bitmap, SkCanvas* canvas,
+                                    const SkPaint& paint)
+{
+    if (bitmap.PreferSkShader())
+    {
+        SkPaint paint2(paint);
+        paint2.setShader(bitmap.GetAlphaSkShader());
+        canvas->drawPaint(paint2);
+    }
+    else
+        canvas->drawImage(bitmap.GetAlphaSkImage(), 0, 0, &paint);
+}
+
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
 sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitmap,
@@ -1254,15 +1279,10 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     keyBuf.append(targetSize.Width())
         .append("x")
         .append(targetSize.Height())
-        .append("_0x")
-        .append(reinterpret_cast<sal_IntPtr>(&bitmap), 16)
-        .append("_0x")
-        .append(reinterpret_cast<sal_IntPtr>(alphaBitmap), 16)
         .append("_")
-        .append(static_cast<sal_Int64>(bitmap.GetSkImage()->uniqueID()));
+        .append(bitmap.GetImageKey());
     if (alphaBitmap)
-        keyBuf.append("_").append(
-            static_cast<sal_Int64>(alphaBitmap->GetAlphaSkImage()->uniqueID()));
+        keyBuf.append("_").append(alphaBitmap->GetAlphaImageKey());
     key = keyBuf.makeStringAndClear();
     image = SkiaHelper::findCachedImage(key);
     if (image)
@@ -1279,9 +1299,9 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
             return nullptr;
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        mergedSurface->getCanvas()->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
+        drawBitmapToCanvas(bitmap, mergedSurface->getCanvas(), paint);
         paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
-        mergedSurface->getCanvas()->drawImage(alphaBitmap->GetAlphaSkImage(), 0, 0, &paint);
+        drawAlphaBitmapToCanvas(*alphaBitmap, mergedSurface->getCanvas(), paint);
         sk_sp<SkSurface> scaledSurface = SkiaHelper::createSkSurface(targetSize);
         if (!scaledSurface)
             return nullptr;
@@ -1310,11 +1330,11 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
             paint.setFilterQuality(kHigh_SkFilterQuality);
         }
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
+        drawBitmapToCanvas(bitmap, canvas, paint);
         if (alphaBitmap != nullptr)
         {
             paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
-            canvas->drawImage(alphaBitmap->GetAlphaSkImage(), 0, 0, &paint);
+            drawAlphaBitmapToCanvas(*alphaBitmap, canvas, paint);
         }
         image = tmpSurface->makeImageSnapshot();
     }
@@ -1349,11 +1369,19 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     else
         drawShader(
             rPosAry,
-            SkShaders::Blend(
-                SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkImage()->makeShader(),
-                static_cast<const SkiaSalBitmap*>(&rAlphaBitmap)->GetAlphaSkImage()->makeShader()));
+            SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                             static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkShader(),
+                             static_cast<const SkiaSalBitmap*>(&rAlphaBitmap)->GetAlphaSkShader()));
     return true;
+}
+
+void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
+                                     SkBlendMode blendMode)
+{
+    if (bitmap.PreferSkShader())
+        drawShader(rPosAry, bitmap.GetSkShader(), blendMode);
+    else
+        drawImage(rPosAry, bitmap.GetSkImage(), blendMode);
 }
 
 void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
@@ -1379,13 +1407,15 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
 
 // SkShader can be used to merge multiple bitmaps with appropriate blend modes (e.g. when
 // merging a bitmap with its alpha mask).
-void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader)
+void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
+                                     SkBlendMode blendMode)
 {
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawshader(" << this << "): " << rPosAry);
     SkRect destinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                               rPosAry.mnDestHeight);
     SkPaint paint;
+    paint.setBlendMode(blendMode);
     paint.setShader(shader);
     if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
         paint.setFilterQuality(kHigh_SkFilterQuality);
@@ -1472,8 +1502,15 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
             // SkCanvas::drawPaint() cannot do rectangles, so clip (is transformed by the matrix too).
             canvas->clipRect(SkRect::MakeWH(aSize.Width(), aSize.Height()));
             paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                                             rSkiaBitmap.GetSkImage()->makeShader(),
-                                             pSkiaAlphaBitmap->GetAlphaSkImage()->makeShader()));
+                                             rSkiaBitmap.GetSkShader(),
+                                             pSkiaAlphaBitmap->GetAlphaSkShader()));
+            canvas->drawPaint(paint);
+        }
+        else if (rSkiaBitmap.PreferSkShader())
+        {
+            // SkCanvas::drawPaint() cannot do rectangles, so clip (is transformed by the matrix too).
+            canvas->clipRect(SkRect::MakeWH(aSize.Width(), aSize.Height()));
+            paint.setShader(rSkiaBitmap.GetSkShader());
             canvas->drawPaint(paint);
         }
         else

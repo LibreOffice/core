@@ -59,13 +59,24 @@ public:
                          sal_uInt8 nTol) override;
     virtual bool InterpretAs8Bit() override;
     virtual bool ConvertToGreyscale() override;
+    virtual bool Erase(const Color& color) override;
 
     const BitmapPalette& Palette() const { return mPalette; }
+
+    // True if GetSkShader() should be preferred to GetSkImage() (or the Alpha variants).
+    bool PreferSkShader() const;
+
     // Returns the contents as SkImage (possibly GPU-backed).
     const sk_sp<SkImage>& GetSkImage() const;
+    sk_sp<SkShader> GetSkShader() const;
 
     // Returns the contents as alpha SkImage (possibly GPU-backed)
     const sk_sp<SkImage>& GetAlphaSkImage() const;
+    sk_sp<SkShader> GetAlphaSkShader() const;
+
+    // Key for caching/hashing.
+    OString GetImageKey() const;
+    OString GetAlphaImageKey() const;
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
@@ -86,6 +97,7 @@ private:
     void EnsureBitmapUniqueData();
     // Allocate mBuffer (with uninitialized contents).
     bool CreateBitmapData();
+    void EraseInternal();
     SkBitmap GetAsSkBitmap() const;
 #ifdef DBG_UTIL
     void verify() const;
@@ -126,6 +138,9 @@ private:
     // data in mBuffer, if it differs from mSize, then there is a scaling operation pending.
     Size mPixelsSize;
     SkFilterQuality mScaleQuality = kHigh_SkFilterQuality; // quality for on-demand scaling
+    // Erase() is delayed, just sets these two instead of filling the buffer.
+    bool mEraseColorSet = false;
+    Color mEraseColor;
 #ifdef DBG_UTIL
     int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
 #endif
