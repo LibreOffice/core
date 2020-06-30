@@ -619,6 +619,7 @@ public:
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
+    bool IsLastParaEmpty();
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
