@@ -3497,7 +3497,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
                             && !m_pImpl->GetIsDummyParaAddedForTableInSection()
-                            && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
+                               && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE))
                             && !m_pImpl->GetIsPreviousParagraphFramed());
 
             const bool bNoNumbering = bRemove || (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && bSingleParagraph);
@@ -3514,7 +3514,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
             m_pImpl->SetParaSectpr(false);
             finishParagraph(bRemove);
-            if (bRemove)
+            if (bRemove && pSectionContext && pSectionContext->GetBreakType() != NS_ooxml::LN_Value_ST_SectionMark_nextPage)
                 m_pImpl->RemoveLastParagraph();
         }
         else
