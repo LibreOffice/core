@@ -1012,10 +1012,10 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
             "281fc589",
             "5e01ddcc",
             "4df0e464",
-            "34434a50",
-            "d1736327",
-            "b37875c2",
-            "a85d44b8",
+            "6c1263f9",
+            "747e8dfb",
+            "3c80d829",
+            "71efc447",
         });
     }
 
