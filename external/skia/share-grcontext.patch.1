@@ -1,5 +1,5 @@
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
-index c2b26b4254..fe1afd30a1 100644
+index 970c67ec0c..371bd8ab0c 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
 +++ b/tools/sk_app/VulkanWindowContext.cpp
 @@ -24,8 +24,10 @@
@@ -228,11 +228,11 @@ index c2b26b4254..fe1afd30a1 100644
 +        fDestroySwapchainKHR(fShared->fDevice, swapchainCreateInfo.oldSwapchain, nullptr);
      }
  
-     this->createBuffers(swapchainCreateInfo.imageFormat, colorType);
-@@ -323,10 +340,10 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
- }
+     this->createBuffers(swapchainCreateInfo.imageFormat, colorType,
+@@ -325,10 +342,10 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
  
- void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType) {
+ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType,
+                                         VkSharingMode sharingMode) {
 -    fGetSwapchainImagesKHR(fDevice, fSwapchain, &fImageCount, nullptr);
 +    fGetSwapchainImagesKHR(fShared->fDevice, fSwapchain, &fImageCount, nullptr);
      SkASSERT(fImageCount);
@@ -242,16 +242,16 @@ index c2b26b4254..fe1afd30a1 100644
  
      // set up initial image layouts and create surfaces
      fImageLayouts = new VkImageLayout[fImageCount];
-@@ -341,7 +358,7 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType)
+@@ -343,7 +360,7 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType,
          info.fImageTiling = VK_IMAGE_TILING_OPTIMAL;
          info.fFormat = format;
          info.fLevelCount = 1;
 -        info.fCurrentQueueFamily = fPresentQueueIndex;
 +        info.fCurrentQueueFamily = fShared->fPresentQueueIndex;
+         info.fSharingMode = sharingMode;
  
          if (fSampleCount == 1) {
-             GrBackendRenderTarget backendRT(fWidth, fHeight, fSampleCount, info);
-@@ -372,8 +389,8 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType)
+@@ -375,8 +392,8 @@ void VulkanWindowContext::createBuffers(VkFormat format, SkColorType colorType,
      fBackbuffers = new BackbufferInfo[fImageCount + 1];
      for (uint32_t i = 0; i < fImageCount + 1; ++i) {
          fBackbuffers[i].fImageIndex = -1;
@@ -262,7 +262,7 @@ index c2b26b4254..fe1afd30a1 100644
                                  &fBackbuffers[i].fRenderSemaphore));
          SkASSERT(result == VK_SUCCESS);
      }
-@@ -385,8 +402,8 @@ void VulkanWindowContext::destroyBuffers() {
+@@ -388,8 +405,8 @@ void VulkanWindowContext::destroyBuffers() {
      if (fBackbuffers) {
          for (uint32_t i = 0; i < fImageCount + 1; ++i) {
              fBackbuffers[i].fImageIndex = -1;
@@ -273,7 +273,7 @@ index c2b26b4254..fe1afd30a1 100644
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -411,41 +428,59 @@ VulkanWindowContext::~VulkanWindowContext() {
+@@ -414,41 +431,59 @@ VulkanWindowContext::~VulkanWindowContext() {
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -346,7 +346,7 @@ index c2b26b4254..fe1afd30a1 100644
  }
  
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -471,35 +506,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+@@ -474,35 +509,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -388,7 +388,16 @@ index c2b26b4254..fe1afd30a1 100644
              return nullptr;
          }
      }
-@@ -543,4 +578,6 @@ void VulkanWindowContext::swapBuffers() {
+@@ -528,7 +563,7 @@ void VulkanWindowContext::swapBuffers() {
+     GrFlushInfo info;
+     info.fNumSemaphores = 1;
+     info.fSignalSemaphores = &beSemaphore;
+-    GrBackendSurfaceMutableState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fPresentQueueIndex);
++    GrBackendSurfaceMutableState presentState(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, fShared->fPresentQueueIndex);
+     surface->flush(info, &presentState);
+     surface->getContext()->submit();
+ 
+@@ -548,4 +583,6 @@ void VulkanWindowContext::swapBuffers() {
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
  
@@ -396,7 +405,7 @@ index c2b26b4254..fe1afd30a1 100644
 +
  }   //namespace sk_app
 diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 2db9e79ae6..aa48fc2951 100644
+index 5e245aff70..c6c866372f 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
 @@ -19,18 +19,36 @@
@@ -455,7 +464,7 @@ index 2db9e79ae6..aa48fc2951 100644
      struct BackbufferInfo {
          uint32_t        fImageIndex;          // image this is associated with
 @@ -64,11 +88,6 @@ private:
-     void createBuffers(VkFormat format, SkColorType colorType);
+     void createBuffers(VkFormat format, SkColorType colorType, VkSharingMode);
      void destroyBuffers();
  
 -    VkInstance fInstance = VK_NULL_HANDLE;

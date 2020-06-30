@@ -313,7 +313,7 @@ void SkiaSalGraphicsImpl::destroySurface()
     // commands referring to the surface data. This is probably a Skia bug,
     // but work around it here.
     if (mSurface)
-        mSurface->flush();
+        mSurface->flushAndSubmit();
     mSurface.reset();
     mWindowContext.reset();
     mIsGPU = false;
@@ -387,7 +387,7 @@ void SkiaSalGraphicsImpl::flushDrawing()
 {
     if (mXorMode)
         applyXor();
-    mSurface->flush();
+    mSurface->flushAndSubmit();
 }
 
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
@@ -745,7 +745,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     // only on Linux (not Windows on the same machine), with both AMDGPU and Mesa,
     // and only when antialiasing is enabled. Flushing seems to avoid the problem.
     if (mParent.getAntiAliasB2DDraw() && SkiaHelper::getVendor() == DriverBlocklist::VendorAMD)
-        mSurface->flush();
+        mSurface->flushAndSubmit();
 #endif
     return true;
 }
