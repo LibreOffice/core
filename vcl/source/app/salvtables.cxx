@@ -3256,7 +3256,6 @@ private:
     // which columns should be custom rendered
     o3tl::sorted_vector<int> m_aCustomRenders;
     bool m_bTogglesAsRadio;
-    bool m_bDisableCheckBoxAutoWidth;
     int m_nSortColumn;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
@@ -3397,8 +3396,7 @@ private:
     {
         SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
         m_xTreeView->InitViewData(pViewData, pEntry);
-        if (!m_bDisableCheckBoxAutoWidth)
-            m_xTreeView->CheckBoxInserted(pEntry);
+        m_xTreeView->CheckBoxInserted(pEntry);
     }
 
     void do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
@@ -3499,7 +3497,6 @@ public:
         , m_aCheckButtonData(pTreeView, false)
         , m_aRadioButtonData(pTreeView, true)
         , m_bTogglesAsRadio(false)
-        , m_bDisableCheckBoxAutoWidth(false)
         , m_nSortColumn(-1)
     {
         m_xTreeView->SetNodeDefaultImages();
@@ -3580,7 +3577,6 @@ public:
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
     {
-        m_bDisableCheckBoxAutoWidth = true;
         std::vector<long> aTabPositions;
         aTabPositions.push_back(0);
         for (size_t i = 0; i < rWidths.size(); ++i)
@@ -3693,11 +3689,14 @@ public:
         if (pFixedWidths)
             set_column_fixed_widths(*pFixedWidths);
 
+        bool bHasAutoCheckButton(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
+        size_t nExtraCols = bHasAutoCheckButton ? 2 : 1;
+
         Image aDummy;
         for (int i = 0; i < nSourceCount; ++i)
         {
             aVclIter.iter = new SvTreeListEntry;
-            if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+            if (bHasAutoCheckButton)
                 AddStringItem(aVclIter.iter, "", -1);
             aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
             m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
@@ -3709,7 +3708,7 @@ public:
             size_t nFixedWidths = std::min(pFixedWidths->size(), aVclIter.iter->ItemCount());
             for (size_t j = 0; j < nFixedWidths; ++j)
             {
-                SvLBoxItem& rItem = aVclIter.iter->GetItem(j);
+                SvLBoxItem& rItem = aVclIter.iter->GetItem(j + nExtraCols);
                 SvViewDataItem* pViewDataItem = m_xTreeView->GetViewDataItem(aVclIter.iter, &rItem);
                 pViewDataItem->mnWidth = (*pFixedWidths)[j];
             }
