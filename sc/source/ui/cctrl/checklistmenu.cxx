@@ -278,7 +278,7 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
 
     tools::Rectangle aRect = mxMenu->get_row_area(*mxScratchIter);
     ScCheckListMenuControl& rSubMenuControl = pSubMenu->get_widget();
-    rSubMenuControl.StartPopupMode(aRect);
+    rSubMenuControl.StartPopupMode(aRect, FloatWinPopupFlags::Right);
     if (bSetMenuPos)
         rSubMenuControl.setSelectedMenuItem(0, false); // select menu item after the popup becomes fully visible.
 
@@ -386,12 +386,12 @@ void ScCheckListMenuControl::EndPopupMode()
     mxFrame->EnableDocking(false);
 }
 
-void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect)
+void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags)
 {
     mxFrame->EnableDocking(true);
     DockingManager* pDockingManager = vcl::Window::GetDockingManager();
     pDockingManager->SetPopupModeEndHdl(mxFrame, LINK(this, ScCheckListMenuControl, PopupModeEndHdl));
-    pDockingManager->StartPopupMode(mxFrame, rRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
+    pDockingManager->StartPopupMode(mxFrame, rRect, (eFlags | FloatWinPopupFlags::GrabFocus));
 }
 
 void ScCheckListMenuControl::terminateAllPopupMenus()
@@ -1297,7 +1297,7 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
         aRect.AdjustLeft(nDiff );
     }
 
-    StartPopupMode(aRect);
+    StartPopupMode(aRect, FloatWinPopupFlags::Down);
 }
 
 void ScCheckListMenuControl::close(bool bOK)
