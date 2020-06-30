@@ -140,6 +140,30 @@
       "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0010c008_be6e74de",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-30T09:38:09Z",
+      "side": 1,
+      "message": "The sidebar graphics is just an eye candy and was remove for a good reason- no transparency with gtk3. I would rather omit the personal statement in this text (in most case it is not shown anyway).",
+      "parentUuid": "142605f7_69e6d262",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 26
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
