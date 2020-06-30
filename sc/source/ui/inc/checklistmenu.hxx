@@ -183,10 +183,9 @@ private:
     };
 
     /**
-     * Calculate the appropriate window size, the position and size of each
-     * control based on the menu items.
+     * Calculate the appropriate window size based on the menu items.
      */
-    void packWindow();
+    void prepWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
     void updateMemberParents(const weld::TreeIter* pLeaf, size_t nIdx);
@@ -312,7 +311,7 @@ class ScCheckListMenuWindow : public DockingWindow
 {
 public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu, int nWidth = -1,
-                                   sal_uInt16 nMenuStackLevel = 0, ScCheckListMenuWindow* pParentMenu = nullptr);
+                                   ScCheckListMenuWindow* pParentMenu = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
 
@@ -322,13 +321,10 @@ public:
     ScCheckListMenuWindow* GetParentMenu() { return mxParentMenu; }
     ScCheckListMenuControl& get_widget() { return *mxControl; }
 
-    sal_uInt16 GetMenuStackLevel() const { return mnMenuStackLevel; }
-
 private:
     VclPtr<ScCheckListMenuWindow> mxParentMenu;
     VclPtr<vcl::Window> mxBox;
     std::unique_ptr<ScCheckListMenuControl> mxControl;
-    sal_uInt16 mnMenuStackLevel;
 };
 
 #endif
