@@ -188,6 +188,30 @@
       "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d67b2ab9_d6c192df",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-30T10:13:56Z",
+      "side": 1,
+      "message": "If there was more time I\u0027d suggest to ask the logo designers to add something to this image but afraid it\u0027s to late. So why not just \"Welcome to LibreOffice, Personal Edition\"?",
+      "parentUuid": "2323e726_dc4565b2",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 26
+      },
+      "revId": "9436443d4a224bf2b98ce76268791913a2c99be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
