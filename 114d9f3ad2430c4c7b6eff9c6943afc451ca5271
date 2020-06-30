@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b7a8326_80f69d62",
+        "filename": "icon-themes/colibre/brand/intro.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-06-30T10:54:58Z",
+      "side": 1,
+      "message": "I wonder about this. Previously we have had a TDF sub-line there.\nAre we going to de-emphasize that ? I think Italo is/was eager to use LibreOffice Project rather than TDF so much - but I\u0027d really like this to be more prominent than a small sub-line / tag that may get over-written with TDF \u003d)\n\nHow do you see the TDF artwork there ?",
+      "revId": "114d9f3ad2430c4c7b6eff9c6943afc451ca5271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d7eca3f_ef4af220",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-06-30T10:54:58Z",
+      "side": 1,
+      "message": "By individuals would perhaps be better - students would be a good target group that we include with \u0027Personal\u0027 rather than \u0027Home\u0027 I guess \u003d)",
+      "revId": "114d9f3ad2430c4c7b6eff9c6943afc451ca5271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
