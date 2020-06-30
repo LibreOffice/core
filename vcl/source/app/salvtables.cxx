@@ -3334,8 +3334,7 @@ void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry* pEntr
 {
     SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
     m_xTreeView->InitViewData(pViewData, pEntry);
-    if (!m_bDisableCheckBoxAutoWidth)
-        m_xTreeView->CheckBoxInserted(pEntry);
+    m_xTreeView->CheckBoxInserted(pEntry);
 }
 
 void SalInstanceTreeView::do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
@@ -3434,7 +3433,6 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     , m_xTreeView(pTreeView)
     , m_aCheckButtonData(pTreeView, false)
     , m_aRadioButtonData(pTreeView, true)
-    , m_bDisableCheckBoxAutoWidth(false)
     , m_bTogglesAsRadio(false)
     , m_nSortColumn(-1)
 {
@@ -3499,7 +3497,6 @@ void SalInstanceTreeView::thaw()
 
 void SalInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidths)
 {
-    m_bDisableCheckBoxAutoWidth = true;
     std::vector<long> aTabPositions;
     aTabPositions.push_back(0);
     for (size_t i = 0; i < rWidths.size(); ++i)
@@ -3569,57 +3566,8 @@ void SalInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const O
                     const OUString* pIconName, VirtualDevice* pImageSurface,
                     const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet)
 {
-    disable_notify_events();
-    const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
-    SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
-    auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
-    void* pUserData;
-    if (pId)
-    {
-        m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
-        pUserData = m_aUserData.back().get();
-    }
-    else
-        pUserData = nullptr;
-
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-
-    if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
-        AddStringItem(pEntry, "", -1);
-
-    if (pIconName || pImageSurface)
-    {
-        Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-    }
-    else
-    {
-        Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-    }
-    if (pStr)
-        pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
-    pEntry->SetUserData(pUserData);
-    m_xTreeView->Insert(pEntry, iter, nInsertPos);
-
-    if (pExpanderName)
-    {
-        Image aImage(createImage(*pExpanderName));
-        m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
-        m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
-    }
-
-    if (pRet)
-    {
-        SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
-        pVclRetIter->iter = pEntry;
-    }
-
-    if (bChildrenOnDemand)
-    {
-        m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
-    }
-    enable_notify_events();
+    do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
+                  bChildrenOnDemand, pRet, false);
 }
 
 void SalInstanceTreeView::bulk_insert_for_each(int nSourceCount,
@@ -3635,11 +3583,14 @@ void SalInstanceTreeView::bulk_insert_for_each(int nSourceCount,
     if (pFixedWidths)
         set_column_fixed_widths(*pFixedWidths);
 
+    bool bHasAutoCheckButton(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
+        size_t nExtraCols = bHasAutoCheckButton ? 2 : 1;
+
     Image aDummy;
     for (int i = 0; i < nSourceCount; ++i)
     {
         aVclIter.iter = new SvTreeListEntry;
-        if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+        if (bHasAutoCheckButton)
             AddStringItem(aVclIter.iter, "", -1);
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
@@ -3651,7 +3602,7 @@ void SalInstanceTreeView::bulk_insert_for_each(int nSourceCount,
         size_t nFixedWidths = std::min(pFixedWidths->size(), aVclIter.iter->ItemCount());
         for (size_t j = 0; j < nFixedWidths; ++j)
         {
-            SvLBoxItem& rItem = aVclIter.iter->GetItem(j);
+            SvLBoxItem& rItem = aVclIter.iter->GetItem(j + nExtraCols);
             SvViewDataItem* pViewDataItem = m_xTreeView->GetViewDataItem(aVclIter.iter, &rItem);
             pViewDataItem->mnWidth = (*pFixedWidths)[j];
         }
