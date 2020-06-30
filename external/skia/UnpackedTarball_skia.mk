@@ -32,13 +32,13 @@ skia_patches := \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
-    operator-eq-bool.patch.0 \
+    operator-eq-bool.patch.1 \
     fix-without-gl.patch.0 \
     extend-rgb-to-rgba.patch.0 \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
-    c++20.patch.0 \
+    public-make-from-backend-texture.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

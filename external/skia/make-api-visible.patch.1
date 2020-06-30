@@ -1,5 +1,5 @@
 diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
-index 47310970d5..e02e6eb5b7 100644
+index 11bd2d2ac2..09c92dc417 100644
 --- a/tools/sk_app/unix/WindowContextFactory_unix.h
 +++ b/tools/sk_app/unix/WindowContextFactory_unix.h
 @@ -36,15 +36,15 @@ struct XlibWindowInfo {
@@ -23,10 +23,10 @@ index 47310970d5..e02e6eb5b7 100644
  }  // namespace window_context_factory
  
 diff --git a/tools/sk_app/win/WindowContextFactory_win.h b/tools/sk_app/win/WindowContextFactory_win.h
-index 33dd6d413b..647e5ff81a 100644
+index c05a4f0acf..fc27cd2afb 100644
 --- a/tools/sk_app/win/WindowContextFactory_win.h
 +++ b/tools/sk_app/win/WindowContextFactory_win.h
-@@ -20,17 +20,17 @@ struct DisplayParams;
+@@ -20,21 +20,21 @@ struct DisplayParams;
  
  namespace window_context_factory {
  
@@ -38,6 +38,11 @@ index 33dd6d413b..647e5ff81a 100644
  
 -std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
+ 
+ #ifdef SK_DIRECT3D
+-std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, const DisplayParams&);
++SK_API std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, const DisplayParams&);
+ #endif
  
  #ifdef SK_DAWN
 -std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
