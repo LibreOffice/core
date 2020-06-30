@@ -9,37 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/AutoTextContainer.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#include <com/sun/star/text/XTextPortionAppend.hpp>
-#include <com/sun/star/text/XTextContentAppend.hpp>
-#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
-#include <com/sun/star/rdf/URI.hpp>
-#include <com/sun/star/rdf/URIs.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-
-#include <comphelper/propertyvalue.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/graphicfilter.hxx>
 
 #include <wrtsh.hxx>
-#include <ndtxt.hxx>
-#include <swdtflvr.hxx>
-#include <view.hxx>
-#include <PostItMgr.hxx>
-#include <postithelper.hxx>
-#include <AnnotationWin.hxx>
-#include <flyfrm.hxx>
-#include <fmtanchr.hxx>
 #include <unotextrange.hxx>
 
 using namespace ::com::sun::star;

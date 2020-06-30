@@ -126,3 +126,6 @@ blacklist:
     - QUrl
     - QApplication
     - QDebug
+    vcl/qa/cppunit/filter/ipdf/ipdf.cxx:
+    - prewin.h
+    - postwin.h

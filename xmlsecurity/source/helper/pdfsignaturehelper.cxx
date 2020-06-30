@@ -25,7 +25,6 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
-#include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
