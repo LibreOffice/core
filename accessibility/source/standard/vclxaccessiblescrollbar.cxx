@@ -105,7 +105,7 @@ Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames()
 
 // XAccessibleAction
 
-static constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT=4;
+constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT=4;
 
 sal_Int32 VCLXAccessibleScrollBar::getAccessibleActionCount( )
 {
