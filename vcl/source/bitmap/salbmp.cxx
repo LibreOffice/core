@@ -141,6 +141,70 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     return nullptr;
 }
 
+// Optimized conversion from 1bpp. Currently LO uses 1bpp bitmaps for masks, which is nowadays
+// a lousy obsolete format, as the memory saved is just not worth the cost of fiddling with the bits.
+// Ideally LO should move to RGBA bitmaps. Until then, try to be faster with 1bpp bitmaps.
+typedef void(*WriteColorFunction)( sal_uInt8 color8Bit, sal_uInt8*& dst );
+void writeColorA8(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; };
+void writeColorRGB(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = color8Bit; };
+void writeColorRGBA(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = 0xff; };
+typedef void(*WriteBlackWhiteFunction)( sal_uInt8*& dst, int count );
+void writeBlackA8(sal_uInt8*& dst, int count ) { memset( dst, 0, count ); dst += count; };
+void writeWhiteA8(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count ); dst += count; };
+void writeBlackRGB(sal_uInt8*& dst, int count ) { memset( dst, 0, count * 3 ); dst += count * 3; };
+void writeWhiteRGB(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count * 3 ); dst += count * 3; };
+void writeWhiteRGBA(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count * 4 ); dst += count * 4; };
+void writeBlackRGBA(sal_uInt8*& dst, int count )
+{
+    for( int i = 0; i < count; ++i )
+    {
+        dst[0] = 0x00;
+        dst[1] = 0x00;
+        dst[2] = 0x00;
+        dst[3] = 0xff;
+        dst += 4;
+    }
+};
+
+template< WriteColorFunction func, WriteBlackWhiteFunction funcBlack, WriteBlackWhiteFunction funcWhite >
+void writeBlackWhiteData( const sal_uInt8* src, sal_uInt8* dst, int width, int height, int bytesPerRow )
+{
+    for( int y = 0; y < height; ++y )
+    {
+        const sal_uInt8* srcLine = src;
+        int xsize = width;
+        while( xsize >= 64 )
+        {
+            // TODO alignment?
+            const sal_uInt64* src64 = reinterpret_cast< const sal_uInt64* >( src );
+            if( *src64 == 0x00 )
+                funcBlack( dst, 64 );
+            else if( *src64 == static_cast< sal_uInt64 >( -1 ))
+                funcWhite( dst, 64 );
+            else
+                break;
+            src += sizeof( sal_uInt64 );
+            xsize -= 64;
+        }
+        while( xsize >= 8 )
+        {
+            if( *src == 0x00 ) // => eight black pixels
+                funcBlack( dst, 8 );
+            else if( *src == 0xff ) // => eight white pixels
+                funcWhite( dst, 8 );
+            else
+                for( int bit = 7; bit >= 0; --bit )
+                    func(( *src >> bit ) & 1 ? 0xff : 0, dst );
+            ++src;
+            xsize -= 8;
+        }
+        for( int bit = 7; bit > 7 - xsize; --bit )
+            func(( *src >> bit ) & 1 ? 0xff : 0, dst );
+        ++src;
+        src = srcLine + bytesPerRow;
+    }
+}
+
 } // namespace
 
 std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* src,
@@ -155,6 +219,29 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
         for( int y = 0; y < height; ++y )
             memcpy( data.get() + y * width, src + y * bytesPerRow, width );
         return data;
+    }
+
+    if(bitCount == 1 && palette.GetEntryCount() == 2 && palette[ 0 ] == COL_BLACK && palette[ 1 ] == COL_WHITE)
+    {
+        switch( type )
+        {
+            case BitConvert::A8 :
+                writeBlackWhiteData< writeColorA8, writeBlackA8, writeWhiteA8 >
+                    ( src, data.get(), width, height, bytesPerRow );
+                return data;
+            case BitConvert::BGR :
+            case BitConvert::RGB :
+                // BGR/RGB is the same, all 3 values get the same value
+                writeBlackWhiteData< writeColorRGB, writeBlackRGB, writeWhiteRGB >
+                    ( src, data.get(), width, height, bytesPerRow );
+                return data;
+            case BitConvert::BGRA :
+            case BitConvert::RGBA :
+                // BGRA/RGBA is the same, all 3 values get the same value
+                writeBlackWhiteData< writeColorRGBA, writeBlackRGBA, writeWhiteRGBA >
+                    ( src, data.get(), width, height, bytesPerRow );
+                return data;
+        }
     }
 
     std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));
