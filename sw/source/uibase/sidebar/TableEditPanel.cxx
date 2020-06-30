@@ -45,6 +45,9 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
     {
         case SID_ATTR_TABLE_ROW_HEIGHT:
         {
+            bool bDisabled = eState == SfxItemState::DISABLED;
+            m_xRowHeightEdit->set_sensitive(!bDisabled);
+
             if (pState && eState >= SfxItemState::DEFAULT)
             {
                 const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pState);
@@ -55,18 +58,16 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                     m_xRowHeightEdit->set_value(nNewHeight, FieldUnit::TWIP);
                 }
             }
-            else if (eState == SfxItemState::DISABLED)
-            {
-                m_xRowHeightEdit->set_sensitive(false);
-            }
-            else
-            {
+            else if (eState != SfxItemState::DISABLED)
                 m_xRowHeightEdit->set_text("");
-            }
+
             break;
         }
         case SID_ATTR_TABLE_COLUMN_WIDTH:
         {
+            bool bDisabled = eState == SfxItemState::DISABLED;
+            m_xColumnWidthEdit->set_sensitive(!bDisabled);
+
             if (pState && eState >= SfxItemState::DEFAULT)
             {
                 const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pState);
@@ -77,14 +78,9 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                     m_xColumnWidthEdit->set_value(nNewWidth, FieldUnit::TWIP);
                 }
             }
-            else if (eState == SfxItemState::DISABLED)
-            {
-                m_xColumnWidthEdit->set_sensitive(false);
-            }
-            else
-            {
+            else if (eState != SfxItemState::DISABLED)
                 m_xColumnWidthEdit->set_text("");
-            }
+
             break;
         }
     }
