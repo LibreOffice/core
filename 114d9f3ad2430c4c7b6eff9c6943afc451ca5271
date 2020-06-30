@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "81295fa4_5f6f2886",
+        "filename": "icon-themes/colibre/brand/intro.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-30T11:44:18Z",
+      "side": 1,
+      "message": "TDF tagline is what Cloph uses at official builds, we never shared it with the sources.",
+      "parentUuid": "9b7a8326_80f69d62",
+      "revId": "114d9f3ad2430c4c7b6eff9c6943afc451ca5271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d7eca3f_ef4af220",
         "filename": "include/sfx2/strings.hrc",
         "patchSetId": 3

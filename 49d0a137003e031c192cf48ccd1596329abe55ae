@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dae9f42_ef210b64",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-30T11:44:18Z",
+      "side": 1,
+      "message": "It always shows the inverted (white text) logo on a light grey background. The color of this panel can be changed only via expert option StartCenterBackgroundColor; maybe you can use BackingWindow::initControls() aButtonsBackground.",
+      "revId": "49d0a137003e031c192cf48ccd1596329abe55ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
