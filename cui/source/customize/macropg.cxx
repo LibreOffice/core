@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
+const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
 
 SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : bReadOnly(false)

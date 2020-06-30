@@ -108,7 +108,7 @@ namespace o3tl {
     template<> struct typed_flags<LB> : is_typed_flags<LB, 0x3fffff> {};
 }
 
-static RelationMap const aRelationMap[] =
+RelationMap const aRelationMap[] =
 {
     {SvxSwFramePosString::FRAME,         SvxSwFramePosString::FRAME,             LB::Frame,           RelOrientation::FRAME},
     {SvxSwFramePosString::PRTAREA,       SvxSwFramePosString::PRTAREA,           LB::PrintArea,         RelOrientation::PRINT_AREA},
@@ -137,7 +137,7 @@ static RelationMap const aRelationMap[] =
     {SvxSwFramePosString::REL_LINE,  SvxSwFramePosString::REL_LINE,   LB::VertLine,   RelOrientation::TEXT_LINE}
 };
 
-static RelationMap const aAsCharRelationMap[] =
+RelationMap const aAsCharRelationMap[] =
 {
     {SvxSwFramePosString::REL_BASE,  SvxSwFramePosString::REL_BASE,   LB::RelBase,   RelOrientation::FRAME},
     {SvxSwFramePosString::REL_CHAR,  SvxSwFramePosString::REL_CHAR,   LB::RelChar,   RelOrientation::FRAME},
@@ -148,10 +148,10 @@ static RelationMap const aAsCharRelationMap[] =
     Anchored at page
  --------------------------------------------------------------------*/
 
-static constexpr auto HORI_PAGE_REL = LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft|
+constexpr auto HORI_PAGE_REL = LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft|
                                       LB::RelPageRight;
 
-static FrmMap const aHPageMap[] =
+FrmMap const aHPageMap[] =
 {
     {SvxSwFramePosString::LEFT,       SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PAGE_REL},
     {SvxSwFramePosString::RIGHT,      SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PAGE_REL},
@@ -159,14 +159,14 @@ static FrmMap const aHPageMap[] =
     {SvxSwFramePosString::FROMLEFT,   SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
-static FrmMap const aHPageHtmlMap[] =
+FrmMap const aHPageHtmlMap[] =
 {
     {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 #define VERT_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea)
 
-static FrmMap const aVPageMap[] =
+FrmMap const aVPageMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PAGE_REL},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PAGE_REL},
@@ -174,7 +174,7 @@ static FrmMap const aVPageMap[] =
     {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
-static FrmMap const aVPageHtmlMap[] =
+FrmMap const aVPageHtmlMap[] =
 {
     {SvxSwFramePosString::FROMTOP, SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::RelPageFrame}
 };
@@ -183,10 +183,10 @@ static FrmMap const aVPageHtmlMap[] =
     Anchored at frame
  --------------------------------------------------------------------*/
 
-static constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame|LB::FlyRelPagePrintArea|
+constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame|LB::FlyRelPagePrintArea|
                                        LB::FlyRelPageLeft|LB::FlyRelPageRight;
 
-static FrmMap const aHFrameMap[] =
+FrmMap const aHFrameMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,  HORI_FRAME_REL},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_FRAME_REL},
@@ -194,7 +194,7 @@ static FrmMap const aHFrameMap[] =
     {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
-static FrmMap const aHFlyHtmlMap[] =
+FrmMap const aHFlyHtmlMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      LB::FlyRelPageFrame},
     {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::FlyRelPageFrame}
@@ -204,7 +204,7 @@ static FrmMap const aHFlyHtmlMap[] =
 // #i22305#
 #define VERT_FRAME_REL   (LB::VertFrame|LB::FlyVertPrintArea)
 
-static FrmMap const aVFrameMap[] =
+FrmMap const aVFrameMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_FRAME_REL},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_FRAME_REL},
@@ -212,17 +212,17 @@ static FrmMap const aVFrameMap[] =
     {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
-static FrmMap const aVFlyHtmlMap[] =
+FrmMap const aVFlyHtmlMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       LB::FlyVertFrame},
     {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::FlyVertFrame}
 };
 
-static FrmMap const aVMultiSelectionMap[] =
+FrmMap const aVMultiSelectionMap[] =
 {
     {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::NONE}
 };
-static FrmMap const aHMultiSelectionMap[] =
+FrmMap const aHMultiSelectionMap[] =
 {
     {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::FROMLEFT,       HoriOrientation::NONE,      LB::NONE}
 };
@@ -231,11 +231,11 @@ static FrmMap const aHMultiSelectionMap[] =
     Anchored at paragraph
  --------------------------------------------------------------------*/
 
-static constexpr auto HORI_PARA_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
+constexpr auto HORI_PARA_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
                                       LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft|
                                       LB::RelFrameRight;
 
-static FrmMap const aHParaMap[] =
+FrmMap const aHParaMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PARA_REL},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PARA_REL},
@@ -245,23 +245,23 @@ static FrmMap const aHParaMap[] =
 
 #define HTML_HORI_PARA_REL  (LB::Frame|LB::PrintArea)
 
-static FrmMap const aHParaHtmlMap[] =
+FrmMap const aHParaHtmlMap[] =
 {
     {SvxSwFramePosString::LEFT,  SvxSwFramePosString::LEFT,   HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SvxSwFramePosString::RIGHT, SvxSwFramePosString::RIGHT,  HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-static FrmMap const aHParaHtmlAbsMap[] =
+FrmMap const aHParaHtmlAbsMap[] =
 {
     {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
 
-static constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
+constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
                                       LB::RelPageFrame|LB::RelPagePrintArea;
 
-static FrmMap const aVParaMap[] =
+FrmMap const aVParaMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
@@ -269,7 +269,7 @@ static FrmMap const aVParaMap[] =
     {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL|LB::RelPagePrintAreaBottom}
 };
 
-static FrmMap const aVParaHtmlMap[] =
+FrmMap const aVParaHtmlMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       LB::VertPrintArea}
 };
@@ -278,7 +278,7 @@ static FrmMap const aVParaHtmlMap[] =
     Anchored at character
  --------------------------------------------------------------------*/
 
-static constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
+constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight|
                                       LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft|
                                       LB::RelFrameRight|LB::RelChar;
 
@@ -307,7 +307,7 @@ static FrmMap aHCharHtmlAbsMap[] =
 
 // #i18732# - allow vertical alignment at page areas
 // #i22341# - handle <LB::RelChar> on its own
-static constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
+constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
                                       LB::RelPageFrame|LB::RelPagePrintArea;
 
 static FrmMap aVCharMap[] =
@@ -331,12 +331,12 @@ static FrmMap aVCharMap[] =
 };
 
 
-static FrmMap const aVCharHtmlMap[] =
+FrmMap const aVCharHtmlMap[] =
 {
     {SvxSwFramePosString::BELOW,         SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
-static FrmMap const aVCharHtmlAbsMap[] =
+FrmMap const aVCharHtmlAbsMap[] =
 {
     {SvxSwFramePosString::TOP,    SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelChar},
     {SvxSwFramePosString::BELOW,  SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
@@ -345,7 +345,7 @@ static FrmMap const aVCharHtmlAbsMap[] =
     anchored as character
  --------------------------------------------------------------------*/
 
-static FrmMap const aVAsCharMap[] =
+FrmMap const aVAsCharMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelBase},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,        LB::RelBase},
@@ -362,7 +362,7 @@ static FrmMap const aVAsCharMap[] =
     {SvxSwFramePosString::FROMBOTTOM,    SvxSwFramePosString::FROMBOTTOM,     VertOrientation::NONE,          LB::RelBase}
 };
 
-static FrmMap const aVAsCharHtmlMap[] =
+FrmMap const aVAsCharHtmlMap[] =
 {
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelBase},
     {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},

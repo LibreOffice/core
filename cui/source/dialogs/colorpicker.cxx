@@ -1255,8 +1255,8 @@ Sequence< OUString > ColorPicker_getSupportedServiceNames()
     return { "com.sun.star.ui.dialogs.ColorPicker" };
 }
 
-static const OUStringLiteral gsColorKey( "Color" );
-static const OUStringLiteral gsModeKey( "Mode" );
+const OUStringLiteral gsColorKey( "Color" );
+const OUStringLiteral gsModeKey( "Mode" );
 
 ColorPicker::ColorPicker()
     : ColorPickerBase( m_aMutex )

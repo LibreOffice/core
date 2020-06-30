@@ -1136,11 +1136,11 @@ struct LanguageConfig_Impl
 static bool bLanguageCurrentDoc_Impl = false;
 
 // some things we'll need...
-static const char sAccessSrvc[] = "com.sun.star.configuration.ConfigurationAccess";
-static const char sAccessUpdSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
-static const char sInstalledLocalesPath[] = "org.openoffice.Setup/Office/InstalledLocales";
-static const char sUserLocalePath[] = "org.openoffice.Office.Linguistic/General";
-static const char sUserLocaleKey[] = "UILocale";
+const char sAccessSrvc[] = "com.sun.star.configuration.ConfigurationAccess";
+const char sAccessUpdSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
+const char sInstalledLocalesPath[] = "org.openoffice.Setup/Office/InstalledLocales";
+const char sUserLocalePath[] = "org.openoffice.Office.Linguistic/General";
+const char sUserLocaleKey[] = "UILocale";
 static Sequence< OUString > seqInstalledLanguages;
 
 static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocaleWrapper )

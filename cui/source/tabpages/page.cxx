@@ -55,7 +55,7 @@
 // static ----------------------------------------------------------------
 
 // #i19922# - tdf#126051 see svx/source/dialog/hdft.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
-static const long MINBODY = 56;  // 1mm in twips rounded
+const long MINBODY = 56;  // 1mm in twips rounded
 
 const sal_uInt16 SvxPageDescPage::pRanges[] =
 {

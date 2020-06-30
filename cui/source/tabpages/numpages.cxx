@@ -116,7 +116,7 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
 }
 
 // the selection of bullets from the OpenSymbol
-static const sal_Unicode aBulletTypes[] =
+const sal_Unicode aBulletTypes[] =
 {
     0x2022,
     0x25cf,

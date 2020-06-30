@@ -114,7 +114,7 @@ using namespace ::com::sun::star::util;
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = nullptr;
 
 // some stuff for easier changes for SvtViewOptions
-static const OUString VIEWOPT_DATANAME = "page data";
+const OUString VIEWOPT_DATANAME = "page data";
 
 static void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
@@ -317,7 +317,7 @@ struct OptionsMapping_Impl
 
 }
 
-static OptionsMapping_Impl const OptionsMap_Impl[] =
+OptionsMapping_Impl const OptionsMap_Impl[] =
 {
 //    GROUP                 PAGE                    PAGE-ID
     { "ProductName",        nullptr,                SID_GENERAL_OPTIONS },
