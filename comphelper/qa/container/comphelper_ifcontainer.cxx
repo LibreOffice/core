@@ -56,7 +56,7 @@ public:
 
 namespace comphelper_ifcontainer
 {
-    static const int nTests = 10;
+    const int nTests = 10;
     class IfTest : public CppUnit::TestFixture
     {
         osl::Mutex m_aGuard;

@@ -24,7 +24,7 @@
 
 namespace comphelper{
 
-static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
+const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 
 
 NumberedCollection::NumberedCollection()

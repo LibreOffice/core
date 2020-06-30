@@ -26,8 +26,8 @@
 
 namespace comphelper
 {
-static const size_t nThreadCountGlobal = std::thread::hardware_concurrency();
-const static bool bHyperThreadingActive = cpuid::hasHyperThreading();
+const size_t nThreadCountGlobal = std::thread::hardware_concurrency();
+const bool bHyperThreadingActive = cpuid::hasHyperThreading();
 static comphelper::ThreadPool& rTPool(comphelper::ThreadPool::getSharedOptimalPool());
 
 static thread_local std::mt19937 aGenerator{ std::random_device{}() };

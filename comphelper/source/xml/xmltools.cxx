@@ -19,7 +19,7 @@ namespace
     //Will be inside an xml comment, so can't use '-' in case '--' appears in
     //output, etc. Despite what *is* legal in an xml comment, just using the
     //base-64 subset to avoid pain with simplistic third-party parsers
-    static const sal_uInt8 aChaffEncoder[] =
+    const sal_uInt8 aChaffEncoder[] =
     {
         'A', 'Q', 'g', 'w', 'B', 'R', 'h', 'x',
         'C', 'S', 'i', 'y', 'D', 'T', 'j', 'z',

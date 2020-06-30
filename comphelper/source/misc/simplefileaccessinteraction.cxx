@@ -19,15 +19,15 @@
 namespace comphelper {
 
 /// Will handle com::sun::star::ucb::InteractiveIOException and derived classes
-static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION = 0;
+const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION = 0;
 /// Will handle com::sun::star::ucb::UnsupportedDataSinkException
-static const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
+const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
 /// Will handle com::sun::star::ucb::InteractiveNetworkException
-static const sal_Int32 HANDLE_INTERACTIVENETWORKEXCEPTION = 2;
+const sal_Int32 HANDLE_INTERACTIVENETWORKEXCEPTION = 2;
 /// Will handle com::sun::star::ucb::CertificateValidationRequest
-static const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
+const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
 /// Will handle com::sun::star::ucb::AuthenticationRequest
-static const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
+const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 
 SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     const css::uno::Reference< css::task::XInteractionHandler >& xHandler )

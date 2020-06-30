@@ -269,20 +269,20 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
 } // namespace OFOPXMLHelper
 
 // Relations info related strings
-static OUString const g_aRelListElement("Relationships");
-static OUString const g_aRelElement( "Relationship" );
-static OUString const g_aIDAttr( "Id" );
-static OUString const g_aTypeAttr( "Type" );
-static OUString const g_aTargetModeAttr( "TargetMode" );
-static OUString const g_aTargetAttr( "Target" );
+OUString const g_aRelListElement("Relationships");
+OUString const g_aRelElement( "Relationship" );
+OUString const g_aIDAttr( "Id" );
+OUString const g_aTypeAttr( "Type" );
+OUString const g_aTargetModeAttr( "TargetMode" );
+OUString const g_aTargetAttr( "Target" );
 
 // ContentType related strings
-static OUString const g_aTypesElement( "Types" );
-static OUString const g_aDefaultElement( "Default" );
-static OUString const g_aOverrideElement( "Override" );
-static OUString const g_aExtensionAttr( "Extension" );
-static OUString const g_aPartNameAttr( "PartName" );
-static OUString const g_aContentTypeAttr( "ContentType" );
+OUString const g_aTypesElement( "Types" );
+OUString const g_aDefaultElement( "Default" );
+OUString const g_aOverrideElement( "Override" );
+OUString const g_aExtensionAttr( "Extension" );
+OUString const g_aPartNameAttr( "PartName" );
+OUString const g_aContentTypeAttr( "ContentType" );
 
 OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 : m_nFormat( nFormat )
