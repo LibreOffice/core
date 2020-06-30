@@ -138,7 +138,7 @@ public:
     void launch(const tools::Rectangle& rRect);
     void close(bool bOK);
 
-    void StartPopupMode(const tools::Rectangle& rRect);
+    void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags);
     void EndPopupMode();
 
     size_t getSubMenuPos(const ScCheckListMenuControl* pSubMenu);
