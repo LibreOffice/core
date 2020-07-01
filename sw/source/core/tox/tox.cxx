@@ -146,12 +146,17 @@ SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
     return new SwTOXMark( *this );
 }
 
-void SwTOXMark::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew)
+void SwTOXMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    NotifyClients(pOld, pNew);
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached uno object
-        SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark>(nullptr));
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        if (pLegacyHint->m_pOld && (RES_REMOVE_UNO_OBJECT == pLegacyHint->m_pOld->Which()))
+            SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark>(nullptr));
+    } else if (auto pCollectHint = dynamic_cast<const sw::CollectTextMarksHint*>(&rHint))
+    {
+        if(GetTextTOXMark())
+            pCollectHint->m_rMarks.push_back(this);
     }
 }
 
@@ -179,18 +184,6 @@ OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const
     }
 
     return OUString();
-}
-
-void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
-{
-    SwIterator<SwTOXMark,SwTOXType> aIter(rType);
-    SwTOXMark* pMark = aIter.First();
-    while( pMark )
-    {
-        if(pMark->GetTextTOXMark())
-            aMarks.push_back(pMark);
-        pMark = aIter.Next();
-    }
 }
 
 // Manage types of TOX

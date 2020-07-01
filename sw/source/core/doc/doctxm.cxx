@@ -245,7 +245,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 
     const SwTOXType* pType = rCurTOXMark.GetTOXType();
     SwTOXMarks aMarks;
-    SwTOXMark::InsertTOXMarks( aMarks, *pType );
+    pType->CollectTextMarks(aMarks);
 
     for(SwTOXMark* pTOXMark : aMarks)
     {
