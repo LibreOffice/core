@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-static const struct ImplementationEntry g_entries[] =
+const struct ImplementationEntry g_entries[] =
 {
     {
         io_acceptor::acceptor_CreateInstance, io_acceptor::acceptor_getImplementationName ,
