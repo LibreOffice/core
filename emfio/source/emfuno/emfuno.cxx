@@ -27,7 +27,7 @@
 
 namespace {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &emfio::emfreader::XEmfParser_createInstance,
       &emfio::emfreader::XEmfParser_getImplementationName,
       &emfio::emfreader::XEmfParser_getSupportedServiceNames,
