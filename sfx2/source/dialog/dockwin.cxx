@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 // - Add new slot ids to sfxsids.hrc
 // - Add new slots to frmslots.sdi
 // - Add new slot definitions to sfx.sdi
-static const int NUM_OF_DOCKINGWINDOWS = 10;
+const int NUM_OF_DOCKINGWINDOWS = 10;
 
 namespace {
 

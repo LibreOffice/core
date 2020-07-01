@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum<sal_uInt16> const aAreaShapeOptEnums[] =
+HTMLOptionEnum<sal_uInt16> const aAreaShapeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
     { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },

@@ -660,7 +660,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #endif // ENABLE_QUICKSTART_APPLET
 }
 
-static const ::sal_Int32 PROPHANDLE_TERMINATEVETOSTATE = 0;
+const ::sal_Int32 PROPHANDLE_TERMINATEVETOSTATE = 0;
 
 // XFastPropertySet
 void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32                  nHandle,

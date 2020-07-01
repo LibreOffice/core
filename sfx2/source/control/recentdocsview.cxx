@@ -118,8 +118,8 @@ static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
     { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
 };
 
-static constexpr long gnTextHeight = 30;
-static constexpr long gnItemPadding = 5;
+constexpr long gnTextHeight = 30;
+constexpr long gnItemPadding = 5;
 
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)

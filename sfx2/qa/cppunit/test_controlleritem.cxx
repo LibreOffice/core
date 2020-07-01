@@ -30,7 +30,7 @@ public:
 private:
 };
 
-static bool bDeleted = false;
+bool bDeleted = false;
 
 class FooController : public SfxControllerItem {
 public:

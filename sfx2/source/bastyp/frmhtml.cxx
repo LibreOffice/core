@@ -23,11 +23,11 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/frmhtml.hxx>
 
-static char const sHTML_SC_yes[] =  "YES";
-static char const sHTML_SC_no[] =       "NO";
-static char const sHTML_SC_auto[] = "AUTO";
+char const sHTML_SC_yes[] =  "YES";
+char const sHTML_SC_no[] =       "NO";
+char const sHTML_SC_auto[] = "AUTO";
 
-static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
+HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
 {
     { sHTML_SC_yes,     ScrollingMode::Yes    },
     { sHTML_SC_no,      ScrollingMode::No     },

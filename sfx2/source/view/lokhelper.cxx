@@ -67,8 +67,8 @@ int DisableCallbacks::m_nDisabled = 0;
 
 namespace
 {
-static LanguageTag g_defaultLanguageTag("en-US", true);
-static LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
+LanguageTag g_defaultLanguageTag("en-US", true);
+LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
 int SfxLokHelper::createView()

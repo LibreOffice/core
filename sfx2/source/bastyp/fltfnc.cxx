@@ -233,8 +233,8 @@ public:
 
 namespace
 {
-    static std::vector<std::unique_ptr<SfxFilterMatcher_Impl> > aImplArr;
-    static int nSfxFilterMatcherCount;
+    std::vector<std::unique_ptr<SfxFilterMatcher_Impl> > aImplArr;
+    int nSfxFilterMatcherCount;
 
     SfxFilterMatcher_Impl & getSfxFilterMatcher_Impl(const OUString &rName)
     {

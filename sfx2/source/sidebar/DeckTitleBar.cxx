@@ -34,8 +34,8 @@ namespace sfx2::sidebar {
 
 namespace
 {
-static const sal_Int32 gaLeftGripPadding (3);
-static const sal_Int32 gaRightGripPadding (6);
+const sal_Int32 gaLeftGripPadding (3);
+const sal_Int32 gaRightGripPadding (6);
 }
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,

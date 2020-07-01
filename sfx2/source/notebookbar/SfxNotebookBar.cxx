@@ -36,8 +36,8 @@ using namespace css;
 
 #define MENUBAR_STR "private:resource/menubar/menubar"
 
-static const char MERGE_NOTEBOOKBAR_URL[] = "URL";
-static const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
+const char MERGE_NOTEBOOKBAR_URL[] = "URL";
+const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
