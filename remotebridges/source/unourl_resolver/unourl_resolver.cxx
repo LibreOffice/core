@@ -141,7 +141,7 @@ static Reference< XInterface > ResolverImpl_create( const Reference< XComponentC
 
 using namespace unourl_resolver;
 
-static const struct ImplementationEntry g_entries[] =
+const struct ImplementationEntry g_entries[] =
 {
     {
         ResolverImpl_create, resolver_getImplementationName,
