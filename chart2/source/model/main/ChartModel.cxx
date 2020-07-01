@@ -56,6 +56,7 @@
 #include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/diagnose_ex.h>
+#include <libxml/xmlwriter.h>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -736,6 +737,19 @@ void ChartModel::removeDataProviders()
         m_xInternalDataProvider.clear();
     if (m_xDataProvider.is())
         m_xDataProvider.clear();
+}
+
+void ChartModel::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("ChartModel"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    if (mxChartView.is())
+    {
+        mxChartView->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()

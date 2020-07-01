@@ -54,6 +54,7 @@
 #include <atomic>
 #include <deque>
 #include <libxml/xmlwriter.h>
+#include <sfx2/xmldump.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -1138,6 +1139,14 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
                                 BAD_CAST(typeid(*m_xOLERef.GetObject()).name()));
+
+    uno::Reference<embed::XEmbeddedObject> xIP = m_xOLERef.GetObject();
+    auto pComponent = dynamic_cast<sfx2::XmlDump*>(xIP->getComponent().get());
+    if (pComponent)
+    {
+        pComponent->dumpAsXml(pWriter);
+    }
+
     xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);

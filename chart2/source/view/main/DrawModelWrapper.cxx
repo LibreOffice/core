@@ -33,6 +33,7 @@
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <libxml/xmlwriter.h>
 
 #include <com/sun/star/container/XChild.hpp>
 
@@ -322,6 +323,16 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
         }
     }
     return false;
+}
+
+void DrawModelWrapper::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("DrawModelWrapper"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SdrModel::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 } //namespace chart
