@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const OUStringLiteral aStringList[]=
+const OUStringLiteral aStringList[]=
 {
     ".uno:Open",
     ".uno:FormatCellDialog",

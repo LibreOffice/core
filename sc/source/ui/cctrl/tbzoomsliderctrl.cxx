@@ -114,7 +114,7 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
         }
 };
 
-static constexpr sal_uInt16 gnSliderCenter(100);
+constexpr sal_uInt16 gnSliderCenter(100);
 
 const long nButtonWidth     = 10;
 const long nButtonHeight    = 10;

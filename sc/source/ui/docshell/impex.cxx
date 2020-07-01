@@ -69,7 +69,7 @@
 // times maximum cell content length, 2*1024*64K=128M, and because it's
 // sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
 // anyway.
-static const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
+const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
 
 namespace
 {

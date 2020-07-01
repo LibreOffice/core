@@ -139,25 +139,25 @@ using ::std::vector;
 
 //  Filter names (like in sclib.cxx)
 
-static const char pFilterSc50[]     = "StarCalc 5.0";
-static const char pFilterXML[]      = "StarOffice XML (Calc)";
-static const char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
-static const char pFilterLotus[]    = "Lotus";
-static const char pFilterQPro6[]    = "Quattro Pro 6.0";
-static const char pFilterExcel4[]   = "MS Excel 4.0";
-static const char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
-static const char pFilterExcel5[]   = "MS Excel 5.0/95";
-static const char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
-static const char pFilterExcel95[]  = "MS Excel 95";
-static const char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
-static const char pFilterExcel97[]  = "MS Excel 97";
-static const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-static const char pFilterDBase[]    = "dBase";
-static const char pFilterDif[]      = "DIF";
-static const char pFilterSylk[]     = "SYLK";
-static const char pFilterHtml[]     = "HTML (StarCalc)";
-static const char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
-static const char pFilterRtf[]      = "Rich Text Format (StarCalc)";
+const char pFilterSc50[]     = "StarCalc 5.0";
+const char pFilterXML[]      = "StarOffice XML (Calc)";
+const char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
+const char pFilterLotus[]    = "Lotus";
+const char pFilterQPro6[]    = "Quattro Pro 6.0";
+const char pFilterExcel4[]   = "MS Excel 4.0";
+const char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+const char pFilterExcel5[]   = "MS Excel 5.0/95";
+const char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
+const char pFilterExcel95[]  = "MS Excel 95";
+const char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
+const char pFilterExcel97[]  = "MS Excel 97";
+const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+const char pFilterDBase[]    = "dBase";
+const char pFilterDif[]      = "DIF";
+const char pFilterSylk[]     = "SYLK";
+const char pFilterHtml[]     = "HTML (StarCalc)";
+const char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
+const char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 #define ShellClass_ScDocShell
 #include <scslots.hxx>

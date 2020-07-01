@@ -89,7 +89,7 @@ SvxFontItem* getDefaultFontItem(LanguageType eLang, DefaultFontType nFontType, s
 
 }
 
-static SfxItemInfo const  aItemInfos[] =
+SfxItemInfo const  aItemInfos[] =
 {
     { SID_ATTR_CHAR_FONT,           true },    // ATTR_FONT
     { SID_ATTR_CHAR_FONTHEIGHT,     true },    // ATTR_FONT_HEIGHT

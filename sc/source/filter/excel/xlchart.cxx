@@ -415,7 +415,7 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
 
 namespace {
 
-static const XclChFormatInfo spFmtInfos[] =
+const XclChFormatInfo spFmtInfos[] =
 {
     // object type                  property mode                auto line color         auto line weight         auto pattern color      missing frame type         create delete isframe
     { EXC_CHOBJTYPE_BACKGROUND,     EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, true,  true,  true  },
@@ -469,7 +469,7 @@ const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";  
 
 namespace csscd = css::chart::DataLabelPlacement;
 
-static const XclChTypeInfo spTypeInfos[] =
+const XclChTypeInfo spTypeInfos[] =
 {
     // chart type             chart type category      record id           service                   varied point color     def label pos         comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
     { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },

@@ -41,7 +41,7 @@
 #define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 
-static const char* const publicFunc =
+const char* const publicFunc =
  "\n"
  "#define IllegalArgument 502\n"
  "#define IllegalFPOperation 503 // #NUM!\n"

@@ -385,7 +385,7 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 #define SC_FAMILYNAME_CELL  "CellStyles"
 #define SC_FAMILYNAME_PAGE  "PageStyles"
 
-static const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
+const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;

@@ -350,7 +350,7 @@ namespace {
             ::Color(0x800000), ::Color(0x008000), ::Color(0x000080), ::Color(0x808000), ::Color(0x800080), ::Color(0x008080), ::Color(0xC0C0C0), ::Color(0x808080)
 
 /** Default color table for BIFF8/BIFF12/OOXML. */
-static const ::Color spnDefColors8[] =
+const ::Color spnDefColors8[] =
 {
 /*  0 */    PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    PALETTE_EGA_COLORS_LIGHT,

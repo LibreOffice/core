@@ -53,7 +53,7 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(ScSheetEventId nEvent)
     return nVbaEventIds[static_cast<int>(nEvent)];
 }
 
-static const int COUNT = static_cast<int>(ScSheetEventId::COUNT);
+const int COUNT = static_cast<int>(ScSheetEventId::COUNT);
 
 sal_Int32 ScSheetEvents::GetVbaDocumentEventId(ScSheetEventId nEvent)
 {

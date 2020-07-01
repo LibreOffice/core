@@ -3295,7 +3295,7 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 {
 }
 
-static const OUStringLiteral gaStdFormName( "Standard" ); /// Standard name of control forms.
+const OUStringLiteral gaStdFormName( "Standard" ); /// Standard name of control forms.
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),

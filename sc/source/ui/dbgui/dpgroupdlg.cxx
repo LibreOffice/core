@@ -32,7 +32,7 @@
 namespace {
 
 /** Date part flags in order of the list box entries. */
-static const sal_Int32 spnDateParts[] =
+const sal_Int32 spnDateParts[] =
 {
     css::sheet::DataPilotFieldGroupBy::SECONDS,
     css::sheet::DataPilotFieldGroupBy::MINUTES,
@@ -43,7 +43,7 @@ static const sal_Int32 spnDateParts[] =
     css::sheet::DataPilotFieldGroupBy::YEARS
 };
 
-static const char* aDatePartResIds[] =
+const char* aDatePartResIds[] =
 {
     STR_DPFIELD_GROUP_BY_SECONDS,
     STR_DPFIELD_GROUP_BY_MINUTES,

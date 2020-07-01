@@ -45,13 +45,13 @@
             Color(0x800000), Color(0x008000), Color(0x000080), Color(0x808000), Color(0x800080), Color(0x008080), Color(0xC0C0C0), Color(0x808080)
 
 /** Default color table for BIFF2. */
-static const Color spnDefColorTable2[] =
+const Color spnDefColorTable2[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT
 };
 
 /** Default color table for BIFF3/BIFF4. */
-static const Color spnDefColorTable3[] =
+const Color spnDefColorTable3[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -59,7 +59,7 @@ static const Color spnDefColorTable3[] =
 };
 
 /** Default color table for BIFF5/BIFF7. */
-static const Color spnDefColorTable5[] =
+const Color spnDefColorTable5[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -72,7 +72,7 @@ static const Color spnDefColorTable5[] =
 };
 
 /** Default color table for BIFF8. */
-static const Color spnDefColorTable8[] =
+const Color spnDefColorTable8[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -821,7 +821,7 @@ struct XclBuiltInFormat
 #define UTF8_KO_SEC     "\354\264\210"
 
 /** Default number format table. Last parent of all other tables, used for unknown languages. */
-static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
+const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
 {
     EXC_NUMFMT_OFFSET(   0, NF_NUMBER_STANDARD ),       // General
     EXC_NUMFMT_OFFSET(   1, NF_NUMBER_INT ),            // 0
@@ -914,7 +914,7 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
 // ENGLISH --------------------------------------------------------------------
 
 /** Base table for English locales. */
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
 {
     EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
     EXC_NUMFMT_STRING(  16, "DD-MMM" ),
@@ -925,7 +925,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_UK[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_UK[] =
 {
     EXC_NUMFMT_STRING(  63, UTF8_POUND_UK "#,##0;-" UTF8_POUND_UK "#,##0" ),
     EXC_NUMFMT_STRING(  64, UTF8_POUND_UK "#,##0;[RED]-" UTF8_POUND_UK "#,##0" ),
@@ -934,7 +934,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_UK[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_EIRE[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_EIRE[] =
 {
     EXC_NUMFMT_STRING(  63, UTF8_EURO "#,##0;-" UTF8_EURO "#,##0" ),
     EXC_NUMFMT_STRING(  64, UTF8_EURO "#,##0;[RED]-" UTF8_EURO "#,##0" ),
@@ -943,7 +943,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_EIRE[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
 {
     EXC_NUMFMT_STRING(  14, "M/D/YYYY" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -962,7 +962,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_CAN[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_CAN[] =
 {
     EXC_NUMFMT_STRING(  20, "h:mm" ),
     EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
@@ -974,7 +974,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_CAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_AUS[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_AUS[] =
 {
     EXC_NUMFMT_STRING(  14, "D/MM/YYYY" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -989,7 +989,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_AUS[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
+const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
 {
     EXC_NUMFMT_STRING(  14, "YYYY/MM/DD" ),
     EXC_NUMFMT_OFFSET(  18, NF_TIME_HHMMAMPM ),
@@ -1005,7 +1005,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
 // FRENCH ---------------------------------------------------------------------
 
 /** Base table for French locales. */
-static const XclBuiltInFormat spBuiltInFormats_FRENCH[] =
+const XclBuiltInFormat spBuiltInFormats_FRENCH[] =
 {
     EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
     EXC_NUMFMT_STRING(  16, "DD-MMM" ),
@@ -1015,7 +1015,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_FRENCH_FRANCE[] =
+const XclBuiltInFormat spBuiltInFormats_FRENCH_FRANCE[] =
 {
     EXC_NUMFMT_STRING(  22, "DD/MM/YYYY hh:mm" ),
     EXC_NUMFMT_STRING(  37, "#,##0\\ _" UTF8_EURO ";-#,##0\\ _" UTF8_EURO ),
@@ -1029,7 +1029,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_FRANCE[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_FRENCH_CANADIAN[] =
+const XclBuiltInFormat spBuiltInFormats_FRENCH_CANADIAN[] =
 {
     EXC_NUMFMT_STRING(  22, "YYYY-MM-DD hh:mm" ),
     EXC_NUMFMT_STRING(  37, "#,##0\\ _$_-;#,##0\\ _$-" ),
@@ -1043,7 +1043,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_CANADIAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
+const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
 {
     EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
@@ -1056,7 +1056,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_FRENCH_BELGIAN[] =
+const XclBuiltInFormat spBuiltInFormats_FRENCH_BELGIAN[] =
 {
     EXC_NUMFMT_STRING(  14, "D/MM/YYYY" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -1070,7 +1070,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_BELGIAN[] =
 // GERMAN ---------------------------------------------------------------------
 
 /** Base table for German locales. */
-static const XclBuiltInFormat spBuiltInFormats_GERMAN[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN[] =
 {
     EXC_NUMFMT_STRING(  15, "DD. MMM YY" ),
     EXC_NUMFMT_STRING(  16, "DD. MMM" ),
@@ -1081,7 +1081,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_GERMAN_GERMANY[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN_GERMANY[] =
 {
     EXC_NUMFMT_STRING(  37, "#,##0 _" UTF8_EURO ";-#,##0 _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
@@ -1094,7 +1094,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_GERMANY[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
 {
     EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
@@ -1106,7 +1106,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_GERMAN_SWISS[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN_SWISS[] =
 {
     EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
     EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
@@ -1115,7 +1115,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_SWISS[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_GERMAN_LUXEMBOURG[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN_LUXEMBOURG[] =
 {
     EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
@@ -1131,7 +1131,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_LUXEMBOURG[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_GERMAN_LIECHTENSTEIN[] =
+const XclBuiltInFormat spBuiltInFormats_GERMAN_LIECHTENSTEIN[] =
 {
     EXC_NUMFMT_STRING(  63, "\"CHF \"#,##0;\"CHF \"-#,##0" ),
     EXC_NUMFMT_STRING(  64, "\"CHF \"#,##0;[RED]\"CHF \"-#,##0" ),
@@ -1142,7 +1142,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_LIECHTENSTEIN[] =
 
 // ITALIAN --------------------------------------------------------------------
 
-static const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
+const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
 {
     EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
     EXC_NUMFMT_STRING(  16, "DD-MMM" ),
@@ -1159,7 +1159,7 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
+const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
 {
     EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
@@ -1176,7 +1176,7 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
 
 // SWEDISH --------------------------------------------------------------------
 
-static const XclBuiltInFormat spBuiltInFormats_SWEDISH_SWEDEN[] =
+const XclBuiltInFormat spBuiltInFormats_SWEDISH_SWEDEN[] =
 {
     EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
     EXC_NUMFMT_STRING(  16, "DD-MMM" ),
@@ -1195,7 +1195,7 @@ static const XclBuiltInFormat spBuiltInFormats_SWEDISH_SWEDEN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_SWEDISH_FINLAND[] =
+const XclBuiltInFormat spBuiltInFormats_SWEDISH_FINLAND[] =
 {
     EXC_NUMFMT_STRING(   9, "0 %" ),
     EXC_NUMFMT_STRING(  10, "0.00 %" ),
@@ -1219,7 +1219,7 @@ static const XclBuiltInFormat spBuiltInFormats_SWEDISH_FINLAND[] =
 // ASIAN ----------------------------------------------------------------------
 
 /** Base table for Asian locales. */
-static const XclBuiltInFormat spBuiltInFormats_ASIAN[] =
+const XclBuiltInFormat spBuiltInFormats_ASIAN[] =
 {
     EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
     EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
@@ -1243,7 +1243,7 @@ static const XclBuiltInFormat spBuiltInFormats_ASIAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
+const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
 {
     EXC_NUMFMT_STRING(  14, "YYYY/M/D" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -1265,7 +1265,7 @@ static const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
+const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
 {
     EXC_NUMFMT_STRING(  14, "YYYY-MM-DD" ),
     EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
@@ -1287,7 +1287,7 @@ static const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
+const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
 {
     EXC_NUMFMT_STRING(  14, "YYYY-M-D" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -1311,7 +1311,7 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
+const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
 {
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
     EXC_NUMFMT_STRING(  16, "D-MMM" ),
@@ -1342,7 +1342,7 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
 
 // OTHER ----------------------------------------------------------------------
 
-static const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
+const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
 {
     EXC_NUMFMT_STRING(  15, "DD-MMMM-YY" ),
     EXC_NUMFMT_STRING(  16, "DD-MMMM" ),
@@ -1356,7 +1356,7 @@ static const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-static const XclBuiltInFormat spBuiltInFormats_THAI[] =
+const XclBuiltInFormat spBuiltInFormats_THAI[] =
 {
     EXC_NUMFMT_STRING(  14, "D/M/YYYY" ),
     EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
@@ -1404,7 +1404,7 @@ struct XclBuiltInFormatTable
     const XclBuiltInFormat* mpFormats;      /// The number format table.
 };
 
-static const XclBuiltInFormatTable spBuiltInFormatTables[] =
+const XclBuiltInFormatTable spBuiltInFormatTables[] =
 {   //  language                        parent language             format table
     {   LANGUAGE_DONTKNOW,              LANGUAGE_NONE,              spBuiltInFormats_DONTKNOW               },
 

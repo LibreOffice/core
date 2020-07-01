@@ -296,7 +296,7 @@ Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape 
 
 namespace {
 
-static const struct
+const struct
 {
     const char*     mpcListenerType;
     const char*     mpcEventMethod;

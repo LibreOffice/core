@@ -23,8 +23,8 @@
 #include "address.hxx"
 #include <algorithm>
 
-static const sal_Int32 nInt32Min = 0x80000000;
-static const sal_Int32 nInt32Max = 0x7fffffff;
+const sal_Int32 nInt32Min = 0x80000000;
+const sal_Int32 nInt32Max = 0x7fffffff;
 
 class ScDocument;
 

@@ -328,8 +328,8 @@ sal_uInt16 XclRoot::GetBaseYear() const
     return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
 }
 
-static const DateTime theOurCompatNullDate( Date( 30, 12, 1899 ));
-static const DateTime theExcelCutOverDate( Date( 1, 3, 1900 ));
+const DateTime theOurCompatNullDate( Date( 30, 12, 1899 ));
+const DateTime theExcelCutOverDate( Date( 1, 3, 1900 ));
 
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {

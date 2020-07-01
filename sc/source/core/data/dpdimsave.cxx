@@ -758,7 +758,7 @@ OUString ScDPDimensionSaveData::CreateGroupDimName(
 
 namespace
 {
-    static const char* aDatePartIds[] =
+    const char* aDatePartIds[] =
     {
         STR_DPFIELD_GROUP_BY_SECONDS,
         STR_DPFIELD_GROUP_BY_MINUTES,

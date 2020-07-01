@@ -597,7 +597,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-static const OUStringLiteral aLevelBmps[]=
+const OUStringLiteral aLevelBmps[]=
 {
     RID_BMP_LEVEL1,
     RID_BMP_LEVEL2,

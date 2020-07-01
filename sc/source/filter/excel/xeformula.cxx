@@ -240,7 +240,7 @@ struct XclExpCompConfig
 };
 
 /** The table containing configuration data for all formula types. */
-static const XclExpCompConfig spConfigTable[] =
+const XclExpCompConfig spConfigTable[] =
 {
     // formula type         token class type     lclLM  inCell 3dOnly allowArray
     { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,  true,  true,  false, true  },

@@ -80,7 +80,7 @@ struct ConditionEntryApiMap
     sal_Int32 nApiMode;
 };
 
-static ConditionEntryApiMap const aConditionEntryMap[] =
+ConditionEntryApiMap const aConditionEntryMap[] =
 {
     {ScConditionMode::Equal, sheet::ConditionFormatOperator::EQUAL},
     {ScConditionMode::Less, sheet::ConditionFormatOperator::LESS},
@@ -131,7 +131,7 @@ struct ColorScaleEntryTypeApiMap
     sal_Int32 nApiType;
 };
 
-static ColorScaleEntryTypeApiMap const aColorScaleEntryTypeMap[] =
+ColorScaleEntryTypeApiMap const aColorScaleEntryTypeMap[] =
 {
     { COLORSCALE_MIN, sheet::ColorScaleEntryType::COLORSCALE_MIN },
     { COLORSCALE_MAX, sheet::ColorScaleEntryType::COLORSCALE_MAX },
@@ -180,7 +180,7 @@ struct DataBarAxisApiMap
     sal_Int32 nApiPos;
 };
 
-static DataBarAxisApiMap const aDataBarAxisMap[] =
+DataBarAxisApiMap const aDataBarAxisMap[] =
 {
     { databar::NONE, sheet::DataBarAxis::AXIS_NONE },
     { databar::AUTOMATIC, sheet::DataBarAxis::AXIS_AUTOMATIC },
@@ -193,7 +193,7 @@ struct DataBarEntryTypeApiMap
     sal_Int32 nApiType;
 };
 
-static DataBarEntryTypeApiMap const aDataBarEntryTypeMap[] =
+DataBarEntryTypeApiMap const aDataBarEntryTypeMap[] =
 {
     { COLORSCALE_AUTO, sheet::DataBarEntryType::DATABAR_AUTO },
     { COLORSCALE_MIN, sheet::DataBarEntryType::DATABAR_MIN },
@@ -260,7 +260,7 @@ struct IconSetEntryTypeApiMap
     sal_Int32 nApiType;
 };
 
-static IconSetEntryTypeApiMap const aIconSetEntryTypeMap[] =
+IconSetEntryTypeApiMap const aIconSetEntryTypeMap[] =
 {
     { COLORSCALE_MIN, sheet::IconSetFormatEntry::ICONSET_MIN },
     { COLORSCALE_VALUE, sheet::IconSetFormatEntry::ICONSET_VALUE },
@@ -292,7 +292,7 @@ struct DateTypeApiMap
     sal_Int32 nApiType;
 };
 
-static DateTypeApiMap const aDateTypeApiMap[] =
+DateTypeApiMap const aDateTypeApiMap[] =
 {
     { condformat::TODAY, sheet::DateType::TODAY },
     { condformat::YESTERDAY, sheet::DateType::YESTERDAY },
