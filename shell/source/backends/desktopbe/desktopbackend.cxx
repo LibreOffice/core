@@ -303,7 +303,7 @@ css::uno::Reference< css::uno::XInterface > createInstance(
         ? backend : static_cast< cppu::OWeakObject * >(new Default);
 }
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &createInstance, &getDefaultImplementationName,
       &getDefaultSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
       0 },
