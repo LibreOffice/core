@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-const static sal_Int64 CaretBlinkInterval = 500 * 1000 * 1000;
+const sal_Int64 CaretBlinkInterval = 500 * 1000 * 1000;
 
 //#define SHOW_CHARACTER_BOXES
 

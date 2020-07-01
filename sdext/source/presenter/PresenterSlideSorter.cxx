@@ -41,24 +41,24 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace {
-    const static sal_Int32 gnVerticalGap (10);
-    const static sal_Int32 gnVerticalBorder (10);
-    const static sal_Int32 gnHorizontalGap (10);
-    const static sal_Int32 gnHorizontalBorder (10);
+    const sal_Int32 gnVerticalGap (10);
+    const sal_Int32 gnVerticalBorder (10);
+    const sal_Int32 gnHorizontalGap (10);
+    const sal_Int32 gnHorizontalBorder (10);
 
-    const static double gnMinimalPreviewWidth (200);
-    const static double gnPreferredPreviewWidth (300);
-    const static double gnMaximalPreviewWidth (400);
-    const static sal_Int32 gnPreferredColumnCount (6);
-    const static double gnMinimalHorizontalPreviewGap(15);
-    const static double gnPreferredHorizontalPreviewGap(25);
-    const static double gnMaximalHorizontalPreviewGap(50);
-    const static double gnPreferredVerticalPreviewGap(25);
+    const double gnMinimalPreviewWidth (200);
+    const double gnPreferredPreviewWidth (300);
+    const double gnMaximalPreviewWidth (400);
+    const sal_Int32 gnPreferredColumnCount (6);
+    const double gnMinimalHorizontalPreviewGap(15);
+    const double gnPreferredHorizontalPreviewGap(25);
+    const double gnMaximalHorizontalPreviewGap(50);
+    const double gnPreferredVerticalPreviewGap(25);
 
-    const static sal_Int32 gnHorizontalLabelBorder (3);
-    const static sal_Int32 gnHorizontalLabelPadding (5);
+    const sal_Int32 gnHorizontalLabelBorder (3);
+    const sal_Int32 gnHorizontalLabelPadding (5);
 
-    const static sal_Int32 gnVerticalButtonPadding (gnVerticalGap);
+    const sal_Int32 gnVerticalButtonPadding (gnVerticalGap);
 }
 
 namespace sdext::presenter {

@@ -47,7 +47,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
-static const sal_Int32 gnGapSize (20);
+const sal_Int32 gnGapSize (20);
 
 namespace {
 
