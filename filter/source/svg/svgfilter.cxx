@@ -64,8 +64,8 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    static const char constFilterNameDraw[] = "svg_Scalable_Vector_Graphics_Draw";
-    static const char constFilterName[] = "svg_Scalable_Vector_Graphics";
+    const char constFilterNameDraw[] = "svg_Scalable_Vector_Graphics_Draw";
+    const char constFilterName[] = "svg_Scalable_Vector_Graphics";
 }
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :

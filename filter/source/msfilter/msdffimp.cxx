@@ -6732,7 +6732,7 @@ struct ClsIDs {
 
 }
 
-static const ClsIDs aClsIDs[] = {
+const ClsIDs aClsIDs[] = {
 
     { 0x000212F0, "MSWordArt",          "Microsoft Word Art"            },
     { 0x000212F0, "MSWordArt.2",        "Microsoft Word Art 2.0"        },

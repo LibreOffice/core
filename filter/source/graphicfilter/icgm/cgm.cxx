@@ -31,8 +31,8 @@
 
 using namespace ::com::sun::star;
 
-static constexpr double gnOutdx = 28000;                // Output size in 1/100TH mm
-static constexpr double gnOutdy = 21000;                // on which is mapped
+constexpr double gnOutdx = 28000;                // Output size in 1/100TH mm
+constexpr double gnOutdy = 21000;                // on which is mapped
 
 CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     : mnVDCXadd(0)

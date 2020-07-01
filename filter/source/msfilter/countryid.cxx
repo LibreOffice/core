@@ -71,7 +71,7 @@ struct CountryEntry
 
     For now all entries are sorted by country ID, but this is not required.
  */
-static const CountryEntry pTable[] =
+const CountryEntry pTable[] =
 {
     { COUNTRY_USA,                  LANGUAGE_ENGLISH_US,                    false   },
     { COUNTRY_DOMINICAN_REPUBLIC,   LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,    true    },

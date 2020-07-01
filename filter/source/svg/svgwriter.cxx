@@ -47,43 +47,43 @@
 #include <memory>
 
 
-static const char   aPrefixClipPathId[] = "clip_path_";
+const char   aPrefixClipPathId[] = "clip_path_";
 
-static const char   aXMLElemG[] = "g";
-static const char   aXMLElemDefs[] = "defs";
-static const char   aXMLElemText[] = "text";
-static const char   aXMLElemTspan[] = "tspan";
-static const char   aXMLElemLinearGradient[] = "linearGradient";
-static const char   aXMLElemStop[] = "stop";
+const char   aXMLElemG[] = "g";
+const char   aXMLElemDefs[] = "defs";
+const char   aXMLElemText[] = "text";
+const char   aXMLElemTspan[] = "tspan";
+const char   aXMLElemLinearGradient[] = "linearGradient";
+const char   aXMLElemStop[] = "stop";
 
-static const char   aXMLAttrTransform[] = "transform";
-static const char   aXMLAttrStyle[] = "style";
-static const char   aXMLAttrId[] = "id";
-static const char   aXMLAttrX[] = "x";
-static const char   aXMLAttrY[] = "y";
-static const char   aXMLAttrX1[] = "x1";
-static const char   aXMLAttrY1[] = "y1";
-static const char   aXMLAttrX2[] = "x2";
-static const char   aXMLAttrY2[] = "y2";
-static const char   aXMLAttrCX[] = "cx";
-static const char   aXMLAttrCY[] = "cy";
-static const char   aXMLAttrRX[] = "rx";
-static const char   aXMLAttrRY[] = "ry";
-static const char   aXMLAttrWidth[] = "width";
-static const char   aXMLAttrHeight[] = "height";
-static const char   aXMLAttrStrokeWidth[] = "stroke-width";
-static const char   aXMLAttrFill[] = "fill";
-static const char   aXMLAttrFontFamily[] = "font-family";
-static const char   aXMLAttrFontSize[] = "font-size";
-static const char   aXMLAttrFontStyle[] = "font-style";
-static const char   aXMLAttrFontWeight[] = "font-weight";
-static const char   aXMLAttrTextDecoration[] = "text-decoration";
-static const char   aXMLAttrXLinkHRef[] = "xlink:href";
-static const char   aXMLAttrGradientUnits[] = "gradientUnits";
-static const char   aXMLAttrOffset[] = "offset";
-static const char   aXMLAttrStopColor[] = "stop-color";
-static const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
-static const char   aXMLAttrStrokeLinecap[] = "stroke-linecap";
+const char   aXMLAttrTransform[] = "transform";
+const char   aXMLAttrStyle[] = "style";
+const char   aXMLAttrId[] = "id";
+const char   aXMLAttrX[] = "x";
+const char   aXMLAttrY[] = "y";
+const char   aXMLAttrX1[] = "x1";
+const char   aXMLAttrY1[] = "y1";
+const char   aXMLAttrX2[] = "x2";
+const char   aXMLAttrY2[] = "y2";
+const char   aXMLAttrCX[] = "cx";
+const char   aXMLAttrCY[] = "cy";
+const char   aXMLAttrRX[] = "rx";
+const char   aXMLAttrRY[] = "ry";
+const char   aXMLAttrWidth[] = "width";
+const char   aXMLAttrHeight[] = "height";
+const char   aXMLAttrStrokeWidth[] = "stroke-width";
+const char   aXMLAttrFill[] = "fill";
+const char   aXMLAttrFontFamily[] = "font-family";
+const char   aXMLAttrFontSize[] = "font-size";
+const char   aXMLAttrFontStyle[] = "font-style";
+const char   aXMLAttrFontWeight[] = "font-weight";
+const char   aXMLAttrTextDecoration[] = "text-decoration";
+const char   aXMLAttrXLinkHRef[] = "xlink:href";
+const char   aXMLAttrGradientUnits[] = "gradientUnits";
+const char   aXMLAttrOffset[] = "offset";
+const char   aXMLAttrStopColor[] = "stop-color";
+const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
+const char   aXMLAttrStrokeLinecap[] = "stroke-linecap";
 
 
 PushFlags SVGContextHandler::getPushFlags() const
