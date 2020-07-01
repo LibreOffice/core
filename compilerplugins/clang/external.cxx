@@ -471,8 +471,17 @@ private:
         {
             return true;
         }
-        //TODO: in some cases getLinkageInternal() appears to report ExternalLinkage instead of
-        // UniqueExternalLinkage:
+        // In some cases getLinkageInternal() arguably wrongly reports ExternalLinkage, see the
+        // commit message of <https://github.com/llvm/llvm-project/commit/
+        // df963a38a9e27fc43b485dfdf52bc1b090087e06> "DR1113: anonymous namespaces formally give
+        // their contents internal linkage":
+        //
+        //  "We still deviate from the standard in one regard here: extern "C" declarations
+        //   in anonymous namespaces are still granted external linkage. Changing those does
+        //   not appear to have been an intentional consequence of the standard change in
+        //   DR1113."
+        //
+        // Do not warn about such "wrongly external" declarations here:
         if (decl->isInAnonymousNamespace())
         {
             return true;
