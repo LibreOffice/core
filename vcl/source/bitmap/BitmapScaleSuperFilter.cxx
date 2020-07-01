@@ -983,21 +983,17 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                     comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
                     std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
 
-                    long nStripYStart = nStartY;
-                    long nStripYEnd = nStripYStart + constScaleThreadStrip - 1;
-
-                    while (nStripYEnd < nEndY)
+                    vcl::bitmap::generateStripRanges<constScaleThreadStrip>(nStartY, nEndY,
+                    [&] (long const nStart, long const nEnd, bool const bLast)
                     {
-                        std::unique_ptr<ScaleTask> pTask(new ScaleTask(pTag, pScaleRangeFn, aContext, nStripYStart, nStripYEnd));
-                        rShared.pushTask(std::move(pTask));
-                        nStripYStart += constScaleThreadStrip;
-                        nStripYEnd += constScaleThreadStrip;
-                    }
-                    if (nStripYStart <= nEndY)
-                    {
-                        std::unique_ptr<ScaleTask> pTask(new ScaleTask(pTag, pScaleRangeFn, aContext, nStripYStart, nEndY));
-                        rShared.pushTask(std::move(pTask));
-                    }
+                        if (!bLast)
+                        {
+                            auto pTask(std::make_unique<ScaleTask>(pTag, pScaleRangeFn, aContext, nStart, nEnd));
+                            rShared.pushTask(std::move(pTask));
+                        }
+                        else
+                            pScaleRangeFn(aContext, nStart, nEnd);
+                    });
                     rShared.waitUntilDone(pTag);
                     SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
                 }
