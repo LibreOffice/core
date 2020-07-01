@@ -23,8 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
-
 class Menu;
 
 namespace com::sun::star::accessibility {

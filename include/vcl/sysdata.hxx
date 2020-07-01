@@ -22,10 +22,6 @@
 
 #include <sal/types.h>
 
-#include <vector>
-
-#include <config_cairo_canvas.h>
-
 #ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
 typedef struct CGContext *CGContextRef;

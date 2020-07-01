@@ -30,7 +30,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/vclptr.hxx>
 #include <memory>
 
 namespace vcl { class Window; }

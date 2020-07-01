@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>
-#include <config_options.h>
 
 
 class VCL_DLLPUBLIC SpinField : public Edit

@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace css;
 using namespace css::uno;

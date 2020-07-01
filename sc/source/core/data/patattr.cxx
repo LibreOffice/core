@@ -49,6 +49,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <patattr.hxx>

@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 #include <math.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>

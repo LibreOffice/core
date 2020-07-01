@@ -27,7 +27,6 @@
 #include <vector>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/image.hxx>
@@ -35,7 +34,6 @@
 #include <tools/contnr.hxx>
 #include <vcl/treelist.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

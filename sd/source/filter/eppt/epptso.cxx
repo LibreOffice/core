@@ -29,6 +29,7 @@
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/UnitConversion.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <editeng/svxenum.hxx>

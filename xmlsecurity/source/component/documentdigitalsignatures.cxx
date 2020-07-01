@@ -43,6 +43,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/date.hxx>
+#include <tools/time.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>

@@ -54,6 +54,7 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <output.hxx>
 #include <document.hxx>

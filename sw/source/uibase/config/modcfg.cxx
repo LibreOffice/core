@@ -28,6 +28,7 @@
 
 #include <tools/mapunit.hxx>
 #include <tools/globname.hxx>
+#include <tools/UnitConversion.hxx>
 #include <itabenum.hxx>
 #include <modcfg.hxx>
 #include <caption.hxx>

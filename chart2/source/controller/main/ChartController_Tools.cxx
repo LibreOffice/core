@@ -71,6 +71,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 
 #include <memory>
 

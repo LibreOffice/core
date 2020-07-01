@@ -19,6 +19,7 @@
 #include "vbainformationhelper.hxx"
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/UnitConversion.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
 #include <doc.hxx>

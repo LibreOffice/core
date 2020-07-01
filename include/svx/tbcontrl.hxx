@@ -132,7 +132,6 @@
 
 #include <config_options.h>
 #include <svl/style.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <svtools/popupwindowcontroller.hxx>

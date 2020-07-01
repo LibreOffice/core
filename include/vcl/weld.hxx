@@ -17,7 +17,6 @@
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>

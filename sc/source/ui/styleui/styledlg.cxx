@@ -24,6 +24,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svl/style.hxx>
 #include <svl/cjkoptions.hxx>
+#include <osl/diagnose.h>
 
 #include <styledlg.hxx>
 #include <tabpages.hxx>

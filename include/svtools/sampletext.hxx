@@ -12,7 +12,6 @@
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unicode/uscript.h>
-#include <i18nlangtag/lang.h>
 #include <vcl/fontcapabilities.hxx>
 
 class OutputDevice;

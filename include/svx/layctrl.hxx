@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_LAYCTRL_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <svx/svxdllapi.h>
 
 class SvxTableToolBoxControl final : public svt::PopupWindowController
 {

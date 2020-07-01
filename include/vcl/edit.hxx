@@ -27,7 +27,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/deleter.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>

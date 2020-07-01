@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <svx/sdr/animation/scheduler.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 namespace sdr::contact { class ViewObjectContact; }
 

@@ -18,6 +18,7 @@
  */
 
 #include <editeng/itemtype.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unosett.hxx>
 
 #include <swtypes.hxx>

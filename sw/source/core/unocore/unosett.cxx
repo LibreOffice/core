@@ -50,6 +50,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/enumarray.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/font.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>

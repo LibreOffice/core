@@ -23,7 +23,7 @@
 #include <sfx2//dllapi.h>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
-
+#include <vcl/button.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 

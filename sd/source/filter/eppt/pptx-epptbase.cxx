@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/UnitConversion.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>

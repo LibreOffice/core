@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/rtfkeywd.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>

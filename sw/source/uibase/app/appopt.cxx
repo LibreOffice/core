@@ -33,6 +33,7 @@
 #include <editeng/tstpitem.hxx>
 #include <svx/optgrid.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/UnitConversion.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <fontcfg.hxx>

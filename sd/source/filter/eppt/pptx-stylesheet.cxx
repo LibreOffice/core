@@ -21,6 +21,7 @@
 #include "epptdef.hxx"
 #include "text.hxx"
 #include <tools/color.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/svxenum.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

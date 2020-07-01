@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UCBHELPER_RESULTSET_HXX
 #define INCLUDED_UCBHELPER_RESULTSET_HXX
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>

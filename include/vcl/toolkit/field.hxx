@@ -24,6 +24,9 @@
 #endif
 
 #include <config_options.h>
+#include <tools/date.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/time.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/longcurr.hxx>
 

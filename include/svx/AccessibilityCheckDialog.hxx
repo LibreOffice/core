@@ -11,10 +11,8 @@
 #ifndef INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
 #define INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
 
-#include <sfx2/AccessibilityCheck.hxx>
-#include <sal/types.h>
+#include <sfx2/AccessibilityIssue.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
 

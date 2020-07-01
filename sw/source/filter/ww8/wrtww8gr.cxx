@@ -25,6 +25,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <svl/itemiter.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <svtools/embedhlp.hxx>
 

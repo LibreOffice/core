@@ -25,6 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/textfilter.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/idle.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SwMailMergeWizard;

@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <svl/listener.hxx>
+#include <tools/solar.h>
 #include "unotextmarkup.hxx"
 
 #include <set>

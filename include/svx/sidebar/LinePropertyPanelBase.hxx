@@ -22,9 +22,7 @@
 #include <vcl/weld.hxx>
 #include <memory>
 #include <svl/poolitem.hxx>
-#include <svx/dlgctrl.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <svx/xtable.hxx>
 #include <svx/sidebar/LineWidthPopup.hxx>
 #include <svx/svxdllapi.h>
 

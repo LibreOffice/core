@@ -236,6 +236,9 @@ excludelist:
     include/tools/svlibrary.h:
     # Used behind #ifndef
     - osl/module.h
+    include/tools/simdsupport.hxx:
+    # Needed for CPU intrinsics detection to work
+    - emmintrin.h
     include/unotools/accessiblestatesethelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleStateSet.hpp
@@ -906,6 +909,8 @@ excludelist:
     - com/sun/star/drawing/CameraGeometry.hpp
     - com/sun/star/text/WritingMode.hpp
     - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/drawing/QRCode.hpp
+    - svx/svddef.hxx
     include/svx/xdef.hxx:
     # Needed for macro defines
     - svl/typedwhich.hxx

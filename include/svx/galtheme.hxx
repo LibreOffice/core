@@ -24,7 +24,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/salctype.hxx>
+#include <vcl/bitmapex.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/galmisc.hxx>
 #include <memory>

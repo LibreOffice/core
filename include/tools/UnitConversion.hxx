@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <sal/types.h>
+
 constexpr sal_Int64 convertTwipToMm100(sal_Int64 n)
 {
     return (n >= 0) ? (n * 127 + 36) / 72 : (n * 127 - 36) / 72;

@@ -10,7 +10,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <algorithm>
 
 namespace rtl
 {

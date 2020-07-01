@@ -31,7 +31,6 @@
 #include <osl/diagnose.h>
 //#define VBAHELPER_DLLIMPLEMENTATION
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>

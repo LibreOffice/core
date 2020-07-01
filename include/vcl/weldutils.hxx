@@ -14,7 +14,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <tools/link.hxx>
+#include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>

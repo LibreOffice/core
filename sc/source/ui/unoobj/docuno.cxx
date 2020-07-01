@@ -49,6 +49,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/multisel.hxx>
+#include <tools/UnitConversion.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
 

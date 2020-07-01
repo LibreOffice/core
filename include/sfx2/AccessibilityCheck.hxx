@@ -12,9 +12,6 @@
 #define INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
 
 #include <sfx2/dllapi.h>
-#include <vector>
-#include <memory>
-#include <rtl/ustring.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
 
 namespace sfx

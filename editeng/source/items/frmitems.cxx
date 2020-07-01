@@ -45,6 +45,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -22,7 +22,6 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>

@@ -47,6 +47,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "rtfdocumentimpl.hxx"

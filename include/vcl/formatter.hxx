@@ -20,6 +20,8 @@
 #pragma once
 
 #include <config_options.h>
+#include <i18nlangtag/lang.h>
+#include <tools/link.hxx>
 #include <vcl/settings.hxx>
 #include <map>
 #include <memory>

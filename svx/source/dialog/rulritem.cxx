@@ -22,6 +22,7 @@
 #include <svx/unomid.hxx>
 #include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>

@@ -21,7 +21,6 @@
 #define INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <sfx2/dllapi.h>
 
 class CharmapPopup final : public svt::PopupWindowController
 {

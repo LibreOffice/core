@@ -21,7 +21,6 @@
 #define INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <sfx2/dllapi.h>
 
 class EmojiPopup final : public svt::PopupWindowController
 {

@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/itemwin.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/objsh.hxx>
 #include <svx/xfltrit.hxx>

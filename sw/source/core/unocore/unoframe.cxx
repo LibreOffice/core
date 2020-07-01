@@ -33,6 +33,7 @@
 #include <svx/sdtaitm.hxx>
 #include <svx/xflclit.hxx>
 #include <tools/globname.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/memberids.h>
 #include <swtypes.hxx>
 #include <cmdid.h>

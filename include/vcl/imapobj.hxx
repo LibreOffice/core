@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_IMAPOBJ_HXX
 #define INCLUDED_VCL_IMAPOBJ_HXX
 
-#include <vcl/dllapi.h>
 #include <svl/macitem.hxx>
 #include <rtl/strbuf.hxx>
 

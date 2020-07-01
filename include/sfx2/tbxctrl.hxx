@@ -25,7 +25,6 @@
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/window.hxx>
 
 namespace com::sun::star::frame { class XDispatchProvider; }

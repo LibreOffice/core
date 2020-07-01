@@ -23,11 +23,7 @@
 #include <config_options.h>
 #include <memory>
 #include <vcl/dllapi.h>
-#include <tools/link.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <vcl/spinfld.hxx>
-#include <tools/fldunit.hxx>
 
 namespace com::sun::star::lang { struct Locale; }
 
