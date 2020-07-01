@@ -54,7 +54,7 @@ static const char *aCH[] =
     UPN_IS_USE_DICTIONARY_LIST,
 };
 
-static const int nCHCount = SAL_N_ELEMENTS(aCH);
+const int nCHCount = SAL_N_ELEMENTS(aCH);
 
 
 PropertyChgHelper::PropertyChgHelper(

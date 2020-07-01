@@ -625,7 +625,7 @@ OUString ToLower( const OUString &rText, LanguageType nLanguage )
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
 // and thus may NOT not be part of names or words like the Chinese/Japanese number characters
-static const sal_uInt32 the_aDigitZeroes [] =
+const sal_uInt32 the_aDigitZeroes [] =
 {
     0x00000030, //0039    ; Decimal # Nd  [10] DIGIT ZERO..DIGIT NINE
     0x00000660, //0669    ; Decimal # Nd  [10] ARABIC-INDIC DIGIT ZERO..ARABIC-INDIC DIGIT NINE
