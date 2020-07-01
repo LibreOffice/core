@@ -76,8 +76,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 // Some constants
-static const char DELIM[] = "::";
-static const sal_Int32 DELIMLEN = strlen(DELIM);
+const char DELIM[] = "::";
+const sal_Int32 DELIMLEN = strlen(DELIM);
 
 static bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
