@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7e878f4_afa76277",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-01T16:35:12Z",
+      "side": 1,
+      "message": "I can find anything about this here:\nhttps://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html?gi-language\u003dc#gst_element_seek\nDid I miss something?",
+      "range": {
+        "startLine": 682,
+        "startChar": 18,
+        "endLine": 682,
+        "endChar": 72
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42696bc4_5b826b6e",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-01T16:35:12Z",
+      "side": 1,
+      "message": "if \"gst_element_seek\" method changes the status to \"GST_STATE_PAUSED\", why set again this state?",
+      "range": {
+        "startLine": 691,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 61
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
