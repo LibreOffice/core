@@ -1384,13 +1384,13 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         bool bClearMax = true;
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MAX, xUnoModel))
         {
-            Any aMin( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MAX));
-            if (aMin.getValueType().getTypeClass() != TypeClass_VOID)
+            Any aMax(xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MAX));
+            if (aMax.getValueType().getTypeClass() != TypeClass_VOID)
             {
-                DBG_ASSERT(aMin.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
-                double dMin = ::comphelper::getDouble(aMin);
-                static_cast<FormattedField*>(m_pWindow.get())->SetMaxValue(dMin);
-                static_cast<FormattedField*>(m_pPainter.get())->SetMaxValue(dMin);
+                DBG_ASSERT(aMax.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
+                double dMax = ::comphelper::getDouble(aMax);
+                static_cast<FormattedField*>(m_pWindow.get())->SetMaxValue(dMax);
+                static_cast<FormattedField*>(m_pPainter.get())->SetMaxValue(dMax);
                 bClearMax = false;
             }
         }
