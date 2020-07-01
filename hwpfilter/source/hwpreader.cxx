@@ -399,7 +399,7 @@ ArrowShape[] =
     { "Square", false }
 };
 
-static struct
+struct
 {
     double dots1;
     double dots2;

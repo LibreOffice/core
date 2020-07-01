@@ -51,7 +51,7 @@ static hchar jaso2ks(hchar hh);
 /**
  * kssm code table matching with ks index
  */
-static const hchar ksTbl[2350] =
+const hchar ksTbl[2350] =
 {
     0x8861, 0x8862, 0x8865, 0x8868, 0x8869, 0x886A, 0x886B, 0x8871,
     0x8873, 0x8874, 0x8875, 0x8876, 0x8877, 0x8878, 0x8879, 0x887B,
@@ -352,7 +352,7 @@ static const hchar ksTbl[2350] =
 /**
  * ks symbols
  */
-static const unsigned tblhhtg_ks[] =
+const unsigned tblhhtg_ks[] =
 {
     0xC7D1, 0xB1DB, 0xB0FA, 0xC4C4, 0xC7BB, 0xC5CD, noneks, noneks,
     0xA2B1, 0xA3DF, 0xA2D5, 0xA6B1, 0xA1B8, 0xA1B9, 0xA3DF, 0xA1DA,
@@ -367,7 +367,7 @@ static const unsigned tblhhtg_ks[] =
 /**
  * kssm symbols
  */
-static const unsigned hhtg_tg[] =
+const unsigned hhtg_tg[] =
 {
     0xD065, 0x8B69, 0x89C1, 0xC4F1, 0xCF41, 0xC8E1, 0xD3C5, 0xD931,
     0xD931, 0xD481, 0xD482, 0xD488, 0xD48A, 0xD48F, 0xD493, 0xD494,
@@ -534,7 +534,7 @@ static hchar cdkssm2ks_han(hchar kssm)
 #define IsHangul(c) ((c) & 0x8000)
 #define IsHanja(c)  (((c) & 0x4000)==0x4000)
 
-static const hchar jaso_hh_code[] =
+const hchar jaso_hh_code[] =
 {
     34881, 35905, 33860, 36929, 33862, 33863, 37953, 38977, 40001, 33866,
     33867,
@@ -571,7 +571,7 @@ static hchar jaso2ks(hchar hh)
 
 
 //1 00011 00 001 00011
-static const hchar choseong_to_unicode[] =
+const hchar choseong_to_unicode[] =
 {
     0x111e,  0,  0x1100, 0x1101, 0x1102, 0x1103, 0x1104, 0x1105,
     0x1106, 0x1107, 0x1108, 0x1109, 0x110a, 0x110b, 0x110c, 0x110d,
@@ -579,7 +579,7 @@ static const hchar choseong_to_unicode[] =
     0x112b, 0x112d, 0x112f, 0x1132, 0x1136, 0x1140, 0x114c, 0x1158
 };
 /* There are some other codes where the medial sound is 0 or 1. It needs to extract the rules in those area */
-static const hchar joongseong_to_unicode[] =
+const hchar joongseong_to_unicode[] =
 {
     0,      0,  0, 0x1161, 0x1162, 0x1163, 0x1164, 0x1165,
     0,      0, 0x1166, 0x1167, 0x1168, 0x1169, 0x116a, 0x116b,
@@ -587,7 +587,7 @@ static const hchar joongseong_to_unicode[] =
     0x1191, 0x1194, 0x1172, 0x1173, 0x1174, 0x1175, 0x119e, 0x11a1
 };
 
-static const hchar jongseong_to_unicode[] =
+const hchar jongseong_to_unicode[] =
 {
     0x11d9, 0  , 0x11a8, 0x11a9, 0x11aa, 0x11ab, 0x11ac, 0x11ad,
     0x11ae, 0x11af, 0x11b0, 0x11b1, 0x11b2, 0x11b3, 0x11b4, 0x11b5,
@@ -601,7 +601,7 @@ static const hchar jongseong_to_unicode[] =
  * consonants and vowels area is made as a general table and the rest are made of a structure mapping table
  *
  * 844, except for the remaining 1152-308 is a combination of consonants and vowels. */
-static const hchar jamo_to_unicode[] =
+const hchar jamo_to_unicode[] =
 {
     0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136, 0x3137, 0x3138,
     0x3139, 0x313a, 0x313b, 0x313c, 0x313d, 0x313e, 0x313f, 0x3140,
@@ -665,7 +665,7 @@ struct JamoComp{
 }
 
 /* 704 + 12 = 706 */
-static const JamoComp jamocomp1_to_unicode[] =
+const JamoComp jamocomp1_to_unicode[] =
 {
     {3, 0x1100, 0x1161, 0x11e7}, {3, 0x1100, 0x1161, 0x3167},
     {3, 0x1100, 0x1161, 0x11dd}, {3, 0x1100, 0x1161, 0x11e2},

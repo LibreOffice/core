@@ -112,22 +112,22 @@ DateCode::DateCode()
 {
 }
 
-static const hchar kor_week[] =
+const hchar kor_week[] =
 {
     0xB7A9, 0xB6A9, 0xD1C1, 0xAE81, 0xA1A2, 0x8B71, 0xC9A1
 };
-static const hchar china_week[] =
+const hchar china_week[] =
 {
     0x4CC8, 0x4BE4, 0x525A, 0x48D8, 0x45AB, 0x4270, 0x50B4
 };
-static const char eng_week[] = { "SunMonTueWedThuFriSat" };
-static const char eng_mon[] = { "JanFebMarAprMayJunJulAugSepOctNovDec" };
-static const char * const en_mon[] =
+const char eng_week[] = { "SunMonTueWedThuFriSat" };
+const char eng_mon[] = { "JanFebMarAprMayJunJulAugSepOctNovDec" };
+const char * const en_mon[] =
 {
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"
 };
-static const char * const en_week[] =
+const char * const en_week[] =
 {
     "Sunday", "Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday"
