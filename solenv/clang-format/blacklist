@@ -1652,7 +1652,6 @@ compilerplugins/clang/dynexcspec.cxx
 compilerplugins/clang/expandablemethods.cxx
 compilerplugins/clang/expressionalwayszero.cxx
 compilerplugins/clang/externandnotdefined.cxx
-compilerplugins/clang/externvar.cxx
 compilerplugins/clang/faileddyncast.cxx
 compilerplugins/clang/fakebool.cxx
 compilerplugins/clang/finalclasses.cxx
@@ -1760,8 +1759,7 @@ compilerplugins/clang/test/cppunitassertequals.hxx
 compilerplugins/clang/test/datamembershadow.cxx
 compilerplugins/clang/test/dodgyswitch.cxx
 compilerplugins/clang/test/expressionalwayszero.cxx
-compilerplugins/clang/test/externvar.cxx
-compilerplugins/clang/test/externvar.hxx
+compilerplugins/clang/test/external.hxx
 compilerplugins/clang/test/faileddyncast.cxx
 compilerplugins/clang/test/fakebool.cxx
 compilerplugins/clang/test/finalprotected.cxx
