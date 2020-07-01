@@ -313,7 +313,7 @@ static PyObject* getComponentContext(
 // exactly once near the end of the process, if InitVCL has ever been called via
 // pyuno.private_initTestEnvironment):
 
-static osl::Module * testModule = nullptr;
+osl::Module * testModule = nullptr;
 
 static PyObject* initTestEnvironment(
     SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)

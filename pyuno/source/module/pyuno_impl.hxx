@@ -70,9 +70,9 @@ struct RuntimeCargo;
 namespace LogLevel
 {
 // when you add a loglevel, extend the log function !
-static const sal_Int32 NONE = 0;
-static const sal_Int32 CALL = 1;
-static const sal_Int32 ARGS = 2;
+const sal_Int32 NONE = 0;
+const sal_Int32 CALL = 1;
+const sal_Int32 ARGS = 2;
 }
 
 bool isLog( RuntimeCargo const *cargo, sal_Int32 loglevel );
@@ -88,8 +88,8 @@ void logReply( RuntimeCargo *cargo, const char *intro,
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, const OUString &aFunctionName,
                    const void * data, const css::uno::Type & type );
-static const sal_Int32 VAL2STR_MODE_DEEP = 0;
-static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
+const sal_Int32 VAL2STR_MODE_DEEP = 0;
+const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP );
 
 
