@@ -25,6 +25,7 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
                                                 rWidgetController.GetUITestFactory(),
                                                 &rWidgetController))
 {
+    m_rWidgetController.SetDrawingArea(m_xDrawingArea.get());
     m_xDrawingArea->connect_size_allocate(LINK(this, CustomWeld, DoResize));
     m_xDrawingArea->connect_draw(LINK(this, CustomWeld, DoPaint));
     m_xDrawingArea->connect_mouse_press(LINK(this, CustomWeld, DoMouseButtonDown));
@@ -37,7 +38,6 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
     m_xDrawingArea->connect_style_updated(LINK(this, CustomWeld, DoStyleUpdated));
     m_xDrawingArea->connect_command(LINK(this, CustomWeld, DoCommand));
     m_xDrawingArea->connect_query_tooltip(LINK(this, CustomWeld, DoRequestHelp));
-    m_rWidgetController.SetDrawingArea(m_xDrawingArea.get());
 }
 
 IMPL_LINK(CustomWeld, DoResize, const Size&, rSize, void)
