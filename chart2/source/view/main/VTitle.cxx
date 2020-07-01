@@ -100,7 +100,13 @@ void VTitle::changePosition( const awt::Point& rPos )
 
 void VTitle::createShapes(
       const awt::Point& rPos
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
     , const awt::Size& rReferenceSize )
+=======
+    , const awt::Size& rReferenceSize
+    , const awt::Size& rTextMaxWidth
+    , bool bYAxisTitle )
+>>>>>>> CHANGE (23b73b tdf#134146 Chart OOXML import: break long horizontal Y axis )
 {
     if(!m_xTitle.is())
         return;
@@ -125,6 +131,24 @@ void VTitle::createShapes(
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
+=======
+    sal_Int32 nTextMaxWidth;
+    if (bYAxisTitle)
+    {
+        if (m_fRotationAngleDegree < 75.0 || m_fRotationAngleDegree > 285.0
+            || (m_fRotationAngleDegree > 105.0 && m_fRotationAngleDegree < 255.0))
+            nTextMaxWidth = rTextMaxWidth.Width;
+        else
+            nTextMaxWidth = rTextMaxWidth.Height;
+    }
+    else if (m_fRotationAngleDegree <= 15.0 || m_fRotationAngleDegree >= 345.0
+             || (m_fRotationAngleDegree >= 165.0 && m_fRotationAngleDegree <= 195.0))
+        nTextMaxWidth = rTextMaxWidth.Width;
+    else
+        nTextMaxWidth = rTextMaxWidth.Height;
+
+>>>>>>> CHANGE (23b73b tdf#134146 Chart OOXML import: break long horizontal Y axis )
     ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
     m_xShape =pShapeFactory->createText( m_xTarget, rReferenceSize, rPos, aStringList,
             xTitleProperties, m_fRotationAngleDegree, m_aCID );

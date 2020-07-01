@@ -2159,10 +2159,32 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         return apVTitle;
 
     //create title
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
     apVTitle.reset(new VTitle(xTitle));
+=======
+    awt::Size aTextMaxWidth(rPageSize.Width, rPageSize.Height);
+    bool bYAxisTitle = false;
+    if (eType == TitleHelper::MAIN_TITLE || eType == TitleHelper::SUB_TITLE)
+    {
+        aTextMaxWidth.Width = static_cast<sal_Int32>(rPageSize.Width * 0.8);
+        aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.5);
+    }
+    else if (eType == TitleHelper::Y_AXIS_TITLE || eType == TitleHelper::SECONDARY_Y_AXIS_TITLE
+             || eType == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION)
+    {
+        aTextMaxWidth.Width = static_cast<sal_Int32>(rPageSize.Width * 0.2);
+        aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.8);
+        bYAxisTitle = true;
+    }
+    apVTitle = std::make_shared<VTitle>(xTitle);
+>>>>>>> CHANGE (23b73b tdf#134146 Chart OOXML import: break long horizontal Y axis )
     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
     apVTitle->init(xPageShapes, xShapeFactory, aCID);
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
     apVTitle->createShapes(awt::Point(0,0), rPageSize);
+=======
+    apVTitle->createShapes(awt::Point(0, 0), rPageSize, aTextMaxWidth, bYAxisTitle);
+>>>>>>> CHANGE (23b73b tdf#134146 Chart OOXML import: break long horizontal Y axis )
     awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
     awt::Size aTitleSize = apVTitle->getFinalSize();
 

@@ -44,7 +44,13 @@ public:
              , const OUString& rCID );
 
     void    createShapes( const css::awt::Point& rPos
+<<<<<<< HEAD   (acd5f3 Resolves: tdf#131424 separator in TableRef column specifier )
                           , const css::awt::Size& rReferenceSize );
+=======
+                          , const css::awt::Size& rReferenceSize
+                          , const css::awt::Size& nTextMaxWidth
+                          , bool bYAxisTitle );
+>>>>>>> CHANGE (23b73b tdf#134146 Chart OOXML import: break long horizontal Y axis )
 
     double getRotationAnglePi() const;
     css::awt::Size getUnrotatedSize() const;
