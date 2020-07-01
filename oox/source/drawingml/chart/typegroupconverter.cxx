@@ -67,7 +67,7 @@ const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";  
 
 namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
-static const TypeGroupInfo spTypeInfos[] =
+const TypeGroupInfo spTypeInfos[] =
 {
     // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt
     { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
@@ -85,7 +85,7 @@ static const TypeGroupInfo spTypeInfos[] =
     { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false }
 };
 
-static const TypeGroupInfo saUnknownTypeInfo =
+const TypeGroupInfo saUnknownTypeInfo =
     { TYPEID_UNKNOWN,   TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true, true  };
 
 const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )

@@ -180,7 +180,7 @@ struct XmlFilterBaseImpl
     explicit            XmlFilterBaseImpl();
 };
 
-static const OUStringLiteral gaBinSuffix( ".bin" );
+const OUStringLiteral gaBinSuffix( ".bin" );
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
     mrNamespaceMap(StaticNamespaceMap::get())

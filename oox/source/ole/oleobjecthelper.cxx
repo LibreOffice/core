@@ -51,7 +51,7 @@ OleObjectInfo::OleObjectInfo() :
 {
 }
 
-static const char g_aEmbeddedObjScheme[] = "vnd.sun.star.EmbeddedObject:";
+const char g_aEmbeddedObjScheme[] = "vnd.sun.star.EmbeddedObject:";
 
 OleObjectHelper::OleObjectHelper(
         const Reference< XMultiServiceFactory >& rxModelFactory,

@@ -40,9 +40,9 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-static const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
-static const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
-static const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
+const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
+const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
+const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
 // Code similar to oox/source/xls/formulabase.cxx
 static OUString lclGenerateApiString( const OUString& rString )

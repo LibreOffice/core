@@ -70,7 +70,7 @@ struct FormulaCommandNameTable
 
 }
 
-static const FormulaCommandNameTable pFormulaCommandNameTable[] =
+const FormulaCommandNameTable pFormulaCommandNameTable[] =
 {
     { "*/",     FC_MULDIV },
     { "+-",     FC_PLUSMINUS },

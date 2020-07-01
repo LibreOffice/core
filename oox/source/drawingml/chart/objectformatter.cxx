@@ -67,7 +67,7 @@ struct AutoFormatPatternEntry
 #define AUTOFORMAT_PATTERN_END() \
     AUTOFORMAT_PATTERN_COLOR( XML_TOKEN_INVALID )
 
-static const AutoFormatPatternEntry spAutoFormatPattern1[] =
+const AutoFormatPatternEntry spAutoFormatPattern1[] =
 {
     AUTOFORMAT_PATTERN_COLORMOD( XML_dk1, XML_tint, 88500 ),
     AUTOFORMAT_PATTERN_COLORMOD( XML_dk1, XML_tint, 55000 ),
@@ -78,7 +78,7 @@ static const AutoFormatPatternEntry spAutoFormatPattern1[] =
     AUTOFORMAT_PATTERN_END()
 };
 
-static const AutoFormatPatternEntry spAutoFormatPattern2[] =
+const AutoFormatPatternEntry spAutoFormatPattern2[] =
 {
     AUTOFORMAT_PATTERN_COLOR( XML_accent1 ),
     AUTOFORMAT_PATTERN_COLOR( XML_accent2 ),
@@ -89,7 +89,7 @@ static const AutoFormatPatternEntry spAutoFormatPattern2[] =
     AUTOFORMAT_PATTERN_END()
 };
 
-static const AutoFormatPatternEntry spAutoFormatPattern3[] =
+const AutoFormatPatternEntry spAutoFormatPattern3[] =
 {
     AUTOFORMAT_PATTERN_COLORMOD( XML_accent1, XML_shade, 50000 ),
     AUTOFORMAT_PATTERN_COLORMOD( XML_accent2, XML_shade, 50000 ),
@@ -100,7 +100,7 @@ static const AutoFormatPatternEntry spAutoFormatPattern3[] =
     AUTOFORMAT_PATTERN_END()
 };
 
-static const AutoFormatPatternEntry spAutoFormatPattern4[] =
+const AutoFormatPatternEntry spAutoFormatPattern4[] =
 {
     AUTOFORMAT_PATTERN_COLORMOD( XML_dk1, XML_tint,  5000 ),
     AUTOFORMAT_PATTERN_COLORMOD( XML_dk1, XML_tint, 55000 ),
@@ -162,13 +162,13 @@ struct AutoFormatEntry
 #define AUTOFORMAT_END() \
     AUTOFORMAT_INVISIBLE( -1, -1 )
 
-static const AutoFormatEntry spNoFormats[] =
+const AutoFormatEntry spNoFormats[] =
 {
     AUTOFORMAT_INVISIBLE( 1, 48 ),
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spChartSpaceFill[] =
+const AutoFormatEntry spChartSpaceFill[] =
 {
     AUTOFORMAT_COLOR( 1, 32, THEMED_STYLE_SUBTLE, XML_bg1 ),
     AUTOFORMAT_COLOR( 33, 40, THEMED_STYLE_SUBTLE, XML_lt1 ),
@@ -176,7 +176,7 @@ static const AutoFormatEntry spChartSpaceFill[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spDataTableLines[] =
+const AutoFormatEntry spDataTableLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),
     AUTOFORMAT_COLORMOD( 33, 40, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),
@@ -184,7 +184,7 @@ static const AutoFormatEntry spDataTableLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spPlotArea2dFills[] =
+const AutoFormatEntry spPlotArea2dFills[] =
 {
     AUTOFORMAT_COLOR(       1, 32, THEMED_STYLE_SUBTLE, XML_bg1 ),
     AUTOFORMAT_COLORMOD(   33, 34, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 20000 ),
@@ -193,7 +193,7 @@ static const AutoFormatEntry spPlotArea2dFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spWallFloorLines[] =
+const AutoFormatEntry spWallFloorLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),
     AUTOFORMAT_COLORMOD( 33, 40, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),
@@ -201,7 +201,7 @@ static const AutoFormatEntry spWallFloorLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spWallFloorFills[] =
+const AutoFormatEntry spWallFloorFills[] =
 {
     AUTOFORMAT_INVISIBLE(   1, 32 ),
     AUTOFORMAT_COLORMOD(   33, 34, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 20000 ),
@@ -210,28 +210,28 @@ static const AutoFormatEntry spWallFloorFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spAxisLines[] =
+const AutoFormatEntry spAxisLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),   // tint not documented!?
     AUTOFORMAT_COLORMOD( 33, 48, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),   // tint not documented!?
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spMajorGridLines[] =
+const AutoFormatEntry spMajorGridLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),   // tint not documented!?
     AUTOFORMAT_COLORMOD( 33, 48, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),   // tint not documented!?
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spMinorGridLines[] =
+const AutoFormatEntry spMinorGridLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 40, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 50000 ),
     AUTOFORMAT_COLORMOD( 41, 48, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 90000 ),
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spOtherLines[] =
+const AutoFormatEntry spOtherLines[] =
 {
     AUTOFORMAT_COLOR(     1, 32, THEMED_STYLE_SUBTLE, XML_tx1 ),
     AUTOFORMAT_COLOR(    33, 34, THEMED_STYLE_SUBTLE, XML_dk1 ),
@@ -240,7 +240,7 @@ static const AutoFormatEntry spOtherLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spLinearSeriesLines[] =
+const AutoFormatEntry spLinearSeriesLines[] =
 {
     AUTOFORMAT_PATTERN(       1,  1, THEMED_STYLE_SUBTLE, 300, spAutoFormatPattern1 ),
     AUTOFORMAT_PATTERN(       2,  2, THEMED_STYLE_SUBTLE, 300, spAutoFormatPattern2 ),
@@ -263,7 +263,7 @@ static const AutoFormatEntry spLinearSeriesLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spFilledSeriesLines[] =
+const AutoFormatEntry spFilledSeriesLines[] =
 {
     AUTOFORMAT_INVISIBLE(   1,  8 ),
     AUTOFORMAT_COLOR(       9, 16, THEMED_STYLE_SUBTLE, XML_lt1 ),
@@ -275,7 +275,7 @@ static const AutoFormatEntry spFilledSeriesLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spFilledSeries2dFills[] =
+const AutoFormatEntry spFilledSeries2dFills[] =
 {
     AUTOFORMAT_PATTERN(       1,  1, THEMED_STYLE_SUBTLE,  100, spAutoFormatPattern1 ),
     AUTOFORMAT_PATTERN(       2,  2, THEMED_STYLE_SUBTLE,  100, spAutoFormatPattern2 ),
@@ -298,7 +298,7 @@ static const AutoFormatEntry spFilledSeries2dFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spFilledSeries3dFills[] =
+const AutoFormatEntry spFilledSeries3dFills[] =
 {
     AUTOFORMAT_PATTERN(       1,  1, THEMED_STYLE_SUBTLE,  100, spAutoFormatPattern1 ),
     AUTOFORMAT_PATTERN(       2,  2, THEMED_STYLE_SUBTLE,  100, spAutoFormatPattern2 ),
@@ -321,7 +321,7 @@ static const AutoFormatEntry spFilledSeries3dFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spUpDownBarLines[] =
+const AutoFormatEntry spUpDownBarLines[] =
 {
     AUTOFORMAT_COLOR(       1, 16, THEMED_STYLE_SUBTLE, XML_tx1 ),
     AUTOFORMAT_INVISIBLE(  17, 32 ),
@@ -331,7 +331,7 @@ static const AutoFormatEntry spUpDownBarLines[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spUpBarFills[] =
+const AutoFormatEntry spUpBarFills[] =
 {
     AUTOFORMAT_COLORMOD(    1,  1, THEMED_STYLE_SUBTLE,  XML_dk1, XML_tint, 25000 ),
     AUTOFORMAT_COLORMOD(    2,  2, THEMED_STYLE_SUBTLE,  XML_dk1, XML_tint,  5000 ),
@@ -352,7 +352,7 @@ static const AutoFormatEntry spUpBarFills[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spDownBarFills[] =
+const AutoFormatEntry spDownBarFills[] =
 {
     AUTOFORMAT_COLORMOD(    1,  1, THEMED_STYLE_SUBTLE,  XML_dk1, XML_tint,  85000 ),
     AUTOFORMAT_COLORMOD(    2,  2, THEMED_STYLE_SUBTLE,  XML_dk1, XML_tint,  95000 ),
@@ -409,21 +409,21 @@ struct AutoTextEntry
 #define AUTOTEXT_END() \
     AUTOTEXT_COLOR( -1, -1, XML_none, XML_TOKEN_INVALID, 1000, 100, false )
 
-static const AutoTextEntry spChartTitleTexts[] =
+const AutoTextEntry spChartTitleTexts[] =
 {
     AUTOTEXT_COLOR(  1, 40, XML_minor, XML_tx1, 1800, 120, true ),
     AUTOTEXT_COLOR( 41, 48, XML_minor, XML_lt1, 1800, 120, true ),
     AUTOTEXT_END()
 };
 
-static const AutoTextEntry spAxisTitleTexts[] =
+const AutoTextEntry spAxisTitleTexts[] =
 {
     AUTOTEXT_COLOR(  1, 40, XML_minor, XML_tx1, 1000, 100, true ),
     AUTOTEXT_COLOR( 41, 48, XML_minor, XML_lt1, 1000, 100, true ),
     AUTOTEXT_END()
 };
 
-static const AutoTextEntry spOtherTexts[] =
+const AutoTextEntry spOtherTexts[] =
 {
     AUTOTEXT_COLOR(  1, 40, XML_minor, XML_tx1, 1000, 100, false ),
     AUTOTEXT_COLOR( 41, 48, XML_minor, XML_lt1, 1000, 100, false ),
@@ -443,7 +443,7 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
 
 // These PropIds arrays will be indexed into using a ShapeProperty enum
 
-static const ShapePropertyIds spnCommonPropIds =
+const ShapePropertyIds spnCommonPropIds =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
@@ -453,7 +453,7 @@ static const ShapePropertyIds spnCommonPropIds =
     PROP_FillHatchName, PROP_FillBackground
 };
 
-static const ShapePropertyIds spnLinearPropIds =
+const ShapePropertyIds spnLinearPropIds =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_Color, PROP_Transparency, PROP_LineDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
@@ -463,7 +463,7 @@ static const ShapePropertyIds spnLinearPropIds =
     PROP_INVALID, PROP_INVALID
 };
 
-static const ShapePropertyIds spnFilledPropIds =
+const ShapePropertyIds spnFilledPropIds =
 {
     PROP_BorderStyle,
     PROP_BorderWidth,
@@ -495,11 +495,11 @@ static const ShapePropertyIds spnFilledPropIds =
 };
 
 /** Property info for common chart objects, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saCommonPropInfo( spnCommonPropIds, false, true, true, true, true );
+const ShapePropertyInfo saCommonPropInfo( spnCommonPropIds, false, true, true, true, true );
 /** Property info for linear data series, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, true, true, true );
+const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, true, true, true );
 /** Property info for filled data series, to be used in ShapePropertyMap. */
-static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true, true );
+const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true, true );
 
 /** Contains information about formatting of a specific chart object type. */
 struct ObjectTypeFormatEntry
@@ -526,7 +526,7 @@ struct ObjectTypeFormatEntry
 #define TYPEFORMAT_LINE( obj_type, prop_type, auto_texts, auto_lines ) \
     { obj_type, prop_type, auto_lines, nullptr,  auto_texts, false }
 
-static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
+const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
     //                object type                property info      auto text          auto line            auto fill
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     saCommonPropInfo, nullptr,                 spNoFormats,         spChartSpaceFill ),

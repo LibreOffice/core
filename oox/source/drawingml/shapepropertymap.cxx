@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-static const ShapePropertyIds spnDefaultShapeIds =
+const ShapePropertyIds spnDefaultShapeIds =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDash, PROP_LineCap, PROP_LineJoint,
     PROP_LineStartName, PROP_LineStartWidth, PROP_LineStartCenter, PROP_LineEndName, PROP_LineEndWidth, PROP_LineEndCenter,
