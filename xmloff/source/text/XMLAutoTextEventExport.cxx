@@ -56,7 +56,7 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags
     )
-:   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_AUTO_TEXT, nFlags)
+:   SvXMLExport(xContext, implementationName, util::MeasureUnit::INCH, XML_AUTO_TEXT, nFlags)
 {
 }
 

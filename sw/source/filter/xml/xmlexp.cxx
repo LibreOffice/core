@@ -80,7 +80,7 @@ using namespace ::xmloff::token;
 SwXMLExport::SwXMLExport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
-:   SvXMLExport( util::MeasureUnit::INCH, rContext, implementationName, XML_TEXT,
+:   SvXMLExport( rContext, implementationName, util::MeasureUnit::INCH, XML_TEXT,
         nExportFlags ),
     m_bBlock( false ),
     m_bShowProgress( true ),

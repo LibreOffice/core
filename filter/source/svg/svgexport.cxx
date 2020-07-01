@@ -324,8 +324,8 @@ SVGExport::SVGExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
-    : SvXMLExport( util::MeasureUnit::MM_100TH,
-                   rContext, "",
+    : SvXMLExport( rContext, "",
+                   util::MeasureUnit::MM_100TH,
                    xmloff::token::XML_TOKEN_INVALID,
                    SvXMLExportFlags::META|SvXMLExportFlags::PRETTY )
 {
