@@ -44,13 +44,20 @@ class SwRootFrame;
 
 typedef std::vector<SwTOXMark*> SwTOXMarks;
 
+namespace sw {
+    struct CollectTextMarksHint final : SfxHint {
+        SwTOXMarks& m_rMarks;
+        CollectTextMarksHint(SwTOXMarks& rMarks) : m_rMarks(rMarks) {}
+    };
+}
+
 // Entry of content index, alphabetical index or user defined index
 
 extern const sal_Unicode C_NUM_REPL;
 extern const sal_Unicode C_END_PAGE_NUM;
 extern const OUString S_PAGE_DELI;
 
-class SW_DLLPUBLIC SwTOXMark
+class SW_DLLPUBLIC SwTOXMark final
     : public SfxPoolItem
     , public sw::BroadcastingModify
 {
@@ -78,9 +85,7 @@ class SW_DLLPUBLIC SwTOXMark
 
     SwTOXMark();                    // to create the default attribute in InitCore
 
-protected:
-    // SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override;
 
 public:
 
@@ -141,7 +146,6 @@ public:
     SAL_DLLPRIVATE void SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark> const& xMark)
             { m_wXDocumentIndexMark = xMark; }
     void RegisterToTOXType( SwTOXType& rMark );
-    static void InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType );
 };
 
 // index types
@@ -155,6 +159,8 @@ public:
 
     inline const OUString&  GetTypeName() const;
     inline TOXTypes         GetType() const;
+    void CollectTextMarks(SwTOXMarks& rMarks) const
+            { const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::CollectTextMarksHint(rMarks)); }
 
 private:
     OUString        m_aName;
