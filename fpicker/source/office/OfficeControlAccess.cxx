@@ -67,7 +67,7 @@ namespace svt
         #define PROPERTY_FLAGS_CHECKBOX     ( PropFlags::Checked | PropFlags::Text )
 
         // Note: this array MUST be sorted by name!
-        static const ControlDescription aDescriptions[] =  {
+        const ControlDescription aDescriptions[] =  {
             { "AutoExtensionBox",       CHECKBOX_AUTOEXTENSION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PropFlags::Text          },
@@ -99,10 +99,10 @@ namespace svt
             { "VersionListLabel",       LISTBOX_VERSION_LABEL,          PROPERTY_FLAGS_COMMON | PropFlags::Text          }
         };
 
-        static const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
+        const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
 
-        static ControlDescIterator s_pControls = aDescriptions;
-        static ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
+        ControlDescIterator s_pControls = aDescriptions;
+        ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
 
         struct ControlDescriptionLookup
         {
@@ -120,7 +120,7 @@ namespace svt
 
         typedef const ControlProperty* ControlPropertyIterator;
 
-        static const ControlProperty aProperties[] =  {
+        const ControlProperty aProperties[] =  {
             { "Text",               PropFlags::Text              },
             { "Enabled",            PropFlags::Enabled          },
             { "Visible",            PropFlags::Visible           },
@@ -131,10 +131,10 @@ namespace svt
             { "Checked",            PropFlags::Checked           }
         };
 
-        static const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
+        const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
 
-        static ControlPropertyIterator s_pProperties = aProperties;
-        static ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;
+        ControlPropertyIterator s_pProperties = aProperties;
+        ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;
 
 
         struct ControlPropertyLookup
