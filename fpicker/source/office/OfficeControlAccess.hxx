@@ -47,11 +47,11 @@ namespace svt
 
     namespace InternalFilePickerElementIds
     {
-        static const sal_Int16 PUSHBUTTON_HELP = sal_Int16(0x1000);
-        static const sal_Int16 TOOLBOXBUTOON_DEFAULT_LOCATION = sal_Int16(0x1001);
-        static const sal_Int16 TOOLBOXBUTOON_LEVEL_UP = sal_Int16(0x1002);
-        static const sal_Int16 TOOLBOXBUTOON_NEW_FOLDER = sal_Int16(0x1003);
-        static const sal_Int16 FIXEDTEXT_CURRENTFOLDER = sal_Int16(0x1004);
+        const sal_Int16 PUSHBUTTON_HELP = sal_Int16(0x1000);
+        const sal_Int16 TOOLBOXBUTOON_DEFAULT_LOCATION = sal_Int16(0x1001);
+        const sal_Int16 TOOLBOXBUTOON_LEVEL_UP = sal_Int16(0x1002);
+        const sal_Int16 TOOLBOXBUTOON_NEW_FOLDER = sal_Int16(0x1003);
+        const sal_Int16 FIXEDTEXT_CURRENTFOLDER = sal_Int16(0x1004);
     }
 
 
