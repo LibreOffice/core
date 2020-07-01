@@ -493,7 +493,7 @@ void CustomAnimationPane::updateControls()
 
     mxPBAddEffect->set_sensitive( maViewSelection.hasValue() );
     mxPBRemoveEffect->set_sensitive(nSelectionCount != 0);
-    bool bIsSelected = (nSelectionCount == 1);
+    bool bIsSelected = (nSelectionCount > 0);
 
     if(bIsSelected)
     {
@@ -2086,9 +2086,6 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, weld::TreeView&, void)
     }
 
     mnLastSelectedAnimation = nSelected;
-
-    if( maListSelection.size() != 1 )
-        return;
 
     CustomAnimationPresetPtr* pPreset = reinterpret_cast<CustomAnimationPresetPtr*>(mxLBAnimation->get_id(nSelected).toInt64());
     PathKind ePathKind = getCreatePathKind();
