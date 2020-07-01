@@ -3735,6 +3735,20 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                             bContinueWithLOKWindow = true;
                     }
                 }
+                else if (sControlType == "edit")
+                {
+                    auto pEdit = dynamic_cast<weld::Entry*>(pWidget);
+                    if (pEdit)
+                    {
+                        if (sAction == "change")
+                        {
+                            pEdit->set_text(aMap["data"]);
+                            pEdit->signal_changed();
+                        }
+                        else
+                            bContinueWithLOKWindow = true;
+                    }
+                }
                 else
                 {
                     bContinueWithLOKWindow = true;

@@ -1470,11 +1470,12 @@ protected:
     Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
-    void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
     void signal_insert_text(OUString& rString);
 
 public:
+    void signal_changed() { m_aChangeHdl.Call(*this); }
+
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
