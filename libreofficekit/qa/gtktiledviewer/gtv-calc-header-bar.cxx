@@ -65,8 +65,8 @@ G_DEFINE_TYPE_WITH_PRIVATE(GtvCalcHeaderBar, gtv_calc_header_bar, GTK_TYPE_DRAWI
 #endif
 #endif
 
-static const int ROW_HEADER_WIDTH = 50;
-static const int COLUMN_HEADER_HEIGHT = 20;
+const int ROW_HEADER_WIDTH = 50;
+const int COLUMN_HEADER_HEIGHT = 20;
 
 static GtvCalcHeaderBarPrivate&
 getPrivate(GtvCalcHeaderBar* headerbar)
