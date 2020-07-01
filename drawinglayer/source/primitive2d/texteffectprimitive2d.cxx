@@ -27,7 +27,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        static const double fDiscreteSize(1.1);
+        const double fDiscreteSize(1.1);
 
         void TextEffectPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
