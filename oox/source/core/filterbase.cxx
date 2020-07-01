@@ -137,6 +137,8 @@ struct FilterBaseImpl
 
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
+    std::map<css::uno::Reference<css::lang::XMultiServiceFactory>, ModelObjHelperRef>
+        mxModelObjHelpers;
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
     VbaProjectRef       mxVbaProject;           /// VBA project manager.
 
@@ -350,6 +352,14 @@ ModelObjectHelper& FilterBase::getModelObjectHelper() const
     if( !mxImpl->mxModelObjHelper )
         mxImpl->mxModelObjHelper = std::make_shared<ModelObjectHelper>( mxImpl->mxModelFactory );
     return *mxImpl->mxModelObjHelper;
+}
+
+ModelObjectHelper& FilterBase::getModelObjectHelperForModel(
+    const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const
+{
+    if (!mxImpl->mxModelObjHelpers.count(xFactory))
+        mxImpl->mxModelObjHelpers[xFactory] = std::make_shared<ModelObjectHelper>(xFactory);
+    return *mxImpl->mxModelObjHelpers[xFactory];
 }
 
 OleObjectHelper& FilterBase::getOleObjectHelper() const

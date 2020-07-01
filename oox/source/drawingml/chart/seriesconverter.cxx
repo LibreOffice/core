@@ -33,6 +33,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <osl/diagnose.h>
 #include <drawingml/chart/datasourceconverter.hxx>
@@ -283,7 +284,10 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if (mrModel.mxShapeProp)
         {
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
-            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(), getFilter().getModelObjectHelper());
+            uno::Reference<lang::XMultiServiceFactory> xFactory(getChartDocument(), uno::UNO_QUERY);
+            ModelObjectHelper& rHelper = getFilter().getModelObjectHelperForModel(xFactory);
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(),
+                                 rHelper);
         }
         if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
         {
@@ -370,7 +374,10 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         {
             // Import baseline border properties for these data labels.
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
-            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(), getFilter().getModelObjectHelper());
+            uno::Reference<lang::XMultiServiceFactory> xFactory(getChartDocument(), uno::UNO_QUERY);
+            ModelObjectHelper& rHelper = getFilter().getModelObjectHelperForModel(xFactory);
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(),
+                                 rHelper);
         }
     }
     // import leaderline of data labels

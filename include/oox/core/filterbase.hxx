@@ -180,6 +180,9 @@ public:
         the imported document. */
     ModelObjectHelper&  getModelObjectHelper() const;
 
+    ModelObjectHelper& getModelObjectHelperForModel(
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const;
+
     /** Returns a helper for the handling of OLE objects. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
