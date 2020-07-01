@@ -168,7 +168,7 @@ struct IsoLangOtherEntry
  * LANGUAGE_ENGLISH  LANGUAGE_ARABIC_PRIMARY_ONLY
  */
 
-static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
+IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 {
     // MS-LANGID codes,             ISO639-1/2/3, ISO3166, override
     { LANGUAGE_ENGLISH,                     "en", ""  , k0    },
@@ -695,7 +695,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""  , k0    }     // marks end of table
 };
 
-static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
+IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
     // MS-LangID,                             ISO639-ISO15924, ISO3166, override
     { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS", k0    },
@@ -781,7 +781,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_DONTKNOW,                            "",        ""  , k0    }    // marks end of table
 };
 
-static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
+Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 {
     // MS-LangID                              full BCP47, ISO3166, ISO639-Variant or other fallback
     { LANGUAGE_CATALAN_VALENCIAN,        "ca-ES-valencia", "ES", "ca-valencia", k0 },
@@ -794,7 +794,7 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table
 };
 
-static const IsoLanguageCountryEntry aLastResortFallbackEntry =
+const IsoLanguageCountryEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US", k0 };
 
 OUString IsoLanguageCountryEntry::getTagString() const
@@ -841,7 +841,7 @@ css::lang::Locale Bcp47CountryEntry::getLocale() const
 
 // In this table are the countries which should mapped to a specific
 // english language
-static IsoLangEngEntry const aImplIsoLangEngEntries[] =
+IsoLangEngEntry const aImplIsoLangEngEntries[] =
 {
     { LANGUAGE_ENGLISH_UK,                  "AO" },         // Angola
     { LANGUAGE_ENGLISH_UK,                  "BJ" },         // Benin
@@ -907,7 +907,7 @@ static IsoLangEngEntry const aImplIsoLangEngEntries[] =
 };
 
 
-static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
+IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 {
     { LANGUAGE_NORWEGIAN_BOKMAL,            "no", "BOK"      }, // registered subtags for "no" in rfc1766
     { LANGUAGE_NORWEGIAN_NYNORSK,           "no", "NYN"      }, // registered subtags for "no" in rfc1766
@@ -920,7 +920,7 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 
 
 // in this table are only names to find the best language
-static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
+IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
 {
     { LANGUAGE_NORWEGIAN_BOKMAL,            "no", "bokmaal"  },
     { LANGUAGE_NORWEGIAN_BOKMAL,            "no", "bokmal"   },
@@ -930,7 +930,7 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
 
 
 // in this table are only names to find the best language
-static IsoLangOtherEntry const aImplOtherEntries[] =
+IsoLangOtherEntry const aImplOtherEntries[] =
 {
     { LANGUAGE_ENGLISH_US,                  "c"              },
     { LANGUAGE_CHINESE,                     "chinese"        },
@@ -944,7 +944,7 @@ static IsoLangOtherEntry const aImplOtherEntries[] =
 
 
 // in this table are only privateuse names
-static IsoLangOtherEntry const aImplPrivateUseEntries[] =
+IsoLangOtherEntry const aImplPrivateUseEntries[] =
 {
     { LANGUAGE_USER_PRIV_NOTRANSLATE,       "x-no-translate" }, //! not BCP47 but legacy in .xcu configmgr
     { LANGUAGE_USER_PRIV_DEFAULT,           "x-default"      },
@@ -1435,7 +1435,7 @@ struct IsoLangGLIBCModifiersEntry
 
 }
 
-static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
+IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
 {
     // MS-LANGID codes               ISO639-1/2/3 ISO3166            glibc modifier
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs", "BA", "cyrillic" },
