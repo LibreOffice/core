@@ -21,7 +21,7 @@
 // for numbers see:
 // https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
 
-static const char * const bluetooth_service_record =
+const char * const bluetooth_service_record =
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<record>"
       "<attribute id=\"0x0001\">"       // Service class ID list

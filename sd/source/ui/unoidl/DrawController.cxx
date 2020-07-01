@@ -205,7 +205,7 @@ OUString SAL_CALL DrawController::getImplementationName(  )
     return "DrawController" ;
 }
 
-static const char ssServiceName[] = "com.sun.star.drawing.DrawingDocumentDrawView";
+const char ssServiceName[] = "com.sun.star.drawing.DrawingDocumentDrawView";
 
 sal_Bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
 {

@@ -36,8 +36,8 @@ using ::sd::tools::ConfigurationAccess;
 
 namespace sd::framework {
 
-static const sal_uInt32 snFactoryPropertyCount (2);
-static const sal_uInt32 snStartupPropertyCount (1);
+const sal_uInt32 snFactoryPropertyCount (2);
+const sal_uInt32 snStartupPropertyCount (1);
 
 class ModuleController::ResourceToFactoryMap
     : public std::unordered_map<

@@ -35,9 +35,9 @@ using ::sd::framework::FrameworkHelper;
 
 namespace {
 
-static const sal_Int32 ResourceActivationRequestEvent = 0;
-static const sal_Int32 ResourceDeactivationRequestEvent = 1;
-static const sal_Int32 ResourceActivationEvent = 2;
+const sal_Int32 ResourceActivationRequestEvent = 0;
+const sal_Int32 ResourceDeactivationRequestEvent = 1;
+const sal_Int32 ResourceActivationEvent = 2;
 
 }
 

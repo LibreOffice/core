@@ -80,7 +80,7 @@ struct snewfoil_value_info
 
 }
 
-static const snewfoil_value_info editmodes[] =
+const snewfoil_value_info editmodes[] =
 {
     {1,
         BMP_DISPLAYMODE_SLIDE,
@@ -101,7 +101,7 @@ static const snewfoil_value_info editmodes[] =
     {0, "", nullptr, "" }
 };
 
-static const snewfoil_value_info mastermodes[] =
+const snewfoil_value_info mastermodes[] =
 {
     {5,
         BMP_DISPLAYMODE_SLIDE_MASTER,

@@ -48,8 +48,8 @@ namespace {
         LeftDrawPaneId
     };
 
-    static const sal_Int32 gnConfigurationUpdateStartEvent(0);
-    static const sal_Int32 gnConfigurationUpdateEndEvent(1);
+    const sal_Int32 gnConfigurationUpdateStartEvent(0);
+    const sal_Int32 gnConfigurationUpdateEndEvent(1);
 }
 
 namespace sd::framework {

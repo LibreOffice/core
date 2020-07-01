@@ -68,7 +68,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
-static PHLayout const pPHLayout[] =
+PHLayout const pPHLayout[] =
 {
     { EppLayout::TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, true, true, false },
     { EppLayout::TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, true, true, false },

@@ -29,8 +29,8 @@
 
 namespace sd::slidesorter::view {
 
-const static Color Black(0x000000);
-const static Color White(0xffffff);
+const Color Black(0x000000);
+const Color White(0xffffff);
 
 static Color ChangeLuminance (Color aColor, const int nValue)
 {

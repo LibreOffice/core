@@ -46,9 +46,9 @@ using ::sd::framework::FrameworkHelper;
 class SdDrawDocument;
 
 namespace {
-static const sal_Int32 ResourceActivationEvent = 0;
-static const sal_Int32 ResourceDeactivationEvent = 1;
-static const sal_Int32 ConfigurationUpdateEvent = 2;
+const sal_Int32 ResourceActivationEvent = 0;
+const sal_Int32 ResourceDeactivationEvent = 1;
+const sal_Int32 ConfigurationUpdateEvent = 2;
 }
 
 namespace sd::tools {

@@ -332,12 +332,12 @@ void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUStrin
 
 } // anonymous namespace
 
-static constexpr OUStringLiteral gaHTMLHeader(
+constexpr OUStringLiteral gaHTMLHeader(
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
             "<html>\r\n<head>\r\n" );
 
-static constexpr OUStringLiteral gaHTMLExtension = STR_HTMLEXP_DEFAULT_EXTENSION;
+constexpr OUStringLiteral gaHTMLExtension = STR_HTMLEXP_DEFAULT_EXTENSION;
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
@@ -2224,7 +2224,7 @@ OUString const & HtmlExport::getDocumentTitle()
     return mDocTitle;
 }
 
-static const char JS_NavigateAbs[] =
+const char JS_NavigateAbs[] =
     "function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"
@@ -2244,7 +2244,7 @@ static const char JS_NavigateAbs[] =
     "  }\r\n"
     "}\r\n\r\n";
 
-static const char JS_NavigateRel[] =
+const char JS_NavigateRel[] =
     "function NavigateRel( nDelta )\r\n"
     "{\r\n"
     "  var nPage = parseInt(nCurrentPage) + parseInt(nDelta);\r\n"
@@ -2254,14 +2254,14 @@ static const char JS_NavigateRel[] =
     "  }\r\n"
     "}\r\n\r\n";
 
-static const char JS_ExpandOutline[] =
+const char JS_ExpandOutline[] =
     "function ExpandOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar4.$EXT\";\r\n"
     "  frames[\"outline\"].location.href = \"outline1.$EXT\";\r\n"
     "}\r\n\r\n";
 
-static const char JS_CollapseOutline[] =
+const char JS_CollapseOutline[] =
     "function CollapseOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar3.$EXT\";\r\n"

@@ -30,10 +30,10 @@ using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
 namespace {
-    static const sal_Int32 gnConfigurationUpdateStartEvent(0);
-    static const sal_Int32 gnConfigurationUpdateEndEvent(1);
-    static const sal_Int32 gnResourceActivationRequestEvent(2);
-    static const sal_Int32 gnResourceDeactivationRequestEvent(3);
+    const sal_Int32 gnConfigurationUpdateStartEvent(0);
+    const sal_Int32 gnConfigurationUpdateEndEvent(1);
+    const sal_Int32 gnResourceActivationRequestEvent(2);
+    const sal_Int32 gnResourceDeactivationRequestEvent(3);
 }
 
 namespace sd::framework {

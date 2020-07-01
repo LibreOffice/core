@@ -42,7 +42,7 @@ class XFillGradientItem;
 class XFillBitmapItem;
 class XFillHatchItem;
 
-static const long MINBODY = 284;
+const long MINBODY = 284;
 
 namespace sd::sidebar {
 

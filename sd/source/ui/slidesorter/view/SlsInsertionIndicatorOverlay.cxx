@@ -39,7 +39,7 @@
 
 namespace {
 
-static const double gnPreviewOffsetScale = 1.0 / 8.0;
+const double gnPreviewOffsetScale = 1.0 / 8.0;
 
 ::tools::Rectangle GrowRectangle (const ::tools::Rectangle& rBox, const sal_Int32 nOffset)
 {
@@ -58,8 +58,8 @@ namespace sd::slidesorter::view {
 
 //=====  InsertionIndicatorOverlay  ===========================================
 
-const static sal_Int32 gnShadowBorder = 3;
-const static sal_Int32 gnLayerIndex = 2;
+const sal_Int32 gnShadowBorder = 3;
+const sal_Int32 gnLayerIndex = 2;
 
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),

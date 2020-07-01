@@ -35,7 +35,7 @@ class SfxRequest;
 
 namespace sd {
 
-static const sal_uInt16 SidArraySpell[] = {
+const sal_uInt16 SidArraySpell[] = {
             SID_DRAWINGMODE,
             SID_OUTLINE_MODE,
             SID_SLIDE_SORTER_MODE,

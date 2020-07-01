@@ -86,7 +86,7 @@ private:
 
 //===== PresentationFactory ===================================================
 
-static const char gsPresentationViewURL[] = "private:resource/view/Presentation";
+const char gsPresentationViewURL[] = "private:resource/view/Presentation";
 
 PresentationFactory::PresentationFactory (
     const Reference<frame::XController>& rxController)

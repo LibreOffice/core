@@ -80,14 +80,14 @@ struct snewfoil_value_info
 
 }
 
-static const snewfoil_value_info notes[] =
+const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
     {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info handout[] =
+const snewfoil_value_info handout[] =
 {
     {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
@@ -104,7 +104,7 @@ static const snewfoil_value_info handout[] =
     {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info standard[] =
+const snewfoil_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
     {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},

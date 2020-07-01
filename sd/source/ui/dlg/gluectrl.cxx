@@ -35,7 +35,7 @@ using namespace ::com::sun::star::frame;
 
 // at the moment, Joe only supports the methods specified below
 #define ESCDIR_COUNT 5
-static const SdrEscapeDirection aEscDirArray[] =
+const SdrEscapeDirection aEscDirArray[] =
 {
     SdrEscapeDirection::SMART,
     SdrEscapeDirection::LEFT,
