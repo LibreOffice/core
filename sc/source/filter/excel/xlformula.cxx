@@ -73,7 +73,7 @@ const sal_uInt8 MX    = 30;                 /// Maximum parameter count.
 #define EXC_FUNCNAME_ADDIN( ascii )   "com.sun.star.sheet.addin." ascii
 
 /** Functions new in BIFF2. */
-static const XclFunctionInfo saFuncTable_2[] =
+const XclFunctionInfo saFuncTable_2[] =
 {
     { ocCount,              0,      0,  MX, V, { RX }, 0, nullptr },
     { ocIf,                 1,      2,  3,  R, { VO, RO }, 0, nullptr },
@@ -223,7 +223,7 @@ static const XclFunctionInfo saFuncTable_2[] =
 };
 
 /** Functions new in BIFF3. */
-static const XclFunctionInfo saFuncTable_3[] =
+const XclFunctionInfo saFuncTable_3[] =
 {
     { ocLinest,             49,     1,  4,  A, { RA, RA, VV }, 0, nullptr },          // BIFF2: 1-2, BIFF3: 1-4
     { ocTrend,              50,     1,  4,  A, { RA, RA, RA, VV }, 0, nullptr },      // BIFF2: 1-3, BIFF3: 1-4
@@ -251,7 +251,7 @@ static const XclFunctionInfo saFuncTable_3[] =
 };
 
 /** Functions new in BIFF4. */
-static const XclFunctionInfo saFuncTable_4[] =
+const XclFunctionInfo saFuncTable_4[] =
 {
     { ocFixed,              14,     1,  3,  V, { VR }, 0, nullptr },                  // BIFF2-3: 1-2, BIFF4: 1-3
     { ocAsc,                214,    1,  1,  V, { VR }, 0, nullptr },
@@ -340,7 +340,7 @@ static const XclFunctionInfo saFuncTable_4[] =
 };
 
 /** Functions new in BIFF5/BIFF7. Unsupported functions: DATESTRING, NUMBERSTRING. */
-static const XclFunctionInfo saFuncTable_5[] =
+const XclFunctionInfo saFuncTable_5[] =
 {
     { ocGetDayOfWeek,       70,     1,  2,  V, { VR }, 0, nullptr },                  // BIFF2-4: 1, BIFF5: 1-2
     { ocHLookup,            101,    3,  4,  V, { VV, RO, RO, VV }, 0, nullptr },      // BIFF2-4: 3, BIFF5: 3-4
@@ -364,7 +364,7 @@ static const XclFunctionInfo saFuncTable_5[] =
 };
 
 /** Functions new in BIFF8. Unsupported functions: PHONETIC. */
-static const XclFunctionInfo saFuncTable_8[] =
+const XclFunctionInfo saFuncTable_8[] =
 {
     { ocGetPivotData,       358,    2,  MX, V, { RR, RR, VR }, 0, nullptr },
     { ocHyperLink,          359,    1,  2,  V, { VV, VO }, 0, nullptr },
@@ -386,7 +386,7 @@ static const XclFunctionInfo saFuncTable_8[] =
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
 /** Functions new in OOXML. */
-static const XclFunctionInfo saFuncTable_Oox[] =
+const XclFunctionInfo saFuncTable_Oox[] =
 {
     { ocCountIfs,           NOID,   2,  MX, V, { RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "COUNTIFS" ) },
     { ocCountIfs,           255,    3,  MX, V, { RO_E, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "COUNTIFS" ) },
@@ -435,7 +435,7 @@ static const XclFunctionInfo saFuncTable_Oox[] =
 
     @See sc/source/filter/oox/formulabase.cxx saFuncTable2010 for V,VR,RO,...
  */
-static const XclFunctionInfo saFuncTable_2010[] =
+const XclFunctionInfo saFuncTable_2010[] =
 {
     EXC_FUNCENTRY_V_VA( ocCovarianceP,      2,  2,  0,  "COVARIANCE.P" ),
     EXC_FUNCENTRY_V_VA( ocCovarianceS,      2,  2,  0,  "COVARIANCE.S" ),
@@ -514,7 +514,7 @@ static const XclFunctionInfo saFuncTable_2010[] =
 
     @See sc/source/filter/oox/formulabase.cxx saFuncTable2013 for V,VR,RO,...
  */
-static const XclFunctionInfo saFuncTable_2013[] =
+const XclFunctionInfo saFuncTable_2013[] =
 {
     EXC_FUNCENTRY_V_VR_IMPORT(  ocArcCot,        1,  1,  0,  "ACOT" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocArcCotHyp,     1,  1,  0,  "ACOTH" ),
@@ -578,7 +578,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
 
     @See sc/source/filter/oox/formulabase.cxx saFuncTable2016 for V,VR,RO,...
  */
-static const XclFunctionInfo saFuncTable_2016[] =
+const XclFunctionInfo saFuncTable_2016[] =
 {
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_ADD,    3,  6,  0,  "FORECAST.ETS" ),
     EXC_FUNCENTRY_V_VR(  ocForecast_ETS_PIA,    3,  7,  0,  "FORECAST.ETS.CONFINT" ),
@@ -598,7 +598,7 @@ static const XclFunctionInfo saFuncTable_2016[] =
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
 
 /** Functions defined by OpenFormula, but not supported by Calc (ocNoName) or by Excel (defined op-code). */
-static const XclFunctionInfo saFuncTable_Odf[] =
+const XclFunctionInfo saFuncTable_Odf[] =
 {
     EXC_FUNCENTRY_ODF( ocChiSqDist,     2,  3,  0,  "CHISQDIST" ),
     EXC_FUNCENTRY_ODF( ocChiSqInv,      2,  2,  0,  "CHISQINV" )
@@ -615,7 +615,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), asciiname }
 
 /** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
-static const XclFunctionInfo saFuncTable_OOoLO[] =
+const XclFunctionInfo saFuncTable_OOoLO[] =
 {
     EXC_FUNCENTRY_OOO( ocErrorType,     1,  1,  0,  "ORG.OPENOFFICE.ERRORTYPE" ),
     EXC_FUNCENTRY_OOO_IBR( ocErrorType, 1,  1,  0,  "ERRORTYPE" ),      // was written wrongly, read it

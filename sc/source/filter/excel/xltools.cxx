@@ -456,10 +456,10 @@ OUString XclTools::GetXclFontName( const OUString& rFontName )
 }
 
 // built-in defined names
-static const char maDefNamePrefix[]    = "Excel_BuiltIn_"; /// Prefix for built-in defined names.
-static const char maDefNamePrefixXml[] = "_xlnm.";         /// Prefix for built-in defined names for OOX
+const char maDefNamePrefix[]    = "Excel_BuiltIn_"; /// Prefix for built-in defined names.
+const char maDefNamePrefixXml[] = "_xlnm.";         /// Prefix for built-in defined names for OOX
 
-static const char* const ppcDefNames[] =
+const char* const ppcDefNames[] =
 {
     "Consolidate_Area",
     "Auto_Open",
@@ -530,10 +530,10 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 
 // built-in style names
 
-static const char maStyleNamePrefix1[] = "Excel_BuiltIn_";  /// Prefix for built-in cell style names.
-static const char maStyleNamePrefix2[] = "Excel Built-in "; /// Prefix for built-in cell style names from OOX filter.
+const char maStyleNamePrefix1[] = "Excel_BuiltIn_";  /// Prefix for built-in cell style names.
+const char maStyleNamePrefix2[] = "Excel Built-in "; /// Prefix for built-in cell style names from OOX filter.
 
-static const char* const ppcStyleNames[] =
+const char* const ppcStyleNames[] =
 {
     "",                 // "Normal" not used directly, but localized "Default"
     "RowLevel_",        // outline level will be appended
@@ -654,8 +654,8 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 // conditional formatting style names
 
-static const char maCFStyleNamePrefix1[] = "Excel_CondFormat_"; /// Prefix for cond. formatting style names.
-static const char maCFStyleNamePrefix2[] = "ConditionalStyle_"; /// Prefix for cond. formatting style names from OOX filter.
+const char maCFStyleNamePrefix1[] = "Excel_CondFormat_"; /// Prefix for cond. formatting style names.
+const char maCFStyleNamePrefix2[] = "ConditionalStyle_"; /// Prefix for cond. formatting style names from OOX filter.
 
 OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
@@ -694,8 +694,8 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 
 // Basic macro names
 
-static const char maSbMacroPrefix[] = "vnd.sun.star.script:";              /// Prefix for StarBasic macros.
-static const char maSbMacroSuffix[] = "?language=Basic&location=document"; /// Suffix for StarBasic macros.
+const char maSbMacroPrefix[] = "vnd.sun.star.script:";              /// Prefix for StarBasic macros.
+const char maSbMacroSuffix[] = "?language=Basic&location=document"; /// Suffix for StarBasic macros.
 
 OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {

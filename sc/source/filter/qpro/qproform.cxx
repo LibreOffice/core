@@ -395,7 +395,7 @@ ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>
     return eRet;
 }
 
-static const struct
+const struct
 {
     DefTokenId     nToken;
     QPRO_FUNC_TYPE nType;

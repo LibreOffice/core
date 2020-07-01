@@ -171,7 +171,7 @@ const double fExtraWidth = 182.0 / 256.0;
 //    * 1 cm = 567 twips
 static double lcl_hmmToPoints( double nVal ) { return nVal / 1000 * 567 / 20; }
 
-static const sal_Int16 supportedIndexTable[] = {  excel::XlBordersIndex::xlEdgeLeft, excel::XlBordersIndex::xlEdgeTop, excel::XlBordersIndex::xlEdgeBottom, excel::XlBordersIndex::xlEdgeRight, excel::XlBordersIndex::xlDiagonalDown, excel::XlBordersIndex::xlDiagonalUp, excel::XlBordersIndex::xlInsideVertical, excel::XlBordersIndex::xlInsideHorizontal };
+const sal_Int16 supportedIndexTable[] = {  excel::XlBordersIndex::xlEdgeLeft, excel::XlBordersIndex::xlEdgeTop, excel::XlBordersIndex::xlEdgeBottom, excel::XlBordersIndex::xlEdgeRight, excel::XlBordersIndex::xlDiagonalDown, excel::XlBordersIndex::xlDiagonalUp, excel::XlBordersIndex::xlInsideVertical, excel::XlBordersIndex::xlInsideHorizontal };
 
 static sal_uInt16 lcl_pointsToTwips( double nVal )
 {
@@ -673,15 +673,15 @@ public:
 
 }
 
-static const char ISVISIBLE[] = "IsVisible";
-static const char EQUALS[] = "=";
-static const char NOTEQUALS[] = "<>";
-static const char GREATERTHAN[] = ">";
-static const char GREATERTHANEQUALS[] = ">=";
-static const char LESSTHAN[] = "<";
-static const char LESSTHANEQUALS[] = "<=";
-static const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
-static const char CELLSTYLE[] = "CellStyle";
+const char ISVISIBLE[] = "IsVisible";
+const char EQUALS[] = "=";
+const char NOTEQUALS[] = "<>";
+const char GREATERTHAN[] = ">";
+const char GREATERTHANEQUALS[] = ">=";
+const char LESSTHAN[] = "<";
+const char LESSTHANEQUALS[] = "<=";
+const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
+const char CELLSTYLE[] = "CellStyle";
 
 namespace {
 
@@ -970,7 +970,7 @@ public:
 
 }
 
-static const char sNA[] = "#N/A";
+const char sNA[] = "#N/A";
 
 namespace {
 

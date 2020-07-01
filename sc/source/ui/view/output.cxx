@@ -70,7 +70,7 @@ using namespace com::sun::star;
 
 #define SC_AUTHORCOLORCOUNT     9
 
-static const Color nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
+const Color nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
@@ -819,7 +819,7 @@ void ScOutputData::DrawDocumentBackground()
 
 namespace {
 
-static const double lclCornerRectTransparency = 40.0;
+const double lclCornerRectTransparency = 40.0;
 
 void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const tools::Rectangle& rRect, long nOneX, long nOneY)
 {

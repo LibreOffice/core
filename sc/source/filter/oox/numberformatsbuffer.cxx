@@ -430,7 +430,7 @@ struct BuiltinFormat
 #define UTF8_KO_SEC         "\354\264\210"
 
 /** Default number format table. Last parent of all other tables, used for unknown locales. */
-static const BuiltinFormat spBuiltinFormats_BASE[] =
+const BuiltinFormat spBuiltinFormats_BASE[] =
 {
     // 0..13 numeric and currency formats
     NUMFMT_PREDEF(   0, NUMBER_STANDARD ),          // General
@@ -526,7 +526,7 @@ static const BuiltinFormat spBuiltinFormats_BASE[] =
 };
 
 /** Arabic, U.A.E. */
-static const BuiltinFormat spBuiltinFormats_ar_AE[] =
+const BuiltinFormat spBuiltinFormats_ar_AE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_AE "\"", " " ),
@@ -534,7 +534,7 @@ static const BuiltinFormat spBuiltinFormats_ar_AE[] =
 };
 
 /** Arabic, Bahrain. */
-static const BuiltinFormat spBuiltinFormats_ar_BH[] =
+const BuiltinFormat spBuiltinFormats_ar_BH[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_BH "\"", " " ),
@@ -542,7 +542,7 @@ static const BuiltinFormat spBuiltinFormats_ar_BH[] =
 };
 
 /** Arabic, Algeria. */
-static const BuiltinFormat spBuiltinFormats_ar_DZ[] =
+const BuiltinFormat spBuiltinFormats_ar_DZ[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_DZ "\"", " " ),
@@ -550,7 +550,7 @@ static const BuiltinFormat spBuiltinFormats_ar_DZ[] =
 };
 
 /** Arabic, Egypt. */
-static const BuiltinFormat spBuiltinFormats_ar_EG[] =
+const BuiltinFormat spBuiltinFormats_ar_EG[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_EG "\"", " " ),
@@ -558,7 +558,7 @@ static const BuiltinFormat spBuiltinFormats_ar_EG[] =
 };
 
 /** Arabic, Iraq. */
-static const BuiltinFormat spBuiltinFormats_ar_IQ[] =
+const BuiltinFormat spBuiltinFormats_ar_IQ[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_IQ "\"", " " ),
@@ -566,7 +566,7 @@ static const BuiltinFormat spBuiltinFormats_ar_IQ[] =
 };
 
 /** Arabic, Jordan. */
-static const BuiltinFormat spBuiltinFormats_ar_JO[] =
+const BuiltinFormat spBuiltinFormats_ar_JO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_JO "\"", " " ),
@@ -574,7 +574,7 @@ static const BuiltinFormat spBuiltinFormats_ar_JO[] =
 };
 
 /** Arabic, Kuwait. */
-static const BuiltinFormat spBuiltinFormats_ar_KW[] =
+const BuiltinFormat spBuiltinFormats_ar_KW[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_KW "\"", " " ),
@@ -582,7 +582,7 @@ static const BuiltinFormat spBuiltinFormats_ar_KW[] =
 };
 
 /** Arabic, Lebanon. */
-static const BuiltinFormat spBuiltinFormats_ar_LB[] =
+const BuiltinFormat spBuiltinFormats_ar_LB[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_LB "\"", " " ),
@@ -590,7 +590,7 @@ static const BuiltinFormat spBuiltinFormats_ar_LB[] =
 };
 
 /** Arabic, Libya. */
-static const BuiltinFormat spBuiltinFormats_ar_LY[] =
+const BuiltinFormat spBuiltinFormats_ar_LY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_LY "\"", " " ),
@@ -598,7 +598,7 @@ static const BuiltinFormat spBuiltinFormats_ar_LY[] =
 };
 
 /** Arabic, Morocco. */
-static const BuiltinFormat spBuiltinFormats_ar_MA[] =
+const BuiltinFormat spBuiltinFormats_ar_MA[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_MA "\"", " " ),
@@ -606,7 +606,7 @@ static const BuiltinFormat spBuiltinFormats_ar_MA[] =
 };
 
 /** Arabic, Oman. */
-static const BuiltinFormat spBuiltinFormats_ar_OM[] =
+const BuiltinFormat spBuiltinFormats_ar_OM[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_OM "\"", " " ),
@@ -614,7 +614,7 @@ static const BuiltinFormat spBuiltinFormats_ar_OM[] =
 };
 
 /** Arabic, Qatar. */
-static const BuiltinFormat spBuiltinFormats_ar_QA[] =
+const BuiltinFormat spBuiltinFormats_ar_QA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_QA "\"", " " ),
@@ -622,7 +622,7 @@ static const BuiltinFormat spBuiltinFormats_ar_QA[] =
 };
 
 /** Arabic, Saudi Arabia. */
-static const BuiltinFormat spBuiltinFormats_ar_SA[] =
+const BuiltinFormat spBuiltinFormats_ar_SA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_SA "\"", " " ),
@@ -630,7 +630,7 @@ static const BuiltinFormat spBuiltinFormats_ar_SA[] =
 };
 
 /** Arabic, Syria. */
-static const BuiltinFormat spBuiltinFormats_ar_SY[] =
+const BuiltinFormat spBuiltinFormats_ar_SY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_SY "\"", " " ),
@@ -638,7 +638,7 @@ static const BuiltinFormat spBuiltinFormats_ar_SY[] =
 };
 
 /** Arabic, Tunisia. */
-static const BuiltinFormat spBuiltinFormats_ar_TN[] =
+const BuiltinFormat spBuiltinFormats_ar_TN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_TN "\"", " " ),
@@ -646,7 +646,7 @@ static const BuiltinFormat spBuiltinFormats_ar_TN[] =
 };
 
 /** Arabic, Yemen. */
-static const BuiltinFormat spBuiltinFormats_ar_YE[] =
+const BuiltinFormat spBuiltinFormats_ar_YE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_AR_YE "\"", " " ),
@@ -654,7 +654,7 @@ static const BuiltinFormat spBuiltinFormats_ar_YE[] =
 };
 
 /** Belarusian, Belarus. */
-static const BuiltinFormat spBuiltinFormats_be_BY[] =
+const BuiltinFormat spBuiltinFormats_be_BY[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -663,7 +663,7 @@ static const BuiltinFormat spBuiltinFormats_be_BY[] =
 };
 
 /** Bulgarian, Bulgaria. */
-static const BuiltinFormat spBuiltinFormats_bg_BG[] =
+const BuiltinFormat spBuiltinFormats_bg_BG[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.M.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
@@ -672,7 +672,7 @@ static const BuiltinFormat spBuiltinFormats_bg_BG[] =
 };
 
 /** Bengali, India. */
-static const BuiltinFormat spBuiltinFormats_bn_IN[] =
+const BuiltinFormat spBuiltinFormats_bn_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_BN_IN "\"", " " ),
@@ -680,7 +680,7 @@ static const BuiltinFormat spBuiltinFormats_bn_IN[] =
 };
 
 /** Czech, Czech Republic. */
-static const BuiltinFormat spBuiltinFormats_cs_CZ[] =
+const BuiltinFormat spBuiltinFormats_cs_CZ[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
@@ -689,7 +689,7 @@ static const BuiltinFormat spBuiltinFormats_cs_CZ[] =
 };
 
 /** Danish, Denmark. */
-static const BuiltinFormat spBuiltinFormats_da_DK[] =
+const BuiltinFormat spBuiltinFormats_da_DK[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"kr\"", " " ),
@@ -697,7 +697,7 @@ static const BuiltinFormat spBuiltinFormats_da_DK[] =
 };
 
 /** German, Austria. */
-static const BuiltinFormat spBuiltinFormats_de_AT[] =
+const BuiltinFormat spBuiltinFormats_de_AT[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
@@ -705,7 +705,7 @@ static const BuiltinFormat spBuiltinFormats_de_AT[] =
 };
 
 /** German, Switzerland. */
-static const BuiltinFormat spBuiltinFormats_de_CH[] =
+const BuiltinFormat spBuiltinFormats_de_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
@@ -713,7 +713,7 @@ static const BuiltinFormat spBuiltinFormats_de_CH[] =
 };
 
 /** German, Germany. */
-static const BuiltinFormat spBuiltinFormats_de_DE[] =
+const BuiltinFormat spBuiltinFormats_de_DE[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -721,7 +721,7 @@ static const BuiltinFormat spBuiltinFormats_de_DE[] =
 };
 
 /** German, Liechtenstein. */
-static const BuiltinFormat spBuiltinFormats_de_LI[] =
+const BuiltinFormat spBuiltinFormats_de_LI[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ". ", "MMM", " ", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"CHF\"", " " ),
@@ -729,7 +729,7 @@ static const BuiltinFormat spBuiltinFormats_de_LI[] =
 };
 
 /** German, Luxembourg. */
-static const BuiltinFormat spBuiltinFormats_de_LU[] =
+const BuiltinFormat spBuiltinFormats_de_LU[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -737,7 +737,7 @@ static const BuiltinFormat spBuiltinFormats_de_LU[] =
 };
 
 /** Divehi, Maldives. */
-static const BuiltinFormat spBuiltinFormats_div_MV[] =
+const BuiltinFormat spBuiltinFormats_div_MV[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_NUMBER_SYMBOL_MINUS( "\"" UTF8_RUFIYAA ".\"", "_" UTF8_RUFIYAA "_.", " " ),
@@ -745,7 +745,7 @@ static const BuiltinFormat spBuiltinFormats_div_MV[] =
 };
 
 /** Greek, Greece. */
-static const BuiltinFormat spBuiltinFormats_el_GR[] =
+const BuiltinFormat spBuiltinFormats_el_GR[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -753,7 +753,7 @@ static const BuiltinFormat spBuiltinFormats_el_GR[] =
 };
 
 /** English, Australia. */
-static const BuiltinFormat spBuiltinFormats_en_AU[] =
+const BuiltinFormat spBuiltinFormats_en_AU[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -761,7 +761,7 @@ static const BuiltinFormat spBuiltinFormats_en_AU[] =
 };
 
 /** English, Belize. */
-static const BuiltinFormat spBuiltinFormats_en_BZ[] =
+const BuiltinFormat spBuiltinFormats_en_BZ[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"BZ$\"", "" ),
@@ -769,7 +769,7 @@ static const BuiltinFormat spBuiltinFormats_en_BZ[] =
 };
 
 /** English, Canada. */
-static const BuiltinFormat spBuiltinFormats_en_CA[] =
+const BuiltinFormat spBuiltinFormats_en_CA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -777,7 +777,7 @@ static const BuiltinFormat spBuiltinFormats_en_CA[] =
 };
 
 /** English, Caribbean. */
-static const BuiltinFormat spBuiltinFormats_en_CB[] =
+const BuiltinFormat spBuiltinFormats_en_CB[] =
 {
     NUMFMT_ALLDATETIMES( "MM/DD/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -785,7 +785,7 @@ static const BuiltinFormat spBuiltinFormats_en_CB[] =
 };
 
 /** English, United Kingdom. */
-static const BuiltinFormat spBuiltinFormats_en_GB[] =
+const BuiltinFormat spBuiltinFormats_en_GB[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_POUND_GB, "" ),
@@ -793,7 +793,7 @@ static const BuiltinFormat spBuiltinFormats_en_GB[] =
 };
 
 /** English, Ireland. */
-static const BuiltinFormat spBuiltinFormats_en_IE[] =
+const BuiltinFormat spBuiltinFormats_en_IE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, "" ),
@@ -801,7 +801,7 @@ static const BuiltinFormat spBuiltinFormats_en_IE[] =
 };
 
 /** English, Jamaica. */
-static const BuiltinFormat spBuiltinFormats_en_JM[] =
+const BuiltinFormat spBuiltinFormats_en_JM[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\"J$\"", "" ),
@@ -809,7 +809,7 @@ static const BuiltinFormat spBuiltinFormats_en_JM[] =
 };
 
 /** English, New Zealand. */
-static const BuiltinFormat spBuiltinFormats_en_NZ[] =
+const BuiltinFormat spBuiltinFormats_en_NZ[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -817,7 +817,7 @@ static const BuiltinFormat spBuiltinFormats_en_NZ[] =
 };
 
 /** English, Philippines. */
-static const BuiltinFormat spBuiltinFormats_en_PH[] =
+const BuiltinFormat spBuiltinFormats_en_PH[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Php\"", "" ),
@@ -825,7 +825,7 @@ static const BuiltinFormat spBuiltinFormats_en_PH[] =
 };
 
 /** English, Trinidad and Tobago. */
-static const BuiltinFormat spBuiltinFormats_en_TT[] =
+const BuiltinFormat spBuiltinFormats_en_TT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"TT$\"", "" ),
@@ -833,7 +833,7 @@ static const BuiltinFormat spBuiltinFormats_en_TT[] =
 };
 
 /** English, USA. */
-static const BuiltinFormat spBuiltinFormats_en_US[] =
+const BuiltinFormat spBuiltinFormats_en_US[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
@@ -841,7 +841,7 @@ static const BuiltinFormat spBuiltinFormats_en_US[] =
 };
 
 /** English, South Africa. */
-static const BuiltinFormat spBuiltinFormats_en_ZA[] =
+const BuiltinFormat spBuiltinFormats_en_ZA[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/MM/DD", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\\R", " " ),
@@ -849,7 +849,7 @@ static const BuiltinFormat spBuiltinFormats_en_ZA[] =
 };
 
 /** English, Zimbabwe. */
-static const BuiltinFormat spBuiltinFormats_en_ZW[] =
+const BuiltinFormat spBuiltinFormats_en_ZW[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Z$\"", "" ),
@@ -857,7 +857,7 @@ static const BuiltinFormat spBuiltinFormats_en_ZW[] =
 };
 
 /** Spanish, Argentina. */
-static const BuiltinFormat spBuiltinFormats_es_AR[] =
+const BuiltinFormat spBuiltinFormats_es_AR[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "$", " " ),
@@ -865,7 +865,7 @@ static const BuiltinFormat spBuiltinFormats_es_AR[] =
 };
 
 /** Spanish, Bolivia. */
-static const BuiltinFormat spBuiltinFormats_es_BO[] =
+const BuiltinFormat spBuiltinFormats_es_BO[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
@@ -874,7 +874,7 @@ static const BuiltinFormat spBuiltinFormats_es_BO[] =
 };
 
 /** Spanish, Chile. */
-static const BuiltinFormat spBuiltinFormats_es_CL[] =
+const BuiltinFormat spBuiltinFormats_es_CL[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", " " ),
@@ -882,7 +882,7 @@ static const BuiltinFormat spBuiltinFormats_es_CL[] =
 };
 
 /** Spanish, Colombia. */
-static const BuiltinFormat spBuiltinFormats_es_CO[] =
+const BuiltinFormat spBuiltinFormats_es_CO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", " " ),
@@ -890,7 +890,7 @@ static const BuiltinFormat spBuiltinFormats_es_CO[] =
 };
 
 /** Spanish, Costa Rica. */
-static const BuiltinFormat spBuiltinFormats_es_CR[] =
+const BuiltinFormat spBuiltinFormats_es_CR[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( UTF8_COLON, "" ),
@@ -898,7 +898,7 @@ static const BuiltinFormat spBuiltinFormats_es_CR[] =
 };
 
 /** Spanish, Dominican Republic. */
-static const BuiltinFormat spBuiltinFormats_es_DO[] =
+const BuiltinFormat spBuiltinFormats_es_DO[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"RD$\"", "" ),
@@ -906,7 +906,7 @@ static const BuiltinFormat spBuiltinFormats_es_DO[] =
 };
 
 /** Spanish, Ecuador. */
-static const BuiltinFormat spBuiltinFormats_es_EC[] =
+const BuiltinFormat spBuiltinFormats_es_EC[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", " " ),
@@ -914,7 +914,7 @@ static const BuiltinFormat spBuiltinFormats_es_EC[] =
 };
 
 /** Spanish, Spain. */
-static const BuiltinFormat spBuiltinFormats_es_ES[] =
+const BuiltinFormat spBuiltinFormats_es_ES[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -922,7 +922,7 @@ static const BuiltinFormat spBuiltinFormats_es_ES[] =
 };
 
 /** Spanish, Guatemala. */
-static const BuiltinFormat spBuiltinFormats_es_GT[] =
+const BuiltinFormat spBuiltinFormats_es_GT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\Q", "" ),
@@ -930,7 +930,7 @@ static const BuiltinFormat spBuiltinFormats_es_GT[] =
 };
 
 /** Spanish, Honduras. */
-static const BuiltinFormat spBuiltinFormats_es_HN[] =
+const BuiltinFormat spBuiltinFormats_es_HN[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
@@ -939,7 +939,7 @@ static const BuiltinFormat spBuiltinFormats_es_HN[] =
 };
 
 /** Spanish, Mexico. */
-static const BuiltinFormat spBuiltinFormats_es_MX[] =
+const BuiltinFormat spBuiltinFormats_es_MX[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -947,7 +947,7 @@ static const BuiltinFormat spBuiltinFormats_es_MX[] =
 };
 
 /** Spanish, Nicaragua. */
-static const BuiltinFormat spBuiltinFormats_es_NI[] =
+const BuiltinFormat spBuiltinFormats_es_NI[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
@@ -956,7 +956,7 @@ static const BuiltinFormat spBuiltinFormats_es_NI[] =
 };
 
 /** Spanish, Panama. */
-static const BuiltinFormat spBuiltinFormats_es_PA[] =
+const BuiltinFormat spBuiltinFormats_es_PA[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"B/.\"", " " ),
@@ -964,7 +964,7 @@ static const BuiltinFormat spBuiltinFormats_es_PA[] =
 };
 
 /** Spanish, Peru. */
-static const BuiltinFormat spBuiltinFormats_es_PE[] =
+const BuiltinFormat spBuiltinFormats_es_PE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"S/.\"", " " ),
@@ -972,7 +972,7 @@ static const BuiltinFormat spBuiltinFormats_es_PE[] =
 };
 
 /** Spanish, Puerto Rico. */
-static const BuiltinFormat spBuiltinFormats_es_PR[] =
+const BuiltinFormat spBuiltinFormats_es_PR[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
@@ -981,7 +981,7 @@ static const BuiltinFormat spBuiltinFormats_es_PR[] =
 };
 
 /** Spanish, Paraguay. */
-static const BuiltinFormat spBuiltinFormats_es_PY[] =
+const BuiltinFormat spBuiltinFormats_es_PY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Gs\"", " " ),
@@ -989,7 +989,7 @@ static const BuiltinFormat spBuiltinFormats_es_PY[] =
 };
 
 /** Spanish, El Salvador. */
-static const BuiltinFormat spBuiltinFormats_es_SV[] =
+const BuiltinFormat spBuiltinFormats_es_SV[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "DD\\/MM\\/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
@@ -998,7 +998,7 @@ static const BuiltinFormat spBuiltinFormats_es_SV[] =
 };
 
 /** Spanish, Uruguay. */
-static const BuiltinFormat spBuiltinFormats_es_UY[] =
+const BuiltinFormat spBuiltinFormats_es_UY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"$U\"", " " ),
@@ -1006,7 +1006,7 @@ static const BuiltinFormat spBuiltinFormats_es_UY[] =
 };
 
 /** Spanish, Venezuela. */
-static const BuiltinFormat spBuiltinFormats_es_VE[] =
+const BuiltinFormat spBuiltinFormats_es_VE[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "Bs", " " ),
@@ -1014,7 +1014,7 @@ static const BuiltinFormat spBuiltinFormats_es_VE[] =
 };
 
 /** Estonian, Estonia. */
-static const BuiltinFormat spBuiltinFormats_et_EE[] =
+const BuiltinFormat spBuiltinFormats_et_EE[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.MM.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1023,7 +1023,7 @@ static const BuiltinFormat spBuiltinFormats_et_EE[] =
 };
 
 /** Farsi, Iran. */
-static const BuiltinFormat spBuiltinFormats_fa_IR[] =
+const BuiltinFormat spBuiltinFormats_fa_IR[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/MM/DD", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"" UTF8_CURR_FA_IR "\"", " " ),
@@ -1031,7 +1031,7 @@ static const BuiltinFormat spBuiltinFormats_fa_IR[] =
 };
 
 /** Finnish, Finland. */
-static const BuiltinFormat spBuiltinFormats_fi_FI[] =
+const BuiltinFormat spBuiltinFormats_fi_FI[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_STRING(  9, "0\\ %" ),
@@ -1042,7 +1042,7 @@ static const BuiltinFormat spBuiltinFormats_fi_FI[] =
 };
 
 /** Faroese, Faroe Islands. */
-static const BuiltinFormat spBuiltinFormats_fo_FO[] =
+const BuiltinFormat spBuiltinFormats_fo_FO[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"kr\"", " " ),
@@ -1050,7 +1050,7 @@ static const BuiltinFormat spBuiltinFormats_fo_FO[] =
 };
 
 /** French, Belgium. */
-static const BuiltinFormat spBuiltinFormats_fr_BE[] =
+const BuiltinFormat spBuiltinFormats_fr_BE[] =
 {
     NUMFMT_ALLDATETIMES( "D/MM/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -1058,7 +1058,7 @@ static const BuiltinFormat spBuiltinFormats_fr_BE[] =
 };
 
 /** French, Canada. */
-static const BuiltinFormat spBuiltinFormats_fr_CA[] =
+const BuiltinFormat spBuiltinFormats_fr_CA[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
@@ -1067,7 +1067,7 @@ static const BuiltinFormat spBuiltinFormats_fr_CA[] =
 };
 
 /** French, Switzerland. */
-static const BuiltinFormat spBuiltinFormats_fr_CH[] =
+const BuiltinFormat spBuiltinFormats_fr_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
@@ -1075,7 +1075,7 @@ static const BuiltinFormat spBuiltinFormats_fr_CH[] =
 };
 
 /** French, France. */
-static const BuiltinFormat spBuiltinFormats_fr_FR[] =
+const BuiltinFormat spBuiltinFormats_fr_FR[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
@@ -1084,7 +1084,7 @@ static const BuiltinFormat spBuiltinFormats_fr_FR[] =
 };
 
 /** French, Luxembourg. */
-static const BuiltinFormat spBuiltinFormats_fr_LU[] =
+const BuiltinFormat spBuiltinFormats_fr_LU[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
@@ -1093,7 +1093,7 @@ static const BuiltinFormat spBuiltinFormats_fr_LU[] =
 };
 
 /** French, Monaco. */
-static const BuiltinFormat spBuiltinFormats_fr_MC[] =
+const BuiltinFormat spBuiltinFormats_fr_MC[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
@@ -1102,7 +1102,7 @@ static const BuiltinFormat spBuiltinFormats_fr_MC[] =
 };
 
 /** Galizian, Spain. */
-static const BuiltinFormat spBuiltinFormats_gl_ES[] =
+const BuiltinFormat spBuiltinFormats_gl_ES[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
@@ -1110,7 +1110,7 @@ static const BuiltinFormat spBuiltinFormats_gl_ES[] =
 };
 
 /** Gujarati, India. */
-static const BuiltinFormat spBuiltinFormats_gu_IN[] =
+const BuiltinFormat spBuiltinFormats_gu_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_GU_IN "\"", " " ),
@@ -1118,7 +1118,7 @@ static const BuiltinFormat spBuiltinFormats_gu_IN[] =
 };
 
 /** Hebrew, Israel. */
-static const BuiltinFormat spBuiltinFormats_he_IL[] =
+const BuiltinFormat spBuiltinFormats_he_IL[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( UTF8_SHEQEL, " " ),
@@ -1126,7 +1126,7 @@ static const BuiltinFormat spBuiltinFormats_he_IL[] =
 };
 
 /** Hindi, India. */
-static const BuiltinFormat spBuiltinFormats_hi_IN[] =
+const BuiltinFormat spBuiltinFormats_hi_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_HI_IN "\"", " " ),
@@ -1134,7 +1134,7 @@ static const BuiltinFormat spBuiltinFormats_hi_IN[] =
 };
 
 /** Croatian, Bosnia and Herzegowina. */
-static const BuiltinFormat spBuiltinFormats_hr_BA[] =
+const BuiltinFormat spBuiltinFormats_hr_BA[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"KM\"", "_K_M", " " ),
@@ -1142,7 +1142,7 @@ static const BuiltinFormat spBuiltinFormats_hr_BA[] =
 };
 
 /** Croatian, Croatia. */
-static const BuiltinFormat spBuiltinFormats_hr_HR[] =
+const BuiltinFormat spBuiltinFormats_hr_HR[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kn\"", "_k_n", " " ),
@@ -1150,7 +1150,7 @@ static const BuiltinFormat spBuiltinFormats_hr_HR[] =
 };
 
 /** Hungarian, Hungary. */
-static const BuiltinFormat spBuiltinFormats_hu_HU[] =
+const BuiltinFormat spBuiltinFormats_hu_HU[] =
 {
     // space character is group separator, literal spaces must be quoted
     // MMM is rendered differently in Calc and Excel (see #i41488#)
@@ -1160,7 +1160,7 @@ static const BuiltinFormat spBuiltinFormats_hu_HU[] =
 };
 
 /** Armenian, Armenia. */
-static const BuiltinFormat spBuiltinFormats_hy_AM[] =
+const BuiltinFormat spBuiltinFormats_hy_AM[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"" UTF8_HY_DA_LC UTF8_HY_REH_LC ".\"", "_" UTF8_HY_DA_LC "_" UTF8_HY_REH_LC "_.", " " ),
@@ -1168,7 +1168,7 @@ static const BuiltinFormat spBuiltinFormats_hy_AM[] =
 };
 
 /** Indonesian, Indonesia. */
-static const BuiltinFormat spBuiltinFormats_id_ID[] =
+const BuiltinFormat spBuiltinFormats_id_ID[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"Rp\"", "" ),
@@ -1176,7 +1176,7 @@ static const BuiltinFormat spBuiltinFormats_id_ID[] =
 };
 
 /** Icelandic, Iceland. */
-static const BuiltinFormat spBuiltinFormats_is_IS[] =
+const BuiltinFormat spBuiltinFormats_is_IS[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"kr.\"", "_k_r_.", " " ),
@@ -1184,7 +1184,7 @@ static const BuiltinFormat spBuiltinFormats_is_IS[] =
 };
 
 /** Italian, Switzerland. */
-static const BuiltinFormat spBuiltinFormats_it_CH[] =
+const BuiltinFormat spBuiltinFormats_it_CH[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"SFr.\"", " " ),
@@ -1192,7 +1192,7 @@ static const BuiltinFormat spBuiltinFormats_it_CH[] =
 };
 
 /** Italian, Italy. */
-static const BuiltinFormat spBuiltinFormats_it_IT[] =
+const BuiltinFormat spBuiltinFormats_it_IT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_EURO, " " ),
@@ -1200,7 +1200,7 @@ static const BuiltinFormat spBuiltinFormats_it_IT[] =
 };
 
 /** Georgian, Georgia. */
-static const BuiltinFormat spBuiltinFormats_ka_GE[] =
+const BuiltinFormat spBuiltinFormats_ka_GE[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1209,7 +1209,7 @@ static const BuiltinFormat spBuiltinFormats_ka_GE[] =
 };
 
 /** Kazakh, Kazakhstan. */
-static const BuiltinFormat spBuiltinFormats_kk_KZ[] =
+const BuiltinFormat spBuiltinFormats_kk_KZ[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1218,7 +1218,7 @@ static const BuiltinFormat spBuiltinFormats_kk_KZ[] =
 };
 
 /** Kannada, India. */
-static const BuiltinFormat spBuiltinFormats_kn_IN[] =
+const BuiltinFormat spBuiltinFormats_kn_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_KN_IN "\"", " " ),
@@ -1226,7 +1226,7 @@ static const BuiltinFormat spBuiltinFormats_kn_IN[] =
 };
 
 /** Kyrgyz, Kyrgyzstan. */
-static const BuiltinFormat spBuiltinFormats_ky_KG[] =
+const BuiltinFormat spBuiltinFormats_ky_KG[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1235,7 +1235,7 @@ static const BuiltinFormat spBuiltinFormats_ky_KG[] =
 };
 
 /** Lithuanian, Lithuania. */
-static const BuiltinFormat spBuiltinFormats_lt_LT[] =
+const BuiltinFormat spBuiltinFormats_lt_LT[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"Lt\"", "_L_t", " " ),
@@ -1243,7 +1243,7 @@ static const BuiltinFormat spBuiltinFormats_lt_LT[] =
 };
 
 /** Latvian, Latvia. */
-static const BuiltinFormat spBuiltinFormats_lv_LV[] =
+const BuiltinFormat spBuiltinFormats_lv_LV[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1252,7 +1252,7 @@ static const BuiltinFormat spBuiltinFormats_lv_LV[] =
 };
 
 /** Malayalam, India. */
-static const BuiltinFormat spBuiltinFormats_ml_IN[] =
+const BuiltinFormat spBuiltinFormats_ml_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_ML_IN "\"", " " ),
@@ -1260,7 +1260,7 @@ static const BuiltinFormat spBuiltinFormats_ml_IN[] =
 };
 
 /** Mongolian, Mongolia. */
-static const BuiltinFormat spBuiltinFormats_mn_MN[] =
+const BuiltinFormat spBuiltinFormats_mn_MN[] =
 {
     NUMFMT_ALLDATETIMES( "YY.MM.DD", "DD", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_TUGRUG, "_" UTF8_TUGRUG, "" ),
@@ -1268,7 +1268,7 @@ static const BuiltinFormat spBuiltinFormats_mn_MN[] =
 };
 
 /** Malay, Brunei Darussalam. */
-static const BuiltinFormat spBuiltinFormats_ms_BN[] =
+const BuiltinFormat spBuiltinFormats_ms_BN[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
@@ -1276,7 +1276,7 @@ static const BuiltinFormat spBuiltinFormats_ms_BN[] =
 };
 
 /** Malay, Malaysia. */
-static const BuiltinFormat spBuiltinFormats_ms_MY[] =
+const BuiltinFormat spBuiltinFormats_ms_MY[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\R", "" ),
@@ -1284,7 +1284,7 @@ static const BuiltinFormat spBuiltinFormats_ms_MY[] =
 };
 
 /** Maltese, Malta. */
-static const BuiltinFormat spBuiltinFormats_mt_MT[] =
+const BuiltinFormat spBuiltinFormats_mt_MT[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "\"Lm\"", "" ),
@@ -1292,7 +1292,7 @@ static const BuiltinFormat spBuiltinFormats_mt_MT[] =
 };
 
 /** Dutch, Belgium. */
-static const BuiltinFormat spBuiltinFormats_nl_BE[] =
+const BuiltinFormat spBuiltinFormats_nl_BE[] =
 {
     // slashes must be quoted to prevent conversion to minus
     NUMFMT_ALLDATETIMES( "D\\/MM\\/YYYY", "D", "\\/", "MMM", "\\/", "YY", "h", "h" ),
@@ -1301,7 +1301,7 @@ static const BuiltinFormat spBuiltinFormats_nl_BE[] =
 };
 
 /** Dutch, Netherlands. */
-static const BuiltinFormat spBuiltinFormats_nl_NL[] =
+const BuiltinFormat spBuiltinFormats_nl_NL[] =
 {
     NUMFMT_ALLDATETIMES( "D-M-YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( UTF8_EURO, " " ),
@@ -1309,7 +1309,7 @@ static const BuiltinFormat spBuiltinFormats_nl_NL[] =
 };
 
 /** Norwegian (Bokmal and Nynorsk), Norway. */
-static const BuiltinFormat spBuiltinFormats_no_NO[] =
+const BuiltinFormat spBuiltinFormats_no_NO[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
@@ -1318,7 +1318,7 @@ static const BuiltinFormat spBuiltinFormats_no_NO[] =
 };
 
 /** Punjabi, India. */
-static const BuiltinFormat spBuiltinFormats_pa_IN[] =
+const BuiltinFormat spBuiltinFormats_pa_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_PA_IN "\"", " " ),
@@ -1326,7 +1326,7 @@ static const BuiltinFormat spBuiltinFormats_pa_IN[] =
 };
 
 /** Polish, Poland. */
-static const BuiltinFormat spBuiltinFormats_pl_PL[] =
+const BuiltinFormat spBuiltinFormats_pl_PL[] =
 {
     // space character is group separator, literal spaces must be quoted
     // MMM is rendered differently in Calc and Excel (see #i72300#)
@@ -1336,7 +1336,7 @@ static const BuiltinFormat spBuiltinFormats_pl_PL[] =
 };
 
 /** Portuguese, Brazil. */
-static const BuiltinFormat spBuiltinFormats_pt_BR[] =
+const BuiltinFormat spBuiltinFormats_pt_BR[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "/", "MMM", "/", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"R$\"", " " ),
@@ -1344,7 +1344,7 @@ static const BuiltinFormat spBuiltinFormats_pt_BR[] =
 };
 
 /** Portuguese, Portugal. */
-static const BuiltinFormat spBuiltinFormats_pt_PT[] =
+const BuiltinFormat spBuiltinFormats_pt_PT[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_EURO, "_" UTF8_EURO, " " ),
@@ -1352,7 +1352,7 @@ static const BuiltinFormat spBuiltinFormats_pt_PT[] =
 };
 
 /** Romanian, Romania. */
-static const BuiltinFormat spBuiltinFormats_ro_RO[] =
+const BuiltinFormat spBuiltinFormats_ro_RO[] =
 {
     // space character is group separator, literal spaces must be quoted (but see #i75367#)
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
@@ -1361,7 +1361,7 @@ static const BuiltinFormat spBuiltinFormats_ro_RO[] =
 };
 
 /** Russian, Russian Federation. */
-static const BuiltinFormat spBuiltinFormats_ru_RU[] =
+const BuiltinFormat spBuiltinFormats_ru_RU[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1370,7 +1370,7 @@ static const BuiltinFormat spBuiltinFormats_ru_RU[] =
 };
 
 /** Slovak, Slovakia. */
-static const BuiltinFormat spBuiltinFormats_sk_SK[] =
+const BuiltinFormat spBuiltinFormats_sk_SK[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1379,7 +1379,7 @@ static const BuiltinFormat spBuiltinFormats_sk_SK[] =
 };
 
 /** Slovenian, Slovenia. */
-static const BuiltinFormat spBuiltinFormats_sl_SI[] =
+const BuiltinFormat spBuiltinFormats_sl_SI[] =
 {
     NUMFMT_ALLDATETIMES( "D.M.YYYY", "D", ".", "MMM", ".", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"SIT\"", "_S_I_T", " " ),
@@ -1387,7 +1387,7 @@ static const BuiltinFormat spBuiltinFormats_sl_SI[] =
 };
 
 /** Swedish, Finland. */
-static const BuiltinFormat spBuiltinFormats_sv_FI[] =
+const BuiltinFormat spBuiltinFormats_sv_FI[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_STRING(  9, "0\\ %" ),
@@ -1398,7 +1398,7 @@ static const BuiltinFormat spBuiltinFormats_sv_FI[] =
 };
 
 /** Swedish, Sweden. */
-static const BuiltinFormat spBuiltinFormats_sv_SE[] =
+const BuiltinFormat spBuiltinFormats_sv_SE[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
@@ -1407,7 +1407,7 @@ static const BuiltinFormat spBuiltinFormats_sv_SE[] =
 };
 
 /** Swahili, Tanzania. */
-static const BuiltinFormat spBuiltinFormats_sw_TZ[] =
+const BuiltinFormat spBuiltinFormats_sw_TZ[] =
 {
     NUMFMT_ALLDATETIMES( "M/D/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\S", "" ),
@@ -1415,7 +1415,7 @@ static const BuiltinFormat spBuiltinFormats_sw_TZ[] =
 };
 
 /** Tamil, India. */
-static const BuiltinFormat spBuiltinFormats_ta_IN[] =
+const BuiltinFormat spBuiltinFormats_ta_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_TA_IN "\"", " " ),
@@ -1423,7 +1423,7 @@ static const BuiltinFormat spBuiltinFormats_ta_IN[] =
 };
 
 /** Telugu, India. */
-static const BuiltinFormat spBuiltinFormats_te_IN[] =
+const BuiltinFormat spBuiltinFormats_te_IN[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YY", "DD", "-", "MMM", "-", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( "\"" UTF8_CURR_TE_IN "\"", " " ),
@@ -1431,7 +1431,7 @@ static const BuiltinFormat spBuiltinFormats_te_IN[] =
 };
 
 /** Thai, Thailand. */
-static const BuiltinFormat spBuiltinFormats_th_TH[] =
+const BuiltinFormat spBuiltinFormats_th_TH[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_BAHT, "" ),
@@ -1459,7 +1459,7 @@ static const BuiltinFormat spBuiltinFormats_th_TH[] =
 };
 
 /** Turkish, Turkey. */
-static const BuiltinFormat spBuiltinFormats_tr_TR[] =
+const BuiltinFormat spBuiltinFormats_tr_TR[] =
 {
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( "\"TL\"", "_T_L", " " ),
@@ -1467,7 +1467,7 @@ static const BuiltinFormat spBuiltinFormats_tr_TR[] =
 };
 
 /** Tatar, Russian Federation. */
-static const BuiltinFormat spBuiltinFormats_tt_RU[] =
+const BuiltinFormat spBuiltinFormats_tt_RU[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1476,7 +1476,7 @@ static const BuiltinFormat spBuiltinFormats_tt_RU[] =
 };
 
 /** Ukrainian, Ukraine. */
-static const BuiltinFormat spBuiltinFormats_uk_UA[] =
+const BuiltinFormat spBuiltinFormats_uk_UA[] =
 {
     // space character is group separator, literal spaces must be quoted
     NUMFMT_ALLDATETIMES( "DD.MM.YYYY", "DD", ".", "MMM", ".", "YY", "h", "h" ),
@@ -1485,7 +1485,7 @@ static const BuiltinFormat spBuiltinFormats_uk_UA[] =
 };
 
 /** Urdu, Pakistan. */
-static const BuiltinFormat spBuiltinFormats_ur_PK[] =
+const BuiltinFormat spBuiltinFormats_ur_PK[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_NUMBER_MINUS( "\"Rs\"", "" ),
@@ -1493,7 +1493,7 @@ static const BuiltinFormat spBuiltinFormats_ur_PK[] =
 };
 
 /** Vietnamese, Viet Nam. */
-static const BuiltinFormat spBuiltinFormats_vi_VN[] =
+const BuiltinFormat spBuiltinFormats_vi_VN[] =
 {
     NUMFMT_ALLDATETIMES( "DD/MM/YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_NUMBER_SYMBOL( UTF8_DONG, "_" UTF8_DONG, " " ),
@@ -1503,7 +1503,7 @@ static const BuiltinFormat spBuiltinFormats_vi_VN[] =
 // CJK ------------------------------------------------------------------------
 
 /** Base table for CJK locales. */
-static const BuiltinFormat spBuiltinFormats_CJK[] =
+const BuiltinFormat spBuiltinFormats_CJK[] =
 {
     NUMFMT_REUSE( 29, 28 ),
     NUMFMT_REUSE( 36, 27 ),
@@ -1520,7 +1520,7 @@ static const BuiltinFormat spBuiltinFormats_CJK[] =
 };
 
 /** Japanese, Japan. */
-static const BuiltinFormat spBuiltinFormats_ja_JP[] =
+const BuiltinFormat spBuiltinFormats_ja_JP[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/MM/DD", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_YEN_JP, "" ),
@@ -1536,7 +1536,7 @@ static const BuiltinFormat spBuiltinFormats_ja_JP[] =
 };
 
 /** Korean, South Korea. */
-static const BuiltinFormat spBuiltinFormats_ko_KR[] =
+const BuiltinFormat spBuiltinFormats_ko_KR[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY-MM-DD", "DD", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( UTF8_WON, "" ),
@@ -1553,7 +1553,7 @@ static const BuiltinFormat spBuiltinFormats_ko_KR[] =
 };
 
 /** Chinese, China. */
-static const BuiltinFormat spBuiltinFormats_zh_CN[] =
+const BuiltinFormat spBuiltinFormats_zh_CN[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY-M-D", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_SYMBOL_MINUS_NUMBER( UTF8_YEN_CN, "" ),
@@ -1569,7 +1569,7 @@ static const BuiltinFormat spBuiltinFormats_zh_CN[] =
 };
 
 /** Chinese, Hong Kong. */
-static const BuiltinFormat spBuiltinFormats_zh_HK[] =
+const BuiltinFormat spBuiltinFormats_zh_HK[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\"HK$\"", "" ),
@@ -1583,7 +1583,7 @@ static const BuiltinFormat spBuiltinFormats_zh_HK[] =
 };
 
 /** Chinese, Macau. */
-static const BuiltinFormat spBuiltinFormats_zh_MO[] =
+const BuiltinFormat spBuiltinFormats_zh_MO[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "\\P", "" ),
@@ -1597,7 +1597,7 @@ static const BuiltinFormat spBuiltinFormats_zh_MO[] =
 };
 
 /** Chinese, Singapore. */
-static const BuiltinFormat spBuiltinFormats_zh_SG[] =
+const BuiltinFormat spBuiltinFormats_zh_SG[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "-", "MMM", "-", "YY", "h", "h" ),
     NUMFMT_ALLCURRENCIES_OPEN_SYMBOL_NUMBER_CLOSE( "$", "" ),
@@ -1611,7 +1611,7 @@ static const BuiltinFormat spBuiltinFormats_zh_SG[] =
 };
 
 /** Chinese, Taiwan. */
-static const BuiltinFormat spBuiltinFormats_zh_TW[] =
+const BuiltinFormat spBuiltinFormats_zh_TW[] =
 {
     NUMFMT_ALLDATETIMES( "YYYY/M/D", "D", "-", "MMM", "-", "YY", "hh", "hh" ),
     NUMFMT_ALLCURRENCIES_MINUS_SYMBOL_NUMBER( "$", "" ),
@@ -1632,7 +1632,7 @@ struct BuiltinFormatTable
     const BuiltinFormat* mpFormats;         /// The number format table (may be 0, if equal to parent).
 };
 
-static const BuiltinFormatTable spBuiltinFormatTables[] =
+const BuiltinFormatTable spBuiltinFormatTables[] =
 { //  locale    parent      format table
     { "*",      "",         spBuiltinFormats_BASE   },  // Base table
     { "af-ZA",  "*",        spBuiltinFormats_en_ZA  },  // Afrikaans, South Africa

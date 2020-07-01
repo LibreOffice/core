@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 //  order of the categories in navigator -------------------------------------
 
-static const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
+const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
 {
     ScContentId::ROOT,            // ROOT (0) has to be at the front
     ScContentId::TABLE,
@@ -71,7 +71,7 @@ static const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
     ScContentId::DRAWING
 };
 
-static const OUStringLiteral aContentBmps[]=
+const OUStringLiteral aContentBmps[]=
 {
     RID_BMP_CONTENT_TABLE,
     RID_BMP_CONTENT_RANGENAME,

@@ -26,7 +26,7 @@ struct StatisticCalculation {
     const char* aResultRangeName;
 };
 
-static StatisticCalculation const lclBasicStatistics[] =
+StatisticCalculation const lclBasicStatistics[] =
 {
     { STR_ANOVA_LABEL_GROUPS, nullptr,             nullptr       },
     { STRID_CALC_COUNT,       "=COUNT(%RANGE%)",   "COUNT_RANGE" },
@@ -36,7 +36,7 @@ static StatisticCalculation const lclBasicStatistics[] =
     { nullptr,                nullptr,             nullptr       }
 };
 
-static const char* lclAnovaLabels[] =
+const char* lclAnovaLabels[] =
 {
     STR_ANOVA_LABEL_SOURCE_OF_VARIATION,
     STR_ANOVA_LABEL_SS,
@@ -48,7 +48,7 @@ static const char* lclAnovaLabels[] =
     nullptr
 };
 
-static const char strWildcardRange[] = "%RANGE%";
+const char strWildcardRange[] = "%RANGE%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,

@@ -1326,7 +1326,7 @@ struct ScIconSetBitmapMap {
     const OUStringLiteral* pBitmaps;
 };
 
-static const ScIconSetBitmapMap aBitmapMap[] = {
+const ScIconSetBitmapMap aBitmapMap[] = {
     { IconSet_3Arrows, a3Arrows },
     { IconSet_3ArrowsGray, a3ArrowsGray },
     { IconSet_3Flags, a3Flags },

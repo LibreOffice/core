@@ -575,9 +575,9 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
     return pContext;
 }
 
-static constexpr OUStringLiteral gsNumberFormat(SC_UNONAME_NUMFMT);
-static constexpr OUStringLiteral gsLocale(SC_LOCALE);
-static constexpr OUStringLiteral gsCellStyle(SC_UNONAME_CELLSTYL);
+constexpr OUStringLiteral gsNumberFormat(SC_UNONAME_NUMFMT);
+constexpr OUStringLiteral gsLocale(SC_LOCALE);
+constexpr OUStringLiteral gsCellStyle(SC_UNONAME_CELLSTYL);
 
 ScXMLImport::ScXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,

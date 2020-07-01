@@ -69,7 +69,7 @@ const sal_uInt16 EXC_PCITEM_DATA_INTEGER    = 0x0004;   /// Integer, double with
 const sal_uInt16 EXC_PCITEM_DATA_DATE       = 0x0008;   /// Date, time, date/time.
 
 /** Maps a bitfield consisting of EXC_PCITEM_DATA_* flags above to SXFIELD data type bitfield. */
-static const sal_uInt16 spnPCItemFlags[] =
+const sal_uInt16 spnPCItemFlags[] =
 {                               // STR DBL INT DAT
     EXC_SXFIELD_DATA_NONE,
     EXC_SXFIELD_DATA_STR,       //  x

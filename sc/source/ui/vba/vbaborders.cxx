@@ -40,15 +40,15 @@ typedef InheritedHelperInterfaceWeakImpl<excel::XBorder > ScVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Excel iterates over the
 // borders, the enumeration will match the order in this list
-static const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
+const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
 
-static const char sTableBorder[] = "TableBorder";
+const char sTableBorder[] = "TableBorder";
 
 //  Equiv widths in 1/100 mm
-const static sal_Int32 OOLineThin = 35;
-const static sal_Int32 OOLineMedium = 88;
-const static sal_Int32 OOLineThick = 141;
-const static sal_Int32 OOLineHairline = 2;
+const sal_Int32 OOLineThin = 35;
+const sal_Int32 OOLineMedium = 88;
+const sal_Int32 OOLineThick = 141;
+const sal_Int32 OOLineHairline = 2;
 
 namespace {
 

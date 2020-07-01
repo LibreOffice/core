@@ -38,7 +38,7 @@ using namespace ::ooo::vba;
 #define EXC_PALETTE_EGA_COLORS_DARK \
             Color(0x800000), Color(0x008000), Color(0x000080), Color(0x808000), Color(0x800080), Color(0x008080), Color(0xC0C0C0), Color(0x808080)
 
-static const Color spnDefColorTable8[] =
+const Color spnDefColorTable8[] =
 {
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /* 16 */    EXC_PALETTE_EGA_COLORS_DARK,

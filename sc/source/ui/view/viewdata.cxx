@@ -727,7 +727,7 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
-static const ScSheetLimits gaNoShellSheetLimits(MAXCOL, MAXROW);
+const ScSheetLimits gaNoShellSheetLimits(MAXCOL, MAXROW);
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPPTX(0.0),

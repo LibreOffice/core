@@ -108,7 +108,7 @@ bool lclFillListBox(weld::TreeView& rLBox, const vector<ScDPLabelData::Member>& 
 }
 
 /** This table represents the order of the strings in the resource string array. */
-static const PivotFunc spnFunctions[] =
+const PivotFunc spnFunctions[] =
 {
     PivotFunc::Sum,
     PivotFunc::Count,

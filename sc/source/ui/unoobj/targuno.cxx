@@ -199,7 +199,7 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aProperty
     //! exception?
 }
 
-static const OUStringLiteral aContentBmps[]=
+const OUStringLiteral aContentBmps[]=
 {
     RID_BMP_CONTENT_TABLE,
     RID_BMP_CONTENT_RANGENAME,

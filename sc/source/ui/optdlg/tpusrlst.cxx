@@ -41,7 +41,7 @@
 #define CR  u'\x000D'
 #define LF  u'\x000A'
 
-static const sal_Unicode cDelimiter = ',';
+const sal_Unicode cDelimiter = ',';
 
 // Benutzerdefinierte Listen:
 

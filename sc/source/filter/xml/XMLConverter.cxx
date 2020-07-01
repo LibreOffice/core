@@ -359,7 +359,7 @@ struct ScXMLConditionInfo
     sal_Int32                 mnIdentLength;
 };
 
-static const ScXMLConditionInfo spConditionInfos[] =
+const ScXMLConditionInfo spConditionInfos[] =
 {
     { XML_COND_AND,                     XML_COND_TYPE_KEYWORD,    sheet::ValidationType_ANY,      sheet::ConditionOperator_NONE,        RTL_CONSTASCII_STRINGPARAM( "and" ) },
     { XML_COND_CELLCONTENT,             XML_COND_TYPE_COMPARISON, sheet::ValidationType_ANY,      sheet::ConditionOperator_NONE,        RTL_CONSTASCII_STRINGPARAM( "cell-content" ) },

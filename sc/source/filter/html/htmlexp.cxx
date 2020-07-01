@@ -81,11 +81,11 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-const static char sMyBegComment[]   = "<!-- ";
-const static char sMyEndComment[]   = " -->";
-const static char sDisplay[]        = "display:";
-const static char sBorder[]         = "border:";
-const static char sBackground[]     = "background:";
+const char sMyBegComment[]   = "<!-- ";
+const char sMyEndComment[]   = " -->";
+const char sDisplay[]        = "display:";
+const char sBorder[]         = "border:";
+const char sBackground[]     = "background:";
 
 const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {

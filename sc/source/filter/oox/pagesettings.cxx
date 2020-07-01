@@ -446,7 +446,7 @@ private:
 namespace {
 
 // different names for bold font style (lowercase)
-static const char* const sppcBoldNames[] =
+const char* const sppcBoldNames[] =
 {
     "bold",
     "fett",             // German 'bold'
@@ -457,7 +457,7 @@ static const char* const sppcBoldNames[] =
 };
 
 // different names for italic font style (lowercase)
-static const char* const sppcItalicNames[] =
+const char* const sppcItalicNames[] =
 {
     "italic",
     "kursiv",           // German 'italic'
@@ -468,11 +468,11 @@ static const char* const sppcItalicNames[] =
 
 } // namespace
 
-static const OUStringLiteral gaPageNumberService( "com.sun.star.text.TextField.PageNumber" );
-static const OUStringLiteral gaPageCountService( "com.sun.star.text.TextField.PageCount" );
-static const OUStringLiteral gaSheetNameService( "com.sun.star.text.TextField.SheetName" );
-static const OUStringLiteral gaFileNameService( "com.sun.star.text.TextField.FileName" );
-static const OUStringLiteral gaDateTimeService( "com.sun.star.text.TextField.DateTime" );
+const OUStringLiteral gaPageNumberService( "com.sun.star.text.TextField.PageNumber" );
+const OUStringLiteral gaPageCountService( "com.sun.star.text.TextField.PageCount" );
+const OUStringLiteral gaSheetNameService( "com.sun.star.text.TextField.SheetName" );
+const OUStringLiteral gaFileNameService( "com.sun.star.text.TextField.FileName" );
+const OUStringLiteral gaDateTimeService( "com.sun.star.text.TextField.DateTime" );
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

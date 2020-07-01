@@ -279,7 +279,7 @@ static void lcl_SaveSeparators(
     aItem.PutProperties(aNames, aValues);
 }
 
-static constexpr OUStringLiteral gaTextSepList(SCSTR_TEXTSEP);
+constexpr OUStringLiteral gaTextSepList(SCSTR_TEXTSEP);
 
 ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatName,
                                    SvStream* pInStream, ScImportAsciiCall eCall)

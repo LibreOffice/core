@@ -77,7 +77,7 @@
 #include <memory>
 #include <limits>
 
-static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
+const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 
 ScCalcConfig *ScInterpreter::mpGlobalConfig = nullptr;
 
@@ -8961,7 +8961,7 @@ struct UBlockScript {
 
 }
 
-static const UBlockScript scriptList[] = {
+const UBlockScript scriptList[] = {
     {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},
     {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES},
     {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS,UBLOCK_CJK_RADICALS_SUPPLEMENT },

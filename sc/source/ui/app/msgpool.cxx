@@ -23,7 +23,7 @@
 #include <docpool.hxx>
 #include <msgpool.hxx>
 
-static SfxItemInfo const aMsgItemInfos[] =
+SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         true },   // SCITEM_STRING
     { 0,                         true },   // SCITEM_SEARCHDATA - stop using this!

@@ -24,7 +24,7 @@ struct StatisticCalculation {
     const char* aFormula;
 };
 
-static const StatisticCalculation lclCalcDefinitions[] =
+const StatisticCalculation lclCalcDefinitions[] =
 {
     { STRID_CALC_MEAN,           "=AVERAGE(%RANGE%)" },
     { STRID_CALC_STD_ERROR,      "=SQRT(VAR(%RANGE%)/COUNT(%RANGE%))"},

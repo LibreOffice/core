@@ -22,7 +22,7 @@
 
 #define SC_RANGECOLORS  8
 
-static const Color aColNames[SC_RANGECOLORS] =
+const Color aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
         COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
 

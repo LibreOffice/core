@@ -228,7 +228,7 @@ const sal_uInt8 A = BIFF_TOKCLASS_ARR;
 // Note: parameter types of all macro sheet functions (FuncFlags::MACROFUNC/FuncFlags::MACROCMD) untested!
 
 /** Functions new in BIFF2. */
-static const FunctionData saFuncTableBiff2[] =
+const FunctionData saFuncTableBiff2[] =
 {
     { "COUNT",                  "COUNT",                0,      0,      0,  MX, V, { RX }, FuncFlags::NONE },
     { "IF",                     "IF",                   1,      1,      2,  3,  R, { VO, RO }, FuncFlags::NONE },
@@ -382,7 +382,7 @@ static const FunctionData saFuncTableBiff2[] =
 };
 
 /** Functions new in BIFF3. */
-static const FunctionData saFuncTableBiff3[] =
+const FunctionData saFuncTableBiff3[] =
 {
     { "LINEST",                 "LINEST",               49,     49,     1,  4,  A, { RA, RA, VV }, FuncFlags::NONE },             // BIFF2: 1-2, BIFF3: 1-4
     { "TREND",                  "TREND",                50,     50,     1,  4,  A, { RA, RA, RA, VV }, FuncFlags::NONE },             // BIFF2: 1-3, BIFF3: 1-4
@@ -428,7 +428,7 @@ static const FunctionData saFuncTableBiff3[] =
 };
 
 /** Functions new in BIFF4. */
-static const FunctionData saFuncTableBiff4[] =
+const FunctionData saFuncTableBiff4[] =
 {
     { "FIXED",                  "FIXED",                14,     14,     1,  3,  V, { VR }, FuncFlags::NONE },       // BIFF2-3: 1-2, BIFF4: 1-3
     { "RANK",                   "RANK",                 216,    216,    2,  3,  V, { VR, RO, VR }, FuncFlags::NONE },
@@ -603,7 +603,7 @@ static const FunctionData saFuncTableBiff4[] =
 };
 
 /** Functions new in BIFF5/BIFF7. */
-static const FunctionData saFuncTableBiff5[] =
+const FunctionData saFuncTableBiff5[] =
 {
     { "WEEKDAY",                "WEEKDAY",              70,     70,     1,  2,  V, { VR }, FuncFlags::NONE },                              // BIFF2-4: 1,   BIFF5: 1-2
     { "HLOOKUP",                "HLOOKUP",              101,    101,    3,  4,  V, { VV, RO, RO, VV }, FuncFlags::NONE },                     // BIFF2-4: 3,   BIFF5: 3-4
@@ -637,7 +637,7 @@ static const FunctionData saFuncTableBiff5[] =
 };
 
 /** Functions new in BIFF8. */
-static const FunctionData saFuncTableBiff8[] =
+const FunctionData saFuncTableBiff8[] =
 {
     { "GETPIVOTDATA",           "GETPIVOTDATA",         358,    358,    2,  MX, V, { RR, RR, VR, VR }, FuncFlags::IMPORTONLY | FuncFlags::PARAMPAIRS },
     { "HYPERLINK",              "HYPERLINK",            359,    359,    1,  2,  V, { VV, VO }, FuncFlags::NONE },
@@ -664,7 +664,7 @@ static const FunctionData saFuncTableBiff8[] =
 };
 
 /** Functions new in OOXML. */
-static const FunctionData saFuncTableOox[] =
+const FunctionData saFuncTableOox[] =
 {
     { nullptr,                        "CUBEVALUE",            380,    NOID,   1,  MX, V, { VR, RX }, FuncFlags::NONE },
     { nullptr,                        "CUBEMEMBER",           381,    NOID,   2,  3,  V, { VR, RX, VR }, FuncFlags::NONE },
@@ -700,7 +700,7 @@ static const FunctionData saFuncTableOox[] =
     @See sc/source/filter/excel/xlformula.cxx saFuncTable_2010
  */
 /* FIXME: BIFF12 function identifiers available? Where to obtain? */
-static const FunctionData saFuncTable2010[] =
+const FunctionData saFuncTable2010[] =
 {
     { "COM.MICROSOFT.COVARIANCE.P",           "COVARIANCE.P",        NOID,    NOID,   2,  2,  V, { VA }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.COVARIANCE.S",           "COVARIANCE.S",        NOID,    NOID,   2,  2,  V, { VA }, FuncFlags::MACROCALL_NEW },
@@ -780,7 +780,7 @@ static const FunctionData saFuncTable2010[] =
     @See sc/source/filter/excel/xlformula.cxx saFuncTable_2013
  */
 /* FIXME: BIFF12 function identifiers available? Where to obtain? */
-static const FunctionData saFuncTable2013[] =
+const FunctionData saFuncTable2013[] =
 {
     { "ACOT",                   "ACOT",                 NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW },
     { "ACOTH",                  "ACOTH",                NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW },
@@ -848,7 +848,7 @@ static const FunctionData saFuncTable2013[] =
     @See sc/source/filter/excel/xlformula.cxx saFuncTable_2016
  */
 /* FIXME: BIFF12 function identifiers available? Where to obtain? */
-static const FunctionData saFuncTable2016[] =
+const FunctionData saFuncTable2016[] =
 {
     { "COM.MICROSOFT.FORECAST.ETS",             "FORECAST.ETS",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.FORECAST.ETS.CONFINT",     "FORECAST.ETS.CONFINT",     NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FuncFlags::MACROCALL_NEW },
@@ -865,14 +865,14 @@ static const FunctionData saFuncTable2016[] =
 
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
-static const FunctionData saFuncTableOdf[] =
+const FunctionData saFuncTableOdf[] =
 {
     { "CHISQDIST",              nullptr,                      NOID,   NOID,   2,  3,  V, { VR }, FuncFlags::MACROCALLODF },
     { "CHISQINV",               nullptr,                      NOID,   NOID,   2,  2,  V, { VR }, FuncFlags::MACROCALLODF }
 };
 
 /** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
-static const FunctionData saFuncTableOOoLO[] =
+const FunctionData saFuncTableOOoLO[] =
 {
     { "ORG.OPENOFFICE.WEEKS",       "ORG.OPENOFFICE.WEEKS",       NOID,   NOID,   3,  3,  V, { VR }, FuncFlags::MACROCALL_NEW | FuncFlags::EXTERNAL },
     { "ORG.OPENOFFICE.MONTHS",      "ORG.OPENOFFICE.MONTHS",      NOID,   NOID,   3,  3,  V, { VR }, FuncFlags::MACROCALL_NEW | FuncFlags::EXTERNAL },

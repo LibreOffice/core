@@ -34,9 +34,9 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlPattern;
 
-static const char BACKCOLOR[] = "CellBackColor";
-static const char PATTERN[] = "Pattern";
-static const char PATTERNCOLOR[] = "PatternColor";
+const char BACKCOLOR[] = "CellBackColor";
+const char PATTERN[] = "Pattern";
+const char PATTERNCOLOR[] = "PatternColor";
 
 static std::map< sal_Int32, sal_Int32 > aPatternMap {
     { xlPatternAutomatic, 0 },
