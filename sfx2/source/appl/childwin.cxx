@@ -39,7 +39,7 @@
 #include <workwin.hxx>
 #include <childwinimpl.hxx>
 
-static const sal_uInt16 nVersion = 2;
+const sal_uInt16 nVersion = 2;
 
 SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
         sal_uInt16 n )

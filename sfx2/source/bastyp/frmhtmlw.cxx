@@ -45,8 +45,8 @@
 
 using namespace ::com::sun::star;
 
-static char const sHTML_SC_yes[] =  "YES";
-static char const sHTML_SC_no[] =       "NO";
+char const sHTML_SC_yes[] =  "YES";
+char const sHTML_SC_no[] =       "NO";
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const char *pIndent,

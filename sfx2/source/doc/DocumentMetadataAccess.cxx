@@ -84,10 +84,10 @@ bool isValidNCName(OUString const & i_rIdref)
 }
 
 
-static const char s_content [] = "content.xml";
-static const char s_styles  [] = "styles.xml";
-static const char s_manifest[] = "manifest.rdf";
-static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
+const char s_content [] = "content.xml";
+const char s_styles  [] = "styles.xml";
+const char s_manifest[] = "manifest.rdf";
+const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 
 static bool isContentFile(OUString const & i_rPath)

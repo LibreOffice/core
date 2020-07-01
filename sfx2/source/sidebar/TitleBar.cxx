@@ -25,8 +25,8 @@
 
 namespace
 {
-    const static sal_Int32 gnLeftIconSpace (3);
-    const static sal_Int32 gnRightIconSpace (3);
+    const sal_Int32 gnLeftIconSpace (3);
+    const sal_Int32 gnRightIconSpace (3);
 }
 
 namespace sfx2::sidebar {

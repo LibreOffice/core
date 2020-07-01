@@ -410,7 +410,7 @@ const char s_nsODF[] = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
 const char s_nsODFMeta[] = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 // const char* s_nsOOo     = "http://openoffice.org/2004/office"; // not used (yet?)
 
-static const char s_meta    [] = "meta.xml";
+const char s_meta    [] = "meta.xml";
 
 bool isValidDate(const css::util::Date & i_rDate)
 {

@@ -37,8 +37,8 @@ using namespace css::uno;
 
 namespace sfx2::sidebar {
 
-static const sal_Int32 gaLeftIconPadding (5);
-static const sal_Int32 gaRightIconPadding (5);
+const sal_Int32 gaLeftIconPadding (5);
+const sal_Int32 gaRightIconPadding (5);
 
 PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
                              vcl::Window* pParentWindow,

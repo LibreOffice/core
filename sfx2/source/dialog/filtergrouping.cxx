@@ -398,7 +398,7 @@ namespace sfx2
 
     }
 
-    static const sal_Unicode s_cWildcardSeparator( ';' );
+    const sal_Unicode s_cWildcardSeparator( ';' );
 
     static OUString getSeparatorString()
     {

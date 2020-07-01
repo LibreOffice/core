@@ -41,7 +41,7 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 namespace {
-    static const sal_Int32 MinimalPanelHeight (25);
+    const sal_Int32 MinimalPanelHeight (25);
 
     enum LayoutMode
     {
