@@ -1236,7 +1236,7 @@ namespace emfio
         }
     }
 
-    static const long   aMaxWidth = 1024;
+    const long   aMaxWidth = 1024;
 
     bool WmfReader::ReadHeader()
     {
