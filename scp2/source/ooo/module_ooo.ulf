@@ -340,6 +340,12 @@ en-US = "Thai"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_TH]
 en-US = "Thai spelling dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_TR]
+en-US = "Turkish"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_TR]
+en-US = "Turkish spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_UK]
 en-US = "Ukrainian"
 
