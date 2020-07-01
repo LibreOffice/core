@@ -76,7 +76,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-static const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
+const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
 
 namespace framework
 {

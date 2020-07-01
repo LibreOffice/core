@@ -64,17 +64,17 @@ using namespace ::cppu;
 
 const sal_Int16 MAX_IMAGETYPE_VALUE       = css::ui::ImageType::SIZE_32;
 
-static const char   IMAGE_FOLDER[]        = "images";
-static const char   BITMAPS_FOLDER[]      = "Bitmaps";
+const char   IMAGE_FOLDER[]        = "images";
+const char   BITMAPS_FOLDER[]      = "Bitmaps";
 
-static const o3tl::enumarray<vcl::ImageType, const char*> IMAGELIST_XML_FILE =
+const o3tl::enumarray<vcl::ImageType, const char*> IMAGELIST_XML_FILE =
 {
     "sc_imagelist.xml",
     "lc_imagelist.xml",
     "xc_imagelist.xml"
 };
 
-static const o3tl::enumarray<vcl::ImageType, const char*> BITMAP_FILE_NAMES =
+const o3tl::enumarray<vcl::ImageType, const char*> BITMAP_FILE_NAMES =
 {
     "sc_userimages.png",
     "lc_userimages.png",

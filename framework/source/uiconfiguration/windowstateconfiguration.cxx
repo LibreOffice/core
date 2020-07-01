@@ -60,25 +60,25 @@ using namespace framework;
 namespace {
 
 // Zero based indexes, order must be the same as WindowStateMask && CONFIGURATION_PROPERTIES!
-static const sal_Int16 PROPERTY_LOCKED                  = 0;
-static const sal_Int16 PROPERTY_DOCKED                  = 1;
-static const sal_Int16 PROPERTY_VISIBLE                 = 2;
-static const sal_Int16 PROPERTY_CONTEXT                 = 3;
-static const sal_Int16 PROPERTY_HIDEFROMMENU            = 4;
-static const sal_Int16 PROPERTY_NOCLOSE                 = 5;
-static const sal_Int16 PROPERTY_SOFTCLOSE               = 6;
-static const sal_Int16 PROPERTY_CONTEXTACTIVE           = 7;
-static const sal_Int16 PROPERTY_DOCKINGAREA             = 8;
-static const sal_Int16 PROPERTY_POS                     = 9;
-static const sal_Int16 PROPERTY_SIZE                    = 10;
-static const sal_Int16 PROPERTY_UINAME                  = 11;
-static const sal_Int16 PROPERTY_INTERNALSTATE           = 12;
-static const sal_Int16 PROPERTY_STYLE                   = 13;
-static const sal_Int16 PROPERTY_DOCKPOS                 = 14;
-static const sal_Int16 PROPERTY_DOCKSIZE                = 15;
+const sal_Int16 PROPERTY_LOCKED                  = 0;
+const sal_Int16 PROPERTY_DOCKED                  = 1;
+const sal_Int16 PROPERTY_VISIBLE                 = 2;
+const sal_Int16 PROPERTY_CONTEXT                 = 3;
+const sal_Int16 PROPERTY_HIDEFROMMENU            = 4;
+const sal_Int16 PROPERTY_NOCLOSE                 = 5;
+const sal_Int16 PROPERTY_SOFTCLOSE               = 6;
+const sal_Int16 PROPERTY_CONTEXTACTIVE           = 7;
+const sal_Int16 PROPERTY_DOCKINGAREA             = 8;
+const sal_Int16 PROPERTY_POS                     = 9;
+const sal_Int16 PROPERTY_SIZE                    = 10;
+const sal_Int16 PROPERTY_UINAME                  = 11;
+const sal_Int16 PROPERTY_INTERNALSTATE           = 12;
+const sal_Int16 PROPERTY_STYLE                   = 13;
+const sal_Int16 PROPERTY_DOCKPOS                 = 14;
+const sal_Int16 PROPERTY_DOCKSIZE                = 15;
 
 // Order must be the same as WindowStateMask!!
-static const char* CONFIGURATION_PROPERTIES[]           =
+const char* CONFIGURATION_PROPERTIES[]           =
 {
     WINDOWSTATE_PROPERTY_LOCKED,
     WINDOWSTATE_PROPERTY_DOCKED,

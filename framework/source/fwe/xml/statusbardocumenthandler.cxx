@@ -85,12 +85,12 @@ namespace framework
 {
 
 // Property names of a menu/menu item ItemDescriptor
-static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
-static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
+const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
+const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
+const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 
 static void ExtractStatusbarItemParameters(
     const Sequence< PropertyValue >& rProp,

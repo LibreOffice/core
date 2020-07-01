@@ -995,78 +995,78 @@ private:
 };
 
 // recovery.xcu
-static const char CFG_PACKAGE_RECOVERY[] = "org.openoffice.Office.Recovery/";
+const char CFG_PACKAGE_RECOVERY[] = "org.openoffice.Office.Recovery/";
 
-static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
-static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
+const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
+const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
-static const char CFG_ENTRY_REALDEFAULTFILTER[] = "ooSetupFactoryActualFilter";
+const char CFG_ENTRY_REALDEFAULTFILTER[] = "ooSetupFactoryActualFilter";
 
-static const char CFG_ENTRY_PROP_TEMPURL[] = "TempURL";
-static const char CFG_ENTRY_PROP_ORIGINALURL[] = "OriginalURL";
-static const char CFG_ENTRY_PROP_TEMPLATEURL[] = "TemplateURL";
-static const char CFG_ENTRY_PROP_FACTORYURL[] = "FactoryURL";
-static const char CFG_ENTRY_PROP_MODULE[] = "Module";
-static const char CFG_ENTRY_PROP_DOCUMENTSTATE[] = "DocumentState";
-static const char CFG_ENTRY_PROP_FILTER[] = "Filter";
-static const char CFG_ENTRY_PROP_TITLE[] = "Title";
-static const char CFG_ENTRY_PROP_ID[] = "ID";
-static const char CFG_ENTRY_PROP_VIEWNAMES[] = "ViewNames";
+const char CFG_ENTRY_PROP_TEMPURL[] = "TempURL";
+const char CFG_ENTRY_PROP_ORIGINALURL[] = "OriginalURL";
+const char CFG_ENTRY_PROP_TEMPLATEURL[] = "TemplateURL";
+const char CFG_ENTRY_PROP_FACTORYURL[] = "FactoryURL";
+const char CFG_ENTRY_PROP_MODULE[] = "Module";
+const char CFG_ENTRY_PROP_DOCUMENTSTATE[] = "DocumentState";
+const char CFG_ENTRY_PROP_FILTER[] = "Filter";
+const char CFG_ENTRY_PROP_TITLE[] = "Title";
+const char CFG_ENTRY_PROP_ID[] = "ID";
+const char CFG_ENTRY_PROP_VIEWNAMES[] = "ViewNames";
 
-static const char FILTER_PROP_TYPE[] = "Type";
-static const char TYPE_PROP_EXTENSIONS[] = "Extensions";
+const char FILTER_PROP_TYPE[] = "Type";
+const char TYPE_PROP_EXTENSIONS[] = "Extensions";
 
 // setup.xcu
-static const char CFG_ENTRY_PROP_EMPTYDOCUMENTURL[] = "ooSetupFactoryEmptyDocumentURL";
-static const char CFG_ENTRY_PROP_FACTORYSERVICE[] = "ooSetupFactoryDocumentService";
+const char CFG_ENTRY_PROP_EMPTYDOCUMENTURL[] = "ooSetupFactoryEmptyDocumentURL";
+const char CFG_ENTRY_PROP_FACTORYSERVICE[] = "ooSetupFactoryDocumentService";
 
-static const char EVENT_ON_NEW[] = "OnNew";
-static const char EVENT_ON_LOAD[] = "OnLoad";
-static const char EVENT_ON_UNLOAD[] = "OnUnload";
-static const char EVENT_ON_MODIFYCHANGED[] = "OnModifyChanged";
-static const char EVENT_ON_SAVE[] = "OnSave";
-static const char EVENT_ON_SAVEAS[] = "OnSaveAs";
-static const char EVENT_ON_SAVETO[] = "OnCopyTo";
-static const char EVENT_ON_SAVEDONE[] = "OnSaveDone";
-static const char EVENT_ON_SAVEASDONE[] = "OnSaveAsDone";
-static const char EVENT_ON_SAVETODONE[] = "OnCopyToDone";
-static const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
-static const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
-static const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
+const char EVENT_ON_NEW[] = "OnNew";
+const char EVENT_ON_LOAD[] = "OnLoad";
+const char EVENT_ON_UNLOAD[] = "OnUnload";
+const char EVENT_ON_MODIFYCHANGED[] = "OnModifyChanged";
+const char EVENT_ON_SAVE[] = "OnSave";
+const char EVENT_ON_SAVEAS[] = "OnSaveAs";
+const char EVENT_ON_SAVETO[] = "OnCopyTo";
+const char EVENT_ON_SAVEDONE[] = "OnSaveDone";
+const char EVENT_ON_SAVEASDONE[] = "OnSaveAsDone";
+const char EVENT_ON_SAVETODONE[] = "OnCopyToDone";
+const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
+const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
+const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
 
-static const char RECOVERY_ITEM_BASE_IDENTIFIER[] = "recovery_item_";
+const char RECOVERY_ITEM_BASE_IDENTIFIER[] = "recovery_item_";
 
-static const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
+const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
 
-static const char CMD_DO_AUTO_SAVE[] = "/doAutoSave";    // force AutoSave ignoring the AutoSave timer
-static const char CMD_DO_PREPARE_EMERGENCY_SAVE[] = "/doPrepareEmergencySave";    // prepare the office for the following EmergencySave step (hide windows etcpp.)
-static const char CMD_DO_EMERGENCY_SAVE[] = "/doEmergencySave";    // do EmergencySave on crash
-static const char CMD_DO_RECOVERY[] = "/doAutoRecovery";    // recover all crashed documents
-static const char CMD_DO_ENTRY_BACKUP[] = "/doEntryBackup";    // try to store a temp or original file to a user defined location
-static const char CMD_DO_ENTRY_CLEANUP[] = "/doEntryCleanUp";    // remove the specified entry from the recovery cache
-static const char CMD_DO_SESSION_SAVE[] = "/doSessionSave";    // save all open documents if e.g. a window manager closes an user session
-static const char CMD_DO_SESSION_QUIET_QUIT[] = "/doSessionQuietQuit";    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
-static const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved user session from disc
-static const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
-static const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
+const char CMD_DO_AUTO_SAVE[] = "/doAutoSave";    // force AutoSave ignoring the AutoSave timer
+const char CMD_DO_PREPARE_EMERGENCY_SAVE[] = "/doPrepareEmergencySave";    // prepare the office for the following EmergencySave step (hide windows etcpp.)
+const char CMD_DO_EMERGENCY_SAVE[] = "/doEmergencySave";    // do EmergencySave on crash
+const char CMD_DO_RECOVERY[] = "/doAutoRecovery";    // recover all crashed documents
+const char CMD_DO_ENTRY_BACKUP[] = "/doEntryBackup";    // try to store a temp or original file to a user defined location
+const char CMD_DO_ENTRY_CLEANUP[] = "/doEntryCleanUp";    // remove the specified entry from the recovery cache
+const char CMD_DO_SESSION_SAVE[] = "/doSessionSave";    // save all open documents if e.g. a window manager closes an user session
+const char CMD_DO_SESSION_QUIET_QUIT[] = "/doSessionQuietQuit";    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
+const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved user session from disc
+const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
+const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
 
-static const char REFERRER_USER[] = "private:user";
+const char REFERRER_USER[] = "private:user";
 
-static const char PROP_DISPATCH_ASYNCHRON[] = "DispatchAsynchron";
-static const char PROP_PROGRESS[] = "StatusIndicator";
-static const char PROP_SAVEPATH[] = "SavePath";
-static const char PROP_ENTRY_ID[] = "EntryID";
-static const char PROP_AUTOSAVE_STATE[] = "AutoSaveState";
+const char PROP_DISPATCH_ASYNCHRON[] = "DispatchAsynchron";
+const char PROP_PROGRESS[] = "StatusIndicator";
+const char PROP_SAVEPATH[] = "SavePath";
+const char PROP_ENTRY_ID[] = "EntryID";
+const char PROP_AUTOSAVE_STATE[] = "AutoSaveState";
 
-static const char OPERATION_START[] = "start";
-static const char OPERATION_STOP[] = "stop";
-static const char OPERATION_UPDATE[] = "update";
+const char OPERATION_START[] = "start";
+const char OPERATION_STOP[] = "stop";
+const char OPERATION_UPDATE[] = "update";
 
-static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
-static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
-static const sal_Int32       RETRY_STORE_ON_FULL_DISC_FOREVER       = 300; // not forever ... but often enough .-)
-static const sal_Int32       RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL =   3; // in case FULL DISC does not seem the real problem
-static const sal_Int32       GIVE_UP_RETRY                          =   1; // in case FULL DISC does not seem the real problem
+const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
+const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
+const sal_Int32       RETRY_STORE_ON_FULL_DISC_FOREVER       = 300; // not forever ... but often enough .-)
+const sal_Int32       RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL =   3; // in case FULL DISC does not seem the real problem
+const sal_Int32       GIVE_UP_RETRY                          =   1; // in case FULL DISC does not seem the real problem
 
 #define SAVE_IN_PROGRESS            true
 #define SAVE_FINISHED               false

@@ -33,35 +33,35 @@
 namespace framework
 {
 
-static const char MERGE_TOOLBAR_URL[]             = "URL";
-static const char MERGE_TOOLBAR_TITLE[]           = "Title";
-static const char MERGE_TOOLBAR_IMAGEID[]         = "ImageIdentifier";
-static const char MERGE_TOOLBAR_CONTEXT[]         = "Context";
-static const char MERGE_TOOLBAR_TARGET[]          = "Target";
-static const char MERGE_TOOLBAR_CONTROLTYPE[]     = "ControlType";
-static const char MERGE_TOOLBAR_WIDTH[]           = "Width";
+const char MERGE_TOOLBAR_URL[]             = "URL";
+const char MERGE_TOOLBAR_TITLE[]           = "Title";
+const char MERGE_TOOLBAR_IMAGEID[]         = "ImageIdentifier";
+const char MERGE_TOOLBAR_CONTEXT[]         = "Context";
+const char MERGE_TOOLBAR_TARGET[]          = "Target";
+const char MERGE_TOOLBAR_CONTROLTYPE[]     = "ControlType";
+const char MERGE_TOOLBAR_WIDTH[]           = "Width";
 
-static const char MERGECOMMAND_ADDAFTER[]         = "AddAfter";
-static const char MERGECOMMAND_ADDBEFORE[]        = "AddBefore";
-static const char MERGECOMMAND_REPLACE[]          = "Replace";
-static const char MERGECOMMAND_REMOVE[]           = "Remove";
+const char MERGECOMMAND_ADDAFTER[]         = "AddAfter";
+const char MERGECOMMAND_ADDBEFORE[]        = "AddBefore";
+const char MERGECOMMAND_REPLACE[]          = "Replace";
+const char MERGECOMMAND_REMOVE[]           = "Remove";
 
-static const char MERGEFALLBACK_ADDLAST[]         = "AddLast";
-static const char MERGEFALLBACK_ADDFIRST[]        = "AddFirst";
-static const char MERGEFALLBACK_IGNORE[]          = "Ignore";
+const char MERGEFALLBACK_ADDLAST[]         = "AddLast";
+const char MERGEFALLBACK_ADDFIRST[]        = "AddFirst";
+const char MERGEFALLBACK_IGNORE[]          = "Ignore";
 
-static const char TOOLBARCONTROLLER_BUTTON[]      = "Button";
-static const char TOOLBARCONTROLLER_COMBOBOX[]    = "Combobox";
-static const char TOOLBARCONTROLLER_EDIT[]        = "Editfield";
-static const char TOOLBARCONTROLLER_SPINFIELD[]   = "Spinfield";
-static const char TOOLBARCONTROLLER_IMGBUTTON[]   = "ImageButton";
-static const char TOOLBARCONTROLLER_DROPDOWNBOX[] = "Dropdownbox";
-static const char TOOLBARCONTROLLER_DROPDOWNBTN[] = "DropdownButton";
-static const char TOOLBARCONTROLLER_TOGGLEDDBTN[] = "ToggleDropdownButton";
-static const char TOOLBARCONTROLLER_FIXEDIMAGE[]  = "FixedImage";
-static const char TOOLBARCONTROLLER_FIXEDTEXT[]   = "FixedText";
+const char TOOLBARCONTROLLER_BUTTON[]      = "Button";
+const char TOOLBARCONTROLLER_COMBOBOX[]    = "Combobox";
+const char TOOLBARCONTROLLER_EDIT[]        = "Editfield";
+const char TOOLBARCONTROLLER_SPINFIELD[]   = "Spinfield";
+const char TOOLBARCONTROLLER_IMGBUTTON[]   = "ImageButton";
+const char TOOLBARCONTROLLER_DROPDOWNBOX[] = "Dropdownbox";
+const char TOOLBARCONTROLLER_DROPDOWNBTN[] = "DropdownButton";
+const char TOOLBARCONTROLLER_TOGGLEDDBTN[] = "ToggleDropdownButton";
+const char TOOLBARCONTROLLER_FIXEDIMAGE[]  = "FixedImage";
+const char TOOLBARCONTROLLER_FIXEDTEXT[]   = "FixedText";
 
-static const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
+const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
 
 using namespace ::com::sun::star;
 

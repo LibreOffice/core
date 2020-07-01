@@ -25,10 +25,10 @@ namespace framework
 {
 namespace {
 
-static const char MERGECOMMAND_ADDAFTER[]       = "AddAfter";
-static const char MERGECOMMAND_ADDBEFORE[]      = "AddBefore";
-static const char MERGECOMMAND_REPLACE[]        = "Replace";
-static const char MERGECOMMAND_REMOVE[]         = "Remove";
+const char MERGECOMMAND_ADDAFTER[]       = "AddAfter";
+const char MERGECOMMAND_ADDBEFORE[]      = "AddBefore";
+const char MERGECOMMAND_REPLACE[]        = "Replace";
+const char MERGECOMMAND_REMOVE[]         = "Remove";
 
 void lcl_ConvertSequenceToValues(
     const Sequence< PropertyValue > &rSequence,

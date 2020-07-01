@@ -195,7 +195,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-static OUStringLiteral UIELEMENTTYPENAMES[] =
+OUStringLiteral UIELEMENTTYPENAMES[] =
 {
     "",  // Dummy value for unknown!
     UIELEMENTTYPE_MENUBAR_NAME,
@@ -207,8 +207,8 @@ static OUStringLiteral UIELEMENTTYPENAMES[] =
     UIELEMENTTYPE_TOOLPANEL_NAME
 };
 
-static const char       RESOURCEURL_PREFIX[] = "private:resource/";
-static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
+const char       RESOURCEURL_PREFIX[] = "private:resource/";
+const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 
 sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {

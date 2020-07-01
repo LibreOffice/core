@@ -137,7 +137,7 @@ void setZeroRectangle( ::tools::Rectangle& rRect )
 // ATTENTION!
 // This value is directly copied from the sfx2 project.
 // You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
-static const sal_Int32 DOCKWIN_ID_BASE = 9800;
+const sal_Int32 DOCKWIN_ID_BASE = 9800;
 
 bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt::Rectangle& _rPosSize, uno::Reference< awt::XWindow >& _xWindow)
 {
