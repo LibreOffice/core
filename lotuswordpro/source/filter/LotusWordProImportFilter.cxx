@@ -42,7 +42,7 @@ using com::sun::star::document::XImporter;
 using com::sun::star::xml::sax::XDocumentHandler;
 
 //                                 W     o     r     d     P     r     o
-static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
+const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
 
 bool LotusWordProImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
 {
