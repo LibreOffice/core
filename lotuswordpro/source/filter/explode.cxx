@@ -61,7 +61,7 @@
 #include <assert.h>
 #include <math.h>
 
-    const static char Tree1String[][32] = {
+    const char Tree1String[][32] = {
         "101",
         "11",
            "100",
@@ -80,7 +80,7 @@
         "0000000",
     };
 
-    const static char Tree2String[][32] = {
+    const char Tree2String[][32] = {
         "11"    ,
         "1011"  ,
            "1010"  ,
