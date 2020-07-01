@@ -31,6 +31,7 @@
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>

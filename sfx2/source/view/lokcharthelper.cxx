@@ -16,6 +16,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

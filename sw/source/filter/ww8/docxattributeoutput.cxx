@@ -94,6 +94,7 @@
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>

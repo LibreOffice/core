@@ -18,6 +18,7 @@
  */
 
 #include <svx/charthelper.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>

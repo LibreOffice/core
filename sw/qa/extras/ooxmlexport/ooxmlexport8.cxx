@@ -48,6 +48,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
+#include <tools/UnitConversion.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

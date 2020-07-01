@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_XMLMETAE_HXX
 
 #include <sal/config.h>
-#include <xmloff/dllapi.h>
 #include <sal/types.h>
 
 #include <cppuhelper/implbase.hxx>

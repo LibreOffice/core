@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_VALUESET_HXX
 #define INCLUDED_SVTOOLS_VALUESET_HXX
 
-#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <tools/wintypes.hxx>
 #include <vcl/customweld.hxx>

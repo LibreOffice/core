@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include <tools/UnitConversion.hxx>
+
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

@@ -15,6 +15,7 @@
 #include <fpdfview.h>
 #include <fpdf_edit.h>
 #include <fpdf_save.h>
+#include <tools/UnitConversion.hxx>
 #endif
 
 #include <vcl/graph.hxx>

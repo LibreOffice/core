@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
-#include <memory>
 #include <ostream>
 #include <type_traits>
 

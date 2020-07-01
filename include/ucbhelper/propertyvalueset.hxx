@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UCBHELPER_PROPERTYVALUESET_HXX
 #define INCLUDED_UCBHELPER_PROPERTYVALUESET_HXX
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/Property.hpp>

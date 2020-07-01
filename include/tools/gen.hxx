@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <ostream>
 #include <config_options.h>
-#include <cassert>
 
 class SvStream;
 namespace rtl

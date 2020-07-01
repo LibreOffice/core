@@ -49,6 +49,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <o3tl/cppunittraitshelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>

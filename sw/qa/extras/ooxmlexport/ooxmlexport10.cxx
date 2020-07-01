@@ -53,6 +53,7 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
+#include <tools/UnitConversion.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <svx/svxdllapi.h>
 
 namespace svx {
 

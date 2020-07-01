@@ -37,6 +37,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

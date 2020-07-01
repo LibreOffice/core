@@ -20,6 +20,7 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/linectrl.hxx>

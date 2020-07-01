@@ -40,6 +40,7 @@
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace css;
 

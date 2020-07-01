@@ -22,10 +22,8 @@
 #include <memory>
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>

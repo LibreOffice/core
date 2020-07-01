@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <svtools/popupwindowcontroller.hxx>
-#include <svx/svxdllapi.h>
 
 class ToolBox;
 class SvxPopupWindowListBox;

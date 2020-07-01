@@ -9,6 +9,7 @@
 #pragma once
 
 #include <memory>
+#include <libxml/tree.h>
 
 struct xmlDocDeleter
 {
