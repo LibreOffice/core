@@ -275,7 +275,7 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
         *pOk = *pChanged = true;
 }
 
-static struct {
+struct {
     const char *pName;
     XPropertyListType t;
 } const aURLPropertyNames[] = {

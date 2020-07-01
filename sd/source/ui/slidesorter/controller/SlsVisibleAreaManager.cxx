@@ -188,7 +188,7 @@ VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler()
 
 namespace {
 
-const static sal_Int32 gnMaxScrollDistance = 300;
+const sal_Int32 gnMaxScrollDistance = 300;
 
 VisibleAreaScroller::VisibleAreaScroller (
     SlideSorter& rSlideSorter,

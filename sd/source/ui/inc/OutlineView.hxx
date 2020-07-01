@@ -43,7 +43,7 @@ class DrawDocShell;
 class OutlineViewShell;
 class OutlineViewModelChangeGuard;
 
-static const int MAX_OUTLINERVIEWS = 4;
+const int MAX_OUTLINERVIEWS = 4;
 
 /**
  * Derivative of ::sd::View for the outline mode

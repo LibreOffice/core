@@ -22,8 +22,8 @@
 
 namespace sd::sidebar {
 
-static const int gnBorderWidth(3);
-static const int gnBorderHeight(3);
+const int gnBorderWidth(3);
+const int gnBorderHeight(3);
 
 PreviewValueSet::PreviewValueSet()
     : ValueSet(nullptr)

@@ -77,7 +77,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
     return *mpInstance;
 }
 
-static constexpr size_t gnMaxListSize(8);
+constexpr size_t gnMaxListSize(8);
 
 RecentlyUsedMasterPages::RecentlyUsedMasterPages()
     : maListeners(),

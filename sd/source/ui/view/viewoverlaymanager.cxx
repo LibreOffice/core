@@ -57,10 +57,10 @@ class ImageButtonHdl;
 
 }
 
-static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
+const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const char* gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-static const OUStringLiteral aSmallPlaceHolders[] =
+const OUStringLiteral aSmallPlaceHolders[] =
 {
     BMP_PLACEHOLDER_TABLE_SMALL,
     BMP_PLACEHOLDER_CHART_SMALL,
@@ -72,7 +72,7 @@ static const OUStringLiteral aSmallPlaceHolders[] =
     BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
 };
 
-static const OUStringLiteral aBigPlaceHolders[] =
+const OUStringLiteral aBigPlaceHolders[] =
 {
     BMP_PLACEHOLDER_TABLE_LARGE,
     BMP_PLACEHOLDER_CHART_LARGE,

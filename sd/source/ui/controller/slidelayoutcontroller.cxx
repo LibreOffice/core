@@ -84,13 +84,13 @@ struct snewfoil_value_info_layout
 
 }
 
-static const snewfoil_value_info_layout notes[] =
+const snewfoil_value_info_layout notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
     {nullptr, nullptr, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info_layout handout[] =
+const snewfoil_value_info_layout handout[] =
 {
     {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, AUTOLAYOUT_HANDOUT1},
     {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, AUTOLAYOUT_HANDOUT2},
@@ -101,7 +101,7 @@ static const snewfoil_value_info_layout handout[] =
     {nullptr, nullptr, AUTOLAYOUT_NONE},
 };
 
-static const snewfoil_value_info_layout standard[] =
+const snewfoil_value_info_layout standard[] =
 {
     {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 AUTOLAYOUT_NONE         },
     {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                AUTOLAYOUT_TITLE        },
@@ -118,7 +118,7 @@ static const snewfoil_value_info_layout standard[] =
     {nullptr, nullptr, AUTOLAYOUT_NONE}
 };
 
-static const snewfoil_value_info_layout v_standard[] =
+const snewfoil_value_info_layout v_standard[] =
 {
     // vertical
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT   },

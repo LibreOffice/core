@@ -109,7 +109,7 @@ namespace sd
 {
 /** Slots, which will be disabled in the slide show and are managed by Sfx.
     Have to be sorted in the order of the SIDs */
-static sal_uInt16 const pAllowed[] =
+sal_uInt16 const pAllowed[] =
 {
     SID_OPENDOC                             , //     5501   ///< that internally jumps work
     SID_JUMPTOMARK                          , //     5598
@@ -479,9 +479,9 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
         xShow->displaySlide( xSlide, xDrawPages, xAnimNode, comphelper::containerToSequence(aProperties) );
 }
 
-static constexpr OUStringLiteral gsOnClick( "OnClick" );
-static constexpr OUStringLiteral gsBookmark( "Bookmark" );
-static constexpr OUStringLiteral gsVerb( "Verb" );
+constexpr OUStringLiteral gsOnClick( "OnClick" );
+constexpr OUStringLiteral gsBookmark( "Bookmark" );
+constexpr OUStringLiteral gsVerb( "Verb" );
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : SlideshowImplBase( m_aMutex )
@@ -2303,7 +2303,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
 typedef sal_uInt16 (*FncGetChildWindowId)();
 
-static const FncGetChildWindowId aShowChildren[] =
+const FncGetChildWindowId aShowChildren[] =
 {
     &AnimationChildWindow::GetChildWindowId,
     &Svx3DChildWindow::GetChildWindowId,

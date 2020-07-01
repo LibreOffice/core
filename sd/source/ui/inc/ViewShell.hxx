@@ -58,16 +58,16 @@ class ZoomList;
 #undef OUTPUT_DRAWMODE_COLOR
 #undef OUTPUT_DRAWMODE_CONTRAST
 
-static const DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
-static const DrawModeFlags OUTPUT_DRAWMODE_GRAYSCALE
+const DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
+const DrawModeFlags OUTPUT_DRAWMODE_GRAYSCALE
         = DrawModeFlags::GrayLine | DrawModeFlags::GrayFill
         | DrawModeFlags::BlackText | DrawModeFlags::GrayBitmap
         | DrawModeFlags::GrayGradient;
-static const DrawModeFlags OUTPUT_DRAWMODE_BLACKWHITE
+const DrawModeFlags OUTPUT_DRAWMODE_BLACKWHITE
         = DrawModeFlags::BlackLine | DrawModeFlags::BlackText
         | DrawModeFlags::WhiteFill | DrawModeFlags::GrayBitmap
         | DrawModeFlags::WhiteGradient;
-static const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
+const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
         = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill
         | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
 

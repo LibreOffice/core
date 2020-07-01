@@ -66,14 +66,14 @@ using namespace ::com::sun::star::ui;
 
 namespace sd {
 
-static const sal_Int32 nPreviewColumns = 5;
-static const sal_Int32 nPreviewRows = 5;
-static const sal_Int32 nCellWidth = 12; // one pixel is shared with the next cell!
-static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
-static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
-static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
+const sal_Int32 nPreviewColumns = 5;
+const sal_Int32 nPreviewRows = 5;
+const sal_Int32 nCellWidth = 12; // one pixel is shared with the next cell!
+const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
+const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
+const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
-static const OUStringLiteral gPropNames[CB_COUNT] =
+const OUStringLiteral gPropNames[CB_COUNT] =
 {
     "UseFirstRowStyle",
     "UseLastRowStyle",

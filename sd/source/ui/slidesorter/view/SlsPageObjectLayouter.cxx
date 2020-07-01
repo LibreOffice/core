@@ -30,10 +30,10 @@
 namespace sd::slidesorter::view {
 
 namespace {
-const static sal_Int32 gnLeftPageNumberOffset = 2;
-const static sal_Int32 gnRightPageNumberOffset = 5;
-const static sal_Int32 gnOuterBorderWidth = 5;
-const static sal_Int32 gnInfoAreaMinWidth = 26;
+const sal_Int32 gnLeftPageNumberOffset = 2;
+const sal_Int32 gnRightPageNumberOffset = 5;
+const sal_Int32 gnOuterBorderWidth = 5;
+const sal_Int32 gnInfoAreaMinWidth = 26;
 }
 
 PageObjectLayouter::PageObjectLayouter (

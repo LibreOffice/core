@@ -157,7 +157,7 @@ struct PPTXLayoutInfo
 
 }
 
-static const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] =
+const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] =
 {
     { 20, "Blank Slide", "blank" },
     { 0, "Title Slide", "tx" },

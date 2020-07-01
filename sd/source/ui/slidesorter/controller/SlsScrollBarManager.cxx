@@ -34,8 +34,8 @@
 
 namespace sd::slidesorter::controller {
 
-static constexpr double gnHorizontalScrollFactor(0.15);
-static constexpr double gnVerticalScrollFactor(0.25);
+constexpr double gnHorizontalScrollFactor(0.15);
+constexpr double gnVerticalScrollFactor(0.25);
 
 ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),

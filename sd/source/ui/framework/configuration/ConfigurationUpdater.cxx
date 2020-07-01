@@ -38,11 +38,11 @@ using ::sd::framework::FrameworkHelper;
 using ::std::vector;
 
 namespace {
-static const sal_Int32 snShortTimeout (100);
-static const sal_Int32 snNormalTimeout (1000);
-static const sal_Int32 snLongTimeout (10000);
-static const sal_Int32 snShortTimeoutCountThreshold (1);
-static const sal_Int32 snNormalTimeoutCountThreshold (5);
+const sal_Int32 snShortTimeout (100);
+const sal_Int32 snNormalTimeout (1000);
+const sal_Int32 snLongTimeout (10000);
+const sal_Int32 snShortTimeoutCountThreshold (1);
+const sal_Int32 snNormalTimeoutCountThreshold (5);
 }
 
 namespace sd::framework {

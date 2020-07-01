@@ -33,7 +33,7 @@
 namespace sd::slidesorter::view {
 
 namespace {
-static const sal_Int32 gnMaximumLayerCount = 8;
+const sal_Int32 gnMaximumLayerCount = 8;
 
 class LayerInvalidator : public ILayerInvalidator
 {

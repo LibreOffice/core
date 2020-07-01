@@ -52,7 +52,7 @@ namespace sd
 {
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
-static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
+const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
 static OUString getInitials( const OUString& rName )
 {

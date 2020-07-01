@@ -42,8 +42,8 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-static const sal_uInt64 HIDE_MOUSE_TIMEOUT = 10000;
-static const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
+const sal_uInt64 HIDE_MOUSE_TIMEOUT = 10000;
+const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
 
 ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vcl::Window* pParent )
 : ::sd::Window( pParent )

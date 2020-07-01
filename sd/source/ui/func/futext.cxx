@@ -73,7 +73,7 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace sd {
 
-static const sal_uInt16 SidArray[] = {
+const sal_uInt16 SidArray[] = {
     SID_STYLE_FAMILY2,                //    5542
     SID_STYLE_FAMILY5,                //    5545
     SID_REDO,                         //    5700

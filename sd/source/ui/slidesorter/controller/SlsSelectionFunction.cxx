@@ -55,28 +55,28 @@
 #include <sdmod.hxx>
 
 namespace {
-static const sal_uInt32 SINGLE_CLICK             (0x00000001);
-static const sal_uInt32 DOUBLE_CLICK             (0x00000002);
-static const sal_uInt32 LEFT_BUTTON              (0x00000010);
-static const sal_uInt32 RIGHT_BUTTON             (0x00000020);
-static const sal_uInt32 MIDDLE_BUTTON            (0x00000040);
-static const sal_uInt32 BUTTON_DOWN              (0x00000100);
-static const sal_uInt32 BUTTON_UP                (0x00000200);
-static const sal_uInt32 MOUSE_MOTION             (0x00000400);
-static const sal_uInt32 MOUSE_DRAG               (0x00000800);
+const sal_uInt32 SINGLE_CLICK             (0x00000001);
+const sal_uInt32 DOUBLE_CLICK             (0x00000002);
+const sal_uInt32 LEFT_BUTTON              (0x00000010);
+const sal_uInt32 RIGHT_BUTTON             (0x00000020);
+const sal_uInt32 MIDDLE_BUTTON            (0x00000040);
+const sal_uInt32 BUTTON_DOWN              (0x00000100);
+const sal_uInt32 BUTTON_UP                (0x00000200);
+const sal_uInt32 MOUSE_MOTION             (0x00000400);
+const sal_uInt32 MOUSE_DRAG               (0x00000800);
 // The rest leaves the lower 16 bit untouched so that it can be used with
 // key codes.
-static const sal_uInt32 OVER_SELECTED_PAGE       (0x00010000);
-static const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00020000);
-static const sal_uInt32 SHIFT_MODIFIER           (0x00200000);
-static const sal_uInt32 CONTROL_MODIFIER         (0x00400000);
+const sal_uInt32 OVER_SELECTED_PAGE       (0x00010000);
+const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00020000);
+const sal_uInt32 SHIFT_MODIFIER           (0x00200000);
+const sal_uInt32 CONTROL_MODIFIER         (0x00400000);
 
 // Some absent events are defined so they can be expressed explicitly.
-static const sal_uInt32 NO_MODIFIER              (0x00000000);
-static const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
+const sal_uInt32 NO_MODIFIER              (0x00000000);
+const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
 
 // Masks
-static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIFIER);
+const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIFIER);
 
 } // end of anonymous namespace
 

@@ -1057,21 +1057,21 @@ uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  )
     return new SdUnoEventsAccess( this );
 }
 
-static const OUStringLiteral gaStrOnClick( "OnClick" );
-static const OUStringLiteral gaStrServiceName( "com.sun.star.documents.Events" );
-static const OUStringLiteral gaStrEventType( "EventType" );
-static const OUStringLiteral gaStrPresentation( "Presentation" );
-static const OUStringLiteral gaStrLibrary("Library");
-static const OUStringLiteral gaStrMacroName("MacroName");
-static const OUStringLiteral gaStrClickAction( "ClickAction" );
-static const OUStringLiteral gaStrBookmark( "Bookmark" );
-static const OUStringLiteral gaStrEffect( "Effect" );
-static const OUStringLiteral gaStrPlayFull( "PlayFull" );
-static const OUStringLiteral gaStrVerb( "Verb" );
-static const OUStringLiteral gaStrSoundURL( "SoundURL" );
-static const OUStringLiteral gaStrSpeed( "Speed" );
-static const OUStringLiteral gaStrStarBasic( "StarBasic" );
-static const OUStringLiteral gaStrScript( "Script" );
+const OUStringLiteral gaStrOnClick( "OnClick" );
+const OUStringLiteral gaStrServiceName( "com.sun.star.documents.Events" );
+const OUStringLiteral gaStrEventType( "EventType" );
+const OUStringLiteral gaStrPresentation( "Presentation" );
+const OUStringLiteral gaStrLibrary("Library");
+const OUStringLiteral gaStrMacroName("MacroName");
+const OUStringLiteral gaStrClickAction( "ClickAction" );
+const OUStringLiteral gaStrBookmark( "Bookmark" );
+const OUStringLiteral gaStrEffect( "Effect" );
+const OUStringLiteral gaStrPlayFull( "PlayFull" );
+const OUStringLiteral gaStrVerb( "Verb" );
+const OUStringLiteral gaStrSoundURL( "SoundURL" );
+const OUStringLiteral gaStrSpeed( "Speed" );
+const OUStringLiteral gaStrStarBasic( "StarBasic" );
+const OUStringLiteral gaStrScript( "Script" );
 
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
   : mpShape( pShape )

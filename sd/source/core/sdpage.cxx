@@ -888,11 +888,11 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 
 namespace {
 
-static const o3tl::enumarray<PageKind, char const *> PageKindVector = {
+const o3tl::enumarray<PageKind, char const *> PageKindVector = {
     "PageKind::Standard", "PageKind::Notes", "PageKind::Handout"
 };
 
-static const o3tl::enumarray<PresObjKind, const char*> PresObjKindVector = {
+const o3tl::enumarray<PresObjKind, const char*> PresObjKindVector = {
     "PRESOBJ_NONE", "PRESOBJ_TITLE", "PRESOBJ_OUTLINE",
     "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
     "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
