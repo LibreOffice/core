@@ -58,7 +58,7 @@ static const char *lcl_DATA_OTHERS = "localedata_others";
 
 #ifndef DISABLE_DYNLOADING
 
-static const struct {
+const struct {
     const char* pLocale;
     const char* pLib;
 } aLibTable[] = {
@@ -339,10 +339,10 @@ static const struct {
 
 #endif
 
-static const sal_Unicode cUnder = '_';
-static const sal_Unicode cHyphen = '-';
+const sal_Unicode cUnder = '_';
+const sal_Unicode cHyphen = '-';
 
-static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
+const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
 struct LocaleDataLookupTableItem
 {

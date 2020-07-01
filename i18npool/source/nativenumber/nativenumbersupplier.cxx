@@ -1023,11 +1023,11 @@ HebrewNumberChar const HebrewNumberCharArray[] = {
     { 0x05d0, 1 }
 };
 
-static const sal_Unicode thousand[] = {0x05d0, 0x05dc, 0x05e3, 0x0};
-static const sal_Unicode thousands[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x0};
-static const sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x05dd, 0x0};
-static const sal_Unicode geresh = 0x05f3;
-static const sal_Unicode gershayim = 0x05f4;
+const sal_Unicode thousand[] = {0x05d0, 0x05dc, 0x05e3, 0x0};
+const sal_Unicode thousands[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x0};
+const sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x05dd, 0x0};
+const sal_Unicode geresh = 0x05f3;
+const sal_Unicode gershayim = 0x05f4;
 
 static void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool useGeresh)
 {
@@ -1098,9 +1098,9 @@ OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGere
 // See UTN 41 for implementation information
 // http://www.unicode.org/notes/tn41/
 
-static const sal_Unicode cyrillicThousandsMark = 0x0482;
-static const sal_Unicode cyrillicTitlo = 0x0483;
-static const sal_Unicode cyrillicTen = 0x0456;
+const sal_Unicode cyrillicThousandsMark = 0x0482;
+const sal_Unicode cyrillicTitlo = 0x0483;
+const sal_Unicode cyrillicTen = 0x0456;
 
 namespace {
 
@@ -1220,7 +1220,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         return aNumberString;
 }
 
-static const char implementationName[] = "com.sun.star.i18n.NativeNumberSupplier";
+const char implementationName[] = "com.sun.star.i18n.NativeNumberSupplier";
 
 OUString SAL_CALL NativeNumberSupplierService::getImplementationName()
 {

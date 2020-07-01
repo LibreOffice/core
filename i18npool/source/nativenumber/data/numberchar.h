@@ -22,41 +22,41 @@
 
 namespace i18npool {
 
-static const sal_Int16 NumberChar_HalfWidth     = 0;
-static const sal_Int16 NumberChar_FullWidth     = 1;
-static const sal_Int16 NumberChar_Lower_zh  = 2;
-static const sal_Int16 NumberChar_Upper_zh  = 3;
-static const sal_Int16 NumberChar_Upper_zh_TW   = 4;
-static const sal_Int16 NumberChar_Modern_ja     = 5;
-static const sal_Int16 NumberChar_Traditional_ja= 6;
-static const sal_Int16 NumberChar_Lower_ko  = 7;
-static const sal_Int16 NumberChar_Upper_ko  = 8;
-static const sal_Int16 NumberChar_Hangul_ko     = 9;
-static const sal_Int16 NumberChar_Indic_ar  = 10;
-static const sal_Int16 NumberChar_EastIndic_ar  = 11;
-static const sal_Int16 NumberChar_hi        = 12;
-static const sal_Int16 NumberChar_th        = 13;
-static const sal_Int16 NumberChar_or        = 14;
-static const sal_Int16 NumberChar_mr        = 15;
-static const sal_Int16 NumberChar_bn        = 16;
-static const sal_Int16 NumberChar_pa        = 17;
-static const sal_Int16 NumberChar_gu        = 18;
-static const sal_Int16 NumberChar_ta        = 19;
-static const sal_Int16 NumberChar_te        = 20;
-static const sal_Int16 NumberChar_kn        = 21;
-static const sal_Int16 NumberChar_ml        = 22;
-static const sal_Int16 NumberChar_lo        = 23;
-static const sal_Int16 NumberChar_bo        = 24;
-static const sal_Int16 NumberChar_my        = 25;
-static const sal_Int16 NumberChar_km        = 26;
-static const sal_Int16 NumberChar_mn        = 27;
-static const sal_Int16 NumberChar_he        = 28;
-static const sal_Int16 NumberChar_ne        = 29;
-static const sal_Int16 NumberChar_dz        = 30;
-static const sal_Int16 NumberChar_cu        = 31;
-static const sal_Int16 NumberChar_Count     = 32;
+const sal_Int16 NumberChar_HalfWidth     = 0;
+const sal_Int16 NumberChar_FullWidth     = 1;
+const sal_Int16 NumberChar_Lower_zh  = 2;
+const sal_Int16 NumberChar_Upper_zh  = 3;
+const sal_Int16 NumberChar_Upper_zh_TW   = 4;
+const sal_Int16 NumberChar_Modern_ja     = 5;
+const sal_Int16 NumberChar_Traditional_ja= 6;
+const sal_Int16 NumberChar_Lower_ko  = 7;
+const sal_Int16 NumberChar_Upper_ko  = 8;
+const sal_Int16 NumberChar_Hangul_ko     = 9;
+const sal_Int16 NumberChar_Indic_ar  = 10;
+const sal_Int16 NumberChar_EastIndic_ar  = 11;
+const sal_Int16 NumberChar_hi        = 12;
+const sal_Int16 NumberChar_th        = 13;
+const sal_Int16 NumberChar_or        = 14;
+const sal_Int16 NumberChar_mr        = 15;
+const sal_Int16 NumberChar_bn        = 16;
+const sal_Int16 NumberChar_pa        = 17;
+const sal_Int16 NumberChar_gu        = 18;
+const sal_Int16 NumberChar_ta        = 19;
+const sal_Int16 NumberChar_te        = 20;
+const sal_Int16 NumberChar_kn        = 21;
+const sal_Int16 NumberChar_ml        = 22;
+const sal_Int16 NumberChar_lo        = 23;
+const sal_Int16 NumberChar_bo        = 24;
+const sal_Int16 NumberChar_my        = 25;
+const sal_Int16 NumberChar_km        = 26;
+const sal_Int16 NumberChar_mn        = 27;
+const sal_Int16 NumberChar_he        = 28;
+const sal_Int16 NumberChar_ne        = 29;
+const sal_Int16 NumberChar_dz        = 30;
+const sal_Int16 NumberChar_cu        = 31;
+const sal_Int16 NumberChar_Count     = 32;
 
-static const sal_Unicode NumberChar[][10] = {
+const sal_Unicode NumberChar[][10] = {
 //  0   1   2   3   4   5   6   7   8   9
     { 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039 }, // Half Width (Ascii)
     { 0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19 }, // Full Width
@@ -127,7 +127,7 @@ static sal_Unicode DecimalChar[] = {
     0x0000, // Church Slavic
 };
 
-static const sal_Unicode MinusChar[] = {
+const sal_Unicode MinusChar[] = {
     0x002D, // Half Width (Ascii)
     0xFF0D, // Full Width
     0xFF0D, // Chinese Lower
@@ -218,10 +218,10 @@ const sal_Int16 Multiplier_Count    = 9;
 
 const sal_Int16 ExponentCount_6_CJK     = 6;
 
-static const sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
+const sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
         12,     8,  4,  3,  2,  1
 };
-static const sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
+const sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
     {0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
     {0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
     {0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower
@@ -235,11 +235,11 @@ static const sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
 
 const sal_Int16 ExponentCount_2_CJK     = 2;
 
-static const sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
+const sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
         8,  4,
 };
 
-static const sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
+const sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
     {0x4EBF, 0x4E07}, // S. Chinese Lower
     {0x4EBF, 0x4E07}, // S. Chinese Upper
     {0x5104, 0x842C}, // T. Chinese Lower
@@ -253,10 +253,10 @@ static const sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
 
 const sal_Int16 ExponentCount_7_CJK     = 7;
 
-static const sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
+const sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
         16, 12,     8,  4,  3,  2,  1
 };
-static const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
+const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
     {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
     {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
     {0x4EAC, 0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower

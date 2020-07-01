@@ -131,7 +131,7 @@ LineBreakResults SAL_CALL BreakIterator_th::getLineBreak(
 #define ST_NXT  2   // display the following character in the next cell
 #define ST_NDP  3   // non-display
 
-static const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
+const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
     //  C  N  C  L  F  F  F  B  B  B  T  A  A  A  A  A  A
     //  T  O  O  V  V  V  V  V  V  D  O  D  D  D  V  V  V
     //  R  N  N     1  2  3  1  2     N  1  2  3  1  2  3

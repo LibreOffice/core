@@ -26,7 +26,7 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-static const sal_Unicode table_normalwidth[] = {
+const sal_Unicode table_normalwidth[] = {
     //  0x0000,   // 0x3040
     0x3041,       // 0x3041 HIRAGANA LETTER SMALL A
     0x3042,       // 0x3042 HIRAGANA LETTER A
@@ -221,7 +221,7 @@ static const sal_Unicode table_normalwidth[] = {
     //  0x0000    // 0x30ff
 };
 
-static const sal_Unicode table_halfwidth[] = {
+const sal_Unicode table_halfwidth[] = {
     //  0x0000,   // 0xff61 HALFWIDTH IDEOGRAPHIC FULL STOP
     //  0x0000,   // 0xff62 HALFWIDTH LEFT CORNER BRACKET
     //  0x0000,   // 0xff63 HALFWIDTH RIGHT CORNER BRACKET

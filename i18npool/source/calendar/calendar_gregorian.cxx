@@ -209,7 +209,7 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const css::lang::Loc
     Calendar_gregorian::loadCalendar("hanja", rLocale);
 }
 
-static const Era gengou_eraArray[] = {
+const Era gengou_eraArray[] = {
     {1868,  1,  1, 0},  // Meiji
     {1912,  7, 30, 0},  // Taisho
     {1926, 12, 25, 0},  // Showa
@@ -222,7 +222,7 @@ Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
     cCalendar = "com.sun.star.i18n.Calendar_gengou";
 }
 
-static const Era ROC_eraArray[] = {
+const Era ROC_eraArray[] = {
     {1912, 1, 1, kDisplayEraForcedLongYear},    // #i116701#
     {0, 0, 0, 0}
 };
@@ -235,7 +235,7 @@ Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
 * The start year of the Korean traditional calendar (Dan-gi) is the inaugural
 * year of Dan-gun (BC 2333).
 */
-static const Era dangi_eraArray[] = {
+const Era dangi_eraArray[] = {
     {-2332, 1, 1, 0},
     {0, 0, 0, 0}
 };
@@ -244,7 +244,7 @@ Calendar_dangi::Calendar_dangi() : Calendar_gregorian(dangi_eraArray)
     cCalendar = "com.sun.star.i18n.Calendar_dangi";
 }
 
-static const Era buddhist_eraArray[] = {
+const Era buddhist_eraArray[] = {
     {-542, 1, 1, 0},
     {0, 0, 0, 0}
 };

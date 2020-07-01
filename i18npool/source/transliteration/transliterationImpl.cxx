@@ -59,7 +59,7 @@ struct TMList {
 
 }
 
-static TMList const TMlist[] = {                //      Modules      ModulesNew
+TMList const TMlist[] = {                //      Modules      ModulesNew
   TmItem1 (IGNORE_CASE),                        // 0. (1<<8        256) (7)
   TmItem1 (IGNORE_WIDTH),                       // 1. (1<<9        512) (8)
   TmItem1 (IGNORE_KANA),                        // 2. (1<<10      1024) (9)

@@ -24,7 +24,7 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-static const transliteration_Ignore::Mapping TiJi[] = {
+const transliteration_Ignore::Mapping TiJi[] = {
     // TU + I --> TI
     { 0x30C4, 0x30A3, 0x30C1, true },
     // TE + I --> TI
