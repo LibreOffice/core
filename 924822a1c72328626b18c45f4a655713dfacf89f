@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c66f1f7e_ba5e80d6",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-01T12:52:21Z",
+      "side": 0,
+      "message": "This was just added by Caolan to avoid crashing. I\u0027m sure m_nCell.back() would also have crashed, so this existing variable seemed to be appropriate as a replacement.",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 28
+      },
+      "revId": "924822a1c72328626b18c45f4a655713dfacf89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "843a8b82_3fe9a424",
+        "filename": "writerfilter/source/dmapper/TableData.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-01T12:52:21Z",
+      "side": 1,
+      "message": "Done. So in order to reduce code churn, it would be good to evaluate which way to go before committing to master. But I have questions about what the good way to generate getGridSpans() is. Use a vector returned with RVO, or a unique_ptr?",
+      "range": {
+        "startLine": 121,
+        "startChar": 38,
+        "endLine": 121,
+        "endChar": 70
+      },
+      "revId": "c60e1e521bd5e31bc8ab2dc15580b39749b66a42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
