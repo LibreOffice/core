@@ -24,7 +24,6 @@
 #include <vcl/window.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/settings.hxx>
 
 #include <bitmaps.hlst>

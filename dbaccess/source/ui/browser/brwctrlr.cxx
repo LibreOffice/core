@@ -1457,11 +1457,11 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_CUT:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-                if (xCurrentController.is() && nullptr != dynamic_cast< const EditCellController* >(xCurrentController.get()))
+                if (const EditCellController* pController = dynamic_cast<const EditCellController*>(xCurrentController.get()))
                 {
-                    Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
-                    bool bHasLen = (rEdit.GetSelection().Len() != 0);
-                    bool bIsReadOnly = rEdit.IsReadOnly();
+                    const IEditImplementation* pEditImplementation = pController->GetEditImplementation();
+                    bool bHasLen = pEditImplementation->GetSelection().Len() != 0;
+                    bool bIsReadOnly = pEditImplementation->IsReadOnly();
                     switch (nId)
                     {
                         case ID_BROWSER_CUT:    aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen && !bIsReadOnly; break;
@@ -1927,22 +1927,23 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
         case ID_BROWSER_PASTE:
         {
             CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-            if (!xCurrentController.is())
-                // should be intercepted by GetState. Normally.
-                // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
-                // enabled. This would be really deadly herein if the current cell has no controller ...
-                return;
-
-            Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
-            switch (nId)
+            if (EditCellController* pController = dynamic_cast<EditCellController*>(xCurrentController.get()))
             {
-                case ID_BROWSER_CUT :       rEdit.Cut();    break;
-                case SID_COPY   :           rEdit.Copy();   break;
-                case ID_BROWSER_PASTE   :   rEdit.Paste();  break;
-            }
-            if (ID_BROWSER_CUT == nId || ID_BROWSER_PASTE == nId)
-            {
-                rEdit.Modify();
+                IEditImplementation* pEditImplementation = pController->GetEditImplementation();
+                switch (nId)
+                {
+                    case ID_BROWSER_CUT:
+                        pEditImplementation->Cut();
+                        break;
+                    case SID_COPY:
+                        pEditImplementation->Copy();
+                        break;
+                    case ID_BROWSER_PASTE:
+                        pEditImplementation->Paste();
+                        break;
+                }
+                if (ID_BROWSER_CUT == nId || ID_BROWSER_PASTE == nId)
+                    pController->Modify();
             }
         }
         break;

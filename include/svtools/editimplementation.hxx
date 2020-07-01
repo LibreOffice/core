@@ -120,4 +120,22 @@ void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<LinkParamNone*,
     m_aModifyHdl = _rLink;
 }
 
+template <class EDIT>
+void GenericEditImplementation< EDIT >::Cut()
+{
+    m_rEdit.Cut();
+}
+
+template <class EDIT>
+void GenericEditImplementation< EDIT >::Copy()
+{
+    m_rEdit.Copy();
+}
+
+template <class EDIT>
+void GenericEditImplementation< EDIT >::Paste()
+{
+    m_rEdit.Paste();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

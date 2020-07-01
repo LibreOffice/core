@@ -346,26 +346,56 @@ namespace svt
         m_aModifyHdl.Call(nullptr);
     }
 
-    EditControl::EditControl(vcl::Window* pParent)
+    EditControlBase::EditControlBase(vcl::Window* pParent)
         : InterimItemWindow(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
-        m_xWidget->set_width_chars(1); // so a smaller than default width can be used
-        m_xWidget->connect_key_press(LINK(this, EditControl, KeyInputHdl));
     }
 
-    IMPL_LINK(EditControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    void EditControlBase::init(weld::Entry* pEntry)
+    {
+        m_pEntry = pEntry;
+        m_pEntry->set_width_chars(1); // so a smaller than default width can be used
+        m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
+    }
+
+    IMPL_LINK(EditControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     {
         return ChildKeyInput(rKEvt);
+    }
+
+    void EditControlBase::dispose()
+    {
+        m_pEntry = nullptr;
+        InterimItemWindow::dispose();
+    }
+
+    EditControl::EditControl(vcl::Window* pParent)
+        : EditControlBase(pParent)
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
+    {
+        init(m_xWidget.get());
     }
 
     void EditControl::dispose()
     {
         m_xWidget.reset();
-        InterimItemWindow::dispose();
+        EditControlBase::dispose();
     }
 
-    EditCellController::EditCellController(EditControl* pEdit)
+    FormattedControl::FormattedControl(vcl::Window* pParent)
+        : EditControlBase(pParent)
+        , m_xFormattedEntry(new weld::FormattedEntry(m_xBuilder->weld_entry("entry")))
+    {
+        init(m_xFormattedEntry->get_widget());
+    }
+
+    void FormattedControl::dispose()
+    {
+        m_xFormattedEntry.reset();
+        EditControlBase::dispose();
+    }
+
+    EditCellController::EditCellController(EditControlBase* pEdit)
         : CellController(pEdit)
         , m_pEditImplementation(new EntryImplementation(*pEdit))
         , m_bOwnImplementation(true)
@@ -475,29 +505,22 @@ namespace svt
     }
 
     //= FormattedFieldCellController
-
-
-    FormattedFieldCellController::FormattedFieldCellController( FormattedField* _pFormatted )
-        :EditCellController( _pFormatted )
+    FormattedFieldCellController::FormattedFieldCellController( FormattedControl* _pFormatted )
+        : EditCellController(_pFormatted)
     {
     }
-
 
     void FormattedFieldCellController::CommitModifications()
     {
-        static_cast< FormattedField& >( GetWindow() ).Commit();
+        static_cast<FormattedControl&>(GetWindow()).get_formatter().Commit();
     }
 
-
     //= MultiLineTextCell
-
-
     void MultiLineTextCell::Modify()
     {
         GetTextEngine()->SetModified( true );
         VclMultiLineEdit::Modify();
     }
-
 
     bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
     {

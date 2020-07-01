@@ -275,7 +275,7 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
 {
     OUString sTablename = m_aTableNames[nRow];
     // special case for tablename
-    if(nColumnId == COL_TABLE_NAME)
+    if (nColumnId == COL_TABLE_NAME)
         m_pEdit->get_widget().set_text(sTablename);
     else
     {

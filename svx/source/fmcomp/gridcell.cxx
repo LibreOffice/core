@@ -1041,11 +1041,11 @@ void DbLimitedLengthField::implAdjustGenericFieldSetting( const Reference< XProp
     }
 }
 
-void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
+void DbLimitedLengthField::implSetEffectiveMaxTextLen(sal_Int32 nMaxLen)
 {
-    dynamic_cast<Edit&>(*m_pWindow).SetMaxTextLen(_nMaxLen);
+    dynamic_cast<EditControlBase&>(*m_pWindow).get_widget().set_max_length(nMaxLen);
     if (m_pPainter)
-        dynamic_cast<Edit&>(*m_pPainter).SetMaxTextLen(_nMaxLen);
+        dynamic_cast<EditControlBase&>(*m_pPainter).get_widget().set_max_length(nMaxLen);
 }
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
@@ -1239,11 +1239,9 @@ DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     doPropertyListening( FM_PROP_FORMATKEY );
 }
 
-
 DbFormattedField::~DbFormattedField()
 {
 }
-
 
 void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
@@ -1251,34 +1249,38 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
 
     Reference< css::beans::XPropertySet >  xUnoModel = m_rColumn.getModel();
 
+    auto xEditControl = VclPtr<FormattedControl>::Create(&rParent);
+    auto xEditPainter = VclPtr<FormattedControl>::Create(&rParent);
+
+    weld::FormattedEntry& rControlFormatter = xEditControl->get_formatter();
+    weld::FormattedEntry& rPainterFormatter = xEditPainter->get_formatter();
+
+    m_pWindow = xEditControl.get();
+    m_pPainter = xEditPainter.get();
+
     switch (nAlignment)
     {
-        case css::awt::TextAlign::RIGHT:
-            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
-            m_pPainter = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
+        case awt::TextAlign::RIGHT:
+            xEditControl->get_widget().set_alignment(TxtAlign::Right);
+            xEditPainter->get_widget().set_alignment(TxtAlign::Right);
             break;
-
-        case css::awt::TextAlign::CENTER:
-            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
-            m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
+        case awt::TextAlign::CENTER:
+            xEditControl->get_widget().set_alignment(TxtAlign::Center);
+            xEditPainter->get_widget().set_alignment(TxtAlign::Center);
             break;
         default:
-            m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
-            m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
-
+        {
             // Everything just so that the selection goes from right to left when getting focus
-            AllSettings aSettings = m_pWindow->GetSettings();
-            StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            aStyleSettings.SetSelectionOptions(
-                aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
-            aSettings.SetStyleSettings(aStyleSettings);
-            m_pWindow->SetSettings(aSettings);
+            SelectionOptions eOptions = rControlFormatter.GetEntrySelectionOptions();
+            rControlFormatter.SetEntrySelectionOptions(eOptions | SelectionOptions::ShowFirst);
+            break;
+        }
     }
 
     implAdjustGenericFieldSetting( xUnoModel );
 
-    static_cast< FormattedField* >( m_pWindow.get() )->SetStrictFormat( false );
-    static_cast< FormattedField* >( m_pPainter.get() )->SetStrictFormat( false );
+    rControlFormatter.SetStrictFormat(false);
+    rPainterFormatter.SetStrictFormat(false);
         // if one allows any formatting, one cannot make an entry check anyway
         // (the FormattedField does not support that anyway, only derived classes)
 
@@ -1344,21 +1346,21 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     // a standard formatter ...
     if (pFormatterUsed == nullptr)
     {
-        pFormatterUsed = static_cast<FormattedField*>(m_pWindow.get())->StandardFormatter();
+        pFormatterUsed = rControlFormatter.StandardFormatter();
         DBG_ASSERT(pFormatterUsed != nullptr, "DbFormattedField::Init : no standard formatter given by the numeric field !");
     }
     // ... and a standard key
     if (nFormatKey == -1)
         nFormatKey = 0;
 
-    static_cast<FormattedField*>(m_pWindow.get())->SetFormatter(pFormatterUsed);
-    static_cast<FormattedField*>(m_pPainter.get())->SetFormatter(pFormatterUsed);
+    rControlFormatter.SetFormatter(pFormatterUsed);
+    rPainterFormatter.SetFormatter(pFormatterUsed);
 
-    static_cast<FormattedField*>(m_pWindow.get())->SetFormatKey(nFormatKey);
-    static_cast<FormattedField*>(m_pPainter.get())->SetFormatKey(nFormatKey);
+    rControlFormatter.SetFormatKey(nFormatKey);
+    rPainterFormatter.SetFormatKey(nFormatKey);
 
-    static_cast<FormattedField*>(m_pWindow.get())->TreatAsNumber(m_rColumn.IsNumeric());
-    static_cast<FormattedField*>(m_pPainter.get())->TreatAsNumber(m_rColumn.IsNumeric());
+    rControlFormatter.TreatAsNumber(m_rColumn.IsNumeric());
+    rPainterFormatter.TreatAsNumber(m_rColumn.IsNumeric());
 
     // min and max values
     if (m_rColumn.IsNumeric())
@@ -1371,15 +1373,15 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             {
                 DBG_ASSERT(aMin.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid min value !");
                 double dMin = ::comphelper::getDouble(aMin);
-                static_cast<FormattedField*>(m_pWindow.get())->SetMinValue(dMin);
-                static_cast<FormattedField*>(m_pPainter.get())->SetMinValue(dMin);
+                rControlFormatter.SetMinValue(dMin);
+                rPainterFormatter.SetMinValue(dMin);
                 bClearMin = false;
             }
         }
         if (bClearMin)
         {
-            static_cast<FormattedField*>(m_pWindow.get())->ClearMinValue();
-            static_cast<FormattedField*>(m_pPainter.get())->ClearMinValue();
+            rControlFormatter.ClearMinValue();
+            rPainterFormatter.ClearMinValue();
         }
         bool bClearMax = true;
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MAX, xUnoModel))
@@ -1389,15 +1391,15 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             {
                 DBG_ASSERT(aMax.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
                 double dMax = ::comphelper::getDouble(aMax);
-                static_cast<FormattedField*>(m_pWindow.get())->SetMaxValue(dMax);
-                static_cast<FormattedField*>(m_pPainter.get())->SetMaxValue(dMax);
+                rControlFormatter.SetMaxValue(dMax);
+                rPainterFormatter.SetMaxValue(dMax);
                 bClearMax = false;
             }
         }
         if (bClearMax)
         {
-            static_cast<FormattedField*>(m_pWindow.get())->ClearMaxValue();
-            static_cast<FormattedField*>(m_pPainter.get())->ClearMaxValue();
+            rControlFormatter.ClearMaxValue();
+            rPainterFormatter.ClearMaxValue();
         }
     }
 
@@ -1410,16 +1412,16 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             case TypeClass_DOUBLE:
                 if (m_rColumn.IsNumeric())
                 {
-                    static_cast<FormattedField*>(m_pWindow.get())->SetDefaultValue(::comphelper::getDouble(aDefault));
-                    static_cast<FormattedField*>(m_pPainter.get())->SetDefaultValue(::comphelper::getDouble(aDefault));
+                    rControlFormatter.SetDefaultValue(::comphelper::getDouble(aDefault));
+                    rPainterFormatter.SetDefaultValue(::comphelper::getDouble(aDefault));
                 }
                 else
                 {
                     OUString sConverted;
                     Color* pDummy;
                     pFormatterUsed->GetOutputString(::comphelper::getDouble(aDefault), 0, sConverted, &pDummy);
-                    static_cast<FormattedField*>(m_pWindow.get())->SetDefaultText(sConverted);
-                    static_cast<FormattedField*>(m_pPainter.get())->SetDefaultText(sConverted);
+                    rControlFormatter.SetDefaultText(sConverted);
+                    rPainterFormatter.SetDefaultText(sConverted);
                 }
                 break;
             case TypeClass_STRING:
@@ -1431,14 +1433,14 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
                     sal_uInt32 nTestFormat(0);
                     if (pFormatterUsed->IsNumberFormat(sDefault, nTestFormat, dVal))
                     {
-                        static_cast<FormattedField*>(m_pWindow.get())->SetDefaultValue(dVal);
-                        static_cast<FormattedField*>(m_pPainter.get())->SetDefaultValue(dVal);
+                        rControlFormatter.SetDefaultValue(dVal);
+                        rPainterFormatter.SetDefaultValue(dVal);
                     }
                 }
                 else
                 {
-                    static_cast<FormattedField*>(m_pWindow.get())->SetDefaultText(sDefault);
-                    static_cast<FormattedField*>(m_pPainter.get())->SetDefaultText(sDefault);
+                    rControlFormatter.SetDefaultText(sDefault);
+                    rPainterFormatter.SetDefaultText(sDefault);
                 }
             }
             break;
@@ -1450,12 +1452,10 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     DbLimitedLengthField::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbFormattedField::CreateController() const
 {
-    return new ::svt::FormattedFieldCellController( static_cast< FormattedField* >( m_pWindow.get() ) );
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControl*>(m_pWindow.get()));
 }
-
 
 void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
 {
@@ -1465,16 +1465,15 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
 
         DBG_ASSERT(m_pWindow && m_pPainter, "DbFormattedField::_propertyChanged : where are my windows ?");
         if (m_pWindow)
-            static_cast< FormattedField* >( m_pWindow.get() )->SetFormatKey( nNewKey );
+            static_cast<FormattedControl*>(m_pWindow.get())->get_formatter().SetFormatKey(nNewKey);
         if (m_pPainter)
-            static_cast< FormattedField* >( m_pPainter.get() )->SetFormatKey( nNewKey );
+            static_cast<FormattedControl*>(m_pPainter.get())->get_formatter().SetFormatKey(nNewKey);
     }
     else
     {
         DbLimitedLengthField::_propertyChanged( _rEvent );
     }
 }
-
 
 OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
@@ -1485,6 +1484,9 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
     // NULL value -> empty text
     if (!_rxField.is())
         return OUString();
+
+    FormattedControl* pControl = static_cast<FormattedControl*>(m_pPainter.get());
+    weld::FormattedEntry& rPainterFormatter = pControl->get_formatter();
 
     OUString aText;
     try
@@ -1499,7 +1501,7 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
-            static_cast<FormattedField*>(m_pPainter.get())->SetValue(dValue);
+            rPainterFormatter.SetValue(dValue);
         }
         else
         {
@@ -1508,7 +1510,7 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
             aText = _rxField->getString();
             if (_rxField->wasNull())
                 return aText;
-            static_cast<FormattedField*>(m_pPainter.get())->SetTextFormatted(aText);
+            rPainterFormatter.SetTextFormatted(aText);
         }
     }
     catch( const Exception& )
@@ -1516,22 +1518,25 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
         DBG_UNHANDLED_EXCEPTION("svx");
     }
 
-    aText = m_pPainter->GetText();
+    aText = pControl->get_widget().get_text();
     if (ppColor != nullptr)
-        *ppColor = static_cast<FormattedField*>(m_pPainter.get())->GetLastOutputColor();
+        *ppColor = rPainterFormatter.GetLastOutputColor();
 
     return aText;
 }
-
 
 void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     try
     {
-        FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow.get());
+        FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
+        weld::Entry& rEntry = pEditControl->get_widget();
+        weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
+
         if (!_rxField.is())
-        {   // NULL value -> empty text
-            m_pWindow->SetText(OUString());
+        {
+            // NULL value -> empty text
+            rEntry.set_text(OUString());
         }
         else if (m_rColumn.IsNumeric())
         {
@@ -1542,9 +1547,9 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
             // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
-                m_pWindow->SetText(OUString());
+                rEntry.set_text(OUString());
             else
-                pFormattedWindow->SetValue(dValue);
+                rEditFormatter.SetValue(dValue);
         }
         else
         {
@@ -1552,8 +1557,8 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
             // So simply bind the text from the css::util::NumberFormatter to the correct css::form::component::Form.
             OUString sText( _rxField->getString());
 
-            pFormattedWindow->SetTextFormatted( sText );
-            pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+            rEditFormatter.SetTextFormatted( sText );
+            rEntry.select_region(0, -1);
         }
     }
     catch( const Exception& )
@@ -1562,42 +1567,46 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
     }
 }
 
-
 void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbFormattedField::updateFromModel: invalid call!" );
 
-    FormattedField* pFormattedWindow = static_cast< FormattedField* >( m_pWindow.get() );
+    FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
+    weld::Entry& rEntry = pEditControl->get_widget();
+    weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
 
     OUString sText;
     Any aValue = _rxModel->getPropertyValue( FM_PROP_EFFECTIVE_VALUE );
     if ( !aValue.hasValue() || (aValue >>= sText) )
-    {   // our effective value is transferred as string
-        pFormattedWindow->SetTextFormatted( sText );
-        pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    {
+        // our effective value is transferred as string
+        rEditFormatter.SetTextFormatted( sText );
+        rEntry.select_region(0, -1);
     }
     else
     {
         double dValue = 0;
         aValue >>= dValue;
-        pFormattedWindow->SetValue(dValue);
+        rEditFormatter.SetValue(dValue);
     }
 }
-
 
 bool DbFormattedField::commitControl()
 {
     Any aNewVal;
-    FormattedField& rField = *static_cast<FormattedField*>(m_pWindow.get());
-    DBG_ASSERT(&rField == m_pWindow, "DbFormattedField::commitControl : can't work with a window other than my own !");
+
+    FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
+    weld::Entry& rEntry = pEditControl->get_widget();
+    weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
+
     if (m_rColumn.IsNumeric())
     {
-        if (!rField.GetText().isEmpty())
-            aNewVal <<= rField.GetValue();
+        if (!rEntry.get_text().isEmpty())
+            aNewVal <<= rEditFormatter.GetValue();
         // an empty string is passed on as void by default, to start with
     }
     else
-        aNewVal <<= rField.GetTextValue();
+        aNewVal <<= rEditFormatter.GetTextValue();
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_EFFECTIVE_VALUE, aNewVal);
     return true;
@@ -3555,11 +3564,10 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
     }
     else
     {
-        m_pEditImplementation = new EditImplementation( static_cast< Edit& >( m_pCellControl->GetWindow() ) );
+        m_pEditImplementation = new EntryImplementation(static_cast<EditControlBase&>(m_pCellControl->GetWindow()));
         m_bOwnEditImplementation = true;
     }
 }
-
 
 FmXEditCell::~FmXEditCell()
 {
