@@ -100,7 +100,8 @@ void VTitle::changePosition( const awt::Point& rPos )
 void VTitle::createShapes(
       const awt::Point& rPos
     , const awt::Size& rReferenceSize
-    , const awt::Size& rTextMaxWidth )
+    , const awt::Size& rTextMaxWidth
+    , bool bYAxisTitle )
 {
     if(!m_xTitle.is())
         return;
@@ -126,8 +127,16 @@ void VTitle::createShapes(
     }
 
     sal_Int32 nTextMaxWidth;
-    if (m_fRotationAngleDegree <= 15.0 || m_fRotationAngleDegree >= 345.0
-        || (m_fRotationAngleDegree >= 165.0 && m_fRotationAngleDegree <= 195.0))
+    if (bYAxisTitle)
+    {
+        if (m_fRotationAngleDegree < 75.0 || m_fRotationAngleDegree > 285.0
+            || (m_fRotationAngleDegree > 105.0 && m_fRotationAngleDegree < 255.0))
+            nTextMaxWidth = rTextMaxWidth.Width;
+        else
+            nTextMaxWidth = rTextMaxWidth.Height;
+    }
+    else if (m_fRotationAngleDegree <= 15.0 || m_fRotationAngleDegree >= 345.0
+             || (m_fRotationAngleDegree >= 165.0 && m_fRotationAngleDegree <= 195.0))
         nTextMaxWidth = rTextMaxWidth.Width;
     else
         nTextMaxWidth = rTextMaxWidth.Height;
