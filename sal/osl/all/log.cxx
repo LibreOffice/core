@@ -344,7 +344,9 @@ void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {
-    if (!sal_detail_log_report(level, area))
+    const sal_detail_LogAction eAction
+        = static_cast<sal_detail_LogAction>(sal_detail_log_report(level, area));
+    if (eAction == SAL_DETAIL_LOG_ACTION_IGNORE)
         return;
 
     std::va_list args;
@@ -359,11 +361,15 @@ void sal_detail_logFormat(
     }
     sal_detail_log(level, area, where, buf, 0);
     va_end(args);
+
+    if (eAction == SAL_DETAIL_LOG_ACTION_FATAL)
+        std::abort();
 }
 
-sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
+unsigned char sal_detail_log_report(sal_detail_LogLevel level, char const * area)
+{
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
-        return true;
+        return SAL_DETAIL_LOG_ACTION_LOG;
     }
     assert(area != nullptr);
     static char const* const env = [] {
@@ -379,17 +385,26 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
         // no matching switches at all, the result will be negative (and
         // initializing with 1 is safe as the length of a valid switch, even
         // without the "+"/"-" prefix, will always be > 1)
+    bool senseFatal[2] = { false, false };
     bool seenWarn = false;
+    bool bFlagFatal = false;
     for (char const * p = env;;) {
         Sense sense;
         switch (*p++) {
         case '\0':
+        {
             if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
                 return sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, area);
-            return senseLen[POSITIVE] >= senseLen[NEGATIVE];
-                // if a specific item is both positive and negative
-                // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
-                // positive
+
+            sal_detail_LogAction eAction = SAL_DETAIL_LOG_ACTION_IGNORE;
+            // if a specific item is positive and negative (==), default to positive
+            if (senseLen[POSITIVE] >= senseLen[NEGATIVE])
+            {
+                if (senseFatal[POSITIVE]) eAction = SAL_DETAIL_LOG_ACTION_FATAL;
+                else eAction = SAL_DETAIL_LOG_ACTION_LOG;
+            }
+            return eAction;
+        }
         case '+':
             sense = POSITIVE;
             break;
@@ -397,7 +412,7 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
             sense = NEGATIVE;
             break;
         default:
-            return true; // upon an illegal SAL_LOG value, enable everything
+            return SAL_DETAIL_LOG_ACTION_LOG; // upon an illegal SAL_LOG value, enable everything
         }
         char const * p1 = p;
         while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
@@ -410,13 +425,17 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
             seenWarn = true;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("FATAL")))
+        {
+            bFlagFatal = (sense == POSITIVE);
+            match = false;
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
                    equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
         {
             // handled later
             match = false;
         } else {
-            return true;
+            return SAL_DETAIL_LOG_ACTION_LOG;
                 // upon an illegal SAL_LOG value, everything is considered
                 // positive
         }
@@ -433,9 +452,11 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
                         && equalStrings(p1, n, area, n)))
                 {
                     senseLen[sense] = p2 - p;
+                    senseFatal[sense] = bFlagFatal;
                 }
             } else {
                 senseLen[sense] = p1 - p;
+                senseFatal[sense] = bFlagFatal;
             }
         }
         p = p2;
