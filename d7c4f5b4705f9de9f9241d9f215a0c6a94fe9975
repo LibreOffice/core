@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19917757_79569e99",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-01T13:10:49Z",
+      "side": 1,
+      "message": "better validate that this is not SAL_MAX_UNINT32.\n[Nah. This has already been checked for row\u003dnLastMergedRow - so we are fine here.]",
+      "range": {
+        "startLine": 931,
+        "startChar": 41,
+        "endLine": 931,
+        "endChar": 52
+      },
+      "revId": "d7c4f5b4705f9de9f9241d9f215a0c6a94fe9975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
