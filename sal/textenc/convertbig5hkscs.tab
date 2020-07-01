@@ -26,7 +26,7 @@
 #include "generate/big5hkscs2001.tab"
 #include "tenchelp.hxx"
 
-static ImplBig5HkscsConverterData const aImplBig5HkscsConvertData
+ImplBig5HkscsConverterData const aImplBig5HkscsConvertData
     = { aImplBig5Hkscs2001ToUnicodeData,
         aImplBig5Hkscs2001ToUnicodeRowOffsets,
         aBIG5UniLeadTab, /* from tcvttcn6.tab */
@@ -37,7 +37,7 @@ static ImplBig5HkscsConverterData const aImplBig5HkscsConvertData
         aImplMS950DBCSEUDCTab, /* from tcvttcn6.tab */
         DBCS_EUDC_MS950_COUNT }; /* from tcvttcn6.tab */
 
-static ImplTextEncodingData const aImplBig5HkscsTextEncodingData
+ImplTextEncodingData const aImplBig5HkscsTextEncodingData
     = { { &aImplBig5HkscsConvertData,
           &ImplConvertBig5HkscsToUnicode,
           &ImplConvertUnicodeToBig5Hkscs,

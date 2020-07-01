@@ -26,7 +26,7 @@
 
 #include "generate/cns116431992.tab"
 
-static ImplEucTwConverterData const aImplEucTwConvertData
+ImplEucTwConverterData const aImplEucTwConvertData
     = { aImplCns116431992ToUnicodeData,
         aImplCns116431992ToUnicodeRowOffsets,
         aImplCns116431992ToUnicodePlaneOffsets,
@@ -34,7 +34,7 @@ static ImplEucTwConverterData const aImplEucTwConvertData
         aImplUnicodeToCns116431992PageOffsets,
         aImplUnicodeToCns116431992PlaneOffsets };
 
-static ImplTextEncodingData const aImplEucTwTextEncodingData
+ImplTextEncodingData const aImplEucTwTextEncodingData
     = { { &aImplEucTwConvertData,
           &ImplConvertEucTwToUnicode,
           &ImplConvertUnicodeToEucTw,

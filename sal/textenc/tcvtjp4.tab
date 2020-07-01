@@ -23,7 +23,7 @@
 
 /* ======================================================================= */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_00[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_00[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -43,7 +43,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_00[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_03[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_03[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -59,7 +59,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_03[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_04[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_04[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -79,7 +79,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_04[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_20[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_20[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -93,7 +93,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_20[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_21[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_21[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -129,7 +129,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_21[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_22[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_22[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -161,7 +161,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_22[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_23[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_23[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -171,7 +171,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_23[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_24[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_24[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -182,7 +182,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_24[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_25[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_25[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -220,7 +220,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_25[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_26[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_26[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -242,7 +242,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_26[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_30[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_30[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -282,7 +282,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_30[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_32[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_32[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -306,7 +306,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_32[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_33[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_33[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -340,7 +340,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_33[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_4E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_4E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -380,7 +380,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_4E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_4F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_4F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -420,7 +420,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_4F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_50[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_50[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -460,7 +460,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_50[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_51[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_51[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -500,7 +500,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_51[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_52[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_52[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -540,7 +540,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_52[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_53[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_53[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -580,7 +580,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_53[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_54[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_54[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -620,7 +620,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_54[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_55[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_55[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -660,7 +660,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_55[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_56[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_56[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -700,7 +700,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_56[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_57[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_57[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -740,7 +740,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_57[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_58[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_58[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -780,7 +780,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_58[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_59[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_59[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -820,7 +820,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_59[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5A[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -860,7 +860,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5B[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -900,7 +900,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5C[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -940,7 +940,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5D[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -980,7 +980,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1020,7 +1020,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_5F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1060,7 +1060,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_5F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_60[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_60[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1100,7 +1100,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_60[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_61[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_61[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1140,7 +1140,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_61[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_62[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_62[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1180,7 +1180,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_62[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_63[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_63[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1220,7 +1220,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_63[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_64[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_64[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1260,7 +1260,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_64[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_65[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_65[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1300,7 +1300,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_65[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_66[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_66[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1340,7 +1340,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_66[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_67[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_67[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1380,7 +1380,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_67[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_68[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_68[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1420,7 +1420,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_68[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_69[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_69[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1460,7 +1460,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_69[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6A[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1500,7 +1500,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6B[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1540,7 +1540,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6C[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1580,7 +1580,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6D[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1620,7 +1620,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1660,7 +1660,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_6F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1700,7 +1700,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_6F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_70[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_70[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1740,7 +1740,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_70[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_71[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_71[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1780,7 +1780,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_71[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_72[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_72[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1820,7 +1820,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_72[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_73[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_73[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1860,7 +1860,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_73[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_74[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_74[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1900,7 +1900,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_74[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_75[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_75[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1940,7 +1940,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_75[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_76[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_76[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1980,7 +1980,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_76[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_77[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_77[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2020,7 +2020,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_77[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_78[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_78[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2060,7 +2060,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_78[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_79[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_79[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2100,7 +2100,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_79[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7A[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2140,7 +2140,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7B[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2180,7 +2180,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7C[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2220,7 +2220,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7D[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2260,7 +2260,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2288,7 +2288,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_7F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2322,7 +2322,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_7F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_80[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_80[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2362,7 +2362,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_80[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_81[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_81[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2402,7 +2402,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_81[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_82[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_82[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2442,7 +2442,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_82[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_83[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_83[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2482,7 +2482,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_83[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_84[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_84[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2522,7 +2522,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_84[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_85[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_85[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2562,7 +2562,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_85[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_86[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_86[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2602,7 +2602,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_86[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_87[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_87[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2642,7 +2642,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_87[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_88[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_88[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2682,7 +2682,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_88[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_89[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_89[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2722,7 +2722,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_89[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8A[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2762,7 +2762,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8B[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2790,7 +2790,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8C[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2824,7 +2824,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8D[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2864,7 +2864,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2904,7 +2904,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_8F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2944,7 +2944,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_8F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_90[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_90[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2984,7 +2984,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_90[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_91[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_91[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3024,7 +3024,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_91[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_92[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_92[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3064,7 +3064,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_92[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_93[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_93[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3102,7 +3102,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_93[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_94[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_94[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3128,7 +3128,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_94[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_95[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_95[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3152,7 +3152,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_95[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_96[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_96[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3190,7 +3190,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_96[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_97[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_97[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3230,7 +3230,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_97[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_98[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_98[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3270,7 +3270,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_98[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_99[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_99[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3310,7 +3310,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_99[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9A[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3350,7 +3350,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9B[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3390,7 +3390,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9C[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3430,7 +3430,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9D[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3470,7 +3470,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9E[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3508,7 +3508,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9F[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_9F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3538,7 +3538,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JIS0208_9F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_JIS0208_FF[] =
+sal_uInt16 const aImplUniToDBCSTab_JIS0208_FF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */

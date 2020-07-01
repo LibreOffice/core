@@ -201,7 +201,7 @@ static void initMD2   (DigestContextMD2 *ctx);
 static void updateMD2 (DigestContextMD2 *ctx);
 static void endMD2    (DigestContextMD2 *ctx);
 
-static const sal_uInt32 S[256] =
+const sal_uInt32 S[256] =
 {
     0x29, 0x2E, 0x43, 0xC9, 0xA2, 0xD8, 0x7C, 0x01,
     0x3D, 0x36, 0x54, 0xA1, 0xEC, 0xF0, 0x06, 0x13,
@@ -237,7 +237,7 @@ static const sal_uInt32 S[256] =
     0xDB, 0x99, 0x8D, 0x33, 0x9F, 0x11, 0x83, 0x14,
 };
 
-static const Digest_Impl MD2 =
+const Digest_Impl MD2 =
 {
     rtl_Digest_AlgorithmMD2,
     RTL_DIGEST_LENGTH_MD2,
@@ -492,7 +492,7 @@ static void endMD5 (DigestContextMD5 *ctx);
     a  = RTL_DIGEST_ROTL(a, s); \
     a += b; }
 
-static const Digest_Impl MD5 =
+const Digest_Impl MD5 =
 {
     rtl_Digest_AlgorithmMD5,
     RTL_DIGEST_LENGTH_MD5,
@@ -1086,7 +1086,7 @@ static void endSHA(DigestContextSHA *ctx)
     updateSHA(ctx);
 }
 
-static const Digest_Impl SHA_0 =
+const Digest_Impl SHA_0 =
 {
     rtl_Digest_AlgorithmSHA,
     RTL_DIGEST_LENGTH_SHA,
@@ -1245,7 +1245,7 @@ void SAL_CALL rtl_digest_destroySHA(rtlDigest Digest) SAL_THROW_EXTERN_C()
     }
 }
 
-static const Digest_Impl SHA_1 =
+const Digest_Impl SHA_1 =
 {
     rtl_Digest_AlgorithmSHA1,
     RTL_DIGEST_LENGTH_SHA1,
@@ -1426,7 +1426,7 @@ static void initHMAC_MD5(ContextHMAC_MD5 * ctx);
 static void ipadHMAC_MD5(ContextHMAC_MD5 * ctx);
 static void opadHMAC_MD5(ContextHMAC_MD5 * ctx);
 
-static const Digest_Impl HMAC_MD5 =
+const Digest_Impl HMAC_MD5 =
 {
     rtl_Digest_AlgorithmHMAC_MD5,
     RTL_DIGEST_LENGTH_MD5,
@@ -1626,7 +1626,7 @@ static void initHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 static void ipadHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 static void opadHMAC_SHA1(ContextHMAC_SHA1 * ctx);
 
-static const Digest_Impl HMAC_SHA1 =
+const Digest_Impl HMAC_SHA1 =
 {
     rtl_Digest_AlgorithmHMAC_SHA1,
     RTL_DIGEST_LENGTH_SHA1,

@@ -18,7 +18,7 @@
 
 #include <sal/types.h>
 
-static sal_uInt16 const aImplBig5Hkscs2001ToUnicodeData[] = {
+sal_uInt16 const aImplBig5Hkscs2001ToUnicodeData[] = {
  /* row 0: --- */
  /* row 1: --- */
  /* row 2: --- */
@@ -952,7 +952,7 @@ static sal_uInt16 const aImplBig5Hkscs2001ToUnicodeData[] = {
  /* row 255: --- */
 };
 
-static sal_Int32 const aImplBig5Hkscs2001ToUnicodeRowOffsets[] = {
+sal_Int32 const aImplBig5Hkscs2001ToUnicodeRowOffsets[] = {
   -1, /* row 0 */
   -1, /* row 1 */
   -1, /* row 2 */
@@ -1211,7 +1211,7 @@ static sal_Int32 const aImplBig5Hkscs2001ToUnicodeRowOffsets[] = {
   -1, /* row 255 */
 };
 
-static sal_uInt16 const aImplUnicodeToBig5Hkscs2001Data[] = {
+sal_uInt16 const aImplUnicodeToBig5Hkscs2001Data[] = {
  /* plane 0, page 0 */
   168 | (252 << 8), /* first, last */
                                                           0xC6D8,     0,
@@ -8261,7 +8261,7 @@ static sal_uInt16 const aImplUnicodeToBig5Hkscs2001Data[] = {
  /* plane 16: --- */
 };
 
-static sal_Int32 const aImplUnicodeToBig5Hkscs2001PageOffsets[] = {
+sal_Int32 const aImplUnicodeToBig5Hkscs2001PageOffsets[] = {
   0, /* plane 0, page 0; 44/172 bytes (25.6%) */
   86, /* plane 0, page 1; 46/444 bytes (10.4%) */
   308, /* plane 0, page 2; 22/240 bytes (9.2%) */
@@ -8791,7 +8791,7 @@ static sal_Int32 const aImplUnicodeToBig5Hkscs2001PageOffsets[] = {
   /* plane 16: --- */
 };
 
-static sal_Int32 const aImplUnicodeToBig5Hkscs2001PlaneOffsets[] = {
+sal_Int32 const aImplUnicodeToBig5Hkscs2001PlaneOffsets[] = {
   0 * 256, /* plane 0; 576/1024 bytes (56.3%), 11016/62348 bytes (17.7%) */
   -1, /* plane 1 */
   1 * 256, /* plane 2; 664/1024 bytes (64.8%), 3634/56982 bytes (6.4%) */

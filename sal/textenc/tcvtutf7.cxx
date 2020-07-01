@@ -26,7 +26,7 @@
 
 /* ======================================================================= */
 
-static unsigned char const aImplBase64Tab[64] =
+unsigned char const aImplBase64Tab[64] =
 {
     /* A-Z */
           0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
@@ -44,7 +44,7 @@ static unsigned char const aImplBase64Tab[64] =
 };
 
 /* Index in Base64Tab or 0xFF, when is an invalid character */
-static unsigned char const aImplBase64IndexTab[128] =
+unsigned char const aImplBase64IndexTab[128] =
 {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,     /* 0x00-0x07 */
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,     /* 0x08-0x0F */
@@ -64,7 +64,7 @@ static unsigned char const aImplBase64IndexTab[128] =
       49,   50,   51, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF      /* 0x78-0x7F xyz{|}~ */
 };
 
-static unsigned char const aImplMustShiftTab[128] =
+unsigned char const aImplMustShiftTab[128] =
 {
     1, 1, 1, 1, 1, 1, 1, 1,     /* 0x00-0x07 */
     1, 0, 0, 1, 0, 1, 1, 1,     /* 0x08-0x0F 0x09 == HTAB, 0x0A == LF 0x0C == CR */

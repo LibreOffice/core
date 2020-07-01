@@ -14,7 +14,7 @@
 
 #include "convertisciidevangari.hxx"
 
-static ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
+ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
     = { { nullptr,
           &ImplConvertIsciiDevanagariToUnicode,
           &ImplConvertUnicodeToIsciiDevanagari,

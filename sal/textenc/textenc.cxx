@@ -49,7 +49,7 @@
 
 #define SAME8090UNI_START 0x80
 #define SAME8090UNI_END 0x9F
-static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
+sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
                                                   - SAME8090UNI_START
                                                   + 1]
 = { 0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087, /* 0x80 */
@@ -59,7 +59,7 @@ static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
 
 #define SAME8090CHAR_START 0x0080
 #define SAME8090CHAR_END 0x009F
-static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
+unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
                                                   - SAME8090CHAR_START
                                                   + 1]
     = { 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 0x0080 */
@@ -69,7 +69,7 @@ static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
 
 #define SAMEA0FFCHAR_START 0x00A0
 #define SAMEA0FFCHAR_END 0x00FF
-static unsigned char const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
+unsigned char const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
                                                   - SAMEA0FFCHAR_START
                                                   + 1]
     = { 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, /* 0x00A0 */
@@ -97,7 +97,7 @@ static unsigned char const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
 
 #define MS1252UNI_START                 0x80
 #define MS1252UNI_END                   0xFF
-static sal_uInt16 const aImplMS1252ToUniTab[MS1252UNI_END - MS1252UNI_START + 1] =
+sal_uInt16 const aImplMS1252ToUniTab[MS1252UNI_END - MS1252UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -122,7 +122,7 @@ static sal_uInt16 const aImplMS1252ToUniTab[MS1252UNI_END - MS1252UNI_START + 1]
 /* ----------------------------------------------------------------------- */
 
 #define MS1252TOCHARTABEX_COUNT         27
-static ImplUniCharTabData const aImplMS1252ToCharTabEx[MS1252TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplMS1252ToCharTabEx[MS1252TOCHARTABEX_COUNT] =
 {
   { 0x0152, 0x8C, 0 },
   { 0x0153, 0x9C, 0 },
@@ -155,7 +155,7 @@ static ImplUniCharTabData const aImplMS1252ToCharTabEx[MS1252TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplMS1252ByteCvtData =
+ImplByteConvertData const aImplMS1252ByteCvtData =
 {
     aImplMS1252ToUniTab,
     nullptr,
@@ -171,7 +171,7 @@ static ImplByteConvertData const aImplMS1252ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplMS1252TextEncodingData
+ImplTextEncodingData const aImplMS1252TextEncodingData
     = { { &aImplMS1252ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -200,7 +200,7 @@ static ImplTextEncodingData const aImplMS1252TextEncodingData
 
 #define ISO88591UNI_START               0xA0
 #define ISO88591UNI_END                 0xFF
-static sal_uInt16 const aImplISO88591ToUniTab[ISO88591UNI_END - ISO88591UNI_START + 1] =
+sal_uInt16 const aImplISO88591ToUniTab[ISO88591UNI_END - ISO88591UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -220,7 +220,7 @@ static sal_uInt16 const aImplISO88591ToUniTab[ISO88591UNI_END - ISO88591UNI_STAR
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplISO88591ByteCvtData =
+ImplByteConvertData const aImplISO88591ByteCvtData =
 {
     aImplISO88591ToUniTab,
     aImpl8090SameToUniTab,
@@ -236,7 +236,7 @@ static ImplByteConvertData const aImplISO88591ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplISO88591TextEncodingData
+ImplTextEncodingData const aImplISO88591TextEncodingData
     = { { &aImplISO88591ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -268,7 +268,7 @@ static ImplTextEncodingData const aImplISO88591TextEncodingData
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplUSASCIIByteCvtData =
+ImplByteConvertData const aImplUSASCIIByteCvtData =
 {
     aImplMS1252ToUniTab,
     nullptr,
@@ -284,7 +284,7 @@ static ImplByteConvertData const aImplUSASCIIByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplUSASCIITextEncodingData
+ImplTextEncodingData const aImplUSASCIITextEncodingData
     = { { &aImplUSASCIIByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -305,7 +305,7 @@ static ImplTextEncodingData const aImplUSASCIITextEncodingData
             | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_LATIN, pc code page 437 */
 
-static ImplTextEncodingData const aImplUTF8TextEncodingData
+ImplTextEncodingData const aImplUTF8TextEncodingData
     = { { nullptr,
           &ImplConvertUtf8ToUnicode,
           &ImplConvertUnicodeToUtf8,
@@ -332,7 +332,7 @@ static char aImplJavaUtf8TextConverterTag;
        distinguish between RTL_TEXTENCODING_UTF8 and
        RTL_TEXTENCODING_JAVA_UTF8. */
 
-static ImplTextEncodingData const aImplJavaUtf8TextEncodingData
+ImplTextEncodingData const aImplJavaUtf8TextEncodingData
     = { { &aImplJavaUtf8TextConverterTag,
           &ImplConvertUtf8ToUnicode,
           &ImplConvertUnicodeToUtf8,

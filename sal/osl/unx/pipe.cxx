@@ -41,7 +41,7 @@
 
 static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
-static struct
+struct
 {
     int            errcode;
     oslPipeError   error;

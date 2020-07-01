@@ -590,7 +590,7 @@ struct HashEntry
 }
 
 static HashEntry* HashTable[31];
-static const int HashSize = SAL_N_ELEMENTS(HashTable);
+const int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
