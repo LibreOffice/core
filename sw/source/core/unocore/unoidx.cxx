@@ -1164,7 +1164,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 SwTOXMarks aMarks;
                 const SwTOXType* pType = pTOXBase->GetTOXType();
-                SwTOXMark::InsertTOXMarks( aMarks, *pType );
+                pType->CollectTextMarks(aMarks);
                 uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.size());
                 uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
                 for(size_t i = 0; i < aMarks.size(); ++i)

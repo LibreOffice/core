@@ -340,7 +340,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             {
                 const SwTOXType* pTOXType = pDoc->GetTOXType(eType, 0);
                 SwTOXMarks aMarks;
-                SwTOXMark::InsertTOXMarks(aMarks, *pTOXType);
+                pTOXType->CollectTextMarks(aMarks);
                 for (auto pMark : aMarks)
                 {
                     if (pMark->GetAlternativeText() == "Chapter")
