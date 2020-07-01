@@ -124,6 +124,44 @@ void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent
     }
     rTreeView.remove(rParent);
 }
+
+FormattedEntry::FormattedEntry(std::unique_ptr<weld::Entry> xEntry)
+    : m_xEntry(std::move(xEntry))
+    , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
+{
+    m_xEntry->connect_changed(LINK(this, FormattedEntry, ModifyHdl));
+    m_xEntry->connect_focus_out(LINK(this, FormattedEntry, FocusOutHdl));
+}
+
+Selection FormattedEntry::GetEntrySelection() const
+{
+    int nStartPos, nEndPos;
+    m_xEntry->get_selection_bounds(nStartPos, nEndPos);
+    return Selection(nStartPos, nEndPos);
+}
+
+OUString FormattedEntry::GetEntryText() const { return m_xEntry->get_text(); }
+
+void FormattedEntry::SetEntryText(const OUString& rText, const Selection& rSel)
+{
+    m_xEntry->set_text(rText);
+    auto nMin = rSel.Min();
+    auto nMax = rSel.Max();
+    m_xEntry->select_region(nMin < 0 ? 0 : nMin, nMax == SELECTION_MAX ? -1 : nMax);
+}
+
+void FormattedEntry::SetEntryTextColor(const Color* pColor)
+{
+    m_xEntry->set_font_color(pColor ? *pColor : COL_AUTO);
+}
+
+SelectionOptions FormattedEntry::GetEntrySelectionOptions() const { return m_eOptions; }
+
+void FormattedEntry::FieldModified() { m_aModifyHdl.Call(*m_xEntry); }
+
+IMPL_LINK_NOARG(FormattedEntry, ModifyHdl, weld::Entry&, void) { impl_Modify(); }
+
+IMPL_LINK_NOARG(FormattedEntry, FocusOutHdl, weld::Widget&, void) { EntryLostFocus(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

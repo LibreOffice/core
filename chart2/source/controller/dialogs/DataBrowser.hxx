@@ -21,7 +21,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/fmtfield.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
@@ -160,7 +159,7 @@ private:
     bool                m_bIsReadOnly;
     bool                m_bDataValid;
 
-    VclPtr<FormattedField>      m_aNumberEditField;
+    VclPtr<svt::FormattedControl> m_aNumberEditField;
     VclPtr<svt::EditControl>    m_aTextEditField;
     weld::Container*            m_pColumnsWin;
     weld::Container*            m_pColorsWin;
