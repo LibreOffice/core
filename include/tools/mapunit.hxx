@@ -20,9 +20,6 @@
 #ifndef INCLUDED_TOOLS_MAPUNIT_HXX
 #define INCLUDED_TOOLS_MAPUNIT_HXX
 
-#include <sal/types.h>
-#include <tools/UnitConversion.hxx>
-
 enum class MapUnit
 {
     Map100thMM, Map10thMM, MapMM, MapCM,

@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
 #include <rtl/bootstrap.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
 #include <comphelper/sequence.hxx>

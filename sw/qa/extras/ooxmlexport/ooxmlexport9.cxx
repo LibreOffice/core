@@ -39,6 +39,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <docsh.hxx>
 #include <ftninfo.hxx>

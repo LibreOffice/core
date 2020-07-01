@@ -38,6 +38,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <cmdid.h>
 #include <envimg.hxx>

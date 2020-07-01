@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
 
 namespace vcl
 {

@@ -21,6 +21,7 @@
 #include <editeng/itemtype.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 

@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/ustring.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

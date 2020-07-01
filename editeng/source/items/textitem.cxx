@@ -34,6 +34,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>

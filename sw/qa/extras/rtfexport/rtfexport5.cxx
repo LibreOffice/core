@@ -35,6 +35,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <rtl/ustring.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequenceashashmap.hxx>

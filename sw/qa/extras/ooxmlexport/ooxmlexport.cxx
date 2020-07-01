@@ -31,6 +31,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/UnitConversion.hxx>
 
 class Test : public SwModelTestBase
 {

@@ -22,6 +22,7 @@
 #include <cstring>
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_GFXLINK_HXX
 #define INCLUDED_VCL_GFXLINK_HXX
 
-#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>

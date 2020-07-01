@@ -8,9 +8,12 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <comphelper/base64.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
+#include <tools/stream.hxx>
 #include <vcl/toolkit/button.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
@@ -19,6 +22,7 @@
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <messagedialog.hxx>
 #include <svdata.hxx>

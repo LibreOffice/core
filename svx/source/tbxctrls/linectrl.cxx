@@ -21,6 +21,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/virdev.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svtools/toolbarmenu.hxx>

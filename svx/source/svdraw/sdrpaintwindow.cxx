@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 #include <svx/sdrpaintwindow.hxx>
 #include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/svdpntv.hxx>

@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
 
 #include <vcl/treelistbox.hxx>
+#include <vcl/timer.hxx>
 #include "callbacks.hxx"
 
 struct AcceptDropEvent;

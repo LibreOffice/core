@@ -40,6 +40,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/UnitConversion.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>

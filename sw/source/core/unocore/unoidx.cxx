@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/memberids.h>

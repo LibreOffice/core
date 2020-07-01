@@ -60,6 +60,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <tools/globname.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

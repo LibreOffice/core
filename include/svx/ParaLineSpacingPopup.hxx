@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <svx/svxdllapi.h>
 
 namespace svx {
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
 #define INCLUDED_VCL_ANIMATE_ANIMATIONBITMAP_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
 enum class Disposal

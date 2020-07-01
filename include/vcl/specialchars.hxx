@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_SPECIAL_CHARS_HXX
 #define INCLUDED_VCL_SPECIAL_CHARS_HXX
 
+#include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
+
 namespace vcl
 {
 class Font;

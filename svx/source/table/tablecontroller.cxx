@@ -72,6 +72,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <editeng/editview.hxx>
+#include <tools/UnitConversion.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;

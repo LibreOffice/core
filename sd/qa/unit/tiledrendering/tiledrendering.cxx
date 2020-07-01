@@ -38,6 +38,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>

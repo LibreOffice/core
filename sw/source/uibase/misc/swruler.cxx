@@ -17,6 +17,7 @@
 #include <view.hxx>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>

@@ -34,6 +34,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <tools/UnitConversion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/sequenceashashmap.hxx>

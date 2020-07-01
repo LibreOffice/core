@@ -26,7 +26,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SCOPEDBITMAPACCESS_HXX
 #define INCLUDED_VCL_SCOPEDBITMAPACCESS_HXX
 
+#include <sal/types.h>
+
 namespace vcl
 {
 

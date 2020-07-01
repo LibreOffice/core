@@ -20,9 +20,7 @@
 #ifndef INCLUDED_VCL_VIEWDATAENTRY_HXX
 #define INCLUDED_VCL_VIEWDATAENTRY_HXX
 
-#include <vcl/dllapi.h>
 #include <tools/solar.h>
-#include <tools/gen.hxx>
 
 #include <vector>
 
