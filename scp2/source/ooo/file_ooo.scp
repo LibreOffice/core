@@ -717,6 +717,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Tr
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-tr.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+	TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Uk
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-uk.filelist";
