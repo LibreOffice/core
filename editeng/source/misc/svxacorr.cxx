@@ -93,13 +93,13 @@ enum class Flags {
 namespace o3tl {
     template<> struct typed_flags<Flags> : is_typed_flags<Flags, 0x07> {};
 }
-static const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
+const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
 
-static const char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
-static const char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
-static const char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
+const char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
+const char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
+const char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
 
-static const char
+const char
     /* also at these beginnings - Brackets and all kinds of begin characters */
     sImplSttSkipChars[] = "\"\'([{\x83\x84\x89\x91\x92\x93\x94",
     /* also at these ends - Brackets and all kinds of begin characters */
@@ -309,13 +309,13 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
     return nRet;
 }
 
-static constexpr sal_Unicode cEmDash = 0x2014;
-static constexpr sal_Unicode cEnDash = 0x2013;
-static constexpr sal_Unicode cApostrophe = 0x2019;
-static constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
-static constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
-static constexpr sal_Unicode cLeftSingleAngleQuote = 0x2039;
-static constexpr sal_Unicode cRightSingleAngleQuote = 0x203A;
+constexpr sal_Unicode cEmDash = 0x2014;
+constexpr sal_Unicode cEnDash = 0x2013;
+constexpr sal_Unicode cApostrophe = 0x2019;
+constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
+constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
+constexpr sal_Unicode cLeftSingleAngleQuote = 0x2039;
+constexpr sal_Unicode cRightSingleAngleQuote = 0x203A;
 // stop characters for searching preceding quotes
 // (the first character is also the opening quote we are looking for)
 const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,

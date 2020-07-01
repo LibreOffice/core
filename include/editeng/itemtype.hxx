@@ -29,7 +29,7 @@ class Color;
 class IntlWrapper;
 // static and prototypes -------------------------------------------------
 
-static const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
+const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
 EDITENG_DLLPUBLIC OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );
