@@ -35,7 +35,7 @@
 
 #define SAME8090UNI_START 0x80
 #define SAME8090UNI_END 0x9F
-static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
+sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
                                                   - SAME8090UNI_START
                                                   + 1]
 = { 0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087, /* 0x80 */
@@ -45,7 +45,7 @@ static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
 
 #define SAME8090CHAR_START 0x0080
 #define SAME8090CHAR_END 0x009F
-static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
+unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
                                                   - SAME8090CHAR_START
                                                   + 1]
     = { 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 0x0080 */
@@ -53,7 +53,7 @@ static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
         0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, /* 0x0090 */
         0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F };
 
-static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
+sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 
 #include "tcvtarb1.tab"
 #include "tcvteas1.tab"

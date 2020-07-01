@@ -294,7 +294,7 @@ static const Pair nl_language_list[] = {
 
 #elif defined(LINUX)
 
-static const Pair nl_language_list[] = {
+const Pair nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
     { "ANSI_X3.4-1968",             RTL_TEXTENCODING_ISO_8859_1 },  /* fake: ASCII_US */
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */

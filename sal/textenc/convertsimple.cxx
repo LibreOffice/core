@@ -26,7 +26,7 @@ struct ImplReplaceCharData
     sal_uInt16      mnReplaceChar;
 };
 
-static ImplReplaceCharData const aImplRepCharTab[] =
+ImplReplaceCharData const aImplRepCharTab[] =
 {
   { 0x00A0, 0x0020 },   /* NO-BREAK-SPACE */
   { 0x00A1, 0x0021 },   /* INVERTED EXCLAMATION MARK */
@@ -357,7 +357,7 @@ struct ImplReplaceCharStrData
     sal_uInt16      maReplaceChars[IMPL_MAX_REPLACECHAR];
 };
 
-static ImplReplaceCharStrData const aImplRepCharStrTab[] =
+ImplReplaceCharStrData const aImplRepCharStrTab[] =
 {
   { 0x00A9, { 0x0028, 0x0063, 0x0029, 0x0000, 0x0000  } },  /* COPYRIGHT SIGN */
   { 0x00AB, { 0x003C, 0x003C, 0x0000, 0x0000, 0x0000  } },  /* LEFT-POINTING-DOUBLE ANGLE QUOTATION MARK */

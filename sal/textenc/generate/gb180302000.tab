@@ -22,7 +22,7 @@
 
 #include "../convertgb18030.hxx"
 
-static sal_Unicode const aImplGb180302000ToUnicodeData[] = {
+sal_Unicode const aImplGb180302000ToUnicodeData[] = {
   0x4E02,0x4E04,0x4E05,0x4E06,0x4E0F,0x4E12,0x4E17,0x4E1F,
   0x4E20,0x4E21,0x4E23,0x4E26,0x4E29,0x4E2E,0x4E2F,0x4E31,
   0x4E33,0x4E35,0x4E37,0x4E3C,0x4E40,0x4E41,0x4E42,0x4E44,
@@ -3867,7 +3867,7 @@ static sal_Unicode const aImplGb180302000ToUnicodeData[] = {
   0xFFDB,0xFFDC,0xFFDD,0xFFDE,0xFFDF,
 };
 
-static ImplGb180302000ToUnicodeRange const
+ImplGb180302000ToUnicodeRange const
     aImplGb180302000ToUnicodeRanges[] = {
   { 23940, 820, 7922, 0x0452 },
   { 24760, 9219, 11329, 0x2643 },
@@ -3884,7 +3884,7 @@ static ImplGb180302000ToUnicodeRange const
   { -1, 0, 0, 0 }
 };
 
-static sal_uInt32 const aImplUnicodeToGb180302000Data[] = {
+sal_uInt32 const aImplUnicodeToGb180302000Data[] = {
   0x81308130,0x81308131,0x81308132,0x81308133,0x81308134,0x81308135,
   0x81308136,0x81308137,0x81308138,0x81308139,0x81308230,0x81308231,
   0x81308232,0x81308233,0x81308234,0x81308235,0x81308236,0x81308237,
@@ -9010,7 +9010,7 @@ static sal_uInt32 const aImplUnicodeToGb180302000Data[] = {
       0xA3A4,
 };
 
-static ImplUnicodeToGb180302000Range const
+ImplUnicodeToGb180302000Range const
     aImplUnicodeToGb180302000Ranges[] = {
   { 0, 0x0452, 0x200F, 820 },
   { 978, 0x2643, 0x2E80, 9219 },

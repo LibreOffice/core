@@ -22,7 +22,7 @@
 
 /* Symbol Font Encodings */
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
+ImplTextEncodingData const aImplSYMBOLTextEncodingData
     = { { nullptr,
           ImplSymbolToUnicode,
           ImplUnicodeToSymbol,

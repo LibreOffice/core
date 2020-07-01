@@ -39,7 +39,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_81[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_81[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -71,7 +71,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_81[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_82[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_82[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -103,7 +103,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_82[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_83[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_83[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -135,7 +135,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_83[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_84[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_84[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -167,7 +167,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_84[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_85[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_85[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -199,7 +199,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_85[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_86[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_86[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -231,7 +231,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_86[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_87[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_87[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -263,7 +263,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_87[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_88[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_88[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -295,7 +295,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_88[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_89[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_89[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -327,7 +327,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_89[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8A[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -359,7 +359,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8B[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -391,7 +391,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8C[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -423,7 +423,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8D[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -455,7 +455,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8E[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -487,7 +487,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8F[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_8F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -519,7 +519,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_8F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_90[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_90[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -551,7 +551,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_90[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_91[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_91[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -583,7 +583,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_91[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_92[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_92[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -615,7 +615,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_92[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_93[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_93[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -647,7 +647,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_93[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_94[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_94[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -679,7 +679,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_94[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_95[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_95[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -711,7 +711,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_95[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_96[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_96[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -743,7 +743,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_96[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_97[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_97[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -775,7 +775,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_97[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_98[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_98[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -807,7 +807,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_98[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_99[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_99[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -839,7 +839,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_99[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9A[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -871,7 +871,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9B[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -903,7 +903,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9C[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -935,7 +935,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9D[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -967,7 +967,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9E[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -999,7 +999,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9F[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_9F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1031,7 +1031,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_9F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1063,7 +1063,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1095,7 +1095,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1124,7 +1124,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1156,7 +1156,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1188,7 +1188,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1220,7 +1220,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1249,7 +1249,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1279,7 +1279,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1311,7 +1311,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A9[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_A9[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1343,7 +1343,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_A9[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1374,7 +1374,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1405,7 +1405,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1436,7 +1436,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AD[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AD[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1457,7 +1457,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AD[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AE[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AE[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1478,7 +1478,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AE[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AF[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_AF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1499,7 +1499,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_AF[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1531,7 +1531,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1563,7 +1563,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1595,7 +1595,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1627,7 +1627,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1659,7 +1659,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1691,7 +1691,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1723,7 +1723,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1755,7 +1755,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1787,7 +1787,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B9[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_B9[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1819,7 +1819,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_B9[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1851,7 +1851,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1883,7 +1883,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1915,7 +1915,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BD[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BD[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1947,7 +1947,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BD[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BE[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BE[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1979,7 +1979,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BE[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BF[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_BF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2011,7 +2011,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_BF[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2043,7 +2043,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2075,7 +2075,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2107,7 +2107,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2139,7 +2139,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2171,7 +2171,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2203,7 +2203,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2235,7 +2235,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2255,7 +2255,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_C8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2275,7 +2275,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_C8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2295,7 +2295,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2315,7 +2315,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2335,7 +2335,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CD[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CD[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2355,7 +2355,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CD[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CE[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CE[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2375,7 +2375,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CE[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CF[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_CF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2395,7 +2395,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_CF[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2415,7 +2415,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2435,7 +2435,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2455,7 +2455,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2475,7 +2475,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2495,7 +2495,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2515,7 +2515,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2535,7 +2535,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2555,7 +2555,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2575,7 +2575,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D9[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_D9[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2595,7 +2595,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_D9[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2615,7 +2615,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2635,7 +2635,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2655,7 +2655,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DD[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DD[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2675,7 +2675,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DD[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DE[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DE[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2695,7 +2695,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DE[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DF[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_DF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2715,7 +2715,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_DF[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2735,7 +2735,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2755,7 +2755,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2775,7 +2775,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2795,7 +2795,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2815,7 +2815,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2835,7 +2835,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2855,7 +2855,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2875,7 +2875,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2895,7 +2895,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E9[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_E9[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2915,7 +2915,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_E9[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_EA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2935,7 +2935,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_EB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2955,7 +2955,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_EC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2975,7 +2975,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_ED[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_ED[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2995,7 +2995,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_ED[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EE[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_EE[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3015,7 +3015,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EE[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EF[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_EF[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3035,7 +3035,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_EF[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F0[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F0[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3055,7 +3055,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F0[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F1[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F1[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3075,7 +3075,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F1[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F2[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F2[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3095,7 +3095,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F2[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F3[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F3[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3115,7 +3115,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F3[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F4[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F4[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3135,7 +3135,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F4[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F5[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F5[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3155,7 +3155,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F5[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F6[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F6[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3175,7 +3175,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F6[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F7[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F7[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3195,7 +3195,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F7[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F8[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F8[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3215,7 +3215,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F8[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F9[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_F9[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3235,7 +3235,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_F9[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FA[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_FA[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3255,7 +3255,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FA[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FB[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_FB[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3275,7 +3275,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FB[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FC[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_FC[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3295,7 +3295,7 @@ static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FC[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplDBCSToUniTab_KSC5601_FD[] =
+sal_uInt16 const aImplDBCSToUniTab_KSC5601_FD[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */

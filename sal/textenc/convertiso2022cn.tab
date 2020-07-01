@@ -24,7 +24,7 @@
 #include "convertiso2022cn.hxx"
 #include "tenchelp.hxx"
 
-static ImplIso2022CnConverterData const aImplIso2022CnConvertData
+ImplIso2022CnConverterData const aImplIso2022CnConvertData
     = { aGB2312UniLeadTab, /* from tcvtscn6.tab */
         aImplCns116431992ToUnicodeData, /* from generate/cns116431992.tab */
         aImplCns116431992ToUnicodeRowOffsets,
@@ -38,7 +38,7 @@ static ImplIso2022CnConverterData const aImplIso2022CnConvertData
         aImplUnicodeToCns116431992PlaneOffsets };
             /* from generate/cns116431992.tab */
 
-static ImplTextEncodingData const aImplIso2022CnTextEncodingData
+ImplTextEncodingData const aImplIso2022CnTextEncodingData
     = { { &aImplIso2022CnConvertData,
           &ImplConvertIso2022CnToUnicode,
           &ImplConvertUnicodeToIso2022Cn,

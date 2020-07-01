@@ -28,7 +28,7 @@
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
+ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -290,7 +290,7 @@ static ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
 {
     { 0x00, 0xFE, aImplUniToDBCSTab_KSC5601_00 },               /* 0x00 */
     { 0x11, 0x67, aImplUniToDBCSTab_KSC5601_01 },               /* 0x01 */
@@ -556,7 +556,7 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
 /* FEA1-FEFE    -> E05E-E0BB */
 
 #define DBCS_EUDC_MS949_COUNT    2
-static ImplDBCSEUDCData const aImplMS949DBCSEUDCTab[DBCS_EUDC_MS949_COUNT] =
+ImplDBCSEUDCData const aImplMS949DBCSEUDCTab[DBCS_EUDC_MS949_COUNT] =
 {
     /* EUDC-Range */
     /* Lead:    C9-C9 */
@@ -569,7 +569,7 @@ static ImplDBCSEUDCData const aImplMS949DBCSEUDCTab[DBCS_EUDC_MS949_COUNT] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
+ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 {
     aKSC5601UniLeadTab,
     aKSC5601DBCSHighTab,
@@ -581,7 +581,7 @@ static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplMS949DBCSCvtData =
+ImplDBCSConvertData const aImplMS949DBCSCvtData =
 {
     aKSC5601UniLeadTab,
     aKSC5601DBCSHighTab,
@@ -593,7 +593,7 @@ static ImplDBCSConvertData const aImplMS949DBCSCvtData =
 
 /* ======================================================================= */
 
-static ImplTextEncodingData const aImplEUCKRTextEncodingData
+ImplTextEncodingData const aImplEUCKRTextEncodingData
     = { { &aImplKSC5601DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -616,7 +616,7 @@ static ImplTextEncodingData const aImplEUCKRTextEncodingData
 
 /* ======================================================================= */
 
-static ImplTextEncodingData const aImplMS949TextEncodingData
+ImplTextEncodingData const aImplMS949TextEncodingData
     = { { &aImplMS949DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -639,7 +639,7 @@ static ImplTextEncodingData const aImplMS949TextEncodingData
 
 /* Apple has some extension, which we don't support */
 
-static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
+ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
     = { { &aImplMS949DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -660,7 +660,7 @@ static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aJOHABUniLeadTab[256] =
+ImplDBCSToUniLeadTab const aJOHABUniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -922,7 +922,7 @@ static ImplDBCSToUniLeadTab const aJOHABUniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
+ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
 {
     { 0x00, 0xFE, aImplUniToDBCSTab_JOHAB_00 },                 /* 0x00 */
     { 0x11, 0x67, aImplUniToDBCSTab_JOHAB_01 },                 /* 0x01 */
@@ -1188,7 +1188,7 @@ static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
 /* D891-D8FE    -> E05E-E0BB */
 
 #define DBCS_EUDC_MS1361_COUNT    2
-static ImplDBCSEUDCData const aImplMS1361DBCSEUDCTab[DBCS_EUDC_MS1361_COUNT] =
+ImplDBCSEUDCData const aImplMS1361DBCSEUDCTab[DBCS_EUDC_MS1361_COUNT] =
 {
     /* EUDC-Range */
     /* Lead:    D8-D8 */
@@ -1201,7 +1201,7 @@ static ImplDBCSEUDCData const aImplMS1361DBCSEUDCTab[DBCS_EUDC_MS1361_COUNT] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplJOHABDBCSCvtData =
+ImplDBCSConvertData const aImplJOHABDBCSCvtData =
 {
     aJOHABUniLeadTab,
     aJOHABDBCSHighTab,
@@ -1213,7 +1213,7 @@ static ImplDBCSConvertData const aImplJOHABDBCSCvtData =
 
 /* ======================================================================= */
 
-static ImplTextEncodingData const aImplMS1361TextEncodingData
+ImplTextEncodingData const aImplMS1361TextEncodingData
     = { { &aImplJOHABDBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,

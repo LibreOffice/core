@@ -92,8 +92,8 @@ struct ProcessData
     oslFileHandle    *m_pErrorRead;
 };
 
-static oslProcessImpl* ChildList;
-static oslMutex        ChildListMutex;
+oslProcessImpl* ChildList;
+oslMutex        ChildListMutex;
 
 } //Anonymous namespace
 

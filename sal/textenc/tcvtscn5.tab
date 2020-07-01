@@ -27,7 +27,7 @@
 
 /* ======================================================================= */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_4E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_4E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -67,7 +67,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_4E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_4F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_4F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -107,7 +107,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_4F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_50[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_50[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -147,7 +147,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_50[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_51[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_51[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -187,7 +187,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_51[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_52[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_52[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -227,7 +227,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_52[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_53[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_53[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -267,7 +267,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_53[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_54[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_54[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -307,7 +307,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_54[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_55[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_55[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -347,7 +347,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_55[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_56[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_56[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -387,7 +387,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_56[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_57[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_57[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -427,7 +427,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_57[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_58[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_58[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -467,7 +467,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_58[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_59[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_59[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -507,7 +507,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_59[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5A[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -547,7 +547,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5B[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -587,7 +587,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5C[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -627,7 +627,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5D[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -667,7 +667,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -707,7 +707,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_5F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_5F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -747,7 +747,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_5F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_60[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_60[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -787,7 +787,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_60[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_61[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_61[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -827,7 +827,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_61[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_62[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_62[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -867,7 +867,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_62[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_63[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_63[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -907,7 +907,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_63[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_64[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_64[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -947,7 +947,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_64[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_65[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_65[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -987,7 +987,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_65[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_66[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_66[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1027,7 +1027,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_66[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_67[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_67[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1067,7 +1067,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_67[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_68[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_68[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1107,7 +1107,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_68[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_69[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_69[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1147,7 +1147,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_69[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6A[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1187,7 +1187,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6B[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1227,7 +1227,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6C[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1267,7 +1267,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6D[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1307,7 +1307,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1347,7 +1347,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_6F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_6F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1387,7 +1387,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_6F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_70[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_70[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1427,7 +1427,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_70[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_71[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_71[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1467,7 +1467,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_71[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_72[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_72[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1507,7 +1507,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_72[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_73[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_73[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1547,7 +1547,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_73[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_74[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_74[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1587,7 +1587,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_74[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_75[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_75[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1627,7 +1627,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_75[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_76[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_76[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1667,7 +1667,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_76[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_77[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_77[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1707,7 +1707,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_77[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_78[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_78[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1747,7 +1747,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_78[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_79[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_79[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1787,7 +1787,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_79[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7A[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1827,7 +1827,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7B[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1867,7 +1867,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7C[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1907,7 +1907,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7D[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1947,7 +1947,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1975,7 +1975,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_7F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_7F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2009,7 +2009,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_7F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_80[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_80[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2049,7 +2049,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_80[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_81[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_81[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2089,7 +2089,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_81[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_82[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_82[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2129,7 +2129,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_82[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_83[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_83[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2169,7 +2169,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_83[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_84[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_84[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2209,7 +2209,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_84[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_85[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_85[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2249,7 +2249,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_85[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_86[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_86[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2289,7 +2289,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_86[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_87[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_87[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2329,7 +2329,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_87[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_88[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_88[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2369,7 +2369,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_88[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_89[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_89[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2409,7 +2409,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_89[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8A[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2449,7 +2449,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8B[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2477,7 +2477,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8C[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2511,7 +2511,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8D[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2551,7 +2551,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2591,7 +2591,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_8F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_8F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2631,7 +2631,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_8F[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_90[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_90[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2671,7 +2671,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_90[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_91[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_91[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2711,7 +2711,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_91[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_92[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_92[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2751,7 +2751,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_92[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_93[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_93[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2791,7 +2791,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_93[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_94[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_94[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2815,7 +2815,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_94[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_95[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_95[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2839,7 +2839,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_95[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_96[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_96[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2877,7 +2877,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_96[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_97[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_97[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2917,7 +2917,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_97[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_98[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_98[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2957,7 +2957,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_98[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_99[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_99[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -2997,7 +2997,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_99[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9A[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9A[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3037,7 +3037,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_9A[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9B[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9B[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3077,7 +3077,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_9B[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9C[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9C[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3117,7 +3117,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_9C[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9D[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9D[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3157,7 +3157,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_9D[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9E[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9E[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -3197,7 +3197,7 @@ static sal_uInt16 const aImplUniToDBCSTab_GBT_9E[] =
 
 /* ----------------------------------------------------------------------- */
 
-static sal_uInt16 const aImplUniToDBCSTab_GBT_9F[] =
+sal_uInt16 const aImplUniToDBCSTab_GBT_9F[] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */

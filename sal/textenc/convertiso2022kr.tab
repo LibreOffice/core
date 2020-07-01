@@ -24,11 +24,11 @@
 #include "convertiso2022kr.hxx"
 #include "tenchelp.hxx"
 
-static ImplIso2022KrConverterData const aImplIso2022KrConvertData
+ImplIso2022KrConverterData const aImplIso2022KrConvertData
     = { aKSC5601UniLeadTab, /* from tcvtkr6.tab */
         aKSC5601DBCSHighTab }; /* from tcvtkr6.tab */
 
-static ImplTextEncodingData const aImplIso2022KrTextEncodingData
+ImplTextEncodingData const aImplIso2022KrTextEncodingData
     = { { &aImplIso2022KrConvertData,
           &ImplConvertIso2022KrToUnicode,
           &ImplConvertUnicodeToIso2022Kr,

@@ -28,7 +28,7 @@
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aBIG5UniLeadTab[256] =
+ImplDBCSToUniLeadTab const aBIG5UniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -290,7 +290,7 @@ static ImplDBCSToUniLeadTab const aBIG5UniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_BIG5_00 },                  /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -559,7 +559,7 @@ static ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
 /* C740-C8FE --> F70F-F848 */
 
 #define DBCS_EUDC_MS950_COUNT       5
-static ImplDBCSEUDCData const aImplMS950DBCSEUDCTab[DBCS_EUDC_MS950_COUNT] =
+ImplDBCSEUDCData const aImplMS950DBCSEUDCTab[DBCS_EUDC_MS950_COUNT] =
 {
     /* EUDC-Range */
     /* Lead:    FA-FE */
@@ -581,7 +581,7 @@ static ImplDBCSEUDCData const aImplMS950DBCSEUDCTab[DBCS_EUDC_MS950_COUNT] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplBIG5DBCSCvtData =
+ImplDBCSConvertData const aImplBIG5DBCSCvtData =
 {
     aBIG5UniLeadTab,
     aBIG5DBCSHighTab,
@@ -593,7 +593,7 @@ static ImplDBCSConvertData const aImplBIG5DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplBIG5TextEncodingData
+ImplTextEncodingData const aImplBIG5TextEncodingData
     = { { &aImplBIG5DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -614,7 +614,7 @@ static ImplTextEncodingData const aImplBIG5TextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aMS950UniLeadTab[256] =
+ImplDBCSToUniLeadTab const aMS950UniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -876,7 +876,7 @@ static ImplDBCSToUniLeadTab const aMS950UniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aMS950DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aMS950DBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_BIG5_00 },                  /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -1138,7 +1138,7 @@ static ImplUniToDBCSHighTab const aMS950DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplMS950DBCSCvtData =
+ImplDBCSConvertData const aImplMS950DBCSCvtData =
 {
     aMS950UniLeadTab,
     aMS950DBCSHighTab,
@@ -1150,7 +1150,7 @@ static ImplDBCSConvertData const aImplMS950DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplMS950TextEncodingData
+ImplTextEncodingData const aImplMS950TextEncodingData
     = { { &aImplMS950DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -1172,7 +1172,7 @@ static ImplTextEncodingData const aImplMS950TextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aAPPLECHINTRADUniLeadTab[256] =
+ImplDBCSToUniLeadTab const aAPPLECHINTRADUniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -1434,7 +1434,7 @@ static ImplDBCSToUniLeadTab const aAPPLECHINTRADUniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aAPPLECHINTRADDBCSHighTab[256] =
+ImplUniToDBCSHighTab const aAPPLECHINTRADDBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_APPLECHINTRAD_00 },           /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -1696,7 +1696,7 @@ static ImplUniToDBCSHighTab const aAPPLECHINTRADDBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplAPPLECHINTRADDBCSCvtData =
+ImplDBCSConvertData const aImplAPPLECHINTRADDBCSCvtData =
 {
     aAPPLECHINTRADUniLeadTab,
     aAPPLECHINTRADDBCSHighTab,
@@ -1708,7 +1708,7 @@ static ImplDBCSConvertData const aImplAPPLECHINTRADDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData
+ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData
     = { { &aImplAPPLECHINTRADDBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,

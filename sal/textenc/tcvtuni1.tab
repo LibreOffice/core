@@ -18,7 +18,7 @@
 
 /* Unicode Encodings */
 
-static ImplTextEncodingData const aImplUTF7TextEncodingData
+ImplTextEncodingData const aImplUTF7TextEncodingData
     = { { nullptr,
           ImplUTF7ToUnicode,
           ImplUnicodeToUTF7,

@@ -30,280 +30,280 @@ extern "C"
 {
 #endif
 
-static const rtl_TextEncoding kEncodingRTLTextUSASCII = RTL_TEXTENCODING_ASCII_US;
+const rtl_TextEncoding kEncodingRTLTextUSASCII = RTL_TEXTENCODING_ASCII_US;
 
-static const sal_uInt32 kConvertFlagsOUStringToOString = OUSTRING_TO_OSTRING_CVTFLAGS;
-static const sal_uInt32 kConvertFlagsOStringToOUString = OSTRING_TO_OUSTRING_CVTFLAGS;
+const sal_uInt32 kConvertFlagsOUStringToOString = OUSTRING_TO_OSTRING_CVTFLAGS;
+const sal_uInt32 kConvertFlagsOStringToOUString = OSTRING_TO_OUSTRING_CVTFLAGS;
 
-static const char * const kTestStr1  = "Sun Microsystems";
-static const char * const kTestStr2  = "Sun Microsystems Java Technology";
-static const char * const kTestStr7  = "Sun ";
-static const char * const kTestStr8  = "Microsystems";
-static const char * const kTestStr14 = "   Sun Microsystems";
-static const char * const kTestStr17 = "   Sun Microsystems   ";
-static const char * const kTestStr23  = " Java Technology";
-static const char * const kTestStr25 = "";
-static const char * const kTestStr27 = "s";
-static const char * const kTestStr28 = "\50\3\5\7\11\13\15\17sun";
-static const char * const kTestStr29 = "\50\3\5\7\11\13\15\17sun\21\23\25\27\31\33\50";
-static const char * const kTestStr31 = "sun Microsystems";
-static const char * const kTestStr36 = "Microsystems Java Technology";
-static const char * const kTestStr37 = "Sun  Java Technology";
-static const char * const kTestStr38 = "\21\23\25\27\31\33\50";
-static const char * const kTestStr39 = "\50\3\5\7\11\13\15\17sun   Sun Microsystems   ";
-static const char * const kTestStr40 = "\50\3\5\7\11\13\15\17sunsun Microsystems";
-static const char * const kTestStr45  = "Sun true";
-static const char * const kTestStr46  = "Sun false";
-static const char * const kTestStr47  = "true";
-static const char * const kTestStr48  = "false";
-static const char * const kTestStr49 = "\50\3\5\7\11\13\15\17suntrue";
-static const char * const kTestStr50 = "\50\3\5\7\11\13\15\17sunfalse";
-static const char * const kTestStr51  = "Sun M";
+const char * const kTestStr1  = "Sun Microsystems";
+const char * const kTestStr2  = "Sun Microsystems Java Technology";
+const char * const kTestStr7  = "Sun ";
+const char * const kTestStr8  = "Microsystems";
+const char * const kTestStr14 = "   Sun Microsystems";
+const char * const kTestStr17 = "   Sun Microsystems   ";
+const char * const kTestStr23  = " Java Technology";
+const char * const kTestStr25 = "";
+const char * const kTestStr27 = "s";
+const char * const kTestStr28 = "\50\3\5\7\11\13\15\17sun";
+const char * const kTestStr29 = "\50\3\5\7\11\13\15\17sun\21\23\25\27\31\33\50";
+const char * const kTestStr31 = "sun Microsystems";
+const char * const kTestStr36 = "Microsystems Java Technology";
+const char * const kTestStr37 = "Sun  Java Technology";
+const char * const kTestStr38 = "\21\23\25\27\31\33\50";
+const char * const kTestStr39 = "\50\3\5\7\11\13\15\17sun   Sun Microsystems   ";
+const char * const kTestStr40 = "\50\3\5\7\11\13\15\17sunsun Microsystems";
+const char * const kTestStr45  = "Sun true";
+const char * const kTestStr46  = "Sun false";
+const char * const kTestStr47  = "true";
+const char * const kTestStr48  = "false";
+const char * const kTestStr49 = "\50\3\5\7\11\13\15\17suntrue";
+const char * const kTestStr50 = "\50\3\5\7\11\13\15\17sunfalse";
+const char * const kTestStr51  = "Sun M";
 //static const char *kTestStr52  = "Sun \077777";
 //static const char *kTestStr53  = "Sun \100000";
 //static const char *kTestStr54  = "\77777";
 //static const char *kTestStr55  = "\100000";
-static const char * const kTestStr56 = "\50\3\5\7\11\13\15\17suns";
+const char * const kTestStr56 = "\50\3\5\7\11\13\15\17suns";
 //static const char *kTestStr57 = "\50\3\5\7\11\13\15\17sun\77777";
 //static const char *kTestStr58 = "\50\3\5\7\11\13\15\17sun\10000";
-static const char * const kTestStr59  = "Sun 11";
-static const char * const kTestStr60  = "11";
-static const char * const kTestStr61  = "\50\3\5\7\11\13\15\17sun11";
-static const char * const kTestStr62  = "Sun 0";
-static const char * const kTestStr63  = "Sun -11";
-static const char * const kTestStr64  = "Sun 2147483647";
-static const char * const kTestStr65  = "Sun -2147483648";
-static const char * const kTestStr66  = "0";
-static const char * const kTestStr67  = "-11";
-static const char * const kTestStr68  = "2147483647";
-static const char * const kTestStr69  = "-2147483648";
-static const char * const kTestStr70  = "\50\3\5\7\11\13\15\17sun0";
-static const char * const kTestStr71  = "\50\3\5\7\11\13\15\17sun-11";
-static const char * const kTestStr72  = "\50\3\5\7\11\13\15\17sun2147483647";
-static const char * const kTestStr73  = "\50\3\5\7\11\13\15\17sun-2147483648";
-static const char * const kTestStr116  = "Sun 9223372036854775807";
-static const char * const kTestStr117  = "Sun -9223372036854775808";
-static const char * const kTestStr118  = "9223372036854775807";
-static const char * const kTestStr119  = "-9223372036854775808";
-static const char * const kTestStr120  = "\50\3\5\7\11\13\15\17sun9223372036854775807";
-static const char * const kTestStr121  = "\50\3\5\7\11\13\15\17sun-9223372036854775808";
-static const char * const kTestStr143  = "Sun \377";
-static const char * const kTestStr144  = "\377";
-static const char * const kTestStr145 = "\50\3\5\7\11\13\15\17sun\377";
+const char * const kTestStr59  = "Sun 11";
+const char * const kTestStr60  = "11";
+const char * const kTestStr61  = "\50\3\5\7\11\13\15\17sun11";
+const char * const kTestStr62  = "Sun 0";
+const char * const kTestStr63  = "Sun -11";
+const char * const kTestStr64  = "Sun 2147483647";
+const char * const kTestStr65  = "Sun -2147483648";
+const char * const kTestStr66  = "0";
+const char * const kTestStr67  = "-11";
+const char * const kTestStr68  = "2147483647";
+const char * const kTestStr69  = "-2147483648";
+const char * const kTestStr70  = "\50\3\5\7\11\13\15\17sun0";
+const char * const kTestStr71  = "\50\3\5\7\11\13\15\17sun-11";
+const char * const kTestStr72  = "\50\3\5\7\11\13\15\17sun2147483647";
+const char * const kTestStr73  = "\50\3\5\7\11\13\15\17sun-2147483648";
+const char * const kTestStr116  = "Sun 9223372036854775807";
+const char * const kTestStr117  = "Sun -9223372036854775808";
+const char * const kTestStr118  = "9223372036854775807";
+const char * const kTestStr119  = "-9223372036854775808";
+const char * const kTestStr120  = "\50\3\5\7\11\13\15\17sun9223372036854775807";
+const char * const kTestStr121  = "\50\3\5\7\11\13\15\17sun-9223372036854775808";
+const char * const kTestStr143  = "Sun \377";
+const char * const kTestStr144  = "\377";
+const char * const kTestStr145 = "\50\3\5\7\11\13\15\17sun\377";
 
-static const sal_Int32 kTestStr1Len  = 16;
-static const sal_Int32 kTestStr2Len  = 32;
-static const sal_Int32 kTestStr3Len  = 16;
-static const sal_Int32 kTestStr4Len  = 16;
-static const sal_Int32 kTestStr5Len  = 16;
-static const sal_Int32 kTestStr6Len  = 15;
-static const sal_Int32 kTestStr7Len  = 4;
-static const sal_Int32 kTestStr8Len  = 12;
-static const sal_Int32 kTestStr9Len  = 32;
-static const sal_Int32 kTestStr10Len = 17;
-static const sal_Int32 kTestStr11Len = 17;
-static const sal_Int32 kTestStr12Len = 18;
-static const sal_Int32 kTestStr13Len = 19;
-static const sal_Int32 kTestStr14Len = 19;
-static const sal_Int32 kTestStr15Len = 20;
-static const sal_Int32 kTestStr16Len = 20;
-static const sal_Int32 kTestStr17Len = 22;
-static const sal_Int32 kTestStr18Len = 16;
-static const sal_Int32 kTestStr19Len = 22;
-static const sal_Int32 kTestStr20Len = 3;
-static const sal_Int32 kTestStr21Len = 3;
-static const sal_Int32 kTestStr22Len = 32;
-static const sal_Int32 kTestStr23Len = 16;
-static const sal_Int32 kTestStr24Len = 31;
-static const sal_Int32 kTestStr25Len = 0;
-static const sal_Int32 kTestStr26Len = 4;
-static const sal_Int32 kTestStr27Len = 1;
-static const sal_Int32 kTestStr28Len = 11;
-static const sal_Int32 kTestStr29Len = 18;
-static const sal_Int32 kTestStr30Len = 10;
-static const sal_Int32 kTestStr31Len = 16;
-static const sal_Int32 kTestStr32Len = 16;
-static const sal_Int32 kTestStr33Len = 1;
-static const sal_Int32 kTestStr34Len = 11;
-static const sal_Int32 kTestStr35Len = 11;
-static const sal_Int32 kTestStr36Len = 28;
-static const sal_Int32 kTestStr37Len = 20;
-static const sal_Int32 kTestStr38Len = 7;
-static const sal_Int32 kTestStr39Len = 33;
-static const sal_Int32 kTestStr40Len = 27;
-static const sal_Int32 kTestStr41Len = 3;
-static const sal_Int32 kTestStr42Len = 10;
-static const sal_Int32 kTestStr43Len = 13;
-static const sal_Int32 kTestStr44Len = 2;
-static const sal_Int32 kTestStr45Len = 8;
-static const sal_Int32 kTestStr46Len = 9;
-static const sal_Int32 kTestStr47Len = 4;
-static const sal_Int32 kTestStr48Len = 5;
-static const sal_Int32 kTestStr49Len = 15;
-static const sal_Int32 kTestStr50Len = 16;
-static const sal_Int32 kTestStr51Len = 5;
-static const sal_Int32 kTestStr52Len = 5;
-static const sal_Int32 kTestStr53Len = 5;
-static const sal_Int32 kTestStr54Len = 1;
-static const sal_Int32 kTestStr55Len = 1;
-static const sal_Int32 kTestStr56Len = 12;
-static const sal_Int32 kTestStr57Len = 12;
-static const sal_Int32 kTestStr58Len = 12;
-static const sal_Int32 kTestStr59Len = 6;
-static const sal_Int32 kTestStr60Len = 2;
-static const sal_Int32 kTestStr61Len = 13;
-static const sal_Int32 kTestStr62Len = 5;
-static const sal_Int32 kTestStr63Len = 7;
-static const sal_Int32 kTestStr64Len = 14;
-static const sal_Int32 kTestStr65Len = 15;
-static const sal_Int32 kTestStr66Len = 1;
-static const sal_Int32 kTestStr67Len = 3;
-static const sal_Int32 kTestStr68Len = 10;
-static const sal_Int32 kTestStr69Len = 11;
-static const sal_Int32 kTestStr70Len = 12;
-static const sal_Int32 kTestStr71Len = 14;
-static const sal_Int32 kTestStr72Len = 21;
-static const sal_Int32 kTestStr73Len = 22;
-static const sal_Int32 kTestStr74Len = 7;
-static const sal_Int32 kTestStr75Len = 7;
-static const sal_Int32 kTestStr76Len = 10;
-static const sal_Int32 kTestStr77Len = 12;
-static const sal_Int32 kTestStr78Len = 12;
-static const sal_Int32 kTestStr79Len = 13;
-static const sal_Int32 kTestStr80Len = 13;
-static const sal_Int32 kTestStr81Len = 3;
-static const sal_Int32 kTestStr82Len = 3;
-static const sal_Int32 kTestStr83Len = 6;
-static const sal_Int32 kTestStr84Len = 8;
-static const sal_Int32 kTestStr85Len = 8;
-static const sal_Int32 kTestStr86Len = 9;
-static const sal_Int32 kTestStr87Len = 9;
-static const sal_Int32 kTestStr88Len = 14;
-static const sal_Int32 kTestStr89Len = 14;
-static const sal_Int32 kTestStr90Len = 17;
-static const sal_Int32 kTestStr91Len = 19;
-static const sal_Int32 kTestStr92Len = 19;
-static const sal_Int32 kTestStr93Len = 20;
-static const sal_Int32 kTestStr94Len = 20;
-static const sal_Int32 kTestStr95Len = 8;
-static const sal_Int32 kTestStr96Len = 8;
-static const sal_Int32 kTestStr97Len = 11;
-static const sal_Int32 kTestStr98Len = 13;
-static const sal_Int32 kTestStr99Len = 13;
-static const sal_Int32 kTestStr100Len = 14;
-static const sal_Int32 kTestStr101Len = 14;
-static const sal_Int32 kTestStr102Len = 4;
-static const sal_Int32 kTestStr103Len = 4;
-static const sal_Int32 kTestStr104Len = 7;
-static const sal_Int32 kTestStr105Len = 9;
-static const sal_Int32 kTestStr106Len = 9;
-static const sal_Int32 kTestStr107Len = 10;
-static const sal_Int32 kTestStr108Len = 10;
-static const sal_Int32 kTestStr109Len = 15;
-static const sal_Int32 kTestStr110Len = 15;
-static const sal_Int32 kTestStr111Len = 18;
-static const sal_Int32 kTestStr112Len = 20;
-static const sal_Int32 kTestStr113Len = 20;
-static const sal_Int32 kTestStr114Len = 21;
-static const sal_Int32 kTestStr115Len = 21;
-static const sal_Int32 kTestStr116Len = 23;
-static const sal_Int32 kTestStr117Len = 24;
-static const sal_Int32 kTestStr118Len = 19;
-static const sal_Int32 kTestStr119Len = 20;
-static const sal_Int32 kTestStr120Len = 30;
-static const sal_Int32 kTestStr121Len = 31;
-static const sal_Int32 kTestStr122Len = 16;
-static const sal_Int32 kTestStr123Len = 21;
-static const sal_Int32 kTestStr124Len = 23;
-static const sal_Int32 kTestStr125Len = 30;
-static const sal_Int32 kTestStr126Len = 12;
-static const sal_Int32 kTestStr127Len = 17;
-static const sal_Int32 kTestStr128Len = 19;
-static const sal_Int32 kTestStr129Len = 26;
-static const sal_Int32 kTestStr130Len = 23;
-static const sal_Int32 kTestStr131Len = 28;
-static const sal_Int32 kTestStr132Len = 30;
-static const sal_Int32 kTestStr133Len = 37;
-static const sal_Int32 kTestStr134Len = 22;
-static const sal_Int32 kTestStr135Len = 24;
-static const sal_Int32 kTestStr136Len = 31;
-static const sal_Int32 kTestStr137Len = 18;
-static const sal_Int32 kTestStr138Len = 20;
-static const sal_Int32 kTestStr139Len = 27;
-static const sal_Int32 kTestStr140Len = 29;
-static const sal_Int32 kTestStr141Len = 31;
-static const sal_Int32 kTestStr142Len = 38;
-static const sal_Int32 kTestStr143Len = 5;
-static const sal_Int32 kTestStr144Len = 1;
-static const sal_Int32 kTestStr145Len = 12;
-static const sal_Int32 kTestStr146Len = 19;
-static const sal_Int32 kTestStr147Len = 19;
-static const sal_Int32 kTestStr148Len = 19;
-static const sal_Int32 kTestStr149Len = 32;
-static const sal_Int32 kTestStr150Len = 32;
-static const sal_Int32 kTestStr151Len = 31;
-static const sal_Int32 kTestStr152Len = 31;
-static const sal_Int32 kTestStr153Len = 31;
-static const sal_Int32 kTestStr154Len = 36;
-static const sal_Int32 kTestStr155Len = 36;
-static const sal_Int32 kTestStr156Len = 36;
-static const sal_Int32 kTestStr157Len = 49;
-static const sal_Int32 kTestStr158Len = 49;
-static const sal_Int32 kTestStr159Len = 49;
-static const sal_Int32 kTestStr160Len = 48;
-static const sal_Int32 kTestStr161Len = 48;
-static const sal_Int32 kTestStr162Len = 48;
-static const sal_Int32 kTestStr163Len = 15;
-static const sal_Int32 kTestStr164Len = 15;
-static const sal_Int32 kTestStr165Len = 15;
-static const sal_Int32 kTestStr166Len = 28;
-static const sal_Int32 kTestStr167Len = 28;
-static const sal_Int32 kTestStr168Len = 28;
-static const sal_Int32 kTestStr169Len = 27;
-static const sal_Int32 kTestStr170Len = 27;
-static const sal_Int32 kTestStr171Len = 27;
-static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
+const sal_Int32 kTestStr1Len  = 16;
+const sal_Int32 kTestStr2Len  = 32;
+const sal_Int32 kTestStr3Len  = 16;
+const sal_Int32 kTestStr4Len  = 16;
+const sal_Int32 kTestStr5Len  = 16;
+const sal_Int32 kTestStr6Len  = 15;
+const sal_Int32 kTestStr7Len  = 4;
+const sal_Int32 kTestStr8Len  = 12;
+const sal_Int32 kTestStr9Len  = 32;
+const sal_Int32 kTestStr10Len = 17;
+const sal_Int32 kTestStr11Len = 17;
+const sal_Int32 kTestStr12Len = 18;
+const sal_Int32 kTestStr13Len = 19;
+const sal_Int32 kTestStr14Len = 19;
+const sal_Int32 kTestStr15Len = 20;
+const sal_Int32 kTestStr16Len = 20;
+const sal_Int32 kTestStr17Len = 22;
+const sal_Int32 kTestStr18Len = 16;
+const sal_Int32 kTestStr19Len = 22;
+const sal_Int32 kTestStr20Len = 3;
+const sal_Int32 kTestStr21Len = 3;
+const sal_Int32 kTestStr22Len = 32;
+const sal_Int32 kTestStr23Len = 16;
+const sal_Int32 kTestStr24Len = 31;
+const sal_Int32 kTestStr25Len = 0;
+const sal_Int32 kTestStr26Len = 4;
+const sal_Int32 kTestStr27Len = 1;
+const sal_Int32 kTestStr28Len = 11;
+const sal_Int32 kTestStr29Len = 18;
+const sal_Int32 kTestStr30Len = 10;
+const sal_Int32 kTestStr31Len = 16;
+const sal_Int32 kTestStr32Len = 16;
+const sal_Int32 kTestStr33Len = 1;
+const sal_Int32 kTestStr34Len = 11;
+const sal_Int32 kTestStr35Len = 11;
+const sal_Int32 kTestStr36Len = 28;
+const sal_Int32 kTestStr37Len = 20;
+const sal_Int32 kTestStr38Len = 7;
+const sal_Int32 kTestStr39Len = 33;
+const sal_Int32 kTestStr40Len = 27;
+const sal_Int32 kTestStr41Len = 3;
+const sal_Int32 kTestStr42Len = 10;
+const sal_Int32 kTestStr43Len = 13;
+const sal_Int32 kTestStr44Len = 2;
+const sal_Int32 kTestStr45Len = 8;
+const sal_Int32 kTestStr46Len = 9;
+const sal_Int32 kTestStr47Len = 4;
+const sal_Int32 kTestStr48Len = 5;
+const sal_Int32 kTestStr49Len = 15;
+const sal_Int32 kTestStr50Len = 16;
+const sal_Int32 kTestStr51Len = 5;
+const sal_Int32 kTestStr52Len = 5;
+const sal_Int32 kTestStr53Len = 5;
+const sal_Int32 kTestStr54Len = 1;
+const sal_Int32 kTestStr55Len = 1;
+const sal_Int32 kTestStr56Len = 12;
+const sal_Int32 kTestStr57Len = 12;
+const sal_Int32 kTestStr58Len = 12;
+const sal_Int32 kTestStr59Len = 6;
+const sal_Int32 kTestStr60Len = 2;
+const sal_Int32 kTestStr61Len = 13;
+const sal_Int32 kTestStr62Len = 5;
+const sal_Int32 kTestStr63Len = 7;
+const sal_Int32 kTestStr64Len = 14;
+const sal_Int32 kTestStr65Len = 15;
+const sal_Int32 kTestStr66Len = 1;
+const sal_Int32 kTestStr67Len = 3;
+const sal_Int32 kTestStr68Len = 10;
+const sal_Int32 kTestStr69Len = 11;
+const sal_Int32 kTestStr70Len = 12;
+const sal_Int32 kTestStr71Len = 14;
+const sal_Int32 kTestStr72Len = 21;
+const sal_Int32 kTestStr73Len = 22;
+const sal_Int32 kTestStr74Len = 7;
+const sal_Int32 kTestStr75Len = 7;
+const sal_Int32 kTestStr76Len = 10;
+const sal_Int32 kTestStr77Len = 12;
+const sal_Int32 kTestStr78Len = 12;
+const sal_Int32 kTestStr79Len = 13;
+const sal_Int32 kTestStr80Len = 13;
+const sal_Int32 kTestStr81Len = 3;
+const sal_Int32 kTestStr82Len = 3;
+const sal_Int32 kTestStr83Len = 6;
+const sal_Int32 kTestStr84Len = 8;
+const sal_Int32 kTestStr85Len = 8;
+const sal_Int32 kTestStr86Len = 9;
+const sal_Int32 kTestStr87Len = 9;
+const sal_Int32 kTestStr88Len = 14;
+const sal_Int32 kTestStr89Len = 14;
+const sal_Int32 kTestStr90Len = 17;
+const sal_Int32 kTestStr91Len = 19;
+const sal_Int32 kTestStr92Len = 19;
+const sal_Int32 kTestStr93Len = 20;
+const sal_Int32 kTestStr94Len = 20;
+const sal_Int32 kTestStr95Len = 8;
+const sal_Int32 kTestStr96Len = 8;
+const sal_Int32 kTestStr97Len = 11;
+const sal_Int32 kTestStr98Len = 13;
+const sal_Int32 kTestStr99Len = 13;
+const sal_Int32 kTestStr100Len = 14;
+const sal_Int32 kTestStr101Len = 14;
+const sal_Int32 kTestStr102Len = 4;
+const sal_Int32 kTestStr103Len = 4;
+const sal_Int32 kTestStr104Len = 7;
+const sal_Int32 kTestStr105Len = 9;
+const sal_Int32 kTestStr106Len = 9;
+const sal_Int32 kTestStr107Len = 10;
+const sal_Int32 kTestStr108Len = 10;
+const sal_Int32 kTestStr109Len = 15;
+const sal_Int32 kTestStr110Len = 15;
+const sal_Int32 kTestStr111Len = 18;
+const sal_Int32 kTestStr112Len = 20;
+const sal_Int32 kTestStr113Len = 20;
+const sal_Int32 kTestStr114Len = 21;
+const sal_Int32 kTestStr115Len = 21;
+const sal_Int32 kTestStr116Len = 23;
+const sal_Int32 kTestStr117Len = 24;
+const sal_Int32 kTestStr118Len = 19;
+const sal_Int32 kTestStr119Len = 20;
+const sal_Int32 kTestStr120Len = 30;
+const sal_Int32 kTestStr121Len = 31;
+const sal_Int32 kTestStr122Len = 16;
+const sal_Int32 kTestStr123Len = 21;
+const sal_Int32 kTestStr124Len = 23;
+const sal_Int32 kTestStr125Len = 30;
+const sal_Int32 kTestStr126Len = 12;
+const sal_Int32 kTestStr127Len = 17;
+const sal_Int32 kTestStr128Len = 19;
+const sal_Int32 kTestStr129Len = 26;
+const sal_Int32 kTestStr130Len = 23;
+const sal_Int32 kTestStr131Len = 28;
+const sal_Int32 kTestStr132Len = 30;
+const sal_Int32 kTestStr133Len = 37;
+const sal_Int32 kTestStr134Len = 22;
+const sal_Int32 kTestStr135Len = 24;
+const sal_Int32 kTestStr136Len = 31;
+const sal_Int32 kTestStr137Len = 18;
+const sal_Int32 kTestStr138Len = 20;
+const sal_Int32 kTestStr139Len = 27;
+const sal_Int32 kTestStr140Len = 29;
+const sal_Int32 kTestStr141Len = 31;
+const sal_Int32 kTestStr142Len = 38;
+const sal_Int32 kTestStr143Len = 5;
+const sal_Int32 kTestStr144Len = 1;
+const sal_Int32 kTestStr145Len = 12;
+const sal_Int32 kTestStr146Len = 19;
+const sal_Int32 kTestStr147Len = 19;
+const sal_Int32 kTestStr148Len = 19;
+const sal_Int32 kTestStr149Len = 32;
+const sal_Int32 kTestStr150Len = 32;
+const sal_Int32 kTestStr151Len = 31;
+const sal_Int32 kTestStr152Len = 31;
+const sal_Int32 kTestStr153Len = 31;
+const sal_Int32 kTestStr154Len = 36;
+const sal_Int32 kTestStr155Len = 36;
+const sal_Int32 kTestStr156Len = 36;
+const sal_Int32 kTestStr157Len = 49;
+const sal_Int32 kTestStr158Len = 49;
+const sal_Int32 kTestStr159Len = 49;
+const sal_Int32 kTestStr160Len = 48;
+const sal_Int32 kTestStr161Len = 48;
+const sal_Int32 kTestStr162Len = 48;
+const sal_Int32 kTestStr163Len = 15;
+const sal_Int32 kTestStr164Len = 15;
+const sal_Int32 kTestStr165Len = 15;
+const sal_Int32 kTestStr166Len = 28;
+const sal_Int32 kTestStr167Len = 28;
+const sal_Int32 kTestStr168Len = 28;
+const sal_Int32 kTestStr169Len = 27;
+const sal_Int32 kTestStr170Len = 27;
+const sal_Int32 kTestStr171Len = 27;
+const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
 
-static const sal_Int32 uTestStr1Len  = 16;
-static const sal_Int32 uTestStr2Len  = 32;
-static const sal_Int32 uTestStr3Len  = 16;
-static const sal_Int32 uTestStr4Len  = 16;
-static const sal_Int32 uTestStr5Len  = 16;
-static const sal_Int32 uTestStr9Len  = 32;
-static const sal_Int32 uTestStr22Len = 32;
+const sal_Int32 uTestStr1Len  = 16;
+const sal_Int32 uTestStr2Len  = 32;
+const sal_Int32 uTestStr3Len  = 16;
+const sal_Int32 uTestStr4Len  = 16;
+const sal_Int32 uTestStr5Len  = 16;
+const sal_Int32 uTestStr9Len  = 32;
+const sal_Int32 uTestStr22Len = 32;
 
 const sal_Unicode uTestStr31[]= {0x400,0x410,0x4DF};
 const sal_Unicode uTestStr32[]= {0x9F9F,0xA000,0x8F80,0x9AD9};
 
-static const sal_Int32 uTestStr31Len  = 3;
-static const sal_Int32 uTestStr32Len  = 4;
+const sal_Int32 uTestStr31Len  = 3;
+const sal_Int32 uTestStr32Len  = 4;
 
-static const sal_Int16 kRadixBinary     = 2;
-static const sal_Int16 kRadixOctol      = 8;
-static const sal_Int16 kRadixDecimal    = 10;
-static const sal_Int16 kRadixHexdecimal = 16;
-static const sal_Int16 kRadixBase36     = 36;
+const sal_Int16 kRadixBinary     = 2;
+const sal_Int16 kRadixOctol      = 8;
+const sal_Int16 kRadixDecimal    = 10;
+const sal_Int16 kRadixHexdecimal = 16;
+const sal_Int16 kRadixBase36     = 36;
 
-static const sal_Int8  kSInt8Max  = SCHAR_MAX;
-static const sal_Int16 kUInt8Max  = UCHAR_MAX;
-static const sal_Int16 kSInt16Max = SHRT_MAX;
-static const sal_Int32 kUInt16Max = USHRT_MAX;
-static const sal_Int32 kSInt32Max = INT_MAX;
-static const sal_Int64 kUInt32Max = UINT_MAX;
-static const sal_Int64 kSInt64Max = SAL_CONST_INT64(9223372036854775807);
+const sal_Int8  kSInt8Max  = SCHAR_MAX;
+const sal_Int16 kUInt8Max  = UCHAR_MAX;
+const sal_Int16 kSInt16Max = SHRT_MAX;
+const sal_Int32 kUInt16Max = USHRT_MAX;
+const sal_Int32 kSInt32Max = INT_MAX;
+const sal_Int64 kUInt32Max = UINT_MAX;
+const sal_Int64 kSInt64Max = SAL_CONST_INT64(9223372036854775807);
 
-static const sal_Int32 kInt32MaxNumsCount = 5;
+const sal_Int32 kInt32MaxNumsCount = 5;
 
-static const sal_Int32 kInt32MaxNums[kInt32MaxNumsCount] =
+const sal_Int32 kInt32MaxNums[kInt32MaxNumsCount] =
                         {
                             kSInt8Max,  kUInt8Max,
                             kSInt16Max, kUInt16Max,
                             kSInt32Max
                         };
 
-static const sal_Int32 kInt64MaxNumsCount = 7;
+const sal_Int32 kInt64MaxNumsCount = 7;
 
-static const sal_Int64 kInt64MaxNums[kInt64MaxNumsCount] =
+const sal_Int64 kInt64MaxNums[kInt64MaxNumsCount] =
                         {
                             kSInt8Max,  kUInt8Max,
                             kSInt16Max, kUInt16Max,
@@ -311,28 +311,28 @@ static const sal_Int64 kInt64MaxNums[kInt64MaxNumsCount] =
                             kSInt64Max
                         };
 
-static const sal_Int32 kBinaryNumsCount = 16;
+const sal_Int32 kBinaryNumsCount = 16;
 
-static const sal_Int32 kBinaryMaxNumsCount = 7;
+const sal_Int32 kBinaryMaxNumsCount = 7;
 
-static const sal_Int32 kOctolNumsCount = 16;
+const sal_Int32 kOctolNumsCount = 16;
 
-static const sal_Int32 kOctolMaxNumsCount = 7;
+const sal_Int32 kOctolMaxNumsCount = 7;
 
-static const sal_Int32 kDecimalNumsCount = 16;
+const sal_Int32 kDecimalNumsCount = 16;
 
-static const sal_Int32 kDecimalMaxNumsCount = 7;
+const sal_Int32 kDecimalMaxNumsCount = 7;
 
-static const sal_Int32 kHexDecimalNumsCount = 16;
+const sal_Int32 kHexDecimalNumsCount = 16;
 
-static const sal_Int32 kHexDecimalMaxNumsCount = 7;
+const sal_Int32 kHexDecimalMaxNumsCount = 7;
 
-static const sal_Int32 kBase36NumsCount = 36;
+const sal_Int32 kBase36NumsCount = 36;
 
-static const sal_Int32 kBase36MaxNumsCount = 7;
+const sal_Int32 kBase36MaxNumsCount = 7;
 
-static const sal_Int32 nDoubleCount=24;
-static const double   expValDouble[nDoubleCount]=
+const sal_Int32 nDoubleCount=24;
+const double   expValDouble[nDoubleCount]=
     {
             3.0,3.1,3.1415,3.1415926535,3.141592653589793,
             3.1415926535897932,3.14159265358979323,3.1,
@@ -341,8 +341,8 @@ static const double   expValDouble[nDoubleCount]=
             0.0,0.0,0.0,1.00e+308
     };
 
-static const sal_Int32 nFloatCount=22;
-static const float  expValFloat[nFloatCount] =
+const sal_Int32 nFloatCount=22;
+const float  expValFloat[nFloatCount] =
         {
             3.0f,3.1f,3.1415f,3.14159f,3.141592f,
             3.1415926f,3.14159265f,3.141592653589793238462643f,
@@ -351,8 +351,8 @@ static const float  expValFloat[nFloatCount] =
             3.1f,0.0f,0.0f,0.0f
         };
 
-static const sal_Int32 nCharCount=15;
-static const sal_Unicode  expValChar[nCharCount] =
+const sal_Int32 nCharCount=15;
+const sal_Unicode  expValChar[nCharCount] =
         {
             65,97,48,45,95,
             21,27,29,
@@ -360,104 +360,104 @@ static const sal_Unicode  expValChar[nCharCount] =
             0,0,83
         };
 
-static const sal_Int32 nDefaultCount=6;
-static const sal_Unicode input1Default[nDefaultCount] =
+const sal_Int32 nDefaultCount=6;
+const sal_Unicode input1Default[nDefaultCount] =
         {
             77,115,85,119,32,0
         };
-static const sal_Int32 input2Default[nDefaultCount] =
+const sal_Int32 input2Default[nDefaultCount] =
         {
             0,0,0,0,0,0
         };
-static const sal_Int32  expValDefault[nDefaultCount] =
+const sal_Int32  expValDefault[nDefaultCount] =
         {
             4,9,-1,-1,3,-1
         };
 
-static const sal_Int32 nNormalCount=10;
-static const sal_Unicode input1Normal[nNormalCount] =
+const sal_Int32 nNormalCount=10;
+const sal_Unicode input1Normal[nNormalCount] =
         {
             77,77,77,115,115,115,119,119,0,0
         };
-static const sal_Int32 input2Normal[nNormalCount] =
+const sal_Int32 input2Normal[nNormalCount] =
         {
             0,32,80,0,13,20,0,80,0,32
         };
-static const sal_Int32  expValNormal[nNormalCount] =
+const sal_Int32  expValNormal[nNormalCount] =
         {
             4,-1,-1,9,15,-1,-1,-1,-1,-1
         };
 
-static const sal_Int32 nlastDefaultCount=5;
-static const sal_Unicode input1lastDefault[nlastDefaultCount] =
+const sal_Int32 nlastDefaultCount=5;
+const sal_Unicode input1lastDefault[nlastDefaultCount] =
         {
             77,115,119,32,0
         };
-static const sal_Int32 input2lastDefault[nlastDefaultCount] =
+const sal_Int32 input2lastDefault[nlastDefaultCount] =
         {
             31,31,31,31,31
         };
-static const sal_Int32  expVallastDefault[nlastDefaultCount] =
+const sal_Int32  expVallastDefault[nlastDefaultCount] =
         {
             4,15,-1,21,-1
         };
 
-static const sal_Int32 nlastNormalCount=8;
-static const sal_Unicode input1lastNormal[nlastNormalCount] =
+const sal_Int32 nlastNormalCount=8;
+const sal_Unicode input1lastNormal[nlastNormalCount] =
         {
             77,77,77,115,115,119,119,0
         };
-static const sal_Int32 input2lastNormal[nlastNormalCount] =
+const sal_Int32 input2lastNormal[nlastNormalCount] =
         {
             29,0,80,31,3,31,80,31
         };
-static const sal_Int32  expVallastNormal[nlastNormalCount] =
+const sal_Int32  expVallastNormal[nlastNormalCount] =
         {
             4,-1,4,15,-1,-1,-1,-1
         };
 
-static const sal_Int32 nStrDefaultCount=6;
-static const sal_Int32 input2StrDefault[nStrDefaultCount] =
+const sal_Int32 nStrDefaultCount=6;
+const sal_Int32 input2StrDefault[nStrDefaultCount] =
         {
             0,0,0,0,0,0
         };
-static const sal_Int32 expValStrDefault[nStrDefaultCount] =
+const sal_Int32 expValStrDefault[nStrDefaultCount] =
         {
             0,4,-1,-1,-1,3
         };
 
-static const sal_Int32 nStrNormalCount=9;
-static const sal_Int32 input2StrNormal[nStrNormalCount] =
+const sal_Int32 nStrNormalCount=9;
+const sal_Int32 input2StrNormal[nStrNormalCount] =
         {
             0,32,0,30,0,0,0,32,0
         };
-static const sal_Int32 expValStrNormal[nStrNormalCount] =
+const sal_Int32 expValStrNormal[nStrNormalCount] =
         {
             0,-1,4,-1,-1,-1,-1,-1,3
         };
 
-static const sal_Int32 nStrLastDefaultCount=6;
-static const sal_Int32 input2StrLastDefault[nStrLastDefaultCount] =
+const sal_Int32 nStrLastDefaultCount=6;
+const sal_Int32 input2StrLastDefault[nStrLastDefaultCount] =
         {
             31,31,31,31,31,31
         };
-static const sal_Int32  expValStrLastDefault[nStrLastDefaultCount] =
+const sal_Int32  expValStrLastDefault[nStrLastDefaultCount] =
         {
             0,4,-1,-1,-1,3
         };
 
-static const sal_Int32 nStrLastNormalCount=12;
-static const sal_Int32 input2StrLastNormal[nStrLastNormalCount] =
+const sal_Int32 nStrLastNormalCount=12;
+const sal_Int32 input2StrLastNormal[nStrLastNormalCount] =
         {
             31,0,80,31,2,31,31,31,0,31,31,14
         };
-static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
+const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
         {
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
 
-static const sal_Int32 kNonSInt32Max = INT_MIN;
-static const sal_Int32 kNonSInt16Max = SHRT_MIN;
+const sal_Int32 kNonSInt32Max = INT_MIN;
+const sal_Int32 kNonSInt16Max = SHRT_MIN;
 
 #ifdef __cplusplus
 }

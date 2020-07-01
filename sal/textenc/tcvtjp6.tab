@@ -28,7 +28,7 @@
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
+ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -292,7 +292,7 @@ static ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
 
 /* MS932-Tables are used for better microsoft compatibility */
 
-static ImplUniToDBCSHighTab const aSJISDBCSHighTab[256] =
+ImplUniToDBCSHighTab const aSJISDBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -557,7 +557,7 @@ static ImplUniToDBCSHighTab const aSJISDBCSHighTab[256] =
 /* F040-F9FC    --> E000-E757 */
 
 #define DBCS_EUDC_SJIS_COUNT        1
-static ImplDBCSEUDCData const aImplSJISDBCSEUDCTab[DBCS_EUDC_SJIS_COUNT] =
+ImplDBCSEUDCData const aImplSJISDBCSEUDCTab[DBCS_EUDC_SJIS_COUNT] =
 {
     /* EUDC-Range */
     /* Lead:    F0-F9 */
@@ -567,7 +567,7 @@ static ImplDBCSEUDCData const aImplSJISDBCSEUDCTab[DBCS_EUDC_SJIS_COUNT] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplSJISDBCSCvtData =
+ImplDBCSConvertData const aImplSJISDBCSCvtData =
 {
     aSJISUniLeadTab,
     aSJISDBCSHighTab,
@@ -579,7 +579,7 @@ static ImplDBCSConvertData const aImplSJISDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplSJISTextEncodingData
+ImplTextEncodingData const aImplSJISTextEncodingData
     = { { &aImplSJISDBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -600,7 +600,7 @@ static ImplTextEncodingData const aImplSJISTextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
+ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -862,7 +862,7 @@ static ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aMS932DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aMS932DBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -1124,7 +1124,7 @@ static ImplUniToDBCSHighTab const aMS932DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplMS932DBCSCvtData =
+ImplDBCSConvertData const aImplMS932DBCSCvtData =
 {
     aMS932UniLeadTab,
     aMS932DBCSHighTab,
@@ -1136,7 +1136,7 @@ static ImplDBCSConvertData const aImplMS932DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplMS932TextEncodingData
+ImplTextEncodingData const aImplMS932TextEncodingData
     = { { &aImplMS932DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -1157,7 +1157,7 @@ static ImplTextEncodingData const aImplMS932TextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
+ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
 {
     { 0x0000,    0,    0, nullptr },                               /* 0x00 */
     { 0x0001,    0,    0, nullptr },                               /* 0x01 */
@@ -1419,7 +1419,7 @@ static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aAPPLEJAPANESEDBCSHighTab[256] =
+ImplUniToDBCSHighTab const aAPPLEJAPANESEDBCSHighTab[256] =
 {
     { 0x00, 0xF7, aImplUniToDBCSTab_APPLEJAPANESE_00 },         /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -1681,7 +1681,7 @@ static ImplUniToDBCSHighTab const aAPPLEJAPANESEDBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
+ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
 {
     aAPPLEJAPANESEUniLeadTab,
     aAPPLEJAPANESEDBCSHighTab,
@@ -1693,7 +1693,7 @@ static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
+ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
     = { { &aImplAPPLEJAPANESEDBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
@@ -1714,7 +1714,7 @@ static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSToUniLeadTab const aJIS0208UniLeadTab[128] =
+ImplDBCSToUniLeadTab const aJIS0208UniLeadTab[128] =
 {
     {      0,    1,    0, nullptr },                               /* 0x00 */
     {      0,    1,    0, nullptr },                               /* 0x01 */
@@ -1848,7 +1848,7 @@ static ImplDBCSToUniLeadTab const aJIS0208UniLeadTab[128] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
 {
     { 0xA2, 0xF7, aImplUniToDBCSTab_JIS0208_00 },               /* 0x00 */
     {    1,    0, nullptr },                                       /* 0x01 */
@@ -2110,7 +2110,7 @@ static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplDBCSToUniLeadTab const aJIS0212UniLeadTab[128] =
+ImplDBCSToUniLeadTab const aJIS0212UniLeadTab[128] =
 {
     {      0,    1,    0, nullptr },                               /* 0x00 */
     {      0,    1,    0, nullptr },                               /* 0x01 */
@@ -2244,7 +2244,7 @@ static ImplDBCSToUniLeadTab const aJIS0212UniLeadTab[128] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplUniToDBCSHighTab const aJIS0212DBCSHighTab[256] =
+ImplUniToDBCSHighTab const aJIS0212DBCSHighTab[256] =
 {
     { 0xA1, 0xFF, aImplUniToDBCSTab_JIS0212_00 },               /* 0x00 */
     { 0x00, 0xF5, aImplUniToDBCSTab_JIS0212_01 },               /* 0x01 */
@@ -2506,7 +2506,7 @@ static ImplUniToDBCSHighTab const aJIS0212DBCSHighTab[256] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplEUCJPConvertData const aImplEUCJPCvtData =
+ImplEUCJPConvertData const aImplEUCJPCvtData =
 {
     aJIS0208UniLeadTab,
     aJIS0212UniLeadTab,
@@ -2516,7 +2516,7 @@ static ImplEUCJPConvertData const aImplEUCJPCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplEUCJPTextEncodingData
+ImplTextEncodingData const aImplEUCJPTextEncodingData
     = { { &aImplEUCJPCvtData,
           ImplEUCJPToUnicode,
           ImplUnicodeToEUCJP,
@@ -2544,7 +2544,7 @@ static ImplTextEncodingData const aImplEUCJPTextEncodingData
 #define HALFWIDTHKANA_START 0xFF61
 #define HALFWIDTHKANA_END   0xFF9F
 
-static unsigned char const aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
+unsigned char const aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
 {
           0xA1, 0xA2, 0xA3, 0xA4, 0x5A, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF,
     0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
@@ -2554,7 +2554,7 @@ static unsigned char const aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_ST
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplJISX0201ByteCvtData =
+ImplByteConvertData const aImplJISX0201ByteCvtData =
 {
     nullptr,
     nullptr,
@@ -2570,7 +2570,7 @@ static ImplByteConvertData const aImplJISX0201ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplJISX0201TextEncodingData
+ImplTextEncodingData const aImplJISX0201TextEncodingData
     = { { &aImplJISX0201ByteCvtData,
           nullptr,
           sal::detail::textenc::convertUnicodeToChar,
@@ -2591,7 +2591,7 @@ static ImplTextEncodingData const aImplJISX0201TextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
+ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 {
     nullptr,
     aJIS0208DBCSHighTab,
@@ -2603,7 +2603,7 @@ static ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplJISX0208TextEncodingData
+ImplTextEncodingData const aImplJISX0208TextEncodingData
     = { { &aImplJISX0208DBCSCvtData,
           nullptr,
           ImplUnicodeToDBCS,
@@ -2624,7 +2624,7 @@ static ImplTextEncodingData const aImplJISX0208TextEncodingData
 
 /* ======================================================================= */
 
-static ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
+ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
 {
     nullptr,
     aJIS0212DBCSHighTab,
@@ -2636,7 +2636,7 @@ static ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplJISX0212TextEncodingData
+ImplTextEncodingData const aImplJISX0212TextEncodingData
     = { { &aImplJISX0212DBCSCvtData,
           nullptr,
           ImplUnicodeToDBCS,

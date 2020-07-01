@@ -18,7 +18,7 @@
 
 #include <sal/types.h>
 
-static sal_uInt16 const aImplCns116431992ToUnicodeData[] = {
+sal_uInt16 const aImplCns116431992ToUnicodeData[] = {
  /* plane 1, row 1 */
   1 | (94 << 8), /* first, last */
          0x3000,0xFF0C,0x3001,0x3002,0xFF0E,0x30FB,0xFF1B,0xFF1A,0xFF1F,
@@ -11729,7 +11729,7 @@ static sal_uInt16 const aImplCns116431992ToUnicodeData[] = {
  /* plane 15, row 94: --- */
 };
 
-static sal_Int32 const aImplCns116431992ToUnicodeRowOffsets[] = {
+sal_Int32 const aImplCns116431992ToUnicodeRowOffsets[] = {
   0, /* plane 1, row 1; 182/190 bytes (95.8%) */
   95, /* plane 1, row 2; 186/190 bytes (97.9%) */
   190, /* plane 1, row 3; 94/94 bytes (100.0%) */
@@ -12492,7 +12492,7 @@ static sal_Int32 const aImplCns116431992ToUnicodeRowOffsets[] = {
   /* plane 16: --- */
 };
 
-static sal_Int32 const aImplCns116431992ToUnicodePlaneOffsets[] = {
+sal_Int32 const aImplCns116431992ToUnicodePlaneOffsets[] = {
   0 * 94, /* plane 1; 264/376 bytes (70.2%) */
   1 * 94, /* plane 2; 328/376 bytes (87.2%) */
   2 * 94, /* plane 3; 284/376 bytes (75.5%) */
@@ -12511,7 +12511,7 @@ static sal_Int32 const aImplCns116431992ToUnicodePlaneOffsets[] = {
   -1, /* plane 16 */
 };
 
-static sal_uInt8 const aImplUnicodeToCns116431992Data[] = {
+sal_uInt8 const aImplUnicodeToCns116431992Data[] = {
  /* plane 0, page 0 */
   167, 247, /* first, last */
                                                                   1, 1,80,
@@ -22306,7 +22306,7 @@ static sal_uInt8 const aImplUnicodeToCns116431992Data[] = {
  /* plane 16: --- */
 };
 
-static sal_Int32 const aImplUnicodeToCns116431992PageOffsets[] = {
+sal_Int32 const aImplUnicodeToCns116431992PageOffsets[] = {
   0, /* plane 0, page 0; 20/245 bytes (8.2%) */
   -1, /* plane 0, page 1 */
   245, /* plane 0, page 2; 17/59 bytes (28.8%) */
@@ -22836,7 +22836,7 @@ static sal_Int32 const aImplUnicodeToCns116431992PageOffsets[] = {
   /* plane 16: --- */
 };
 
-static sal_Int32 const aImplUnicodeToCns116431992PlaneOffsets[] = {
+sal_Int32 const aImplUnicodeToCns116431992PlaneOffsets[] = {
   0 * 256, /* plane 0; 496/1024 bytes (48.4%), 74432/85679 bytes (86.9%) */
   -1, /* plane 1 */
   1 * 256, /* plane 2; 680/1024 bytes (66.4%), 92476/129088 bytes (71.6%) */

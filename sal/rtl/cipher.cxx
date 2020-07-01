@@ -274,7 +274,7 @@ static void BF_decode(CipherKeyBF *key, sal_uInt32 *xl, sal_uInt32 *xr);
 
 static sal_uInt32 BF(CipherKeyBF *key, sal_uInt32 x);
 
-static const CipherKeyBF BF_key =
+const CipherKeyBF BF_key =
 {
     /* S */
     {

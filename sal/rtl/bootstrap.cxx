@@ -60,7 +60,7 @@ namespace
 
 struct Bootstrap_Impl;
 
-static char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
+char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
 
 bool isPathnameUrl(OUString const & url)
 {

@@ -25,13 +25,13 @@
 #include "convertgb18030.hxx"
 #include "generate/gb180302000.tab"
 
-static ImplGb18030ConverterData const aImplGb18030ConvertData
+ImplGb18030ConverterData const aImplGb18030ConvertData
     = { aImplGb180302000ToUnicodeData,
         aImplGb180302000ToUnicodeRanges,
         aImplUnicodeToGb180302000Data,
         aImplUnicodeToGb180302000Ranges };
 
-static ImplTextEncodingData const aImplGb18030TextEncodingData
+ImplTextEncodingData const aImplGb18030TextEncodingData
     = { { &aImplGb18030ConvertData,
           &ImplConvertGb18030ToUnicode,
           &ImplConvertUnicodeToGb18030,

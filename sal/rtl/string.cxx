@@ -38,7 +38,7 @@
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
  */
-static rtl_String const aImplEmpty_rtl_String =
+rtl_String const aImplEmpty_rtl_String =
 {
     SAL_STRING_STATIC_FLAG|1,
             /* sal_Int32    refCount;   */

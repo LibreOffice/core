@@ -39,7 +39,7 @@
 
 #define IBM437UNI_START                 0x80
 #define IBM437UNI_END                   0xFF
-static sal_uInt16 const aImplIBM437ToUniTab[IBM437UNI_END - IBM437UNI_START + 1] =
+sal_uInt16 const aImplIBM437ToUniTab[IBM437UNI_END - IBM437UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -65,7 +65,7 @@ static sal_uInt16 const aImplIBM437ToUniTab[IBM437UNI_END - IBM437UNI_START + 1]
 
 #define IBM437CHAR_START                0x00A0
 #define IBM437CHAR_END                  0x00FF
-static unsigned char const aImplIBM437ToCharTab[IBM437CHAR_END - IBM437CHAR_START + 1] =
+unsigned char const aImplIBM437ToCharTab[IBM437CHAR_END - IBM437CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -86,7 +86,7 @@ static unsigned char const aImplIBM437ToCharTab[IBM437CHAR_END - IBM437CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM437TOCHARTABEX_COUNT         75
-static ImplUniCharTabData const aImplIBM437ToCharTabEx[IBM437TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM437ToCharTabEx[IBM437TOCHARTABEX_COUNT] =
 {
   { 0x0192, 0x9F, 0 },
   { 0x0393, 0xE2, 0 },
@@ -167,7 +167,7 @@ static ImplUniCharTabData const aImplIBM437ToCharTabEx[IBM437TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM437ByteCvtData =
+ImplByteConvertData const aImplIBM437ByteCvtData =
 {
     aImplIBM437ToUniTab,
     nullptr,
@@ -183,7 +183,7 @@ static ImplByteConvertData const aImplIBM437ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM437TextEncodingData
+ImplTextEncodingData const aImplIBM437TextEncodingData
     = { { &aImplIBM437ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -215,7 +215,7 @@ static ImplTextEncodingData const aImplIBM437TextEncodingData
 
 #define IBM850UNI_START                 0x80
 #define IBM850UNI_END                   0xFF
-static sal_uInt16 const aImplIBM850ToUniTab[IBM850UNI_END - IBM850UNI_START + 1] =
+sal_uInt16 const aImplIBM850ToUniTab[IBM850UNI_END - IBM850UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -241,7 +241,7 @@ static sal_uInt16 const aImplIBM850ToUniTab[IBM850UNI_END - IBM850UNI_START + 1]
 
 #define IBM850CHAR_START                0x00A0
 #define IBM850CHAR_END                  0x00FF
-static unsigned char const aImplIBM850ToCharTab[IBM850CHAR_END - IBM850CHAR_START + 1] =
+unsigned char const aImplIBM850ToCharTab[IBM850CHAR_END - IBM850CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -262,7 +262,7 @@ static unsigned char const aImplIBM850ToCharTab[IBM850CHAR_END - IBM850CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM850TOCHARTABEX_COUNT         33
-static ImplUniCharTabData const aImplIBM850ToCharTabEx[IBM850TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM850ToCharTabEx[IBM850TOCHARTABEX_COUNT] =
 {
   { 0x0131, 0xD5, 0 },
   { 0x0192, 0x9F, 0 },
@@ -301,7 +301,7 @@ static ImplUniCharTabData const aImplIBM850ToCharTabEx[IBM850TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM850ByteCvtData =
+ImplByteConvertData const aImplIBM850ByteCvtData =
 {
     aImplIBM850ToUniTab,
     nullptr,
@@ -317,7 +317,7 @@ static ImplByteConvertData const aImplIBM850ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM850TextEncodingData
+ImplTextEncodingData const aImplIBM850TextEncodingData
     = { { &aImplIBM850ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -348,7 +348,7 @@ static ImplTextEncodingData const aImplIBM850TextEncodingData
 
 #define IBM860UNI_START                 0x80
 #define IBM860UNI_END                   0xFF
-static sal_uInt16 const aImplIBM860ToUniTab[IBM860UNI_END - IBM860UNI_START + 1] =
+sal_uInt16 const aImplIBM860ToUniTab[IBM860UNI_END - IBM860UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -374,7 +374,7 @@ static sal_uInt16 const aImplIBM860ToUniTab[IBM860UNI_END - IBM860UNI_START + 1]
 
 #define IBM860CHAR_START                0x00A0
 #define IBM860CHAR_END                  0x00FC
-static unsigned char const aImplIBM860ToCharTab[IBM860CHAR_END - IBM860CHAR_START + 1] =
+unsigned char const aImplIBM860ToCharTab[IBM860CHAR_END - IBM860CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -395,7 +395,7 @@ static unsigned char const aImplIBM860ToCharTab[IBM860CHAR_END - IBM860CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM860TOCHARTABEX_COUNT         73
-static ImplUniCharTabData const aImplIBM860ToCharTabEx[IBM860TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM860ToCharTabEx[IBM860TOCHARTABEX_COUNT] =
 {
   { 0x0393, 0xE2, 0 },
   { 0x0398, 0xE9, 0 },
@@ -474,7 +474,7 @@ static ImplUniCharTabData const aImplIBM860ToCharTabEx[IBM860TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM860ByteCvtData =
+ImplByteConvertData const aImplIBM860ByteCvtData =
 {
     aImplIBM860ToUniTab,
     nullptr,
@@ -490,7 +490,7 @@ static ImplByteConvertData const aImplIBM860ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM860TextEncodingData
+ImplTextEncodingData const aImplIBM860TextEncodingData
     = { { &aImplIBM860ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -521,7 +521,7 @@ static ImplTextEncodingData const aImplIBM860TextEncodingData
 
 #define IBM861UNI_START                 0x80
 #define IBM861UNI_END                   0xFF
-static sal_uInt16 const aImplIBM861ToUniTab[IBM861UNI_END - IBM861UNI_START + 1] =
+sal_uInt16 const aImplIBM861ToUniTab[IBM861UNI_END - IBM861UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -547,7 +547,7 @@ static sal_uInt16 const aImplIBM861ToUniTab[IBM861UNI_END - IBM861UNI_START + 1]
 
 #define IBM861CHAR_START                0x00A0
 #define IBM861CHAR_END                  0x00FE
-static unsigned char const aImplIBM861ToCharTab[IBM861CHAR_END - IBM861CHAR_START + 1] =
+unsigned char const aImplIBM861ToCharTab[IBM861CHAR_END - IBM861CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -568,7 +568,7 @@ static unsigned char const aImplIBM861ToCharTab[IBM861CHAR_END - IBM861CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM861TOCHARTABEX_COUNT         75
-static ImplUniCharTabData const aImplIBM861ToCharTabEx[IBM861TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM861ToCharTabEx[IBM861TOCHARTABEX_COUNT] =
 {
   { 0x0192, 0x9F, 0 },
   { 0x0393, 0xE2, 0 },
@@ -649,7 +649,7 @@ static ImplUniCharTabData const aImplIBM861ToCharTabEx[IBM861TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM861ByteCvtData =
+ImplByteConvertData const aImplIBM861ByteCvtData =
 {
     aImplIBM861ToUniTab,
     nullptr,
@@ -665,7 +665,7 @@ static ImplByteConvertData const aImplIBM861ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM861TextEncodingData
+ImplTextEncodingData const aImplIBM861TextEncodingData
     = { { &aImplIBM861ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -696,7 +696,7 @@ static ImplTextEncodingData const aImplIBM861TextEncodingData
 
 #define IBM863UNI_START                 0x80
 #define IBM863UNI_END                   0xFF
-static sal_uInt16 const aImplIBM863ToUniTab[IBM863UNI_END - IBM863UNI_START + 1] =
+sal_uInt16 const aImplIBM863ToUniTab[IBM863UNI_END - IBM863UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -722,7 +722,7 @@ static sal_uInt16 const aImplIBM863ToUniTab[IBM863UNI_END - IBM863UNI_START + 1]
 
 #define IBM863CHAR_START                0x00A0
 #define IBM863CHAR_END                  0x00FC
-static unsigned char const aImplIBM863ToCharTab[IBM863CHAR_END - IBM863CHAR_START + 1] =
+unsigned char const aImplIBM863ToCharTab[IBM863CHAR_END - IBM863CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -743,7 +743,7 @@ static unsigned char const aImplIBM863ToCharTab[IBM863CHAR_END - IBM863CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM863TOCHARTABEX_COUNT         75
-static ImplUniCharTabData const aImplIBM863ToCharTabEx[IBM863TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM863ToCharTabEx[IBM863TOCHARTABEX_COUNT] =
 {
   { 0x0192, 0x9F, 0 },
   { 0x0393, 0xE2, 0 },
@@ -824,7 +824,7 @@ static ImplUniCharTabData const aImplIBM863ToCharTabEx[IBM863TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM863ByteCvtData =
+ImplByteConvertData const aImplIBM863ByteCvtData =
 {
     aImplIBM863ToUniTab,
     nullptr,
@@ -840,7 +840,7 @@ static ImplByteConvertData const aImplIBM863ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM863TextEncodingData
+ImplTextEncodingData const aImplIBM863TextEncodingData
     = { { &aImplIBM863ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -871,7 +871,7 @@ static ImplTextEncodingData const aImplIBM863TextEncodingData
 
 #define IBM865UNI_START                 0x80
 #define IBM865UNI_END                   0xFF
-static sal_uInt16 const aImplIBM865ToUniTab[IBM865UNI_END - IBM865UNI_START + 1] =
+sal_uInt16 const aImplIBM865ToUniTab[IBM865UNI_END - IBM865UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -897,7 +897,7 @@ static sal_uInt16 const aImplIBM865ToUniTab[IBM865UNI_END - IBM865UNI_START + 1]
 
 #define IBM865CHAR_START                0x00A0
 #define IBM865CHAR_END                  0x00FF
-static unsigned char const aImplIBM865ToCharTab[IBM865CHAR_END - IBM865CHAR_START + 1] =
+unsigned char const aImplIBM865ToCharTab[IBM865CHAR_END - IBM865CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -918,7 +918,7 @@ static unsigned char const aImplIBM865ToCharTab[IBM865CHAR_END - IBM865CHAR_STAR
 /* ----------------------------------------------------------------------- */
 
 #define IBM865TOCHARTABEX_COUNT         75
-static ImplUniCharTabData const aImplIBM865ToCharTabEx[IBM865TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplIBM865ToCharTabEx[IBM865TOCHARTABEX_COUNT] =
 {
   { 0x0192, 0x9F, 0 },
   { 0x0393, 0xE2, 0 },
@@ -999,7 +999,7 @@ static ImplUniCharTabData const aImplIBM865ToCharTabEx[IBM865TOCHARTABEX_COUNT] 
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplIBM865ByteCvtData =
+ImplByteConvertData const aImplIBM865ByteCvtData =
 {
     aImplIBM865ToUniTab,
     nullptr,
@@ -1015,7 +1015,7 @@ static ImplByteConvertData const aImplIBM865ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplIBM865TextEncodingData
+ImplTextEncodingData const aImplIBM865TextEncodingData
     = { { &aImplIBM865ByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -1044,7 +1044,7 @@ static ImplTextEncodingData const aImplIBM865TextEncodingData
 
 #define ISO885914UNI_START              0xA0
 #define ISO885914UNI_END                0xFF
-static sal_uInt16 const aImplISO885914ToUniTab[ISO885914UNI_END - ISO885914UNI_START + 1] =
+sal_uInt16 const aImplISO885914ToUniTab[ISO885914UNI_END - ISO885914UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1066,7 +1066,7 @@ static sal_uInt16 const aImplISO885914ToUniTab[ISO885914UNI_END - ISO885914UNI_S
 
 #define ISO885914CHAR_START             0x00C0
 #define ISO885914CHAR_END               0x00FF
-static unsigned char const aImplISO885914ToCharTab[ISO885914CHAR_END - ISO885914CHAR_START + 1] =
+unsigned char const aImplISO885914ToCharTab[ISO885914CHAR_END - ISO885914CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1083,7 +1083,7 @@ static unsigned char const aImplISO885914ToCharTab[ISO885914CHAR_END - ISO885914
 /* ----------------------------------------------------------------------- */
 
 #define ISO885914TOCHARTABEX_COUNT      38
-static ImplUniCharTabData const aImplISO885914ToCharTabEx[ISO885914TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplISO885914ToCharTabEx[ISO885914TOCHARTABEX_COUNT] =
 {
   { 0x00A0, 0xA0, 0 },
   { 0x00A3, 0xA3, 0 },
@@ -1127,7 +1127,7 @@ static ImplUniCharTabData const aImplISO885914ToCharTabEx[ISO885914TOCHARTABEX_C
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplISO885914ByteCvtData =
+ImplByteConvertData const aImplISO885914ByteCvtData =
 {
     aImplISO885914ToUniTab,
     aImpl8090SameToUniTab,
@@ -1143,7 +1143,7 @@ static ImplByteConvertData const aImplISO885914ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplISO885914TextEncodingData
+ImplTextEncodingData const aImplISO885914TextEncodingData
     = { { &aImplISO885914ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -1172,7 +1172,7 @@ static ImplTextEncodingData const aImplISO885914TextEncodingData
 
 #define ISO885915UNI_START              0xA0
 #define ISO885915UNI_END                0xFF
-static sal_uInt16 const aImplISO885915ToUniTab[ISO885915UNI_END - ISO885915UNI_START + 1] =
+sal_uInt16 const aImplISO885915ToUniTab[ISO885915UNI_END - ISO885915UNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1194,7 +1194,7 @@ static sal_uInt16 const aImplISO885915ToUniTab[ISO885915UNI_END - ISO885915UNI_S
 
 #define ISO885915CHAR_START             0x00A0
 #define ISO885915CHAR_END               0x00FF
-static unsigned char const aImplISO885915ToCharTab[ISO885915CHAR_END - ISO885915CHAR_START + 1] =
+unsigned char const aImplISO885915ToCharTab[ISO885915CHAR_END - ISO885915CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1215,7 +1215,7 @@ static unsigned char const aImplISO885915ToCharTab[ISO885915CHAR_END - ISO885915
 /* ----------------------------------------------------------------------- */
 
 #define ISO885915TOCHARTABEX_COUNT      8
-static ImplUniCharTabData const aImplISO885915ToCharTabEx[ISO885915TOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplISO885915ToCharTabEx[ISO885915TOCHARTABEX_COUNT] =
 {
   { 0x0152, 0xBC, 0 },
   { 0x0153, 0xBD, 0 },
@@ -1229,7 +1229,7 @@ static ImplUniCharTabData const aImplISO885915ToCharTabEx[ISO885915TOCHARTABEX_C
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplISO885915ByteCvtData =
+ImplByteConvertData const aImplISO885915ByteCvtData =
 {
     aImplISO885915ToUniTab,
     aImpl8090SameToUniTab,
@@ -1245,7 +1245,7 @@ static ImplByteConvertData const aImplISO885915ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplISO885915TextEncodingData
+ImplTextEncodingData const aImplISO885915TextEncodingData
     = { { &aImplISO885915ByteCvtData,
           sal::detail::textenc::convertCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -1275,7 +1275,7 @@ static ImplTextEncodingData const aImplISO885915TextEncodingData
 
 #define APPLEICELANDUNI_START           0x80
 #define APPLEICELANDUNI_END             0xFF
-static sal_uInt16 const aImplAPPLEICELANDToUniTab[APPLEICELANDUNI_END - APPLEICELANDUNI_START + 1] =
+sal_uInt16 const aImplAPPLEICELANDToUniTab[APPLEICELANDUNI_END - APPLEICELANDUNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1301,7 +1301,7 @@ static sal_uInt16 const aImplAPPLEICELANDToUniTab[APPLEICELANDUNI_END - APPLEICE
 
 #define APPLEICELANDCHAR_START          0x00A0
 #define APPLEICELANDCHAR_END            0x00FF
-static unsigned char const aImplAPPLEICELANDToCharTab[APPLEICELANDCHAR_END - APPLEICELANDCHAR_START + 1] =
+unsigned char const aImplAPPLEICELANDToCharTab[APPLEICELANDCHAR_END - APPLEICELANDCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1322,7 +1322,7 @@ static unsigned char const aImplAPPLEICELANDToCharTab[APPLEICELANDCHAR_END - APP
 /* ----------------------------------------------------------------------- */
 
 #define APPLEICELANDTOCHARTABEX_COUNT   41
-static ImplUniCharTabData const aImplAPPLEICELANDToCharTabEx[APPLEICELANDTOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplAPPLEICELANDToCharTabEx[APPLEICELANDTOCHARTABEX_COUNT] =
 {
   { 0x0131, 0xF5, 0 },
   { 0x0152, 0xCE, 0 },
@@ -1369,7 +1369,7 @@ static ImplUniCharTabData const aImplAPPLEICELANDToCharTabEx[APPLEICELANDTOCHART
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
+ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 {
     aImplAPPLEICELANDToUniTab,
     nullptr,
@@ -1385,7 +1385,7 @@ static ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
+ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
     = { { &aImplAPPLEICELANDByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,
@@ -1415,7 +1415,7 @@ static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
 
 #define APPLEROMANUNI_START             0x80
 #define APPLEROMANUNI_END               0xFF
-static sal_uInt16 const aImplAPPLEROMANToUniTab[APPLEROMANUNI_END - APPLEROMANUNI_START + 1] =
+sal_uInt16 const aImplAPPLEROMANToUniTab[APPLEROMANUNI_END - APPLEROMANUNI_START + 1] =
 {
 /*       0       1       2       3       4       5       6       7 */
 /*       8       9       A       B       C       D       E       F */
@@ -1441,7 +1441,7 @@ static sal_uInt16 const aImplAPPLEROMANToUniTab[APPLEROMANUNI_END - APPLEROMANUN
 
 #define APPLEROMANCHAR_START            0x00A0
 #define APPLEROMANCHAR_END              0x00FF
-static unsigned char const aImplAPPLEROMANToCharTab[APPLEROMANCHAR_END - APPLEROMANCHAR_START + 1] =
+unsigned char const aImplAPPLEROMANToCharTab[APPLEROMANCHAR_END - APPLEROMANCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1462,7 +1462,7 @@ static unsigned char const aImplAPPLEROMANToCharTab[APPLEROMANCHAR_END - APPLERO
 /* ----------------------------------------------------------------------- */
 
 #define APPLEROMANTOCHARTABEX_COUNT     48
-static ImplUniCharTabData const aImplAPPLEROMANToCharTabEx[APPLEROMANTOCHARTABEX_COUNT] =
+ImplUniCharTabData const aImplAPPLEROMANToCharTabEx[APPLEROMANTOCHARTABEX_COUNT] =
 {
   { 0x0131, 0xF5, 0 },
   { 0x0152, 0xCE, 0 },
@@ -1516,7 +1516,7 @@ static ImplUniCharTabData const aImplAPPLEROMANToCharTabEx[APPLEROMANTOCHARTABEX
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData const aImplAPPLEROMANByteCvtData =
+ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 {
     aImplAPPLEROMANToUniTab,
     nullptr,
@@ -1532,7 +1532,7 @@ static ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
+ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
     = { { &aImplAPPLEROMANByteCvtData,
           ImplUpperCharToUnicode,
           sal::detail::textenc::convertUnicodeToChar,

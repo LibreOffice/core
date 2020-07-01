@@ -23,7 +23,7 @@
 /**
     rtl_crc32Table (CRC polynomial 0xEDB88320).
 */
-static const sal_uInt32 rtl_crc32Table[256] =
+const sal_uInt32 rtl_crc32Table[256] =
 {
     /* 0 */
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
