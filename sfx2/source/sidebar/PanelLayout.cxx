@@ -21,10 +21,11 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     , m_bInClose(false)
     , mxFrame(rFrame)
 {
-    SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
     m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
     m_aPanelLayoutIdle.SetDebugName("sfx2::PanelLayout m_aPanelLayoutIdle");
+
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
     // Builder will trigger resize and start Idle
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
