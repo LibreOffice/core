@@ -39,7 +39,7 @@ namespace linguistic
 
 #define NUM_FLUSH_PROPS     6
 
-static const struct
+const struct
 {
     const char *pPropName;
     sal_Int32       nPropHdl;

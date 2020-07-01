@@ -68,7 +68,7 @@ static OUString GrammarCheckingIterator_getImplementationName() throw();
 static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw();
 
 // white space list: obtained from the fonts.config.txt of a Linux system.
-static const sal_Unicode aWhiteSpaces[] =
+const sal_Unicode aWhiteSpaces[] =
 {
     0x0020,   /* SPACE */
     0x00a0,   /* NO-BREAK SPACE */
@@ -121,10 +121,10 @@ static const sal_Unicode aWhiteSpaces[] =
 };
 
 //  Information about reason for proofreading (ProofInfo)
-   static const sal_Int32 PROOFINFO_GET_PROOFRESULT = 1;
-   static const sal_Int32 PROOFINFO_MARK_PARAGRAPH = 2;
+   const sal_Int32 PROOFINFO_GET_PROOFRESULT = 1;
+   const sal_Int32 PROOFINFO_MARK_PARAGRAPH = 2;
 
-static const int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
+const int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {

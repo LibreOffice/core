@@ -76,16 +76,16 @@ using namespace linguistic;
 // text stripping and dictionary saving.
 #define EXTENSION_FOR_TITLE_TEXT "."
 
-static const char* const pVerStr2    = "WBSWG2";
-static const char* const pVerStr5    = "WBSWG5";
-static const char* const pVerStr6    = "WBSWG6";
-static const char* const pVerOOo7    = "OOoUserDict1";
+const char* const pVerStr2    = "WBSWG2";
+const char* const pVerStr5    = "WBSWG5";
+const char* const pVerStr6    = "WBSWG6";
+const char* const pVerOOo7    = "OOoUserDict1";
 
-static const sal_Int16 DIC_VERSION_DONTKNOW = -1;
-static const sal_Int16 DIC_VERSION_2 = 2;
-static const sal_Int16 DIC_VERSION_5 = 5;
-static const sal_Int16 DIC_VERSION_6 = 6;
-static const sal_Int16 DIC_VERSION_7 = 7;
+const sal_Int16 DIC_VERSION_DONTKNOW = -1;
+const sal_Int16 DIC_VERSION_2 = 2;
+const sal_Int16 DIC_VERSION_5 = 5;
+const sal_Int16 DIC_VERSION_6 = 6;
+const sal_Int16 DIC_VERSION_7 = 7;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
