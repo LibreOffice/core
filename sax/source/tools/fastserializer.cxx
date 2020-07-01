@@ -42,15 +42,15 @@ using ::com::sun::star::io::XOutputStream;
 // number of characters without terminating 0
 #define N_CHARS(string) (SAL_N_ELEMENTS(string) - 1)
 
-static const char sClosingBracket[] = ">";
-static const char sSlashAndClosingBracket[] = "/>";
-static const char sColon[] = ":";
-static const char sOpeningBracket[] = "<";
-static const char sOpeningBracketAndSlash[] = "</";
-static const char sQuote[] = "\"";
-static const char sEqualSignAndQuote[] = "=\"";
-static const char sSpace[] = " ";
-static const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+const char sClosingBracket[] = ">";
+const char sSlashAndClosingBracket[] = "/>";
+const char sColon[] = ":";
+const char sOpeningBracket[] = "<";
+const char sOpeningBracketAndSlash[] = "</";
+const char sQuote[] = "\"";
+const char sEqualSignAndQuote[] = "=\"";
+const char sSpace[] = " ";
+const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
