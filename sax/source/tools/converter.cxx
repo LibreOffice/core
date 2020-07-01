@@ -42,11 +42,11 @@ using namespace ::com::sun::star::i18n;
 
 namespace sax {
 
-static const char* const gpsMM = "mm";
-static const char* const gpsCM = "cm";
-static const char* const gpsPT = "pt";
-static const char* const gpsINCH = "in";
-static const char* const gpsPC = "pc";
+const char* const gpsMM = "mm";
+const char* const gpsCM = "cm";
+const char* const gpsPT = "pt";
+const char* const gpsINCH = "in";
+const char* const gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
@@ -492,7 +492,7 @@ bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue )
     return true;
 }
 
-static const char aHexTab[] = "0123456789abcdef";
+const char aHexTab[] = "0123456789abcdef";
 
 /** convert color to string */
 void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )

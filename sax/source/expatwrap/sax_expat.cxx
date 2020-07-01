@@ -140,7 +140,7 @@ struct Entity
 };
 
 
-static constexpr OUStringLiteral gsCDATA = "CDATA";
+constexpr OUStringLiteral gsCDATA = "CDATA";
 
 class SaxExpatParser_Impl
 {
