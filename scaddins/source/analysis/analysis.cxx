@@ -272,7 +272,7 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
     return aRet;
 }
 
-static const char pDefCatName[] = "Add-In";
+const char pDefCatName[] = "Add-In";
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName )
 {
@@ -321,7 +321,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgra
 
 static const char*          pLang[] = { "de", "en" };
 static const char*          pCoun[] = { "DE", "US" };
-static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
+const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 void AnalysisAddIn::InitDefLocales()
 {
