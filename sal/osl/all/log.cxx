@@ -344,7 +344,8 @@ void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {
-    if (!sal_detail_log_report(level, area))
+    bool bFatal = false;
+    if (!sal_detail_log_report(level, area, bFatal))
         return;
 
     std::va_list args;
@@ -359,9 +360,12 @@ void sal_detail_logFormat(
     }
     sal_detail_log(level, area, where, buf, 0);
     va_end(args);
+
+    if (bFatal)
+        std::abort();
 }
 
-sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
+sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area, bool & bFatal) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         return true;
     }
@@ -379,13 +383,16 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
         // no matching switches at all, the result will be negative (and
         // initializing with 1 is safe as the length of a valid switch, even
         // without the "+"/"-" prefix, will always be > 1)
+    bool senseFatal[2] = { false, };
     bool seenWarn = false;
+    bool bCurFatal = false;
     for (char const * p = env;;) {
         Sense sense;
         switch (*p++) {
         case '\0':
             if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
-                return sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, area);
+                return sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, area, bFatal);
+            bFatal = (senseLen[POSITIVE] >= senseLen[NEGATIVE]) ? senseFatal[POSITIVE] : false;
             return senseLen[POSITIVE] >= senseLen[NEGATIVE];
                 // if a specific item is both positive and negative
                 // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
@@ -397,6 +404,7 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
             sense = NEGATIVE;
             break;
         default:
+            bFatal = false;
             return true; // upon an illegal SAL_LOG value, enable everything
         }
         char const * p1 = p;
@@ -410,12 +418,17 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
             seenWarn = true;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("FATAL")))
+        {
+            bCurFatal = (sense == POSITIVE);
+            match = false;
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
                    equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
         {
             // handled later
             match = false;
         } else {
+            bFatal = false;
             return true;
                 // upon an illegal SAL_LOG value, everything is considered
                 // positive
@@ -433,9 +446,11 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
                         && equalStrings(p1, n, area, n)))
                 {
                     senseLen[sense] = p2 - p;
+                    senseFatal[sense] = bCurFatal;
                 }
             } else {
                 senseLen[sense] = p1 - p;
+                senseFatal[sense] = bCurFatal;
             }
         }
         p = p2;
