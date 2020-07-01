@@ -375,6 +375,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133735, "fdo73389.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+    // This was 200
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[3]/w:p/w:pPr/w:spacing", "after", "0");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
 {
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
