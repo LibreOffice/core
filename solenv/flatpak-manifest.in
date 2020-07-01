@@ -585,6 +585,12 @@
                     "dest-filename": "external/tarballs/dtoa-20180411.tgz"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/box2d-2.3.1.tar.gz",
+                    "sha256": "58ffc8475a8650aadc351345aef696937747b40501ab78d72c197c5ff5b3035c",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/box2d-2.3.1.tar.gz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf",
                     "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
                     "type": "file",
