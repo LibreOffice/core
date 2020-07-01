@@ -39,9 +39,9 @@
 
 namespace {
 
-static bool g_bEnabledSwitchedOn = false;
+bool g_bEnabledSwitchedOn = false;
 
-static JavaVM * g_pJavaVM = nullptr;
+JavaVM * g_pJavaVM = nullptr;
 
 bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
