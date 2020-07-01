@@ -3859,7 +3859,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
 
             if (bThisTab)
             {
-                aCell.release(aCol[nDestX], nDestY);
+                aCell.release(CreateColumnIfNotExists(nDestX), nDestY);
                 SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ) );
             }
             else
