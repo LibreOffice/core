@@ -5300,7 +5300,7 @@ SalInstanceSpinButton::~SalInstanceSpinButton()
     else
         m_xButton->SetActivateHdl(Link<Edit&, bool>());
     m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
-    m_xButton->SetOutputHdl(Link<Edit&, bool>());
+    m_xButton->SetOutputHdl(Link<LinkParamNone*, bool>());
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
     m_xButton->SetUpHdl(Link<SpinField&, void>());
@@ -5317,7 +5317,7 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, UpDownHdl, SpinField&, void) { signal_val
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, LoseFocusHdl, Control&, void) { signal_value_changed(); }
 
-IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, Edit&, bool) { return signal_output(); }
+IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, LinkParamNone*, bool) { return signal_output(); }
 
 IMPL_LINK(SalInstanceSpinButton, InputHdl, sal_Int64*, pResult, TriState)
 {
@@ -5336,7 +5336,7 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 private:
     VclPtr<FormattedField> m_xButton;
 
-    DECL_LINK(OutputHdl, Edit&, bool);
+    DECL_LINK(OutputHdl, LinkParamNone*, bool);
     DECL_LINK(InputHdl, sal_Int64*, TriState);
 
 public:
@@ -5358,7 +5358,7 @@ public:
     virtual ~SalInstanceFormattedSpinButton() override
     {
         m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
-        m_xButton->SetOutputHdl(Link<Edit&, bool>());
+        m_xButton->SetOutputHdl(Link<LinkParamNone*, bool>());
     }
 
     virtual double get_value() const override { return m_xButton->GetValue(); }
@@ -5401,7 +5401,7 @@ public:
     virtual void set_digits(unsigned int digits) override { m_xButton->SetDecimalDigits(digits); }
 };
 
-IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, OutputHdl, Edit&, bool)
+IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, OutputHdl, LinkParamNone*, bool)
 {
     // allow an explicit handler
     if (!m_aOutputHdl.IsSet())
