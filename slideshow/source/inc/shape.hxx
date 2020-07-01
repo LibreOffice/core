@@ -214,7 +214,7 @@ namespace slideshow
             virtual bool isForeground() const { return mbIsForeground; };
 
             /**
-               Set the flag that holds wheter the shape is
+               Set the flag that holds whether the shape is
                in the foreground or not
 
                @param bIsForeground

@@ -47,7 +47,7 @@
 static bool isDeletedPtr(SvtListener* p)
 {
     /** mark deleted entries by toggling the last bit,which is effectively unused, since the struct we point
-     * to is at least 16-bit aligned. This allows the binary seach to continue working even when we have
+     * to is at least 16-bit aligned. This allows the binary search to continue working even when we have
      * deleted entries */
 #if SAL_TYPES_SIZEOFPOINTER == 4
     return (reinterpret_cast<sal_uInt32>(p) & 0x01) == 0x01;
