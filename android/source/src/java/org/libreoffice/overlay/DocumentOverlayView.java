@@ -181,8 +181,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
             mCalcSelectionBox.reposition(rect);
         }
 
-        RectF scaledGraphicSelection = convertToScreen(mGraphicSelection.mRectangle, x, y, zoom);
-        mGraphicSelection.reposition(scaledGraphicSelection);
+        if (mGraphicSelection != null && mGraphicSelection.mRectangle != null) {
+            RectF scaledGraphicSelection = convertToScreen(mGraphicSelection.mRectangle, x, y, zoom);
+            mGraphicSelection.reposition(scaledGraphicSelection);
+        }
+
         invalidate();
     }
 
