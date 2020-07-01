@@ -518,10 +518,10 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     // document name (from the above "component title").
     impl_appendProductName      (sTitle);
 
+#if defined(WNT) || defined(MACOSX)
     if (!std::string_view(PRODUCTFLAVOR).empty())
-    {
         sTitle.append(" " PRODUCTFLAVOR);
-    }
+#endif
 
     impl_appendModuleName       (sTitle);
     impl_appendDebugVersion     (sTitle);
