@@ -3131,6 +3131,8 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
             if (bResult)
             {
                 CopyData( aParam.nCol1,j, aParam.nCol2,j, aParam.nDestCol,nOutRow,aParam.nDestTab );
+                if( nTab == aParam.nDestTab ) // copy to self, changes may invalidate caching position hints
+                    blockPos.invalidate();
                 ++nOutRow;
             }
         }
