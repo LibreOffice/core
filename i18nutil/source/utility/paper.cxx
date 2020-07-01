@@ -67,7 +67,7 @@ struct PageDesc
 
 //!! The order of these entries must correspond to enum Paper in <i18nutil/paper.hxx>
 
-static const PageDesc aDinTab[] =
+const PageDesc aDinTab[] =
 {
     { MM2MM100( 841 ),   MM2MM100( 1189 ),   "A0",  nullptr },
     { MM2MM100( 594 ),   MM2MM100( 841 ),    "A1",  nullptr },
@@ -158,7 +158,7 @@ static const PageDesc aDinTab[] =
 
 };
 
-static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
+const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
 #define MAXSLOPPY 21
 
