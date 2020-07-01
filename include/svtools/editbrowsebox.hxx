@@ -32,6 +32,7 @@
 #include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class Button;
@@ -143,6 +144,10 @@ namespace svt
         virtual bool                IsValueChangedFromSaved() const = 0;
         virtual void                SaveValue() = 0;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) = 0;
+
+        virtual void                Cut() = 0;
+        virtual void                Copy() = 0;
+        virtual void                Paste() = 0;
     };
 
 
@@ -179,43 +184,68 @@ namespace svt
         virtual bool                IsValueChangedFromSaved() const override;
         virtual void                SaveValue() override;
         virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) override;
+
+        virtual void                Cut() override;
+        virtual void                Copy() override;
+        virtual void                Paste() override;
     };
 
-    class SVT_DLLPUBLIC EditControl final : public InterimItemWindow
+    class SVT_DLLPUBLIC EditControlBase : public InterimItemWindow
+    {
+    public:
+        EditControlBase(vcl::Window* pParent);
+
+        virtual void dispose() override;
+
+        virtual void GetFocus() override
+        {
+            if (m_pEntry)
+                m_pEntry->grab_focus();
+            InterimItemWindow::GetFocus();
+        }
+
+        weld::Entry& get_widget() { return *m_pEntry; }
+
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) = 0;
+
+    protected:
+        void init(weld::Entry* pEntry);
+
+    private:
+        weld::Entry* m_pEntry;
+
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    };
+
+    class SVT_DLLPUBLIC EditControl final : public EditControlBase
     {
     public:
         EditControl(vcl::Window* pParent);
 
         virtual void dispose() override;
 
-        virtual void GetFocus() override
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
         {
-            if (m_xWidget)
-                m_xWidget->grab_focus();
-            InterimItemWindow::GetFocus();
+            m_xWidget->connect_changed(rLink);
         }
-
-        weld::Entry& get_widget() { return *m_xWidget; }
 
     private:
         std::unique_ptr<weld::Entry> m_xWidget;
-
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     };
 
     class SVT_DLLPUBLIC EntryImplementation : public IEditImplementation
     {
-        EditControl& m_rEdit;
+        EditControlBase& m_rEdit;
         int m_nMaxTextLen;
         Link<LinkParamNone*,void> m_aModifyHdl;
 
         DECL_LINK(ModifyHdl, weld::Entry&, void);
     public:
-        EntryImplementation(EditControl& rEdit)
+        EntryImplementation(EditControlBase& rEdit)
             : m_rEdit(rEdit)
             , m_nMaxTextLen(EDIT_NOLIMIT)
         {
-            m_rEdit.get_widget().connect_changed(LINK(this, EntryImplementation, ModifyHdl));
+            m_rEdit.connect_changed(LINK(this, EntryImplementation, ModifyHdl));
         }
 
         virtual Control& GetControl() override
@@ -264,7 +294,9 @@ namespace svt
 
         virtual void SetSelection( const Selection& rSelection ) override
         {
-            m_rEdit.get_widget().select_region(rSelection.Min(), rSelection.Max());
+            auto nMin = rSelection.Min();
+            auto nMax = rSelection.Max();
+            m_rEdit.get_widget().select_region(nMin < 0 ? 0 : nMin, nMax == SELECTION_MAX ? -1 : nMax);
         }
 
         virtual void ReplaceSelected( const OUString& rStr ) override
@@ -294,6 +326,21 @@ namespace svt
         virtual void SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) override
         {
             m_aModifyHdl = rLink;
+        }
+
+        virtual void Cut() override
+        {
+            m_rEdit.get_widget().cut_clipboard();
+        }
+
+        virtual void Copy() override
+        {
+            m_rEdit.get_widget().copy_clipboard();
+        }
+
+        virtual void Paste() override
+        {
+            m_rEdit.get_widget().paste_clipboard();
         }
     };
 
@@ -358,7 +405,7 @@ namespace svt
 
     public:
         EditCellController( Edit* _pEdit );
-        EditCellController( EditControl* _pEdit );
+        EditCellController( EditControlBase* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         virtual ~EditCellController( ) override;
 
@@ -367,6 +414,11 @@ namespace svt
 
         virtual bool IsValueChangedFromSaved() const override;
         virtual void SaveValue() override;
+
+        void Modify()
+        {
+            ModifyHdl(nullptr);
+        }
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
@@ -519,15 +571,32 @@ namespace svt
         DECL_LINK(ListBoxSelectHdl, weld::ComboBox&, void);
     };
 
+    class SVT_DLLPUBLIC FormattedControl : public EditControlBase
+    {
+    public:
+        FormattedControl(vcl::Window* pParent);
+
+        virtual void dispose() override;
+
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
+        {
+            m_xFormattedEntry->connect_changed(rLink);
+        }
+
+        weld::FormattedEntry& get_formatter() { return *m_xFormattedEntry; }
+
+    private:
+        std::unique_ptr<weld::FormattedEntry> m_xFormattedEntry;
+    };
+
     //= FormattedFieldCellController
     class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
     public:
-        FormattedFieldCellController( FormattedField* _pFormatted );
+        FormattedFieldCellController( FormattedControl* _pFormatted );
 
         virtual void CommitModifications() override;
     };
-
 
     //= EditBrowserHeader
     class SVT_DLLPUBLIC EditBrowserHeader : public BrowserHeader

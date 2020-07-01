@@ -1309,9 +1309,9 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             ActivateCell();
 
         CellControllerRef xCurrentController = Controller();
-        if (!xCurrentController.is() || nullptr == dynamic_cast< const EditCellController* >(xCurrentController.get()))
+        EditCellController* pController = dynamic_cast<EditCellController*>(xCurrentController.get());
+        if (!pController)
             return DND_ACTION_NONE;
-        Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
 
         // get the dropped string
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
@@ -1319,9 +1319,10 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         if ( !aDropped.GetString( SotClipboardFormatId::STRING, sDropped ) )
             return DND_ACTION_NONE;
 
-        rEdit.SetText( sDropped );
+        IEditImplementation* pEditImplementation = pController->GetEditImplementation();
+        pEditImplementation->SetText(sDropped);
         // SetText itself doesn't call a Modify as it isn't a user interaction
-        rEdit.Modify();
+        pController->Modify();
 
         return DND_ACTION_COPY;
     }

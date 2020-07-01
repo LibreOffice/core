@@ -16,6 +16,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 
 namespace weld
@@ -151,6 +152,33 @@ public:
     {
         m_aPaintListeners.removeInterface(rListener);
     }
+};
+
+class VCL_DLLPUBLIC FormattedEntry : public Formatter
+{
+public:
+    FormattedEntry(std::unique_ptr<weld::Entry> xEntry);
+
+    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
+
+    weld::Entry* get_widget() { return m_xEntry.get(); }
+
+    // Formatter overrides
+    virtual Selection GetEntrySelection() const override;
+    virtual OUString GetEntryText() const override;
+    virtual void SetEntryText(const OUString& rText, const Selection& rSel) override;
+    virtual void SetEntryTextColor(const Color* pColor) override;
+    virtual SelectionOptions GetEntrySelectionOptions() const override;
+    virtual void FieldModified() override;
+
+    void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
+
+private:
+    std::unique_ptr<weld::Entry> m_xEntry;
+    Link<weld::Entry&, void> m_aModifyHdl;
+    SelectionOptions m_eOptions;
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
 };
 
 // get the row the iterator is on
