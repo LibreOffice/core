@@ -62,7 +62,7 @@ static int debug(const char *format, ...);
 
 #define YYTRANSLATE(x) (static_cast<unsigned>(x) <= 285 ? yytranslate[x] : 66)
 
-static const char yytranslate[] = {     0,
+const char yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -159,7 +159,7 @@ static const char * const yytname[] = {   "$","error","$undefined.","ACCENT",
 };
 #endif
 
-static const short yyr1[] = {     0,
+const short yyr1[] = {     0,
     43,    43,    43,    43,    43,    43,    43,    43,    43,    43,
     43,    43,    43,    43,    43,    43,    43,    44,    44,    45,
     45,    45,    45,    45,    45,    45,    46,    46,    46,    46,
@@ -170,7 +170,7 @@ static const short yyr1[] = {     0,
     65,    65
 };
 
-static const short yyr2[] = {     0,
+const short yyr2[] = {     0,
      1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
      1,     1,     1,     1,     1,     1,     1,     1,     2,     2,
      2,     2,     2,     2,     3,     1,     2,     2,     2,     2,
@@ -181,7 +181,7 @@ static const short yyr2[] = {     0,
      1,     1
 };
 
-static const short yydefact[] = {     0,
+const short yydefact[] = {     0,
     46,     1,     4,    10,     9,    14,     2,     3,     5,     6,
      0,     0,    12,    13,    48,     7,     8,    17,    11,     0,
      0,     0,    26,    16,    15,     0,     0,    18,    70,     0,
@@ -195,13 +195,13 @@ static const short yydefact[] = {     0,
      0,     0
 };
 
-static const short yydefgoto[] = {    28,
+const short yydefgoto[] = {    28,
     29,    30,    84,    31,    32,    33,    51,    34,    35,    36,
     37,    38,    39,    40,    41,    42,    43,   100,    44,    45,
     46,    47
 };
 
-static const short yypact[] = {   393,
+const short yypact[] = {   393,
 -32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,
    -30,   -19,-32768,-32768,-32768,-32768,-32768,-32768,-32768,   -19,
    -19,    -3,-32768,-32768,-32768,   290,   107,-32768,   425,   393,
@@ -215,7 +215,7 @@ static const short yypact[] = {   393,
     23,-32768
 };
 
-static const short yypgoto[] = {    -2,
+const short yypgoto[] = {    -2,
 -32768,-32768,-32768,-32768,-32768,   -11,-32768,-32768,-32768,-32768,
 -32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,   -33,
    -24,   -27
@@ -225,7 +225,7 @@ static const short yypgoto[] = {    -2,
 #define YYLAST      457
 
 
-static const short yytable[] = {    50,
+const short yytable[] = {    50,
     52,    61,    63,    48,    49,    65,    91,    68,    53,    54,
     96,    92,    93,    94,    95,    49,    78,    98,    69,    70,
     71,   101,   102,    73,    74,    66,    64,    67,    55,    56,
@@ -274,7 +274,7 @@ static const short yytable[] = {    50,
      0,     0,     0,     0,     0,    24,    25
 };
 
-static const short yycheck[] = {    11,
+const short yycheck[] = {    11,
     12,    26,    27,    34,    35,    30,    32,    28,    20,    21,
     42,    37,    38,    39,    40,    35,    32,    32,    46,    41,
     42,     0,     0,    48,    49,    37,    29,    39,    32,    33,

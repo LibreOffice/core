@@ -20,7 +20,7 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_DATECODE_H
 #define INCLUDED_HWPFILTER_SOURCE_DATECODE_H
 
-static const hchar defaultform[] =
+const hchar defaultform[] =
 {
     '1', 0x9165, 32, '2', 0xB6A9, 32, '3', 0xB7A9, 0
 };

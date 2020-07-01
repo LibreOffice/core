@@ -233,7 +233,7 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
     yy_c_buf_p = yy_cp;
 
 #define YY_END_OF_BUFFER 46
-static yyconst short int yy_accept[994] =
+yyconst short int yy_accept[994] =
     {   0,
         0,    0,   46,   44,   41,   41,   44,   42,   39,   37,
        37,   36,   39,   39,   44,   44,   38,   40,   35,   43,
@@ -347,7 +347,7 @@ static yyconst short int yy_accept[994] =
 
     } ;
 
-static yyconst int yy_ec[256] =
+yyconst int yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
@@ -379,7 +379,7 @@ static yyconst int yy_ec[256] =
        73,   73,   73,   73,    1
     } ;
 
-static yyconst int yy_meta[74] =
+yyconst int yy_meta[74] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -391,7 +391,7 @@ static yyconst int yy_meta[74] =
         1,    1,    1
     } ;
 
-static yyconst short int yy_base[995] =
+yyconst short int yy_base[995] =
     {   0,
         0,   72, 1314, 1315, 1315, 1315, 1297, 1315, 1315, 1315,
      1295,    2,    8, 1294, 1281,  142, 1315, 1315, 1315, 1236,
@@ -505,7 +505,7 @@ static yyconst short int yy_base[995] =
 
     } ;
 
-static yyconst short int yy_def[995] =
+yyconst short int yy_def[995] =
     {   0,
       994,  994,  993,  993,  993,  993,  993,  993,  993,  993,
       993,  993,  993,  993,  993,  993,  993,  993,  993,  993,
@@ -619,7 +619,7 @@ static yyconst short int yy_def[995] =
 
     } ;
 
-static yyconst short int yy_nxt[1389] =
+yyconst short int yy_nxt[1389] =
     {   0,
       993,    5,    6,    7,    8,    9,    9,   10,  993,   11,
       993,   12,   23,   24,   13,   10,   14,   25,   23,   24,
@@ -775,7 +775,7 @@ static yyconst short int yy_nxt[1389] =
       993,  993,  993,  993,  993,  993,  993,  993
     } ;
 
-static yyconst short int yy_chk[1389] =
+yyconst short int yy_chk[1389] =
     {   0,
         0,    1,    1,    1,    1,    1,    1,    1,    0,    1,
         0,    1,   12,   12,    1,    1,    1,   13,   24,   24,

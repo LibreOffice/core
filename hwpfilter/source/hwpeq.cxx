@@ -79,7 +79,7 @@ struct hwpeq {
 
 }
 
-static const hwpeq eq_tbl[] = {
+const hwpeq eq_tbl[] = {
   { "!=",         "\\equiv ", 0,  0   },
   { "#",          "\\\\",     0,  0   },
   { "+-",         "\\pm ",    0,  0   },
