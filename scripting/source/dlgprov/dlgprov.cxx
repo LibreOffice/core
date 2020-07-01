@@ -593,7 +593,7 @@ namespace dlgprov
     // XDialogProvider
 
 
-    static const char aDecorationPropName[] = "Decoration";
+    const char aDecorationPropName[] = "Decoration";
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,
@@ -735,7 +735,7 @@ namespace dlgprov
     }
 
 
-    static struct ::cppu::ImplementationEntry const s_component_entries [] =
+    struct ::cppu::ImplementationEntry const s_component_entries [] =
     {
         {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,nullptr, 0},
         { &comp_DialogModelProvider::_create,&comp_DialogModelProvider::_getImplementationName,&comp_DialogModelProvider::_getSupportedServiceNames,&::cppu::createSingleComponentFactory, nullptr, 0 },

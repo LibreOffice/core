@@ -35,13 +35,13 @@ namespace ucb = ::com::sun::star::ucb;
 namespace lang = ::com::sun::star::lang;
 namespace uri = ::com::sun::star::uri;
 
-static const char SHARE[] = "share";
+const char SHARE[] = "share";
 
-static const char SHARE_UNO_PACKAGES_URI[] =
+const char SHARE_UNO_PACKAGES_URI[] =
     "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
-static const char USER[] = "user";
-static const char USER_URI[] =
+const char USER[] = "user";
+const char USER_URI[] =
     "vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 

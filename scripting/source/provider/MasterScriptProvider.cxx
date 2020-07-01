@@ -709,7 +709,7 @@ static OUString urihelper_getImplementationName( )
     return "com.sun.star.script.provider.ScriptURIHelper";
 }
 
-static const struct cppu::ImplementationEntry s_entries [] =
+const struct cppu::ImplementationEntry s_entries [] =
     {
         {
             sp_create, sp_getImplementationName,

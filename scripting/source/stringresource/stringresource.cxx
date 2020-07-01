@@ -697,7 +697,7 @@ Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
 // XInitialization base functionality for derived classes
 
 
-static const char aNameBaseDefaultStr[] = "strings";
+const char aNameBaseDefaultStr[] = "strings";
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
     ( const Sequence< Any >& aArguments )
@@ -2656,7 +2656,7 @@ const Reference< ucb::XSimpleFileAccess3 > & StringResourceWithLocationImpl::get
 // component export operations
 
 
-static const struct ::cppu::ImplementationEntry s_component_entries [] =
+const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     {
         create_StringResourceImpl, getImplementationName_StringResourceImpl,
