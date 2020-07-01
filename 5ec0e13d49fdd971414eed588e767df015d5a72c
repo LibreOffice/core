@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a02d7dad_756354e1",
+        "filename": "icon-themes/colibre/brand/shell/logo_flavor.svg",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-01T09:49:50Z",
+      "side": 1,
+      "message": "People who don\u0027t have Vegur installed will see a slightly different image. I convert the text to path when done for our logo. Not urgently needed in this case.",
+      "range": {
+        "startLine": 63,
+        "startChar": 84,
+        "endLine": 63,
+        "endChar": 89
+      },
+      "revId": "5ec0e13d49fdd971414eed588e767df015d5a72c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
