@@ -1,0 +1,487 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9689ea2a_d0186788",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Why use the smart pointer here? it incurs a performance penalty, and syntactic noise. Just use vector of structs, and don\u0027t introduce the typedef for it. Just use full name below.",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 35
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "446e4d2c_6bdce555",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Why class? you make everything public - just use struct.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 12
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c9facdf_6b85b940",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Don\u0027t use \"x\", unless it\u0027s a UNO interface. For vector objects, use \"a\". And don\u0027t forget the prefix \"m\" for members.\n\nWhy \"protected\"?\nAdditionally, try always to use this order in class definition: \"public\"-\u003e\"protected\"-\u003e\"private\". Don\u0027t put less visible sections before more visible. It makes class definition to be easier to understand, where *interface* (public) parts are first, and implementation (private details) are last.",
+      "range": {
+        "startLine": 43,
+        "startChar": 14,
+        "endLine": 43,
+        "endChar": 15
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa2233a8_504c206d",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "By the way - why is it virtual?",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 11
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ae0c4f_92e76d41",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Looks like a leftover - forgot to delete? ;-)",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 67
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44d8b781_792eeb74",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Don\u0027t use \"x\", unless it\u0027s a UNO interface. For pointer-like objects, including smart pointers, we use \"p\".",
+      "range": {
+        "startLine": 52,
+        "startChar": 36,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2421e45_931975ec",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Why not?",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 39
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f9b2d8_652d44e1",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Why not?",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 31
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31cec77f_a91cd822",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Maybe put t to the end, after expanding?",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 28
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c024b05c_607295b6",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "So you think it\u0027s non-translatable?\n\nPossibly just don\u0027t bother collapsing for now, or count children to collapse (moving expand/collapse into the insertion loop, where you even have this information right away as the array size).",
+      "range": {
+        "startLine": 87,
+        "startChar": 50,
+        "endLine": 87,
+        "endChar": 75
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a64110_11fa852e",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Please don\u0027t iterate twice. Just put the check into the first loop, and conditionally collapse there, otherwise expand.",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 5
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db1033a3_ad1d930f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "p",
+      "range": {
+        "startLine": 62,
+        "startChar": 71,
+        "endLine": 62,
+        "endChar": 72
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f8d6821_d2d5f742",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "Using string instead of enum here is strange...",
+      "range": {
+        "startLine": 64,
+        "startChar": 43,
+        "endLine": 64,
+        "endChar": 57
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ed8d08_95607e48",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "For strings, \"s\" is appropriate, although \"a\" is also often used. Since you already used \"s\" in the function argument list, please be consistent and keep using \"s\".",
+      "range": {
+        "startLine": 85,
+        "startChar": 13,
+        "endLine": 85,
+        "endChar": 14
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb26b631_71095e22",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "p\n\nYou use \"CurrentTree\" and \"CurTree\" for two similar objects. The naming is confusing. Please use something distinctive, like \"pParentNode\" and \"pCurrentChild\".",
+      "range": {
+        "startLine": 104,
+        "startChar": 16,
+        "endLine": 104,
+        "endChar": 17
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e80fe72e_30e4f3d0",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "it\u0027s not a reference to UNO interface -\u003e \"a\".\n\nAdditionally: property set is an UNO interface (that you use below). Please don\u0027t use names that might confuse into thinking that this object is such a reference. Just use something neutral, like \"aProperties\"",
+      "range": {
+        "startLine": 111,
+        "startChar": 45,
+        "endLine": 111,
+        "endChar": 46
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cefda01_3209d9e1",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "p",
+      "range": {
+        "startLine": 136,
+        "startChar": 32,
+        "endLine": 136,
+        "endChar": 33
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a29499a9_bbdc9225",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "It\u0027s not logical to use emplace_back here, after you already constructed the object yourself. emplace_back is used when you pass constructor arguments, not the resulting object. Of course, this works too, since copy ctor is used in this case, but more logical would be using push_back - or changing the code to pass ctor arguments right into emplace_back, which is better.",
+      "range": {
+        "startLine": 137,
+        "startChar": 38,
+        "endLine": 137,
+        "endChar": 50
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "223df78a_45cfee3e",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "a",
+      "range": {
+        "startLine": 156,
+        "startChar": 41,
+        "endLine": 156,
+        "endChar": 42
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f08a218d_5616c420",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "p; see notes about naming above.",
+      "range": {
+        "startLine": 158,
+        "startChar": 12,
+        "endLine": 158,
+        "endChar": 13
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bf016f4_2d10f625",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-01T07:08:41Z",
+      "side": 1,
+      "message": "\"m\" prefix is for member variables, not for methods. Please remove.",
+      "range": {
+        "startLine": 56,
+        "startChar": 16,
+        "endLine": 56,
+        "endChar": 17
+      },
+      "revId": "35f98106926da32a02a0cf1c437dd6766837a003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
