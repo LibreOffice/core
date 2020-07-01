@@ -12761,6 +12761,18 @@ public:
         return m_pAccessible;
     }
 
+    virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        gtk_widget_add_events(m_pWidget, GDK_BUTTON_PRESS_MASK);
+        GtkInstanceWidget::connect_mouse_press(rLink);
+    }
+
+    virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
+    {
+        gtk_widget_add_events(m_pWidget, GDK_BUTTON_RELEASE_MASK);
+        GtkInstanceWidget::connect_mouse_release(rLink);
+    }
+
     virtual void set_direction(bool bRTL) override
     {
         GtkInstanceWidget::set_direction(bRTL);
