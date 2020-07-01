@@ -175,7 +175,7 @@ static Reference<XInterface> NumberText_Impl_create(Reference<XComponentContext>
 }
 
 //#### EXPORTED ### functions to allow for registration and creation of the UNO component
-static const struct ::cppu::ImplementationEntry s_component_entries[]
+const struct ::cppu::ImplementationEntry s_component_entries[]
     = { { NumberText_Impl_create, getImplementationName_NumberText_Impl,
           getSupportedServiceNames_NumberText_Impl, ::cppu::createSingleComponentFactory, nullptr,
           0 },

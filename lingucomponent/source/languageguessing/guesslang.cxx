@@ -333,7 +333,7 @@ static Reference< XInterface > LangGuess_Impl_create(
 }
 
 //#### EXPORTED ### functions to allow for registration and creation of the UNO component
-static const struct ::cppu::ImplementationEntry s_component_entries [] =
+const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     {
         LangGuess_Impl_create, getImplementationName_LangGuess_Impl,
