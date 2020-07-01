@@ -45,7 +45,8 @@ public:
 
     void    createShapes( const css::awt::Point& rPos
                           , const css::awt::Size& rReferenceSize
-                          , const css::awt::Size& nTextMaxWidth );
+                          , const css::awt::Size& nTextMaxWidth
+                          , bool bYAxisTitle );
 
     double getRotationAnglePi() const;
     css::awt::Size getUnrotatedSize() const;
