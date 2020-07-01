@@ -12,7 +12,35 @@
 #define INCLUDED_VCL_BITMAPFILTER_HXX
 
 #include <vcl/bitmapex.hxx>
+#include <functional>
+
 class Animation;
+
+namespace vcl::bitmap
+{
+// Generates strip ranges and run the input function with the start and
+// end as parameters. The additional parameter bLast denotes if the
+// iteration is teh last one.
+//
+// Example:
+// first = 0, last = 100, STRIP_SIZE = 32
+// this will generate:
+// [0, 31, false], [32, 63, false], [64, 95, false], [96, 100, true]
+template <int STRIP_SIZE>
+void generateStripRanges(
+    long nFirst, long nLast,
+    std::function<void(long const nStart, long const nEnd, bool const bLast)> aFunction)
+{
+    long nStart = nFirst;
+    for (; nStart < nLast - STRIP_SIZE; nStart += STRIP_SIZE)
+    {
+        long nEnd = nStart + STRIP_SIZE - 1;
+        aFunction(nStart, nEnd, false);
+    }
+    aFunction(nStart, nLast, true);
+}
+
+} // end vcl::bitmap
 
 class VCL_DLLPUBLIC BitmapFilter
 {
