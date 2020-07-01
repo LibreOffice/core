@@ -22,6 +22,30 @@
       "revId": "bde0cc68bd6443c97b4ca061ed7132f478959281",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d6c62b8_f3df4f93",
+        "filename": "svl/source/notify/broadcast.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-01T09:28:24Z",
+      "side": 1,
+      "message": "I thought I tried that and it complained somehow. You\u0027re welcome to improve it :-)",
+      "parentUuid": "24b8f56c_96fa5b59",
+      "range": {
+        "startLine": 53,
+        "startChar": 29,
+        "endLine": 53,
+        "endChar": 39
+      },
+      "revId": "bde0cc68bd6443c97b4ca061ed7132f478959281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
