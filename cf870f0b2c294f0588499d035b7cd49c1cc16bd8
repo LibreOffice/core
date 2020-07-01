@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12f389e3_7fc5e9c1",
+        "filename": "writerfilter/source/dmapper/TableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-01T12:41:27Z",
+      "side": 1,
+      "message": "maybe a separate function to just return the one? That will make it much neater if it ever moves to a per-cell - where it doesn\u0027t need to generate the entire gridspan. Plus this just looks ugly.\nAt least, save this into a variable so it can be reused - which will be very beneficial if getGridSpans ends up computing the vector for each call.",
+      "range": {
+        "startLine": 84,
+        "startChar": 19,
+        "endLine": 84,
+        "endChar": 42
+      },
+      "revId": "cf870f0b2c294f0588499d035b7cd49c1cc16bd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f38724b1_fe2f24fc",
+        "filename": "writerfilter/source/dmapper/TableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-01T12:41:27Z",
+      "side": 1,
+      "message": "leftover word from different phrasing...",
+      "range": {
+        "startLine": 98,
+        "startChar": 48,
+        "endLine": 98,
+        "endChar": 52
+      },
+      "revId": "cf870f0b2c294f0588499d035b7cd49c1cc16bd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
