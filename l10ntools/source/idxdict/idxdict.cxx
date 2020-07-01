@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const int MAXLINE = 1024*64;
+const int MAXLINE = 1024*64;
 
 using namespace std;
 
