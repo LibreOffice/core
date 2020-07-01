@@ -150,6 +150,11 @@ ColumnBlockPosition* TableColumnBlockPositionSet::getBlockPosition( SCCOL nCol )
     return &it->second;
 }
 
+void TableColumnBlockPositionSet::invalidate()
+{
+    mpImpl->maColumns.clear();
+}
+
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
 {
     switch (itPos->type)
