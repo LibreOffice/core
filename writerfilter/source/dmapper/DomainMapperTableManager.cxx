@@ -566,6 +566,7 @@ void DomainMapperTableManager::endOfRowAction()
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
         sal_uInt32 nTmpCell = m_nCell.back();
         sal_uInt32 nTmpGridBefore = m_aGridBefore.back();
+        TableParagraphVectorPtr pTableParagraphs = getCurrentParagraphs();
 
         // endLevel and startLevel are taking care of the non finished row
         // to carry it over to the next table
@@ -584,6 +585,8 @@ void DomainMapperTableManager::endOfRowAction()
         m_aCellWidths.push_back(pTmpCellWidths);
         m_nCell.push_back(nTmpCell);
         m_aGridBefore.push_back(nTmpGridBefore);
+        m_aParagraphsToEndTable.pop( );
+        m_aParagraphsToEndTable.push( pTableParagraphs );
     }
 
     // Push the tmp position now that we compared it
