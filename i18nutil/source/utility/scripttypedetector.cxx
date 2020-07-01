@@ -25,7 +25,7 @@
 
 using namespace com::sun::star::i18n;
 
-static const sal_Int16 scriptDirection[] = {
+const sal_Int16 scriptDirection[] = {
     ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT = 0,
     ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT = 1,
     ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER = 2,
