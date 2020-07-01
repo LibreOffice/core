@@ -32,7 +32,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
     rtl_random_destroyPool(aRandomPool);
 }
 
-static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
+const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
 constexpr const sal_uInt32 AES128Size = 16;
 
 } // end anonymous namespace

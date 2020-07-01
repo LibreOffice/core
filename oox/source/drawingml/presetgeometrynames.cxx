@@ -25,7 +25,7 @@ struct PresetGeometryName
     const char* pFontworkType;
 };
 
-static const PresetGeometryName pPresetGeometryNameArray[]
+const PresetGeometryName pPresetGeometryNameArray[]
     = { { "textNoShape", "" },
         { "textPlain", "fontwork-plain-text" },
         { "textStop", "fontwork-stop" },

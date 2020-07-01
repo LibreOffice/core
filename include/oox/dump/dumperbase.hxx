@@ -384,7 +384,7 @@ public:
     OUString operator()( const char* pcDefault ) const { if( has() ) return *this; return String( pcDefault ); }
 };
 
-static const String EMPTY_STRING;
+const String EMPTY_STRING;
 
 
 /** Base class for all dumper classes.
@@ -733,7 +733,7 @@ private:
     mutable NameListRef mxList;
 };
 
-static const NameListWrapper NO_LIST;
+const NameListWrapper NO_LIST;
 
 
 class ItemFormatMap
