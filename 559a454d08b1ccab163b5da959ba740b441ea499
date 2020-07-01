@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0f0522c_da135c07",
+        "filename": "framework/source/fwe/helper/titlehelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-07-01T17:07:22Z",
+      "side": 1,
+      "message": "better do #if defined WNT || defined MACOSX\n\n(for whatever else free software thingies than Linux - like BSD, ....)?",
+      "revId": "559a454d08b1ccab163b5da959ba740b441ea499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
