@@ -42,7 +42,7 @@ struct TokenTable
 
 }
 
-static const TokenTable pTokenTableArray[] =
+const TokenTable pTokenTableArray[] =
 {
     { "rdmNavi",            TK_rdmNavi },
     { "btnNavBack",         TK_btnNavBack },

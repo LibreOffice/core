@@ -30,7 +30,7 @@ using namespace osl;
 
 namespace sdext::presenter {
 
-static const struct ImplementationEntry gServiceEntries[] =
+const struct ImplementationEntry gServiceEntries[] =
 {
     {
         PresenterProtocolHandler::Create,

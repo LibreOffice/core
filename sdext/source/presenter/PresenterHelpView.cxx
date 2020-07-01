@@ -41,9 +41,9 @@ using ::std::vector;
 namespace sdext::presenter {
 
 namespace {
-    const static sal_Int32 gnHorizontalGap (20);
-    const static sal_Int32 gnVerticalBorder (30);
-    const static sal_Int32 gnVerticalButtonPadding (12);
+    const sal_Int32 gnHorizontalGap (20);
+    const sal_Int32 gnVerticalBorder (30);
+    const sal_Int32 gnVerticalButtonPadding (12);
 
     class LineDescriptor
     {

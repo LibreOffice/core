@@ -34,8 +34,8 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext::presenter {
 
-const static double gnHorizontalBorder (15);
-const static double gnVerticalBorder (5);
+const double gnHorizontalBorder (15);
+const double gnVerticalBorder (5);
 
 ::rtl::Reference<PresenterButton> PresenterButton::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,

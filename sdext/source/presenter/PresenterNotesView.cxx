@@ -42,9 +42,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-static const sal_Int32 gnSpaceBelowSeparator (10);
-static const sal_Int32 gnSpaceAboveSeparator (10);
-static const double gnLineScrollFactor (1.2);
+const sal_Int32 gnSpaceBelowSeparator (10);
+const sal_Int32 gnSpaceAboveSeparator (10);
+const double gnLineScrollFactor (1.2);
 
 namespace sdext::presenter {
 

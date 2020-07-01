@@ -24,7 +24,7 @@
 namespace
 {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &PPPOptimizerDialog_createInstance,
       &PPPOptimizerDialog_getImplementationName,
       &PPPOptimizerDialog_getSupportedServiceNames,

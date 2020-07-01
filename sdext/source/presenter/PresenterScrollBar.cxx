@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-const static double gnScrollBarGap (10);
+const double gnScrollBarGap (10);
 
 namespace sdext::presenter {
 
