@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "271e2d74_016c00d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-01T09:47:23Z",
+      "side": 1,
+      "message": "uh, why isn\u0027t this a separate commit?",
+      "revId": "84a5e45490e3461c0d3c276e10fdc4e389ec5008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
