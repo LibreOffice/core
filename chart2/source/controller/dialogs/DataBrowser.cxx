@@ -497,7 +497,7 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
     m_bDataValid( true ),
-    m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
+    m_aNumberEditField(VclPtr<FormattedControl>::Create(&EditBrowseBox::GetDataWindow())),
     m_aTextEditField(VclPtr<EditControl>::Create(&EditBrowseBox::GetDataWindow())),
     m_pColumnsWin(pColumns),
     m_pColorsWin(pColors),
@@ -506,8 +506,9 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
 {
     double fNan;
     ::rtl::math::setNan( & fNan );
-    m_aNumberEditField->SetDefaultValue( fNan );
-    m_aNumberEditField->TreatAsNumber( true );
+    Formatter& rFormatter = m_aNumberEditField->get_formatter();
+    rFormatter.SetDefaultValue( fNan );
+    rFormatter.TreatAsNumber( true );
     RenewTable();
 }
 
@@ -828,7 +829,7 @@ bool DataBrowser::IsDataValid() const
     {
         sal_uInt32 nDummy = 0;
         double fDummy = 0.0;
-        OUString aText( m_aNumberEditField->GetText());
+        OUString aText(m_aNumberEditField->get_widget().get_text());
 
         if( !aText.isEmpty() &&
             m_spNumberFormatterWrapper &&
@@ -860,7 +861,8 @@ void DataBrowser::SetDataFromModel(
         std::make_shared<NumberFormatterWrapper>(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ));
 
-    m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
+    Formatter& rFormatter = m_aNumberEditField->get_formatter();
+    rFormatter.SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
     RenewTable();
 
@@ -1114,8 +1116,9 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
 
     if( CellContainsNumbers( nCol ))
     {
-        m_aNumberEditField->UseInputStringForFormatting();
-        m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nCol ));
+        Formatter& rFormatter = m_aNumberEditField->get_formatter();
+        rFormatter.UseInputStringForFormatting();
+        rFormatter.SetFormatKey( GetNumberFormatKey( nCol ));
         return m_rNumberEditController.get();
     }
 
@@ -1135,13 +1138,14 @@ void DataBrowser::InitController(
     else if( rController == m_rNumberEditController )
     {
         // treat invalid and empty text as Nan
-        m_aNumberEditField->EnableNotANumber( true );
+        Formatter& rFormatter = m_aNumberEditField->get_formatter();
+        rFormatter.EnableNotANumber( true );
         if( std::isnan( GetCellNumber( nRow, nCol )))
-            m_aNumberEditField->SetTextValue( OUString());
+            rFormatter.SetTextValue( OUString());
         else
-            m_aNumberEditField->SetValue( GetCellNumber( nRow, nCol ) );
-        OUString aText( m_aNumberEditField->GetText());
-        m_aNumberEditField->SetSelection( ::Selection( 0, aText.getLength()));
+            rFormatter.SetValue( GetCellNumber( nRow, nCol ) );
+        weld::Entry& rEntry = m_aNumberEditField->get_widget();
+        rEntry.select_region(0, -1);
     }
     else
     {
@@ -1194,7 +1198,7 @@ bool DataBrowser::SaveModified()
         {
             sal_uInt32 nDummy = 0;
             double fDummy = 0.0;
-            OUString aText( m_aNumberEditField->GetText());
+            OUString aText(m_aNumberEditField->get_widget().get_text());
             // an empty string is valid, if no numberformatter exists, all
             // values are treated as valid
             if( !aText.isEmpty() && pSvNumberFormatter &&
@@ -1204,7 +1208,8 @@ bool DataBrowser::SaveModified()
             }
             else
             {
-                double fData = m_aNumberEditField->GetValue();
+                Formatter& rFormatter = m_aNumberEditField->get_formatter();
+                double fData = rFormatter.GetValue();
                 bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
             }
         }
