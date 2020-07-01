@@ -46,10 +46,10 @@ using namespace ::com::sun::star::frame;
 
 //  Namespace
 
-static const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
+const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
 
 // Special resource URLs to retrieve additional information
-static const char PRIVATE_RESOURCE_URL[]                = "private:";
+const char PRIVATE_RESOURCE_URL[]                = "private:";
 
 const sal_Int32   COMMAND_PROPERTY_IMAGE                = 1;
 const sal_Int32   COMMAND_PROPERTY_ROTATE               = 2;

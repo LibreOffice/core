@@ -65,7 +65,7 @@ static const char* aCommands[] =
     ".uno:ConvertToNavigationBar"
 };
 
-static const OUStringLiteral aImgIds[] =
+const OUStringLiteral aImgIds[] =
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,

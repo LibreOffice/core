@@ -378,7 +378,7 @@ struct Hook
     ~Hook() { g_pGetMultiplexerListener = nullptr; }
 };
 
-static Hook g_hook;
+Hook g_hook;
 
 }
 

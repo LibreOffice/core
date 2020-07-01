@@ -82,7 +82,7 @@ struct FixedVariable
 };
 
 // Table with all fixed/predefined variables supported.
-static const FixedVariable aFixedVarTable[PREDEFVAR_COUNT] =
+const FixedVariable aFixedVarTable[PREDEFVAR_COUNT] =
 {
     { "$(inst)",         true  }, // PREDEFVAR_INST
     { "$(prog)",         true  }, // PREDEFVAR_PROG

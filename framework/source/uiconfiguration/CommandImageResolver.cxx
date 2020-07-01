@@ -21,7 +21,7 @@ namespace vcl
 namespace
 {
 
-static const o3tl::enumarray<ImageType, const char*> ImageType_Prefixes =
+const o3tl::enumarray<ImageType, const char*> ImageType_Prefixes =
 {
     "cmd/sc_",
     "cmd/lc_",

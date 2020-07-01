@@ -36,9 +36,9 @@
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 
-static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
-static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
-static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
+const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
+const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
+const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 
 namespace framework
 {

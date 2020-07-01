@@ -23,15 +23,15 @@
 
 using namespace ::com::sun::star;
 
-static const char SEPARATOR_STRING[]               = "private:separator";
+const char SEPARATOR_STRING[]               = "private:separator";
 
-static const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
-static const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
-static const char MERGECOMMAND_REPLACE[]           = "Replace";
-static const char MERGECOMMAND_REMOVE[]            = "Remove";
+const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
+const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
+const char MERGECOMMAND_REPLACE[]           = "Replace";
+const char MERGECOMMAND_REMOVE[]            = "Remove";
 
-static const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
-static const char MERGEFALLBACK_IGNORE[]            = "Ignore";
+const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
+const char MERGEFALLBACK_IGNORE[]            = "Ignore";
 
 namespace framework
 {

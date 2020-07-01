@@ -67,10 +67,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
-static const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
+const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
 
-static const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
-static const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
+const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
+const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 
 namespace framework
 {
@@ -131,8 +131,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController              
 
 DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
-static constexpr OUStringLiteral g_aPropUIName( "UIName" );
-static constexpr OUStringLiteral g_aPropResourceURL( "ResourceURL" );
+constexpr OUStringLiteral g_aPropUIName( "UIName" );
+constexpr OUStringLiteral g_aPropResourceURL( "ResourceURL" );
 
 ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),

@@ -89,10 +89,10 @@ using namespace ::com::sun::star;
 namespace framework
 {
 
-static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
-static const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
+const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
+const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
 
-static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
+const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
 static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
     css::uno::Reference< css::frame::XFrame > const & rFrame )
