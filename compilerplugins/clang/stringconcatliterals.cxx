@@ -109,7 +109,8 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
                 compiler.getSourceManager().getSpellingLoc(
                     compiler.getSourceManager().getImmediateMacroCallerLoc(
                         compiler.getSourceManager().getImmediateMacroCallerLoc(
-                            compat::getBeginLoc(expr))))),
+                            compiler.getSourceManager().getImmediateMacroCallerLoc(
+                                compat::getBeginLoc(expr)))))),
             SRCDIR "/include/tools/diagnose_ex.h"))
         return true;
 
