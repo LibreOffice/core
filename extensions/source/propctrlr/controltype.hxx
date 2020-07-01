@@ -27,9 +27,9 @@ namespace pcr
 
     namespace ControlType
     {
-        static const sal_Int16 FIXEDLINE      = sal_Int16(100);
-        static const sal_Int16 FORMATTEDFIELD = sal_Int16(101);
-        static const sal_Int16 PROGRESSBAR    = sal_Int16(102);
+        const sal_Int16 FIXEDLINE      = sal_Int16(100);
+        const sal_Int16 FORMATTEDFIELD = sal_Int16(101);
+        const sal_Int16 PROGRESSBAR    = sal_Int16(102);
 
         // need only those which are not already covered as FormComponentType
     }

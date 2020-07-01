@@ -37,9 +37,9 @@ namespace pcr
 
     namespace
     {
-        static const sal_Int32 s_nFirstVirtualButtonType = 1 + sal_Int32(FormButtonType_URL);
+        const sal_Int32 s_nFirstVirtualButtonType = 1 + sal_Int32(FormButtonType_URL);
 
-        static const char* pNavigationURLs[] =
+        const char* pNavigationURLs[] =
         {
             ".uno:FormController/moveToFirst",
             ".uno:FormController/moveToPrev",
