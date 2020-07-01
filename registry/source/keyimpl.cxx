@@ -32,7 +32,7 @@
 
 using namespace store;
 
-namespace { static char const VALUE_PREFIX[] = "$VL_"; }
+namespace { char const VALUE_PREFIX[] = "$VL_"; }
 
 
 //  ORegKey()
