@@ -2016,7 +2016,7 @@ struct NameValuePair {
 
 }
 
-static const NameValuePair ReserveWord[] = {
+const NameValuePair ReserveWord[] = {
     { "trueWord", "true" },
     { "falseWord", "false" },
     { "quarter1Word", "1st quarter" },

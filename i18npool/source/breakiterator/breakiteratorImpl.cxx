@@ -480,7 +480,7 @@ struct UBlock2Script
     sal_Int16 script;
 };
 
-static const UBlock2Script scriptList[] =
+const UBlock2Script scriptList[] =
 {
     {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
     {UBLOCK_BASIC_LATIN, UBLOCK_SPACING_MODIFIER_LETTERS, ScriptType::LATIN},

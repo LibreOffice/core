@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 namespace i18npool {
 
-static const char implementationName[] = "com.sun.star.i18n.Collator_Unicode";
+const char implementationName[] = "com.sun.star.i18n.Collator_Unicode";
 
 Collator_Unicode::Collator_Unicode()
 {

@@ -74,7 +74,7 @@ InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartP
     return nStartPos;
 }
 
-static ScriptTypeList const typeList[] = {
+ScriptTypeList const typeList[] = {
     //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
     //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
     { UnicodeScript_kDevanagari,  UnicodeScript_kDevanagari,    sal_Int16(UnicodeScript_kDevanagari) },    // 14,

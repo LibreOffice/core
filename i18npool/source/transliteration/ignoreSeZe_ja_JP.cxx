@@ -24,7 +24,7 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-static const transliteration_Ignore::Mapping SeZe[] = {
+const transliteration_Ignore::Mapping SeZe[] = {
     // SI + E --> SE
     { 0x30B7, 0x30A7, 0x30BB, true },
     // SI + E --> SE

@@ -45,7 +45,7 @@ namespace i18npool {
 
 #define MAX_CT      17
 
-static const sal_uInt16 thaiCT[128] = {     // Thai character type
+const sal_uInt16 thaiCT[128] = {     // Thai character type
     CT_NON, CT_CONS, CT_CONS, CT_CONS, CT_CONS,CT_CONS, CT_CONS, CT_CONS,       //0E00
     CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS,
     CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS, CT_CONS,     //0E10

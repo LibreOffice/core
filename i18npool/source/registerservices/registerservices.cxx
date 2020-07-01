@@ -257,7 +257,7 @@ struct InstancesArray {
 
 }
 
-static const InstancesArray aInstances[] = {
+const InstancesArray aInstances[] = {
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },

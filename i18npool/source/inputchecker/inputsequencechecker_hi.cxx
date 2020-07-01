@@ -54,7 +54,7 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
 /*
  * Devanagari character type table
  */
-static const sal_uInt16 devaCT[128] = {
+const sal_uInt16 devaCT[128] = {
 /*         0,    1,    2,    3,    4,    5,    6,    7,
            8,    9,    A,    B,    C,    D,    E,    F, */
 /* 0900 */ ND_, UP_, UP_, NP_, ND_, IV_, IV_, IV_,
@@ -78,7 +78,7 @@ static const sal_uInt16 devaCT[128] = {
 /*
  * Devanagari character composition table
  */
-static const sal_uInt16 dev_cell_check[14][14] = {
+const sal_uInt16 dev_cell_check[14][14] = {
   /*        ND, UP, NP, IV, CN, CK, RC, NM, RM, IM, HL, NK, VD, HD, */
   /* 0  */ { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }, /* ND */
   /* 1  */ { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }, /* UP */
