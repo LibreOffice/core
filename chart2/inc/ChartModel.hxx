@@ -52,6 +52,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <sfx2/xmldump.hxx>
 
 #include <memory>
 
@@ -105,7 +106,7 @@ typedef cppu::WeakImplHelper<
 class UndoManager;
 class ChartView;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartModel final : public impl::ChartModel_Base
+class OOO_DLLPUBLIC_CHARTTOOLS ChartModel final : public impl::ChartModel_Base, public sfx2::XmlDump
 {
 
 private:
@@ -464,6 +465,9 @@ public:
     bool isDataFromPivotTable() const;
 
     void removeDataProviders();
+
+    /// See sfx2::XmlDump::dumpAsXml().
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
     sal_Int32 mnStart;

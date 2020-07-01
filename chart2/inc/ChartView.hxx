@@ -39,6 +39,7 @@
 #include <memory>
 
 #include <vcl/timer.hxx>
+#include <sfx2/xmldump.hxx>
 
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace com::sun::star::drawing { class XShapes; }
@@ -92,6 +93,7 @@ class ChartView final : public ::cppu::WeakImplHelper<
         >
         , public ExplicitValueProvider
         , private SfxListener
+        , public sfx2::XmlDump
 {
 private:
     void init();
@@ -178,6 +180,9 @@ public:
     virtual OUString SAL_CALL dump() override;
 
     void setViewDirty();
+
+    /// See sfx2::XmlDump::dumpAsXml().
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private: //methods
     void createShapes();

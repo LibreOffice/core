@@ -103,6 +103,7 @@
 #include <tools/stream.hxx>
 
 #include <memory>
+#include <libxml/xmlwriter.h>
 namespace com::sun::star::chart2 { class XChartDocument; }
 
 namespace chart {
@@ -2888,6 +2889,19 @@ OUString ChartView::dump()
 #else
     return OUString();
 #endif
+}
+
+void ChartView::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("ChartView"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    if (m_pDrawModelWrapper)
+    {
+        m_pDrawModelWrapper->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void ChartView::setViewDirty()

@@ -86,6 +86,8 @@ public:
     static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList const * pObjList );
 
     static bool removeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 } //namespace chart
 #endif
