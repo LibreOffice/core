@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
-static const sal_Int32 nFontEM = 2048;
+const sal_Int32 nFontEM = 2048;
 
 
 SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects ) :

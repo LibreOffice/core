@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 
-static const DffPropSetEntry mso_PropSetDefaults[] = {
+const DffPropSetEntry mso_PropSetDefaults[] = {
 
 // 0
 { { false, false, false, false }, 0, 0 },

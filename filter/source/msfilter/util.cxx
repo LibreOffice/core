@@ -148,7 +148,7 @@ OString ConvertColor( const Color &rColor )
 #define IN2MM100( v )    static_cast< sal_Int32 >( (v) * 2540.0 + 0.5 )
 #define MM2MM100( v )    static_cast< sal_Int32 >( (v) * 100.0 + 0.5 )
 
-static const ApiPaperSize spPaperSizeTable[] =
+const ApiPaperSize spPaperSizeTable[] =
 {
     { 0, 0 },                                                //  0 - (undefined)
     { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          //  1 - Letter paper
@@ -565,7 +565,7 @@ struct CustomShapeTypeTranslationTable
 
 }
 
-static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
+const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
 {
     // { "non-primitive", mso_sptMin },
     { "frame", "frame" },
@@ -960,7 +960,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "ooxml-rect", "rect" },
 };
 
-static struct {
+struct {
     const char* sDML;
     MSO_SPT nVML;
 } const pDMLToVMLTable[] = {

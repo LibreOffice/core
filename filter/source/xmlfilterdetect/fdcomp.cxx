@@ -27,7 +27,7 @@
 
 namespace {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &FilterDetect_createInstance, &FilterDetect_getImplementationName,
       &FilterDetect_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, nullptr, 0 },

@@ -25,7 +25,7 @@ using namespace ::ooo::vba;
 
 namespace {
 
-static ::cppu::ImplementationEntry const spServices[] =
+::cppu::ImplementationEntry const spServices[] =
 {
     { VBAMacroResolver_createInstance, VBAMacroResolver_getImplementationName,
       VBAMacroResolver_getSupportedServiceNames,

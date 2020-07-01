@@ -81,23 +81,23 @@ using namespace ::xmloff::token;
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 // ooo xml elements
-static const char    aOOOElemTextField[] = NSPREFIX "text_field";
+const char    aOOOElemTextField[] = NSPREFIX "text_field";
 
 
 // ooo xml attributes for meta_slide
-static const char    aOOOAttrSlide[] = NSPREFIX "slide";
-static const char    aOOOAttrMaster[] = NSPREFIX "master";
-static const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
-static const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
-static const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
-static const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
-static const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
+const char    aOOOAttrSlide[] = NSPREFIX "slide";
+const char    aOOOAttrMaster[] = NSPREFIX "master";
+const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
+const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
+const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
+const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
+const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
+const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
 
 // ooo xml attributes for pages and shapes
-static const char    aOOOAttrName[] = NSPREFIX "name";
+const char    aOOOAttrName[] = NSPREFIX "name";
 
-static const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
+const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
 
 
 /** Text Field Class Hierarchy
