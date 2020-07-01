@@ -27,8 +27,8 @@ namespace rptui
     namespace
     {
 
-        static const char sExpressionPrefix[] = "rpt:";
-        static const char sFieldPrefix[] =  "field:";
+        const char sExpressionPrefix[] = "rpt:";
+        const char sFieldPrefix[] =  "field:";
     }
 
 
