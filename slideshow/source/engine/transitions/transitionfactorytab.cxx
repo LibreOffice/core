@@ -33,7 +33,7 @@ namespace slideshow::internal {
 
 namespace {
 
-static const TransitionInfo lcl_transitionInfo[] =
+const TransitionInfo lcl_transitionInfo[] =
 {
     {
         0,
