@@ -36,6 +36,8 @@
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
 
+#include <config_features.h>
+
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
 /// Test to assert layout / rendering result of Writer.
@@ -2289,6 +2291,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf131707)
     assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
 }
 
+#if HAVE_MORE_FONTS
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122225)
 {
     SwDoc* pDoc = createDoc("tdf122225.docx");
@@ -2305,6 +2308,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122225)
                        "Advanced Diploma");
     // This failed, if the legend label is not "Advanced Diploma".
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
 {
