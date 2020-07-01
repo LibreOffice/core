@@ -13,7 +13,6 @@
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 

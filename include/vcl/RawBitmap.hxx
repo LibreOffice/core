@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <o3tl/safeint.hxx>
+#include <vcl/BitmapColor.hxx>
+#include <vcl/bitmapex.hxx>
+
 namespace vcl::bitmap
 {
 /**

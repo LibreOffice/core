@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/string.hxx>
+#include <tools/UnitConversion.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <cnttab.hxx>

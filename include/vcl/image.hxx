@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/outdev.hxx>
 
 #include <memory>

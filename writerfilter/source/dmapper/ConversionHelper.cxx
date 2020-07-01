@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace com::sun::star;
 

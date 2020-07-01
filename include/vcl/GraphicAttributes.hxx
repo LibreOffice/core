@@ -19,9 +19,7 @@
 
 #pragma once
 
-#include <memory>
 #include <vcl/dllapi.h>
-#include <o3tl/typed_flags_set.hxx>
 #include <vcl/bitmap.hxx>
 
 enum class GraphicDrawMode

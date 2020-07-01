@@ -16,6 +16,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/treelistbox.hxx>
 
 #include <set>
 

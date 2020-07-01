@@ -53,6 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <libxml/xmlwriter.h>
 #include <rtl/ustrbuf.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 

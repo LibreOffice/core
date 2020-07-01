@@ -22,12 +22,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
-#include <tools/stream.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <comphelper/base64.hxx>
-#include <vcl/virdev.hxx>
 #include <set>
-#include <boost/property_tree/json_parser.hpp>
 
 class ScrollBar;
 class ScrollBar;

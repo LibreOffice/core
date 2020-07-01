@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SDGMOITM_HXX
 #define INCLUDED_SVX_SDGMOITM_HXX
 
-#include <vcl/GraphicObject.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>

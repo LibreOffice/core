@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
+#include <rtl/string.hxx>
 
 class VCL_PLUGIN_PUBLIC WindowStateData
 {

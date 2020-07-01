@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 #include <cppuhelper/weak.hxx>
-#include <memory>
 
 class KeyEvent;
 class MouseEvent;

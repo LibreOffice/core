@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_DIAGRAMDATAINTERFACE_HXX
 #define INCLUDED_SVX_DIAGRAMDATAINTERFACE_HXX
 
-#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 #include <utility>

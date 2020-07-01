@@ -19,6 +19,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/UnitConversion.hxx>
 
 using namespace css;
 
