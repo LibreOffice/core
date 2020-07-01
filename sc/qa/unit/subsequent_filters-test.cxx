@@ -230,6 +230,7 @@ public:
     void testTdf98844();
     void testTdf100458();
     void testTdf127982();
+    void testTdf131424();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf110440XLSX();
@@ -388,6 +389,7 @@ public:
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf127982);
+    CPPUNIT_TEST(testTdf131424);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
@@ -3811,6 +3813,21 @@ void ScFiltersTest::testTdf127982()
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), rDoc.GetString(ScAddress(4,5,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("R6"), rDoc.GetString(ScAddress(4,6,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("R7"), rDoc.GetString(ScAddress(4,7,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf131424()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf131424.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, table reference would have failed
+    CPPUNIT_ASSERT_EQUAL(35.0, rDoc.GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(58.0, rDoc.GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(81.0, rDoc.GetValue(ScAddress(2,3,0)));
+    CPPUNIT_ASSERT_EQUAL(104.0, rDoc.GetValue(ScAddress(2,4,0)));
 
     xDocSh->DoClose();
 }
