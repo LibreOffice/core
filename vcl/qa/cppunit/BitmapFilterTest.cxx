@@ -38,11 +38,13 @@ public:
     void testBlurCorrectness();
     void testBasicMorphology();
     void testPerformance();
+    void testGenerateStripRanges();
 
     CPPUNIT_TEST_SUITE(BitmapFilterTest);
     CPPUNIT_TEST(testBlurCorrectness);
     CPPUNIT_TEST(testBasicMorphology);
     CPPUNIT_TEST(testPerformance);
+    CPPUNIT_TEST(testGenerateStripRanges);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -206,6 +208,67 @@ void BitmapFilterTest::testPerformance()
         pStream->WriteOString(OString::number(
             std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count()));
         pStream->WriteOString("\n");
+    }
+}
+
+void BitmapFilterTest::testGenerateStripRanges()
+{
+    {
+        constexpr long nFirstIndex = 0;
+        constexpr long nLastIndex = 100;
+        constexpr long nStripSize = 32;
+
+        std::vector<std::tuple<long, long, bool>> aRanges;
+
+        vcl::bitmap::generateStripRanges<nStripSize>(
+            nFirstIndex, nLastIndex, [&](long const nStart, long const nEnd, bool const bLast) {
+                aRanges.emplace_back(nStart, nEnd, bLast);
+            });
+
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aRanges.size());
+
+        CPPUNIT_ASSERT_EQUAL(0L, std::get<0>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(31L, std::get<1>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[0]));
+
+        CPPUNIT_ASSERT_EQUAL(32L, std::get<0>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(63L, std::get<1>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[1]));
+
+        CPPUNIT_ASSERT_EQUAL(64L, std::get<0>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(95L, std::get<1>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[2]));
+
+        CPPUNIT_ASSERT_EQUAL(96L, std::get<0>(aRanges[3]));
+        CPPUNIT_ASSERT_EQUAL(100L, std::get<1>(aRanges[3]));
+        CPPUNIT_ASSERT_EQUAL(true, std::get<2>(aRanges[3]));
+    }
+
+    {
+        constexpr long nFirstIndex = 0;
+        constexpr long nLastIndex = 95;
+        constexpr long nStripSize = 32;
+
+        std::vector<std::tuple<long, long, bool>> aRanges;
+
+        vcl::bitmap::generateStripRanges<nStripSize>(
+            nFirstIndex, nLastIndex, [&](long const nStart, long const nEnd, bool const bLast) {
+                aRanges.emplace_back(nStart, nEnd, bLast);
+            });
+
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aRanges.size());
+
+        CPPUNIT_ASSERT_EQUAL(0L, std::get<0>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(31L, std::get<1>(aRanges[0]));
+        CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[0]));
+
+        CPPUNIT_ASSERT_EQUAL(32L, std::get<0>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(63L, std::get<1>(aRanges[1]));
+        CPPUNIT_ASSERT_EQUAL(false, std::get<2>(aRanges[1]));
+
+        CPPUNIT_ASSERT_EQUAL(64L, std::get<0>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(95L, std::get<1>(aRanges[2]));
+        CPPUNIT_ASSERT_EQUAL(true, std::get<2>(aRanges[2]));
     }
 }
 

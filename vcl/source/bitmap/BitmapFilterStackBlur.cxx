@@ -469,17 +469,21 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
 
+                const long nFirstIndex = 0;
                 const long nLastIndex = pReadAccess->Height() - 1;
-                long nStripStart = 0;
-                for (; nStripStart < nLastIndex - nThreadStrip; nStripStart += nThreadStrip)
-                {
-                    long nStripEnd = nStripStart + nThreadStrip - 1;
-                    auto pTask(std::make_unique<BlurTask>(pTag, pBlurHorizontalFn, aSharedData,
-                                                          nStripStart, nStripEnd));
-                    rShared.pushTask(std::move(pTask));
-                }
-                // Do the last (or the only) strip in main thread without threading overhead
-                pBlurHorizontalFn(aSharedData, nStripStart, nLastIndex);
+
+                vcl::bitmap::generateStripRanges<nThreadStrip>(
+                    nFirstIndex, nLastIndex,
+                    [&](long const nStart, long const nEnd, bool const bLast) {
+                        if (!bLast)
+                        {
+                            auto pTask(std::make_unique<BlurTask>(pTag, pBlurHorizontalFn,
+                                                                  aSharedData, nStart, nEnd));
+                            rShared.pushTask(std::move(pTask));
+                        }
+                        else
+                            pBlurHorizontalFn(aSharedData, nStart, nEnd);
+                    });
                 rShared.waitUntilDone(pTag);
             }
             {
@@ -488,17 +492,22 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
 
+                const long nFirstIndex = 0;
                 const long nLastIndex = pReadAccess->Width() - 1;
-                long nStripStart = 0;
-                for (; nStripStart < nLastIndex - nThreadStrip; nStripStart += nThreadStrip)
-                {
-                    long nStripEnd = nStripStart + nThreadStrip - 1;
-                    auto pTask(std::make_unique<BlurTask>(pTag, pBlurVerticalFn, aSharedData,
-                                                          nStripStart, nStripEnd));
-                    rShared.pushTask(std::move(pTask));
-                }
-                // Do the last (or the only) strip in main thread without threading overhead
-                pBlurVerticalFn(aSharedData, nStripStart, nLastIndex);
+
+                vcl::bitmap::generateStripRanges<nThreadStrip>(
+                    nFirstIndex, nLastIndex,
+                    [&](long const nStart, long const nEnd, bool const bLast) {
+                        if (!bLast)
+                        {
+                            auto pTask(std::make_unique<BlurTask>(pTag, pBlurVerticalFn,
+                                                                  aSharedData, nStart, nEnd));
+                            rShared.pushTask(std::move(pTask));
+                        }
+                        else
+                            pBlurVerticalFn(aSharedData, nStart, nEnd);
+                    });
+
                 rShared.waitUntilDone(pTag);
             }
         }
