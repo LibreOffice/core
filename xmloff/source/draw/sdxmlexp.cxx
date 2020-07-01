@@ -375,7 +375,7 @@ SdXMLExport::SdXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     bool bIsDraw, SvXMLExportFlags nExportFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
+:   SvXMLExport( xContext, implementationName, util::MeasureUnit::CM,
         bIsDraw ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0),
     mnDocDrawPageCount(0),

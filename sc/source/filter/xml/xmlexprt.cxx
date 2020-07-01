@@ -341,8 +341,8 @@ static const OUStringLiteral gsLayerID( SC_LAYERID );
 ScXMLExport::ScXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlag)
-:   SvXMLExport( GetMeasureUnit(),
-        rContext, implementationName, XML_SPREADSHEET, nExportFlag ),
+:   SvXMLExport(
+        rContext, implementationName, GetMeasureUnit(), XML_SPREADSHEET, nExportFlag ),
     pDoc(nullptr),
     nSourceStreamPos(0),
     aTableStyles(),

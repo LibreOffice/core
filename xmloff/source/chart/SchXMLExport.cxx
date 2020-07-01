@@ -3576,7 +3576,7 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText )
 
 SchXMLExport::SchXMLExport(const Reference<uno::XComponentContext>& xContext,
                            OUString const& implementationName, SvXMLExportFlags nExportFlags)
-    : SvXMLExport(util::MeasureUnit::CM, xContext, implementationName, ::xmloff::token::XML_CHART,
+    : SvXMLExport(xContext, implementationName, util::MeasureUnit::CM, ::xmloff::token::XML_CHART,
                   nExportFlags)
     , maAutoStylePool(new SchXMLAutoStylePoolP(*this))
     , maExportHelper(new SchXMLExportHelper(*this, *maAutoStylePool))

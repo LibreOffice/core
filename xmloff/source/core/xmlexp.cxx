@@ -422,9 +422,9 @@ void SvXMLExport::DetermineModelType_()
 }
 
 SvXMLExport::SvXMLExport(
-    sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< uno::XComponentContext >& xContext,
     OUString const & implementationName,
+    sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(implementationName),

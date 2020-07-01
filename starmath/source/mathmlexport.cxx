@@ -337,7 +337,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 SmXMLExport::SmXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
-    : SvXMLExport(util::MeasureUnit::INCH, rContext, implementationName, XML_MATH,
+    : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH,
                   nExportFlags)
     , pTree(nullptr)
     , bSuccess(false)

@@ -197,7 +197,7 @@ static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 }
 
 ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, implementationName, XML_REPORT, SvXMLExportFlags::OASIS)
+: SvXMLExport( _rxContext, implementationName, util::MeasureUnit::MM_100TH, XML_REPORT, SvXMLExportFlags::OASIS)
 ,m_bAllreadyFilled(false)
 {
     setExportFlags( SvXMLExportFlags::OASIS | nExportFlag);

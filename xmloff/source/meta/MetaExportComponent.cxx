@@ -46,7 +46,7 @@ using namespace ::xmloff::token;
 XMLMetaExportComponent::XMLMetaExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName, XML_TEXT, nFlags )
+:   SvXMLExport( xContext, implementationName, util::MeasureUnit::CM, XML_TEXT, nFlags )
 {
 }
 
