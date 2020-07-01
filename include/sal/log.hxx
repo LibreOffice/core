@@ -26,11 +26,20 @@
 
 /// @cond INTERNAL
 
+enum sal_detail_LogAction
+{
+    SAL_DETAIL_LOG_ACTION_IGNORE,
+    SAL_DETAIL_LOG_ACTION_LOG,
+    SAL_DETAIL_LOG_ACTION_FATAL
+};
+
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message, sal_uInt32 backtraceDepth);
 
-extern "C" SAL_DLLPUBLIC sal_Bool SAL_CALL sal_detail_log_report(
+// the return value is actually "enum sal_detail_LogAction", but due to ABI
+// compatibility, it's left as the original "sal_Bool" / "unsigned char".
+extern "C" SAL_DLLPUBLIC unsigned char SAL_CALL sal_detail_log_report(
     sal_detail_LogLevel level, char const * area);
 
 namespace sal { namespace detail {
@@ -113,9 +122,9 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
 } }
 
-#define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
-    do { \
-        if ((condition) && sal_detail_log_report(level, area)) { \
+// to prevent using a local variable, which can eventually shadow,
+// resulting in compiler warnings (or even errors with -Werror)
+#define SAL_DETAIL_LOG_STREAM_PRIVATE_(level, area, where, stream) \
             if (sizeof ::sal::detail::getResult( \
                     ::sal::detail::StreamStart() << stream) == 1) \
             { \
@@ -129,6 +138,22 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
                 sal_detail_stream << stream; \
                 ::sal::detail::log( \
                     (level), (area), (where), sal_detail_stream, 0); \
+    }
+
+#define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
+    do { \
+        if (condition) \
+        { \
+            switch (sal_detail_log_report(level, area)) \
+            { \
+            case SAL_DETAIL_LOG_ACTION_IGNORE: break; \
+            case SAL_DETAIL_LOG_ACTION_LOG: \
+                SAL_DETAIL_LOG_STREAM_PRIVATE_(level, area, where, stream); \
+                break; \
+            case SAL_DETAIL_LOG_ACTION_FATAL: \
+                SAL_DETAIL_LOG_STREAM_PRIVATE_(level, area, where, stream); \
+                std::abort(); \
+                break; \
             } \
         } \
     } while (false)
@@ -238,7 +263,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
       <switch> ::= <sense><item>
       <sense> ::= "+"|"-"
       <item> ::= <flag>|<level>("."<area>)?
-      <flag> ::= "TIMESTAMP"|"RELATIVETIMER"
+      <flag> ::= "TIMESTAMP"|"RELATIVETIMER"|"FATAL"
       <level> ::= "INFO"|"WARN"
     @endverbatim
 
@@ -254,6 +279,12 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     The "+RELATIVETIMER" flag causes each output line (as selected by
     the level switch(es)) to be prefixed by a relative timestamp in
     seconds since the first output line like 1.312.
+
+    The "+FATAL" flag will cause later matching rules to log and call
+    std::abort. This can be disabled at some later point by using the
+    "-FATAL" flag before specifying additional rules. The flag will just
+    abort on positive rules, as it doesn't seem to make sense to abort
+    on ignored output.
 
     If both +TIMESTAMP and +RELATIVETIMER are specified, they are
     output in that order.
