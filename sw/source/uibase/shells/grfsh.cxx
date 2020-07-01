@@ -20,6 +20,7 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/urihelper.hxx>

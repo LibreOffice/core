@@ -21,6 +21,7 @@
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svl/fstathelper.hxx>
 #include <vcl/imap.hxx>
 #include <sfx2/docfile.hxx>

@@ -26,6 +26,7 @@
 #include <charfmt.hxx>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
+#include <tools/UnitConversion.hxx>
 
 using namespace ::com::sun::star;
 

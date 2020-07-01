@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_PALETTE_HXX
 
 #include <rtl/ustring.hxx>
-#include <svx/svxdllapi.h>
 
 class Color;
 class SvxColorValueSet;

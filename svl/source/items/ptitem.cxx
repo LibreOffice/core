@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <osl/diagnose.h>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>

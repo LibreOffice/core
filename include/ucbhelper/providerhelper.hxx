@@ -24,7 +24,6 @@
 #include <memory>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>

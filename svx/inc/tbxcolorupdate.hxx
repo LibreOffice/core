@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/toolbox.hxx>
 #include <svx/Palette.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>

@@ -24,8 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
-#include <svx/svxdllapi.h>
-
 //HACK to avoid duplicate ImplInheritanceHelper symbols with MSVC:
 class SAL_DLLPUBLIC_TEMPLATE SvxVertCTLTextTbxCtrl_Base:
     public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>

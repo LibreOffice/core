@@ -22,7 +22,6 @@
 #include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/builderpage.hxx>
-#include <vcl/idle.hxx>
 
 namespace weld {
     class Builder;

@@ -40,6 +40,7 @@
 #include <unotools/saveopt.hxx>
 
 #include <tools/datetime.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

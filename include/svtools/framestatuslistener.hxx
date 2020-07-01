@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 #define INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
-#include <svtools/svtdllapi.h>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <cppuhelper/weak.hxx>

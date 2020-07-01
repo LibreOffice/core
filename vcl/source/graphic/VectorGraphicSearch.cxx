@@ -15,6 +15,7 @@
 #if HAVE_FEATURE_PDFIUM
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <sal/config.h>
 

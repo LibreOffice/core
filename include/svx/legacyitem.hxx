@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_LEGACYITEM_HXX
 #define INCLUDED_SVX_LEGACYITEM_HXX
 
-#include <svx/svxdllapi.h>
+#include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // // svx

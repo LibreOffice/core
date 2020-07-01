@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_QUEUEINFO_HXX
 #define INCLUDED_VCL_QUEUEINFO_HXX
 
-#include <config_options.h>
-
 #include <rtl/ustring.hxx>
 
 #include <vcl/dllapi.h>

@@ -30,6 +30,7 @@
 
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/ctrlbox.hxx>
 
 #include <vcl/idle.hxx>
 

@@ -17,7 +17,6 @@
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
 #include <svtools/miscopt.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <map>

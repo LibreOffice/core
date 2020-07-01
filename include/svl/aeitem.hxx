@@ -21,10 +21,8 @@
 
 #include <config_options.h>
 #include <svl/svldllapi.h>
-#include <svl/eitem.hxx>
+#include <svl/poolitem.hxx>
 
-#include <cstddef>
-#include <memory>
 #include <vector>
 
 class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxAllEnumItem final : public SfxPoolItem

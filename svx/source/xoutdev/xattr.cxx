@@ -34,6 +34,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
 #include <svx/unoapi.hxx>

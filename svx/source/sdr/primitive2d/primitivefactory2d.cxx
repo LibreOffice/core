@@ -20,6 +20,7 @@
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/svdobj.hxx>

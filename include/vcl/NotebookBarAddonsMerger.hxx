@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <vector>
-#include <map>
 
 class Menu;
 

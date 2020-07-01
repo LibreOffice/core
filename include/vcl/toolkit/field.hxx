@@ -27,7 +27,6 @@
 #include <tools/date.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/time.hxx>
-#include <tools/link.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/spinfld.hxx>
 

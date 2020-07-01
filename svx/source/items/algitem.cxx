@@ -20,6 +20,7 @@
 #include <svx/strings.hrc>
 #include <osl/diagnose.h>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <com/sun/star/table/CellOrientation.hpp>
 
 #include <svx/algitem.hxx>

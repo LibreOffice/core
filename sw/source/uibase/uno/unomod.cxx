@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unomod.hxx>

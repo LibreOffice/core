@@ -12,8 +12,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vcl/dllapi.h>
-
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }

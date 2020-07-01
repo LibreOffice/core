@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SVX_ITEMWIN_HXX
 #define INCLUDED_SVX_ITEMWIN_HXX
 
-#include <vcl/InterimItemWindow.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/xtable.hxx>
+#include <vcl/customweld.hxx>
 
 class SfxObjectShell;
 class ValueSet;

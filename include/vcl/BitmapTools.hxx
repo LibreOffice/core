@@ -13,12 +13,10 @@
 #include <config_cairo_canvas.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/ImageTree.hxx>
-#include <vcl/BitmapColor.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
 #endif
 #include <basegfx/range/b2drectangle.hxx>
-#include <o3tl/safeint.hxx>
 #include <array>
 #include <vcl/RawBitmap.hxx>
 

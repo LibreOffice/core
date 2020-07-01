@@ -29,6 +29,7 @@
 
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>

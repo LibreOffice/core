@@ -122,6 +122,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
+#include <tools/UnitConversion.hxx>
 
 #define TWIPS_PER_PIXEL 15
 

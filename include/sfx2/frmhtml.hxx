@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
-#include <sfx2/sfxhtml.hxx>
+#include <svtools/parhtml.hxx>
 
 class SfxFrameDescriptor;
 

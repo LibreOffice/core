@@ -21,7 +21,6 @@
 #define INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>

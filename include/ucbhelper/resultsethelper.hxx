@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <osl/mutex.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
