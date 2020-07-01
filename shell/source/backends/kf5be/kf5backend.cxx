@@ -258,7 +258,7 @@ createInstance(css::uno::Reference<css::uno::XComponentContext> const&)
     return static_cast<cppu::OWeakObject*>(new Service);
 }
 
-static cppu::ImplementationEntry const services[]
+cppu::ImplementationEntry const services[]
     = { { &createInstance, &getServiceImplementationName, &getServiceSupportedServiceNames,
           &cppu::createSingleComponentFactory, nullptr, 0 },
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };

@@ -33,7 +33,7 @@ static uno::Reference<uno::XInterface> createLocaleBackend(
 }
 
 
-static const cppu::ImplementationEntry kImplementations_entries[] =
+const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createLocaleBackend,
