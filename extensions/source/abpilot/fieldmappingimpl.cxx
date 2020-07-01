@@ -49,8 +49,8 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
 
 
-    static const char sDriverSettingsNodeName[] = "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver";
-    static const char sAddressBookNodeName[] = "/org.openoffice.Office.DataAccess/AddressBook";
+    const char sDriverSettingsNodeName[] = "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver";
+    const char sAddressBookNodeName[] = "/org.openoffice.Office.DataAccess/AddressBook";
 
     namespace fieldmapping
     {

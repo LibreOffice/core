@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 
 
-static const char cDataSourceHistory[] = "DataSourceHistory";
+const char cDataSourceHistory[] = "DataSourceHistory";
 
 Sequence<OUString> const & BibConfig::GetPropertyNames()
 {

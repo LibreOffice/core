@@ -30,7 +30,7 @@ static uno::Reference<uno::XInterface> createLdapUserProfileBe(
 }
 
 
-static const cppu::ImplementationEntry kImplementations_entries[] =
+const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createLdapUserProfileBe,
