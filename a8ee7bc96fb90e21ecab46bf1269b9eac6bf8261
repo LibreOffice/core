@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a9b8501f_1ece7bd6",
+        "filename": "include/sfx2/infobar.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-01T06:30:20Z",
+      "side": 1,
+      "message": "Yep and I wonder if it could be other cases like this.",
+      "parentUuid": "b02414ff_74f4d9de",
+      "revId": "a8ee7bc96fb90e21ecab46bf1269b9eac6bf8261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c70b892b_8d8e0dd1",
         "filename": "sfx2/source/dialog/infobar.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-06-30T21:46:42Z",
       "side": 1,
       "message": "Seeing that now - no default args at the function _definition_ please. Behaviour is quite unintuitive (only calling code in this compilation unit sees the defaults). As the header doesn\u0027t have it, lets simply rid us of it",
+      "revId": "a8ee7bc96fb90e21ecab46bf1269b9eac6bf8261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba99739_23732417",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-01T06:30:20Z",
+      "side": 1,
+      "message": "if I do this:\ndiff --git a/sfx2/source/dialog/infobar.cxx b/sfx2/source/dialog/infobar.cxx\nindex 8fbb61c23443..a9bdd2069009 100644\n--- a/sfx2/source/dialog/infobar.cxx\n+++ b/sfx2/source/dialog/infobar.cxx\n@@ -185,7 +185,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString\u0026 sId,\n                                    const OUString\u0026 sPrimaryMessage,\n                                    const OUString\u0026 sSecondaryMessage, InfobarType ibType,\n                                    WinBits nMessageStyle \u003d WB_LEFT | WB_VCENTER,\n-                                   bool bShowCloseButton \u003d true)\n+                                   bool bShowCloseButton)\n     : Window(pParent, WB_DIALOGCONTROL)\n     , m_sId(sId)\n     , m_eType(ibType)\nI get:\n/home/julien/lo/libreoffice/sfx2/source/dialog/infobar.cxx:188:41: error: missing default argument on parameter \u0027bShowCloseButton\u0027\n                                   bool bShowCloseButton)\n                                        ^\n1 error generated.\nmake[1]: *** [/home/julien/lo/libreoffice/solenv/gbuild/LinkTarget.mk:301: /home/julien/lo/libreoffice/workdir/CxxObject/sfx2/source/dialog/infobar.o] Error 1\n\nThat\u0027s why I had added by default argument",
+      "parentUuid": "c70b892b_8d8e0dd1",
       "revId": "a8ee7bc96fb90e21ecab46bf1269b9eac6bf8261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
