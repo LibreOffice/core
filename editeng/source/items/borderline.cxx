@@ -171,16 +171,16 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
     }
 }
 
-static const double THINTHICK_SMALLGAP_line2 = 15.0;
-static const double THINTHICK_SMALLGAP_gap   = 15.0;
-static const double THINTHICK_LARGEGAP_line1 = 30.0;
-static const double THINTHICK_LARGEGAP_line2 = 15.0;
-static const double THICKTHIN_SMALLGAP_line1 = 15.0;
-static const double THICKTHIN_SMALLGAP_gap   = 15.0;
-static const double THICKTHIN_LARGEGAP_line1 = 15.0;
-static const double THICKTHIN_LARGEGAP_line2 = 30.0;
-static const double OUTSET_line1 = 15.0;
-static const double INSET_line2  = 15.0;
+const double THINTHICK_SMALLGAP_line2 = 15.0;
+const double THINTHICK_SMALLGAP_gap   = 15.0;
+const double THINTHICK_LARGEGAP_line1 = 30.0;
+const double THINTHICK_LARGEGAP_line2 = 15.0;
+const double THICKTHIN_SMALLGAP_line1 = 15.0;
+const double THICKTHIN_SMALLGAP_gap   = 15.0;
+const double THICKTHIN_LARGEGAP_line1 = 15.0;
+const double THICKTHIN_LARGEGAP_line2 = 30.0;
+const double OUTSET_line1 = 15.0;
+const double INSET_line2  = 15.0;
 
 double
 ConvertBorderWidthFromWord(SvxBorderLineStyle const eStyle, double const i_fWidth,

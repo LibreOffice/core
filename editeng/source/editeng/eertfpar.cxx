@@ -59,7 +59,7 @@ RtfImportInfo::~RtfImportInfo()
 {
 }
 
-static constexpr MapUnit gRTFMapUnit = MapUnit::MapTwip;
+constexpr MapUnit gRTFMapUnit = MapUnit::MapTwip;
 
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
