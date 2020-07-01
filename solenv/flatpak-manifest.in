@@ -189,22 +189,22 @@
                     "dest-filename": "external/tarballs/glm-0.9.9.7.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/gpgme-1.9.0.tar.bz2",
-                    "sha256": "1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb",
+                    "url": "https://dev-www.libreoffice.org/src/gpgme-1.13.1.tar.bz2",
+                    "sha256": "c4e30b227682374c23cddc7fdb9324a99694d907e79242a25a4deeedb393be46",
                     "type": "file",
-                    "dest-filename": "external/tarballs/gpgme-1.9.0.tar.bz2"
+                    "dest-filename": "external/tarballs/gpgme-1.13.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libassuan-2.5.1.tar.bz2",
-                    "sha256": "47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449",
+                    "url": "https://dev-www.libreoffice.org/src/libassuan-2.5.3.tar.bz2",
+                    "sha256": "91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libassuan-2.5.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libassuan-2.5.3.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libgpg-error-1.27.tar.bz2",
-                    "sha256": "4f93aac6fecb7da2b92871bb9ee33032be6a87b174f54abf8ddf0911a22d29d2",
+                    "url": "https://dev-www.libreoffice.org/src/libgpg-error-1.37.tar.bz2",
+                    "sha256": "b32d6ff72a73cf79797f7f2d039e95e9c6f92f0c1450215410840ab62aea9763",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libgpg-error-1.27.tar.bz2"
+                    "dest-filename": "external/tarballs/libgpg-error-1.37.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libabw-0.1.3.tar.xz",
@@ -351,10 +351,10 @@
                     "dest-filename": "external/tarballs/mdds-1.6.0.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/neon-0.30.2.tar.gz",
-                    "sha256": "db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca",
+                    "url": "https://dev-www.libreoffice.org/src/neon-0.31.1.tar.gz",
+                    "sha256": "c9dfcee723050df37ce18ba449d7707b78e7ab8230f3a4c59d9112e17dc2718d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/neon-0.30.2.tar.gz"
+                    "dest-filename": "external/tarballs/neon-0.31.1.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/noto-fonts-20171024.tar.gz",
@@ -573,10 +573,10 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m83-8ce842d38d0b32149e874d6855c91e8c68ba65a7.tar.xz",
-                    "sha256": "d724dd60d4375359aa4751ea39950ad833592f01774914873f6d033f14e1c63f",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m85-e684c6daef6bfb774a325a069eda1f76ca6ac26c.tar.xz",
+                    "sha256": "3294877fa2b61b220d98a0f7bfc11325429b13edd2cf455444c703ee3a14d760",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m83-8ce842d38d0b32149e874d6855c91e8c68ba65a7.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m85-e684c6daef6bfb774a325a069eda1f76ca6ac26c.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
