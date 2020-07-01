@@ -1450,12 +1450,10 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     DbLimitedLengthField::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbFormattedField::CreateController() const
 {
-    return new ::svt::FormattedFieldCellController( static_cast< FormattedField* >( m_pWindow.get() ) );
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControl*>(m_pWindow.get()));
 }
-
 
 void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
 {
@@ -1474,7 +1472,6 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
         DbLimitedLengthField::_propertyChanged( _rEvent );
     }
 }
-
 
 OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
