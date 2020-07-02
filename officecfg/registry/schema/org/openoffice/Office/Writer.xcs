@@ -5892,7 +5892,7 @@
               <desc>Specifies whether ComboBox form control should be imported as DropDown text field.</desc>
               <label>Import ComboBox as DropDown</label>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
         </group>
       </group>
