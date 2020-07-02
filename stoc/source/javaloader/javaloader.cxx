@@ -350,7 +350,7 @@ static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const 
 
 using namespace stoc_javaloader;
 
-static const struct ImplementationEntry g_entries[] =
+const struct ImplementationEntry g_entries[] =
 {
     {
         JavaComponentLoader_CreateInstance, loader_getImplementationName,

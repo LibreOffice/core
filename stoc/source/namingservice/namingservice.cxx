@@ -134,7 +134,7 @@ void NamingService_Impl::revokeObject( const OUString& Name )
 }
 
 using namespace stoc_namingservice;
-static const struct ImplementationEntry g_entries[] =
+const struct ImplementationEntry g_entries[] =
 {
     {
         NamingService_Impl_create, ns_getImplementationName,

@@ -56,27 +56,27 @@ using namespace osl;
 
 namespace {
 
-static constexpr OUStringLiteral slash_UNO_slash_REGISTRY_LINKS
+constexpr OUStringLiteral slash_UNO_slash_REGISTRY_LINKS
         = "/UNO/REGISTRY_LINKS";
-static constexpr OUStringLiteral slash_IMPLEMENTATIONS
+constexpr OUStringLiteral slash_IMPLEMENTATIONS
         =  "/IMPLEMENTATIONS";
-static constexpr OUStringLiteral slash_UNO
+constexpr OUStringLiteral slash_UNO
         = "/UNO";
-static constexpr OUStringLiteral slash_UNO_slash_SERVICES
+constexpr OUStringLiteral slash_UNO_slash_SERVICES
         = "/UNO/SERVICES";
-static constexpr OUStringLiteral slash_UNO_slash_SINGLETONS
+constexpr OUStringLiteral slash_UNO_slash_SINGLETONS
         = "/UNO/SINGLETONS";
-static constexpr OUStringLiteral slash_SERVICES
+constexpr OUStringLiteral slash_SERVICES
         = "/SERVICES/";
-static constexpr OUStringLiteral slash_UNO_slash_LOCATION
+constexpr OUStringLiteral slash_UNO_slash_LOCATION
         = "/UNO/LOCATION";
-static constexpr OUStringLiteral slash_UNO_slash_ACTIVATOR
+constexpr OUStringLiteral slash_UNO_slash_ACTIVATOR
         = "/UNO/ACTIVATOR";
-static constexpr OUStringLiteral colon_old
+constexpr OUStringLiteral colon_old
         = ":old";
-static constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
+constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
         = "com.sun.star.registry.SimpleRegistry";
-static constexpr OUStringLiteral Registry
+constexpr OUStringLiteral Registry
         = "Registry";
 
 //  static deleteAllLinkReferences()

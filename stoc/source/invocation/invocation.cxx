@@ -1109,7 +1109,7 @@ static Reference<XInterface> InvocationService_CreateInstance( const Reference<X
 }
 
 using namespace stoc_inv;
-static const struct ImplementationEntry g_entries[] =
+const struct ImplementationEntry g_entries[] =
 {
     {
         InvocationService_CreateInstance, inv_getImplementationName,

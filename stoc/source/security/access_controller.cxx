@@ -62,7 +62,7 @@ using namespace stoc_sec;
 namespace {
 
 // static stuff initialized when loading lib
-static OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 const char s_acRestriction[] = "access-control.restriction";
 
 
