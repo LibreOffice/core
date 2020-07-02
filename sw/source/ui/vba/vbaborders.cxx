@@ -34,10 +34,10 @@ typedef InheritedHelperInterfaceWeakImpl<word::XBorder > SwVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Word iterates over the
 // borders, the enumeration will match the order in this list
-static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
+const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
 
 //  Equiv widths in 1/100 mm
-const static sal_Int32 OOLineHairline = 2;
+const sal_Int32 OOLineHairline = 2;
 
 namespace {
 

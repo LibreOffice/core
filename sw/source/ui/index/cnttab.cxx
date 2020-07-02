@@ -75,8 +75,8 @@ using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 
-static const sal_Unicode aDeliStart = '['; // for the form
-static const sal_Unicode aDeliEnd    = ']'; // for the form
+const sal_Unicode aDeliStart = '['; // for the form
+const sal_Unicode aDeliEnd    = ']'; // for the form
 
 static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString& rURL,
                                 const OUString& rFileString, bool bOpen)

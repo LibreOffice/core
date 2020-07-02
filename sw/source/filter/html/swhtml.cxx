@@ -151,7 +151,7 @@ HTMLOptionEnum<SvxAdjust> const aHTMLPAlignTable[] =
 };
 
 // <SPACER TYPE=...>
-static HTMLOptionEnum<sal_uInt16> const aHTMLSpacerTypeTable[] =
+HTMLOptionEnum<sal_uInt16> const aHTMLSpacerTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,      HTML_SPTYPE_BLOCK       },
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal, HTML_SPTYPE_HORI        },

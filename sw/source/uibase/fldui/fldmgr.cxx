@@ -120,9 +120,9 @@ enum
     GRP_WEB_VAR_END     =  GRP_WEB_VAR_BEGIN + 1
 };
 
-static const sal_uInt16 VF_COUNT = 1; // { 0 }
-static const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
-static const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
+const sal_uInt16 VF_COUNT = 1; // { 0 }
+const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
+const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
 static const char* FLD_EU_ARY[] =
 {
@@ -292,7 +292,7 @@ struct SwFieldPack
 }
 
 // strings and formats
-static const SwFieldPack aSwFields[] =
+const SwFieldPack aSwFields[] =
 {
     // Document
     { SwFieldTypesEnum::ExtendedUser,       FLD_EU_ARY,         SAL_N_ELEMENTS(FLD_EU_ARY),     nullptr,          0 },

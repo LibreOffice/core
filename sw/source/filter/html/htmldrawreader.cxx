@@ -54,7 +54,7 @@
 
 using namespace css;
 
-static HTMLOptionEnum<SdrTextAniKind> const aHTMLMarqBehaviorTable[] =
+HTMLOptionEnum<SdrTextAniKind> const aHTMLMarqBehaviorTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,    SdrTextAniKind::Scroll       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate, SdrTextAniKind::Alternate    },
@@ -62,7 +62,7 @@ static HTMLOptionEnum<SdrTextAniKind> const aHTMLMarqBehaviorTable[] =
     { nullptr,                                 SdrTextAniKind(0)       }
 };
 
-static HTMLOptionEnum<SdrTextAniDirection> const aHTMLMarqDirectionTable[] =
+HTMLOptionEnum<SdrTextAniDirection> const aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,  SdrTextAniDirection::Left   },
     { OOO_STRING_SVTOOLS_HTML_AL_right, SdrTextAniDirection::Right  },

@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-static HTMLOutEvent const aBodyEventTable[] =
+HTMLOutEvent const aBodyEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,    OOO_STRING_SVTOOLS_HTML_O_onload,    SvMacroItemId::OpenDoc   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonunload,  OOO_STRING_SVTOOLS_HTML_O_onunload,  SvMacroItemId::PrepareCloseDoc   },

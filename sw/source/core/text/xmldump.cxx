@@ -440,7 +440,7 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 
 // Hack: somehow conversion from "..." to va_list does
 // bomb on two string literals in the format.
-static const char* const TMP_FORMAT = "%" SAL_PRIuUINTPTR;
+const char* const TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
 void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {

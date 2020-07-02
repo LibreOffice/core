@@ -24,7 +24,7 @@
 
 /** Resize block management by this constant.
     As a result there are approx. 20 * MAXENTRY == 20000 entries available */
-static const sal_uInt16 nBlockGrowSize = 20;
+const sal_uInt16 nBlockGrowSize = 20;
 
 #if OSL_DEBUG_LEVEL > 2
 #define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );

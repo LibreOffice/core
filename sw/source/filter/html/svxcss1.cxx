@@ -69,7 +69,7 @@ typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
                                  SvxCSS1PropertyInfo& rPropInfo,
                                  const SvxCSS1Parser& rParser );
 
-static CSS1PropertyEnum const aFontSizeTable[] =
+CSS1PropertyEnum const aFontSizeTable[] =
 {
     { "xx-small",    0                   },
     { "x-small",     1                   },
@@ -81,7 +81,7 @@ static CSS1PropertyEnum const aFontSizeTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aFontWeightTable[] =
+CSS1PropertyEnum const aFontWeightTable[] =
 {
     { "extra-light", WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
     { "light",       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
@@ -96,7 +96,7 @@ static CSS1PropertyEnum const aFontWeightTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aFontStyleTable[] =
+CSS1PropertyEnum const aFontStyleTable[] =
 {
     { "normal",      ITALIC_NONE         },
     { "italic",      ITALIC_NORMAL       },
@@ -104,14 +104,14 @@ static CSS1PropertyEnum const aFontStyleTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aFontVariantTable[] =
+CSS1PropertyEnum const aFontVariantTable[] =
 {
     { "normal",      sal_uInt16(SvxCaseMap::NotMapped)      },
     { "small-caps",  sal_uInt16(SvxCaseMap::SmallCaps)    },
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aTextTransformTable[] =
+CSS1PropertyEnum const aTextTransformTable[] =
 {
     { "uppercase",  sal_uInt16(SvxCaseMap::Uppercase) },
     { "lowercase",  sal_uInt16(SvxCaseMap::Lowercase)   },
@@ -119,7 +119,7 @@ static CSS1PropertyEnum const aTextTransformTable[] =
     { nullptr,                   0                     }
 };
 
-static CSS1PropertyEnum const aDirectionTable[] =
+CSS1PropertyEnum const aDirectionTable[] =
 {
     { "ltr",         sal_uInt16(SvxFrameDirection::Horizontal_LR_TB)  },
     { "rtl",         sal_uInt16(SvxFrameDirection::Horizontal_RL_TB)  },
@@ -127,7 +127,7 @@ static CSS1PropertyEnum const aDirectionTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aBGRepeatTable[] =
+CSS1PropertyEnum const aBGRepeatTable[] =
 {
     { "repeat",      GPOS_TILED                  },
     { "repeat-x",    GPOS_TILED                  },
@@ -136,7 +136,7 @@ static CSS1PropertyEnum const aBGRepeatTable[] =
     { nullptr,                    0                           }
 };
 
-static CSS1PropertyEnum const aBGHoriPosTable[] =
+CSS1PropertyEnum const aBGHoriPosTable[] =
 {
     { "left",        GPOS_LT                 },
     { "center",      GPOS_MT                 },
@@ -144,7 +144,7 @@ static CSS1PropertyEnum const aBGHoriPosTable[] =
     { nullptr,                    0                       }
 };
 
-static CSS1PropertyEnum const aBGVertPosTable[] =
+CSS1PropertyEnum const aBGVertPosTable[] =
 {
     { "top",         GPOS_LT                 },
     { "middle",      GPOS_LM                 },
@@ -152,7 +152,7 @@ static CSS1PropertyEnum const aBGVertPosTable[] =
     { nullptr,                    0                       }
 };
 
-static CSS1PropertyEnum const aTextAlignTable[] =
+CSS1PropertyEnum const aTextAlignTable[] =
 {
     { "left",        sal_uInt16(SvxAdjust::Left)     },
     { "center",      sal_uInt16(SvxAdjust::Center)   },
@@ -161,7 +161,7 @@ static CSS1PropertyEnum const aTextAlignTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aBorderWidthTable[] =
+CSS1PropertyEnum const aBorderWidthTable[] =
 {
     { "thin",        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
     { "medium",      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
@@ -175,7 +175,7 @@ enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOT
 
 }
 
-static CSS1PropertyEnum const aBorderStyleTable[] =
+CSS1PropertyEnum const aBorderStyleTable[] =
 {
     { "none",        CSS1_BS_NONE        },
     { "dotted",      CSS1_BS_DOTTED      },
@@ -189,7 +189,7 @@ static CSS1PropertyEnum const aBorderStyleTable[] =
     { nullptr,                    0                   }
 };
 
-static CSS1PropertyEnum const aFloatTable[] =
+CSS1PropertyEnum const aFloatTable[] =
 {
     { "left",    sal_uInt16(SvxAdjust::Left)         },
     { "right",   sal_uInt16(SvxAdjust::Right)        },
@@ -197,7 +197,7 @@ static CSS1PropertyEnum const aFloatTable[] =
     { nullptr,                0                       }
 };
 
-static CSS1PropertyEnum const aPositionTable[] =
+CSS1PropertyEnum const aPositionTable[] =
 {
     { "absolute",    SVX_CSS1_POS_ABSOLUTE   },
     { "relative",    SVX_CSS1_POS_RELATIVE   },
@@ -206,7 +206,7 @@ static CSS1PropertyEnum const aPositionTable[] =
 };
 
 // Feature: PrintExt
-static CSS1PropertyEnum const aSizeTable[] =
+CSS1PropertyEnum const aSizeTable[] =
 {
     { "auto",        SVX_CSS1_STYPE_AUTO         },
     { "landscape",   SVX_CSS1_STYPE_LANDSCAPE    },
@@ -214,7 +214,7 @@ static CSS1PropertyEnum const aSizeTable[] =
     { nullptr,                    0                           }
 };
 
-static CSS1PropertyEnum const aPageBreakTable[] =
+CSS1PropertyEnum const aPageBreakTable[] =
 {
     { "auto",        SVX_CSS1_PBREAK_AUTO        },
     { "always",      SVX_CSS1_PBREAK_ALWAYS      },
@@ -224,7 +224,7 @@ static CSS1PropertyEnum const aPageBreakTable[] =
     { nullptr,                    0                           }
 };
 
-static CSS1PropertyEnum const aNumberStyleTable[] =
+CSS1PropertyEnum const aNumberStyleTable[] =
 {
     { "decimal",          SVX_NUM_ARABIC              },
     { "lower-alpha",      SVX_NUM_CHARS_LOWER_LETTER  },
@@ -236,7 +236,7 @@ static CSS1PropertyEnum const aNumberStyleTable[] =
     { nullptr,            0                           }
 };
 
-static CSS1PropertyEnum const aBulletStyleTable[] =
+CSS1PropertyEnum const aBulletStyleTable[] =
 {
     { "circle",      HTML_BULLETCHAR_CIRCLE   },
     { "disc",        HTML_BULLETCHAR_DISC     },
@@ -245,7 +245,7 @@ static CSS1PropertyEnum const aBulletStyleTable[] =
 };
 
 
-static sal_uInt16 const aBorderWidths[] =
+sal_uInt16 const aBorderWidths[] =
 {
     DEF_LINE_WIDTH_0,
     DEF_LINE_WIDTH_5,
@@ -3089,7 +3089,7 @@ struct CSS1PropEntry
     { sCSS1_P_##p, ParseCSS1_##p }
 
 // the table with assignments
-static CSS1PropEntry const aCSS1PropFnTab[] =
+CSS1PropEntry const aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
     CSS1_PROP_ENTRY(background_color),

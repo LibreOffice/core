@@ -27,7 +27,7 @@ using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
-static const sal_Int32 ColorTable[] =
+const sal_Int32 ColorTable[] =
 {
 WdColor::wdColorAutomatic, // 0
 WdColor::wdColorBlack,             // 1

@@ -32,7 +32,7 @@ struct WordDialogTable
 
 }
 
-static const WordDialogTable aWordDialogTable[] =
+const WordDialogTable aWordDialogTable[] =
 {
     { word::WdWordDialog::wdDialogFileNew, ".uno:NewDoc" },
     { word::WdWordDialog::wdDialogFileOpen, ".uno:Open" },

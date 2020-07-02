@@ -154,23 +154,23 @@ using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 
-static const sal_Int32 Tag_StartParagraph_1 = 1;
-static const sal_Int32 Tag_StartParagraph_2 = 2;
-static const sal_Int32 Tag_WriteSdtBlock = 3;
-static const sal_Int32 Tag_StartParagraphProperties = 4;
-static const sal_Int32 Tag_InitCollectedParagraphProperties = 5;
-static const sal_Int32 Tag_StartRun_1 = 6;
-static const sal_Int32 Tag_StartRun_2 = 7;
-static const sal_Int32 Tag_StartRun_3 = 8;
-static const sal_Int32 Tag_EndRun_1 = 9;
-static const sal_Int32 Tag_EndRun_2 = 10;
-static const sal_Int32 Tag_StartRunProperties = 11;
-static const sal_Int32 Tag_InitCollectedRunProperties = 12;
+const sal_Int32 Tag_StartParagraph_1 = 1;
+const sal_Int32 Tag_StartParagraph_2 = 2;
+const sal_Int32 Tag_WriteSdtBlock = 3;
+const sal_Int32 Tag_StartParagraphProperties = 4;
+const sal_Int32 Tag_InitCollectedParagraphProperties = 5;
+const sal_Int32 Tag_StartRun_1 = 6;
+const sal_Int32 Tag_StartRun_2 = 7;
+const sal_Int32 Tag_StartRun_3 = 8;
+const sal_Int32 Tag_EndRun_1 = 9;
+const sal_Int32 Tag_EndRun_2 = 10;
+const sal_Int32 Tag_StartRunProperties = 11;
+const sal_Int32 Tag_InitCollectedRunProperties = 12;
 //static const sal_Int32 Tag_Redline_1 = 13;
-static const sal_Int32 Tag_Redline_2 = 14;
-static const sal_Int32 Tag_TableDefinition = 15;
-static const sal_Int32 Tag_OutputFlyFrame = 16;
-static const sal_Int32 Tag_StartSection = 17;
+const sal_Int32 Tag_Redline_2 = 14;
+const sal_Int32 Tag_TableDefinition = 15;
+const sal_Int32 Tag_OutputFlyFrame = 16;
+const sal_Int32 Tag_StartSection = 17;
 
 namespace {
 

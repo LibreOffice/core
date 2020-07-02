@@ -42,7 +42,7 @@ struct BuiltinStyleTable
 
 }
 
-static const BuiltinStyleTable aBuiltinStyleTable[] =
+const BuiltinStyleTable aBuiltinStyleTable[] =
 {
     { word::WdBuiltinStyle::wdStyleBlockQuotation, "", word::WdStyleType::wdStyleTypeParagraph },
     { word::WdBuiltinStyle::wdStyleBodyText, "Text body", word::WdStyleType::wdStyleTypeParagraph },
@@ -160,7 +160,7 @@ struct MSOStyleNameTable
 
 }
 
-static const MSOStyleNameTable aMSOStyleNameTable[] =
+const MSOStyleNameTable aMSOStyleNameTable[] =
 {
     { "Normal", "Default" },
     { nullptr, nullptr }

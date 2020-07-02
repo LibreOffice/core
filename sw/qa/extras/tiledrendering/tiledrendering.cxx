@@ -51,7 +51,7 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <tools/json_writer.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {

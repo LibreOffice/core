@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 #define FRAME_FORMAT_WIDTH 1000
 
 // static data
-static const sal_uInt16 nVisCols = 3;
+const sal_uInt16 nVisCols = 3;
 
 static bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {

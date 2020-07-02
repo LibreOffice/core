@@ -58,7 +58,7 @@
 
 using namespace ::com::sun::star::i18n;
 
-static const sal_uInt16 coSrchRplcThreshold = 60000;
+const sal_uInt16 coSrchRplcThreshold = 60000;
 
 namespace {
 

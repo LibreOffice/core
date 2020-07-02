@@ -65,7 +65,7 @@ SwFntCache *pFntCache = nullptr;
 // last Font set by ChgFntCache
 SwFntObj *pLastFont = nullptr;
 
-static constexpr Color gWaveCol(COL_GRAY);
+constexpr Color gWaveCol(COL_GRAY);
 
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = nullptr;

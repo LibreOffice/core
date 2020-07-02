@@ -387,7 +387,7 @@ struct DocPropertyTable
 
 }
 
-static const DocPropertyTable aDocPropertyTables[] =
+const DocPropertyTable aDocPropertyTables[] =
 {
     { "Author", "com.sun.star.text.textfield.docinfo.CreateAuthor" },
     { "Bytes", nullptr },

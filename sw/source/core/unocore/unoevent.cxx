@@ -212,7 +212,7 @@ void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
     m_rStyle.SetItem(RES_FRMMACRO, rItem);
 }
 
-static const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
+const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
 
 const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 {

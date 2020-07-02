@@ -82,20 +82,20 @@ bool IsConditionalByPoolId(sal_uInt16 nId)
 
 namespace
 {
-    static const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
-    static const sal_uInt16 PT_6   =  6 * 20;      //  6 pt
-    static const sal_uInt16 PT_7   =  7 * 20;      //  7 pt
-    static const sal_uInt16 PT_10  = 10 * 20;      // 10 pt
-    static const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
-    static const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
-    static const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
-    static const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
-    static const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
-    static const sal_uInt16 PT_28  = 28 * 20;      // 28 pt
+    const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
+    const sal_uInt16 PT_6   =  6 * 20;      //  6 pt
+    const sal_uInt16 PT_7   =  7 * 20;      //  7 pt
+    const sal_uInt16 PT_10  = 10 * 20;      // 10 pt
+    const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
+    const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
+    const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
+    const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
+    const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
+    const sal_uInt16 PT_28  = 28 * 20;      // 28 pt
 
     #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
-    static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
+    const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
         // we do everything percentual now:
         130, 115, 101, 95, 85,
         85,   80,  80, 75, 75,  // normal

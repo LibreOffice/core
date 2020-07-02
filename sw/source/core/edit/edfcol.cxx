@@ -97,20 +97,20 @@
 
 namespace
 {
-static const OUString MetaFilename("tscp/bails.rdf");
-static const OUString MetaNS("urn:bails");
-static const OUString ParagraphSignatureRDFNamespace = "urn:bails:loext:paragraph:signature:";
-static const OUString ParagraphSignatureIdRDFName = "urn:bails:loext:paragraph:signature:id";
-static const OUString ParagraphSignatureDigestRDFName = ":digest";
-static const OUString ParagraphSignatureDateRDFName = ":date";
-static const OUString ParagraphSignatureUsageRDFName = ":usage";
-static const OUString ParagraphSignatureLastIdRDFName = "urn:bails:loext:paragraph:signature:lastid";
-static const OUString ParagraphClassificationNameRDFName = "urn:bails:loext:paragraph:classification:name";
-static const OUString ParagraphClassificationValueRDFName = "urn:bails:loext:paragraph:classification:value";
-static const OUString ParagraphClassificationAbbrRDFName = "urn:bails:loext:paragraph:classification:abbreviation";
-static const OUString ParagraphClassificationFieldNamesRDFName = "urn:bails:loext:paragraph:classification:fields";
-static const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
-static const OUString DocInfoServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
+const OUString MetaFilename("tscp/bails.rdf");
+const OUString MetaNS("urn:bails");
+const OUString ParagraphSignatureRDFNamespace = "urn:bails:loext:paragraph:signature:";
+const OUString ParagraphSignatureIdRDFName = "urn:bails:loext:paragraph:signature:id";
+const OUString ParagraphSignatureDigestRDFName = ":digest";
+const OUString ParagraphSignatureDateRDFName = ":date";
+const OUString ParagraphSignatureUsageRDFName = ":usage";
+const OUString ParagraphSignatureLastIdRDFName = "urn:bails:loext:paragraph:signature:lastid";
+const OUString ParagraphClassificationNameRDFName = "urn:bails:loext:paragraph:classification:name";
+const OUString ParagraphClassificationValueRDFName = "urn:bails:loext:paragraph:classification:value";
+const OUString ParagraphClassificationAbbrRDFName = "urn:bails:loext:paragraph:classification:abbreviation";
+const OUString ParagraphClassificationFieldNamesRDFName = "urn:bails:loext:paragraph:classification:fields";
+const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
+const OUString DocInfoServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
 
 /// Find all page styles which are currently used in the document.
 std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)

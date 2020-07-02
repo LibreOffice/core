@@ -148,7 +148,7 @@ struct FrameMap
 };
 
 
-static RelationMap const aRelationMap[] =
+RelationMap const aRelationMap[] =
 {
     {SwFPos::FRAME,  SwFPos::FRAME, LB::Frame, text::RelOrientation::FRAME},
     {SwFPos::PRTAREA,           SwFPos::PRTAREA,                LB::PrintArea,             text::RelOrientation::PRINT_AREA},
@@ -174,7 +174,7 @@ static RelationMap const aRelationMap[] =
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB::VertLine,   text::RelOrientation::TEXT_LINE}
 };
 
-static RelationMap const aAsCharRelationMap[] =
+RelationMap const aAsCharRelationMap[] =
 {
     {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB::RelBase,    text::RelOrientation::FRAME},
     {SwFPos::REL_CHAR,   SwFPos::REL_CHAR,   LB::RelChar,   text::RelOrientation::FRAME},
@@ -182,10 +182,10 @@ static RelationMap const aAsCharRelationMap[] =
 };
 
 // site anchored
-static constexpr auto HORI_PAGE_REL = LB::RelPageFrame | LB::RelPagePrintArea | LB::RelPageLeft |
+constexpr auto HORI_PAGE_REL = LB::RelPageFrame | LB::RelPagePrintArea | LB::RelPageLeft |
                         LB::RelPageRight;
 
-static FrameMap const aHPageMap[] =
+FrameMap const aHPageMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_PAGE_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_PAGE_REL},
@@ -193,14 +193,14 @@ static FrameMap const aHPageMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
-static FrameMap const aHPageHtmlMap[] =
+FrameMap const aHPageHtmlMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 #define VERT_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea)
 
-static FrameMap const aVPageMap[] =
+FrameMap const aVPageMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_PAGE_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_PAGE_REL},
@@ -208,16 +208,16 @@ static FrameMap const aVPageMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
-static FrameMap const aVPageHtmlMap[] =
+FrameMap const aVPageHtmlMap[] =
 {
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB::RelPageFrame}
 };
 
 // frame anchored
-static constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame | LB::FlyRelPagePrintArea |
+constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame | LB::FlyRelPagePrintArea |
                                        LB::FlyRelPageLeft | LB::FlyRelPageRight;
 
-static FrameMap const aHFrameMap[] =
+FrameMap const aHFrameMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,  HORI_FRAME_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_FRAME_REL},
@@ -225,7 +225,7 @@ static FrameMap const aHFrameMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
-static FrameMap const aHFlyHtmlMap[] =
+FrameMap const aHFlyHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      LB::FlyRelPageFrame},
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB::FlyRelPageFrame}
@@ -234,7 +234,7 @@ static FrameMap const aHFlyHtmlMap[] =
 // own vertical alignment map for objects anchored to frame
 #define VERT_FRAME_REL   (LB::FlyVertFrame|LB::FlyVertPrintArea)
 
-static FrameMap const aVFrameMap[] =
+FrameMap const aVFrameMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_FRAME_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_FRAME_REL},
@@ -242,18 +242,18 @@ static FrameMap const aVFrameMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
-static FrameMap const aVFlyHtmlMap[] =
+FrameMap const aVFlyHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       LB::FlyVertFrame},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB::FlyVertFrame}
 };
 
 // paragraph anchored
-static constexpr auto HORI_PARA_REL = LB::Frame | LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
+constexpr auto HORI_PARA_REL = LB::Frame | LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
                         LB::RelPageFrame | LB::RelPagePrintArea | LB::RelFrameLeft |
                         LB::RelFrameRight;
 
-static FrameMap const aHParaMap[] =
+FrameMap const aHParaMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_PARA_REL},
@@ -263,23 +263,23 @@ static FrameMap const aHParaMap[] =
 
 #define HTML_HORI_PARA_REL  (LB::Frame|LB::PrintArea)
 
-static FrameMap const aHParaHtmlMap[] =
+FrameMap const aHParaHtmlMap[] =
 {
     {SwFPos::LEFT,  SwFPos::LEFT,   text::HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT, SwFPos::RIGHT,  text::HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-static FrameMap const aHParaHtmlAbsMap[] =
+FrameMap const aHParaHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
 // allow vertical alignment at page areas
-static constexpr auto VERT_PARA_REL = LB::VertFrame | LB::VertPrintArea |
+constexpr auto VERT_PARA_REL = LB::VertFrame | LB::VertPrintArea |
                                       LB::RelPageFrame | LB::RelPagePrintArea;
 
-static FrameMap const aVParaMap[] =
+FrameMap const aVParaMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_PARA_REL},
@@ -287,17 +287,17 @@ static FrameMap const aVParaMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_PARA_REL}
 };
 
-static FrameMap const aVParaHtmlMap[] =
+FrameMap const aVParaHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       LB::VertPrintArea}
 };
 
 // anchored relative to the character
-static constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
+constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea | LB::RelPageLeft | LB::RelPageRight |
                                       LB::RelPageFrame | LB::RelPagePrintArea | LB::RelFrameLeft |
                                       LB::RelFrameRight | LB::RelChar;
 
-static FrameMap const aHCharMap[] =
+FrameMap const aHCharMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_CHAR_REL},
@@ -307,13 +307,13 @@ static FrameMap const aHCharMap[] =
 
 #define HTML_HORI_CHAR_REL  (LB::Frame|LB::PrintArea|LB::RelChar)
 
-static FrameMap const aHCharHtmlMap[] =
+FrameMap const aHCharHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::LEFT,           text::HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::RIGHT,          text::HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
 };
 
-static FrameMap const aHCharHtmlAbsMap[] =
+FrameMap const aHCharHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      LB::PrintArea|LB::RelChar},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     LB::PrintArea},
@@ -321,10 +321,10 @@ static FrameMap const aHCharHtmlAbsMap[] =
 };
 
 // allow vertical alignment at page areas
-static constexpr auto VERT_CHAR_REL = LB::VertFrame | LB::VertPrintArea |
+constexpr auto VERT_CHAR_REL = LB::VertFrame | LB::VertPrintArea |
                                       LB::RelPageFrame | LB::RelPagePrintArea;
 
-static FrameMap const aVCharMap[] =
+FrameMap const aVCharMap[] =
 {
     // introduce mappings for new vertical alignment at top of line <LB::VertLine>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
@@ -343,19 +343,19 @@ static FrameMap const aVCharMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB::VertLine}
 };
 
-static FrameMap const aVCharHtmlMap[] =
+FrameMap const aVCharHtmlMap[] =
 {
     {SwFPos::BELOW,         SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
-static FrameMap const aVCharHtmlAbsMap[] =
+FrameMap const aVCharHtmlAbsMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,           LB::RelChar},
     {SwFPos::BELOW,             SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
 // anchored as character
-static FrameMap const aVAsCharMap[] =
+FrameMap const aVAsCharMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB::RelBase},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,        LB::RelBase},
@@ -372,7 +372,7 @@ static FrameMap const aVAsCharMap[] =
     {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     text::VertOrientation::NONE,          LB::RelBase}
 };
 
-static FrameMap const aVAsCharHtmlMap[] =
+FrameMap const aVAsCharHtmlMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB::RelBase},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::CENTER,        LB::RelBase},

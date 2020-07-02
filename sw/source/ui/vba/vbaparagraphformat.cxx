@@ -31,10 +31,10 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const sal_Int16 CHARACTER_INDENT_FACTOR = 12;
-static const sal_Int16 PERCENT100 = 100;
-static const sal_Int16 PERCENT150 = 150;
-static const sal_Int16 PERCENT200 = 200;
+const sal_Int16 CHARACTER_INDENT_FACTOR = 12;
+const sal_Int16 PERCENT100 = 100;
+const sal_Int16 PERCENT150 = 150;
+const sal_Int16 PERCENT200 = 200;
 
 SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< beans::XPropertySet >& rParaProps ) : SwVbaParagraphFormat_BASE( rParent, rContext ), mxParaProps( rParaProps )
 {

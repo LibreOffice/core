@@ -93,7 +93,7 @@ using namespace nsSwDocInfoSubType;
 #define COM_TEXT_FLDMASTER_CC   "com.sun.star.text.fieldmaster."
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
-static const sal_uInt16 aDocInfoSubTypeFromService[] =
+const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
     DI_CHANGE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
     DI_CHANGE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
@@ -124,7 +124,7 @@ struct ServiceIdResId
 
 }
 
-static const ServiceIdResId aServiceToRes[] =
+const ServiceIdResId aServiceToRes[] =
 {
     {SwFieldIds::DateTime,           SwServiceType::FieldTypeDateTime              },
     {SwFieldIds::User,               SwServiceType::FieldTypeUser                  },

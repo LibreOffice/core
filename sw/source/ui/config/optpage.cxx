@@ -1352,7 +1352,7 @@ struct CharAttr
 }
 
 // Edit corresponds to Paste-attributes
-static CharAttr const aRedlineAttr[] =
+CharAttr const aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::NotMapped) },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },

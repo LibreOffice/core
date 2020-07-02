@@ -29,23 +29,23 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const sal_Int32 LIST_LEVEL_COUNT = 9;
+const sal_Int32 LIST_LEVEL_COUNT = 9;
 
-static const char UNO_NAME_PARENT_NUMBERING[] = "ParentNumbering";
-static const char UNO_NAME_PREFIX[] = "Prefix";
-static const char UNO_NAME_SUFFIX[] = "Suffix";
-static const char UNO_NAME_CHAR_STYLE_NAME[] = "CharStyleName";
-static const char UNO_NAME_NUMBERING_TYPE[] = "NumberingType";
-static const char UNO_NAME_BULLET_CHAR[] = "BulletChar";
+const char UNO_NAME_PARENT_NUMBERING[] = "ParentNumbering";
+const char UNO_NAME_PREFIX[] = "Prefix";
+const char UNO_NAME_SUFFIX[] = "Suffix";
+const char UNO_NAME_CHAR_STYLE_NAME[] = "CharStyleName";
+const char UNO_NAME_NUMBERING_TYPE[] = "NumberingType";
+const char UNO_NAME_BULLET_CHAR[] = "BulletChar";
 
-static const sal_Unicode CHAR_CLOSED_DOT[] = u"\u2022";
-static const char CHAR_EMPTY_DOT[] = "o";
-static const sal_Unicode CHAR_SQUARE[] = u"\u2540";
-static const sal_Unicode CHAR_STAR_SYMBOL[] = u"\u272A";
-static const sal_Unicode CHAR_FOUR_DIAMONDS[] = u"\u2756";
-static const sal_Unicode CHAR_DIAMOND[] = u"\u2726";
-static const sal_Unicode CHAR_ARROW[] = u"\u27A2";
-static const sal_Unicode CHAR_CHECK_MARK[] = u"\u2713";
+const sal_Unicode CHAR_CLOSED_DOT[] = u"\u2022";
+const char CHAR_EMPTY_DOT[] = "o";
+const sal_Unicode CHAR_SQUARE[] = u"\u2540";
+const sal_Unicode CHAR_STAR_SYMBOL[] = u"\u272A";
+const sal_Unicode CHAR_FOUR_DIAMONDS[] = u"\u2756";
+const sal_Unicode CHAR_DIAMOND[] = u"\u2726";
+const sal_Unicode CHAR_ARROW[] = u"\u27A2";
+const sal_Unicode CHAR_CHECK_MARK[] = u"\u2713";
 
 SwVbaListHelper::SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument( xTextDoc ), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {

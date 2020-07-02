@@ -28,7 +28,7 @@
 #define SWPAGE_WIDE_VALUE3     1800
 
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and svx/source/dialog/hdft.cxx
-static const long MINBODY = 56;  // 1mm in twips rounded
+const long MINBODY = 56;  // 1mm in twips rounded
 
 class PageMarginPopup;
 

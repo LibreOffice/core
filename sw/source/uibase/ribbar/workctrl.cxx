@@ -175,7 +175,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR
 };
 
-static OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
+OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
 {
     RID_BMP_RIBBAR_TBL,
     RID_BMP_RIBBAR_FRM,

@@ -107,7 +107,7 @@ enum SwXMLDocTokens
 
 }
 
-static const SvXMLTokenMapEntry aDocTokenMap[] =
+const SvXMLTokenMapEntry aDocTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
     { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },

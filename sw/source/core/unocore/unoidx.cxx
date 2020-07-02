@@ -119,8 +119,8 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     rTOXBase.RegisterToTOXType( *const_cast<SwTOXType*>(pNewType) );
 }
 
-static const char cUserDefined[] = "User-Defined";
-static const char cUserSuffix[] = " (user)";
+const char cUserDefined[] = "User-Defined";
+const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
 #define USER_AND_SUFFIXLEN 19
 
@@ -2650,7 +2650,7 @@ struct TokenType_ {
 
 }
 
-static const struct TokenType_ g_TokenTypes[] =
+const struct TokenType_ g_TokenTypes[] =
 {
     { "TokenEntryNumber",           TOKEN_ENTRY_NO  },
     { "TokenEntryText",             TOKEN_ENTRY_TEXT },

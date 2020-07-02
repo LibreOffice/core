@@ -20,7 +20,7 @@
 #include <dcontact.hxx>
 #include <frameformats.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/core/frmedt/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/core/frmedt/data/";
 
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase

@@ -41,7 +41,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
+const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
 
 SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
     const uno::Reference< frame::XModel >& rModel ) :

@@ -29,7 +29,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const sal_Int32 DEFAULT_PAGE_DISTANCE = 500;
+const sal_Int32 DEFAULT_PAGE_DISTANCE = 500;
 
 sal_Int32 SwVbaInformationHelper::handleWdActiveEndPageNumber( const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
 {
