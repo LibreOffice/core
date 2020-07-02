@@ -40,7 +40,7 @@ using css::xml::dom::XDocumentBuilder;
 namespace
 {
 // valid xml
-static const char validTestFile[] =
+const char validTestFile[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
  <office:document-content \
    xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" \
@@ -56,7 +56,7 @@ static const char validTestFile[] =
 
 // generates a warning: unknown xml:space
 // value
-static const char warningTestFile[] =
+const char warningTestFile[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
  <office:document-content \
    xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" \
@@ -72,7 +72,7 @@ static const char warningTestFile[] =
 ";
 
 // <?xml not at start of file
-static const char errorTestFile[] =
+const char errorTestFile[] =
 " <?xml version=\"1.0\" encoding=\"UTF-8\"?> \
  <office:document-content \
    xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" \
