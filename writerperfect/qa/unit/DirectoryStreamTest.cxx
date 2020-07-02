@@ -56,9 +56,9 @@ private:
     uno::Reference<ucb::XContent> m_xNonexistent;
 };
 
-static const char g_aDirPath[] = "/writerperfect/qa/unit/data/stream/test.dir";
-static const char g_aNondirPath[] = "/writerperfect/qa/unit/data/stream/test.dir/mimetype";
-static const char g_aNonexistentPath[] = "/writerperfect/qa/unit/data/stream/foo/bar";
+const char g_aDirPath[] = "/writerperfect/qa/unit/data/stream/test.dir";
+const char g_aNondirPath[] = "/writerperfect/qa/unit/data/stream/test.dir/mimetype";
+const char g_aNonexistentPath[] = "/writerperfect/qa/unit/data/stream/foo/bar";
 
 DirectoryStreamTest::DirectoryStreamTest()
 {
