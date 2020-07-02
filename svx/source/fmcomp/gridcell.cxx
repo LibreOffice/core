@@ -1944,7 +1944,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     rPaintFormatter.SetFormat( sFormatString, aAppLanguage );
 }
 
-VclPtr<SpinField> DbNumericField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<Control> DbNumericField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<DoubleNumericField>::Create( _pParent, _nFieldStyle );
@@ -2072,13 +2072,11 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     static_cast< LongCurrencyField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
 }
 
-
-VclPtr<SpinField> DbCurrencyField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<Control> DbCurrencyField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<LongCurrencyField>::Create( _pParent, _nFieldStyle );
 }
-
 
 double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
@@ -2179,7 +2177,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-VclPtr<SpinField> DbDateField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& _rxModel  )
+VclPtr<Control> DbDateField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& _rxModel  )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     // check if there is a DropDown property set to TRUE
@@ -2306,7 +2304,7 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-VclPtr<SpinField> DbTimeField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/ )
+VclPtr<Control> DbTimeField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/ )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<TimeField>::Create( _pParent, _nFieldStyle );

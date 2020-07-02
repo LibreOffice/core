@@ -545,7 +545,7 @@ public:
     virtual ::svt::CellControllerRef    CreateController() const override;
 
 protected:
-    virtual VclPtr<SpinField> createField(
+    virtual VclPtr<Control> createField(
                             vcl::Window* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -566,7 +566,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<SpinField> createField(
+    virtual VclPtr<Control> createField(
                             vcl::Window* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -590,7 +590,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<SpinField> createField(
+    virtual VclPtr<Control> createField(
                             vcl::Window* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -618,7 +618,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<SpinField> createField(
+    virtual VclPtr<Control> createField(
                             vcl::Window* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -642,7 +642,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<SpinField> createField(
+    virtual VclPtr<Control> createField(
                             vcl::Window* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
