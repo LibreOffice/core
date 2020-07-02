@@ -38,16 +38,16 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-static const sal_Unicode uCR = 0xd;
-static const sal_Unicode uFtnEdnRef = 0x2;
-static const sal_Unicode uFtnEdnSep = 0x3;
-static const sal_Unicode uTab = 0x9;
-static const sal_Unicode uPgNum = 0x0;
-static const sal_Unicode uNoBreakHyphen = 0x2011;
-static const sal_Unicode uSoftHyphen = 0xAD;
+const sal_Unicode uCR = 0xd;
+const sal_Unicode uFtnEdnRef = 0x2;
+const sal_Unicode uFtnEdnSep = 0x3;
+const sal_Unicode uTab = 0x9;
+const sal_Unicode uPgNum = 0x0;
+const sal_Unicode uNoBreakHyphen = 0x2011;
+const sal_Unicode uSoftHyphen = 0xAD;
 
-static const sal_uInt8 cFtnEdnCont = 0x4;
-static const sal_uInt8 cFieldLock = 0x8;
+const sal_uInt8 cFtnEdnCont = 0x4;
+const sal_uInt8 cFieldLock = 0x8;
 
 namespace writerfilter::ooxml
 {
