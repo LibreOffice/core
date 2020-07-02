@@ -5081,128 +5081,117 @@ std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
     return std::make_unique<SalInstanceLabel>(pLabel, m_pBuilder, false);
 }
 
-class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
+SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
+    , m_xTextView(pTextView)
 {
-private:
-    VclPtr<VclMultiLineEdit> m_xTextView;
-    Link<ScrollBar*,void> m_aOrigVScrollHdl;
+    m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
+    rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
+}
 
-    DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(VscrollHdl, ScrollBar*, void);
-    DECL_LINK(CursorListener, VclWindowEvent&, void);
-public:
-    SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pTextView, pBuilder, bTakeOwnership)
-        , m_xTextView(pTextView)
+void SalInstanceTextView::set_text(const OUString& rText)
+{
+    disable_notify_events();
+    m_xTextView->SetText(rText);
+    enable_notify_events();
+}
+
+void SalInstanceTextView::replace_selection(const OUString& rText)
+{
+    disable_notify_events();
+    m_xTextView->ReplaceSelected(rText);
+    enable_notify_events();
+}
+
+OUString SalInstanceTextView::get_text() const
+{
+    return m_xTextView->GetText();
+}
+
+bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int &rEndPos)
+{
+    const Selection& rSelection = m_xTextView->GetSelection();
+    rStartPos = rSelection.Min();
+    rEndPos = rSelection.Max();
+    return rSelection.Len();
+}
+
+void SalInstanceTextView::select_region(int nStartPos, int nEndPos)
+{
+    disable_notify_events();
+    m_xTextView->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    enable_notify_events();
+}
+
+void SalInstanceTextView::set_editable(bool bEditable)
+{
+    m_xTextView->SetReadOnly(!bEditable);
+}
+
+void SalInstanceTextView::set_monospace(bool bMonospace)
+{
+    vcl::Font aOrigFont = m_xTextView->GetControlFont();
+    vcl::Font aFont;
+    if (bMonospace)
+        aFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, GetDefaultFontFlags::OnlyOne, m_xTextView);
+    else
+        aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
+    aFont.SetFontHeight(aOrigFont.GetFontHeight());
+    m_xTextView->SetFont(aFont);
+    m_xTextView->SetControlFont(aFont);
+}
+
+void SalInstanceTextView::connect_cursor_position(const Link<TextView&, void>& rLink)
+{
+    assert(!m_aCursorPositionHdl.IsSet());
+    m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));
+    weld::TextView::connect_cursor_position(rLink);
+}
+
+int SalInstanceTextView::vadjustment_get_value() const
+{
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    return rVertScrollBar.GetThumbPos();
+}
+
+void SalInstanceTextView::vadjustment_set_value(int value)
+{
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    rVertScrollBar.SetThumbPos(value);
+    m_aOrigVScrollHdl.Call(&rVertScrollBar);
+}
+
+int SalInstanceTextView::vadjustment_get_upper() const
+{
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    return rVertScrollBar.GetRangeMax();
+}
+
+int SalInstanceTextView::vadjustment_get_lower() const
+{
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    return rVertScrollBar.GetRangeMin();
+}
+
+int SalInstanceTextView::vadjustment_get_page_size() const
+{
+    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
+    return rVertScrollBar.GetVisibleSize();
+}
+
+SalInstanceTextView::~SalInstanceTextView()
+{
+    if (!m_xTextView->IsDisposed())
     {
-        m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
+        if (m_aCursorPositionHdl.IsSet())
+            m_xTextView->RemoveEventListener(LINK(this, SalInstanceTextView, CursorListener));
+        m_xTextView->SetModifyHdl(Link<Edit&, void>());
         ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
-        rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceTextView, VscrollHdl));
+        rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
     }
-
-    virtual void set_text(const OUString& rText) override
-    {
-        disable_notify_events();
-        m_xTextView->SetText(rText);
-        enable_notify_events();
-    }
-
-    virtual void replace_selection(const OUString& rText) override
-    {
-        disable_notify_events();
-        m_xTextView->ReplaceSelected(rText);
-        enable_notify_events();
-    }
-
-    virtual OUString get_text() const override
-    {
-        return m_xTextView->GetText();
-    }
-
-    bool get_selection_bounds(int& rStartPos, int &rEndPos) override
-    {
-        const Selection& rSelection = m_xTextView->GetSelection();
-        rStartPos = rSelection.Min();
-        rEndPos = rSelection.Max();
-        return rSelection.Len();
-    }
-
-    virtual void select_region(int nStartPos, int nEndPos) override
-    {
-        disable_notify_events();
-        m_xTextView->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
-        enable_notify_events();
-    }
-
-    virtual void set_editable(bool bEditable) override
-    {
-        m_xTextView->SetReadOnly(!bEditable);
-    }
-
-    virtual void set_monospace(bool bMonospace) override
-    {
-        vcl::Font aOrigFont = m_xTextView->GetControlFont();
-        vcl::Font aFont;
-        if (bMonospace)
-            aFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, GetDefaultFontFlags::OnlyOne, m_xTextView);
-        else
-            aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
-        aFont.SetFontHeight(aOrigFont.GetFontHeight());
-        m_xTextView->SetFont(aFont);
-        m_xTextView->SetControlFont(aFont);
-    }
-
-    virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override
-    {
-        assert(!m_aCursorPositionHdl.IsSet());
-        m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));
-        weld::TextView::connect_cursor_position(rLink);
-    }
-
-    virtual int vadjustment_get_value() const override
-    {
-        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        return rVertScrollBar.GetThumbPos();
-    }
-
-    virtual void vadjustment_set_value(int value) override
-    {
-        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        rVertScrollBar.SetThumbPos(value);
-        m_aOrigVScrollHdl.Call(&rVertScrollBar);
-    }
-
-    virtual int vadjustment_get_upper() const override
-    {
-        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        return rVertScrollBar.GetRangeMax();
-    }
-
-    virtual int vadjustment_get_lower() const override
-    {
-        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        return rVertScrollBar.GetRangeMin();
-    }
-
-    virtual int vadjustment_get_page_size() const override
-    {
-        ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-        return rVertScrollBar.GetVisibleSize();
-    }
-
-    virtual ~SalInstanceTextView() override
-    {
-        if (!m_xTextView->IsDisposed())
-        {
-            if (m_aCursorPositionHdl.IsSet())
-                m_xTextView->RemoveEventListener(LINK(this, SalInstanceTextView, CursorListener));
-            m_xTextView->SetModifyHdl(Link<Edit&, void>());
-            ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-            rVertScrollBar.SetScrollHdl(m_aOrigVScrollHdl);
-        }
-    }
-};
+}
 
 IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
