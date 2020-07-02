@@ -86,40 +86,32 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         css::awt::FontDescriptor m_aCurrentFont;
 };
 
-class SvxFontSizeBox_Impl : public InterimItemWindow
+class SvxFontSizeBox_Impl : public FontSizeBox
 {
 public:
                         SvxFontSizeBox_Impl( vcl::Window* pParent,
                                              const uno::Reference< frame::XFrame >& _xFrame,
                                              FontHeightToolBoxControl& rCtrl );
 
-    virtual void        dispose() override;
-    virtual             ~SvxFontSizeBox_Impl() override;
     void                statusChanged_Impl( long nHeight, bool bErase );
     void                UpdateFont( const css::awt::FontDescriptor& rCurrentFont );
     void                SetOptimalSize();
 
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
 protected:
+    virtual void        Select() override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void        GetFocus() override;
 
 private:
-    FontHeightToolBoxControl&                  m_rCtrl;
+    FontHeightToolBoxControl*                  m_pCtrl;
     OUString                                   m_aCurText;
+    Size const                                 m_aLogicalSize;
     bool                                       m_bRelease;
     uno::Reference< frame::XFrame >            m_xFrame;
-    std::unique_ptr<SvtFontSizeBox>            m_xWidget;
 
     void                ReleaseFocus_Impl();
-
-    void                Select();
-
-    DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
-    DECL_LINK(FocusOutHdl, weld::Widget&, void);
 };
 
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
@@ -127,38 +119,16 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     const uno::Reference< frame::XFrame >&            _xFrame,
     FontHeightToolBoxControl&                         _rCtrl ) :
 
-    InterimItemWindow(_pParent, "svx/ui/fontsizebox.ui", "FontSizeBox"),
+    FontSizeBox( _pParent, WinBits( WB_DROPDOWN ) ),
 
-    m_rCtrl             ( _rCtrl ),
+    m_pCtrl             ( &_rCtrl ),
+    m_aLogicalSize      ( 0,100 ),
     m_bRelease          ( true ),
-    m_xFrame            ( _xFrame ),
-    m_xWidget(new SvtFontSizeBox(m_xBuilder->weld_combo_box("fontsize")))
+    m_xFrame            ( _xFrame )
 {
+    SetValue( 0 );
+    SetText( "" );
     set_id("fontsizecombobox");
-    m_xWidget->set_value(0);
-    m_xWidget->set_active_text("");
-    m_xWidget->disable_entry_completion();
-
-    m_xWidget->connect_changed(LINK(this, SvxFontSizeBox_Impl, SelectHdl));
-    m_xWidget->connect_key_press(LINK(this, SvxFontSizeBox_Impl, KeyInputHdl));
-    m_xWidget->connect_entry_activate(LINK(this, SvxFontSizeBox_Impl, ActivateHdl));
-    m_xWidget->connect_focus_out(LINK(this, SvxFontSizeBox_Impl, FocusOutHdl));
-}
-
-void SvxFontSizeBox_Impl::dispose()
-{
-    m_xWidget.reset();
-    InterimItemWindow::dispose();
-}
-
-SvxFontSizeBox_Impl::~SvxFontSizeBox_Impl()
-{
-    disposeOnce();
-}
-
-void SvxFontSizeBox_Impl::GetFocus()
-{
-    m_xWidget->grab_focus();
 }
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
@@ -173,34 +143,29 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK(SvxFontSizeBox_Impl, SelectHdl, weld::ComboBox&, rCombo, void)
-{
-    if (rCombo.changed_by_menu()) // only when picked from the list
-        Select();
-}
-
-IMPL_LINK_NOARG(SvxFontSizeBox_Impl, ActivateHdl, weld::ComboBox&, bool)
-{
-    Select();
-    return true;
-}
 
 void SvxFontSizeBox_Impl::Select()
 {
-    sal_Int64 nSelVal = m_xWidget->get_value();
-    float fSelVal     = float( nSelVal ) / 10;
+    FontSizeBox::Select();
 
-    uno::Sequence< beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = "FontHeight.Height";
-    aArgs[0].Value <<= fSelVal;
+    if ( !IsTravelSelect() )
+    {
+        sal_Int64 nSelVal = GetValue();
+        float fSelVal     = float( nSelVal ) / 10;
 
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    ReleaseFocus_Impl();
+        uno::Sequence< beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name  = "FontHeight.Height";
+        aArgs[0].Value <<= fSelVal;
 
-    m_rCtrl.dispatchCommand( aArgs );
+        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            This instance may be deleted in the meantime (i.e. when a dialog is opened
+            while in Dispatch()), accessing members will crash in this case. */
+        ReleaseFocus_Impl();
+
+        m_pCtrl->dispatchCommand( aArgs );
+    }
 }
+
 
 void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 {
@@ -210,22 +175,23 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
         long nVal = nPoint;
 
         // changed => set new value
-        if (m_xWidget->get_value() != nVal)
-            m_xWidget->set_value(nVal);
+        if ( GetValue() != nVal )
+            SetValue( nVal );
     }
     else
     {
         // delete value in the display
-        m_xWidget->set_value(-1L);
-        m_xWidget->set_active_text("");
+        SetValue( -1L );
+        SetText( "" );
     }
-    m_xWidget->save_value();
+    SaveValue();
 }
+
 
 void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFont )
 {
     // filling up the sizes list
-    auto nOldVal = m_xWidget->get_value(); // memorize old value
+    sal_Int64 nOldVal = GetValue(); // memorize old value
     const FontList* _pFontList = nullptr;
     std::unique_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
@@ -236,49 +202,61 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
         _aFontMetric.SetFamilyName( rCurrentFont.Name );
         _aFontMetric.SetStyleName( rCurrentFont.StyleName );
         _aFontMetric.SetFontHeight( rCurrentFont.Height );
-        m_xWidget->Fill(&_aFontMetric, _pFontList);
+        Fill( &_aFontMetric, _pFontList );
     }
     else
     {
-        m_xWidget->Fill(nullptr, _pFontList);
+        Fill( nullptr, _pFontList );
     }
-    m_xWidget->set_value(nOldVal); // restore old value
-    m_aCurText = m_xWidget->get_active_text(); // memorize to reset at ESC
+    SetValue( nOldVal ); // restore old value
+    m_aCurText = GetText(); // memorize to reset at ESC
 }
 
-IMPL_LINK(SvxFontSizeBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+
+bool SvxFontSizeBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-
-    switch (nCode)
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
-        case KEY_TAB:
-            m_bRelease = false;
-            Select();
-            break;
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
-        case KEY_ESCAPE:
-            m_xWidget->set_active_text(m_aCurText);
-            if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
-                ReleaseFocus_Impl();
-            bHandled = true;
-            break;
+        switch ( nCode )
+        {
+            case KEY_RETURN:
+            case KEY_TAB:
+            {
+                if ( KEY_TAB == nCode )
+                    m_bRelease = false;
+                else
+                    bHandled = true;
+                Select();
+                break;
+            }
+
+            case KEY_ESCAPE:
+                SetText( m_aCurText );
+                if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
+                    ReleaseFocus_Impl();
+                bHandled = true;
+                break;
+        }
+    }
+    else if( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
+    {
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
+        if(!HasFocus() && GetSubEdit() != pFocusWin)
+            SetText(GetSavedValue());
     }
 
-    return bHandled || ChildKeyInput(rKEvt);
-}
-
-IMPL_LINK_NOARG(SvxFontSizeBox_Impl, FocusOutHdl, weld::Widget&, void)
-{
-    if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidget so double-check if none of those has focus
-        m_xWidget->set_value(m_xWidget->get_saved_value());
+    return bHandled || FontSizeBox::EventNotify( rNEvt );
 }
 
 void SvxFontSizeBox_Impl::SetOptimalSize()
 {
-    SetSizePixel(get_preferred_size());
+    Size aPrefSize(LogicToPixel(m_aLogicalSize, MapMode(MapUnit::MapAppFont)));
+    aPrefSize.setWidth( get_preferred_size().Width() );
+    SetSizePixel(aPrefSize);
 }
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -288,18 +266,20 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     {
         SetOptimalSize();
     }
+
+    FontSizeBox::DataChanged( rDCEvt );
 }
 
 boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
 {
-    boost::property_tree::ptree aTree(m_xWidget->get_property_tree());
+    boost::property_tree::ptree aTree(FontSizeBox::DumpAsPropertyTree());
 
     boost::property_tree::ptree aEntries;
 
-    for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
+    for (int i = 0; i < GetEntryCount(); ++i)
     {
         boost::property_tree::ptree aEntry;
-        aEntry.put("", m_xWidget->get_text(i));
+        aEntry.put("", GetEntry(i));
         aEntries.push_back(std::make_pair("", aEntry));
     }
 
@@ -307,15 +287,14 @@ boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
 
     boost::property_tree::ptree aSelected;
 
-    int nActive = m_xWidget->get_active();
-    if (nActive != -1)
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
     {
         boost::property_tree::ptree aEntry;
-        aEntry.put("", nActive);
+        aEntry.put("", GetSelectedEntryPos(i));
         aSelected.push_back(std::make_pair("", aEntry));
     }
 
-    aTree.put("selectedCount", nActive == -1 ? 0 : 1);
+    aTree.put("selectedCount", GetSelectedEntryCount());
     aTree.add_child("selectedEntries", aSelected);
 
     aTree.put("command", ".uno:FontHeight");

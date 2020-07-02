@@ -22,6 +22,8 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/relfld.hxx>
 #include <vcl/InterimItemWindow.hxx>
