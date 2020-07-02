@@ -110,6 +110,7 @@ const SmElementDescr SmElementsControl::m_aSetOperationsList[] =
 
 const SmElementDescr SmElementsControl::m_aFunctionsList[] =
 {
+    {RID_FUNCX, RID_FUNCX_HELP},
     {RID_ABSX, RID_ABSX_HELP}, {RID_FACTX, RID_FACTX_HELP}, {RID_SQRTX, RID_SQRTX_HELP},
     {RID_NROOTXY, RID_NROOTXY_HELP}, {RID_RSUPX, RID_RSUPX_HELP}, {RID_EX, RID_EX_HELP},
     {RID_LNX, RID_LNX_HELP}, {RID_EXPX, RID_EXPX_HELP}, {RID_LOGX, RID_LOGX_HELP},
@@ -125,6 +126,9 @@ const SmElementDescr SmElementsControl::m_aFunctionsList[] =
 
 const SmElementDescr SmElementsControl::m_aOperatorsList[] =
 {
+    {RID_OPERX, RID_OPERX_HELP}, {RID_OPER_FROMX, RID_OPER_FROMX_HELP},
+    {RID_OPER_TOX, RID_OPER_TOX_HELP}, {RID_OPER_FROMTOX, RID_OPER_FROMTOX_HELP},
+    {nullptr, nullptr},
     {RID_LIMX, RID_LIMX_HELP}, {RID_LIM_FROMX, RID_LIM_FROMX_HELP},
     {RID_LIM_TOX, RID_LIM_TOX_HELP}, {RID_LIM_FROMTOX, RID_LIM_FROMTOX_HELP},
     {nullptr, nullptr},
@@ -184,7 +188,8 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_COLORX_LIME, RID_COLORX_LIME_HELP}, {RID_COLORX_MAROON, RID_COLORX_MAROON_HELP},
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
     {RID_COLORX_PURPLE, RID_COLORX_PURPLE_HELP}, {RID_COLORX_SILVER, RID_COLORX_SILVER_HELP},
-    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP},{RID_COLORX_RGB, RID_COLORX_RGB_HELP}
+    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP},{RID_COLORX_RGB, RID_COLORX_RGB_HELP},
+    {RID_COLORX_HEX, RID_COLORX_HEX_HELP},
 };
 
 const SmElementDescr SmElementsControl::m_aBracketsList[] =
@@ -920,6 +925,8 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RGB)
                 addElement(aParser, "color rgb 0 0 0 { \"" + SmResId(STR_RGB) + "\" }", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_HEX)
+                addElement(aParser, "color hex 000000 { \"" + SmResId(STR_HEX) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNLX)
                 addElement(aParser, "\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNCX)
@@ -941,13 +948,21 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRFLOORX)
                 addElement(aParser, "left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(pElementHelp));
-
             else if (aElement == RID_SLRLINEX)
                 addElement(aParser, "left lline binom{<?>}{<?>} right rline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDLINEX)
                 addElement(aParser, "left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLMRANGLEXY)
                 addElement(aParser, "left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
+
+            else if (aElement == RID_OPERX)
+                addElement(aParser, u"oper \xE22B <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_FROMX)
+                addElement(aParser, u"oper \xE22B from <?> <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_TOX)
+                addElement(aParser, u"oper \xE22B to <?> <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_FROMTOX)
+                addElement(aParser, u"oper \xE22B from <?> to <?> <?>", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_XOVERBRACEY)
                 addElement(aParser, "{<?><?><?>} overbrace {<?>} ", aElement, SmResId(pElementHelp));
