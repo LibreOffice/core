@@ -18,7 +18,7 @@
  */
 
 #include "WriterInspectorTextPanel.hxx"
-#include <svx/svxids.hrc>
+
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
@@ -68,48 +68,42 @@ static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& r
     if (SvtLanguageOptions().IsCTLFontEnabled() && rProperty.Name.indexOf("Complex") != -1)
         return false;
 
-    OUString aValue;
-    double fValue;
-    bool bValue;
-    short sValue;
-    long lValue;
-    awt::FontSlant iValue;
-
     rString = rProperty.Name + "     ";
 
-    if (rAny >>= bValue)
+    if (bool bValue; rAny >>= bValue)
     {
         rString += OUString::boolean(bValue);
     }
-    else if ((rAny >>= aValue) && !(aValue.isEmpty()))
+    else if (OUString aValue; (rAny >>= aValue) && !(aValue.isEmpty()))
     {
         rString += aValue;
     }
-    else if (rAny >>= iValue)
+    else if (awt::FontSlant eValue; rAny >>= eValue)
     {
-        rString += (iValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
+        rString += (eValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
                                                      : OUStringLiteral("normal");
     }
-    else if ((rAny >>= lValue) && lValue)
+    else if (long nValueLong; rAny >>= nValueLong)
     {
         if (rString.indexOf("Color") != -1)
-            rString += "0x" + OUString::number(lValue, 16);
+            rString += "0x" + OUString::number(nValueLong, 16);
         else
-            rString += OUString::number(lValue);
+            rString += OUString::number(nValueLong);
     }
-    else if ((rAny >>= fValue) && fValue)
+    else if (double fValue; rAny >>= fValue)
     {
         if (rString.indexOf("Weight") != -1)
             rString += (fValue > 100) ? OUStringLiteral("bold") : OUStringLiteral("normal");
         else
             rString += OUString::number((round(fValue * 100)) / 100.00);
     }
-    else if ((rAny >>= sValue) && sValue)
+    else if (short nValueShort; rAny >>= nValueShort)
     {
-        rString += OUString::number(sValue);
+        rString += OUString::number(nValueShort);
     }
     else
         return false;
+
     return true;
 }
 
@@ -117,13 +111,13 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 {
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
-    svx::sidebar::TreeNode pDFNode;
-    svx::sidebar::TreeNode pCharNode;
-    svx::sidebar::TreeNode pParaNode;
+    svx::sidebar::TreeNode aDFNode;
+    svx::sidebar::TreeNode aCharNode;
+    svx::sidebar::TreeNode aParaNode;
 
-    pDFNode.sNodeName = "Direct Formatting";
-    pCharNode.sNodeName = "Character Styles";
-    pParaNode.sNodeName = "Paragraph Styles";
+    aDFNode.sNodeName = "Direct Formatting";
+    aCharNode.sNodeName = "Character Styles";
+    aParaNode.sNodeName = "Paragraph Styles";
 
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
@@ -144,9 +138,9 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
             {
                 aIsDefined[rProperty.Name] = true;
-                svx::sidebar::TreeNode pTemp;
-                pTemp.sNodeName = aPropertyValuePair;
-                pDFNode.children.push_back(pTemp);
+                svx::sidebar::TreeNode aTemp;
+                aTemp.sNodeName = aPropertyValuePair;
+                aDFNode.children.push_back(aTemp);
             }
         }
     }
@@ -168,8 +162,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         xPropertiesState.set(xPropertiesSet, css::uno::UNO_QUERY_THROW);
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
         aProperties = xPropertiesSet->getPropertySetInfo()->getProperties();
-        svx::sidebar::TreeNode pCurrentChild;
-        pCurrentChild.sNodeName = sDisplayName;
+        svx::sidebar::TreeNode aCurrentChild;
+        aCurrentChild.sNodeName = sDisplayName;
 
         for (const beans::Property& rProperty : std::as_const(aProperties))
         {
@@ -184,14 +178,14 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                         aPropertyValuePair = aPropertyValuePair + "  !!<GREY>!!";
                     else
                         aIsDefined[sPropName] = true;
-                    svx::sidebar::TreeNode pTemp;
-                    pTemp.sNodeName = aPropertyValuePair;
-                    pCurrentChild.children.push_back(pTemp);
+                    svx::sidebar::TreeNode aTemp;
+                    aTemp.sNodeName = aPropertyValuePair;
+                    aCurrentChild.children.push_back(aTemp);
                 }
             }
         }
 
-        pCharNode.children.push_back(pCurrentChild);
+        aCharNode.children.push_back(aCurrentChild);
     }
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
@@ -205,8 +199,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
         aProperties = xPropertiesSet->getPropertySetInfo()->getProperties();
         OUString aParentParaStyle = xPropertiesStyle->getParentStyle();
-        svx::sidebar::TreeNode pCurrentChild;
-        pCurrentChild.sNodeName = sDisplayName;
+        svx::sidebar::TreeNode aCurrentChild;
+        aCurrentChild.sNodeName = sDisplayName;
 
         for (const beans::Property& rProperty : std::as_const(aProperties))
         {
@@ -224,19 +218,19 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                         aPropertyValuePair = aPropertyValuePair + "    !!<GREY>!! ";
                     else
                         aIsDefined[sPropName] = true;
-                    svx::sidebar::TreeNode pTemp;
-                    pTemp.sNodeName = aPropertyValuePair;
-                    pCurrentChild.children.push_back(pTemp);
+                    svx::sidebar::TreeNode aTemp;
+                    aTemp.sNodeName = aPropertyValuePair;
+                    aCurrentChild.children.push_back(aTemp);
                 }
             }
         }
 
-        pParaNode.children.push_back(pCurrentChild);
+        aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
     }
 
-    std::reverse(pParaNode.children.begin(),
-                 pParaNode.children.end()); // Parent style should be first then children
+    std::reverse(aParaNode.children.begin(),
+                 aParaNode.children.end()); // Parent style should be first then children
 
     /*
     Display Order :-
@@ -244,9 +238,9 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     CHARACTER STYLE
     DEFAULT FORMATTING
     */
-    aStore.push_back(pParaNode);
-    aStore.push_back(pCharNode);
-    aStore.push_back(pDFNode);
+    aStore.push_back(aParaNode);
+    aStore.push_back(aCharNode);
+    aStore.push_back(aDFNode);
 }
 
 IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, void)

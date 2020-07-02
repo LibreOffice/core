@@ -42,52 +42,50 @@ InspectorTextPanel::Create(vcl::Window* pParent,
 InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
-    , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
+    , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(25));
+    mpListBoxStyles->set_size_request(-1, mpListBoxStyles->get_height_rows(25));
 }
 
-static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& current,
+static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurrent,
                          weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> pResult = rListBoxStyles.make_iterator();
-    const OUString& rName = current.sNodeName;
+    const OUString& rName = rCurrent.sNodeName;
     rListBoxStyles.insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, pResult.get());
 
-    for (const TreeNode& ChildNode : current.children)
-        FillBox_Impl(rListBoxStyles, ChildNode, pResult.get());
+    for (const TreeNode& rChildNode : rCurrent.children)
+        FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
 }
 
 void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
 {
-    mxListBoxStyles->freeze();
-    mxListBoxStyles->clear();
-    for (const TreeNode& ChildNode : rStore)
+    mpListBoxStyles->freeze();
+    mpListBoxStyles->clear();
+    for (const TreeNode& rChildNode : rStore)
     {
-        FillBox_Impl(*mxListBoxStyles, ChildNode, nullptr);
+        FillBox_Impl(*mpListBoxStyles, rChildNode, nullptr);
     }
 
-    mxListBoxStyles->thaw();
+    mpListBoxStyles->thaw();
 
-    weld::TreeView* pTreeDiagram = mxListBoxStyles.get();
+    weld::TreeView* pTreeDiagram = mpListBoxStyles.get();
     pTreeDiagram->all_foreach([pTreeDiagram](weld::TreeIter& rEntry) {
         pTreeDiagram->expand_row(rEntry);
         return false;
     });
 
-    std::unique_ptr<weld::TreeIter> xEntry = mxListBoxStyles->make_iterator();
-    if (!mxListBoxStyles->get_iter_first(*xEntry))
-        return;
-    if (!mxListBoxStyles->iter_next(*xEntry))
-        return;
-    mxListBoxStyles->collapse_row(*xEntry); // Collapse "Default Paragraph Style"
+    std::unique_ptr<weld::TreeIter> pEntry = mpListBoxStyles->make_iterator();
+    mpListBoxStyles->get_iter_first(*pEntry);
+    mpListBoxStyles->iter_next(*pEntry);
+    mpListBoxStyles->collapse_row(*pEntry); // Collapse "Default Paragraph Style"
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
 
 void InspectorTextPanel::dispose()
 {
-    mxListBoxStyles.reset();
+    mpListBoxStyles.reset();
 
     PanelLayout::dispose();
 }
