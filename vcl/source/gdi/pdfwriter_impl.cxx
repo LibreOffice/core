@@ -115,13 +115,23 @@ static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSIO
 #define MAX_SIGNATURE_CONTENT_LENGTH 50000
 #endif
 
-const sal_Int32 nLog10Divisor = 3;
-const double fDivisor = 1000.0;
+namespace
+{
 
-static double pixelToPoint( double px ) { return px/fDivisor; }
-static sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
+constexpr sal_Int32 nLog10Divisor = 3;
+constexpr double fDivisor = 1000.0;
 
-static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
+constexpr double pixelToPoint(double px)
+{
+    return px / fDivisor;
+}
+
+constexpr sal_Int32 pointToPixel(double pt)
+{
+    return sal_Int32(pt * fDivisor);
+}
+
+void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
 {
     static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -129,7 +139,7 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
 
-static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
+void appendName( const OUString& rStr, OStringBuffer& rBuffer )
 {
 // FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
 // I guess than when reading the #xx sequence it will count for a single character.
@@ -159,7 +169,7 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
     }
 }
 
-static void appendName( const char* pStr, OStringBuffer& rBuffer )
+void appendName( const char* pStr, OStringBuffer& rBuffer )
 {
     // FIXME i59651 see above
     while( pStr && *pStr )
@@ -181,7 +191,7 @@ static void appendName( const char* pStr, OStringBuffer& rBuffer )
 }
 
 //used only to emit encoded passwords
-static void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
+void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
 {
     while( nLength )
     {
@@ -240,7 +250,7 @@ static void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuf
  * Further limitation: it is advisable to use standard ASCII characters for
  * OOo bookmarks.
 */
-static void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
+void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
 {
     const sal_Unicode* pStr = rString.getStr();
     sal_Int32 nLen = rString.getLength();
@@ -264,6 +274,8 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
     }
 }
 
+} // end anonymous namespace
+
 namespace vcl
 {
 const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
@@ -272,8 +284,11 @@ const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
     0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
 };
 
+namespace
+{
+
 template < class GEOMETRY >
-static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
+GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
 {
     GEOMETRY aPoint;
     if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
@@ -286,6 +301,8 @@ static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, Out
     }
     return aPoint;
 }
+
+} // end anonymous namespace
 
 void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
 {
@@ -453,7 +470,10 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     m_aWidgets[i_nWidgetIndex].m_aName = aPartialName;
 }
 
-static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
+namespace
+{
+
+void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
 {
     if( nValue < 0 )
     {
@@ -479,7 +499,7 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
 }
 
 // appends a double. PDF does not accept exponential format, only fixed point
-static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
+void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
 {
     bool bNeg = false;
     if( fValue < 0.0 )
@@ -520,7 +540,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
     }
 }
 
-static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
+void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
 {
 
     if( rColor != COL_TRANSPARENT )
@@ -540,6 +560,8 @@ static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConv
         }
     }
 }
+
+} // end anonymous namespace
 
 void PDFWriterImpl::appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
 {
