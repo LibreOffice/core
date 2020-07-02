@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "ab4ca2bb_18afbb22",
+        "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T12:00:31Z",
+      "side": 1,
+      "message": "This is not a published interface, so I thought that was not needed. No problem to add this.",
+      "parentUuid": "756f342b_530bd6b9",
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d797d4d_f109877d",
         "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
         "patchSetId": 4
