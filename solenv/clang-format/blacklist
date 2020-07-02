@@ -1686,6 +1686,7 @@ compilerplugins/clang/rangedforcopy.cxx
 compilerplugins/clang/redundantcast.cxx
 compilerplugins/clang/redundantinline.cxx
 compilerplugins/clang/redundantpointerops.cxx
+compilerplugins/clang/redundantstatic.cxx
 compilerplugins/clang/refcounting.cxx
 compilerplugins/clang/rendercontext.cxx
 compilerplugins/clang/reservedid.cxx
@@ -1698,7 +1699,6 @@ compilerplugins/clang/sharedvisitor/generator.cxx
 compilerplugins/clang/simplifybool.cxx
 compilerplugins/clang/singlevalfields.cxx
 compilerplugins/clang/staticaccess.cxx
-compilerplugins/clang/staticanonymous.cxx
 compilerplugins/clang/staticmethods.cxx
 compilerplugins/clang/store/badvectorinit.cxx
 compilerplugins/clang/store/bodynotinblock.cxx

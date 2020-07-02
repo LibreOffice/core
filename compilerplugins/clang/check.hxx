@@ -51,6 +51,8 @@ public:
 
     TypeCheck ConstVolatile() const;
 
+    TypeCheck ConstNonVolatile() const;
+
     TerminalCheck Void() const;
 
     TerminalCheck Char() const;
