@@ -700,7 +700,9 @@ static void exec_javaldx(Args *args)
             *chomp = '\0';
     }
 
-    extend_library_path(newpath);
+    if (newpath[0] != '\0') {
+        extend_library_path(newpath);
+    }
 
     if (javaldx)
         osl_freeProcessHandle(javaldx);

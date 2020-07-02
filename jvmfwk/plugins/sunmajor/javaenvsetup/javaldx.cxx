@@ -59,6 +59,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (errcode == JFW_E_NONE && !bEnabled)
         {
                 //Do not do any preparation because that may only slow startup time.
+            fprintf(stdout, "\n");
             return 0;
         }
         else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
