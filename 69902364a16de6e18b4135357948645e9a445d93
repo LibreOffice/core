@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "59d845cb_eb4a5c2e",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-07-02T19:24:16Z",
+      "side": 1,
+      "message": "I observed it when debugging, so I guess it is a side-effect of the function. Maybe it is set to \"PAUSED\" while it is buffering at the new position.\n\nDo you think I should remove the comment, to avoid confusion?",
+      "parentUuid": "c7e878f4_afa76277",
+      "range": {
+        "startLine": 682,
+        "startChar": 18,
+        "endLine": 682,
+        "endChar": 72
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42696bc4_5b826b6e",
         "filename": "avmedia/source/gstreamer/gstplayer.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-01T16:35:12Z",
       "side": 1,
       "message": "if \"gst_element_seek\" method changes the status to \"GST_STATE_PAUSED\", why set again this state?",
+      "range": {
+        "startLine": 691,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 61
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d343756_939284b5",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-07-02T19:24:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure why this logic is there. I tested with it removed, and everything still worked fine on my PC (Ubuntu 18.04). I guess it may be required on other Linux platforms.\n\nCan we find out who wrote it originally, so we can ask?",
+      "parentUuid": "42696bc4_5b826b6e",
       "range": {
         "startLine": 691,
         "startChar": 4,
