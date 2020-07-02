@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cc2bc9b_36249852",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T15:23:20Z",
+      "side": 1,
+      "message": "this comment appertained to\n\n  return senseLen[POSITIVE] \u003e\u003d senseLen[NEGATIVE];",
+      "range": {
+        "startLine": 404,
+        "startChar": 16,
+        "endLine": 406,
+        "endChar": 27
+      },
+      "revId": "eadfb8d40174c875ce1affd42ba41a4e6a9bc8b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
