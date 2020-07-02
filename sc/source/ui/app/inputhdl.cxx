@@ -2860,8 +2860,7 @@ static bool lcl_IsNumber(const OUString& rString)
     for (sal_Int32 i=0; i<nLen; i++)
     {
         sal_Unicode c = rString[i];
-        if ( c < '0' || c > '9' )
-            return false;
+        if ( c < '0' || c > '9' ) return false;
     }
     return true;
 }

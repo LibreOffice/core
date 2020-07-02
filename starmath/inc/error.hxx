@@ -20,6 +20,7 @@
 #define INCLUDED_STARMATH_INC_ERROR_HXX
 
 #include <rtl/ustring.hxx>
+#include <strings.hxx>
 
 class SmNode;
 

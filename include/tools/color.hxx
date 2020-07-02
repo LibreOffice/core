@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <osl/endian.h>
+#define MAX_COLOR_NUMBER 16777215 //255 + 255*256 + 255*256*256
 
 namespace color
 {

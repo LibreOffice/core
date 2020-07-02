@@ -90,15 +90,15 @@ enum class SmHorAlign {
 
 class SmFormat final : public SfxBroadcaster
 {
-    SmFace      vFont[FNT_END + 1];
-    bool        bDefaultFont[FNT_END + 1];
-    Size        aBaseSize;
+    SmFace          vFont[FNT_END + 1];
+    bool            bDefaultFont[FNT_END + 1];
+    Size            aBaseSize;
     sal_uInt16      vSize[SIZ_END + 1];
     sal_uInt16      vDist[DIS_END + 1];
-    SmHorAlign  eHorAlign;
+    SmHorAlign      eHorAlign;
     sal_Int16       nGreekCharStyle;
-    bool        bIsTextmode,
-                bScaleNormalBrackets;
+    bool            bIsTextmode,
+                    bScaleNormalBrackets;
 
 public:
     SmFormat();
