@@ -28,8 +28,8 @@
 /**
  * The range in which we can perform add/sub without fear of overflow
  */
-static const sal_Int32 MY_MAXLONG  = 0x3fffffff;
-static const sal_Int32 MY_MINLONG  = -MY_MAXLONG;
+const sal_Int32 MY_MAXLONG  = 0x3fffffff;
+const sal_Int32 MY_MINLONG  = -MY_MAXLONG;
 
 /*
  * The algorithms for Addition, Subtraction, Multiplication and Division

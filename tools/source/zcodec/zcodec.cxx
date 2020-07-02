@@ -35,7 +35,7 @@
 #define GZ_COMMENT      0x10 /* bit 4 set: file comment present */
 #define GZ_RESERVED     0xE0 /* bits 5..7: reserved */
 
-static const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
+const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 
 ZCodec::ZCodec( size_t nInBufSize, size_t nOutBufSize )
     : meState(STATE_INIT)

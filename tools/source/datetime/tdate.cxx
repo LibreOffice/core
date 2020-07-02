@@ -22,7 +22,7 @@
 
 #include <systemdatetime.hxx>
 
-static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
+const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                              31, 31, 30, 31, 30, 31 };
 
 // Once upon a time the number of days we internally handled was limited to
@@ -38,8 +38,8 @@ static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
 /* XXX can that dbconversion cope with years > 9999 or negative years at all?
  * Database fields may be limited to positive 4 digits. */
 
-static const sal_Int32 MIN_DAYS = -11968265;     // -32768-01-01
-static const sal_Int32 MAX_DAYS =  11967900;     //  32767-12-31
+const sal_Int32 MIN_DAYS = -11968265;     // -32768-01-01
+const sal_Int32 MAX_DAYS =  11967900;     //  32767-12-31
 
 namespace
 {

@@ -190,7 +190,7 @@ bool INetMIMEMessage::ParseDateField (
               (rDateTime.GetHour() > 23)    ));
 }
 
-static const std::map<InetMessageMime, const char*> ImplINetMIMEMessageHeaderData =
+const std::map<InetMessageMime, const char*> ImplINetMIMEMessageHeaderData =
 {
     { InetMessageMime::VERSION, "MIME-Version"},
     { InetMessageMime::CONTENT_DISPOSITION, "Content-Disposition"},

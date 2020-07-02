@@ -22,8 +22,8 @@
 #include <osl/diagnose.h>
 
     // Near and far clipping planes
-static constexpr double gfNearBound = 0.001;
-static constexpr double gfFarBound = 1.001;
+constexpr double gfNearBound = 0.001;
+constexpr double gfFarBound = 1.001;
 
 
 // B3dTransformationSet --------------------------------------------------------
