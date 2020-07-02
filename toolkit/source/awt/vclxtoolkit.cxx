@@ -691,7 +691,7 @@ struct ComponentInfo
     WindowType      nWinType;
 };
 
-static ComponentInfo const aComponentInfos [] =
+ComponentInfo const aComponentInfos [] =
 {
     { OUStringLiteral("animatedimages"),     WindowType::CONTROL },
     { OUStringLiteral("buttondialog"),       WindowType::BUTTONDIALOG },
@@ -809,7 +809,7 @@ struct MessageBoxTypeInfo
     sal_Int32                nLen;
 };
 
-static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
+const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
 {
     { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
     { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },
@@ -842,8 +842,8 @@ bool lcl_convertMessageBoxType(
 
 #ifndef IOS
 
-static sal_Int32                            nVCLToolkitInstanceCount = 0;
-static bool                                 bInitedByVCLToolkit = false;
+sal_Int32                            nVCLToolkitInstanceCount = 0;
+bool                                 bInitedByVCLToolkit = false;
 
 osl::Mutex & getInitMutex()
 {

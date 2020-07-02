@@ -58,7 +58,7 @@ namespace toolkitform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    static const char FM_PROP_NAME[] = "Name";
+    const char FM_PROP_NAME[] = "Name";
 
     namespace
     {

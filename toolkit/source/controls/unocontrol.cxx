@@ -63,7 +63,7 @@ struct LanguageDependentProp
 
 }
 
-static const LanguageDependentProp aLanguageDependentProp[] =
+const LanguageDependentProp aLanguageDependentProp[] =
 {
     { "Text",            4 },
     { "Label",           5 },

@@ -38,12 +38,12 @@ namespace toolkit
     namespace
     {
 #ifndef DISABLE_DYNLOADING
-        static oslModule                                s_hAccessibleImplementationModule = nullptr;
+        oslModule                                s_hAccessibleImplementationModule = nullptr;
 #endif
 #if HAVE_FEATURE_DESKTOP
-        static GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = nullptr;
+        GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = nullptr;
 #endif
-        static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
+        ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
 
 
