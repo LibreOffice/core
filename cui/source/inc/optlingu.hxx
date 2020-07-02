@@ -75,8 +75,9 @@ public:
     virtual ~SvxEditModulesDlg() override;
 };
 
-// class SvxLinguTabPage -------------------------------------------------
+struct ImplSVEvent;
 
+// class SvxLinguTabPage -------------------------------------------------
 class SvxLinguTabPage : public SfxTabPage
 {
 private:
@@ -94,6 +95,8 @@ private:
     int nUPN_HYPH_MIN_WORD_LENGTH;
     int nUPN_HYPH_MIN_LEADING;
     int nUPN_HYPH_MIN_TRAILING;
+
+    ImplSVEvent* m_nDlbClickEventId;
 
     css::uno::Reference<
         css::linguistic2::XLinguProperties >     xProp;

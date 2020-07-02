@@ -58,6 +58,8 @@ namespace sw { namespace mark
     private:
             OUString const m_aName;
             OUString m_aShortName;
+            bool m_bHidden;
+            OUString m_aHideCondition;
             vcl::KeyCode m_aCode;
             IDocumentMarkAccess::MarkType const m_eOrigBkmType;
             sal_uLong m_nNode1;

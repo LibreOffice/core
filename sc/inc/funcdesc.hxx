@@ -121,6 +121,13 @@ public:
     virtual sal_uInt32 getVarArgsStart() const override ;
 
     /**
+      Returns maximum number of (variable) arguments
+
+      @return   maximum number of arguments, or 0 if there is no specific limit other than the general limit
+    */
+    virtual sal_uInt32 getVarArgsLimit() const override ;
+
+    /**
       Returns description of parameter at given position
 
       @param _nPos
@@ -216,6 +223,7 @@ public:
     sal_uInt16            nCategory;              /**< Function category */
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
     sal_uInt16            nVarArgsStart;          /**< Start of variable arguments, for numbering */
+    sal_uInt16            nVarArgsLimit;          /**< Limit maximum of (variable) arguments, for numbering */
     OString               sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  mbHidden            :1; /**< Whether function is hidden */

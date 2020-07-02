@@ -144,6 +144,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DISABLE_OFF_PAGE_POSITIONING,
     HANDLE_EMPTY_DB_FIELD_HIDES_PARA,
     HANDLE_CONTINUOUS_ENDNOTES,
+    HANDLE_HEADER_SPACING_BELOW_LAST_PARA,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -229,6 +230,8 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("DisableOffPagePositioning"),       HANDLE_DISABLE_OFF_PAGE_POSITIONING,         cppu::UnoType<bool>::get(),           0},
         { OUString("EmptyDbFieldHidesPara"), HANDLE_EMPTY_DB_FIELD_HIDES_PARA, cppu::UnoType<bool>::get(), 0 },
         { OUString("ContinuousEndnotes"), HANDLE_CONTINUOUS_ENDNOTES, cppu::UnoType<bool>::get(), 0 },
+        { OUString("HeaderSpacingBelowLastPara"), HANDLE_HEADER_SPACING_BELOW_LAST_PARA, cppu::UnoType<bool>::get(), 0 },
+
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -937,6 +940,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_HEADER_SPACING_BELOW_LAST_PARA:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1397,6 +1410,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue
                 <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::CONTINUOUS_ENDNOTES);
+        }
+        break;
+        case HANDLE_HEADER_SPACING_BELOW_LAST_PARA:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA);
         }
         break;
         default:

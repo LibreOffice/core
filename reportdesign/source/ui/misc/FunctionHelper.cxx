@@ -234,6 +234,11 @@ sal_uInt32 FunctionDescription::getVarArgsStart() const
     return nLen ? nLen - 1 : 0;
 }
 
+sal_uInt32 FunctionDescription::getVarArgsLimit() const
+{
+    return 0;
+}
+
 OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )

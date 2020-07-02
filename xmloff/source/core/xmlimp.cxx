@@ -1621,7 +1621,7 @@ void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 
 void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 {
-    if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & SvXMLImportFlags::CONTENT) )
+    if (pAutoStyles && mxNumberStyles.is())
     {
         uno::Reference<xml::sax::XAttributeList> xAttrList;
         const uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
@@ -1632,7 +1632,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
             if (aAny >>= nKey)
             {
                 SvXMLStyleContext* pContext = new SvXMLNumFormatContext(
-                    *this, XML_NAMESPACE_NUMBER, name, xAttrList, nKey, *pAutoStyles);
+                    *this, XML_NAMESPACE_NUMBER, name, xAttrList, nKey,
+                    GetDataStylesImport()->GetLanguageForKey(nKey), *pAutoStyles);
                 pAutoStyles->AddStyle(*pContext);
             }
         }

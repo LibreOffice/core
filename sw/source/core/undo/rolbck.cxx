@@ -559,8 +559,7 @@ SwHistoryBookmark::SwHistoryBookmark(
     bool bSaveOtherPos)
     : SwHistoryHint(HSTRY_BOOKMARK)
     , m_aName(rBkmk.GetName())
-    , m_aShortName()
-    , m_aKeycode()
+    , m_bHidden(false)
     , m_nNode(bSavePos ?
         rBkmk.GetMarkPos().nNode.GetIndex() : 0)
     , m_nOtherNode(bSaveOtherPos ?
@@ -579,6 +578,8 @@ SwHistoryBookmark::SwHistoryBookmark(
     {
         m_aKeycode = pBookmark->GetKeyCode();
         m_aShortName = pBookmark->GetShortName();
+        m_bHidden = pBookmark->IsHidden();
+        m_aHideCondition = pBookmark->GetHideCondition();
 
         ::sfx2::Metadatable const*const pMetadatable(
                 dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
@@ -653,6 +654,9 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
         {
             pBookmark->SetKeyCode(m_aKeycode);
             pBookmark->SetShortName(m_aShortName);
+            pBookmark->Hide(m_bHidden);
+            pBookmark->SetHideCondition(m_aHideCondition);
+
             if (m_pMetadataUndo)
             {
                 ::sfx2::Metadatable * const pMeta(

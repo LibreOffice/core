@@ -56,6 +56,7 @@ private:
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
+    void*           nTipVisible;
     bool            bDragMoved;
 
     bool            bIgnoreMove;

@@ -526,6 +526,8 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
     int ch;
     OStringBuffer sBuffer(256);
 
+    assert(nTyp == 0 || nTyp == 1 || nTyp == 2);
+
     while (!checkeof(ch = yyinput()))
     {
         if (ch == delim)
@@ -554,7 +556,7 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
             }
 
         }
-        else if (nTyp != 1 && (ch == '\r' || ch == '\n') )
+        else if (nTyp == 2 && (ch == '\r' || ch == '\n') )
             break;
         else
         {

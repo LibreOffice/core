@@ -964,32 +964,32 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if (pAPos &&
                             pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode)
                         {
-                                if( !m_pHistory )
-                                    m_pHistory.reset( new SwHistory );
+                            if (!m_pHistory)
+                                m_pHistory.reset( new SwHistory );
 
-                                if (IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
-                                {
-                                    m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
-                                    // reset n so that no Format is skipped
-                                    n = n >= rSpzArr.size()
-                                        ? rSpzArr.size() : n+1;
-                                }
-                                // Moving the anchor?
-                                else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
-                                        & nDelContentType) &&
-                                    // at least for calls from SwUndoDelete,
-                                    // this should work - other Undos don't
-                                    // remember the order of the cursor
-                                    (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
-                                    // Do not try to move the anchor to a table!
-                                    && rMark.nNode.GetNode().IsTextNode())
-                                {
-                                    m_pHistory->AddChangeFlyAnchor(*pFormat);
-                                    SwFormatAnchor aAnch( *pAnchor );
-                                    SwPosition aPos( rMark.nNode );
-                                    aAnch.SetAnchor( &aPos );
-                                    pFormat->SetFormatAttr( aAnch );
-                                }
+                            if (!(DelContentType::Replace & nDelContentType)
+                                && IsSelectFrameAnchoredAtPara(*pAPos, *pStt, *pEnd, nDelContentType))
+                            {
+                                m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
+                                // reset n so that no Format is skipped
+                                n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
+                            }
+                            // Moving the anchor?
+                            else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
+                                    & nDelContentType) &&
+                                // at least for calls from SwUndoDelete,
+                                // this should work - other Undos don't
+                                // remember the order of the cursor
+                                (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
+                                // Do not try to move the anchor to a table!
+                                && rMark.nNode.GetNode().IsTextNode())
+                            {
+                                m_pHistory->AddChangeFlyAnchor(*pFormat);
+                                SwFormatAnchor aAnch( *pAnchor );
+                                SwPosition aPos( rMark.nNode );
+                                aAnch.SetAnchor( &aPos );
+                                pFormat->SetFormatAttr( aAnch );
+                            }
                         }
                     }
                     break;
@@ -999,7 +999,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     {
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
-                        if (IsDestroyFrameAnchoredAtChar(
+                        if (!(DelContentType::Replace & nDelContentType)
+                            && IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, nDelContentType))
                         {
                             m_pHistory->AddDeleteFly(*pFormat, nChainInsPos);
@@ -1518,7 +1519,9 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
     SwContentNode *const pNode(SwNodes::GoPrevious(&node));
     assert(pNode);
     assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
-    return node == rAnchorPos.nNode && rAnchorPos.nContent == pNode->Len();
+    return node == rAnchorPos.nNode
+        // at-para fly has no SwIndex!
+        && (rAnchorPos.nContent == pNode->Len() || rAnchorPos.nContent.GetIdxReg() == nullptr);
 }
 
 static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
@@ -1530,6 +1533,19 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
     (void) pNode;
     assert(node <= rAnchorPos.nNode);
     return node == rAnchorPos.nNode && rAnchorPos.nContent == 0;
+}
+
+/// passed start / end position could be on section start / end node
+static bool IsAtEndOfSection2(SwPosition const& rPos)
+{
+    return rPos.nNode.GetNode().IsEndNode()
+        || IsAtEndOfSection(rPos);
+}
+
+static bool IsAtStartOfSection2(SwPosition const& rPos)
+{
+    return rPos.nNode.GetNode().IsStartNode()
+        || IsAtStartOfSection(rPos);
 }
 
 static bool IsNotBackspaceHeuristic(
@@ -1560,22 +1576,26 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         return (rStart < rAnchorPos) && (rAnchorPos < rEnd);
     }
 
+    if (nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
+    {   // exclude selection start and end node
+        return (rAnchorPos.nNode < rEnd.nNode)
+            && (rStart.nNode < rAnchorPos.nNode);
+    }
+
     // in general, exclude the start and end position
     return ((rStart < rAnchorPos)
             || (rStart == rAnchorPos
-                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection(rEnd)))))
+                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection2(rEnd)))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
-                && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection(rStart)))));
+                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection2(rStart)))));
 }
 
 bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
@@ -1610,14 +1630,43 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtStartOfSection(rStart))))
+                    || (IsAtStartOfSection2(rStart) && IsAtEndOfSection2(rEnd)))))
         && ((rAnchorPos.nNode < rEnd.nNode)
             || (rAnchorPos.nNode == rEnd.nNode
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtEndOfSection(rEnd))));
+                    || (IsAtEndOfSection2(rEnd) && IsAtStartOfSection2(rStart)))));
+}
+
+bool IsFlySelectedByCursor(SwDoc const & rDoc,
+        SwPosition const & rStart, SwPosition const & rEnd)
+{
+    for (SwFrameFormat const*const pFly : *rDoc.GetSpzFrameFormats())
+    {
+        SwFormatAnchor const& rAnchor(pFly->GetAnchor());
+        switch (rAnchor.GetAnchorId())
+        {
+            case RndStdIds::FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_PARA:
+            {
+                SwPosition const*const pAnchorPos(rAnchor.GetContentAnchor());
+                // can this really be null?
+                if (pAnchorPos != nullptr
+                    && ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+                        ? IsDestroyFrameAnchoredAtChar(*pAnchorPos, rStart, rEnd)
+                        : IsSelectFrameAnchoredAtPara(*pAnchorPos, rStart, rEnd)))
+                {
+                    return true;
+                }
+            }
+            break;
+            default: // other types not relevant
+            break;
+        }
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

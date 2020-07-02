@@ -57,6 +57,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
             nDragNo     ( 0 ),
             nDragStart  ( 0 ),
             nDragPos    ( 0 ),
+            nTipVisible ( nullptr ),
             bDragMoved  ( false ),
             bIgnoreMove ( false ),
             bInRefMode  ( false ),
@@ -712,6 +713,11 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         DrawInvert( nDragPos );
         ReleaseMouse();
+        if (nTipVisible)
+        {
+            Help::HidePopover(this, nTipVisible);
+            nTipVisible = nullptr;
+        }
         bDragging = false;
 
         long nScrPos    = GetScrPos( nDragNo );
@@ -879,6 +885,11 @@ void ScHeaderControl::StopMarking()
     if ( bDragging )
     {
         DrawInvert( nDragPos );
+        if (nTipVisible)
+        {
+            Help::HidePopover(this, nTipVisible);
+            nTipVisible = nullptr;
+        }
         bDragging = false;
     }
 
@@ -926,7 +937,9 @@ void ScHeaderControl::ShowDragHelp()
         aRect.SetRight( aRect.Left() );
         aRect.SetBottom( aRect.Top() );
 
-        Help::ShowQuickHelp(this, aRect, aHelpStr, nAlign);
+        if (nTipVisible)
+            Help::HidePopover(this, nTipVisible);
+        nTipVisible = Help::ShowPopover(this, aRect, aHelpStr, nAlign);
     }
 }
 

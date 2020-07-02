@@ -1837,6 +1837,9 @@ void SwWW8ImplReader::ImportDop()
     // tdf#117923
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, true);
+    // tdf#128195
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, true);
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;

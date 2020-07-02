@@ -179,7 +179,7 @@ ScTransferObj::~ScTransferObj()
     SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetDragData().pCellTransfer == this )
+    if (pScMod && pScMod->GetDragData().pCellTransfer == this)
     {
         OSL_FAIL("ScTransferObj wasn't released");
         pScMod->ResetDragObject();

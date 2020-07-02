@@ -31,6 +31,7 @@
 #include <edimp.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
+#include <undobj.hxx>
 #include <SwRewriter.hxx>
 #include <globals.hrc>
 
@@ -41,8 +42,12 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
 {
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // only for selections
-    if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
+    if (!rPam.HasMark()
+        || (*rPam.GetPoint() == *rPam.GetMark()
+            && !IsFlySelectedByCursor(*GetDoc(), *rPam.Start(), *rPam.End())))
+    {
         return;
+    }
 
     // Is the selection in a table? Then delete only the content of the selected boxes.
     // Here, there are two cases:
@@ -101,7 +106,17 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
-            pNewPam->Start()->nNode = pNewPam->Start()->nNode.GetNode().FindTableNode()->GetIndex();
+            while (SwTableNode const* pTableNode =
+                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
+            {
+                pNewPam->Start()->nNode = *pTableNode;
+            }
+            // tdf#133990 ensure section is included in SwUndoDelete
+            while (SwSectionNode const* pSectionNode =
+                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
+            {
+                pNewPam->Start()->nNode = *pSectionNode;
+            }
             pNewPam->Start()->nContent.Assign(nullptr, 0);
             pPam = pNewPam.get();
         }

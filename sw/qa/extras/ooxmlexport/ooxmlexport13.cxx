@@ -393,6 +393,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePage
     assertXPath(pDump, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "Last line on page 1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocPtr pDump = parseLayoutDump();
+
+    // There are three tabs with default width
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
 {
     //MS Compatibility flag: SplitPgBreakAndParaMark
@@ -505,7 +517,12 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
-    if (!mbExported) // importing the ODT, an input field
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+
+    if (!mbExported || xDrawPage->getCount() == 0) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -859,12 +876,32 @@ DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
 
 DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
 {
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+
     // Combobox without an item list lost during import
-    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
+    if (xDrawPage->getCount() > 0)
+    {
+        uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
+    }
+    else
+    {
+        // ComboBox was imported as DropDown text field
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
+
+        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aItems.getLength());
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")

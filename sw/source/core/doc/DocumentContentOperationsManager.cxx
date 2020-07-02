@@ -297,6 +297,8 @@ namespace sw
             {
                 pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());
                 pNewBookmark->SetShortName(pOldBookmark->GetShortName());
+                pNewBookmark->Hide(pOldBookmark->IsHidden());
+                pNewBookmark->SetHideCondition(pOldBookmark->GetHideCondition());
             }
             ::sw::mark::IFieldmark* const pNewFieldmark =
                 dynamic_cast< ::sw::mark::IFieldmark* const >(pNewMark);
@@ -2005,6 +2007,11 @@ void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
     lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
 
+    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    {
+        rPam.Normalize(false); // tdf#127635 put point at the end of deletion
+    }
+
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
         && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
@@ -2176,10 +2183,17 @@ bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam,
     if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
-    return lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    bool const ret = lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? &DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl
                 : &DocumentContentOperationsManager::DeleteAndJoinImpl,
                 bForceJoinNext );
+
+    if (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    {
+        rPam.Normalize(false); // tdf#127635 put point at the end of deletion
+    }
+
+    return ret;
 }
 
 // It seems that this is mostly used by SwDoc internals; the only
@@ -3771,6 +3785,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             }
         }
 
+        // Ignore TextBoxes, they are already handled in
+        // sw::DocumentLayoutManager::CopyLayoutFormat().
+        if (SwTextBoxHelper::isTextBox(it->GetFormat(), RES_FLYFRMFMT))
+        {
+            it = aSet.erase(it);
+            continue;
+        }
+
         // Copy the format and set the new anchor
         aVecSwFrameFormat.push_back( pDest->getIDocumentLayoutAccess().CopyLayoutFormat( *(*it).GetFormat(),
                 aAnchor, false, true ) );
@@ -4057,8 +4079,11 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 {
     SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
-    if( !rPam.HasMark() || *pStt >= *pEnd )
+    if (!rPam.HasMark()
+        || (*pStt == *pEnd && !IsFlySelectedByCursor(m_rDoc, *pStt, *pEnd)))
+    {
         return false;
+    }
 
     if( m_rDoc.GetAutoCorrExceptWord() )
     {
@@ -4831,10 +4856,10 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     }
 
                     // copy at-char flys in rPam
-                    aInsPos = *pDestTextNd; // update to new (start) node for flys
+                    SwNodeIndex temp(*pDestTextNd); // update to new (start) node for flys
                     // tdf#126626 prevent duplicate Undos
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    CopyFlyInFlyImpl(aRg, &rPam, aInsPos, false);
+                    CopyFlyInFlyImpl(aRg, &rPam, temp, false);
 
                     break;
                 }

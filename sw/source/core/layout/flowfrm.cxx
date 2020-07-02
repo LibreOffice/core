@@ -1696,6 +1696,10 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
         nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
     }
 
+    // tdf#128195 Consider para spacing below last paragraph in header
+    if (!m_rThis.IsInFly() && m_rThis.FindFooterOrHeader() && !GetFollow() && !m_rThis.GetIndNext())
+        nLowerSpace += _pAttrs->GetULSpace().GetLower() + _pAttrs->CalcLineSpacing();
+
     return nLowerSpace;
 }
 

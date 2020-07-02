@@ -229,26 +229,26 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     ? DelContentType::AllMask|DelContentType::WriterfilterHack
                     : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))))
         {
-                // If the Fly is deleted, all Flys in its content have to be deleted too.
-                const SwFormatContent &rContent = pFormat->GetContent();
-                // But only fly formats own their content, not draw formats.
-                if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
-                {
-                    DelFlyInRange( *rContent.GetContentIdx(),
-                                    SwNodeIndex( *rContent.GetContentIdx()->
-                                            GetNode().EndOfSectionNode() ));
-                    // Position could have been moved!
-                    if( i > rTable.size() )
-                        i = rTable.size();
-                    else if( pFormat != rTable[i] )
-                        i = std::distance(rTable.begin(), rTable.find( pFormat ));
-                }
-
-                pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
-
-                // DelLayoutFormat can also trigger the deletion of objects.
-                if( i > rTable.size() )
+            // If the Fly is deleted, all Flys in its content have to be deleted too.
+            const SwFormatContent &rContent = pFormat->GetContent();
+            // But only fly formats own their content, not draw formats.
+            if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
+            {
+                DelFlyInRange( *rContent.GetContentIdx(),
+                                SwNodeIndex( *rContent.GetContentIdx()->
+                                        GetNode().EndOfSectionNode() ));
+                // Position could have been moved!
+                if (i > rTable.size())
                     i = rTable.size();
+                else if (pFormat != rTable[i])
+                    i = std::distance(rTable.begin(), rTable.find( pFormat ));
+            }
+
+            pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+
+            // DelLayoutFormat can also trigger the deletion of objects.
+            if (i > rTable.size())
+                i = rTable.size();
         }
     }
 }
@@ -410,7 +410,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pOldTextNd->FormatToTextAttr( pTextNd );
 
                 const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-                pContentStore->Save( pDoc, aOldIdx.GetIndex(), pOldTextNd->Len() );
+                pContentStore->Save(pDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
 
                 SwIndex aAlphaIdx(pTextNd);
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwIndex(pOldTextNd),

@@ -135,12 +135,13 @@ enum class DelContentType : sal_uInt16
     Fly          = 0x02,
     Bkm          = 0x08,
     AllMask      = 0x0b,
+    Replace      = 0x10,
     WriterfilterHack = 0x20,
     ExcludeFlyAtStartEnd = 0x40,
     CheckNoCntnt = 0x80,
 };
 namespace o3tl {
-    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xeb> {};
+    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xfb> {};
 }
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
@@ -151,6 +152,9 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
 bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType = DelContentType::AllMask);
+/// check at-char and at-para flys in rDoc
+bool IsFlySelectedByCursor(SwDoc const & rDoc,
+        SwPosition const & rStart, SwPosition const & rEnd);
 
 // This class has to be inherited into an Undo-object if it saves content
 // for Redo/Undo...

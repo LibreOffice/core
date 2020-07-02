@@ -29,6 +29,13 @@ Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {
     const MapMode aMapTwip(MapUnit::MapTwip);
     Size aSize(rGraphic.GetPrefSize());
+
+    if (!aSize.getWidth() && !aSize.getHeight())
+    {
+        const_cast<Graphic&>(rGraphic).makeAvailable();
+        aSize = rGraphic.GetPrefSize();
+    }
+
     if (MapUnit::MapPixel == rGraphic.GetPrefMapMode().GetMapUnit())
     {
         if (!pOutDev)

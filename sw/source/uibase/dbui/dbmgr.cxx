@@ -45,6 +45,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vcl/errinf.hxx>
+#include <vcl/scheduler.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1394,7 +1395,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     //TODO xProgressDlg->queue_draw();
                 }
 
-                Application::Reschedule( true );
+                Scheduler::ProcessEventsToIdle();
 
                 // Create a copy of the source document and work with that one instead of the source.
                 // If we're not in the single file mode (which requires modifying the document for the merging),

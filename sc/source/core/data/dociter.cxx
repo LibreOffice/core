@@ -892,14 +892,17 @@ void ScCellIterator::init()
     if (maStartPos.Tab() > maEndPos.Tab())
         maStartPos.SetTab(maEndPos.Tab());
 
-    maCurPos = maStartPos;
-
-    if (!mpDoc->maTabs[maCurPos.Tab()])
+    if (!mpDoc->maTabs[maStartPos.Tab()])
     {
         OSL_FAIL("Table not found");
         maStartPos = ScAddress(mpDoc->MaxCol()+1, mpDoc->MaxRow()+1, MAXTAB+1); // -> Abort on GetFirst.
-        maCurPos = maStartPos;
     }
+    else
+    {
+        maStartPos.SetCol(mpDoc->maTabs[maStartPos.Tab()]->ClampToAllocatedColumns(maStartPos.Col()));
+    }
+
+    maCurPos = maStartPos;
 }
 
 bool ScCellIterator::getCurrent()
