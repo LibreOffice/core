@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
-    static const struct ::cppu::ImplementationEntry s_entries [] =
+    const struct ::cppu::ImplementationEntry s_entries [] =
     {
         {
             create_DocumentHandlerImpl, getImplementationName_DocumentHandlerImpl,

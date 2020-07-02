@@ -1388,7 +1388,7 @@ bool ImportContext::importImageScaleModeProperty(
     return false;
 }
 
-static StringTriple const s_aEventTranslations[] =
+StringTriple const s_aEventTranslations[] =
 {
     // from xmloff/source/forms/formevents.cxx
     // 28.09.2001 tbe added on-adjustmentvaluechange
