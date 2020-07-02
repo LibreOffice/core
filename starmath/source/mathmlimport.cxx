@@ -1977,7 +1977,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Imp
     }
 }
 
-static const SvXMLTokenMapEntry aColorTokenMap[] =
+const SvXMLTokenMapEntry aColorTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
     { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE},
