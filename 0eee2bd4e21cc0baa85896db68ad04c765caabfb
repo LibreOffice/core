@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a001bc6f_62ee8a98",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T12:15:24Z",
+      "side": 1,
+      "message": "You still do this unrelated rename here :-(",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "0eee2bd4e21cc0baa85896db68ad04c765caabfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
