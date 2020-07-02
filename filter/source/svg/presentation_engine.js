@@ -4752,6 +4752,14 @@ function getSafeIndex( nIndex, nMin, nMax )
         return nIndex;
 }
 
+function getUrlParameter(name)
+{
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(window.location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
 /** getRandomInt
  *
  * @param nMax
@@ -4873,6 +4881,12 @@ function MetaDocument()
             'MetaDocument: number of slides is zero or undefined.' );
     // - the index of the slide to show when the presentation starts;
     this.nStartSlideNumber = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrStartSlideNumber ) ) || 0;
+    // - get the parameter StartSlideNumber in the URL for online presentation
+    var aParmStartSlideNumber = getUrlParameter('StartSlideNumber');
+    if (aParmStartSlideNumber !== '')
+    {
+        this.nStartSlideNumber = parseInt(aParmStartSlideNumber);
+    }
     // - the numbering type used in the presentation, default type is arabic.
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
     // - the way text is exported
