@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03b5d96a_04793b35",
+        "filename": "vcl/source/bitmap/salbmp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T08:33:48Z",
+      "side": 1,
+      "message": "This is broken, see e.g. \u003chttps://ci.libreoffice.org//job/lo_ubsan/1679/\u003e, where in CppunitTest_sd_export_tests a 64x64 bitmap with mnBitCount\u003d4 and mnScanlineSize\u003d32 now reads mnWidth*bytesPerPixel\u003d64 bytes per line.",
+      "revId": "b1c119679700630d16bcf76d96a99e3a39908914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
