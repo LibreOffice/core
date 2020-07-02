@@ -1482,7 +1482,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    const NfCurrencyEntry* pCurr = reinterpret_cast<const NfCurrencyEntry*>(m_xCurrencyLB->get_active_id().toInt64());
+    OUString sId = m_xCurrencyLB->get_active_id();
+    const NfCurrencyEntry* pCurr = sId == "default" ? nullptr : reinterpret_cast<const NfCurrencyEntry*>(sId.toInt64());
     OUString sNewCurr;
     if ( pCurr )
         sNewCurr = SvtSysLocaleOptions::CreateCurrencyConfigString(
@@ -1642,7 +1643,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==nullptr the SYSTEM entry is selected
-    m_xCurrencyLB->set_active_id(OUString::number(reinterpret_cast<sal_Int64>(pCurr)));
+    OUString sId = !pCurr ? OUString("default") : OUString::number(reinterpret_cast<sal_Int64>(pCurr));
+    m_xCurrencyLB->set_active_id(sId);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Currency);
     m_xCurrencyLB->set_sensitive(!bReadonly);
     m_xCurrencyFT->set_sensitive(!bReadonly);
