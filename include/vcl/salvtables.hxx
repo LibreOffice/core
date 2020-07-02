@@ -341,8 +341,6 @@ public:
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
 
-    virtual boost::property_tree::ptree get_property_tree() const override;
-
     virtual void set_stack_background() override;
 
     virtual void set_highlight_background() override;
@@ -783,8 +781,6 @@ public:
 
     virtual bool has_entry() const override;
 
-    virtual bool changed_by_menu() const override;
-
     virtual void set_entry_message_type(weld::EntryMessageType /*eType*/) override;
 
     virtual void set_entry_text(const OUString& /*rText*/) override;
@@ -825,8 +821,6 @@ public:
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
-
-    virtual bool changed_by_menu() const override;
 
     virtual void set_entry_text(const OUString& rText) override;
 
