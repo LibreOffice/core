@@ -2044,6 +2044,15 @@ void ExtensionsTabPage::Show()
 {
     if (!m_xPageParent.is())
         return;
+
+    VclPtr<vcl::Window> xPageParent = VCLUnoHelper::GetWindow(m_xPageParent);
+    if (xPageParent)
+    {
+        // NoActivate otherwise setVisible will call Window::Show which will grab
+        // focus to the page by default
+        xPageParent->Show(true, ShowFlags::NoActivate);
+    }
+
     m_xPageParent->setVisible(true);
 }
 
