@@ -17,6 +17,7 @@
 #include <cassert>
 
 // SmDefaultingVisitor
+/********************************************************************************************************************/
 
 void SmDefaultingVisitor::Visit( SmTableNode* pNode )
 {
@@ -154,6 +155,7 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
 }
 
 // SmCaretDrawingVisitor
+/********************************************************************************************************************/
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
@@ -270,6 +272,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 
 
 // SmDrawingVisitor
+/********************************************************************************************************************/
 
 void SmDrawingVisitor::Visit( SmTableNode* pNode )
 {
@@ -518,6 +521,7 @@ void SmDrawingVisitor::DrawChildren( SmStructureNode* pNode )
 }
 
 // SmSetSelectionVisitor
+/********************************************************************************************************************/
 
 SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree)
     : maStartPos(startPos)
@@ -731,6 +735,7 @@ void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
 }
 
 // SmCaretPosGraphBuildingVisitor
+/********************************************************************************************************************/
 
 SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode )
     : mpRightMost(nullptr)
@@ -1588,6 +1593,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmPolyLineNode* )
 }
 
 // SmCloningVisitor
+/********************************************************************************************************************/
 
 SmNode* SmCloningVisitor::Clone( SmNode* pNode )
 {
@@ -1914,6 +1920,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 }
 
 // SmNodeToTextVisitor
+/********************************************************************************************************************/
 
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
@@ -2146,6 +2153,27 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
         case TYELLOW:
             Append( "color yellow " );
             break;
+        case TRGB:
+            Append("color rgb ");
+            sal_Int32 nc, r, g, b;
+            nc = pNode->GetToken().aText.toInt32(16);
+            b = nc % 256;
+            nc /= 256;
+            g = nc % 256;
+            nc /= 256;
+            r = nc % 256;
+            Append(OUString::number(r));
+            Append(" ");
+            Append(OUString::number(g));
+            Append(" ");
+            Append(OUString::number(b));
+            Append(" ");
+            break;
+        case THEX:
+            Append("color hex ");
+            Append(pNode->GetToken().aText);
+            Append(" ");
+            break;
         case TSANS:
             Append( "font sans " );
             break;
@@ -2305,12 +2333,13 @@ void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 {
-    //TODO: This method might need improvements, see SmTextNode::CreateTextFromNode
     if( pNode->GetToken( ).eType == TTEXT )
+    {
         Append( "\"" );
-    Append( pNode->GetText( ) );
-    if( pNode->GetToken( ).eType == TTEXT )
+        Append( pNode->GetText( ) );
         Append( "\"" );
+    }
+    else Append( pNode->GetText( ) );
 }
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
@@ -2335,14 +2364,11 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 {
     sal_uInt16 nNum = pNode->GetBlankNum();
-    if (nNum <= 0)
-        return;
+    if (nNum <= 0) return;
     sal_uInt16 nWide = nNum / 4;
     sal_uInt16 nNarrow = nNum % 4;
-    for (sal_uInt16 i = 0; i < nWide; i++)
-        Append( "~" );
-    for (sal_uInt16 i = 0; i < nNarrow; i++)
-        Append( "`" );
+    for (sal_uInt16 i = 0; i < nWide; i++) Append( "~" );
+    for (sal_uInt16 i = 0; i < nNarrow; i++) Append( "`" );
     Append( " " );
 }
 

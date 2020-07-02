@@ -39,6 +39,7 @@ class SmTableNode;
 class SmTextNode;
 
 #define DEPTH_LIMIT 1024
+#define MAX_COLOR_NUMBER 16777215 //255 + 255*256 + 255*256*256
 
 class SmParser
 {
@@ -59,16 +60,9 @@ class SmParser
     private:
         sal_Int32& m_rParseDepth;
     public:
-        DepthProtect(sal_Int32& rParseDepth)
-            : m_rParseDepth(rParseDepth)
-        {
-            ++m_rParseDepth;
-        }
+        DepthProtect(sal_Int32& rParseDepth) : m_rParseDepth(rParseDepth) { ++m_rParseDepth; }
+        ~DepthProtect() { --m_rParseDepth; }
         bool TooDeep() const { return m_rParseDepth > DEPTH_LIMIT; }
-        ~DepthProtect()
-        {
-            --m_rParseDepth;
-        }
     };
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
@@ -83,6 +77,9 @@ class SmParser
     SmParser& operator=(const SmParser&) = delete;
 
     void            NextToken();
+    void            NextTokenHex();
+    void            NextTokenColor();
+    void            NextTokenFontSize();
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
@@ -141,6 +138,7 @@ public:
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError();
     static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
+    static const SmTokenTableEntry* GetTokenTableEntryColor( const OUString &rName );
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 

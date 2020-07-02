@@ -38,6 +38,8 @@
 
 using namespace ::com::sun::star::i18n;
 
+static bool lcl_IsNumber(const OUString& rText);
+static bool lcl_IsNumber16(const OUString& rText);
 
 SmToken::SmToken()
     : eType(TUNKNOWN)
@@ -64,7 +66,8 @@ SmToken::SmToken(SmTokenType eTokenType,
 {
 }
 
-//Definition of math keywords
+// Definition of math keywords
+// Must be alphabetically sorted
 static const SmTokenTableEntry aTokenTable[] =
 {
     { "abs", TABS, '\0', TG::UnOper, 13 },
@@ -78,7 +81,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "alignt", TALIGNC, '\0', TG::Align, 0},
     { "and", TAND, MS_AND, TG::Product, 0},
     { "approx", TAPPROX, MS_APPROX, TG::Relation, 0},
-    { "aqua", TAQUA, '\0', TG::Color, 0},
     { "arccos", TACOS, '\0', TG::Function, 5},
     { "arccot", TACOT, '\0', TG::Function, 5},
     { "arcosh", TACOSH, '\0', TG::Function, 5 },
@@ -90,8 +92,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "backepsilon" , TBACKEPSILON, MS_BACKEPSILON, TG::Standalone, 5},
     { "bar", TBAR, MS_BAR, TG::Attribute, 5},
     { "binom", TBINOM, '\0', TG::NONE, 5 },
-    { "black", TBLACK, '\0', TG::Color, 0},
-    { "blue", TBLUE, '\0', TG::Color, 0},
     { "bold", TBOLD, '\0', TG::FontAttr, 5},
     { "boper", TBOPER, '\0', TG::Product, 0},
     { "breve", TBREVE, MS_BREVE, TG::Attribute, 5},
@@ -108,7 +108,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "coth", TCOTH, '\0', TG::Function, 5},
     { "csub", TCSUB, '\0', TG::Power, 0},
     { "csup", TCSUP, '\0', TG::Power, 0},
-    { "cyan", TCYAN, '\0', TG::Color, 0},
     { "dddot", TDDDOT, MS_DDDOT, TG::Attribute, 5},
     { "ddot", TDDOT, MS_DDOT, TG::Attribute, 5},
     { "def", TDEF, MS_DEF, TG::Relation, 0},
@@ -134,18 +133,16 @@ static const SmTokenTableEntry aTokenTable[] =
     { "font", TFONT, '\0', TG::FontAttr, 5},
     { "forall", TFORALL, MS_FORALL, TG::Standalone, 5},
     { "from", TFROM, '\0', TG::Limit, 0},
-    { "fuchsia", TFUCHSIA, '\0', TG::Color, 0},
     { "func", TFUNC, '\0', TG::Function, 5},
     { "ge", TGE, MS_GE, TG::Relation, 0},
     { "geslant", TGESLANT, MS_GESLANT, TG::Relation, 0 },
     { "gg", TGG, MS_GG, TG::Relation, 0},
     { "grave", TGRAVE, MS_GRAVE, TG::Attribute, 5},
-    { "gray", TGRAY, '\0', TG::Color, 0},
-    { "green", TGREEN, '\0', TG::Color, 0},
     { "gt", TGT, MS_GT, TG::Relation, 0},
     { "harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5},
     { "hat", THAT, MS_HAT, TG::Attribute, 5},
     { "hbar" , THBAR, MS_HBAR, TG::Standalone, 5},
+    { "hex" , THEX, '\0', TG::NONE, 0},
     { "iiint", TIIINT, MS_IIINT, TG::Oper, 5},
     { "iint", TIINT, MS_IINT, TG::Oper, 5},
     { "im" , TIM, MS_IM, TG::Standalone, 5 },
@@ -170,7 +167,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "leslant", TLESLANT, MS_LESLANT, TG::Relation, 0 },
     { "lfloor", TLFLOOR, MS_LFLOOR, TG::LBrace, 5},
     { "lim", TLIM, '\0', TG::Oper, 5},
-    { "lime", TLIME, '\0', TG::Color, 0},
     { "liminf", TLIMINF, '\0', TG::Oper, 5},
     { "limsup", TLIMSUP, '\0', TG::Oper, 5},
     { "lint", TLINT, MS_LINT, TG::Oper, 5},
@@ -183,13 +179,10 @@ static const SmTokenTableEntry aTokenTable[] =
     { "lsub", TLSUB, '\0', TG::Power, 0},
     { "lsup", TLSUP, '\0', TG::Power, 0},
     { "lt", TLT, MS_LT, TG::Relation, 0},
-    { "magenta", TMAGENTA, '\0', TG::Color, 0},
-    { "maroon", TMAROON, '\0', TG::Color, 0},
     { "matrix", TMATRIX, '\0', TG::NONE, 5},
     { "minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5},
     { "mline", TMLINE, MS_VERTLINE, TG::NONE, 0},      //! not in TG::RBrace, Level 0
     { "nabla", TNABLA, MS_NABLA, TG::Standalone, 5},
-    { "navy", TNAVY, '\0', TG::Color, 0},
     { "nbold", TNBOLD, '\0', TG::FontAttr, 5},
     { "ndivides", TNDIVIDES, MS_NDIVIDES, TG::Relation, 0},
     { "neg", TNEG, MS_NEG, TG::UnOper, 5 },
@@ -210,7 +203,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "nsupseteq", TNSUPSETEQ, MS_NSUPSETEQ, TG::Relation, 0 },
     { "odivide", TODIVIDE, MS_ODIVIDE, TG::Product, 0},
     { "odot", TODOT, MS_ODOT, TG::Product, 0},
-    { "olive", TOLIVE, '\0', TG::Color, 0},
     { "ominus", TOMINUS, MS_OMINUS, TG::Sum, 0},
     { "oper", TOPER, '\0', TG::Oper, 5},
     { "oplus", TOPLUS, MS_OPLUS, TG::Sum, 0},
@@ -231,16 +223,13 @@ static const SmTokenTableEntry aTokenTable[] =
     { "precsim", TPRECEDESEQUIV, MS_PRECEDESEQUIV, TG::Relation, 0 },
     { "prod", TPROD, MS_PROD, TG::Oper, 5},
     { "prop", TPROP, MS_PROP, TG::Relation, 0},
-    { "purple", TPURPLE, '\0', TG::Color, 0},
     { "rangle", TRANGLE, MS_RMATHANGLE, TG::RBrace, 0},  //! 0 to terminate expression
     { "rbrace", TRBRACE, MS_RBRACE, TG::RBrace, 0},
     { "rceil", TRCEIL, MS_RCEIL, TG::RBrace, 0},
     { "rdbracket", TRDBRACKET, MS_RDBRACKET, TG::RBrace, 0},
     { "rdline", TRDLINE, MS_DVERTLINE, TG::RBrace, 0},
     { "re" , TRE, MS_RE, TG::Standalone, 5 },
-    { "red", TRED, '\0', TG::Color, 0},
     { "rfloor", TRFLOOR, MS_RFLOOR, TG::RBrace, 0},  //! 0 to terminate expression
-    { "rgb", TRGB, '\0', TG::Color, 0},
     { "right", TRIGHT, '\0', TG::NONE, 0},
     { "rightarrow" , TRIGHTARROW, MS_RIGHTARROW, TG::Standalone, 5},
     { "rline", TRLINE, MS_VERTLINE, TG::RBrace, 0},  //! 0 to terminate expression
@@ -254,7 +243,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "setQ" , TSETQ, MS_SETQ, TG::Standalone, 5},
     { "setR" , TSETR, MS_SETR, TG::Standalone, 5},
     { "setZ" , TSETZ, MS_SETZ, TG::Standalone, 5},
-    { "silver", TSILVER, '\0', TG::Color, 0},
     { "sim", TSIM, MS_SIM, TG::Relation, 0},
     { "simeq", TSIMEQ, MS_SIMEQ, TG::Relation, 0},
     { "sin", TSIN, '\0', TG::Function, 5},
@@ -275,7 +263,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "supseteq", TSUPSETEQ, MS_SUPSETEQ, TG::Relation, 0},
     { "tan", TTAN, '\0', TG::Function, 5},
     { "tanh", TTANH, '\0', TG::Function, 5},
-    { "teal", TTEAL, '\0', TG::Color, 0},
     { "tilde", TTILDE, MS_TILDE, TG::Attribute, 5},
     { "times", TTIMES, MS_TIMES, TG::Product, 0},
     { "to", TTO, '\0', TG::Limit, 0},
@@ -288,7 +275,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "uoper", TUOPER, '\0', TG::UnOper, 5},
     { "uparrow" , TUPARROW, MS_UPARROW, TG::Standalone, 5},
     { "vec", TVEC, MS_VEC, TG::Attribute, 5},
-    { "white", TWHITE, '\0', TG::Color, 0},
     { "widebslash", TWIDEBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
     { "wideharpoon", TWIDEHARPOON, MS_HARPOON, TG::Attribute, 5},
     { "widehat", TWIDEHAT, MS_HAT, TG::Attribute, 5},
@@ -296,6 +282,29 @@ static const SmTokenTableEntry aTokenTable[] =
     { "widetilde", TWIDETILDE, MS_TILDE, TG::Attribute, 5},
     { "widevec", TWIDEVEC, MS_VEC, TG::Attribute, 5},
     { "wp" , TWP, MS_WP, TG::Standalone, 5},
+};
+
+static const SmTokenTableEntry aTokenTableColor[] =
+{
+    { "aqua", TAQUA, '\0', TG::Color, 0},
+    { "black", TBLACK, '\0', TG::Color, 0},
+    { "blue", TBLUE, '\0', TG::Color, 0},
+    { "cyan", TCYAN, '\0', TG::Color, 0},
+    { "fuchsia", TFUCHSIA, '\0', TG::Color, 0},
+    { "gray", TGRAY, '\0', TG::Color, 0},
+    { "green", TGREEN, '\0', TG::Color, 0},
+    { "hex" , THEX, '\0', TG::Color, 0},
+    { "lime", TLIME, '\0', TG::Color, 0},
+    { "magenta", TMAGENTA, '\0', TG::Color, 0},
+    { "maroon", TMAROON, '\0', TG::Color, 0},
+    { "navy", TNAVY, '\0', TG::Color, 0},
+    { "olive", TOLIVE, '\0', TG::Color, 0},
+    { "purple", TPURPLE, '\0', TG::Color, 0},
+    { "red", TRED, '\0', TG::Color, 0},
+    { "rgb", TRGB, '\0', TG::Color, 0},
+    { "silver", TSILVER, '\0', TG::Color, 0},
+    { "teal", TTEAL, '\0', TG::Color, 0},
+    { "white", TWHITE, '\0', TG::Color, 0},
     { "yellow", TYELLOW, '\0', TG::Color, 0}
 };
 
@@ -322,13 +331,20 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
         assert( std::is_sorted( std::begin(aTokenTable), std::end(aTokenTable), sortCompare ) );
         bSortKeyWords = true;
     }
-
     if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
-
     //Looks for the first keyword after or equal to rName in alphabetical order.
     auto findIter = std::lower_bound( std::begin(aTokenTable), std::end(aTokenTable), rName, findCompare );
     if ( findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))return &*findIter; //check is equal
+    return nullptr; //not found
+}
 
+//Returns the SmTokenTableEntry for a color keyword
+const SmTokenTableEntry * SmParser::GetTokenTableEntryColor( const OUString &rName )
+{
+    if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
+    //Looks for the first keyword after or equal to rName in alphabetical order.
+    auto findIter = std::lower_bound( std::begin(aTokenTableColor), std::end(aTokenTableColor), rName, findCompare );
+    if ( findIter != std::end(aTokenTableColor) && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))return &*findIter; //check is equal
     return nullptr; //not found
 }
 
@@ -376,102 +392,77 @@ void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
     m_nTokenIndex = m_nTokenIndex + nChg;
 }
 
+// First character may be any alphabetic
+static const sal_Int32 coStartFlags = KParseTokens::ANY_LETTER | KParseTokens::IGNORE_LEADING_WS;
+
+// Continuing characters may be any alphabetic
+static const sal_Int32 coContFlags = (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS) | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+
+// First character for numbers, may be any numeric or dot
+static const sal_Int32 coNumStartFlags = KParseTokens::ASC_DIGIT | KParseTokens::ASC_DOT | KParseTokens::IGNORE_LEADING_WS;
+
+// Continuing characters for numbers, may be any numeric or dot or comma.
+static const sal_Int32 coNumContFlags = (coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS) | KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
+
+// First character for numbers hexadecimañ
+static const sal_Int32 coNum16StartFlags = KParseTokens::ASC_DIGIT | KParseTokens::ASC_UPALPHA  | KParseTokens::IGNORE_LEADING_WS;
+
+// Continuing characters for numbers hexadecimal
+static const sal_Int32 coNum16ContFlags = KParseTokens::ASC_DIGIT | KParseTokens::ASC_UPALPHA;
+
+// user-defined char continuing characters may be any alphanumeric or dot.
+static const sal_Int32 coUserDefinedCharContFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_DOT
+                                                    |KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+
 void SmParser::NextToken() //Central part of the parser
 {
-    // First character may be any alphabetic
-    static const sal_Int32 coStartFlags =
-        KParseTokens::ANY_LETTER |
-        KParseTokens::IGNORE_LEADING_WS;
-
-    // Continuing characters may be any alphabetic
-    static const sal_Int32 coContFlags =
-        (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
-        | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
-
-    // user-defined char continuing characters may be any alphanumeric or dot.
-    static const sal_Int32 coUserDefinedCharContFlags =
-        KParseTokens::ANY_LETTER_OR_NUMBER |
-        KParseTokens::ASC_DOT |
-        KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
-
-    // First character for numbers, may be any numeric or dot
-    static const sal_Int32 coNumStartFlags =
-        KParseTokens::ASC_DIGIT |
-        KParseTokens::ASC_DOT |
-        KParseTokens::IGNORE_LEADING_WS;
-
-    // Continuing characters for numbers, may be any numeric or dot.
-    // tdf#127873: additionally accept ',' comma group separator as too many
-    // existing documents unwittingly may have used that as decimal separator
-    // in such locales (though it never was as this is always the en-US locale
-    // and the group separator is only parsed away).
-    static const sal_Int32 coNumContFlags =
-        (coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS) |
-        KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
 
     sal_Int32   nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
     sal_Int32   nRealStart;
     bool        bCont;
+
     do
     {
-        // skip white spaces
-        while (UnicodeType::SPACE_SEPARATOR ==
-                        m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
-           ++m_nBufferIndex;
+        // Skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==  m_pSysCC->getType( m_aBufferString, m_nBufferIndex )) ++m_nBufferIndex;
 
-        // Try to parse a number in a locale-independent manner using
-        // '.' as decimal separator.
-        // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
-        aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER,
-                                        m_aBufferString, m_nBufferIndex,
-                                        coNumStartFlags, "",
-                                        coNumContFlags, "");
+        // Try to parse a number. If fails parse using ','.
+        aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER, m_aBufferString, m_nBufferIndex, coNumStartFlags, "", coNumContFlags, "");
+        if (aRes.TokenType == 0) aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "", coContFlags, "");
 
-        if (aRes.TokenType == 0)
-        {
-            // Try again with the default token parsing.
-            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
-                                     coStartFlags, "",
-                                     coContFlags, "");
-        }
-
+        // Reindex buffer
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
         m_nBufferIndex = nRealStart;
 
         bCont = false;
-        if ( aRes.TokenType == 0  &&
-                nRealStart < nBufLen &&
-                '\n' == m_aBufferString[ nRealStart ] )
+        // There is a new line in the code, skip
+        if ( aRes.TokenType == 0  && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
         {
-            // keep data needed for tokens row and col entry up to date
-            ++m_nRow;
-            m_nBufferIndex = m_nColOff = nRealStart + 1;
+            ++m_nRow; // Add a line
+            m_nBufferIndex = m_nColOff = nRealStart + 1; // Reindex
             bCont = true;
         }
+        // There is a comment and has to be skipped
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
             if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
             {
-                //SkipComment
                 m_nBufferIndex = nRealStart + 2;
-                while (m_nBufferIndex < nBufLen  &&
-                    '\n' != m_aBufferString[ m_nBufferIndex ])
-                    ++m_nBufferIndex;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ]) ++m_nBufferIndex;
                 bCont = true;
-            }
+            } //If not is EOF or %spchar
         }
 
     } while (bCont);
 
     // set index of current token
-    m_nTokenIndex = m_nBufferIndex;
-
-    m_aCurToken.nRow   = m_nRow;
-    m_aCurToken.nCol   = nRealStart - m_nColOff + 1;
+    m_nTokenIndex    = m_nBufferIndex;
+    m_aCurToken.nRow = m_nRow;
+    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
 
     bool bHandled = true;
-    if (nRealStart >= nBufLen)
+    if (nRealStart >= nBufLen) // EOF
     {
         m_aCurToken.eType    = TEND;
         m_aCurToken.cMathChar = '\0';
@@ -482,13 +473,11 @@ void SmParser::NextToken() //Central part of the parser
     else if (aRes.TokenType & KParseType::ANY_NUMBER)
     {
         assert(aRes.EndPos > 0);
-        if ( m_aBufferString[aRes.EndPos-1] == ',' &&
-             aRes.EndPos < nBufLen &&
+        // Comma followed by a non-space char is unlikely for decimal/thousands separator.
+        if ( m_aBufferString[aRes.EndPos-1] == ',' && aRes.EndPos < nBufLen &&
              m_pSysCC->getType( m_aBufferString, aRes.EndPos ) != UnicodeType::SPACE_SEPARATOR )
-        {
-            // Comma followed by a non-space char is unlikely for decimal/thousands separator.
-            --aRes.EndPos;
-        }
+        {   --aRes.EndPos; }
+
         sal_Int32 n = aRes.EndPos - nRealStart;
         assert(n >= 0);
         m_aCurToken.eType      = TNUMBER;
@@ -663,24 +652,16 @@ void SmParser::NextToken() //Central part of the parser
                 case '%':
                     {
                         //! modifies aRes.EndPos
-
-                        OSL_ENSURE( rnEndPos >= nBufLen  ||
-                                    '%' != m_aBufferString[ rnEndPos ],
-                                "unexpected comment start" );
+                        OSL_ENSURE( rnEndPos >= nBufLen || '%' != m_aBufferString[ rnEndPos ], "unexpected comment start" );
 
                         // get identifier of user-defined character
                         ParseResult aTmpRes = m_pSysCC->parseAnyToken(
-                                m_aBufferString, rnEndPos,
-                                KParseTokens::ANY_LETTER,
-                                "",
-                                coUserDefinedCharContFlags,
-                                "" );
+                                m_aBufferString, rnEndPos, KParseTokens::ANY_LETTER, "", coUserDefinedCharContFlags, "" );
 
                         sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
 
                         // default setting for the case that no identifier
-                        // i.e. a valid symbol-name is following the '%'
-                        // character
+                        // i.e. a valid symbol-name is following the '%' character
                         m_aCurToken.eType      = TTEXT;
                         m_aCurToken.cMathChar  = '\0';
                         m_aCurToken.nGroup     = TG::NONE;
@@ -691,17 +672,12 @@ void SmParser::NextToken() //Central part of the parser
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
-
-                            sal_Int32 n = aTmpRes.EndPos - nTmpStart;
-                            m_aCurToken.eType      = TSPECIAL;
-                            m_aCurToken.aText      = m_aBufferString.copy( nTmpStart-1, n+1 );
-
-                            OSL_ENSURE( aTmpRes.EndPos > rnEndPos,
-                                    "empty identifier" );
-                            if (aTmpRes.EndPos > rnEndPos)
-                                rnEndPos = aTmpRes.EndPos;
-                            else
-                                ++rnEndPos;
+                            sal_Int32 n       = aTmpRes.EndPos - nTmpStart;
+                            m_aCurToken.eType = TSPECIAL;
+                            m_aCurToken.aText = m_aBufferString.copy( nTmpStart-1, n+1 );
+                            OSL_ENSURE( aTmpRes.EndPos > rnEndPos, "empty identifier" );
+                            if (aTmpRes.EndPos > rnEndPos) rnEndPos = aTmpRes.EndPos;
+                            else ++rnEndPos;
                         }
 
                         // if no symbol-name was found we start-over with
@@ -974,8 +950,253 @@ void SmParser::NextToken() //Central part of the parser
         aRes.EndPos = nRealStart + nOffset;
     }
 
-    if (TEND != m_aCurToken.eType)
+    if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
+}
+
+void SmParser::NextTokenColor()
+{
+
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+
+    do
+    {
+        // Skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==  m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
+
+        ++m_nBufferIndex;
+
+        //get parsed token and reindex
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "", coContFlags, "");
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        // There is a new line in the code, skip
+        if ( aRes.TokenType == 0  && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
+        {
+            ++m_nRow; // Add a line
+            m_nBufferIndex = m_nColOff = nRealStart + 1; // Reindex
+            bCont = true;
+        }
+        // There is a comment and has to be skipped
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ]) ++m_nBufferIndex;
+                bCont = true;
+            }
+        }
+
+    } while (bCont);
+
+    // set index of current token
+    m_nTokenIndex    = m_nBufferIndex;
+    m_aCurToken.nRow = m_nRow;
+    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+
+    if (nRealStart >= nBufLen) m_aCurToken.eType = TEND; //EOF
+    else {
+        if (aRes.TokenType & KParseType::IDENTNAME)
+        {
+            sal_Int32 n = aRes.EndPos - nRealStart;
+            assert(n >= 0);
+            OUString aName( m_aBufferString.copy( nRealStart, n ) );
+            const SmTokenTableEntry *pEntry = GetTokenTableEntryColor( aName );
+            if (pEntry)
+            {
+                m_aCurToken.eType      = pEntry->eType;
+                m_aCurToken.cMathChar  = '\0';
+                m_aCurToken.nGroup     = TG::Color;
+                m_aCurToken.nLevel     = 0;
+                m_aCurToken.aText      = OUString::createFromAscii( pEntry->pIdent );
+
+            }
+        } else m_aCurToken.eType = TNONE;
         m_nBufferIndex = aRes.EndPos;
+    }
+
+}
+
+void SmParser::NextTokenFontSize() //Central part of the parser
+{
+
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+
+    do
+    {
+        // Skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==  m_pSysCC->getType( m_aBufferString, m_nBufferIndex )) ++m_nBufferIndex;
+
+        // Try to parse a number. If fails parse using ','.
+        aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER, m_aBufferString, m_nBufferIndex, coNumStartFlags, "", coNumContFlags, "");
+        if (aRes.TokenType == 0) aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "", coContFlags, "");
+
+        // Reindex buffer
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        // There is a new line in the code, skip
+        if ( aRes.TokenType == 0  && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
+        {
+            ++m_nRow; // Add a line
+            m_nBufferIndex = m_nColOff = nRealStart + 1; // Reindex
+            bCont = true;
+        }
+        // There is a comment and has to be skipped
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ]) ++m_nBufferIndex;
+                bCont = true;
+            } //If not is EOF or %spchar
+        }
+
+    } while (bCont);
+
+    // set index of current token
+    m_nTokenIndex    = m_nBufferIndex;
+    m_aCurToken.nRow = m_nRow;
+    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+
+    m_aCurToken.eType = TNONE;
+    if (nRealStart >= nBufLen) m_aCurToken.eType = TEND; // EOF
+    else
+    {
+        if (aRes.TokenType & KParseType::ANY_NUMBER)
+        {
+            assert(aRes.EndPos > 0);
+            // Comma followed by a non-space char is unlikely for decimal/thousands separator.
+            if ( m_aBufferString[aRes.EndPos-1] == ',' && aRes.EndPos < nBufLen &&
+                 m_pSysCC->getType( m_aBufferString, aRes.EndPos ) != UnicodeType::SPACE_SEPARATOR )
+            {   --aRes.EndPos; }
+
+            sal_Int32 n = aRes.EndPos - nRealStart;
+            assert(n >= 0);
+            m_aCurToken.eType      = TNUMBER;
+            m_aCurToken.cMathChar  = '\0';
+            m_aCurToken.nGroup     = TG::NONE;
+            m_aCurToken.nLevel     = 5;
+            m_aCurToken.aText      = m_aBufferString.copy( nRealStart, n );
+        }
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            sal_Unicode ch = m_aBufferString[ nRealStart ];
+            switch (ch)
+            {
+                case '*':
+                    m_aCurToken.eType    = TMULTIPLY;
+                    m_aCurToken.cMathChar = MS_MULTIPLY;
+                    m_aCurToken.nGroup       = TG::Product;
+                    m_aCurToken.nLevel       = 0;
+                    m_aCurToken.aText = "*";
+                    break;
+                case '+':
+                    m_aCurToken.eType    = TPLUS;
+                    m_aCurToken.cMathChar = MS_PLUS;
+                    m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                    m_aCurToken.nLevel       = 5;
+                    m_aCurToken.aText = "+";
+                    break;
+                case '-':
+                    m_aCurToken.eType    = TMINUS;
+                    m_aCurToken.cMathChar = MS_MINUS;
+                    m_aCurToken.nGroup       = TG::UnOper | TG::Sum;
+                    m_aCurToken.nLevel       = 5;
+                    m_aCurToken.aText = "-";
+                    break;
+                case '/':
+                    m_aCurToken.eType    = TDIVIDEBY;
+                    m_aCurToken.cMathChar = MS_SLASH;
+                    m_aCurToken.nGroup       = TG::Product;
+                    m_aCurToken.nLevel       = 0;
+                    m_aCurToken.aText = "/";
+                    break;
+                default:
+                   break;
+            }
+        }
+        m_nBufferIndex = aRes.EndPos;
+    }
+
+}
+
+void SmParser::NextTokenHex() //Central part of the parser
+{
+
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+    bool        hex;
+
+    do
+    {
+        // Skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==  m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
+
+        ++m_nBufferIndex;
+
+        // Try to parse a hexadecimal number.
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coNum16StartFlags, "", coNum16ContFlags, "");
+        if (aRes.TokenType == 0) aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "", coContFlags, "");
+        else hex = true;
+
+        // Reindex buffer
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        // There is a new line in the code, skip
+        if ( aRes.TokenType == 0  && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
+        {
+            ++m_nRow; // Add a line
+            m_nBufferIndex = m_nColOff = nRealStart + 1; // Reindex
+            bCont = true;
+        }
+        // There is a comment and has to be skipped
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ]) ++m_nBufferIndex;
+                bCont = true;
+            }
+        }
+
+    } while (bCont);
+
+    // set index of current token
+    m_nTokenIndex    = m_nBufferIndex;
+    m_aCurToken.nRow = m_nRow;
+    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+
+    m_aCurToken.eType = TNONE;
+    if (nRealStart >= nBufLen) m_aCurToken.eType = TEND; //EOF
+
+    else if (hex)
+    {
+        assert(aRes.EndPos > 0);
+        sal_Int32 n = aRes.EndPos - nRealStart;
+        assert(n >= 0);
+        m_aCurToken.eType      = TNUMBER;
+        m_aCurToken.cMathChar  = '\0';
+        m_aCurToken.nGroup     = TG::NONE;
+        m_aCurToken.nLevel     = 5;
+        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, n );
+        m_nBufferIndex = aRes.EndPos;
+    }
 }
 
 namespace
@@ -990,6 +1211,228 @@ namespace
 } //end namespace
 
 // grammar
+/********************************************************************************************************************/
+
+std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
+{
+    DepthProtect aDepthGuard(m_nParseDepth);
+    if (aDepthGuard.TooDeep())
+        throw std::range_error("parser depth limit");
+
+    switch (m_aCurToken.eType)
+    {
+        case TESCAPE :
+            return DoEscape();
+
+        case TNOSPACE :
+        case TLGROUP :
+        {
+            bool bNoSpace = m_aCurToken.eType == TNOSPACE;
+            if (bNoSpace)
+                NextToken();
+            if (m_aCurToken.eType != TLGROUP)
+                return DoTerm(false); // nospace is no longer concerned
+
+            NextToken();
+
+            // allow for empty group
+            if (m_aCurToken.eType == TRGROUP)
+            {
+                std::unique_ptr<SmStructureNode> xSNode(new SmExpressionNode(m_aCurToken));
+                xSNode->SetSubNodes(nullptr, nullptr);
+
+                NextToken();
+                return std::unique_ptr<SmNode>(xSNode.release());
+            }
+
+            auto pNode = DoAlign(!bNoSpace);
+            if (m_aCurToken.eType == TRGROUP) {
+                NextToken();
+                return pNode;
+            }
+            auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
+            std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
+            xSNode->SetSubNodes(std::move(pNode), std::move(xError));
+            return std::unique_ptr<SmNode>(xSNode.release());
+        }
+
+        case TLEFT :
+            return DoBrace();
+
+        case TBLANK :
+        case TSBLANK :
+            return DoBlank();
+
+        case TTEXT :
+            {
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
+                NextToken();
+                return std::unique_ptr<SmNode>(pNode.release());
+            }
+        case TCHARACTER :
+            {
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
+                NextToken();
+                return std::unique_ptr<SmNode>(pNode.release());
+            }
+        case TIDENT :
+        case THEX :
+             m_aCurToken.eType = TNUMBER;
+             [[fallthrough]];
+        case TNUMBER :
+        {
+            auto pTextNode = std::make_unique<SmTextNode>(m_aCurToken,
+                m_aCurToken.eType == TNUMBER ? FNT_NUMBER : FNT_VARIABLE);
+
+            if (!bGroupNumberIdent)
+            {
+                NextToken();
+                return std::unique_ptr<SmNode>(pTextNode.release());
+            }
+            std::vector<std::unique_ptr<SmNode>> aNodes;
+            // Some people want to be able to write "x_2n" for "x_{2n}"
+            // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
+            // The tokenizer skips whitespaces so we need some additional
+            // work to distinguish from "x_2 n".
+            // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
+            // https://bugs.libreoffice.org/show_bug.cgi?id=55853
+            sal_Int32 nBufLen = m_aBufferString.getLength();
+
+            // We need to be careful to call NextToken() only after having
+            // tested for a whitespace separator (otherwise it will be
+            // skipped!)
+            bool moveToNextToken = true;
+            while (m_nBufferIndex < nBufLen &&
+                   m_pSysCC->getType(m_aBufferString, m_nBufferIndex) !=
+                   UnicodeType::SPACE_SEPARATOR)
+            {
+                NextToken();
+                if (m_aCurToken.eType != TNUMBER &&
+                    m_aCurToken.eType != TIDENT)
+                {
+                    // Neither a number nor an identifier. We just moved to
+                    // the next token, so no need to do that again.
+                    moveToNextToken = false;
+                    break;
+                }
+                aNodes.emplace_back(std::unique_ptr<SmNode>(new SmTextNode(m_aCurToken,
+                                                m_aCurToken.eType ==
+                                                TNUMBER ?
+                                                FNT_NUMBER :
+                                                FNT_VARIABLE)));
+            }
+            if (moveToNextToken)
+                NextToken();
+            if (aNodes.empty())
+                return std::unique_ptr<SmNode>(pTextNode.release());
+            // We have several concatenated identifiers and numbers.
+            // Let's group them into one SmExpressionNode.
+            aNodes.insert(aNodes.begin(), std::move(pTextNode));
+            std::unique_ptr<SmExpressionNode> xNode(new SmExpressionNode(SmToken()));
+            xNode->SetSubNodes(buildNodeArray(aNodes));
+            return std::unique_ptr<SmNode>(xNode.release());
+        }
+        case TLEFTARROW :
+        case TRIGHTARROW :
+        case TUPARROW :
+        case TDOWNARROW :
+        case TCIRC :
+        case TDRARROW :
+        case TDLARROW :
+        case TDLRARROW :
+        case TEXISTS :
+        case TNOTEXISTS :
+        case TFORALL :
+        case TPARTIAL :
+        case TNABLA :
+        case TLAPLACE :
+        case TTOWARD :
+        case TDOTSAXIS :
+        case TDOTSDIAG :
+        case TDOTSDOWN :
+        case TDOTSLOW :
+        case TDOTSUP :
+        case TDOTSVERT :
+            {
+                auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+                NextToken();
+                return std::unique_ptr<SmNode>(pNode.release());
+            }
+
+        case TSETN :
+        case TSETZ :
+        case TSETQ :
+        case TSETR :
+        case TSETC :
+        case THBAR :
+        case TLAMBDABAR :
+        case TBACKEPSILON :
+        case TALEPH :
+        case TIM :
+        case TRE :
+        case TWP :
+        case TEMPTYSET :
+        case TINFINITY :
+            {
+                auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                NextToken();
+                return std::unique_ptr<SmNode>(pNode.release());
+            }
+
+        case TPLACE:
+            {
+                auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
+                NextToken();
+                return std::unique_ptr<SmNode>(pNode.release());
+            }
+
+        case TSPECIAL:
+            return DoSpecial();
+
+        case TBINOM:
+            return DoBinom();
+
+        case TSTACK:
+            return DoStack();
+
+        case TMATRIX:
+            return DoMatrix();
+
+        default:
+            if (TokenInGroup(TG::LBrace))
+                return DoBrace();
+            if (TokenInGroup(TG::Oper))
+                return DoOperator();
+            if (TokenInGroup(TG::UnOper))
+                return DoUnOper();
+            if ( TokenInGroup(TG::Attribute) ||
+                 TokenInGroup(TG::FontAttr) )
+            {
+                std::stack<std::unique_ptr<SmStructureNode>> aStack;
+                bool    bIsAttr;
+                for (;;)
+                {
+                    bIsAttr = TokenInGroup(TG::Attribute);
+                    if (!bIsAttr && !TokenInGroup(TG::FontAttr))
+                        break;
+                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
+                }
+
+                auto xFirstNode = DoPower();
+                while (!aStack.empty())
+                {
+                    std::unique_ptr<SmStructureNode> xNode = std::move(aStack.top());
+                    aStack.pop();
+                    xNode->SetSubNodes(nullptr, std::move(xFirstNode));
+                    xFirstNode = std::move(xNode);
+                }
+                return xFirstNode;
+            }
+            if (TokenInGroup(TG::Function))
+                return DoFunction();
+            return DoError(SmParseError::UnexpectedChar);
+    }
+}
 
 std::unique_ptr<SmTableNode> SmParser::DoTable()
 {
@@ -1225,8 +1668,7 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 {
     std::unique_ptr<SmNode> xGivenNode(pGivenNode);
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
     assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
     assert(m_aCurToken.nGroup == nActiveGroup);
@@ -1352,225 +1794,6 @@ std::unique_ptr<SmBlankNode> SmParser::DoBlank()
     return pBlankNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
-{
-    DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
-
-    switch (m_aCurToken.eType)
-    {
-        case TESCAPE :
-            return DoEscape();
-
-        case TNOSPACE :
-        case TLGROUP :
-        {
-            bool bNoSpace = m_aCurToken.eType == TNOSPACE;
-            if (bNoSpace)
-                NextToken();
-            if (m_aCurToken.eType != TLGROUP)
-                return DoTerm(false); // nospace is no longer concerned
-
-            NextToken();
-
-            // allow for empty group
-            if (m_aCurToken.eType == TRGROUP)
-            {
-                std::unique_ptr<SmStructureNode> xSNode(new SmExpressionNode(m_aCurToken));
-                xSNode->SetSubNodes(nullptr, nullptr);
-
-                NextToken();
-                return std::unique_ptr<SmNode>(xSNode.release());
-            }
-
-            auto pNode = DoAlign(!bNoSpace);
-            if (m_aCurToken.eType == TRGROUP) {
-                NextToken();
-                return pNode;
-            }
-            auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
-            std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
-            xSNode->SetSubNodes(std::move(pNode), std::move(xError));
-            return std::unique_ptr<SmNode>(xSNode.release());
-        }
-
-        case TLEFT :
-            return DoBrace();
-
-        case TBLANK :
-        case TSBLANK :
-            return DoBlank();
-
-        case TTEXT :
-            {
-                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
-                NextToken();
-                return std::unique_ptr<SmNode>(pNode.release());
-            }
-        case TCHARACTER :
-            {
-                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
-                NextToken();
-                return std::unique_ptr<SmNode>(pNode.release());
-            }
-        case TIDENT :
-        case TNUMBER :
-        {
-            auto pTextNode = std::make_unique<SmTextNode>(m_aCurToken,
-                                             m_aCurToken.eType == TNUMBER ?
-                                             FNT_NUMBER :
-                                             FNT_VARIABLE);
-            if (!bGroupNumberIdent)
-            {
-                NextToken();
-                return std::unique_ptr<SmNode>(pTextNode.release());
-            }
-            std::vector<std::unique_ptr<SmNode>> aNodes;
-            // Some people want to be able to write "x_2n" for "x_{2n}"
-            // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
-            // The tokenizer skips whitespaces so we need some additional
-            // work to distinguish from "x_2 n".
-            // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
-            // https://bugs.libreoffice.org/show_bug.cgi?id=55853
-            sal_Int32 nBufLen = m_aBufferString.getLength();
-
-            // We need to be careful to call NextToken() only after having
-            // tested for a whitespace separator (otherwise it will be
-            // skipped!)
-            bool moveToNextToken = true;
-            while (m_nBufferIndex < nBufLen &&
-                   m_pSysCC->getType(m_aBufferString, m_nBufferIndex) !=
-                   UnicodeType::SPACE_SEPARATOR)
-            {
-                NextToken();
-                if (m_aCurToken.eType != TNUMBER &&
-                    m_aCurToken.eType != TIDENT)
-                {
-                    // Neither a number nor an identifier. We just moved to
-                    // the next token, so no need to do that again.
-                    moveToNextToken = false;
-                    break;
-                }
-                aNodes.emplace_back(std::unique_ptr<SmNode>(new SmTextNode(m_aCurToken,
-                                                m_aCurToken.eType ==
-                                                TNUMBER ?
-                                                FNT_NUMBER :
-                                                FNT_VARIABLE)));
-            }
-            if (moveToNextToken)
-                NextToken();
-            if (aNodes.empty())
-                return std::unique_ptr<SmNode>(pTextNode.release());
-            // We have several concatenated identifiers and numbers.
-            // Let's group them into one SmExpressionNode.
-            aNodes.insert(aNodes.begin(), std::move(pTextNode));
-            std::unique_ptr<SmExpressionNode> xNode(new SmExpressionNode(SmToken()));
-            xNode->SetSubNodes(buildNodeArray(aNodes));
-            return std::unique_ptr<SmNode>(xNode.release());
-        }
-        case TLEFTARROW :
-        case TRIGHTARROW :
-        case TUPARROW :
-        case TDOWNARROW :
-        case TCIRC :
-        case TDRARROW :
-        case TDLARROW :
-        case TDLRARROW :
-        case TEXISTS :
-        case TNOTEXISTS :
-        case TFORALL :
-        case TPARTIAL :
-        case TNABLA :
-        case TLAPLACE :
-        case TTOWARD :
-        case TDOTSAXIS :
-        case TDOTSDIAG :
-        case TDOTSDOWN :
-        case TDOTSLOW :
-        case TDOTSUP :
-        case TDOTSVERT :
-            {
-                auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
-                NextToken();
-                return std::unique_ptr<SmNode>(pNode.release());
-            }
-
-        case TSETN :
-        case TSETZ :
-        case TSETQ :
-        case TSETR :
-        case TSETC :
-        case THBAR :
-        case TLAMBDABAR :
-        case TBACKEPSILON :
-        case TALEPH :
-        case TIM :
-        case TRE :
-        case TWP :
-        case TEMPTYSET :
-        case TINFINITY :
-            {
-                auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
-                NextToken();
-                return std::unique_ptr<SmNode>(pNode.release());
-            }
-
-        case TPLACE:
-            {
-                auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
-                NextToken();
-                return std::unique_ptr<SmNode>(pNode.release());
-            }
-
-        case TSPECIAL:
-            return DoSpecial();
-
-        case TBINOM:
-            return DoBinom();
-
-        case TSTACK:
-            return DoStack();
-
-        case TMATRIX:
-            return DoMatrix();
-
-        default:
-            if (TokenInGroup(TG::LBrace))
-                return DoBrace();
-            if (TokenInGroup(TG::Oper))
-                return DoOperator();
-            if (TokenInGroup(TG::UnOper))
-                return DoUnOper();
-            if ( TokenInGroup(TG::Attribute) ||
-                 TokenInGroup(TG::FontAttr) )
-            {
-                std::stack<std::unique_ptr<SmStructureNode>> aStack;
-                bool    bIsAttr;
-                for (;;)
-                {
-                    bIsAttr = TokenInGroup(TG::Attribute);
-                    if (!bIsAttr && !TokenInGroup(TG::FontAttr))
-                        break;
-                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
-                }
-
-                auto xFirstNode = DoPower();
-                while (!aStack.empty())
-                {
-                    std::unique_ptr<SmStructureNode> xNode = std::move(aStack.top());
-                    aStack.pop();
-                    xNode->SetSubNodes(nullptr, std::move(xFirstNode));
-                    xFirstNode = std::move(xNode);
-                }
-                return xFirstNode;
-            }
-            if (TokenInGroup(TG::Function))
-                return DoFunction();
-            return DoError(SmParseError::UnexpectedChar);
-    }
-}
-
 std::unique_ptr<SmNode> SmParser::DoEscape()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
@@ -1662,24 +1885,20 @@ std::unique_ptr<SmNode> SmParser::DoOper()
         case TLIMSUP :
         case TLIMINF :
             {
-                const char* pLim = nullptr;
                 switch (eType)
                 {
-                    case TLIM :     pLim = "lim";       break;
-                    case TLIMSUP :  pLim = "lim sup";   break;
-                    case TLIMINF :  pLim = "lim inf";   break;
-                    default:
-                        break;
+                    case TLIM :      m_aCurToken.aText = OUString("lim");       break;
+                    case TLIMSUP :   m_aCurToken.aText = OUString("lim sup");   break;
+                    case TLIMINF :   m_aCurToken.aText = OUString("lim inf");   break;
+                    default:                                                    break;
                 }
-                if( pLim )
-                    m_aCurToken.aText = OUString::createFromAscii(pLim);
                 pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
             }
             break;
 
         case TOPER :
             NextToken();
-
+            m_aCurToken.eType = TOPER;
             OSL_ENSURE(m_aCurToken.eType == TSPECIAL, "Sm: wrong token");
             pNode.reset(new SmGlyphSpecialNode(m_aCurToken));
             break;
@@ -1860,51 +2079,46 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
 std::unique_ptr<SmStructureNode> SmParser::DoColor()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
     assert(m_aCurToken.eType == TCOLOR);
-
     std::unique_ptr<SmStructureNode> xNode;
-    // last color rules, get that one
     SmToken  aToken;
-    do
+    NextTokenColor();
+
+    if (TokenInGroup(TG::Color))
     {
-
-        NextToken();
-
-        if (TokenInGroup(TG::Color))
+        aToken = m_aCurToken;
+        if(aToken.eType==TRGB){
+            sal_Int32 nr, ng, nb;
+            NextTokenFontSize();
+            if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+            if(!lcl_IsNumber(m_aCurToken.aText))return DoError(SmParseError::ColorExpected);
+            nr = m_aCurToken.aText.toInt32();
+            NextTokenFontSize();
+            if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+            if(!lcl_IsNumber(m_aCurToken.aText))return DoError(SmParseError::ColorExpected);
+            ng = m_aCurToken.aText.toInt32();
+            NextTokenFontSize();
+            if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
+            if(!lcl_IsNumber(m_aCurToken.aText))return DoError(SmParseError::ColorExpected);
+            nb = m_aCurToken.aText.toInt32();
+            if( nr < 0 || nr > 255 )return DoError(SmParseError::ColorExpected);
+            if( ng < 0 || ng > 255 )return DoError(SmParseError::ColorExpected);
+            if( nb < 0 || nb > 255 )return DoError(SmParseError::ColorExpected);
+            nb += 256 * ( ng + nr * 256 );
+            aToken.aText = OUString::number(nb,16);
+        } else if(aToken.eType==THEX)
         {
-            aToken = m_aCurToken;
-            if(m_aCurToken.eType==TRGB){
-                SmToken r,g,b;
-                sal_Int32 nr, ng, nb, nc;
-                NextToken();
-                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
-                r = m_aCurToken;
-                NextToken();
-                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
-                g = m_aCurToken;
-                NextToken();
-                if(m_aCurToken.eType!=TNUMBER)return DoError(SmParseError::ColorExpected);
-                b = m_aCurToken;
-                nr = r.aText.toInt32();
-                if( nr < 0 || nr > 255 )return DoError(SmParseError::ColorExpected);
-                ng = g.aText.toInt32();
-                if( ng < 0 || ng > 255 )return DoError(SmParseError::ColorExpected);
-                nb = b.aText.toInt32();
-                if( nb < 0 || nb > 255 )return DoError(SmParseError::ColorExpected);
-                nc = nb + 256 * ( ng + nr*256 );
-                aToken.aText = OUString::number(nc);
-            }
-            NextToken();
+            NextTokenHex();
+            if(!lcl_IsNumber16(m_aCurToken.aText))return DoError(SmParseError::ColorExpected);
+            sal_Int32 nc = m_aCurToken.aText.toInt32(16);
+            if( nc < 0 || nc > MAX_COLOR_NUMBER )return DoError(SmParseError::ColorExpected);
+            aToken.aText = m_aCurToken.aText;
         }
-        else
-        {
-            return DoError(SmParseError::ColorExpected);
-        }
-    } while (m_aCurToken.eType == TCOLOR);
+    } else return DoError(SmParseError::ColorExpected);
 
+    NextToken();
     xNode.reset(new SmFontNode(aToken));
     return xNode;
 }
@@ -1937,41 +2151,16 @@ std::unique_ptr<SmStructureNode> SmParser::DoFont()
     return xNode;
 }
 
-
-// gets number used as arguments in Math formulas (e.g. 'size' command)
-// Format: no negative numbers, must start with a digit, no exponent notation, ...
-static bool lcl_IsNumber(const OUString& rText)
-{
-    bool bPoint = false;
-    const sal_Unicode* pBuffer = rText.getStr();
-    for(sal_Int32 nPos = 0; nPos < rText.getLength(); nPos++, pBuffer++)
-    {
-        const sal_Unicode cChar = *pBuffer;
-        if(cChar == '.')
-        {
-            if(bPoint)
-                return false;
-            else
-                bPoint = true;
-        }
-        else if ( !rtl::isAsciiDigit( cChar ) )
-            return false;
-    }
-    return true;
-}
-
 std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
-
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
     assert(m_aCurToken.eType == TSIZE);
 
     FontSizeType   Type;
     std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(m_aCurToken));
 
-    NextToken();
+    NextTokenFontSize();
 
     switch (m_aCurToken.eType)
     {
@@ -1980,16 +2169,13 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
         case TMINUS:    Type = FontSizeType::MINUS;    break;
         case TMULTIPLY: Type = FontSizeType::MULTIPLY; break;
         case TDIVIDEBY: Type = FontSizeType::DIVIDE;   break;
-
-        default:
-            return DoError(SmParseError::SizeExpected);
+        default: return DoError(SmParseError::SizeExpected);
     }
 
     if (Type != FontSizeType::ABSOLUT)
     {
-        NextToken();
-        if (m_aCurToken.eType != TNUMBER)
-            return DoError(SmParseError::SizeExpected);
+        NextTokenFontSize();
+        if (m_aCurToken.eType != TNUMBER) return DoError(SmParseError::SizeExpected);
     }
 
     // get number argument
@@ -2167,13 +2353,13 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
 std::unique_ptr<SmTextNode> SmParser::DoFunction()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
     switch (m_aCurToken.eType)
     {
         case TFUNC:
             NextToken();    // skip "FUNC"-statement
+            m_aCurToken.eType = TFUNC;
             [[fallthrough]];
 
         case TSIN :
@@ -2366,19 +2552,19 @@ std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
 
 std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
 {
-    DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+      DepthProtect aDepthGuard(m_nParseDepth);
+      if (aDepthGuard.TooDeep())
+          throw std::range_error("parser depth limit");
 
-    auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
-    std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
-    xSNode->SetSubNodes(std::move(pErr), nullptr);
+      auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
+      std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
+      xSNode->SetSubNodes(std::move(pErr), nullptr);
 
-    AddError(eError, xSNode.get());
+      AddError(eError, xSNode.get());
 
-    NextToken();
+      NextToken();
 
-    return xSNode;
+      return xSNode;
 }
 
 // end grammar
@@ -2433,38 +2619,37 @@ std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString &rBuffer)
 
 void SmParser::AddError(SmParseError Type, SmNode *pNode)
 {
-    std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
+      std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
 
-    pErrDesc->m_eType = Type;
-    pErrDesc->m_pNode = pNode;
-    pErrDesc->m_aText = SmResId(RID_ERR_IDENT);
+      pErrDesc->m_eType = Type;
+      pErrDesc->m_pNode = pNode;
+      pErrDesc->m_aText = SmResId(RID_ERR_IDENT);
 
-    const char* pRID;
-    switch (Type)
-    {
-        case SmParseError::UnexpectedChar:     pRID = RID_ERR_UNEXPECTEDCHARACTER; break;
-        case SmParseError::UnexpectedToken:    pRID = RID_ERR_UNEXPECTEDTOKEN;     break;
-        case SmParseError::PoundExpected:      pRID = RID_ERR_POUNDEXPECTED;       break;
-        case SmParseError::ColorExpected:      pRID = RID_ERR_COLOREXPECTED;       break;
-        case SmParseError::LgroupExpected:     pRID = RID_ERR_LGROUPEXPECTED;      break;
-        case SmParseError::RgroupExpected:     pRID = RID_ERR_RGROUPEXPECTED;      break;
-        case SmParseError::LbraceExpected:     pRID = RID_ERR_LBRACEEXPECTED;      break;
-        case SmParseError::RbraceExpected:     pRID = RID_ERR_RBRACEEXPECTED;      break;
-        case SmParseError::ParentMismatch:     pRID = RID_ERR_PARENTMISMATCH;      break;
-        case SmParseError::RightExpected:      pRID = RID_ERR_RIGHTEXPECTED;       break;
-        case SmParseError::FontExpected:       pRID = RID_ERR_FONTEXPECTED;        break;
-        case SmParseError::SizeExpected:       pRID = RID_ERR_SIZEEXPECTED;        break;
-        case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
-        case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
-        default:
-            assert(false);
-            return;
-    }
-    pErrDesc->m_aText += SmResId(pRID);
+      const char* pRID;
+      switch (Type)
+      {
+          case SmParseError::UnexpectedChar:     pRID = RID_ERR_UNEXPECTEDCHARACTER; break;
+          case SmParseError::UnexpectedToken:    pRID = RID_ERR_UNEXPECTEDTOKEN;     break;
+          case SmParseError::PoundExpected:      pRID = RID_ERR_POUNDEXPECTED;       break;
+          case SmParseError::ColorExpected:      pRID = RID_ERR_COLOREXPECTED;       break;
+          case SmParseError::LgroupExpected:     pRID = RID_ERR_LGROUPEXPECTED;      break;
+          case SmParseError::RgroupExpected:     pRID = RID_ERR_RGROUPEXPECTED;      break;
+          case SmParseError::LbraceExpected:     pRID = RID_ERR_LBRACEEXPECTED;      break;
+          case SmParseError::RbraceExpected:     pRID = RID_ERR_RBRACEEXPECTED;      break;
+          case SmParseError::ParentMismatch:     pRID = RID_ERR_PARENTMISMATCH;      break;
+          case SmParseError::RightExpected:      pRID = RID_ERR_RIGHTEXPECTED;       break;
+          case SmParseError::FontExpected:       pRID = RID_ERR_FONTEXPECTED;        break;
+          case SmParseError::SizeExpected:       pRID = RID_ERR_SIZEEXPECTED;        break;
+          case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
+          case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
+          default:
+              assert(false);
+              return;
+      }
+      pErrDesc->m_aText += SmResId(pRID);
 
-    m_aErrDescList.push_back(std::move(pErrDesc));
+      m_aErrDescList.push_back(std::move(pErrDesc));
 }
-
 
 const SmErrorDesc *SmParser::NextError()
 {
@@ -2497,6 +2682,36 @@ const SmErrorDesc *SmParser::GetError()
     if ( !m_aErrDescList.empty() )
         return m_aErrDescList.front().get();
     return nullptr;
+}
+
+// gets number used as arguments in Math formulas (e.g. 'size' command)
+// Format: no negative numbers, must start with a digit, no exponent notation, ...
+static bool lcl_IsNumber(const OUString& rText)
+{
+    bool bPoint = false;
+    const sal_Unicode* pBuffer = rText.getStr();
+    for(sal_Int32 nPos = 0; nPos < rText.getLength(); nPos++, pBuffer++)
+    {
+        const sal_Unicode cChar = rText[nPos];
+        if(cChar == '.')
+        {
+            if(bPoint) return false;
+            else bPoint = true;
+        }
+        else if ( (cChar < '0' || cChar > '9') ) return false;
+    }
+    return true;
+}
+
+static bool lcl_IsNumber16(const OUString& rString)
+{
+    sal_Int32 nLen = rString.getLength();
+    for (sal_Int32 i=0; i<nLen; i++)
+    {
+        sal_Unicode c = rString[i];
+        if ( (c < '0' || c > '9') && (c < 'A' || c > 'F') ) return false;
+    }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
