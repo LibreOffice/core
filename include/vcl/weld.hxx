@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_WELD_HXX
 #define INCLUDED_VCL_WELD_HXX
 
+#include <vcl/jsdialog/executor.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -562,6 +563,9 @@ enum class EntryMessageType
 /// A widget used to choose from a list of items.
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
+    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
+                                                      StringMap& rData);
+
 private:
     OUString m_sSavedValue;
 
@@ -571,10 +575,10 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
-public:
     void signal_changed() { m_aChangeHdl.Call(*this); }
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
+public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
@@ -1242,6 +1246,9 @@ public:
 
 class VCL_DLLPUBLIC Entry : virtual public Widget
 {
+    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
+                                                      StringMap& rData);
+
 private:
     OUString m_sSavedValue;
 
@@ -1251,12 +1258,11 @@ protected:
     Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
+    void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
     void signal_insert_text(OUString& rString);
 
 public:
-    void signal_changed() { m_aChangeHdl.Call(*this); }
-
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;

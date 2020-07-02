@@ -10,12 +10,12 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/IDialogRenderable.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
 
 namespace jsdialog
 {
-VCL_DLLPUBLIC weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
+VCL_DLLPUBLIC bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

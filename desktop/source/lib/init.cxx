@@ -158,7 +158,7 @@
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/uitest/uiobject.hxx>
-#include <vcl/jsdialog/builder.hxx>
+#include <vcl/jsdialog/executor.hxx>
 
 // Needed for getUndoManager()
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -3646,137 +3646,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
         try
         {
             OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
-            weld::Widget* pWidget = jsdialog::FindWeldWidgetsMap(nWindowId, sControlId);
-            if (!pWidget && nWindowId == 0)
-            {
-                pWidget = jsdialog::FindWeldWidgetsMap(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()), sControlId);
-            }
 
-            bIsWeldedDialog = pWidget != nullptr;
-            bool bContinueWithLOKWindow = false;
-
-            if (bIsWeldedDialog)
-            {
-                OUString sControlType = aMap["type"];
-                OUString sAction = aMap["cmd"];
-
-                if (sControlType == "tabcontrol")
-                {
-                    auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
-                    if (pNotebook)
-                    {
-                        if (sAction == "selecttab")
-                        {
-                            OString pageId = OUStringToOString(aMap["data"], RTL_TEXTENCODING_ASCII_US);
-                            int page = std::atoi(pageId.getStr());
-
-                            pNotebook->set_current_page(page);
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "combobox")
-                {
-                    auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
-                    if (pCombobox)
-                    {
-                        if (sAction == "selected")
-                        {
-                            int separatorPos = aMap["data"].indexOf(';');
-                            if (separatorPos)
-                            {
-                                OUString entryPos = aMap["data"].copy(0, separatorPos);
-                                OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
-                                int pos = std::atoi(posString.getStr());
-                                pCombobox->set_active(pos);
-                                pCombobox->signal_changed();
-                            }
-                        }
-                        else if (sAction == "change")
-                        {
-                            pCombobox->set_entry_text(aMap["data"]);
-                            pCombobox->signal_changed();
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "pushbutton")
-                {
-                    auto pButton = dynamic_cast<weld::Button*>(pWidget);
-                    if (pButton)
-                    {
-                        if (sAction == "click")
-                        {
-                            pButton->clicked();
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "drawingarea")
-                {
-                    auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
-                    if (pArea)
-                    {
-                        if (sAction == "click")
-                        {
-                            pArea->click(Point(10, 10));
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "spinfield")
-                {
-                    auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
-                    if (pSpinField)
-                    {
-                        if (sAction == "plus")
-                        {
-                            pSpinField->set_value(pSpinField->get_value() + 1);
-                        }
-                        else if (sAction == "minus")
-                        {
-                            pSpinField->set_value(pSpinField->get_value() - 1);
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "toolbox")
-                {
-                    auto pToolbar = dynamic_cast<weld::Toolbar*>(pWidget);
-                    if (pToolbar)
-                    {
-                        if (sAction == "click")
-                        {
-                            pToolbar->signal_clicked(OUStringToOString(aMap["data"], RTL_TEXTENCODING_ASCII_US));
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else if (sControlType == "edit")
-                {
-                    auto pEdit = dynamic_cast<weld::Entry*>(pWidget);
-                    if (pEdit)
-                    {
-                        if (sAction == "change")
-                        {
-                            pEdit->set_text(aMap["data"]);
-                            pEdit->signal_changed();
-                        }
-                        else
-                            bContinueWithLOKWindow = true;
-                    }
-                }
-                else
-                {
-                    bContinueWithLOKWindow = true;
-                }
-            }
+            bIsWeldedDialog = jsdialog::ExecuteAction(nWindowId, sControlId, aMap);
+            if (!bIsWeldedDialog)
+                bIsWeldedDialog = jsdialog::ExecuteAction(reinterpret_cast<sal_uInt64>(SfxViewShell::Current()),
+                                                          sControlId, aMap);
 
             if (!pWindow)
             {
@@ -3784,7 +3658,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                 return;
             }
 
-            if (!bIsWeldedDialog || bContinueWithLOKWindow)
+            if (!bIsWeldedDialog)
             {
                 WindowUIObject aUIObject(pWindow);
                 std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["id"]));
