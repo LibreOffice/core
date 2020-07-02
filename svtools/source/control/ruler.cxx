@@ -143,7 +143,7 @@ ImplRulerData::ImplRulerData() :
 {
 }
 
-static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
+const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 {
 { MapUnit::Map100thMM,        100,    25.0,    25.0,     50.0,    100.0,  " mm"    }, // MM
 { MapUnit::Map100thMM,       1000,   100.0,   500.0,   1000.0,   1000.0,  " cm"    }, // CM

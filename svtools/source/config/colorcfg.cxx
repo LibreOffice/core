@@ -42,7 +42,7 @@
 using namespace utl;
 using namespace com::sun::star;
 
-static const char g_sIsVisible[] = "/IsVisible";
+const char g_sIsVisible[] = "/IsVisible";
 
 
 namespace svtools

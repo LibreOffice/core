@@ -40,7 +40,7 @@ using namespace com::sun::star::task;
 
 namespace
 {
-static struct JavaEvents {
+struct JavaEvents {
     bool bDisabledHandled : 1;
     bool bInvalidSettingsHandled : 1;
     bool bNotFoundHandled : 1;

@@ -59,7 +59,7 @@ static T search(TokenEntry<T> const (&dataTable)[LEN], const OUString & key, T n
 using HTML_TokenEntry = TokenEntry<HtmlTokenId>;
 
 // this array is sorted by the name (even if it doesn't look like it from the constant names)
-static HTML_TokenEntry const aHTMLTokenTab[] = {
+HTML_TokenEntry const aHTMLTokenTab[] = {
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_comment),         HtmlTokenId::COMMENT},
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_doctype),         HtmlTokenId::DOCTYPE},
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_anchor),          HtmlTokenId::ANCHOR_ON},
@@ -652,7 +652,7 @@ static bool bSortColorKeyWords = false;
 // Color names are not exported (source:
 // "http://www.uio.no/~mnbjerke/colors_w.html")
 // "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
-static HTML_ColorEntry const aHTMLColorNameTab[] = {
+HTML_ColorEntry const aHTMLColorNameTab[] = {
     { OUStringLiteral("aliceblue"), 0x00f0f8ffUL },
     { OUStringLiteral("antiquewhite"), 0x00faebd7UL },
     { OUStringLiteral("aqua"), 0x0000ffffUL },

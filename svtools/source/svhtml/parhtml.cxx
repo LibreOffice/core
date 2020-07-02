@@ -51,7 +51,7 @@ const sal_Int32 MAX_ENTITY_LEN( 8 );
 // Tables to convert option values into strings
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
+HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_IT_text,      HTMLInputType::Text        },
     { OOO_STRING_SVTOOLS_HTML_IT_password,  HTMLInputType::Password    },
@@ -69,7 +69,7 @@ static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
 };
 
 // <TABLE FRAME=xxx>
-static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
+HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TF_void,    HTMLTableFrame::Void    },
     { OOO_STRING_SVTOOLS_HTML_TF_above,   HTMLTableFrame::Above   },
@@ -84,7 +84,7 @@ static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
 };
 
 // <TABLE RULES=xxx>
-static HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
+HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TR_none,   HTMLTableRules::NONE      },
     { OOO_STRING_SVTOOLS_HTML_TR_groups, HTMLTableRules::Groups    },
@@ -1893,7 +1893,7 @@ enum class HtmlMeta {
 }
 
 // <META NAME=xxx>
-static HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =
+HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HtmlMeta::Author        },
     { OOO_STRING_SVTOOLS_HTML_META_changed,       HtmlMeta::Changed       },
