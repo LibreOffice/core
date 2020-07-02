@@ -27,21 +27,21 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <memory>
 
-static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-static const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
-static const char ITEM_DESCRIPTOR_ENABLED[]     = "Enabled";
+const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
+const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
+const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
+const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
+const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+const char ITEM_DESCRIPTOR_ENABLED[]     = "Enabled";
 
-static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
-static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
+const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
+const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
 
-static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
-static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
+const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
+const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
 class VbaCommandBarHelper;
 typedef std::shared_ptr< VbaCommandBarHelper > VbaCommandBarHelperRef;

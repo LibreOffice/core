@@ -851,10 +851,10 @@ double UserFormGeometryHelper::getOffsetY() const
 }
 
 
-static const char saPosXName[] = "PositionX";
-static const char saPosYName[] = "PositionY";
-static const char saWidthName[] = "Width";
-static const char saHeightName[] = "Height";
+const char saPosXName[] = "PositionX";
+const char saPosYName[] = "PositionY";
+const char saWidthName[] = "Width";
+const char saHeightName[] = "Height";
 
 double UserFormGeometryHelper::implGetPos( bool bPosY ) const
 {
