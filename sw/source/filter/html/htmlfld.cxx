@@ -48,7 +48,7 @@ struct HTMLNumFormatTableEntry
 
 }
 
-static HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
+HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
 {
     { OOO_STRING_SW_HTML_FT_author,   SwFieldIds::Author      },
     { OOO_STRING_SW_HTML_FT_sender,   SwFieldIds::ExtUser     },
@@ -62,7 +62,7 @@ static HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
     { nullptr,                        SwFieldIds(0)           }
 };
 
-static HTMLNumFormatTableEntry const aHTMLDateFieldFormatTable[] =
+HTMLNumFormatTableEntry const aHTMLDateFieldFormatTable[] =
 {
     { "SSYS",       NF_DATE_SYSTEM_SHORT    },
     { "LSYS",       NF_DATE_SYSTEM_LONG     },
@@ -84,7 +84,7 @@ static HTMLNumFormatTableEntry const aHTMLDateFieldFormatTable[] =
     { nullptr,                    NF_NUMERIC_START }
 };
 
-static HTMLNumFormatTableEntry const aHTMLTimeFieldFormatTable[] =
+HTMLNumFormatTableEntry const aHTMLTimeFieldFormatTable[] =
 {
     { "SYS",     NF_TIME_HHMMSS },
     { "SSMM24",      NF_TIME_HHMM },
@@ -92,7 +92,7 @@ static HTMLNumFormatTableEntry const aHTMLTimeFieldFormatTable[] =
     { nullptr,                 NF_NUMERIC_START }
 };
 
-static HTMLOptionEnum<SvxNumType> const aHTMLPageNumFieldFormatTable[] =
+HTMLOptionEnum<SvxNumType> const aHTMLPageNumFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_uletter,     SVX_NUM_CHARS_UPPER_LETTER },
     { OOO_STRING_SW_HTML_FF_lletter,     SVX_NUM_CHARS_LOWER_LETTER },
@@ -107,7 +107,7 @@ static HTMLOptionEnum<SvxNumType> const aHTMLPageNumFieldFormatTable[] =
     { nullptr,                           SvxNumType(0) }
 };
 
-static HTMLOptionEnum<SwExtUserSubType> const aHTMLExtUsrFieldSubTable[] =
+HTMLOptionEnum<SwExtUserSubType> const aHTMLExtUsrFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_company,     EU_COMPANY },
     { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
@@ -127,14 +127,14 @@ static HTMLOptionEnum<SwExtUserSubType> const aHTMLExtUsrFieldSubTable[] =
     { nullptr,                           SwExtUserSubType(0) }
 };
 
-static HTMLOptionEnum<SwAuthorFormat> const aHTMLAuthorFieldFormatTable[] =
+HTMLOptionEnum<SwAuthorFormat> const aHTMLAuthorFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
     { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
     { nullptr,                           SwAuthorFormat(0) }
 };
 
-static HTMLOptionEnum<SwPageNumSubType> const aHTMLPageNumFieldSubTable[] =
+HTMLOptionEnum<SwPageNumSubType> const aHTMLPageNumFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
     { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
@@ -150,7 +150,7 @@ static HTMLOptionEnum<SwPageNumSubType> const aHTMLPageNumFieldSubTable[] =
     const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
     const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
 
-static HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldSubTable[] =
+HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_title,   DI_TITLE },
     { OOO_STRING_SW_HTML_FS_theme,   DI_SUBJECT },
@@ -166,7 +166,7 @@ static HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldSubTable[] =
     { nullptr,                       0 }
 };
 
-static HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldFormatTable[] =
+HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_author,  DI_SUB_AUTHOR },
     { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
@@ -174,7 +174,7 @@ static HTMLOptionEnum<sal_uInt16> const aHTMLDocInfoFieldFormatTable[] =
     { nullptr,                       0 }
 };
 
-static HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
+HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
     { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
@@ -186,7 +186,7 @@ static HTMLOptionEnum<SwDocStatSubType> const aHTMLDocStatFieldSubTable[] =
     { nullptr,                       SwDocStatSubType(0) }
 };
 
-static HTMLOptionEnum<SwFileNameFormat> const aHTMLFileNameFieldFormatTable[] =
+HTMLOptionEnum<SwFileNameFormat> const aHTMLFileNameFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
     { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },

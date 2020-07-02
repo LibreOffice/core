@@ -13,7 +13,7 @@
 
 #include <wrtsh.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/core/objectpositioning/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/core/objectpositioning/data/";
 
 /// Covers sw/source/core/objectpositioning/ fixes.
 class SwCoreObjectpositioningTest : public SwModelTestBase

@@ -34,11 +34,11 @@
 
 using namespace ::com::sun::star;
 
-static const char cURLFormLetter[] = ".uno:DataSourceBrowser/FormLetter";
-static const char cURLInsertContent[] = ".uno:DataSourceBrowser/InsertContent";//data into fields
-static const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns";//data into text
-static const char cURLDocumentDataSource[] = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
-static const char cInternalDBChangeNotification[] = ".uno::Writer/DataSourceChanged";
+const char cURLFormLetter[] = ".uno:DataSourceBrowser/FormLetter";
+const char cURLInsertContent[] = ".uno:DataSourceBrowser/InsertContent";//data into fields
+const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns";//data into text
+const char cURLDocumentDataSource[] = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
+const char cInternalDBChangeNotification[] = ".uno::Writer/DataSourceChanged";
 
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)

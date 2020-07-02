@@ -1045,7 +1045,7 @@ struct TextInfo
 
 }
 
-static const TextInfo aTextInfoArr[] =
+const TextInfo aTextInfoArr[] =
 {
     {AUTH_FIELD_IDENTIFIER,      HID_AUTH_FIELD_IDENTIFIER      },
     {AUTH_FIELD_AUTHORITY_TYPE,  HID_AUTH_FIELD_AUTHORITY_TYPE  },

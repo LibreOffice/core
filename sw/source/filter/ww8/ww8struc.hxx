@@ -991,7 +991,7 @@ struct WW8_WKB
 #endif
 
 // Maximum number of columns according the WW8 specification
-static const sal_uInt8 MAX_NO_OF_SEP_COLUMNS = 44;
+const sal_uInt8 MAX_NO_OF_SEP_COLUMNS = 44;
 
 struct SEPr
 {

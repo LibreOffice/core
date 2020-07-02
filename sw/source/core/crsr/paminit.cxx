@@ -21,7 +21,7 @@
 #include <pamtyp.hxx>
 #include <cshtyp.hxx>
 
-static const SwMoveFnCollection aFwrd = {
+const SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,
     /* fnNds        */  &GoNextNds,
     /* fnDoc        */  &GoEndDoc,
@@ -32,7 +32,7 @@ static const SwMoveFnCollection aFwrd = {
     /* fnSection    */  &SwNodes::GoStartOfSection
 };
 
-static const SwMoveFnCollection aBwrd = {
+const SwMoveFnCollection aBwrd = {
     /* fnNd         */  &GoPrevious,
     /* fnNds        */  &GoPreviousNds,
     /* fnDoc        */  &GoStartDoc,

@@ -189,7 +189,7 @@ SwXFootnote::getImplementationName()
     return "SwXFootnote";
 }
 
-static char const*const g_ServicesFootnote[] =
+char const*const g_ServicesFootnote[] =
 {
     "com.sun.star.text.TextContent",
     "com.sun.star.text.Footnote",
@@ -197,9 +197,9 @@ static char const*const g_ServicesFootnote[] =
     "com.sun.star.text.Endnote", // NB: only supported for endnotes!
 };
 
-static const size_t g_nServicesEndnote( SAL_N_ELEMENTS(g_ServicesFootnote) );
+const size_t g_nServicesEndnote( SAL_N_ELEMENTS(g_ServicesFootnote) );
 
-static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
+const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 
 sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
 {

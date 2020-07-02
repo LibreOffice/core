@@ -238,7 +238,7 @@ public:
 }
 
 // Default zoom factor
-const static double aEdgeScale = 0.5;
+const double aEdgeScale = 0.5;
 
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;

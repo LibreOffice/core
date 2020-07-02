@@ -45,11 +45,11 @@ namespace
     // #i59534: If a paragraph will be split we have to restore some redline positions
     // This help function checks a position compared with a node and a content index
 
-    static const int BEFORE_NODE = 0;          // Position before the given node index
-    static const int BEFORE_SAME_NODE = 1;     // Same node index but content index before given content index
-    static const int SAME_POSITION = 2;        // Same node index and samecontent index
-    static const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
-    static const int BEHIND_NODE = 4;          // Position behind the given node index
+    const int BEFORE_NODE = 0;          // Position before the given node index
+    const int BEFORE_SAME_NODE = 1;     // Same node index but content index before given content index
+    const int SAME_POSITION = 2;        // Same node index and samecontent index
+    const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
+    const int BEHIND_NODE = 4;          // Position behind the given node index
 
     int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, sal_Int32 nContent )
     {

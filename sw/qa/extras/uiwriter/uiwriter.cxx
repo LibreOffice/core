@@ -645,8 +645,8 @@ static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
     rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
 }
 
-static const OUString ORIGINAL_REPLACE_CONTENT("toto titi tutu");
-static const OUString EXPECTED_REPLACE_CONTENT("toto toto tutu");
+const OUString ORIGINAL_REPLACE_CONTENT("toto titi tutu");
+const OUString EXPECTED_REPLACE_CONTENT("toto toto tutu");
 
 void SwUiWriterTest::testReplaceForward()
 {
@@ -1464,9 +1464,9 @@ void SwUiWriterTest::testTextFieldGetAnchorGetTextInFooter() {
 
 // Chinese conversion tests
 
-static const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
-static const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
-static const OUStringLiteral NON_CHINESE_CONTENT("Hippopotamus");
+const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
+const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
+const OUStringLiteral NON_CHINESE_CONTENT("Hippopotamus");
 
 // Tests that a blank document is still blank after conversion
 void SwUiWriterTest::testChineseConversionBlank()

@@ -70,7 +70,7 @@ using namespace ::com::sun::star;
 static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc );
 
 // Implementation of SwCSS1Parsers (actually swcss1.cxx)
-static const sal_uInt16 aItemIds[] =
+const sal_uInt16 aItemIds[] =
 {
     RES_BREAK,
     RES_PAGEDESC,

@@ -1296,7 +1296,7 @@ static const char* s_EventNames[] =
     "OnFieldMergeFinished",
     "OnLayoutFinished"
 };
-static sal_Int32 const s_nEvents(SAL_N_ELEMENTS(s_EventNames));
+sal_Int32 const s_nEvents(SAL_N_ELEMENTS(s_EventNames));
 
 Sequence< OUString >    SwDocShell::GetEventNames()
 {

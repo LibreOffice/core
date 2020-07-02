@@ -75,7 +75,7 @@ SwMasterUsrPref::~SwMasterUsrPref()
 {
 }
 
-static const auto g_UpdateLinkIndex = 17;
+const auto g_UpdateLinkIndex = 17;
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {

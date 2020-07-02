@@ -93,7 +93,7 @@ void SwTableShell::InitInterface_Impl()
 }
 
 
-static const sal_uInt16 aUITableAttrRange[] =
+const sal_uInt16 aUITableAttrRange[] =
 {
     XATTR_FILL_FIRST,               XATTR_FILL_LAST,
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,

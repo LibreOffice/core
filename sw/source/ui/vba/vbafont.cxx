@@ -41,7 +41,7 @@ struct MapPair
 
 }
 
-static MapPair const UnderLineTable[] = {
+MapPair const UnderLineTable[] = {
         { word::WdUnderline::wdUnderlineNone, css::awt::FontUnderline::NONE },
         { word::WdUnderline::wdUnderlineSingle, css::awt::FontUnderline::SINGLE },
         { word::WdUnderline::wdUnderlineWords, css::awt::FontUnderline::SINGLE },

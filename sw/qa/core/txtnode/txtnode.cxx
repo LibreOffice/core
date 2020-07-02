@@ -15,7 +15,7 @@
 #include <frameformats.hxx>
 #include <wrtsh.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/core/txtnode/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/core/txtnode/data/";
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase

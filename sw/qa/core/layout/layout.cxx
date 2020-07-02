@@ -13,7 +13,7 @@
 
 #include <wrtsh.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
 /// Covers sw/source/core/layout/ fixes.
 class SwCoreLayoutTest : public SwModelTestBase

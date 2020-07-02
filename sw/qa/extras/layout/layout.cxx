@@ -36,7 +36,7 @@
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase

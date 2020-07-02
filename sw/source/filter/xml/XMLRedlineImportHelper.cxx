@@ -231,9 +231,9 @@ RedlineInfo::~RedlineInfo()
     delete pNextRedline;
 }
 
-static const char g_sShowChanges[] = "ShowChanges";
-static const char g_sRecordChanges[] = "RecordChanges";
-static const char g_sRedlineProtectionKey[] = "RedlineProtectionKey";
+const char g_sShowChanges[] = "ShowChanges";
+const char g_sRecordChanges[] = "RecordChanges";
+const char g_sRedlineProtectionKey[] = "RedlineProtectionKey";
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
     SvXMLImport & rImport,

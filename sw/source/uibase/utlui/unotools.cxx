@@ -79,7 +79,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xVie
     }
 }
 
-static const sal_Int16 nZoomValues[] =
+const sal_Int16 nZoomValues[] =
 {
     20,
     40,

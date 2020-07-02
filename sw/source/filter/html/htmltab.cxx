@@ -72,7 +72,7 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-static HTMLOptionEnum<sal_Int16> const aHTMLTableVAlignTable[] =
+HTMLOptionEnum<sal_Int16> const aHTMLTableVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,     text::VertOrientation::NONE       },
     { OOO_STRING_SVTOOLS_HTML_VA_middle,  text::VertOrientation::CENTER     },

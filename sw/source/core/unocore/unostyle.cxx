@@ -154,7 +154,7 @@ class SwStyleProperties_Impl;
                 , m_fTranslateIndex(fTranslateIndex)
             { }
     };
-    static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
+    const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
     // these should really be constexprs, but MSVC still is apparently too stupid for them
     #define nPoolChrNormalRange (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN)
     #define nPoolChrHtmlRange   (RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN)
@@ -185,7 +185,7 @@ class SwStyleProperties_Impl;
                 , m_nCollectionBits(nCollectionBits)
             { }
     };
-    static const std::vector<ParagraphStyleCategoryEntry>* our_pParagraphStyleCategoryEntries;
+    const std::vector<ParagraphStyleCategoryEntry>* our_pParagraphStyleCategoryEntries;
 }
 static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
 

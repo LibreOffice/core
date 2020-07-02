@@ -3496,7 +3496,7 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
  * They are local structures, only needed within the HTML-DLL.
  */
 
-static SwAttrFnTab const aCSS1AttrFnTab = {
+SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutCSS1_SvxCaseMap,
 /* RES_CHRATR_CHARSETCOLOR  */      nullptr,
 /* RES_CHRATR_COLOR */              OutCSS1_SvxColor,
