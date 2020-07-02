@@ -19,7 +19,6 @@
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/spinfld.hxx>
-#include <vcl/fmtfield.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 
