@@ -309,14 +309,6 @@ static const SmTokenTableEntry aTokenTableColor[] =
     { "yellow", TYELLOW, '\0', TG::Color, 0}
 };
 
-//Checks if keyword is in the list by SmTokenTableEntry.
-#if !defined NDEBUG
-static bool sortCompare(const SmTokenTableEntry & lhs, const SmTokenTableEntry & rhs)
-{
-    return OUString::createFromAscii(lhs.pIdent).compareToIgnoreAsciiCase(OUString::createFromAscii(rhs.pIdent)) < 0;
-}
-#endif
-
 //Checks if keyword is in the list.
 static bool findCompare(const SmTokenTableEntry & lhs, const OUString & s)
 {
@@ -1271,12 +1263,14 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 return std::unique_ptr<SmNode>(pNode.release());
             }
         case TIDENT :
+        case THEX :
+             m_aCurToken.eType = TNUMBER;
+             [[fallthrough]];
         case TNUMBER :
         {
             auto pTextNode = std::make_unique<SmTextNode>(m_aCurToken,
-                                             m_aCurToken.eType == TNUMBER ?
-                                             FNT_NUMBER :
-                                             FNT_VARIABLE);
+                m_aCurToken.eType == TNUMBER ? FNT_NUMBER : FNT_VARIABLE);
+
             if (!bGroupNumberIdent)
             {
                 NextToken();
