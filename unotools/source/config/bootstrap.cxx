@@ -405,9 +405,9 @@ static Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap const & _rData, B
 
 // Error reporting
 
-static char const IS_MISSING[] = "is missing";
-static char const IS_INVALID[] = "is corrupt";
-static char const PERIOD[] = ". ";
+char const IS_MISSING[] = "is missing";
+char const IS_INVALID[] = "is corrupt";
+char const PERIOD[] = ". ";
 
 static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
 {

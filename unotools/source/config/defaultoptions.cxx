@@ -120,7 +120,7 @@ struct PathToDefaultMapping_Impl
 
 }
 
-static PathToDefaultMapping_Impl const PathMap_Impl[] =
+PathToDefaultMapping_Impl const PathMap_Impl[] =
 {
     { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
     { SvtPathOptions::PATH_AUTOCORRECT,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },

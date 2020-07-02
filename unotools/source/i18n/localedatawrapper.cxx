@@ -41,8 +41,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-static const sal_uInt16 nCurrFormatInvalid = 0xffff;
-static const sal_uInt16 nCurrFormatDefault = 0;
+const sal_uInt16 nCurrFormatInvalid = 0xffff;
+const sal_uInt16 nCurrFormatDefault = 0;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
