@@ -242,13 +242,10 @@ cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 
 # Save
-cmd/32/savebasicas.png cmd/32/saveas.png
 cmd/32/savegraphic.png cmd/32/save.png
 
-cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
 
-cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 
 # Text
@@ -985,27 +982,19 @@ cmd/32/dbformopen.png cmd/32/open.png
 cmd/32/dbqueryopen.png cmd/32/open.png
 cmd/32/dbreportopen.png cmd/32/open.png
 cmd/32/dbtableopen.png cmd/32/open.png
-cmd/32/insertdoc.png cmd/32/open.png
 cmd/32/open_h.png cmd/32/open.png
 
 cmd/lc_dbformopen.png cmd/lc_open.png
 cmd/lc_dbqueryopen.png cmd/lc_open.png
 cmd/lc_dbreportopen.png cmd/lc_open.png
 cmd/lc_dbtableopen.png cmd/lc_open.png
-cmd/lc_insertdoc.png cmd/lc_open.png
 cmd/lc_open_h.png cmd/lc_open.png
 
 cmd/sc_dbformopen.png cmd/sc_open.png
 cmd/sc_dbqueryopen.png cmd/sc_open.png
 cmd/sc_dbreportopen.png cmd/sc_open.png
 cmd/sc_dbtableopen.png cmd/sc_open.png
-cmd/sc_insertdoc.png cmd/sc_open.png
 cmd/sc_open_h.png cmd/sc_open.png
-
-# Import
-cmd/32/importfromfile.png cmd/32/dataimport.png
-cmd/lc_importfromfile.png cmd/lc_dataimport.png
-cmd/sc_importfromfile.png cmd/sc_dataimport.png
 
 # Wizard
 cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
@@ -1069,13 +1058,10 @@ cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 
 # Group
 cmd/32/groupmenu.png cmd/32/formatgroup.png
-cmd/32/leaveallgroups.png cmd/32/leavegroup.png
 
 cmd/lc_groupmenu.png cmd/lc_formatgroup.png
-cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 
 cmd/sc_groupmenu.png cmd/sc_formatgroup.png
-cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
 
 # Undo
 cmd/32/recundo.png cmd/32/undo.png
@@ -1346,6 +1332,7 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/32/cellcontentsmenu.png cmd/32/calculate.png
 cmd/32/chartmenu.png cmd/32/diagramtype.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
+cmd/32/editselectmenu.png cmd/32/selecttables.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
 cmd/32/groupoutlinemenu.png cmd/32/group.png
@@ -1376,6 +1363,7 @@ cmd/lc_sheetcommentmenu.png cmd/lc_shownote.png
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 cmd/sc_chartmenu.png cmd/sc_diagramtype.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
+cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/sc_groupoutlinemenu.png cmd/sc_group.png
