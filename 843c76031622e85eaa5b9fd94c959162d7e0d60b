@@ -123,6 +123,24 @@
       "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bba6ec59_726ed696",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T13:05:31Z",
+      "side": 1,
+      "message": "The trailing comma is entirely redundant.  \"Excess\" elements (for which there are no initializers provided) are initialized according to [dcl.init.aggr]/8, which for the second element of the two-element bool array here boils down to zero-initialization (i.e., false).\n\nBut as the second element\u0027s initial value is irrelevant as it is never used (in fact, the second element\u0027s value is never used, as it is only written to but never read, see my initial argument about cleanliness, which you dismissed), the \", \u003cnothing\u003e\" syntax happens to fit here to---somewhat subtly and maybe head-scratching-inducingly, but sill---indicate that its actual initial value is irrelevant.",
+      "parentUuid": "42a2b8e9_9f2551da",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
