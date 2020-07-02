@@ -204,7 +204,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
 }
 
-static const ::cppu::ImplementationEntry s_entries [] =
+const ::cppu::ImplementationEntry s_entries [] =
 {
     {
         create,

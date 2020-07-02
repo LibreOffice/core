@@ -410,10 +410,10 @@ public:
 };
 
 //some helping variables ( names for my special properties )
-static const char g_sPropertyNameForCount[] = "RowCount";
-static const char g_sPropertyNameForFinalCount[] = "IsRowCountFinal";
-static const char g_sPropertyNameForFetchSize[] = "FetchSize";
-static const char g_sPropertyNameForFetchDirection[] = "FetchDirection";
+const char g_sPropertyNameForCount[] = "RowCount";
+const char g_sPropertyNameForFinalCount[] = "IsRowCountFinal";
+const char g_sPropertyNameForFetchSize[] = "FetchSize";
+const char g_sPropertyNameForFetchDirection[] = "FetchDirection";
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > const & xInfo )
