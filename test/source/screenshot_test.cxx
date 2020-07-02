@@ -40,7 +40,7 @@ using namespace css;
 using namespace css::uno;
 
     /// the target directory for screenshots
-static constexpr OUStringLiteral g_aScreenshotDirectory("screenshots");
+constexpr OUStringLiteral g_aScreenshotDirectory("screenshots");
 
 ScreenshotTest::ScreenshotTest()
     : maKnownDialogs()
