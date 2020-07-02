@@ -20,8 +20,6 @@
 
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <docsh.hxx>
-#include <unordered_map>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
