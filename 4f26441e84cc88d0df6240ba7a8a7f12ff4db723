@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8893d65_32ad3294",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T14:00:24Z",
+      "side": 1,
+      "message": "But in *this* function, please do change the function\u0027s argument name to rListBoxStyles, since it\u0027s just an argument, that is not a member, nor a reference to UNO interface.",
+      "range": {
+        "startLine": 50,
+        "startChar": 41,
+        "endLine": 50,
+        "endChar": 43
+      },
+      "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d2f0d0_8219a750",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T14:00:24Z",
+      "side": 1,
+      "message": "I suppose that this function does not need to be a static member of the class. It might be simply a static free function in the CXX, where it\u0027s exclusively used. Or are you going to use it outside of that unit?",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 93
+      },
+      "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
