@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "362ffc67_3b1090c1",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T15:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8893d65_32ad3294",
+      "range": {
+        "startLine": 50,
+        "startChar": 41,
+        "endLine": 50,
+        "endChar": 43
+      },
+      "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33d2f0d0_8219a750",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
         "patchSetId": 16
@@ -41,6 +65,53 @@
         "startChar": 4,
         "endLine": 64,
         "endChar": 93
+      },
+      "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0daee25_4cb04131",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T15:00:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "33d2f0d0_8219a750",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 93
+      },
+      "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a3bb6cd8_6d67507a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T15:00:18Z",
+      "side": 1,
+      "message": "same for this i suppose.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 0
       },
       "revId": "4f26441e84cc88d0df6240ba7a8a7f12ff4db723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
