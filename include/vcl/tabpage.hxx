@@ -23,8 +23,26 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/IContext.hxx>
-#include <vcl/scrbar.hxx>
+
+class TabPage;
+class ImpVclTabPage;
+
+class TabPageContainer final : public vcl::Window
+{
+private:
+    VclPtr<TabPage> mxParent;
+    Point mStartPos;
+
+public:
+    explicit TabPageContainer(TabPage* pParent);
+    virtual ~TabPageContainer() override;
+    virtual void dispose() override;
+
+    void Scroll(long nHorzScroll, long nVertScroll, ScrollFlags nFlags = ScrollFlags::NONE) override;
+    Point GetStartPos() { return mStartPos; }
+};
 
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
@@ -32,20 +50,16 @@ class VCL_DLLPUBLIC TabPage
     , public vcl::IContext
 {
 private:
+    std::unique_ptr<ImpVclTabPage> pImpVclTabPage;
+    Link<TabPage&, void> aModifyHdlLink;
+
+private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
-    VclPtr<ScrollBar> mpHScrollBar;
-    VclPtr<ScrollBar> mpVScrollBar;
-    VclPtr<ScrollBarBox> mpScrollBox;
-
 protected:
-    void ImpUpdateSrollBarVis(WinBits nWinStyle);
-    void ImpInitScrollBars();
-    void ImpSetScrollBarRanges();
-    void ImpSetHScrollBarThumbPos();
-    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    static WinBits ImplInitStyle(WinBits nStyle);
 
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -58,6 +72,8 @@ public:
 
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool    PreNotify(NotifyEvent& rNEvt) override;
+    virtual bool    EventNotify(NotifyEvent& rNEvt) override;
 
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
@@ -65,11 +81,12 @@ public:
     virtual void    SetSizePixel(const Size& rNewSize) override;
     virtual Size    GetOptimalSize() const override;
 
-    bool HandleCommand(const CommandEvent& rCEvt);
-    void Enable(bool bEnable);
     virtual void Resize() override;
-    Size CalcMinimumSize() const;
-    void InitFromStyle(WinBits nWinStyle);
+    virtual void GetFocus() override;
+    virtual Size CalcMinimumSize() const;
+
+    ScrollBar& GetVScrollBar() const;
+    TabPageContainer* GetTabPageContainer();
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX

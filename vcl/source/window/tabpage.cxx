@@ -23,6 +23,343 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
+#include <svl/lstner.hxx>
+#include <vcl/scrbar.hxx>
+
+TabPageContainer::TabPageContainer(TabPage* pParent)
+    : Window(pParent)
+    , mxParent(pParent)
+{
+    Color aBackgroundColor = GetSettings().GetStyleSettings().GetWorkspaceColor();
+    SetBackground(aBackgroundColor);
+    pParent->SetBackground(aBackgroundColor);
+}
+
+TabPageContainer::~TabPageContainer()
+{
+    disposeOnce();
+}
+
+void TabPageContainer::dispose()
+{
+    mxParent.clear();
+    Window::dispose();
+}
+
+void TabPageContainer::Scroll(long nHorzScroll, long nVertScroll, ScrollFlags nFlags)
+{
+    mStartPos.AdjustX(nHorzScroll);
+    mStartPos.AdjustY(nVertScroll);
+    Window::Scroll(nHorzScroll, nVertScroll, nFlags);
+}
+
+class ImpVclTabPage : public SfxListener
+{
+private:
+    VclPtr<TabPage>            pVclTabPage;
+
+    VclPtr<TabPageContainer>   mpTabPageContainer;
+    VclPtr<ScrollBar>          mpHScrollBar;
+    VclPtr<ScrollBar>          mpVScrollBar;
+    VclPtr<ScrollBarBox>       mpScrollBox;
+
+protected:
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    void                ImpUpdateSrollBarVis( WinBits nWinStyle );
+    void                ImpInitScrollBars();
+    void                ImpSetScrollBarRanges();
+    DECL_LINK(    ScrollHdl, ScrollBar*, void );
+
+public:
+                ImpVclTabPage( TabPage* pVclTabPage, WinBits nWinStyle );
+                virtual ~ImpVclTabPage() override;
+
+    void        Resize();
+    void        GetFocus();
+
+    bool        HandleCommand( const CommandEvent& rCEvt );
+
+    void        Enable( bool bEnable );
+
+    Size        CalcMinimumSize() const;
+
+    void        InitFromStyle( WinBits nWinStyle );
+
+    TabPageContainer* GetTabPageContainer() { return mpTabPageContainer; }
+    ScrollBar&  GetHScrollBar() { return *mpHScrollBar; }
+    ScrollBar&  GetVScrollBar() { return *mpVScrollBar; }
+};
+
+ImpVclTabPage::ImpVclTabPage( TabPage* pTabPage, WinBits nWinStyle )
+    : pVclTabPage(pTabPage)
+    , mpTabPageContainer(VclPtr<TabPageContainer>::Create(pVclTabPage))
+    , mpHScrollBar(VclPtr<ScrollBar>::Create(pVclTabPage, WB_HSCROLL|WB_DRAG))
+    , mpVScrollBar(VclPtr<ScrollBar>::Create(pVclTabPage, WB_VSCROLL|WB_DRAG))
+    , mpScrollBox(VclPtr<ScrollBarBox>::Create(pVclTabPage, WB_SIZEABLE))
+{
+    mpVScrollBar->SetScrollHdl( LINK( this, ImpVclTabPage, ScrollHdl ) );
+    mpHScrollBar->SetScrollHdl( LINK( this, ImpVclTabPage, ScrollHdl ) );
+    InitFromStyle( nWinStyle );
+}
+
+void ImpVclTabPage::ImpUpdateSrollBarVis( WinBits nWinStyle )
+{
+    const bool bHaveVScroll = mpVScrollBar->IsVisible();
+    const bool bHaveHScroll = mpHScrollBar->IsVisible();
+    const bool bHaveScrollBox = mpScrollBox->IsVisible();
+
+    bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    const bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
+
+    const bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
+    if ( !bNeedVScroll && bAutoVScroll )
+    {
+        if (mpTabPageContainer)
+        {
+            long nMaxHeightChildren(0);
+            vcl::Window* win = mpTabPageContainer->GetWindow(GetWindowType::FirstChild);
+            while (win)
+            {
+                nMaxHeightChildren = std::max(nMaxHeightChildren, win->GetPosPixel().getY() + win->GetOutputSizePixel().Height());
+                win = win->GetWindow(GetWindowType::Next);
+            }
+
+            if (nMaxHeightChildren > mpTabPageContainer->GetOutputSizePixel().Height())
+                bNeedVScroll = true;
+        }
+    }
+
+    const bool bNeedScrollBox = bNeedVScroll && bNeedHScroll;
+
+    bool bScrollbarsChanged = false;
+    if ( bHaveVScroll != bNeedVScroll )
+    {
+        mpVScrollBar->Show(bNeedVScroll);
+        bScrollbarsChanged = true;
+    }
+
+    if ( bHaveHScroll != bNeedHScroll )
+    {
+        mpHScrollBar->Show(bNeedHScroll);
+        bScrollbarsChanged = true;
+    }
+
+    if ( bHaveScrollBox != bNeedScrollBox )
+    {
+        mpScrollBox->Show(bNeedScrollBox);
+    }
+
+    if ( bScrollbarsChanged )
+    {
+        ImpInitScrollBars();
+        Resize();
+    }
+}
+
+void ImpVclTabPage::InitFromStyle( WinBits nWinStyle )
+{
+    ImpUpdateSrollBarVis( nWinStyle );
+}
+
+ImpVclTabPage::~ImpVclTabPage()
+{
+    //EndListening( *mpTabPageContainer->GetTextEngine() );
+    mpTabPageContainer.disposeAndClear();
+    mpHScrollBar.disposeAndClear();
+    mpVScrollBar.disposeAndClear();
+    mpScrollBox.disposeAndClear();
+    pVclTabPage.disposeAndClear();
+}
+
+void ImpVclTabPage::ImpSetScrollBarRanges()
+{
+    Size aSz = CalcMinimumSize();
+    mpVScrollBar->SetRange( Range( 0, aSz.Height()-1 ) );
+    mpHScrollBar->SetRange( Range( 0, aSz.Width()-1 ) );
+}
+
+void ImpVclTabPage::ImpInitScrollBars()
+{
+    ImpSetScrollBarRanges();
+
+    Size aOutSz = CalcMinimumSize();
+
+    mpHScrollBar->SetVisibleSize( aOutSz.Width() );
+    mpHScrollBar->SetPageSize( aOutSz.Width() * 8 / 10 );
+    mpHScrollBar->SetLineSize(aOutSz.Width() * 2 / 10);
+    mpHScrollBar->SetThumbPos(0);
+
+    mpVScrollBar->SetVisibleSize( aOutSz.Height() );
+    mpVScrollBar->SetPageSize( aOutSz.Height() * 8 / 10 );
+    mpVScrollBar->SetLineSize(aOutSz.Height() * 2 / 10);
+    mpVScrollBar->SetThumbPos(0);
+}
+
+IMPL_LINK( ImpVclTabPage, ScrollHdl, ScrollBar*, pCurScrollBar, void )
+{
+    long nDiffX = 0, nDiffY = 0;
+
+    if ( pCurScrollBar == mpVScrollBar )
+        nDiffY = mpTabPageContainer->GetStartPos().Y() - pCurScrollBar->GetThumbPos();
+    else if ( pCurScrollBar == mpHScrollBar )
+        nDiffX = mpTabPageContainer->GetStartPos().X() - pCurScrollBar->GetThumbPos();
+
+    mpTabPageContainer->Scroll( nDiffX, nDiffY );
+}
+
+void ImpVclTabPage::Resize()
+{
+    WinBits nWinStyle( pVclTabPage->GetStyle() );
+    if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
+        ImpUpdateSrollBarVis( nWinStyle );
+
+    Size aSizeBrutto = pVclTabPage->GetOutputSizePixel();
+    Size aSizeNetto = aSizeBrutto;
+    long nSBWidth = pVclTabPage->GetSettings().GetStyleSettings().GetScrollBarSize();
+    nSBWidth = pVclTabPage->CalcZoom( nSBWidth );
+
+    if (mpHScrollBar->IsVisible())
+        aSizeNetto.AdjustHeight( -(nSBWidth+1) );
+    if (mpVScrollBar->IsVisible())
+        aSizeNetto.AdjustWidth( -(nSBWidth+1) );
+
+    if (mpHScrollBar->IsVisible())
+        mpHScrollBar->setPosSizePixel( 0, aSizeNetto.Height(), aSizeBrutto.Width(), nSBWidth );
+
+    if (mpVScrollBar->IsVisible())
+        mpVScrollBar->setPosSizePixel(aSizeNetto.Width() - nSBWidth, 0, nSBWidth, aSizeNetto.Height());
+
+    if (mpScrollBox->IsVisible())
+        mpScrollBox->setPosSizePixel(aSizeNetto.Width(), aSizeNetto.Height(), nSBWidth, nSBWidth);
+
+    Size aNewSizeContainer( aSizeNetto );
+    if (aNewSizeContainer.Width() < 0)
+        aNewSizeContainer.setWidth(0);
+    if (aNewSizeContainer.Height() < 0)
+        aNewSizeContainer.setHeight(0);
+
+    Size aOldSizeContainer( mpTabPageContainer->GetSizePixel() );
+    mpTabPageContainer->SetPosSizePixel( Point(0,0), aNewSizeContainer );
+    if (aOldSizeContainer == aNewSizeContainer)
+        return;
+
+    ImpInitScrollBars();
+}
+
+void ImpVclTabPage::GetFocus()
+{
+    mpTabPageContainer->GrabFocus();
+}
+
+void ImpVclTabPage::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    rHint;
+
+    //const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
+    //if ( !pTextHint )
+    //    return;
+
+    //switch (pTextHint->GetId())
+    //{
+    //    case SfxHintId::TextViewScrolled:
+    //        if (mpHScrollBar->IsVisible())
+    //            ImpSetHScrollBarThumbPos();
+    //        if (mpVScrollBar->IsVisible())
+    //            mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
+    //        break;
+
+    //    case SfxHintId::TextHeightChanged:
+    //        if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
+    //        {
+    //            long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
+    //            long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+    //            if ( nTextHeight < nOutHeight )
+    //                mpTextWindow->GetTextView()->Scroll( 0, mpTextWindow->GetTextView()->GetStartDocPos().Y() );
+    //        }
+    //        ImpSetScrollBarRanges();
+    //        break;
+
+    //    case SfxHintId::TextFormatted:
+    //        if (mpHScrollBar->IsVisible())
+    //        {
+    //            const long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+    //            if ( nWidth != mnTextWidth )
+    //            {
+    //                mnTextWidth = nWidth;
+    //                mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
+    //                ImpSetHScrollBarThumbPos();
+    //            }
+    //        }
+    //        break;
+
+    //    case SfxHintId::TextModified:
+    //        ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
+    //        pVclMultiLineEdit->Modify();
+    //        break;
+
+    //    case SfxHintId::TextViewSelectionChanged:
+    //        pVclMultiLineEdit->SelectionChanged();
+    //        break;
+
+    //    case SfxHintId::TextViewCaretChanged:
+    //        pVclMultiLineEdit->CaretChanged();
+    //        break;
+
+    //    default: break;
+    //}
+}
+
+
+Size ImpVclTabPage::CalcMinimumSize() const
+{
+    long nMaxWidth(0);
+    long nMaxHeight(0);
+
+    if (mpTabPageContainer)
+    {
+        vcl::Window* win = mpTabPageContainer->GetWindow(GetWindowType::FirstChild);
+        while (win)
+        {
+            nMaxWidth = std::max(nMaxWidth, win->GetPosPixel().getX() + win->GetOutputSizePixel().Width());
+            nMaxHeight = std::max(nMaxHeight, win->GetPosPixel().getY() + win->GetOutputSizePixel().Height());
+            win = win->GetWindow(GetWindowType::Next);
+        }
+    }
+
+    Size aSz(nMaxWidth, nMaxHeight);
+    if (mpHScrollBar->IsVisible())
+        aSz.AdjustHeight(mpHScrollBar->GetSizePixel().Height() );
+    if (mpVScrollBar->IsVisible())
+        aSz.AdjustWidth(mpVScrollBar->GetSizePixel().Width() );
+
+    return aSz;
+}
+
+void ImpVclTabPage::Enable( bool bEnable )
+{
+    mpTabPageContainer->Enable( bEnable );
+    if (mpHScrollBar->IsVisible())
+        mpHScrollBar->Enable( bEnable );
+    if (mpVScrollBar->IsVisible())
+        mpVScrollBar->Enable( bEnable );
+}
+
+bool ImpVclTabPage::HandleCommand( const CommandEvent& rCEvt )
+{
+    bool bDone = false;
+    CommandEventId nCommand = rCEvt.GetCommand();
+    if (nCommand == CommandEventId::Wheel ||
+        nCommand == CommandEventId::StartAutoScroll ||
+        nCommand == CommandEventId::AutoScroll ||
+        nCommand == CommandEventId::Gesture)
+    {
+        ScrollBar* pHScrollBar = mpHScrollBar->IsVisible() ? mpHScrollBar.get() : nullptr;
+        ScrollBar* pVScrollBar = mpVScrollBar->IsVisible() ? mpVScrollBar.get() : nullptr;
+        mpTabPageContainer->HandleScrollCommand(rCEvt, pHScrollBar, pVScrollBar);
+        bDone = true;
+    }
+    return bDone;
+}
 
 void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -37,12 +374,12 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WindowType::TABCONTROL) )
         EnableChildTransparentMode();
-
-    InitFromStyle(nStyle);
 }
 
 void TabPage::ImplInitSettings()
 {
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
     vcl::Window* pParent = GetParent();
     if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
@@ -62,18 +399,40 @@ void TabPage::ImplInitSettings()
         else
             SetBackground( pParent->GetBackground() );
     }
+
+    if (IsPaintTransparent())
+    {
+        pImpVclTabPage->GetTabPageContainer()->SetPaintTransparent(true);
+        pImpVclTabPage->GetTabPageContainer()->SetBackground();
+        pImpVclTabPage->GetTabPageContainer()->SetControlBackground();
+        SetBackground();
+        SetControlBackground();
+    }
+    else
+    {
+        if (IsControlBackground())
+            pImpVclTabPage->GetTabPageContainer()->SetBackground(GetControlBackground());
+        else
+            pImpVclTabPage->GetTabPageContainer()->SetBackground(rStyleSettings.GetFieldColor());
+        // also adjust for VclTabPage as the Container might hide Scrollbars
+        SetBackground(pImpVclTabPage->GetTabPageContainer()->GetBackground());
+    }
 }
 
 TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::TABPAGE )
     , IContext()
-    , mpHScrollBar(VclPtr<ScrollBar>::Create(this, WB_HSCROLL | WB_DRAG))
-    , mpVScrollBar(VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG))
-    , mpScrollBox(VclPtr<ScrollBarBox>::Create(this, WB_SIZEABLE))
 {
+    // copied from VclMEdit
+    pImpVclTabPage.reset(new ImpVclTabPage(this, nStyle));
+    ImplInitSettings();
+
+    SetCompoundControl(true);
+    SetStyle(ImplInitStyle(nStyle));
+
+
+    // old from TabPage
     ImplInit( pParent, nStyle | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
-    mpVScrollBar->SetScrollHdl(LINK(this, TabPage, ScrollHdl));
-    mpHScrollBar->SetScrollHdl(LINK(this, TabPage, ScrollHdl));
 }
 
 TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
@@ -90,58 +449,53 @@ TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXM
 TabPage::~TabPage()
 {
     disposeOnce();
-    mpHScrollBar.disposeAndClear();
-    mpVScrollBar.disposeAndClear();
-    mpScrollBox.disposeAndClear();
 }
 
 void TabPage::dispose()
 {
+    pImpVclTabPage.reset();
     disposeBuilder();
     vcl::Window::dispose();
 }
 
-void TabPage::InitFromStyle(WinBits nWinStyle)
+WinBits TabPage::ImplInitStyle(WinBits nStyle)
 {
-    ImpUpdateSrollBarVis(nWinStyle);
+    if (!(nStyle & WB_NOTABSTOP))
+        nStyle |= WB_TABSTOP;
+
+    if (!(nStyle & WB_NOGROUP))
+        nStyle |= WB_GROUP;
+
+    if (!(nStyle & WB_IGNORETAB))
+        nStyle |= WB_NODIALOGCONTROL;
+
+    return nStyle;
 }
 
-void TabPage::ImpUpdateSrollBarVis(WinBits nWinStyle)
+void TabPage::Resize()
 {
-    const bool bHaveVScroll = mpVScrollBar->IsVisible();
-    const bool bHaveHScroll = mpHScrollBar->IsVisible();
-    const bool bHaveScrollBox = mpScrollBox->IsVisible();
+    pImpVclTabPage->Resize();
+}
 
-    bool bNeedVScroll = (nWinStyle & WB_VSCROLL) == WB_VSCROLL;
-    const bool bNeedHScroll = (nWinStyle & WB_HSCROLL) == WB_HSCROLL;
+void TabPage::GetFocus()
+{
+    if (!pImpVclTabPage) // might be called from within the dtor, when pImpVclMEdit == NULL is a valid state
+        return;
 
-    const bool bAutoVScroll = (nWinStyle & WB_AUTOVSCROLL) == WB_AUTOVSCROLL;
+    pImpVclTabPage->GetFocus();
+}
 
-    const bool bNeedScrollBox = bNeedVScroll && bNeedHScroll;
+Size TabPage::CalcMinimumSize() const
+{
+    Size aSz = pImpVclTabPage->CalcMinimumSize();
 
-    bool bScrollbarsChanged = false;
-    if (bHaveVScroll != bNeedVScroll)
-    {
-        mpVScrollBar->Show(bNeedVScroll);
-        bScrollbarsChanged = true;
-    }
+    sal_Int32 nLeft, nTop, nRight, nBottom;
+    static_cast<vcl::Window*>(const_cast<TabPage*>(this))
+        ->GetBorder(nLeft, nTop, nRight, nBottom);
+    aSz.AdjustWidth(nLeft + nRight);
+    aSz.AdjustHeight(nTop + nBottom);
 
-    if (bHaveHScroll != bNeedHScroll)
-    {
-        mpHScrollBar->Show(bNeedHScroll);
-        bScrollbarsChanged = true;
-    }
-
-    if (bHaveScrollBox != bNeedScrollBox)
-    {
-        mpScrollBox->Show(bNeedScrollBox);
-    }
-
-    if (bScrollbarsChanged)
-    {
-        ImpInitScrollBars();
-        Resize();
-    }
+    return aSz;
 }
 
 void TabPage::StateChanged( StateChangedType nType )
@@ -252,160 +606,83 @@ void TabPage::SetPosPixel(const Point& rAllocPos)
     }
 }
 
-void TabPage::ImpSetScrollBarRanges()
-{
-    // set range of scroll bar to size of this window plus max extents of children
-    Size sz = GetSizePixel();
-
-    Window* win = GetWindow(GetWindowType::FirstChild);
-    while (win)
-    {
-        long testX = win->GetPosPixel().X() + win->GetSizePixel().getWidth();
-        long testY = win->GetPosPixel().Y() + win->GetSizePixel().getHeight();
-        if (testX > sz.getWidth())
-            sz.setWidth(testX);
-        if (testY > sz.getHeight())
-            sz.setWidth(testY);
-        win = win->GetWindow(GetWindowType::Next);
-    }
-
-    mpVScrollBar->SetRange(Range(0, sz.getHeight() - 1));
-    mpHScrollBar->SetRange(Range(0, sz.getWidth() - 1));
-}
-
-void TabPage::ImpInitScrollBars()
-{
-    ImpSetScrollBarRanges();
-
-    Size aOutSz = this->GetSizePixel();
-
-    mpHScrollBar->SetVisibleSize(aOutSz.Width());
-    mpHScrollBar->SetPageSize(aOutSz.Width() * 8 / 10);
-    mpHScrollBar->SetLineSize(aOutSz.Width() * 8 / 100); // 10 "lines" per "page"?
-    ImpSetHScrollBarThumbPos();
-
-    mpVScrollBar->SetVisibleSize(aOutSz.Height());
-    mpVScrollBar->SetPageSize(aOutSz.Height() * 8 / 10);
-    mpVScrollBar->SetLineSize(aOutSz.Height() * 8 / 100); // 10 "lines" per "page"?
-
-    // set vertical thumb pos based on reference point?
-    mpVScrollBar->SetThumbPos(0);
-}
-
-void TabPage::ImpSetHScrollBarThumbPos()
-{
-    //long nX = mpTextWindow->GetTextView()->GetStartDocPos().X();
-    //if (!mpTextWindow->GetTextEngine()->IsRightToLeft())
-    //    mpHScrollBar->SetThumbPos(nX);
-    //else
-    //    mpHScrollBar->SetThumbPos(mnTextWidth - mpHScrollBar->GetVisibleSize() - nX);
-
-    // set horizontal thumb pos based on reference point (visible top left corner)?
-    mpHScrollBar->SetThumbPos(0);
-}
-
-// for multiline edit, this scrolls the text view by the difference of current text view and scrollbar position
-// for tab pages, something like StartDocPos should be introduced, position of left top visible corner
-// 'Scroll' then means changing positions of child controls?
-IMPL_LINK(TabPage, ScrollHdl, ScrollBar*, pCurScrollBar, void)
-{
-    pCurScrollBar;
-    //long nDiffX = 0, nDiffY = 0;
-
-    //if (pCurScrollBar == mpVScrollBar)
-    //    nDiffY = mpTextWindow->GetTextView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
-    //else if (pCurScrollBar == mpHScrollBar)
-    //    nDiffX = mpTextWindow->GetTextView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
-
-    //mpTextWindow->GetTextView()->Scroll(nDiffX, nDiffY);
-    //// mpTextWindow->GetTextView()->ShowCursor( false, true );
-}
-
-Size TabPage::CalcMinimumSize() const
-{
-    Size aSz;
-    // reference size is max(position+size) of all child controls?
-    //Size aSz(mpTextWindow->GetTextEngine()->CalcTextWidth(),
-    //         mpTextWindow->GetTextEngine()->GetTextHeight());
-
-    if (mpHScrollBar->IsVisible())
-        aSz.AdjustHeight(mpHScrollBar->GetSizePixel().Height());
-    if (mpVScrollBar->IsVisible())
-        aSz.AdjustWidth(mpVScrollBar->GetSizePixel().Width());
-
-    return aSz;
-}
-
-void TabPage::Resize()
-{
-    WinBits nWinStyle(GetStyle());
-    if ((nWinStyle & WB_AUTOVSCROLL) == WB_AUTOVSCROLL)
-        ImpUpdateSrollBarVis(nWinStyle);
-
-    Size aSz = GetOutputSizePixel();
-    Size aEditSize = aSz;
-    long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-    nSBWidth = CalcZoom(nSBWidth);
-
-    if (mpHScrollBar->IsVisible())
-        aSz.AdjustHeight(-(nSBWidth + 1));
-    if (mpVScrollBar->IsVisible())
-        aSz.AdjustWidth(-(nSBWidth + 1));
-
-    if (mpHScrollBar->IsVisible())
-        mpHScrollBar->setPosSizePixel(0, aEditSize.Height() - nSBWidth, aSz.Width(), nSBWidth);
-
-    Point aTextWindowPos;
-    if (mpVScrollBar->IsVisible())
-    {
-        if (AllSettings::GetLayoutRTL())
-        {
-            mpVScrollBar->setPosSizePixel(0, 0, nSBWidth, aSz.Height());
-            aTextWindowPos.AdjustX(nSBWidth);
-        }
-        else
-            mpVScrollBar->setPosSizePixel(aEditSize.Width() - nSBWidth, 0, nSBWidth,
-                                            aSz.Height());
-    }
-
-    if (mpScrollBox->IsVisible())
-        mpScrollBox->setPosSizePixel(aSz.Width(), aSz.Height(), nSBWidth, nSBWidth);
-
-    Size aTextWindowSize(aSz);
-    if (aTextWindowSize.Width() < 0)
-        aTextWindowSize.setWidth(0);
-    if (aTextWindowSize.Height() < 0)
-        aTextWindowSize.setHeight(0);
-
-    Size aOldTextWindowSize(GetSizePixel());
-    SetPosSizePixel(aTextWindowPos, aTextWindowSize);
-    if (aOldTextWindowSize == aTextWindowSize)
-        return;
-
-    ImpInitScrollBars();
-}
-
-void TabPage::Enable(bool bEnable)
-{
-    if (mpHScrollBar->IsVisible())
-        mpHScrollBar->Enable(bEnable);
-    if (mpVScrollBar->IsVisible())
-        mpVScrollBar->Enable(bEnable);
-}
-
-bool TabPage::HandleCommand(const CommandEvent& rCEvt)
+bool TabPage::EventNotify(NotifyEvent& rNEvt)
 {
     bool bDone = false;
-    CommandEventId nCommand = rCEvt.GetCommand();
-    if (nCommand == CommandEventId::Wheel || nCommand == CommandEventId::StartAutoScroll
-        || nCommand == CommandEventId::AutoScroll || nCommand == CommandEventId::Gesture)
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
-        ScrollBar* pHScrollBar = mpHScrollBar->IsVisible() ? mpHScrollBar.get() : nullptr;
-        ScrollBar* pVScrollBar = mpVScrollBar->IsVisible() ? mpVScrollBar.get() : nullptr;
-        HandleScrollCommand(rCEvt, pHScrollBar, pVScrollBar);
-        bDone = true;
+        bDone = pImpVclTabPage->HandleCommand(*rNEvt.GetCommandEvent());
     }
-    return bDone;
+    return bDone || Window::EventNotify(rNEvt);
+}
+
+bool TabPage::PreNotify(NotifyEvent& rNEvt)
+{
+    bool bDone = false;
+
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+    {
+        const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
+        if (!rKEvent.GetKeyCode().IsShift() && (rKEvent.GetKeyCode().GetGroup() == KEYGROUP_CURSOR))
+        {
+            bDone = true;
+            switch (rKEvent.GetKeyCode().GetCode())
+            {
+                case KEY_UP:
+                {
+                    if (pImpVclTabPage->GetVScrollBar().IsVisible())
+                        pImpVclTabPage->GetVScrollBar().DoScrollAction(ScrollType::LineUp);
+                }
+                break;
+                case KEY_DOWN:
+                {
+                    if (pImpVclTabPage->GetVScrollBar().IsVisible())
+                        pImpVclTabPage->GetVScrollBar().DoScrollAction(ScrollType::LineDown);
+                }
+                break;
+                case KEY_PAGEUP:
+                {
+                    if (pImpVclTabPage->GetVScrollBar().IsVisible())
+                        pImpVclTabPage->GetVScrollBar().DoScrollAction(ScrollType::PageUp);
+                }
+                break;
+                case KEY_PAGEDOWN:
+                {
+                    if (pImpVclTabPage->GetVScrollBar().IsVisible())
+                        pImpVclTabPage->GetVScrollBar().DoScrollAction(ScrollType::PageDown);
+                }
+                break;
+                case KEY_LEFT:
+                {
+                    if (pImpVclTabPage->GetHScrollBar().IsVisible())
+                        pImpVclTabPage->GetHScrollBar().DoScrollAction(ScrollType::LineUp);
+                }
+                break;
+                case KEY_RIGHT:
+                {
+                    if (pImpVclTabPage->GetHScrollBar().IsVisible())
+                        pImpVclTabPage->GetHScrollBar().DoScrollAction(ScrollType::LineDown);
+                }
+                break;
+                default:
+                {
+                    bDone = false;
+                }
+            }
+        }
+    }
+
+    return bDone || Window::PreNotify(rNEvt);
+}
+
+ScrollBar& TabPage::GetVScrollBar() const
+{
+    return pImpVclTabPage->GetVScrollBar();
+}
+
+TabPageContainer* TabPage::GetTabPageContainer()
+{
+    return pImpVclTabPage->GetTabPageContainer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
