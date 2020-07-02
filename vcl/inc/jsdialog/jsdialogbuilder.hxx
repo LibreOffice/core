@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <vcl/jsdialog/builder.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -55,12 +55,13 @@ class JSInstanceBuilder : public SalInstanceBuilder
     bool m_bHasTopLevelDialog;
     bool m_bIsNotebookbar;
 
-    friend VCL_DLLPUBLIC weld::Widget* jsdialog::FindWeldWidgetsMap(sal_uInt64 nWindowId,
-                                                                    const OString& rWidget);
+    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
+                                                      StringMap& rData);
 
     static std::map<sal_uInt64, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(sal_uInt64 nWindowId);
     void RememberWidget(const OString& id, weld::Widget* pWidget);
+    static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
 
 public:
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
