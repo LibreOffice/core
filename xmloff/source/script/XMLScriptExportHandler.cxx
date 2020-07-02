@@ -31,7 +31,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
 
-static const OUStringLiteral gsURL("Script");
+const OUStringLiteral gsURL("Script");
 
 XMLScriptExportHandler::XMLScriptExportHandler()
 {

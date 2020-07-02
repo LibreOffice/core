@@ -41,9 +41,9 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
-static const OUStringLiteral gsAnchorType("AnchorType");
-static const OUStringLiteral gsAnchorPageNo("AnchorPageNo");
-static const OUStringLiteral gsVertOrientPosition("VertOrientPosition");
+const OUStringLiteral gsAnchorType("AnchorType");
+const OUStringLiteral gsAnchorPageNo("AnchorPageNo");
+const OUStringLiteral gsVertOrientPosition("VertOrientPosition");
 
 XMLTextShapeImportHelper::XMLTextShapeImportHelper(
         SvXMLImport& rImp ) :

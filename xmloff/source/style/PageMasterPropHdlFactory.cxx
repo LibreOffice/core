@@ -40,7 +40,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 
-static SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
+SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
 {
     { XML_NONE,         text::TextGridMode::NONE },
     { XML_LINE,         text::TextGridMode::LINES },

@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-static const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
+const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
     { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER          },
@@ -79,8 +79,8 @@ static const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const OUStringLiteral gsParaStyleServiceName( "com.sun.star.style.ParagraphStyle" );
-static const OUStringLiteral gsTextStyleServiceName( "com.sun.star.style.CharacterStyle" );
+const OUStringLiteral gsParaStyleServiceName( "com.sun.star.style.ParagraphStyle" );
+const OUStringLiteral gsTextStyleServiceName( "com.sun.star.style.CharacterStyle" );
 
 const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 {

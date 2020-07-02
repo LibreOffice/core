@@ -69,7 +69,7 @@ static const char* aIndexServiceMap[] =
     "com.sun.star.text.IllustrationsIndex"
 };
 
-static const XMLTokenEnum aIndexSourceElementMap[] =
+const XMLTokenEnum aIndexSourceElementMap[] =
 {
     XML_TABLE_OF_CONTENT_SOURCE,
     XML_ALPHABETICAL_INDEX_SOURCE,

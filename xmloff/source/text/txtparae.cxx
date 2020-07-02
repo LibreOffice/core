@@ -126,80 +126,80 @@ using namespace ::xmloff;
 using namespace ::xmloff::token;
 
 // Implement Title/Description Elements UI (#i73249#)
-static const OUStringLiteral gsTitle("Title");
-static const OUStringLiteral gsDescription("Description");
+const OUStringLiteral gsTitle("Title");
+const OUStringLiteral gsDescription("Description");
 const OUStringLiteral XMLTextParagraphExport::gsAnchorCharStyleName("AnchorCharStyleName");
-static const OUStringLiteral gsAnchorPageNo("AnchorPageNo");
-static const OUStringLiteral gsAnchorType("AnchorType");
+const OUStringLiteral gsAnchorPageNo("AnchorPageNo");
+const OUStringLiteral gsAnchorType("AnchorType");
 const OUStringLiteral XMLTextParagraphExport::gsBeginNotice("BeginNotice");
-static const OUStringLiteral gsBookmark("Bookmark");
+const OUStringLiteral gsBookmark("Bookmark");
 const OUStringLiteral XMLTextParagraphExport::gsCategory("Category");
-static const OUStringLiteral gsChainNextName("ChainNextName");
+const OUStringLiteral gsChainNextName("ChainNextName");
 const OUStringLiteral XMLTextParagraphExport::gsCharStyleName("CharStyleName");
 const OUStringLiteral XMLTextParagraphExport::gsCharStyleNames("CharStyleNames");
-static const OUStringLiteral gsContourPolyPolygon("ContourPolyPolygon");
-static const OUStringLiteral gsDocumentIndexMark("DocumentIndexMark");
+const OUStringLiteral gsContourPolyPolygon("ContourPolyPolygon");
+const OUStringLiteral gsDocumentIndexMark("DocumentIndexMark");
 const OUStringLiteral XMLTextParagraphExport::gsEndNotice("EndNotice");
 const OUStringLiteral XMLTextParagraphExport::gsFootnote("Footnote");
 const OUStringLiteral XMLTextParagraphExport::gsFootnoteCounting("FootnoteCounting");
-static const OUStringLiteral gsFrame("Frame");
-static const OUStringLiteral gsGraphicFilter("GraphicFilter");
-static const OUStringLiteral gsGraphicRotation("GraphicRotation");
-static const OUStringLiteral gsHeight("Height");
-static const OUStringLiteral gsHoriOrient("HoriOrient");
-static const OUStringLiteral gsHoriOrientPosition("HoriOrientPosition");
-static const OUStringLiteral gsHyperLinkName("HyperLinkName");
-static const OUStringLiteral gsHyperLinkTarget("HyperLinkTarget");
-static const OUStringLiteral gsHyperLinkURL("HyperLinkURL");
-static const OUStringLiteral gsIsAutomaticContour("IsAutomaticContour");
-static const OUStringLiteral gsIsCollapsed("IsCollapsed");
-static const OUStringLiteral gsIsPixelContour("IsPixelContour");
-static const OUStringLiteral gsIsStart("IsStart");
-static const OUStringLiteral gsIsSyncHeightToWidth("IsSyncHeightToWidth");
-static const OUStringLiteral gsIsSyncWidthToHeight("IsSyncWidthToHeight");
-static const OUStringLiteral gsNumberingRules("NumberingRules");
+const OUStringLiteral gsFrame("Frame");
+const OUStringLiteral gsGraphicFilter("GraphicFilter");
+const OUStringLiteral gsGraphicRotation("GraphicRotation");
+const OUStringLiteral gsHeight("Height");
+const OUStringLiteral gsHoriOrient("HoriOrient");
+const OUStringLiteral gsHoriOrientPosition("HoriOrientPosition");
+const OUStringLiteral gsHyperLinkName("HyperLinkName");
+const OUStringLiteral gsHyperLinkTarget("HyperLinkTarget");
+const OUStringLiteral gsHyperLinkURL("HyperLinkURL");
+const OUStringLiteral gsIsAutomaticContour("IsAutomaticContour");
+const OUStringLiteral gsIsCollapsed("IsCollapsed");
+const OUStringLiteral gsIsPixelContour("IsPixelContour");
+const OUStringLiteral gsIsStart("IsStart");
+const OUStringLiteral gsIsSyncHeightToWidth("IsSyncHeightToWidth");
+const OUStringLiteral gsIsSyncWidthToHeight("IsSyncWidthToHeight");
+const OUStringLiteral gsNumberingRules("NumberingRules");
 const OUStringLiteral XMLTextParagraphExport::gsNumberingType("NumberingType");
 const OUStringLiteral XMLTextParagraphExport::gsPageDescName("PageDescName");
 const OUStringLiteral XMLTextParagraphExport::gsPageStyleName("PageStyleName");
-static const OUStringLiteral gsParaConditionalStyleName("ParaConditionalStyleName");
-static const OUStringLiteral gsParagraphService("com.sun.star.text.Paragraph");
+const OUStringLiteral gsParaConditionalStyleName("ParaConditionalStyleName");
+const OUStringLiteral gsParagraphService("com.sun.star.text.Paragraph");
 const OUStringLiteral XMLTextParagraphExport::gsParaStyleName("ParaStyleName");
 const OUStringLiteral XMLTextParagraphExport::gsPositionEndOfDoc("PositionEndOfDoc");
 const OUStringLiteral XMLTextParagraphExport::gsPrefix("Prefix");
-static const OUStringLiteral gsRedline("Redline");
+const OUStringLiteral gsRedline("Redline");
 const OUStringLiteral XMLTextParagraphExport::gsReferenceId("ReferenceId");
-static const OUStringLiteral gsReferenceMark("ReferenceMark");
-static const OUStringLiteral gsRelativeHeight("RelativeHeight");
-static const OUStringLiteral gsRelativeWidth("RelativeWidth");
-static const OUStringLiteral gsRuby("Ruby");
-static const OUStringLiteral gsRubyCharStyleName("RubyCharStyleName");
-static const OUStringLiteral gsRubyText("RubyText");
-static const OUStringLiteral gsServerMap("ServerMap");
-static const OUStringLiteral gsShapeService("com.sun.star.drawing.Shape");
-static const OUStringLiteral gsSizeType("SizeType");
-static const OUStringLiteral gsSoftPageBreak( "SoftPageBreak"  );
+const OUStringLiteral gsReferenceMark("ReferenceMark");
+const OUStringLiteral gsRelativeHeight("RelativeHeight");
+const OUStringLiteral gsRelativeWidth("RelativeWidth");
+const OUStringLiteral gsRuby("Ruby");
+const OUStringLiteral gsRubyCharStyleName("RubyCharStyleName");
+const OUStringLiteral gsRubyText("RubyText");
+const OUStringLiteral gsServerMap("ServerMap");
+const OUStringLiteral gsShapeService("com.sun.star.drawing.Shape");
+const OUStringLiteral gsSizeType("SizeType");
+const OUStringLiteral gsSoftPageBreak( "SoftPageBreak"  );
 const OUStringLiteral XMLTextParagraphExport::gsStartAt("StartAt");
 const OUStringLiteral XMLTextParagraphExport::gsSuffix("Suffix");
-static const OUStringLiteral gsTableService("com.sun.star.text.TextTable");
-static const OUStringLiteral gsText("Text");
-static const OUStringLiteral gsTextContentService("com.sun.star.text.TextContent");
-static const OUStringLiteral gsTextEmbeddedService("com.sun.star.text.TextEmbeddedObject");
+const OUStringLiteral gsTableService("com.sun.star.text.TextTable");
+const OUStringLiteral gsText("Text");
+const OUStringLiteral gsTextContentService("com.sun.star.text.TextContent");
+const OUStringLiteral gsTextEmbeddedService("com.sun.star.text.TextEmbeddedObject");
 const OUStringLiteral XMLTextParagraphExport::gsTextEndnoteService("com.sun.star.text.Endnote");
-static const OUStringLiteral gsTextField("TextField");
-static const OUStringLiteral gsTextFieldService("com.sun.star.text.TextField");
-static const OUStringLiteral gsTextFrameService("com.sun.star.text.TextFrame");
-static const OUStringLiteral gsTextGraphicService("com.sun.star.text.TextGraphicObject");
-static const OUStringLiteral gsTextPortionType("TextPortionType");
+const OUStringLiteral gsTextField("TextField");
+const OUStringLiteral gsTextFieldService("com.sun.star.text.TextField");
+const OUStringLiteral gsTextFrameService("com.sun.star.text.TextFrame");
+const OUStringLiteral gsTextGraphicService("com.sun.star.text.TextGraphicObject");
+const OUStringLiteral gsTextPortionType("TextPortionType");
 const OUStringLiteral XMLTextParagraphExport::gsTextSection("TextSection");
-static const OUStringLiteral gsUnvisitedCharStyleName("UnvisitedCharStyleName");
-static const OUStringLiteral gsVertOrient("VertOrient");
-static const OUStringLiteral gsVertOrientPosition("VertOrientPosition");
-static const OUStringLiteral gsVisitedCharStyleName("VisitedCharStyleName");
-static const OUStringLiteral gsWidth("Width");
-static const OUStringLiteral gsWidthType( "WidthType"  );
-static const OUStringLiteral gsTextFieldStart( "TextFieldStart"  );
-static const OUStringLiteral gsTextFieldEnd( "TextFieldEnd"  );
-static const OUStringLiteral gsTextFieldStartEnd( "TextFieldStartEnd"  );
+const OUStringLiteral gsUnvisitedCharStyleName("UnvisitedCharStyleName");
+const OUStringLiteral gsVertOrient("VertOrient");
+const OUStringLiteral gsVertOrientPosition("VertOrientPosition");
+const OUStringLiteral gsVisitedCharStyleName("VisitedCharStyleName");
+const OUStringLiteral gsWidth("Width");
+const OUStringLiteral gsWidthType( "WidthType"  );
+const OUStringLiteral gsTextFieldStart( "TextFieldStart"  );
+const OUStringLiteral gsTextFieldEnd( "TextFieldEnd"  );
+const OUStringLiteral gsTextFieldStartEnd( "TextFieldStartEnd"  );
 
 const OUStringLiteral XMLTextParagraphExport::gsFrameStyleName("FrameStyleName");
 
@@ -1424,9 +1424,9 @@ void XMLTextParagraphExport::exportFrameFrames(
 // bookmarks, reference marks (and TOC marks) are the same except for the
 // element names. We use the same method for export and it an array with
 // the proper element names
-static const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
+const enum XMLTokenEnum lcl_XmlReferenceElements[] = {
     XML_REFERENCE_MARK, XML_REFERENCE_MARK_START, XML_REFERENCE_MARK_END };
-static const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
+const enum XMLTokenEnum lcl_XmlBookmarkElements[] = {
     XML_BOOKMARK, XML_BOOKMARK_START, XML_BOOKMARK_END };
 
 // This function replaces the text portion iteration during auto style

@@ -34,13 +34,13 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-static const SvXMLTokenMapEntry aAttributes[] =
+const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, NAME ),
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aChildren[] =
+const SvXMLTokenMapEntry aChildren[] =
 {
     TOKEN_MAP_ENTRY( XSD, RESTRICTION ),
     XML_TOKEN_MAP_END

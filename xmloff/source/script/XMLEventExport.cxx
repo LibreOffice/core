@@ -40,7 +40,7 @@ using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
-static const OUStringLiteral gsEventType("EventType");
+const OUStringLiteral gsEventType("EventType");
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
     rExport(rExp),

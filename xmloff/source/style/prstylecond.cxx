@@ -36,7 +36,7 @@ struct ConditionMap
 
 }
 
-static const ConditionMap g_ConditionMap[] =
+const ConditionMap g_ConditionMap[] =
 {
     { "TableHeader",            XML_TABLE_HEADER,   -1 },
     { "Table",                  XML_TABLE,          -1 },

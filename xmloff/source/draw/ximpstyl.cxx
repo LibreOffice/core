@@ -150,8 +150,8 @@ public:
     virtual void Finish( bool bOverwrite ) override;
 };
 
-static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
-static ContextID_Index_Pair const g_ContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
+ContextID_Index_Pair const g_ContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
 {
     { CTF_DASHNAME , -1 },
     { CTF_LINESTARTNAME , -1 },
@@ -162,7 +162,7 @@ static ContextID_Index_Pair const g_ContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
     { CTF_FILLBITMAPNAME , -1 },
     { -1, -1 }
 };
-static XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
+XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
 {
     XmlStyleFamily::SD_STROKE_DASH_ID,
     XmlStyleFamily::SD_MARKER_ID,

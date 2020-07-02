@@ -55,7 +55,7 @@ enum SvXMLTokenMapAttrs
 
 }
 
-static const SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
+const SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME },

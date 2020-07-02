@@ -43,17 +43,17 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
 
 
-static const OUStringLiteral gsCharStyleName("CharStyleName");
-static const OUStringLiteral gsCountEmptyLines("CountEmptyLines");
-static const OUStringLiteral gsCountLinesInFrames("CountLinesInFrames");
-static const OUStringLiteral gsDistance("Distance");
-static const OUStringLiteral gsInterval("Interval");
-static const OUStringLiteral gsSeparatorText("SeparatorText");
-static const OUStringLiteral gsNumberPosition("NumberPosition");
-static const OUStringLiteral gsNumberingType("NumberingType");
-static const OUStringLiteral gsIsOn("IsOn");
-static const OUStringLiteral gsRestartAtEachPage("RestartAtEachPage");
-static const OUStringLiteral gsSeparatorInterval("SeparatorInterval");
+const OUStringLiteral gsCharStyleName("CharStyleName");
+const OUStringLiteral gsCountEmptyLines("CountEmptyLines");
+const OUStringLiteral gsCountLinesInFrames("CountLinesInFrames");
+const OUStringLiteral gsDistance("Distance");
+const OUStringLiteral gsInterval("Interval");
+const OUStringLiteral gsSeparatorText("SeparatorText");
+const OUStringLiteral gsNumberPosition("NumberPosition");
+const OUStringLiteral gsNumberingType("NumberingType");
+const OUStringLiteral gsIsOn("IsOn");
+const OUStringLiteral gsRestartAtEachPage("RestartAtEachPage");
+const OUStringLiteral gsSeparatorInterval("SeparatorInterval");
 
 XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     SvXMLImport& rImport,

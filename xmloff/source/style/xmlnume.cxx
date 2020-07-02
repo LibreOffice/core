@@ -605,9 +605,9 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 }
 
 
-static const OUStringLiteral gsNumberingRules( "NumberingRules" );
-static const OUStringLiteral gsIsPhysical( "IsPhysical" );
-static const OUStringLiteral gsIsContinuousNumbering( "IsContinuousNumbering" );
+const OUStringLiteral gsNumberingRules( "NumberingRules" );
+const OUStringLiteral gsIsPhysical( "IsPhysical" );
+const OUStringLiteral gsIsContinuousNumbering( "IsContinuousNumbering" );
 
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     rExport( rExp ),

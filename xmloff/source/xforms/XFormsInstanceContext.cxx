@@ -46,7 +46,7 @@ using com::sun::star::xml::sax::XAttributeList;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
 
-static const SvXMLTokenMapEntry aAttributes[] =
+const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, SRC ),
     TOKEN_MAP_ENTRY( NONE, ID ),

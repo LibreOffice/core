@@ -294,10 +294,10 @@ void SvXMLMetaExport::MExport_()
     }
 }
 
-static const char s_xmlns[] = "xmlns";
-static const char s_xmlns2[] = "xmlns:";
-static const char s_meta[] = "meta:";
-static const char s_href[] = "xlink:href";
+const char s_xmlns[] = "xmlns";
+const char s_xmlns2[] = "xmlns:";
+const char s_meta[] = "meta:";
+const char s_href[] = "xlink:href";
 
 SvXMLMetaExport::SvXMLMetaExport(
         SvXMLExport& i_rExp,

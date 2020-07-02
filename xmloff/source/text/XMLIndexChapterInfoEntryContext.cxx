@@ -64,7 +64,7 @@ XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
 {
 }
 
-static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 {
     { XML_NAME,                     ChapterFormat::NAME },
     { XML_NUMBER,                   ChapterFormat::NUMBER },

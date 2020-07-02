@@ -86,7 +86,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::ucb;
 
-static const SvXMLTokenMapEntry aTextElemTokenMap[] =
+const SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_P,                XML_TOK_TEXT_P              },
     { XML_NAMESPACE_LO_EXT, XML_P,                XML_TOK_TEXT_P              },
@@ -122,7 +122,7 @@ static const SvXMLTokenMapEntry aTextElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextPElemTokenMap[] =
+const SvXMLTokenMapEntry aTextPElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_TEXT_SPAN },
     { XML_NAMESPACE_TEXT, XML_TAB, XML_TOK_TEXT_TAB_STOP },
@@ -303,7 +303,7 @@ static const SvXMLTokenMapEntry aTextPElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextPAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML  , XML_ID,          XML_TOK_TEXT_P_XMLID },
     { XML_NAMESPACE_XHTML, XML_ABOUT,       XML_TOK_TEXT_P_ABOUT },
@@ -321,7 +321,7 @@ static const SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID,    XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID },
     { XML_NAMESPACE_TEXT, XML_LIST_ID,
@@ -336,7 +336,7 @@ static const SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_LIST_BLOCK_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,
@@ -348,14 +348,14 @@ static const SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
+const SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_LIST_HEADER, XML_TOK_TEXT_LIST_HEADER },
     { XML_NAMESPACE_TEXT, XML_LIST_ITEM,    XML_TOK_TEXT_LIST_ITEM   },
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_STYLE_NAME, XML_TOK_TEXT_FRAME_STYLE_NAME },
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_TEXT_FRAME_NAME },
@@ -387,7 +387,7 @@ static const SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG, XML_WIDTH,     XML_TOK_TEXT_CONTOUR_WIDTH      },
     { XML_NAMESPACE_SVG, XML_HEIGHT,    XML_TOK_TEXT_CONTOUR_HEIGHT     },
@@ -398,7 +398,7 @@ static const SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_TEXT_HYPERLINK_HREF },
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_TEXT_HYPERLINK_NAME },
@@ -410,7 +410,7 @@ static const SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
+const SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_HEADER, XML_TOK_TEXT_MP_HEADER },
     { XML_NAMESPACE_STYLE, XML_FOOTER, XML_TOK_TEXT_MP_FOOTER },
@@ -424,7 +424,7 @@ static const SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_FIXED, XML_TOK_TEXTFIELD_FIXED },
     { XML_NAMESPACE_TEXT, XML_DESCRIPTION,  XML_TOK_TEXTFIELD_DESCRIPTION },

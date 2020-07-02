@@ -511,7 +511,7 @@ static void lcl_CopyStream(
         xTransaction->commit();
 }
 
-static char const s_PkgScheme[] = "vnd.sun.star.Package:";
+char const s_PkgScheme[] = "vnd.sun.star.Package:";
 
 static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& rURL)
 {

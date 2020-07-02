@@ -111,18 +111,18 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 
 // XMLFootnoteConfigurationImportContext
 
-static const OUStringLiteral gsPropertyAnchorCharStyleName("AnchorCharStyleName");
-static const OUStringLiteral gsPropertyCharStyleName("CharStyleName");
-static const OUStringLiteral gsPropertyNumberingType("NumberingType");
-static const OUStringLiteral gsPropertyPageStyleName("PageStyleName");
-static const OUStringLiteral gsPropertyParagraphStyleName("ParaStyleName");
-static const OUStringLiteral gsPropertyPrefix("Prefix");
-static const OUStringLiteral gsPropertyStartAt("StartAt");
-static const OUStringLiteral gsPropertySuffix("Suffix");
-static const OUStringLiteral gsPropertyPositionEndOfDoc("PositionEndOfDoc");
-static const OUStringLiteral gsPropertyFootnoteCounting("FootnoteCounting");
-static const OUStringLiteral gsPropertyEndNotice("EndNotice");
-static const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
+const OUStringLiteral gsPropertyAnchorCharStyleName("AnchorCharStyleName");
+const OUStringLiteral gsPropertyCharStyleName("CharStyleName");
+const OUStringLiteral gsPropertyNumberingType("NumberingType");
+const OUStringLiteral gsPropertyPageStyleName("PageStyleName");
+const OUStringLiteral gsPropertyParagraphStyleName("ParaStyleName");
+const OUStringLiteral gsPropertyPrefix("Prefix");
+const OUStringLiteral gsPropertyStartAt("StartAt");
+const OUStringLiteral gsPropertySuffix("Suffix");
+const OUStringLiteral gsPropertyPositionEndOfDoc("PositionEndOfDoc");
+const OUStringLiteral gsPropertyFootnoteCounting("FootnoteCounting");
+const OUStringLiteral gsPropertyEndNotice("EndNotice");
+const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
@@ -181,7 +181,7 @@ enum XMLFtnConfigToken
 
 }
 
-static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
+const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,      XML_TOK_FTNCONFIG_CITATION_STYLENAME },
     { XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME, XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
@@ -213,7 +213,7 @@ const SvXMLTokenMap&
     return *pAttrTokenMap;
 }
 
-static SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
+SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
 {
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
     { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },

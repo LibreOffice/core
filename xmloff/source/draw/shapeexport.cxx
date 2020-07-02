@@ -147,26 +147,26 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-static const OUStringLiteral gsZIndex( "ZOrder" );
-static const OUStringLiteral gsPrintable( "Printable" );
-static const OUStringLiteral gsVisible( "Visible" );
-static const OUStringLiteral gsModel( "Model" );
-static const OUStringLiteral gsStartShape( "StartShape" );
-static const OUStringLiteral gsEndShape( "EndShape" );
-static const OUStringLiteral gsOnClick( "OnClick" );
-static const OUStringLiteral gsEventType( "EventType" );
-static const OUStringLiteral gsPresentation( "Presentation" );
-static const OUStringLiteral gsMacroName( "MacroName" );
-static const OUStringLiteral gsScript( "Script" );
-static const OUStringLiteral gsLibrary( "Library" );
-static const OUStringLiteral gsClickAction( "ClickAction" );
-static const OUStringLiteral gsBookmark( "Bookmark" );
-static const OUStringLiteral gsEffect( "Effect" );
-static const OUStringLiteral gsPlayFull( "PlayFull" );
-static const OUStringLiteral gsVerb( "Verb" );
-static const OUStringLiteral gsSoundURL( "SoundURL" );
-static const OUStringLiteral gsSpeed( "Speed" );
-static const OUStringLiteral gsStarBasic( "StarBasic" );
+const OUStringLiteral gsZIndex( "ZOrder" );
+const OUStringLiteral gsPrintable( "Printable" );
+const OUStringLiteral gsVisible( "Visible" );
+const OUStringLiteral gsModel( "Model" );
+const OUStringLiteral gsStartShape( "StartShape" );
+const OUStringLiteral gsEndShape( "EndShape" );
+const OUStringLiteral gsOnClick( "OnClick" );
+const OUStringLiteral gsEventType( "EventType" );
+const OUStringLiteral gsPresentation( "Presentation" );
+const OUStringLiteral gsMacroName( "MacroName" );
+const OUStringLiteral gsScript( "Script" );
+const OUStringLiteral gsLibrary( "Library" );
+const OUStringLiteral gsClickAction( "ClickAction" );
+const OUStringLiteral gsBookmark( "Bookmark" );
+const OUStringLiteral gsEffect( "Effect" );
+const OUStringLiteral gsPlayFull( "PlayFull" );
+const OUStringLiteral gsVerb( "Verb" );
+const OUStringLiteral gsSoundURL( "SoundURL" );
+const OUStringLiteral gsSpeed( "Speed" );
+const OUStringLiteral gsStarBasic( "StarBasic" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )

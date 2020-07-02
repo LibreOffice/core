@@ -59,7 +59,7 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-static SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
+SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 {
 
     { XML_TEXT,                 ReferenceFieldPart::TEXT },
