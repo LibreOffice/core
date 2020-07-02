@@ -89,20 +89,25 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
             basegfx::B2DPoint aPreviousControlPoint = rPolygon.getNextControlPoint(nPreviousIndex);
             basegfx::B2DPoint aCurrentControlPoint = rPolygon.getPrevControlPoint(nCurrentIndex);
 
-            if (aPreviousControlPoint.equal(aPreviousPoint))
+            if (aPreviousControlPoint.equal(aPreviousPoint)
+                && aCurrentControlPoint.equal(aCurrentPoint))
+                rPath.lineTo(aCurrentPoint.getX(), aCurrentPoint.getY()); // a straight line
+            else
             {
-                aPreviousControlPoint
-                    = aPreviousPoint + ((aPreviousControlPoint - aCurrentPoint) * 0.0005);
+                if (aPreviousControlPoint.equal(aPreviousPoint))
+                {
+                    aPreviousControlPoint
+                        = aPreviousPoint + ((aPreviousControlPoint - aCurrentPoint) * 0.0005);
+                }
+                if (aCurrentControlPoint.equal(aCurrentPoint))
+                {
+                    aCurrentControlPoint
+                        = aCurrentPoint + ((aCurrentControlPoint - aPreviousPoint) * 0.0005);
+                }
+                rPath.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
+                              aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
+                              aCurrentPoint.getX(), aCurrentPoint.getY());
             }
-
-            if (aCurrentControlPoint.equal(aCurrentPoint))
-            {
-                aCurrentControlPoint
-                    = aCurrentPoint + ((aCurrentControlPoint - aPreviousPoint) * 0.0005);
-            }
-            rPath.cubicTo(aPreviousControlPoint.getX(), aPreviousControlPoint.getY(),
-                          aCurrentControlPoint.getX(), aCurrentControlPoint.getY(),
-                          aCurrentPoint.getX(), aCurrentPoint.getY());
         }
         aPreviousPoint = aCurrentPoint;
         nPreviousIndex = nCurrentIndex;
