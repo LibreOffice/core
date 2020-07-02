@@ -33,7 +33,7 @@ using namespace ::unodevtools;
 
 namespace {
 
-static const char usageText[] =
+const char usageText[] =
 "\n sub-commands:\n"
 "    dump        dump declarations on stdout (e.g. constructors, methods, type\n"
 "                mapping for properties) or complete method bodies with\n"

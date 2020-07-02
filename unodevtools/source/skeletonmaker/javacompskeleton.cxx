@@ -545,7 +545,7 @@ static void generateMethodBodies(std::ostream& o,
     }
 }
 
-static const char* const propcomment=
+const char* const propcomment=
 "        // use the last parameter of the PropertySetMixin constructor\n"
 "        // for your optional attributes if necessary. See the documentation\n"
 "        // of the PropertySetMixin helper for further information.\n"
