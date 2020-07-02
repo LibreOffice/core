@@ -809,7 +809,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     {
                         sal_Int32 nDecPos;
                         SvNumFormatType F_Type = SvNumFormatType::UNDEFINED;
-                        if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr) ||
+                        if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr, SvNumInputOptions::NONE) ||
                             ( F_Type != SvNumFormatType::NUMBER &&
                               F_Type != SvNumFormatType::SCIENTIFIC) )
                         {
