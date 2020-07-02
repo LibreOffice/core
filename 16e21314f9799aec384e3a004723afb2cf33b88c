@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a266849_aaaad60e",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-02T12:52:31Z",
+      "side": 1,
+      "message": "What about the other shapes behind the text and their z-order? What about more than 10 shapes in front of the text?",
+      "range": {
+        "startLine": 906,
+        "startChar": 46,
+        "endLine": 906,
+        "endChar": 48
+      },
+      "revId": "16e21314f9799aec384e3a004723afb2cf33b88c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
