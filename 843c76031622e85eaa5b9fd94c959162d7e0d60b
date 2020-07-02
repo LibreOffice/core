@@ -51,6 +51,24 @@
       "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08f95871_426c65be",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T12:22:33Z",
+      "side": 1,
+      "message": "I stumbled when I saw the odd \"half initialization\" of\n\n  { false, }\n\nBut yeah, whatever way you prefer is OK.",
+      "parentUuid": "9c25a9f9_13956778",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
