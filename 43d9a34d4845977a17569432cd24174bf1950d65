@@ -16,6 +16,24 @@
       "revId": "43d9a34d4845977a17569432cd24174bf1950d65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "369ffabe_939f4d70",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T20:38:20Z",
+      "side": 1,
+      "message": "c++ error (generic)\n\nerror: scoped enums only available with -std\u003dc++11 or -std\u003dgnu++11 [-Werror] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/include/sal/log.hxx",
+      "parentUuid": "94d5d01f_d86ff9ef",
+      "revId": "43d9a34d4845977a17569432cd24174bf1950d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
