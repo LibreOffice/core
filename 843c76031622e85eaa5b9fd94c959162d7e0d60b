@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "f503f09f_43151f1a",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T13:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33f9a4f9_5974bb44",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e9f8307_7b10faf9",
         "filename": "sal/osl/all/log.cxx",
         "patchSetId": 4
