@@ -16,6 +16,8 @@
 class LOKTrigger
 {
 public:
+    static void trigger_changed(weld::TextView& rView) { rView.signal_changed(); }
+
     static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }

@@ -131,6 +131,17 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     return true;
                 }
             }
+
+            auto pTextView = dynamic_cast<weld::TextView*>(pWidget);
+            if (pTextView)
+            {
+                if (sAction == "change")
+                {
+                    pTextView->set_text(rData["data"]);
+                    LOKTrigger::trigger_changed(*pTextView);
+                    return true;
+                }
+            }
         }
     }
 
