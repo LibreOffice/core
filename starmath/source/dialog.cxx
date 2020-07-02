@@ -545,7 +545,7 @@ struct FieldMinMax
 
 // Data for min and max values of the 4 metric fields
 // for each of the 10 categories
-static const FieldMinMax pMinMaxData[10][4] =
+const FieldMinMax pMinMaxData[10][4] =
 {
     // 0
     {{ 0, 200 },    { 0, 200 },     { 0, 100 },     { 0, 0 }},
