@@ -830,7 +830,7 @@ void TVChildTarget::subst( OUString& instpath )
 }
 
 
-static const char aHelpMediaType[] = "application/vnd.sun.star.help";
+const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
 TreeFileIterator::TreeFileIterator( const OUString& aLanguage )
         : m_eState( IteratorState::UserExtensions )
