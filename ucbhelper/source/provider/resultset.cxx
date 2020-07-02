@@ -60,7 +60,7 @@ static const uno::Type& sal_Bool_getCppuType()
     return cppu::UnoType<bool>::get();
 }
 
-static const PropertyInfo aPropertyTable[] =
+const PropertyInfo aPropertyTable[] =
 {
     { "IsRowCountFinal",
       1000,
