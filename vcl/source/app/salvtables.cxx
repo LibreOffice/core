@@ -3138,6 +3138,14 @@ void SalInstanceEntry::set_font(const vcl::Font& rFont)
     m_xEntry->Invalidate();
 }
 
+void SalInstanceEntry::set_font_color(const Color& rColor)
+{
+    if (rColor == COL_AUTO)
+        m_xEntry->SetControlForeground();
+    else
+        m_xEntry->SetControlForeground(rColor);
+}
+
 void SalInstanceEntry::connect_cursor_position(const Link<Entry&, void>& rLink)
 {
     assert(!m_aCursorPositionHdl.IsSet());
