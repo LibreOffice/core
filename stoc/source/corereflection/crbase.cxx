@@ -93,7 +93,7 @@ sal_Bool IdlClassImpl::equals( const Reference< XIdlClass >& xType )
             (xType->getTypeClass() == _eTypeClass) && (xType->getName() == _aName));
 }
 
-static const bool s_aAssignableFromTab[11][11] =
+const bool s_aAssignableFromTab[11][11] =
 {
                          /* from  CH,    BO,    BY,    SH,    US,    LO,    UL,    HY,    UH,    FL,    DO */
 /* TypeClass_CHAR */            { true,  false, false, false, false, false, false, false, false, false, false },

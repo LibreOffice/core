@@ -892,7 +892,7 @@ static Reference< XInterface > FactoryImpl_create(
 }
 
 
-static const struct ::cppu::ImplementationEntry g_entries[] =
+const struct ::cppu::ImplementationEntry g_entries[] =
 {
     {
         ::stoc_invadp::FactoryImpl_create,

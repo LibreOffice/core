@@ -432,7 +432,7 @@ Reference< XInterface > proxyfac_create(
     return xRet;
 }
 
-static const ::cppu::ImplementationEntry g_entries [] =
+const ::cppu::ImplementationEntry g_entries [] =
 {
     {
         proxyfac_create, proxyfac_getImplementationName,
