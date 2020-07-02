@@ -16,6 +16,24 @@
       "revId": "a9540b5252eaa29f00d2981b2601c159d23bdc73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "313dd19d_215be847",
+        "filename": "sfx2/uiconfig/ui/addtargetdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-07-02T19:42:14Z",
+      "side": 1,
+      "message": "Should I fix other title (Redaction Targets, Target Name, Whole Words)",
+      "parentUuid": "5a9c8138_9ebffa55",
+      "revId": "a9540b5252eaa29f00d2981b2601c159d23bdc73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
