@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "772228f9_dbdcf00e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-02T08:12:34Z",
+      "side": 1,
+      "message": "this seems a bit dubious to me - we only have control of LO-internal use of NSS but it could be used and initialised by externals as well, for example curl.\n\nwhat happens if NSS has already been initialised when nsscrypto_initialize runs?\n\ni\u0027ve never seen a bug reported due to this, but i haven\u0027t really been looking for bugs...",
+      "range": {
+        "startLine": 17,
+        "startChar": 48,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "756f342b_530bd6b9",
+        "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-02T08:12:34Z",
+      "side": 1,
+      "message": "adding attribute is incompaible so needs [API CHANGE]",
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d797d4d_f109877d",
+        "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-02T08:12:34Z",
+      "side": 1,
+      "message": "do we really want to expose this in the API?",
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
