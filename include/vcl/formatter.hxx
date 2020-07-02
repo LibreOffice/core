@@ -21,11 +21,53 @@
 
 #include <config_options.h>
 #include <vcl/settings.hxx>
+#include <map>
 #include <memory>
 
 class SvNumberFormatter;
 
-namespace validation { class NumberValidator; }
+namespace validation
+{
+    // the states of our automat.
+    enum State
+    {
+        START,              // at the very start of the string
+        NUM_START,          // the very start of the number
+
+        DIGIT_PRE_COMMA,    // some pre-comma digits are read, perhaps including some thousand separators
+
+        DIGIT_POST_COMMA,   // reading digits after the comma
+        EXPONENT_START,     // at the very start of the exponent value
+                            //    (means: not including the "e" which denotes the exponent)
+        EXPONENT_DIGIT,     // currently reading the digits of the exponent
+
+        END                 // reached the end of the string
+    };
+
+    // a row in the transition table (means the set of states to be reached from a given state)
+    typedef ::std::map< sal_Unicode, State >        StateTransitions;
+
+    // a single transition
+    typedef StateTransitions::value_type            Transition;
+
+    // the complete transition table
+    typedef ::std::map< State, StateTransitions >   TransitionTable;
+
+    // the validator class
+    class NumberValidator
+    {
+    private:
+        TransitionTable     m_aTransitions;
+
+    public:
+        NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
+
+        bool isValidNumericFragment( const OUString& _rText );
+
+    private:
+        bool implValidateNormalized( const OUString& _rText );
+    };
+}
 
 enum class FORMAT_CHANGE_TYPE
 {
@@ -139,9 +181,13 @@ public:
     // If the current String is invalid, GetValue() returns this value
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
+    void SetLastSelection(const Selection& rSelection) { m_aLastSelection = rSelection; }
+
     // Settings for the format
     sal_uLong   GetFormatKey() const                { return m_nFormatKey; }
     void    SetFormatKey(sal_uLong nFormatKey);
+
+    SvNumberFormatter*  GetOrCreateFormatter() const { return m_pFormatter ? m_pFormatter : const_cast<Formatter*>(this)->CreateFormatter(); }
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
     void    SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat = true);
@@ -153,6 +199,9 @@ public:
         // the is no check if the current format is numeric, so be cautious when calling these functions
 
     void    DisableRemainderFactor();
+    bool    GetDisableRemainderFactor() const { return m_bDisableRemainderFactor; }
+
+    void    SetWrapOnLimits(bool bWrapOnLimits) { m_bWrapOnLimits = bWrapOnLimits; }
 
     sal_uInt16  GetDecimalDigits() const;
     void    SetDecimalDigits(sal_uInt16 _nPrecision);
@@ -234,14 +283,17 @@ public:
     void    UseInputStringForFormatting();
     bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
 
-protected:
-    void impl_Modify(bool makeValueDirty = true);
+    void    Modify(bool makeValueDirty = true);
 
-    // Override CheckText for input-time checks
-    virtual bool CheckText(const OUString&) const { return true; }
+    void    EntryLostFocus();
 
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
+
+protected:
+
+    // Override CheckText for input-time checks
+    virtual bool CheckText(const OUString&) const { return true; }
 
     void ImplSetTextImpl(const OUString& rNew, Selection const * pNewSel);
     void ImplSetValue(double dValue, bool bForce);
@@ -250,10 +302,7 @@ protected:
     void ImplSetFormatKey(sal_uLong nFormatKey);
         // SetFormatKey without FormatChanged notification
 
-    void EntryLostFocus();
-
     SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
-    SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : const_cast<Formatter*>(this)->CreateFormatter(); }
 
     void ReFormat();
 };

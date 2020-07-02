@@ -1951,7 +1951,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         {
             connectFormattedFormatterAdjustment(id, sAdjustment);
             VclPtrInstance<FormattedField> xField(pParent, nBits);
-            xField->SetMinValue(0);
+            xField->GetFormatter()->SetMinValue(0);
             xWindow = xField;
         }
     }
@@ -4411,10 +4411,11 @@ void VclBuilder::mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdj
             SAL_INFO("vcl.builder", "unhandled property :" << rKey);
     }
 
-    rTarget.SetMinValue(nMinValue);
-    rTarget.SetMaxValue(nMaxValue);
-    rTarget.SetValue(nValue);
-    rTarget.SetSpinSize(nSpinSize);
+    Formatter* pFormatter = rTarget.GetFormatter();
+    pFormatter->SetMinValue(nMinValue);
+    pFormatter->SetMaxValue(nMaxValue);
+    pFormatter->SetValue(nValue);
+    pFormatter->SetSpinSize(nSpinSize);
 }
 
 void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)

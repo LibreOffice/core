@@ -48,50 +48,6 @@ using namespace ::com::sun::star::util;
 
 namespace validation
 {
-    namespace {
-
-    // the states of our automat.
-    enum State
-    {
-        START,              // at the very start of the string
-        NUM_START,          // the very start of the number
-
-        DIGIT_PRE_COMMA,    // some pre-comma digits are read, perhaps including some thousand separators
-
-        DIGIT_POST_COMMA,   // reading digits after the comma
-        EXPONENT_START,     // at the very start of the exponent value
-                            //    (means: not including the "e" which denotes the exponent)
-        EXPONENT_DIGIT,     // currently reading the digits of the exponent
-
-        END                 // reached the end of the string
-    };
-
-    }
-
-    // a row in the transition table (means the set of states to be reached from a given state)
-    typedef ::std::map< sal_Unicode, State >        StateTransitions;
-
-    // a single transition
-    typedef StateTransitions::value_type            Transition;
-
-    // the complete transition table
-    typedef ::std::map< State, StateTransitions >   TransitionTable;
-
-    // the validator class
-    class NumberValidator
-    {
-    private:
-        TransitionTable     m_aTransitions;
-
-    public:
-        NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
-
-        bool isValidNumericFragment( const OUString& _rText );
-
-    private:
-        bool implValidateNormalized( const OUString& _rText );
-    };
-
     static void lcl_insertStopTransition( StateTransitions& _rRow )
     {
         _rRow.insert( Transition( '_', END ) );
@@ -266,10 +222,10 @@ namespace validation
     }
 }
 
-SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = nullptr;
-sal_uLong FormattedField::StaticFormatter::s_nReferences = 0;
+SvNumberFormatter* Formatter::StaticFormatter::s_cFormatter = nullptr;
+sal_uLong Formatter::StaticFormatter::s_nReferences = 0;
 
-SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
+SvNumberFormatter* Formatter::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
     {
@@ -282,12 +238,12 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     return s_cFormatter;
 }
 
-FormattedField::StaticFormatter::StaticFormatter()
+Formatter::StaticFormatter::StaticFormatter()
 {
     ++s_nReferences;
 }
 
-FormattedField::StaticFormatter::~StaticFormatter()
+Formatter::StaticFormatter::~StaticFormatter()
 {
     if (--s_nReferences == 0)
     {
@@ -334,7 +290,7 @@ void Formatter::SetFieldText(const OUString& rStr, const Selection& rNewSelectio
 
 void Formatter::SetTextFormatted(const OUString& rStr)
 {
-    SAL_INFO_IF(ImplGetFormatter()->IsTextFormat(m_nFormatKey), "svtools",
+    SAL_INFO_IF(GetOrCreateFormatter()->IsTextFormat(m_nFormatKey), "svtools",
         "FormattedField::SetTextFormatted : valid only with text formats !");
 
     m_sCurrentTextValue = rStr;
@@ -344,13 +300,13 @@ void Formatter::SetTextFormatted(const OUString& rStr)
     // IsNumberFormat changes the format key parameter
     sal_uInt32 nTempFormatKey = static_cast< sal_uInt32 >( m_nFormatKey );
     if( IsUsingInputStringForFormatting() &&
-        ImplGetFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
+        GetOrCreateFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
     {
-        ImplGetFormatter()->GetInputLineString(dNumber, m_nFormatKey, sFormatted);
+        GetOrCreateFormatter()->GetInputLineString(dNumber, m_nFormatKey, sFormatted);
     }
     else
     {
-        ImplGetFormatter()->GetOutputString(m_sCurrentTextValue,
+        GetOrCreateFormatter()->GetOutputString(m_sCurrentTextValue,
                                             m_nFormatKey,
                                             sFormatted,
                                             &m_pLastOutputColor);
@@ -422,7 +378,7 @@ void Formatter::SetAutoColor(bool _bAutomatic)
     }
 }
 
-void Formatter::impl_Modify(bool makeValueDirty)
+void Formatter::Modify(bool makeValueDirty)
 {
     if (!IsStrictFormat())
     {
@@ -497,7 +453,7 @@ void Formatter::ImplSetFormatKey(sal_uLong nFormatKey)
     bool bNeedFormatter = (m_pFormatter == nullptr) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
-        ImplGetFormatter(); // this creates a standard formatter
+        GetOrCreateFormatter(); // this creates a standard formatter
 
         // It might happen that the standard formatter makes no sense here, but it takes a default
         // format. Thus, it is possible to set one of the other standard keys (which are spanning
@@ -560,7 +516,7 @@ void Formatter::SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat)
 
 OUString Formatter::GetFormat(LanguageType& eLang) const
 {
-    const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
+    const SvNumberformat* pFormatEntry = GetOrCreateFormatter()->GetEntry(m_nFormatKey);
     DBG_ASSERT(pFormatEntry != nullptr, "FormattedField::GetFormat: no number format for the given format key.");
     OUString sFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : OUString();
     eLang = pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_DONTKNOW;
@@ -570,13 +526,13 @@ OUString Formatter::GetFormat(LanguageType& eLang) const
 
 bool Formatter::SetFormat(const OUString& rFormatString, LanguageType eLang)
 {
-    sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
+    sal_uInt32 nNewKey = GetOrCreateFormatter()->TestNewString(rFormatString, eLang);
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         sal_Int32 nCheckPos;
         SvNumFormatType nType;
         OUString rFormat(rFormatString);
-        if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
+        if (!GetOrCreateFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
             return false;
         DBG_ASSERT(nNewKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "FormattedField::SetFormatString : PutEntry returned an invalid key !");
     }
@@ -588,25 +544,25 @@ bool Formatter::SetFormat(const OUString& rFormatString, LanguageType eLang)
 
 bool Formatter::GetThousandsSep() const
 {
-    DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
+    DBG_ASSERT(!GetOrCreateFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nLeadingCnt;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
+    GetOrCreateFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
 
     return bThousand;
 }
 
 void Formatter::SetThousandsSep(bool _bUseSeparator)
 {
-    DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
+    DBG_ASSERT(!GetOrCreateFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
     // get the current settings
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nLeadingCnt;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
+    GetOrCreateFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
     if (bThousand == _bUseSeparator)
         return;
 
@@ -615,12 +571,12 @@ void Formatter::SetThousandsSep(bool _bUseSeparator)
     GetFormat(eLang);
 
     // generate a new format ...
-    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nLeadingCnt);
+    OUString sFmtDescription = GetOrCreateFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nLeadingCnt);
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
     SvNumFormatType nType;
-    ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
+    GetOrCreateFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
     // set the new key
     ImplSetFormatKey(nNewKey);
@@ -629,25 +585,25 @@ void Formatter::SetThousandsSep(bool _bUseSeparator)
 
 sal_uInt16 Formatter::GetDecimalDigits() const
 {
-    DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
+    DBG_ASSERT(!GetOrCreateFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nLeadingCnt;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
+    GetOrCreateFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
 
     return nPrecision;
 }
 
 void Formatter::SetDecimalDigits(sal_uInt16 _nPrecision)
 {
-    DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
+    DBG_ASSERT(!GetOrCreateFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
     // get the current settings
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nLeadingCnt;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
+    GetOrCreateFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
     if (nPrecision == _nPrecision)
         return;
 
@@ -656,12 +612,12 @@ void Formatter::SetDecimalDigits(sal_uInt16 _nPrecision)
     GetFormat(eLang);
 
     // generate a new format ...
-    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nLeadingCnt);
+    OUString sFmtDescription = GetOrCreateFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nLeadingCnt);
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
     SvNumFormatType nType;
-    ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
+    GetOrCreateFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
     // set the new key
     ImplSetFormatKey(nNewKey);
@@ -688,7 +644,7 @@ void Formatter::EntryLostFocus()
             if (TreatingAsNumber())
             {
                 ImplSetValue(m_dCurrentValue, true);
-                impl_Modify();
+                Modify();
                 m_ValueState = valueDouble;
             }
             else
@@ -723,7 +679,7 @@ void Formatter::Commit()
         // don't reparse it from the text
         // (can lead to data loss when the format is lossy,
         //  as is e.g. our default date format: 2-digit year!)
-        impl_Modify(false);
+        Modify(false);
     }
 }
 
@@ -795,7 +751,7 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     if (!bForce && (dVal == GetValue()))
         return;
 
-    DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplSetValue : can't set a value without a formatter !");
+    DBG_ASSERT(GetOrCreateFormatter() != nullptr, "FormattedField::ImplSetValue : can't set a value without a formatter !");
 
     m_ValueState = valueDouble;
     m_dCurrentValue = dVal;
@@ -803,23 +759,23 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     if (!m_aOutputHdl.IsSet() || !m_aOutputHdl.Call(nullptr))
     {
         OUString sNewText;
-        if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
+        if (GetOrCreateFormatter()->IsTextFormat(m_nFormatKey))
         {
             // first convert the number as string in standard format
             OUString sTemp;
-            ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
+            GetOrCreateFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
             // then encode the string in the corresponding text format
-            ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
+            GetOrCreateFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
         }
         else
         {
             if( IsUsingInputStringForFormatting())
             {
-                ImplGetFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+                GetOrCreateFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
             }
             else
             {
-                ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+                GetOrCreateFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
             }
         }
         ImplSetTextImpl(sNewText, nullptr);
@@ -860,16 +816,16 @@ bool Formatter::ImplGetValue(double& dNewVal)
 
     if (!bUseExternalFormatterValue)
     {
-        DBG_ASSERT(ImplGetFormatter() != nullptr, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
+        DBG_ASSERT(GetOrCreateFormatter() != nullptr, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
         sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 
-        if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
+        if (GetOrCreateFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
             // for detection of values like "1,1" in fields that are formatted as text
             nFormatKey = 0;
 
         // special treatment for percentage formatting
-        if (ImplGetFormatter()->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
+        if (GetOrCreateFormatter()->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
         {
             // the language of our format
             LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
@@ -886,7 +842,7 @@ bool Formatter::ImplGetValue(double& dNewVal)
             // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
             // which equals 300 percent.
         }
-        if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
+        if (!GetOrCreateFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
             return false;
     }
 
@@ -922,38 +878,150 @@ void Formatter::DisableRemainderFactor()
     m_bDisableRemainderFactor = true;
 }
 
-
 void Formatter::UseInputStringForFormatting()
 {
     m_bUseInputStringForFormatting = true;
 }
 
+namespace
+{
+    class FieldFormatter : public Formatter
+    {
+    private:
+        FormattedField& m_rSpinButton;
+    public:
+        FieldFormatter(FormattedField& rSpinButton)
+            : m_rSpinButton(rSpinButton)
+        {
+        }
+
+        // Formatter overrides
+        virtual Selection GetEntrySelection() const override
+        {
+            return m_rSpinButton.GetSelection();
+        }
+
+        virtual OUString GetEntryText() const override
+        {
+            return m_rSpinButton.GetText();
+        }
+
+        void SetEntryText(const OUString& rText, const Selection& rSel) override
+        {
+            m_rSpinButton.SpinField::SetText(rText, rSel);
+        }
+
+        virtual void SetEntryTextColor(const Color* pColor) override
+        {
+            if (pColor)
+                m_rSpinButton.SetControlForeground(*pColor);
+            else
+                m_rSpinButton.SetControlForeground();
+        }
+
+        virtual SelectionOptions GetEntrySelectionOptions() const override
+        {
+            return m_rSpinButton.GetSettings().GetStyleSettings().GetSelectionOptions();
+        }
+
+        virtual void FieldModified() override
+        {
+            m_rSpinButton.SpinField::Modify();
+        }
+    };
+
+    class DoubleNumericFormatter : public FieldFormatter
+    {
+    private:
+        DoubleNumericField& m_rNumericSpinButton;
+    public:
+        DoubleNumericFormatter(DoubleNumericField& rNumericSpinButton)
+            : FieldFormatter(rNumericSpinButton)
+            , m_rNumericSpinButton(rNumericSpinButton)
+        {
+        }
+
+        virtual bool CheckText(const OUString& sText) const override
+        {
+            // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
+            // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
+            // Thus, the roundabout way via a regular expression
+            return m_rNumericSpinButton.GetNumberValidator().isValidNumericFragment(sText);
+        }
+
+        virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override
+        {
+            m_rNumericSpinButton.ResetConformanceTester();
+            FieldFormatter::FormatChanged(nWhat);
+        }
+    };
+
+    class DoubleCurrencyFormatter : public FieldFormatter
+    {
+    private:
+        DoubleCurrencyField& m_rCurrencySpinButton;
+        bool m_bChangingFormat;
+    public:
+        DoubleCurrencyFormatter(DoubleCurrencyField& rNumericSpinButton)
+            : FieldFormatter(rNumericSpinButton)
+            , m_rCurrencySpinButton(rNumericSpinButton)
+            , m_bChangingFormat(false)
+        {
+        }
+
+        virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override
+        {
+            if (m_bChangingFormat)
+            {
+                FieldFormatter::FormatChanged(nWhat);
+                return;
+            }
+
+            switch (nWhat)
+            {
+                case FORMAT_CHANGE_TYPE::FORMATTER:
+                case FORMAT_CHANGE_TYPE::PRECISION:
+                case FORMAT_CHANGE_TYPE::THOUSANDSSEP:
+                    // the aspects which changed don't take our currency settings into account (in fact, they most probably
+                    // destroyed them)
+                    m_rCurrencySpinButton.UpdateCurrencyFormat();
+                    break;
+                case FORMAT_CHANGE_TYPE::KEYONLY:
+                    OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
+                    // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
+                    // Nobody but ourself should modify the format key directly!
+                    break;
+                default: break;
+            }
+
+            FieldFormatter::FormatChanged(nWhat);
+        }
+
+        void GuardSetFormat(const OUString& rString, LanguageType eLanguage)
+        {
+            // set this new basic format
+            m_bChangingFormat = true;
+            SetFormat(rString, eLanguage);
+            m_bChangingFormat = false;
+        }
+
+    };
+}
+
 DoubleNumericField::DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
     : FormattedField(pParent, nStyle)
 {
+    m_xFormatter.reset(new DoubleNumericFormatter(*this));
     ResetConformanceTester();
 }
 
 DoubleNumericField::~DoubleNumericField() = default;
 
-void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
-{
-    ResetConformanceTester();
-    FormattedField::FormatChanged(nWhat);
-}
-
-bool DoubleNumericField::CheckText(const OUString& sText) const
-{
-    // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
-    // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
-    // Thus, the roundabout way via a regular expression
-    return m_pNumberValidator->isValidNumericFragment( sText );
-}
-
 void DoubleNumericField::ResetConformanceTester()
 {
     // the thousands and the decimal separator are language dependent
-    const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
+    Formatter* pFormatter = GetFormatter();
+    const SvNumberformat* pFormatEntry = pFormatter->GetOrCreateFormatter()->GetEntry(pFormatter->GetFormatKey());
 
     sal_Unicode cSeparatorThousand = ',';
     sal_Unicode cSeparatorDecimal = '.';
@@ -973,43 +1041,16 @@ void DoubleNumericField::ResetConformanceTester()
     m_pNumberValidator.reset(new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal ));
 }
 
+
 DoubleCurrencyField::DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle)
     :FormattedField(pParent, nStyle)
-    ,m_bChangingFormat(false)
 {
+    m_xFormatter.reset(new DoubleCurrencyFormatter(*this));
     m_bPrependCurrSym = false;
 
     // initialize with a system currency format
     m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
     UpdateCurrencyFormat();
-}
-
-void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
-{
-    if (m_bChangingFormat)
-    {
-        FormattedField::FormatChanged(nWhat);
-        return;
-    }
-
-    switch (nWhat)
-    {
-        case FORMAT_CHANGE_TYPE::FORMATTER:
-        case FORMAT_CHANGE_TYPE::PRECISION:
-        case FORMAT_CHANGE_TYPE::THOUSANDSSEP:
-            // the aspects which changed don't take our currency settings into account (in fact, they most probably
-            // destroyed them)
-            UpdateCurrencyFormat();
-            break;
-        case FORMAT_CHANGE_TYPE::KEYONLY:
-            OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
-            // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
-            // Nobody but ourself should modify the format key directly!
-            break;
-        default: break;
-    }
-
-    FormattedField::FormatChanged(nWhat);
 }
 
 void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
@@ -1019,7 +1060,7 @@ void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
 
     m_sCurrencySymbol = rSymbol;
     UpdateCurrencyFormat();
-    FormatChanged(FORMAT_CHANGE_TYPE::CURRENCY_SYMBOL);
+    m_xFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRENCY_SYMBOL);
 }
 
 void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
@@ -1029,16 +1070,16 @@ void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
 
     m_bPrependCurrSym = _bPrepend;
     UpdateCurrencyFormat();
-    FormatChanged(FORMAT_CHANGE_TYPE::CURRSYM_POSITION);
+    m_xFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRSYM_POSITION);
 }
 
 void DoubleCurrencyField::UpdateCurrencyFormat()
 {
     // the old settings
     LanguageType eLanguage;
-    GetFormat(eLanguage);
-    bool bThSep = GetThousandsSep();
-    sal_uInt16 nDigits = GetDecimalDigits();
+    m_xFormatter->GetFormat(eLanguage);
+    bool bThSep = m_xFormatter->GetThousandsSep();
+    sal_uInt16 nDigits = m_xFormatter->GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
 
@@ -1102,9 +1143,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     }
 
     // set this new basic format
-    m_bChangingFormat = true;
-    SetFormat(sNewFormat.makeStringAndClear(), eLanguage);
-    m_bChangingFormat = false;
+    static_cast<DoubleCurrencyFormatter*>(m_xFormatter.get())->GuardSetFormat(sNewFormat.makeStringAndClear(), eLanguage);
 }
 
 FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
@@ -1114,21 +1153,21 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
 
 void FormattedField::SetText(const OUString& rStr)
 {
-    SetFieldText(rStr, Selection(0, 0));
+    GetFormatter()->SetFieldText(rStr, Selection(0, 0));
 }
 
 void FormattedField::SetText(const OUString& rStr, const Selection& rNewSelection)
 {
-    SetFieldText(rStr, rNewSelection);
+    GetFormatter()->SetFieldText(rStr, rNewSelection);
     SetSelection(rNewSelection);
 }
 
 bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
-        SetDecimalDigits(rValue.toInt32());
+        GetFormatter()->SetDecimalDigits(rValue.toInt32());
     else if (rKey == "wrap")
-        m_bWrapOnLimits = toBool(rValue);
+        GetFormatter()->SetWrapOnLimits(toBool(rValue));
     else
         return SpinField::set_property(rKey, rValue);
     return true;
@@ -1136,18 +1175,19 @@ bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
 
 void FormattedField::Up()
 {
-    auto nScale = weld::SpinButton::Power10(GetDecimalDigits());
+    Formatter* pFormatter = GetFormatter();
+    auto nScale = weld::SpinButton::Power10(pFormatter->GetDecimalDigits());
 
-    sal_Int64 nValue = std::round(GetValue() * nScale);
-    sal_Int64 nSpinSize = std::round(m_dSpinSize * nScale);
-    sal_Int64 nRemainder = m_bDisableRemainderFactor ? 0 : nValue % nSpinSize;
+    sal_Int64 nValue = std::round(pFormatter->GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(pFormatter->GetSpinSize() * nScale);
+    sal_Int64 nRemainder = pFormatter->GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue + nSpinSize - nRemainder;
     else
         nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue - nRemainder;
 
     // setValue handles under- and overflows (min/max) automatically
-    SetValue(static_cast<double>(nValue) / nScale);
+    pFormatter->SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -1156,18 +1196,19 @@ void FormattedField::Up()
 
 void FormattedField::Down()
 {
-    auto nScale = weld::SpinButton::Power10(GetDecimalDigits());
+    Formatter* pFormatter = GetFormatter();
+    auto nScale = weld::SpinButton::Power10(pFormatter->GetDecimalDigits());
 
-    sal_Int64 nValue = std::round(GetValue() * nScale);
-    sal_Int64 nSpinSize = std::round(m_dSpinSize * nScale);
-    sal_Int64 nRemainder = m_bDisableRemainderFactor ? 0 : nValue % nSpinSize;
+    sal_Int64 nValue = std::round(pFormatter->GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(pFormatter->GetSpinSize() * nScale);
+    sal_Int64 nRemainder = pFormatter->GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nRemainder;
     else
         nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nSpinSize - nRemainder;
 
     // setValue handles under- and overflows (min/max) automatically
-    SetValue(static_cast<double>(nValue) / nScale);
+    pFormatter->SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -1176,9 +1217,10 @@ void FormattedField::Down()
 
 void FormattedField::First()
 {
-    if (m_bHasMin)
+    Formatter* pFormatter = GetFormatter();
+    if (pFormatter->HasMinValue())
     {
-        SetValue(m_dMinValue);
+        pFormatter->SetValue(pFormatter->GetMinValue());
         SetModifyFlag();
         Modify();
     }
@@ -1188,9 +1230,10 @@ void FormattedField::First()
 
 void FormattedField::Last()
 {
-    if (m_bHasMax)
+    Formatter* pFormatter = GetFormatter();
+    if (pFormatter->HasMaxValue())
     {
-        SetValue(m_dMaxValue);
+        pFormatter->SetValue(pFormatter->GetMaxValue());
         SetModifyFlag();
         Modify();
     }
@@ -1200,19 +1243,18 @@ void FormattedField::Last()
 
 void FormattedField::Modify()
 {
-    impl_Modify();
+    GetFormatter()->Modify();
 }
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
-        m_aLastSelection = GetSelection();
+        GetFormatter()->SetLastSelection(GetSelection());
     return SpinField::PreNotify(rNEvt);
 }
 
 bool FormattedField::EventNotify(NotifyEvent& rNEvt)
 {
-
     if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !IsReadOnly())
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
@@ -1223,12 +1265,15 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
             case KEY_DOWN:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
-                if (!nMod && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
+            {
+                Formatter* pFormatter = GetFormatter();
+                if (!nMod && pFormatter->GetOrCreateFormatter()->IsTextFormat(pFormatter->GetFormatKey()))
                 {
                     // the base class would translate this into calls to Up/Down/First/Last,
                     // but we don't want this if we are text-formatted
                     return true;
                 }
+            }
         }
     }
 
@@ -1238,7 +1283,9 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         if (pCommand->GetCommand() == CommandEventId::Wheel)
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ((pData->GetMode() == CommandWheelMode::SCROLL) && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
+            Formatter* pFormatter = GetFormatter();
+            if ((pData->GetMode() == CommandWheelMode::SCROLL) &&
+                pFormatter->GetOrCreateFormatter()->IsTextFormat(pFormatter->GetFormatKey()))
             {
                 // same as above : prevent the base class from doing Up/Down-calls
                 // (normally I should put this test into the Up/Down methods itself, shouldn't I ?)
@@ -1249,42 +1296,16 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
     }
 
     if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
-        EntryLostFocus();
+        GetFormatter()->EntryLostFocus();
 
     return SpinField::EventNotify( rNEvt );
 }
 
-Selection FormattedField::GetEntrySelection() const
+Formatter* FormattedField::GetFormatter()
 {
-    return GetSelection();
-}
-
-OUString FormattedField::GetEntryText() const
-{
-    return GetText();
-}
-
-void FormattedField::SetEntryText(const OUString& rText, const Selection& rSel)
-{
-    SpinField::SetText(rText, rSel);
-}
-
-void FormattedField::SetEntryTextColor(const Color* pColor)
-{
-    if (pColor)
-        SetControlForeground(*pColor);
-    else
-        SetControlForeground();
-}
-
-SelectionOptions FormattedField::GetEntrySelectionOptions() const
-{
-    return GetSettings().GetStyleSettings().GetSelectionOptions();
-}
-
-void FormattedField::FieldModified()
-{
-    SpinField::Modify();
+    if (!m_xFormatter)
+        m_xFormatter.reset(new FieldFormatter(*this));
+    return m_xFormatter.get();
 }
 
 // currently used by online
@@ -1292,12 +1313,13 @@ void FormattedField::SetValueFromString(const OUString& rStr)
 {
     sal_Int32 nEnd;
     rtl_math_ConversionStatus eStatus;
-    double fValue = ::rtl::math::stringToDouble(rStr, '.', GetDecimalDigits(), &eStatus, &nEnd );
+    Formatter* pFormatter = GetFormatter();
+    double fValue = ::rtl::math::stringToDouble(rStr, '.', pFormatter->GetDecimalDigits(), &eStatus, &nEnd );
 
     if (eStatus == rtl_math_ConversionStatus_Ok &&
         nEnd == rStr.getLength())
     {
-        SetValue(fValue);
+        pFormatter->SetValue(fValue);
         SetModifyFlag();
         Modify();
 
@@ -1313,9 +1335,10 @@ void FormattedField::SetValueFromString(const OUString& rStr)
 void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SpinField::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("min", GetMinValue());
-    rJsonWriter.put("max", GetMaxValue());
-    rJsonWriter.put("value", GetValue());
+    Formatter* pFormatter = GetFormatter();
+    rJsonWriter.put("min", pFormatter->GetMinValue());
+    rJsonWriter.put("max", pFormatter->GetMaxValue());
+    rJsonWriter.put("value", pFormatter->GetValue());
 }
 
 FactoryFunction FormattedField::GetUITestFactory() const

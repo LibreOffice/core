@@ -1905,15 +1905,16 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
     bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
 
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMinValue(nMin);
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetMaxValue(nMax);
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetSpinSize(nStep);
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetStrictFormat(bStrict);
+    Formatter* pEditFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+    pEditFormatter->SetMinValue(nMin);
+    pEditFormatter->SetMaxValue(nMax);
+    pEditFormatter->SetSpinSize(nStep);
+    pEditFormatter->SetStrictFormat(bStrict);
 
-    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMinValue(nMin);
-    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetMaxValue(nMax);
-    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetStrictFormat(bStrict);
-
+    Formatter* pPaintFormatter = static_cast<DoubleNumericField*>(m_pPainter.get())->GetFormatter();
+    pPaintFormatter->SetMinValue(nMin);
+    pPaintFormatter->SetMaxValue(nMax);
+    pPaintFormatter->SetStrictFormat(bStrict);
 
     // give a formatter to the field and the painter;
     // test first if I can get from the service behind a connection
@@ -1931,18 +1932,18 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     }
     if ( nullptr == pFormatterUsed )
     {   // the cursor didn't lead to success -> standard
-        pFormatterUsed = static_cast< DoubleNumericField* >( m_pWindow.get() )->StandardFormatter();
+        pFormatterUsed = pEditFormatter->StandardFormatter();
         DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
     }
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormatter( pFormatterUsed );
-    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormatter( pFormatterUsed );
+    pEditFormatter->SetFormatter( pFormatterUsed );
+    pPaintFormatter->SetFormatter( pFormatterUsed );
 
     // and then generate a format which has the desired length after the decimal point, etc.
     LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
 
-    static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormat( sFormatString, aAppLanguage );
-    static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormat( sFormatString, aAppLanguage );
+    pEditFormatter->SetFormat( sFormatString, aAppLanguage );
+    pPaintFormatter->SetFormat( sFormatString, aAppLanguage );
 }
 
 
@@ -1965,7 +1966,7 @@ namespace
                 double fValue = _rControl.GetValue( _rxField, _rxFormatter );
                 if ( !_rxField->wasNull() )
                 {
-                    _rField.SetValue( fValue );
+                    _rField.GetFormatter()->SetValue( fValue );
                     sValue = _rField.GetText();
                 }
             }
@@ -1978,18 +1979,15 @@ namespace
     }
 }
 
-
 OUString DbNumericField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
 
-
 void DbNumericField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pWindow), *this, _rxField, _rxFormatter);
 }
-
 
 void DbNumericField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -1997,11 +1995,13 @@ void DbNumericField::updateFromModel( Reference< XPropertySet > _rxModel )
 
     double dValue = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
-        static_cast< DoubleNumericField* >( m_pWindow.get() )->SetValue( dValue );
+    {
+        Formatter* pFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+        pFormatter->SetValue(dValue);
+    }
     else
         m_pWindow->SetText( OUString() );
 }
-
 
 bool DbNumericField::commitControl()
 {
@@ -2010,7 +2010,8 @@ bool DbNumericField::commitControl()
 
     if (!aText.isEmpty())   // not empty
     {
-        double fValue = static_cast<DoubleNumericField*>(m_pWindow.get())->GetValue();
+        Formatter* pFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+        double fValue = pFormatter->GetValue();
         aVal <<= fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
