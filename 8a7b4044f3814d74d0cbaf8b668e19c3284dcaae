@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1d46e78_e77ec4c3",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "Moves the rectangle by rPosition.\n\nPerhaps have a better name than \u0027rPosition\u0027. The naming was already unclear in the old version. Perhaps rDelta or rVector or rShift or ?",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "326617c9_652b3d11",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "That is not immediately clear. Perhaps \u0027Moves the rectangle, so that top left corner is at rPosition\u0027 ?",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa82d2c2_8265ab12",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "typo: opperators -\u003e operators",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332b1950_c43260ca",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "Remove \u0027Returns -1, if pSubNode isn\u0027t a subnode of this\u0027.",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461e3533_e682b1d7",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "Remove \u0027index of the child node\u0027.",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "612cc5b0_fb48f592",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-07-02T20:59:20Z",
+      "side": 1,
+      "message": "Typo: with -\u003e width",
+      "revId": "8a7b4044f3814d74d0cbaf8b668e19c3284dcaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
