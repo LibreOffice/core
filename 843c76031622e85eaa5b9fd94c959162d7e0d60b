@@ -87,6 +87,24 @@
       "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42a2b8e9_9f2551da",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T12:41:31Z",
+      "side": 1,
+      "message": "\u003e I stumbled when I saw the odd \"half initialization\"\n\nSeems I just learned that I was taught something wrong at the university C++ class?\n\nI always assumed \"{ value, }\" (with an explicit comma at the init list) would init all array members to that value. But now searching for this pattern, I can\u0027t find any mentioning of that fact looking for array init patterns (like http://www.cplusplus.com/doc/tutorial/arrays/). Better to explicitly init the 2nd value too, even if we probably never use it.",
+      "parentUuid": "08f95871_426c65be",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
