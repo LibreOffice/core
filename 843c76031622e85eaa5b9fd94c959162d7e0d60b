@@ -33,6 +33,24 @@
       "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c25a9f9_13956778",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T12:17:45Z",
+      "side": 1,
+      "message": "\u003e Would it be cleaner to have a single non-array\n\nJust stating the obvious: the current way, we can just updated the value like the senseLen array and don\u0027t need the additional tests. I found this looked simpler and preferred this implementation in the end, but this feels like bike-shedding, as I don\u0027t have any strong point.\n\nSince you wrote the comment as a question: if you don\u0027t think the single-value solution is cleaner yourself, I would just keep the current implementation.",
+      "parentUuid": "8e9f8307_7b10faf9",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
