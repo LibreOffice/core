@@ -19,6 +19,18 @@
 
 #include <salbmp.hxx>
 
+static BitmapChecksum scanlineChecksum(BitmapChecksum nCrc, const sal_uInt8* bits, int lineBitsCount, sal_uInt8 extraBitsMask)
+{
+    if( lineBitsCount / 8 > 0 )
+        nCrc = vcl_get_checksum( nCrc, bits, lineBitsCount / 8 );
+    if( extraBitsMask != 0 )
+    {
+        sal_uInt8 extraByte = bits[ lineBitsCount / 8 ] & extraBitsMask;
+        nCrc = vcl_get_checksum( nCrc, &extraByte, 1 );
+    }
+    return nCrc;
+}
+
 void SalBitmap::updateChecksum() const
 {
     if (mbChecksumValid)
@@ -30,19 +42,50 @@ void SalBitmap::updateChecksum() const
     if (pBuf)
     {
         nCrc = pBuf->maPalette.GetChecksum();
-        const int bytesPerPixel = ( pBuf->mnBitCount + 7 ) / 8;
+        const int lineBitsCount = pBuf->mnWidth * pBuf->mnBitCount;
+        // With 1bpp/4bpp format we need to check only used bits in the last byte.
+        sal_uInt8 extraBitsMask = 0;
+        if( lineBitsCount % 8 != 0 )
+        {
+            const int extraBitsCount = lineBitsCount % 8;
+            switch( RemoveScanline( pBuf->mnFormat ))
+            {
+                case ScanlineFormat::N1BitMsbPal:
+                {
+                    static const sal_uInt8 mask1Bit[] = { 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
+                    extraBitsMask = mask1Bit[ extraBitsCount ];
+                    break;
+                }
+                case ScanlineFormat::N1BitLsbPal:
+                {
+                    static const sal_uInt8 mask1Bit[] = { 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff };
+                    extraBitsMask = mask1Bit[ extraBitsCount ];
+                    break;
+                }
+                case ScanlineFormat::N4BitMsnPal:
+                    assert(extraBitsCount == 4);
+                    extraBitsMask = 0xf0;
+                    break;
+                case ScanlineFormat::N4BitLsnPal:
+                    assert(extraBitsCount == 4);
+                    extraBitsMask = 0x0f;
+                    break;
+                default:
+                    break;
+            }
+        }
         if( pBuf->mnFormat & ScanlineFormat::TopDown )
         {
-            if( pBuf->mnScanlineSize == pBuf->mnWidth * bytesPerPixel )
+            if( pBuf->mnScanlineSize == lineBitsCount / 8 )
                 nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             else // Do not include padding with undefined content in the checksum.
                 for( long y = 0; y < pBuf->mnHeight; ++y )
-                    nCrc = vcl_get_checksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, pBuf->mnWidth * bytesPerPixel);
+                    nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
         }
         else // Compute checksum in the order of scanlines, to make it consistent between different bitmap implementations.
         {
             for( long y = pBuf->mnHeight - 1; y >= 0; --y )
-                nCrc = vcl_get_checksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, pBuf->mnWidth * bytesPerPixel);
+                nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
         }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
         pThis->mnChecksum = nCrc;
