@@ -792,7 +792,7 @@ struct ImplFSNameItem
     const char* mszUtf8Name;
 };
 
-static const ImplFSNameItem aImplSimplifiedChinese[] =
+const ImplFSNameItem aImplSimplifiedChinese[] =
 {
     {  50, "\xe5\x85\xab\xe5\x8f\xb7" },
     {  55, "\xe4\xb8\x83\xe5\x8f\xb7" },

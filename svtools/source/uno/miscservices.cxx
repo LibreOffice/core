@@ -31,7 +31,7 @@ using namespace css::lang;
 
 namespace
 {
-    static const struct ::cppu::ImplementationEntry s_aServiceEntries[] =
+    const struct ::cppu::ImplementationEntry s_aServiceEntries[] =
     {
         {
             // FilePicker should not use a constructor, it is only a

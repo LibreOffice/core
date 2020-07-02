@@ -34,7 +34,7 @@
 #include <sal/macros.h>
 #include <tools/diagnose_ex.h>
 
-static const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 

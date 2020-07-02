@@ -24,7 +24,7 @@
 #include <tools/urlobj.hxx>
 
 // Table for converting option values into strings
-static HTMLOptionEnum<HTMLScriptLanguage> const aScriptLangOptEnums[] =
+HTMLOptionEnum<HTMLScriptLanguage> const aScriptLangOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_LG_starbasic,    HTMLScriptLanguage::StarBasic     },
     { OOO_STRING_SVTOOLS_HTML_LG_javascript,   HTMLScriptLanguage::JavaScript    },
