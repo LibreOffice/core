@@ -1126,7 +1126,8 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
 
 bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                                        sal_uInt32& F_Index,
-                                       double& fOutNumber)
+                                       double& fOutNumber,
+                                       SvNumInputOptions eInputOptions)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
 
@@ -1164,7 +1165,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     }
     else
     {
-        res = pStringScanner->IsNumberFormat(sString, RType, fOutNumber, pFormat);
+        res = pStringScanner->IsNumberFormat(sString, RType, fOutNumber, pFormat, eInputOptions);
     }
     if (res && !IsCompatible(FType, RType))     // non-matching type
     {
