@@ -478,7 +478,7 @@ static void TrueTypeTableDispose_post(TrueTypeTable *_this)
 
 /* destructor vtable */
 
-static struct {
+struct {
     sal_uInt32 tag;
     void (*f)(TrueTypeTable *);
 } const vtable1[] =
@@ -804,7 +804,7 @@ static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     return ret;
 }
 
-static struct {
+struct {
     sal_uInt32 tag;
     int (*f)(TrueTypeTable *, sal_uInt8 **, sal_uInt32 *, sal_uInt32 *);
 } const vtable2[] =

@@ -1077,7 +1077,7 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     mpReadEnd = pOldReadEnd;
 }
 
-static const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
+const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
 
 int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
 {

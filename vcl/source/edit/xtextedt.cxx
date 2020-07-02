@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-static const std::wstring gaGroupChars = L"(){}[]";
+const std::wstring gaGroupChars = L"(){}[]";
 
 ExtTextEngine::ExtTextEngine()
 {

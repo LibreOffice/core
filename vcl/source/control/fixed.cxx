@@ -28,17 +28,17 @@
 
 #define FIXEDLINE_TEXT_BORDER    4
 
-static constexpr auto FIXEDTEXT_VIEW_STYLE = WB_3DLOOK |
+constexpr auto FIXEDTEXT_VIEW_STYLE = WB_3DLOOK |
                                  WB_LEFT | WB_CENTER | WB_RIGHT |
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |
                                  WB_WORDBREAK | WB_NOLABEL |
                                  WB_PATHELLIPSIS;
-static constexpr auto FIXEDLINE_VIEW_STYLE = WB_3DLOOK | WB_NOLABEL;
-static constexpr auto FIXEDBITMAP_VIEW_STYLE = WB_3DLOOK |
+constexpr auto FIXEDLINE_VIEW_STYLE = WB_3DLOOK | WB_NOLABEL;
+constexpr auto FIXEDBITMAP_VIEW_STYLE = WB_3DLOOK |
                                  WB_LEFT | WB_CENTER | WB_RIGHT |
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |
                                  WB_SCALE;
-static constexpr auto FIXEDIMAGE_VIEW_STYLE = WB_3DLOOK |
+constexpr auto FIXEDIMAGE_VIEW_STYLE = WB_3DLOOK |
                                  WB_LEFT | WB_CENTER | WB_RIGHT |
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |
                                  WB_SCALE;

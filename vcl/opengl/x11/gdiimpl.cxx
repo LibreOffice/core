@@ -106,7 +106,7 @@ private:
         }
     };
 
-    static bool errorTriggered;
+    bool errorTriggered;
     int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
     {
         errorTriggered = true;

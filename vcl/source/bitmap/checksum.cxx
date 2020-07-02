@@ -26,7 +26,7 @@
  * vcl_crc64Table (CRC polynomial 0x95AC9329AC4BC9B5ULL).
  *
  *======================================================================*/
-static const sal_uInt64 vcl_crc64Table[256] = {
+const sal_uInt64 vcl_crc64Table[256] = {
   0x0000000000000000ULL, 0x7ad870c830358979ULL, 0xf5b0e190606b12f2ULL,
   0x8f689158505e9b8bULL, 0xc038e5739841b68fULL, 0xbae095bba8743ff6ULL,
   0x358804e3f82aa47dULL, 0x4f50742bc81f2d04ULL, 0xab28ecb46814fe75ULL,

@@ -1833,7 +1833,7 @@ struct PointerData {
 
 }
 
-static const PointerData gvPointerData [] = {
+const PointerData gvPointerData [] = {
     { PointerStyle::Null, "Null" },
     { PointerStyle::Magnify, "Magnify" },
     { PointerStyle::Fill, "Fill" },

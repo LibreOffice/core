@@ -70,7 +70,7 @@
 
 using namespace vcl_sal;
 
-static constexpr auto CLIENT_EVENTS = StructureNotifyMask
+constexpr auto CLIENT_EVENTS = StructureNotifyMask
                                 | SubstructureNotifyMask
                                 | KeyPressMask
                                 | KeyReleaseMask
@@ -1635,10 +1635,10 @@ void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
     }
 }
 
-static constexpr auto FRAMESTATE_MASK_GEOMETRY =
+constexpr auto FRAMESTATE_MASK_GEOMETRY =
      WindowStateMask::X     | WindowStateMask::Y |
      WindowStateMask::Width | WindowStateMask::Height;
-static constexpr auto FRAMESTATE_MASK_MAXIMIZED_GEOMETRY =
+constexpr auto FRAMESTATE_MASK_MAXIMIZED_GEOMETRY =
      WindowStateMask::MaximizedX     | WindowStateMask::MaximizedY |
      WindowStateMask::MaximizedWidth | WindowStateMask::MaximizedHeight;
 

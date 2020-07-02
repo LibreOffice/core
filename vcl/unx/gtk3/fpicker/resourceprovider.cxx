@@ -29,7 +29,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 // translate control ids to resource ids
 
-static const struct
+const struct
 {
     sal_Int32 ctrlId;
     const char *resId;

@@ -241,9 +241,9 @@ void FreetypeFontInfo::ReleaseFaceFT()
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 
-static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
-static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
-static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
+const sal_uInt32 T_true = 0x74727565;        /* 'true' */
+const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
+const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
 const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {

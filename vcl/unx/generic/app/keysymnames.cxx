@@ -60,7 +60,7 @@ namespace vcl_sal {
     // every string value in the replacements tables must be in UTF8
     // be careful with your editor !
 
-    static const struct KeysymNameReplacement aImplReplacements_English[] =
+    const struct KeysymNameReplacement aImplReplacements_English[] =
     {
         { XK_Control_L, "Ctrl" },
         { XK_Control_R, "Ctrl" },
@@ -70,7 +70,7 @@ namespace vcl_sal {
         { XK_Page_Down, "PgDn"}
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Turkish[] =
+    const struct KeysymNameReplacement aImplReplacements_Turkish[] =
     {
         { XK_Control_L, "Ctrl" },
         { XK_Control_R, "Ctrl" },
@@ -81,7 +81,7 @@ namespace vcl_sal {
         { XK_space, "Bo\305\237luk" }
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Russian[] =
+    const struct KeysymNameReplacement aImplReplacements_Russian[] =
     {
         { XK_Right, "\320\222\320\277\321\200\320\260\320\262\320\276" },
         { XK_Left, "\320\222\320\273\320\265\320\262\320\276" },
@@ -90,7 +90,7 @@ namespace vcl_sal {
         { XK_space, "\320\237\321\200\320\276\320\261\320\265\320\273" }
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_German[] =
+    const struct KeysymNameReplacement aImplReplacements_German[] =
     {
         { XK_Control_L, "Strg" },
         { XK_Control_R, "Strg" },
@@ -125,7 +125,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Ausschneiden" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_French[] =
+    const struct KeysymNameReplacement aImplReplacements_French[] =
     {
         { XK_Shift_L, "Maj" },
         { XK_Shift_R, "Maj" },
@@ -156,7 +156,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Couper" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Italian[] =
+    const struct KeysymNameReplacement aImplReplacements_Italian[] =
     {
         { XK_Shift_L, "Maiusc" },
         { XK_Shift_R, "Maiusc" },
@@ -185,7 +185,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Taglia" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Dutch[] =
+    const struct KeysymNameReplacement aImplReplacements_Dutch[] =
     {
         { XK_Page_Up, "PageUp" },
         { XK_Page_Down, "PageDown" },
@@ -209,7 +209,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cut" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
+    const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
     {
         { XK_Shift_L, "Skift" },
         { XK_Shift_R, "Skift" },
@@ -234,7 +234,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Klipp" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Swedish[] =
+    const struct KeysymNameReplacement aImplReplacements_Swedish[] =
     {
         { XK_Shift_L, "Skift" },
         { XK_Shift_R, "Skift" },
@@ -260,7 +260,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Klipp ut" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Portuguese[] =
+    const struct KeysymNameReplacement aImplReplacements_Portuguese[] =
     {
         { XK_Page_Up, "PageUp" },
         { XK_Page_Down, "PageDown" },
@@ -284,7 +284,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cut" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Slovenian[] =
+    const struct KeysymNameReplacement aImplReplacements_Slovenian[] =
     {
         { XK_Control_L, "Krmilka" },
         { XK_Control_R, "Krmilka" },
@@ -319,7 +319,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Izre\305\276i" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Spanish[] =
+    const struct KeysymNameReplacement aImplReplacements_Spanish[] =
     {
         { XK_Shift_L, "May\303\272s" },
         { XK_Shift_R, "May\303\272s" },
@@ -349,7 +349,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cortar" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Estonian[] =
+    const struct KeysymNameReplacement aImplReplacements_Estonian[] =
     {
         { XK_Page_Up, "PgUp" },
         { XK_Page_Down, "PgDown" },
@@ -379,7 +379,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "L\303\265ika" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Catalan[] =
+    const struct KeysymNameReplacement aImplReplacements_Catalan[] =
     {
         { XK_Shift_L, "Maj" },
         { XK_Shift_R, "Maj" },
@@ -409,7 +409,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "Retalla" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Lithuanian[] =
+    const struct KeysymNameReplacement aImplReplacements_Lithuanian[] =
     {
         { XK_Control_L, "Vald" },
         { XK_Control_R, "Vald" },
@@ -445,7 +445,7 @@ namespace vcl_sal {
         { SunXK_Cut,   "I\305\241kirpti" },
     };
 
-    static const struct KeysymNameReplacement aImplReplacements_Hungarian[] =
+    const struct KeysymNameReplacement aImplReplacements_Hungarian[] =
     {
         { XK_Right, "Jobbra" },
         { XK_Left, "Balra" },
@@ -457,7 +457,7 @@ namespace vcl_sal {
         { XK_slash, "Oszt\303\241sjel" },
     };
 
-    static const struct KeyboardReplacements aKeyboards[] =
+    const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },

@@ -1444,7 +1444,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
 
 /* end i12626 methods */
 
-static const long unsetRun[256] =
+const long unsetRun[256] =
 {
     8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, /* 0x00 - 0x0f */
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, /* 0x10 - 0x1f */
@@ -1464,7 +1464,7 @@ static const long unsetRun[256] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0xf0 - 0xff */
 };
 
-static const long setRun[256] =
+const long setRun[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x00 - 0x0f */
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x10 - 0x1f */
@@ -1616,7 +1616,7 @@ struct PixelCode
 
 }
 
-static const PixelCode WhitePixelCodes[] =
+const PixelCode WhitePixelCodes[] =
 {
     { 0, 8, 0x35 },     // 0011 0101
     { 1, 6, 0x7 },      // 0001 11
@@ -1724,7 +1724,7 @@ static const PixelCode WhitePixelCodes[] =
     { 2560, 12, 0x1F }  // 0000 0001 1111
 };
 
-static const PixelCode BlackPixelCodes[] =
+const PixelCode BlackPixelCodes[] =
 {
     { 0, 10, 0x37 },    // 0000 1101 11
     { 1, 3, 0x2 },      // 010

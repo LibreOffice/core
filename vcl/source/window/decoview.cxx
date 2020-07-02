@@ -23,7 +23,7 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-static constexpr auto BUTTON_DRAW_FLATTEST = DrawButtonFlags::Flat |
+constexpr auto BUTTON_DRAW_FLATTEST = DrawButtonFlags::Flat |
                                  DrawButtonFlags::Pressed |
                                  DrawButtonFlags::Checked |
                                  DrawButtonFlags::Highlight;

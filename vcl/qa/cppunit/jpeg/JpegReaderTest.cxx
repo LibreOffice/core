@@ -13,7 +13,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <tools/stream.hxx>
 
-static OUString const gaDataUrl("/vcl/qa/cppunit/jpeg/data/");
+OUString const gaDataUrl("/vcl/qa/cppunit/jpeg/data/");
 
 class JpegReaderTest : public test::BootstrapFixtureBase
 {

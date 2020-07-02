@@ -101,8 +101,8 @@ static int XIOErrorHdl( Display * )
 
 }
 
-static const struct timeval noyield_ = { 0, 0 };
-static const struct timeval yield_   = { 0, 10000 };
+const struct timeval noyield_ = { 0, 0 };
+const struct timeval yield_   = { 0, 10000 };
 
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...

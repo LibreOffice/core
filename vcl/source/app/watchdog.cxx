@@ -27,9 +27,9 @@
 
 namespace
 {
-static volatile bool gbWatchdogFiring = false;
-static osl::Condition* gpWatchdogExit = nullptr;
-static rtl::Reference<WatchdogThread> gxWatchdog;
+volatile bool gbWatchdogFiring = false;
+osl::Condition* gpWatchdogExit = nullptr;
+rtl::Reference<WatchdogThread> gxWatchdog;
 
 template <typename Zone> struct WatchdogHelper
 {

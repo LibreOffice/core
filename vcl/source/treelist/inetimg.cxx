@@ -23,7 +23,7 @@
 
 #include <vcl/inetimg.hxx>
 
-static const sal_Unicode TOKEN_SEPARATOR = '\001';
+const sal_Unicode TOKEN_SEPARATOR = '\001';
 
 void INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
 {

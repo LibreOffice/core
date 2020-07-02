@@ -72,7 +72,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 
-static constexpr auto DRAG_EVENT_MASK = ButtonPressMask |
+constexpr auto DRAG_EVENT_MASK = ButtonPressMask |
                               ButtonReleaseMask |
                               PointerMotionMask |
                               EnterWindowMask |
@@ -103,7 +103,7 @@ extern "C"
     }
 }
 
-static const long nXdndProtocolRevision = 5;
+const long nXdndProtocolRevision = 5;
 
 namespace {
 

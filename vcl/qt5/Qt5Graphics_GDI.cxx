@@ -33,7 +33,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
+const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
 
 static void AddPolygonToPath(QPainterPath& rPath, const basegfx::B2DPolygon& rPolygon,
                              bool bClosePath, bool bPixelSnap, bool bLineDraw)

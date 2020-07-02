@@ -83,7 +83,7 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
         m_bValid = false;
 }
 
-static RandRWrapper* pWrapper = nullptr;
+RandRWrapper* pWrapper = nullptr;
 
 RandRWrapper& RandRWrapper::get( Display* i_pDisplay )
 {

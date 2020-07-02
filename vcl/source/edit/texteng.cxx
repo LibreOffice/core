@@ -223,9 +223,9 @@ void TextEngine::SetMaxTextWidth( long nMaxWidth )
     }
 }
 
-static const sal_Unicode static_aLFText[] = { '\n', 0 };
-static const sal_Unicode static_aCRText[] = { '\r', 0 };
-static const sal_Unicode static_aCRLFText[] = { '\r', '\n', 0 };
+const sal_Unicode static_aLFText[] = { '\n', 0 };
+const sal_Unicode static_aCRText[] = { '\r', 0 };
+const sal_Unicode static_aCRLFText[] = { '\r', '\n', 0 };
 
 static const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
 {

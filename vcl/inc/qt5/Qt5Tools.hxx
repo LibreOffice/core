@@ -98,7 +98,7 @@ inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
     return aList;
 }
 
-static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
+constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
 
 inline QImage::Format getBitFormat(sal_uInt16 nBitCount)
 {

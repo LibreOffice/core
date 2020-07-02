@@ -26,7 +26,7 @@
 #include <vcl/window.hxx>
 #include <vcl/keycod.hxx>
 
-static const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::FRONT)+1)*4] =
+const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::FRONT)+1)*4] =
 {
     0, 0, 0, 0,                                                    // KeyFuncType::DONTKNOW
     KEY_N | KEY_MOD1, 0, 0, 0,                                     // KeyFuncType::NEW

@@ -199,7 +199,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     return BitmapEx();
 }
 
-static const long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
+const long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
 
 BitmapSharpenFilter::BitmapSharpenFilter()
     : BitmapConvolutionMatrixFilter(g_SharpenMatrix)

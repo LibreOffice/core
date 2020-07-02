@@ -28,17 +28,17 @@
 #include <vcl/IPrioritable.hxx>
 #include <OptionalBox.hxx>
 
-static const char STYLE_TEXT[] = "Text";
-static const char STYLE_ICON[] = "Icon";
+const char STYLE_TEXT[] = "Text";
+const char STYLE_ICON[] = "Icon";
 
-static const char MERGE_NOTEBOOKBAR_URL[] = "URL";
-static const char MERGE_NOTEBOOKBAR_TITLE[] = "Title";
-static const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
-static const char MERGE_NOTEBOOKBAR_CONTEXT[] = "Context";
-static const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
-static const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
-static const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
-static const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
+const char MERGE_NOTEBOOKBAR_URL[] = "URL";
+const char MERGE_NOTEBOOKBAR_TITLE[] = "Title";
+const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
+const char MERGE_NOTEBOOKBAR_CONTEXT[] = "Context";
+const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
+const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
+const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
+const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
 
 static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
                                     AddonNotebookBarItem& aAddonNotebookBarItem)

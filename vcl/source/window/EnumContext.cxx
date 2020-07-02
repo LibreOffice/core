@@ -29,13 +29,13 @@ namespace {
 
 typedef ::std::map<OUString,EnumContext::Application> ApplicationMap;
 
-static ApplicationMap maApplicationMap;
-static o3tl::enumarray<EnumContext::Application, OUString> maApplicationVector;
+ApplicationMap maApplicationMap;
+o3tl::enumarray<EnumContext::Application, OUString> maApplicationVector;
 
 typedef ::std::map<OUString,EnumContext::Context> ContextMap;
 
-static ContextMap maContextMap;
-static o3tl::enumarray<EnumContext::Context, OUString> maContextVector;
+ContextMap maContextMap;
+o3tl::enumarray<EnumContext::Context, OUString> maContextVector;
 
 }
 

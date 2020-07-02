@@ -115,8 +115,8 @@ static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSIO
 #define MAX_SIGNATURE_CONTENT_LENGTH 50000
 #endif
 
-static const sal_Int32 nLog10Divisor = 3;
-static const double fDivisor = 1000.0;
+const sal_Int32 nLog10Divisor = 3;
+const double fDivisor = 1000.0;
 
 static double pixelToPoint( double px ) { return px/fDivisor; }
 static sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }

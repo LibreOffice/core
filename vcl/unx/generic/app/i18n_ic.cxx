@@ -112,7 +112,7 @@ get_font_set( Display *p_display )
     return p_font_set;
 }
 
-static const XIMStyle g_nSupportedStatusStyle(
+const XIMStyle g_nSupportedStatusStyle(
                                XIMStatusCallbacks   |
                                XIMStatusNothing     |
                                XIMStatusNone

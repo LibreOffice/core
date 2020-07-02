@@ -92,7 +92,7 @@ struct WMAdaptorProtocol
  *  table must be sorted ascending in strings
  *  since it is use with bsearch
  */
-static const WMAdaptorProtocol aProtocolTab[] =
+const WMAdaptorProtocol aProtocolTab[] =
 {
     { "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE", WMAdaptor::KDE_NET_WM_WINDOW_TYPE_OVERRIDE },
     { "_NET_ACTIVE_WINDOW", WMAdaptor::NET_ACTIVE_WINDOW },
@@ -142,7 +142,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
  *  table containing atoms to get anyway
  */
 
-static const WMAdaptorProtocol aAtomTab[] =
+const WMAdaptorProtocol aAtomTab[] =
 {
     { "WM_STATE", WMAdaptor::WM_STATE },
     { "_MOTIF_WM_HINTS", WMAdaptor::MOTIF_WM_HINTS },

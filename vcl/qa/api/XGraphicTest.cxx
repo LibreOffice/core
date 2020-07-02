@@ -22,7 +22,7 @@ namespace
 {
 using namespace css;
 
-static OUString const gaDataUrl = "/vcl/qa/api/data/";
+OUString const gaDataUrl = "/vcl/qa/api/data/";
 
 class XGraphicTest : public test::BootstrapFixture
 {

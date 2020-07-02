@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-static constexpr long gnBorder = 1;
+constexpr long gnBorder = 1;
 
 void ImplInitDropDownButton( PushButton* pButton )
 {

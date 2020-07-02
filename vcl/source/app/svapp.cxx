@@ -84,7 +84,7 @@ void InitSettings(ImplSVData* pSVData);
 }
 
 // keycodes handled internally by VCL
-static vcl::KeyCode const ReservedKeys[]
+vcl::KeyCode const ReservedKeys[]
 {
                 vcl::KeyCode(KEY_F1,0)                  ,
                 vcl::KeyCode(KEY_F1,KEY_SHIFT)          ,
