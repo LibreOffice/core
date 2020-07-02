@@ -4243,8 +4243,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     // draw full shadow rectangle
-                    aOut.AddTop( nHeight );
-                    aOut.AddLeft( nWidth );
+                    aOut.Top( rOutRect.Top() + nHeight );
+                    aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
@@ -4253,18 +4253,18 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     {
                         aOut.Top( rOutRect.Bottom() - nHeight );
                         if( bLeft )
-                            aOut.AddLeft( nWidth );
+                            aOut.Left( rOutRect.Left() + nWidth );
                         aRegion.push_back( aOut );
                     }
                     if( bRight )
                     {
                         aOut.Left( rOutRect.Right() - nWidth );
                         if( bTop )
-                            aOut.AddTop( nHeight );
+                            aOut.Top( rOutRect.Top() + nHeight );
                         else
                             aOut.Top( rOutRect.Top() );
                         if( bBottom )
-                            aOut.AddBottom( - nHeight );
+                            aOut.Bottom( rOutRect.Bottom() - nHeight );
                         aRegion.push_back( aOut );
                     }
                 }
@@ -4280,8 +4280,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     // draw full shadow rectangle
-                    aOut.AddBottom( - nHeight );
-                    aOut.AddRight( - nWidth );
+                    aOut.Bottom( rOutRect.Bottom() - nHeight );
+                    aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
@@ -4290,7 +4290,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     {
                         aOut.Bottom( rOutRect.Top() + nHeight );
                         if( bRight )
-                            aOut.AddRight( - nWidth );
+                            aOut.Right( rOutRect.Right() - nWidth );
                         aRegion.push_back( aOut );
                     }
                     if( bLeft )
