@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4a24dd94_f8373295",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T11:00:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43edf7bc_ca2c8e2d",
+      "range": {
+        "startLine": 45,
+        "startChar": 23,
+        "endLine": 45,
+        "endChar": 51
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f54dbf_fcfbb38c",
         "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e043d93a_7dbfc180",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T11:00:02Z",
+      "side": 1,
+      "message": "Should i rename it to, say \"mpDisplayStyles\" ?\nI don\u0027t understand.",
+      "parentUuid": "24f54dbf_fcfbb38c",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abd33274_6cc638d3",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 12
@@ -59,6 +107,30 @@
       "writtenOn": "2020-07-02T10:06:13Z",
       "side": 1,
       "message": "Not for this change, but for a follow-up:\n\nit\u0027s better if you remove this list of declarations, and instead use modern c++ syntax allowing to limit the scope of the variables:\n\n    if (bool bValue; rAny \u003e\u003e\u003d bValue)\n    {\n        ...\n    }\n    else if (OUString aValue; (rAny \u003e\u003e\u003d aValue) \u0026\u0026 !(aValue.isEmpty()))\n    ...\n\nSome (insignificant in this specific case, but notable and important elsewhere) advantages, besides limiting the scope, include: only calling ctor of OUString if checking bool failed; and re-using stack for all the temporary variables (instead of having them in stack side-by-side).",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 26
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0215a47_6273934f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-02T11:00:02Z",
+      "side": 1,
+      "message": "Noted.",
+      "parentUuid": "abd33274_6cc638d3",
       "range": {
         "startLine": 238,
         "startChar": 4,
