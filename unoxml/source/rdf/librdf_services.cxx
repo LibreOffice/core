@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 extern "C"
 {
 
-static ::cppu::ImplementationEntry const entries[] = {
+::cppu::ImplementationEntry const entries[] = {
     { &comp_CBlankNode::_create,
       &comp_CBlankNode::_getImplementationName,
       &comp_CBlankNode::_getSupportedServiceNames,
