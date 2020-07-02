@@ -14,6 +14,7 @@
 #include <vcl/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclmedit.hxx>
 
 using namespace weld;
 
@@ -324,6 +325,21 @@ std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString& id,
+                                                                  bool bTakeOwnership)
+{
+    VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
+    auto pWeldWidget = pTextView ? std::make_unique<JSTextView>(
+                                       m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
+                                       pTextView, this, bTakeOwnership)
+                                 : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -561,6 +577,19 @@ JSToolbar::JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox,
 void JSToolbar::signal_clicked(const OString& rIdent)
 {
     SalInstanceToolbar::signal_clicked(rIdent);
+    notifyDialogState();
+}
+
+JSTextView::JSTextView(VclPtr<vcl::Window> aOwnedToplevel, ::VclMultiLineEdit* pTextView,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(aOwnedToplevel, pTextView, pBuilder,
+                                                        bTakeOwnership)
+{
+}
+
+void JSTextView::set_text(const OUString& rText)
+{
+    SalInstanceTextView::set_text(rText);
     notifyDialogState();
 }
 

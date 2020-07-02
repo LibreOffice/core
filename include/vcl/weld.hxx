@@ -1760,6 +1760,9 @@ public:
 
 class VCL_DLLPUBLIC TextView : virtual public Container
 {
+    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
+                                                      StringMap& rData);
+
 private:
     OUString m_sSavedValue;
 

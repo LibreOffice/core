@@ -22,6 +22,7 @@
 
 class ToolBox;
 class SfxViewShell;
+class VclMultiLineEdit;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
@@ -94,6 +95,8 @@ public:
                       bool bTakeOwnership = false) override;
     std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
                                                 bool bTakeOwnership = true) override;
+    std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
+                                                   bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -249,6 +252,14 @@ public:
               bool bTakeOwnership);
 
     void signal_clicked(const OString& rIdent) override;
+};
+
+class JSTextView : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
+{
+public:
+    JSTextView(VclPtr<vcl::Window> aOwnedToplevel, ::VclMultiLineEdit* pTextView,
+               SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    virtual void set_text(const OUString& rText) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
