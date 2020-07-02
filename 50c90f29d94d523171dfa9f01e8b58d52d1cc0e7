@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "cc970867_ab824d06",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T11:04:48Z",
+      "side": 1,
+      "message": "\u003e Should i rename it to, say \"mpDisplayStyles\" ?\n\nExactly (I mean the \"ma\" \u003d\u003e \"mp\", didn\u0027t talk about changing \"ListBoxStyles\" to \"DisplayStyles\")! Sorry for being unclear.",
+      "parentUuid": "e043d93a_7dbfc180",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abd33274_6cc638d3",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 12
