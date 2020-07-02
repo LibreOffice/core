@@ -377,6 +377,16 @@ public:
 
 typedef std::vector< OUString > NfWSStringsDtor;
 
+/** Input options to be used with IsNumberFormat() */
+enum class SvNumInputOptions : sal_uInt16
+{
+    NONE = 0,
+    LAX_TIME = 1    ///< allow input of minutes or seconds >59
+};
+namespace o3tl {
+    template<> struct typed_flags<SvNumInputOptions> : is_typed_flags<SvNumInputOptions, 0x0001> {};
+}
+
 class SvNumberFormatterRegistry_Impl;
 class NfCurrencyTable;
 
@@ -536,7 +546,8 @@ public:
                 returned in fOutNumber
             <FALSE/> if input is not a number
      */
-    bool IsNumberFormat( const OUString& sString, sal_uInt32& F_Index, double& fOutNumber );
+    bool IsNumberFormat( const OUString& sString, sal_uInt32& F_Index, double& fOutNumber,
+                         SvNumInputOptions eInputOptions = SvNumInputOptions::NONE );
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
