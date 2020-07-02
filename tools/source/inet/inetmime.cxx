@@ -747,7 +747,7 @@ struct EncodingEntry
 // The source for the following table is <ftp://ftp.iana.org/in-notes/iana/
 // assignments/character-sets> as of Jan, 21 2000 12:46:00, unless  otherwise
 // noted:
-static EncodingEntry const aEncodingMap[]
+EncodingEntry const aEncodingMap[]
     = { { "US-ASCII", RTL_TEXTENCODING_ASCII_US },
         { "ANSI_X3.4-1968", RTL_TEXTENCODING_ASCII_US },
         { "ISO-IR-6", RTL_TEXTENCODING_ASCII_US },

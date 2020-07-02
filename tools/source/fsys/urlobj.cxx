@@ -453,7 +453,7 @@ enum
     PR = INetURLObject::PART_HTTP_QUERY,
 };
 
-static sal_uInt32 const aMustEncodeMap[128]
+sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                              PP,
