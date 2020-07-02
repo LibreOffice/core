@@ -1070,9 +1070,9 @@ static void lcl_AddRangeAndStyle(
 
 
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
-static constexpr sal_Int32 DEFAULT_FRAME_MIN_WIDTH = 0;
-static constexpr sal_Int32 DEFAULT_FRAME_MIN_HEIGHT = 0;
-static constexpr sal_Int32 DEFAULT_VALUE = 0;
+constexpr sal_Int32 DEFAULT_FRAME_MIN_WIDTH = 0;
+constexpr sal_Int32 DEFAULT_FRAME_MIN_HEIGHT = 0;
+constexpr sal_Int32 DEFAULT_VALUE = 0;
 
 void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
