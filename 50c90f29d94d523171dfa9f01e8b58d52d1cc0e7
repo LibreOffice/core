@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43edf7bc_ca2c8e2d",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T10:06:13Z",
+      "side": 1,
+      "message": "This likely should be \"const std::vector\u003cTreeNode\u003e\u0026 rStore\", with \"r\" for \"reference\", right?",
+      "range": {
+        "startLine": 45,
+        "startChar": 23,
+        "endLine": 45,
+        "endChar": 51
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f54dbf_fcfbb38c",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T10:06:13Z",
+      "side": 1,
+      "message": "First, this is a pointer-like object (std::unique_ptr) which assumes using operator -\u003e, so it should be \"p\", not \"a\".\n\nBut more importantly, this change, although needed, is unrelated to the topic of this patch. It is an already existing name in the code; please create a separate clean-up change to fix such older names. What I wrote in a previous change set was related to the new names you introduced in the patch.",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abd33274_6cc638d3",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T10:06:13Z",
+      "side": 1,
+      "message": "Not for this change, but for a follow-up:\n\nit\u0027s better if you remove this list of declarations, and instead use modern c++ syntax allowing to limit the scope of the variables:\n\n    if (bool bValue; rAny \u003e\u003e\u003d bValue)\n    {\n        ...\n    }\n    else if (OUString aValue; (rAny \u003e\u003e\u003d aValue) \u0026\u0026 !(aValue.isEmpty()))\n    ...\n\nSome (insignificant in this specific case, but notable and important elsewhere) advantages, besides limiting the scope, include: only calling ctor of OUString if checking bool failed; and re-using stack for all the temporary variables (instead of having them in stack side-by-side).",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 26
+      },
+      "revId": "50c90f29d94d523171dfa9f01e8b58d52d1cc0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
