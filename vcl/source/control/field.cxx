@@ -1089,7 +1089,7 @@ static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 // twip in km = 254 / 14 400 000 000
 // expressions too big for default size 32 bit need LL to avoid overflow
 
-static const sal_Int64 aImplFactor[sal_uInt16(FieldUnit::LINE) + 1]
+const sal_Int64 aImplFactor[sal_uInt16(FieldUnit::LINE) + 1]
                                   [sal_uInt16(FieldUnit::LINE) + 1] =
 { /*
 mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile     char     line  */

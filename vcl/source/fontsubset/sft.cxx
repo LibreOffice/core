@@ -49,9 +49,9 @@ namespace vcl
 
 /*- module identification */
 
-static const char * const modname  = "SunTypeTools-TT";
-static const char * const modver   = "1.0";
-static const char * const modextra = "gelf";
+const char * const modname  = "SunTypeTools-TT";
+const char * const modver   = "1.0";
+const char * const modextra = "gelf";
 
 /*- private functions, constants and data types */
 

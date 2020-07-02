@@ -533,7 +533,7 @@ namespace
         return bResult;
     }
 
-    static struct WeightSearchEntry
+    struct WeightSearchEntry
     {
         const char* string;
         int         string_len;

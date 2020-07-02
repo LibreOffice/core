@@ -35,8 +35,8 @@ CmapResult::CmapResult( bool bSymbolic,
 {}
 
 static ImplFontCharMapRef g_pDefaultImplFontCharMap;
-static const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
-static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
+const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
+const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
 ImplFontCharMap::~ImplFontCharMap()
 {

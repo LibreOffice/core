@@ -36,10 +36,10 @@
 #include <o3tl/enumarray.hxx>
 
 // we don't actually handle units beyond, hence the zeros in the arrays
-static const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
-static const o3tl::enumarray<MapUnit,long> aImplNumeratorAry =
+const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
+const o3tl::enumarray<MapUnit,long> aImplNumeratorAry =
      {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1, 0, 0, 0 };
-static const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
+const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1, 0, 0, 0 };
 
 /*

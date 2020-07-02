@@ -20,9 +20,9 @@ const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("sifr");
 
 namespace {
 
-static const OUStringLiteral KARASA_JAGA_ID("karasa_jaga");
-static const OUStringLiteral KARASA_JAGA_DISPLAY_NAME("Karasa Jaga");
-static const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
+const OUStringLiteral KARASA_JAGA_ID("karasa_jaga");
+const OUStringLiteral KARASA_JAGA_DISPLAY_NAME("Karasa Jaga");
+const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
 
 OUString
 filename_from_url(const OUString& url)
@@ -39,9 +39,9 @@ filename_from_url(const OUString& url)
 
 namespace vcl {
 
-static const char ICON_THEME_PACKAGE_PREFIX[] = "images_";
+const char ICON_THEME_PACKAGE_PREFIX[] = "images_";
 
-static const char EXTENSION_FOR_ICON_PACKAGES[] = ".zip";
+const char EXTENSION_FOR_ICON_PACKAGES[] = ".zip";
 
 IconThemeInfo::IconThemeInfo()
 {

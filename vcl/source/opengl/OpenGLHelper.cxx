@@ -165,7 +165,7 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
 
 namespace
 {
-    static const sal_uInt32 GLenumSize = sizeof(GLenum);
+    const sal_uInt32 GLenumSize = sizeof(GLenum);
 
     OString getHexString(const sal_uInt8* pData, sal_uInt32 nLength)
     {
@@ -824,7 +824,7 @@ public:
     }
 };
 
-static CrashWatchdogTimings gWatchdogTimings;
+CrashWatchdogTimings gWatchdogTimings;
 
 CrashWatchdogTimings::CrashWatchdogTimings()
     : maTimingValues{

@@ -251,8 +251,8 @@ namespace
     }
 
     // check for env var that decides for using downscale pattern
-    static const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
-    static bool bDisableDownScale(nullptr != pDisableDownScale);
+    const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
+    bool bDisableDownScale(nullptr != pDisableDownScale);
 
     class SurfaceHelper
     {
@@ -593,9 +593,9 @@ namespace
     }
 
     // MM02 decide to use buffers or not
-    static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
-    static bool bUseBuffer(nullptr == pDisableMM02Goodies);
-    static long nMinimalSquareSizeToBuffer(64*64);
+    const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
+    bool bUseBuffer(nullptr == pDisableMM02Goodies);
+    long nMinimalSquareSizeToBuffer(64*64);
 
     void tryToUseSourceBuffer(
         const SalBitmap& rSourceBitmap,

@@ -743,7 +743,7 @@ String2Locale( uno::Any& rAny, const gchar * value )
 
 // @see http://www.w3.org/TR/2002/WD-css3-fonts-20020802/#font-effect-prop
 static const gchar * relief[] = { "none", "emboss", "engrave" };
-static const gchar * const outline  = "outline";
+const gchar * const outline  = "outline";
 
 static gchar *
 get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,

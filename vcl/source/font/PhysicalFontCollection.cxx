@@ -918,7 +918,7 @@ std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSiz
 // These are the metric-compatible replacement fonts that are bundled with
 // LibreOffice, we prefer them over generic substitutions that might be
 // provided by the system.
-static const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
+const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
 {
     { "Times New Roman", "Liberation Serif" },
     { "Arial",           "Liberation Sans" },

@@ -841,7 +841,7 @@ static void standardSysQueueTokenHandler(
     }
 }
 
-static const struct SystemCommandParameters aParms[] =
+const struct SystemCommandParameters aParms[] =
 {
     #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },

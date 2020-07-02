@@ -130,7 +130,7 @@ UScriptCode getScript(UChar32 ch, UErrorCode* status)
 
 }
 
-static const PairIndices gPairIndices;
+const PairIndices gPairIndices;
 
 
 namespace vcl {

@@ -39,7 +39,7 @@
 #include <memory>
 #include <vcl/idle.hxx>
 
-static constexpr auto DRAWTEXT_FLAGS_ICON =
+constexpr auto DRAWTEXT_FLAGS_ICON =
     DrawTextFlags::Center | DrawTextFlags::Top | DrawTextFlags::EndEllipsis |
     DrawTextFlags::Clip | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Mnemonic;
 
