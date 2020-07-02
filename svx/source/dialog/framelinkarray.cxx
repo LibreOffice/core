@@ -179,8 +179,8 @@ static void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol,
 }
 
 
-static const Style OBJ_STYLE_NONE;
-static const Cell OBJ_CELL_NONE;
+const Style OBJ_STYLE_NONE;
+const Cell OBJ_CELL_NONE;
 
 struct ArrayImpl
 {

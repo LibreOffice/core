@@ -66,14 +66,14 @@ using namespace css;
 
 namespace {
 
-static const char COMMAND_FINDTEXT[] = ".uno:FindText";
-static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
-static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
-static const char COMMAND_FINDALL[] = ".uno:FindAll";
-static const char COMMAND_MATCHCASE[] = ".uno:MatchCase";
-static const char COMMAND_SEARCHFORMATTED[] = ".uno:SearchFormattedDisplayString";
+const char COMMAND_FINDTEXT[] = ".uno:FindText";
+const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
+const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
+const char COMMAND_FINDALL[] = ".uno:FindAll";
+const char COMMAND_MATCHCASE[] = ".uno:MatchCase";
+const char COMMAND_SEARCHFORMATTED[] = ".uno:SearchFormattedDisplayString";
 
-static const sal_Int32       REMEMBER_SIZE = 10;
+const sal_Int32       REMEMBER_SIZE = 10;
 
 class CheckButtonItemWindow final : public InterimItemWindow
 {

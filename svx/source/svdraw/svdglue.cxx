@@ -24,7 +24,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 
-static const Size aGlueHalfSize(4,4);
+const Size aGlueHalfSize(4,4);
 
 void SdrGluePoint::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {

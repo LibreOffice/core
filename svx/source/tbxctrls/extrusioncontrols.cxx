@@ -40,11 +40,11 @@ using namespace ::com::sun::star::graphic;
 namespace svx
 {
 
-static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
-static const char g_sExtrusionDirection[] = ".uno:ExtrusionDirection";
-static const char g_sExtrusionProjection[] = ".uno:ExtrusionProjection";
+const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
+const char g_sExtrusionDirection[] = ".uno:ExtrusionDirection";
+const char g_sExtrusionProjection[] = ".uno:ExtrusionProjection";
 
-static const OUStringLiteral aLightOffBmps[] =
+const OUStringLiteral aLightOffBmps[] =
 {
     RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_OFF_FROM_TOP,
@@ -57,7 +57,7 @@ static const OUStringLiteral aLightOffBmps[] =
     RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT
 };
 
-static const OUStringLiteral aLightOnBmps[] =
+const OUStringLiteral aLightOnBmps[] =
 {
     RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_ON_FROM_TOP,
@@ -70,7 +70,7 @@ static const OUStringLiteral aLightOnBmps[] =
     RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT
 };
 
-static const OUStringLiteral aLightPreviewBmps[] =
+const OUStringLiteral aLightPreviewBmps[] =
 {
     RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP,
@@ -83,7 +83,7 @@ static const OUStringLiteral aLightPreviewBmps[] =
     RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT
 };
 
-static const OUStringLiteral aDirectionBmps[] =
+const OUStringLiteral aDirectionBmps[] =
 {
     RID_SVXBMP_DIRECTION_DIRECTION_NW,
     RID_SVXBMP_DIRECTION_DIRECTION_N,
@@ -323,8 +323,8 @@ double ExtrusionDepthDialog::getDepth() const
 double const aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double const aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
-static const OUStringLiteral gsExtrusionDepth( ".uno:ExtrusionDepth" );
-static const OUStringLiteral gsMetricUnit(     ".uno:MetricUnit"     );
+const OUStringLiteral gsExtrusionDepth( ".uno:ExtrusionDepth" );
+const OUStringLiteral gsMetricUnit(     ".uno:MetricUnit"     );
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")
@@ -560,8 +560,8 @@ com_sun_star_comp_svx_ExtrusionDepthController_get_implementation(
 }
 
 
-static const char g_sExtrusionLightingDirection[] = ".uno:ExtrusionLightingDirection";
-static const char g_sExtrusionLightingIntensity[] = ".uno:ExtrusionLightingIntensity";
+const char g_sExtrusionLightingDirection[] = ".uno:ExtrusionLightingDirection";
+const char g_sExtrusionLightingIntensity[] = ".uno:ExtrusionLightingIntensity";
 
 ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pControl,
                                                  weld::Widget* pParent)
@@ -792,7 +792,7 @@ com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
 }
 
 
-static const char g_sExtrusionSurface[] = ".uno:ExtrusionSurface";
+const char g_sExtrusionSurface[] = ".uno:ExtrusionSurface";
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/surfacewindow.ui", "SurfaceWindow")

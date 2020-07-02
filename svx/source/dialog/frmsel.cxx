@@ -302,7 +302,7 @@ void FrameSelectorImpl::InitColors()
     maHCLineCol = rSettings.GetLabelTextColor();
 }
 
-static const OUStringLiteral aImageIds[] =
+const OUStringLiteral aImageIds[] =
 {
     RID_SVXBMP_FRMSEL_ARROW1,
     RID_SVXBMP_FRMSEL_ARROW2,

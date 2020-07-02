@@ -366,7 +366,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     return pList;
 }
 
-static struct {
+struct {
     XPropertyListType t;
     const char *pExt;
 } const pExtnMap[] = {

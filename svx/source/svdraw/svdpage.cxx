@@ -55,7 +55,7 @@
 
 using namespace ::com::sun::star;
 
-static const sal_Int32 InitialObjectContainerCapacity (64);
+const sal_Int32 InitialObjectContainerCapacity (64);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // helper to allow changing parent at SdrObject, but only from SdrObjList

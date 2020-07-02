@@ -36,7 +36,7 @@ struct HandleAdjRel
 // The array initializer has been extracted from
 // oox/source/drawingml/customshapes/presetShapeDefinitions.xml
 // by using an XSLT file. That file is attached to tdf#126512.
-static const HandleAdjRel aHandleAdjRelArray[]
+const HandleAdjRel aHandleAdjRelArray[]
     = { { "accentBorderCallout1_0", "RefX|adj2|RefY|adj1" },
         { "accentBorderCallout1_1", "RefX|adj4|RefY|adj3" },
         { "accentBorderCallout2_0", "RefX|adj2|RefY|adj1" },

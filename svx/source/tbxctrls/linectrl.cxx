@@ -260,7 +260,7 @@ public:
 
 }
 
-static constexpr sal_uInt16 gnCols = 2;
+constexpr sal_uInt16 gnCols = 2;
 
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")

@@ -176,8 +176,8 @@ bool SvxColorValueSet_docking::StartDrag()
     return false;
 }
 
-static constexpr sal_uInt16 gnLeftSlot = SID_ATTR_FILL_COLOR;
-static constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
+constexpr sal_uInt16 gnLeftSlot = SID_ATTR_FILL_COLOR;
+constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
 
 SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* _pParent)
     : SfxDockingWindow(_pBindings, pCW, _pParent,

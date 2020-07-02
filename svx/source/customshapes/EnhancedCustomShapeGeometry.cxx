@@ -25,80 +25,80 @@
 #include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 
-static const sal_Int32 MIN_INT32 = std::numeric_limits<sal_Int32>::min();
+const sal_Int32 MIN_INT32 = std::numeric_limits<sal_Int32>::min();
 
-static const sal_Int32 mso_sptDefault1400[] =
+const sal_Int32 mso_sptDefault1400[] =
 {
     1, 1400
 };
-static const sal_Int32 mso_sptDefault1800[] =
+const sal_Int32 mso_sptDefault1800[] =
 {
     1, 1800
 };
-static const sal_Int32 mso_sptDefault2500[] =
+const sal_Int32 mso_sptDefault2500[] =
 {
     1, 2500
 };
-static const sal_Int32 mso_sptDefault2700[] =
+const sal_Int32 mso_sptDefault2700[] =
 {
     1, 2700
 };
-static const sal_Int32 mso_sptDefault3600[] =
+const sal_Int32 mso_sptDefault3600[] =
 {
     1, 3600
 };
-static const sal_Int32 mso_sptDefault3700[] =
+const sal_Int32 mso_sptDefault3700[] =
 {
     1, 3700
 };
-static const sal_Int32 mso_sptDefault5400[] =
+const sal_Int32 mso_sptDefault5400[] =
 {
     1, 5400
 };
-static const sal_Int32 mso_sptDefault7200[] =
+const sal_Int32 mso_sptDefault7200[] =
 {
     1, 7200
 };
-static const sal_Int32 mso_sptDefault8100[] =
+const sal_Int32 mso_sptDefault8100[] =
 {
     1, 8100
 };
-static const sal_Int32 mso_sptDefault9600[] =
+const sal_Int32 mso_sptDefault9600[] =
 {
     1, 9600
 };
-static const sal_Int32 mso_sptDefault10800[] =
+const sal_Int32 mso_sptDefault10800[] =
 {
     1, 10800
 };
-static const sal_Int32 mso_sptDefault12000[] =
+const sal_Int32 mso_sptDefault12000[] =
 {
     1, 12000
 };
-static const sal_Int32 mso_sptDefault13500[] =
+const sal_Int32 mso_sptDefault13500[] =
 {
     1, 13500
 };
-static const sal_Int32 mso_sptDefault16200[] =
+const sal_Int32 mso_sptDefault16200[] =
 {
     1, 16200
 };
-static const sal_Int32 mso_sptDefault16200and5400[] =
+const sal_Int32 mso_sptDefault16200and5400[] =
 {
     2, 16200, 5400
 };
 
-static const SvxMSDffVertPair mso_sptArcVert[] =
+const SvxMSDffVertPair mso_sptArcVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 3 MSO_I, 1 MSO_I }, { 7 MSO_I, 5 MSO_I }, { 10800, 10800 },
     { 0, 0 }, { 21600, 21600 }, { 3 MSO_I, 1 MSO_I }, { 7 MSO_I, 5 MSO_I }
 };
-static const sal_uInt16 mso_sptArcSegm[] =
+const sal_uInt16 mso_sptArcSegm[] =
 {
     0xa604, 0xab00, 0x0001, 0x6001, 0x8000,
     0xa604, 0xaa00, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptArcCalc[] =
+const SvxMSDffCalculationData mso_sptArcCalc[] =
 {
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x2000, { 0x400, 10800, 0 } },
@@ -109,22 +109,22 @@ static const SvxMSDffCalculationData mso_sptArcCalc[] =
     { 0x400a, { 10800, DFF_Prop_adjust2Value, 0 } },
     { 0x2000, { 0x406, 10800, 0 } }
 };
-static const sal_Int32 mso_sptArcDefault[] =
+const sal_Int32 mso_sptArcDefault[] =
 {
     2, 270, 0
 };
-static const SvxMSDffVertPair mso_sptStandardGluePoints[] =
+const SvxMSDffVertPair mso_sptStandardGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 21600, 10800 }
 };
-static const SvxMSDffHandle mso_sptArcHandle[] =
+const SvxMSDffHandle mso_sptArcHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x100, 10800, 10800, 10800, 10800, MIN_INT32, 0x7fffffff },
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x101, 10800, 10800, 10800, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoArc =
+const mso_CustomShape msoArc =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptArcVert), SAL_N_ELEMENTS( mso_sptArcVert ),
     const_cast<sal_uInt16*>(mso_sptArcSegm), sizeof( mso_sptArcSegm ) >> 1,
@@ -137,11 +137,11 @@ static const mso_CustomShape msoArc =
     const_cast<SvxMSDffHandle*>(mso_sptArcHandle), SAL_N_ELEMENTS( mso_sptArcHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptTextSimpleVert[] =
+const SvxMSDffVertPair mso_sptTextSimpleVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
-static const mso_CustomShape msoTextSimple =
+const mso_CustomShape msoTextSimple =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextSimpleVert), SAL_N_ELEMENTS( mso_sptTextSimpleVert ),
     nullptr, 0,
@@ -154,11 +154,11 @@ static const mso_CustomShape msoTextSimple =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptRectangleVert[] =
+const SvxMSDffVertPair mso_sptRectangleVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
-static const mso_CustomShape msoRectangle =
+const mso_CustomShape msoRectangle =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRectangleVert), SAL_N_ELEMENTS( mso_sptRectangleVert ),
     nullptr, 0,
@@ -171,16 +171,16 @@ static const mso_CustomShape msoRectangle =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptRoundRectangleVert[] = // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptRoundRectangleVert[] = // adj value 0 -> 10800
 {
     { 7 MSO_I, 0 }, { 0, 8 MSO_I }, { 0, 9 MSO_I }, { 7 MSO_I, 21600 },
     { 10 MSO_I, 21600 }, { 21600, 9 MSO_I }, { 21600, 8 MSO_I }, { 10 MSO_I, 0 }
 };
-static const sal_uInt16 mso_sptRoundRectangleSegm[] =
+const sal_uInt16 mso_sptRoundRectangleSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x6000, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =
+const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =
 {
     { 0x000e, { 0, 45, 0 } },
     { 0x6009, { DFF_Prop_adjustValue, 0x400, 0 } },
@@ -194,16 +194,16 @@ static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } }
 };
-static const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
+const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
 {
     { { 3 MSO_I, 4 MSO_I }, { 5 MSO_I, 6 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptRoundRectangleHandle[] =
+const SvxMSDffHandle mso_sptRoundRectangleHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoRoundRectangle =
+const mso_CustomShape msoRoundRectangle =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRoundRectangleVert), SAL_N_ELEMENTS( mso_sptRoundRectangleVert ),
     const_cast<sal_uInt16*>(mso_sptRoundRectangleSegm), sizeof( mso_sptRoundRectangleSegm ) >> 1,
@@ -216,19 +216,19 @@ static const mso_CustomShape msoRoundRectangle =
     const_cast<SvxMSDffHandle*>(mso_sptRoundRectangleHandle), SAL_N_ELEMENTS( mso_sptRoundRectangleHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
+const SvxMSDffVertPair mso_sptRightTriangleVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptRightTriangleTextRect[] =
+const SvxMSDffTextRectangles mso_sptRightTriangleTextRect[] =
 {
     { { 1900, 12700 }, { 12700, 19700 } }
 };
-static const SvxMSDffVertPair mso_sptRightTriangleGluePoints[] =
+const SvxMSDffVertPair mso_sptRightTriangleGluePoints[] =
 {
     { 0, 0 }, { 0, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 10800, 10800 }
 };
-static const mso_CustomShape msoRightTriangle =
+const mso_CustomShape msoRightTriangle =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRightTriangleVert), SAL_N_ELEMENTS( mso_sptRightTriangleVert ),
     nullptr, 0,
@@ -241,23 +241,23 @@ static const mso_CustomShape msoRightTriangle =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptEllipseVert[] =
+const SvxMSDffVertPair mso_sptEllipseVert[] =
 {
     { 10800, 10800 }, { 10800, 10800 },  { 0, 360 }
 };
-static const sal_uInt16 mso_sptEllipseSegm[] =
+const sal_uInt16 mso_sptEllipseSegm[] =
 {
     0xa203, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptEllipseTextRect[] =
+const SvxMSDffTextRectangles mso_sptEllipseTextRect[] =
 {
     { { 3163, 3163 }, { 18437, 18437 } }
 };
-static const SvxMSDffVertPair mso_sptEllipseGluePoints[] =
+const SvxMSDffVertPair mso_sptEllipseGluePoints[] =
 {
     { 10800, 0 }, { 3163, 3163 }, { 0, 10800 }, { 3163, 18437 }, { 10800, 21600 }, { 18437, 18437 }, { 21600, 10800 }, { 18437, 3163 }
 };
-static const mso_CustomShape msoEllipse =
+const mso_CustomShape msoEllipse =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptEllipseVert), SAL_N_ELEMENTS( mso_sptEllipseVert ),
     const_cast<sal_uInt16*>(mso_sptEllipseSegm), sizeof( mso_sptEllipseSegm ) >> 1,
@@ -270,15 +270,15 @@ static const mso_CustomShape msoEllipse =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptParallelogramVert[] =  // adjustment1 : 0 - 21600
+const SvxMSDffVertPair mso_sptParallelogramVert[] =  // adjustment1 : 0 - 21600
 {
     { 0 MSO_I, 0 }, { 21600, 0 }, { 1 MSO_I, 21600 }, { 0, 21600 }
 };
-static const sal_uInt16 mso_sptParallelogramSegm[] =
+const sal_uInt16 mso_sptParallelogramSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
+const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
 {
     { 0x4000, { 0, DFF_Prop_adjustValue, 0 } },
     { 0x8000, { 0, 21600, DFF_Prop_adjustValue } },
@@ -295,20 +295,20 @@ static const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
     { 0x8001, { 21600, 10800, 0x400 } },
     { 0x8000, { 21600, 0, 0x40c } }
 };
-static const SvxMSDffTextRectangles mso_sptParallelogramTextRect[] =
+const SvxMSDffTextRectangles mso_sptParallelogramTextRect[] =
 {
     { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 4 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptParallelogramGluePoints[] =
+const SvxMSDffVertPair mso_sptParallelogramGluePoints[] =
 {
     { 6 MSO_I, 0 }, { 10800, 8 MSO_I }, { 11 MSO_I, 10800 }, { 9 MSO_I, 21600 }, { 10800, 10 MSO_I }, { 5 MSO_I, 10800 }
 };
-static const SvxMSDffHandle mso_sptParallelogramHandle[] =
+const SvxMSDffHandle mso_sptParallelogramHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoParallelogram =
+const mso_CustomShape msoParallelogram =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptParallelogramVert), SAL_N_ELEMENTS( mso_sptParallelogramVert ),
     const_cast<sal_uInt16*>(mso_sptParallelogramSegm), sizeof( mso_sptParallelogramSegm ) >> 1,
@@ -321,15 +321,15 @@ static const mso_CustomShape msoParallelogram =
     const_cast<SvxMSDffHandle*>(mso_sptParallelogramHandle), SAL_N_ELEMENTS( mso_sptParallelogramHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptDiamondVert[] =
+const SvxMSDffVertPair mso_sptDiamondVert[] =
 {
     { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 10800 }, { 10800, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptDiamondTextRect[] =
+const SvxMSDffTextRectangles mso_sptDiamondTextRect[] =
 {
     { { 5400, 5400 }, { 16200, 16200 } }
 };
-static const mso_CustomShape msoDiamond =
+const mso_CustomShape msoDiamond =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptDiamondVert), SAL_N_ELEMENTS( mso_sptDiamondVert ),
     nullptr, 0,
@@ -342,15 +342,15 @@ static const mso_CustomShape msoDiamond =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptTrapezoidVert[] =      // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptTrapezoidVert[] =      // adjustment1 : 0 - 10800
 {
     { 0, 0 }, { 21600, 0 }, {0 MSO_I, 21600 }, { 1 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptTrapezoidSegm[] =
+const sal_uInt16 mso_sptTrapezoidSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptTrapezoidCalc[] =
+const SvxMSDffCalculationData mso_sptTrapezoidCalc[] =
 {
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
@@ -360,20 +360,20 @@ static const SvxMSDffCalculationData mso_sptTrapezoidCalc[] =
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x8000, { 21600, 0, 0x405 } }
 };
-static const SvxMSDffTextRectangles mso_sptTrapezoidTextRect[] =
+const SvxMSDffTextRectangles mso_sptTrapezoidTextRect[] =
 {
     { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 4 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptTrapezoidGluePoints[] =
+const SvxMSDffVertPair mso_sptTrapezoidGluePoints[] =
 {
     { 6 MSO_I, 10800 }, { 10800, 21600 }, { 5 MSO_I, 10800 }, { 10800, 0 }
 };
-static const SvxMSDffHandle mso_sptTrapezoidHandle[] =
+const SvxMSDffHandle mso_sptTrapezoidHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoTrapezoid =
+const mso_CustomShape msoTrapezoid =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTrapezoidVert), SAL_N_ELEMENTS( mso_sptTrapezoidVert ),
     const_cast<sal_uInt16*>(mso_sptTrapezoidSegm), sizeof( mso_sptTrapezoidSegm ) >> 1,
@@ -430,16 +430,16 @@ static const mso_CustomShape msoTrapezoid =
 
 */
 
-static const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
 {
     { 0 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 3 MSO_I },
     { 2 MSO_I, 21600 }, { 0 MSO_I, 21600 }, { 0, 3 MSO_I }, { 0, 1 MSO_I }
 };
-static const sal_uInt16 mso_sptOctagonSegm[] =
+const sal_uInt16 mso_sptOctagonSegm[] =
 {
     0x4000, 0x0007, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptOctagonCalc[] =
+const SvxMSDffCalculationData mso_sptOctagonCalc[] =
 {
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
     { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
@@ -451,20 +451,20 @@ static const SvxMSDffCalculationData mso_sptOctagonCalc[] =
     { 0xa000, { DFF_Prop_geoRight, 0, 0x404 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x404 } }
 };
-static const sal_Int32 mso_sptOctagonDefault[] =
+const sal_Int32 mso_sptOctagonDefault[] =
 {
     1, static_cast<sal_Int32>((21600 - ((M_SQRT2-1)*21600)) / 2)
 };
-static const SvxMSDffTextRectangles mso_sptOctagonTextRect[] =
+const SvxMSDffTextRectangles mso_sptOctagonTextRect[] =
 {
     { { 5 MSO_I, 6 MSO_I }, { 7 MSO_I, 8 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptOctagonHandle[] =
+const SvxMSDffHandle mso_sptOctagonHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoOctagon =
+const mso_CustomShape msoOctagon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptOctagonVert), SAL_N_ELEMENTS( mso_sptOctagonVert ),
     const_cast<sal_uInt16*>(mso_sptOctagonSegm), sizeof( mso_sptOctagonSegm ) >> 1,
@@ -477,15 +477,15 @@ static const mso_CustomShape msoOctagon =
     const_cast<SvxMSDffHandle*>(mso_sptOctagonHandle), SAL_N_ELEMENTS( mso_sptOctagonHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   // adjustment1 : 0 - 21600
+const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   // adjustment1 : 0 - 21600
 {
     { 0 MSO_I, 0 }, { 21600, 21600 }, { 0, 21600 }
 };
-static const sal_uInt16 mso_sptIsocelesTriangleSegm[] =
+const sal_uInt16 mso_sptIsocelesTriangleSegm[] =
 {
     0x4000, 0x0002, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptIsocelesTriangleCalc[] =
+const SvxMSDffCalculationData mso_sptIsocelesTriangleCalc[] =
 {
     { 0x4000, { 0, DFF_Prop_adjustValue, 0 } },
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
@@ -496,21 +496,21 @@ static const SvxMSDffCalculationData mso_sptIsocelesTriangleCalc[] =
     { 0x2001, { 0x405, 1, 2 } },
     { 0x8000, { 21600, 0, 0x406 } }
 };
-static const SvxMSDffTextRectangles mso_sptIsocelesTriangleTextRect[] =
+const SvxMSDffTextRectangles mso_sptIsocelesTriangleTextRect[] =
 {
     { { 1 MSO_I, 10800 }, { 2 MSO_I, 18000 } },
     { { 3 MSO_I, 7200 }, { 4 MSO_I, 21600   } }
 };
-static const SvxMSDffVertPair mso_sptIsocelesTriangleGluePoints[] =
+const SvxMSDffVertPair mso_sptIsocelesTriangleGluePoints[] =
 {
     { 0 MSO_I, 0 }, { 1 MSO_I, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 7 MSO_I, 10800 }
 };
-static const SvxMSDffHandle mso_sptIsocelesTriangleHandle[] =
+const SvxMSDffHandle mso_sptIsocelesTriangleHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoIsocelesTriangle =
+const mso_CustomShape msoIsocelesTriangle =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptIsocelesTriangleVert), SAL_N_ELEMENTS( mso_sptIsocelesTriangleVert ),
     const_cast<sal_uInt16*>(mso_sptIsocelesTriangleSegm), sizeof( mso_sptIsocelesTriangleSegm ) >> 1,
@@ -523,16 +523,16 @@ static const mso_CustomShape msoIsocelesTriangle =
     const_cast<SvxMSDffHandle*>(mso_sptIsocelesTriangleHandle), SAL_N_ELEMENTS( mso_sptIsocelesTriangleHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptHexagonVert[] =                // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptHexagonVert[] =                // adjustment1 : 0 - 10800
 {
     { 0 MSO_I, 0 }, { 1 MSO_I, 0 }, { 21600, 10800 }, { 1 MSO_I, 21600 },
     { 0 MSO_I, 21600 }, { 0, 10800 }
 };
-static const sal_uInt16 mso_sptHexagonSegm[] =
+const sal_uInt16 mso_sptHexagonSegm[] =
 {
     0x4000, 0x0005, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptHexagonCalc[] =
+const SvxMSDffCalculationData mso_sptHexagonCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
@@ -540,16 +540,16 @@ static const SvxMSDffCalculationData mso_sptHexagonCalc[] =
     { 0x2000, { 0x402, 1700, 0 } },
     { 0x8000, { 21600, 0, 0x403 } }
 };
-static const SvxMSDffTextRectangles mso_sptHexagonTextRect[] =
+const SvxMSDffTextRectangles mso_sptHexagonTextRect[] =
 {
     { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 4 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptHexagonHandle[] =
+const SvxMSDffHandle mso_sptHexagonHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoHexagon =
+const mso_CustomShape msoHexagon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptHexagonVert), SAL_N_ELEMENTS( mso_sptHexagonVert ),
     const_cast<sal_uInt16*>(mso_sptHexagonSegm), sizeof( mso_sptHexagonSegm ) >> 1,
@@ -562,21 +562,21 @@ static const mso_CustomShape msoHexagon =
     const_cast<SvxMSDffHandle*>(mso_sptHexagonHandle), SAL_N_ELEMENTS( mso_sptHexagonHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptPentagonVert[] =
+const SvxMSDffVertPair mso_sptPentagonVert[] =
 {
     { 10800, 0 }, { 0, 8260 }, { 4230, 21600 }, { 17370, 21600 },
     { 21600, 8260 }, { 10800, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptPentagonTextRect[] =
+const SvxMSDffTextRectangles mso_sptPentagonTextRect[] =
 {
     { { 4230, 5080 }, { 17370, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptPentagonGluePoints[] =
+const SvxMSDffVertPair mso_sptPentagonGluePoints[] =
 {
     { 10800, 0 }, { 0, 8260 }, { 4230, 21600 }, { 10800, 21600 },
     { 17370, 21600 }, { 21600, 8260 }
 };
-static const mso_CustomShape msoPentagon =
+const mso_CustomShape msoPentagon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptPentagonVert), SAL_N_ELEMENTS( mso_sptPentagonVert ),
     nullptr, 0,
@@ -589,29 +589,29 @@ static const mso_CustomShape msoPentagon =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 : 0 - 10800
 {
     { 1 MSO_I, 0 }, { 2 MSO_I, 0 }, { 2 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I },
     { 21600, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 21600 }, { 1 MSO_I, 21600 },
     { 1 MSO_I, 3 MSO_I }, { 0, 3 MSO_I }, { 0, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 }
 };
-static const SvxMSDffCalculationData mso_sptPlusCalc[] =
+const SvxMSDffCalculationData mso_sptPlusCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 10799, 10800 } },
     { 0x2000, { 0x400, 0, 0 } },
     { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
-static const SvxMSDffTextRectangles mso_sptPlusTextRect[] =
+const SvxMSDffTextRectangles mso_sptPlusTextRect[] =
 {
     { { 1 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptPlusHandle[] =
+const SvxMSDffHandle mso_sptPlusHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoPlus =
+const mso_CustomShape msoPlus =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptPlusVert), SAL_N_ELEMENTS( mso_sptPlusVert ),
     nullptr, 0,
@@ -624,7 +624,7 @@ static const mso_CustomShape msoPlus =
     const_cast<SvxMSDffHandle*>(mso_sptPlusHandle), SAL_N_ELEMENTS( mso_sptPlusHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 10800
 {
     { 44, 0 },
     { 20, 0 }, { 0, 2 MSO_I }, { 0, 0 MSO_I },          // ccp
@@ -639,12 +639,12 @@ static const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 108
     { 68, 6 MSO_I },{ 88, 5 MSO_I }, { 88, 0 MSO_I },   // ccp
     { 88, 2 MSO_I },{ 68, 0 }, { 44, 0 }                // ccp
 };
-static const sal_uInt16 mso_sptCanSegm[] =
+const sal_uInt16 mso_sptCanSegm[] =
 {
     0x4000, 0x2001, 0x0001, 0x2002, 0x0001, 0x2001, 0x6001, 0x8000,
     0x4000, 0x2004, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCanCalc[] =
+const SvxMSDffCalculationData mso_sptCanCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 2, 4 } },     // 1/4
     { 0x2001, { 0x0400, 6, 11 } },
@@ -655,20 +655,20 @@ static const SvxMSDffCalculationData mso_sptCanCalc[] =
     { 0x2001, { DFF_Prop_adjustValue, 2, 2 } },
     { 0x0000, { 44, 0, 0 } }
 };
-static const SvxMSDffTextRectangles mso_sptCanTextRect[] =
+const SvxMSDffTextRectangles mso_sptCanTextRect[] =
 {
     { { 0, 6 MSO_I }, { 88, 3 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptCanGluePoints[] =
+const SvxMSDffVertPair mso_sptCanGluePoints[] =
 {
     { 44, 6 MSO_I }, { 44, 0 }, { 0, 10800 }, { 44, 21600 }, { 88, 10800 }
 };
-static const SvxMSDffHandle mso_sptCanHandle[] =
+const SvxMSDffHandle mso_sptCanHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         7 + 3, 0x100, 44, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoCan =
+const mso_CustomShape msoCan =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCanVert), SAL_N_ELEMENTS( mso_sptCanVert ),
     const_cast<sal_uInt16*>(mso_sptCanSegm), sizeof( mso_sptCanSegm ) >> 1,
@@ -681,16 +681,16 @@ static const mso_CustomShape msoCan =
     const_cast<SvxMSDffHandle*>(mso_sptCanHandle), SAL_N_ELEMENTS( mso_sptCanHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptArrowVert[] =  // adjustment1: x 0 - 21600
+const SvxMSDffVertPair mso_sptArrowVert[] =  // adjustment1: x 0 - 21600
 {                                                   // adjustment2: y 0 - 10800
     { 0, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 21600, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptArrowSegm[] =
+const sal_uInt16 mso_sptArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptArrowCalc[] =
+const SvxMSDffCalculationData mso_sptArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
@@ -701,16 +701,16 @@ static const SvxMSDffCalculationData mso_sptArrowCalc[] =
     { 0x6001, { 0x401, 0x400, 10800 } },
     { 0xa000, { 0x401, 0, 0x406 } }
 };
-static const SvxMSDffTextRectangles mso_sptArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptArrowTextRect[] =
 {
     { { 0, 0 MSO_I }, { 5 MSO_I, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptArrowHandle[] =
+const SvxMSDffHandle mso_sptArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
-static const mso_CustomShape msoArrow =
+const mso_CustomShape msoArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptArrowVert), SAL_N_ELEMENTS( mso_sptArrowVert ),
     const_cast<sal_uInt16*>(mso_sptArrowSegm), sizeof( mso_sptArrowSegm ) >> 1,
@@ -723,29 +723,29 @@ static const mso_CustomShape msoArrow =
     const_cast<SvxMSDffHandle*>(mso_sptArrowHandle), SAL_N_ELEMENTS( mso_sptArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptLeftArrowVert[] =  // adjustment1: x 0 - 21600
+const SvxMSDffVertPair mso_sptLeftArrowVert[] =  // adjustment1: x 0 - 21600
 {                                                       // adjustment2: y 0 - 10800
     { 21600, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 0, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 21600, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptLeftArrowSegm[] =
+const sal_uInt16 mso_sptLeftArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000
 };
-static const sal_Int32 mso_sptLeftArrowDefault[] =
+const sal_Int32 mso_sptLeftArrowDefault[] =
 {
     2, 5400, 5400
 };
-static const SvxMSDffTextRectangles mso_sptLeftArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftArrowTextRect[] =
 {
     { { 7 MSO_I, 0 MSO_I }, { 21600, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptLeftArrowHandle[] =
+const SvxMSDffHandle mso_sptLeftArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
-static const mso_CustomShape msoLeftArrow =
+const mso_CustomShape msoLeftArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftArrowVert), SAL_N_ELEMENTS( mso_sptLeftArrowVert ),
     const_cast<sal_uInt16*>(mso_sptLeftArrowSegm), sizeof( mso_sptLeftArrowSegm ) >> 1,
@@ -758,25 +758,25 @@ static const mso_CustomShape msoLeftArrow =
     const_cast<SvxMSDffHandle*>(mso_sptLeftArrowHandle), SAL_N_ELEMENTS( mso_sptLeftArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptDownArrowVert[] =  // adjustment1: x 0 - 21600
+const SvxMSDffVertPair mso_sptDownArrowVert[] =  // adjustment1: x 0 - 21600
 {                                                       // adjustment2: y 0 - 10800
     { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0, 1 MSO_I }, { 10800, 21600 },
     { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 0 }
 };
-static const sal_uInt16 mso_sptDownArrowSegm[] =
+const sal_uInt16 mso_sptDownArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptDownArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptDownArrowTextRect[] =
 {
     { { 0 MSO_I, 0 }, { 2 MSO_I, 5 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptDownArrowHandle[] =
+const SvxMSDffHandle mso_sptDownArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, 0, 21600 }
 };
-static const mso_CustomShape msoDownArrow =
+const mso_CustomShape msoDownArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptDownArrowVert), SAL_N_ELEMENTS( mso_sptDownArrowVert ),
     const_cast<sal_uInt16*>(mso_sptDownArrowSegm), sizeof( mso_sptDownArrowSegm ) >> 1,
@@ -789,29 +789,29 @@ static const mso_CustomShape msoDownArrow =
     const_cast<SvxMSDffHandle*>(mso_sptDownArrowHandle), SAL_N_ELEMENTS( mso_sptDownArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptUpArrowVert[] =    // adjustment1: x 0 - 21600
+const SvxMSDffVertPair mso_sptUpArrowVert[] =    // adjustment1: x 0 - 21600
 {                                                       // adjustment2: y 0 - 10800
     { 0 MSO_I, 21600 }, { 0 MSO_I, 1 MSO_I }, { 0, 1 MSO_I }, { 10800, 0 },
     { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptUpArrowSegm[] =
+const sal_uInt16 mso_sptUpArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000
 };
-static const sal_Int32 mso_sptUpArrowDefault[] =
+const sal_Int32 mso_sptUpArrowDefault[] =
 {
     2, 5400, 5400
 };
-static const SvxMSDffTextRectangles mso_sptUpArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptUpArrowTextRect[] =
 {
     { { 0 MSO_I, 7 MSO_I }, { 2 MSO_I, 21600 } }
 };
-static const SvxMSDffHandle mso_sptUpArrowHandle[] =
+const SvxMSDffHandle mso_sptUpArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, 0, 21600 }
 };
-static const mso_CustomShape msoUpArrow =
+const mso_CustomShape msoUpArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptUpArrowVert), SAL_N_ELEMENTS( mso_sptUpArrowVert ),
     const_cast<sal_uInt16*>(mso_sptUpArrowSegm), sizeof( mso_sptUpArrowSegm ) >> 1,
@@ -824,17 +824,17 @@ static const mso_CustomShape msoUpArrow =
     const_cast<SvxMSDffHandle*>(mso_sptUpArrowHandle), SAL_N_ELEMENTS( mso_sptUpArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = // adjustment1: x 0 - 10800
+const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = // adjustment1: x 0 - 10800
 {                                                           // adjustment2: y 0 - 10800
     { 0, 10800 }, { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 1 MSO_I },
     { 2 MSO_I, 0 }, { 21600, 10800 }, { 2 MSO_I, 21600 }, { 2 MSO_I, 3 MSO_I },
     { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptLeftRightArrowSegm[] =
+const sal_uInt16 mso_sptLeftRightArrowSegm[] =
 {
     0x4000, 0x0009, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptDoubleArrowCalc[] =
+const SvxMSDffCalculationData mso_sptDoubleArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -847,20 +847,20 @@ static const SvxMSDffCalculationData mso_sptDoubleArrowCalc[] =
     { 0x6001, { DFF_Prop_adjust2Value, 0x407, 10800 } },
     { 0x8000, { 21600, 0, 0x408 } }
 };
-static const sal_Int32 mso_sptLeftRightArrowDefault[] =
+const sal_Int32 mso_sptLeftRightArrowDefault[] =
 {
     2, 4300, 5400
 };
-static const SvxMSDffTextRectangles mso_sptLeftRightArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftRightArrowTextRect[] =
 {
     { { 5 MSO_I, 1 MSO_I }, { 6 MSO_I, 3 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptLeftRightArrowHandle[] =
+const SvxMSDffHandle mso_sptLeftRightArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 10800, 0, 10800 }
 };
-static const mso_CustomShape msoLeftRightArrow =
+const mso_CustomShape msoLeftRightArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftRightArrowVert), SAL_N_ELEMENTS( mso_sptLeftRightArrowVert ),
     const_cast<sal_uInt16*>(mso_sptLeftRightArrowSegm), sizeof( mso_sptLeftRightArrowSegm ) >> 1,
@@ -873,30 +873,30 @@ static const mso_CustomShape msoLeftRightArrow =
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightArrowHandle), SAL_N_ELEMENTS( mso_sptLeftRightArrowHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    // adjustment1: x 0 - 10800
+const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    // adjustment1: x 0 - 10800
 {                                                           // adjustment2: y 0 - 10800
     { 0, 1 MSO_I }, { 10800, 0 }, { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I },
     { 2 MSO_I, 3 MSO_I }, { 21600, 3 MSO_I }, { 10800, 21600 }, { 0, 3 MSO_I },
     { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 1 MSO_I }
 };
-static const sal_uInt16 mso_sptUpDownArrowSegm[] =
+const sal_uInt16 mso_sptUpDownArrowSegm[] =
 {
     0x4000, 0x0009, 0x6001, 0x8000
 };
-static const sal_Int32 mso_sptUpDownArrowDefault[] =
+const sal_Int32 mso_sptUpDownArrowDefault[] =
 {
     2, 5400, 4300
 };
-static const SvxMSDffTextRectangles mso_sptUpDownArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptUpDownArrowTextRect[] =
 {
     { { 0 MSO_I, 8 MSO_I }, { 2 MSO_I, 9 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptUpDownArrowHandle[] =
+const SvxMSDffHandle mso_sptUpDownArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 10800, 0, 10800 }
 };
-static const mso_CustomShape msoUpDownArrow =
+const mso_CustomShape msoUpDownArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptUpDownArrowVert), SAL_N_ELEMENTS( mso_sptUpDownArrowVert ),
     const_cast<sal_uInt16*>(mso_sptUpDownArrowSegm), sizeof( mso_sptUpDownArrowSegm ) >> 1,
@@ -909,7 +909,7 @@ static const mso_CustomShape msoUpDownArrow =
     const_cast<SvxMSDffHandle*>(mso_sptUpDownArrowHandle), SAL_N_ELEMENTS( mso_sptUpDownArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
+const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
 {                                                       // adjustment3: y 0 - 10800
     { 0, 10800 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 2 MSO_I, 2 MSO_I },
     { 2 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 10800, 0 }, { 3 MSO_I, 0 MSO_I },
@@ -918,11 +918,11 @@ static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10
     { 4 MSO_I, 5 MSO_I }, { 3 MSO_I, 5 MSO_I }, { 10800, 21600 }, { 1 MSO_I, 5 MSO_I },
     { 2 MSO_I, 5 MSO_I }, { 2 MSO_I, 4 MSO_I }, { 0 MSO_I, 4 MSO_I }, { 0 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptQuadArrowSegm[] =
+const sal_uInt16 mso_sptQuadArrowSegm[] =
 {
     0x4000, 0x0017, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptQuadArrowCalc[] =
+const SvxMSDffCalculationData mso_sptQuadArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
@@ -931,22 +931,22 @@ static const SvxMSDffCalculationData mso_sptQuadArrowCalc[] =
     { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
     { 0x8000, { 21600, 0, DFF_Prop_adjust3Value } }
 };
-static const sal_Int32 mso_sptQuadArrowDefault[] =
+const sal_Int32 mso_sptQuadArrowDefault[] =
 {
     3, 6500, 8600, 4300
 };
-static const SvxMSDffTextRectangles mso_sptQuadArrowTextRect[] =    // todo
+const SvxMSDffTextRectangles mso_sptQuadArrowTextRect[] =    // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptQuadArrowHandle[] =
+const SvxMSDffHandle mso_sptQuadArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 0x100, 10800, 0, 0x100 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 0x101, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoQuadArrow =
+const mso_CustomShape msoQuadArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptQuadArrowVert), SAL_N_ELEMENTS( mso_sptQuadArrowVert ),
     const_cast<sal_uInt16*>(mso_sptQuadArrowSegm), sizeof( mso_sptQuadArrowSegm ) >> 1,
@@ -959,7 +959,7 @@ static const mso_CustomShape msoQuadArrow =
     const_cast<SvxMSDffHandle*>(mso_sptQuadArrowHandle), SAL_N_ELEMENTS( mso_sptQuadArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
+const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
 {                                                               // adjustment3: y 0 - 21600
     { 10800, 0 }, { 3 MSO_I, 2 MSO_I }, { 4 MSO_I, 2 MSO_I }, { 4 MSO_I, 1 MSO_I },
     { 5 MSO_I, 1 MSO_I }, { 5 MSO_I, 0 MSO_I }, { 21600, 10800 }, { 5 MSO_I, 3 MSO_I },
@@ -967,11 +967,11 @@ static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: 
     { 2 MSO_I, 0 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 2 MSO_I },
     { 0 MSO_I, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptLeftRightUpArrowSegm[] =
+const sal_uInt16 mso_sptLeftRightUpArrowSegm[] =
 {
     0x4000, 0x0010, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptLeftRightUpArrowCalc[] =
+const SvxMSDffCalculationData mso_sptLeftRightUpArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 0
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 1
@@ -980,22 +980,22 @@ static const SvxMSDffCalculationData mso_sptLeftRightUpArrowCalc[] =
     { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },        // 4
     { 0x8000, { 21600, 0, 0x0402 } }                        // 5
 };
-static const sal_Int32 mso_sptLeftRightUpArrowDefault[] =
+const sal_Int32 mso_sptLeftRightUpArrowDefault[] =
 {
     3, 6500, 8600, 6200
 };
-static const SvxMSDffTextRectangles mso_sptLeftRightUpArrowTextRect[] =     // todo
+const SvxMSDffTextRectangles mso_sptLeftRightUpArrowTextRect[] =     // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptLeftRightUpArrowHandle[] =
+const SvxMSDffHandle mso_sptLeftRightUpArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 0x100, 10800, 0, 0x100 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 0x101, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoLeftRightUpArrow =
+const mso_CustomShape msoLeftRightUpArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftRightUpArrowVert), SAL_N_ELEMENTS( mso_sptLeftRightUpArrowVert ),
     const_cast<sal_uInt16*>(mso_sptLeftRightUpArrowSegm), sizeof( mso_sptLeftRightUpArrowSegm ) >> 1,
@@ -1008,17 +1008,17 @@ static const mso_CustomShape msoLeftRightUpArrow =
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightUpArrowHandle), SAL_N_ELEMENTS( mso_sptLeftRightUpArrowHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptBentArrowVert[] =  // adjustment1 : x 12427 - 21600
+const SvxMSDffVertPair mso_sptBentArrowVert[] =  // adjustment1 : x 12427 - 21600
 {                                                       // adjustment2 : y 0 - 6079
     { 0, 21600 }, { 0, 12160 }, { 12427, 1 MSO_I }, { 0 MSO_I, 1 MSO_I },
     { 0 MSO_I, 0 }, { 21600, 6079 }, { 0 MSO_I, 12158 }, { 0 MSO_I, 2 MSO_I },
     { 12427, 2 MSO_I }, { 4 MSO_I, 12160 }, { 4 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptBentArrowSegm[] =
+const sal_uInt16 mso_sptBentArrowSegm[] =
 {
     0x4000, 0x0001, 0xa801, 0x0006, 0xa701, 0x0001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBentArrowCalc[] =
+const SvxMSDffCalculationData mso_sptBentArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1026,20 +1026,20 @@ static const SvxMSDffCalculationData mso_sptBentArrowCalc[] =
     { 0x8000, { 6079, 0, DFF_Prop_adjust2Value } },
     { 0x2001, { 0x0403, 2, 1 } }
 };
-static const sal_Int32 mso_sptBentArrowDefault[] =
+const sal_Int32 mso_sptBentArrowDefault[] =
 {
     2, 15100, 2900
 };
-static const SvxMSDffTextRectangles mso_sptBentArrowTextRect[] =    // todo
+const SvxMSDffTextRectangles mso_sptBentArrowTextRect[] =    // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptBentArrowHandle[] =
+const SvxMSDffHandle mso_sptBentArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 12427, 21600, 0, 6079 }
 };
-static const mso_CustomShape msoBentArrow =
+const mso_CustomShape msoBentArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentArrowVert), SAL_N_ELEMENTS( mso_sptBentArrowVert ),
     const_cast<sal_uInt16*>(mso_sptBentArrowSegm), sizeof( mso_sptBentArrowSegm ) >> 1,
@@ -1052,7 +1052,7 @@ static const mso_CustomShape msoBentArrow =
     const_cast<SvxMSDffHandle*>(mso_sptBentArrowHandle), SAL_N_ELEMENTS( mso_sptBentArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptUturnArrowVert[] =
+const SvxMSDffVertPair mso_sptUturnArrowVert[] =
 {
     { 0, 21600 }, { 0, 8550 },                                          // pp
     { 0, 3540 }, { 4370, 0 }, { 9270, 0 },                              // ccp
@@ -1062,15 +1062,15 @@ static const SvxMSDffVertPair mso_sptUturnArrowVert[] =
     { 7770, 5850 }, { 6040, 6410 }, { 6110, 8520 },                     // ccp
     { 6110, 21600 }
 };
-static const sal_uInt16 mso_sptUturnArrowSegm[] =
+const sal_uInt16 mso_sptUturnArrowSegm[] =
 {
     0x4000, 0x0001, 0x2002, 0x0004, 0x2002, 0x0001, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptUturnArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptUturnArrowTextRect[] =
 {
     { { 0, 8280 }, { 6110, 21600 } }
 };
-static const mso_CustomShape msoUturnArrow =
+const mso_CustomShape msoUturnArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptUturnArrowVert), SAL_N_ELEMENTS( mso_sptUturnArrowVert ),
     const_cast<sal_uInt16*>(mso_sptUturnArrowSegm), sizeof( mso_sptUturnArrowSegm ) >> 1,
@@ -1083,17 +1083,17 @@ static const mso_CustomShape msoUturnArrow =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptLeftUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
+const SvxMSDffVertPair mso_sptLeftUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
 {                                                           // adjustment3 : y 0 - 21600
     { 0, 5 MSO_I }, { 2 MSO_I, 0 MSO_I }, { 2 MSO_I, 7 MSO_I }, { 7 MSO_I, 7 MSO_I },
     { 7 MSO_I, 2 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 5 MSO_I, 0 }, { 21600, 2 MSO_I },
     { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptLeftUpArrowSegm[] =
+const sal_uInt16 mso_sptLeftUpArrowSegm[] =
 {
     0x4000, 0x000b, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptLeftUpArrowCalc[] =
+const SvxMSDffCalculationData mso_sptLeftUpArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
@@ -1106,23 +1106,23 @@ static const SvxMSDffCalculationData mso_sptLeftUpArrowCalc[] =
     { 0x8000, { 21600, 0, 0x406 } },                    // 8
     { 0xa000, { 0x408, 0, 0x406 } }                 // 9
 };
-static const sal_Int32 mso_sptLeftUpArrowDefault[] =
+const sal_Int32 mso_sptLeftUpArrowDefault[] =
 {
     3, 9340, 18500, 6200
 };
-static const SvxMSDffTextRectangles mso_sptLeftUpArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftUpArrowTextRect[] =
 {
     { { 2 MSO_I, 7 MSO_I }, { 1 MSO_I, 1 MSO_I } },
     { { 7 MSO_I, 2 MSO_I }, { 1 MSO_I, 1 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptLeftUpArrowHandle[] =
+const SvxMSDffHandle mso_sptLeftUpArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 3 + 5, 21600, 0, 0x100 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 3 + 9, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoLeftUpArrow =
+const mso_CustomShape msoLeftUpArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftUpArrowVert), SAL_N_ELEMENTS( mso_sptLeftUpArrowVert ),
     const_cast<sal_uInt16*>(mso_sptLeftUpArrowSegm), sizeof( mso_sptLeftUpArrowSegm ) >> 1,
@@ -1135,17 +1135,17 @@ static const mso_CustomShape msoLeftUpArrow =
     const_cast<SvxMSDffHandle*>(mso_sptLeftUpArrowHandle), SAL_N_ELEMENTS( mso_sptLeftUpArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
+const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
 {                                                           // adjustment3 : y 0 - 21600
     { 0, 8 MSO_I }, { 7 MSO_I, 8 MSO_I }, { 7 MSO_I, 2 MSO_I }, { 0 MSO_I, 2 MSO_I },
     { 5 MSO_I, 0 }, { 21600, 2 MSO_I }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 21600 },
     { 0, 21600 }
 };
-static const sal_uInt16 mso_sptBentUpArrowSegm[] =
+const sal_uInt16 mso_sptBentUpArrowSegm[] =
 {
     0x4000, 0x0008, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBentUpArrowCalc[] =
+const SvxMSDffCalculationData mso_sptBentUpArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
@@ -1159,23 +1159,23 @@ static const SvxMSDffCalculationData mso_sptBentUpArrowCalc[] =
     { 0x8000, { 21600, 0, 0x406 } },                    // 9
     { 0xa000, { 0x409, 0, 0x406 } }                 // a
 };
-static const sal_Int32 mso_sptBentUpArrowDefault[] =
+const sal_Int32 mso_sptBentUpArrowDefault[] =
 {
     3, 9340, 18500, 7200
 };
-static const SvxMSDffTextRectangles mso_sptBentUpArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptBentUpArrowTextRect[] =
 {
     { { 2 MSO_I, 7 MSO_I }, { 1 MSO_I, 1 MSO_I } },
     { { 7 MSO_I, 2 MSO_I }, { 1 MSO_I, 1 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptBentUpArrowHandle[] =
+const SvxMSDffHandle mso_sptBentUpArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x101, 0x102, 10800, 10800, 3 + 5, 21600, 0, 0x100 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 3 + 10, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBentUpArrow =
+const mso_CustomShape msoBentUpArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentUpArrowVert), SAL_N_ELEMENTS( mso_sptBentUpArrowVert ),
     const_cast<sal_uInt16*>(mso_sptBentUpArrowSegm), sizeof( mso_sptBentUpArrowSegm ) >> 1,
@@ -1188,7 +1188,7 @@ static const mso_CustomShape msoBentUpArrow =
     const_cast<SvxMSDffHandle*>(mso_sptBentUpArrowHandle), SAL_N_ELEMENTS( mso_sptBentUpArrowHandle )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedRightVert[] =
+const SvxMSDffVertPair mso_sptCurvedRightVert[] =
 {
     { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 22 MSO_I, 0 }, { 0, 4 MSO_I }, { 0, 15 MSO_I }, { 23 MSO_I, 1 MSO_I }, { 0, 7 MSO_I }, { 2 MSO_I, 13 MSO_I },
     { 2 MSO_I, 14 MSO_I }, { 22 MSO_I, 8 MSO_I }, { 2 MSO_I, 12 MSO_I },
@@ -1197,7 +1197,7 @@ static const SvxMSDffVertPair mso_sptCurvedRightVert[] =
     { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 0, 4 MSO_I }, { 26 MSO_I, 17 MSO_I },
     { 0, 15 MSO_I }, { 23 MSO_I, 1 MSO_I }, { 26 MSO_I, 17 MSO_I }, { 22 MSO_I, 15 MSO_I }
 };
-static const sal_uInt16 mso_sptCurvedRightSegm[] =
+const sal_uInt16 mso_sptCurvedRightSegm[] =
 {
     0xa408,
     0x0003,
@@ -1210,7 +1210,7 @@ static const sal_uInt16 mso_sptCurvedRightSegm[] =
     0x6000,
     0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedRightCalc[] =
+const SvxMSDffCalculationData mso_sptCurvedRightCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1262,19 +1262,19 @@ static const SvxMSDffCalculationData mso_sptCurvedRightCalc[] =
     { 0x0001, { 21600, 2195, 16384 } },
     { 0x0001, { 21600, 14189, 16384 } }
 };
-static const sal_Int32 mso_sptCurvedRightDefault[] =
+const sal_Int32 mso_sptCurvedRightDefault[] =
 {
     3, 12960, 19440, 14400
 };
-static const SvxMSDffTextRectangles mso_sptCurvedRightTextRect[] =
+const SvxMSDffTextRectangles mso_sptCurvedRightTextRect[] =
 {
     { { 47 MSO_I, 45 MSO_I }, { 48 MSO_I, 46 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptCurvedRightGluePoints[] =
+const SvxMSDffVertPair mso_sptCurvedRightGluePoints[] =
 {
     { 0, 17 MSO_I }, { 2 MSO_I, 14 MSO_I }, { 22 MSO_I, 8 MSO_I }, { 2 MSO_I, 12 MSO_I }, { 22 MSO_I, 16 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCurvedRightHandles[] =
+const SvxMSDffHandle mso_sptCurvedRightHandles[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         21600, 0x100, 10800, 10800, 0, 10800, 3 + 40, 3 + 29 },
@@ -1283,7 +1283,7 @@ static const SvxMSDffHandle mso_sptCurvedRightHandles[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x102, 21600, 10800, 10800, 3 + 44, 3 + 22, 3375, 21600 }
 };
-static const mso_CustomShape msoCurvedRightArrow =
+const mso_CustomShape msoCurvedRightArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedRightVert), SAL_N_ELEMENTS( mso_sptCurvedRightVert ),
     const_cast<sal_uInt16*>(mso_sptCurvedRightSegm), sizeof( mso_sptCurvedRightSegm ) >> 1,
@@ -1296,7 +1296,7 @@ static const mso_CustomShape msoCurvedRightArrow =
     const_cast<SvxMSDffHandle*>(mso_sptCurvedRightHandles), SAL_N_ELEMENTS( mso_sptCurvedRightHandles )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedDownVert[] =
+const SvxMSDffVertPair mso_sptCurvedDownVert[] =
 {
    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 0, 22 MSO_I }, { 4 MSO_I, 0 },
    { 15 MSO_I, 0 }, { 1 MSO_I, 23 MSO_I }, { 7 MSO_I, 0 }, { 13 MSO_I, 2 MSO_I },
@@ -1307,7 +1307,7 @@ static const SvxMSDffVertPair mso_sptCurvedDownVert[] =
    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 4 MSO_I, 0 }, { 17 MSO_I, 26 MSO_I },
    { 15 MSO_I, 0 }, { 1 MSO_I, 23 MSO_I }, { 17 MSO_I, 26 MSO_I }, { 15 MSO_I, 22 MSO_I }
 };
-static const sal_uInt16 mso_sptCurvedDownSegm[] =
+const sal_uInt16 mso_sptCurvedDownSegm[] =
 {
     0xa608,
     0x0003,
@@ -1320,15 +1320,15 @@ static const sal_uInt16 mso_sptCurvedDownSegm[] =
    0x6000,
    0x8000
 };
-static const SvxMSDffTextRectangles mso_sptCurvedDownTextRect[] =
+const SvxMSDffTextRectangles mso_sptCurvedDownTextRect[] =
 {
    { { 45 MSO_I, 47 MSO_I }, { 46 MSO_I, 48 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptCurvedDownGluePoints[] =
+const SvxMSDffVertPair mso_sptCurvedDownGluePoints[] =
 {
    { 17 MSO_I, 0 }, { 16 MSO_I, 22 MSO_I }, { 12 MSO_I, 2 MSO_I }, { 8 MSO_I, 22 MSO_I }, { 14 MSO_I, 2 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
+const SvxMSDffHandle mso_sptCurvedDownHandles[] =
 {
    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x100, 21600, 10800, 10800, 3 + 40, 3 + 29, 0, 10800 },
@@ -1338,7 +1338,7 @@ static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
        21600, 0x102, 10800, 10800, 3375, 21600, 3 + 44, 3 + 22 }
 };
 
-static const mso_CustomShape msoCurvedDownArrow =
+const mso_CustomShape msoCurvedDownArrow =
 {
    const_cast<SvxMSDffVertPair*>(mso_sptCurvedDownVert), SAL_N_ELEMENTS( mso_sptCurvedDownVert ),
    const_cast<sal_uInt16*>(mso_sptCurvedDownSegm), sizeof( mso_sptCurvedDownSegm ) >> 1,
@@ -1351,7 +1351,7 @@ static const mso_CustomShape msoCurvedDownArrow =
    const_cast<SvxMSDffHandle*>(mso_sptCurvedDownHandles), SAL_N_ELEMENTS( mso_sptCurvedDownHandles )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedUpVert[] =
+const SvxMSDffVertPair mso_sptCurvedUpVert[] =
 {
    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 0, 0 }, { 4 MSO_I, 21 MSO_I },
    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I },
@@ -1362,7 +1362,7 @@ static const SvxMSDffVertPair mso_sptCurvedUpVert[] =
    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I },
    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I }, { 14 MSO_I, 0 }
 };
-static const sal_uInt16 mso_sptCurvedUpSegm[] =
+const sal_uInt16 mso_sptCurvedUpSegm[] =
 {
    0xa408,
    0x0003,
@@ -1375,7 +1375,7 @@ static const sal_uInt16 mso_sptCurvedUpSegm[] =
    0x6000,
    0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedUpCalc[] =
+const SvxMSDffCalculationData mso_sptCurvedUpCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1423,19 +1423,19 @@ static const SvxMSDffCalculationData mso_sptCurvedUpCalc[] =
     { 0x0001, { 21600, 2195, 16384 } },
     { 0x0001, { 21600, 14189, 16384 } }
 };
-static const sal_Int32 mso_sptCurvedUpDefault[] =
+const sal_Int32 mso_sptCurvedUpDefault[] =
 {
     3, 12960, 19440, 7200
 };
-static const SvxMSDffTextRectangles mso_sptCurvedUpTextRect[] =
+const SvxMSDffTextRectangles mso_sptCurvedUpTextRect[] =
 {
    { { 41 MSO_I, 43 MSO_I }, { 42 MSO_I, 44 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptCurvedUpGluePoints[] =
+const SvxMSDffVertPair mso_sptCurvedUpGluePoints[] =
 {
    { 8 MSO_I, 0 }, { 11 MSO_I, 2 MSO_I }, { 15 MSO_I, 0 }, { 16 MSO_I, 21 MSO_I }, { 13 MSO_I, 2 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
+const SvxMSDffHandle mso_sptCurvedUpHandles[] =
 {
    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
        0x100, 0, 10800, 10800, 3 + 37, 3 + 27, 0, 10800 },
@@ -1444,7 +1444,7 @@ static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
    {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
        21600, 0x102, 10800, 10800, 3375, 21600, 0, 3 + 40 }
 };
-static const mso_CustomShape msoCurvedUpArrow =
+const mso_CustomShape msoCurvedUpArrow =
 {
    const_cast<SvxMSDffVertPair*>(mso_sptCurvedUpVert), SAL_N_ELEMENTS( mso_sptCurvedUpVert ),
    const_cast<sal_uInt16*>(mso_sptCurvedUpSegm), sizeof( mso_sptCurvedUpSegm ) >> 1,
@@ -1457,7 +1457,7 @@ static const mso_CustomShape msoCurvedUpArrow =
    const_cast<SvxMSDffHandle*>(mso_sptCurvedUpHandles), SAL_N_ELEMENTS( mso_sptCurvedUpHandles )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
+const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
 {
    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 0, 0 }, { 21 MSO_I, 4 MSO_I },
    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 2 MSO_I, 12 MSO_I },
@@ -1468,7 +1468,7 @@ static const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 24 MSO_I, 16 MSO_I },
    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 24 MSO_I, 16 MSO_I }, { 0, 14 MSO_I }
 };
-static const sal_uInt16 mso_sptCurvedLeftSegm[] =
+const sal_uInt16 mso_sptCurvedLeftSegm[] =
 {
    0xa608,
    0x0003,
@@ -1480,15 +1480,15 @@ static const sal_uInt16 mso_sptCurvedLeftSegm[] =
    0x6000,
    0x8000
 };
-static const SvxMSDffTextRectangles mso_sptCurvedLeftTextRect[] =
+const SvxMSDffTextRectangles mso_sptCurvedLeftTextRect[] =
 {
     { { 43 MSO_I, 41 MSO_I }, { 44 MSO_I, 42 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptCurvedLeftGluePoints[] =
+const SvxMSDffVertPair mso_sptCurvedLeftGluePoints[] =
 {
     { 0, 15 MSO_I }, { 2 MSO_I, 11 MSO_I }, { 0, 8 MSO_I }, { 2 MSO_I, 13 MSO_I }, { 21 MSO_I, 16 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCurvedLeftHandles[] =
+const SvxMSDffHandle mso_sptCurvedLeftHandles[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, 0, 10800, 3 + 37, 3 + 27 },
@@ -1497,7 +1497,7 @@ static const SvxMSDffHandle mso_sptCurvedLeftHandles[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x102, 21600, 10800, 10800, 0, 3 + 40, 3375, 21600 }
 };
-static const mso_CustomShape msoCurvedLeftArrow =
+const mso_CustomShape msoCurvedLeftArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedLeftVert), SAL_N_ELEMENTS( mso_sptCurvedLeftVert ),
     const_cast<sal_uInt16*>(mso_sptCurvedLeftSegm), sizeof( mso_sptCurvedLeftSegm ) >> 1,
@@ -1510,20 +1510,20 @@ static const mso_CustomShape msoCurvedLeftArrow =
     const_cast<SvxMSDffHandle*>(mso_sptCurvedLeftHandles), SAL_N_ELEMENTS( mso_sptCurvedLeftHandles )
 };
 
-static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
+const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
 {                                                               // adjustment2 : y 0 - 10800
     { 3375, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 21600, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 3375, 2 MSO_I }, { 0, 0 MSO_I },
     { 675, 0 MSO_I }, { 675, 2 MSO_I }, { 0, 2 MSO_I }, { 1350, 0 MSO_I },
     { 2700, 0 MSO_I }, { 2700, 2 MSO_I }, { 1350, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptStripedRightArrowSegm[] =
+const sal_uInt16 mso_sptStripedRightArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptStripedRightArrowCalc[] =
+const SvxMSDffCalculationData mso_sptStripedRightArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
@@ -1532,16 +1532,16 @@ static const SvxMSDffCalculationData mso_sptStripedRightArrowCalc[] =
     { 0x6001, { 0x403, 0x400, 10800 } },
     { 0x6000, { 0x401, 0x404, 0 } }
 };
-static const SvxMSDffTextRectangles mso_sptStripedRightArrowTextRect[] =
+const SvxMSDffTextRectangles mso_sptStripedRightArrowTextRect[] =
 {
     { { 3375, 0 MSO_I }, { 5 MSO_I, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptStripedRightArrowHandle[] =
+const SvxMSDffHandle mso_sptStripedRightArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 3375, 21600, 0, 10800 }
 };
-static const mso_CustomShape msoStripedRightArrow =
+const mso_CustomShape msoStripedRightArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptStripedRightArrowVert), SAL_N_ELEMENTS( mso_sptStripedRightArrowVert ),
     const_cast<sal_uInt16*>(mso_sptStripedRightArrowSegm), sizeof( mso_sptStripedRightArrowSegm ) >> 1,
@@ -1554,12 +1554,12 @@ static const mso_CustomShape msoStripedRightArrow =
     const_cast<SvxMSDffHandle*>(mso_sptStripedRightArrowHandle), SAL_N_ELEMENTS( mso_sptStripedRightArrowHandle )
 };
 
-static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
+const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
 {                                                               // adjustment2 : y 0 - 10800    (default 5400)
     { 0, 1 MSO_I }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 0 }, { 21600, 10800 },
     { 0 MSO_I, 21600 }, { 0 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 5 MSO_I, 10800 }, { 0, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
+const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1569,16 +1569,16 @@ static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
     { 0x6001, { 0x403, 0x404, 10800 } },
     { 0x8000, { 21600, 0, 0x405 }}
 };
-static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // todo
+const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // todo
 {
     { { 5 MSO_I, 1 MSO_I }, { 6 MSO_I, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptNotchedRightArrowHandle[] =
+const SvxMSDffHandle mso_sptNotchedRightArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0x101, 10800, 10800, 0, 21600, 0, 10800 }
 };
-static const mso_CustomShape msoNotchedRightArrow =
+const mso_CustomShape msoNotchedRightArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptNotchedRightArrowVert), SAL_N_ELEMENTS( mso_sptNotchedRightArrowVert ),
     nullptr, 0,
@@ -1591,33 +1591,33 @@ static const mso_CustomShape msoNotchedRightArrow =
     const_cast<SvxMSDffHandle*>(mso_sptNotchedRightArrowHandle), SAL_N_ELEMENTS( mso_sptNotchedRightArrowHandle )
 };
 
-static const SvxMSDffVertPair mso_sptHomePlateVert[] =  // adjustment1 : x 0 - 21600
+const SvxMSDffVertPair mso_sptHomePlateVert[] =  // adjustment1 : x 0 - 21600
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 21600, 10800 }, { 0 MSO_I, 21600 },
     { 0, 21600 }
 };
-static const sal_uInt16 mso_sptHomePlateSegm[] =
+const sal_uInt16 mso_sptHomePlateSegm[] =
 {
     0x4000, 0x0004, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptHomePlateCalc[] =
+const SvxMSDffCalculationData mso_sptHomePlateCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
-static const sal_Int32 mso_sptHomePlateDefault[] =
+const sal_Int32 mso_sptHomePlateDefault[] =
 {
     1, 16200
 };
-static const SvxMSDffTextRectangles mso_sptHomePlateTextRect[] =    // todo
+const SvxMSDffTextRectangles mso_sptHomePlateTextRect[] =    // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptHomePlateHandle[] =
+const SvxMSDffHandle mso_sptHomePlateHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoHomePlate =
+const mso_CustomShape msoHomePlate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptHomePlateVert), SAL_N_ELEMENTS( mso_sptHomePlateVert ),
     const_cast<sal_uInt16*>(mso_sptHomePlateSegm), sizeof( mso_sptHomePlateSegm ) >> 1,
@@ -1630,34 +1630,34 @@ static const mso_CustomShape msoHomePlate =
     const_cast<SvxMSDffHandle*>(mso_sptHomePlateHandle), SAL_N_ELEMENTS( mso_sptHomePlateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptChevronVert[] =    // adjustment1 : x 0 - 21600
+const SvxMSDffVertPair mso_sptChevronVert[] =    // adjustment1 : x 0 - 21600
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 21600, 10800 }, { 0 MSO_I, 21600 },
     { 0, 21600 }, { 1 MSO_I, 10800 }
 };
-static const sal_uInt16 mso_sptChevronSegm[] =
+const sal_uInt16 mso_sptChevronSegm[] =
 {
     0x4000, 0x0005, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptChevronCalc[] =
+const SvxMSDffCalculationData mso_sptChevronCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, 0x0400 } }
 };
-static const sal_Int32 mso_sptChevronDefault[] =
+const sal_Int32 mso_sptChevronDefault[] =
 {
     1, 16200
 };
-static const SvxMSDffTextRectangles mso_sptChevronTextRect[] =  // todo
+const SvxMSDffTextRectangles mso_sptChevronTextRect[] =  // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptChevronHandle[] =
+const SvxMSDffHandle mso_sptChevronHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 21600, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoChevron =
+const mso_CustomShape msoChevron =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptChevronVert), SAL_N_ELEMENTS( mso_sptChevronVert ),
     const_cast<sal_uInt16*>(mso_sptChevronSegm), sizeof( mso_sptChevronSegm ) >> 1,
@@ -1670,17 +1670,17 @@ static const mso_CustomShape msoChevron =
     const_cast<SvxMSDffHandle*>(mso_sptChevronHandle), SAL_N_ELEMENTS( mso_sptChevronHandle )
 };
 
-static const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  // adjustment1 : x 0 - 21000
+const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  // adjustment1 : x 0 - 21000
 {                                                               // adjustment2 : y 0 - 10800
     { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I },
     { 2 MSO_I, 1 MSO_I }, { 21600, 10800 }, { 2 MSO_I, 4 MSO_I }, { 2 MSO_I, 5 MSO_I },
     { 0 MSO_I, 5 MSO_I }, { 0 MSO_I, 21600 }, { 0, 21600 }
 };
-static const sal_uInt16 mso_sptRightArrowCalloutSegm[] =
+const sal_uInt16 mso_sptRightArrowCalloutSegm[] =
 {
     0x4000, 0x000a, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptRightArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptRightArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1689,15 +1689,15 @@ static const SvxMSDffCalculationData mso_sptRightArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0401 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptRightArrowCalloutDefault[] =
+const sal_Int32 mso_sptRightArrowCalloutDefault[] =
 {
     4, 14400, 5400, 18000, 8100
 };
-static const SvxMSDffTextRectangles mso_sptRightArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptRightArrowCalloutTextRect[] =
 {
     { { 0, 0 }, { 0 MSO_I, 21600 } }
 };
-static const SvxMSDffHandle mso_sptRightArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptRightArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0, 0x102, MIN_INT32, 0x7fffffff },
@@ -1706,7 +1706,7 @@ static const SvxMSDffHandle mso_sptRightArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         1, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
-static const mso_CustomShape msoRightArrowCallout =
+const mso_CustomShape msoRightArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRightArrowCalloutVert), SAL_N_ELEMENTS( mso_sptRightArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptRightArrowCalloutSegm), sizeof( mso_sptRightArrowCalloutSegm ) >> 1,
@@ -1719,17 +1719,17 @@ static const mso_CustomShape msoRightArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptRightArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptRightArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   // adjustment1 : x 0 - 21600, adjustment2 : y 0 - 10800
+const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   // adjustment1 : x 0 - 21600, adjustment2 : y 0 - 10800
 {                                                               // adjustment3 : x 0 - 21600, adjustment4 : y 0 - 10800
     { 0 MSO_I, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0 MSO_I, 21600 },
     { 0 MSO_I, 5 MSO_I }, { 2 MSO_I, 5 MSO_I }, { 2 MSO_I, 4 MSO_I }, { 0, 10800 },
     { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptLeftArrowCalloutSegm[] =
+const sal_uInt16 mso_sptLeftArrowCalloutSegm[] =
 {
     0x4000, 0x000a, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptLeftArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptLeftArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1738,15 +1738,15 @@ static const SvxMSDffCalculationData mso_sptLeftArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0401 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptLeftArrowCalloutDefault[] =
+const sal_Int32 mso_sptLeftArrowCalloutDefault[] =
 {
     4, 7200, 5400, 3600, 8100
 };
-static const SvxMSDffTextRectangles mso_sptLeftArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftArrowCalloutTextRect[] =
 {
     { { 0 MSO_I, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptLeftArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptLeftArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 21600, MIN_INT32, 0x7fffffff },
@@ -1755,7 +1755,7 @@ static const SvxMSDffHandle mso_sptLeftArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
-static const mso_CustomShape msoLeftArrowCallout =
+const mso_CustomShape msoLeftArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftArrowCalloutVert), SAL_N_ELEMENTS( mso_sptLeftArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptLeftArrowCalloutSegm), sizeof( mso_sptLeftArrowCalloutSegm ) >> 1,
@@ -1768,17 +1768,17 @@ static const mso_CustomShape msoLeftArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptLeftArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptLeftArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptUpArrowCalloutVert[] =
+const SvxMSDffVertPair mso_sptUpArrowCalloutVert[] =
 {
     { 21600, 0 MSO_I }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 MSO_I },
     { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I }, { 10800, 0 },
     { 4 MSO_I, 2 MSO_I }, { 5 MSO_I, 2 MSO_I }, { 5 MSO_I, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptUpArrowCalloutSegm[] =
+const sal_uInt16 mso_sptUpArrowCalloutSegm[] =
 {
     0x4000, 0x000a, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptUpArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptUpArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1787,15 +1787,15 @@ static const SvxMSDffCalculationData mso_sptUpArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0401 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptUpArrowCalloutDefault[] =
+const sal_Int32 mso_sptUpArrowCalloutDefault[] =
 {
     4, 7200, 5400, 3600, 8100
 };
-static const SvxMSDffTextRectangles mso_sptUpArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptUpArrowCalloutTextRect[] =
 {
     { { 0, 0 MSO_I }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptUpArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptUpArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 21600 },
@@ -1804,7 +1804,7 @@ static const SvxMSDffHandle mso_sptUpArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 0, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoUpArrowCallout =
+const mso_CustomShape msoUpArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptUpArrowCalloutVert), SAL_N_ELEMENTS( mso_sptUpArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptUpArrowCalloutSegm), sizeof( mso_sptUpArrowCalloutSegm ) >> 1,
@@ -1817,17 +1817,17 @@ static const mso_CustomShape msoUpArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptUpArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptUpArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptDownArrowCalloutVert[] =
+const SvxMSDffVertPair mso_sptDownArrowCalloutVert[] =
 {
     { 0, 0 MSO_I }, { 0, 0 }, { 21600, 0 }, { 21600, 0 MSO_I },
     { 5 MSO_I, 0 MSO_I }, { 5 MSO_I, 2 MSO_I }, { 4 MSO_I, 2 MSO_I }, { 10800, 21600 },
     { 1 MSO_I, 2 MSO_I }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptDownArrowCalloutSegm[] =
+const sal_uInt16 mso_sptDownArrowCalloutSegm[] =
 {
     0x4000, 0x000a, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptDownArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptDownArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1836,15 +1836,15 @@ static const SvxMSDffCalculationData mso_sptDownArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0401 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptDownArrowCalloutDefault[] =
+const sal_Int32 mso_sptDownArrowCalloutDefault[] =
 {
     4, 14400, 5400, 18000, 8100
 };
-static const SvxMSDffTextRectangles mso_sptDownArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptDownArrowCalloutTextRect[] =
 {
     { { 0, 0 }, { 21600, 0 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptDownArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptDownArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x102 },
@@ -1853,7 +1853,7 @@ static const SvxMSDffHandle mso_sptDownArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 1, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoDownArrowCallout =
+const mso_CustomShape msoDownArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptDownArrowCalloutVert), SAL_N_ELEMENTS( mso_sptDownArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptDownArrowCalloutSegm), sizeof( mso_sptDownArrowCalloutSegm ) >> 1,
@@ -1866,7 +1866,7 @@ static const mso_CustomShape msoDownArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptDownArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptDownArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptLeftRightArrowCalloutVert[] =
+const SvxMSDffVertPair mso_sptLeftRightArrowCalloutVert[] =
 {
     { 0 MSO_I, 0 }, { 4 MSO_I, 0 }, { 4 MSO_I, 3 MSO_I }, { 6 MSO_I, 3 MSO_I },
     { 6 MSO_I, 1 MSO_I }, { 21600, 10800 }, { 6 MSO_I, 5 MSO_I }, { 6 MSO_I, 7 MSO_I },
@@ -1874,11 +1874,11 @@ static const SvxMSDffVertPair mso_sptLeftRightArrowCalloutVert[] =
     { 2 MSO_I, 7 MSO_I }, { 2 MSO_I, 5 MSO_I }, { 0, 10800 }, { 2 MSO_I, 1 MSO_I },
     { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptLeftRightArrowCalloutSegm[] =
+const sal_uInt16 mso_sptLeftRightArrowCalloutSegm[] =
 {
     0x4000, 0x0011, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptLeftRightArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptLeftRightArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1889,15 +1889,15 @@ static const SvxMSDffCalculationData mso_sptLeftRightArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0402 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptLeftRightArrowCalloutDefault[] =
+const sal_Int32 mso_sptLeftRightArrowCalloutDefault[] =
 {
     4, 5400, 5500, 2700, 8100
 };
-static const SvxMSDffTextRectangles mso_sptLeftRightArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftRightArrowCalloutTextRect[] =
 {
     { { 0 MSO_I, 0 }, { 4 MSO_I, 21600 } }
 };
-static const SvxMSDffHandle mso_sptLeftRightArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptLeftRightArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 0x102, 10800, MIN_INT32, 0x7fffffff },
@@ -1906,7 +1906,7 @@ static const SvxMSDffHandle mso_sptLeftRightArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 0x103 }
 };
-static const mso_CustomShape msoLeftRightArrowCallout =
+const mso_CustomShape msoLeftRightArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftRightArrowCalloutVert), SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptLeftRightArrowCalloutSegm), sizeof( mso_sptLeftRightArrowCalloutSegm ) >> 1,
@@ -1919,7 +1919,7 @@ static const mso_CustomShape msoLeftRightArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptLeftRightArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptLeftRightArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptUpDownArrowCalloutVert[] =
+const SvxMSDffVertPair mso_sptUpDownArrowCalloutVert[] =
 {
     { 0, 0 MSO_I }, { 0, 4 MSO_I }, { 3 MSO_I, 4 MSO_I }, { 3 MSO_I, 6 MSO_I },
     { 1 MSO_I, 6 MSO_I }, { 10800, 21600 }, { 5 MSO_I, 6 MSO_I }, { 7 MSO_I, 6 MSO_I },
@@ -1927,11 +1927,11 @@ static const SvxMSDffVertPair mso_sptUpDownArrowCalloutVert[] =
     { 7 MSO_I, 2 MSO_I }, { 5 MSO_I, 2 MSO_I }, { 10800, 0 }, { 1 MSO_I, 2 MSO_I },
     { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptUpDownArrowCalloutSegm[] =
+const sal_uInt16 mso_sptUpDownArrowCalloutSegm[] =
 {
     0x4000, 0x0011, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptUpDownArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptUpDownArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1942,15 +1942,15 @@ static const SvxMSDffCalculationData mso_sptUpDownArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0402 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptUpDownArrowCalloutDefault[] =
+const sal_Int32 mso_sptUpDownArrowCalloutDefault[] =
 {
     4, 5400, 5500, 2700, 8100
 };
-static const SvxMSDffTextRectangles mso_sptUpDownArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptUpDownArrowCalloutTextRect[] =
 {
     { { 0, 0 MSO_I }, { 21600, 4 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptUpDownArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptUpDownArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 10800 },
@@ -1959,7 +1959,7 @@ static const SvxMSDffHandle mso_sptUpDownArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         0x101, 0, 10800, 10800, 0, 0x103, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoUpDownArrowCallout =
+const mso_CustomShape msoUpDownArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptUpDownArrowCalloutVert), SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptUpDownArrowCalloutSegm), sizeof( mso_sptUpDownArrowCalloutSegm ) >> 1,
@@ -1972,7 +1972,7 @@ static const mso_CustomShape msoUpDownArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptUpDownArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptUpDownArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptQuadArrowCalloutVert[] =
+const SvxMSDffVertPair mso_sptQuadArrowCalloutVert[] =
 {
     { 0 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
     { 10800, 0 }, { 5 MSO_I, 2 MSO_I }, { 7 MSO_I, 2 MSO_I }, { 7 MSO_I, 0 MSO_I },
@@ -1983,11 +1983,11 @@ static const SvxMSDffVertPair mso_sptQuadArrowCalloutVert[] =
     { 0 MSO_I, 4 MSO_I }, { 0 MSO_I, 7 MSO_I }, { 2 MSO_I, 7 MSO_I }, { 2 MSO_I, 5 MSO_I },
     { 0, 10800 }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptQuadArrowCalloutSegm[] =
+const sal_uInt16 mso_sptQuadArrowCalloutSegm[] =
 {
     0x4000, 0x001f, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptQuadArrowCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptQuadArrowCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1998,15 +1998,15 @@ static const SvxMSDffCalculationData mso_sptQuadArrowCalloutCalc[] =
     { 0x8000, { 21600, 0, 0x0402 } },
     { 0x8000, { 21600, 0, 0x0403 } }
 };
-static const sal_Int32 mso_sptQuadArrowCalloutDefault[] =
+const sal_Int32 mso_sptQuadArrowCalloutDefault[] =
 {
     4, 5400, 8100, 2700, 9400
 };
-static const SvxMSDffTextRectangles mso_sptQuadArrowCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptQuadArrowCalloutTextRect[] =
 {
     { { 0 MSO_I, 0 MSO_I }, { 4 MSO_I, 4 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptQuadArrowCalloutHandle[] =
+const SvxMSDffHandle mso_sptQuadArrowCalloutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0x102, 0x101 },
@@ -2015,7 +2015,7 @@ static const SvxMSDffHandle mso_sptQuadArrowCalloutHandle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x103, 0x102, 10800, 10800, 0x101, 10800, 0, 0x100 }
 };
-static const mso_CustomShape msoQuadArrowCallout =
+const mso_CustomShape msoQuadArrowCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptQuadArrowCalloutVert), SAL_N_ELEMENTS( mso_sptQuadArrowCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptQuadArrowCalloutSegm), sizeof( mso_sptQuadArrowCalloutSegm ) >> 1,
@@ -2028,7 +2028,7 @@ static const mso_CustomShape msoQuadArrowCallout =
     const_cast<SvxMSDffHandle*>(mso_sptQuadArrowCalloutHandle), SAL_N_ELEMENTS( mso_sptQuadArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptCircularArrowVert[] =
+const SvxMSDffVertPair mso_sptCircularArrowVert[] =
 {
     { 0x03 MSO_I, 0x03 MSO_I },
     { 0x14 MSO_I, 0x14 MSO_I },
@@ -2041,11 +2041,11 @@ static const SvxMSDffVertPair mso_sptCircularArrowVert[] =
     { 0x2F MSO_I, 0x2E MSO_I },
     { 0x1D MSO_I, 0x1C MSO_I }
 };
-static const sal_uInt16 mso_sptCircularArrowSegm[] =
+const sal_uInt16 mso_sptCircularArrowSegm[] =
 {
     0xa404, 0xa504, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCircularArrowCalc[] =
+const SvxMSDffCalculationData mso_sptCircularArrowCalc[] =
 {
     { 0x2000, { 0x0147, 0x0000, 0x0000 } },
     { 0x2000, { 0x0148, 0x0000, 0x0000 } },
@@ -2096,22 +2096,22 @@ static const SvxMSDffCalculationData mso_sptCircularArrowCalc[] =
     { 0x6000, { 0x041C, 0x042B, 0x0000 } },
     { 0x6000, { 0x041D, 0x042D, 0x0000 } }
 };
-static const sal_Int32 mso_sptCircularArrowDefault[] =
+const sal_Int32 mso_sptCircularArrowDefault[] =
 {
     3, 180, 0, 5500
 };
-static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
+const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffHandle mso_sptCircularArrowHandle[] =
+const SvxMSDffHandle mso_sptCircularArrowHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         10800, 0x100, 10800, 10800, 10800, 10800, -0x7f4c0000, 0x00b40000 },
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x102, 0x101, 10800, 10800, 0, 10800, -0x7f4c0000, 0x00b40000 }
 };
-static const mso_CustomShape msoCircularArrow =
+const mso_CustomShape msoCircularArrow =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCircularArrowVert), SAL_N_ELEMENTS( mso_sptCircularArrowVert ),
     const_cast<sal_uInt16*>(mso_sptCircularArrowSegm), sizeof( mso_sptCircularArrowSegm ) >> 1,
@@ -2124,19 +2124,19 @@ static const mso_CustomShape msoCircularArrow =
     const_cast<SvxMSDffHandle*>(mso_sptCircularArrowHandle), SAL_N_ELEMENTS( mso_sptCircularArrowHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptCubeVert[] =
+const SvxMSDffVertPair mso_sptCubeVert[] =
 {
     { 0, 12 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 11 MSO_I, 0 }, { 11 MSO_I, 3 MSO_I }, { 4 MSO_I, 12 MSO_I },
     { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 11 MSO_I, 0 }, { 4 MSO_I, 1 MSO_I },
     { 4 MSO_I, 12 MSO_I  }, { 4 MSO_I, 1 MSO_I },   { 11 MSO_I, 0 }, { 11 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptCubeSegm[] =
+const sal_uInt16 mso_sptCubeSegm[] =
 {
     0x4000, 0x0005, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCubeCalc[] =
+const SvxMSDffCalculationData mso_sptCubeCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoTop, 0x400, 0 } },
@@ -2152,20 +2152,20 @@ static const SvxMSDffCalculationData mso_sptCubeCalc[] =
     { 0x2000, { DFF_Prop_geoRight, 0, 0 } },        // 11
     { 0x2000, { DFF_Prop_geoBottom, 0, 0 } }        // 12
 };
-static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
+const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
     { { 0, 1 MSO_I }, { 4 MSO_I, 12 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptCubeHandle[] =
+const SvxMSDffHandle mso_sptCubeHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const SvxMSDffVertPair mso_sptCubeGluePoints[] =
+const SvxMSDffVertPair mso_sptCubeGluePoints[] =
 {
     { 7 MSO_I, 0 }, { 6 MSO_I, 1 MSO_I }, { 0, 10 MSO_I }, { 6 MSO_I, 21600 }, { 4 MSO_I, 10 MSO_I }, { 21600, 9 MSO_I }
 };
-static const mso_CustomShape msoCube =
+const mso_CustomShape msoCube =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCubeVert), SAL_N_ELEMENTS( mso_sptCubeVert ),
     const_cast<sal_uInt16*>(mso_sptCubeSegm), sizeof( mso_sptCubeSegm ) >> 1,
@@ -2178,7 +2178,7 @@ static const mso_CustomShape msoCube =
     const_cast<SvxMSDffHandle*>(mso_sptCubeHandle), SAL_N_ELEMENTS( mso_sptCubeHandle )
 };
 
-static const SvxMSDffVertPair mso_sptBevelVert[] =
+const SvxMSDffVertPair mso_sptBevelVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 1 MSO_I, 0 MSO_I }, { 0 MSO_I, 0 MSO_I },
@@ -2186,7 +2186,7 @@ static const SvxMSDffVertPair mso_sptBevelVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptBevelSegm[] =
+const sal_uInt16 mso_sptBevelSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2194,23 +2194,23 @@ static const sal_uInt16 mso_sptBevelSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBevelCalc[] =
+const SvxMSDffCalculationData mso_sptBevelCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 21599, 21600 } },
     { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
 
-static const SvxMSDffTextRectangles mso_sptBevelTextRect[] =
+const SvxMSDffTextRectangles mso_sptBevelTextRect[] =
 {
     { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptBevelHandle[] =
+const SvxMSDffHandle mso_sptBevelHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBevel =
+const mso_CustomShape msoBevel =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBevelVert), SAL_N_ELEMENTS( mso_sptBevelVert ),
     const_cast<sal_uInt16*>(mso_sptBevelSegm), sizeof( mso_sptBevelSegm ) >> 1,
@@ -2223,18 +2223,18 @@ static const mso_CustomShape msoBevel =
     const_cast<SvxMSDffHandle*>(mso_sptBevelHandle), SAL_N_ELEMENTS( mso_sptBevelHandle )
 };
 
-static const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   // adjustment1 : x 10800 - 21600
+const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   // adjustment1 : x 10800 - 21600
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 0 MSO_I }, { 0 MSO_I, 21600 },
     { 0, 21600 }, { 0 MSO_I, 21600 }, { 3 MSO_I, 0 MSO_I }, { 8 MSO_I, 9 MSO_I },
     { 10 MSO_I, 11 MSO_I }, { 21600, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptFoldedCornerSegm[] =
+const sal_uInt16 mso_sptFoldedCornerSegm[] =
 {
     0x4000, 0x0004, 0x6001, 0x8000,
     0x4000, 0x0001, 0x2001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptFoldedCornerCalc[] =
+const SvxMSDffCalculationData mso_sptFoldedCornerCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, 0x400 } },
@@ -2249,20 +2249,20 @@ static const SvxMSDffCalculationData mso_sptFoldedCornerCalc[] =
     { 0x8000, { 21600, 0, 0x404 } },
     { 0x6000, { 0x400, 0x407, 0 } }
 };
-static const sal_Int32 mso_sptFoldedCornerDefault[] =
+const sal_Int32 mso_sptFoldedCornerDefault[] =
 {
     1, 18900
 };
-static const SvxMSDffTextRectangles mso_sptFoldedCornerTextRect[] =
+const SvxMSDffTextRectangles mso_sptFoldedCornerTextRect[] =
 {
     { { 0, 0 }, { 21600, 11 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptFoldedCornerHandle[] =
+const SvxMSDffHandle mso_sptFoldedCornerHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 10800, 21600, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoFoldedCorner =
+const mso_CustomShape msoFoldedCorner =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFoldedCornerVert), SAL_N_ELEMENTS( mso_sptFoldedCornerVert ),
     const_cast<sal_uInt16*>(mso_sptFoldedCornerSegm), sizeof( mso_sptFoldedCornerSegm ) >> 1,
@@ -2275,7 +2275,7 @@ static const mso_CustomShape msoFoldedCorner =
     const_cast<SvxMSDffHandle*>(mso_sptFoldedCornerHandle), SAL_N_ELEMENTS( mso_sptFoldedCornerHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
+const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 1 MSO_I, 0 MSO_I }, { 0 MSO_I, 0 MSO_I },
@@ -2283,7 +2283,7 @@ static const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 2 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonBlankSegm[] =
+const sal_uInt16 mso_sptActionButtonBlankSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2291,22 +2291,22 @@ static const sal_uInt16 mso_sptActionButtonBlankSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonBlankCalc[] =
+const SvxMSDffCalculationData mso_sptActionButtonBlankCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 21599, 21600 } },
     { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
-static const SvxMSDffTextRectangles mso_sptActionButtonBlankTextRect[] =
+const SvxMSDffTextRectangles mso_sptActionButtonBlankTextRect[] =
 {
     { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 2 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptButtonHandle[] =
+const SvxMSDffHandle mso_sptButtonHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 5400, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoActionButtonBlank =
+const mso_CustomShape msoActionButtonBlank =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonBlankVert), SAL_N_ELEMENTS( mso_sptActionButtonBlankVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonBlankSegm), sizeof( mso_sptActionButtonBlankSegm ) >> 1,
@@ -2319,11 +2319,11 @@ static const mso_CustomShape msoActionButtonBlank =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffTextRectangles mso_sptActionButtonTextRect[] =
+const SvxMSDffTextRectangles mso_sptActionButtonTextRect[] =
 {
     { { 1 MSO_I, 2 MSO_I }, { 3 MSO_I, 4 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptActionButtonHomeVert[] =
+const SvxMSDffVertPair mso_sptActionButtonHomeVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2341,7 +2341,7 @@ static const SvxMSDffVertPair mso_sptActionButtonHomeVert[] =
     { 0x18 MSO_I, 8 MSO_I }, { 0x1c MSO_I, 8 MSO_I }, { 0x1c MSO_I, 0x1a MSO_I }, { 0x20 MSO_I, 0x1a MSO_I }
 
 };
-static const sal_uInt16 mso_sptActionButtonHomeSegm[] =
+const sal_uInt16 mso_sptActionButtonHomeSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2352,7 +2352,7 @@ static const sal_uInt16 mso_sptActionButtonHomeSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0007, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2394,7 +2394,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj v
     { 0x6000, { 0x0423, 0x0408, 0 } }   // 24
 
 };
-static const mso_CustomShape msoActionButtonHome =
+const mso_CustomShape msoActionButtonHome =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonHomeVert), SAL_N_ELEMENTS( mso_sptActionButtonHomeVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonHomeSegm), sizeof( mso_sptActionButtonHomeSegm ) >> 1,
@@ -2407,7 +2407,7 @@ static const mso_CustomShape msoActionButtonHome =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
+const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2427,7 +2427,7 @@ static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
     { 7 MSO_I, 0x3c MSO_I }, { 0x34 MSO_I, 8 MSO_I }, { 0x34 MSO_I, 0x16 MSO_I },       // ccp
     { 0x34 MSO_I, 0x14 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
+const sal_uInt16 mso_sptActionButtonHelpSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2437,7 +2437,7 @@ static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
     0x4000, 0xa704, 0x6000, 0x8000,
     0x4000, 0x0001, 0x2004, 0x0001, 0x2004, 0x0001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2504,7 +2504,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj v
     { 0x4001, { 6290, 0x0406, 1 } },    // 3d
     { 0x6000, { 0x043d, 0x0408, 0 } }   // 3e
 };
-static const mso_CustomShape msoActionButtonHelp =
+const mso_CustomShape msoActionButtonHelp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonHelpVert), SAL_N_ELEMENTS( mso_sptActionButtonHelpVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonHelpSegm), sizeof( mso_sptActionButtonHelpSegm ) >> 1,
@@ -2517,7 +2517,7 @@ static const mso_CustomShape msoActionButtonHelp =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonInformationVert[] =
+const SvxMSDffVertPair mso_sptActionButtonInformationVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2530,7 +2530,7 @@ static const SvxMSDffVertPair mso_sptActionButtonInformationVert[] =
     { 0x22 MSO_I, 0x24 MSO_I }, { 0x1a MSO_I, 0x24 MSO_I }, { 0x1a MSO_I, 0x20 MSO_I }, { 0x26 MSO_I, 0x20 MSO_I },
     { 0x26 MSO_I, 0x28 MSO_I }, { 0x1a MSO_I, 0x28 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonInformationSegm[] =
+const sal_uInt16 mso_sptActionButtonInformationSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2541,7 +2541,7 @@ static const sal_uInt16 mso_sptActionButtonInformationSegm[] =
     0x4000, 0xa704, 0x6000, 0x8000,
     0x4000, 0x0009, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2592,7 +2592,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // a
     { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
 
 };
-static const mso_CustomShape msoActionButtonInformation =
+const mso_CustomShape msoActionButtonInformation =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonInformationVert), SAL_N_ELEMENTS( mso_sptActionButtonInformationVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonInformationSegm), sizeof( mso_sptActionButtonInformationSegm ) >> 1,
@@ -2605,7 +2605,7 @@ static const mso_CustomShape msoActionButtonInformation =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
+const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2615,7 +2615,7 @@ static const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
 
     { 0xa MSO_I, 8 MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
+const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2624,7 +2624,7 @@ static const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0002, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2645,7 +2645,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // a
     { 0x4001, { 8050, 0x0406, 1 } },    // f
     { 0x6000, { 0x040f, 0x0408, 0 } }   // 10
 };
-static const mso_CustomShape msoActionButtonBackPrevious =
+const mso_CustomShape msoActionButtonBackPrevious =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonBackPreviousVert), SAL_N_ELEMENTS( mso_sptActionButtonBackPreviousVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonForwardBackSegm), sizeof( mso_sptActionButtonForwardBackSegm ) >> 1,
@@ -2658,7 +2658,7 @@ static const mso_CustomShape msoActionButtonBackPrevious =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
+const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2668,7 +2668,7 @@ static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
 
     { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 8 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }
 };
-static const mso_CustomShape msoActionButtonForwardNext =
+const mso_CustomShape msoActionButtonForwardNext =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonForwardNextVert), SAL_N_ELEMENTS( mso_sptActionButtonForwardNextVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonForwardBackSegm), sizeof( mso_sptActionButtonForwardBackSegm ) >> 1,
@@ -2681,7 +2681,7 @@ static const mso_CustomShape msoActionButtonForwardNext =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
+const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2692,7 +2692,7 @@ static const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
     { 0xa MSO_I, 8 MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0xc MSO_I },
     { 0x14 MSO_I, 0xc MSO_I }, { 0x14 MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
+const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2703,7 +2703,7 @@ static const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
     0x4000, 0x0002, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2735,7 +2735,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    
     { 0x4001, { 6140, 0x0406, 1 } },    // 17
     { 0x6000, { 0x0417, 0x0407, 0 } }   // 18
 };
-static const mso_CustomShape msoActionButtonBeginning =
+const mso_CustomShape msoActionButtonBeginning =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonBeginningVert), SAL_N_ELEMENTS( mso_sptActionButtonBeginningVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonBeginningEndSegm), sizeof( mso_sptActionButtonBeginningEndSegm ) >> 1,
@@ -2748,7 +2748,7 @@ static const mso_CustomShape msoActionButtonBeginning =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
+const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2760,7 +2760,7 @@ static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
 
     { 0x18 MSO_I, 0xc MSO_I }, { 0x18 MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0xc MSO_I }
 };
-static const mso_CustomShape msoActionButtonEnd =
+const mso_CustomShape msoActionButtonEnd =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonEndVert), SAL_N_ELEMENTS( mso_sptActionButtonEndVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonBeginningEndSegm), sizeof( mso_sptActionButtonBeginningEndSegm ) >> 1,
@@ -2773,7 +2773,7 @@ static const mso_CustomShape msoActionButtonEnd =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
+const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2791,7 +2791,7 @@ static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
     { 0x18 MSO_I, 0x2a MSO_I },                                                                             // p
     { 0x2c MSO_I, 0x2a MSO_I }, { 0xa MSO_I, 0x26 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }                        // ccp
 };
-static const sal_uInt16 mso_sptActionButtonReturnSegm[] =
+const sal_uInt16 mso_sptActionButtonReturnSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2800,7 +2800,7 @@ static const sal_uInt16 mso_sptActionButtonReturnSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0002, 0x2001, 0x0001, 0x2001, 0x0006,0x2001, 0x0001, 0x2001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2849,7 +2849,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj v
     { 0x4001, { -5090, 0x0406, 1 } },   // 2b
     { 0x6000, { 0x042b, 0x0407, 0 } }   // 2c
 };
-static const mso_CustomShape msoActionButtonReturn =
+const mso_CustomShape msoActionButtonReturn =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonReturnVert), SAL_N_ELEMENTS( mso_sptActionButtonReturnVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonReturnSegm), sizeof( mso_sptActionButtonReturnSegm ) >> 1,
@@ -2862,7 +2862,7 @@ static const mso_CustomShape msoActionButtonReturn =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonDocumentVert[] =
+const SvxMSDffVertPair mso_sptActionButtonDocumentVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2873,7 +2873,7 @@ static const SvxMSDffVertPair mso_sptActionButtonDocumentVert[] =
     { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0x10 MSO_I, 0x12 MSO_I }, { 0x10 MSO_I, 0x14 MSO_I },
     { 0xa MSO_I, 0x14 MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0x10 MSO_I, 0x12 MSO_I }, { 0xe MSO_I, 0x12 MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonDocumentSegm[] =
+const sal_uInt16 mso_sptActionButtonDocumentSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2884,7 +2884,7 @@ static const sal_uInt16 mso_sptActionButtonDocumentSegm[] =
     0x4000, 0x0004, 0x6001, 0x8000,
     0x4000, 0x0002, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2909,7 +2909,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // a
     { 0x4001, { 7830, 0x0406, 1 } },    // 13
     { 0x6000, { 0x0413, 0x0408, 0 } }   // 14
 };
-static const mso_CustomShape msoActionButtonDocument =
+const mso_CustomShape msoActionButtonDocument =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonDocumentVert), SAL_N_ELEMENTS( mso_sptActionButtonDocumentVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonDocumentSegm), sizeof( mso_sptActionButtonDocumentSegm ) >> 1,
@@ -2922,7 +2922,7 @@ static const mso_CustomShape msoActionButtonDocument =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
+const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -2937,7 +2937,7 @@ static const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
 
     { 0x18 MSO_I, 0x16 MSO_I }, { 0x1a MSO_I, 0x1e MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonSoundSegm[] =
+const sal_uInt16 mso_sptActionButtonSoundSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -2950,7 +2950,7 @@ static const sal_uInt16 mso_sptActionButtonSoundSegm[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2985,7 +2985,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj v
     { 0x4001, { 5930, 0x0406, 1 } },    // 1d
     { 0x6000, { 0x041d, 0x0408, 0 } }   // 1e
 };
-static const mso_CustomShape msoActionButtonSound =
+const mso_CustomShape msoActionButtonSound =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonSoundVert), SAL_N_ELEMENTS( mso_sptActionButtonSoundVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonSoundSegm), sizeof( mso_sptActionButtonSoundSegm ) >> 1,
@@ -2998,7 +2998,7 @@ static const mso_CustomShape msoActionButtonSound =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptActionButtonMovieVert[] =
+const SvxMSDffVertPair mso_sptActionButtonMovieVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 3 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
@@ -3012,7 +3012,7 @@ static const SvxMSDffVertPair mso_sptActionButtonMovieVert[] =
     { 0x16 MSO_I, 0x24 MSO_I }, { 0x16 MSO_I, 0x26 MSO_I }, { 0x2a MSO_I, 0x26 MSO_I }, { 0x2a MSO_I, 0x28 MSO_I },
     { 0x10 MSO_I, 0x28 MSO_I }, { 0xe MSO_I, 0x2c MSO_I }, { 0xa MSO_I, 0x2c MSO_I }
 };
-static const sal_uInt16 mso_sptActionButtonMovieSegm[] =
+const sal_uInt16 mso_sptActionButtonMovieSegm[] =
 {
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000,
@@ -3021,7 +3021,7 @@ static const sal_uInt16 mso_sptActionButtonMovieSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0012, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj value 0 - 5400
+const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj value 0 - 5400
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -3070,7 +3070,7 @@ static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj v
     { 0x4001, { -640, 0x0406, 1 } },    // 2b
     { 0x6000, { 0x042b, 0x0408, 0 } }   // 2c
 };
-static const mso_CustomShape msoActionButtonMovie =
+const mso_CustomShape msoActionButtonMovie =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptActionButtonMovieVert), SAL_N_ELEMENTS( mso_sptActionButtonMovieVert ),
     const_cast<sal_uInt16*>(mso_sptActionButtonMovieSegm), sizeof( mso_sptActionButtonMovieSegm ) >> 1,
@@ -3083,37 +3083,37 @@ static const mso_CustomShape msoActionButtonMovie =
     const_cast<SvxMSDffHandle*>(mso_sptButtonHandle), SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
+const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
     { 7305, 7515 }, { 1000, 1865 }, { 0, 360 },
     { 14295, 7515 }, { 1000, 1865 }, { 0, 360 },
     { 4870, 1 MSO_I }, { 8680, 2 MSO_I }, { 12920, 2 MSO_I }, { 16730, 1 MSO_I }
 };
-static const sal_uInt16 mso_sptSmileyFaceSegm[] =
+const sal_uInt16 mso_sptSmileyFaceSegm[] =
 {
     0xa203, 0x6000, 0x8000,
     0xa203, 0x6000, 0x8000,
     0xa203, 0x6000, 0x8000,
     0x4000, 0x2001, 0xaa00, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptSmileyFaceCalc[] =
+const SvxMSDffCalculationData mso_sptSmileyFaceCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 14510 } },
     { 0x8000, { 18520, 0, 0x400 } },
     { 0x4000, { 14510, 0x400, 0 } }
 };
 
-static const sal_Int32 mso_sptSmileyFaceDefault[] =
+const sal_Int32 mso_sptSmileyFaceDefault[] =
 {
     1, 18520
 };
-static const SvxMSDffHandle mso_sptSmileyHandle[] =
+const SvxMSDffHandle mso_sptSmileyHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 14510, 18520 }
 };
-static const mso_CustomShape msoSmileyFace =
+const mso_CustomShape msoSmileyFace =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSmileyFaceVert), SAL_N_ELEMENTS( mso_sptSmileyFaceVert ),
     const_cast<sal_uInt16*>(mso_sptSmileyFaceSegm), sizeof( mso_sptSmileyFaceSegm ) >> 1,
@@ -3126,26 +3126,26 @@ static const mso_CustomShape msoSmileyFace =
     const_cast<SvxMSDffHandle*>(mso_sptSmileyHandle), SAL_N_ELEMENTS( mso_sptSmileyHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
+const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
     { 10800, 10800 }, { 1 MSO_I, 1 MSO_I }, { 0, 360 }
 };
-static const sal_uInt16 mso_sptDonutSegm[] =
+const sal_uInt16 mso_sptDonutSegm[] =
 {
     0xa203, 0x6000, 0xa203, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptDonutCalc[] =
+const SvxMSDffCalculationData mso_sptDonutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } }
 };
-static const SvxMSDffHandle mso_sptDonutHandle[] =
+const SvxMSDffHandle mso_sptDonutHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoDonut =
+const mso_CustomShape msoDonut =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptDonutVert), SAL_N_ELEMENTS( mso_sptDonutVert ),
     const_cast<sal_uInt16*>(mso_sptDonutSegm), sizeof( mso_sptDonutSegm ) >> 1,
@@ -3158,18 +3158,18 @@ static const mso_CustomShape msoDonut =
     const_cast<SvxMSDffHandle*>(mso_sptDonutHandle), SAL_N_ELEMENTS( mso_sptDonutHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
+const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
 {
     { 10800, 10800 },  { 10800, 10800 }, { 0, 360 },
     { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I },
     { 9 MSO_I, 0xa MSO_I }, { 0xb MSO_I, 0xc MSO_I }, { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I },
     { 0xd MSO_I, 0xe MSO_I }, { 0xf MSO_I, 0x10 MSO_I }
 };
-static const sal_uInt16 mso_sptNoSmokingSegm[] =
+const sal_uInt16 mso_sptNoSmokingSegm[] =
 {
     0xa203, 0x6000, 0xa404, 0x6000, 0xa404, 0x6000, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
+const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         // 0
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },     // 1
@@ -3189,12 +3189,12 @@ static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
     { 0x6081, { 0x406, 0x407, 45 } },                   // f
     { 0x6082, { 0x406, 0x407, 45 } }                    // 10
 };
-static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
+const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 7200, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoNoSmoking =
+const mso_CustomShape msoNoSmoking =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptNoSmokingVert), SAL_N_ELEMENTS( mso_sptNoSmokingVert ),
     const_cast<sal_uInt16*>(mso_sptNoSmokingSegm), sizeof( mso_sptNoSmokingSegm ) >> 1,
@@ -3207,20 +3207,20 @@ static const mso_CustomShape msoNoSmoking =
     const_cast<SvxMSDffHandle*>(mso_sptNoSmokingHandle), SAL_N_ELEMENTS( mso_sptNoSmokingHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptBlockArcVert[] =   // adj value 0 (degrees)
+const SvxMSDffVertPair mso_sptBlockArcVert[] =   // adj value 0 (degrees)
 {                                                       // adj value 1: 0 -> 10800;
     { 0, 0 }, { 21600, 21600 }, { 4 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I },
     { 5 MSO_I, 5 MSO_I }, { 6 MSO_I, 6 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptBlockArcSegm[] =
+const sal_uInt16 mso_sptBlockArcSegm[] =
 {
     0xA404, 0xa504, 0x6001, 0x8000
 };
-static const sal_Int32 mso_sptBlockArcDefault[] =
+const sal_Int32 mso_sptBlockArcDefault[] =
 {
     2, 180, 5400
 };
-static const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
+const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -3232,12 +3232,12 @@ static const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
     { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } },
     { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } }
 };
-static const SvxMSDffHandle mso_sptBlockArcHandle[] =
+const SvxMSDffHandle mso_sptBlockArcHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBlockArc =
+const mso_CustomShape msoBlockArc =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBlockArcVert), SAL_N_ELEMENTS( mso_sptBlockArcVert ),
     const_cast<sal_uInt16*>(mso_sptBlockArcSegm), sizeof( mso_sptBlockArcSegm ) >> 1,
@@ -3251,7 +3251,7 @@ static const mso_CustomShape msoBlockArc =
 };
 
 // aware : control points are always part of the bounding box
-static const SvxMSDffVertPair mso_sptHeartVert[] =
+const SvxMSDffVertPair mso_sptHeartVert[] =
 {
     { 10800, 21599 }, { 321, 6886 }, { 70, 6036 },      // ppp
     { -9, 5766 }, { -1, 5474 }, { 2, 5192 },            // ccp
@@ -3289,19 +3289,19 @@ static const SvxMSDffVertPair mso_sptHeartVert[] =
     { 21478, 6326 }, { 21366, 6603 }, { 21282, 6887 },  // ccp
     { 10802, 21602 }                                    // p
 };
-static const sal_uInt16 mso_sptHeartSegm[] =
+const sal_uInt16 mso_sptHeartSegm[] =
 {
     0x4000, 0x0002, 0x2010, 0x0001, 0x2010, 0x0001, 0x6001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptHeartTextRect[] =
+const SvxMSDffTextRectangles mso_sptHeartTextRect[] =
 {
     { { 5080, 2540 }, { 16520, 13550 } }
 };
-static const SvxMSDffVertPair mso_sptHeartGluePoints[] =
+const SvxMSDffVertPair mso_sptHeartGluePoints[] =
 {
     { 10800, 2180 }, { 3090, 10800 }, { 10800, 21600 }, { 18490, 10800 }
 };
-static const mso_CustomShape msoHeart =
+const mso_CustomShape msoHeart =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptHeartVert), SAL_N_ELEMENTS( mso_sptHeartVert ),
     const_cast<sal_uInt16*>(mso_sptHeartSegm), sizeof( mso_sptHeartSegm ) >> 1,
@@ -3314,22 +3314,22 @@ static const mso_CustomShape msoHeart =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptLightningBoldVert[] =
+const SvxMSDffVertPair mso_sptLightningBoldVert[] =
 {
     { 8458, 0 }, { 0, 3923 }, { 7564, 8416 }, { 4993, 9720 },
     { 12197, 13904 }, { 9987, 14934 }, { 21600, 21600 }, { 14768, 12911 },
     { 16558, 12016 }, { 11030, 6840 }, { 12831, 6120 }, { 8458, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptLightningBoldTextRect[] =
+const SvxMSDffTextRectangles mso_sptLightningBoldTextRect[] =
 {
     { { 8680, 7410 }, { 13970, 14190 } }
 };
-static const SvxMSDffVertPair mso_sptLightningBoldGluePoints[] =
+const SvxMSDffVertPair mso_sptLightningBoldGluePoints[] =
 {
     { 8458, 0 }, { 0, 3923 }, { 4993, 9720 }, { 9987, 14934 }, { 21600, 21600 },
     { 16558, 12016 }, { 12831, 6120 }
 };
-static const mso_CustomShape msoLightningBold =
+const mso_CustomShape msoLightningBold =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLightningBoldVert), SAL_N_ELEMENTS( mso_sptLightningBoldVert ),
     nullptr, 0,
@@ -3342,7 +3342,7 @@ static const mso_CustomShape msoLightningBold =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
+const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
 {
     { 0, 10800 },               { 4 MSO_I, 8 MSO_I },       { 4 MSO_I, 9 MSO_I },
     { 0x0a MSO_I, 0x0b MSO_I }, { 0x0c MSO_I, 0x0d MSO_I }, { 0x0e MSO_I, 0x0f MSO_I },
@@ -3354,7 +3354,7 @@ static const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
     { 0x2e MSO_I, 0x2f MSO_I }, { 0x30 MSO_I, 0x31 MSO_I }, { 0x32 MSO_I, 0x33 MSO_I },
     { 10800, 10800 }, { 0x36 MSO_I, 0x36 MSO_I },   { 0, 360 }
 };
-static const sal_uInt16 mso_sptSunSegm[] =
+const sal_uInt16 mso_sptSunSegm[] =
 {
     0x4000, 0x0002, 0x6001, 0x8000,
     0x4000, 0x0002, 0x6001, 0x8000,
@@ -3366,7 +3366,7 @@ static const sal_uInt16 mso_sptSunSegm[] =
     0x4000, 0x0002, 0x6001, 0x8000,
     0xa203, 0x6000, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptSunCalc[] =
+const SvxMSDffCalculationData mso_sptSunCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
@@ -3424,16 +3424,16 @@ static const SvxMSDffCalculationData mso_sptSunCalc[] =
     { 0x2081, { DFF_Prop_adjustValue, 10800, 225 } },   // 0x35
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } }
 };
-static const SvxMSDffTextRectangles mso_sptSunTextRect[] =
+const SvxMSDffTextRectangles mso_sptSunTextRect[] =
 {
     { { 0x34 MSO_I, 0x34 MSO_I }, { 0x35 MSO_I, 0x35 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptSunHandle[] =
+const SvxMSDffHandle mso_sptSunHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 2700, 10125, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoSun =
+const mso_CustomShape msoSun =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSunVert), SAL_N_ELEMENTS( mso_sptSunVert ),
     const_cast<sal_uInt16*>(mso_sptSunSegm), sizeof( mso_sptSunSegm ) >> 1,
@@ -3446,7 +3446,7 @@ static const mso_CustomShape msoSun =
     const_cast<SvxMSDffHandle*>(mso_sptSunHandle), SAL_N_ELEMENTS( mso_sptSunHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
+const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
 {
     { 21600, 0 },
     { 3 MSO_I, 4 MSO_I },   { 0 MSO_I, 5080 },      { 0 MSO_I, 10800 }, // ccp
@@ -3454,11 +3454,11 @@ static const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
     { 9740, 21600 },        { 0, 16730 },           { 0, 10800 },       // ccp
     { 0, 4870 },            { 9740, 0 },            { 21600, 0  }       // ccp
 };
-static const sal_uInt16 mso_sptMoonSegm[] =
+const sal_uInt16 mso_sptMoonSegm[] =
 {
     0x4000, 0x2004, 0x6000, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptMoonCalc[] =
+const SvxMSDffCalculationData mso_sptMoonCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
@@ -3472,20 +3472,20 @@ static const SvxMSDffCalculationData mso_sptMoonCalc[] =
     { 0x6000, { 0x407, 0x407, 0 } },
     { 0x8000, { 21600, 0, 0x408 } }
 };
-static const SvxMSDffTextRectangles mso_sptMoonTextRect[] =
+const SvxMSDffTextRectangles mso_sptMoonTextRect[] =
 {
     { { 9 MSO_I, 8 MSO_I }, { 0 MSO_I, 0xa MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptMoonGluePoints[] =
+const SvxMSDffVertPair mso_sptMoonGluePoints[] =
 {
     { 21600, 0 }, { 0, 10800 }, { 21600, 21600 }, { 0 MSO_I, 10800 }
 };
-static const SvxMSDffHandle mso_sptMoonHandle[] =
+const SvxMSDffHandle mso_sptMoonHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 18900, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoMoon =
+const mso_CustomShape msoMoon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptMoonVert), SAL_N_ELEMENTS( mso_sptMoonVert ),
     const_cast<sal_uInt16*>(mso_sptMoonSegm), sizeof( mso_sptMoonSegm ) >> 1,
@@ -3498,7 +3498,7 @@ static const mso_CustomShape msoMoon =
     const_cast<SvxMSDffHandle*>(mso_sptMoonHandle), SAL_N_ELEMENTS( mso_sptMoonHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10800
 {
     { 0 MSO_I, 0 },     { 0, 1 MSO_I },     // left top alignment
     { 0, 2 MSO_I },     { 0 MSO_I, 21600 }, // left  bottom "
@@ -3509,14 +3509,14 @@ static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10
     { 3 MSO_I, 21600 }, { 21600, 2 MSO_I },
     { 21600, 1 MSO_I }, { 3 MSO_I, 0 }
 };
-static const sal_uInt16 mso_sptBracketPairSegm[] =
+const sal_uInt16 mso_sptBracketPairSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0x0001,             // filling area
     0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
+const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
 {
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
     { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
@@ -3535,16 +3535,16 @@ static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
     { 0x6000, { DFF_Prop_geoRight, 0x405, 0 } },
     { 0x6000, { DFF_Prop_geoBottom, 0x405, 0 } }
 };
-static const SvxMSDffTextRectangles mso_sptBracketPairTextRect[] =
+const SvxMSDffTextRectangles mso_sptBracketPairTextRect[] =
 {
     { { 8 MSO_I, 9 MSO_I }, { 0xa MSO_I, 0xb MSO_I } }
 };
-static const SvxMSDffHandle mso_sptBracketPairHandle[] =
+const SvxMSDffHandle mso_sptBracketPairHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBracketPair =
+const mso_CustomShape msoBracketPair =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBracketPairVert), SAL_N_ELEMENTS( mso_sptBracketPairVert ),
     const_cast<sal_uInt16*>(mso_sptBracketPairSegm), sizeof( mso_sptBracketPairSegm ) >> 1,
@@ -3557,20 +3557,20 @@ static const mso_CustomShape msoBracketPair =
     const_cast<SvxMSDffHandle*>(mso_sptBracketPairHandle), SAL_N_ELEMENTS( mso_sptBracketPairHandle )        // handles
 };
 
-static const sal_uInt16 mso_sptPlaqueSegm[] =
+const sal_uInt16 mso_sptPlaqueSegm[] =
 {
     0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptPlaqueTextRect[] =
+const SvxMSDffTextRectangles mso_sptPlaqueTextRect[] =
 {
     { { 0xc MSO_I, 0xd MSO_I }, { 0xe MSO_I, 0xf MSO_I } }
 };
-static const SvxMSDffHandle mso_sptPlaqueHandle[] =
+const SvxMSDffHandle mso_sptPlaqueHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoPlaque =
+const mso_CustomShape msoPlaque =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBracketPairVert), SAL_N_ELEMENTS( mso_sptBracketPairVert ),
     const_cast<sal_uInt16*>(mso_sptPlaqueSegm), sizeof( mso_sptPlaqueSegm ) >> 1,
@@ -3583,7 +3583,7 @@ static const mso_CustomShape msoPlaque =
     const_cast<SvxMSDffHandle*>(mso_sptPlaqueHandle), SAL_N_ELEMENTS( mso_sptPlaqueHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
+const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
 {
     { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           // left bracket
     { 0 MSO_I, 7 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 4 MSO_I, 21600 },
@@ -3594,14 +3594,14 @@ static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
     { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },
     { 3 MSO_I, 6 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 8 MSO_I, 0 }
 };
-static const sal_uInt16 mso_sptBracePairSegm[] =
+const sal_uInt16 mso_sptBracePairSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x0001,                     // filling area
     0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
+const SvxMSDffCalculationData mso_sptBracePairCalc[] =
 {
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
     { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
@@ -3619,16 +3619,16 @@ static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
     { 0xa000, { DFF_Prop_geoRight, 0, 0x40a } },                    // xd
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x409 } }                    // xe
 };
-static const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
+const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
 {
     { { 0xb MSO_I, 0xc MSO_I }, { 0xd MSO_I, 0xe MSO_I } }
 };
-static const SvxMSDffHandle mso_sptBracePairHandle[] =
+const SvxMSDffHandle mso_sptBracePairHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::SWITCHED,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 }
 };
-static const mso_CustomShape msoBracePair =
+const mso_CustomShape msoBracePair =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBracePairVert), SAL_N_ELEMENTS( mso_sptBracePairVert ),
     const_cast<sal_uInt16*>(mso_sptBracePairSegm), sizeof( mso_sptBracePairSegm ) >> 1,
@@ -3641,7 +3641,7 @@ static const mso_CustomShape msoBracePair =
     const_cast<SvxMSDffHandle*>(mso_sptBracePairHandle), SAL_N_ELEMENTS( mso_sptBracePairHandle )        // handles
 };
 
-static const SvxMSDffCalculationData mso_sptBracketCalc[] =
+const SvxMSDffCalculationData mso_sptBracketCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
@@ -3649,29 +3649,29 @@ static const SvxMSDffCalculationData mso_sptBracketCalc[] =
     { 0x6000, { DFF_Prop_geoTop, 0x400, 0 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
-static const sal_uInt16 mso_sptBracketSegm[] =
+const sal_uInt16 mso_sptBracketSegm[] =
 {
     0x4000, 0x2001, 0x0001, 0x2001, 0x8000
 };
-static const SvxMSDffVertPair mso_sptLeftBracketVert[] =    // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptLeftBracketVert[] =    // adj value 0 -> 10800
 {
     { 21600, 0 }, { 10800,  0 }, { 0, 3 MSO_I }, { 0, 1 MSO_I },
     { 0, 2 MSO_I }, { 0, 4 MSO_I }, { 10800, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffTextRectangles mso_sptLeftBracketTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftBracketTextRect[] =
 {
     { { 6350, 3 MSO_I }, { 21600, 4 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptLeftBracketGluePoints[] =
+const SvxMSDffVertPair mso_sptLeftBracketGluePoints[] =
 {
     { 21600, 0 }, { 0, 10800 }, { 21600, 21600 }
 };
-static const SvxMSDffHandle mso_sptLeftBracketHandle[] =
+const SvxMSDffHandle mso_sptLeftBracketHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoLeftBracket =
+const mso_CustomShape msoLeftBracket =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptLeftBracketVert), SAL_N_ELEMENTS( mso_sptLeftBracketVert ),
     const_cast<sal_uInt16*>(mso_sptBracketSegm), sizeof( mso_sptBracketSegm ) >> 1,
@@ -3683,25 +3683,25 @@ static const mso_CustomShape msoLeftBracket =
     const_cast<SvxMSDffVertPair*>(mso_sptLeftBracketGluePoints), SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
     const_cast<SvxMSDffHandle*>(mso_sptLeftBracketHandle), SAL_N_ELEMENTS( mso_sptLeftBracketHandle )        // handles
 };
-static const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
 {
     { 0, 0 }, { 10800, 0 }, { 21600, 3 MSO_I }, { 21600, 1 MSO_I },
     { 21600, 2 MSO_I }, { 21600, 4 MSO_I }, { 10800, 21600 }, { 0, 21600 }
 };
-static const SvxMSDffTextRectangles mso_sptRightBracketTextRect[] =
+const SvxMSDffTextRectangles mso_sptRightBracketTextRect[] =
 {
     { { 0, 3 MSO_I }, { 15150, 4 MSO_I } }
 };
-static const SvxMSDffVertPair mso_sptRightBracketGluePoints[] =
+const SvxMSDffVertPair mso_sptRightBracketGluePoints[] =
 {
     { 0, 0 }, { 0, 21600 }, { 21600, 10800 }
 };
-static const SvxMSDffHandle mso_sptRightBracketHandle[] =
+const SvxMSDffHandle mso_sptRightBracketHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         1, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoRightBracket =
+const mso_CustomShape msoRightBracket =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRightBracketVert), SAL_N_ELEMENTS( mso_sptRightBracketVert ),
     const_cast<sal_uInt16*>(mso_sptBracketSegm), sizeof( mso_sptBracketSegm ) >> 1,
@@ -3714,7 +3714,7 @@ static const mso_CustomShape msoRightBracket =
     const_cast<SvxMSDffHandle*>(mso_sptRightBracketHandle), SAL_N_ELEMENTS( mso_sptRightBracketHandle )      // handles
 };
 
-static const SvxMSDffCalculationData mso_sptBraceCalc[] =
+const SvxMSDffCalculationData mso_sptBraceCalc[] =
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
@@ -3728,15 +3728,15 @@ static const SvxMSDffCalculationData mso_sptBraceCalc[] =
     { 0x2001, { DFF_Prop_adjustValue, 10000, 31953 } },
     { 0x8000, { 21600, 0, 0x409 } }
 };
-static const sal_uInt16 mso_sptBraceSegm[] =
+const sal_uInt16 mso_sptBraceSegm[] =
 {
     0x4000, 0x2001, 0x0001, 0x2002, 0x0001, 0x2001, 0x8000
 };
-static const sal_Int32 mso_sptBraceDefault[] =
+const sal_Int32 mso_sptBraceDefault[] =
 {
     2, 1800, 10800
 };
-static const SvxMSDffVertPair mso_sptLeftBraceVert[] =
+const SvxMSDffVertPair mso_sptLeftBraceVert[] =
 {
     { 21600, 0 },                                               // p
     { 16200, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },       // ccp
@@ -3746,18 +3746,18 @@ static const SvxMSDffVertPair mso_sptLeftBraceVert[] =
     { 10800, 7 MSO_I },                                         // p
     { 10800, 8 MSO_I }, { 16200, 21600 }, { 21600, 21600 }      // ccp
 };
-static const SvxMSDffTextRectangles mso_sptLeftBraceTextRect[] =
+const SvxMSDffTextRectangles mso_sptLeftBraceTextRect[] =
 {
     { { 13800, 9 MSO_I }, { 21600, 10 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptLeftBraceHandle[] =
+const SvxMSDffHandle mso_sptLeftBraceHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 },
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
+const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
 {                                               // adj value1 0 -> 21600
     const_cast<SvxMSDffVertPair*>(mso_sptLeftBraceVert), SAL_N_ELEMENTS( mso_sptLeftBraceVert ),
     const_cast<sal_uInt16*>(mso_sptBraceSegm), sizeof( mso_sptBraceSegm ) >> 1,
@@ -3769,7 +3769,7 @@ static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
     const_cast<SvxMSDffVertPair*>(mso_sptLeftBracketGluePoints), SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
     const_cast<SvxMSDffHandle*>(mso_sptLeftBraceHandle), SAL_N_ELEMENTS( mso_sptLeftBraceHandle )        // handles
 };
-static const SvxMSDffVertPair mso_sptRightBraceVert[] =
+const SvxMSDffVertPair mso_sptRightBraceVert[] =
 {
     { 0, 0 },                                                   // p
     { 5400, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },        // ccp
@@ -3779,18 +3779,18 @@ static const SvxMSDffVertPair mso_sptRightBraceVert[] =
     { 10800, 7 MSO_I },                                         // p
     { 10800, 8 MSO_I }, { 5400, 21600 }, { 0, 21600 }           // ccp
 };
-static const SvxMSDffTextRectangles mso_sptRightBraceTextRect[] =
+const SvxMSDffTextRectangles mso_sptRightBraceTextRect[] =
 {
     { { 0, 9 MSO_I }, { 7800, 10 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptRightBraceHandle[] =
+const SvxMSDffHandle mso_sptRightBraceHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 },
     {   SvxMSDffHandleFlags::RANGE,
         1, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
+const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
 {                                               // adj value1 0 -> 21600
     const_cast<SvxMSDffVertPair*>(mso_sptRightBraceVert), SAL_N_ELEMENTS( mso_sptRightBraceVert ),
     const_cast<sal_uInt16*>(mso_sptBraceSegm), sizeof( mso_sptBraceSegm ) >> 1,
@@ -3803,7 +3803,7 @@ static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
     const_cast<SvxMSDffHandle*>(mso_sptRightBraceHandle), SAL_N_ELEMENTS( mso_sptRightBraceHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
+const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
 {
     { 10901, 5905 }, { 8458, 2399 }, { 7417, 6425 }, { 476, 2399 },
     { 4732, 7722 }, { 106, 8718 }, { 3828, 11880 }, { 243, 14689 },
@@ -3812,15 +3812,15 @@ static const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
     { 16938, 13044 }, { 21600, 13393 }, { 17710, 10579 }, { 21198, 8242 },
     { 16806, 7417 }, { 18482, 4560 }, { 14257, 5429 }, { 14623, 106 }, { 10901, 5905 }
 };
-static const SvxMSDffTextRectangles mso_sptIrregularSeal1TextRect[] =
+const SvxMSDffTextRectangles mso_sptIrregularSeal1TextRect[] =
 {
     { { 4680, 6570 }, { 16140, 13280 } }
 };
-static const SvxMSDffVertPair mso_sptIrregularSeal1GluePoints[] =
+const SvxMSDffVertPair mso_sptIrregularSeal1GluePoints[] =
 {
     { 14623, 106 }, { 106, 8718 }, { 8590, 21600 }, { 21600, 13393 }
 };
-static const mso_CustomShape msoIrregularSeal1 =
+const mso_CustomShape msoIrregularSeal1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptIrregularSeal1Vert), SAL_N_ELEMENTS( mso_sptIrregularSeal1Vert ),
     nullptr, 0,
@@ -3833,7 +3833,7 @@ static const mso_CustomShape msoIrregularSeal1 =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptIrregularSeal2Vert[] =
+const SvxMSDffVertPair mso_sptIrregularSeal2Vert[] =
 {
     { 11464, 4340 }, { 9722, 1887 }, { 8548, 6383 }, { 4503, 3626 },
     { 5373, 7816 }, { 1174, 8270 }, { 3934, 11592 }, { 0, 12875 },
@@ -3844,15 +3844,15 @@ static const SvxMSDffVertPair mso_sptIrregularSeal2Vert[] =
     { 16382, 6533 }, { 18005, 3172 }, { 14524, 5778 }, { 14789, 0 },
     { 11464, 4340 }
 };
-static const SvxMSDffTextRectangles mso_sptIrregularSeal2TextRect[] =
+const SvxMSDffTextRectangles mso_sptIrregularSeal2TextRect[] =
 {
     { { 5400, 6570 }, { 14160, 15290 } }
 };
-static const SvxMSDffVertPair mso_sptIrregularSeal2GluePoints[] =
+const SvxMSDffVertPair mso_sptIrregularSeal2GluePoints[] =
 {
     { 9722, 1887 }, { 0, 12875 }, { 11614, 18844 }, { 21600, 6646 }
 };
-static const mso_CustomShape msoIrregularSeal2 =
+const mso_CustomShape msoIrregularSeal2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptIrregularSeal2Vert), SAL_N_ELEMENTS( mso_sptIrregularSeal2Vert ),
     nullptr, 0,
@@ -3865,13 +3865,13 @@ static const mso_CustomShape msoIrregularSeal2 =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptSeal4Vert[] =      // adjustment1 : 0 - 10800
+const SvxMSDffVertPair mso_sptSeal4Vert[] =      // adjustment1 : 0 - 10800
 {
     { 0, 10800 }, { 4 MSO_I, 4 MSO_I }, { 10800, 0 }, { 3 MSO_I, 4 MSO_I },
     { 21600, 10800 }, { 3 MSO_I, 3 MSO_I }, { 10800, 21600 }, { 4 MSO_I, 3 MSO_I },
     { 0, 10800 }
 };
-static const SvxMSDffCalculationData mso_sptSeal4Calc[] =
+const SvxMSDffCalculationData mso_sptSeal4Calc[] =
 {
     { 0x0000, { 7600, 0, 0 } },
     { 0x6001, { 0x400, DFF_Prop_adjustValue, 10800 } },
@@ -3879,16 +3879,16 @@ static const SvxMSDffCalculationData mso_sptSeal4Calc[] =
     { 0x4000, { 10800, 0x402, 0 } },
     { 0x8000, { 10800, 0, 0x402 } }
 };
-static const SvxMSDffTextRectangles mso_sptSeal4TextRect[] =
+const SvxMSDffTextRectangles mso_sptSeal4TextRect[] =
 {
     { { 4 MSO_I, 4 MSO_I }, { 3 MSO_I, 3 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptSealHandle[] =
+const SvxMSDffHandle mso_sptSealHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoSeal4 =
+const mso_CustomShape msoSeal4 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSeal4Vert), SAL_N_ELEMENTS( mso_sptSeal4Vert ),
     nullptr, 0,
@@ -3901,17 +3901,17 @@ static const mso_CustomShape msoSeal4 =
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
 
-static const SvxMSDffVertPair mso_sptStarVert[] =
+const SvxMSDffVertPair mso_sptStarVert[] =
 {
     { 10797, 0 }, { 8278, 8256 }, { 0, 8256 }, { 6722, 13405 },
     { 4198, 21600 }, { 10797, 16580 }, { 17401, 21600 }, { 14878, 13405 },
     { 21600, 8256 }, { 13321, 8256 }, { 10797, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptStarTextRect[] =
+const SvxMSDffTextRectangles mso_sptStarTextRect[] =
 {
     { { 6722, 8256 }, { 14878, 15460 } }
 };
-static const mso_CustomShape msoStar =
+const mso_CustomShape msoStar =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptStarVert), SAL_N_ELEMENTS( mso_sptStarVert ),
     nullptr, 0,
@@ -3924,7 +3924,7 @@ static const mso_CustomShape msoStar =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
+const SvxMSDffCalculationData mso_sptSeal24Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
     { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
@@ -4028,7 +4028,7 @@ static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
     { 0x2081, { 0x400, 10800, 352 } },
     { 0x2082, { 0x400, 10800, 352 } }
 };
-static const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
 {
     { 5 MSO_I, 6 MSO_I }, { 11 MSO_I, 12 MSO_I }, { 17 MSO_I, 18 MSO_I }, { 23 MSO_I, 24 MSO_I },
     { 29 MSO_I, 30 MSO_I }, { 35 MSO_I, 36 MSO_I }, { 41 MSO_I, 42 MSO_I }, { 47 MSO_I, 48 MSO_I },
@@ -4036,11 +4036,11 @@ static const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
     { 77 MSO_I, 78 MSO_I }, { 83 MSO_I, 84 MSO_I }, { 89 MSO_I, 90 MSO_I }, { 95 MSO_I, 96 MSO_I },
     { 5 MSO_I, 6 MSO_I }
 };
-static const SvxMSDffTextRectangles mso_sptSealTextRect[] =
+const SvxMSDffTextRectangles mso_sptSealTextRect[] =
 {
     { { 1 MSO_I, 2 MSO_I }, { 3 MSO_I, 4 MSO_I } }
 };
-static const mso_CustomShape msoSeal8 =
+const mso_CustomShape msoSeal8 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSeal8Vert), SAL_N_ELEMENTS( mso_sptSeal8Vert ),
     nullptr, 0,
@@ -4052,7 +4052,7 @@ static const mso_CustomShape msoSeal8 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
-static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
+const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 {
     { 0x05 MSO_I, 0x06 MSO_I }, { 0x07 MSO_I, 0x08 MSO_I }, { 0x09 MSO_I, 0x0a MSO_I }, { 0x0b MSO_I, 0x0c MSO_I },
     { 0x0d MSO_I, 0x0e MSO_I }, { 0x0f MSO_I, 0x10 MSO_I }, { 0x11 MSO_I, 0x12 MSO_I }, { 0x13 MSO_I, 0x14 MSO_I },
@@ -4064,7 +4064,7 @@ static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
     { 0x3d MSO_I, 0x3e MSO_I }, { 0x3f MSO_I, 0x40 MSO_I }, { 0x41 MSO_I, 0x42 MSO_I }, { 0x43 MSO_I, 0x44 MSO_I },
     { 0x05 MSO_I, 0x06 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
+const SvxMSDffCalculationData mso_sptSeal16Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
     { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
@@ -4136,7 +4136,7 @@ static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
     { 0x2081, { 0x400, 10800, 348 } },
     { 0x2082, { 0x400, 10800, 348 } }
 };
-static const mso_CustomShape msoSeal16 =
+const mso_CustomShape msoSeal16 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSeal16Vert), SAL_N_ELEMENTS( mso_sptSeal16Vert ),
     nullptr, 0,
@@ -4148,7 +4148,7 @@ static const mso_CustomShape msoSeal16 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
-static const SvxMSDffVertPair mso_sptSeal24Vert[] =
+const SvxMSDffVertPair mso_sptSeal24Vert[] =
 {
     { 0x05 MSO_I, 0x06 MSO_I }, { 0x07 MSO_I, 0x08 MSO_I }, { 0x09 MSO_I, 0x0a MSO_I }, { 0x0b MSO_I, 0x0c MSO_I },
     { 0x0d MSO_I, 0x0e MSO_I }, { 0x0f MSO_I, 0x10 MSO_I }, { 0x11 MSO_I, 0x12 MSO_I }, { 0x13 MSO_I, 0x14 MSO_I },
@@ -4164,7 +4164,7 @@ static const SvxMSDffVertPair mso_sptSeal24Vert[] =
     { 0x5d MSO_I, 0x5e MSO_I }, { 0x5f MSO_I, 0x60 MSO_I }, { 0x61 MSO_I, 0x62 MSO_I }, { 0x63 MSO_I, 0x64 MSO_I },
     { 0x05 MSO_I, 0x06 MSO_I }
 };
-static const mso_CustomShape msoSeal24 =
+const mso_CustomShape msoSeal24 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSeal24Vert), SAL_N_ELEMENTS( mso_sptSeal24Vert ),
     nullptr, 0,
@@ -4176,7 +4176,7 @@ static const mso_CustomShape msoSeal24 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
 };
-static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
+const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
     { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
@@ -4312,7 +4312,7 @@ static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
     { 0x2081, { 0x400, 10800, 354 } },
     { 0x2082, { 0x400, 10800, 354 } }
 };
-static const SvxMSDffVertPair mso_sptSeal32Vert[] =
+const SvxMSDffVertPair mso_sptSeal32Vert[] =
 {
     { 0x05 MSO_I, 0x06 MSO_I }, { 0x07 MSO_I, 0x08 MSO_I }, { 0x09 MSO_I, 0x0a MSO_I }, { 0x0b MSO_I, 0x0c MSO_I },
     { 0x0d MSO_I, 0x0e MSO_I }, { 0x0f MSO_I, 0x10 MSO_I }, { 0x11 MSO_I, 0x12 MSO_I }, { 0x13 MSO_I, 0x14 MSO_I },
@@ -4332,7 +4332,7 @@ static const SvxMSDffVertPair mso_sptSeal32Vert[] =
     { 0x7d MSO_I, 0x7e MSO_I }, { 0x7f MSO_I, 0x80 MSO_I }, { 0x81 MSO_I, 0x82 MSO_I }, { 0x83 MSO_I, 0x84 MSO_I },
     { 0x05 MSO_I, 0x06 MSO_I }
 };
-static const mso_CustomShape msoSeal32 =
+const mso_CustomShape msoSeal32 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptSeal32Vert), SAL_N_ELEMENTS( mso_sptSeal32Vert ),
     nullptr, 0,
@@ -4345,7 +4345,7 @@ static const mso_CustomShape msoSeal32 =
     const_cast<SvxMSDffHandle*>(mso_sptSealHandle), SAL_N_ELEMENTS( mso_sptSealHandle )
 };
 
-static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700  - 8100     def 5400
+const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700  - 8100     def 5400
 {                                                       // adjustment2 : y 14400 - 21600    def 18900
     { 12 MSO_I, 1 MSO_I }, { 12 MSO_I, 13 MSO_I },                                      // pp
     { 12 MSO_I, 14 MSO_I }, { 15 MSO_I, 21600 }, { 16 MSO_I, 21600 },                   // ccp
@@ -4373,7 +4373,7 @@ static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700 
 
     { 19 MSO_I, 25 MSO_I }, { 19 MSO_I, 2 MSO_I }                                       // pp
 };
-static const sal_uInt16 mso_sptRibbon2Segm[] =
+const sal_uInt16 mso_sptRibbon2Segm[] =
 {
     0x4000, 0x0001, 0x2001, 0x0005, 0x2001, 0x0001, 0x2001, 0x0005, 0x2001, 0x0001, 0x6001, 0x8000,
     0x4000, 0x0001, 0x2001, 0x0001, 0x2002, 0x6001, 0x8000,
@@ -4381,7 +4381,7 @@ static const sal_uInt16 mso_sptRibbon2Segm[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
+const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 01
@@ -4414,22 +4414,22 @@ static const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
     { 0x6000, { 0x419, 0x405, 0 } },                        // 26
     { 0xa000, { 0x419, 0, 0x405 } }                         // 27
 };
-static const sal_Int32 mso_sptRibbon2Default[] =
+const sal_Int32 mso_sptRibbon2Default[] =
 {
     2, 5400, 18900
 };
-static const SvxMSDffTextRectangles mso_sptRibbon2TextRect[] =
+const SvxMSDffTextRectangles mso_sptRibbon2TextRect[] =
 {
     { { 0 MSO_I, 0 }, { 19 MSO_I, 1 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptRibbon2Handle[] =
+const SvxMSDffHandle mso_sptRibbon2Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 2700, 8100, MIN_INT32, 0x7fffffff },
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 14400, 21600 }
 };
-static const mso_CustomShape msoRibbon2 =
+const mso_CustomShape msoRibbon2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRibbon2Vert), SAL_N_ELEMENTS( mso_sptRibbon2Vert ),
     const_cast<sal_uInt16*>(mso_sptRibbon2Segm), sizeof( mso_sptRibbon2Segm ) >> 1,
@@ -4442,7 +4442,7 @@ static const mso_CustomShape msoRibbon2 =
     const_cast<SvxMSDffHandle*>(mso_sptRibbon2Handle), SAL_N_ELEMENTS( mso_sptRibbon2Handle )
 };
 
-static const SvxMSDffVertPair mso_sptRibbonVert[] =
+const SvxMSDffVertPair mso_sptRibbonVert[] =
 {
     { 0, 0 }, { 3 MSO_I, 0 },
     { 4 MSO_I, 11 MSO_I }, { 4 MSO_I, 10 MSO_I }, { 5 MSO_I, 10 MSO_I }, { 5 MSO_I, 11 MSO_I },
@@ -4460,7 +4460,7 @@ static const SvxMSDffVertPair mso_sptRibbonVert[] =
     { 9 MSO_I, 13 MSO_I },
     { 9 MSO_I, 15 MSO_I }
 };
-static const sal_uInt16 mso_sptRibbonSegm[] =
+const sal_uInt16 mso_sptRibbonSegm[] =
 {
     0x4000, 0x0001, 0xa701, 0x0003, 0xa801, 0x0005, 0xa801, 0x0001, 0xa701, 0x0003, 0x6000, 0x8000,
     0x4000, 0xaa00, 0xa801, 0x0001, 0xa702, 0x0001, 0x8000,
@@ -4468,7 +4468,7 @@ static const sal_uInt16 mso_sptRibbonSegm[] =
     0x4000, 0xaa00, 0x0001, 0x8000,
     0x4000, 0xaa00, 0x0001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptRibbonCalc[] =
+const SvxMSDffCalculationData mso_sptRibbonCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
     { 0x2000, { 0x400, 675, 0 } },                          // 01
@@ -4491,26 +4491,26 @@ static const SvxMSDffCalculationData mso_sptRibbonCalc[] =
     { 0x0000, { 21600, 0, 2700 } },                         // 18
     { 0x2000, { 0x411, 0, 2700 } }                          // 19
 };
-static const sal_Int32 mso_sptRibbonDefault[] =
+const sal_Int32 mso_sptRibbonDefault[] =
 {
     2, 5400, 2700
 };
-static const SvxMSDffTextRectangles mso_sptRibbonTextRect[] =
+const SvxMSDffTextRectangles mso_sptRibbonTextRect[] =
 {
     { { 0 MSO_I, 10 MSO_I }, { 9 MSO_I, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptRibbonGluePoints[] =
+const SvxMSDffVertPair mso_sptRibbonGluePoints[] =
 {
     { 17 MSO_I, 10 MSO_I }, { 2700, 14 MSO_I }, { 17 MSO_I, 21600 }, { 18 MSO_I, 14 MSO_I }
 };
-static const SvxMSDffHandle mso_sptRibbonHandle[] =
+const SvxMSDffHandle mso_sptRibbonHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 2700, 8100, MIN_INT32, 0x7fffffff },
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 7200 }
 };
-static const mso_CustomShape msoRibbon =
+const mso_CustomShape msoRibbon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptRibbonVert), SAL_N_ELEMENTS( mso_sptRibbonVert ),
     const_cast<sal_uInt16*>(mso_sptRibbonSegm), sizeof( mso_sptRibbonSegm ) >> 1,
@@ -4525,7 +4525,7 @@ static const mso_CustomShape msoRibbon =
 //msosptEllipseRibbon
 //svg path = ar@9@38@8@37,0@27@0@26@9@13@8@4@0@25@22@25@9@38@8@37@22@26@3@27l@7@40@3,wa@9@35@8@10@3,0@21@33@9@36@8@1@21@31@20@31@9@35@8@10@20@33,,l@5@40xewr@9@36@8@1@20@31@0@32nfl@20@33ear@9@36@8@1@21@31@22@32nfl@21@33em@0@26nfl@0@32em@22@26nfl@22@32e
 //odp path = A ?f9 ?f38 ?f8 ?f37 0 ?f27 ?f0 ?f26 ?f9 ?f13 ?f8 ?f4 ?f0 ?f25 ?f22 ?f25 ?f9 ?f38 ?f8 ?f37 ?f22 ?f26 ?f3 ?f27 L ?f7 ?f40 ?f3 0 W ?f9 ?f35 ?f8 ?f10 ?f3 0 ?f21 ?f33 ?f9 ?f36 ?f8 ?f1 ?f21 ?f31 ?f20 ?f31 ?f9 ?f35 ?f8 ?f10 ?f20 ?f33 0 0 L ?f5 ?f40 Z N W ?f9 ?f36 ?f8 ?f1 ?f20 ?f31 ?f0 ?f32 F L ?f20 ?f33 N A ?f9 ?f36 ?f8 ?f1 ?f21 ?f31 ?f22 ?f32 F L ?f21 ?f33 N M ?f0 ?f26 F L ?f0 ?f32 N M ?f22 ?f26 F L ?f22 ?f32 N
-static const SvxMSDffVertPair mso_sptEllipseRibbonVert[] =
+const SvxMSDffVertPair mso_sptEllipseRibbonVert[] =
 {
     { 9 MSO_I , 38 MSO_I },
     { 8 MSO_I , 37 MSO_I },
@@ -4570,7 +4570,7 @@ static const SvxMSDffVertPair mso_sptEllipseRibbonVert[] =
     { 22 MSO_I , 32 MSO_I }
 };
 
-static const sal_uInt16 mso_sptEllipseRibbonSegm[] =
+const sal_uInt16 mso_sptEllipseRibbonSegm[] =
 {
     0xa30c /*ar*/,0x0002/*l*/,0xa50c/*wa*/,0x0001/*l*/,
     0x6001/*x*/, 0x8000/*e*/,0xa504/*wr*/,0xaa00/*nf*/,
@@ -4580,7 +4580,7 @@ static const sal_uInt16 mso_sptEllipseRibbonSegm[] =
     0x0001/*l*/, 0x8000/*e*/
 };
 
-static const SvxMSDffCalculationData mso_sptEllipseRibbonCalc[] =
+const SvxMSDffCalculationData mso_sptEllipseRibbonCalc[] =
 {
     { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, //val #0
     { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, //val #1
@@ -4632,17 +4632,17 @@ static const SvxMSDffCalculationData mso_sptEllipseRibbonCalc[] =
     { 0x2000 , { 0x42e , 0 , 4 } }, //sum @46 0 4
 };
 
-static const SvxMSDffTextRectangles mso_sptEllipseRibbonTextRect[] =
+const SvxMSDffTextRectangles mso_sptEllipseRibbonTextRect[] =
 {//@0,@1,@22,@25
     { { 0 MSO_I, 1 MSO_I }, { 22 MSO_I, 25 MSO_I } }
 };
 
-static const sal_Int32 mso_sptEllipseRibbonDefault[] =
+const sal_Int32 mso_sptEllipseRibbonDefault[] =
 {
     3,5400,5400,18900
 };
 
-static const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
+const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
 {
 //position="#0,bottomRight" xrange="@5,@47
 //position="center,#1" yrange="@10,@43
@@ -4655,7 +4655,7 @@ static const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
         0, 0x102, 0, 0, MIN_INT32, 0x7fffffff,0x1e/*27+3*/, 0x30 /*45+3*/ }
 };
 
-static const mso_CustomShape msosptEllipseRibbon =
+const mso_CustomShape msosptEllipseRibbon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbonVert), SAL_N_ELEMENTS( mso_sptEllipseRibbonVert ),
     const_cast<sal_uInt16*>(mso_sptEllipseRibbonSegm), sizeof( mso_sptEllipseRibbonSegm ) >> 1,
@@ -4670,7 +4670,7 @@ static const mso_CustomShape msosptEllipseRibbon =
 
 //msosptEllipseRibbon2
 //svg path = wr@9@34@8@35,0@24@0@23@9,0@8@11@0@22@19@22@9@34@8@35@19@23@3@24l@7@36@3@4at@9@31@8@32@3@4@18@30@9@1@8@33@18@28@17@28@9@31@8@32@17@30,0@4l@5@36xear@9@1@8@33@17@28@0@29nfl@17@30ewr@9@1@8@33@18@28@19@29nfl@18@30em@0@23nfl@0@29em@19@23nfl@19@29e
-static const SvxMSDffVertPair mso_sptEllipseRibbon2Vert[] =
+const SvxMSDffVertPair mso_sptEllipseRibbon2Vert[] =
 {
     { 9 MSO_I , 34 MSO_I },
     { 8 MSO_I , 35 MSO_I },
@@ -4714,7 +4714,7 @@ static const SvxMSDffVertPair mso_sptEllipseRibbon2Vert[] =
     { 19 MSO_I , 23 MSO_I },
     { 19 MSO_I , 29 MSO_I }
 };
-static const sal_uInt16 mso_sptEllipseRibbon2Segm[] =
+const sal_uInt16 mso_sptEllipseRibbon2Segm[] =
 {
     0xa50c/*wr*/,0x0002/*l*/,0xa30c/*at*/,0x0001/*l*/,
     0x6001/*x*/, 0x8000/*e*/,0xa304/*ar*/,0xaa00/*nf*/,
@@ -4724,7 +4724,7 @@ static const sal_uInt16 mso_sptEllipseRibbon2Segm[] =
     0x0001/*l*/, 0x8000/*e*/
 };
 
-static const SvxMSDffCalculationData mso_sptEllipseRibbon2Calc[] =
+const SvxMSDffCalculationData mso_sptEllipseRibbon2Calc[] =
 {
     { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, //val #0
     { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, //val #1
@@ -4772,17 +4772,17 @@ static const SvxMSDffCalculationData mso_sptEllipseRibbon2Calc[] =
     { 0x2000 , { 0x42a , 0 , 4 } } //sum @42 0 4
 };
 
-static const SvxMSDffTextRectangles mso_sptEllipseRibbon2TextRect[] =
+const SvxMSDffTextRectangles mso_sptEllipseRibbon2TextRect[] =
 {//@0,@22,@19,@1
     { { 0 MSO_I, 22 MSO_I }, { 19 MSO_I, 1 MSO_I } }
 };
 
-static const sal_Int32 mso_sptEllipseRibbon2Default[] =
+const sal_Int32 mso_sptEllipseRibbon2Default[] =
 {
     3,5400,16200,2700
 };
 
-static const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
+const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
 {
 //position="#0,topLeft" xrange="@5,@43
 //position="center,#1" yrange="@39,@31
@@ -4795,7 +4795,7 @@ static const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
         0, 0x102, 0, 0, MIN_INT32, 0x7fffffff,0x2c/*41+3*/, 0x1b /*24+3*/ }
 };
 
-static const mso_CustomShape msosptEllipseRibbon2 =
+const mso_CustomShape msosptEllipseRibbon2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbon2Vert), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Vert ),
     const_cast<sal_uInt16*>(mso_sptEllipseRibbon2Segm), sizeof( mso_sptEllipseRibbon2Segm ) >> 1,
@@ -4808,7 +4808,7 @@ static const mso_CustomShape msosptEllipseRibbon2 =
     const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbon2Handle), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Handle )
 };
 // End
-static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
+const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
 {
     { 1 MSO_I, 21600 }, { 0, 11 MSO_I }, { 1 MSO_I, 12 MSO_I }, { 0 MSO_I, 12 MSO_I },
     { 0 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I },
@@ -4826,7 +4826,7 @@ static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 -
     { 4 MSO_I, 0 MSO_I },
     { 2 MSO_I, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptVerticalScrollSegm[] =
+const sal_uInt16 mso_sptVerticalScrollSegm[] =
 {
     0x4000, 0xa702, 0x0002, 0xa801, 0x0001, 0xa702, 0x0002, 0xa801, 0x6001, 0x8000,
     0x4000, 0xa801, 0xa702, 0x6000, 0x8000,
@@ -4835,7 +4835,7 @@ static const sal_uInt16 mso_sptVerticalScrollSegm[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptScrollCalc[] =
+const SvxMSDffCalculationData mso_sptScrollCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2001, { 0x400, 1, 2 } },
@@ -4852,16 +4852,16 @@ static const SvxMSDffCalculationData mso_sptScrollCalc[] =
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x404 } }
 };
-static const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
+const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
 {
     { { 0 MSO_I, 0 MSO_I }, { 3 MSO_I, 12 MSO_I } }
 };
-static const SvxMSDffHandle mso_sptVerticalScrollHandle[] =
+const SvxMSDffHandle mso_sptVerticalScrollHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 5400 }
 };
-static const mso_CustomShape msoVerticalScroll =
+const mso_CustomShape msoVerticalScroll =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptVerticalScrollVert), SAL_N_ELEMENTS( mso_sptVerticalScrollVert ),
     const_cast<sal_uInt16*>(mso_sptVerticalScrollSegm), sizeof( mso_sptVerticalScrollSegm ) >> 1,
@@ -4873,7 +4873,7 @@ static const mso_CustomShape msoVerticalScroll =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptVerticalScrollHandle), SAL_N_ELEMENTS( mso_sptVerticalScrollHandle )
 };
-static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
+const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
 {
     { 0, 4 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 1 MSO_I },
     { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 13 MSO_I }, { 2 MSO_I, 12 MSO_I },
@@ -4893,7 +4893,7 @@ static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 :
     { 0 MSO_I, 4 MSO_I },
     { 0 MSO_I, 11 MSO_I }
 };
-static const sal_uInt16 mso_sptHorizontalScrollSegm[] =
+const sal_uInt16 mso_sptHorizontalScrollSegm[] =
 {
     0x4000, 0xa801, 0x0002, 0xa802, 0x0001, 0xa801, 0x0002, 0xa802, 0x6001, 0x8000,
     0x4000, 0xa803, 0x6000, 0x8000,
@@ -4902,12 +4902,12 @@ static const sal_uInt16 mso_sptHorizontalScrollSegm[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptHorizontalScrollHandle[] =
+const SvxMSDffHandle mso_sptHorizontalScrollHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 5400, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoHorizontalScroll =
+const mso_CustomShape msoHorizontalScroll =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptHorizontalScrollVert), SAL_N_ELEMENTS( mso_sptHorizontalScrollVert ),
     const_cast<sal_uInt16*>(mso_sptHorizontalScrollSegm), sizeof( mso_sptHorizontalScrollSegm ) >> 1,
@@ -4920,11 +4920,11 @@ static const mso_CustomShape msoHorizontalScroll =
     const_cast<SvxMSDffHandle*>(mso_sptHorizontalScrollHandle), SAL_N_ELEMENTS( mso_sptHorizontalScrollHandle )
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
+const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
 };
-static const mso_CustomShape msoFlowChartProcess =
+const mso_CustomShape msoFlowChartProcess =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartProcessVert), SAL_N_ELEMENTS( mso_sptFlowChartProcessVert ),
     nullptr, 0,
@@ -4937,16 +4937,16 @@ static const mso_CustomShape msoFlowChartProcess =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartAlternateProcessVert[] =
+const SvxMSDffVertPair mso_sptFlowChartAlternateProcessVert[] =
 {
     { 0, 2 MSO_I }, { 0 MSO_I, 0 }, { 1 MSO_I, 0 }, { 21600, 2 MSO_I },
     { 21600, 3 MSO_I }, { 1 MSO_I, 21600 }, { 0 MSO_I, 21600 }, { 0, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptFlowChartAlternateProcessSegm[] =
+const sal_uInt16 mso_sptFlowChartAlternateProcessSegm[] =
 {
     0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x6000, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
+const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
 {
     { 0x2000, { DFF_Prop_geoLeft, 2540, 0 } },
     { 0x2000, { DFF_Prop_geoRight, 0, 2540 } },
@@ -4957,11 +4957,11 @@ static const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
     { 0x2000, { DFF_Prop_geoTop, 800, 0 } },
     { 0x2000, { DFF_Prop_geoBottom,0, 800 } }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartAlternateProcessTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartAlternateProcessTextRect[] =
 {
     { { 4 MSO_I, 6 MSO_I }, { 5 MSO_I, 7 MSO_I } }
 };
-static const mso_CustomShape msoFlowChartAlternateProcess =
+const mso_CustomShape msoFlowChartAlternateProcess =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartAlternateProcessVert), SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartAlternateProcessSegm), sizeof( mso_sptFlowChartAlternateProcessSegm ) >> 1,
@@ -4974,15 +4974,15 @@ static const mso_CustomShape msoFlowChartAlternateProcess =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartDecisionVert[] =
+const SvxMSDffVertPair mso_sptFlowChartDecisionVert[] =
 {
     { 0, 10800 }, { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 10800 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartDecisionTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartDecisionTextRect[] =
 {
     { { 5400, 5400 }, { 16200, 16200 } }
 };
-static const mso_CustomShape msoFlowChartDecision =
+const mso_CustomShape msoFlowChartDecision =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartDecisionVert), SAL_N_ELEMENTS( mso_sptFlowChartDecisionVert ),
     nullptr, 0,
@@ -4995,19 +4995,19 @@ static const mso_CustomShape msoFlowChartDecision =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartInputOutputVert[] =
+const SvxMSDffVertPair mso_sptFlowChartInputOutputVert[] =
 {
     { 4230, 0 }, { 21600, 0 }, { 17370, 21600 }, { 0, 21600 }, { 4230, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartInputOutputTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartInputOutputTextRect[] =
 {
     { { 4230, 0 }, { 17370, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartInputOutputGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartInputOutputGluePoints[] =
 {
     { 12960, 0 }, { 10800, 0 }, { 2160, 10800 }, { 8600, 21600 }, { 10800, 21600 }, { 19400, 10800 }
 };
-static const mso_CustomShape msoFlowChartInputOutput =
+const mso_CustomShape msoFlowChartInputOutput =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartInputOutputVert), SAL_N_ELEMENTS( mso_sptFlowChartInputOutputVert ),
     nullptr, 0,
@@ -5020,7 +5020,7 @@ static const mso_CustomShape msoFlowChartInputOutput =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartPredefinedProcessVert[] =
+const SvxMSDffVertPair mso_sptFlowChartPredefinedProcessVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
 
@@ -5028,17 +5028,17 @@ static const SvxMSDffVertPair mso_sptFlowChartPredefinedProcessVert[] =
 
     { 21600 - 2540, 0 }, { 21600 - 2540, 21600 }
 };
-static const sal_uInt16 mso_sptFlowChartPredefinedProcessSegm[] =
+const sal_uInt16 mso_sptFlowChartPredefinedProcessSegm[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartPredefinedProcessTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartPredefinedProcessTextRect[] =
 {
     { { 2540, 0 }, { 21600 - 2540, 21600 } }
 };
-static const mso_CustomShape msoFlowChartPredefinedProcess =
+const mso_CustomShape msoFlowChartPredefinedProcess =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartPredefinedProcessVert), SAL_N_ELEMENTS( mso_sptFlowChartPredefinedProcessVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartPredefinedProcessSegm), sizeof( mso_sptFlowChartPredefinedProcessSegm ) >> 1,
@@ -5051,7 +5051,7 @@ static const mso_CustomShape msoFlowChartPredefinedProcess =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartInternalStorageVert[] =
+const SvxMSDffVertPair mso_sptFlowChartInternalStorageVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
 
@@ -5059,17 +5059,17 @@ static const SvxMSDffVertPair mso_sptFlowChartInternalStorageVert[] =
 
     { 0, 4230 }, { 21600, 4230 }
 };
-static const sal_uInt16 mso_sptFlowChartInternalStorageSegm[] =
+const sal_uInt16 mso_sptFlowChartInternalStorageSegm[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartInternalStorageTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartInternalStorageTextRect[] =
 {
     { { 4230, 4230 }, { 21600, 21600 } }
 };
-static const mso_CustomShape msoFlowChartInternalStorage =
+const mso_CustomShape msoFlowChartInternalStorage =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartInternalStorageVert), SAL_N_ELEMENTS( mso_sptFlowChartInternalStorageVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartInternalStorageSegm), sizeof( mso_sptFlowChartInternalStorageSegm ) >> 1,
@@ -5082,25 +5082,25 @@ static const mso_CustomShape msoFlowChartInternalStorage =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartDocumentVert[] =
+const SvxMSDffVertPair mso_sptFlowChartDocumentVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 17360 },
     { 13050, 17220 }, { 13340, 20770 }, { 5620, 21600 },    // ccp
     { 2860, 21100 }, { 1850, 20700 }, { 0,  20120 }         // ccp
 };
-static const sal_uInt16 mso_sptFlowChartDocumentSegm[] =
+const sal_uInt16 mso_sptFlowChartDocumentSegm[] =
 {
     0x4000, 0x0002, 0x2002, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartDocumentTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartDocumentTextRect[] =
 {
     { { 0, 0 }, { 21600, 17360 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartDocumentGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartDocumentGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 }, { 10800, 20320 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartDocument =
+const mso_CustomShape msoFlowChartDocument =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartDocumentVert), SAL_N_ELEMENTS( mso_sptFlowChartDocumentVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartDocumentSegm), sizeof( mso_sptFlowChartDocumentSegm ) >> 1,
@@ -5113,7 +5113,7 @@ static const mso_CustomShape msoFlowChartDocument =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
+const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
 {
     { 0, 3600 }, { 1500, 3600 }, { 1500, 1800 }, { 3000, 1800 },
     { 3000, 0 }, { 21600, 0 }, { 21600, 14409 }, { 21600 - 1500, 14409 },
@@ -5125,21 +5125,21 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
 
     { 3000, 1800 }, { 21600 - 1500, 1800 }, { 21600 - 1500, 14409 }
 };
-static const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
+const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
 {
     0x4000, 0x000a, 0x2002, 0x6000, 0x8000,
     0x4000, 0xaa00, 0x0002, 0x8000,         // NO FILL
     0x4000, 0xaa00, 0x0002, 0x8000          // NO FILL
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartMultidocumentTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartMultidocumentTextRect[] =
 {
     { { 0, 3600 }, { 21600 - 3000, 14409 + 3600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartMultidocumentGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartMultidocumentGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 }, { 10800, 19890 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartMultidocument =
+const mso_CustomShape msoFlowChartMultidocument =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMultidocumentVert), SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartMultidocumentSegm), sizeof( mso_sptFlowChartMultidocumentSegm ) >> 1,
@@ -5152,20 +5152,20 @@ static const mso_CustomShape msoFlowChartMultidocument =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartTerminatorVert[] =
+const SvxMSDffVertPair mso_sptFlowChartTerminatorVert[] =
 {
     { 3470, 21600 }, { 0, 10800 }, { 3470, 0 }, { 18130, 0 },
     { 21600, 10800 }, { 18130, 21600 }
 };
-static const sal_uInt16 mso_sptFlowChartTerminatorSegm[] =
+const sal_uInt16 mso_sptFlowChartTerminatorSegm[] =
 {
     0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartTerminatorTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartTerminatorTextRect[] =
 {
     { { 1060, 3180 }, { 20540, 18420 } }
 };
-static const mso_CustomShape msoFlowChartTerminator =
+const mso_CustomShape msoFlowChartTerminator =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartTerminatorVert), SAL_N_ELEMENTS( mso_sptFlowChartTerminatorVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartTerminatorSegm), sizeof( mso_sptFlowChartTerminatorSegm ) >> 1,
@@ -5178,16 +5178,16 @@ static const mso_CustomShape msoFlowChartTerminator =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartPreparationVert[] =
+const SvxMSDffVertPair mso_sptFlowChartPreparationVert[] =
 {
     { 4350, 0 }, { 17250, 0 }, { 21600, 10800 }, { 17250, 21600 },
     { 4350, 21600 }, { 0, 10800 }, { 4350, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartPreparationTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartPreparationTextRect[] =
 {
     { { 4350, 0 }, { 17250, 21600 } }
 };
-static const mso_CustomShape msoFlowChartPreparation =
+const mso_CustomShape msoFlowChartPreparation =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartPreparationVert), SAL_N_ELEMENTS( mso_sptFlowChartPreparationVert ),
     nullptr, 0,
@@ -5200,19 +5200,19 @@ static const mso_CustomShape msoFlowChartPreparation =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartManualInputVert[] =
+const SvxMSDffVertPair mso_sptFlowChartManualInputVert[] =
 {
     { 0, 4300 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 4300 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartManualInputTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartManualInputTextRect[] =
 {
     { { 0, 4300 }, { 21600, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartManualInputGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartManualInputGluePoints[] =
 {
     { 10800, 2150 }, { 0, 10800 }, { 10800, 19890 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartManualInput =
+const mso_CustomShape msoFlowChartManualInput =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartManualInputVert), SAL_N_ELEMENTS( mso_sptFlowChartManualInputVert ),
     nullptr, 0,
@@ -5225,19 +5225,19 @@ static const mso_CustomShape msoFlowChartManualInput =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartManualOperationVert[] =
+const SvxMSDffVertPair mso_sptFlowChartManualOperationVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 17250, 21600 }, { 4350, 21600 }, { 0, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartManualOperationTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartManualOperationTextRect[] =
 {
     { { 4350, 0 }, { 17250, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartManualOperationGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartManualOperationGluePoints[] =
 {
     { 10800, 0 }, { 2160, 10800 }, { 10800, 21600 }, { 19440, 10800 }
 };
-static const mso_CustomShape msoFlowChartManualOperation =
+const mso_CustomShape msoFlowChartManualOperation =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartManualOperationVert), SAL_N_ELEMENTS( mso_sptFlowChartManualOperationVert ),
     nullptr, 0,
@@ -5250,19 +5250,19 @@ static const mso_CustomShape msoFlowChartManualOperation =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartConnectorVert[] =
+const SvxMSDffVertPair mso_sptFlowChartConnectorVert[] =
 {
     { 10800, 10800 }, { 10800, 10800 },  { 0, 360 }
 };
-static const sal_uInt16 mso_sptFlowChartConnectorSegm[] =
+const sal_uInt16 mso_sptFlowChartConnectorSegm[] =
 {
     0xa203, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartConnectorTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartConnectorTextRect[] =
 {
     { { 3180, 3180 }, { 18420, 18420 } }
 };
-static const mso_CustomShape msoFlowChartConnector =
+const mso_CustomShape msoFlowChartConnector =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartConnectorVert), SAL_N_ELEMENTS( mso_sptFlowChartConnectorVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartConnectorSegm), sizeof( mso_sptFlowChartConnectorSegm ) >> 1,
@@ -5275,16 +5275,16 @@ static const mso_CustomShape msoFlowChartConnector =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartOffpageConnectorVert[] =
+const SvxMSDffVertPair mso_sptFlowChartOffpageConnectorVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 17150 }, { 10800, 21600 },
     { 0, 17150 }, { 0, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartOffpageConnectorTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartOffpageConnectorTextRect[] =
 {
     { { 0, 0 }, { 21600, 17150 } }
 };
-static const mso_CustomShape msoFlowChartOffpageConnector =
+const mso_CustomShape msoFlowChartOffpageConnector =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartOffpageConnectorVert), SAL_N_ELEMENTS( mso_sptFlowChartOffpageConnectorVert ),
     nullptr, 0,
@@ -5297,16 +5297,16 @@ static const mso_CustomShape msoFlowChartOffpageConnector =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartPunchedCardVert[] =
+const SvxMSDffVertPair mso_sptFlowChartPunchedCardVert[] =
 {
     { 4300, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 4300 }, { 4300, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartPunchedCardTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartPunchedCardTextRect[] =
 {
     { { 0, 4300 }, { 21600, 21600 } }
 };
-static const mso_CustomShape msoFlowChartPunchedCard =
+const mso_CustomShape msoFlowChartPunchedCard =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartPunchedCardVert), SAL_N_ELEMENTS( mso_sptFlowChartPunchedCardVert ),
     nullptr, 0,
@@ -5319,7 +5319,7 @@ static const mso_CustomShape msoFlowChartPunchedCard =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeVert[] =
+const SvxMSDffVertPair mso_sptFlowChartPunchedTapeVert[] =
 {
     { 0, 2230 },                                            // p
     { 820, 3990 }, { 3410, 3980 }, { 5370, 4360 },          // ccp
@@ -5332,19 +5332,19 @@ static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeVert[] =
     { 10150, 21150 }, { 7380, 21290 }, { 5290, 21600 },     // ccp
     { 3220, 21250 }, { 610, 21130 }, { 0, 19420 }           // ccp
 };
-static const sal_uInt16 mso_sptFlowChartPunchedTapeSegm[] =
+const sal_uInt16 mso_sptFlowChartPunchedTapeSegm[] =
 {
     0x4000, 0x2004, 0x0001, 0x2004, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartPunchedTapeTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartPunchedTapeTextRect[] =
 {
     { { 0, 4360 }, { 21600, 17240 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartPunchedTapeGluePoints[] =
 {
     { 10800, 2020 }, { 0, 10800 }, { 10800, 19320 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartPunchedTape =
+const mso_CustomShape msoFlowChartPunchedTape =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartPunchedTapeVert), SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartPunchedTapeSegm), sizeof( mso_sptFlowChartPunchedTapeSegm ) >> 1,
@@ -5357,7 +5357,7 @@ static const mso_CustomShape msoFlowChartPunchedTape =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
+const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
 
@@ -5367,17 +5367,17 @@ static const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
     { 3100, 18500 },
     { 18500, 3100 }
 };
-static const sal_uInt16 mso_sptFlowChartSummingJunctionSegm[] =
+const sal_uInt16 mso_sptFlowChartSummingJunctionSegm[] =
 {
     0xa203, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartSummingJunctionTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartSummingJunctionTextRect[] =
 {
     { { 3100, 3100 }, { 18500, 18500 } }
 };
-static const mso_CustomShape msoFlowChartSummingJunction =
+const mso_CustomShape msoFlowChartSummingJunction =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartSummingJunctionVert), SAL_N_ELEMENTS( mso_sptFlowChartSummingJunctionVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartSummingJunctionSegm), sizeof( mso_sptFlowChartSummingJunctionSegm ) >> 1,
@@ -5390,7 +5390,7 @@ static const mso_CustomShape msoFlowChartSummingJunction =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
+const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
 
@@ -5398,17 +5398,17 @@ static const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
 
     { 10800, 0 }, { 10800, 21600 }
 };
-static const sal_uInt16 mso_sptFlowChartOrSegm[] =
+const sal_uInt16 mso_sptFlowChartOrSegm[] =
 {
     0xa203, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartOrTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartOrTextRect[] =
 {
     { { 3100, 3100 }, { 18500, 18500 } }
 };
-static const mso_CustomShape msoFlowChartOr =
+const mso_CustomShape msoFlowChartOr =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartOrVert), SAL_N_ELEMENTS( mso_sptFlowChartOrVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartOrSegm), sizeof( mso_sptFlowChartOrSegm ) >> 1,
@@ -5421,19 +5421,19 @@ static const mso_CustomShape msoFlowChartOr =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartCollateVert[] =
+const SvxMSDffVertPair mso_sptFlowChartCollateVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 0, 21600 }, { 21600, 0 }, { 0, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartCollateTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartCollateTextRect[] =
 {
     { { 5400, 5400 }, { 16200, 16200 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartCollateGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartCollateGluePoints[] =
 {
     { 10800, 0 }, { 10800, 10800 }, { 10800, 21600 }
 };
-static const mso_CustomShape msoFlowChartCollate =
+const mso_CustomShape msoFlowChartCollate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartCollateVert), SAL_N_ELEMENTS( mso_sptFlowChartCollateVert ),
     nullptr, 0,
@@ -5446,22 +5446,22 @@ static const mso_CustomShape msoFlowChartCollate =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartSortVert[] =
+const SvxMSDffVertPair mso_sptFlowChartSortVert[] =
 {
     { 0, 10800 }, { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 },
 
     { 0, 10800 }, { 21600, 10800 }
 };
-static const sal_uInt16 mso_sptFlowChartSortSegm[] =
+const sal_uInt16 mso_sptFlowChartSortSegm[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartSortTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartSortTextRect[] =
 {
     { { 5400, 5400 }, { 16200, 16200 } }
 };
-static const mso_CustomShape msoFlowChartSort =
+const mso_CustomShape msoFlowChartSort =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartSortVert), SAL_N_ELEMENTS( mso_sptFlowChartSortVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartSortSegm), sizeof( mso_sptFlowChartSortSegm ) >> 1,
@@ -5474,19 +5474,19 @@ static const mso_CustomShape msoFlowChartSort =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartExtractVert[] =
+const SvxMSDffVertPair mso_sptFlowChartExtractVert[] =
 {
     { 10800, 0 }, { 21600, 21600 }, { 0, 21600 }, { 10800, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartExtractTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartExtractTextRect[] =
 {
     { { 5400, 10800 }, { 16200, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartExtractGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartExtractGluePoints[] =
 {
     { 10800, 0 }, { 5400, 10800 }, { 10800, 21600 }, { 16200, 10800 }
 };
-static const mso_CustomShape msoFlowChartExtract =
+const mso_CustomShape msoFlowChartExtract =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartExtractVert), SAL_N_ELEMENTS( mso_sptFlowChartExtractVert ),
     nullptr, 0,
@@ -5499,15 +5499,15 @@ static const mso_CustomShape msoFlowChartExtract =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartMergeVert[] =
+const SvxMSDffVertPair mso_sptFlowChartMergeVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 10800, 21600 }, { 0, 0 }
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartMergeTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartMergeTextRect[] =
 {
     { { 5400, 0 }, { 16200, 10800 } }
 };
-static const mso_CustomShape msoFlowChartMerge =
+const mso_CustomShape msoFlowChartMerge =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMergeVert), SAL_N_ELEMENTS( mso_sptFlowChartMergeVert ),
     nullptr, 0,
@@ -5520,24 +5520,24 @@ static const mso_CustomShape msoFlowChartMerge =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageVert[] =
+const SvxMSDffVertPair mso_sptFlowChartOnlineStorageVert[] =
 {
     { 3600, 21600 }, { 0, 10800 }, { 3600, 0 }, { 21600, 0 },
     { 18000, 10800 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptFlowChartOnlineStorageSegm[] =
+const sal_uInt16 mso_sptFlowChartOnlineStorageSegm[] =
 {
     0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartOnlineStorageTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartOnlineStorageTextRect[] =
 {
     { { 3600, 0 }, { 18000, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartOnlineStorageGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 18000, 10800 }
 };
-static const mso_CustomShape msoFlowChartOnlineStorage =
+const mso_CustomShape msoFlowChartOnlineStorage =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartOnlineStorageVert), SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartOnlineStorageSegm), sizeof( mso_sptFlowChartOnlineStorageSegm ) >> 1,
@@ -5550,20 +5550,20 @@ static const mso_CustomShape msoFlowChartOnlineStorage =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartDelayVert[] =
+const SvxMSDffVertPair mso_sptFlowChartDelayVert[] =
 {
     { 10800, 0 }, { 21600, 10800 }, { 10800, 21600 }, { 0, 21600 },
     { 0, 0 }
 };
-static const sal_uInt16 mso_sptFlowChartDelaySegm[] =
+const sal_uInt16 mso_sptFlowChartDelaySegm[] =
 {
     0x4000, 0xa702, 0x0002, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartDelayTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartDelayTextRect[] =
 {
     { { 0, 3100 }, { 18500, 18500 } }
 };
-static const mso_CustomShape msoFlowChartDelay =
+const mso_CustomShape msoFlowChartDelay =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartDelayVert), SAL_N_ELEMENTS( mso_sptFlowChartDelayVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartDelaySegm), sizeof( mso_sptFlowChartDelaySegm ) >> 1,
@@ -5576,7 +5576,7 @@ static const mso_CustomShape msoFlowChartDelay =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartMagneticTapeVert[] =
+const SvxMSDffVertPair mso_sptFlowChartMagneticTapeVert[] =
 {
     { 20980, 18150 }, { 20980, 21600 }, { 10670, 21600 },
     { 4770, 21540 }, { 0, 16720 }, { 0, 10800 },            // ccp
@@ -5584,15 +5584,15 @@ static const SvxMSDffVertPair mso_sptFlowChartMagneticTapeVert[] =
     { 16740, 0 }, { 21600, 4840 }, { 21600, 10800 },        // ccp
     { 21600, 13520 }, { 20550, 16160 }, { 18670, 18170 }    // ccp
 };
-static const sal_uInt16 mso_sptFlowChartMagneticTapeSegm[] =
+const sal_uInt16 mso_sptFlowChartMagneticTapeSegm[] =
 {
     0x4000, 0x0002, 0x2004, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartMagneticTapeTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartMagneticTapeTextRect[] =
 {
     { { 3100, 3100 }, { 18500, 18500 } }
 };
-static const mso_CustomShape msoFlowChartMagneticTape =
+const mso_CustomShape msoFlowChartMagneticTape =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMagneticTapeVert), SAL_N_ELEMENTS( mso_sptFlowChartMagneticTapeVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartMagneticTapeSegm), sizeof( mso_sptFlowChartMagneticTapeSegm ) >> 1,
@@ -5605,27 +5605,27 @@ static const mso_CustomShape msoFlowChartMagneticTape =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskVert[] =
+const SvxMSDffVertPair mso_sptFlowChartMagneticDiskVert[] =
 {
     { 0, 3400 }, { 10800, 0 }, { 21600, 3400 }, { 21600, 18200 },
     { 10800, 21600 }, { 0, 18200 },
 
     { 0, 3400 }, { 10800, 6800 }, { 21600, 3400 }
 };
-static const sal_uInt16 mso_sptFlowChartMagneticDiskSegm[] =
+const sal_uInt16 mso_sptFlowChartMagneticDiskSegm[] =
 {
     0x4000, 0xa802, 0x0001, 0xa802, 0x6000, 0x8000,
     0x4000, 0xa802, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartMagneticDiskTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartMagneticDiskTextRect[] =
 {
     { { 0, 6800 }, { 21600, 18200 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartMagneticDiskGluePoints[] =
 {
     { 10800, 6800 }, { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartMagneticDisk =
+const mso_CustomShape msoFlowChartMagneticDisk =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMagneticDiskVert), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartMagneticDiskSegm), sizeof( mso_sptFlowChartMagneticDiskSegm ) >> 1,
@@ -5638,27 +5638,27 @@ static const mso_CustomShape msoFlowChartMagneticDisk =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumVert[] =
+const SvxMSDffVertPair mso_sptFlowChartMagneticDrumVert[] =
 {
     { 18200, 0 }, { 21600, 10800 }, { 18200, 21600 }, { 3400, 21600 },
     { 0, 10800 }, { 3400, 0 },
 
     { 18200, 0 }, { 14800, 10800 }, { 18200, 21600 }
 };
-static const sal_uInt16 mso_sptFlowChartMagneticDrumSegm[] =
+const sal_uInt16 mso_sptFlowChartMagneticDrumSegm[] =
 {
     0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000,
     0x4000, 0xa702, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartMagneticDrumTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartMagneticDrumTextRect[] =
 {
     { { 3400, 0 }, { 14800, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumGluePoints[] =
+const SvxMSDffVertPair mso_sptFlowChartMagneticDrumGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 14800, 10800 }, { 21600, 10800 }
 };
-static const mso_CustomShape msoFlowChartMagneticDrum =
+const mso_CustomShape msoFlowChartMagneticDrum =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartMagneticDrumVert), SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartMagneticDrumSegm), sizeof( mso_sptFlowChartMagneticDrumSegm ) >> 1,
@@ -5671,20 +5671,20 @@ static const mso_CustomShape msoFlowChartMagneticDrum =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptFlowChartDisplayVert[] =
+const SvxMSDffVertPair mso_sptFlowChartDisplayVert[] =
 {
     { 3600, 0 }, { 17800, 0 }, { 21600, 10800 }, { 17800, 21600 },
     { 3600, 21600 }, { 0, 10800 }
 };
-static const sal_uInt16 mso_sptFlowChartDisplaySegm[] =
+const sal_uInt16 mso_sptFlowChartDisplaySegm[] =
 {
     0x4000, 0x0001, 0xa702, 0x0002, 0x6000, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptFlowChartDisplayTextRect[] =
+const SvxMSDffTextRectangles mso_sptFlowChartDisplayTextRect[] =
 {
     { { 3600, 0 }, { 17800, 21600 } }
 };
-static const mso_CustomShape msoFlowChartDisplay =
+const mso_CustomShape msoFlowChartDisplay =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptFlowChartDisplayVert), SAL_N_ELEMENTS( mso_sptFlowChartDisplayVert ),
     const_cast<sal_uInt16*>(mso_sptFlowChartDisplaySegm), sizeof( mso_sptFlowChartDisplaySegm ) >> 1,
@@ -5697,7 +5697,7 @@ static const mso_CustomShape msoFlowChartDisplay =
     nullptr, 0     // handles
 };
 
-static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
+const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
 {
     { 0, 0 },
     { 0, 3590 }, { 2 MSO_I, 3 MSO_I }, { 0, 8970 },
@@ -5713,7 +5713,7 @@ static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
     { 8970, 0 }, { 16 MSO_I, 17 MSO_I }, { 3590, 0 },
     { 0, 0 }
 };
-static const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     //0x400
     { 0x2000, { DFF_Prop_adjust2Value, 0,10800 } },
@@ -5758,26 +5758,26 @@ static const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         //0x428
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } }
 };
-static const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
+const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
 {
     2, 1400, 25920
 };
-static const SvxMSDffTextRectangles mso_sptWedgeRectCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptWedgeRectCalloutTextRect[] =
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
-static const SvxMSDffVertPair mso_sptWedgeRectCalloutGluePoints[] =
+const SvxMSDffVertPair mso_sptWedgeRectCalloutGluePoints[] =
 {
     { 10800, 0 }, { 0, 10800 },  { 10800, 21600 }, { 21600, 10800 }, { 40 MSO_I, 41 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCalloutHandle[] =
+const SvxMSDffHandle mso_sptCalloutHandle[] =
 {
     {
         SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff
     }
 };
-static const mso_CustomShape msoWedgeRectCallout =
+const mso_CustomShape msoWedgeRectCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptWedgeRectCalloutVert), SAL_N_ELEMENTS( mso_sptWedgeRectCalloutVert ),
     nullptr, 0,
@@ -5789,7 +5789,7 @@ static const mso_CustomShape msoWedgeRectCallout =
     const_cast<SvxMSDffVertPair*>(mso_sptWedgeRectCalloutGluePoints), SAL_N_ELEMENTS( mso_sptWedgeRectCalloutGluePoints ),
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
-static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
+const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
 {
     { 3590, 0 },
     { 0, 3590 },
@@ -5805,15 +5805,15 @@ static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
     { 14 MSO_I, 15 MSO_I }, { 12630, 0 },
     { 8970, 0 }, { 16 MSO_I, 17 MSO_I }
 };
-static const sal_uInt16 mso_sptWedgeRRectCalloutSegm[] =
+const sal_uInt16 mso_sptWedgeRRectCalloutSegm[] =
 {
     0x4000, 0xa701, 0x0005, 0xa801, 0x0005, 0xa701, 0x0005, 0xa801, 0x0004, 0x6001, 0x8000
 };
-static const SvxMSDffTextRectangles mso_sptWedgeRRectCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptWedgeRRectCalloutTextRect[] =
 {
     { { 800, 800 }, { 20800, 20800 } }
 };
-static const mso_CustomShape msoWedgeRRectCallout =
+const mso_CustomShape msoWedgeRRectCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptWedgeRRectCalloutVert), SAL_N_ELEMENTS( mso_sptWedgeRRectCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptWedgeRRectCalloutSegm), sizeof( mso_sptWedgeRRectCalloutSegm ) >> 1,
@@ -5825,7 +5825,7 @@ static const mso_CustomShape msoWedgeRRectCallout =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
-static const SvxMSDffVertPair mso_sptBalloonVert[] =
+const SvxMSDffVertPair mso_sptBalloonVert[] =
 {
     { 3590, 0 },
     { 0, 3590 },
@@ -5837,22 +5837,22 @@ static const SvxMSDffVertPair mso_sptBalloonVert[] =
     { 21600, 3590 },
     { 18010, 0 }
 };
-static const sal_uInt16 mso_sptBalloonSegm[] =
+const sal_uInt16 mso_sptBalloonSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0x0003, 0xa701, 0x0001, 0xa801, 0x6001, 0x8000
 };
-static const SvxMSDffHandle mso_sptBalloonHandle[] =
+const SvxMSDffHandle mso_sptBalloonHandle[] =
 {
     {
         SvxMSDffHandleFlags::RANGE,
         0x100, 1, 10800, 10800, 0, 8990, MIN_INT32, 0x7fffffff
     }
 };
-static const SvxMSDffTextRectangles mso_sptBalloonTextRect[] =
+const SvxMSDffTextRectangles mso_sptBalloonTextRect[] =
 {
     { { 800, 800 }, { 20800, 17250 } }
 };
-static const mso_CustomShape msoBalloon =
+const mso_CustomShape msoBalloon =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBalloonVert), SAL_N_ELEMENTS( mso_sptBalloonVert ),
     const_cast<sal_uInt16*>(mso_sptBalloonSegm), sizeof( mso_sptBalloonSegm ) >> 1,
@@ -5864,15 +5864,15 @@ static const mso_CustomShape msoBalloon =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptBalloonHandle), SAL_N_ELEMENTS( mso_sptBalloonHandle )        // handles
 };
-static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
+const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 0x16 MSO_I, 0x17 MSO_I }, { 0x12 MSO_I, 0x13 MSO_I }, { 0xe MSO_I, 0xf MSO_I }
 };
-static const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
+const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
 {
     0xa504, 0x0001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     // 00 rad x
     { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },    // 01 rad y
@@ -5899,19 +5899,19 @@ static const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
     { 0x2000, { 0x414, 10800, 0 } },                    // 16
     { 0x2000, { 0x415, 10800, 0 } }                     // 17
 };
-static const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
+const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
 {
     2, 1350, 25920
 };
-static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutGluePoints[] =
+const SvxMSDffVertPair mso_sptWedgeEllipseCalloutGluePoints[] =
 {
     { 10800, 0 }, { 3160, 3160 }, { 0, 10800 }, { 3160, 18440 }, { 10800, 21600 }, { 18440, 18440 }, { 21600, 10800 }, { 18440, 3160 }, { 0xe MSO_I, 0xf MSO_I }
 };
-static const SvxMSDffTextRectangles mso_sptWedgeEllipseCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptWedgeEllipseCalloutTextRect[] =
 {
     { { 3200, 3200 }, { 18400, 18400 } }
 };
-static const mso_CustomShape msoWedgeEllipseCallout =
+const mso_CustomShape msoWedgeEllipseCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptWedgeEllipseCalloutVert), SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptWedgeEllipseCalloutSegm), sizeof( mso_sptWedgeEllipseCalloutSegm ) >> 1,
@@ -5924,7 +5924,7 @@ static const mso_CustomShape msoWedgeEllipseCallout =
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
+const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
 {
     { 1930,7160 },                                      // p
     { 1530,4490 }, { 3400,1970 }, { 5270,1970 },        // ccp
@@ -5966,7 +5966,7 @@ static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
     { 0x13 MSO_I, 0x14 MSO_I }, { 1200, 1200 }, { 0, 360 },                 // circ2
     { 0xd MSO_I, 0xe MSO_I }, { 700, 700 }, { 0, 360 }                      // circ3
 };
-static const sal_uInt16 mso_sptCloudCalloutSegm[] =
+const sal_uInt16 mso_sptCloudCalloutSegm[] =
 {
     0x4000, 0x2016, 0x6001, 0x8000,
     0x4000, 0x2001, 0xaa00, 0x8000,
@@ -5984,7 +5984,7 @@ static const sal_uInt16 mso_sptCloudCalloutSegm[] =
     0xa203, 0x6001, 0x8000,
     0xa203, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },
@@ -6008,15 +6008,15 @@ static const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
     { 0x6000, { 0x40b, 0x405, 0 } },                    // 0x13
     { 0x6000, { 0x40c, 0x406, 0 } }                     // 0x14
 };
-static const sal_Int32 mso_sptCloudCalloutDefault[] =
+const sal_Int32 mso_sptCloudCalloutDefault[] =
 {
     2, 1350, 25920
 };
-static const SvxMSDffTextRectangles mso_sptCloudCalloutTextRect[] =
+const SvxMSDffTextRectangles mso_sptCloudCalloutTextRect[] =
 {
     { { 3000, 3320 }, { 17110, 17330 } }
 };
-static const mso_CustomShape msoCloudCallout =
+const mso_CustomShape msoCloudCallout =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCloudCalloutVert), SAL_N_ELEMENTS( mso_sptCloudCalloutVert ),
     const_cast<sal_uInt16*>(mso_sptCloudCalloutSegm), sizeof( mso_sptCloudCalloutSegm ) >> 1,
@@ -6029,12 +6029,12 @@ static const mso_CustomShape msoCloudCallout =
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle), SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
 };
 
-static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
+const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
 {                                                   // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptWaveCalc[] =
+const SvxMSDffCalculationData mso_sptWaveCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
     { 0x8000, { 21600, 0, 0x400 } },            //401
@@ -6071,30 +6071,30 @@ static const SvxMSDffCalculationData mso_sptWaveCalc[] =
 
     { 0x8000, { 21600, 0, 0x40c } }             //41d p3
 };
-static const SvxMSDffVertPair mso_sptWaveGluePoints[] =
+const SvxMSDffVertPair mso_sptWaveGluePoints[] =
 {
     { 0x12 MSO_I, 0 MSO_I }, { 0x14 MSO_I, 10800 }, { 0x13 MSO_I, 1 MSO_I }, { 0x15 MSO_I, 10800 }
 };
-static const sal_uInt16 mso_sptWaveSegm[] =
+const sal_uInt16 mso_sptWaveSegm[] =
 {
     0x4000, 0x2001, 0x0001, 0x2001, 0x6000, 0x8000
 };
-static const SvxMSDffHandle mso_sptWaveHandle[] =
+const SvxMSDffHandle mso_sptWaveHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 4460 },
     {   SvxMSDffHandleFlags::RANGE,
         0x101, 21600, 10800, 10800, 8640, 12960, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptWaveDefault[] =
+const sal_Int32 mso_sptWaveDefault[] =
 {
     2, 1400, 10800
 };
-static const SvxMSDffTextRectangles mso_sptWaveTextRect[] =
+const SvxMSDffTextRectangles mso_sptWaveTextRect[] =
 {
     { { 5 MSO_I, 22 MSO_I }, { 11 MSO_I, 23 MSO_I } }
 };
-static const mso_CustomShape msoWave =
+const mso_CustomShape msoWave =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptWaveVert), SAL_N_ELEMENTS( mso_sptWaveVert ),
     const_cast<sal_uInt16*>(mso_sptWaveSegm), sizeof( mso_sptWaveSegm ) >> 1,
@@ -6107,12 +6107,12 @@ static const mso_CustomShape msoWave =
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 2230
+const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 2230
 {                                                       // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 0x1f MSO_I, 10 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1e MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 0x20 MSO_I, 28 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x21 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
+const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
     { 0x8000, { 21600, 0, 0x400 } },            //401
@@ -6153,30 +6153,30 @@ static const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
     { 0xa000, { 0x413, 3600, 0x40e } },         //420
     { 0x6000, { 0x413, 0x40e, 3600 } }          //421
 };
-static const SvxMSDffVertPair mso_sptDoubleWaveGluePoints[] =
+const SvxMSDffVertPair mso_sptDoubleWaveGluePoints[] =
 {
     { 0x12 MSO_I, 0 MSO_I }, { 0x14 MSO_I, 10800 }, { 0x13 MSO_I, 1 MSO_I }, { 0x15 MSO_I, 10800 }
 };
-static const sal_uInt16 mso_sptDoubleWaveSegm[] =
+const sal_uInt16 mso_sptDoubleWaveSegm[] =
 {
     0x4000, 0x2002, 0x0001, 0x2002, 0x6000, 0x8000
 };
-static const SvxMSDffHandle mso_sptDoubleWaveHandle[] =
+const SvxMSDffHandle mso_sptDoubleWaveHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 2230 },
     {   SvxMSDffHandleFlags::RANGE,
         0x101, 21600, 10800, 10800, 8640, 12960, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptDoubleWaveDefault[] =
+const sal_Int32 mso_sptDoubleWaveDefault[] =
 {
     2, 1400, 10800
 };
-static const SvxMSDffTextRectangles mso_sptDoubleWaveTextRect[] =
+const SvxMSDffTextRectangles mso_sptDoubleWaveTextRect[] =
 {
     { { 5 MSO_I, 22 MSO_I }, { 11 MSO_I, 23 MSO_I } }
 };
-static const mso_CustomShape msoDoubleWave =
+const mso_CustomShape msoDoubleWave =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptDoubleWaveVert), SAL_N_ELEMENTS( mso_sptDoubleWaveVert ),
     const_cast<sal_uInt16*>(mso_sptDoubleWaveSegm), sizeof( mso_sptDoubleWaveSegm ) >> 1,
@@ -6190,7 +6190,7 @@ static const mso_CustomShape msoDoubleWave =
 };
 
 // for each shapetype a bit of 1 is indicating that the shape is NOT filled by default
-static const sal_uInt16 mso_DefaultFillingTable[] =
+const sal_uInt16 mso_DefaultFillingTable[] =
 {
     0x0000, 0x0018, 0x01ff, 0x0000, 0x0c00, 0x01e0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0600, 0x0000, 0x0000, 0x0000, 0x0000
 };
@@ -6232,7 +6232,7 @@ sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
 
 // for each shapetype a bit of 1 is indicating that the shape is NOT stroked by default
 // #i28269#
-static const sal_uInt16 mso_DefaultStrokingTable[] =
+const sal_uInt16 mso_DefaultStrokingTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000,
     0x0800, 0x0000, 0x0000, 0x0000, // #i28269# Added shape 75 (mso_sptPictureFrame)
@@ -6249,7 +6249,7 @@ bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
     return bIsStrokedByDefault;
 }
 
-static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
+const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 };
@@ -6262,16 +6262,16 @@ bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
     return bSortFilledObjectsToBackByDefault;
 }
 
-static const SvxMSDffTextRectangles mso_sptFontWorkTextRect[] =
+const SvxMSDffTextRectangles mso_sptFontWorkTextRect[] =
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
 
-static const SvxMSDffVertPair mso_sptTextPlainTextVert[] =
+const SvxMSDffVertPair mso_sptTextPlainTextVert[] =
 {
     { 3 MSO_I, 0 }, { 5 MSO_I, 0 }, { 6 MSO_I, 21600 }, { 7 MSO_I, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   // adjustment1 : 6629 - 14971
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
     { 0x2001, { 0x400, 2, 1 } },
@@ -6282,17 +6282,17 @@ static const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   // adjustmen
     { 0x6006, { 0x401, 0x402, 0 } },        // x2
     { 0xa006, { 0x401, 21600, 0x404 } }     // x3(7)
 };
-static const sal_uInt16 mso_sptTextPlainTextSegm[] =
+const sal_uInt16 mso_sptTextPlainTextSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextPlainTextHandle[] =
+const SvxMSDffHandle mso_sptTextPlainTextHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 21600, 10800, 10800, 6629, 14971, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoTextPlainText =
+const mso_CustomShape msoTextPlainText =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextPlainTextVert), SAL_N_ELEMENTS( mso_sptTextPlainTextVert ),
     const_cast<sal_uInt16*>(mso_sptTextPlainTextSegm), sizeof( mso_sptTextPlainTextSegm ) >> 1,
@@ -6305,31 +6305,31 @@ static const mso_CustomShape msoTextPlainText =
     const_cast<SvxMSDffHandle*>(mso_sptTextPlainTextHandle), SAL_N_ELEMENTS( mso_sptTextPlainTextHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextStopVert[] =
+const SvxMSDffVertPair mso_sptTextStopVert[] =
 {
     { 0, 0 MSO_I }, { 7200, 0 }, { 14400, 0 }, { 21600, 0 MSO_I },
     { 0, 1 MSO_I }, { 7200, 21600 }, { 14400, 21600 }, { 21600, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextStopCalc[] =    // adjustment1 : 3080 - 10800
+const SvxMSDffCalculationData mso_sptTextStopCalc[] =    // adjustment1 : 3080 - 10800
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
-static const sal_uInt16 mso_sptTextStopSegm[] =
+const sal_uInt16 mso_sptTextStopSegm[] =
 {
     0x4000, 0x0003, 0x8000,
     0x4000, 0x0003, 0x8000
 };
-static const sal_Int32 mso_sptTextStopDefault[] =
+const sal_Int32 mso_sptTextStopDefault[] =
 {
     1, 2700
 };
-static const SvxMSDffHandle mso_sptTextStopHandle[] =
+const SvxMSDffHandle mso_sptTextStopHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 3080, 10800 }
 };
-static const mso_CustomShape msoTextStop =
+const mso_CustomShape msoTextStop =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextStopVert), SAL_N_ELEMENTS( mso_sptTextStopVert ),
     const_cast<sal_uInt16*>(mso_sptTextStopSegm), sizeof( mso_sptTextStopSegm ) >> 1,
@@ -6342,25 +6342,25 @@ static const mso_CustomShape msoTextStop =
     const_cast<SvxMSDffHandle*>(mso_sptTextStopHandle), SAL_N_ELEMENTS( mso_sptTextStopHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextTriangleVert[] =
+const SvxMSDffVertPair mso_sptTextTriangleVert[] =
 {
     { 0, 0 MSO_I }, { 10800, 0 }, { 21600, 0 MSO_I }, { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextTriangleCalc[] =    // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextTriangleCalc[] =    // adjustment1 : 6629 - 14971
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
-static const sal_uInt16 mso_sptTextTriangleSegm[] =
+const sal_uInt16 mso_sptTextTriangleSegm[] =
 {
     0x4000, 0x0002, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextTriangleHandle[] =
+const SvxMSDffHandle mso_sptTextTriangleHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const mso_CustomShape msoTextTriangle =
+const mso_CustomShape msoTextTriangle =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextTriangleVert), SAL_N_ELEMENTS( mso_sptTextTriangleVert ),
     const_cast<sal_uInt16*>(mso_sptTextTriangleSegm), sizeof( mso_sptTextTriangleSegm ) >> 1,
@@ -6372,16 +6372,16 @@ static const mso_CustomShape msoTextTriangle =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptTextTriangleHandle), SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
-static const SvxMSDffVertPair mso_sptTextTriangleInvertedVert[] =
+const SvxMSDffVertPair mso_sptTextTriangleInvertedVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 0, 0 MSO_I }, { 10800, 21600 }, { 21600, 0 MSO_I }
 };
-static const sal_uInt16 mso_sptTextTriangleInvertedSegm[] =
+const sal_uInt16 mso_sptTextTriangleInvertedSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0002, 0x8000
 };
-static const mso_CustomShape msoTextTriangleInverted =
+const mso_CustomShape msoTextTriangleInverted =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextTriangleInvertedVert), SAL_N_ELEMENTS( mso_sptTextTriangleInvertedVert ),
     const_cast<sal_uInt16*>(mso_sptTextTriangleInvertedSegm), sizeof( mso_sptTextTriangleInvertedSegm ) >> 1,
@@ -6394,26 +6394,26 @@ static const mso_CustomShape msoTextTriangleInverted =
     const_cast<SvxMSDffHandle*>(mso_sptTextTriangleHandle), SAL_N_ELEMENTS( mso_sptTextTriangleHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextChevronVert[] =
+const SvxMSDffVertPair mso_sptTextChevronVert[] =
 {
     { 0, 0 MSO_I }, { 10800, 0 }, { 21600, 0 MSO_I }, { 0, 21600 }, { 10800, 1 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextChevronCalc[] = // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextChevronCalc[] = // adjustment1 : 6629 - 14971
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
-static const sal_uInt16 mso_sptTextChevronSegm[] =
+const sal_uInt16 mso_sptTextChevronSegm[] =
 {
     0x4000, 0x0002, 0x8000,
     0x4000, 0x0002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextChevronHandle[] =
+const SvxMSDffHandle mso_sptTextChevronHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoTextChevron =
+const mso_CustomShape msoTextChevron =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextChevronVert), SAL_N_ELEMENTS( mso_sptTextChevronVert ),
     const_cast<sal_uInt16*>(mso_sptTextChevronSegm), sizeof( mso_sptTextChevronSegm ) >> 1,
@@ -6426,26 +6426,26 @@ static const mso_CustomShape msoTextChevron =
     const_cast<SvxMSDffHandle*>(mso_sptTextChevronHandle), SAL_N_ELEMENTS( mso_sptTextChevronHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextChevronInvertedVert[] =
+const SvxMSDffVertPair mso_sptTextChevronInvertedVert[] =
 {
     { 0, 0 }, { 10800, 1 MSO_I }, { 21600, 0 }, { 0, 0 MSO_I }, { 10800, 21600 }, { 21600, 0 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextChevronInvertedCalc[] = // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextChevronInvertedCalc[] = // adjustment1 : 6629 - 14971
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
-static const sal_uInt16 mso_sptTextChevronInvertedSegm[] =
+const sal_uInt16 mso_sptTextChevronInvertedSegm[] =
 {
     0x4000, 0x0002, 0x8000,
     0x4000, 0x0002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextChevronInvertedHandle[] =
+const SvxMSDffHandle mso_sptTextChevronInvertedHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
-static const mso_CustomShape msoTextChevronInverted =
+const mso_CustomShape msoTextChevronInverted =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextChevronInvertedVert), SAL_N_ELEMENTS( mso_sptTextChevronInvertedVert ),
     const_cast<sal_uInt16*>(mso_sptTextChevronInvertedSegm), sizeof( mso_sptTextChevronInvertedSegm ) >> 1,
@@ -6462,31 +6462,31 @@ static const mso_CustomShape msoTextChevronInverted =
 //V 0 ?f3 21600 21600 0 ?f1 21600 ?f1
 //W 0 ?f3 21600 21600 21600 ?f1 0 ?f1 N
 //mso_sptTextRingInside
-static const SvxMSDffVertPair mso_sptTextRingInsideVert[] =
+const SvxMSDffVertPair mso_sptTextRingInsideVert[] =
 {
     { 0, 0 }, { 21600, 2 MSO_I }, { 0, 0 MSO_I },{ 21600, 0 MSO_I },//V
     { 0, 0 }, { 21600, 2 MSO_I }, { 21600, 0 MSO_I },{ 0, 0 MSO_I },//W
     { 0, 3 MSO_I }, { 21600, 21600 }, { 0, 1 MSO_I },{ 21600, 1 MSO_I },//V
     { 0, 3 MSO_I }, { 21600, 21600 }, { 21600, 1 MSO_I },{ 0, 1 MSO_I }//W
 };
-static const SvxMSDffCalculationData mso_sptTextRingInsideCalc[] =  // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextRingInsideCalc[] =  // adjustment1 : 6629 - 14971
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x8000, { 21600, 0, 0x400 } },
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
 };
-static const sal_uInt16 mso_sptTextRingInsideSegm[] =
+const sal_uInt16 mso_sptTextRingInsideSegm[] =
 {
     0xa604, 0xa504,0x8000,
     0xa604, 0xa504,0x8000
 };
-static const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
+const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE| SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
-static const mso_CustomShape msoTextRingInside =
+const mso_CustomShape msoTextRingInside =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextRingInsideVert), SAL_N_ELEMENTS( mso_sptTextRingInsideVert ),
     const_cast<sal_uInt16*>(mso_sptTextRingInsideSegm), sizeof( mso_sptTextRingInsideSegm ) >> 1,
@@ -6501,27 +6501,27 @@ static const mso_CustomShape msoTextRingInside =
 //mso_sptTextRingOutside
 //path = U 10800 ?f0 10800 ?f2 180 539 N U 10800 ?f1 10800 ?f2 180 539 N
 // MSO binary format has swing angle, not end angle, therefore 359 instead of 539.
-static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
+const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 {
     { 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
     { 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
 };
-static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
+const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x8000, { 21600, 0, 0x400 } }
 };
-static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
+const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 {
     0xA203, 0x8000,
     0xA203, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
+const SvxMSDffHandle mso_sptTextRingOutsideHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
-static const mso_CustomShape msoTextRingOutside =
+const mso_CustomShape msoTextRingOutside =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextRingOutsideVert), SAL_N_ELEMENTS( mso_sptTextRingOutsideVert ),
     const_cast<sal_uInt16*>(mso_sptTextRingOutsideSegm), sizeof( mso_sptTextRingOutsideSegm ) >> 1,
@@ -6534,26 +6534,26 @@ static const mso_CustomShape msoTextRingOutside =
     const_cast<SvxMSDffHandle*>(mso_sptTextRingOutsideHandle), SAL_N_ELEMENTS( mso_sptTextRingOutsideHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextFadeRightVert[] =
+const SvxMSDffVertPair mso_sptTextFadeRightVert[] =
 {
     { 0, 0 }, { 21600, 0 MSO_I }, { 0, 21600 }, { 21600, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextFadeCalc[] =
+const SvxMSDffCalculationData mso_sptTextFadeCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
-static const sal_uInt16 mso_sptTextFadeSegm[] =
+const sal_uInt16 mso_sptTextFadeSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextFadeRightHandle[] =
+const SvxMSDffHandle mso_sptTextFadeRightHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoTextFadeRight =
+const mso_CustomShape msoTextFadeRight =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextFadeRightVert), SAL_N_ELEMENTS( mso_sptTextFadeRightVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6566,16 +6566,16 @@ static const mso_CustomShape msoTextFadeRight =
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeRightHandle), SAL_N_ELEMENTS( mso_sptTextFadeRightHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextFadeLeftVert[] =
+const SvxMSDffVertPair mso_sptTextFadeLeftVert[] =
 {
     { 0, 0 MSO_I }, { 21600, 0 }, { 0, 1 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffHandle mso_sptTextFadeLeftHandle[] =
+const SvxMSDffHandle mso_sptTextFadeLeftHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10800 }
 };
-static const mso_CustomShape msoTextFadeLeft =
+const mso_CustomShape msoTextFadeLeft =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextFadeLeftVert), SAL_N_ELEMENTS( mso_sptTextFadeLeftVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6588,16 +6588,16 @@ static const mso_CustomShape msoTextFadeLeft =
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeLeftHandle), SAL_N_ELEMENTS( mso_sptTextFadeLeftHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextFadeUpVert[] =
+const SvxMSDffVertPair mso_sptTextFadeUpVert[] =
 {
     { 0 MSO_I, 0 }, { 1 MSO_I, 0 }, { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffHandle mso_sptTextFadeUpHandle[] =
+const SvxMSDffHandle mso_sptTextFadeUpHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 0, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoTextFadeUp =
+const mso_CustomShape msoTextFadeUp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextFadeUpVert), SAL_N_ELEMENTS( mso_sptTextFadeUpVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6610,16 +6610,16 @@ static const mso_CustomShape msoTextFadeUp =
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeUpHandle), SAL_N_ELEMENTS( mso_sptTextFadeUpHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextFadeDownVert[] =
+const SvxMSDffVertPair mso_sptTextFadeDownVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 0 MSO_I, 21600 }, { 1 MSO_I, 21600 }
 };
-static const SvxMSDffHandle mso_sptTextFadeDownHandle[] =
+const SvxMSDffHandle mso_sptTextFadeDownHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 21600, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoTextFadeDown =
+const mso_CustomShape msoTextFadeDown =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextFadeDownVert), SAL_N_ELEMENTS( mso_sptTextFadeDownVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6632,16 +6632,16 @@ static const mso_CustomShape msoTextFadeDown =
     const_cast<SvxMSDffHandle*>(mso_sptTextFadeDownHandle), SAL_N_ELEMENTS( mso_sptTextFadeDownHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextSlantUpVert[] =
+const SvxMSDffVertPair mso_sptTextSlantUpVert[] =
 {
     { 0, 0 MSO_I }, { 21600, 0 }, { 0, 21600 }, { 21600, 1 MSO_I }
 };
-static const SvxMSDffHandle mso_sptTextSlantUpHandle[] =
+const SvxMSDffHandle mso_sptTextSlantUpHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 15400 }
 };
-static const mso_CustomShape msoTextSlantUp =
+const mso_CustomShape msoTextSlantUp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextSlantUpVert), SAL_N_ELEMENTS( mso_sptTextSlantUpVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6654,16 +6654,16 @@ static const mso_CustomShape msoTextSlantUp =
     const_cast<SvxMSDffHandle*>(mso_sptTextSlantUpHandle), SAL_N_ELEMENTS( mso_sptTextSlantUpHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextSlantDownVert[] =
+const SvxMSDffVertPair mso_sptTextSlantDownVert[] =
 {
     { 0, 0 }, { 21600, 1 MSO_I }, { 0, 0 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffHandle mso_sptTextSlantDownHandle[] =
+const SvxMSDffHandle mso_sptTextSlantDownHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
-static const mso_CustomShape msoTextSlantDown =
+const mso_CustomShape msoTextSlantDown =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextSlantDownVert), SAL_N_ELEMENTS( mso_sptTextSlantDownVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6676,22 +6676,22 @@ static const mso_CustomShape msoTextSlantDown =
     const_cast<SvxMSDffHandle*>(mso_sptTextSlantDownHandle), SAL_N_ELEMENTS( mso_sptTextSlantDownHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCascadeUpVert[] =
+const SvxMSDffVertPair mso_sptTextCascadeUpVert[] =
 {
     { 0, 2 MSO_I }, { 21600, 0 }, { 0, 21600 }, { 21600, 0 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextCascadeCalc[] =
+const SvxMSDffCalculationData mso_sptTextCascadeCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
     { 0x2001, { 0x401, 1, 4 } }
 };
-static const SvxMSDffHandle mso_sptTextCascadeUpHandle[] =
+const SvxMSDffHandle mso_sptTextCascadeUpHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
-static const mso_CustomShape msoTextCascadeUp =
+const mso_CustomShape msoTextCascadeUp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCascadeUpVert), SAL_N_ELEMENTS( mso_sptTextCascadeUpVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6704,16 +6704,16 @@ static const mso_CustomShape msoTextCascadeUp =
     const_cast<SvxMSDffHandle*>(mso_sptTextCascadeUpHandle), SAL_N_ELEMENTS( mso_sptTextCascadeUpHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCascadeDownVert[] =
+const SvxMSDffVertPair mso_sptTextCascadeDownVert[] =
 {
     { 0, 0 }, { 21600, 2 MSO_I }, { 0, 0 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffHandle mso_sptTextCascadeDownHandle[] =
+const SvxMSDffHandle mso_sptTextCascadeDownHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 6200, 21600 }
 };
-static const mso_CustomShape msoTextCascadeDown =
+const mso_CustomShape msoTextCascadeDown =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCascadeDownVert), SAL_N_ELEMENTS( mso_sptTextCascadeDownVert ),
     const_cast<sal_uInt16*>(mso_sptTextFadeSegm), sizeof( mso_sptTextFadeSegm ) >> 1,
@@ -6726,11 +6726,11 @@ static const mso_CustomShape msoTextCascadeDown =
     const_cast<SvxMSDffHandle*>(mso_sptTextCascadeDownHandle), SAL_N_ELEMENTS( mso_sptTextCascadeDownHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextArchUpCurveVert[] =
+const SvxMSDffVertPair mso_sptTextArchUpCurveVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
+const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -6738,20 +6738,20 @@ static const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
     { 0x2000, { 0x401, 10800, 0 } },
     { 0x8000, { 21600, 0, 0x402 } }
 };
-static const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
+const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
 {
     0xA504, 0x8000      // clockwise arc
 };
-static const SvxMSDffHandle mso_sptTextArchUpCurveHandle[] =
+const SvxMSDffHandle mso_sptTextArchUpCurveHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextArchUpCurveDefault[] =
+const sal_Int32 mso_sptTextArchUpCurveDefault[] =
 {
     1, 180
 };
-static const mso_CustomShape msoTextArchUpCurve =
+const mso_CustomShape msoTextArchUpCurve =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextArchUpCurveVert), SAL_N_ELEMENTS( mso_sptTextArchUpCurveVert ),
     const_cast<sal_uInt16*>(mso_sptTextArchUpCurveSegm), sizeof( mso_sptTextArchUpCurveSegm ) >> 1,
@@ -6764,24 +6764,24 @@ static const mso_CustomShape msoTextArchUpCurve =
     const_cast<SvxMSDffHandle*>(mso_sptTextArchUpCurveHandle), SAL_N_ELEMENTS( mso_sptTextArchUpCurveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextArchDownCurveVert[] =
+const SvxMSDffVertPair mso_sptTextArchDownCurveVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 4 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptTextArchDownCurveSegm[] =
+const sal_uInt16 mso_sptTextArchDownCurveSegm[] =
 {
     0xA304, 0x8000      // counter clockwise arc to
 };
-static const SvxMSDffHandle mso_sptTextArchDownCurveHandle[] =
+const SvxMSDffHandle mso_sptTextArchDownCurveHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextArchDownCurveDefault[] =
+const sal_Int32 mso_sptTextArchDownCurveDefault[] =
 {
     1, 0
 };
-static const mso_CustomShape msoTextArchDownCurve =
+const mso_CustomShape msoTextArchDownCurve =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextArchDownCurveVert), SAL_N_ELEMENTS( mso_sptTextArchDownCurveVert ),
     const_cast<sal_uInt16*>(mso_sptTextArchDownCurveSegm), sizeof( mso_sptTextArchDownCurveSegm ) >> 1,
@@ -6794,11 +6794,11 @@ static const mso_CustomShape msoTextArchDownCurve =
     const_cast<SvxMSDffHandle*>(mso_sptTextArchDownCurveHandle), SAL_N_ELEMENTS( mso_sptTextArchDownCurveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCircleCurveVert[] =
+const SvxMSDffVertPair mso_sptTextCircleCurveVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 4 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextCircleCurveCalc[] =
+const SvxMSDffCalculationData mso_sptTextCircleCurveCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -6806,20 +6806,20 @@ static const SvxMSDffCalculationData mso_sptTextCircleCurveCalc[] =
     { 0x2000, { 0x401, 10800, 0 } },
     { 0x8000, { 21600, 0, 0x403 } }
 };
-static const sal_uInt16 mso_sptTextCircleCurveSegm[] =
+const sal_uInt16 mso_sptTextCircleCurveSegm[] =
 {
     0xA504, 0x8000      // clockwise arc to
 };
-static const SvxMSDffHandle mso_sptTextCircleCurveHandle[] =
+const SvxMSDffHandle mso_sptTextCircleCurveHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextCircleCurveDefault[] =
+const sal_Int32 mso_sptTextCircleCurveDefault[] =
 {
     1, -179
 };
-static const mso_CustomShape msoTextCircleCurve =
+const mso_CustomShape msoTextCircleCurve =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCircleCurveVert), SAL_N_ELEMENTS( mso_sptTextCircleCurveVert ),
     const_cast<sal_uInt16*>(mso_sptTextCircleCurveSegm), sizeof( mso_sptTextCircleCurveSegm ) >> 1,
@@ -6832,13 +6832,13 @@ static const mso_CustomShape msoTextCircleCurve =
     const_cast<SvxMSDffHandle*>(mso_sptTextCircleCurveHandle), SAL_N_ELEMENTS( mso_sptTextCircleCurveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextButtonCurveVert[] =
+const SvxMSDffVertPair mso_sptTextButtonCurveVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I },
     { 0, 10800 }, { 21600, 10800 },
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 5 MSO_I }, { 4 MSO_I, 5 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextButtonCurveCalc[] =
+const SvxMSDffCalculationData mso_sptTextButtonCurveCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -6847,22 +6847,22 @@ static const SvxMSDffCalculationData mso_sptTextButtonCurveCalc[] =
     { 0x8000, { 21600, 0, 0x402 } },
     { 0x8000, { 21600, 0, 0x403 } }
 };
-static const sal_uInt16 mso_sptTextButtonCurveSegm[] =
+const sal_uInt16 mso_sptTextButtonCurveSegm[] =
 {
     0xA504, 0x8000,     // clockwise arc
     0x4000, 0x0001, 0x8000,
     0xA304, 0x8000      // counter clockwise
 };
-static const SvxMSDffHandle mso_sptTextButtonCurveHandle[] =
+const SvxMSDffHandle mso_sptTextButtonCurveHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR,
         10800, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextButtonCurveDefault[] =
+const sal_Int32 mso_sptTextButtonCurveDefault[] =
 {
     1, 180
 };
-static const mso_CustomShape msoTextButtonCurve =
+const mso_CustomShape msoTextButtonCurve =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextButtonCurveVert), SAL_N_ELEMENTS( mso_sptTextButtonCurveVert ),
     const_cast<sal_uInt16*>(mso_sptTextButtonCurveSegm), sizeof( mso_sptTextButtonCurveSegm ) >> 1,
@@ -6875,12 +6875,12 @@ static const mso_CustomShape msoTextButtonCurve =
     const_cast<SvxMSDffHandle*>(mso_sptTextButtonCurveHandle), SAL_N_ELEMENTS( mso_sptTextButtonCurveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextArchUpPourVert[] =
+const SvxMSDffVertPair mso_sptTextArchUpPourVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I },
     { 5 MSO_I, 5 MSO_I }, { 11 MSO_I, 11 MSO_I }, { 8 MSO_I, 9 MSO_I }, { 0xa MSO_I, 9 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextArchPourCalc[] =
+const SvxMSDffCalculationData mso_sptTextArchPourCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -6895,20 +6895,20 @@ static const SvxMSDffCalculationData mso_sptTextArchPourCalc[] =
     { 0x8000, { 21600, 0, 0x408 } },                // 10
     { 0x8000, { 21600, 0, 0x405 } }
 };
-static const sal_uInt16 mso_sptTextArchUpPourSegm[] =
+const sal_uInt16 mso_sptTextArchUpPourSegm[] =
 {
     0xA504, 0x8000, 0xA504, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextArchPourHandle[] =
+const SvxMSDffHandle mso_sptTextArchPourHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextArchUpPourDefault[] =
+const sal_Int32 mso_sptTextArchUpPourDefault[] =
 {
     2, 180, 5400
 };
-static const mso_CustomShape msoTextArchUpPour =
+const mso_CustomShape msoTextArchUpPour =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextArchUpPourVert), SAL_N_ELEMENTS( mso_sptTextArchUpPourVert ),
     const_cast<sal_uInt16*>(mso_sptTextArchUpPourSegm), sizeof( mso_sptTextArchUpPourSegm ) >> 1,
@@ -6921,20 +6921,20 @@ static const mso_CustomShape msoTextArchUpPour =
     const_cast<SvxMSDffHandle*>(mso_sptTextArchPourHandle), SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextArchDownPourVert[] =
+const SvxMSDffVertPair mso_sptTextArchDownPourVert[] =
 {
     { 5 MSO_I, 5 MSO_I }, { 11 MSO_I, 11 MSO_I }, { 0xa MSO_I, 9 MSO_I }, { 8 MSO_I, 9 MSO_I },
     { 0, 0 }, { 21600, 21600 }, { 4 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }
 };
-static const sal_uInt16 mso_sptTextArchDownPourSegm[] =
+const sal_uInt16 mso_sptTextArchDownPourSegm[] =
 {
     0xA304, 0x8000, 0xA304, 0x8000
 };
-static const sal_Int32 mso_sptTextArchDownPourDefault[] =
+const sal_Int32 mso_sptTextArchDownPourDefault[] =
 {
     2, 0, 5400
 };
-static const mso_CustomShape msoTextArchDownPour =
+const mso_CustomShape msoTextArchDownPour =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextArchDownPourVert), SAL_N_ELEMENTS( mso_sptTextArchDownPourVert ),
     const_cast<sal_uInt16*>(mso_sptTextArchDownPourSegm), sizeof( mso_sptTextArchDownPourSegm ) >> 1,
@@ -6947,12 +6947,12 @@ static const mso_CustomShape msoTextArchDownPour =
     const_cast<SvxMSDffHandle*>(mso_sptTextArchPourHandle), SAL_N_ELEMENTS( mso_sptTextArchPourHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCirclePourVert[] =
+const SvxMSDffVertPair mso_sptTextCirclePourVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 4 MSO_I },
     { 5 MSO_I, 5 MSO_I }, { 11 MSO_I, 11 MSO_I }, { 8 MSO_I, 9 MSO_I }, { 8 MSO_I, 0xa MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextCirclePourCalc[] =
+const SvxMSDffCalculationData mso_sptTextCirclePourCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
@@ -6968,20 +6968,20 @@ static const SvxMSDffCalculationData mso_sptTextCirclePourCalc[] =
     { 0x8000, { 21600, 0, 0x405 } },
     { 0x000, { 21600, 0, 0 } }
 };
-static const sal_uInt16 mso_sptTextCirclePourSegm[] =
+const sal_uInt16 mso_sptTextCirclePourSegm[] =
 {
     0xA504, 0x8000, 0xA504, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextCirclePourHandle[] =
+const SvxMSDffHandle mso_sptTextCirclePourHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 0, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextCirclePourDefault[] =
+const sal_Int32 mso_sptTextCirclePourDefault[] =
 {
     2,  -179, 5400
 };
-static const mso_CustomShape msoTextCirclePour =
+const mso_CustomShape msoTextCirclePour =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCirclePourVert), SAL_N_ELEMENTS( mso_sptTextCirclePourVert ),
     const_cast<sal_uInt16*>(mso_sptTextCirclePourSegm), sizeof( mso_sptTextCirclePourSegm ) >> 1,
@@ -6994,7 +6994,7 @@ static const mso_CustomShape msoTextCirclePour =
     const_cast<SvxMSDffHandle*>(mso_sptTextCirclePourHandle), SAL_N_ELEMENTS( mso_sptTextCirclePourHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
+const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
 {
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I },
     { 6 MSO_I, 6 MSO_I }, { 7 MSO_I, 7 MSO_I }, { 10 MSO_I, 11 MSO_I }, { 12 MSO_I, 11 MSO_I },
@@ -7003,7 +7003,7 @@ static const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
     { 6 MSO_I, 6 MSO_I }, { 7 MSO_I, 7 MSO_I }, { 10 MSO_I, 13 MSO_I }, { 12 MSO_I, 13 MSO_I },
     { 0, 0 }, { 21600, 21600 }, { 2 MSO_I, 5 MSO_I }, { 4 MSO_I, 5 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextButtonPourCalc[] =
+const SvxMSDffCalculationData mso_sptTextButtonPourCalc[] =
 {
     { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x00
     { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x01
@@ -7031,7 +7031,7 @@ static const SvxMSDffCalculationData mso_sptTextButtonPourCalc[] =
     { 0x4000, { 10800, 0x414, 0 } },    // 0x15
     { 0x8000, { 10800, 0, 0x414 } }     // 0x16
 };
-static const sal_uInt16 mso_sptTextButtonPourSegm[] =
+const sal_uInt16 mso_sptTextButtonPourSegm[] =
 {
     0xA504, 0x8000,     // clockwise arc
     0xA504, 0x8000,     // clockwise arc
@@ -7040,16 +7040,16 @@ static const sal_uInt16 mso_sptTextButtonPourSegm[] =
     0xA304, 0x8000,     // counter clockwise
     0xA304, 0x8000      // counter clockwise
 };
-static const SvxMSDffHandle mso_sptTextButtonPourHandle[] =
+const SvxMSDffHandle mso_sptTextButtonPourHandle[] =
 {
     {   SvxMSDffHandleFlags::POLAR | SvxMSDffHandleFlags::RADIUS_RANGE,
         0x101, 0x100, 10800, 10800, 4320, 10800, MIN_INT32, 0x7fffffff }
 };
-static const sal_Int32 mso_sptTextButtonPourDefault[] =
+const sal_Int32 mso_sptTextButtonPourDefault[] =
 {
     2, 180, 5400
 };
-static const mso_CustomShape msoTextButtonPour =
+const mso_CustomShape msoTextButtonPour =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextButtonPourVert), SAL_N_ELEMENTS( mso_sptTextButtonPourVert ),
     const_cast<sal_uInt16*>(mso_sptTextButtonPourSegm), sizeof( mso_sptTextButtonPourSegm ) >> 1,
@@ -7062,12 +7062,12 @@ static const mso_CustomShape msoTextButtonPour =
     const_cast<SvxMSDffHandle*>(mso_sptTextButtonPourHandle), SAL_N_ELEMENTS( mso_sptTextButtonPourHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCurveUpVert[] =
+const SvxMSDffVertPair mso_sptTextCurveUpVert[] =
 {
     { 0, 0 MSO_I }, { 4900, 1 MSO_I /*12170->0 14250 ->0*/ }, { 11640, 2 MSO_I /*12170->0 12800 ->0*/ }, { 21600, 0 },
     { 0, 4 MSO_I /*12170->0 17220 ->21600*/ }, { 3700, 21600 }, { 8500, 21600 }, { 10100, 21600 }, { 14110, 21600 }, { 15910, 21600 }, { 21600, 4 MSO_I /*12170->0 17220 ->21600*/ }
 };
-static const SvxMSDffCalculationData mso_sptTextCurveUpCalc[] =
+const SvxMSDffCalculationData mso_sptTextCurveUpCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x4001, { 14250, 0x400, 12170 } },        // 401
@@ -7075,21 +7075,21 @@ static const SvxMSDffCalculationData mso_sptTextCurveUpCalc[] =
     { 0x4001, { 6380, 0x400, 12170 } },         // 403
     { 0x8000, { 21600, 0, 0x403 } }             // 404
 };
-static const sal_uInt16 mso_sptTextCurveUpSegm[] =
+const sal_uInt16 mso_sptTextCurveUpSegm[] =
 {
     0x4000, 0x2001, 0x8000,
     0x4000, 0x2002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextCurveUpHandle[] =
+const SvxMSDffHandle mso_sptTextCurveUpHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 12170 }
 };
-static const sal_Int32 mso_sptTextCurveUpDefault[] =
+const sal_Int32 mso_sptTextCurveUpDefault[] =
 {
     1, 9900
 };
-static const mso_CustomShape msoTextCurveUp =
+const mso_CustomShape msoTextCurveUp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCurveUpVert), SAL_N_ELEMENTS( mso_sptTextCurveUpVert ),
     const_cast<sal_uInt16*>(mso_sptTextCurveUpSegm), sizeof( mso_sptTextCurveUpSegm ) >> 1,
@@ -7102,7 +7102,7 @@ static const mso_CustomShape msoTextCurveUp =
     const_cast<SvxMSDffHandle*>(mso_sptTextCurveUpHandle), SAL_N_ELEMENTS( mso_sptTextCurveUpHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
+const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
 {
 //  { 0, 0 MSO_I }, { 4900, 1 MSO_I /*12170->0 14250 ->0*/ }, { 11640, 2 MSO_I /*12170->0 12800 ->0*/ }, { 21600, 0 },
     { 0, 0 }, { 9960, 2 MSO_I }, { 16700, 1 MSO_I }, { 21600, 0 MSO_I },
@@ -7110,12 +7110,12 @@ static const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
 //  { 0, 4 MSO_I /*12170->0 17220 ->21600*/ }, { 3700, 21600 }, { 8500, 21600 }, { 10100, 21600 }, { 14110, 21600 }, { 15910, 21600 }, { 21600, 4 MSO_I /*12170->0 17220 ->21600*/ }
     { 0, 4 MSO_I }, { 5690, 21600 }, { 7490, 21600 }, { 11500, 21600 }, { 13100, 21600 }, { 17900, 21600 }, { 21600, 4 MSO_I }
 };
-static const SvxMSDffHandle mso_sptTextCurveDownHandle[] =
+const SvxMSDffHandle mso_sptTextCurveDownHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         21600, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 12170 }
 };
-static const mso_CustomShape msoTextCurveDown =
+const mso_CustomShape msoTextCurveDown =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCurveDownVert), SAL_N_ELEMENTS( mso_sptTextCurveDownVert ),
     const_cast<sal_uInt16*>(mso_sptTextCurveUpSegm), sizeof( mso_sptTextCurveUpSegm ) >> 1,
@@ -7128,12 +7128,12 @@ static const mso_CustomShape msoTextCurveDown =
     const_cast<SvxMSDffHandle*>(mso_sptTextCurveDownHandle), SAL_N_ELEMENTS( mso_sptTextCurveDownHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCanUpVert[] =
+const SvxMSDffVertPair mso_sptTextCanUpVert[] =
 {
     { 0, 1 MSO_I }, { 900, 0 }, { 7100, 0 }, { 10800, 0 }, { 14500, 0 }, { 20700, 0 }, { 21600, 1 MSO_I },
     { 0, 21600 }, { 900, 4 MSO_I }, { 7100, 0 MSO_I }, { 10800, 0 MSO_I }, { 14500, 0 MSO_I }, { 20700, 4 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextCanUpCalc[] =
+const SvxMSDffCalculationData mso_sptTextCanUpCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
@@ -7141,21 +7141,21 @@ static const SvxMSDffCalculationData mso_sptTextCanUpCalc[] =
     { 0x4001, { 5470, 0x402, 7200 } },              // 403
     { 0x4000, { 16130, 0x403, 0 } }                 // 404
 };
-static const sal_uInt16 mso_sptTextCanUpSegm[] =
+const sal_uInt16 mso_sptTextCanUpSegm[] =
 {
     0x4000, 0x2002, 0x8000,
     0x4000, 0x2002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextCanUpHandle[] =
+const SvxMSDffHandle mso_sptTextCanUpHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 14400, 21600 }
 };
-static const sal_Int32 mso_sptTextCanUpDefault[] =
+const sal_Int32 mso_sptTextCanUpDefault[] =
 {
     1, 18500
 };
-static const mso_CustomShape msoTextCanUp =
+const mso_CustomShape msoTextCanUp =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCanUpVert), SAL_N_ELEMENTS( mso_sptTextCanUpVert ),
     const_cast<sal_uInt16*>(mso_sptTextCanUpSegm), sizeof( mso_sptTextCanUpSegm ) >> 1,
@@ -7168,27 +7168,27 @@ static const mso_CustomShape msoTextCanUp =
     const_cast<SvxMSDffHandle*>(mso_sptTextCanUpHandle), SAL_N_ELEMENTS( mso_sptTextCanUpHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextCanDownVert[] =
+const SvxMSDffVertPair mso_sptTextCanDownVert[] =
 {
     { 0, 0 }, { 900, 2 MSO_I }, { 7100, 0 MSO_I }, { 10800, 0 MSO_I }, { 14500, 0 MSO_I }, { 20700, 2 MSO_I }, { 21600, 0 },
     { 0, 1 MSO_I }, { 900, 21600 }, { 7100, 21600 }, { 10800, 21600 }, { 14500, 21600 }, { 20700, 21600 }, { 21600, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextCanDownCalc[] =
+const SvxMSDffCalculationData mso_sptTextCanDownCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
     { 0x4001, { 5470, 0x400, 7200 } }               // 402
 };
-static const SvxMSDffHandle mso_sptTextCanDownHandle[] =
+const SvxMSDffHandle mso_sptTextCanDownHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 7200 }
 };
-static const sal_Int32 mso_sptTextCanDownDefault[] =
+const sal_Int32 mso_sptTextCanDownDefault[] =
 {
     1, 3100
 };
-static const mso_CustomShape msoTextCanDown =
+const mso_CustomShape msoTextCanDown =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextCanDownVert), SAL_N_ELEMENTS( mso_sptTextCanDownVert ),
     const_cast<sal_uInt16*>(mso_sptTextCanUpSegm), sizeof( mso_sptTextCanUpSegm ) >> 1,
@@ -7201,28 +7201,28 @@ static const mso_CustomShape msoTextCanDown =
     const_cast<SvxMSDffHandle*>(mso_sptTextCanDownHandle), SAL_N_ELEMENTS( mso_sptTextCanDownHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextInflateVert[] =
+const SvxMSDffVertPair mso_sptTextInflateVert[] =
 {
     { 0, 0 MSO_I }, { 4100, 1 MSO_I }, { 7300, 0 }, { 10800, 0 }, { 14300, 0 }, { 17500, 1 MSO_I }, { 21600, 0 MSO_I },
     { 0, 2 MSO_I }, { 4100, 3 MSO_I }, { 7300, 21600 }, { 10800, 21600 }, { 14300, 21600 }, { 17500, 3 MSO_I }, { 21600, 2 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextInflateCalc[] =
+const SvxMSDffCalculationData mso_sptTextInflateCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x4001, { 1530, 0x400, 4650 } },          // 401
     { 0x8000, { 21600, 0, 0x400 } },            // 402
     { 0x8000, { 21600, 0, 0x401 } }             // 403
 };
-static const SvxMSDffHandle mso_sptTextInflateHandle[] =
+const SvxMSDffHandle mso_sptTextInflateHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 4650 }
 };
-static const sal_Int32 mso_sptTextInflateDefault[] =
+const sal_Int32 mso_sptTextInflateDefault[] =
 {
     1, 2950
 };
-static const mso_CustomShape msoTextInflate =
+const mso_CustomShape msoTextInflate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextInflateVert), SAL_N_ELEMENTS( mso_sptTextInflateVert ),
     const_cast<sal_uInt16*>(mso_sptTextCanUpSegm), sizeof( mso_sptTextCanUpSegm ) >> 1,
@@ -7235,24 +7235,24 @@ static const mso_CustomShape msoTextInflate =
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateHandle), SAL_N_ELEMENTS( mso_sptTextInflateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextDeflateVert[] =
+const SvxMSDffVertPair mso_sptTextDeflateVert[] =
 {
     { 0, 0 }, { 3500, 1 MSO_I }, { 7100, 0 MSO_I }, { 10800, 0 MSO_I }, { 14500, 0 MSO_I }, { 18100, 1 MSO_I }, { 21600, 0 },
     { 0, 21600 }, { 3500, 3 MSO_I }, { 7100, 2 MSO_I }, { 10800, 2 MSO_I }, { 14500, 2 MSO_I }, { 18100, 3 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextDeflateCalc[] =
+const SvxMSDffCalculationData mso_sptTextDeflateCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x2001, { 0x400, 5320, 7100 } },          // 401
     { 0x8000, { 21600, 0, 0x400 } },            // 402
     { 0x8000, { 21600, 0, 0x401 } }             // 403
 };
-static const SvxMSDffHandle mso_sptTextDeflateHandle[] =
+const SvxMSDffHandle mso_sptTextDeflateHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 8100 }
 };
-static const mso_CustomShape msoTextDeflate =
+const mso_CustomShape msoTextDeflate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextDeflateVert), SAL_N_ELEMENTS( mso_sptTextDeflateVert ),
     const_cast<sal_uInt16*>(mso_sptTextCanUpSegm), sizeof( mso_sptTextCanUpSegm ) >> 1,
@@ -7265,33 +7265,33 @@ static const mso_CustomShape msoTextDeflate =
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextInflateBottomVert[] =
+const SvxMSDffVertPair mso_sptTextInflateBottomVert[] =
 {
     { 0, 0 }, { 21600, 0 },
     { 0, 0 MSO_I }, { 3500, 3 MSO_I }, { 7300, 21600 }, { 10800, 21600 }, { 14300, 21600 }, { 18100, 3 MSO_I }, { 21600, 0 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextInflateBottomCalc[] =
+const SvxMSDffCalculationData mso_sptTextInflateBottomCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x2000, { 0x400, 0, 11150 } },            // 401 0->10450
     { 0x2001, { 0x401, 3900, 10450 } },         // 402
     { 0x2000, { 0x402, 17700, 0 } }             // 403
 };
-static const sal_uInt16 mso_sptTextInflateBottomSegm[] =
+const sal_uInt16 mso_sptTextInflateBottomSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x2002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextInflateBottomHandle[] =
+const SvxMSDffHandle mso_sptTextInflateBottomHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 11150, 21600 }
 };
-static const sal_Int32 mso_sptTextInflateBottomDefault[] =
+const sal_Int32 mso_sptTextInflateBottomDefault[] =
 {
     1, 14700
 };
-static const mso_CustomShape msoTextInflateBottom =
+const mso_CustomShape msoTextInflateBottom =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextInflateBottomVert), SAL_N_ELEMENTS( mso_sptTextInflateBottomVert ),
     const_cast<sal_uInt16*>(mso_sptTextInflateBottomSegm), sizeof( mso_sptTextInflateBottomSegm ) >> 1,
@@ -7304,33 +7304,33 @@ static const mso_CustomShape msoTextInflateBottom =
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateBottomHandle), SAL_N_ELEMENTS( mso_sptTextInflateBottomHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextDeflateBottomVert[] =
+const SvxMSDffVertPair mso_sptTextDeflateBottomVert[] =
 {
     { 0, 0 }, { 21600, 0 },
     { 0, 21600 }, { 2900, 3 MSO_I }, { 7200, 0 MSO_I }, { 10800, 0 MSO_I }, { 14400, 0 MSO_I }, { 18700, 3 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextDeflateBottomCalc[] =
+const SvxMSDffCalculationData mso_sptTextDeflateBottomCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x2000, { 0x400, 0, 1350 } },             // 401 0->20250
     { 0x2001, { 0x401, 12070, 20250 } },        // 402
     { 0x2000, { 0x402, 9530, 0 } }              // 403
 };
-static const sal_uInt16 mso_sptTextDeflateBottomSegm[] =
+const sal_uInt16 mso_sptTextDeflateBottomSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x2002, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextDeflateBottomHandle[] =
+const SvxMSDffHandle mso_sptTextDeflateBottomHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 1350, 21600 }
 };
-static const sal_Int32 mso_sptTextDeflateBottomDefault[] =
+const sal_Int32 mso_sptTextDeflateBottomDefault[] =
 {
     1, 11500
 };
-static const mso_CustomShape msoTextDeflateBottom =
+const mso_CustomShape msoTextDeflateBottom =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextDeflateBottomVert), SAL_N_ELEMENTS( mso_sptTextDeflateBottomVert ),
     const_cast<sal_uInt16*>(mso_sptTextDeflateBottomSegm), sizeof( mso_sptTextDeflateBottomSegm ) >> 1,
@@ -7343,31 +7343,31 @@ static const mso_CustomShape msoTextDeflateBottom =
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateBottomHandle), SAL_N_ELEMENTS( mso_sptTextDeflateBottomHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextInflateTopVert[] =
+const SvxMSDffVertPair mso_sptTextInflateTopVert[] =
 {
     { 0, 0 MSO_I }, { 3500, 1 MSO_I }, { 7300, 0 }, { 10800, 0 }, { 14300, 0 }, { 18100, 1 MSO_I }, { 21600, 0 MSO_I },
     { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextInflateTopCalc[] =
+const SvxMSDffCalculationData mso_sptTextInflateTopCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x2001, { 0x400, 3900, 10450 } }          // 401
 };
-static const sal_uInt16 mso_sptTextInflateTopSegm[] =
+const sal_uInt16 mso_sptTextInflateTopSegm[] =
 {
     0x4000, 0x2002, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextInflateTopHandle[] =
+const SvxMSDffHandle mso_sptTextInflateTopHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 10450 }
 };
-static const sal_Int32 mso_sptTextInflateTopDefault[] =
+const sal_Int32 mso_sptTextInflateTopDefault[] =
 {
     1, 6900
 };
-static const mso_CustomShape msoTextInflateTop =
+const mso_CustomShape msoTextInflateTop =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextInflateTopVert), SAL_N_ELEMENTS( mso_sptTextInflateTopVert ),
     const_cast<sal_uInt16*>(mso_sptTextInflateTopSegm), sizeof( mso_sptTextInflateTopSegm ) >> 1,
@@ -7380,31 +7380,31 @@ static const mso_CustomShape msoTextInflateTop =
     const_cast<SvxMSDffHandle*>(mso_sptTextInflateTopHandle), SAL_N_ELEMENTS( mso_sptTextInflateTopHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextDeflateTopVert[] =
+const SvxMSDffVertPair mso_sptTextDeflateTopVert[] =
 {
     { 0, 0 }, { 2900, 1 MSO_I }, { 7200, 0 MSO_I }, { 10800, 0 MSO_I }, { 14400, 0 MSO_I }, { 18700, 1 MSO_I }, { 21600, 0 },
     { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextDeflateTopCalc[] =
+const SvxMSDffCalculationData mso_sptTextDeflateTopCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x2001, { 0x400, 12070, 20250 } }         // 402
 };
-static const sal_uInt16 mso_sptTextDeflateTopSegm[] =
+const sal_uInt16 mso_sptTextDeflateTopSegm[] =
 {
     0x4000, 0x2002, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextDeflateTopHandle[] =
+const SvxMSDffHandle mso_sptTextDeflateTopHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 20250 }
 };
-static const sal_Int32 mso_sptTextDeflateTopDefault[] =
+const sal_Int32 mso_sptTextDeflateTopDefault[] =
 {
     1, 10100
 };
-static const mso_CustomShape msoTextDeflateTop =
+const mso_CustomShape msoTextDeflateTop =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextDeflateTopVert), SAL_N_ELEMENTS( mso_sptTextDeflateTopVert ),
     const_cast<sal_uInt16*>(mso_sptTextDeflateTopSegm), sizeof( mso_sptTextDeflateTopSegm ) >> 1,
@@ -7417,14 +7417,14 @@ static const mso_CustomShape msoTextDeflateTop =
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateTopHandle), SAL_N_ELEMENTS( mso_sptTextDeflateTopHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextDeflateInflateVert[] =
+const SvxMSDffVertPair mso_sptTextDeflateInflateVert[] =
 {
     { 0, 0 }, { 21600, 0 },
     { 0, 10100 }, { 3300, 3 MSO_I }, { 7100, 5 MSO_I }, { 10800, 5 MSO_I }, { 14500, 5 MSO_I }, { 18300, 3 MSO_I }, { 21600, 10100 },
     { 0, 11500 }, { 3300, 4 MSO_I }, { 7100, 6 MSO_I }, { 10800, 6 MSO_I }, { 14500, 6 MSO_I }, { 18300, 4 MSO_I }, { 21600, 11500 },
     { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextDeflateInflateCalc[] =
+const SvxMSDffCalculationData mso_sptTextDeflateInflateCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
     { 0x8000, { 10800, 0, 0x400 } },            // 401
@@ -7434,23 +7434,23 @@ static const SvxMSDffCalculationData mso_sptTextDeflateInflateCalc[] =
     { 0x2000, { 0x400, 0, 700 } },              // 405
     { 0x2000, { 0x400, 700, 0 } }               // 406
 };
-static const sal_uInt16 mso_sptTextDeflateInflateSegm[] =
+const sal_uInt16 mso_sptTextDeflateInflateSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x2002, 0x8000,
     0x4000, 0x2002, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextDeflateInflateHandle[] =
+const SvxMSDffHandle mso_sptTextDeflateInflateHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 1300, 20300 }
 };
-static const sal_Int32 mso_sptTextDeflateInflateDefault[] =
+const sal_Int32 mso_sptTextDeflateInflateDefault[] =
 {
     1, 6500
 };
-static const mso_CustomShape msoTextDeflateInflate =
+const mso_CustomShape msoTextDeflateInflate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextDeflateInflateVert), SAL_N_ELEMENTS( mso_sptTextDeflateInflateVert ),
     const_cast<sal_uInt16*>(mso_sptTextDeflateInflateSegm), sizeof( mso_sptTextDeflateInflateSegm ) >> 1,
@@ -7463,7 +7463,7 @@ static const mso_CustomShape msoTextDeflateInflate =
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateInflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateInflateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
+const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
 {
     { 0, 0 }, { 21600, 0 },
     { 0, 6600 }, { 3600, 3 MSO_I }, { 7250, 4 MSO_I }, { 10800, 4 MSO_I }, { 14350, 4 MSO_I }, { 18000, 3 MSO_I }, { 21600, 6600 },
@@ -7472,7 +7472,7 @@ static const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
     { 0, 15000 }, { 3600, 7 MSO_I }, { 7250, 8 MSO_I }, { 10800, 8 MSO_I }, { 14350, 8 MSO_I }, { 18000, 7 MSO_I }, { 21600, 15000 },
     { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextDeflateInflateDeflateCalc[] =
+const SvxMSDffCalculationData mso_sptTextDeflateInflateDeflateCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 850 } },       // 400
     { 0x2001, { 0x400, 6120, 8700 } },
@@ -7486,7 +7486,7 @@ static const SvxMSDffCalculationData mso_sptTextDeflateInflateDeflateCalc[] =
     { 0x8000, { 21600, 0, 0x405 } },                    // 409
     { 0x8000, { 21600, 0, 0x406 } }                     // 410
 };
-static const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
+const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
 {
     0x4000, 0x0001, 0x8000,
     0x4000, 0x2002, 0x8000,
@@ -7495,16 +7495,16 @@ static const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
     0x4000, 0x2002, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffHandle mso_sptTextDeflateInflateDeflateHandle[] =
+const SvxMSDffHandle mso_sptTextDeflateInflateDeflateHandle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 850, 9550 }
 };
-static const sal_Int32 mso_sptTextDeflateInflateDeflateDefault[] =
+const sal_Int32 mso_sptTextDeflateInflateDeflateDefault[] =
 {
     1, 6050
 };
-static const mso_CustomShape msoTextDeflateInflateDeflate =
+const mso_CustomShape msoTextDeflateInflateDeflate =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextDeflateInflateDeflateVert), SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateVert ),
     const_cast<sal_uInt16*>(mso_sptTextDeflateInflateDeflateSegm), sizeof( mso_sptTextDeflateInflateDeflateSegm ) >> 1,
@@ -7517,17 +7517,17 @@ static const mso_CustomShape msoTextDeflateInflateDeflate =
     const_cast<SvxMSDffHandle*>(mso_sptTextDeflateInflateDeflateHandle), SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave1Vert[] =  // adjustment1 : 0 - 4459
+const SvxMSDffVertPair mso_sptTextWave1Vert[] =  // adjustment1 : 0 - 4459
 {                                                   // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
-static const sal_uInt16 mso_sptTextWave1Segm[] =
+const sal_uInt16 mso_sptTextWave1Segm[] =
 {
     0x4000, 0x2001, 0x8000,
     0x4000, 0x2001, 0x8000
 };
-static const mso_CustomShape msoTextWave1 =
+const mso_CustomShape msoTextWave1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextWave1Vert), SAL_N_ELEMENTS( mso_sptTextWave1Vert ),
     const_cast<sal_uInt16*>(mso_sptTextWave1Segm), sizeof( mso_sptTextWave1Segm ) >> 1,
@@ -7540,12 +7540,12 @@ static const mso_CustomShape msoTextWave1 =
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave2Vert[] =  // adjustment1 : 0 - 4459
+const SvxMSDffVertPair mso_sptTextWave2Vert[] =  // adjustment1 : 0 - 4459
 {                                                   // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 10 MSO_I }, { 16 MSO_I, 9 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 26 MSO_I }, { 25 MSO_I, 28 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
-static const mso_CustomShape msoTextWave2 =
+const mso_CustomShape msoTextWave2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextWave2Vert), SAL_N_ELEMENTS( mso_sptTextWave2Vert ),
     const_cast<sal_uInt16*>(mso_sptTextWave1Segm), sizeof( mso_sptTextWave1Segm ) >> 1,
@@ -7558,17 +7558,17 @@ static const mso_CustomShape msoTextWave2 =
     const_cast<SvxMSDffHandle*>(mso_sptWaveHandle), SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave3Vert[] =  // adjustment1 : 0 - 2230
+const SvxMSDffVertPair mso_sptTextWave3Vert[] =  // adjustment1 : 0 - 2230
 {                                                       // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 0x1f MSO_I, 10 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1e MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 0x21 MSO_I, 26 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x20 MSO_I, 28 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
-static const sal_uInt16 mso_sptTextWave3Segm[] =
+const sal_uInt16 mso_sptTextWave3Segm[] =
 {
     0x4000, 0x2002, 0x8000,
     0x4000, 0x2002, 0x8000
 };
-static const mso_CustomShape msoTextWave3 =
+const mso_CustomShape msoTextWave3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextWave3Vert), SAL_N_ELEMENTS( mso_sptTextWave3Vert ),
     const_cast<sal_uInt16*>(mso_sptTextWave3Segm), sizeof( mso_sptTextWave3Segm ) >> 1,
@@ -7581,12 +7581,12 @@ static const mso_CustomShape msoTextWave3 =
     const_cast<SvxMSDffHandle*>(mso_sptDoubleWaveHandle), SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave4Vert[] =  // adjustment1 : 0 - 2230
+const SvxMSDffVertPair mso_sptTextWave4Vert[] =  // adjustment1 : 0 - 2230
 {                                                       // adjustment2 : 8640 - 12960
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 10 MSO_I }, { 0x1f MSO_I, 9 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1e MSO_I, 10 MSO_I }, { 16 MSO_I, 9 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 26 MSO_I }, { 0x21 MSO_I, 28 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x20 MSO_I, 26 MSO_I }, { 25 MSO_I, 28 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
-static const mso_CustomShape msoTextWave4 =
+const mso_CustomShape msoTextWave4 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTextWave4Vert), SAL_N_ELEMENTS( mso_sptTextWave4Vert ),
     const_cast<sal_uInt16*>(mso_sptTextWave3Segm), sizeof( mso_sptTextWave3Segm ) >> 1,
@@ -7599,68 +7599,68 @@ static const mso_CustomShape msoTextWave4 =
     const_cast<SvxMSDffHandle*>(mso_sptDoubleWaveHandle), SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
-static const sal_Int32 mso_sptCalloutDefault1[] =
+const sal_Int32 mso_sptCalloutDefault1[] =
 {
     4, -1800, 24500, -1800, 4000
 };
-static const sal_Int32 mso_sptCalloutDefault2[] =
+const sal_Int32 mso_sptCalloutDefault2[] =
 {
     4, -8300, 24500, -1800, 4000
 };
-static const sal_Int32 mso_sptCalloutDefault3[] =
+const sal_Int32 mso_sptCalloutDefault3[] =
 {
     6, -10000, 24500, -3600, 4000, -1800, 4000
 };
-static const sal_Int32 mso_sptCalloutDefault4[] =
+const sal_Int32 mso_sptCalloutDefault4[] =
 {
     8, 23400, 24500, 25200, 21600, 25200, 4000, 23400, 4000
 };
-static const SvxMSDffVertPair mso_sptCalloutVert1[] =
+const SvxMSDffVertPair mso_sptCalloutVert1[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }
 };
-static const SvxMSDffHandle mso_sptCalloutHandle1[] =
+const SvxMSDffHandle mso_sptCalloutHandle1[] =
 {
     {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
     {   SvxMSDffHandleFlags::NONE,
         0x102, 0x103, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
-static const sal_uInt16 mso_sptCalloutSegm1a[] =
+const sal_uInt16 mso_sptCalloutSegm1a[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCalloutSegm1b[] =
+const sal_uInt16 mso_sptCalloutSegm1b[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffVertPair mso_sptCallout1Vert[] =
+const SvxMSDffVertPair mso_sptCallout1Vert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 0 }, { 2 MSO_I, 21600 }
 };
-static const sal_uInt16 mso_sptCallout1Segm1a[] =
+const sal_uInt16 mso_sptCallout1Segm1a[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCallout1Segm1b[] =
+const sal_uInt16 mso_sptCallout1Segm1b[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffVertPair mso_sptCallout2Verta[] =
+const SvxMSDffVertPair mso_sptCallout2Verta[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 5 MSO_I }
 };
-static const SvxMSDffVertPair mso_sptCallout2Vertb[] =
+const SvxMSDffVertPair mso_sptCallout2Vertb[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 5 MSO_I }, { 4 MSO_I, 0 }, { 4 MSO_I, 21600 }
 };
-static const SvxMSDffHandle mso_sptCalloutHandle2[] =
+const SvxMSDffHandle mso_sptCalloutHandle2[] =
 {
     {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
@@ -7669,21 +7669,21 @@ static const SvxMSDffHandle mso_sptCalloutHandle2[] =
     {   SvxMSDffHandleFlags::NONE,
         0x104, 0x105, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
-static const sal_uInt16 mso_sptCallout2Segm1a[] =
+const sal_uInt16 mso_sptCallout2Segm1a[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCallout2Segm1b[] =
+const sal_uInt16 mso_sptCallout2Segm1b[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCallout2Segm1c[] =
+const sal_uInt16 mso_sptCallout2Segm1c[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0x0001, 0x8000,
@@ -7691,7 +7691,7 @@ static const sal_uInt16 mso_sptCallout2Segm1c[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCallout2Segm1d[] =
+const sal_uInt16 mso_sptCallout2Segm1d[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0x0001, 0x8000,
@@ -7699,15 +7699,15 @@ static const sal_uInt16 mso_sptCallout2Segm1d[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffVertPair mso_sptCallout3Verta[] =
+const SvxMSDffVertPair mso_sptCallout3Verta[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 6 MSO_I, 7 MSO_I }, { 4 MSO_I, 5 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 1 MSO_I }
 };
-static const SvxMSDffVertPair mso_sptCallout3Vertb[] =
+const SvxMSDffVertPair mso_sptCallout3Vertb[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 6 MSO_I, 7 MSO_I }, { 4 MSO_I, 5 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 1 MSO_I }, { 6 MSO_I, 0 }, { 6 MSO_I, 21600 }
 };
-static const SvxMSDffHandle mso_sptCalloutHandle3[] =
+const SvxMSDffHandle mso_sptCalloutHandle3[] =
 {
     {   SvxMSDffHandleFlags::NONE,
         0x100, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff },
@@ -7718,30 +7718,30 @@ static const SvxMSDffHandle mso_sptCalloutHandle3[] =
     {   SvxMSDffHandleFlags::NONE,
         0x106, 0x107, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
-static const sal_uInt16 mso_sptCallout3Segm1a[] =
+const sal_uInt16 mso_sptCallout3Segm1a[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0xaa00, 0x0003, 0x8000          // NO_FILL
 };
-static const sal_uInt16 mso_sptCallout3Segm1b[] =
+const sal_uInt16 mso_sptCallout3Segm1b[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0xaa00, 0x0003, 0x8000          // NO FILL
 };
-static const sal_uInt16 mso_sptCallout3Segm1c[] =
+const sal_uInt16 mso_sptCallout3Segm1c[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
     0x4000, 0xaa00, 0x0003, 0x8000,         // NO FILL
     0x4000, 0x0001, 0x8000
 };
-static const sal_uInt16 mso_sptCallout3Segm1d[] =
+const sal_uInt16 mso_sptCallout3Segm1d[] =
 {
     0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
     0x4000, 0xaa00, 0x0003, 0x8000,         // NO FILL
     0x4000, 0x0001, 0x8000
 };
 
-static const SvxMSDffCalculationData mso_sptCalloutCalc[] =
+const SvxMSDffCalculationData mso_sptCalloutCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -7753,7 +7753,7 @@ static const SvxMSDffCalculationData mso_sptCalloutCalc[] =
     { 0x2000, { DFF_Prop_adjust8Value, 0, 0 } }
 };
 
-static const mso_CustomShape msoCallout90 =
+const mso_CustomShape msoCallout90 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1b), sizeof( mso_sptCalloutSegm1b ) >> 1,
@@ -7765,7 +7765,7 @@ static const mso_CustomShape msoCallout90 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoCallout1 =
+const mso_CustomShape msoCallout1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1b), sizeof( mso_sptCalloutSegm1b ) >> 1,
@@ -7777,7 +7777,7 @@ static const mso_CustomShape msoCallout1 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoCallout2 =
+const mso_CustomShape msoCallout2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout2Verta), SAL_N_ELEMENTS( mso_sptCallout2Verta ),
     const_cast<sal_uInt16*>(mso_sptCallout2Segm1b), sizeof( mso_sptCallout2Segm1b ) >> 1,
@@ -7789,7 +7789,7 @@ static const mso_CustomShape msoCallout2 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
-static const mso_CustomShape msoCallout3 =
+const mso_CustomShape msoCallout3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout3Verta), SAL_N_ELEMENTS( mso_sptCallout3Verta ),
     const_cast<sal_uInt16*>(mso_sptCallout3Segm1b), sizeof( mso_sptCallout3Segm1b ) >> 1,
@@ -7801,7 +7801,7 @@ static const mso_CustomShape msoCallout3 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
-static const mso_CustomShape msoAccentCallout90 =
+const mso_CustomShape msoAccentCallout90 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1b), sizeof( mso_sptCalloutSegm1b ) >> 1,
@@ -7813,7 +7813,7 @@ static const mso_CustomShape msoAccentCallout90 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoAccentCallout1 =
+const mso_CustomShape msoAccentCallout1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout1Vert), SAL_N_ELEMENTS( mso_sptCallout1Vert ),
     const_cast<sal_uInt16*>(mso_sptCallout1Segm1b), sizeof( mso_sptCallout1Segm1b ) >> 1,
@@ -7825,7 +7825,7 @@ static const mso_CustomShape msoAccentCallout1 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoAccentCallout2 =
+const mso_CustomShape msoAccentCallout2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout2Vertb), SAL_N_ELEMENTS( mso_sptCallout2Vertb ),
     const_cast<sal_uInt16*>(mso_sptCallout2Segm1d), sizeof( mso_sptCallout2Segm1d ) >> 1,
@@ -7837,7 +7837,7 @@ static const mso_CustomShape msoAccentCallout2 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
-static const mso_CustomShape msoAccentCallout3 =
+const mso_CustomShape msoAccentCallout3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout3Vertb), SAL_N_ELEMENTS( mso_sptCallout3Vertb ),
     const_cast<sal_uInt16*>(mso_sptCallout3Segm1d), sizeof( mso_sptCallout3Segm1d ) >> 1,
@@ -7849,7 +7849,7 @@ static const mso_CustomShape msoAccentCallout3 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
-static const mso_CustomShape msoBorderCallout90 =
+const mso_CustomShape msoBorderCallout90 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1a), sizeof( mso_sptCalloutSegm1a ) >> 1,
@@ -7861,7 +7861,7 @@ static const mso_CustomShape msoBorderCallout90 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoBorderCallout1 =
+const mso_CustomShape msoBorderCallout1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1a), sizeof( mso_sptCalloutSegm1a ) >> 1,
@@ -7873,7 +7873,7 @@ static const mso_CustomShape msoBorderCallout1 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoBorderCallout2 =
+const mso_CustomShape msoBorderCallout2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout2Verta), SAL_N_ELEMENTS( mso_sptCallout2Verta ),
     const_cast<sal_uInt16*>(mso_sptCallout2Segm1a), sizeof( mso_sptCallout2Segm1a ) >> 1,
@@ -7885,7 +7885,7 @@ static const mso_CustomShape msoBorderCallout2 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
-static const mso_CustomShape msoBorderCallout3 =
+const mso_CustomShape msoBorderCallout3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout3Verta), SAL_N_ELEMENTS( mso_sptCallout3Verta ),
     const_cast<sal_uInt16*>(mso_sptCallout3Segm1a), sizeof( mso_sptCallout3Segm1a ) >> 1,
@@ -7897,7 +7897,7 @@ static const mso_CustomShape msoBorderCallout3 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
-static const mso_CustomShape msoAccentBorderCallout90 =
+const mso_CustomShape msoAccentBorderCallout90 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCalloutVert1), SAL_N_ELEMENTS( mso_sptCalloutVert1 ),
     const_cast<sal_uInt16*>(mso_sptCalloutSegm1a), sizeof( mso_sptCalloutSegm1a ) >> 1,
@@ -7909,7 +7909,7 @@ static const mso_CustomShape msoAccentBorderCallout90 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoAccentBorderCallout1 =
+const mso_CustomShape msoAccentBorderCallout1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout1Vert), SAL_N_ELEMENTS( mso_sptCallout1Vert ),
     const_cast<sal_uInt16*>(mso_sptCallout1Segm1a), sizeof( mso_sptCallout1Segm1a ) >> 1,
@@ -7921,7 +7921,7 @@ static const mso_CustomShape msoAccentBorderCallout1 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle1), SAL_N_ELEMENTS( mso_sptCalloutHandle1 )
 };
-static const mso_CustomShape msoAccentBorderCallout2 =
+const mso_CustomShape msoAccentBorderCallout2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout2Vertb), SAL_N_ELEMENTS( mso_sptCallout2Vertb ),
     const_cast<sal_uInt16*>(mso_sptCallout2Segm1c), sizeof( mso_sptCallout2Segm1c ) >> 1,
@@ -7933,7 +7933,7 @@ static const mso_CustomShape msoAccentBorderCallout2 =
     nullptr, 0,
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle2), SAL_N_ELEMENTS( mso_sptCalloutHandle2 )
 };
-static const mso_CustomShape msoAccentBorderCallout3 =
+const mso_CustomShape msoAccentBorderCallout3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCallout3Vertb), SAL_N_ELEMENTS( mso_sptCallout3Vertb ),
     const_cast<sal_uInt16*>(mso_sptCallout3Segm1c), sizeof( mso_sptCallout3Segm1c ) >> 1,
@@ -7946,15 +7946,15 @@ static const mso_CustomShape msoAccentBorderCallout3 =
     const_cast<SvxMSDffHandle*>(mso_sptCalloutHandle3), SAL_N_ELEMENTS( mso_sptCalloutHandle3 )
 };
 
-static const SvxMSDffVertPair mso_sptStraightConnector1Vert[] =
+const SvxMSDffVertPair mso_sptStraightConnector1Vert[] =
 {
     { 0, 0 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptStraightConnector1Segm[] =
+const sal_uInt16 mso_sptStraightConnector1Segm[] =
 {
     0x4000, 0x0001, 0x8000
 };
-static const mso_CustomShape msoStraightConnector1 =
+const mso_CustomShape msoStraightConnector1 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptStraightConnector1Vert), SAL_N_ELEMENTS( mso_sptStraightConnector1Vert ),
     const_cast<sal_uInt16*>(mso_sptStraightConnector1Segm), sizeof( mso_sptStraightConnector1Segm ) >> 1,
@@ -7967,15 +7967,15 @@ static const mso_CustomShape msoStraightConnector1 =
     nullptr, 0
 };
 
-static const SvxMSDffVertPair mso_sptBentConnector2Vert[] =
+const SvxMSDffVertPair mso_sptBentConnector2Vert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptBentConnector2Segm[] =
+const sal_uInt16 mso_sptBentConnector2Segm[] =
 {
     0x4000, 0x0002, 0x8000
 };
-static const mso_CustomShape msoBentConnector2 =
+const mso_CustomShape msoBentConnector2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentConnector2Vert), SAL_N_ELEMENTS( mso_sptBentConnector2Vert ),
     const_cast<sal_uInt16*>(mso_sptBentConnector2Segm), sizeof( mso_sptBentConnector2Segm ) >> 1,
@@ -7988,28 +7988,28 @@ static const mso_CustomShape msoBentConnector2 =
     nullptr, 0
 };
 
-static const SvxMSDffVertPair mso_sptBentConnector3Vert[] =
+const SvxMSDffVertPair mso_sptBentConnector3Vert[] =
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 21600 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptBentConnector3Segm[] =
+const sal_uInt16 mso_sptBentConnector3Segm[] =
 {
     0x4000, 0x0003, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBentConnector3Calc[] =
+const SvxMSDffCalculationData mso_sptBentConnector3Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
-static const sal_Int32 mso_sptBentConnector3Default[] =
+const sal_Int32 mso_sptBentConnector3Default[] =
 {
     1, 10800
 };
-static const SvxMSDffHandle mso_sptBentConnector3Handle[] =
+const SvxMSDffHandle mso_sptBentConnector3Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBentConnector3 =
+const mso_CustomShape msoBentConnector3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentConnector3Vert), SAL_N_ELEMENTS( mso_sptBentConnector3Vert ),
     const_cast<sal_uInt16*>(mso_sptBentConnector3Segm), sizeof( mso_sptBentConnector3Segm ) >> 1,
@@ -8022,15 +8022,15 @@ static const mso_CustomShape msoBentConnector3 =
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector3Handle), SAL_N_ELEMENTS( mso_sptBentConnector3Handle )
 };
 
-static const SvxMSDffVertPair mso_sptBentConnector4Vert[] =
+const SvxMSDffVertPair mso_sptBentConnector4Vert[] =
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptBentConnector4Segm[] =
+const sal_uInt16 mso_sptBentConnector4Segm[] =
 {
     0x4000, 0x0004, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBentConnector4Calc[] =
+const SvxMSDffCalculationData mso_sptBentConnector4Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -8038,18 +8038,18 @@ static const SvxMSDffCalculationData mso_sptBentConnector4Calc[] =
     { 0x2001, { 0x402, 1, 2 } },
     { 0x2001, { 0x401, 1, 2 } }
 };
-static const sal_Int32 mso_sptBentConnector4Default[] =
+const sal_Int32 mso_sptBentConnector4Default[] =
 {
     2, 10800, 10800
 };
-static const SvxMSDffHandle mso_sptBentConnector4Handle[] =
+const SvxMSDffHandle mso_sptBentConnector4Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 4 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 4 + 3, 4 + 3 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoBentConnector4 =
+const mso_CustomShape msoBentConnector4 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentConnector4Vert), SAL_N_ELEMENTS( mso_sptBentConnector4Vert ),
     const_cast<sal_uInt16*>(mso_sptBentConnector4Segm), sizeof( mso_sptBentConnector4Segm ) >> 1,
@@ -8062,15 +8062,15 @@ static const mso_CustomShape msoBentConnector4 =
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector4Handle), SAL_N_ELEMENTS( mso_sptBentConnector4Handle )
 };
 
-static const SvxMSDffVertPair mso_sptBentConnector5Vert[] =
+const SvxMSDffVertPair mso_sptBentConnector5Vert[] =
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 4 MSO_I }, { 1 MSO_I, 4 MSO_I }, { 1 MSO_I, 21600 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptBentConnector5Segm[] =
+const sal_uInt16 mso_sptBentConnector5Segm[] =
 {
     0x4000, 0x0005, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptBentConnector5Calc[] =
+const SvxMSDffCalculationData mso_sptBentConnector5Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
@@ -8081,11 +8081,11 @@ static const SvxMSDffCalculationData mso_sptBentConnector5Calc[] =
     { 0x4000, { 21600, 0x404, 0 } },
     { 0x2001, { 0x406, 1, 2 } }
 };
-static const sal_Int32 mso_sptBentConnector5Default[] =
+const sal_Int32 mso_sptBentConnector5Default[] =
 {
     3, 10800, 10800, 10800
 };
-static const SvxMSDffHandle mso_sptBentConnector5Handle[] =
+const SvxMSDffHandle mso_sptBentConnector5Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 5 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 5 + 3, 5 + 3 },
@@ -8094,7 +8094,7 @@ static const SvxMSDffHandle mso_sptBentConnector5Handle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x102, 7 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 7 + 3, 7 + 3 }
 };
-static const mso_CustomShape msoBentConnector5 =
+const mso_CustomShape msoBentConnector5 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptBentConnector5Vert), SAL_N_ELEMENTS( mso_sptBentConnector5Vert ),
     const_cast<sal_uInt16*>(mso_sptBentConnector5Segm), sizeof( mso_sptBentConnector5Segm ) >> 1,
@@ -8107,15 +8107,15 @@ static const mso_CustomShape msoBentConnector5 =
     const_cast<SvxMSDffHandle*>(mso_sptBentConnector5Handle), SAL_N_ELEMENTS( mso_sptBentConnector5Handle )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedConnector2Vert[] =
+const SvxMSDffVertPair mso_sptCurvedConnector2Vert[] =
 {
     { 0, 0 }, { 10800, 0 }, { 21600, 10800 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptCurvedConnector2Segm[] =
+const sal_uInt16 mso_sptCurvedConnector2Segm[] =
 {
     0x4000, 0x2001, 0x8000
 };
-static const mso_CustomShape msoCurvedConnector2 =
+const mso_CustomShape msoCurvedConnector2 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedConnector2Vert), SAL_N_ELEMENTS( mso_sptCurvedConnector2Vert ),
     const_cast<sal_uInt16*>(mso_sptCurvedConnector2Segm), sizeof( mso_sptCurvedConnector2Segm ) >> 1,
@@ -8128,31 +8128,31 @@ static const mso_CustomShape msoCurvedConnector2 =
     nullptr, 0
 };
 
-static const SvxMSDffVertPair mso_sptCurvedConnector3Vert[] =
+const SvxMSDffVertPair mso_sptCurvedConnector3Vert[] =
 {
     { 0, 0 }, { 1 MSO_I, 0 }, { 0 MSO_I, 5400 }, { 0 MSO_I, 10800 }, { 0 MSO_I, 16200 }, { 3 MSO_I, 21600 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptCurvedConnector3Segm[] =
+const sal_uInt16 mso_sptCurvedConnector3Segm[] =
 {
     0x4000, 0x2002, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedConnector3Calc[] =
+const SvxMSDffCalculationData mso_sptCurvedConnector3Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2001, { 0x400, 1, 2 } },
     { 0x2000, { 0x400, 21600, 0 } },
     { 0x2001, { 0x402, 1, 2 } }
 };
-static const sal_Int32 mso_sptCurvedConnector3Default[] =
+const sal_Int32 mso_sptCurvedConnector3Default[] =
 {
     1, 10800
 };
-static const SvxMSDffHandle mso_sptCurvedConnector3Handle[] =
+const SvxMSDffHandle mso_sptCurvedConnector3Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE,
         0x100, 10800, 10800, 10800, MIN_INT32, 0x7fffffff, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoCurvedConnector3 =
+const mso_CustomShape msoCurvedConnector3 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedConnector3Vert), SAL_N_ELEMENTS( mso_sptCurvedConnector3Vert ),
     const_cast<sal_uInt16*>(mso_sptCurvedConnector3Segm), sizeof( mso_sptCurvedConnector3Segm ) >> 1,
@@ -8165,18 +8165,18 @@ static const mso_CustomShape msoCurvedConnector3 =
     const_cast<SvxMSDffHandle*>(mso_sptCurvedConnector3Handle), SAL_N_ELEMENTS( mso_sptCurvedConnector3Handle )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedConnector4Vert[] =
+const SvxMSDffVertPair mso_sptCurvedConnector4Vert[] =
 {
     { 0, 0 }, { 1 MSO_I, 0 }, { 0 MSO_I, 10 MSO_I }, { 0 MSO_I, 9 MSO_I },
     { 0 MSO_I, 12 MSO_I }, { 5 MSO_I, 8 MSO_I }, { 3 MSO_I, 8 MSO_I },
     { 7 MSO_I, 8 MSO_I }, { 21600, 14 MSO_I }, { 21600, 21600 }
 
 };
-static const sal_uInt16 mso_sptCurvedConnector4Segm[] =
+const sal_uInt16 mso_sptCurvedConnector4Segm[] =
 {
     0x4000, 0x2003, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedConnector4Calc[] =
+const SvxMSDffCalculationData mso_sptCurvedConnector4Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2001, { 0x400, 1, 2 } },
@@ -8194,18 +8194,18 @@ static const SvxMSDffCalculationData mso_sptCurvedConnector4Calc[] =
     { 0x2000, { 0x408, 21600, 0 } },
     { 0x2001, { 0x40d, 1, 2 } }
 };
-static const sal_Int32 mso_sptCurvedConnector4Default[] =
+const sal_Int32 mso_sptCurvedConnector4Default[] =
 {
     2, 10800, 10800
 };
-static const SvxMSDffHandle mso_sptCurvedConnector4Handle[] =
+const SvxMSDffHandle mso_sptCurvedConnector4Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 9 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 9 + 3, 9 + 3 },
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL,
         3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, MIN_INT32, 0x7fffffff }
 };
-static const mso_CustomShape msoCurvedConnector4 =
+const mso_CustomShape msoCurvedConnector4 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedConnector4Vert), SAL_N_ELEMENTS( mso_sptCurvedConnector4Vert ),
     const_cast<sal_uInt16*>(mso_sptCurvedConnector4Segm), sizeof( mso_sptCurvedConnector4Segm ) >> 1,
@@ -8218,7 +8218,7 @@ static const mso_CustomShape msoCurvedConnector4 =
     const_cast<SvxMSDffHandle*>(mso_sptCurvedConnector4Handle), SAL_N_ELEMENTS( mso_sptCurvedConnector4Handle )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedConnector5Vert[] =
+const SvxMSDffVertPair mso_sptCurvedConnector5Vert[] =
 {
     { 0, 0 },
     { 21 MSO_I, 0 }, { 0 MSO_I, 12 MSO_I }, { 0 MSO_I, 11 MSO_I },
@@ -8226,11 +8226,11 @@ static const SvxMSDffVertPair mso_sptCurvedConnector5Vert[] =
     { 8 MSO_I, 4 MSO_I }, { 1 MSO_I, 18 MSO_I }, { 1 MSO_I, 16 MSO_I },
     { 1 MSO_I, 20 MSO_I }, { 10 MSO_I, 21600 }, { 21600, 21600 }
 };
-static const sal_uInt16 mso_sptCurvedConnector5Segm[] =
+const sal_uInt16 mso_sptCurvedConnector5Segm[] =
 {
     0x4000, 0x2004, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedConnector5Calc[] =
+const SvxMSDffCalculationData mso_sptCurvedConnector5Calc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
@@ -8255,11 +8255,11 @@ static const SvxMSDffCalculationData mso_sptCurvedConnector5Calc[] =
     { 0x2001, { 0x413, 1, 2 } },
     { 0x2001, { 0x400, 1, 2 } }
 };
-static const sal_Int32 mso_sptCurvedConnector5Default[] =
+const sal_Int32 mso_sptCurvedConnector5Default[] =
 {
     3, 10800, 10800, 10800
 };
-static const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
+const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
 {
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x100, 11 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 11 + 3, 11 + 3 },
@@ -8268,7 +8268,7 @@ static const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL | SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL,
         0x102, 16 + 3, 10800, 10800, MIN_INT32, 0x7fffffff, 16 + 3, 16 + 3 }
 };
-static const mso_CustomShape msoCurvedConnector5 =
+const mso_CustomShape msoCurvedConnector5 =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptCurvedConnector5Vert), SAL_N_ELEMENTS( mso_sptCurvedConnector5Vert ),
     const_cast<sal_uInt16*>(mso_sptCurvedConnector5Segm), sizeof( mso_sptCurvedConnector5Segm ) >> 1,
@@ -8282,7 +8282,7 @@ static const mso_CustomShape msoCurvedConnector5 =
 };
 
 /////////////////////////////teardrop
-static const SvxMSDffVertPair mso_sptTearDropVert[] =
+const SvxMSDffVertPair mso_sptTearDropVert[] =
 {
     { 10800, 0 },
     { 0, 10800 },                                                   // X
@@ -8294,7 +8294,7 @@ static const SvxMSDffVertPair mso_sptTearDropVert[] =
 
 //  the last number (0x***n)  :  0 = sum, 1 = prod, 2 = mid, 3 = abs, 4 = min, 5 = max, 6 = if, 13 = sqrt, 15 = eclipse ...
 //    the first number(0xn***)  :  2/4/8 the first/second/third value is not directly value
-static const SvxMSDffCalculationData mso_sptTearDropCalc[] =
+const SvxMSDffCalculationData mso_sptTearDropCalc[] =
 {
     { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } },  // 0  adjust value #0
     { 0x8000 , { 21600 , 0 , 0x0400 } },            // 1  21600 - @0                     y0
@@ -8305,18 +8305,18 @@ static const SvxMSDffCalculationData mso_sptTearDropCalc[] =
 
 //m, qx, qy, qx,C,C
 //the last number(0x***n) : repeat number of this current Segm
-static const sal_uInt16 mso_sptTearDropSegm[] =
+const sal_uInt16 mso_sptTearDropSegm[] =
 {
     0x4000, 0xa701, 0xa801, 0xa701, 0x2002, 0x6000, 0x8000
 };
 
-static const SvxMSDffTextRectangles mso_sptTearDropTextRect[] =
+const SvxMSDffTextRectangles mso_sptTearDropTextRect[] =
 {
     { { 2863, 2863 }, { 18737, 18737 } }
 };
 
 //the range of adjust values
-static const SvxMSDffHandle mso_sptTearDropHandle[] =
+const SvxMSDffHandle mso_sptTearDropHandle[] =
 {
     //position="$0,0" xrange="10800,32400"
     {   SvxMSDffHandleFlags::RANGE | SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL| SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL,
@@ -8324,12 +8324,12 @@ static const SvxMSDffHandle mso_sptTearDropHandle[] =
 };
 
 //the number of adjust values, the default values
-static const sal_Int32 mso_sptTearDropDefault[] =
+const sal_Int32 mso_sptTearDropDefault[] =
 {
     1, 21600
 };
 
-static const mso_CustomShape msoTearDrop =
+const mso_CustomShape msoTearDrop =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptTearDropVert), SAL_N_ELEMENTS( mso_sptTearDropVert ),
     const_cast<sal_uInt16*>(mso_sptTearDropSegm), sizeof( mso_sptTearDropSegm ) >> 1,

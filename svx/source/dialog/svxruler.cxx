@@ -153,7 +153,7 @@ void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 // expects: something like SwTabCols
 // Ruler: SetBorders
 
-static constexpr long glMinFrame = 5;   // minimal frame width in pixels
+constexpr long glMinFrame = 5;   // minimal frame width in pixels
 
 SvxRuler::SvxRuler(
             vcl::Window* pParent,        // StarView Parent
