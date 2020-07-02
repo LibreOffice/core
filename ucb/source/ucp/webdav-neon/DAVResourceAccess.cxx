@@ -44,7 +44,7 @@ using namespace com::sun::star;
 
 // DAVAuthListener_Impl Implementation.
 
-static constexpr sal_uInt32 g_nRedirectLimit = 5;
+constexpr sal_uInt32 g_nRedirectLimit = 5;
 
 // virtual
 int DAVAuthListener_Impl::authenticate(

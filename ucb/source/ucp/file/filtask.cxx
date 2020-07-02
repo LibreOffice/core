@@ -116,21 +116,21 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
 
         // Default properties
 
-static const OUStringLiteral Title( "Title" );
-static const OUStringLiteral CasePreservingURL( "CasePreservingURL" );
-static const OUStringLiteral IsDocument( "IsDocument" );
-static const OUStringLiteral IsFolder( "IsFolder" );
-static const OUStringLiteral DateModified( "DateModified" );
-static const OUStringLiteral Size( "Size" );
-static const OUStringLiteral IsVolume( "IsVolume" );
-static const OUStringLiteral IsRemoveable( "IsRemoveable" );
-static const OUStringLiteral IsRemote( "IsRemote" );
-static const OUStringLiteral IsCompactDisc( "IsCompactDisc" );
-static const OUStringLiteral IsFloppy( "IsFloppy" );
-static const OUStringLiteral IsHidden( "IsHidden" );
-static const OUStringLiteral ContentType( "ContentType" );
-static const OUStringLiteral IsReadOnly( "IsReadOnly" );
-static const OUStringLiteral CreatableContentsInfo( "CreatableContentsInfo" );
+const OUStringLiteral Title( "Title" );
+const OUStringLiteral CasePreservingURL( "CasePreservingURL" );
+const OUStringLiteral IsDocument( "IsDocument" );
+const OUStringLiteral IsFolder( "IsFolder" );
+const OUStringLiteral DateModified( "DateModified" );
+const OUStringLiteral Size( "Size" );
+const OUStringLiteral IsVolume( "IsVolume" );
+const OUStringLiteral IsRemoveable( "IsRemoveable" );
+const OUStringLiteral IsRemote( "IsRemote" );
+const OUStringLiteral IsCompactDisc( "IsCompactDisc" );
+const OUStringLiteral IsFloppy( "IsFloppy" );
+const OUStringLiteral IsHidden( "IsHidden" );
+const OUStringLiteral ContentType( "ContentType" );
+const OUStringLiteral IsReadOnly( "IsReadOnly" );
+const OUStringLiteral CreatableContentsInfo( "CreatableContentsInfo" );
 const OUStringLiteral TaskManager::FolderContentType( "application/vnd.sun.staroffice.fsys-folder" );
 const OUStringLiteral TaskManager::FileContentType( "application/vnd.sun.staroffice.fsys-file" );
 
