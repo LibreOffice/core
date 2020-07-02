@@ -41,7 +41,7 @@ struct NameTypeTable
 
 }
 
-static const NameTypeTable pNameTypeTableArray[] =
+const NameTypeTable pNameTypeTableArray[] =
 {
     { "non-primitive", mso_sptMin },
     { "rectangle", mso_sptRectangle },
@@ -325,7 +325,7 @@ struct ACCNameTypeTable
 
 }
 
-static const ACCNameTypeTable pACCNameTypeTableArray[] =
+const ACCNameTypeTable pACCNameTypeTableArray[] =
 {
     { "non-primitive", "Non Primitive Shape" },
     { "rectangle", "Rectangle" },

@@ -44,7 +44,7 @@ using namespace com::sun::star::style;
 
 
 // The selection of bullets from the star symbol
-static const sal_Unicode aBulletTypes[] =
+const sal_Unicode aBulletTypes[] =
 {
     0x2022,
     0x25cf,

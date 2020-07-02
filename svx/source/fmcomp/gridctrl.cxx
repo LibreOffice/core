@@ -82,7 +82,7 @@ using namespace com::sun::star::accessibility;
 
 #define ROWSTATUS(row) (!row.is() ? "NULL" : row->GetStatus() == GridRowStatus::Clean ? "CLEAN" : row->GetStatus() == GridRowStatus::Modified ? "MODIFIED" : row->GetStatus() == GridRowStatus::Deleted ? "DELETED" : "INVALID")
 
-static constexpr auto DEFAULT_BROWSE_MODE =
+constexpr auto DEFAULT_BROWSE_MODE =
               BrowserMode::COLUMNSELECTION
             | BrowserMode::MULTISELECTION
             | BrowserMode::KEEPHIGHLIGHT
@@ -223,7 +223,7 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
     }
 }
 
-static const DbGridControlNavigationBarState ControlMap[] =
+const DbGridControlNavigationBarState ControlMap[] =
     {
         DbGridControlNavigationBarState::Text,
         DbGridControlNavigationBarState::Absolute,

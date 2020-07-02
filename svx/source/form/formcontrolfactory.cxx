@@ -220,7 +220,7 @@ namespace svxform
         }
 
 
-        static const char* aCharacterAndParagraphProperties[] =
+        const char* aCharacterAndParagraphProperties[] =
         {
             "CharFontName",
             "CharFontStyleName",

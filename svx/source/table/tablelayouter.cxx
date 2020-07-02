@@ -46,7 +46,7 @@ namespace sdr::table {
 
 static SvxBorderLine gEmptyBorder;
 
-static const OUStringLiteral gsSize( "Size" );
+const OUStringLiteral gsSize( "Size" );
 
 TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 : mxTable( xTableModel )

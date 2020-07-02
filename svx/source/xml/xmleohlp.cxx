@@ -116,8 +116,8 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     bStreamClosed = true;
 }
 
-static const OUStringLiteral gaReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME );
-static const OUStringLiteral gaReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 );
+const OUStringLiteral gaReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME );
+const OUStringLiteral gaReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 );
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),

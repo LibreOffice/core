@@ -557,7 +557,7 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
 
-static struct
+struct
 {
     const char* mpAPIName;
     sal_uInt16  mnAPINameLen;

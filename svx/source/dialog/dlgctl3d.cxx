@@ -242,7 +242,7 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 #define NO_LIGHT_SELECTED           (0xffffffff)
 #define MAX_NUMBER_LIGHTS              (8)
 
-static const sal_Int32 g_nInteractionStartDistance = 5 * 5 * 2;
+const sal_Int32 g_nInteractionStartDistance = 5 * 5 * 2;
 
 Svx3DLightControl::Svx3DLightControl()
 :   maChangeCallback(),

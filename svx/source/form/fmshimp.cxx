@@ -103,7 +103,7 @@
 #include <vector>
 
 // is used for Invalidate -> maintain it as well
-static const sal_uInt16 DatabaseSlotMap[] =
+const sal_uInt16 DatabaseSlotMap[] =
 {
     SID_FM_RECORD_FIRST,
     SID_FM_RECORD_NEXT,
@@ -131,7 +131,7 @@ static const sal_uInt16 DatabaseSlotMap[] =
 
 // is used for Invalidate -> maintain it as well
 // sort ascending !!!!!!
-static const sal_Int16 DlgSlotMap[] =    // slots of the controller
+const sal_Int16 DlgSlotMap[] =    // slots of the controller
 {
     SID_FM_CTL_PROPERTIES,
     SID_FM_PROPERTIES,
@@ -147,7 +147,7 @@ static const sal_Int16 DlgSlotMap[] =    // slots of the controller
     0
 };
 
-static const sal_Int16 SelObjectSlotMap[] =  // slots depending on the SelObject
+const sal_Int16 SelObjectSlotMap[] =  // slots depending on the SelObject
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
@@ -202,7 +202,7 @@ static const char* aConvertSlots[] =
     "ConvertToNavigationBar"
 };
 
-static const OUStringLiteral aImgIds[] =
+const OUStringLiteral aImgIds[] =
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,
@@ -226,7 +226,7 @@ static const OUStringLiteral aImgIds[] =
     RID_SVXBMP_NAVIGATIONBAR
 };
 
-static const sal_Int16 nObjectTypes[] =
+const sal_Int16 nObjectTypes[] =
 {
     OBJ_FM_EDIT,
     OBJ_FM_BUTTON,
