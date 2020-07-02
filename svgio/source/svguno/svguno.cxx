@@ -27,7 +27,7 @@
 
 namespace {
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &svgio::svgreader::XSvgParser_createInstance,
       &svgio::svgreader::XSvgParser_getImplementationName,
       &svgio::svgreader::XSvgParser_getSupportedServiceNames,
