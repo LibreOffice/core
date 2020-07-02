@@ -67,9 +67,9 @@ const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
  * would work, together with the nTimezonePos handling in GetTimeRef(). */
 #define NF_RECOGNIZE_ISO8601_TIMEZONES 0
 
-static const sal_Unicode cNoBreakSpace = 0xA0;
-static const sal_Unicode cNarrowNoBreakSpace = 0x202F;
-static const bool kDefaultEra = true;     // Gregorian CE, positive year
+const sal_Unicode cNoBreakSpace = 0xA0;
+const sal_Unicode cNarrowNoBreakSpace = 0x202F;
+const bool kDefaultEra = true;     // Gregorian CE, positive year
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
