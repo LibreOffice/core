@@ -24,7 +24,6 @@
 #include <vcl/spinfld.hxx>
 
 class VCL_DLLPUBLIC FormattedField : public SpinField
-                                   , public Formatter
 {
 public:
     FormattedField(vcl::Window* pParent, WinBits nStyle);
@@ -48,15 +47,11 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    // Formatter overrides
-    virtual Selection GetEntrySelection() const override;
-    virtual OUString GetEntryText() const override;
-    virtual void SetEntryText(const OUString& rText, const Selection& rSel) override;
-    virtual void SetEntryTextColor(const Color* pColor) override;
-    virtual SelectionOptions GetEntrySelectionOptions() const override;
-    virtual void FieldModified() override;
+    Formatter* GetFormatter();
 
 protected:
+    std::unique_ptr<Formatter> m_xFormatter;
+
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     virtual void Modify() override;
 
@@ -70,15 +65,13 @@ public:
 
     virtual ~DoubleNumericField() override;
 
-private:
-    virtual bool CheckText(const OUString& sText) const override;
-
-    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
+    validation::NumberValidator& GetNumberValidator() { return *m_pNumberValidator; }
     void ResetConformanceTester();
+
+private:
 
     std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
-
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DoubleCurrencyField final : public FormattedField
 {
@@ -91,14 +84,10 @@ public:
     bool        getPrependCurrSym() const { return m_bPrependCurrSym; }
     void        setPrependCurrSym(bool _bPrepend);
 
-private:
-    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
-
     void UpdateCurrencyFormat();
-
+private:
     OUString   m_sCurrencySymbol;
     bool       m_bPrependCurrSym;
-    bool       m_bChangingFormat;
 };
 
 #endif // INCLUDED_VCL_FMTFIELD_HXX

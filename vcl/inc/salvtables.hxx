@@ -15,6 +15,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
@@ -617,6 +618,7 @@ class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::Spin
 {
 private:
     VclPtr<FormattedField> m_xButton;
+    Formatter* m_pFormatter;
 
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);

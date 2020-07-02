@@ -159,7 +159,7 @@ SelectionOptions FormattedEntry::GetEntrySelectionOptions() const { return m_eOp
 
 void FormattedEntry::FieldModified() { m_aModifyHdl.Call(*m_xEntry); }
 
-IMPL_LINK_NOARG(FormattedEntry, ModifyHdl, weld::Entry&, void) { impl_Modify(); }
+IMPL_LINK_NOARG(FormattedEntry, ModifyHdl, weld::Entry&, void) { Modify(); }
 
 IMPL_LINK_NOARG(FormattedEntry, FocusOutHdl, weld::Widget&, void) { EntryLostFocus(); }
 }

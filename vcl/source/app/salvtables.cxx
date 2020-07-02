@@ -5207,13 +5207,14 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
                         bool bTakeOwnership)
     : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
     , m_xButton(pButton)
+    , m_pFormatter(m_xButton->GetFormatter())
 {
-    m_xButton->SetThousandsSep(false); //off by default, MetricSpinButton enables it
+    m_pFormatter->SetThousandsSep(false); //off by default, MetricSpinButton enables it
     m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
     m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
     m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
-    m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
-    m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
+    m_pFormatter->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
+    m_pFormatter->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
     if (Edit* pEdit = m_xButton->GetSubEdit())
         pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
     else
@@ -5222,40 +5223,40 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
 
 int SalInstanceSpinButton::get_value() const
 {
-    return fromField(m_xButton->GetValue());
-    }
+    return fromField(m_pFormatter->GetValue());
+}
 
 void SalInstanceSpinButton::set_value(int value)
 {
-    m_xButton->SetValue(toField(value));
-    }
+    m_pFormatter->SetValue(toField(value));
+}
 
 void SalInstanceSpinButton::set_range(int min, int max)
 {
-    m_xButton->SetMinValue(toField(min));
-    m_xButton->SetMaxValue(toField(max));
+    m_pFormatter->SetMinValue(toField(min));
+    m_pFormatter->SetMaxValue(toField(max));
 }
 
 void SalInstanceSpinButton::get_range(int& min, int& max) const
 {
-    min = fromField(m_xButton->GetMinValue());
-    max = fromField(m_xButton->GetMaxValue());
+    min = fromField(m_pFormatter->GetMinValue());
+    max = fromField(m_pFormatter->GetMaxValue());
 }
 
 void SalInstanceSpinButton::set_increments(int step, int /*page*/)
 {
-    m_xButton->SetSpinSize(toField(step));
+    m_pFormatter->SetSpinSize(toField(step));
 }
 
 void SalInstanceSpinButton::get_increments(int& step, int& page) const
 {
-    step = fromField(m_xButton->GetSpinSize());
-    page = fromField(m_xButton->GetSpinSize());
+    step = fromField(m_pFormatter->GetSpinSize());
+    page = fromField(m_pFormatter->GetSpinSize());
 }
 
 void SalInstanceSpinButton::set_digits(unsigned int digits)
 {
-    m_xButton->SetDecimalDigits(digits);
+    m_pFormatter->SetDecimalDigits(digits);
 }
 
 // SpinButton may be comprised of multiple subwidgets, consider the lot as
@@ -5268,18 +5269,18 @@ bool SalInstanceSpinButton::has_focus() const
 //so with hh::mm::ss, incrementing mm will not reset ss
 void SalInstanceSpinButton::DisableRemainderFactor()
 {
-    m_xButton->DisableRemainderFactor();
+    m_pFormatter->DisableRemainderFactor();
 }
 
 //off by default for direct SpinButtons, MetricSpinButton enables it
 void SalInstanceSpinButton::SetUseThousandSep()
 {
-    m_xButton->SetThousandsSep(true);
+    m_pFormatter->SetThousandsSep(true);
 }
 
 unsigned int SalInstanceSpinButton::get_digits() const
 {
-    return m_xButton->GetDecimalDigits();
+    return m_pFormatter->GetDecimalDigits();
 }
 
 SalInstanceSpinButton::~SalInstanceSpinButton()
@@ -5288,8 +5289,8 @@ SalInstanceSpinButton::~SalInstanceSpinButton()
         pEdit->SetActivateHdl(Link<Edit&, bool>());
     else
         m_xButton->SetActivateHdl(Link<Edit&, bool>());
-    m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
-    m_xButton->SetOutputHdl(Link<LinkParamNone*, bool>());
+    m_pFormatter->SetInputHdl(Link<sal_Int64*, TriState>());
+    m_pFormatter->SetOutputHdl(Link<LinkParamNone*, bool>());
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
     m_xButton->SetUpHdl(Link<SpinField&, void>());
@@ -5324,6 +5325,7 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 {
 private:
     VclPtr<FormattedField> m_xButton;
+    Formatter* m_pFormatter;
 
     DECL_LINK(OutputHdl, LinkParamNone*, bool);
     DECL_LINK(InputHdl, sal_Int64*, TriState);
@@ -5333,61 +5335,62 @@ public:
                                    bool bTakeOwnership)
         : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
+        , m_pFormatter(m_xButton->GetFormatter())
     {
-        m_xButton->SetOutputHdl(LINK(this, SalInstanceFormattedSpinButton, OutputHdl));
-        m_xButton->SetInputHdl(LINK(this, SalInstanceFormattedSpinButton, InputHdl));
+        m_pFormatter->SetOutputHdl(LINK(this, SalInstanceFormattedSpinButton, OutputHdl));
+        m_pFormatter->SetInputHdl(LINK(this, SalInstanceFormattedSpinButton, InputHdl));
 
         // #i6278# allow more decimal places than the output format.  As
         // the numbers shown in the edit fields are used for input, it makes more
         // sense to display the values in the input format rather than the output
         // format.
-        m_xButton->UseInputStringForFormatting();
+        m_pFormatter->UseInputStringForFormatting();
     }
 
     virtual ~SalInstanceFormattedSpinButton() override
     {
-        m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
-        m_xButton->SetOutputHdl(Link<LinkParamNone*, bool>());
+        m_pFormatter->SetInputHdl(Link<sal_Int64*, TriState>());
+        m_pFormatter->SetOutputHdl(Link<LinkParamNone*, bool>());
     }
 
-    virtual double get_value() const override { return m_xButton->GetValue(); }
+    virtual double get_value() const override { return m_pFormatter->GetValue(); }
 
-    virtual void set_value(double value) override { m_xButton->SetValue(value); }
+    virtual void set_value(double value) override { m_pFormatter->SetValue(value); }
 
     virtual void set_range(double min, double max) override
     {
-        m_xButton->SetMinValue(min);
-        m_xButton->SetMaxValue(max);
+        m_pFormatter->SetMinValue(min);
+        m_pFormatter->SetMaxValue(max);
     }
 
     virtual void get_range(double& min, double& max) const override
     {
-        min = m_xButton->GetMinValue();
-        max = m_xButton->GetMaxValue();
+        min = m_pFormatter->GetMinValue();
+        max = m_pFormatter->GetMaxValue();
     }
 
     virtual void set_increments(double step, double /*page*/) override
     {
-        m_xButton->SetSpinSize(step);
+        m_pFormatter->SetSpinSize(step);
     }
 
     virtual void set_formatter(SvNumberFormatter* pFormatter) override
     {
-        m_xButton->SetFormatter(pFormatter);
+        m_pFormatter->SetFormatter(pFormatter);
     }
 
-    virtual SvNumberFormatter* get_formatter() override { return m_xButton->GetFormatter(); }
+    virtual SvNumberFormatter* get_formatter() override { return m_pFormatter->GetFormatter(); }
 
-    virtual sal_Int32 get_format_key() const override { return m_xButton->GetFormatKey(); }
+    virtual sal_Int32 get_format_key() const override { return m_pFormatter->GetFormatKey(); }
 
     virtual void set_format_key(sal_Int32 nFormatKey) override
     {
-        m_xButton->SetFormatKey(nFormatKey);
+        m_pFormatter->SetFormatKey(nFormatKey);
     }
 
-    virtual void treat_as_number(bool bSet) override { m_xButton->TreatAsNumber(bSet); }
+    virtual void treat_as_number(bool bSet) override { m_pFormatter->TreatAsNumber(bSet); }
 
-    virtual void set_digits(unsigned int digits) override { m_xButton->SetDecimalDigits(digits); }
+    virtual void set_digits(unsigned int digits) override { m_pFormatter->SetDecimalDigits(digits); }
 };
 
 IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, OutputHdl, LinkParamNone*, bool)
@@ -5408,7 +5411,7 @@ IMPL_LINK(SalInstanceFormattedSpinButton, InputHdl, sal_Int64*, pResult, TriStat
     double value;
     TriState eRet = m_aInputHdl.Call(&value) ? TRISTATE_TRUE : TRISTATE_FALSE;
     if (eRet == TRISTATE_TRUE)
-        *pResult = std::round(value * weld::SpinButton::Power10(m_xButton->GetDecimalDigits()));
+        *pResult = std::round(value * weld::SpinButton::Power10(m_pFormatter->GetDecimalDigits()));
     return eRet;
 }
 

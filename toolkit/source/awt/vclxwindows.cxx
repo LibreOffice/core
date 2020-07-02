@@ -7186,9 +7186,8 @@ void SVTXFormattedField::SetWindow( const VclPtr< vcl::Window > &_pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
     if (GetAs< FormattedField >())
-        GetAs< FormattedField >()->SetAutoColor(true);
+        GetAs< FormattedField >()->GetFormatter()->SetAutoColor(true);
 }
-
 
 void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
@@ -7197,6 +7196,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
     {
+        Formatter* pFormatter = pField->GetFormatter();
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch (nPropType)
         {
@@ -7204,7 +7204,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
             {
                 bool bEnable( true );
                 if ( Value >>= bEnable )
-                    pField->EnableNotANumber( !bEnable );
+                    pFormatter->EnableNotANumber( !bEnable );
             }
             break;
 
@@ -7276,12 +7276,12 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
             {
                 double d = 0.0;
                 if ( Value >>= d )
-                     pField->SetSpinSize( d );
+                     pFormatter->SetSpinSize( d );
                 else
                 {
                     sal_Int32 n = 0;
                     if ( Value >>= n )
-                         pField->SetSpinSize( n );
+                         pFormatter->SetSpinSize( n );
                 }
             }
             break;
@@ -7289,14 +7289,14 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
             {
                 sal_Int32 n = 0;
                 if ( Value >>= n )
-                     pField->SetDecimalDigits( static_cast<sal_uInt16>(n) );
+                     pFormatter->SetDecimalDigits( static_cast<sal_uInt16>(n) );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
                     bool b;
                     if ( Value >>= b )
-                     pField->SetThousandsSep( b );
+                     pFormatter->SetThousandsSep( b );
             }
             break;
 
@@ -7307,13 +7307,12 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
         if (BASEPROPERTY_TEXTCOLOR == nPropType)
         {   // after setting a new text color, think again about the AutoColor flag of the control
             // 17.05.2001 - 86859 - frank.schoenheit@germany.sun.com
-            pField->SetAutoColor(!Value.hasValue());
+            pFormatter->SetAutoColor(!Value.hasValue());
         }
     }
     else
         VCLXSpinField::setProperty( PropertyName, Value );
 }
-
 
 css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
 {
@@ -7324,6 +7323,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
     {
+        Formatter* pFormatter = pField->GetFormatter();
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch (nPropType)
         {
@@ -7351,11 +7351,11 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
                 break;
 
             case BASEPROPERTY_VALUESTEP_DOUBLE:
-                aReturn <<= pField->GetSpinSize();
+                aReturn <<= pFormatter->GetSpinSize();
                 break;
 
             case BASEPROPERTY_DECIMALACCURACY:
-                aReturn <<= pField->GetDecimalDigits();
+                aReturn <<= pFormatter->GetDecimalDigits();
                 break;
 
             case BASEPROPERTY_FORMATSSUPPLIER:
@@ -7390,10 +7390,11 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
     if (!pField)
         return aReturn;
 
+    Formatter* pFieldFormatter = pField->GetFormatter();
     switch (rValue.getValueType().getTypeClass())
     {
         case css::uno::TypeClass_DOUBLE:
-            if (pField->TreatingAsNumber())
+            if (pFieldFormatter->TreatingAsNumber())
             {
                 double d = 0.0;
                 rValue >>= d;
@@ -7401,9 +7402,9 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
             }
             else
             {
-                SvNumberFormatter* pFormatter = pField->GetFormatter();
+                SvNumberFormatter* pFormatter = pFieldFormatter->GetFormatter();
                 if (!pFormatter)
-                    pFormatter = pField->StandardFormatter();
+                    pFormatter = pFieldFormatter->StandardFormatter();
                     // should never fail
 
                 Color* pDum;
@@ -7418,11 +7419,11 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
         {
             OUString aStr;
             rValue >>= aStr;
-            if (pField->TreatingAsNumber())
+            if (pFieldFormatter->TreatingAsNumber())
             {
-                SvNumberFormatter* pFormatter = pField->GetFormatter();
+                SvNumberFormatter* pFormatter = pFieldFormatter->GetFormatter();
                 if (!pFormatter)
-                    pFormatter = pField->StandardFormatter();
+                    pFormatter = pFieldFormatter->StandardFormatter();
 
                 double dVal;
                 sal_uInt32 nTestFormat(0);
@@ -7441,13 +7442,13 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
     return aReturn;
 }
 
-
 void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (!pField)
         return;
 
+    Formatter* pFormatter = pField->GetFormatter();
     switch (rValue.getValueType().getTypeClass())
 
     {
@@ -7455,9 +7456,9 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
         {
             double d = 0.0;
             rValue >>= d;
-            pField->SetMinValue(d);
-        }
+            pFormatter->SetMinValue(d);
             break;
+        }
         default:
             DBG_ASSERT(rValue.getValueType().getTypeClass() == css::uno::TypeClass_VOID, "SVTXFormattedField::SetMinValue : invalid argument (an exception will be thrown) !");
             if ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID )
@@ -7465,20 +7466,22 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
             {
                 throw css::lang::IllegalArgumentException();
             }
-            pField->ClearMinValue();
+            pFormatter->ClearMinValue();
             break;
     }
 }
 
-
 css::uno::Any SVTXFormattedField::GetMinValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    if (!pField || !pField->HasMinValue())
+    if (!pField)
+        return css::uno::Any();
+    Formatter* pFormatter = pField->GetFormatter();
+    if (!pFormatter->HasMinValue())
         return css::uno::Any();
 
     css::uno::Any aReturn;
-    aReturn <<= pField->GetMinValue();
+    aReturn <<= pFormatter->GetMinValue();
     return aReturn;
 }
 
@@ -7489,39 +7492,40 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
     if (!pField)
         return;
 
+    Formatter* pFormatter = pField->GetFormatter();
     switch (rValue.getValueType().getTypeClass())
-
     {
         case css::uno::TypeClass_DOUBLE:
         {
             double d = 0.0;
             rValue >>= d;
-            pField->SetMaxValue(d);
-        }
+            pFormatter->SetMaxValue(d);
             break;
+        }
         default:
             if (rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID)
 
             {
                 throw css::lang::IllegalArgumentException();
             }
-            pField->ClearMaxValue();
+            pFormatter->ClearMaxValue();
             break;
     }
 }
 
-
 css::uno::Any SVTXFormattedField::GetMaxValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    if (!pField || !pField->HasMaxValue())
+    if (!pField)
+        return css::uno::Any();
+    Formatter* pFormatter = pField->GetFormatter();
+    if (!pFormatter->HasMaxValue())
         return css::uno::Any();
 
     css::uno::Any aReturn;
-    aReturn <<= pField->GetMaxValue();
+    aReturn <<= pFormatter->GetMaxValue();
     return aReturn;
 }
-
 
 void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
 {
@@ -7531,63 +7535,62 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
 
     css::uno::Any aConverted = convertEffectiveValue(rValue);
 
+    Formatter* pFormatter = pField->GetFormatter();
     switch (aConverted.getValueType().getTypeClass())
-
     {
         case css::uno::TypeClass_DOUBLE:
         {
             double d = 0.0;
             aConverted >>= d;
-            pField->SetDefaultValue(d);
+            pFormatter->SetDefaultValue(d);
         }
         break;
         case css::uno::TypeClass_STRING:
         {
             OUString aStr;
             aConverted >>= aStr;
-            pField->SetDefaultText( aStr );
+            pFormatter->SetDefaultText( aStr );
         }
         break;
         default:
-            pField->EnableEmptyField(true);
+            pFormatter->EnableEmptyField(true);
                 // only void accepted
             break;
     }
 }
 
-
 css::uno::Any SVTXFormattedField::GetDefaultValue() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    if (!pField || pField->IsEmptyFieldEnabled())
+    if (!pField)
+        return css::uno::Any();
+    Formatter* pFormatter = pField->GetFormatter();
+    if (pFormatter->IsEmptyFieldEnabled())
         return css::uno::Any();
 
     css::uno::Any aReturn;
-    if (pField->TreatingAsNumber())
-        aReturn <<= pField->GetDefaultValue();
+    if (pFormatter->TreatingAsNumber())
+        aReturn <<= pFormatter->GetDefaultValue();
     else
-        aReturn <<= pField->GetDefaultText();
+        aReturn <<= pFormatter->GetDefaultText();
     return aReturn;
 }
-
 
 bool SVTXFormattedField::GetTreatAsNumber() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
-        return pField->TreatingAsNumber();
+        return pField->GetFormatter()->TreatingAsNumber();
 
     return true;
 }
-
 
 void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if (pField)
-        pField->TreatAsNumber(bSet);
+        pField->GetFormatter()->TreatAsNumber(bSet);
 }
-
 
 css::uno::Any SVTXFormattedField::GetValue() const
 {
@@ -7595,21 +7598,21 @@ css::uno::Any SVTXFormattedField::GetValue() const
     if (!pField)
         return css::uno::Any();
 
+    Formatter* pFormatter = pField->GetFormatter();
     css::uno::Any aReturn;
-    if (!pField->TreatingAsNumber())
+    if (!pFormatter->TreatingAsNumber())
     {
-        OUString sText = pField->GetTextValue();
+        OUString sText = pFormatter->GetTextValue();
         aReturn <<= sText;
     }
     else
     {
         if (!pField->GetText().isEmpty())    // empty is returned as void by default
-            aReturn <<= pField->GetValue();
+            aReturn <<= pFormatter->GetValue();
     }
 
     return aReturn;
 }
-
 
 void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 {
@@ -7623,11 +7626,12 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
     }
     else
     {
+        Formatter* pFormatter = pField->GetFormatter();
         if (rValue.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE )
         {
             double d = 0.0;
             rValue >>= d;
-            pField->SetValue(d);
+            pFormatter->SetValue(d);
         }
         else
         {
@@ -7635,10 +7639,10 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 
             OUString sText;
             rValue >>= sText;
-            if (!pField->TreatingAsNumber())
-                pField->SetTextFormatted(sText);
+            if (!pFormatter->TreatingAsNumber())
+                pFormatter->SetTextFormatted(sText);
             else
-                pField->SetTextValue(sText);
+                pFormatter->SetTextValue(sText);
         }
     }
 //  NotifyTextListeners();
@@ -7648,13 +7652,14 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier)
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
+    Formatter* pFormatter = pField ? pField->GetFormatter() : nullptr;
 
     SvNumberFormatsSupplierObj* pNew = nullptr;
     if (!xSupplier.is())
     {
         if (pField)
         {
-            pNew = new SvNumberFormatsSupplierObj(pField->StandardFormatter());
+            pNew = new SvNumberFormatsSupplierObj(pFormatter->StandardFormatter());
             bIsStandardSupplier = true;
         }
     }
@@ -7673,23 +7678,21 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
 
     // save the actual value
     css::uno::Any aCurrent = GetValue();
-    pField->SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
+    pFormatter->SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
     if (nKeyToSetDelayed != -1)
     {
-        pField->SetFormatKey(nKeyToSetDelayed);
+        pFormatter->SetFormatKey(nKeyToSetDelayed);
         nKeyToSetDelayed = -1;
     }
     SetValue(aCurrent);
     NotifyTextListeners();
 }
 
-
 sal_Int32 SVTXFormattedField::getFormatKey() const
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetFormatKey() : 0;
+    return pField ? pField->GetFormatter()->GetFormatKey() : 0;
 }
-
 
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
@@ -7697,8 +7700,9 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
     if (!pField)
         return;
 
-    if (pField->GetFormatter())
-        pField->SetFormatKey(nKey);
+    Formatter* pFormatter = pField->GetFormatter();
+    if (pFormatter->GetFormatter())
+        pFormatter->SetFormatKey(nKey);
     else
     {
         // probably I am in a block, in which first the key and next the formatter will be set,
@@ -7708,7 +7712,6 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
     }
     NotifyTextListeners();
 }
-
 
 void SVTXFormattedField::NotifyTextListeners()
 {
@@ -7783,7 +7786,7 @@ void SVTXCurrencyField::setValue( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetValue( Value );
+        pField->GetFormatter()->SetValue( Value );
 }
 
 double SVTXCurrencyField::getValue()
@@ -7791,7 +7794,7 @@ double SVTXCurrencyField::getValue()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetValue() : 0;
+    return pField ? pField->GetFormatter()->GetValue() : 0;
 }
 
 void SVTXCurrencyField::setMin( double Value )
@@ -7800,7 +7803,7 @@ void SVTXCurrencyField::setMin( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetMinValue( Value );
+        pField->GetFormatter()->SetMinValue( Value );
 }
 
 double SVTXCurrencyField::getMin()
@@ -7808,7 +7811,7 @@ double SVTXCurrencyField::getMin()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetMinValue() : 0;
+    return pField ? pField->GetFormatter()->GetMinValue() : 0;
 }
 
 void SVTXCurrencyField::setMax( double Value )
@@ -7817,7 +7820,7 @@ void SVTXCurrencyField::setMax( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetMaxValue( Value );
+        pField->GetFormatter()->SetMaxValue( Value );
 }
 
 double SVTXCurrencyField::getMax()
@@ -7825,7 +7828,7 @@ double SVTXCurrencyField::getMax()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetMaxValue() : 0;
+    return pField ? pField->GetFormatter()->GetMaxValue() : 0;
 }
 
 void SVTXCurrencyField::setFirst( double Value )
@@ -7834,7 +7837,7 @@ void SVTXCurrencyField::setFirst( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinFirst( Value );
+        pField->GetFormatter()->SetSpinFirst( Value );
 }
 
 double SVTXCurrencyField::getFirst()
@@ -7842,7 +7845,7 @@ double SVTXCurrencyField::getFirst()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinFirst() : 0;
+    return pField ? pField->GetFormatter()->GetSpinFirst() : 0;
 }
 
 void SVTXCurrencyField::setLast( double Value )
@@ -7851,7 +7854,7 @@ void SVTXCurrencyField::setLast( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinLast( Value );
+        pField->GetFormatter()->SetSpinLast( Value );
 }
 
 double SVTXCurrencyField::getLast()
@@ -7859,7 +7862,7 @@ double SVTXCurrencyField::getLast()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinLast() : 0;
+    return pField ? pField->GetFormatter()->GetSpinLast() : 0;
 }
 
 void SVTXCurrencyField::setSpinSize( double Value )
@@ -7868,7 +7871,7 @@ void SVTXCurrencyField::setSpinSize( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinSize( Value );
+        pField->GetFormatter()->SetSpinSize( Value );
 }
 
 double SVTXCurrencyField::getSpinSize()
@@ -7876,7 +7879,7 @@ double SVTXCurrencyField::getSpinSize()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinSize() : 0;
+    return pField ? pField->GetFormatter()->GetSpinSize() : 0;
 }
 
 void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value )
@@ -7885,7 +7888,7 @@ void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetDecimalDigits( Value );
+        pField->GetFormatter()->SetDecimalDigits( Value );
 }
 
 sal_Int16 SVTXCurrencyField::getDecimalDigits()
@@ -7893,7 +7896,7 @@ sal_Int16 SVTXCurrencyField::getDecimalDigits()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetDecimalDigits() : 0;
+    return pField ? pField->GetFormatter()->GetDecimalDigits() : 0;
 }
 
 void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict )
@@ -7902,7 +7905,7 @@ void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetStrictFormat( bStrict );
+        pField->GetFormatter()->SetStrictFormat( bStrict );
 }
 
 sal_Bool SVTXCurrencyField::isStrictFormat()
@@ -7910,7 +7913,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField && pField->IsStrictFormat();
+    return pField && pField->GetFormatter()->IsStrictFormat();
 }
 
 void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
@@ -8013,14 +8016,13 @@ css::uno::Sequence< css::uno::Type > SVTXNumericField::getTypes()
     return aTypeList.getTypes();
 }
 
-
 void SVTXNumericField::setValue( double Value )
 {
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetValue( Value );
+        pField->GetFormatter()->SetValue( Value );
 }
 
 double SVTXNumericField::getValue()
@@ -8028,7 +8030,7 @@ double SVTXNumericField::getValue()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetValue() : 0;
+    return pField ? pField->GetFormatter()->GetValue() : 0;
 }
 
 void SVTXNumericField::setMin( double Value )
@@ -8037,7 +8039,7 @@ void SVTXNumericField::setMin( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetMinValue( Value );
+        pField->GetFormatter()->SetMinValue( Value );
 }
 
 double SVTXNumericField::getMin()
@@ -8045,7 +8047,7 @@ double SVTXNumericField::getMin()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetMinValue() : 0;
+    return pField ? pField->GetFormatter()->GetMinValue() : 0;
 }
 
 void SVTXNumericField::setMax( double Value )
@@ -8054,7 +8056,7 @@ void SVTXNumericField::setMax( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetMaxValue( Value );
+        pField->GetFormatter()->SetMaxValue( Value );
 }
 
 double SVTXNumericField::getMax()
@@ -8062,7 +8064,7 @@ double SVTXNumericField::getMax()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetMaxValue() : 0;
+    return pField ? pField->GetFormatter()->GetMaxValue() : 0;
 }
 
 void SVTXNumericField::setFirst( double Value )
@@ -8071,7 +8073,7 @@ void SVTXNumericField::setFirst( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinFirst( Value );
+        pField->GetFormatter()->SetSpinFirst( Value );
 }
 
 double SVTXNumericField::getFirst()
@@ -8079,7 +8081,7 @@ double SVTXNumericField::getFirst()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinFirst() : 0;
+    return pField ? pField->GetFormatter()->GetSpinFirst() : 0;
 }
 
 void SVTXNumericField::setLast( double Value )
@@ -8088,7 +8090,7 @@ void SVTXNumericField::setLast( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinLast( Value );
+        pField->GetFormatter()->SetSpinLast( Value );
 }
 
 double SVTXNumericField::getLast()
@@ -8096,7 +8098,7 @@ double SVTXNumericField::getLast()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinLast() : 0;
+    return pField ? pField->GetFormatter()->GetSpinLast() : 0;
 }
 
 void SVTXNumericField::setSpinSize( double Value )
@@ -8105,7 +8107,7 @@ void SVTXNumericField::setSpinSize( double Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetSpinSize( Value );
+        pField->GetFormatter()->SetSpinSize( Value );
 }
 
 double SVTXNumericField::getSpinSize()
@@ -8113,7 +8115,7 @@ double SVTXNumericField::getSpinSize()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetSpinSize() : 0;
+    return pField ? pField->GetFormatter()->GetSpinSize() : 0;
 }
 
 void SVTXNumericField::setDecimalDigits( sal_Int16 Value )
@@ -8122,7 +8124,7 @@ void SVTXNumericField::setDecimalDigits( sal_Int16 Value )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetDecimalDigits( Value );
+        pField->GetFormatter()->SetDecimalDigits( Value );
 }
 
 sal_Int16 SVTXNumericField::getDecimalDigits()
@@ -8130,7 +8132,7 @@ sal_Int16 SVTXNumericField::getDecimalDigits()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField ? pField->GetDecimalDigits() : 0;
+    return pField ? pField->GetFormatter()->GetDecimalDigits() : 0;
 }
 
 void SVTXNumericField::setStrictFormat( sal_Bool bStrict )
@@ -8139,7 +8141,7 @@ void SVTXNumericField::setStrictFormat( sal_Bool bStrict )
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
     if ( pField )
-        pField->SetStrictFormat( bStrict );
+        pField->GetFormatter()->SetStrictFormat( bStrict );
 }
 
 sal_Bool SVTXNumericField::isStrictFormat()
@@ -8147,7 +8149,7 @@ sal_Bool SVTXNumericField::isStrictFormat()
     SolarMutexGuard aGuard;
 
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
-    return pField && pField->IsStrictFormat();
+    return pField && pField->GetFormatter()->IsStrictFormat();
 }
 
 void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
