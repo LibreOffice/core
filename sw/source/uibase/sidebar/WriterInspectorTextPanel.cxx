@@ -66,53 +66,47 @@ static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& r
     if (rProperty.Name.indexOf("Asian") != -1 || rProperty.Name.indexOf("Complex") != -1)
         return false;
 
-    OUString aValue;
-    double fValue;
-    bool bValue;
-    short sValue;
-    long lValue;
-    awt::FontSlant iValue;
-
     rString = rProperty.Name + "     ";
 
-    if (rAny >>= bValue)
+    if (bool bValue; rAny >>= bValue)
     {
         rString += OUString::boolean(bValue);
     }
-    else if ((rAny >>= aValue) && !(aValue.isEmpty()))
+    else if (OUString aValue; (rAny >>= aValue) && !(aValue.isEmpty()))
     {
         rString += aValue;
     }
-    else if (rAny >>= iValue)
+    else if (awt::FontSlant iValue; rAny >>= iValue)
     {
         rString += (iValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
                                                      : OUStringLiteral("normal");
     }
-    else if ((rAny >>= lValue) && lValue)
+    else if (long nValue; rAny >>= nValue)
     {
         if (rString.indexOf("Color") != -1)
-            rString += "0x" + OUString::number(lValue, 16);
+            rString += "0x" + OUString::number(nValue, 16);
         else
-            rString += OUString::number(lValue);
+            rString += OUString::number(nValue);
     }
-    else if ((rAny >>= fValue) && fValue)
+    else if (double fValue; rAny >>= fValue)
     {
         if (rString.indexOf("Weight") != -1)
             rString += (fValue > 100) ? OUStringLiteral("bold") : OUStringLiteral("normal");
         else
             rString += OUString::number((round(fValue * 100)) / 100.00);
     }
-    else if ((rAny >>= sValue) && sValue)
+    else if (short nValue; rAny >>= nValue)
     {
-        rString += OUString::number(sValue);
+        rString += OUString::number(nValue);
     }
     else
         return false;
+
     return true;
 }
 
-static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
-                       std::unordered_map<OUString, bool>& maIsDefined, StyleType sType)
+static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& rParentNode,
+                       std::unordered_map<OUString, bool>& rbDefinedMap, StyleType sType)
 {
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
@@ -131,13 +125,13 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     uno::Reference<text::XTextCursor> xCursor = dynamic_cast<text::XTextCursor*>(pCursor);
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-    uno::Reference<beans::XPropertySet> properties(xRange, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProperties(xRange, uno::UNO_QUERY_THROW);
 
     OUString sCurrentStyleName, sDisplayName;
     if (sType == CHARACTERSTYLES)
-        properties->getPropertyValue("CharStyleName") >>= sCurrentStyleName;
+        xProperties->getPropertyValue("CharStyleName") >>= sCurrentStyleName;
     else
-        properties->getPropertyValue("ParaStyleName") >>= sCurrentStyleName;
+        xProperties->getPropertyValue("ParaStyleName") >>= sCurrentStyleName;
 
     if (sCurrentStyleName.isEmpty())
         sCurrentStyleName = "Standard";
@@ -152,8 +146,8 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
         xStyleFamily->getByName(sCurrentStyleName) >>= xProp1State;
         OUString aParentCharStyle = xProp1->getParentStyle();
         xProp1Set->getPropertyValue("DisplayName") >>= sDisplayName;
-        svx::sidebar::TreeNode pCurrentChild;
-        pCurrentChild.sNodeName = sDisplayName;
+        svx::sidebar::TreeNode aCurrentChild;
+        aCurrentChild.sNodeName = sDisplayName;
 
         if (aParentCharStyle.isEmpty())
         {
@@ -175,21 +169,21 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
                     == xProp1State->getPropertyDefault(sPropName))
                     continue;
 
-                if (maIsDefined[sPropName])
+                if (rbDefinedMap[sPropName])
                     continue;
 
                 if (xProp1Set->getPropertyValue(sPropName)
                     != xProp2Set->getPropertyValue(sPropName))
                 {
-                    maIsDefined[sPropName] = true;
+                    rbDefinedMap[sPropName] = true;
                     OUString aPropertyValuePair;
                     const uno::Any aAny = xProp1Set->getPropertyValue(sPropName);
                     GetPropertyValues(rProperty, aAny, aPropertyValuePair);
                     if (!aPropertyValuePair.isEmpty())
                     {
-                        svx::sidebar::TreeNode pTemp;
-                        pTemp.sNodeName = aPropertyValuePair;
-                        pCurrentChild.children.push_back(pTemp);
+                        svx::sidebar::TreeNode aTemp;
+                        aTemp.sNodeName = aPropertyValuePair;
+                        aCurrentChild.children.push_back(aTemp);
                     }
                 }
             }
@@ -199,7 +193,7 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
             //do nothing
         }
 
-        pParentNode.children.emplace_back(pCurrentChild);
+        rParentNode.children.emplace_back(aCurrentChild);
         sCurrentStyleName = aParentCharStyle;
     }
 
@@ -210,32 +204,32 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
 
     const uno::Sequence<beans::Property> aProperties
         = aProp1Set->getPropertySetInfo()->getProperties();
-    svx::sidebar::TreeNode pCurrentChild;
-    pCurrentChild.sNodeName = sDisplayName;
+    svx::sidebar::TreeNode aCurrentChild;
+    aCurrentChild.sNodeName = sDisplayName;
 
     for (const beans::Property& rProperty : aProperties)
     {
         OUString aPropertyValuePair, sPropName = rProperty.Name;
         if (aProp1Set->getPropertyValue(sPropName) == aProp1State->getPropertyDefault(sPropName))
             continue;
-        if (maIsDefined[sPropName])
+        if (rbDefinedMap[sPropName])
             continue;
-        maIsDefined[sPropName] = true;
+        rbDefinedMap[sPropName] = true;
 
         const uno::Any aAny = aProp1Set->getPropertyValue(sPropName);
         if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
         {
             if (!aPropertyValuePair.isEmpty())
             {
-                svx::sidebar::TreeNode pTemp;
-                pTemp.sNodeName = aPropertyValuePair;
-                pCurrentChild.children.push_back(pTemp);
+                svx::sidebar::TreeNode aTemp;
+                aTemp.sNodeName = aPropertyValuePair;
+                aCurrentChild.children.push_back(aTemp);
             }
         }
     }
 
-    pParentNode.children.emplace_back(pCurrentChild);
-    std::reverse(pParentNode.children.begin(), pParentNode.children.end());
+    rParentNode.children.emplace_back(aCurrentChild);
+    std::reverse(rParentNode.children.begin(), rParentNode.children.end());
 }
 
 void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
@@ -244,7 +238,7 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     std::vector<svx::sidebar::TreeNode> aStore;
-    std::unordered_map<OUString, bool> maIsDefined;
+    std::unordered_map<OUString, bool> aDefinedMap;
 
     switch (nSId)
     {
@@ -258,12 +252,12 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
                 (as CS has higher priority over PS), then look into
                 property set of Paragraph Styles;
                 */
-                svx::sidebar::TreeNode pTempChar;
-                pTempChar.sNodeName = "CHARACTER STYLES";
-                UpdateTree(pDocSh, pTempChar, maIsDefined, CHARACTERSTYLES);
-                svx::sidebar::TreeNode pTempPara;
-                pTempPara.sNodeName = "PARAGRAPH STYLES";
-                UpdateTree(pDocSh, pTempPara, maIsDefined, PARAGRAPHSTYLES);
+                svx::sidebar::TreeNode aTempCharNode;
+                aTempCharNode.sNodeName = "CHARACTER STYLES";
+                UpdateTree(pDocSh, aTempCharNode, aDefinedMap, CHARACTERSTYLES);
+                svx::sidebar::TreeNode aTempParaNode;
+                aTempParaNode.sNodeName = "PARAGRAPH STYLES";
+                UpdateTree(pDocSh, aTempParaNode, aDefinedMap, PARAGRAPHSTYLES);
 
                 /*
                 Order:-
@@ -271,8 +265,8 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
                 CHARACTER STYLES
                 DEFAULT FORMATTING
                 */
-                aStore.push_back(pTempPara);
-                aStore.push_back(pTempChar);
+                aStore.push_back(aTempParaNode);
+                aStore.push_back(aTempCharNode);
             }
         }
         break;
