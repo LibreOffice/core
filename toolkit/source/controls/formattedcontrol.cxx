@@ -60,7 +60,7 @@ namespace toolkit
         }
 
 
-        static bool s_bTriedCreation = false;
+        bool s_bTriedCreation = false;
 
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
@@ -79,7 +79,7 @@ namespace toolkit
         }
 
 
-        static oslInterlockedCount  s_refCount(0);
+        oslInterlockedCount  s_refCount(0);
 
 
         void    lcl_registerDefaultFormatsClient()
