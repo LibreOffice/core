@@ -64,6 +64,16 @@ TypeCheck TypeCheck::ConstVolatile() const {
         // checking for
 }
 
+TypeCheck TypeCheck::ConstNonVolatile() const {
+    return
+        (!type_.isNull() && type_.isConstQualified()
+         && !type_.isVolatileQualified())
+        ? *this : TypeCheck();
+        // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
+        // may look tempting, but could remove sugar we might be interested in
+        // checking for
+}
+
 TerminalCheck TypeCheck::Void() const {
     return TerminalCheck(
         !type_.isNull()
