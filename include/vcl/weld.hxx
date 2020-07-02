@@ -2003,6 +2003,8 @@ public:
 
 class VCL_DLLPUBLIC TextView : virtual public Container
 {
+    friend class ::LOKTrigger;
+
 private:
     OUString m_sSavedValue;
 
