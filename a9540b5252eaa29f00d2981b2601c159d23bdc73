@@ -34,6 +34,24 @@
       "revId": "a9540b5252eaa29f00d2981b2601c159d23bdc73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aba345e_438749a7",
+        "filename": "sfx2/uiconfig/ui/addtargetdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-07-02T21:57:14Z",
+      "side": 1,
+      "message": "No. When they are titles like in headings, the strings should use Title Case. In checkboxes and radio buttons, the strings should be sentence case.",
+      "parentUuid": "313dd19d_215be847",
+      "revId": "a9540b5252eaa29f00d2981b2601c159d23bdc73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
