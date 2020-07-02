@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f501b7d5_514545e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T11:59:32Z",
+      "side": 1,
+      "message": "This is nothing new; I just documented it. I\u0027m talking about the call to PR_Init and NSS_InitReadWrite in nsscrypto_initialize and the shutdown in nsscrypto_finalize calling NSS_Shutdown. AFAIK none of these calls creates a new profile, but even if it did, I don\u0027t understand your reference to curl or other external programs. AFAIK this is just the NSS library state and the way LO handles it.\n\nMaybe the current implementation with NSS deinit using an atexit handler isn\u0027t needed and it\u0027s fine just to reset the library and profile path at runtime. So the whole \"problem\" is LO\u0027s implementation and not a general one. There is also a large comment at nsscrypto_initialize.\n\nI just want to push an old patch originally tested with 6.4, but I somehow forgot it in my patch stack. And I really don\u0027t want to rewrite the whole NSS handling, just remove the duplicate NSS profile auto-selection logic, which I broke once.\n\n\u003e i\u0027ve never seen a bug reported due to this, but i haven\u0027t really been looking for bugs...\n\nIt\u0027s not broken / a bug, and works as expected. LO kept the dialog and the service auto-select logic in sync. I just broke it once while fixing tdf#127909 and so came up with this.\n\nIf you refer to the init / deinit on change: LO shows the user the restart dialog, like for extensions, but the user may ignore it.",
+      "parentUuid": "772228f9_dbdcf00e",
+      "range": {
+        "startLine": 17,
+        "startChar": 48,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "756f342b_530bd6b9",
         "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
         "patchSetId": 4
@@ -53,6 +77,24 @@
       "writtenOn": "2020-07-02T08:12:34Z",
       "side": 1,
       "message": "do we really want to expose this in the API?",
+      "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c75a722_439104b5",
+        "filename": "offapi/com/sun/star/xml/crypto/XNSSInitializer.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T11:59:32Z",
+      "side": 1,
+      "message": "Why not?\n\nThe dialog has to ask the user to restart LO, if NSS is already initialized and the user has selected a different profile, so it needs this information. OTOH we can simply always ask for a restart, if the path was changed.\n\nOr do you see a particular problem? This is an LO internal-only interface so from my POV this is no problem, but maybe I\u0027m missing something.",
+      "parentUuid": "7d797d4d_f109877d",
       "revId": "b7b255d43aa9a4a238dbec609e811701a8d00774",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
