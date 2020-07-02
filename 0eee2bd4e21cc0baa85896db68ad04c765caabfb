@@ -22,6 +22,52 @@
       "revId": "0eee2bd4e21cc0baa85896db68ad04c765caabfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad2b5c9b_5720e676",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T12:17:49Z",
+      "side": 1,
+      "message": "and this rename should be related: you create an object, which is not a pointer-like thing -\u003e aTempChar.",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 40
+      },
+      "revId": "0eee2bd4e21cc0baa85896db68ad04c765caabfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abc3db3d_dd191d7f",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-02T12:17:49Z",
+      "side": 1,
+      "message": "aTempPara",
+      "range": {
+        "startLine": 209,
+        "startChar": 39,
+        "endLine": 209,
+        "endChar": 40
+      },
+      "revId": "0eee2bd4e21cc0baa85896db68ad04c765caabfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
