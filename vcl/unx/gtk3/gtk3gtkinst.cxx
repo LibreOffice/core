@@ -3670,7 +3670,8 @@ public:
         gtk_widget_set_can_focus(pWindow, true);
         g_object_unref(pWindow);
 
-        xEmbedWindow->Show();
+        // NoActivate otherwise Show grab focus to this widget
+        xEmbedWindow->Show(true, ShowFlags::NoActivate);
         css::uno::Reference<css::awt::XWindow> xWindow(xEmbedWindow->GetComponentInterface(), css::uno::UNO_QUERY);
         return xWindow;
     }
@@ -15908,7 +15909,7 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
     SystemWindowData winData = {};
     winData.bClipUsingNativeWidget = true;
     auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0, &winData, false);
-    xEmbedWindow->Show();
+    xEmbedWindow->Show(true, ShowFlags::NoActivate);
     xEmbedWindow->set_expand(true);
 
     const SystemEnvData* pEnvData = xEmbedWindow->GetSystemData();
