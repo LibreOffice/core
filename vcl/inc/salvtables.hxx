@@ -592,6 +592,8 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override;
 
+    virtual void set_font_color(const Color& rColor) override;
+
     virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override;
 
     virtual void set_placeholder_text(const OUString& rText) override;

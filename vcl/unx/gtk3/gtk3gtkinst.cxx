@@ -8638,6 +8638,11 @@ namespace
             gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
     }
 
+    gboolean filter_pango_attrs(PangoAttribute *attr, gpointer /*data*/)
+    {
+        return attr->klass->type == PANGO_ATTR_FOREGROUND;
+    }
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -8833,6 +8838,21 @@ public:
         if (m_xFont)
             return *m_xFont;
         return GtkInstanceWidget::get_font();
+    }
+
+    void set_font_color(const Color& rColor) override
+    {
+        PangoAttrList* pOrigList = gtk_entry_get_attributes(m_pEntry);
+        if (rColor == COL_AUTO && !pOrigList) // nothing to do
+            return;
+
+        PangoAttrList* pAttrList = pOrigList ? pango_attr_list_filter(pOrigList, filter_pango_attrs, nullptr) : pango_attr_list_new();
+
+        if (rColor != COL_AUTO)
+            pango_attr_list_insert(pAttrList, pango_attr_foreground_new(rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0));
+
+        gtk_entry_set_attributes(m_pEntry, pAttrList);
+        pango_attr_list_unref(pAttrList);
     }
 
     void fire_signal_changed()

@@ -1496,6 +1496,16 @@ public:
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 
+    /*
+       If you want to set a warning or error state, see set_message_type
+       instead where, if the toolkit supports it, a specific warning/error
+       indicator is shown.
+
+       This explicit text color method exists to support rendering the
+       SvNumberformat color feature.
+    */
+    virtual void set_font_color(const Color& rColor) = 0;
+
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
     // callback returns true to indicated no further processing of activate wanted
