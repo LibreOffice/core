@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57025f9a_0e79bae4",
+        "filename": "sc/source/core/data/colorscale.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-02T09:51:59Z",
+      "side": 1,
+      "message": "Looks like RED (above) is considered NEGATIVE. Thanks for the patch.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 4,
+        "endLine": 1252,
+        "endChar": 39
+      },
+      "revId": "a76cb42a75b1694f20a1c95c99e3137369527dd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
