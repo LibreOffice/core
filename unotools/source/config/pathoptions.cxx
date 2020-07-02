@@ -167,7 +167,7 @@ struct VarNameAttribute
 
 }
 
-static const PropertyStruct aPropNames[] =
+const PropertyStruct aPropNames[] =
 {
     { "Addin",          SvtPathOptions::PATH_ADDIN          },
     { "AutoCorrect",    SvtPathOptions::PATH_AUTOCORRECT    },
@@ -198,7 +198,7 @@ static const PropertyStruct aPropNames[] =
     { "Classification", SvtPathOptions::PATH_CLASSIFICATION }
 };
 
-static const VarNameAttribute aVarNameAttribute[] =
+const VarNameAttribute aVarNameAttribute[] =
 {
     { SUBSTITUTE_INSTPATH },    // $(instpath)
     { SUBSTITUTE_PROGPATH },    // $(progpath)

@@ -219,7 +219,7 @@ struct NamesToHdl
 
 }
 
-static NamesToHdl const aNamesToHdl[] =
+NamesToHdl const aNamesToHdl[] =
 {
 {/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
 {/*  1 */    "General/DictionaryList/ActiveDictionaries",     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},
@@ -803,7 +803,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = nullptr;
 static sal_Int32           nCfgItemRefCount = 0;
 
-static const char aG_Dictionaries[] = "Dictionaries";
+const char aG_Dictionaries[] = "Dictionaries";
 
 SvtLinguConfig::SvtLinguConfig()
 {

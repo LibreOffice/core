@@ -44,11 +44,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 namespace {
-    static const ::sal_Int32 s_nOffsetURL               = 0;
-    static const ::sal_Int32 s_nOffsetFilter            = 1;
-    static const ::sal_Int32 s_nOffsetTitle             = 2;
-    static const ::sal_Int32 s_nOffsetPassword          = 3;
-    static const ::sal_Int32 s_nOffsetThumbnail         = 4;
+    const ::sal_Int32 s_nOffsetURL               = 0;
+    const ::sal_Int32 s_nOffsetFilter            = 1;
+    const ::sal_Int32 s_nOffsetTitle             = 2;
+    const ::sal_Int32 s_nOffsetPassword          = 3;
+    const ::sal_Int32 s_nOffsetThumbnail         = 4;
 
     const char s_sItemList[] = "ItemList";
     const char s_sOrderList[] = "OrderList";

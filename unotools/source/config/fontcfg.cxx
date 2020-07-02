@@ -368,7 +368,7 @@ FontSubstConfiguration::~FontSubstConfiguration()
  *  FontSubstConfigItem::getMapName
  */
 
-static const char* const aImplKillLeadingList[] =
+const char* const aImplKillLeadingList[] =
 {
     "microsoft",
     "monotype",
@@ -391,7 +391,7 @@ static const char* const aImplKillLeadingList[] =
     nullptr
 };
 
-static const char* const aImplKillTrailingList[] =
+const char* const aImplKillTrailingList[] =
 {
     "microsoft",
     "monotype",
@@ -441,7 +441,7 @@ static const char* const aImplKillTrailingList[] =
     nullptr
 };
 
-static const char* const aImplKillTrailingWithExceptionsList[] =
+const char* const aImplKillTrailingWithExceptionsList[] =
 {
     "ce", "monospace", "oldface", nullptr,
     "ps", "caps", nullptr,
@@ -458,7 +458,7 @@ struct ImplFontAttrWeightSearchData
 
 }
 
-static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
+ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
 // the attribute names are ordered by "first match wins"
 // e.g. "semilight" should wins over "semi"
@@ -488,7 +488,7 @@ struct ImplFontAttrWidthSearchData
 
 }
 
-static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
+ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 {
 {   "narrow",               WIDTH_CONDENSED },
 {   "semicondensed",        WIDTH_SEMI_CONDENSED },
@@ -513,7 +513,7 @@ struct ImplFontAttrTypeSearchData
 
 }
 
-static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
+ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {
 {   "monotype",             ImplFontAttrs::None },
 {   "linotype",             ImplFontAttrs::None },
@@ -758,7 +758,7 @@ struct StrictStringSort
 
 // The entries in this table must match the bits in the ImplFontAttrs enum.
 
-static const char* const pAttribNames[] =
+const char* const pAttribNames[] =
 {
     "default",
     "standard",
@@ -804,7 +804,7 @@ struct enum_convert
 
 }
 
-static const enum_convert pWeightNames[] =
+const enum_convert pWeightNames[] =
 {
     { "normal", WEIGHT_NORMAL },
     { "medium", WEIGHT_MEDIUM },
@@ -822,7 +822,7 @@ static const enum_convert pWeightNames[] =
     { "ultralight", WEIGHT_ULTRALIGHT }
 };
 
-static const enum_convert pWidthNames[] =
+const enum_convert pWidthNames[] =
 {
     { "normal", WIDTH_NORMAL },
     { "condensed", WIDTH_CONDENSED },
