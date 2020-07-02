@@ -115,13 +115,11 @@ std::map<sal_uInt64, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
     return s_aLOKWeldBuildersMap;
 }
 
-namespace jsdialog
+weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
 {
-weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
-{
-    const auto it = JSInstanceBuilder::GetLOKWeldWidgetsMap().find(nWindowId);
+    const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
 
-    if (it != JSInstanceBuilder::GetLOKWeldWidgetsMap().end())
+    if (it != GetLOKWeldWidgetsMap().end())
     {
         auto widgetIt = it->second.find(rWidget);
         if (widgetIt != it->second.end())
@@ -129,7 +127,6 @@ weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget)
     }
 
     return nullptr;
-}
 }
 
 void JSInstanceBuilder::InsertWindowToMap(sal_uInt64 nWindowId)
