@@ -109,7 +109,7 @@ static_assert( NF_INDEX_TABLE_ENTRIES <= i18npool::nFirstFreeFormatIndex,
 #define UNKNOWN_SUBSTITUTE      LANGUAGE_ENGLISH_US
 
 // Same order as in include/svl/zforlist.hxx enum NfIndexTableOffset
-static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
+sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD, // NF_NUMBER_STANDARD
     ZF_STANDARD + 1, // NF_NUMBER_INT
     ZF_STANDARD + 2, // NF_NUMBER_DEC2

@@ -32,7 +32,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 
-static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
+const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
 
 namespace
 {

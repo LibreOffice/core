@@ -29,7 +29,7 @@
 class SfxPoolItem;
 class SfxItemPoolUser;
 
-static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
+const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
 static bool CompareSortablePoolItems(SfxPoolItem const* lhs, SfxPoolItem const* rhs)
 {

@@ -67,7 +67,7 @@ const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
 const double D_MAX_D_BY_100  = 1.7E306;
 const double D_MIN_M_BY_1000 = 2.3E-305;
 
-static const sal_uInt8 cCharWidths[ 128-32 ] = {
+const sal_uInt8 cCharWidths[ 128-32 ] = {
     1,1,1,2,2,3,2,1,1,1,1,2,1,1,1,1,
     2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,
     3,2,2,2,2,2,2,3,2,1,2,2,2,3,3,3,
@@ -138,7 +138,7 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
     nCntExp      = rNumFor.nCntExp;
 }
 
-static const std::map<LanguageType, std::array<sal_uInt8, 4>> tblDBNumToNatNum
+const std::map<LanguageType, std::array<sal_uInt8, 4>> tblDBNumToNatNum
     = { { primary(LANGUAGE_CHINESE),    { 4, 5, 3, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 4, 5, 3, 0 } },
         { primary(LANGUAGE_KOREAN),     { 4, 5, 6, 10 } } };
@@ -173,7 +173,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     return nNatNum;
 }
 
-static const std::map<LanguageType, std::array<sal_uInt8, 9>> tblNatNumToDBNum
+const std::map<LanguageType, std::array<sal_uInt8, 9>> tblNatNumToDBNum
     = { { primary(LANGUAGE_CHINESE),    { 1, 0, 0, 1, 2, 3, 0, 0, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 1, 2, 3, 1, 2, 3, 1, 2, 0 } },
         { primary(LANGUAGE_KOREAN),     { 1, 2, 3, 1, 2, 3, 1, 2, 4 } } };
