@@ -19,10 +19,6 @@
 #pragma once
 
 #include <sfx2/weldutils.hxx>
-#include <docsh.hxx>
-#include <unordered_map>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
 namespace sw

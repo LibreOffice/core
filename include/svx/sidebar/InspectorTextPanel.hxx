@@ -45,7 +45,7 @@ public:
     void updateEntries(const std::vector<TreeNode>& rStore);
 
 private:
-    std::unique_ptr<weld::TreeView> mxListBoxStyles;
+    std::unique_ptr<weld::TreeView> mpListBoxStyles;
 };
 }
 } // end of namespace svx::sidebar
