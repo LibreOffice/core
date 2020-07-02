@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37ab8ae8_3e551602",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T09:21:23Z",
+      "side": 1,
+      "message": "I would prefer to change the return type to some three-state enum instead, no/yes/fatal",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9f8307_7b10faf9",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-02T09:21:23Z",
+      "side": 1,
+      "message": "Would it be cleaner to have a single non-array\n\n  bool positiveSenseIsFatal \u003d false;\n\nthat is only updated below when sense \u003d\u003d POSITIVE?",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
