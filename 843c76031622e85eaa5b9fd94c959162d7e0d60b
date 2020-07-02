@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "094057b6_90588d1b",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-02T12:28:36Z",
+      "side": 1,
+      "message": "Can I use a \n\nenum {\n    Ignore \u003d 0,\n    Log,\n    Fail\n}\nLogAction;\n\nas a result, or might that lead to problems (additional UNO types ore somesuch). Just wondering, because it\u0027s a SAL_CALL...",
+      "parentUuid": "37ab8ae8_3e551602",
+      "revId": "843c76031622e85eaa5b9fd94c959162d7e0d60b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e9f8307_7b10faf9",
         "filename": "sal/osl/all/log.cxx",
         "patchSetId": 4
