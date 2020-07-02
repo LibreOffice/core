@@ -1030,10 +1030,10 @@ public:
  * This node is used for parsing errors and draws a questionmark turned upside
  * down (inverted question mark).
  */
-class SmErrorNode final : public SmSpecialNode
+class SmErrorNode final : public SmMathSymbolNode
 {
 public:
-    explicit SmErrorNode(const SmToken &rNodeToken) : SmSpecialNode(SmNodeType::Error, rNodeToken, FNT_TEXT) { SetText(GetToken().aText); }
+    explicit SmErrorNode(const SmToken &rNodeToken) : SmMathSymbolNode(SmNodeType::Error, rNodeToken) { SetText(OUString(MS_ERROR)); }
 
     /**
      * Prepare preliminary settings about font and text

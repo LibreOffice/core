@@ -1630,6 +1630,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
+        case THEX:
             nc = GetToken().aText.toInt32(16);
             col_perso_rgb_color.SetBlue(nc % 256);
             nc /= 256;
@@ -2276,10 +2277,8 @@ void SmPlaceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
-    SmSpecialNode::Prepare(rFormat, rDocShell, nDepth);
-    SetFontSize( Fraction(2,1), FontSizeType::DIVIDE );
+    SmNode::Prepare(rFormat, rDocShell, nDepth);
     GetFont().SetColor(COL_RED);
-    ClearAttribut(FontAttribute::Italic);
     Flags() |= FontChangeMask::Phantom | FontChangeMask::Bold | FontChangeMask::Italic
                | FontChangeMask::Color | FontChangeMask::Face | FontChangeMask::Size;
 }
