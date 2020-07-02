@@ -53,17 +53,17 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::drawing::PointSequence;
 
-static const OUStringLiteral gsBoundary("Boundary");
-static const OUStringLiteral gsCenter("Center");
-static const OUStringLiteral gsDescription("Description");
-static const OUStringLiteral gsImageMap("ImageMap");
-static const OUStringLiteral gsIsActive("IsActive");
-static const OUStringLiteral gsName("Name");
-static const OUStringLiteral gsPolygon("Polygon");
-static const OUStringLiteral gsRadius("Radius");
-static const OUStringLiteral gsTarget("Target");
-static const OUStringLiteral gsURL("URL");
-static const OUStringLiteral gsTitle("Title");
+const OUStringLiteral gsBoundary("Boundary");
+const OUStringLiteral gsCenter("Center");
+const OUStringLiteral gsDescription("Description");
+const OUStringLiteral gsImageMap("ImageMap");
+const OUStringLiteral gsIsActive("IsActive");
+const OUStringLiteral gsName("Name");
+const OUStringLiteral gsPolygon("Polygon");
+const OUStringLiteral gsRadius("Radius");
+const OUStringLiteral gsTarget("Target");
+const OUStringLiteral gsURL("URL");
+const OUStringLiteral gsTitle("Title");
 
 XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     mrExport(rExp)

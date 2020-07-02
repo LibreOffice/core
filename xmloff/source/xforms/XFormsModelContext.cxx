@@ -44,14 +44,14 @@ using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
 
-static const SvXMLTokenMapEntry aAttributes[] =
+const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, ID ),
     TOKEN_MAP_ENTRY( NONE, SCHEMA ),
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aChildren[] =
+const SvXMLTokenMapEntry aChildren[] =
 {
     TOKEN_MAP_ENTRY( XFORMS, INSTANCE ),
     TOKEN_MAP_ENTRY( XFORMS, BIND ),

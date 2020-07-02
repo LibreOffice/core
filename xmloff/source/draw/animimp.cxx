@@ -318,18 +318,18 @@ AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirecti
 
 namespace
 {
-    static constexpr OUStringLiteral gsDimColor = "DimColor";
-    static constexpr OUStringLiteral gsDimHide = "DimHide";
-    static constexpr OUStringLiteral gsDimPrev = "DimPrevious";
-    static constexpr OUStringLiteral gsEffect = "Effect";
-    static constexpr OUStringLiteral gsPlayFull = "PlayFull";
-    static constexpr OUStringLiteral gsSound = "Sound";
-    static constexpr OUStringLiteral gsSoundOn = "SoundOn";
-    static constexpr OUStringLiteral gsSpeed = "Speed";
-    static constexpr OUStringLiteral gsTextEffect = "TextEffect";
-    static constexpr OUStringLiteral gsPresShapeService = "com.sun.star.presentation.Shape";
-    static constexpr OUStringLiteral gsAnimPath = "AnimationPath";
-    static constexpr OUStringLiteral gsIsAnimation = "IsAnimation";
+    constexpr OUStringLiteral gsDimColor = "DimColor";
+    constexpr OUStringLiteral gsDimHide = "DimHide";
+    constexpr OUStringLiteral gsDimPrev = "DimPrevious";
+    constexpr OUStringLiteral gsEffect = "Effect";
+    constexpr OUStringLiteral gsPlayFull = "PlayFull";
+    constexpr OUStringLiteral gsSound = "Sound";
+    constexpr OUStringLiteral gsSoundOn = "SoundOn";
+    constexpr OUStringLiteral gsSpeed = "Speed";
+    constexpr OUStringLiteral gsTextEffect = "TextEffect";
+    constexpr OUStringLiteral gsPresShapeService = "com.sun.star.presentation.Shape";
+    constexpr OUStringLiteral gsAnimPath = "AnimationPath";
+    constexpr OUStringLiteral gsIsAnimation = "IsAnimation";
 };
 
 namespace {

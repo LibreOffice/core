@@ -140,7 +140,7 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
-static const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
+const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

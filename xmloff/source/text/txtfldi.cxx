@@ -535,7 +535,7 @@ void XMLTextFieldImportContext::ForceUpdate(
 // XMLSenderFieldImportContext
 
 
-static const OUStringLiteral gsPropertyFieldSubType("UserDataType");
+const OUStringLiteral gsPropertyFieldSubType("UserDataType");
 
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -654,7 +654,7 @@ void XMLSenderFieldImportContext::PrepareField(
 
 // XMLAuthorFieldImportContext
 
-static const OUStringLiteral gsPropertyAuthorFullName("FullName");
+const OUStringLiteral gsPropertyAuthorFullName("FullName");
 
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -719,7 +719,7 @@ void XMLAuthorFieldImportContext::PrepareField(
 // page continuation string
 
 
-static SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
+SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
 {
     { XML_PREVIOUS,      PageNumberType_PREV },
     { XML_CURRENT,       PageNumberType_CURRENT },
@@ -727,7 +727,7 @@ static SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
     { XML_TOKEN_INVALID, PageNumberType(0) },
 };
 
-static const OUStringLiteral gsPropertyUserText("UserText");
+const OUStringLiteral gsPropertyUserText("UserText");
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
@@ -878,8 +878,8 @@ void XMLPageNumberImportContext::PrepareField(
 // Placeholder
 
 
-static const OUStringLiteral gsPropertyPlaceholderType("PlaceHolderType");
-static const OUStringLiteral gsPropertyPlaceholder("PlaceHolder");
+const OUStringLiteral gsPropertyPlaceholderType("PlaceHolderType");
+const OUStringLiteral gsPropertyPlaceholder("PlaceHolder");
 
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -960,7 +960,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
 
 // time field
 
-static const OUStringLiteral gsPropertyAdjust("Adjust");
+const OUStringLiteral gsPropertyAdjust("Adjust");
 
 XMLTimeFieldImportContext::XMLTimeFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -1136,11 +1136,11 @@ void XMLDateFieldImportContext::ProcessAttribute(
 // database field superclass
 
 
-static const OUStringLiteral gsPropertyDataBaseName("DataBaseName");
-static const OUStringLiteral gsPropertyDataBaseURL("DataBaseURL");
-static const OUStringLiteral gsPropertyTableName("DataTableName");
-static const OUStringLiteral gsPropertyDataCommandType("DataCommandType");
-static const OUStringLiteral gsPropertyIsVisible("IsVisible");
+const OUStringLiteral gsPropertyDataBaseName("DataBaseName");
+const OUStringLiteral gsPropertyDataBaseURL("DataBaseURL");
+const OUStringLiteral gsPropertyTableName("DataTableName");
+const OUStringLiteral gsPropertyDataCommandType("DataCommandType");
+const OUStringLiteral gsPropertyIsVisible("IsVisible");
 
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -1604,7 +1604,7 @@ const char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 
 // revision field
 
-static const OUStringLiteral sPropertyRevision("Revision");
+const OUStringLiteral sPropertyRevision("Revision");
 
 XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
@@ -1874,9 +1874,9 @@ void XMLHiddenParagraphImportContext::PrepareField(
 
 // import conditional text (<text:conditional-text>)
 
-static const OUStringLiteral gsPropertyTrueContent("TrueContent");
-static const OUStringLiteral gsPropertyFalseContent("FalseContent");
-static const OUStringLiteral gsPropertyIsConditionTrue("IsConditionTrue");
+const OUStringLiteral gsPropertyTrueContent("TrueContent");
+const OUStringLiteral gsPropertyFalseContent("FalseContent");
+const OUStringLiteral gsPropertyIsConditionTrue("IsConditionTrue");
 
 XMLConditionalTextImportContext::XMLConditionalTextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -2012,7 +2012,7 @@ void XMLHiddenTextImportContext::PrepareField(
 // file name fields
 
 
-static const SvXMLEnumMapEntry<sal_uInt16> aFilenameDisplayMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aFilenameDisplayMap[] =
 {
     { XML_PATH,                 FilenameDisplayFormat::PATH },
     { XML_NAME,                 FilenameDisplayFormat::NAME },
@@ -2094,7 +2094,7 @@ void XMLFileNameImportContext::PrepareField(
 // template name field
 
 
-static const SvXMLEnumMapEntry<sal_uInt16> aTemplateDisplayMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aTemplateDisplayMap[] =
 {
     { XML_FULL,                 TemplateDisplayFormat::FULL },
     { XML_PATH,                 TemplateDisplayFormat::PATH },
@@ -2149,7 +2149,7 @@ void XMLTemplateNameImportContext::PrepareField(
 // import chapter fields
 
 
-static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 {
     { XML_NAME,                     ChapterFormat::NAME },
     { XML_NUMBER,                   ChapterFormat::NUMBER },
@@ -2159,8 +2159,8 @@ static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static const OUStringLiteral gsPropertyChapterFormat("ChapterFormat");
-static const OUStringLiteral gsPropertyLevel("Level");
+const OUStringLiteral gsPropertyChapterFormat("ChapterFormat");
+const OUStringLiteral gsPropertyLevel("Level");
 
 XMLChapterImportContext::XMLChapterImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -2547,7 +2547,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 {
 }
 
-static SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
+SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 {
     { XML_PAGE,         ReferenceFieldPart::PAGE},
     { XML_CHAPTER,      ReferenceFieldPart::CHAPTER },
@@ -2677,7 +2677,7 @@ enum DdeFieldDeclAttrs
 
 }
 
-static const SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
+const SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_DDEFIELD_NAME },
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, XML_TOK_DDEFIELD_APPLICATION },
@@ -3024,7 +3024,7 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 }
 
 // TODO: this is the same map as is used in the text field export
-static SvXMLEnumMapEntry<sal_uInt16> const aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry<sal_uInt16> const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },

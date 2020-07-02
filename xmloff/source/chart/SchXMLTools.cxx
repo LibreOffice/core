@@ -128,7 +128,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
+const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
 {
     { XML_LINE,         XML_CHART_CLASS_LINE    },
     { XML_AREA,         XML_CHART_CLASS_AREA    },

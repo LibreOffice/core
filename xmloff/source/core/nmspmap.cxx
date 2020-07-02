@@ -46,7 +46,7 @@ using namespace ::xmloff::token;
  * Martin 13/06/01
  */
 
-static const OUString sEmpty;
+const OUString sEmpty;
 
 SvXMLNamespaceMap::SvXMLNamespaceMap()
 : sXMLNS( GetXMLToken ( XML_XMLNS ) )

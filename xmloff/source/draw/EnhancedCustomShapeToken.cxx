@@ -42,7 +42,7 @@ struct TokenTable
 
 }
 
-static const TokenTable pTokenTableArray[] =
+const TokenTable pTokenTableArray[] =
 {
     { "type",                               EAS_type },
     { "name",                               EAS_name },

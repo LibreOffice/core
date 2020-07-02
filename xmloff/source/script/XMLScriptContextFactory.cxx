@@ -32,9 +32,9 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-static const OUStringLiteral gsEventType("EventType");
-static const OUStringLiteral gsScript("Script");
-static const OUStringLiteral gsURL("Script");
+const OUStringLiteral gsEventType("EventType");
+const OUStringLiteral gsScript("Script");
+const OUStringLiteral gsURL("Script");
 
 XMLScriptContextFactory::XMLScriptContextFactory()
 {

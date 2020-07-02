@@ -369,7 +369,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-static const OUStringLiteral gsPageLayoutNames( "PageLayoutNames" );
+const OUStringLiteral gsPageLayoutNames( "PageLayoutNames" );
 
 SdXMLExport::SdXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -1355,9 +1355,9 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
-static const char gpStrHeaderTextPrefix[] = "hdr";
-static const char gpStrFooterTextPrefix[] = "ftr";
-static const char gpStrDateTimeTextPrefix[] = "dtd";
+const char gpStrHeaderTextPrefix[] = "hdr";
+const char gpStrFooterTextPrefix[] = "ftr";
+const char gpStrDateTimeTextPrefix[] = "dtd";
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {

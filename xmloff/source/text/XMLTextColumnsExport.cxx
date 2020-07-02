@@ -43,14 +43,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 
-static const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
-static const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
-static const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
-static const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
-static const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
-static const OUStringLiteral gsIsAutomatic("IsAutomatic");
-static const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
-static const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
+const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
+const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
+const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
+const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
+const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
+const OUStringLiteral gsIsAutomatic("IsAutomatic");
+const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
+const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
 
 XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
     rExport( rExp )

@@ -39,7 +39,7 @@ namespace xmloff
 #define MAP_CONST_P( name, prefix, token, type, context ){ name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFSVER_010, false }
 #define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 
-    static XMLPropertyMapEntry const aControlStyleProperties[] =
+    XMLPropertyMapEntry const aControlStyleProperties[] =
     {
             MAP_CONST_P( PROPERTY_ALIGN,        XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
             MAP_CONST( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,      XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),

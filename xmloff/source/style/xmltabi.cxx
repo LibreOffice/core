@@ -44,7 +44,7 @@ enum SvXMLTokenMapAttrs
 
 }
 
-static const SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
+const SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
     { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },

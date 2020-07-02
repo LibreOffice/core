@@ -272,7 +272,7 @@ enum SvXMLStyleElemAttrTokens
 
 #define XML_NUMF_COLORCOUNT     10
 
-static const Color aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
+const Color aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 {
     COL_BLACK,
     COL_LIGHTBLUE,
@@ -292,14 +292,14 @@ static const Color aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 
 // maps for SvXMLUnitConverter::convertEnum
 
-static const SvXMLEnumMapEntry<bool> aStyleValueMap[] =
+const SvXMLEnumMapEntry<bool> aStyleValueMap[] =
 {
     { XML_SHORT,            false },
     { XML_LONG,             true },
     { XML_TOKEN_INVALID,    false }
 };
 
-static const SvXMLEnumMapEntry<bool> aFormatSourceMap[] =
+const SvXMLEnumMapEntry<bool> aFormatSourceMap[] =
 {
     { XML_FIXED,            false },
     { XML_LANGUAGE,         true },
@@ -323,7 +323,7 @@ struct SvXMLDefaultDateFormat
 
 }
 
-static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
+const SvXMLDefaultDateFormat aDefaultDateFormats[] =
 {
     // format                           day-of-week     day             month               year            hours           minutes         seconds         format-source
 

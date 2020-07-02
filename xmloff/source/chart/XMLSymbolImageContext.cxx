@@ -41,7 +41,7 @@ enum SvXMLTokenMapAttrs
 
 }
 
-static const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
+const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },

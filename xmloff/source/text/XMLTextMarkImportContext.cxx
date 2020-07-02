@@ -118,7 +118,7 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
 
 }
 
-static SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
+SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 {
     { XML_REFERENCE_MARK,         TypeReference },
     { XML_REFERENCE_MARK_START,   TypeReferenceStart },

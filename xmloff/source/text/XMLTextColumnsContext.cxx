@@ -63,7 +63,7 @@ enum SvXMLSepTokenMapAttrs
 
 }
 
-static const SvXMLTokenMapEntry aColAttrTokenMap[] =
+const SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
     { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
@@ -71,7 +71,7 @@ static const SvXMLTokenMapEntry aColAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
+const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
     { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },
@@ -81,7 +81,7 @@ static const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
+SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
 {
     { XML_NONE,          0 },
     { XML_SOLID,         1 },
@@ -90,7 +90,7 @@ static SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry<VerticalAlignment> const pXML_Sep_Align_Enum[] =
+SvXMLEnumMapEntry<VerticalAlignment> const pXML_Sep_Align_Enum[] =
 {
     { XML_TOP,           VerticalAlignment_TOP   },
     { XML_MIDDLE,        VerticalAlignment_MIDDLE },
@@ -244,13 +244,13 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
     }
 }
 
-static const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
-static const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
-static const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
-static const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
-static const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
-static const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
-static const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
+const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
+const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
+const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
+const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
+const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
+const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
+const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
 
 XMLTextColumnsContext::XMLTextColumnsContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

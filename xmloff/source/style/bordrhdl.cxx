@@ -68,7 +68,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to internal box line widths
 
-static sal_uInt16 const aBorderWidths[] =
+sal_uInt16 const aBorderWidths[] =
 {
     DEF_LINE_WIDTH_0,
     DEF_LINE_WIDTH_1,

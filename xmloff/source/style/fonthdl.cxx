@@ -51,7 +51,7 @@ static const SvXMLEnumMapEntry<FontFamily>* lcl_getFontFamilyGenericMapping()
     return aFontFamilyGenericMapping;
 }
 
-static SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
+SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
 {
     { XML_FIXED,            PITCH_FIXED     },
     { XML_VARIABLE,         PITCH_VARIABLE  },

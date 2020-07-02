@@ -153,7 +153,7 @@ static OUString lcl_getXSDType( SvXMLExport const & rExport,
 // the model
 
 
-static const ExportTable aXFormsModelTable[] =
+const ExportTable aXFormsModelTable[] =
 {
     TABLE_ENTRY( "ID", NONE, ID, xforms_string ),
     TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, xforms_string ),
@@ -252,7 +252,7 @@ void exportXFormsInstance( SvXMLExport& rExport,
 // the binding
 
 
-static const ExportTable aXFormsBindingTable[] =
+const ExportTable aXFormsBindingTable[] =
 {
     TABLE_ENTRY( "BindingID",            NONE, ID,         xforms_string ),
     TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    xforms_string ),
@@ -366,7 +366,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
 // the submission
 
 
-static const ExportTable aXFormsSubmissionTable[] =
+const ExportTable aXFormsSubmissionTable[] =
 {
     TABLE_ENTRY( "ID",         NONE, ID,        xforms_string ),
     TABLE_ENTRY( "Bind",       NONE, BIND,      xforms_string ),
@@ -398,7 +398,7 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 // export data types as XSD schema
 
 
-static const ExportTable aDataTypeFacetTable[] =
+const ExportTable aDataTypeFacetTable[] =
 {
     TABLE_ENTRY( "Length",               XSD, LENGTH,         xforms_int32 ),
     TABLE_ENTRY( "MinLength",            XSD, MINLENGTH,      xforms_int32 ),

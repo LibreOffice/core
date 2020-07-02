@@ -64,7 +64,7 @@ enum XMLSectionToken
 
 }
 
-static const SvXMLTokenMapEntry aSectionTokenMap[] =
+const SvXMLTokenMapEntry aSectionTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },

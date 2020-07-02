@@ -23,8 +23,8 @@
 
 using namespace ::com::sun::star;
 
-static const sal_Int32 nDefaultProgressBarRange = 1000000;
-static const float fProgressStep = 0.5;
+const sal_Int32 nDefaultProgressBarRange = 1000000;
+const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(const css::uno::Reference < css::task::XStatusIndicator>& xTempStatusIndicator,
                                     const bool bTempStrict)

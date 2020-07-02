@@ -725,7 +725,7 @@ void XMLSectionExport::ExportBaseIndexStart(
     GetExport().StartElement( XML_NAMESPACE_TEXT, eElement, false );
 }
 
-static const XMLTokenEnum aTypeSourceElementNameMap[] =
+const XMLTokenEnum aTypeSourceElementNameMap[] =
 {
     XML_TABLE_OF_CONTENT_SOURCE,        // TOC
     XML_TABLE_INDEX_SOURCE,         // table index
@@ -882,14 +882,14 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
 
 // map index of LevelFormats to attribute value;
 // level 0 is always the header
-static const XMLTokenEnum aLevelNameTOCMap[] =
+const XMLTokenEnum aLevelNameTOCMap[] =
     { XML_TOKEN_INVALID, XML_1, XML_2, XML_3, XML_4, XML_5, XML_6, XML_7,
           XML_8, XML_9, XML_10, XML_TOKEN_INVALID };
-static const XMLTokenEnum aLevelNameTableMap[] =
+const XMLTokenEnum aLevelNameTableMap[] =
     { XML_TOKEN_INVALID, XML__EMPTY, XML_TOKEN_INVALID };
-static const XMLTokenEnum aLevelNameAlphaMap[] =
+const XMLTokenEnum aLevelNameAlphaMap[] =
     { XML_TOKEN_INVALID, XML_SEPARATOR, XML_1, XML_2, XML_3, XML_TOKEN_INVALID };
-static const XMLTokenEnum aLevelNameBibliographyMap[] =
+const XMLTokenEnum aLevelNameBibliographyMap[] =
     { XML_TOKEN_INVALID, XML_ARTICLE, XML_BOOK, XML_BOOKLET, XML_CONFERENCE,
           XML_CUSTOM1, XML_CUSTOM2, XML_CUSTOM3, XML_CUSTOM4,
           XML_CUSTOM5, XML_EMAIL, XML_INBOOK, XML_INCOLLECTION,
@@ -942,7 +942,7 @@ static const char** aTypeLevelStylePropNameMap[] =
     aLevelStylePropNameBibliographyMap  // bibliography
 };
 
-static const XMLTokenEnum aTypeLevelAttrMap[] =
+const XMLTokenEnum aTypeLevelAttrMap[] =
 {
     XML_OUTLINE_LEVEL,      // TOC
     XML_TOKEN_INVALID,      // table index
@@ -953,7 +953,7 @@ static const XMLTokenEnum aTypeLevelAttrMap[] =
     XML_BIBLIOGRAPHY_TYPE   // bibliography
 };
 
-static const XMLTokenEnum aTypeElementNameMap[] =
+const XMLTokenEnum aTypeElementNameMap[] =
 {
     XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE,    // TOC
     XML_TABLE_INDEX_ENTRY_TEMPLATE,     // table index

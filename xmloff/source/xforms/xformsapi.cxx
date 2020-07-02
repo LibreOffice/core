@@ -172,7 +172,7 @@ void xforms_setValue( Reference<XPropertySet> const & xPropertySet,
 }
 
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
-static const SvXMLTokenMapEntry aTypes[] =
+const SvXMLTokenMapEntry aTypes[] =
 {
     TOKEN_MAP_ENTRY( XSD, STRING  ),
     TOKEN_MAP_ENTRY( XSD, DECIMAL ),

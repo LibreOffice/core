@@ -77,7 +77,7 @@ enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
 
 }
 
-static const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
+const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
     { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
@@ -554,7 +554,7 @@ void XMLImageMapCircleContext::Prepare(
 }
 
 
-static const OUStringLiteral gsImageMap("ImageMap");
+const OUStringLiteral gsImageMap("ImageMap");
 
 XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,

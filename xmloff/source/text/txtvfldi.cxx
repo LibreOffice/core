@@ -51,18 +51,18 @@
 
 
 // service names
-static const char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
-static const char sAPI_get_expression[]     = "GetExpression";
-static const char sAPI_set_expression[]     = "SetExpression";
-static const char sAPI_user[]               = "User";
-static const char sAPI_database[]           = "com.sun.star.text.TextField.Database";
+const char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
+const char sAPI_get_expression[]     = "GetExpression";
+const char sAPI_set_expression[]     = "SetExpression";
+const char sAPI_user[]               = "User";
+const char sAPI_database[]           = "com.sun.star.text.TextField.Database";
 
 // property names
-static const char sAPI_content[]            = "Content";
-static const char sAPI_sub_type[]           = "SubType";
-static const char sAPI_number_format[]      = "NumberFormat";
-static const char sAPI_is_visible[]         = "IsVisible";
-static const char sAPI_current_presentation[]   = "CurrentPresentation";
+const char sAPI_content[]            = "Content";
+const char sAPI_sub_type[]           = "SubType";
+const char sAPI_number_format[]      = "NumberFormat";
+const char sAPI_is_visible[]         = "IsVisible";
+const char sAPI_current_presentation[]   = "CurrentPresentation";
 
 
 using namespace ::com::sun::star;
@@ -1063,7 +1063,7 @@ enum ValueType
 
 }
 
-static SvXMLEnumMapEntry<ValueType> const aValueTypeMap[] =
+SvXMLEnumMapEntry<ValueType> const aValueTypeMap[] =
 {
     { XML_FLOAT,        XML_VALUE_TYPE_FLOAT },
     { XML_CURRENCY,     XML_VALUE_TYPE_CURRENCY },

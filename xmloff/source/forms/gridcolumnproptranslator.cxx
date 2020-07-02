@@ -57,7 +57,7 @@ namespace xmloff
             return -1;
         }
 
-        static struct AlignmentTranslationEntry
+        struct AlignmentTranslationEntry
         {
             ParagraphAdjust nParagraphValue;
             sal_Int16       nControlValue;
