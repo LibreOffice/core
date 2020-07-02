@@ -52,7 +52,7 @@ Type_action:
 ;
 SELECT:
   'Select in ' edit_button=STRING
-  '{"FROM": "' from_pos=INT '" , "TO" : "'to_pos=INT '"}'
+  '{' + '"FROM"' + ':' + '"' from_pos=INT '"' + ',' + '"TO"' + ':' + '"' to_pos=INT '"'+'}'
 ;
 Clear:
   'Clear' edit_button=STRING
