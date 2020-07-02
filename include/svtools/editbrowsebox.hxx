@@ -73,11 +73,6 @@ namespace o3tl
     template<> struct typed_flags<EditBrowseBoxFlags> : is_typed_flags<EditBrowseBoxFlags, 0x0f> {};
 }
 
-
-class Edit;
-class FormattedField;
-
-
 namespace svt
 {
     class SVT_DLLPUBLIC CellController : public SvRefBase
