@@ -113,6 +113,11 @@ shell TableObjectBar
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_TABLE_DELETE_TABLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_TABLE_SELECT_ALL
     [
         ExecMethod = Execute;

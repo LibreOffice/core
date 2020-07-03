@@ -473,6 +473,10 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 if( !mxTable.is() || !hasSelectedCells() || (!comphelper::LibreOfficeKit::isActive() && mxTable->getColumnCount() <= 1) )
                     rSet.DisableItem(SID_TABLE_DELETE_COL);
                 break;
+            case SID_TABLE_DELETE_TABLE:
+                if( !mxTable.is() )
+                    rSet.DisableItem(SID_TABLE_DELETE_TABLE);
+                break;
             case SID_TABLE_MERGE_CELLS:
                 if( !mxTable.is() || !hasSelectedCells() )
                     rSet.DisableItem(SID_TABLE_MERGE_CELLS);
@@ -786,10 +790,17 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 void SvxTableController::onDelete( sal_uInt16 nSId )
 {
     sdr::table::SdrTableObj* pTableObj = mxTableObj.get();
-    if( !pTableObj )
+    if( !pTableObj || !mxTable.is() )
         return;
 
-    if( mxTable.is() && hasSelectedCells() )
+    if( nSId == SID_TABLE_DELETE_TABLE )
+    {
+        if( pTableObj->IsTextEditActive() )
+            mrView.SdrEndTextEdit(true);
+
+        mrView.DeleteMarkedObj();
+    }
+    else if( hasSelectedCells() )
     {
         CellPos aStart, aEnd;
         getSelectedCells( aStart, aEnd );
@@ -966,6 +977,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
         break;
     case SID_TABLE_DELETE_ROW:
     case SID_TABLE_DELETE_COL:
+    case SID_TABLE_DELETE_TABLE:
         onDelete( nSId );
         break;
     case SID_TABLE_SELECT_ALL:
