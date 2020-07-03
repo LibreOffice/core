@@ -819,7 +819,9 @@ public:
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
-    static void handleFieldFormula
+    OUString convertFieldFormula(const OUString& input);
+    OUString convertFieldFormulaLocale(const OUString& input);
+    void handleFieldFormula
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
