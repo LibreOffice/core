@@ -263,6 +263,7 @@ public:
     void testColumnWidthRowHeightXLSXML();
     void testCharacterSetXLSXML();
     void testTdf62268();
+    void testTdf35636();
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
     void testXLSDefColWidth();
@@ -421,6 +422,7 @@ public:
     CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf62268);
+    CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
@@ -4550,6 +4552,20 @@ void ScFiltersTest::testTdf62268()
     CPPUNIT_ASSERT_LESSEQUAL( 3, abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
     CPPUNIT_ASSERT_LESSEQUAL( 19, abs( 1905 - nHeight ) );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf35636()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf35636.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, SUMIF would have returned 0.0
+    // with empty cells in the criteria
+    CPPUNIT_ASSERT_EQUAL(50.0, rDoc.GetValue(ScAddress(1,4,0)));
 
     xDocSh->DoClose();
 }
