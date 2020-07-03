@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fba8d2ea_4b41f094",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-03T10:12:27Z",
+      "side": 1,
+      "message": "No need to leave commented-out code.",
+      "revId": "b25177b5a0b124f3f6557f1765fedf6ed0275eef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f21a7353_e9d05643",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-03T10:12:27Z",
+      "side": 1,
+      "message": "I don\u0027t think this end marker is necessary (or saying \"start\")",
+      "revId": "b25177b5a0b124f3f6557f1765fedf6ed0275eef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
