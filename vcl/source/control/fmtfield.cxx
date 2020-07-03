@@ -1308,6 +1308,11 @@ Formatter* FormattedField::GetFormatter()
     return m_xFormatter.get();
 }
 
+void FormattedField::SetFormatter(Formatter* pFormatter)
+{
+    m_xFormatter.reset(pFormatter);
+}
+
 // currently used by online
 void FormattedField::SetValueFromString(const OUString& rStr)
 {
