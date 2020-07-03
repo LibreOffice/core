@@ -63,9 +63,13 @@ GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode)
 
 //note: parameter is SwPam just so we can init SwUndRng, the End is ignored!
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
-    : SwUndo( nUndoId, rPam.GetDoc() ), SwUndRng( rPam ),
-    m_pTextFormatColl( nullptr ), m_pLastNodeColl(nullptr),
-    m_bStartWasTextNode( true ), m_nNodeDiff( 0 ), m_nSetPos( 0 )
+    : SwUndo( nUndoId, rPam.GetDoc() )
+    , SwUndRng( rPam )
+    , m_pTextFormatColl(nullptr)
+    , m_pLastNodeColl(nullptr)
+    , m_nDeleteTextNodes(1)
+    , m_nNodeDiff(0)
+    , m_nSetPos(0)
 {
     m_pHistory.reset( new SwHistory );
     SwDoc* pDoc = rPam.GetDoc();
@@ -74,6 +78,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     if( pTextNd )
     {
         m_pTextFormatColl = pTextNd->GetTextColl();
+        assert(m_pTextFormatColl);
         m_pHistory->CopyAttr( pTextNd->GetpSwpHints(), m_nSttNode,
                             0, pTextNd->GetText().getLength(), false );
         if( pTextNd->HasSwAttrSet() )
@@ -106,7 +111,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 //  Flys, anchored to any paragraph, but not first and last, are handled by DelContentIndex (see SwUndoInserts::UndoImpl) and are not stored in m_FlyUndos.
 
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
-                                    bool bSttIsTextNd )
+                                    int const nDeleteTextNodes)
 {
     const SwPosition* pTmpPos = rPam.End();
     m_nEndNode = pTmpPos->nNode.GetIndex();
@@ -121,11 +126,11 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         m_nSttNode = pTmpPos->nNode.GetIndex();
         m_nSttContent = pTmpPos->nContent.GetIndex();
 
-        if( !bSttIsTextNd )      // if a table selection is added...
+        if (m_nDeleteTextNodes == 0) // if a table selection is added...
         {
             ++m_nSttNode;         // ... then the CopyPam is not fully correct
-            m_bStartWasTextNode = false;
         }
+        m_nDeleteTextNodes = nDeleteTextNodes;
     }
 
     // Fill m_FlyUndos with flys anchored to first and last paragraphs
@@ -309,8 +314,10 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                     new SwNodeIndex(rDoc.GetNodes().GetEndOfContent()));
             MoveToUndoNds(rPam, m_pUndoNodeIndex.get());
 
-            if( !m_bStartWasTextNode )
+            if (m_nDeleteTextNodes == 0)
+            {
                 rPam.Move( fnMoveBackward, GoInContent );
+            }
         }
     }
 
@@ -321,15 +328,19 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( !m_pTextFormatColl ) // if 0 than it's no TextNode -> delete
         {
             SwNodeIndex aDelIdx( rIdx );
-            ++rIdx;
-            SwContentNode* pCNd = rIdx.GetNode().GetContentNode();
-            rPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
-            rPam.SetMark();
+            assert(0 < m_nDeleteTextNodes && m_nDeleteTextNodes < 3);
+            for (int i = 0; i < m_nDeleteTextNodes; ++i)
+            {
+                rPam.Move(fnMoveForward, GoInNode);
+            }
             rPam.DeleteMark();
 
-            RemoveIdxRel(aDelIdx.GetIndex(), *rPam.GetPoint());
+            for (int i = 0; i < m_nDeleteTextNodes; ++i)
+            {
+                RemoveIdxRel(aDelIdx.GetIndex() + i, *rPam.GetPoint());
+            }
 
-            rDoc.GetNodes().Delete( aDelIdx );
+            rDoc.GetNodes().Delete( aDelIdx, m_nDeleteTextNodes );
         }
         else
         {
@@ -386,8 +397,10 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
         MoveFromUndoNds(*pDoc, nMvNd, *rPam.GetMark());
-        if( m_bStartWasTextNode )
+        if (m_nDeleteTextNodes != 0)
+        {
             MovePtForward(rPam, bMvBkwrd);
+        }
         rPam.Exchange();
 
         // at-char anchors post SplitNode are on index 0 of 2nd node and will
