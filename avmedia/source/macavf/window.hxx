@@ -44,8 +44,7 @@ class Window
 {
 public:
 
-            Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rxMgr,
-                    Player& i_rPlayer,
+            Window( Player& i_rPlayer,
                     NSView* i_pParentView
                     );
     virtual ~Window() override;
@@ -91,8 +90,6 @@ public:
     virtual bool handleObservation( NSString* pKeyPath ) override;
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
     ::osl::Mutex                                maMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;

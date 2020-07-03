@@ -28,9 +28,8 @@ using namespace ::com::sun::star;
 
 namespace avmedia::macavf {
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Player& i_rPlayer, NSView* i_pParentView )
-:   mxMgr( i_rxMgr )
-,   maListeners( maMutex )
+Window::Window( Player& i_rPlayer, NSView* i_pParentView )
+:   maListeners( maMutex )
 ,   meZoomLevel( media::ZoomLevel_NOT_AVAILABLE )
 ,   mrPlayer( i_rPlayer )
 ,   mnPointerType( awt::SystemPointer::ARROW )

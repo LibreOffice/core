@@ -33,7 +33,7 @@ class Player
                                    css::lang::XServiceInfo >
 {
 public:
-    explicit Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+    explicit Player();
     virtual  ~Player() override;
 
     bool create( const OUString& rURL );
@@ -68,7 +68,6 @@ public:
     virtual bool handleObservation( NSString* pKeyPath ) override;
 
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
     AVPlayer*           mpPlayer;
 

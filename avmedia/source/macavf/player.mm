@@ -20,6 +20,7 @@
 #include "player.hxx"
 #include "framegrabber.hxx"
 #include "window.hxx"
+#include <rtl/ref.hxx>
 
 #include <cmath> // for log10()
 
@@ -71,9 +72,8 @@ MacAVObserverObject* MacAVObserverHandler::getObserver()
 }
 
 
-Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
-:   mxMgr( rxMgr )
-,   mpPlayer( nullptr )
+Player::Player()
+:   mpPlayer( nullptr )
 ,   mfUnmutedVolume( 0 )
 ,   mfStopTime( DBL_MAX )
 ,   mbMuted( false )
@@ -318,27 +318,22 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     NSView* pParentView = reinterpret_cast<NSView*>(nNSViewPtr);
 
     // check the window parameters
-    uno::Reference< ::media::XPlayerWindow > xRet;
     if( (aSize.Width <= 0) || (aSize.Height <= 0) || (pParentView == nullptr) )
-         return xRet;
+         return {};
 
     // create the window
-    ::avmedia::macavf::Window* pWindow = new ::avmedia::macavf::Window( mxMgr, *this, pParentView );
-    xRet = pWindow;
-    return xRet;
+    return new ::avmedia::macavf::Window( *this, pParentView );
 }
 
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 {
-    uno::Reference< media::XFrameGrabber > xRet;
-
-    FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
+    rtl::Reference<FrameGrabber> pGrabber = new FrameGrabber();
     AVAsset* pMovie = [[mpPlayer currentItem] asset];
-    if( pGrabber->create( pMovie ) )
-        xRet = pGrabber;
+    if( !pGrabber->create( pMovie ) )
+        return {};
 
-    return xRet;
+    return pGrabber.get();
 }
 
 

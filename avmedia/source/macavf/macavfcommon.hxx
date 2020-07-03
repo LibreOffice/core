@@ -45,9 +45,6 @@
 #include <com/sun/star/media/XManager.hpp>
 
 
-#define AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_MacAVF"
-#define AVMEDIA_MACAVF_MANAGER_SERVICENAME "com.sun.star.media.Manager_MacAVF"
-
 #define AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_MacAVF"
 #define AVMEDIA_MACAVF_PLAYER_SERVICENAME "com.sun.star.media.Player_MacAVF"
 

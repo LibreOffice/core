@@ -32,7 +32,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
 {
 public:
 
-    Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    Manager();
     virtual ~Manager() override;
 
     // XManager
@@ -42,9 +42,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 };
 
 } // namespace avmedia::macavf

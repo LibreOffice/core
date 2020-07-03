@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaMacAVF,\
 
 $(eval $(call gb_Library_add_objcxxobjects,avmediaMacAVF,\
 	avmedia/source/macavf/framegrabber \
-	avmedia/source/macavf/macavfuno \
 	avmedia/source/macavf/manager \
 	avmedia/source/macavf/player \
 	avmedia/source/macavf/window \

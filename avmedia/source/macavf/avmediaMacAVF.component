@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="avmediaMacAVF" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.avmedia.Manager_MacAVF">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.avmedia.Manager_MacAVF"
+        constructor="com_sun_star_comp_avmedia_Manager_MacAVF_get_implementation">
     <service name="com.sun.star.media.Manager_MacAVF"/>
   </implementation>
 </component>

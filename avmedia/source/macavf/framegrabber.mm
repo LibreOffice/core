@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 namespace avmedia::macavf {
 
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& /*rxMgr*/ )
+FrameGrabber::FrameGrabber()
 :   mpImageGen( nullptr )
 {}
 
