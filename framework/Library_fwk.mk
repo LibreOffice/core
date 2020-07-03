@@ -28,6 +28,7 @@ $(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
 $(eval $(call gb_Library_set_include,fwk,\
     -I$(SRCDIR)/framework/source/inc \
     -I$(SRCDIR)/framework/inc \
+    -I$(WORKDIR)/CustomTarget/officecfg/registry \
     $$(INCLUDE) \
 ))
 
@@ -78,6 +79,12 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/dispatch/loaddispatcher \
     framework/source/dispatch/startmoduledispatcher \
     framework/source/dispatch/windowcommanddispatch \
+    framework/source/dispatch/dispatchdisabler \
+    framework/source/dispatch/mailtodispatcher \
+    framework/source/dispatch/oxt_handler \
+    framework/source/dispatch/popupmenudispatcher \
+    framework/source/dispatch/servicehandler \
+    framework/source/dispatch/systemexec \
     framework/source/helper/dockingareadefaultacceptor \
     framework/source/helper/ocomponentaccess \
     framework/source/helper/ocomponentenumeration \
@@ -92,6 +99,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/helper/vclstatusindicator \
     framework/source/helper/wakeupthread \
     framework/source/interaction/quietinteraction \
+    framework/source/jobs/helponstartup \
+    framework/source/jobs/shelljob \
     framework/source/fwe/classes/actiontriggercontainer \
     framework/source/fwe/classes/actiontriggerpropertyset \
     framework/source/fwe/classes/actiontriggerseparatorpropertyset \
@@ -139,6 +148,9 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/layoutmanager/uielement \
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
+    framework/source/recording/dispatchrecorder \
+    framework/source/recording/dispatchrecordersupplier \
+    framework/source/register/registertemp \
     framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/autorecovery \
     framework/source/services/desktop \
@@ -150,6 +162,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/substitutepathvars \
     framework/source/services/taskcreatorsrv \
     framework/source/services/urltransformer \
+    framework/source/services/mediatypedetectionhelper \
+    framework/source/services/uriabbreviation \
     framework/source/uiconfiguration/CommandImageResolver \
     framework/source/uiconfiguration/ImageList \
     framework/source/uiconfiguration/globalsettings \
@@ -199,6 +213,15 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/toolbarmerger \
     framework/source/uielement/toolbarwrapper \
     framework/source/uielement/uicommanddescription \
+    framework/source/uielement/fontmenucontroller \
+    framework/source/uielement/fontsizemenucontroller \
+    framework/source/uielement/footermenucontroller \
+    framework/source/uielement/headermenucontroller \
+    framework/source/uielement/langselectionmenucontroller \
+    framework/source/uielement/macrosmenucontroller \
+    framework/source/uielement/newmenucontroller \
+    framework/source/uielement/toolbarmodemenucontroller \
+    framework/source/uielement/toolbarsmenucontroller \
     framework/source/uifactory/addonstoolbarfactory \
     framework/source/uifactory/factoryconfiguration \
     framework/source/uifactory/menubarfactory \

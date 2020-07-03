@@ -41,7 +41,6 @@ MERGE_LIBRARY_LIST := \
 	frm \
 	fsstorage \
 	fwk \
-	fwl \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \

@@ -20,7 +20,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     lng \
     xo \
     fwk \
-    fwl \
     package2 \
     ucpfile1 \
     ucb1 \
