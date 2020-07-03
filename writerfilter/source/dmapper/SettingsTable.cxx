@@ -256,6 +256,8 @@ struct SettingsTable_Impl
     bool                m_bRedlineProtection;
     OUString            m_sRedlineProtectionKey;
     bool                m_bDisplayBackgroundShape;
+    OUString            m_sDecimalSymbol;
+    OUString            m_sListSeparator;
 
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
@@ -292,6 +294,8 @@ struct SettingsTable_Impl
     , m_bRedlineProtection(false)
     , m_sRedlineProtectionKey()
     , m_bDisplayBackgroundShape(false)
+    , m_sDecimalSymbol(".")
+    , m_sListSeparator(",")
     , m_pThemeFontLangProps(3)
     , m_pCurrentCompatSetting(3)
     {}
@@ -473,8 +477,10 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
+        m_pImpl->m_sDecimalSymbol = pValue->getString();
     break;
     case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
+        m_pImpl->m_sListSeparator = pValue->getString();
     break;
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
@@ -672,6 +678,17 @@ sal_Int16 SettingsTable::GetHypenationZone() const
 {
     return m_pImpl->m_nHyphenationZone;
 }
+
+OUString SettingsTable::GetDecimalSymbol() const
+{
+    return m_pImpl->m_sDecimalSymbol;
+}
+
+OUString SettingsTable::GetListSeparator() const
+{
+    return m_pImpl->m_sListSeparator;
+}
+
 
 uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
