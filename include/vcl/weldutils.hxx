@@ -158,12 +158,13 @@ class VCL_DLLPUBLIC EntryFormatter : public Formatter
 {
 public:
     EntryFormatter(weld::Entry& rEntry);
+    EntryFormatter(weld::FormattedSpinButton& rSpinButton);
 
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
 
     weld::Entry& get_widget() { return m_rEntry; }
 
-    // Formatter overrides
+    // public Formatter overrides, drives interactions with the Entry
     virtual Selection GetEntrySelection() const override;
     virtual OUString GetEntryText() const override;
     virtual void SetEntryText(const OUString& rText, const Selection& rSel) override;
@@ -171,14 +172,27 @@ public:
     virtual SelectionOptions GetEntrySelectionOptions() const override;
     virtual void FieldModified() override;
 
+    // public Formatter overrides, drives optional SpinButton settings
+    virtual void ClearMinValue() override;
+    virtual void SetMinValue(double dMin) override;
+    virtual void ClearMaxValue() override;
+    virtual void SetMaxValue(double dMin) override;
+
+    virtual void SetSpinSize(double dStep) override;
+
     void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
 
 private:
     weld::Entry& m_rEntry;
+    weld::FormattedSpinButton* m_pSpinButton;
     Link<weld::Entry&, void> m_aModifyHdl;
     SelectionOptions m_eOptions;
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
     DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
+    void Init();
+
+    // private Formatter overrides
+    virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
 // get the row the iterator is on
