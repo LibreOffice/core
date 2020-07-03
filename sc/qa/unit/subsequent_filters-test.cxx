@@ -229,6 +229,7 @@ public:
     void testTdf103734();
     void testTdf98844();
     void testTdf100458();
+    void testTdf134455();
     void testTdf127982();
     void testTdf131424();
     void testTdf100709XLSX();
@@ -389,6 +390,7 @@ public:
     CPPUNIT_TEST(testTdf103734);
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
+    CPPUNIT_TEST(testTdf134455);
     CPPUNIT_TEST(testTdf127982);
     CPPUNIT_TEST(testTdf131424);
     CPPUNIT_TEST(testTdf100709XLSX);
@@ -3793,6 +3795,24 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf134455()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf134455.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("00:05"), rDoc.GetString(ScAddress(3,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("00:10"), rDoc.GetString(ScAddress(3,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("00:59"), rDoc.GetString(ScAddress(3,6,0)));
+
+    // Without the fix in place, TIMEVALUE would have returned Err:502 for values
+    // greater than 59
+    CPPUNIT_ASSERT_EQUAL(OUString("01:05"), rDoc.GetString(ScAddress(3,7,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("04:00"), rDoc.GetString(ScAddress(3,8,0)));
+
     xDocSh->DoClose();
 }
 
