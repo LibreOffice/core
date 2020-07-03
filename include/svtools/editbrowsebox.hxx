@@ -575,14 +575,14 @@ namespace svt
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
         {
-            m_xFormattedEntry->connect_changed(rLink);
+            m_xEntryFormatter->connect_changed(rLink);
         }
 
-        weld::FormattedEntry& get_formatter() { return *m_xFormattedEntry; }
+        weld::EntryFormatter& get_formatter() { return *m_xEntryFormatter; }
 
     private:
         std::unique_ptr<weld::Entry> m_xEntry;
-        std::unique_ptr<weld::FormattedEntry> m_xFormattedEntry;
+        std::unique_ptr<weld::EntryFormatter> m_xEntryFormatter;
     };
 
     //= FormattedFieldCellController

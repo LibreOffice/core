@@ -1252,8 +1252,8 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     auto xEditControl = VclPtr<FormattedControl>::Create(&rParent);
     auto xEditPainter = VclPtr<FormattedControl>::Create(&rParent);
 
-    weld::FormattedEntry& rControlFormatter = xEditControl->get_formatter();
-    weld::FormattedEntry& rPainterFormatter = xEditPainter->get_formatter();
+    weld::EntryFormatter& rControlFormatter = xEditControl->get_formatter();
+    weld::EntryFormatter& rPainterFormatter = xEditPainter->get_formatter();
 
     m_pWindow = xEditControl.get();
     m_pPainter = xEditPainter.get();
@@ -1486,7 +1486,7 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
         return OUString();
 
     FormattedControl* pControl = static_cast<FormattedControl*>(m_pPainter.get());
-    weld::FormattedEntry& rPainterFormatter = pControl->get_formatter();
+    weld::EntryFormatter& rPainterFormatter = pControl->get_formatter();
 
     OUString aText;
     try
@@ -1531,7 +1531,7 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
     {
         FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
         weld::Entry& rEntry = pEditControl->get_widget();
-        weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
+        weld::EntryFormatter& rEditFormatter = pEditControl->get_formatter();
 
         if (!_rxField.is())
         {
@@ -1573,7 +1573,7 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
 
     FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
     weld::Entry& rEntry = pEditControl->get_widget();
-    weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
+    weld::EntryFormatter& rEditFormatter = pEditControl->get_formatter();
 
     OUString sText;
     Any aValue = _rxModel->getPropertyValue( FM_PROP_EFFECTIVE_VALUE );
@@ -1597,7 +1597,7 @@ bool DbFormattedField::commitControl()
 
     FormattedControl* pEditControl = static_cast<FormattedControl*>(m_pWindow.get());
     weld::Entry& rEntry = pEditControl->get_widget();
-    weld::FormattedEntry& rEditFormatter = pEditControl->get_formatter();
+    weld::EntryFormatter& rEditFormatter = pEditControl->get_formatter();
 
     if (m_rColumn.IsNumeric())
     {
