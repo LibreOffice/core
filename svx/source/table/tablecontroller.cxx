@@ -473,6 +473,10 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 if( !mxTable.is() || !hasSelectedCells() || (!comphelper::LibreOfficeKit::isActive() && mxTable->getColumnCount() <= 1) )
                     rSet.DisableItem(SID_TABLE_DELETE_COL);
                 break;
+            case SID_TABLE_DELETE_TABLE:
+                if( !mxTable.is() )
+                    rSet.DisableItem(SID_TABLE_DELETE_TABLE);
+                break;
             case SID_TABLE_MERGE_CELLS:
                 if( !mxTable.is() || !hasSelectedCells() )
                     rSet.DisableItem(SID_TABLE_MERGE_CELLS);
@@ -831,6 +835,12 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             }
             break;
         }
+
+        case SID_TABLE_DELETE_TABLE:
+        {
+            bDeleteTable = true;
+            break;
+        }
         }
 
         if( bDeleteTable )
@@ -966,6 +976,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
         break;
     case SID_TABLE_DELETE_ROW:
     case SID_TABLE_DELETE_COL:
+    case SID_TABLE_DELETE_TABLE:
         onDelete( nSId );
         break;
     case SID_TABLE_SELECT_ALL:
