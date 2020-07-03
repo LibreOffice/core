@@ -31,7 +31,7 @@ class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
 {
 public:
 
-    explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+    explicit FrameGrabber();
     virtual  ~FrameGrabber() override;
 
     bool    create( AVAsset* pMovie );
@@ -45,8 +45,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory >    mxMgr;
 
     AVAssetImageGenerator* mpImageGen;
 };
