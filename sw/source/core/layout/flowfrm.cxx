@@ -1421,16 +1421,25 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         if( pPrevFrame )
         {
             const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
-            const bool bContextualSpacing = pAttrs->GetULSpace().GetContext()
-                                         && lcl_getContextualSpacing(pPrevFrame)
+            const bool bContextualSpacingThis = pAttrs->GetULSpace().GetContext();
+            const bool bContextualSpacingPrev = lcl_getContextualSpacing(pPrevFrame);
+
+            const bool bContextualSpacing = bContextualSpacingThis
+                                         && bContextualSpacingPrev
                                          && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
 
             // tdf#125893 always ignore own top margin setting of the actual paragraph
             // with contextual spacing, if the previous paragraph is identical
             const bool bHalfContextualSpacing = !bContextualSpacing
-                                         && pAttrs->GetULSpace().GetContext()
-                                         && !lcl_getContextualSpacing(pPrevFrame)
-                                         && lcl_getContextualSpacing(&m_rThis)
+                                         && bContextualSpacingThis
+                                         && !bContextualSpacingPrev
+                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+
+            // tdf#134463 always ignore own bottom margin setting of the previous paragraph
+            // with contextual spacing, if the actual paragraph is identical
+            const bool bHalfContextualSpacingPrev = !bContextualSpacing
+                                         && !bContextualSpacingThis
+                                         && bContextualSpacingPrev
                                          && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
 
             // i#11860 - use new method to determine needed spacing
@@ -1488,8 +1497,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             }
             else
             {
-                nUpper = bContextualSpacing ? 0 : std::max(static_cast<long>(nPrevLowerSpace), bHalfContextualSpacing
-                                                           ? 0 : static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
+                nUpper = bContextualSpacing ? 0 : std::max(
+                                bHalfContextualSpacingPrev ? 0 : static_cast<long>(nPrevLowerSpace),
+                                bHalfContextualSpacing     ? 0 : static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
 
                 // i#11859 - consideration of the line spacing
                 //      for the upper spacing of a text frame
