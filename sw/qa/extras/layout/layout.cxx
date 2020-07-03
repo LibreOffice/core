@@ -3113,6 +3113,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)
     assertXPath(pXmlDoc, "/root/page/body/txt[4]/infos/prtBounds", "top", "0");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134463)
+{
+    createDoc("tdf134463.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 621. The previous paragraph must have zero bottom border.
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/prtBounds", "top", "21");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117188)
 {
     createDoc("tdf117188.docx");
