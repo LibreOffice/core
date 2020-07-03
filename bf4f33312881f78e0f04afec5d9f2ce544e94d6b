@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1bd436ab_cc46574e",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd712dd7_526739a4",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d7c55f7_84264fb9",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e13fb70e_ea824762",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 1,
+      "message": "changed.",
+      "parentUuid": "4d7c55f7_84264fb9",
+      "range": {
+        "startLine": 84,
+        "startChar": 18,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "519975c4_3732aa6b",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a70ebe1_a789130c",
+      "range": {
+        "startLine": 98,
+        "startChar": 36,
+        "endLine": 98,
+        "endChar": 37
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5c75550_e1800a09",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21608d45_115e7348",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5c75550_e1800a09",
+      "range": {
+        "startLine": 255,
+        "startChar": 39,
+        "endLine": 255,
+        "endChar": 48
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

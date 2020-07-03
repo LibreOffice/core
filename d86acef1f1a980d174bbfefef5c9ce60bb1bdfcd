@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f45c2923_8f0ed66e",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 0,
+      "message": "\"rb\" perhaps ? Its a reference.",
+      "parentUuid": "7f3c4196_5d4f90d6",
+      "range": {
+        "startLine": 115,
+        "startChar": 59,
+        "endLine": 115,
+        "endChar": 61
+      },
+      "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0ef6f08_a863a176",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4c8780b_8cca389a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T11:10:31Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a0ef6f08_a863a176",
+      "range": {
+        "startLine": 247,
+        "startChar": 39,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
