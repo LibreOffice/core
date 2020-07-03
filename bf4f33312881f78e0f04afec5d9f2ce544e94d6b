@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "dfd5ae67_67984dfb",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-03T12:34:28Z",
+      "side": 1,
+      "message": "https://ci.libreoffice.org/job/gerrit_linux_gcc_release/63836/\n\nWarning generated, changing to \"long nValueLong\" and \"short nValueShort\" for now",
+      "parentUuid": "519975c4_3732aa6b",
+      "range": {
+        "startLine": 98,
+        "startChar": 36,
+        "endLine": 98,
+        "endChar": 37
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5c75550_e1800a09",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
