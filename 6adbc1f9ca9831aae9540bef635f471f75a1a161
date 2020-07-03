@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99efdc24_12898f31",
+        "filename": "vcl/source/app/weldutils.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-03T16:09:49Z",
+      "side": 1,
+      "message": "give that this does not own the entry, does it need to disconnect somehow?",
+      "revId": "6adbc1f9ca9831aae9540bef635f471f75a1a161",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
