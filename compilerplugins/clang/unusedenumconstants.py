@@ -110,6 +110,7 @@ def is_ignore(srcLoc):
          "include/oox/ppt/animationspersist.hxx",
          "include/vcl/fontcapabilities.hxx",
          "sw/inc/poolfmt.hxx",
+         "include/xmloff/xmltoken.hxx",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

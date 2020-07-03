@@ -1,5 +1,13 @@
+canvas/inc/rendering/icolorbuffer.hxx:38
+    enum canvas::IColorBuffer::Format A8R8G8B8
+canvas/inc/rendering/icolorbuffer.hxx:41
+    enum canvas::IColorBuffer::Format X8R8G8B8
+canvas/inc/rendering/irendermodule.hxx:54
+    enum canvas::IRenderModule::PrimitiveType Unknown
 cui/source/options/optfltr.cxx:35
     enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
+drawinglayer/source/tools/emfphelperdata.cxx:71
+    enum emfplushelper::(anonymous at /home/noel/libo2/drawinglayer/source/tools/emfphelperdata.cxx:65:5) WrapModeClamp
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
 framework/inc/xml/imagesdocumenthandler.hxx:43
@@ -20,8 +28,8 @@ framework/inc/xml/imagesdocumenthandler.hxx:51
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTURL
 framework/inc/xml/imagesdocumenthandler.hxx:52
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
-framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:42
-    enum EPROPERTIES PROPERTYCOUNT
+framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:44
+    enum (anonymous namespace)::EPROPERTIES PROPERTYCOUNT
 include/connectivity/dbtools.hxx:821
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
@@ -52,7 +60,7 @@ include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
 include/LibreOfficeKit/LibreOfficeKitEnums.h:56
     LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
-include/LibreOfficeKit/LibreOfficeKitEnums.h:729
+include/LibreOfficeKit/LibreOfficeKitEnums.h:772
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -83,48 +91,88 @@ include/vcl/keycod.hxx:29
 include/vcl/keycod.hxx:30
     enum KeyFuncType SAVEAS
 include/vcl/keycod.hxx:30
-    enum KeyFuncType CLOSE
-include/vcl/keycod.hxx:30
     enum KeyFuncType PRINT
+include/vcl/keycod.hxx:30
+    enum KeyFuncType CLOSE
 include/vcl/keycod.hxx:30
     enum KeyFuncType QUIT
 include/vcl/keycod.hxx:32
     enum KeyFuncType FIND
 include/vcl/keycod.hxx:33
-    enum KeyFuncType PROPERTIES
-include/vcl/keycod.hxx:33
     enum KeyFuncType FINDBACKWARD
-include/vcl/vclenum.hxx:309
+include/vcl/keycod.hxx:33
+    enum KeyFuncType PROPERTIES
+include/vcl/toolkit/svtabbx.hxx:36
+    enum SvTabJustify AdjustRight
+include/vcl/toolkit/svtabbx.hxx:37
+    enum SvTabJustify AdjustLeft
+include/vcl/treelistbox.hxx:152
+    enum DragDropMode APP_COPY
+include/vcl/vclenum.hxx:312
     enum WindowStateState FullScreen
-include/vcl/window.hxx:110
+include/vcl/window.hxx:109
     enum TrackingEventFlags Focus
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:72
-    enum (anonymous at /media/disk2/libo4/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:70:1) PROP_0
-libreofficekit/source/gtk/lokdocview.cxx:292
-    enum (anonymous at /media/disk2/libo4/libreofficekit/source/gtk/lokdocview.cxx:290:1) PROP_0
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69
+    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:67:1) PROP_0
+libreofficekit/source/gtk/lokdocview.cxx:296
+    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:294:1) PROP_0
+reportdesign/source/filter/xml/xmlEnums.hxx:42
+    enum rptxml::XMLReportToken XML_TOK_REPORT_ELEMENT
 sc/source/filter/excel/xiescher.cxx:473
-    enum (anonymous at /media/disk2/libo4/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
+    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:473:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /media/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl::(anonymous at /media/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxModelessDialogController, true>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:145
-    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /media/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+    enum ScRefHdlrControllerImpl<class SfxTabDialogController, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:145:5) SLOTID
+sc/source/ui/inc/checklistmenu.hxx:173
+    enum ScCheckListMenuControl::SectionType WHOLE
+sc/source/ui/inc/checklistmenu.hxx:174
+    enum ScCheckListMenuControl::SectionType LISTBOX_AREA_OUTER
+sc/source/ui/inc/checklistmenu.hxx:175
+    enum ScCheckListMenuControl::SectionType LISTBOX_AREA_INNER
+sc/source/ui/inc/checklistmenu.hxx:176
+    enum ScCheckListMenuControl::SectionType SINGLE_BTN_AREA
+sc/source/ui/inc/checklistmenu.hxx:177
+    enum ScCheckListMenuControl::SectionType CHECK_TOGGLE_ALL
+sc/source/ui/inc/checklistmenu.hxx:178
+    enum ScCheckListMenuControl::SectionType BTN_SINGLE_SELECT
+sc/source/ui/inc/checklistmenu.hxx:179
+    enum ScCheckListMenuControl::SectionType BTN_SINGLE_UNSELECT
+sc/source/ui/inc/checklistmenu.hxx:180
+    enum ScCheckListMenuControl::SectionType BTN_OK
+sc/source/ui/inc/checklistmenu.hxx:181
+    enum ScCheckListMenuControl::SectionType BTN_CANCEL
+sc/source/ui/inc/checklistmenu.hxx:182
+    enum ScCheckListMenuControl::SectionType EDIT_SEARCH
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:97
     enum (anonymous namespace)::ScRegType LINEAR
+starmath/source/mathmlimport.hxx:111
+    enum SmXMLPresScriptEmptyElemTokenMap XML_TOK_MPRESCRIPTS
+svtools/source/control/valueset.cxx:61
+    enum (anonymous namespace)::(anonymous at /home/noel/libo2/svtools/source/control/valueset.cxx:53:1) SCRBAR_OFFSET
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
-sw/inc/docary.hxx:75
-    enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:75
-    enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:75
+svx/source/inc/datanavi.hxx:59
+    enum svxform::DataGroupType DGTUnknown
+svx/source/inc/fmexpl.hxx:381
+    enum svxform::NavigatorTree::DROP_ACTION DA_EXPANDNODE
+svx/source/inc/fmexpl.hxx:381
+    enum svxform::NavigatorTree::DROP_ACTION DA_SCROLLUP
+svx/source/inc/fmexpl.hxx:381
+    enum svxform::NavigatorTree::DROP_ACTION DA_SCROLLDOWN
+sw/inc/docary.hxx:68
     enum SwVectorModifyBase::DestructorPolicy KeepElements
-sw/inc/docary.hxx:75
+sw/inc/docary.hxx:68
+    enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:68
+    enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:68
     enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
-sw/inc/docary.hxx:76
+sw/inc/docary.hxx:69
     enum SwVectorModifyBase::DestructorPolicy FreeElements
 sw/inc/tblenum.hxx:34
     enum TableChgWidthHeightType InvalidPos
@@ -134,69 +182,111 @@ sw/source/filter/ww8/ww8struc.hxx:940
     enum WW8_FSPA::FSPAOrient RelPgMargin
 sw/source/filter/ww8/ww8struc.hxx:940
     enum WW8_FSPA::FSPAOrient RelText
+sw/source/ui/fldui/fldref.cxx:734
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_PAGE_IDX
 sw/source/ui/fldui/fldref.cxx:735
-    enum FMT_REF_IDX FMT_REF_PAGE_IDX
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_CHAPTER_IDX
 sw/source/ui/fldui/fldref.cxx:736
-    enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_TEXT_IDX
 sw/source/ui/fldui/fldref.cxx:737
-    enum FMT_REF_IDX FMT_REF_TEXT_IDX
-sw/source/ui/fldui/fldref.cxx:738
-    enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_UPDOWN_IDX
+sw/source/ui/fldui/fldref.cxx:739
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
 sw/source/ui/fldui/fldref.cxx:740
-    enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
-sw/source/ui/fldui/fldref.cxx:741
-    enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
-sw/source/uibase/utlui/content.cxx:829
-    enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
+    enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
+sw/source/uibase/utlui/content.cxx:821
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_LEVEL
+sw/source/uibase/utlui/content.cxx:822
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DRAGMODE
+sw/source/uibase/utlui/content.cxx:824
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_LINK_REGION
+sw/source/uibase/utlui/content.cxx:825
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_COPY_REGION
+sw/source/uibase/utlui/content.cxx:826
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DISPLAY
 sw/source/uibase/utlui/content.cxx:830
-    enum STR_CONTEXT_IDX IDX_STR_COPY_REGION
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_INACTIVE
+sw/source/uibase/utlui/content.cxx:831
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_EDIT_ENTRY
+sw/source/uibase/utlui/content.cxx:832
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DELETE_ENTRY
+sw/source/uibase/utlui/content.cxx:833
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
 sw/source/uibase/utlui/content.cxx:835
-    enum STR_CONTEXT_IDX IDX_STR_INACTIVE
-sw/source/uibase/utlui/glbltree.cxx:149
-    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_INDEX
-sw/source/uibase/utlui/glbltree.cxx:150
-    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
-sw/source/uibase/utlui/glbltree.cxx:151
-    enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_DEFAULT
+sw/source/uibase/utlui/content.cxx:836
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_FOCUS
+sw/source/uibase/utlui/content.cxx:837
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_OFF
+sw/source/uibase/utlui/glbltree.cxx:91
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE
+sw/source/uibase/utlui/glbltree.cxx:92
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_CONTENT
+sw/source/uibase/utlui/glbltree.cxx:93
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_INSERT
+sw/source/uibase/utlui/glbltree.cxx:94
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_INDEX
+sw/source/uibase/utlui/glbltree.cxx:95
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_FILE
+sw/source/uibase/utlui/glbltree.cxx:96
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_NEW_FILE
+sw/source/uibase/utlui/glbltree.cxx:98
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_DELETE
+sw/source/uibase/utlui/glbltree.cxx:99
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_SEL
+sw/source/uibase/utlui/glbltree.cxx:100
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_INDEX
+sw/source/uibase/utlui/glbltree.cxx:101
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
+sw/source/uibase/utlui/glbltree.cxx:102
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
+sw/source/uibase/utlui/glbltree.cxx:104
+    enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_LINK
 ucb/source/ucp/webdav-neon/DAVTypes.hxx:192
     enum webdav_ucp::Depth DAVINFINITY
-ucbhelper/source/client/proxydecider.cxx:119
+ucbhelper/source/client/proxydecider.cxx:125
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
 vcl/inc/salptype.hxx:43
     enum SalPrinterError General
+vcl/inc/skia/gdiimpl.hxx:215
+    enum SkiaSalGraphicsImpl::GlyphOrientation Ignore
 vcl/inc/unx/saldisp.hxx:62
     srv_vendor_t vendor_none
-vcl/source/gdi/CommonSalLayout.cxx:126
+vcl/source/app/svapp.cxx:1136
+    enum (anonymous at /home/noel/libo2/vcl/source/app/svapp.cxx:1136:1) hwAll
+vcl/source/gdi/CommonSalLayout.cxx:134
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:4839
-    enum (anonymous at /media/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:4837:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:4844
-    enum (anonymous at /media/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:4837:1) PROP_SHADOW_TYPE
-writerfilter/source/ooxml/OOXMLFactory.hxx:36
+vcl/unx/gtk3/gtk3gtkinst.cxx:5161
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:5159:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:5166
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:5159:1) PROP_SHADOW_TYPE
+writerfilter/source/ooxml/OOXMLFactory.hxx:31
     enum writerfilter::ooxml::ResourceType NoResource
-writerfilter/source/ooxml/OOXMLFactory.hxx:37
+writerfilter/source/ooxml/OOXMLFactory.hxx:32
     enum writerfilter::ooxml::ResourceType Table
-writerfilter/source/ooxml/OOXMLFactory.hxx:38
+writerfilter/source/ooxml/OOXMLFactory.hxx:33
     enum writerfilter::ooxml::ResourceType Stream
-writerfilter/source/ooxml/OOXMLFactory.hxx:41
+writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType Properties
-writerfilter/source/ooxml/OOXMLFactory.hxx:45
+writerfilter/source/ooxml/OOXMLFactory.hxx:40
     enum writerfilter::ooxml::ResourceType Shape
-writerfilter/source/ooxml/OOXMLFactory.hxx:47
+writerfilter/source/ooxml/OOXMLFactory.hxx:42
     enum writerfilter::ooxml::ResourceType Value
-writerfilter/source/ooxml/OOXMLFactory.hxx:48
+writerfilter/source/ooxml/OOXMLFactory.hxx:43
     enum writerfilter::ooxml::ResourceType XNote
-writerfilter/source/ooxml/OOXMLFactory.hxx:49
+writerfilter/source/ooxml/OOXMLFactory.hxx:44
     enum writerfilter::ooxml::ResourceType TextTableCell
-writerfilter/source/ooxml/OOXMLFactory.hxx:50
+writerfilter/source/ooxml/OOXMLFactory.hxx:45
     enum writerfilter::ooxml::ResourceType TextTableRow
-writerfilter/source/ooxml/OOXMLFactory.hxx:51
+writerfilter/source/ooxml/OOXMLFactory.hxx:46
     enum writerfilter::ooxml::ResourceType TextTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:52
+writerfilter/source/ooxml/OOXMLFactory.hxx:47
     enum writerfilter::ooxml::ResourceType PropertyTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:53
+writerfilter/source/ooxml/OOXMLFactory.hxx:48
     enum writerfilter::ooxml::ResourceType Math
-writerfilter/source/ooxml/OOXMLFactory.hxx:54
+writerfilter/source/ooxml/OOXMLFactory.hxx:49
     enum writerfilter::ooxml::ResourceType Any
-xmloff/source/style/HatchStyle.cxx:50
-    enum SvXMLTokenMapAttrs XML_TOK_TABSTOP_END
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:203
+    enum writerfilter::ooxml::OOXMLFastContextHandler::eMathParaJc INLINE
+xmloff/source/style/HatchStyle.cxx:52
+    enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_TABSTOP_END

@@ -378,7 +378,6 @@ namespace svxform
         std::unique_ptr<weld::TreeView> m_xTreeView;
         NavigatorTreeDropTarget m_aDropTargetHelper;
 
-        enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
         enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
 
         Timer               m_aSynchronizeTimer;

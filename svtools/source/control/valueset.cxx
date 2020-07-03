@@ -58,7 +58,6 @@ enum
     NAME_LINE_OFF_Y = 2,
     NAME_LINE_HEIGHT = 2,
     NAME_OFFSET = 2,
-    SCRBAR_OFFSET = 1
 };
 
 }
