@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd712dd7_526739a4",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 1,
+      "message": "this is std::unique_ptr, i.e. smart *pointer* \u003d\u003e mpListBoxStyles",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d7c55f7_84264fb9",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 1,
+      "message": "for integers, we usually use prefix \"n\", but not important for this case. Just FYI",
+      "range": {
+        "startLine": 84,
+        "startChar": 18,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a70ebe1_a789130c",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 1,
+      "message": "... but definitely not \"s\", which is for strings. Since every value you introduce here is scoped to corresponding \"if\", it\u0027s OK if you have \"long nValue\" on ln 84, then \"short nValue\" on this line. They don\u0027t conflict; one of beauties of scoping these variables.",
+      "range": {
+        "startLine": 98,
+        "startChar": 36,
+        "endLine": 98,
+        "endChar": 37
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5c75550_e1800a09",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 1,
+      "message": "Yes; also note that a name like \"TempChar\" creates an impression of \"char\". A name like \"aTempCharNode\" could be better.",
+      "range": {
+        "startLine": 255,
+        "startChar": 39,
+        "endLine": 255,
+        "endChar": 48
+      },
+      "revId": "bf4f33312881f78e0f04afec5d9f2ce544e94d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f3c4196_5d4f90d6",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 0,
+      "message": "yes it needs changing, but please replace with \"b\" for bool, not just drop.",
+      "range": {
+        "startLine": 115,
+        "startChar": 59,
+        "endLine": 115,
+        "endChar": 61
+      },
+      "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ef6f08_a863a176",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T08:48:43Z",
+      "side": 0,
+      "message": "you are creating an object of type std::unordered_map. It\u0027s of course not a member, so it\u0027s good that you fix this name; but please keep the \"a\". Also \"IsDefined\" looks like it\u0027s a bool; for a map, it looks better to name it something like \"aDefinedMap\".",
+      "range": {
+        "startLine": 247,
+        "startChar": 39,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
