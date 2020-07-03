@@ -530,18 +530,6 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
     }
 }
 
-//  impl but public method to register service
-Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
-{
-    return css::uno::Sequence<OUString>();
-}
-
-//  impl but public method to register service
-OUString ProgressMonitor::impl_getStaticImplementationName()
-{
-    return "stardiv.UnoControls.ProgressMonitor";
-}
-
 //  protected method
 void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
@@ -865,4 +853,10 @@ bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic )
 
 }   // namespace unocontrols
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stardiv_UnoControls_ProgressMonitor_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new unocontrols::ProgressMonitor(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

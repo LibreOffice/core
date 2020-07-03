@@ -283,20 +283,6 @@ Reference< XControlModel > SAL_CALL ProgressBar::getModel()
     return Reference< XControlModel >();
 }
 
-//  impl but public method to register service
-
-Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
-{
-    return css::uno::Sequence<OUString>();
-}
-
-//  impl but public method to register service
-
-OUString ProgressBar::impl_getStaticImplementationName()
-{
-    return "stardiv.UnoControls.ProgressBar";
-}
-
 //  protected method
 
 void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
@@ -407,4 +393,10 @@ void ProgressBar::impl_recalcRange ()
 
 }   // namespace unocontrols
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stardiv_UnoControls_ProgressBar_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new unocontrols::ProgressBar(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

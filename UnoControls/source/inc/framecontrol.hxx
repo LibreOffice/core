@@ -124,12 +124,6 @@ public:
         const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 
-    //  impl but public methods to register service!
-
-    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-    static OUString impl_getStaticImplementationName();
-
 private:
 
     using OPropertySetHelper::getFastPropertyValue;

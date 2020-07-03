@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_exception_objects,ctl,\
     UnoControls/source/base/basecontainercontrol \
     UnoControls/source/base/basecontrol \
     UnoControls/source/base/multiplexer \
-    UnoControls/source/base/registercontrols \
     UnoControls/source/controls/OConnectionPointContainerHelper \
     UnoControls/source/controls/OConnectionPointHelper \
     UnoControls/source/controls/framecontrol \

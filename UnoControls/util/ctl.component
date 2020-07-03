@@ -18,11 +18,15 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ctl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="stardiv.UnoControls.FrameControl">
-    <service name="com.sun.star.frame.FrameControl"/>
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="stardiv.UnoControls.FrameControl"
+      constructor="stardiv_UnoControls_FrameControl_get_implementation">
+    <service name="com.sun.star.frame.FrameControl" />
   </implementation>
-  <implementation name="stardiv.UnoControls.ProgressBar"/>
-  <implementation name="stardiv.UnoControls.ProgressMonitor"/>
-  <implementation name="stardiv.UnoControls.StatusIndicator"/>
+  <implementation name="stardiv.UnoControls.ProgressBar"
+      constructor="stardiv_UnoControls_ProgressBar_get_implementation"/>
+  <implementation name="stardiv.UnoControls.ProgressMonitor"
+      constructor="stardiv_UnoControls_ProgressMonitor_get_implementation"/>
+  <implementation name="stardiv.UnoControls.StatusIndicator"
+      constructor="stardiv_UnoControls_StatusIndicator_get_implementation"/>
 </component>
