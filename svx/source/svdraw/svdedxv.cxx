@@ -1980,6 +1980,13 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
         else
         {
             pTextEditOutlinerView->Command(rCEvt);
+            if (mpModel && comphelper::LibreOfficeKit::isActive())
+            {
+                // It could execute CommandEventId::ExtTextInput, while SdrObjEditView::KeyInput
+                // isn't called
+                if (pTextEditOutliner && pTextEditOutliner->IsModified())
+                    mpModel->SetChanged();
+            }
             return true;
         }
     }
