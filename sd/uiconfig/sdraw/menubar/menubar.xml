@@ -384,6 +384,7 @@
           <menu:menuitem menu:id=".uno:MergeCells"/>
           <menu:menuitem menu:id=".uno:SplitCell"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:DeleteTable"/>
           <menu:menuitem menu:id=".uno:SelectTable"/>
           <menu:menuitem menu:id=".uno:TableDialog"/>
         </menu:menupopup>
