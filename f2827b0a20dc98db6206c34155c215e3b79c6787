@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f13566e_86e92eca",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-03T06:30:55Z",
+      "side": 1,
+      "message": "or rewrite the single if as a set of nested if, with the var definition in between (this would get a loplugin:burriedassign warning anyway if it didn\u0027t happen to be in a macro)\n\n(thinking about it, the eSalLogAction var is of course problematic; maybe a better choice would be a switch, even if the cases for _LOG and _IGNORE would be mostly identical; or at least chose a name with the \"sal_detail_*\" prefix pattern, like the sal_detail_stream var below)",
+      "revId": "f2827b0a20dc98db6206c34155c215e3b79c6787",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

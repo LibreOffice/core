@@ -34,6 +34,24 @@
       "revId": "43d9a34d4845977a17569432cd24174bf1950d65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "002ddbf8_b2fa4347",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-03T06:30:55Z",
+      "side": 1,
+      "message": "ah, right, so this enum should stay without a fixed underlying type, but sal_detail_LogAction should be changed to return a raw `unsigned char` (plus some comment what\u0027s going on)",
+      "parentUuid": "369ffabe_939f4d70",
+      "revId": "43d9a34d4845977a17569432cd24174bf1950d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
