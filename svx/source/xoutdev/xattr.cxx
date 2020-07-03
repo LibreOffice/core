@@ -90,12 +90,12 @@
 #include <vcl/gradient.hxx>
 #include <svx/svxids.hrc>
 #include <string>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
-typedef std::map<OUString, OUString> StringMap;
 
 static long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
