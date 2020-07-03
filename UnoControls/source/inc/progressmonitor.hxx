@@ -206,12 +206,6 @@ public:
                                         sal_Int32   nHeight ,
                                         sal_Int16   nFlags  ) override;
 
-    //  BaseControl
-
-    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-    static OUString impl_getStaticImplementationName();
-
 private:
     virtual void impl_paint( sal_Int32 nX ,
                              sal_Int32 nY ,

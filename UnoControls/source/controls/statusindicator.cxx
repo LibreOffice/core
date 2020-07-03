@@ -343,20 +343,6 @@ void SAL_CALL StatusIndicator::setPosSize (
     }
 }
 
-//  impl but public method to register service
-
-Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
-{
-    return css::uno::Sequence<OUString>();
-}
-
-//  impl but public method to register service
-
-OUString StatusIndicator::impl_getStaticImplementationName()
-{
-    return "stardiv.UnoControls.StatusIndicator";
-}
-
 //  protected method
 
 WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
@@ -458,5 +444,12 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 }
 
 }   // namespace unocontrols
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stardiv_UnoControls_StatusIndicator_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new unocontrols::StatusIndicator(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

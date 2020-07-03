@@ -148,12 +148,6 @@ public:
                                         sal_Int32   nHeight ,
                                         sal_Int16   nFlags  ) override;
 
-    //  BaseControl
-
-    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-    static OUString impl_getStaticImplementationName();
-
 private:
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
