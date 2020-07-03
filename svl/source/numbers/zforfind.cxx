@@ -499,9 +499,10 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rStri
 /**
  * Skips blanks
  */
-inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
+inline bool ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
                                               sal_Int32& nPos )
 {
+    sal_Int32 nHere = nPos;
     if ( nPos < rString.getLength() )
     {
         const sal_Unicode* p = rString.getStr() + nPos;
@@ -511,6 +512,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
             p++;
         }
     }
+    return nHere < nPos;
 }
 
 
@@ -2271,10 +2273,13 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
     if (nSign && nPos == rString.getLength())
         return true;
 
+    const sal_Int32 nStartBlanks = nPos;
     if ( GetDecSep(rString, nPos) )                 // decimal separator in start string
     {
-        nDecPos = 1;
-        SkipBlanks(rString, nPos);
+        if (SkipBlanks(rString, nPos))
+            nPos = nStartBlanks;                    // `. 2` not a decimal separator
+        else
+            nDecPos = 1;                            // leading decimal separator
     }
     else if ( GetCurrency(rString, nPos) )          // currency (DM 1)?
     {
@@ -2290,8 +2295,13 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
         }
         if ( GetDecSep(rString, nPos) )             // decimal separator follows currency
         {
-            nDecPos = 1;
-            SkipBlanks(rString, nPos);
+            if (SkipBlanks(rString, nPos))
+            {
+                nPos = nStartBlanks;                // `DM . 2` not a decimal separator
+                eScannedType = SvNumFormatType::UNDEFINED;  // !!! it is NOT currency !!!
+            }
+            else
+                nDecPos = 1;                        // leading decimal separator
         }
     }
     else
@@ -2442,7 +2452,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         }
     }
 
-    SkipBlanks(rString, nPos);
+    const sal_Int32 nStartBlanks = nPos;
+    const bool bBlanks = SkipBlanks(rString, nPos);
     if (GetDecSep(rString, nPos))                   // decimal separator?
     {
         if (nDecPos == 1 || nDecPos == 3)           // .12.4 or 1.E2.1
@@ -2472,10 +2483,19 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                 return MatchedReturn();
             }
         }
+        else if (bBlanks)
+        {
+            // `1 .2` or `1 . 2` not a decimal separator, reset
+            nPos = nStartBlanks;
+        }
+        else if (SkipBlanks(rString, nPos))
+        {
+            // `1. 2` not a decimal separator, reset
+            nPos = nStartBlanks;
+        }
         else
         {
             nDecPos = 2;                            // . in mid string
-            SkipBlanks(rString, nPos);
         }
     }
     else if ( (eScannedType & SvNumFormatType::TIME) &&
@@ -2798,7 +2818,8 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         }
     }
 
-    SkipBlanks(rString, nPos);
+    const sal_Int32 nStartBlanks = nPos;
+    const bool bBlanks = SkipBlanks(rString, nPos);
     if (GetDecSep(rString, nPos))                   // decimal separator?
     {
         if (nDecPos == 1 || nDecPos == 3)           // .12.4 or 12.E4.
@@ -2827,6 +2848,11 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
             {
                 return MatchedReturn();
             }
+        }
+        else if (bBlanks)
+        {
+            // not a decimal separator, reset
+            nPos = nStartBlanks;
         }
         else
         {

@@ -264,7 +264,7 @@ private:
                                  sal_Int32& nPos );
 
     // Skip blank
-    static inline void SkipBlanks( const OUString& rString,
+    static inline bool SkipBlanks( const OUString& rString,
                                    sal_Int32& nPos );
 
     // Jump over rWhat in rString at nPos
