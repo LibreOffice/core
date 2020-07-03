@@ -12,9 +12,7 @@
 #include <svx/charmap.hxx>
 #include <vcl/layout.hxx>
 
-#include <memory>
 #include <svx/numvset.hxx>
-#include <vcl/layout.hxx>
 
 SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet):
     WindowUIObject(xCharSetWin),
