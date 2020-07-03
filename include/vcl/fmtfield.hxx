@@ -47,7 +47,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    Formatter* GetFormatter();
+    Formatter& GetFormatter();
     void SetFormatter(Formatter* pFormatter);
 
 protected:

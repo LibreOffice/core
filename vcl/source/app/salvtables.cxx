@@ -5208,14 +5208,14 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
                         bool bTakeOwnership)
     : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
     , m_xButton(pButton)
-    , m_pFormatter(m_xButton->GetFormatter())
+    , m_rFormatter(m_xButton->GetFormatter())
 {
-    m_pFormatter->SetThousandsSep(false); //off by default, MetricSpinButton enables it
+    m_rFormatter.SetThousandsSep(false); //off by default, MetricSpinButton enables it
     m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
     m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
     m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
-    m_pFormatter->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
-    m_pFormatter->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
+    m_rFormatter.SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
+    m_rFormatter.SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
     if (Edit* pEdit = m_xButton->GetSubEdit())
         pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
     else
@@ -5224,40 +5224,40 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
 
 int SalInstanceSpinButton::get_value() const
 {
-    return fromField(m_pFormatter->GetValue());
+    return fromField(m_rFormatter.GetValue());
 }
 
 void SalInstanceSpinButton::set_value(int value)
 {
-    m_pFormatter->SetValue(toField(value));
+    m_rFormatter.SetValue(toField(value));
 }
 
 void SalInstanceSpinButton::set_range(int min, int max)
 {
-    m_pFormatter->SetMinValue(toField(min));
-    m_pFormatter->SetMaxValue(toField(max));
+    m_rFormatter.SetMinValue(toField(min));
+    m_rFormatter.SetMaxValue(toField(max));
 }
 
 void SalInstanceSpinButton::get_range(int& min, int& max) const
 {
-    min = fromField(m_pFormatter->GetMinValue());
-    max = fromField(m_pFormatter->GetMaxValue());
+    min = fromField(m_rFormatter.GetMinValue());
+    max = fromField(m_rFormatter.GetMaxValue());
 }
 
 void SalInstanceSpinButton::set_increments(int step, int /*page*/)
 {
-    m_pFormatter->SetSpinSize(toField(step));
+    m_rFormatter.SetSpinSize(toField(step));
 }
 
 void SalInstanceSpinButton::get_increments(int& step, int& page) const
 {
-    step = fromField(m_pFormatter->GetSpinSize());
-    page = fromField(m_pFormatter->GetSpinSize());
+    step = fromField(m_rFormatter.GetSpinSize());
+    page = fromField(m_rFormatter.GetSpinSize());
 }
 
 void SalInstanceSpinButton::set_digits(unsigned int digits)
 {
-    m_pFormatter->SetDecimalDigits(digits);
+    m_rFormatter.SetDecimalDigits(digits);
 }
 
 // SpinButton may be comprised of multiple subwidgets, consider the lot as
@@ -5270,18 +5270,18 @@ bool SalInstanceSpinButton::has_focus() const
 //so with hh::mm::ss, incrementing mm will not reset ss
 void SalInstanceSpinButton::DisableRemainderFactor()
 {
-    m_pFormatter->DisableRemainderFactor();
+    m_rFormatter.DisableRemainderFactor();
 }
 
 //off by default for direct SpinButtons, MetricSpinButton enables it
 void SalInstanceSpinButton::SetUseThousandSep()
 {
-    m_pFormatter->SetThousandsSep(true);
+    m_rFormatter.SetThousandsSep(true);
 }
 
 unsigned int SalInstanceSpinButton::get_digits() const
 {
-    return m_pFormatter->GetDecimalDigits();
+    return m_rFormatter.GetDecimalDigits();
 }
 
 SalInstanceSpinButton::~SalInstanceSpinButton()
@@ -5290,8 +5290,8 @@ SalInstanceSpinButton::~SalInstanceSpinButton()
         pEdit->SetActivateHdl(Link<Edit&, bool>());
     else
         m_xButton->SetActivateHdl(Link<Edit&, bool>());
-    m_pFormatter->SetInputHdl(Link<sal_Int64*, TriState>());
-    m_pFormatter->SetOutputHdl(Link<LinkParamNone*, bool>());
+    m_rFormatter.SetInputHdl(Link<sal_Int64*, TriState>());
+    m_rFormatter.SetOutputHdl(Link<LinkParamNone*, bool>());
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
     m_xButton->SetUpHdl(Link<SpinField&, void>());
@@ -5357,7 +5357,7 @@ public:
 
     virtual Formatter& GetFormatter() override
     {
-        return *m_xButton->GetFormatter();
+        return m_xButton->GetFormatter();
     }
 };
 
