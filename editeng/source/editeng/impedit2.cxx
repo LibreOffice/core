@@ -693,11 +693,11 @@ void ImpEditEngine::SetText(const OUString& rText)
 }
 
 
-const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
+const SfxItemSet& ImpEditEngine::GetEmptyItemSet() const
 {
     if ( !pEmptyItemSet )
     {
-        pEmptyItemSet = std::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+        pEmptyItemSet = std::make_unique<SfxItemSet>(const_cast<SfxItemPool&>(aEditDoc.GetItemPool()), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             pEmptyItemSet->ClearItem( nWhich );
