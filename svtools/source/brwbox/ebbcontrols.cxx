@@ -353,6 +353,7 @@ namespace svt
     void EditControlBase::init(weld::Entry* pEntry)
     {
         m_pEntry = pEntry;
+        m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
         m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
     }
@@ -381,19 +382,54 @@ namespace svt
         EditControlBase::dispose();
     }
 
-    FormattedControl::FormattedControl(vcl::Window* pParent)
+    FormattedControlBase::FormattedControlBase(vcl::Window* pParent, bool bSpinVariant)
         : EditControlBase(pParent)
+        , m_bSpinVariant(bSpinVariant)
         , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xEntryFormatter(new weld::EntryFormatter(*m_xEntry))
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("spinbutton"))
     {
-        init(m_xEntry.get());
     }
 
-    void FormattedControl::dispose()
+    void FormattedControlBase::init()
+    {
+        if (m_bSpinVariant)
+            m_xSpinButton->SetFormatter(m_xEntryFormatter.release());
+        EditControlBase::init(m_bSpinVariant ? m_xSpinButton.get() : m_xEntry.get());
+    }
+
+    void FormattedControlBase::connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        get_formatter().connect_changed(rLink);
+    }
+
+    weld::EntryFormatter& FormattedControlBase::get_formatter()
+    {
+        if (m_bSpinVariant)
+            return static_cast<weld::EntryFormatter&>(m_xSpinButton->GetFormatter());
+        else
+            return *m_xEntryFormatter;
+    }
+
+    void FormattedControlBase::dispose()
     {
         m_xEntryFormatter.reset();
+        m_xSpinButton.reset();
         m_xEntry.reset();
         EditControlBase::dispose();
+    }
+
+    FormattedControl::FormattedControl(vcl::Window* pParent, bool bSpinVariant)
+        : FormattedControlBase(pParent, bSpinVariant)
+    {
+        m_xEntryFormatter.reset(new weld::EntryFormatter(bSpinVariant ? *m_xSpinButton : *m_xEntry));
+        init();
+    }
+
+    DoubleNumericControl::DoubleNumericControl(vcl::Window* pParent, bool bSpinVariant)
+        : FormattedControlBase(pParent, bSpinVariant)
+    {
+        m_xEntryFormatter.reset(new weld::DoubleNumericEntry(bSpinVariant ? *m_xSpinButton : *m_xEntry));
+        init();
     }
 
     EditCellController::EditCellController(EditControlBase* pEdit)
@@ -506,7 +542,7 @@ namespace svt
     }
 
     //= FormattedFieldCellController
-    FormattedFieldCellController::FormattedFieldCellController( FormattedControl* _pFormatted )
+    FormattedFieldCellController::FormattedFieldCellController( FormattedControlBase* _pFormatted )
         : EditCellController(_pFormatted)
     {
     }
