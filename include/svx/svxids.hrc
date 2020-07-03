@@ -852,6 +852,7 @@ class SvxSetItem;
 #define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
 #define SID_COLOR_SETTINGS                              ( SID_SVX_START + 1044 )
+
 #define SID_FM_FORM_DESIGN_TOOLS                        ( SID_SVX_START + 1046 )
 #define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )
 #define SID_DRAWTBX_CS_SYMBOL                           ( SID_SVX_START + 1048 )
@@ -898,7 +899,7 @@ class SvxSetItem;
 #define SID_TABLE_STYLE_SETTINGS                        ( SID_SVX_START + 1089 )
 #define SID_CHAR_DLG_PREVIEW_STRING                     ( SID_SVX_START + 1090 )
 #define SID_RECHECK_DOCUMENT                            ( SID_SVX_START + 1091 )
-
+// 1092 is used out of order below
 #define SID_OBJECT_MIRROR                               ( SID_SVX_START + 1093 )
 
 #define SID_DELETE_POSTIT                               ( SID_SVX_START + 1094 )
@@ -994,7 +995,8 @@ class SvxSetItem;
 #define SID_EDIT_SIGNATURELINE                          ( SID_SVX_START + 1174 )
 #define SID_SIGN_SIGNATURELINE                          ( SID_SVX_START + 1175 )
 #define SID_MEASURE_DLG                                 ( SID_SVX_START + 1176 )
-
+// free slots - available for use
+#define SID_TABLE_DELETE_TABLE                          ( SID_SVX_START + 1184 )
 #define SID_TABLE_MINIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1185 )
 #define SID_TABLE_MINIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1186 )
 #define SID_TABLE_OPTIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1187 )

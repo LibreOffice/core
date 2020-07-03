@@ -180,6 +180,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
     case SID_OPTIMIZE_TABLE:
     case SID_TABLE_DELETE_ROW:
     case SID_TABLE_DELETE_COL:
+    case SID_TABLE_DELETE_TABLE:
     case SID_FORMAT_TABLE_DLG:
     case SID_TABLE_INSERT_ROW:
     case SID_TABLE_INSERT_COL:
@@ -187,6 +188,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         pView->AdjustMarkHdl();
         pBindings->Invalidate( SID_TABLE_DELETE_ROW );
         pBindings->Invalidate( SID_TABLE_DELETE_COL );
+        pBindings->Invalidate( SID_TABLE_DELETE_TABLE );
         pBindings->Invalidate( SID_FRAME_LINESTYLE );
         pBindings->Invalidate( SID_FRAME_LINECOLOR );
         pBindings->Invalidate( SID_ATTR_BORDER );
