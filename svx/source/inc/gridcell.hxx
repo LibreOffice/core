@@ -547,7 +547,7 @@ public:
 protected:
     virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
-                            WinBits _nFieldStyle,
+                            bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) = 0;
 };
@@ -568,7 +568,7 @@ protected:
     // DbSpinField
     virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
-                            WinBits _nFieldStyle,
+                            bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
@@ -592,7 +592,7 @@ protected:
     // DbSpinField
     virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
-                            WinBits _nFieldStyle,
+                            bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
@@ -620,7 +620,7 @@ protected:
     // DbSpinField
     virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
-                            WinBits _nFieldStyle,
+                            bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
@@ -644,7 +644,7 @@ protected:
     // DbSpinField
     virtual VclPtr<SpinField> createField(
                             vcl::Window* _pParent,
-                            WinBits _nFieldStyle,
+                            bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
