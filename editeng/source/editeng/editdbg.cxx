@@ -51,14 +51,13 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editdoc.hxx>
-#include "editdbg.hxx"
 
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
 #if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
-OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
+static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
 {
     OStringBuffer aDebStr;
     switch ( rItem.Which() )
@@ -295,7 +294,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     return aDebStr.makeStringAndClear();
 }
 
-void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool bShowALL )
+static void DbgOutItemSet(FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool bShowALL)
 {
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
@@ -316,13 +315,12 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool
     }
 }
 
-void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
+void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
 {
-#if defined UNX
-    FILE* fp = fopen( "/tmp/debug.log", "w" );
-#else
-    FILE* fp = fopen( "d:\\debug.log", "w" );
-#endif
+    if (!pEE)
+        return;
+
+    FILE* fp = fopen( "editenginedump.log", "w" );
     if ( fp == nullptr )
     {
         OSL_FAIL( "Log file could not be created!" );
@@ -484,7 +482,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
-                                                      "D:\\DEBUG.LOG !" ));
+                                                      "Dumped editenginedump.log!" ));
         xInfoBox->run();
     }
 }

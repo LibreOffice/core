@@ -477,7 +477,6 @@ public:
 class ImpEditEngine : public SfxListener
 {
     friend class EditEngine;
-    friend class EditDbg;
 
     typedef EditEngine::ViewsType ViewsType;
 
@@ -511,7 +510,7 @@ private:
     svtools::ColorConfig maColorConfig;
     mutable std::unique_ptr<SvtCTLOptions> pCTLOptions;
 
-    std::unique_ptr<SfxItemSet> pEmptyItemSet;
+    mutable std::unique_ptr<SfxItemSet> pEmptyItemSet;
     EditUndoManager*    pUndoManager;
     std::unique_ptr<ESelection> pUndoMarkSelection;
 
@@ -848,7 +847,7 @@ public:
     EditSelectionEngine&    GetSelEngine() { return aSelEngine; }
     OUString                GetSelected( const EditSelection& rSel ) const;
 
-    const SfxItemSet&       GetEmptyItemSet();
+    const SfxItemSet& GetEmptyItemSet() const;
 
     void                    UpdateSelections();
 
