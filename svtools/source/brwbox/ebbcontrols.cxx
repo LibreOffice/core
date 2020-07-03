@@ -353,6 +353,7 @@ namespace svt
     void EditControlBase::init(weld::Entry* pEntry)
     {
         m_pEntry = pEntry;
+        m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
         m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
     }
@@ -381,17 +382,35 @@ namespace svt
         EditControlBase::dispose();
     }
 
-    FormattedControl::FormattedControl(vcl::Window* pParent)
+    FormattedControl::FormattedControl(vcl::Window* pParent, bool bSpinVariant)
         : EditControlBase(pParent)
+        , m_bSpinVariant(bSpinVariant)
         , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xEntryFormatter(new weld::EntryFormatter(*m_xEntry))
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("spinbutton"))
+        , m_xEntryFormatter(new weld::EntryFormatter(bSpinVariant ? *m_xSpinButton : *m_xEntry))
     {
-        init(m_xEntry.get());
+        if (bSpinVariant)
+            m_xSpinButton->SetFormatter(m_xEntryFormatter.release());
+        init(bSpinVariant ? m_xSpinButton.get() : m_xEntry.get());
+    }
+
+    void FormattedControl::connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        get_formatter().connect_changed(rLink);
+    }
+
+    weld::EntryFormatter& FormattedControl::get_formatter()
+    {
+        if (m_bSpinVariant)
+            return static_cast<weld::EntryFormatter&>(m_xSpinButton->GetFormatter());
+        else
+            return *m_xEntryFormatter;
     }
 
     void FormattedControl::dispose()
     {
         m_xEntryFormatter.reset();
+        m_xSpinButton.reset();
         m_xEntry.reset();
         EditControlBase::dispose();
     }

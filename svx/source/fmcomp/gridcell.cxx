@@ -1249,8 +1249,8 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
 
     Reference< css::beans::XPropertySet >  xUnoModel = m_rColumn.getModel();
 
-    auto xEditControl = VclPtr<FormattedControl>::Create(&rParent);
-    auto xEditPainter = VclPtr<FormattedControl>::Create(&rParent);
+    auto xEditControl = VclPtr<FormattedControl>::Create(&rParent, false);
+    auto xEditPainter = VclPtr<FormattedControl>::Create(&rParent, false);
 
     weld::EntryFormatter& rControlFormatter = xEditControl->get_formatter();
     weld::EntryFormatter& rPainterFormatter = xEditPainter->get_formatter();
@@ -1888,6 +1888,10 @@ DbNumericField::DbNumericField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_SHOWTHOUSANDSEP );
 }
 
+CellControllerRef DbNumericField::CreateController() const
+{
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControl*>(m_pWindow.get()));
+}
 
 void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {

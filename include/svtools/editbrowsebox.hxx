@@ -421,9 +421,7 @@ namespace svt
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
-
     //= SpinCellController
-
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SpinCellController final : public CellController
     {
     public:
@@ -439,9 +437,7 @@ namespace svt
         DECL_LINK(ModifyHdl, Edit&, void);
     };
 
-
     //= CheckBoxControl
-
     class SVT_DLLPUBLIC CheckBoxControl final : public Control
     {
         VclPtr<CheckBox>             pBox;
@@ -569,19 +565,18 @@ namespace svt
     class SVT_DLLPUBLIC FormattedControl : public EditControlBase
     {
     public:
-        FormattedControl(vcl::Window* pParent);
+        FormattedControl(vcl::Window* pParent, bool bSpinVariant);
 
         virtual void dispose() override;
 
-        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
-        {
-            m_xEntryFormatter->connect_changed(rLink);
-        }
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
 
-        weld::EntryFormatter& get_formatter() { return *m_xEntryFormatter; }
+        weld::EntryFormatter& get_formatter();
 
     private:
+        bool m_bSpinVariant;
         std::unique_ptr<weld::Entry> m_xEntry;
+        std::unique_ptr<weld::FormattedSpinButton> m_xSpinButton;
         std::unique_ptr<weld::EntryFormatter> m_xEntryFormatter;
     };
 
