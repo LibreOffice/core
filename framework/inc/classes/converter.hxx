@@ -27,11 +27,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <tools/datetime.hxx>
-#include <framework/fwidllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace framework{
 
-class UNLESS_MERGELIBS(FWI_DLLPUBLIC) Converter
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) Converter
 {
     public:
         // Seq<beans.NamedValue> <=> Seq<beans.PropertyValue>

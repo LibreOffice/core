@@ -13,10 +13,10 @@
 
 #include <sal/types.h>
 
-#if defined LO_DLLIMPLEMENTATION_FWK
-#define LO_DLLPUBLIC_FWK SAL_DLLPUBLIC_EXPORT
+#if defined FWK_DLLIMPLEMENTATION
+#define FWK_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
-#define LO_DLLPUBLIC_FWK SAL_DLLPUBLIC_IMPORT
+#define FWK_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

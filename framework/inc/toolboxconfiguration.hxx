@@ -19,7 +19,7 @@
 #pragma once
 
 #include <config_options.h>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::container { class XIndexContainer; }
@@ -31,7 +31,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 namespace framework
 {
 
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) ToolBoxConfiguration
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ToolBoxConfiguration
 {
     public:
         static bool LoadToolBox(

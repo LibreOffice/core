@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
-#include <framework/fwidllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace framework{
 
@@ -34,7 +34,7 @@ namespace framework{
             instead of using specialized config items of the svtools
             project. This class can wrap such configuration access.
  */
-class UNLESS_MERGELIBS(FWI_DLLPUBLIC) ConfigAccess final
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ConfigAccess final
 {
 
     public:

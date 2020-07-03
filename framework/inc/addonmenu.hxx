@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XFrame; }
@@ -38,7 +38,7 @@ class PopupMenu;
 namespace framework
 {
 
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) AddonMenuManager
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonMenuManager
 {
     public:
         static bool       HasAddonMenuElements();

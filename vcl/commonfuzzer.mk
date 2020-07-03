@@ -60,8 +60,6 @@ fuzzer_core_libraries = \
     emfio \
     filterconfig \
     fsstorage \
-    fwe \
-    fwi \
     fwk \
     i18npool \
     i18nutil \

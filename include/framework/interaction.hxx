@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 namespace com::sun::star::task { class XInteractionRequest; }
@@ -53,13 +53,17 @@ namespace framework{
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 class RequestFilterSelect_Impl;
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) RequestFilterSelect
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) RequestFilterSelect
 {
     rtl::Reference<RequestFilterSelect_Impl> mxImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );
     ~RequestFilterSelect();
+
+    RequestFilterSelect& operator=(RequestFilterSelect const &) = delete; // MSVC2019 workaround
+    RequestFilterSelect(RequestFilterSelect const &) = delete; // MSVC2019 workaround
+
     bool     isAbort  () const;
     OUString getFilter() const;
     css::uno::Reference < css::task::XInteractionRequest > GetRequest();
@@ -76,7 +80,7 @@ public:
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-class FWE_DLLPUBLIC InteractionRequest
+class FWK_DLLPUBLIC InteractionRequest
 {
 public:
     static css::uno::Reference < css::task::XInteractionRequest > CreateRequest(
