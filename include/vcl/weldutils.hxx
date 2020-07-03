@@ -202,6 +202,23 @@ private:
     virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
+class VCL_DLLPUBLIC DoubleNumericEntry final : public EntryFormatter
+{
+public:
+    DoubleNumericEntry(weld::Entry& rEntry);
+    DoubleNumericEntry(weld::FormattedSpinButton& rSpinButton);
+
+    virtual ~DoubleNumericEntry() override;
+
+private:
+    virtual bool CheckText(const OUString& sText) const override;
+
+    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
+    void ResetConformanceTester();
+
+    std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
+};
+
 // get the row the iterator is on
 VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 
