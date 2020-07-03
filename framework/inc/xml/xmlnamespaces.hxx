@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
 
 #include <map>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 #include <rtl/ustring.hxx>
 

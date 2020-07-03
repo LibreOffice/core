@@ -317,14 +317,14 @@ static void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XI
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
         sal_uInt16          nItemId = pMenu->GetItemId( nPos );
-        MenuItemType    nType   = pMenu->GetItemType( nPos );
+        ::MenuItemType nType   = pMenu->GetItemType( nPos );
 
         try
         {
             Any a;
             Reference< XPropertySet > xPropSet;
 
-            if ( nType == MenuItemType::SEPARATOR )
+            if ( nType == ::MenuItemType::SEPARATOR )
             {
                 xPropSet = CreateActionTriggerSeparator( rActionTriggerContainer );
 

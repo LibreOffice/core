@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_libraries,rptui,\
     editeng \
     for \
     forui \
-    fwe \
+    fwk \
     i18nlangtag \
     rpt \
     sal \

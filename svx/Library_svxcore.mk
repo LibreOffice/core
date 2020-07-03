@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
         dbtools) \
     drawinglayer \
     editeng \
-    fwe \
+    fwk \
     i18nlangtag \
     i18nutil \
     lng \

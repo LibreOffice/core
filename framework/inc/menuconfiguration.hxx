@@ -20,7 +20,7 @@
 #pragma once
 
 #include <config_options.h>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 #include <cppuhelper/weakref.hxx>
 
@@ -37,7 +37,7 @@ const sal_uInt16 ITEMID_ADDONLIST           = 6678; // used to be a SID in sfx2,
 namespace framework
 {
 
-struct FWE_DLLPUBLIC MenuAttributes
+struct FWK_DLLPUBLIC MenuAttributes
 {
 private:
     oslInterlockedCount refCount;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) MenuConfiguration final
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) MenuConfiguration final
 {
 public:
         MenuConfiguration(

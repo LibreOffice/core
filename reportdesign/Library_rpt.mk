@@ -33,7 +33,7 @@ $(eval $(call gb_Library_use_libraries,rpt,\
     dbtools \
     dbu \
     editeng \
-    fwe \
+    fwk \
     i18nlangtag \
     sal \
     salhelper \

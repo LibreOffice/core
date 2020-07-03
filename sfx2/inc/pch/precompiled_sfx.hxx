@@ -308,7 +308,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <framework/interaction.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
