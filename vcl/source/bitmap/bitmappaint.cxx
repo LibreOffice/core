@@ -367,17 +367,25 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
 {
     ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
 
+    // Historically LO used 1bpp masks, but 8bpp masks are much faster,
+    // better supported by hardware, and the memory savings are not worth
+    // it anymore.
+    // TODO: Possibly remove the 1bpp code later.
+    constexpr bool use8BitMask = true;
+
     if (!nTol && pReadAcc
         && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal
-            || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
+            || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal
+            || (use8BitMask && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal))
         && pReadAcc->GetBestMatchingColor(COL_WHITE) == pReadAcc->GetBestMatchingColor(rTransColor))
     {
-        // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
+        // if we're a 1 or 8 bit pixel already, and the transcolor matches the color that would replace it
         // already, then just return a copy
         return *this;
     }
 
-    Bitmap aNewBmp(GetSizePixel(), 1);
+    Bitmap aNewBmp(GetSizePixel(), use8BitMask ? 8 : 1,
+                   use8BitMask ? &Bitmap::GetGreyPalette(256) : nullptr);
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
@@ -392,8 +400,9 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         {
             const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
-            if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal
-                || pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal)
+            if (pWriteAcc->GetBitCount() == 1
+                && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal
+                    || pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal))
             {
                 // optimized for 4Bit-MSN/LSN source palette
                 const sal_uInt8 cTest = aTest.GetIndex();
@@ -433,7 +442,8 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
                     }
                 }
             }
-            else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+            else if (pWriteAcc->GetBitCount() == 1
+                     && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
             {
                 // optimized for 8Bit source palette
                 const sal_uInt8 cTest = aTest.GetIndex();
@@ -484,6 +494,25 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
                     const long nScanlineSize = pWriteAcc->GetScanlineSize();
                     for (long nX = 0; nX < nScanlineSize; ++nX)
                         pDst[nX] = ~pSrc[nX];
+                }
+            }
+            else if (use8BitMask && pWriteAcc->GetBitCount() == 8
+                     && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+            {
+                // optimized for 8Bit source palette
+                const sal_uInt8 cTest = aTest.GetIndex();
+
+                for (long nY = 0; nY < nHeight; ++nY)
+                {
+                    Scanline pSrc = pReadAcc->GetScanline(nY);
+                    Scanline pDst = pWriteAcc->GetScanline(nY);
+                    for (long nX = 0; nX < nWidth; ++nX)
+                    {
+                        if (cTest == pSrc[nX])
+                            pDst[nX] = aWhite.GetIndex();
+                        else
+                            pDst[nX] = aBlack.GetIndex();
+                    }
                 }
             }
             else
