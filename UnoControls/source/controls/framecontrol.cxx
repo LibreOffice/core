@@ -155,12 +155,12 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType )
 
 OUString FrameControl::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return "stardiv.UnoControls.FrameControl";
 }
 
 css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
+    return { "com.sun.star.frame.FrameControl" };
 }
 
 //  XControl
@@ -250,20 +250,6 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
 {
     // Forwarded to helper class
     m_aConnectionPointContainer->unadvise( aType, xListener );
-}
-
-//  impl but public method to register service
-
-Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
-{
-    return { "com.sun.star.frame.FrameControl" };
-}
-
-//  impl but public method to register service
-
-OUString FrameControl::impl_getStaticImplementationName()
-{
-    return "stardiv.UnoControls.FrameControl";
 }
 
 //  OPropertySetHelper
@@ -467,4 +453,10 @@ void FrameControl::impl_deleteFrame()
 
 }   // namespace unocontrols
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stardiv_UnoControls_FrameControl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new unocontrols::FrameControl(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

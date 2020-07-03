@@ -61,7 +61,6 @@ core_factory_list = [
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
     ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
-    ("libctllo.a", "ctl_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ("libcuilo.a", "cui_component_getFactory"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
@@ -71,6 +70,11 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# UnoControls/util/ctl.component
+    "stardiv_UnoControls_FrameControl_get_implementation",
+    "stardiv_UnoControls_ProgressBar_get_implementation",
+    "stardiv_UnoControls_ProgressMonitor_get_implementation",
+    "stardiv_UnoControls_StatusIndicator_get_implementation",
 # canvas/source/factory/canvasfactory.component
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # chart2/source/chartcore.component
