@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -50,6 +51,35 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+}
+DECLARE_OOXMLEXPORT_TEST(testTdf77794, "tdf77794.docx")
+{
+    uno::Reference<drawing::XShape> xPict = getShape(1);
+
+    uno::Reference<beans::XPropertySet> xPictProps(xPict, uno::UNO_QUERY_THROW);
+    sal_Int16 nHori;
+    xPictProps->getPropertyValue("HoriOrientRelation") >>= nHori;
+    sal_Int16 nVori;
+    xPictProps->getPropertyValue("VertOrientRelation") >>= nVori;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RelOrientation::FRAME), nHori);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RelOrientation::FRAME), nVori);
+
+    /*
+    // tdf#120315 cells of the second column weren't vertically merged
+    // because their horizontal positions are different a little bit
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+    CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(0), "TableColumnSeparators")[0]
+                             .Position,
+                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             xTableRows->getByIndex(1), "TableColumnSeparators")[2]
+                             .Position);
+*/
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
