@@ -41,7 +41,6 @@ MERGE_LIBRARY_LIST := \
 	frm \
 	fsstorage \
 	fwe \
-	fwi \
 	fwk \
 	fwl \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \

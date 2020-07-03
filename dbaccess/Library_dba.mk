@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_libraries,dba,\
     cppuhelper \
 	dbahsql \
     dbtools \
-    fwe \
+    fwk \
     i18nlangtag \
     sal \
     salhelper \

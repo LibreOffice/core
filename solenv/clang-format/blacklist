@@ -6056,8 +6056,6 @@ include/framework/desktop.hxx
 include/framework/documentundoguard.hxx
 include/framework/framecontainer.hxx
 include/framework/framelistanalyzer.hxx
-include/framework/fwedllapi.h
-include/framework/fwidllapi.h
 include/framework/gate.hxx
 include/framework/imutex.hxx
 include/framework/interaction.hxx

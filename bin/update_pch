@@ -76,8 +76,6 @@ DEFAULTS = \
     'drawinglayer.drawinglayer'         : ( 4, EXCLUDE, EXCLUDE, EXCLUDE), #   7.4
     'editeng.editeng'                   : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #  13.0
     'forms.frm'                         : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  14.2
-    'framework.fwe'                     : (10, EXCLUDE, INCLUDE, EXCLUDE), #   5.5
-    'framework.fwi'                     : ( 9, EXCLUDE, INCLUDE, EXCLUDE), #   3.4
     'framework.fwk'                     : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  14.8
     'framework.fwl'                     : ( 5, EXCLUDE, INCLUDE, INCLUDE), #   5.1
     'hwpfilter.hwp'                     : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   6.0

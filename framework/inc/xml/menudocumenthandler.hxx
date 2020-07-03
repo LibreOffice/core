@@ -29,7 +29,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace framework{
 

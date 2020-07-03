@@ -19,7 +19,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     ) \
     lng \
     xo \
-    fwe \
     fwk \
     fwi \
     fwl \
