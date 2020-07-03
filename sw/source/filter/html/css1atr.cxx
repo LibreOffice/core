@@ -110,7 +110,6 @@ enum class Css1FrameSize {
     Width      = 0x01,
     MinHeight  = 0x02,
     FixHeight  = 0x04,
-    AnyHeight  = 0x06,
     Pixel      = 0x10,
 };
 
@@ -2869,44 +2868,6 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
         {
             rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_width,
                                            rFSItem.GetSize().Width() );
-        }
-    }
-
-    if( nMode & Css1FrameSize::AnyHeight )
-    {
-        bool bOutHeight = false;
-        switch( rFSItem.GetHeightSizeType() )
-        {
-        case SwFrameSize::Fixed:
-            bOutHeight = bool(nMode & Css1FrameSize::FixHeight);
-            break;
-        case SwFrameSize::Minimum:
-            bOutHeight = bool(nMode & Css1FrameSize::MinHeight);
-            break;
-        default:
-            OSL_ENSURE( bOutHeight, "Height will not be exported" );
-            break;
-        }
-
-        if( bOutHeight )
-        {
-            sal_uInt8 nPercentHeight = rFSItem.GetHeightPercent();
-            if( nPercentHeight )
-            {
-                OString sOut(OString::number(nPercentHeight) + "%");
-                rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height, sOut);
-            }
-            else if( nMode & Css1FrameSize::Pixel )
-            {
-                rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_height,
-                                                rFSItem.GetSize().Height(),
-                                                true );
-            }
-            else
-            {
-                rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_height,
-                                               rFSItem.GetSize().Height() );
-            }
         }
     }
 
