@@ -2420,6 +2420,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
     rpStarting = nullptr;
 
     bool bChanged = false;
+    bool bNeedsSorting = false;
 
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
@@ -2443,6 +2444,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 bChanged = true;
                 if ( pAttr->GetEnd() > nEnd )
                 {
+                    bNeedsSorting = true;
                     pAttr->GetStart() = nEnd;   // then it starts after this
                     rpStarting = pAttr;
                     if ( nWhich )
@@ -2476,6 +2478,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 bChanged = true;
                 if ( pAttr->GetStart() == nStart )
                 {
+                    bNeedsSorting = true;
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
                     if ( nWhich )
@@ -2490,6 +2493,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
                 }
                 else // Attribute must be split ...
                 {
+                    bNeedsSorting = true;
                     sal_Int32 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
@@ -2514,7 +2518,8 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
     if ( bChanged )
     {
         // char attributes need to be sorted by start again
-        pNode->GetCharAttribs().ResortAttribs();
+        if (bNeedsSorting)
+            pNode->GetCharAttribs().ResortAttribs();
         SetModified(true);
     }
 
