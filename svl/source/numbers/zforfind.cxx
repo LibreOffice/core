@@ -2397,14 +2397,13 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
                 }
             }
         }
+        // Skip one trailing '-' or '/' character to recognize June-2007
+        if (nMonth && nPos + 1 == rString.getLength())
+        {
+            SkipChar('-', rString, nPos) || SkipChar('/', rString, nPos);
+        }
     }
 
-    // skip any trailing '-' or '/' chars
-    if (nPos < rString.getLength())
-    {
-        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos))
-            ; // do nothing
-    }
     if (nPos < rString.getLength()) // not everything consumed
     {
         // Does input StartString equal StartString of format?
