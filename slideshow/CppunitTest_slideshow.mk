@@ -14,6 +14,10 @@ $(eval $(call gb_CppunitTest_set_include,slideshow,\
     -I$(SRCDIR)/slideshow/source/inc \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,slideshow,\
+	box2d \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,slideshow))
 
 $(eval $(call gb_CppunitTest_use_library_objects,slideshow,slideshow))
