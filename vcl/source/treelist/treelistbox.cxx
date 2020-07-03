@@ -492,25 +492,20 @@ bool SvTreeListBox::DoubleClickHdl()
 
 bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 nAction )
 {
-    if ( pSource == this )
+    if ( pSource != this )
+        return false; // no drop
+
+    if ( !(nDragDropMode & DragDropMode::CTRL_MOVE) )
+        return false; // D&D locked within list
+
+    if( DND_ACTION_MOVE == nAction )
     {
-        if ( !(nDragDropMode & (DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY) ) )
-            return false; // D&D locked within list
-        if( DND_ACTION_MOVE == nAction )
-        {
-            if ( !(nDragDropMode & DragDropMode::CTRL_MOVE) )
-                 return false; // no local move
-        }
-        else
-        {
-            if ( !(nDragDropMode & DragDropMode::CTRL_COPY))
-                return false; // no local copy
-        }
+        if ( !(nDragDropMode & DragDropMode::CTRL_MOVE) )
+             return false; // no local move
     }
     else
-    {
-        return false; // no drop
-    }
+        return false; // no local copy
+
     return true;
 }
 
