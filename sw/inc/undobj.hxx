@@ -254,7 +254,8 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
     std::unique_ptr<std::vector<SwFrameFormat*>> m_pFrameFormats;
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
-    bool m_bStartWasTextNode;
+    int m_nDeleteTextNodes;
+
 protected:
     sal_uLong m_nNodeDiff;
     /// start of Content in UndoNodes for Redo
@@ -271,7 +272,7 @@ public:
 
     // Set destination range after reading.
     void SetInsertRange( const SwPaM&, bool bScanFlys = true,
-                         bool bSttWasTextNd = true );
+                         int nDeleteTextNodes = 1);
 
     static bool IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
         sal_uLong const nStartNode, sal_uLong const nEndNode);
