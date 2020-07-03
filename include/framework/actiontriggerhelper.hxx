@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
 #define INCLUDED_FRAMEWORK_ACTIONTRIGGERHELPER_HXX
 
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::container { class XIndexContainer; }
@@ -29,7 +29,7 @@ class Menu;
 
 namespace framework
 {
-    class FWE_DLLPUBLIC ActionTriggerHelper
+    class FWK_DLLPUBLIC ActionTriggerHelper
     {
         public:
             // Fills the submitted menu with the structure contained in the second

@@ -49,7 +49,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     cppuhelper \
 	drawinglayer \
 	editeng \
-    fwe \
+    fwk \
     i18nlangtag \
     sal \
 	salhelper \

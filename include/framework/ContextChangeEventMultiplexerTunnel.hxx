@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <functional>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -18,7 +18,7 @@ namespace com::sun::star::uno { class XInterface; }
 namespace framework {
 
 // this is pretty horrible, don't use it!
-FWE_DLLPUBLIC css::uno::Reference<css::ui::XContextChangeEventListener>
+FWK_DLLPUBLIC css::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith(
     css::uno::Reference<css::uno::XInterface> const& xEventFocus,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);

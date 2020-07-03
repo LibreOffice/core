@@ -40,8 +40,6 @@ MERGE_LIBRARY_LIST := \
 	fps_office \
 	frm \
 	fsstorage \
-	fwe \
-	fwi \
 	fwk \
 	fwl \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \

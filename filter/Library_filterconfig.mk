@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_include,filterconfig,\
 ))
 
 $(eval $(call gb_Library_use_libraries,filterconfig,\
-	fwe \
+	fwk \
 	utl \
 	tl \
 	comphelper \

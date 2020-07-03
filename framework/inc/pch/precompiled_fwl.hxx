@@ -204,7 +204,7 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <services.h>
 #endif // PCH_LEVEL >= 4
 
