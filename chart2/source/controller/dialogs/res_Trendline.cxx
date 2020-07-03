@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 
 namespace chart
@@ -31,8 +32,9 @@ namespace chart
 
 static void lcl_setValue(weld::FormattedSpinButton& rFmtField, double fValue )
 {
-    rFmtField.set_value(fValue);
-//TODO    rFmtField.SetDefaultValue( fValue );
+    Formatter& rFieldFormatter = rFmtField.GetFormatter();
+    rFieldFormatter.SetValue(fValue);
+    rFieldFormatter.SetDefaultValue( fValue );
 }
 
 TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet& rInAttrs)
@@ -65,6 +67,16 @@ TrendlineResources::TrendlineResources(weld::Builder& rBuilder, const SfxItemSet
     , m_xCB_ShowCorrelationCoeff(rBuilder.weld_check_button("showCorrelationCoefficient"))
 {
     FillValueSets();
+
+    Formatter& rForwardFormatter = m_xFmtFld_ExtrapolateForward->GetFormatter();
+    rForwardFormatter.ClearMinValue();
+    rForwardFormatter.ClearMaxValue();
+    Formatter& rBackwardFormatter = m_xFmtFld_ExtrapolateBackward->GetFormatter();
+    rBackwardFormatter.ClearMinValue();
+    rBackwardFormatter.ClearMaxValue();
+    Formatter& rInterceptFormatter = m_xFmtFld_InterceptValue->GetFormatter();
+    rInterceptFormatter.ClearMinValue();
+    rInterceptFormatter.ClearMaxValue();
 
     Link<weld::ToggleButton&,void> aLink = LINK(this, TrendlineResources, SelectTrendLine);
     m_xRB_Linear->connect_toggled( aLink );
@@ -369,9 +381,9 @@ IMPL_LINK_NOARG(TrendlineResources, ChangeFormattedValue, weld::FormattedSpinBut
 void TrendlineResources::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     m_pNumFormatter = pFormatter;
-    m_xFmtFld_ExtrapolateForward->set_formatter( m_pNumFormatter );
-    m_xFmtFld_ExtrapolateBackward->set_formatter( m_pNumFormatter );
-    m_xFmtFld_InterceptValue->set_formatter( m_pNumFormatter );
+    m_xFmtFld_ExtrapolateForward->GetFormatter().SetFormatter(m_pNumFormatter);
+    m_xFmtFld_ExtrapolateBackward->GetFormatter().SetFormatter(m_pNumFormatter);
+    m_xFmtFld_InterceptValue->GetFormatter().SetFormatter(m_pNumFormatter);
 }
 
 void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )

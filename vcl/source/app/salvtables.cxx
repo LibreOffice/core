@@ -65,6 +65,7 @@
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
@@ -5325,95 +5326,40 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 {
 private:
     VclPtr<FormattedField> m_xButton;
-    Formatter* m_pFormatter;
-
-    DECL_LINK(OutputHdl, LinkParamNone*, bool);
-    DECL_LINK(InputHdl, sal_Int64*, TriState);
 
 public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership)
         : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
-        , m_pFormatter(m_xButton->GetFormatter())
     {
-        m_pFormatter->SetOutputHdl(LINK(this, SalInstanceFormattedSpinButton, OutputHdl));
-        m_pFormatter->SetInputHdl(LINK(this, SalInstanceFormattedSpinButton, InputHdl));
-
-        // #i6278# allow more decimal places than the output format.  As
-        // the numbers shown in the edit fields are used for input, it makes more
-        // sense to display the values in the input format rather than the output
-        // format.
-        m_pFormatter->UseInputStringForFormatting();
     }
 
-    virtual ~SalInstanceFormattedSpinButton() override
+    virtual void SetFormatter(weld::EntryFormatter* pFormatter) override
     {
-        m_pFormatter->SetInputHdl(Link<sal_Int64*, TriState>());
-        m_pFormatter->SetOutputHdl(Link<LinkParamNone*, bool>());
+        m_xButton->SetFormatter(pFormatter);
     }
 
-    virtual double get_value() const override { return m_pFormatter->GetValue(); }
-
-    virtual void set_value(double value) override { m_pFormatter->SetValue(value); }
-
-    virtual void set_range(double min, double max) override
+    virtual void sync_value_from_formatter() override
     {
-        m_pFormatter->SetMinValue(min);
-        m_pFormatter->SetMaxValue(max);
+        // no-op for gen
     }
 
-    virtual void get_range(double& min, double& max) const override
+    virtual void sync_range_from_formatter() override
     {
-        min = m_pFormatter->GetMinValue();
-        max = m_pFormatter->GetMaxValue();
+        // no-op for gen
     }
 
-    virtual void set_increments(double step, double /*page*/) override
+    virtual void sync_increments_from_formatter() override
     {
-        m_pFormatter->SetSpinSize(step);
+        // no-op for gen
     }
 
-    virtual void set_formatter(SvNumberFormatter* pFormatter) override
+    virtual Formatter& GetFormatter() override
     {
-        m_pFormatter->SetFormatter(pFormatter);
+        return *m_xButton->GetFormatter();
     }
-
-    virtual SvNumberFormatter* get_formatter() override { return m_pFormatter->GetFormatter(); }
-
-    virtual sal_Int32 get_format_key() const override { return m_pFormatter->GetFormatKey(); }
-
-    virtual void set_format_key(sal_Int32 nFormatKey) override
-    {
-        m_pFormatter->SetFormatKey(nFormatKey);
-    }
-
-    virtual void treat_as_number(bool bSet) override { m_pFormatter->TreatAsNumber(bSet); }
-
-    virtual void set_digits(unsigned int digits) override { m_pFormatter->SetDecimalDigits(digits); }
 };
-
-IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, OutputHdl, LinkParamNone*, bool)
-{
-    // allow an explicit handler
-    if (!m_aOutputHdl.IsSet())
-        return false;
-    m_aOutputHdl.Call(*this);
-    return true;
-}
-
-IMPL_LINK(SalInstanceFormattedSpinButton, InputHdl, sal_Int64*, pResult, TriState)
-{
-    // allow an explicit handler
-    if (!m_aInputHdl.IsSet())
-        return TRISTATE_INDET;
-
-    double value;
-    TriState eRet = m_aInputHdl.Call(&value) ? TRISTATE_TRUE : TRISTATE_FALSE;
-    if (eRet == TRISTATE_TRUE)
-        *pResult = std::round(value * weld::SpinButton::Power10(m_pFormatter->GetDecimalDigits()));
-    return eRet;
-}
 
 }
 
