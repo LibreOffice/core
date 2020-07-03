@@ -423,7 +423,6 @@ public:
 class ImpEditEngine : public SfxListener
 {
     friend class EditEngine;
-    friend class EditDbg;
 
     typedef EditEngine::ViewsType ViewsType;
 
