@@ -48,6 +48,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     Formatter* GetFormatter();
+    void SetFormatter(Formatter* pFormatter);
 
 protected:
     std::unique_ptr<Formatter> m_xFormatter;

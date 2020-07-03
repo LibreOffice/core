@@ -125,9 +125,21 @@ void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent
     rTreeView.remove(rParent);
 }
 
+EntryFormatter::EntryFormatter(weld::FormattedSpinButton& rSpinButton)
+    : m_rEntry(rSpinButton)
+    , m_pSpinButton(&rSpinButton)
+    , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
+{
+}
+
 EntryFormatter::EntryFormatter(weld::Entry& rEntry)
     : m_rEntry(rEntry)
+    , m_pSpinButton(nullptr)
     , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
+{
+}
+
+void EntryFormatter::Init()
 {
     m_rEntry.connect_changed(LINK(this, EntryFormatter, ModifyHdl));
     m_rEntry.connect_focus_out(LINK(this, EntryFormatter, FocusOutHdl));
@@ -153,6 +165,48 @@ void EntryFormatter::SetEntryText(const OUString& rText, const Selection& rSel)
 void EntryFormatter::SetEntryTextColor(const Color* pColor)
 {
     m_rEntry.set_font_color(pColor ? *pColor : COL_AUTO);
+}
+
+void EntryFormatter::UpdateCurrentValue(double dCurrentValue)
+{
+    Formatter::UpdateCurrentValue(dCurrentValue);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_value_from_formatter();
+}
+
+void EntryFormatter::ClearMinValue()
+{
+    Formatter::ClearMinValue();
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetMinValue(double dMin)
+{
+    Formatter::SetMinValue(dMin);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::ClearMaxValue()
+{
+    Formatter::ClearMaxValue();
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetMaxValue(double dMin)
+{
+    Formatter::SetMaxValue(dMin);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetSpinSize(double dStep)
+{
+    Formatter::SetSpinSize(dStep);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_increments_from_formatter();
 }
 
 SelectionOptions EntryFormatter::GetEntrySelectionOptions() const { return m_eOptions; }

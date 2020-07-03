@@ -29,6 +29,7 @@
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
@@ -45,7 +46,7 @@ namespace
 
 void lcl_setValue(weld::FormattedSpinButton& rFmtField, double fValue)
 {
-    rFmtField.set_value(fValue);
+    rFmtField.GetFormatter().SetValue(fValue);
 }
 
 }
@@ -97,12 +98,18 @@ ScaleTabPage::ScaleTabPage(weld::Container* pPage, weld::DialogController* pCont
     m_xCbxAutoOrigin->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
     m_xCbx_AutoTimeResolution->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
 
-    const double nMin = static_cast<double>(SAL_MIN_INT64);
-    const double nMax = static_cast<double>(SAL_MAX_INT64);
-    m_xFmtFldMin->set_range(nMin, nMax);
-    m_xFmtFldMax->set_range(nMin, nMax);
-    m_xFmtFldStepMain->set_range(nMin, nMax);
-    m_xFmtFldOrigin->set_range(nMin, nMax);
+    Formatter& rFmtFldMax = m_xFmtFldMax->GetFormatter();
+    rFmtFldMax.ClearMinValue();
+    rFmtFldMax.ClearMaxValue();
+    Formatter& rFmtFldMin = m_xFmtFldMin->GetFormatter();
+    rFmtFldMin.ClearMinValue();
+    rFmtFldMin.ClearMaxValue();
+    Formatter& rFmtFldStepMain = m_xFmtFldStepMain->GetFormatter();
+    rFmtFldStepMain.ClearMinValue();
+    rFmtFldStepMain.ClearMaxValue();
+    Formatter& rFmtFldOrigin = m_xFmtFldOrigin->GetFormatter();
+    rFmtFldOrigin.ClearMinValue();
+    rFmtFldOrigin.ClearMaxValue();
 
     m_xLB_AxisType->connect_changed(LINK(this, ScaleTabPage, SelectAxisTypeHdl));
 
@@ -144,7 +151,7 @@ void ScaleTabPage::EnableControls()
         if( bWasDateAxis )
             lcl_setValue( *m_xFmtFldStepMain, m_xMt_MainDateStep->get_value() );
         else
-            m_xMt_MainDateStep->set_value(m_xFmtFldStepMain->get_value());
+            m_xMt_MainDateStep->set_value(m_xFmtFldStepMain->GetFormatter().GetValue());
     }
 
     m_xFmtFldStepMain->set_visible( bValueAxis && !bDateAxis );
@@ -379,11 +386,11 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 
     bool bDateAxis = m_nAxisType == chart2::AxisType::DATE;
 
-    sal_uInt32 nMinMaxOriginFmt = m_xFmtFldMax->get_format_key();
+    sal_uInt32 nMinMaxOriginFmt = m_xFmtFldMax->GetFormatter().GetFormatKey();
     if (pNumFormatter->GetType(nMinMaxOriginFmt) == SvNumFormatType::TEXT)
         nMinMaxOriginFmt = 0;
     // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
-    sal_uInt32 nStepFmt = m_xFmtFldStepMain->get_format_key();
+    sal_uInt32 nStepFmt = m_xFmtFldStepMain->GetFormatter().GetFormatKey();
     if (pNumFormatter->GetType(nStepFmt) == SvNumFormatType::TEXT)
         nStepFmt = 0;
 
@@ -391,10 +398,10 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     const char* pErrStrId = nullptr;
     double fDummy;
 
-    fMax = m_xFmtFldMax->get_value();
-    fMin = m_xFmtFldMin->get_value();
-    fOrigin = m_xFmtFldOrigin->get_value();
-    fStepMain = bDateAxis ? m_xMt_MainDateStep->get_value() : m_xFmtFldStepMain->get_value();
+    fMax = m_xFmtFldMax->GetFormatter().GetValue();
+    fMin = m_xFmtFldMin->GetFormatter().GetValue();
+    fOrigin = m_xFmtFldOrigin->GetFormatter().GetValue();
+    fStepMain = bDateAxis ? m_xMt_MainDateStep->get_value() : m_xFmtFldStepMain->GetFormatter().GetValue();
     nStepHelp = m_xMtStepHelp->get_value();
     m_nTimeResolution = m_xLB_TimeResolution->get_active();
     m_nMainTimeUnit = m_xLB_MainTimeUnit->get_active();
@@ -491,10 +498,26 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     pNumFormatter = pFormatter;
-    m_xFmtFldMax->set_formatter( pNumFormatter );
-    m_xFmtFldMin->set_formatter( pNumFormatter );
-    m_xFmtFldStepMain->set_formatter( pNumFormatter );
-    m_xFmtFldOrigin->set_formatter( pNumFormatter );
+
+    Formatter& rFmtFldMax = m_xFmtFldMax->GetFormatter();
+    Formatter& rFmtFldMin = m_xFmtFldMin->GetFormatter();
+    Formatter& rFmtFldStepMain = m_xFmtFldStepMain->GetFormatter();
+    Formatter& rFmtFldOrigin = m_xFmtFldOrigin->GetFormatter();
+
+    rFmtFldMax.SetFormatter( pNumFormatter );
+    rFmtFldMin.SetFormatter( pNumFormatter );
+    rFmtFldStepMain.SetFormatter( pNumFormatter );
+    rFmtFldOrigin.SetFormatter( pNumFormatter );
+
+    // #i6278# allow more decimal places than the output format.  As
+    // the numbers shown in the edit fields are used for input, it makes more
+    // sense to display the values in the input format rather than the output
+    // format.
+    rFmtFldMax.UseInputStringForFormatting();
+    rFmtFldMin.UseInputStringForFormatting();
+    rFmtFldStepMain.UseInputStringForFormatting();
+    rFmtFldOrigin.UseInputStringForFormatting();
+
     SetNumFormat();
 }
 
@@ -507,9 +530,12 @@ void ScaleTabPage::SetNumFormat()
 
     sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
 
-    m_xFmtFldMax->set_format_key(nFmt);
-    m_xFmtFldMin->set_format_key(nFmt);
-    m_xFmtFldOrigin->set_format_key(nFmt);
+    Formatter& rFmtFldMax = m_xFmtFldMax->GetFormatter();
+    rFmtFldMax.SetFormatKey(nFmt);
+    Formatter& rFmtFldMin = m_xFmtFldMin->GetFormatter();
+    rFmtFldMin.SetFormatKey(nFmt);
+    Formatter& rFmtFldOrigin = m_xFmtFldOrigin->GetFormatter();
+    rFmtFldOrigin.SetFormatKey(nFmt);
 
     if( pNumFormatter )
     {
@@ -541,13 +567,13 @@ void ScaleTabPage::SetNumFormat()
             else
                 nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE );
 
-            m_xFmtFldMax->set_format_key(nFmt);
-            m_xFmtFldMin->set_format_key(nFmt);
-            m_xFmtFldOrigin->set_format_key(nFmt);
+            rFmtFldMax.SetFormatKey(nFmt);
+            rFmtFldMin.SetFormatKey(nFmt);
+            rFmtFldOrigin.SetFormatKey(nFmt);
         }
     }
 
-    m_xFmtFldStepMain->set_format_key(nFmt);
+    m_xFmtFldStepMain->GetFormatter().SetFormatKey(nFmt);
 }
 
 void ScaleTabPage::ShowAxisOrigin( bool bShowOrigin )
