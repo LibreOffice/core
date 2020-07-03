@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca7faac_2ec36b3d",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4369,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-03T14:13:12Z",
+      "side": 1,
+      "message": "Following up on my earlier comment at this same place in the previous patchset https://gerrit.libreoffice.org/c/core/+/91834/2/sc/source/ui/vba/vbarange.cxx#4369\n\nIs the group separator \u0027,\u0027 really to be scanned away as well? Do we expect numbers with group separators here? If not, then pass 0 instead. This lessens the possibility of parsing a wrong number, for example if 1,234 was entered and meant with \u0027,\u0027 decimal separator the resulting number would be 1234 instead of not recognizing a number, instead of the intended 1.234 value.\n\nHowever, my earlier comment was about what data we actually *expect* here. Apparently it is user text input, and the document may run in a different locale than it was created or edited in to create the criteria. Without digging into it\u0027s unclear to me what should actually be done here. Probably the locale dependent approach of the previous patchset should be tried (but without accepting group separator, i.e. that argument false instead of true) and if that fails and the decimal separator differs then this not locale dependent conversion tried second. And even a not locale dependent \u0027,\u0027 decimal separator after if the current locale uses yet a different decimal separator.",
+      "revId": "a1352612ed15507d1ee7f305ffe189cfecd5fbea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
