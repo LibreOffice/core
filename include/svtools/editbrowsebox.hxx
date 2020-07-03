@@ -581,6 +581,7 @@ namespace svt
         weld::FormattedEntry& get_formatter() { return *m_xFormattedEntry; }
 
     private:
+        std::unique_ptr<weld::Entry> m_xEntry;
         std::unique_ptr<weld::FormattedEntry> m_xFormattedEntry;
     };
 

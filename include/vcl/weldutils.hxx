@@ -157,11 +157,11 @@ public:
 class VCL_DLLPUBLIC FormattedEntry : public Formatter
 {
 public:
-    FormattedEntry(std::unique_ptr<weld::Entry> xEntry);
+    FormattedEntry(weld::Entry& rEntry);
 
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
 
-    weld::Entry* get_widget() { return m_xEntry.get(); }
+    weld::Entry& get_widget() { return m_rEntry; }
 
     // Formatter overrides
     virtual Selection GetEntrySelection() const override;
@@ -174,7 +174,7 @@ public:
     void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
 
 private:
-    std::unique_ptr<weld::Entry> m_xEntry;
+    weld::Entry& m_rEntry;
     Link<weld::Entry&, void> m_aModifyHdl;
     SelectionOptions m_eOptions;
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
