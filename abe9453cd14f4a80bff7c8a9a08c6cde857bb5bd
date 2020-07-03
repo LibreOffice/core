@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "a6f541ad_26a81605",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-03T11:16:50Z",
+      "side": 1,
+      "message": "no implementation could; but whatever, lets leave it at those explicitly spelled-out values",
+      "parentUuid": "8d380904_82c9b92f",
+      "revId": "abe9453cd14f4a80bff7c8a9a08c6cde857bb5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf12c8cb_16d28d77",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-03T11:16:50Z",
+      "side": 1,
+      "message": "there should be a comment stating what the actual return type of this function is (and I think I\u0027d slightly favor `unsigned char` over `sal_Bool`, but wouldn\u0027t mind the latter,either)",
+      "range": {
+        "startLine": 40,
+        "startChar": 25,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "abe9453cd14f4a80bff7c8a9a08c6cde857bb5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96f16460_237b805e",
         "filename": "include/sal/log.hxx",
         "patchSetId": 11
