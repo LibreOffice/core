@@ -156,13 +156,13 @@ public:
 
     // Min-/Max-management
     bool    HasMinValue() const         { return m_bHasMin; }
-    void    ClearMinValue()             { m_bHasMin = false; }
-    void    SetMinValue(double dMin);
+    virtual void ClearMinValue()        { m_bHasMin = false; }
+    virtual void SetMinValue(double dMin);
     double  GetMinValue() const         { return m_dMinValue; }
 
     bool    HasMaxValue() const         { return m_bHasMax; }
-    void    ClearMaxValue()             { m_bHasMax = false; }
-    void    SetMaxValue(double dMax);
+    virtual void ClearMaxValue()             { m_bHasMax = false; }
+    virtual void SetMaxValue(double dMax);
     double  GetMaxValue() const         { return m_dMaxValue; }
 
     // Current value
@@ -219,7 +219,7 @@ public:
     void    SetStrictFormat(bool bEnable)       { m_bStrictFormat = bEnable; }
     // Check format during input
 
-    void    SetSpinSize(double dStep)   { m_dSpinSize = dStep; }
+    virtual void SetSpinSize(double dStep)   { m_dSpinSize = dStep; }
     double  GetSpinSize() const         { return m_dSpinSize; }
 
     void    SetSpinFirst(double dFirst) { m_dSpinFirst = dFirst; }
@@ -303,6 +303,8 @@ protected:
         // SetFormatKey without FormatChanged notification
 
     SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
+
+    virtual void UpdateCurrentValue(double dCurrentValue) { m_dCurrentValue = dCurrentValue; }
 
     void ReFormat();
 };

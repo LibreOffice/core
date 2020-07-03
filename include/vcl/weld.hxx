@@ -62,6 +62,7 @@ typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrela
 enum class PointerStyle;
 class CommandEvent;
 class KeyEvent;
+class Formatter;
 class MouseEvent;
 class SvNumberFormatter;
 class TransferDataContainer;
@@ -1506,7 +1507,7 @@ public:
     */
     virtual void set_font_color(const Color& rColor) = 0;
 
-    void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
+    virtual void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
     // callback returns true to indicated no further processing of activate wanted
     void connect_activate(const Link<Entry&, bool>& rLink) { m_aActivateHdl = rLink; }
@@ -1596,52 +1597,31 @@ public:
     static unsigned int Power10(unsigned int n);
 };
 
+class EntryFormatter;
+
+// Similar to a SpinButton, but input and output formatting and range/value
+// are managed by a more complex Formatter which can support doubles.
 class VCL_DLLPUBLIC FormattedSpinButton : virtual public Entry
 {
 protected:
     Link<FormattedSpinButton&, void> m_aValueChangedHdl;
-    Link<FormattedSpinButton&, void> m_aOutputHdl;
-    Link<double*, bool> m_aInputHdl;
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
 public:
-    virtual void set_value(double value) = 0;
-    virtual double get_value() const = 0;
-    virtual void set_range(double min, double max) = 0;
-    virtual void get_range(double& min, double& max) const = 0;
-    virtual void set_increments(double step, double page) = 0;
-
-    void set_min(double min)
-    {
-        double max, dummy;
-        get_range(dummy, max);
-        set_range(min, max);
-    }
-
-    void set_max(double max)
-    {
-        double min, dummy;
-        get_range(min, dummy);
-        set_range(min, max);
-    }
-
-    virtual void set_formatter(SvNumberFormatter* pFormatter) = 0;
-    virtual SvNumberFormatter* get_formatter() = 0;
-    virtual sal_Int32 get_format_key() const = 0;
-    virtual void set_format_key(sal_Int32 nFormatKey) = 0;
-
-    virtual void set_digits(unsigned int digits) = 0;
-
-    virtual void treat_as_number(bool bSet) = 0;
+    virtual Formatter& GetFormatter() = 0;
+    virtual void SetFormatter(weld::EntryFormatter* pFormatter) = 0;
 
     void connect_value_changed(const Link<FormattedSpinButton&, void>& rLink)
     {
         m_aValueChangedHdl = rLink;
     }
 
-    void connect_output(const Link<FormattedSpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
-    void connect_input(const Link<double*, bool>& rLink) { m_aInputHdl = rLink; }
+private:
+    friend class EntryFormatter;
+    virtual void sync_range_from_formatter() = 0;
+    virtual void sync_value_from_formatter() = 0;
+    virtual void sync_increments_from_formatter() = 0;
 };
 
 class VCL_DLLPUBLIC Image : virtual public Widget

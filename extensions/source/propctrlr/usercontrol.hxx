@@ -98,8 +98,8 @@ namespace pcr
         void SetFormatDescription( const FormatDescription& rDesc );
 
         // make some FormattedField methods available
-        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->set_digits(nPrecision); }
-        void SetDefaultValue(double dDef) { getTypedControlWindow()->set_value(dDef); }
+        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->GetFormatter().SetDecimalDigits(nPrecision); }
+        void SetDefaultValue(double dDef) { getTypedControlWindow()->GetFormatter().SetDefaultValue(dDef); }
 
         virtual void SetModifyHandler() override
         {

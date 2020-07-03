@@ -12165,39 +12165,14 @@ class GtkInstanceFormattedSpinButton : public GtkInstanceEntry, public virtual w
 {
 private:
     GtkSpinButton* m_pButton;
-    SvNumberFormatter* m_pFormatter;
-    Color* m_pLastOutputColor;
-    sal_uInt32 m_nFormatKey;
-    bool m_bTreatAsNumber;
+    std::unique_ptr<weld::EntryFormatter> m_xFormatter;
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
 
     bool signal_output()
     {
-        // allow an explicit handler
-        if (m_aOutputHdl.IsSet())
-        {
-            m_aOutputHdl.Call(*this);
-            return true;
-        }
-        if (!m_pFormatter)
-            return false;
-        double dVal = get_value();
-        OUString sNewText;
-        if (m_pFormatter->IsTextFormat(m_nFormatKey))
-        {
-            // first convert the number as string in standard format
-            OUString sTemp;
-            m_pFormatter->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-            // then encode the string in the corresponding text format
-            m_pFormatter->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
-        }
-        else
-        {
-            m_pFormatter->GetInputLineString(dVal, m_nFormatKey, sNewText);
-        }
-        set_text(sNewText);
+        GetFormatter().SetValue(gtk_spin_button_get_value(m_pButton));
         return true;
     }
 
@@ -12210,42 +12185,9 @@ private:
 
     gint signal_input(double* value)
     {
-        // allow an explicit handler
-        if (m_aInputHdl.IsSet())
-            return m_aInputHdl.Call(value) ? 1 : GTK_INPUT_ERROR;
-
-        if (!m_pFormatter)
-            return 0;
-
-        sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
-
-        if (m_pFormatter->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
-            // for detection of values like "1,1" in fields that are formatted as text
-            nFormatKey = 0;
-
-        OUString sText(get_text());
-
-        // special treatment for percentage formatting
-        if (m_pFormatter->GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
-        {
-            // the language of our format
-            LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
-            // the default number format for this language
-            sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
-
-            sal_uInt32 nTempFormat = nStandardNumericFormat;
-            double dTemp;
-            if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
-                SvNumFormatType::NUMBER == m_pFormatter->GetType(nTempFormat))
-                // the string is equivalent to a number formatted one (has no % sign) -> append it
-                sText += "%";
-            // (with this, an input of '3' becomes '3%', which then by the formatter is translated
-            // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
-            // which equals 300 percent.
-        }
-        if (!m_pFormatter->IsNumberFormat(sText, nFormatKey, *value))
-            return GTK_INPUT_ERROR;
-
+        Formatter& rFormatter = GetFormatter();
+        rFormatter.Modify();
+        *value = rFormatter.GetValue();
         return 1;
     }
 
@@ -12267,88 +12209,87 @@ public:
     GtkInstanceFormattedSpinButton(GtkSpinButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceEntry(GTK_ENTRY(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
-        , m_pFormatter(nullptr)
-        , m_pLastOutputColor(nullptr)
-        , m_nFormatKey(0)
-        , m_bTreatAsNumber(true)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
     {
     }
 
-    virtual double get_value() const override
+    virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
     {
-        return gtk_spin_button_get_value(m_pButton);
-    }
-
-    virtual void set_value(double value) override
-    {
-        disable_notify_events();
-        gtk_spin_button_set_value(m_pButton, value);
-        enable_notify_events();
-    }
-
-    virtual void set_range(double min, double max) override
-    {
-        disable_notify_events();
-        gtk_spin_button_set_range(m_pButton, min, max);
-        enable_notify_events();
-    }
-
-    virtual void get_range(double& min, double& max) const override
-    {
-        gtk_spin_button_get_range(m_pButton, &min, &max);
-    }
-
-    virtual void set_increments(double step, double page) override
-    {
-        disable_notify_events();
-        gtk_spin_button_set_increments(m_pButton, step, page);
-        enable_notify_events();
-    }
-
-    virtual void set_formatter(SvNumberFormatter* pFormatter) override
-    {
-        m_pFormatter = pFormatter;
-
-        // calc the default format key from the Office's UI locale
-        if (m_pFormatter)
+        if (!m_xFormatter) // once a formatter is set, it takes over "changed"
         {
-            // get the Office's locale and translate
-            LanguageType eSysLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType( false);
-            // get the standard numeric format for this language
-            m_nFormatKey = m_pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, eSysLanguage );
+            GtkInstanceEntry::connect_changed(rLink);
+            return;
         }
-        else
-            m_nFormatKey = 0;
-        signal_output();
+        m_xFormatter->connect_changed(rLink);
     }
 
-    virtual SvNumberFormatter* get_formatter() override
+    virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override
     {
-        return m_pFormatter;
+        if (!m_xFormatter) // once a formatter is set, it takes over "focus-out"
+        {
+            GtkInstanceEntry::connect_focus_out(rLink);
+            return;
+        }
+        m_xFormatter->connect_focus_out(rLink);
     }
 
-    virtual sal_Int32 get_format_key() const override
+    virtual void SetFormatter(weld::EntryFormatter* pFormatter) override
     {
-        return m_nFormatKey;
+        m_xFormatter.reset(pFormatter);
+        sync_range_from_formatter();
+        sync_value_from_formatter();
+        sync_increments_from_formatter();
     }
 
-    virtual void set_format_key(sal_Int32 nFormatKey) override
+    virtual weld::EntryFormatter& GetFormatter() override
     {
-        m_nFormatKey = nFormatKey;
+        if (!m_xFormatter)
+        {
+            auto aFocusOutHdl = m_aFocusOutHdl;
+            m_aFocusOutHdl = Link<weld::Widget&, void>();
+            auto aChangeHdl = m_aChangeHdl;
+            m_aChangeHdl = Link<weld::Entry&, void>();
+
+            double fValue = gtk_spin_button_get_value(m_pButton);
+            double fMin, fMax;
+            gtk_spin_button_get_range(m_pButton, &fMin, &fMax);
+            double fStep;
+            gtk_spin_button_get_increments(m_pButton, &fStep, nullptr);
+            m_xFormatter.reset(new weld::EntryFormatter(*this));
+            m_xFormatter->SetMinValue(fMin);
+            m_xFormatter->SetMaxValue(fMax);
+            m_xFormatter->SetSpinSize(fStep);
+            m_xFormatter->SetValue(fValue);
+
+            m_xFormatter->connect_focus_out(aFocusOutHdl);
+            m_xFormatter->connect_changed(aChangeHdl);
+        }
+        return *m_xFormatter;
     }
 
-    virtual void treat_as_number(bool bSet) override
-    {
-        m_bTreatAsNumber = bSet;
-    }
-
-    virtual void set_digits(unsigned int digits) override
+    virtual void sync_value_from_formatter() override
     {
         disable_notify_events();
-        gtk_spin_button_set_digits(m_pButton, digits);
+        gtk_spin_button_set_value(m_pButton, m_xFormatter->GetValue());
+        enable_notify_events();
+    }
+
+    virtual void sync_range_from_formatter() override
+    {
+        disable_notify_events();
+        double fMin = m_xFormatter->HasMinValue() ? m_xFormatter->GetMinValue() : DBL_MIN;
+        double fMax = m_xFormatter->HasMaxValue() ? m_xFormatter->GetMaxValue() : DBL_MAX;
+        gtk_spin_button_set_range(m_pButton, fMin, fMax);
+        enable_notify_events();
+    }
+
+    virtual void sync_increments_from_formatter() override
+    {
+        disable_notify_events();
+        double fSpinSize = m_xFormatter->GetSpinSize();
+        gtk_spin_button_set_increments(m_pButton, fSpinSize, fSpinSize * 10);
         enable_notify_events();
     }
 

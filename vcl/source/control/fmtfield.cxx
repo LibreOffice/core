@@ -699,7 +699,6 @@ void Formatter::ReFormat()
     }
 }
 
-
 void Formatter::SetMinValue(double dMin)
 {
     DBG_ASSERT(m_bTreatAsNumber, "FormattedField::SetMinValue : only to be used in numeric mode !");
@@ -754,7 +753,7 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     DBG_ASSERT(GetOrCreateFormatter() != nullptr, "FormattedField::ImplSetValue : can't set a value without a formatter !");
 
     m_ValueState = valueDouble;
-    m_dCurrentValue = dVal;
+    UpdateCurrentValue(dVal);
 
     if (!m_aOutputHdl.IsSet() || !m_aOutputHdl.Call(nullptr))
     {
@@ -860,13 +859,14 @@ void Formatter::SetValue(double dVal)
 
 double Formatter::GetValue()
 {
-
     if ( !ImplGetValue( m_dCurrentValue ) )
     {
-        if ( m_bEnableNaN )
-            ::rtl::math::setNan( &m_dCurrentValue );
+        double dValue;
+        if (m_bEnableNaN)
+            ::rtl::math::setNan(&dValue);
         else
-            m_dCurrentValue = m_dDefaultValue;
+            dValue = m_dDefaultValue;
+        UpdateCurrentValue(dValue);
     }
 
     m_ValueState = valueDouble;
@@ -1306,6 +1306,11 @@ Formatter* FormattedField::GetFormatter()
     if (!m_xFormatter)
         m_xFormatter.reset(new FieldFormatter(*this));
     return m_xFormatter.get();
+}
+
+void FormattedField::SetFormatter(Formatter* pFormatter)
+{
+    m_xFormatter.reset(pFormatter);
 }
 
 // currently used by online

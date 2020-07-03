@@ -125,9 +125,29 @@ void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent
     rTreeView.remove(rParent);
 }
 
+EntryFormatter::EntryFormatter(weld::FormattedSpinButton& rSpinButton)
+    : m_rEntry(rSpinButton)
+    , m_pSpinButton(&rSpinButton)
+    , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
+{
+    Init();
+}
+
 EntryFormatter::EntryFormatter(weld::Entry& rEntry)
     : m_rEntry(rEntry)
+    , m_pSpinButton(nullptr)
     , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
+{
+    Init();
+}
+
+EntryFormatter::~EntryFormatter()
+{
+    m_rEntry.connect_changed(Link<weld::Entry&, void>());
+    m_rEntry.connect_focus_out(Link<weld::Widget&, void>());
+}
+
+void EntryFormatter::Init()
 {
     m_rEntry.connect_changed(LINK(this, EntryFormatter, ModifyHdl));
     m_rEntry.connect_focus_out(LINK(this, EntryFormatter, FocusOutHdl));
@@ -155,13 +175,65 @@ void EntryFormatter::SetEntryTextColor(const Color* pColor)
     m_rEntry.set_font_color(pColor ? *pColor : COL_AUTO);
 }
 
+void EntryFormatter::UpdateCurrentValue(double dCurrentValue)
+{
+    Formatter::UpdateCurrentValue(dCurrentValue);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_value_from_formatter();
+}
+
+void EntryFormatter::ClearMinValue()
+{
+    Formatter::ClearMinValue();
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetMinValue(double dMin)
+{
+    Formatter::SetMinValue(dMin);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::ClearMaxValue()
+{
+    Formatter::ClearMaxValue();
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetMaxValue(double dMin)
+{
+    Formatter::SetMaxValue(dMin);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_range_from_formatter();
+}
+
+void EntryFormatter::SetSpinSize(double dStep)
+{
+    Formatter::SetSpinSize(dStep);
+    if (m_pSpinButton)
+        m_pSpinButton->sync_increments_from_formatter();
+}
+
 SelectionOptions EntryFormatter::GetEntrySelectionOptions() const { return m_eOptions; }
 
 void EntryFormatter::FieldModified() { m_aModifyHdl.Call(m_rEntry); }
 
-IMPL_LINK_NOARG(EntryFormatter, ModifyHdl, weld::Entry&, void) { Modify(); }
+IMPL_LINK_NOARG(EntryFormatter, ModifyHdl, weld::Entry&, void)
+{
+    // This leads to FieldModified getting called at the end of Modify() and
+    // FieldModified then calls any modification callback
+    Modify();
+}
 
-IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void) { EntryLostFocus(); }
+IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void)
+{
+    EntryLostFocus();
+    m_aFocusOutHdl.Call(m_rEntry);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
