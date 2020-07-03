@@ -75,7 +75,7 @@ namespace frm
         if ( !getEditView() )
             return;
 
-        SfxItemSet aEmptySet( const_cast< EditView* >( getEditView() )->GetEmptyItemSet() );
+        SfxItemSet aEmptySet(getEditView()->GetEmptyItemSet());
         Sequence< PropertyValue > aUnoStateDescription;
         if ( _rState.getItem() )
         {

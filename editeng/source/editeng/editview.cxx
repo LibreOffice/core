@@ -523,7 +523,7 @@ Pair EditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     return pImpEditView->Scroll( ndX, ndY, nRangeCheck );
 }
 
-const SfxItemSet& EditView::GetEmptyItemSet()
+const SfxItemSet& EditView::GetEmptyItemSet() const
 {
     return pImpEditView->pEditEngine->GetEmptyItemSet();
 }

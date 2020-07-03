@@ -3876,7 +3876,6 @@ editeng/source/accessibility/AccessibleStaticTextBase.cxx
 editeng/source/accessibility/AccessibleStringWrap.cxx
 editeng/source/editeng/editattr.cxx
 editeng/source/editeng/editdbg.cxx
-editeng/source/editeng/editdbg.hxx
 editeng/source/editeng/editdoc.cxx
 editeng/source/editeng/editeng.cxx
 editeng/source/editeng/editobj.cxx
