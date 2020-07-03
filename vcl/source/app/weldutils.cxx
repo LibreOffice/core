@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
@@ -234,6 +236,57 @@ IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void)
     m_aFocusOutHdl.Call(m_rEntry);
 }
 
+DoubleNumericEntry::DoubleNumericEntry(weld::Entry& rEntry)
+    : EntryFormatter(rEntry)
+{
+    ResetConformanceTester();
+}
+
+DoubleNumericEntry::DoubleNumericEntry(weld::FormattedSpinButton& rSpinButton)
+    : EntryFormatter(rSpinButton)
+{
+    ResetConformanceTester();
+}
+
+DoubleNumericEntry::~DoubleNumericEntry() = default;
+
+void DoubleNumericEntry::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
+{
+    ResetConformanceTester();
+    EntryFormatter::FormatChanged(nWhat);
+}
+
+bool DoubleNumericEntry::CheckText(const OUString& sText) const
+{
+    // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
+    // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
+    // Thus, the roundabout way via a regular expression
+    return m_pNumberValidator->isValidNumericFragment(sText);
+}
+
+void DoubleNumericEntry::ResetConformanceTester()
+{
+    // the thousands and the decimal separator are language dependent
+    const SvNumberformat* pFormatEntry = GetOrCreateFormatter()->GetEntry(m_nFormatKey);
+
+    sal_Unicode cSeparatorThousand = ',';
+    sal_Unicode cSeparatorDecimal = '.';
+    if (pFormatEntry)
+    {
+        LocaleDataWrapper aLocaleInfo(LanguageTag(pFormatEntry->GetLanguage()));
+
+        OUString sSeparator = aLocaleInfo.getNumThousandSep();
+        if (!sSeparator.isEmpty())
+            cSeparatorThousand = sSeparator[0];
+
+        sSeparator = aLocaleInfo.getNumDecimalSep();
+        if (!sSeparator.isEmpty())
+            cSeparatorDecimal = sSeparator[0];
+    }
+
+    m_pNumberValidator.reset(
+        new validation::NumberValidator(cSeparatorThousand, cSeparatorDecimal));
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
