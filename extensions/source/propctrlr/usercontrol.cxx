@@ -55,18 +55,19 @@ namespace pcr
 
     void OFormatSampleControl::SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier )
     {
+        Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
         if (pSupplier)
         {
-            m_xSpinButton->treat_as_number(true);
+            rFieldFormatter.TreatAsNumber(true);
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            m_xSpinButton->set_formatter(pFormatter);
-            m_xSpinButton->set_value( 1234.56789 );
+            rFieldFormatter.SetFormatter(pFormatter);
+            rFieldFormatter.SetValue( 1234.56789 );
         }
         else
         {
-            m_xSpinButton->treat_as_number(false);
-            m_xSpinButton->set_formatter(nullptr);
+            rFieldFormatter.TreatAsNumber(false);
+            rFieldFormatter.SetFormatter(nullptr);
             m_xSpinButton->set_text( "" );
         }
 
@@ -78,7 +79,8 @@ namespace pcr
         , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("sample"))
         , m_xEntry(m_xBuilder->weld_entry("entry"))
     {
-        m_xSpinButton->treat_as_number(true);
+        Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
+        rFieldFormatter.TreatAsNumber(true);
         m_xEntry->connect_key_press(LINK(this, OFormatSampleControl, KeyInputHdl));
     }
 
@@ -88,9 +90,10 @@ namespace pcr
         if ( _rValue >>= nFormatKey )
         {
             // else set the new format key, the text will be reformatted
-            m_xSpinButton->set_format_key( nFormatKey );
+            Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
+            rFieldFormatter.SetFormatKey(nFormatKey);
 
-            SvNumberFormatter* pNF = m_xSpinButton->get_formatter();
+            SvNumberFormatter* pNF = rFieldFormatter.GetFormatter();
             const SvNumberformat* pEntry = pNF->GetEntry( nFormatKey );
             OSL_ENSURE( pEntry, "OFormatSampleControl::setValue: invalid format entry!" );
 
@@ -98,7 +101,7 @@ namespace pcr
             if ( bIsTextFormat )
                 m_xSpinButton->set_text( PcrRes( RID_STR_TEXT_FORMAT ) );
             else
-                m_xSpinButton->set_value( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
+                rFieldFormatter.SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
         else
             m_xSpinButton->set_text( "" );
@@ -146,7 +149,10 @@ namespace pcr
     {
         Any aPropValue;
         if ( !m_xSpinButton->get_text().isEmpty() )
-            aPropValue <<= m_xSpinButton->get_value();
+        {
+            Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
+            aPropValue <<= rFieldFormatter.GetValue();
+        }
         return aPropValue;
     }
 
@@ -158,7 +164,7 @@ namespace pcr
     OFormattedNumericControl::OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OFormattedNumericControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->treat_as_number(true);
+        getTypedControlWindow()->GetFormatter().TreatAsNumber(true);
     }
 
     OFormattedNumericControl::~OFormattedNumericControl()
@@ -169,7 +175,7 @@ namespace pcr
     {
         double nValue( 0 );
         if ( _rValue >>= nValue )
-            getTypedControlWindow()->set_value( nValue );
+            getTypedControlWindow()->GetFormatter().SetValue(nValue);
         else
             getTypedControlWindow()->set_text("");
     }
@@ -178,7 +184,7 @@ namespace pcr
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->get_text().isEmpty() )
-            aPropValue <<= getTypedControlWindow()->get_value();
+            aPropValue <<= getTypedControlWindow()->GetFormatter().GetValue();
         return aPropValue;
     }
 
@@ -191,16 +197,17 @@ namespace pcr
     {
         bool bFallback = true;
 
+        Formatter& rFieldFormatter = getTypedControlWindow()->GetFormatter();
         if (rDesc.pSupplier)
         {
-            getTypedControlWindow()->treat_as_number(true);
+            rFieldFormatter.TreatAsNumber(true);
 
             SvNumberFormatter* pFormatter = rDesc.pSupplier->GetNumberFormatter();
-            if (pFormatter != getTypedControlWindow()->get_formatter())
-                getTypedControlWindow()->set_formatter(pFormatter);
-            getTypedControlWindow()->set_format_key(rDesc.nKey);
+            if (pFormatter != rFieldFormatter.GetFormatter())
+                rFieldFormatter.SetFormatter(pFormatter);
+            rFieldFormatter.SetFormatKey(rDesc.nKey);
 
-            const SvNumberformat* pEntry = getTypedControlWindow()->get_formatter()->GetEntry(getTypedControlWindow()->get_format_key());
+            const SvNumberformat* pEntry = rFieldFormatter.GetFormatter()->GetEntry(rFieldFormatter.GetFormatKey());
             DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
             if ( pEntry )
             {
@@ -211,8 +218,8 @@ namespace pcr
 
         if ( bFallback )
         {
-            getTypedControlWindow()->treat_as_number(false);
-            getTypedControlWindow()->set_formatter(nullptr);
+            rFieldFormatter.TreatAsNumber(false);
+            rFieldFormatter.SetFormatter(nullptr);
             getTypedControlWindow()->set_text("");
         }
     }

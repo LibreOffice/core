@@ -28,6 +28,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -59,33 +60,16 @@ public:
         InterimItemWindow::GetFocus();
     }
 
-    void set_value(double fValue);
-
-    void set_digits(int nDigits)
+    Formatter& GetFormatter()
     {
-        m_xWidget->set_digits(nDigits);
-    }
-
-    void set_min(double fMin)
-    {
-        m_xWidget->set_min(fMin);
-    }
-
-    void set_max(double fMax)
-    {
-        m_xWidget->set_max(fMax);
-    }
-
-    void set_step(double fStep)
-    {
-        m_xWidget->set_increments(fStep, fStep * 10);
+        return m_xWidget->GetFormatter();
     }
 
     OUString get_entry_text() const { return m_xWidget->get_text(); }
 
     DECL_LINK(ValueChangedHdl, weld::FormattedSpinButton&, void);
-    DECL_LINK(FormatOutputHdl, weld::FormattedSpinButton&, void);
-    DECL_LINK(ParseInputHdl, double*, bool);
+    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
@@ -104,9 +88,10 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
 {
     m_xWidget->connect_focus_in(LINK(this, SpinfieldControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, SpinfieldControl, FocusOutHdl));
+    Formatter& rFormatter = m_xWidget->GetFormatter();
+    rFormatter.SetOutputHdl(LINK(this, SpinfieldControl, FormatOutputHdl));
+    rFormatter.SetInputHdl(LINK(this, SpinfieldControl, ParseInputHdl));
     m_xWidget->connect_value_changed(LINK(this, SpinfieldControl, ValueChangedHdl));
-    m_xWidget->connect_output(LINK(this, SpinfieldControl, FormatOutputHdl));
-    m_xWidget->connect_input(LINK(this, SpinfieldControl, ParseInputHdl));
     m_xWidget->connect_changed(LINK(this, SpinfieldControl, ModifyHdl));
     m_xWidget->connect_activate(LINK(this, SpinfieldControl, ActivateHdl));
     m_xWidget->connect_key_press(LINK(this, SpinfieldControl, KeyInputHdl));
@@ -118,23 +103,15 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
     SetSizePixel(get_preferred_size());
 }
 
-void SpinfieldControl::set_value(double fValue)
-{
-    OUString aOutString = m_pSpinfieldToolbarController->FormatOutputString(fValue);
-    m_xWidget->set_value(fValue);
-    m_xWidget->set_text(aOutString);
-    m_pSpinfieldToolbarController->Modify();
-}
-
 IMPL_LINK(SpinfieldControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
 {
     return ChildKeyInput(rKEvt);
 }
 
-IMPL_LINK(SpinfieldControl, ParseInputHdl, double*, result, bool)
+IMPL_LINK(SpinfieldControl, ParseInputHdl, sal_Int64*, result, TriState)
 {
-    *result = m_xWidget->get_text().toDouble();
-    return true;
+    *result = m_xWidget->get_text().toDouble() * weld::SpinButton::Power10(m_xWidget->GetFormatter().GetDecimalDigits());
+    return TRISTATE_TRUE;
 }
 
 SpinfieldControl::~SpinfieldControl()
@@ -184,10 +161,11 @@ IMPL_LINK_NOARG(SpinfieldControl, ActivateHdl, weld::Entry&, bool)
     return bConsumed;
 }
 
-IMPL_LINK_NOARG(SpinfieldControl, FormatOutputHdl, weld::FormattedSpinButton&, void)
+IMPL_LINK_NOARG(SpinfieldControl, FormatOutputHdl, LinkParamNone*, bool)
 {
-    OUString aText = m_pSpinfieldToolbarController->FormatOutputString(m_xWidget->get_value());
+    OUString aText = m_pSpinfieldToolbarController->FormatOutputString(m_xWidget->GetFormatter().GetValue());
     m_xWidget->set_text(aText);
+    return true;
 }
 
 SpinfieldToolbarController::SpinfieldToolbarController(
@@ -387,29 +365,31 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
         }
     }
 
+    Formatter& rFormatter = m_pSpinfieldControl->GetFormatter();
+
     // Check values and set members
     if (bFloatValue)
-        m_pSpinfieldControl->set_digits(2);
+        rFormatter.SetDecimalDigits(2);
     if ( !aValue.isEmpty() )
     {
         m_bFloat = bFloatValue;
         m_nValue = aValue.toDouble();
-        m_pSpinfieldControl->set_value(m_nValue);
+        rFormatter.SetValue(m_nValue);
     }
     if ( !aMax.isEmpty() )
     {
         m_nMax = aMax.toDouble();
-        m_pSpinfieldControl->set_max(m_nMax);
+        rFormatter.SetMaxValue(m_nMax);
     }
     if ( !aMin.isEmpty() )
     {
         m_nMin = aMin.toDouble();
-        m_pSpinfieldControl->set_min(m_nMin);
+        rFormatter.SetMinValue(m_nMin);
     }
     if ( !aStep.isEmpty() )
     {
         m_nStep = aStep.toDouble();
-        m_pSpinfieldControl->set_step(m_nStep);
+        rFormatter.SetSpinSize(m_nStep);
     }
 }
 

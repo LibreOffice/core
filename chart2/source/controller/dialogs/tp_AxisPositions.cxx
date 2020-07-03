@@ -25,6 +25,7 @@
 #include <rtl/math.hxx>
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/formatter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -59,10 +60,12 @@ AxisPositionsTabPage::AxisPositionsTabPage(weld::Container* pPage, weld::DialogC
     m_xLB_CrossesAt->connect_changed(LINK(this, AxisPositionsTabPage, CrossesAtSelectHdl));
     m_xLB_PlaceLabels->connect_changed(LINK(this, AxisPositionsTabPage, PlaceLabelsSelectHdl));
 
-    const double nMin = static_cast<double>(SAL_MIN_INT64);
-    const double nMax = static_cast<double>(SAL_MAX_INT64);
-    m_xED_CrossesAt->set_range(nMin, nMax);
-    m_xED_LabelDistance->set_range(nMin, nMax);
+    Formatter& rCrossFormatter = m_xED_CrossesAt->GetFormatter();
+    rCrossFormatter.ClearMinValue();
+    rCrossFormatter.ClearMaxValue();
+    Formatter& rDistanceFormatter = m_xED_CrossesAt->GetFormatter();
+    rDistanceFormatter.ClearMinValue();
+    rDistanceFormatter.ClearMaxValue();
 }
 
 AxisPositionsTabPage::~AxisPositionsTabPage()
@@ -81,7 +84,8 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( nPos==2 )
     {
-        double fCrossover = m_xED_CrossesAt->get_value();
+        Formatter& rCrossFormatter = m_xED_CrossesAt->GetFormatter();
+        double fCrossover = rCrossFormatter.GetValue();
         if( m_bCrossingAxisIsCategoryAxis )
             fCrossover = m_xED_CrossesAtCategory->get_active()+1;
         rOutAttrs->Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
@@ -167,7 +171,10 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
             if( m_bCrossingAxisIsCategoryAxis )
                 m_xED_CrossesAtCategory->set_active( static_cast<sal_uInt16>(::rtl::math::round(fCrossover-1.0)) );
             else
-                m_xED_CrossesAt->set_value(fCrossover);
+            {
+                Formatter& rCrossFormatter = m_xED_CrossesAt->GetFormatter();
+                rCrossFormatter.SetValue(fCrossover);
+            }
         }
         else
         {
@@ -251,13 +258,15 @@ DeactivateRC AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
 void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     m_pNumFormatter = pFormatter;
-    m_xED_CrossesAt->set_formatter(m_pNumFormatter);
+    Formatter& rCrossFormatter = m_xED_CrossesAt->GetFormatter();
+    rCrossFormatter.SetFormatter(m_pNumFormatter);
+    rCrossFormatter.UseInputStringForFormatting();
 
     const SfxPoolItem *pPoolItem = nullptr;
     if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
-        m_xED_CrossesAt->set_format_key( nFmt );
+        rCrossFormatter.SetFormatKey(nFmt);
     }
 }
 
@@ -288,7 +297,7 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, weld::ComboBox&, void)
     m_xED_CrossesAtCategory->set_visible( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
 
     if (m_xED_CrossesAt->get_text().isEmpty())
-        m_xED_CrossesAt->set_value(0.0);
+        m_xED_CrossesAt->GetFormatter().SetValue(0.0);
     if (m_xED_CrossesAtCategory->get_active() == -1)
         m_xED_CrossesAtCategory->set_active(0);
 
