@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
         dbtools) \
     drawinglayer \
     editeng \
-    fwe \
+    fwk \
     i18nlangtag \
     i18nutil \
     sal \

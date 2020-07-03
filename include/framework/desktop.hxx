@@ -95,7 +95,7 @@ typedef cppu::WeakComponentImplHelper<
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
 
-class LO_DLLPUBLIC_FWK Desktop final : private cppu::BaseMutex,
+class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
                 public Desktop_BASE,
                 public cppu::OPropertySetHelper
 {
@@ -446,7 +446,7 @@ class LO_DLLPUBLIC_FWK Desktop final : private cppu::BaseMutex,
 
 };      //  class Desktop
 
-LO_DLLPUBLIC_FWK rtl::Reference<Desktop> getDesktop(
+FWK_DLLPUBLIC rtl::Reference<Desktop> getDesktop(
     css::uno::Reference<css::uno::XComponentContext> const & context);
 
 }       //  namespace framework

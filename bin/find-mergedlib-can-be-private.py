@@ -37,8 +37,6 @@ merged_libs = { \
     ,"expwrap" \
     ,"filterconfig" \
     ,"fsstorage" \
-    ,"fwe" \
-    ,"fwi" \
     ,"fwk" \
     ,"helplinker)" \
     ,"i18npool" \

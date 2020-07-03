@@ -24,7 +24,7 @@
 #include <vcl/image.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <memory>
 
 namespace osl { class Mutex; }
@@ -45,7 +45,7 @@ namespace osl { class Mutex; }
 namespace framework
 {
 
-struct FWE_DLLPUBLIC MergeMenuInstruction
+struct FWK_DLLPUBLIC MergeMenuInstruction
 {
     OUString     aMergePoint;
     OUString     aMergeCommand;
@@ -56,7 +56,7 @@ struct FWE_DLLPUBLIC MergeMenuInstruction
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
-struct FWE_DLLPUBLIC MergeToolbarInstruction
+struct FWK_DLLPUBLIC MergeToolbarInstruction
 {
     OUString     aMergeToolbar;
     OUString     aMergePoint;
@@ -69,7 +69,7 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
-struct FWE_DLLPUBLIC MergeNotebookBarInstruction
+struct FWK_DLLPUBLIC MergeNotebookBarInstruction
 {
     OUString     aMergeNotebookBar;
     OUString     aMergePoint;
@@ -82,7 +82,7 @@ struct FWE_DLLPUBLIC MergeNotebookBarInstruction
 
 typedef ::std::vector< MergeNotebookBarInstruction >    MergeNotebookBarInstructionContainer;
 
-struct FWE_DLLPUBLIC MergeStatusbarInstruction
+struct FWK_DLLPUBLIC MergeStatusbarInstruction
 {
     OUString     aMergePoint;
     OUString     aMergeCommand;
@@ -107,7 +107,7 @@ class AddonsOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) AddonsOptions
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
 {
     public:
          AddonsOptions();
