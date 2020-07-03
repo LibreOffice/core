@@ -54,7 +54,6 @@ static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window c
         case WindowType::METRICBOX:
         case WindowType::COMBOBOX:       return new VCLXComboBox;
         case WindowType::SPINFIELD:
-        case WindowType::NUMERICFIELD:
         case WindowType::CURRENCYFIELD:  return new VCLXNumericField;
         case WindowType::DATEFIELD:      return new VCLXDateField;
         case WindowType::MULTILINEEDIT:
@@ -69,9 +68,7 @@ static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window c
         case WindowType::FIXEDTEXT:      return new VCLXFixedText;
         case WindowType::MULTILISTBOX:
         case WindowType::LISTBOX:        return new VCLXListBox;
-        case WindowType::LONGCURRENCYFIELD:  return new VCLXCurrencyField;
         case WindowType::DIALOG:
-        case WindowType::MODALDIALOG:
         case WindowType::TABDIALOG:
         case WindowType::BUTTONDIALOG:
         case WindowType::MODELESSDIALOG: return new VCLXDialog;

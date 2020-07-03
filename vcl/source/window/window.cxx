@@ -1021,7 +1021,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         {
             case WindowType::DIALOG:
             case WindowType::TABDIALOG:
-            case WindowType::MODALDIALOG:
             case WindowType::MODELESSDIALOG:
             case WindowType::MESSBOX:
             case WindowType::INFOBOX:
@@ -3306,7 +3305,6 @@ const char* windowTypeName(WindowType nWindowType)
         case WindowType::FLOATINGWINDOW:            return "floatingwindow";
         case WindowType::DIALOG:                    return "dialog";
         case WindowType::MODELESSDIALOG:            return "modelessdialog";
-        case WindowType::MODALDIALOG:               return "modaldialog";
         case WindowType::CONTROL:                   return "control";
         case WindowType::PUSHBUTTON:                return "pushbutton";
         case WindowType::OKBUTTON:                  return "okbutton";
@@ -3335,7 +3333,6 @@ const char* windowTypeName(WindowType nWindowType)
         case WindowType::SPLITWINDOW:               return "splitwindow";
         case WindowType::SPINFIELD:                 return "spinfield";
         case WindowType::PATTERNFIELD:              return "patternfield";
-        case WindowType::NUMERICFIELD:              return "numericfield";
         case WindowType::METRICFIELD:               return "metricfield";
         case WindowType::FORMATTEDFIELD:            return "formattedfield";
         case WindowType::CURRENCYFIELD:             return "currencyfield";
@@ -3347,7 +3344,6 @@ const char* windowTypeName(WindowType nWindowType)
         case WindowType::CURRENCYBOX:               return "currencybox";
         case WindowType::DATEBOX:                   return "datebox";
         case WindowType::TIMEBOX:                   return "timebox";
-        case WindowType::LONGCURRENCYFIELD:         return "longcurrencyfield";
         case WindowType::LONGCURRENCYBOX:           return "longcurrencybox";
         case WindowType::SCROLLWINDOW:              return "scrollwindow";
         case WindowType::TOOLBOX:                   return "toolbox";

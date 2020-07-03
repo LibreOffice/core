@@ -241,7 +241,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::QUERYBOX: nRole = accessibility::AccessibleRole::ALERT; break;
 
         case WindowType::MODELESSDIALOG:
-        case WindowType::MODALDIALOG:
         case WindowType::TABDIALOG:
         case WindowType::BUTTONDIALOG:
         case WindowType::DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
@@ -300,10 +299,8 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::DATEFIELD:
         case WindowType::TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
 
-        case WindowType::NUMERICFIELD:
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
-        case WindowType::LONGCURRENCYFIELD:
         case WindowType::SPINFIELD:
         case WindowType::FORMATTEDFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
@@ -391,10 +388,8 @@ OUString Window::getDefaultAccessibleName() const
     {
         case WindowType::MULTILINEEDIT:
         case WindowType::PATTERNFIELD:
-        case WindowType::NUMERICFIELD:
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
-        case WindowType::LONGCURRENCYFIELD:
         case WindowType::CALCINPUTLINE:
         case WindowType::EDIT:
 
