@@ -223,7 +223,7 @@ public:
     void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
     void            MoveParagraphs( long nDiff );
 
-    const SfxItemSet&   GetEmptyItemSet();
+    const SfxItemSet& GetEmptyItemSet() const;
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
     void                RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0 );
