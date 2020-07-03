@@ -31,7 +31,7 @@ struct NSSProfile {
     /** the name of the NSS profile
 
         Normally the name will reflect the name of the Mozilla profile. But the
-        profile list also contains the following special enties: MANUAL and
+        profile list also contains the following special entries: MANUAL and
         MOZILLA_CERTIFICATE_FOLDER.
         These will have a product type of MozillaProductType::Default and might
         have an empty path, if that value is not available.
