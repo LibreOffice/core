@@ -621,30 +621,21 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      OUString  prefix;
      sal_Int16        numType = -1; // type of formatting from style::NumberingType (roman, arabic, etc)
      OUString  suffix;
-     sal_Int32        number = -12345; // the number that needs to be formatted.
+     sal_Int32        number = -1; // the number that needs to be formatted.
 
 //     int nProperties = aProperties.getLength();
 //     int last        = nProperties-1;
 
-     try {
-        getPropertyByName(aProperties, "Prefix", false)      >>=prefix;
-     } catch (Exception&) {
-        //prefix _must_ be empty here!
-     }
-     try {
-        getPropertyByName(aProperties, "Suffix", false)      >>=suffix;
-     } catch (Exception&) {
-        //suffix _must_ be empty here!
-     }
-     try {
-        getPropertyByName(aProperties, "NumberingType", true)   >>=numType;
-     } catch (Exception& ) {
-        numType = -1;
-     }
-     try {
-        getPropertyByName(aProperties, "Value", true)       >>=number;
-     } catch (Exception& ) {
-        number = -1;
+     for (auto const & prop : aProperties)
+     {
+         if (prop.Name == "Prefix")
+             prop.Value >>= prefix;
+         else if (prop.Name == "Suffix")
+             prop.Value >>= suffix;
+         else if (prop.Name == "NumberingType")
+             prop.Value >>= numType;
+         else if (prop.Name == "Value")
+             prop.Value >>= number;
      }
 
      if( number <= 0 )
