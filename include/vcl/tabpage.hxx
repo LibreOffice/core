@@ -42,6 +42,7 @@ public:
 
     void Scroll(long nHorzScroll, long nVertScroll, ScrollFlags nFlags = ScrollFlags::NONE) override;
     Point GetStartPos() { return mStartPos; }
+    Size CalcSizeChildren();
 };
 
 class VCL_DLLPUBLIC TabPage
