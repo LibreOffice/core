@@ -26,17 +26,18 @@ namespace svt
 {
 
     //= ComboBoxControl
-    ComboBoxControl::ComboBoxControl(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "svt/ui/combocontrol.ui", "ComboControl")
+    ComboBoxControl::ComboBoxControl(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/combocontrol.ui", "ComboControl")
         , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     {
+        InitControlBase(m_xWidget.get());
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
     }
 
     void ComboBoxControl::dispose()
     {
         m_xWidget.reset();
-        InterimItemWindow::dispose();
+        ControlBase::dispose();
     }
 
     //= ComboBoxCellController
@@ -103,17 +104,18 @@ namespace svt
     }
 
     //= ListBoxControl
-    ListBoxControl::ListBoxControl(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "svt/ui/listcontrol.ui", "ListControl")
+    ListBoxControl::ListBoxControl(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/listcontrol.ui", "ListControl")
         , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
     {
+        InitControlBase(m_xWidget.get());
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
     }
 
     void ListBoxControl::dispose()
     {
         m_xWidget.reset();
-        InterimItemWindow::dispose();
+        ControlBase::dispose();
     }
 
     //= ListBoxCellController
@@ -345,34 +347,66 @@ namespace svt
         m_aModifyHdl.Call(nullptr);
     }
 
-    EditControlBase::EditControlBase(BrowserDataWin* pParent)
-        : InterimItemWindow(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
+    ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID)
+        : InterimItemWindow(pParent, rUIXMLDescription, rID)
     {
     }
 
-    void EditControlBase::init(weld::Entry* pEntry)
+    bool ControlBase::ControlHasFocus() const
     {
+        if (!m_pWidget)
+            return false;
+        return m_pWidget->has_focus();
+    }
+
+    void ControlBase::dispose()
+    {
+        m_pWidget = nullptr;
+        InterimItemWindow::dispose();
+    }
+
+    void ControlBase::GetFocus()
+    {
+        if (m_pWidget)
+            m_pWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    void ControlBase::InitControlBase(weld::Widget* pWidget)
+    {
+        m_pWidget = pWidget;
+    }
+
+    EditControlBase::EditControlBase(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
+    {
+    }
+
+    void EditControlBase::InitEditControlBase(weld::Entry* pEntry)
+    {
+        InitControlBase(pEntry);
         m_pEntry = pEntry;
+        m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
         m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
     }
 
     IMPL_LINK(EditControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     {
-        return ChildKeyInput(rKEvt);
+        return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
     }
 
     void EditControlBase::dispose()
     {
         m_pEntry = nullptr;
-        InterimItemWindow::dispose();
+        ControlBase::dispose();
     }
 
     EditControl::EditControl(BrowserDataWin* pParent)
         : EditControlBase(pParent)
         , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
-        init(m_xWidget.get());
+        InitEditControlBase(m_xWidget.get());
     }
 
     void EditControl::dispose()
@@ -381,19 +415,60 @@ namespace svt
         EditControlBase::dispose();
     }
 
-    FormattedControl::FormattedControl(BrowserDataWin* pParent)
+    FormattedControlBase::FormattedControlBase(BrowserDataWin* pParent, bool bSpinVariant)
         : EditControlBase(pParent)
+        , m_bSpinVariant(bSpinVariant)
         , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xEntryFormatter(new weld::EntryFormatter(*m_xEntry))
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("spinbutton"))
     {
-        init(m_xEntry.get());
     }
 
-    void FormattedControl::dispose()
+    void FormattedControlBase::InitFormattedControlBase()
+    {
+        if (m_bSpinVariant)
+            m_xSpinButton->SetFormatter(m_xEntryFormatter.release());
+        InitEditControlBase(m_bSpinVariant ? m_xSpinButton.get() : m_xEntry.get());
+    }
+
+    void FormattedControlBase::connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        get_formatter().connect_changed(rLink);
+    }
+
+    weld::EntryFormatter& FormattedControlBase::get_formatter()
+    {
+        if (m_bSpinVariant)
+            return static_cast<weld::EntryFormatter&>(m_xSpinButton->GetFormatter());
+        else
+            return *m_xEntryFormatter;
+    }
+
+    void FormattedControlBase::dispose()
     {
         m_xEntryFormatter.reset();
+        m_xSpinButton.reset();
         m_xEntry.reset();
         EditControlBase::dispose();
+    }
+
+    FormattedControl::FormattedControl(BrowserDataWin* pParent, bool bSpinVariant)
+        : FormattedControlBase(pParent, bSpinVariant)
+    {
+        if (bSpinVariant)
+            m_xEntryFormatter.reset(new weld::EntryFormatter(*m_xSpinButton));
+        else
+            m_xEntryFormatter.reset(new weld::EntryFormatter(*m_xEntry));
+        InitFormattedControlBase();
+    }
+
+    DoubleNumericControl::DoubleNumericControl(BrowserDataWin* pParent, bool bSpinVariant)
+        : FormattedControlBase(pParent, bSpinVariant)
+    {
+        if (bSpinVariant)
+            m_xEntryFormatter.reset(new weld::DoubleNumericEntry(*m_xSpinButton));
+        else
+            m_xEntryFormatter.reset(new weld::DoubleNumericEntry(*m_xEntry));
+        InitFormattedControlBase();
     }
 
     EditCellController::EditCellController(EditControlBase* pEdit)
@@ -506,7 +581,7 @@ namespace svt
     }
 
     //= FormattedFieldCellController
-    FormattedFieldCellController::FormattedFieldCellController( FormattedControl* _pFormatted )
+    FormattedFieldCellController::FormattedFieldCellController( FormattedControlBase* _pFormatted )
         : EditCellController(_pFormatted)
     {
     }
