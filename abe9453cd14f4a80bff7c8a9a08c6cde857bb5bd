@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d380904_82c9b92f",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-03T11:06:33Z",
+      "side": 1,
+      "message": "No idea, if some implementation could assign values \u003e sal_Bool to the enum, but better be safe then sorry.",
+      "revId": "abe9453cd14f4a80bff7c8a9a08c6cde857bb5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f16460_237b805e",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-03T11:06:33Z",
+      "side": 1,
+      "message": "I had implemented this as:\n\n+        [[fallthrough]];\n+    default:\n\nbut as this would break everyone external, if someone added an other result, I skipped that.",
+      "revId": "abe9453cd14f4a80bff7c8a9a08c6cde857bb5bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
