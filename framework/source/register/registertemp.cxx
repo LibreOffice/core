@@ -51,8 +51,11 @@
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarmodemenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
+#include <jobs/helponstartup.hxx>
+#include <dispatch/systemexec.hxx>
+#include <jobs/shelljob.hxx>
 
-COMPONENTGETFACTORY ( fwl,
+COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::MediaTypeDetectionHelper                )
                         IFFACTORY( ::framework::MailToDispatcher                        )   else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
@@ -71,7 +74,10 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
-                        IFFACTORY( ::framework::Oxt_Handler                             )
+                        IFFACTORY( ::framework::Oxt_Handler                             )   else
+                        IFFACTORY( ::framework::HelpOnStartup       ) else
+                        IFFACTORY( ::framework::SystemExec          ) else
+                        IFFACTORY( ::framework::ShellJob            )
                     )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

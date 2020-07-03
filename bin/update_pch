@@ -77,7 +77,6 @@ DEFAULTS = \
     'editeng.editeng'                   : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #  13.0
     'forms.frm'                         : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  14.2
     'framework.fwk'                     : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  14.8
-    'framework.fwl'                     : ( 5, EXCLUDE, INCLUDE, INCLUDE), #   5.1
     'hwpfilter.hwp'                     : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   6.0
     'lotuswordpro.lwpft'                : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  11.6
     'oox.oox'                           : ( 6, EXCLUDE, EXCLUDE, INCLUDE), #  28.2
