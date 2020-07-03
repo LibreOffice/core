@@ -174,8 +174,6 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
             case WindowType::CURRENCYFIELD:
             case WindowType::DATEFIELD:
             case WindowType::TIMEFIELD:
-            case WindowType::LONGCURRENCYFIELD:
-            case WindowType::NUMERICFIELD:
             case WindowType::SPINFIELD:
             case WindowType::FORMATTEDFIELD:
                 aControl = ControlType::Spinbox;

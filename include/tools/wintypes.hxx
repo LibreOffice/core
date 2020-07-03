@@ -37,8 +37,7 @@ enum class WindowType : sal_uInt16
     CONTAINER            ,
     FLOATINGWINDOW       ,
     DIALOG               ,
-    MODELESSDIALOG       , // 10 (314)
-    MODALDIALOG          ,
+    MODELESSDIALOG       ,
     CONTROL              ,
     PUSHBUTTON           ,
     OKBUTTON             ,
@@ -47,7 +46,7 @@ enum class WindowType : sal_uInt16
     IMAGEBUTTON          ,
     MENUBUTTON           ,
     MOREBUTTON           ,
-    SPINBUTTON           , // 20 (324)
+    SPINBUTTON           ,
     RADIOBUTTON          ,
     CHECKBOX             ,
     TRISTATEBOX          ,
@@ -57,7 +56,7 @@ enum class WindowType : sal_uInt16
     LISTBOX              ,
     MULTILISTBOX         ,
     FIXEDTEXT            ,
-    FIXEDLINE            , // 30 (334)
+    FIXEDLINE            ,
     FIXEDBITMAP          ,
     FIXEDIMAGE           ,
     GROUPBOX             ,
@@ -67,7 +66,6 @@ enum class WindowType : sal_uInt16
     SPLITWINDOW          ,
     SPINFIELD            ,
     PATTERNFIELD         ,
-    NUMERICFIELD         , // 40 (344)
     METRICFIELD          ,
     FORMATTEDFIELD       ,
     CURRENCYFIELD        ,
@@ -78,8 +76,7 @@ enum class WindowType : sal_uInt16
     METRICBOX            ,
     CURRENCYBOX          ,
     DATEBOX              ,
-    TIMEBOX              , // 50 (354)
-    LONGCURRENCYFIELD    ,
+    TIMEBOX              ,
     LONGCURRENCYBOX      ,
     SCROLLWINDOW         ,
     TOOLBOX              ,
@@ -88,7 +85,7 @@ enum class WindowType : sal_uInt16
     TABPAGE              ,
     TABCONTROL           ,
     TABDIALOG            ,
-    BORDERWINDOW         , // 60 (364)
+    BORDERWINDOW         ,
     BUTTONDIALOG         ,
     SYSTEMCHILDWINDOW    ,
     SLIDER               ,
@@ -98,7 +95,7 @@ enum class WindowType : sal_uInt16
     INTROWINDOW          ,
     LISTBOXWINDOW        ,
     DOCKINGAREA          ,
-    RULER                , // 70 (374)
+    RULER                ,
     CALCINPUTLINE        ,
     HEADERBAR            ,
     VERTICALTABCONTROL   ,

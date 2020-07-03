@@ -588,7 +588,6 @@ std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, Wi
     if  (   bMessBox
         ||  ( nCompType == WindowType::DIALOG )
         ||  ( nCompType == WindowType::MODELESSDIALOG )
-        ||  ( nCompType == WindowType::MODALDIALOG )
         ||  ( nCompType == WindowType::DOCKINGWINDOW )
         ||  ( nCompType == WindowType::TABDIALOG )
         ||  ( nCompType == WindowType::BUTTONDIALOG )
@@ -729,7 +728,6 @@ ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("messbox"),            WindowType::MESSBOX },
     { OUStringLiteral("metricbox"),          WindowType::METRICBOX },
     { OUStringLiteral("metricfield"),        WindowType::METRICFIELD },
-    { OUStringLiteral("modaldialog"),        WindowType::MODALDIALOG },
     { OUStringLiteral("modelessdialog"),     WindowType::MODELESSDIALOG },
     { OUStringLiteral("morebutton"),         WindowType::MOREBUTTON },
     { OUStringLiteral("multilineedit"),      WindowType::MULTILINEEDIT },
@@ -1412,7 +1410,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         // some time later css::uno::Exception...
         bool bException = true;
         if  (   ( nType == WindowType::DIALOG )
-            ||  ( nType == WindowType::MODALDIALOG )
             ||  ( nType == WindowType::MODELESSDIALOG )
             ||  ( nType == WindowType::MESSBOX )
             ||  ( nType == WindowType::INFOBOX )
@@ -1549,7 +1546,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow.get())) );
             break;
             case WindowType::DIALOG:
-            case WindowType::MODALDIALOG:
             case WindowType::MODELESSDIALOG:
             {
                 // Modal/Modeless only via Show/Execute

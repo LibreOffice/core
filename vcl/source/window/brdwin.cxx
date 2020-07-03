@@ -467,8 +467,6 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WindowType::CURRENCYFIELD:
                     case WindowType::DATEFIELD:
                     case WindowType::TIMEFIELD:
-                    case WindowType::LONGCURRENCYFIELD:
-                    case WindowType::NUMERICFIELD:
                     case WindowType::SPINFIELD:
                     case WindowType::FORMATTEDFIELD:
                     case WindowType::CALCINPUTLINE:
@@ -609,8 +607,6 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
             case WindowType::CURRENCYFIELD:
             case WindowType::DATEFIELD:
             case WindowType::TIMEFIELD:
-            case WindowType::LONGCURRENCYFIELD:
-            case WindowType::NUMERICFIELD:
             case WindowType::SPINFIELD:
             case WindowType::FORMATTEDFIELD:
             case WindowType::CALCINPUTLINE:
