@@ -1002,10 +1002,15 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         mpOutputDevice->SetAntialiasing(AntialiasingFlags::NONE);
         mpOutputDevice->Erase();
         process(rCandidate);
-        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
-                                     static_cast<long>(std::floor(aRange.getMinY())),
-                                     static_cast<long>(std::ceil(aRange.getMaxX())),
-                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+
+        // Limit the bitmap size to the visible area.
+        basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
+        basegfx::B2DRange bitmapRange(aRange);
+        bitmapRange.intersect(viewRange);
+        const tools::Rectangle aRect(static_cast<long>(std::floor(bitmapRange.getMinX())),
+                                     static_cast<long>(std::floor(bitmapRange.getMinY())),
+                                     static_cast<long>(std::ceil(bitmapRange.getMaxX())),
+                                     static_cast<long>(std::ceil(bitmapRange.getMaxY())));
         BitmapEx bmpEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
         mpOutputDevice->SetAntialiasing(aPrevAA);
 
@@ -1053,10 +1058,14 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         // because it would result in poor quality in areas not affected by the effect
         process(rCandidate);
 
-        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
-                                     static_cast<long>(std::floor(aRange.getMinY())),
-                                     static_cast<long>(std::ceil(aRange.getMaxX())),
-                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+        // Limit the bitmap size to the visible area.
+        basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
+        basegfx::B2DRange bitmapRange(aRange);
+        bitmapRange.intersect(viewRange);
+        const tools::Rectangle aRect(static_cast<long>(std::floor(bitmapRange.getMinX())),
+                                     static_cast<long>(std::floor(bitmapRange.getMinY())),
+                                     static_cast<long>(std::ceil(bitmapRange.getMaxX())),
+                                     static_cast<long>(std::ceil(bitmapRange.getMaxY())));
         BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
         AlphaMask aMask = bitmap.GetAlpha();
