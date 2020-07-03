@@ -54,9 +54,6 @@ enum RestartReason {
     // "For the extension to work properly,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_EXTENSION_INSTALL,
-    // For the OpenGL changes to take effect,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_OPENGL,
     // For the Skia changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_SKIA,
