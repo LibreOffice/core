@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3a4228dd_33afe4ab",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-03T12:13:16Z",
+      "side": 0,
+      "message": "Oh sorry! I was thinking of something unrelated it seems, when I reviewed this line. Of course this is not a bool, it is a reference to an object (map), so rDefinedMap would do.",
+      "parentUuid": "f45c2923_8f0ed66e",
+      "range": {
+        "startLine": 115,
+        "startChar": 59,
+        "endLine": 115,
+        "endChar": 61
+      },
+      "revId": "d86acef1f1a980d174bbfefef5c9ce60bb1bdfcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0ef6f08_a863a176",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
