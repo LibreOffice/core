@@ -140,7 +140,6 @@ class EDITENG_DLLPUBLIC EditEngine
 {
     friend class EditView;
     friend class ImpEditView;
-    friend class EditDbg;
     friend class Outliner;
     friend class TextChainingUtils;
 
@@ -199,7 +198,7 @@ public:
                     EditEngine( SfxItemPool* pItemPool );
     virtual         ~EditEngine();
 
-    const SfxItemSet&   GetEmptyItemSet();
+    const SfxItemSet& GetEmptyItemSet() const;
 
     void            SetDefTab( sal_uInt16 nDefTab );
 
@@ -631,6 +630,10 @@ public:
 
     void SetLOKSpecialPaperSize(const Size& rSize);
     const Size& GetLOKSpecialPaperSize() const;
+
+#ifdef DBG_UTIL
+    static void DumpData(const EditEngine* pEE, bool bInfoBox);
+#endif
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX

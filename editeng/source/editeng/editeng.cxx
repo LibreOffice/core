@@ -32,7 +32,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include "editdbg.hxx"
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/flditem.hxx>
@@ -191,7 +190,7 @@ bool EditEngine::IsForceAutoColor() const
     return pImpEditEngine->IsForceAutoColor();
 }
 
-const SfxItemSet& EditEngine::GetEmptyItemSet()
+const SfxItemSet& EditEngine::GetEmptyItemSet() const
 {
     return pImpEditEngine->GetEmptyItemSet();
 }
@@ -228,7 +227,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
 {
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
-        EditDbg::ShowEditEngineData( this, false );
+        DumpData(this, false);
 #endif
 
     // Align to the pixel boundary, so that it becomes exactly the same
@@ -1023,7 +1022,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     {
         switch ( nCode )
         {
-           #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
+#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
             case KEY_F1:
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
@@ -1067,13 +1066,11 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             case KEY_F12:
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-                {
-                    EditDbg::ShowEditEngineData( this );
-                }
+                    DumpData(this, true);
                 bDone = false;
             }
             break;
-           #endif
+#endif
             case KEY_UP:
             case KEY_DOWN:
             case KEY_LEFT:

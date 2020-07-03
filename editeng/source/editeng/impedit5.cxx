@@ -403,7 +403,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
     DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
     DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
-    SfxItemSet aAttribs( const_cast<ImpEditEngine*>(this)->GetEmptyItemSet() );
+    SfxItemSet aAttribs(GetEmptyItemSet());
 
     if ( pNode )
     {
