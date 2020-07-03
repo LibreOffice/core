@@ -1905,16 +1905,16 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
     bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
 
-    Formatter* pEditFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
-    pEditFormatter->SetMinValue(nMin);
-    pEditFormatter->SetMaxValue(nMax);
-    pEditFormatter->SetSpinSize(nStep);
-    pEditFormatter->SetStrictFormat(bStrict);
+    Formatter& rEditFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+    rEditFormatter.SetMinValue(nMin);
+    rEditFormatter.SetMaxValue(nMax);
+    rEditFormatter.SetSpinSize(nStep);
+    rEditFormatter.SetStrictFormat(bStrict);
 
-    Formatter* pPaintFormatter = static_cast<DoubleNumericField*>(m_pPainter.get())->GetFormatter();
-    pPaintFormatter->SetMinValue(nMin);
-    pPaintFormatter->SetMaxValue(nMax);
-    pPaintFormatter->SetStrictFormat(bStrict);
+    Formatter& rPaintFormatter = static_cast<DoubleNumericField*>(m_pPainter.get())->GetFormatter();
+    rPaintFormatter.SetMinValue(nMin);
+    rPaintFormatter.SetMaxValue(nMax);
+    rPaintFormatter.SetStrictFormat(bStrict);
 
     // give a formatter to the field and the painter;
     // test first if I can get from the service behind a connection
@@ -1932,20 +1932,19 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     }
     if ( nullptr == pFormatterUsed )
     {   // the cursor didn't lead to success -> standard
-        pFormatterUsed = pEditFormatter->StandardFormatter();
+        pFormatterUsed = rEditFormatter.StandardFormatter();
         DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
     }
-    pEditFormatter->SetFormatter( pFormatterUsed );
-    pPaintFormatter->SetFormatter( pFormatterUsed );
+    rEditFormatter.SetFormatter( pFormatterUsed );
+    rPaintFormatter.SetFormatter( pFormatterUsed );
 
     // and then generate a format which has the desired length after the decimal point, etc.
     LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
 
-    pEditFormatter->SetFormat( sFormatString, aAppLanguage );
-    pPaintFormatter->SetFormat( sFormatString, aAppLanguage );
+    rEditFormatter.SetFormat( sFormatString, aAppLanguage );
+    rPaintFormatter.SetFormat( sFormatString, aAppLanguage );
 }
-
 
 VclPtr<SpinField> DbNumericField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
 {
@@ -1966,7 +1965,7 @@ namespace
                 double fValue = _rControl.GetValue( _rxField, _rxFormatter );
                 if ( !_rxField->wasNull() )
                 {
-                    _rField.GetFormatter()->SetValue( fValue );
+                    _rField.GetFormatter().SetValue( fValue );
                     sValue = _rField.GetText();
                 }
             }
@@ -1996,8 +1995,8 @@ void DbNumericField::updateFromModel( Reference< XPropertySet > _rxModel )
     double dValue = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
     {
-        Formatter* pFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
-        pFormatter->SetValue(dValue);
+        Formatter& rFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+        rFormatter.SetValue(dValue);
     }
     else
         m_pWindow->SetText( OUString() );
@@ -2010,8 +2009,8 @@ bool DbNumericField::commitControl()
 
     if (!aText.isEmpty())   // not empty
     {
-        Formatter* pFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
-        double fValue = pFormatter->GetValue();
+        Formatter& rFormatter = static_cast<DoubleNumericField*>(m_pWindow.get())->GetFormatter();
+        double fValue = rFormatter.GetValue();
         aVal <<= fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);

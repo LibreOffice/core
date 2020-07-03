@@ -448,7 +448,6 @@ void Formatter::ImplSetTextImpl(const OUString& rNew, Selection const * pNewSel)
 
 void Formatter::ImplSetFormatKey(sal_uLong nFormatKey)
 {
-
     m_nFormatKey = nFormatKey;
     bool bNeedFormatter = (m_pFormatter == nullptr) && (nFormatKey != 0);
     if (bNeedFormatter)
@@ -1020,8 +1019,8 @@ DoubleNumericField::~DoubleNumericField() = default;
 void DoubleNumericField::ResetConformanceTester()
 {
     // the thousands and the decimal separator are language dependent
-    Formatter* pFormatter = GetFormatter();
-    const SvNumberformat* pFormatEntry = pFormatter->GetOrCreateFormatter()->GetEntry(pFormatter->GetFormatKey());
+    Formatter& rFormatter = GetFormatter();
+    const SvNumberformat* pFormatEntry = rFormatter.GetOrCreateFormatter()->GetEntry(rFormatter.GetFormatKey());
 
     sal_Unicode cSeparatorThousand = ',';
     sal_Unicode cSeparatorDecimal = '.';
@@ -1153,21 +1152,21 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
 
 void FormattedField::SetText(const OUString& rStr)
 {
-    GetFormatter()->SetFieldText(rStr, Selection(0, 0));
+    GetFormatter().SetFieldText(rStr, Selection(0, 0));
 }
 
 void FormattedField::SetText(const OUString& rStr, const Selection& rNewSelection)
 {
-    GetFormatter()->SetFieldText(rStr, rNewSelection);
+    GetFormatter().SetFieldText(rStr, rNewSelection);
     SetSelection(rNewSelection);
 }
 
 bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
-        GetFormatter()->SetDecimalDigits(rValue.toInt32());
+        GetFormatter().SetDecimalDigits(rValue.toInt32());
     else if (rKey == "wrap")
-        GetFormatter()->SetWrapOnLimits(toBool(rValue));
+        GetFormatter().SetWrapOnLimits(toBool(rValue));
     else
         return SpinField::set_property(rKey, rValue);
     return true;
@@ -1175,19 +1174,19 @@ bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
 
 void FormattedField::Up()
 {
-    Formatter* pFormatter = GetFormatter();
-    auto nScale = weld::SpinButton::Power10(pFormatter->GetDecimalDigits());
+    Formatter& rFormatter = GetFormatter();
+    auto nScale = weld::SpinButton::Power10(rFormatter.GetDecimalDigits());
 
-    sal_Int64 nValue = std::round(pFormatter->GetValue() * nScale);
-    sal_Int64 nSpinSize = std::round(pFormatter->GetSpinSize() * nScale);
-    sal_Int64 nRemainder = pFormatter->GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
+    sal_Int64 nValue = std::round(rFormatter.GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(rFormatter.GetSpinSize() * nScale);
+    sal_Int64 nRemainder = rFormatter.GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue + nSpinSize - nRemainder;
     else
         nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue - nRemainder;
 
     // setValue handles under- and overflows (min/max) automatically
-    pFormatter->SetValue(static_cast<double>(nValue) / nScale);
+    rFormatter.SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -1196,19 +1195,19 @@ void FormattedField::Up()
 
 void FormattedField::Down()
 {
-    Formatter* pFormatter = GetFormatter();
-    auto nScale = weld::SpinButton::Power10(pFormatter->GetDecimalDigits());
+    Formatter& rFormatter = GetFormatter();
+    auto nScale = weld::SpinButton::Power10(rFormatter.GetDecimalDigits());
 
-    sal_Int64 nValue = std::round(pFormatter->GetValue() * nScale);
-    sal_Int64 nSpinSize = std::round(pFormatter->GetSpinSize() * nScale);
-    sal_Int64 nRemainder = pFormatter->GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
+    sal_Int64 nValue = std::round(rFormatter.GetValue() * nScale);
+    sal_Int64 nSpinSize = std::round(rFormatter.GetSpinSize() * nScale);
+    sal_Int64 nRemainder = rFormatter.GetDisableRemainderFactor() ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nRemainder;
     else
         nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nSpinSize - nRemainder;
 
     // setValue handles under- and overflows (min/max) automatically
-    pFormatter->SetValue(static_cast<double>(nValue) / nScale);
+    rFormatter.SetValue(static_cast<double>(nValue) / nScale);
     SetModifyFlag();
     Modify();
 
@@ -1217,10 +1216,10 @@ void FormattedField::Down()
 
 void FormattedField::First()
 {
-    Formatter* pFormatter = GetFormatter();
-    if (pFormatter->HasMinValue())
+    Formatter& rFormatter = GetFormatter();
+    if (rFormatter.HasMinValue())
     {
-        pFormatter->SetValue(pFormatter->GetMinValue());
+        rFormatter.SetValue(rFormatter.GetMinValue());
         SetModifyFlag();
         Modify();
     }
@@ -1230,10 +1229,10 @@ void FormattedField::First()
 
 void FormattedField::Last()
 {
-    Formatter* pFormatter = GetFormatter();
-    if (pFormatter->HasMaxValue())
+    Formatter& rFormatter = GetFormatter();
+    if (rFormatter.HasMaxValue())
     {
-        pFormatter->SetValue(pFormatter->GetMaxValue());
+        rFormatter.SetValue(rFormatter.GetMaxValue());
         SetModifyFlag();
         Modify();
     }
@@ -1243,13 +1242,13 @@ void FormattedField::Last()
 
 void FormattedField::Modify()
 {
-    GetFormatter()->Modify();
+    GetFormatter().Modify();
 }
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
-        GetFormatter()->SetLastSelection(GetSelection());
+        GetFormatter().SetLastSelection(GetSelection());
     return SpinField::PreNotify(rNEvt);
 }
 
@@ -1266,8 +1265,8 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             {
-                Formatter* pFormatter = GetFormatter();
-                if (!nMod && pFormatter->GetOrCreateFormatter()->IsTextFormat(pFormatter->GetFormatKey()))
+                Formatter& rFormatter = GetFormatter();
+                if (!nMod && rFormatter.GetOrCreateFormatter()->IsTextFormat(rFormatter.GetFormatKey()))
                 {
                     // the base class would translate this into calls to Up/Down/First/Last,
                     // but we don't want this if we are text-formatted
@@ -1283,9 +1282,9 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         if (pCommand->GetCommand() == CommandEventId::Wheel)
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            Formatter* pFormatter = GetFormatter();
+            Formatter& rFormatter = GetFormatter();
             if ((pData->GetMode() == CommandWheelMode::SCROLL) &&
-                pFormatter->GetOrCreateFormatter()->IsTextFormat(pFormatter->GetFormatKey()))
+                rFormatter.GetOrCreateFormatter()->IsTextFormat(rFormatter.GetFormatKey()))
             {
                 // same as above : prevent the base class from doing Up/Down-calls
                 // (normally I should put this test into the Up/Down methods itself, shouldn't I ?)
@@ -1296,16 +1295,16 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
     }
 
     if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
-        GetFormatter()->EntryLostFocus();
+        GetFormatter().EntryLostFocus();
 
     return SpinField::EventNotify( rNEvt );
 }
 
-Formatter* FormattedField::GetFormatter()
+Formatter& FormattedField::GetFormatter()
 {
     if (!m_xFormatter)
         m_xFormatter.reset(new FieldFormatter(*this));
-    return m_xFormatter.get();
+    return *m_xFormatter;
 }
 
 void FormattedField::SetFormatter(Formatter* pFormatter)
@@ -1318,13 +1317,13 @@ void FormattedField::SetValueFromString(const OUString& rStr)
 {
     sal_Int32 nEnd;
     rtl_math_ConversionStatus eStatus;
-    Formatter* pFormatter = GetFormatter();
-    double fValue = ::rtl::math::stringToDouble(rStr, '.', pFormatter->GetDecimalDigits(), &eStatus, &nEnd );
+    Formatter& rFormatter = GetFormatter();
+    double fValue = ::rtl::math::stringToDouble(rStr, '.', rFormatter.GetDecimalDigits(), &eStatus, &nEnd );
 
     if (eStatus == rtl_math_ConversionStatus_Ok &&
         nEnd == rStr.getLength())
     {
-        pFormatter->SetValue(fValue);
+        rFormatter.SetValue(fValue);
         SetModifyFlag();
         Modify();
 
@@ -1340,10 +1339,10 @@ void FormattedField::SetValueFromString(const OUString& rStr)
 void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SpinField::DumpAsPropertyTree(rJsonWriter);
-    Formatter* pFormatter = GetFormatter();
-    rJsonWriter.put("min", pFormatter->GetMinValue());
-    rJsonWriter.put("max", pFormatter->GetMaxValue());
-    rJsonWriter.put("value", pFormatter->GetValue());
+    Formatter& rFormatter = GetFormatter();
+    rJsonWriter.put("min", rFormatter.GetMinValue());
+    rJsonWriter.put("max", rFormatter.GetMaxValue());
+    rJsonWriter.put("value", rFormatter.GetValue());
 }
 
 FactoryFunction FormattedField::GetUITestFactory() const
