@@ -41,7 +41,7 @@ $(eval $(call gb_Library_use_libraries,dbu,\
     dba \
     dbtools \
     editeng \
-    fwe \
+    fwk \
     sal \
     salhelper \
 	i18nlangtag \

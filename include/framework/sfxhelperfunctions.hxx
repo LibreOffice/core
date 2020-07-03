@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 #define INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
@@ -57,31 +57,31 @@ typedef bool ( *pfunc_isDockingWindowVisible)(
 
 namespace framework
 {
-FWE_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
-FWE_DLLPUBLIC svt::ToolboxController* CreateToolBoxController(
+FWK_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
+FWK_DLLPUBLIC svt::ToolboxController* CreateToolBoxController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     unsigned short nID,
     const OUString& aCommandURL );
 
-FWE_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
-FWE_DLLPUBLIC svt::StatusbarController* CreateStatusBarController(
+FWK_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
+FWK_DLLPUBLIC svt::StatusbarController* CreateStatusBarController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
      const OUString& aCommandURL );
 
-FWE_DLLPUBLIC pfunc_getRefreshToolbars SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
-FWE_DLLPUBLIC void RefreshToolbars(
+FWK_DLLPUBLIC pfunc_getRefreshToolbars SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
+FWK_DLLPUBLIC void RefreshToolbars(
      css::uno::Reference< css::frame::XFrame > const & rFrame );
 
-FWE_DLLPUBLIC pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
-FWE_DLLPUBLIC void CreateDockingWindow(
+FWK_DLLPUBLIC pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
+FWK_DLLPUBLIC void CreateDockingWindow(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 
-FWE_DLLPUBLIC pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
-FWE_DLLPUBLIC bool IsDockingWindowVisible(
+FWK_DLLPUBLIC pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
+FWK_DLLPUBLIC bool IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& rResourceURL );
 }

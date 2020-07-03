@@ -33,7 +33,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
@@ -50,7 +50,7 @@ namespace framework{
 
     @threadsafe
  */
-class FWE_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
+class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
                   , public  ::cppu::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,

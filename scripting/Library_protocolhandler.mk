@@ -28,7 +28,7 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	fwe \
+	fwk \
 	sal \
 	sfx \
 	tl \

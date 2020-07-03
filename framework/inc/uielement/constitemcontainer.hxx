@@ -32,14 +32,14 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
-#include <framework/fwidllapi.h>
+#include <framework/fwkdllapi.h>
 
 namespace framework
 {
 
 class RootItemContainer;
 class ItemContainer;
-class UNLESS_MERGELIBS(FWI_DLLPUBLIC) ConstItemContainer final : public ::cppu::WeakImplHelper<
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
                                                     css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,

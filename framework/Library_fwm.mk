@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_libraries,fwm,\
     comphelper \
     cppu \
     cppuhelper \
-    fwi \
+    fwk \
     sal \
     svl \
     svt \

@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 
 #define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER   "com.sun.star.comp.ui.RootActionTriggerContainer"
 

@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <framework/fwedllapi.h>
+#include <framework/fwkdllapi.h>
 #include <osl/conditn.hxx>
 
 namespace com::sun::star::lang
@@ -53,7 +53,7 @@ namespace framework
                     - dispatching of the URL
                 All these steps are done inside one method call here.
 */
-class UNLESS_MERGELIBS(FWE_DLLPUBLIC) DispatchHelper final
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::frame::XDispatchHelper,
                                     css::frame::XDispatchResultListener>
 {

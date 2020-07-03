@@ -44,7 +44,7 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	cppu \
 	cppuhelper \
 	editeng \
-	fwe \
+	fwk \
 	sal \
 	i18nlangtag \
 	sb \

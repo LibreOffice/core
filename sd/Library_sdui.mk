@@ -47,7 +47,7 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     editeng \
     i18nlangtag \
     fwl \
-    fwe \
+    fwk \
     sal \
     salhelper \
     sd \
