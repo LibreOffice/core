@@ -819,6 +819,7 @@ public:
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+    static OUString convertFieldFormula(const OUString& input);
     static void handleFieldFormula
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
