@@ -78,6 +78,9 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetNoHyphenateCaps() const;
     sal_Int16 GetHypenationZone() const;
 
+    OUString GetDecimalSymbol() const;
+    OUString GetListSeparator() const;
+
     css::uno::Sequence<css::beans::PropertyValue> const & GetThemeFontLangProperties() const;
 
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;

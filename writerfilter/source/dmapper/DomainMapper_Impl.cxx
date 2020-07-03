@@ -88,6 +88,8 @@
 #include <map>
 #include <tuple>
 #include <unordered_map>
+#include <regex>
+#include <algorithm>
 
 #include <officecfg/Office/Common.hxx>
 #include <filter/msfilter/util.hxx>
@@ -99,6 +101,9 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+
+#include <unicode/errorcode.h>
+#include <unicode/regex.h>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -4196,6 +4201,70 @@ void DomainMapper_Impl::handleFieldAsk
     }
 }
 
+/**
+ * Converts a Microsoft Word field formula into LibreOffice syntax
+ * @param input The Microsoft Word field formula, with no leading '=' sign
+ * @return An equivalent LibreOffice field formula
+ */
+OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
+
+    OUString listSeparator = m_pSettingsTable->GetListSeparator();
+
+    /* Replace logical condition functions with LO equivalent operators */
+    OUString changed = input.replaceAll(" <> ", " NEQ ");
+    changed = changed.replaceAll(" <= ", " LEQ ");
+    changed = changed.replaceAll(" >= ", " GEQ ");
+    changed = changed.replaceAll(" = " , " EQ ");
+    changed = changed.replaceAll(" < " , " L ");
+    changed = changed.replaceAll(" > " , " G ");
+
+    changed = changed.replaceAll("<>", " NEQ ");
+    changed = changed.replaceAll("<=", " LEQ ");
+    changed = changed.replaceAll(">=", " GEQ ");
+    changed = changed.replaceAll("=" , " EQ ");
+    changed = changed.replaceAll("<" , " L ");
+    changed = changed.replaceAll(">" , " G ");
+
+    /* Replace function calls with infix keywords for AND(), OR(), and ROUND(). Nothing needs to be
+     * done for NOT(). This simple regex will work properly with most common cases. However, it may
+     * not work correctly when the arguments are nested subcalls to other functions, like
+     * ROUND(MIN(1,2),MAX(3,4)). See TDF#134765.  */
+    icu::ErrorCode status;
+    icu::UnicodeString usInput(changed.getStr());
+    const uint32_t rMatcherFlags = UREGEX_CASE_INSENSITIVE;
+    OUString regex = "\\b(AND|OR|ROUND)\\s*\\(\\s*([^" + listSeparator + "]+)\\s*" + listSeparator + "\\s*([^)]+)\\s*\\)";
+    icu::UnicodeString usRegex(regex.getStr());
+    icu::RegexMatcher rmatch1(usRegex, usInput, rMatcherFlags, status);
+    usInput = rmatch1.replaceAll(icu::UnicodeString("(($2) $1 ($3))"), status);
+
+    /* Assumes any remaining list separators separate arguments to functions that accept lists
+     * (SUM, MIN, MAX, MEAN, etc.) */
+    usInput.findAndReplace(icu::UnicodeString(listSeparator.getStr()), "|");
+
+    /* Surround single cell references with angle brackets.
+     * If there is ever added a function name that ends with a digit, this regex will need to be revisited. */
+    icu::RegexMatcher rmatch2("\\b([A-Z]{1,3}[0-9]+)\\b(?![(])", usInput, rMatcherFlags, status);
+    usInput = rmatch2.replaceAll(icu::UnicodeString("<$1>"), status);
+
+    /* Cell references must be upper case */
+    icu::RegexMatcher rmatch3("<[a-z]{1,3}[0-9]+>", usInput, rMatcherFlags, status);
+    icu::UnicodeString replacedCellRefs;
+    while (rmatch3.find(status) && status.isSuccess()) {
+        rmatch3.appendReplacement(replacedCellRefs, rmatch3.group(status).toUpper(), status);
+    }
+    rmatch3.appendTail(replacedCellRefs);
+
+    /* Fix up cell ranges */
+    icu::RegexMatcher rmatch4("<([A-Z]{1,3}[0-9]+)>:<([A-Z]{1,3}[0-9]+)>", replacedCellRefs, rMatcherFlags, status);
+    usInput = rmatch4.replaceAll(icu::UnicodeString("<$1:$2>"), status);
+
+    /* Fix up user defined names */
+    icu::RegexMatcher rmatch5("DEFINED\\s*\\(<([A-Z]+[0-9]+)>\\)", usInput, rMatcherFlags, status);
+    usInput = rmatch5.replaceAll(icu::UnicodeString("DEFINED($1)"), status);
+
+    return OUString(usInput.getTerminatedBuffer());
+}
+
 void DomainMapper_Impl::handleFieldFormula
     (const FieldContextPtr& pContext,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
@@ -4215,7 +4284,7 @@ void DomainMapper_Impl::handleFieldFormula
         return;
 
     // we don't copy the = symbol from the command
-    OUString formula = command.copy(1);
+    OUString formula = convertFieldFormula(command.copy(1));
 
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
     xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));

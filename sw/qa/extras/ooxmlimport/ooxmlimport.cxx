@@ -796,6 +796,161 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105975formula, "tdf105975.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("25"), xEnumerationAccess->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf133647, "tdf133647.docx")
+{
+    /* Tests that argument lists, cell references, and cell ranges are translated correctly
+     * when importing table formulae from MS Word */
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SUM(1|2|3)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("sum(<A1>|<B1>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("(SUM(<C1>|5)*(2+7))*(3+SUM(1|<B1>))"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("432"), xEnumerationAccess3->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1+(SUM(1|2))"), xEnumerationAccess4->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), xEnumerationAccess4->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("3*(2+SUM(<A1:C1>)+7)"), xEnumerationAccess5->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("45"), xEnumerationAccess5->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("(1+2)*SUM(<C1>|<D1>)"), xEnumerationAccess6->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("21"), xEnumerationAccess6->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SUM(<A1>|5|<B1:C1>|6)"), xEnumerationAccess7->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("17"), xEnumerationAccess7->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess8(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SUM(<C1:D1>)"), xEnumerationAccess8->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xEnumerationAccess8->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess9(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SUM(<A1>|<B1>)"), xEnumerationAccess9->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess9->getPresentation(false).trim());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf123386, "tdf123386.docx")
+{
+    /* Tests that argument lists, cell references, and cell ranges are translated correctly
+     * when importing table formulae from MS Word */
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("<A1> L 2"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess1->getPresentation(false).trim());
+
+    /* Ensures non-cell references passed to DEFINED() are preserved.
+     * Doesn't test the display string because LO doesn't support DEFINED(). */
+    uno::Reference<text::XTextField> xEnumerationAccess10(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((1) AND (DEFINED(ABC1)))"), xEnumerationAccess10->getPresentation(true).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess9(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("NOT(TRUE)"), xEnumerationAccess9->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess9->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess8(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((TRUE) OR (FALSE))"), xEnumerationAccess8->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess8->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((<A1> EQ 1) OR (<B1> EQ 2))"), xEnumerationAccess7->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess7->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("(((<A1> L 1)) AND ((<B1> NEQ 2)))"), xEnumerationAccess6->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess6->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((<A1> EQ 1) AND (<B1> EQ 2))"), xEnumerationAccess5->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess5->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("<D1> NEQ 3"), xEnumerationAccess4->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess4->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("<C1> EQ 3"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess3->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("<B1> G 1"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess2->getPresentation(false).trim());
+
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf133647_unicode, "tdf133647_unicode.docx")
+{
+    /* Tests that non-ASCII characters in formulas are preserved when importing from MS Word */
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    xFields->nextElement();
+    xFields->nextElement();
+    xFields->nextElement();
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(預期結果)"), xEnumerationAccess1->getPresentation(true).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(نتيجةمتوقعة)"), xEnumerationAccess2->getPresentation(true).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(ExpectedResult)"), xEnumerationAccess3->getPresentation(true).trim());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf123389, "tdf123389.docx")
+{
+    /* Tests that argument lists, cell references, and cell ranges are translated correctly
+     * when importing table formulae from MS Word */
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((2.345) ROUND (1))"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("2.3"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("((<A1>) ROUND (2))"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("2.35"), xEnumerationAccess2->getPresentation(false).trim());
+}
+
+
 DECLARE_OOXMLIMPORT_TEST(testTdf107784, "tdf107784.docx")
 {
     // Make sure the field displays the citation's title and not the identifier
