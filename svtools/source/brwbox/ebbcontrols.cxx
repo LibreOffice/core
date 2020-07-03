@@ -383,14 +383,16 @@ namespace svt
 
     FormattedControl::FormattedControl(vcl::Window* pParent)
         : EditControlBase(pParent)
-        , m_xFormattedEntry(new weld::FormattedEntry(m_xBuilder->weld_entry("entry")))
+        , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_xFormattedEntry(new weld::FormattedEntry(*m_xEntry))
     {
-        init(m_xFormattedEntry->get_widget());
+        init(m_xEntry.get());
     }
 
     void FormattedControl::dispose()
     {
         m_xFormattedEntry.reset();
+        m_xEntry.reset();
         EditControlBase::dispose();
     }
 
