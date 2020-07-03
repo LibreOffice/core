@@ -186,26 +186,37 @@ namespace svt
         virtual void                Paste() override;
     };
 
-    class SVT_DLLPUBLIC EditControlBase : public InterimItemWindow
+    class SVT_DLLPUBLIC ControlBase : public InterimItemWindow
+    {
+    public:
+        ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID);
+
+        bool ControlHasFocus() const;
+
+        virtual void dispose() override;
+
+        virtual void GetFocus() override;
+
+    protected:
+        void InitControlBase(weld::Widget* pWidget);
+
+    private:
+        weld::Widget* m_pWidget;
+    };
+
+    class SVT_DLLPUBLIC EditControlBase : public ControlBase
     {
     public:
         EditControlBase(BrowserDataWin* pParent);
 
         virtual void dispose() override;
 
-        virtual void GetFocus() override
-        {
-            if (m_pEntry)
-                m_pEntry->grab_focus();
-            InterimItemWindow::GetFocus();
-        }
-
         weld::Entry& get_widget() { return *m_pEntry; }
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) = 0;
 
     protected:
-        void init(weld::Entry* pEntry);
+        void InitEditControlBase(weld::Entry* pEntry);
 
     private:
         weld::Entry* m_pEntry;
@@ -422,9 +433,7 @@ namespace svt
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
-
     //= SpinCellController
-
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SpinCellController final : public CellController
     {
     public:
@@ -440,9 +449,7 @@ namespace svt
         DECL_LINK(ModifyHdl, Edit&, void);
     };
 
-
     //= CheckBoxControl
-
     class SVT_DLLPUBLIC CheckBoxControl final : public Control
     {
         VclPtr<CheckBox>             pBox;
@@ -489,19 +496,12 @@ namespace svt
     };
 
     //= ComboBoxControl
-    class SVT_DLLPUBLIC ComboBoxControl final : public InterimItemWindow
+    class SVT_DLLPUBLIC ComboBoxControl final : public ControlBase
     {
         friend class ComboBoxCellController;
 
     public:
-        ComboBoxControl(vcl::Window* pParent);
-
-        virtual void GetFocus() override
-        {
-            if (m_xWidget)
-                m_xWidget->grab_focus();
-            InterimItemWindow::GetFocus();
-        }
+        ComboBoxControl(BrowserDataWin* pParent);
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
@@ -529,19 +529,12 @@ namespace svt
     };
 
     //= ListBoxControl
-    class SVT_DLLPUBLIC ListBoxControl final : public InterimItemWindow
+    class SVT_DLLPUBLIC ListBoxControl final : public ControlBase
     {
         friend class ListBoxCellController;
 
     public:
-        ListBoxControl(vcl::Window* pParent);
-
-        virtual void GetFocus() override
-        {
-            if (m_xWidget)
-                m_xWidget->grab_focus();
-            InterimItemWindow::GetFocus();
-        }
+        ListBoxControl(BrowserDataWin* pParent);
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
@@ -567,30 +560,43 @@ namespace svt
         DECL_LINK(ListBoxSelectHdl, weld::ComboBox&, void);
     };
 
-    class SVT_DLLPUBLIC FormattedControl : public EditControlBase
+    class SVT_DLLPUBLIC FormattedControlBase : public EditControlBase
     {
     public:
-        FormattedControl(BrowserDataWin* pParent);
+        FormattedControlBase(BrowserDataWin* pParent, bool bSpinVariant);
 
         virtual void dispose() override;
 
-        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
-        {
-            m_xEntryFormatter->connect_changed(rLink);
-        }
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
 
-        weld::EntryFormatter& get_formatter() { return *m_xEntryFormatter; }
+        weld::EntryFormatter& get_formatter();
 
-    private:
+    protected:
+        bool m_bSpinVariant;
         std::unique_ptr<weld::Entry> m_xEntry;
+        std::unique_ptr<weld::FormattedSpinButton> m_xSpinButton;
         std::unique_ptr<weld::EntryFormatter> m_xEntryFormatter;
+
+        void InitFormattedControlBase();
+    };
+
+    class SVT_DLLPUBLIC FormattedControl : public FormattedControlBase
+    {
+    public:
+        FormattedControl(BrowserDataWin* pParent, bool bSpinVariant);
+    };
+
+    class SVT_DLLPUBLIC DoubleNumericControl : public FormattedControlBase
+    {
+    public:
+        DoubleNumericControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
     //= FormattedFieldCellController
     class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
     public:
-        FormattedFieldCellController( FormattedControl* _pFormatted );
+        FormattedFieldCellController( FormattedControlBase* _pFormatted );
 
         virtual void CommitModifications() override;
     };
@@ -826,6 +832,8 @@ namespace svt
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
+
+        bool ControlHasFocus() const;
 
         DECL_DLLPRIVATE_LINK( ModifyHdl, LinkParamNone*, void );
         DECL_DLLPRIVATE_LINK( StartEditHdl, void*, void );
