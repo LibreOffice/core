@@ -898,6 +898,7 @@ class SvxSetItem;
 #define SID_TABLE_STYLE_SETTINGS                        ( SID_SVX_START + 1089 )
 #define SID_CHAR_DLG_PREVIEW_STRING                     ( SID_SVX_START + 1090 )
 #define SID_RECHECK_DOCUMENT                            ( SID_SVX_START + 1091 )
+#define SID_TABLE_DELETE_TABLE                          ( SID_SVX_START + 1092 )
 
 #define SID_OBJECT_MIRROR                               ( SID_SVX_START + 1093 )
 
