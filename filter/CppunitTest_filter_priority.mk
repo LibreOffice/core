@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_components,filter_priority,\
 	configmgr/source/configmgr \
 	filter/source/config/cache/filterconfig1 \
 	framework/util/fwk \
-	framework/util/fwl \
 	i18npool/util/i18npool \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \

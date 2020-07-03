@@ -365,8 +365,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	frm \
 	fsstorage \
 	fwk \
-	fwl \
-	fwm \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
