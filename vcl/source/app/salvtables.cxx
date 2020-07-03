@@ -3182,7 +3182,7 @@ void SalInstanceEntry::set_alignment(TxtAlign eXAlign)
     }
     WinBits nBits = m_xEntry->GetStyle();
     nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
-    m_xEntry->SetStyle(nBits & nAlign);
+    m_xEntry->SetStyle(nBits | nAlign);
 }
 
 SalInstanceEntry::~SalInstanceEntry()
