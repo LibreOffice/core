@@ -169,19 +169,6 @@ private:
 
     std::vector<MenuItemData>         maMenuItems;
 
-    enum SectionType {
-        WHOLE,                // entire window
-        LISTBOX_AREA_OUTER,   // box enclosing the check box items.
-        LISTBOX_AREA_INNER,   // box enclosing the check box items.
-        SINGLE_BTN_AREA,      // box enclosing the single-action buttons.
-        CHECK_TOGGLE_ALL,     // check box for toggling all items.
-        BTN_SINGLE_SELECT,
-        BTN_SINGLE_UNSELECT,
-        BTN_OK,               // OK button
-        BTN_CANCEL,           // Cancel button
-        EDIT_SEARCH,          // Search box
-    };
-
     /**
      * Calculate the appropriate window size based on the menu items.
      */

@@ -106,13 +106,6 @@ public:
 };
 
 
-enum SmXMLPresScriptEmptyElemTokenMap
-{
-    XML_TOK_MPRESCRIPTS,
-    XML_TOK_NONE
-};
-
-
 
 #endif
 
