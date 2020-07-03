@@ -126,8 +126,9 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         meTransparent    ( !rMask ? TransparentType::NONE : TransparentType::Bitmap ),
         mbAlpha          ( false )
 {
-    // Ensure a mask is exactly one bit deep
-    if( !!maMask && maMask.GetBitCount() != 1 )
+    // Ensure a mask is exactly one bit deep,
+    // alternatively also allow 8bpp masks.
+    if( !!maMask && maMask.GetBitCount() != 1 && !(maMask.GetBitCount() == 8 && maMask.HasGreyPalette8Bit()))
     {
         SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
         BitmapEx aMaskEx(maMask);
@@ -154,12 +155,6 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
         maMask.Scale(rBmp.GetSizePixel());
     }
-
-    // #i75531# the workaround below can go when
-    // X11SalGraphics::drawAlphaBitmap()'s render acceleration
-    // can handle the bitmap depth mismatch directly
-    if( maBitmap.GetBitCount() < maMask.GetBitCount() )
-        maBitmap.Convert( BmpConversion::N24Bit );
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :

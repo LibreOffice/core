@@ -714,6 +714,11 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     // non 8-bit alpha not implemented yet
     if( rAlphaBmp.GetBitCount() != 8 )
         return false;
+    // #i75531# the workaround below can go when
+    // X11SalGraphics::drawAlphaBitmap()'s render acceleration
+    // can handle the bitmap depth mismatch directly
+    if( rSrcBitmap.GetBitCount() < rAlphaBmp.GetBitCount() )
+        return false;
 
     // horizontal mirroring not implemented yet
     if( rTR.mnDestWidth < 0 )
