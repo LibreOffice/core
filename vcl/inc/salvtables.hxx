@@ -618,7 +618,7 @@ class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::Spin
 {
 private:
     VclPtr<FormattedField> m_xButton;
-    Formatter* m_pFormatter;
+    Formatter& m_rFormatter;
 
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);

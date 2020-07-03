@@ -1374,7 +1374,7 @@ void FormattedFieldUIObject::execute(const OUString& rAction,
 StringMap FormattedFieldUIObject::get_state()
 {
     StringMap aMap = EditUIObject::get_state();
-    aMap["Value"] = OUString::number(mxFormattedField->GetFormatter()->GetValue());
+    aMap["Value"] = OUString::number(mxFormattedField->GetFormatter().GetValue());
 
     return aMap;
 }
