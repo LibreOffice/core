@@ -899,7 +899,7 @@ createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 }
 
 
-static const cppu::ImplementationEntry kImplementations_entries[] =
+const cppu::ImplementationEntry kImplementations_entries[] =
 {
     {
         createInstance,
