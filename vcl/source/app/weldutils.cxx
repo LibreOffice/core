@@ -125,24 +125,24 @@ void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent
     rTreeView.remove(rParent);
 }
 
-FormattedEntry::FormattedEntry(weld::Entry& rEntry)
+EntryFormatter::EntryFormatter(weld::Entry& rEntry)
     : m_rEntry(rEntry)
     , m_eOptions(Application::GetSettings().GetStyleSettings().GetSelectionOptions())
 {
-    m_rEntry.connect_changed(LINK(this, FormattedEntry, ModifyHdl));
-    m_rEntry.connect_focus_out(LINK(this, FormattedEntry, FocusOutHdl));
+    m_rEntry.connect_changed(LINK(this, EntryFormatter, ModifyHdl));
+    m_rEntry.connect_focus_out(LINK(this, EntryFormatter, FocusOutHdl));
 }
 
-Selection FormattedEntry::GetEntrySelection() const
+Selection EntryFormatter::GetEntrySelection() const
 {
     int nStartPos, nEndPos;
     m_rEntry.get_selection_bounds(nStartPos, nEndPos);
     return Selection(nStartPos, nEndPos);
 }
 
-OUString FormattedEntry::GetEntryText() const { return m_rEntry.get_text(); }
+OUString EntryFormatter::GetEntryText() const { return m_rEntry.get_text(); }
 
-void FormattedEntry::SetEntryText(const OUString& rText, const Selection& rSel)
+void EntryFormatter::SetEntryText(const OUString& rText, const Selection& rSel)
 {
     m_rEntry.set_text(rText);
     auto nMin = rSel.Min();
@@ -150,18 +150,18 @@ void FormattedEntry::SetEntryText(const OUString& rText, const Selection& rSel)
     m_rEntry.select_region(nMin < 0 ? 0 : nMin, nMax == SELECTION_MAX ? -1 : nMax);
 }
 
-void FormattedEntry::SetEntryTextColor(const Color* pColor)
+void EntryFormatter::SetEntryTextColor(const Color* pColor)
 {
     m_rEntry.set_font_color(pColor ? *pColor : COL_AUTO);
 }
 
-SelectionOptions FormattedEntry::GetEntrySelectionOptions() const { return m_eOptions; }
+SelectionOptions EntryFormatter::GetEntrySelectionOptions() const { return m_eOptions; }
 
-void FormattedEntry::FieldModified() { m_aModifyHdl.Call(m_rEntry); }
+void EntryFormatter::FieldModified() { m_aModifyHdl.Call(m_rEntry); }
 
-IMPL_LINK_NOARG(FormattedEntry, ModifyHdl, weld::Entry&, void) { Modify(); }
+IMPL_LINK_NOARG(EntryFormatter, ModifyHdl, weld::Entry&, void) { Modify(); }
 
-IMPL_LINK_NOARG(FormattedEntry, FocusOutHdl, weld::Widget&, void) { EntryLostFocus(); }
+IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void) { EntryLostFocus(); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -154,10 +154,10 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC FormattedEntry : public Formatter
+class VCL_DLLPUBLIC EntryFormatter : public Formatter
 {
 public:
-    FormattedEntry(weld::Entry& rEntry);
+    EntryFormatter(weld::Entry& rEntry);
 
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
 
