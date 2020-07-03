@@ -16,6 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#if 0
+#include <unotools/textsearch.hxx>
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/XTextSearch2.hpp>
+#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -88,6 +95,8 @@
 #include <map>
 #include <tuple>
 #include <unordered_map>
+#include <regex>
+#include <algorithm>
 
 #include <officecfg/Office/Common.hxx>
 #include <filter/msfilter/util.hxx>
@@ -4198,6 +4207,50 @@ void DomainMapper_Impl::handleFieldAsk
     }
 }
 
+/**
+ * Converts a Microsoft Word field formula into LibreOffice syntax
+ * @param input The Microsoft Word field formula, with no leading '=' sign
+ * @return An equivalent LibreOffice field formula
+ */
+OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
+    /* Assume that formulas can always be represented properly in US ASCII */
+    OString ostrInput(input.toAsciiUpperCase().toUtf8());
+
+    const sal_Char* charStar = ostrInput.getStr();
+    std::string str(charStar);
+    std::regex searchRegex("", std::regex_constants::ECMAScript | std::regex_constants::icase);
+    std::string result = str;
+
+    /* Replace logical condition operators with LO equivalents */
+    searchRegex = "\\s*<>\\s*"; result = std::regex_replace(result, searchRegex, " NEQ ");
+    searchRegex = "\\s*<=\\s*"; result = std::regex_replace(result, searchRegex, " LEQ ");
+    searchRegex = "\\s*>=\\s*"; result = std::regex_replace(result, searchRegex, " GEQ ");
+    searchRegex = "\\s*=\\s*" ; result = std::regex_replace(result, searchRegex, " EQ ");
+    searchRegex = "\\s*<\\s*" ; result = std::regex_replace(result, searchRegex, " L ");
+    searchRegex = "\\s*>\\s*" ; result = std::regex_replace(result, searchRegex, " G ");
+
+    /* Replace function calls with infix keywords for AND(), OR(), and ROUND(). Nothing needs to be done for NOT().
+     * This simple regex will work properly with most common cases. However, it may not work correctly when the
+     * arguments are nested subcalls to other functions, like ROUND(MIN(1,2),MAX(3,4)). See TDF#134765.  */
+    searchRegex = "(AND|OR|ROUND)\\s*\\(\\s*([^,]+)\\s*,\\s*([^)]+)\\s*\\)";
+    result = std::regex_replace(result, searchRegex, "(($2) $1 ($3))");
+
+    /* Assumes any remaining commas separate arguments to functions that accept lists (SUM, MIN, MAX, MEAN, etc.) */
+    std::replace(result.begin(), result.end(), ',', '|');
+
+    /* Surround single cell references with angle brackets.
+     * If there is ever added a function name that ends with a digit, this regex will need to be revisited. */
+    searchRegex = "([A-Z]+[0-9]+)([^(])";
+    result = std::regex_replace(result, searchRegex, "<$1>$2");
+
+    /* Fix up cell ranges */
+    searchRegex = "<([A-Z]+[0-9]+)>:<([A-Z]+[0-9]+)>";
+    result = std::regex_replace(result, searchRegex, "<$1:$2>");
+
+    OUString retval(result.c_str(), result.length(), RTL_TEXTENCODING_ASCII_US);
+    return retval;
+}
+
 void DomainMapper_Impl::handleFieldFormula
     (const FieldContextPtr& pContext,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
@@ -4217,7 +4270,8 @@ void DomainMapper_Impl::handleFieldFormula
         return;
 
     // we don't copy the = symbol from the command
-    OUString formula = command.copy(1);
+    OUString formula0(command.copy(1));
+    OUString formula = convertFieldFormula(formula0);
 
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
     xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));
