@@ -988,7 +988,8 @@ class SvxSetItem;
 #define SID_EDIT_SIGNATURELINE                          ( SID_SVX_START + 1174 )
 #define SID_SIGN_SIGNATURELINE                          ( SID_SVX_START + 1175 )
 #define SID_MEASURE_DLG                                 ( SID_SVX_START + 1176 )
-
+// free slots - available for use
+#define SID_TABLE_DELETE_TABLE                          ( SID_SVX_START + 1184 )
 #define SID_TABLE_MINIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1185 )
 #define SID_TABLE_MINIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1186 )
 #define SID_TABLE_OPTIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1187 )
