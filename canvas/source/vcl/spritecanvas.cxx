@@ -128,7 +128,7 @@ namespace vclcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return SPRITECANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.SpriteCanvas.VCL";
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
@@ -142,6 +142,16 @@ namespace vclcanvas
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    auto p = new vclcanvas::SpriteCanvas(args, context);
+    cppu::acquire(p);
+    p->initialize();
+    return static_cast<cppu::OWeakObject*>(p);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

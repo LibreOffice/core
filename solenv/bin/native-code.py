@@ -49,7 +49,6 @@ core_factory_list = [
     ("libutllo.a", "utl_component_getFactory"),
     ("libxoflo.a", "xof_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
@@ -77,6 +76,9 @@ core_constructor_list = [
     "stardiv_UnoControls_StatusIndicator_get_implementation",
 # canvas/source/factory/canvasfactory.component
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
+# canvas/source/vcl/vclcanvas.component
+    "com_sun_star_comp_rendering_Canvas_VCL_get_implementation",
+    "com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation",
 # chart2/source/chartcore.component
     "com_sun_star_chart2_ExponentialScaling_get_implementation",
     "com_sun_star_chart2_LinearScaling_get_implementation",

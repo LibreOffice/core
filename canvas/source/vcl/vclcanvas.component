@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="vclcanvas" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.Canvas.VCL">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.rendering.Canvas.VCL"
+    constructor="com_sun_star_comp_rendering_Canvas_VCL_get_implementation">
     <service name="com.sun.star.rendering.Canvas.VCL"/>
   </implementation>
-  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.VCL">
+  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.VCL"
+    constructor="com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation">
     <service name="com.sun.star.rendering.SpriteCanvas.VCL"/>
   </implementation>
 </component>

@@ -41,9 +41,6 @@
 #include "devicehelper.hxx"
 #include "repainttarget.hxx"
 
-#define CANVAS_SERVICE_NAME        "com.sun.star.rendering.Canvas.VCL"
-#define CANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.Canvas.VCL"
-
 namespace vclcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
