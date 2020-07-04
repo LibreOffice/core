@@ -54,14 +54,7 @@ public:
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
     virtual void SAL_CALL storeToURL( const   OUString& sURL,
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
-
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static OUString getImplementationName_Static();
 };
-
-/// @throws com::sun::star::uno::Exception
-css::uno::Reference< css::uno::XInterface > SIDEModel_createInstance(
-                const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 } // namespace basctl
 
