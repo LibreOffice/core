@@ -917,7 +917,7 @@ public:
 
     virtual vcl::Font get_entry_font() override;
 
-    virtual void set_custom_renderer() override;
+    virtual void set_custom_renderer(bool bOn) override;
 
     virtual int get_max_mru_count() const override;
 
@@ -987,7 +987,7 @@ public:
 
     virtual vcl::Font get_entry_font() override;
 
-    virtual void set_custom_renderer() override;
+    virtual void set_custom_renderer(bool bOn) override;
 
     virtual int get_max_mru_count() const override;
 

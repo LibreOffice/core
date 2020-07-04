@@ -12949,6 +12949,7 @@ private:
     bool m_bAutoComplete;
     bool m_bAutoCompleteCaseSensitive;
     bool m_bChangedByMenu;
+    bool m_bCustomRenderer;
     bool m_bActivateCalled;
     gint m_nTextCol;
     gint m_nIdCol;
@@ -13950,6 +13951,7 @@ public:
         , m_bAutoComplete(false)
         , m_bAutoCompleteCaseSensitive(false)
         , m_bChangedByMenu(false)
+        , m_bCustomRenderer(false)
         , m_bActivateCalled(false)
         , m_nTextCol(gtk_combo_box_get_entry_text_column(pComboBox))
         , m_nIdCol(gtk_combo_box_get_id_column(pComboBox))
@@ -14472,22 +14474,34 @@ public:
         return m_bChangedByMenu;
     }
 
-    virtual void set_custom_renderer() override
+    virtual void set_custom_renderer(bool bOn) override
     {
+        if (bOn == m_bCustomRenderer)
+            return;
         GList* pColumns = gtk_tree_view_get_columns(m_pTreeView);
         // keep the original height around for optimal popup height calculation
-        m_nNonCustomLineHeight = ::get_height_row(m_pTreeView, pColumns);
+        m_nNonCustomLineHeight = bOn ? ::get_height_row(m_pTreeView, pColumns) : -1;
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pColumns->data);
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
-        GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_POINTER);
-        g_value_set_pointer(&value, static_cast<gpointer>(this));
-        g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
-        gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
-        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
-        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        if (bOn)
+        {
+            GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+            GValue value = G_VALUE_INIT;
+            g_value_init(&value, G_TYPE_POINTER);
+            g_value_set_pointer(&value, static_cast<gpointer>(this));
+            g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
+            gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        }
+        else
+        {
+            GtkCellRenderer *pRenderer = gtk_cell_renderer_text_new();
+            gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+        }
         g_list_free(pColumns);
+        m_bCustomRenderer = bOn;
     }
 
     void call_signal_custom_render(VirtualDevice& rOutput, const tools::Rectangle& rRect, bool bSelected, const OUString& rId)
@@ -14960,7 +14974,7 @@ public:
         return m_bTreeChange;
     }
 
-    virtual void set_custom_renderer() override
+    virtual void set_custom_renderer(bool /*bOn*/) override
     {
         assert(false && "not implemented");
     }

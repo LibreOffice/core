@@ -856,7 +856,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
 
     m_xWidget->connect_custom_get_size(LINK(this, SvxStyleBox_Base, CustomGetSizeHdl));
     m_xWidget->connect_custom_render(LINK(this, SvxStyleBox_Base, CustomRenderHdl));
-    m_xWidget->set_custom_renderer();
+    m_xWidget->set_custom_renderer(true);
 
     m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
 }
@@ -1632,9 +1632,13 @@ void SvxFontNameBox_Base::ReleaseFocus_Impl()
 void SvxFontNameBox_Base::EnableControls_Impl()
 {
     SvtFontOptions aFontOpt;
-    bool bEnable = aFontOpt.IsFontHistoryEnabled();
-    sal_uInt16 nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
-    if (m_xWidget->get_max_mru_count() != nEntries)
+    bool bEnableMRU = aFontOpt.IsFontHistoryEnabled();
+    sal_uInt16 nEntries = bEnableMRU ? MAX_MRU_FONTNAME_ENTRIES : 0;
+
+    bool bNewWYSIWYG = aFontOpt.IsFontWYSIWYGEnabled();
+    bool bOldWYSIWYG = m_xWidget->IsWYSIWYGEnabled();
+
+    if (m_xWidget->get_max_mru_count() != nEntries || bNewWYSIWYG != bOldWYSIWYG)
     {
         // refill in the next GetFocus-Handler
         pFontList = nullptr;
@@ -1642,8 +1646,8 @@ void SvxFontNameBox_Base::EnableControls_Impl()
         m_xWidget->set_max_mru_count(nEntries);
     }
 
-    if (aFontOpt.IsFontWYSIWYGEnabled())
-        m_xWidget->EnableWYSIWYG();
+    if (bNewWYSIWYG != bOldWYSIWYG)
+        m_xWidget->EnableWYSIWYG(bNewWYSIWYG);
 }
 
 IMPL_LINK(SvxFontNameBox_Base, SelectHdl, weld::ComboBox&, rCombo, void)

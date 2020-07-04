@@ -5912,7 +5912,7 @@ void SalInstanceComboBoxWithoutEdit::set_entry_font(const vcl::Font&) { assert(f
 
 vcl::Font SalInstanceComboBoxWithoutEdit::get_entry_font() { assert(false); return vcl::Font(); }
 
-void SalInstanceComboBoxWithoutEdit::set_custom_renderer()
+void SalInstanceComboBoxWithoutEdit::set_custom_renderer(bool /*bOn*/)
 {
     assert(false && "not implemented");
 }
@@ -6080,16 +6080,22 @@ vcl::Font SalInstanceComboBoxWithEdit::get_entry_font()
     return pEdit->GetPointFont(*pEdit);
 }
 
-void SalInstanceComboBoxWithEdit::set_custom_renderer()
+void SalInstanceComboBoxWithEdit::set_custom_renderer(bool bOn)
 {
+    if (m_xComboBox->IsUserDrawEnabled() == bOn)
+        return;
+
     auto nOldEntryHeight = m_xComboBox->GetDropDownEntryHeight();
     auto nDropDownLineCount = m_xComboBox->GetDropDownLineCount();
 
-    m_xComboBox->EnableUserDraw(true);
-    m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
+    m_xComboBox->EnableUserDraw(bOn);
+    if (bOn)
+        m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
+    else
+        m_xComboBox->SetUserDrawHdl(Link<UserDrawEvent*, void>());
 
     // adjust the line count to fit approx the height it would have been before
-    // using a custom renderer
+    // changing the renderer
     auto nNewEntryHeight = m_xComboBox->GetDropDownEntryHeight();
     double fRatio = nOldEntryHeight / static_cast<double>(nNewEntryHeight);
     m_xComboBox->SetDropDownLineCount(nDropDownLineCount * fRatio);
@@ -6255,7 +6261,7 @@ public:
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
 
-    virtual void set_custom_renderer() override
+    virtual void set_custom_renderer(bool /*bOn*/) override
     {
         assert(false && "not implemented");
     }

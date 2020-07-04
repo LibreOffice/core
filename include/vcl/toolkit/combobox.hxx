@@ -102,6 +102,7 @@ public:
 
     void            SetUserItemSize( const Size& rSz );
     void            EnableUserDraw( bool bUserDraw );
+    bool            IsUserDrawEnabled() const;
 
     void            DrawEntry( const UserDrawEvent& rEvt );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );

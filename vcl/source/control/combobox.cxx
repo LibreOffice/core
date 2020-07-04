@@ -1268,6 +1268,11 @@ void ComboBox::EnableUserDraw( bool bUserDraw )
     m_pImpl->m_pImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
 }
 
+bool ComboBox::IsUserDrawEnabled() const
+{
+    return m_pImpl->m_pImplLB->GetMainWindow()->IsUserDrawEnabled();
+}
+
 void ComboBox::DrawEntry(const UserDrawEvent& rEvt)
 {
     SAL_WARN_IF(rEvt.GetWindow() != m_pImpl->m_pImplLB->GetMainWindow(), "vcl", "DrawEntry?!");
