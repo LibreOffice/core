@@ -19,7 +19,6 @@
 
 
 #include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentbase.hxx>
@@ -153,8 +152,9 @@ namespace comphelper
 
     class EnumerableMap: public Map_IFace, public ComponentBase
     {
-    protected:
+    public:
         EnumerableMap();
+    protected:
         virtual ~EnumerableMap() override;
 
         // XInitialization
@@ -729,9 +729,11 @@ namespace comphelper
 } // namespace comphelper
 
 
-void createRegistryInfo_Map()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_comphelper_EnumerableMap(
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
 {
-    ::comphelper::module::OAutoRegistration< ::comphelper::EnumerableMap > aAutoRegistration;
+    return cppu::acquire(new comphelper::EnumerableMap());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

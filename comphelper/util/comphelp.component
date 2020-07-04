@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="comphelp" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="AnyCompareFactory"
       constructor="AnyCompareFactory_get_implementation">
     <service name="com.sun.star.ucb.AnyCompareFactory"/>
@@ -61,7 +61,8 @@
     <service name="com.sun.star.util.OfficeInstallationDirectories"/>
     <singleton name="com.sun.star.util.theOfficeInstallationDirectories"/>
   </implementation>
-  <implementation name="org.openoffice.comp.comphelper.EnumerableMap">
+  <implementation name="org.openoffice.comp.comphelper.EnumerableMap"
+      constructor="org_openoffice_comp_comphelper_EnumerableMap">
     <service name="com.sun.star.container.EnumerableMap"/>
   </implementation>
 </component>
