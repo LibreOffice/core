@@ -71,6 +71,7 @@ one go*/
 #include <smdll.hxx>
 #include <unomodel.hxx>
 #include <utility.hxx>
+#include <visitors.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -462,17 +463,13 @@ void SmXMLImport::endDocument()
 
         if (pModel)
         {
-            SmDocShell *pDocShell =
-                static_cast<SmDocShell*>(pModel->GetObjectShell());
+            SmDocShell *pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
             auto pTreeTmp = pTree.get();
             pDocShell->SetFormulaTree(static_cast<SmTableNode *>(pTree.release()));
             if (aText.isEmpty())  //If we picked up no annotation text
             {
-                OUStringBuffer aStrBuf;
                 // Get text from imported formula
-                pTreeTmp->CreateTextFromNode(aStrBuf);
-                aStrBuf.stripEnd(' ');
-                aText = aStrBuf.makeStringAndClear();
+                SmNodeToTextVisitor( pTreeTmp, aText );
             }
 
             // Convert symbol names
@@ -1976,7 +1973,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Imp
                     nElement, xAttrList );
     }
 }
-
+#define LOADCHANGE 0
 const SvXMLTokenMapEntry aColorTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
