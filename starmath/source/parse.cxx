@@ -2174,6 +2174,7 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
     {
         case TFUNC:
             NextToken();    // skip "FUNC"-statement
+            m_aCurToken.eType = TFUNC;
             [[fallthrough]];
 
         case TSIN :
