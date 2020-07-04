@@ -91,6 +91,8 @@ public:
     void testRoundtripPrstDash();
     void testDashOnHairline();
     void testCustomshapeBitmapfillSrcrect();
+    void testTdf100348FontworkBitmapFill();
+    void testTdf100348FontworkGradientGlow();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -131,6 +133,8 @@ public:
     CPPUNIT_TEST(testRoundtripPrstDash);
     CPPUNIT_TEST(testDashOnHairline);
     CPPUNIT_TEST(testCustomshapeBitmapfillSrcrect);
+    CPPUNIT_TEST(testTdf100348FontworkBitmapFill);
+    CPPUNIT_TEST(testTdf100348FontworkGradientGlow);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1093,6 +1097,39 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
     double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
     CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+}
+
+void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf100348_FontworkBitmapFill.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the fontwork shape has a blip bitmap fill and a colored outline.
+    // Without the patch, fill and outline were black.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
+    assertXPath(pXmlDoc, sPathStart + "/a:blipFill/a:blip", 1);
+    assertXPath(pXmlDoc, sPathStart + "/a:ln/a:solidFill/a:srgbClr", "val", "ffbf00");
+}
+
+void SdOOXMLExportTest1::testTdf100348FontworkGradientGlow()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf100348_FontworkGradientGlow.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the fontwork shape has a gradient fill and a colored glow.
+    // Without the patch, fill was black and no glow applied.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr");
+    assertXPath(pXmlDoc, sPathStart + "/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", "8d281e");
+    assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow", "rad", "63360");
+    assertXPath(pXmlDoc, sPathStart + "/a:effectLst/a:glow/a:srgbClr", "val", "ff4500");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
