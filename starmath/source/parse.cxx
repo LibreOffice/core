@@ -65,7 +65,7 @@ SmToken::SmToken(SmTokenType eTokenType,
 }
 
 //Definition of math keywords
-const SmTokenTableEntry aTokenTable[] =
+static const SmTokenTableEntry aTokenTable[] =
 {
     { "abs", TABS, '\0', TG::UnOper, 13 },
     { "acute", TACUTE, MS_ACUTE, TG::Attribute, 5 },
