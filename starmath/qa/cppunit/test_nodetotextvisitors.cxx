@@ -114,9 +114,9 @@ void Test::SimpleUnaryOp()
     parseandparseagain("-+4", "Minus/plus");
     parseandparseagain("neg a", "Boolean 'not'");
     parseandparseagain("fact a", "Factorial");
-    parseandparseagain(" - { 1 over 2 } ", "BinVer in Unary 1");
-    ParseAndCheck(" - { 1 over 2 } ", " - { 1 over 2 } ", "BinVer in Unary 1");
-    parseandparseagain(" { - { 1 over 2 } } ", "BinVer in Unary 2");
+    parseandparseagain("- { 1 over 2 }", "BinVer in Unary 1");
+    ParseAndCheck("- { 1 over 2 }", "- { 1 over 2 }", "BinVer in Unary 1");
+    parseandparseagain("{- { 1 over 2 } }", "BinVer in Unary 2");
     parseandparseagain(" - 1 over 2 ", "Unary in BinVer as numerator 1");
     parseandparseagain(" { - 1 } over 2 ", "Unary in BinVer as numerator 2");
     parseandparseagain(" 1 over - 2 ", "Unary in BinVer as denominator 1");
@@ -523,7 +523,7 @@ void Test::testBinomInBinHor()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected += " { { binom a b + c } + d } ";
+    sExpected += "{ { binom a b + c } + d }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
 }
 
@@ -551,7 +551,7 @@ void Test::testBinVerInUnary()
     aCursor.Move(pOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
-    sExpected += " - { 1 over 2 } ";
+    sExpected += "- { 1 over 2 }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
 }
 
@@ -615,7 +615,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString(" { 2 { - 1 over 2 } + 4 } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
