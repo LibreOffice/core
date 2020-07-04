@@ -2077,6 +2077,8 @@ void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
+    sal_Int32 nc;
+    sal_Int16 nr, ng, nb;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2145,6 +2147,21 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TYELLOW:
             Append( "color yellow " );
+            break;
+        case TRGB:
+            Append( "color rgb " );
+            nc = pNode->GetToken().aText.toInt32();
+            nb = nc % 256;
+            nc /= 256;
+            ng = nc % 256;
+            nc /= 256;
+            nr = nc % 256;
+            Append(OUString::number(nr));
+            Separate();
+            Append(OUString::number(ng));
+            Separate();
+            Append(OUString::number(nb));
+            Separate();
             break;
         case TSANS:
             Append( "font sans " );
@@ -2306,11 +2323,17 @@ void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 {
     //TODO: This method might need improvements, see SmTextNode::CreateTextFromNode
-    if( pNode->GetToken( ).eType == TTEXT )
+    if( pNode->GetToken( ).eType == TTEXT ){
         Append( "\"" );
-    Append( pNode->GetText( ) );
-    if( pNode->GetToken( ).eType == TTEXT )
+        Append( pNode->GetText( ) );
         Append( "\"" );
+    } else {
+        Separate( );
+        if(pNode->GetToken().eType == TFUNC) Append("func ");
+        Append( pNode->GetToken().aText );
+        Separate( );
+    }
+
 }
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
@@ -2335,14 +2358,11 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 {
     sal_uInt16 nNum = pNode->GetBlankNum();
-    if (nNum <= 0)
-        return;
+    if (nNum <= 0) return;
     sal_uInt16 nWide = nNum / 4;
     sal_uInt16 nNarrow = nNum % 4;
-    for (sal_uInt16 i = 0; i < nWide; i++)
-        Append( "~" );
-    for (sal_uInt16 i = 0; i < nNarrow; i++)
-        Append( "`" );
+    for (sal_uInt16 i = 0; i < nWide; i++) Append( "~" );
+    for (sal_uInt16 i = 0; i < nNarrow; i++) Append( "`" );
     Append( " " );
 }
 
@@ -2379,8 +2399,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
     }
     for( auto pChild : *pNode )
     {
-        if(!pChild)
-            continue;
+        if(!pChild) continue;
         pChild->Accept( this );
         Separate( );
     }
@@ -2400,8 +2419,7 @@ void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
     if( pExtra ) {
         Append( "nroot" );
         LineToText( pExtra );
-    } else
-        Append( "sqrt" );
+    } else Append( "sqrt" );
     LineToText( pBody );
 }
 
