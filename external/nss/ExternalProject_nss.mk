@@ -44,12 +44,11 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter iOS,$(OS)),$(if $(filter ARM64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),\
-			$(if $(filter-out POWERPC,$(CPUNAME)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH)) \
+			MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\
-			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
