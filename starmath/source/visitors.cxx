@@ -2077,6 +2077,8 @@ void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
+    sal_Int32 nc;
+    sal_Int16 nr, ng, nb;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2119,7 +2121,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                             static_cast<double>( pNode->GetSizeParameter( ) ),
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true ) );
-                Append( " " );
+                Separate( );
             }
             break;
         case TBLACK:
@@ -2145,6 +2147,45 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TYELLOW:
             Append( "color yellow " );
+            break;
+        case TGRAY:
+            Append( "color gray " );
+            break;
+        case TLIME:
+            Append( "color lime " );
+            break;
+        case TMAROON:
+            Append( "color maroon " );
+            break;
+        case TNAVY:
+            Append( "color navy " );
+            break;
+        case TOLIVE:
+            Append( "color olive " );
+            break;
+        case TPURPLE:
+            Append( "color purple " );
+            break;
+        case TSILVER:
+            Append( "color silver " );
+            break;
+        case TTEAL:
+            Append( "color teal " );
+            break;
+        case TRGB:
+            Append( "color rgb " );
+            nc = pNode->GetToken().aText.toInt32();
+            nb = nc % 256;
+            nc /= 256;
+            ng = nc % 256;
+            nc /= 256;
+            nr = nc % 256;
+            Append(OUString::number(nr));
+            Separate();
+            Append(OUString::number(ng));
+            Separate();
+            Append(OUString::number(nb));
+            Separate();
             break;
         case TSANS:
             Append( "font sans " );
@@ -2288,12 +2329,10 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
             Separate( );
             pSubNode->Accept( this );
             Separate( );
-            if (j != pNode->GetNumCols() - 1U)
-                Append( "#" );
+            if (j != pNode->GetNumCols() - 1U) Append( "#" );
         }
         Separate( );
-        if (i != pNode->GetNumRows() - 1U)
-            Append( "##" );
+        if (i != pNode->GetNumRows() - 1U) Append( "##" );
     }
     Append( "} " );
 }
@@ -2306,11 +2345,17 @@ void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 {
     //TODO: This method might need improvements, see SmTextNode::CreateTextFromNode
-    if( pNode->GetToken( ).eType == TTEXT )
+    if( pNode->GetToken( ).eType == TTEXT ){
         Append( "\"" );
-    Append( pNode->GetText( ) );
-    if( pNode->GetToken( ).eType == TTEXT )
+        Append( pNode->GetText( ) );
         Append( "\"" );
+    } else {
+        Separate( );
+        if(pNode->GetToken().eType == TFUNC) Append("func ");
+        Append( pNode->GetToken().aText );
+        Separate( );
+    }
+
 }
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
@@ -2329,21 +2374,62 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
-    Append( pNode->GetToken( ).aText );
+    SmTokenType type = pNode->GetToken().eType;
+    switch(type){
+        case TINTD:
+            Append("intd ");
+            break;
+        case TINT:
+            Append("int ");
+            break;
+        case TSUM:
+            Append("sum ");
+            break;
+        case TIINT:
+            Append("iint ");
+            break;
+        case TIIINT:
+            Append("iiint ");
+            break;
+        case TLINT:
+            Append("lint ");
+            break;
+        case TLLINT:
+            Append("llint ");
+            break;
+        case TLLLINT:
+            Append("lllint ");
+            break;
+        case TCOPROD:
+            Append("coprod ");
+            break;
+        case TPROD:
+            Append("prod ");
+            break;
+        case TLIM:
+            Append("lim ");
+            break;
+        case TLIMSUP:
+            Append("lim sup ");
+            break;
+        case TLIMINF:
+            Append("lim inf ");
+            break;
+        default:
+            Append( pNode->GetText( ) );
+            break;
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 {
     sal_uInt16 nNum = pNode->GetBlankNum();
-    if (nNum <= 0)
-        return;
+    if (nNum <= 0) return;
     sal_uInt16 nWide = nNum / 4;
     sal_uInt16 nNarrow = nNum % 4;
-    for (sal_uInt16 i = 0; i < nWide; i++)
-        Append( "~" );
-    for (sal_uInt16 i = 0; i < nNarrow; i++)
-        Append( "`" );
-    Append( " " );
+    for (sal_uInt16 i = 0; i < nWide; i++) Append( "~" );
+    for (sal_uInt16 i = 0; i < nNarrow; i++) Append( "`" );
+    Separate(  );
 }
 
 void SmNodeToTextVisitor::Visit( SmErrorNode* )
@@ -2354,8 +2440,7 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 {
     for( auto pChild : *pNode )
     {
-        if(!pChild)
-            continue;
+        if(!pChild) continue;
         Separate( );
         pChild->Accept( this );
     }
@@ -2379,8 +2464,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
     }
     for( auto pChild : *pNode )
     {
-        if(!pChild)
-            continue;
+        if(!pChild) continue;
         pChild->Accept( this );
         Separate( );
     }
@@ -2400,8 +2484,7 @@ void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
     if( pExtra ) {
         Append( "nroot" );
         LineToText( pExtra );
-    } else
-        Append( "sqrt" );
+    } else Append( "sqrt" );
     LineToText( pBody );
 }
 
