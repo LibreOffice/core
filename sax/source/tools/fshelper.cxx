@@ -51,6 +51,10 @@ void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, const OString
 {
     mpSerializer->getTokenValueList().emplace_back(attribute, value.getStr());
 }
+void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, const OUString& value)
+{
+    pushAttributeValue(attribute, value.toUtf8());
+}
 void FastSerializerHelper::singleElement(sal_Int32 elementTokenId)
 {
     mpSerializer->singleFastElement(elementTokenId);
