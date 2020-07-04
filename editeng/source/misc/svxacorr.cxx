@@ -318,8 +318,10 @@ constexpr sal_Unicode cLeftSingleAngleQuote = 0x2039;
 constexpr sal_Unicode cRightSingleAngleQuote = 0x203A;
 // stop characters for searching preceding quotes
 // (the first character is also the opening quote we are looking for)
-const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,
+const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0x201C, 0 }; // preceding ,,
 const sal_Unicode aStopDoubleAngleQuoteEnd[] = { cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0x201D, 0x201E, 0 }; // preceding >>
+// preceding << for Romanian, handle also alternative primary closing quotation mark U+201C
+const sal_Unicode aStopDoubleAngleQuoteEndRo[] = { cLeftDoubleAngleQuote, cRightDoubleAngleQuote, 0x201D, 0x201E, 0x201C, 0 };
 const sal_Unicode aStopSingleQuoteEnd[] = { 0x201A, 0x2018, 0x201C, 0x201E, 0 };
 const sal_Unicode aStopSingleQuoteEndRuUa[] = { 0x201E, 0x201C, cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0 };
 
@@ -1212,7 +1214,12 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     if ( eType == ACQuotes::DoubleAngleQuote )
     {
         bool bSwiss = eLang == LANGUAGE_FRENCH_SWISS;
-        cRet = ( '<' == cInsChar || ('\"' == cInsChar && !bSttQuote) )
+        // pressing " inside a quotation -> use second level angle quotes
+        bool bLeftQuote = '\"' == cInsChar &&
+                // start position and Romanian OR
+                // not start position and Hungarian
+                bSttQuote == (eLang != LANGUAGE_HUNGARIAN);
+        cRet = ( '<' == cInsChar || bLeftQuote )
                 ? ( bSwiss ? cLeftSingleAngleQuote : cLeftDoubleAngleQuote )
                 : ( bSwiss ? cRightSingleAngleQuote : cRightDoubleAngleQuote );
     }
@@ -1347,13 +1354,23 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                     {
                         eType = ACQuotes::CapitalizeIAm;
                     }
-                    // tdf#133524 support << and >> in Hungarian and Romanian
-                    else if ( !bSingle && nInsPos && eLang.anyOf( LANGUAGE_HUNGARIAN, LANGUAGE_ROMANIAN ) &&
-                        lcl_HasPrecedingChar( rTxt, nInsPos,
+                    // tdf#133524 support >>Hungarian<< and <<Romanian>> secondary level quotations
+                    else if ( !bSingle && nInsPos &&
+                        ( ( eLang == LANGUAGE_HUNGARIAN &&
+                            lcl_HasPrecedingChar( rTxt, nInsPos,
                                 bSttQuote ? aStopDoubleAngleQuoteStart[0] : aStopDoubleAngleQuoteEnd[0],
-                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 1 ) )
+                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 1 ) ) ||
+                          ( eLang.anyOf(
+                                LANGUAGE_ROMANIAN,
+                                LANGUAGE_ROMANIAN_MOLDOVA ) &&
+                            lcl_HasPrecedingChar( rTxt, nInsPos,
+                                bSttQuote ? aStopDoubleAngleQuoteStart[0] : aStopDoubleAngleQuoteEndRo[0],
+                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEndRo + 1 ) ) ) )
                     {
-                        eType = ACQuotes::DoubleAngleQuote;
+                        LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
+                        // only if the opening double quotation mark is the default one
+                        if ( rLcl.getDoubleQuotationMarkStart() == OUStringChar(aStopDoubleAngleQuoteStart[0]) )
+                            eType = ACQuotes::DoubleAngleQuote;
                     }
                     else if ( bSingle && nInsPos && !bSttQuote &&
                         // tdf#128860 use apostrophe outside of second level quotation in Czech, German, Icelandic,
@@ -1402,9 +1419,11 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             {
                 const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
                 if ( eLang.anyOf(
+                        LANGUAGE_CATALAN,              // primary level
+                        LANGUAGE_CATALAN_VALENCIAN,    // primary level
                         LANGUAGE_FINNISH,              // alternative primary level
                         LANGUAGE_FRENCH_SWISS,         // second level
-                        LANGUAGE_GALICIAN,
+                        LANGUAGE_GALICIAN,             // primary level
                         LANGUAGE_HUNGARIAN,            // second level
                         LANGUAGE_POLISH,               // second level
                         LANGUAGE_PORTUGUESE,           // primary level
@@ -1413,7 +1432,9 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         LANGUAGE_ROMANIAN_MOLDOVA,     // second level
                         LANGUAGE_SWEDISH,              // alternative primary level
                         LANGUAGE_SWEDISH_FINLAND,      // alternative primary level
-                        LANGUAGE_UKRAINIAN ) ||        // primary level
+                        LANGUAGE_UKRAINIAN,            // primary level
+                        LANGUAGE_USER_ARAGONESE,       // primary level
+                        LANGUAGE_USER_ASTURIAN ) ||    // primary level
                     primary(eLang) == primary(LANGUAGE_GERMAN) ||  // alternative primary level
                     primary(eLang) == primary(LANGUAGE_SPANISH) )  // primary level
                 {

@@ -369,6 +369,7 @@ public:
     void testTdf38394();
     void testTdf59666();
     void testTdf133524();
+    void testTdf133524_Romanian();
     void testTdf128860();
     void testTdf123786();
     void testTdf133589();
@@ -588,6 +589,7 @@ public:
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
+    CPPUNIT_TEST(testTdf133524_Romanian);
     CPPUNIT_TEST(testTdf128860);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
@@ -7186,7 +7188,6 @@ void SwUiWriterTest::testTdf38394()
     // tdf#132301 autocorrect of qu'«
     pWrtShell->Insert(u" qu\u2019");
     pWrtShell->AutoCorrect(corr, cChar);
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" qu\u2019« ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -7221,7 +7222,6 @@ void SwUiWriterTest::testTdf133524()
     // <<
     pWrtShell->Insert(u"word<");
     pWrtShell->AutoCorrect(corr, '<');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"word«";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // 2. Testing autocorrect of " to >> and << inside „...”
@@ -7229,26 +7229,61 @@ void SwUiWriterTest::testTdf133524()
     // opening primary level quote
     pWrtShell->Insert(u" ");
     pWrtShell->AutoCorrect(corr, '"');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" „";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // opening second level quote
     pWrtShell->Insert(u"Sentence and ");
     pWrtShell->AutoCorrect(corr, '"');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"Sentence and »";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // closing second level quote
     pWrtShell->Insert(u"word");
     pWrtShell->AutoCorrect(corr, '"');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"word«";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // closing primary level quote
     pWrtShell->Insert(u".");
     pWrtShell->AutoCorrect(corr, '"');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u".”";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf133524_Romanian()
+{
+    SwDoc* pDoc = createDoc("tdf133524_ro.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    // 1. Testing autocorrect of " to << and >> inside „...”
+    // Example: „Sentence and «word».”
+    // opening primary level quote
+    pWrtShell->AutoCorrect(corr, '"');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"„");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // opening second level quote
+    pWrtShell->Insert(u"Sentence and ");
+    pWrtShell->AutoCorrect(corr, '"');
+    sReplaced += u"Sentence and «";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing second level quote
+    pWrtShell->Insert(u"word");
+    pWrtShell->AutoCorrect(corr, '"');
+    sReplaced += u"word»";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing primary level quote
+    pWrtShell->Insert(u".");
+    pWrtShell->AutoCorrect(corr, '"');
+    sReplaced += u".”";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // 2. Testing recognition of closing double quotation mark ”
+    pWrtShell->Insert(u" ");
+    pWrtShell->AutoCorrect(corr, '"');
+    sReplaced += u" „";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // 3. Testing recognition of alternative closing double quotation mark “
+    pWrtShell->Insert(u"Alternative.“ ");
+    pWrtShell->AutoCorrect(corr, '"');
+    sReplaced += u"Alternative.“ „";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
@@ -7266,13 +7301,11 @@ void SwUiWriterTest::testTdf128860()
     // Us apostrophe without preceding starting quote: word' -> word’
     pWrtShell->Insert(u" word");
     pWrtShell->AutoCorrect(corr, '\'');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" word’";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // But only after letters: word.' -> word.‘
     pWrtShell->Insert(u" word.");
     pWrtShell->AutoCorrect(corr, '\'');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -7291,13 +7324,11 @@ void SwUiWriterTest::testTdf123786()
     // Us apostrophe without preceding starting quote: word' -> word’
     pWrtShell->Insert(u" слово");
     pWrtShell->AutoCorrect(corr, '\'');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" слово’";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // But only after letters: word.' -> word.“
     pWrtShell->Insert(u" слово.");
     pWrtShell->AutoCorrect(corr, '\'');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u" слово.“";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -7317,7 +7348,6 @@ void SwUiWriterTest::testTdf133589()
     // disambiguate consonants: asszony -> asz|szony
     pWrtShell->Insert(u"asszony");
     pWrtShell->AutoCorrect(corr, ' ');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // disambiguate consonants: kosszarv -> kos|szarv
@@ -7326,13 +7356,11 @@ void SwUiWriterTest::testTdf133589()
     // pWrtShell->Insert(u"kosszarv");
     pWrtShell->Insert(u"kos​szarv");
     pWrtShell->AutoCorrect(corr, ' ');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"𐳓𐳛𐳤𐳥𐳀𐳢𐳮 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // transliterate numbers to Old Hungarian
     pWrtShell->Insert(u"2020");
     pWrtShell->AutoCorrect(corr, ' ');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
