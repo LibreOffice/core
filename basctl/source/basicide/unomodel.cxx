@@ -80,11 +80,6 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  )
 
 OUString SIDEModel::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString SIDEModel::getImplementationName_Static()
-{
     return "com.sun.star.comp.basic.BasicIDE";
 }
 
@@ -92,23 +87,10 @@ sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
+
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
-{
     return { "com.sun.star.script.BasicIDE" };
-}
-
-uno::Reference< uno::XInterface > SIDEModel_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & )
-{
-    SolarMutexGuard aGuard;
-    EnsureIde();
-    SfxObjectShell* pShell = new DocShell();
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 //  XStorable
@@ -134,5 +116,17 @@ void  SIDEModel::notImplemented()
 }
 
 } // namespace basctl
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_basic_BasicID_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    SolarMutexGuard aGuard;
+    basctl::EnsureIde();
+    SfxObjectShell* pShell = new basctl::DocShell();
+    auto pModel = pShell->GetModel();
+    pModel->acquire();
+    return pModel.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
