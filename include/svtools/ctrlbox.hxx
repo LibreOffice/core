@@ -353,7 +353,8 @@ public:
 
     void            Fill( const FontList* pList );
 
-    void            EnableWYSIWYG();
+    void            EnableWYSIWYG(bool bEnable);
+    bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xComboBox->connect_focus_in(rLink); }
