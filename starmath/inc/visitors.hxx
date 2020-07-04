@@ -439,10 +439,9 @@ public:
     void Visit( SmVerticalBraceNode* pNode ) override;
 private:
     /** Extract text from a pNode that constitutes a line */
-    void LineToText( SmNode* pNode ) {
+    inline void LineToText( SmNode* pNode ) {
         Separate( );
-        if( pNode )
-            pNode->Accept( this );
+        if( pNode ) pNode->Accept( this );
         Separate( );
     }
     void Append( const OUString &rText ) {
