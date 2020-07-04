@@ -59,7 +59,6 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/canvashelper \
 	canvas/source/vcl/devicehelper \
 	canvas/source/vcl/impltools \
-	canvas/source/vcl/services \
 	canvas/source/vcl/spritecanvas \
 	canvas/source/vcl/spritecanvashelper \
 	canvas/source/vcl/spritedevicehelper \

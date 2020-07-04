@@ -46,9 +46,6 @@
 #include "repainttarget.hxx"
 
 
-#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.VCL"
-#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.VCL"
-
 namespace vclcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
