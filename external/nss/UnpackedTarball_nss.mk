@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,nss))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,nss,$(NSS_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,nss,nspr/build/autoconf))
+
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.patch \
     external/nss/nss.aix.patch \
