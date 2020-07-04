@@ -22,7 +22,6 @@ import xml.etree.ElementTree as ET
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libevtattlo.a", "evtatt_component_getFactory"),
-    ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
     ("libemfiolo.a", "emfio_component_getFactory"),
@@ -141,6 +140,7 @@ core_constructor_list = [
     "com_sun_star_comp_SequenceInputStreamService",
     "com_sun_star_comp_SequenceOutputStreamService",
     "com_sun_star_comp_util_OfficeInstallationDirectories",
+    "org_openoffice_comp_comphelper_EnumerableMap",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # extensions/source/logging/log.component

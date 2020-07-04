@@ -19,7 +19,6 @@
 
 
 #include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentbase.hxx>
@@ -153,8 +152,9 @@ namespace comphelper
 
     class EnumerableMap: public Map_IFace, public ComponentBase
     {
-    protected:
+    public:
         EnumerableMap();
+    protected:
         virtual ~EnumerableMap() override;
 
         // XInitialization
@@ -183,12 +183,6 @@ namespace comphelper
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    public:
-        // XServiceInfo, static version (used for component registration)
-        static OUString getImplementationName_static(  );
-        static Sequence< OUString > getSupportedServiceNames_static(  );
-        static Reference< XInterface > Create( const Reference< XComponentContext >& );
 
     private:
         void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
@@ -645,7 +639,7 @@ namespace comphelper
 
     OUString SAL_CALL EnumerableMap::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "org.openoffice.comp.comphelper.EnumerableMap";
     }
 
     sal_Bool SAL_CALL EnumerableMap::supportsService( const OUString& _serviceName )
@@ -656,28 +650,8 @@ namespace comphelper
 
     Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
+        return { "com.sun.star.container.EnumerableMap" };
     }
-
-
-    OUString EnumerableMap::getImplementationName_static(  )
-    {
-        return "org.openoffice.comp.comphelper.EnumerableMap";
-    }
-
-
-    Sequence< OUString > EnumerableMap::getSupportedServiceNames_static(  )
-    {
-        Sequence< OUString > aServiceNames { "com.sun.star.container.EnumerableMap" };
-        return aServiceNames;
-    }
-
-
-    Reference< XInterface > EnumerableMap::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
-    {
-        return *new EnumerableMap;
-    }
-
 
     bool MapEnumerator::hasMoreElements()
     {
@@ -729,9 +703,11 @@ namespace comphelper
 } // namespace comphelper
 
 
-void createRegistryInfo_Map()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_comphelper_EnumerableMap(
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
 {
-    ::comphelper::module::OAutoRegistration< ::comphelper::EnumerableMap > aAutoRegistration;
+    return cppu::acquire(new comphelper::EnumerableMap());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
