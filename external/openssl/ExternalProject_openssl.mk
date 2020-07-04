@@ -39,7 +39,7 @@ OPENSSL_PLATFORM := \
       )\
     ,\
       $(if $(filter iOS,$(OS)),\
-        ios-armv7\
+        ios-aarch64\
       ,\
         $(if $(filter WNT,$(OS)),\
           $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
