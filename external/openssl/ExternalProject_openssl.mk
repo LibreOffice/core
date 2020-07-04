@@ -45,7 +45,6 @@ OPENSSL_PLATFORM := \
           $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
         ,\
           $(if $(filter MACOSX,$(OS)),\
-            $(if $(filter POWERPC,$(CPUNAME)),darwin-ppc-cc)\
             $(if $(filter INTEL,$(CPUNAME)),darwin-i386-cc)\
             $(if $(filter X86_64,$(CPUNAME)),darwin64-x86_64-cc)\
           )\
