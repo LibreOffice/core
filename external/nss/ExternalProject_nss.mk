@@ -49,6 +49,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\
+			CROSS_COMPILE=1 \
 			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			$(if $(filter ARM64,$(CPUNAME)),CPU_ARCH=aarch64) \
