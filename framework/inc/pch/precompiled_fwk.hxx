@@ -251,7 +251,6 @@
 #if PCH_LEVEL >= 4
 #include <framework/addonsoptions.hxx>
 #include <framework/fwkdllapi.h>
-#include <framework/fwkdllapi.h>
 #include <properties.h>
 #include <targets.h>
 #endif // PCH_LEVEL >= 4
