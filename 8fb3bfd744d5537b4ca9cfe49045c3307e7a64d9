@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d272e5a6_43ab5401",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:02:43Z",
+      "side": 1,
+      "message": "Does this really need to be moved? Just wondering (and people diving in the history might wonder too, so better not move if that\u0027s not necessary).",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b0506b_a8a4bfdb",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:02:43Z",
+      "side": 1,
+      "message": "Err, no, labelled_by_elm is really not the same as labelled_by here:\n\n- labelled_by is the list of \"labelled-by\" relations expressed *in* that element, which should really not have several elements.\n- while labelled_by_elm[oid] is the list of widgets which are labelled by oid, which is completely fine to have several elements.\n\nSo please leave this code as it is now, and introduce a separate \"if oid in labelled_by_elm\" to add your paired visibility check.\n\nI\u0027ll submit some clarification comments.",
+      "range": {
+        "startLine": 998,
+        "startChar": 19,
+        "endLine": 998,
+        "endChar": 34
+      },
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0fda384_3b3dcba5",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:02:43Z",
+      "side": 1,
+      "message": "I\u0027d rather keep a different name for the case when there are several relations of the same type foo in an element (\"multiple-foo\") and the case when there are several elements related to the same element (\"duplicate-foo\"), because that\u0027s a significantly different kind of fix to make.",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bd98d10_909178c9",
+        "filename": "solenv/gbuild/UIConfig.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:02:43Z",
+      "side": 1,
+      "message": "As mentioned in another comment, I prefer to keep the term \"duplicate\" with a different meaning than \"multiple\"",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1052409_5a5844e0",
+        "filename": "solenv/sanitizers/ui/cui.suppr",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:02:43Z",
+      "side": 1,
+      "message": "As mentioned in another comment, this is actually a bug that your change introduced.",
+      "range": {
+        "startLine": 316,
+        "startChar": 72,
+        "endLine": 316,
+        "endChar": 80
+      },
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
