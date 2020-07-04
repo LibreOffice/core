@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "40d59d19_2531685a",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-07-04T20:59:02Z",
+      "side": 1,
+      "message": "Please add a comment to tell the role of the variable, like I did in https://gerrit.libreoffice.org/c/core/+/97982",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d272e5a6_43ab5401",
         "filename": "bin/gla11y",
         "patchSetId": 5
