@@ -102,7 +102,6 @@ private:
 
     ShapeHashMap maShapeMap;
     ShapeHashMap* mpShapeMap;
-    OUString m_presetWarp;
 
 public:
 
