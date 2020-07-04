@@ -2077,6 +2077,8 @@ void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
+    sal_Int32 nc;
+    sal_Int16 nr, ng, nb;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2145,6 +2147,21 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TYELLOW:
             Append( "color yellow " );
+            break;
+        case TRGB:
+            Append( "color rgb " );
+            nc = pNode->GetToken().aText.toInt32();
+            nb = nc % 256;
+            nc /= 256;
+            ng = nc % 256;
+            nc /= 256;
+            nr = nc % 256;
+            Append(OUString::number(nr));
+            Separate();
+            Append(OUString::number(ng));
+            Separate();
+            Append(OUString::number(nb));
+            Separate();
             break;
         case TSANS:
             Append( "font sans " );
