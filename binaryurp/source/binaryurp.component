@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="binaryurp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.bridge.BridgeFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.bridge.BridgeFactory"
+        constructor="com_sun_star_comp_bridge_BridgeFactory_get_implementation">
     <service name="com.sun.star.bridge.BridgeFactory"/>
   </implementation>
 </component>
