@@ -686,11 +686,16 @@ static sal_Int32 lcl_CircleAngle2CustomShapeEllipseAngleOOX(const sal_Int32 nInt
 
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
-    // First check, if this is a Fontwork-shape. For DrawingML, such a shape is a
-    // TextBox shape with body property prstTxWarp.
     SAL_INFO("oox.shape", "write custom shape");
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
-    bool bIsFontworkShape(false);
+    // First check, if this is a Fontwork-shape. For DrawingML, such a shape is a
+    // TextBox shape with body property prstTxWarp.
+    if (IsFontworkShape(rXPropSet))
+    {
+        ShapeExport::WriteTextShape(xShape); // qualifier to prevent PowerPointShapeExport
+        return *this;
+    }
+
     bool bHasGeometrySeq(false);
     Sequence< PropertyValue > aGeometrySeq;
     OUString sShapeType;
@@ -704,32 +709,11 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             for (const PropertyValue& rProp : std::as_const(aGeometrySeq))
             {
                 SAL_INFO("oox.shape", "geometry property: " << rProp.Name);
-                if (rProp.Name == "TextPath")
-                {
-                    uno::Sequence<beans::PropertyValue> aTextPathSeq;
-                    rProp.Value >>= aTextPathSeq;
-                    for (const PropertyValue& rTextProp : std::as_const(aTextPathSeq))
-                    {
-                        if (rTextProp.Name == "TextPath")
-                        {
-                            rTextProp.Value >>= bIsFontworkShape;
-                        }
-                    }
-                }
-                else if (rProp.Name == "Type")
+                if (rProp.Name == "Type")
                     rProp.Value >>= sShapeType;
             }
         }
     }
-    if (bIsFontworkShape)
-    {
-        // write the correct type to m_presetWarp, WriteTextShape() needs it
-        // to set TextWarp.
-        m_presetWarp = PresetGeometryTypeNames::GetMsoName(sShapeType);
-        ShapeExport::WriteTextShape(xShape); // qualifier to prevent PowerPointShapeExport
-        return *this;
-    }
-
 
     bool bPredefinedHandlesUsed = true;
     bool bHasHandles = false;
@@ -751,9 +735,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     bool bFlipH = false;
     bool bFlipV = false;
-
-    // Avoid interference of preset type to the next shape
-    m_presetWarp = "";
 
     if (bHasGeometrySeq)
     {
@@ -777,10 +758,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = false;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
-                }
-                else if ( rProp.Name == "PresetTextWarp" )
-                {
-                    rProp.Value >>= m_presetWarp;
                 }
                 else if ( rProp.Name == "ViewBox" )
                     rProp.Value >>= aViewBox;
@@ -1556,7 +1533,7 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
             if (xPropertySetInfo->hasPropertyByName("TextBox") && xPropertySet->getPropertyValue("TextBox").get<bool>())
             {
                 GetTextExport()->WriteTextBox(uno::Reference<drawing::XShape>(xIface, uno::UNO_QUERY_THROW));
-                WriteText( xIface, m_presetWarp, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
+                WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
                 return *this;
             }
         }
@@ -1569,10 +1546,10 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
 
         pFS->startElementNS(nXmlNamespace,
                             (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx));
-        WriteText( xIface, m_presetWarp, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX) );
+        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX) );
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX)
-            WriteText( xIface, m_presetWarp, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
+            WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
     else if (GetDocumentType() == DOCUMENT_DOCX)
         mpFS->singleElementNS(nXmlNamespace, XML_bodyPr);
@@ -1859,9 +1836,9 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
 
 ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 {
-    bool bIsFontworkShape(m_presetWarp.startsWith("text") && m_presetWarp != "textNoShape");
     FSHelperPtr pFS = GetFS();
     Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
 
     // non visual shape properties
@@ -1898,12 +1875,12 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
-    if (!bIsFontworkShape) // Fontwork needs fill and outline on char instead.
+    if (!IsFontworkShape(xShapeProps)) // Fontwork needs fill and outline in run properties instead.
     {
         WriteBlipOrNormalFill(xPropertySet, "Graphic");
         WriteOutline(xPropertySet);
+        WriteShapeEffects(xPropertySet);
     }
-    WriteShapeEffects(xPropertySet);
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     WriteTextBox( xShape, mnXmlNamespace );
