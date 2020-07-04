@@ -41,6 +41,8 @@ except ImportError:
     import xml.etree.ElementTree as ET
     lxml = False
 
+howto_url = "https://wiki.documentfoundation.org/Development/Accessibility"
+
 # Toplevel widgets
 widgets_toplevel = [
     'GtkWindow',
@@ -1302,12 +1304,12 @@ def main():
     if suppr is not None:
         try:
             supprfile = open(suppr, 'r')
-            line_no = 1;
+            line_no = 1
             for line in supprfile.readlines():
                 prefix = line.rstrip()
                 suppressions[prefix] = True
-                suppressions_to_line[prefix] = line_no
-                line_no = line_no + 1;
+                suppressions_to_line[prefix] = "%s:%u" % (suppr, line_no)
+                line_no = line_no + 1
             supprfile.close()
         except IOError:
             pass
@@ -1354,22 +1356,23 @@ def main():
             traceback.print_exc()
             err(filename, None, None, "parse", "error parsing file")
 
+    wstr = ""
     if errors > 0 or errexists > 0:
-        estr = "%s new error%s" % (errors, 's' if errors > 1 else '')
+        wstr = "%s new error%s" % (errors, 's' if errors > 1 else '')
         if errexists > 0:
-            estr += " (%s suppressed by %s)" % (errexists, suppr)
-        print(estr)
+            wstr += " (%s suppressed by %s, please fix %s)" % (errexists, suppr, 'them' if errexists > 1 else 'it')
+        print(wstr)
 
     if warnings > 0 or warnexists > 0:
         wstr = "%s new warning%s" % (warnings, 's' if warnings > 1 else '')
         if warnexists > 0:
-            wstr += " (%s suppressed by %s)" % (warnexists, suppr)
+            wstr += " (%s suppressed by %s, please fix %s)" % (warnexists, suppr, 'them' if warnexists > 1 else 'it')
         print(wstr)
 
     if fatals > 0 or fatalexists > 0:
         wstr = "%s new fatal%s" % (fatals, 's' if fatals > 1 else '')
         if fatalexists > 0:
-            wstr += " (%s suppressed by %s)" % (fatalexists, suppr)
+            wstr += " (%s suppressed by %s, please fix %s)" % (fatalexists, suppr, 'them' if fatalexists > 1 else 'it')
         print(wstr)
 
     n = 0
@@ -1387,9 +1390,11 @@ def main():
         gen_supprfile.close()
     if outfile is not None:
         outfile.close()
-    if fatals > 0 and gen_suppr is None:
-        print("Explanations are available on https://wiki.documentfoundation.org/Development/Accessibility")
-        sys.exit(1)
+    if gen_suppr is None:
+        if wstr:
+            print("Explanations are available on " + howto_url)
+        if fatals > 0:
+            sys.exit(1)
 
 
 if __name__ == "__main__":
