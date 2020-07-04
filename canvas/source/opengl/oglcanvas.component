@@ -9,8 +9,9 @@
 -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="oglcanvas" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.OGL">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.OGL"
+        constructor="com_sun_star_comp_rendering_SpriteCanvas_OGL_get_implementation">
     <service name="com.sun.star.rendering.SpriteCanvas.OGL"/>
   </implementation>
 </component>

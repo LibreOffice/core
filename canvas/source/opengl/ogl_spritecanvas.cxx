@@ -11,7 +11,6 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <comphelper/servicedecl.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -19,13 +18,7 @@
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_spritecanvas.hxx"
 
-#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.OGL"
-#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.OGL"
-
-
 using namespace ::com::sun::star;
-
-namespace sdecl = comphelper::service_decl;
 
 namespace oglcanvas
 {
@@ -134,7 +127,7 @@ namespace oglcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return SPRITECANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.SpriteCanvas.OGL";
     }
 
     void SpriteCanvas::show( const ::rtl::Reference< CanvasCustomSprite >& xSprite )
@@ -154,26 +147,17 @@ namespace oglcanvas
         maCanvasHelper.renderRecordedActions();
     }
 
-    static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )
-    {
-        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
-        pCanvas->initialize();
-        return xRet;
-    }
-
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > const serviceImpl(&initCanvas);
-    const sdecl::ServiceDecl oglSpriteCanvasDecl(
-        serviceImpl,
-        SPRITECANVAS_IMPLEMENTATION_NAME,
-        SPRITECANVAS_SERVICE_NAME );
 }
 
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* oglcanvas_component_getFactory( char const* pImplName,
-                                         void*, void* )
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_rendering_SpriteCanvas_OGL_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    return sdecl::component_getFactoryHelper( pImplName, {&oglcanvas::oglSpriteCanvasDecl} );
+    auto p = new oglcanvas::SpriteCanvas(args, context);
+    cppu::acquire(p);
+    p->initialize();
+    return static_cast<cppu::OWeakObject*>(p);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
