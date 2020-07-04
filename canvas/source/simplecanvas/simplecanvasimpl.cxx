@@ -27,7 +27,7 @@
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/XSimpleCanvas.hpp>
-#include <comphelper/servicedecl.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <o3tl/lazy_update.hxx>
@@ -36,8 +36,6 @@
 
 
 #include <functional>
-
-#define SERVICE_NAME "com.sun.star.rendering.SimpleCanvas"
 
 using namespace ::com::sun::star;
 using namespace canvas;
@@ -171,7 +169,7 @@ namespace
         // Ifc XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override
         {
-            return SERVICE_NAME;
+            return "com.sun.star.rendering.SimpleCanvas";
         }
 
         // Ifc XSimpleCanvas
@@ -365,18 +363,13 @@ namespace
         SimpleRenderState                  maRenderState;
     };
 
-    namespace sdecl = comphelper::service_decl;
-    const sdecl::ServiceDecl simpleCanvasDecl(
-        sdecl::class_<SimpleCanvasImpl, sdecl::with_args<true> >(),
-        "com.sun.star.comp.rendering.SimpleCanvas",
-        SERVICE_NAME );
 }
 
-// The C shared lib entry points
-extern "C" SAL_DLLPUBLIC_EXPORT void* simplecanvas_component_getFactory( char const* pImplName,
-                                         void*, void* )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_rendering_SimpleCanvas(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    return sdecl::component_getFactoryHelper( pImplName, {&simpleCanvasDecl} );
+    return cppu::acquire(new SimpleCanvasImpl(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
