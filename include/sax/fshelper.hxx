@@ -66,21 +66,9 @@ public:
 
     /// Start an element. After the first two arguments there can be a number of (attribute, value) pairs.
     template<typename... Args>
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args &&... args)
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, Args &&... args)
     {
-        if (value)
-            pushAttributeValue(attribute, value);
-        startElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    template<typename... Args>
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
-    {
-        pushAttributeValue(attribute, value);
-        startElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
-    {
-        startElement(FSNS(namespaceTokenId, elementTokenId));
+        startElement(FSNS(namespaceTokenId, elementTokenId), std::forward<Args>(args)...);
     }
 
     /// Create a single element. After the first argument there can be a number of (attribute, value) pairs.
@@ -101,21 +89,9 @@ public:
 
     /// Create a single element. After the first two arguments there can be a number of (attribute, value) pairs.
     template<typename... Args>
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args &&... args)
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, Args &&... args)
     {
-        if (value)
-            pushAttributeValue(attribute, value);
-        singleElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    template<typename... Args>
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
-    {
-        pushAttributeValue(attribute, value);
-        singleElementNS(namespaceTokenId, elementTokenId, std::forward<Args>(args)...);
-    }
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
-    {
-        singleElement(FSNS(namespaceTokenId, elementTokenId));
+        singleElement(FSNS(namespaceTokenId, elementTokenId), std::forward<Args>(args)...);
     }
 
     void endElement(sal_Int32 elementTokenId);
