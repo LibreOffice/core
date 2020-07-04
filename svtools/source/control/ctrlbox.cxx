@@ -466,14 +466,16 @@ void FontNameBox::Fill( const FontList* pList )
         set_active_or_entry_text(aOldText);
 }
 
-void FontNameBox::EnableWYSIWYG()
+void FontNameBox::EnableWYSIWYG(bool bEnable)
 {
-    if (mbWYSIWYG || comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive())
         return;
-    mbWYSIWYG = true;
+    if (mbWYSIWYG == bEnable)
+        return;
+    mbWYSIWYG = bEnable;
 
     static bool bGlobalsInited;
-    if (!bGlobalsInited)
+    if (mbWYSIWYG && !bGlobalsInited)
     {
         gUserItemSz = Size(m_xComboBox->get_approximate_digit_width() * 52, m_xComboBox->get_text_height());
         gUserItemSz.setHeight(gUserItemSz.Height() * 16);
@@ -485,11 +487,17 @@ void FontNameBox::EnableWYSIWYG()
         bGlobalsInited = true;
     }
 
-    m_xComboBox->connect_custom_get_size(LINK(this, FontNameBox, CustomGetSizeHdl));
-    m_xComboBox->connect_custom_render(LINK(this, FontNameBox, CustomRenderHdl));
-    m_xComboBox->set_custom_renderer();
-
-    mbWYSIWYG = true;
+    if (mbWYSIWYG)
+    {
+        m_xComboBox->connect_custom_get_size(LINK(this, FontNameBox, CustomGetSizeHdl));
+        m_xComboBox->connect_custom_render(LINK(this, FontNameBox, CustomRenderHdl));
+    }
+    else
+    {
+        m_xComboBox->connect_custom_get_size(Link<OutputDevice&, Size>());
+        m_xComboBox->connect_custom_render(Link<weld::ComboBox::render_args, void>());
+    }
+    m_xComboBox->set_custom_renderer(mbWYSIWYG);
 }
 
 IMPL_STATIC_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
