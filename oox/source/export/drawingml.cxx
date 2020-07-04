@@ -115,6 +115,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <drawingml/presetgeometrynames.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -1694,8 +1695,9 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation), IsGroupShape( rXShape ));
 }
 
-void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, sal_Int16 nScriptType )
+void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement,
+                                    bool bCheckDirect,bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                                    sal_Int16 nScriptType, const Reference< XPropertySet >& rXShapePropSet)
 {
     Reference< XPropertySet > rXPropSet = rRun;
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -1899,31 +1901,42 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                           XML_baseline, sax_fastparser::UseIf(OString::number(nCharEscapement*1000), nCharEscapement != 0),
                           XML_cap, cap );
 
-    // mso doesn't like text color to be placed after typeface
-    if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharColor", eState)
-         && eState == beans::PropertyState_DIRECT_VALUE)
-        || GetProperty(rXPropSet, "CharColor"))
+    // Fontwork-shapes in LO have text outline and fill from shape stroke and shape fill
+    // PowerPoint has this as run properties
+    if (IsFontworkShape(rXShapePropSet))
     {
-        ::Color color( *o3tl::doAccess<sal_uInt32>(mAny) );
-        SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
-
-        // WriteSolidFill() handles MAX_PERCENT as "no transparency".
-        sal_Int32 nTransparency = MAX_PERCENT;
-        if (rXPropSet->getPropertySetInfo()->hasPropertyByName("CharTransparence"))
+        WriteOutline(rXShapePropSet);
+        WriteBlipOrNormalFill(rXShapePropSet, "Graphic");
+        WriteShapeEffects(rXShapePropSet);
+    }
+    else
+    {
+        // mso doesn't like text color to be placed after typeface
+        if ((bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, "CharColor", eState)
+            && eState == beans::PropertyState_DIRECT_VALUE)
+            || GetProperty(rXPropSet, "CharColor"))
         {
-            rXPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
-            // UNO scale is 0..100, OOXML scale is 0..100000; also UNO tracks transparency, OOXML
-            // tracks opacity.
-            nTransparency = MAX_PERCENT - (nTransparency * PER_PERCENT);
-        }
+            ::Color color( *o3tl::doAccess<sal_uInt32>(mAny) );
+            SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
 
-        // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
-        // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
-        if( color != COL_AUTO )
-        {
-            color.SetTransparency(0);
-            // TODO: special handle embossed/engraved
-            WriteSolidFill(color, nTransparency);
+            // WriteSolidFill() handles MAX_PERCENT as "no transparency".
+            sal_Int32 nTransparency = MAX_PERCENT;
+            if (rXPropSet->getPropertySetInfo()->hasPropertyByName("CharTransparence"))
+            {
+                rXPropSet->getPropertyValue("CharTransparence") >>= nTransparency;
+                // UNO scale is 0..100, OOXML scale is 0..100000; also UNO tracks transparency, OOXML
+                // tracks opacity.
+                nTransparency = MAX_PERCENT - (nTransparency * PER_PERCENT);
+            }
+
+            // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
+            // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
+            if( color != COL_AUTO )
+            {
+                color.SetTransparency(0);
+                // TODO: special handle embossed/engraved
+                WriteSolidFill(color, nTransparency);
+            }
         }
     }
 
@@ -2136,7 +2149,8 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
 }
 
 void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
-                          bool& rbOverridingCharHeight, sal_Int32& rnCharHeight)
+                          bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                          const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     sal_Int16 nLevel = -1;
@@ -2197,7 +2211,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
         Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
 
-        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight, GetScriptType(sText) );
+        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight, GetScriptType(sText), rXShapePropSet);
         mpFS->startElementNS(XML_a, XML_t);
         mpFS->writeEscaped( sText );
         mpFS->endElementNS( XML_a, XML_t );
@@ -2669,7 +2683,8 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
 }
 
 void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
-                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight )
+                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                                const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
 {
     Reference< XEnumerationAccess > access( rParagraph, UNO_QUERY );
     if( !access.is() )
@@ -2699,26 +2714,60 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                 WriteParagraphProperties( rParagraph, fFirstCharHeight );
                 bPropertiesWritten = true;
             }
-            WriteRun( run, rbOverridingCharHeight, rnCharHeight );
+            WriteRun( run, rbOverridingCharHeight, rnCharHeight, rXShapePropSet);
         }
     }
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
-    WriteRunProperties( rXPropSet, false, XML_endParaRPr, false, rbOverridingCharHeight, rnCharHeight );
+    sal_Int16 nDummy = -1;
+    WriteRunProperties(rXPropSet, false, XML_endParaRPr, false, rbOverridingCharHeight,
+                       rnCharHeight, nDummy, rXShapePropSet);
 
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
+bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
 {
-    Reference< XText > xXText( rXIface, UNO_QUERY );
-    Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
+    bool bResult(false);
+    if (rXShapePropSet.is())
+    {
+        Sequence<PropertyValue> aCustomShapeGeometryProps;
+        if (GetProperty(rXShapePropSet, "CustomShapeGeometry"))
+        {
+            mAny >>= aCustomShapeGeometryProps;
+            uno::Sequence<beans::PropertyValue> aTextPathSeq;
+            for (const auto& rProp : std::as_const(aCustomShapeGeometryProps))
+            {
+                if (rProp.Name == "TextPath")
+                {
+                    rProp.Value >>= aTextPathSeq;
+                    for (const auto& rTextPathItem : std::as_const(aTextPathSeq))
+                    {
+                        if (rTextPathItem.Name == "TextPath")
+                        {
+                            rTextPathItem.Value >>= bResult;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return bResult;
+}
 
+void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
+                           sal_Int32 nXmlNamespace)
+{
+    // ToDo: Fontwork in DOCX
+    Reference< XText > xXText( rXIface, UNO_QUERY );
     if( !xXText.is() )
         return;
 
+    Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
+
     sal_Int32 nTextPreRotateAngle = 0;
     double nTextRotateAngle = 0;
-    bool bIsFontworkShape(presetWarp.startsWith("text") && (presetWarp != "textNoShape"));
 
 #define DEFLRINS 254
 #define DEFTBINS 127
@@ -2757,9 +2806,13 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
     }
 
+    bool bIsFontworkShape(IsFontworkShape(rXPropSet));
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
     uno::Sequence<beans::PropertyValue> aTextPathSeq;
     bool bScaleX(false);
+    OUString sShapeType("non-primitive");
+    // ToDo move to InteropGrabBag
+    OUString sMSWordPresetTextWarp;
 
     if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
@@ -2780,29 +2833,35 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                         sWritingMode = "vert270";
                         bVertical = true;
                     }
-                    if (!bIsFontworkShape)
-                        break;
                 }
                 else if (rProp.Name == "AdjustmentValues")
                     rProp.Value >>= aAdjustmentSeq;
                 else if( rProp.Name == "TextRotateAngle" )
                     rProp.Value >>= nTextRotateAngle;
+                else if (rProp.Name == "Type")
+                    rProp.Value >>= sShapeType;
                 else if (rProp.Name == "TextPath")
                 {
                     rProp.Value >>= aTextPathSeq;
-                    for (const auto& rTextPath : std::as_const(aTextPathSeq))
+                    for (const auto& rTextPathItem : std::as_const(aTextPathSeq))
                     {
-                        if (rTextPath.Name == "ScaleX")
-                            rTextPath.Value >>= bScaleX;
+                        if (rTextPathItem.Name == "ScaleX")
+                            rTextPathItem.Value >>= bScaleX;
                     }
                 }
+                else if (rProp.Name == "PresetTextWarp")
+                    rProp.Value >>= sMSWordPresetTextWarp;
             }
         }
     }
+    OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
+    // ODF may have user defined TextPath, use "textPlain" as ersatz.
+    if (sPresetWarp.isEmpty())
+        sPresetWarp = bIsFontworkShape ? OUStringLiteral("textPlain") : OUStringLiteral("textNoShape");
 
     bool bFromWordArt = !bScaleX
-                        && ( presetWarp == "textArchDown" || presetWarp == "textArchUp"
-                            || presetWarp == "textButton" || presetWarp == "textCircle");
+                        && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
+                            || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
 
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
@@ -2824,7 +2883,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
     if (bBodyPr)
     {
-        const char* pWrap = bHasWrap && !bWrap ? "none" : nullptr;
+        const char* pWrap = (bHasWrap && !bWrap) || bIsFontworkShape ? "none" : nullptr;
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
             // In case of DOCX, if we want to have the same effect as
@@ -2849,11 +2908,16 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         {
             if (aAdjustmentSeq.hasElements())
             {
-                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp);
+                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
                 mpFS->startElementNS(XML_a, XML_avLst);
+                bool bHasTwoHandles(
+                    sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
+                    || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour"
+                    || sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
+                    || sPresetWarp == "textWave2" || sPresetWarp == "textWave4");
                 for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
                 {
-                    OString sName = "adj" + (( nElems > 1 ) ? OString::number(i + 1) : OString());
+                    OString sName = "adj" + (bHasTwoHandles ? OString::number(i + 1) : OString());
                     double fValue(0.0);
                     if (aAdjustmentSeq[i].Value.getValueTypeClass() == TypeClass_DOUBLE)
                         aAdjustmentSeq[i].Value >>= fValue;
@@ -2866,20 +2930,27 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                     // Convert from binary coordinate system with viewBox "0 0 21600 21600" and simple degree
                     // to DrawingML with coordinate range 0..100000 and angle in 1/60000 degree.
                     // Reverse to conversion in lcl_createPresetShape in drawingml/shape.cxx on import.
-                    if (presetWarp == "textArchDown" || presetWarp == "textArchUp"
-                        || presetWarp == "textButton" || presetWarp == "textCircle"
-                        || ((i == 0) && (presetWarp == "textArchDownPour" || presetWarp == "textArchUpPour"
-                        || presetWarp == "textButtonPour" || presetWarp == "textCirclePour")))
+                    if (sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
+                        || sPresetWarp == "textButton" || sPresetWarp == "textCircle"
+                        || ((i == 0)
+                            && (sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
+                                || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour")))
                     {
                         fValue *= 60000.0;
+                        if (fValue < 0)
+                            fValue += 21600000;
                     }
-                    else if ((i == 1) && (presetWarp == "textDoubleWave1" || presetWarp == "textWave1"
-                            || presetWarp == "textWave2" || presetWarp == "textWave4"))
+                    else if ((i == 1)
+                             && (sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
+                            || sPresetWarp == "textWave2" || sPresetWarp == "textWave4"))
                     {
                         fValue = fValue / 0.216 - 50000.0;
                     }
-                    else if ((i == 1) && (presetWarp == "textArchDownPour" || presetWarp == "textArchUpPour"
-                        || presetWarp == "textButtonPour" || presetWarp == "textCirclePour"))
+                    else if ((i == 1)
+                             && (sPresetWarp == "textArchDownPour"
+                                 || sPresetWarp == "textArchUpPour"
+                                 || sPresetWarp == "textButtonPour"
+                                 || sPresetWarp == "textCirclePour"))
                     {
                         fValue /= 0.108;
                     }
@@ -2889,14 +2960,23 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                     }
                     OString sFmla = "val " + OString::number(std::lround(fValue));
                     mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
+                    // There exists faulty Favorite shapes with one handle but two adjustment values.
+                    if (!bHasTwoHandles)
+                        break;
                 }
-                mpFS->endElementNS( XML_a, XML_avLst );
+                mpFS->endElementNS(XML_a, XML_avLst);
                 mpFS->endElementNS(XML_a, XML_prstTxWarp);
             }
             else
             {
-                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp);
+                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
             }
+        }
+        else if (GetDocumentType() == DOCUMENT_DOCX)
+        {
+            // interim solution for fdo#80897, roundtrip DOCX > LO > DOCX
+            if (!sMSWordPresetTextWarp.isEmpty())
+                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sMSWordPresetTextWarp);
         }
 
         if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
@@ -2995,7 +3075,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         Any any ( enumeration->nextElement() );
 
         if( any >>= paragraph)
-            WriteParagraph( paragraph, bOverridingCharHeight, nCharHeight );
+            WriteParagraph( paragraph, bOverridingCharHeight, nCharHeight, rXPropSet );
     }
 }
 
