@@ -54,16 +54,6 @@ typedef
 class BridgeFactory : private cppu::BaseMutex, public BridgeFactoryBase
 {
 public:
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL static_create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & xContext);
-
-    static OUString SAL_CALL static_getImplementationName();
-
-    static com::sun::star::uno::Sequence< OUString > SAL_CALL
-    static_getSupportedServiceNames();
-
     void removeBridge(
         com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
             const & bridge);
@@ -71,7 +61,6 @@ public:
     using BridgeFactoryBase::acquire;
     using BridgeFactoryBase::release;
 
-private:
     BridgeFactory(const BridgeFactory&) = delete;
     BridgeFactory& operator=(const BridgeFactory&) = delete;
 
@@ -79,6 +68,7 @@ private:
 
     virtual ~BridgeFactory() override;
 
+private:
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
