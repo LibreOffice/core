@@ -143,6 +143,7 @@ private:
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;
 
+
 protected:
     css::uno::Any                             mAny;
     ::sax_fastparser::FSHelperPtr             mpFS;
@@ -166,6 +167,7 @@ protected:
     const char* GetRelationCompPrefix() const;
 
     static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
+    bool IsFontworkShape(const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
@@ -244,17 +246,20 @@ public:
     void WriteTransformation(const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
-    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0);
+    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0);
     void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
-                         bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
+                         bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
     void WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight);
     void WriteParagraphNumbering(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
                                   sal_Int16 nLevel );
     void WriteParagraphTabStops(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
-                   bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
+                   bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                   const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
     void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
-                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, sal_Int16 nScriptType = css::i18n::ScriptType::LATIN);
+                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                             sal_Int16 nScriptType = css::i18n::ScriptType::LATIN,
+                             const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet = {});
 
     void WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     void WritePresetShape( const char* pShape );

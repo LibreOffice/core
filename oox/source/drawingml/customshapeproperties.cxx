@@ -157,6 +157,9 @@ void CustomShapeProperties::pushToPropSet(
         uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
 
+        // ToDo: Using sAdjustmentValues in this "if" looks nonsense.
+        // It was introduced in revision acd2c909, which introduced the property "PresetTextWarp"
+        // for interoperability with Word.
         if (aGeoPropSet >>= aGeoPropSeq)
         {
             for ( const auto& rGeoProp : std::as_const(aGeoPropSeq) )
