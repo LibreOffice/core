@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="basctl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.basic.BasicIDE">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.basic.BasicIDE"
+        constructor="com_sun_star_comp_basic_BasicID_get_implementation">
     <service name="com.sun.star.script.BasicIDE"/>
   </implementation>
 </component>

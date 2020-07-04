@@ -54,9 +54,6 @@ public:
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
     virtual void SAL_CALL storeToURL( const   OUString& sURL,
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
-
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static OUString getImplementationName_Static();
 };
 
 /// @throws com::sun::star::uno::Exception
