@@ -1600,7 +1600,7 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
             // OOXTODO: XML_relativeIndent,     mnIndent?
             // OOXTODO: XML_justifyLastLine,
             XML_shrinkToFit,        ToPsz( mbShrink ),
-            XML_readingOrder, mnTextDir == EXC_XF_TEXTDIR_CONTEXT ? nullptr : OString::number(mnTextDir).getStr() );
+            XML_readingOrder, sax_fastparser::UseIf(OString::number(mnTextDir), mnTextDir != EXC_XF_TEXTDIR_CONTEXT) );
 }
 
 namespace {
@@ -2200,7 +2200,7 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
             XML_fontId,             OString::number(mnXclFont),
             XML_fillId,             OString::number(mnFillId),
             XML_borderId,           OString::number(mnBorderId),
-            XML_xfId,               IsStyleXF() ? nullptr : OString::number( nXfId ).getStr(),
+            XML_xfId,               sax_fastparser::UseIf(OString::number(nXfId), !IsStyleXF()),
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
