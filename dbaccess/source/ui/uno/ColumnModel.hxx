@@ -73,12 +73,6 @@ public:
 
 // css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-    Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
     virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;

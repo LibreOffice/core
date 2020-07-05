@@ -18,9 +18,7 @@
  */
 
 #include <sqlmessage.hxx>
-#include <uiservices.hxx>
 #include <unosqlmessage.hxx>
-#include <dbu_reghelper.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>
 #include <comphelper/processfactory.hxx>
@@ -37,9 +35,11 @@ using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
-extern "C" void createRegistryInfo_OSQLMessageDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< OSQLMessageDialog > aAutoRegistration;
+    return cppu::acquire(new OSQLMessageDialog(context));
 }
 
 namespace dbaui
@@ -63,27 +63,12 @@ Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
-}
-
 OUString SAL_CALL OSQLMessageDialog::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString OSQLMessageDialog::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.OSQLMessageDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> OSQLMessageDialog::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.sdb.ErrorMessageDialog" };
 }

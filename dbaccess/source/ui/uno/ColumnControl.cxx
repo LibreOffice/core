@@ -19,15 +19,15 @@
 
 #include "ColumnControl.hxx"
 #include "ColumnPeer.hxx"
-#include <uiservices.hxx>
 #include <apitools.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <dbu_reghelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-extern "C" void createRegistryInfo_OColumnControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbu_OColumnControl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControl> aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OColumnControl(context));
 }
 
 namespace dbaui
@@ -43,13 +43,14 @@ OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
 {
 }
 
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT)
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControl, "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
-
-Reference< XInterface > OColumnControl::Create(const Reference< XMultiServiceFactory >& _rxORB)
+OUString SAL_CALL OColumnControl::getImplementationName()
 {
-    return static_cast< XServiceInfo* >(new OColumnControl(comphelper::getComponentContext(_rxORB)));
+        return SERVICE_CONTROLDEFAULT;
+}
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
+css::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
+{
+    return { "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl" };
 }
 
 OUString OColumnControl::GetComponentServiceName()

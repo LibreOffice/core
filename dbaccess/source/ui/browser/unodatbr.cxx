@@ -23,9 +23,7 @@
 #include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
 #include "dbtreeview.hxx"
-#include <dbu_reghelper.hxx>
 #include <strings.hrc>
-#include <uiservices.hxx>
 #include <imageprovider.hxx>
 #include <sbagrid.hxx>
 #include <strings.hxx>
@@ -46,6 +44,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -127,9 +126,12 @@ using namespace ::comphelper;
 using namespace ::svx;
 
 // SbaTableQueryBrowser
-extern "C" void createRegistryInfo_OBrowser()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SbaTableQueryBrowser > aAutoRegistration;
+    SolarMutexGuard aGuard;
+    return cppu::acquire(new ::dbaui::SbaTableQueryBrowser(context));
 }
 
 namespace dbaui
@@ -154,28 +156,12 @@ static void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, c
 
 OUString SAL_CALL SbaTableQueryBrowser::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.dbu.ODatasourceBrowser";
 }
 
 css::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-OUString SbaTableQueryBrowser::getImplementationName_Static()
-{
-    return "org.openoffice.comp.dbu.ODatasourceBrowser";
-}
-
-css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Static()
-{
     return { "com.sun.star.sdb.DataSourceBrowser" };
-}
-
-Reference< XInterface > SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    SolarMutexGuard aGuard;
-    return *(new SbaTableQueryBrowser(comphelper::getComponentContext(_rxFactory)));
 }
 
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >& _rM)
