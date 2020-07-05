@@ -17,7 +17,7 @@
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 
 class ToolBox;
 class ComboBox;

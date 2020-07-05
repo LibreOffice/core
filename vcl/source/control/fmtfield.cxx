@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <svl/zformat.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/formattedfielduiobject.hxx>
 #include <vcl/weld.hxx>
