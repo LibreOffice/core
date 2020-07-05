@@ -20,7 +20,7 @@ namespace vcl::bitmap
 {
 // Generates strip ranges and run the input function with the start and
 // end as parameters. The additional parameter bLast denotes if the
-// iteration is teh last one.
+// iteration is the last one.
 //
 // Example:
 // first = 0, last = 100, STRIP_SIZE = 32
