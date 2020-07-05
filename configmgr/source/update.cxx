@@ -38,7 +38,6 @@
 #include "lock.hxx"
 #include "modifications.hxx"
 #include "rootaccess.hxx"
-#include "update.hxx"
 
 namespace configmgr::update {
 
@@ -139,21 +138,13 @@ void Service::insertModificationXcuFile(
 }
 
 }
+}
 
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_configuration_Update_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context));
-}
-
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.Update";
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.Update_Service" };
-}
-
+    return cppu::acquire(static_cast< cppu::OWeakObject * >(new configmgr::update::Service(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

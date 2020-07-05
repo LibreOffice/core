@@ -29,7 +29,6 @@
 
 #include "components.hxx"
 #include "lock.hxx"
-#include "readwriteaccess.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr::read_write_access {
@@ -53,14 +52,14 @@ private:
     virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return read_write_access::getImplementationName(); }
+    { return "com.sun.star.comp.configuration.ReadWriteAccess"; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return read_write_access::getSupportedServiceNames(); }
+    { return { "com.sun.star.configuration.ReadWriteAccess" }; }
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & aArguments) override;
@@ -131,21 +130,14 @@ rtl::Reference< RootAccess > Service::getRoot() {
 }
 
 }
+}
 
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_configuration_ReadWriteAccess_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context));
+    return cppu::acquire(static_cast< cppu::OWeakObject * >(new configmgr::read_write_access::Service(context)));
 }
 
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.ReadWriteAccess";
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.ReadWriteAccess" };
-}
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,28 +26,18 @@
 #include <rtl/ustring.hxx>
 
 #include "configurationprovider.hxx"
-#include "defaultprovider.hxx"
 #include "lock.hxx"
 
-namespace configmgr::default_provider {
-
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_configuration_DefaultProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard guard(*lock());
+    osl::MutexGuard guard(*configmgr::lock());
     static css::uno::Reference< css::uno::XInterface > singleton(
-        configuration_provider::createDefault(context));
-    return singleton;
+        configmgr::configuration_provider::createDefault(context));
+    singleton->acquire();
+    return singleton.get();
 }
 
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.DefaultProvider";
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.DefaultProvider" };
-}
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

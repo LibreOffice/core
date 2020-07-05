@@ -18,24 +18,30 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="configmgr" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.ConfigurationProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.configuration.ConfigurationProvider"
+    constructor="com_sun_star_comp_configuration_ConfigurationProvider_get_implementation">
     <service name="com.sun.star.configuration.ConfigurationProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.configuration.ConfigurationRegistry">
+  <implementation name="com.sun.star.comp.configuration.ConfigurationRegistry"
+    constructor="com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation">
     <service name="com.sun.star.configuration.ConfigurationRegistry"/>
   </implementation>
-  <implementation name="com.sun.star.comp.configuration.DefaultProvider">
+  <implementation name="com.sun.star.comp.configuration.DefaultProvider"
+    constructor="com_sun_star_comp_configuration_DefaultProvider_get_implementation">
     <service name="com.sun.star.configuration.DefaultProvider"/>
     <singleton name="com.sun.star.configuration.theDefaultProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.configuration.ReadOnlyAccess">
+  <implementation name="com.sun.star.comp.configuration.ReadOnlyAccess"
+    constructor="com_sun_star_comp_configuration_ReadOnlyAccess_get_implementation">
     <service name="com.sun.star.configuration.ReadOnlyAccess"/>
   </implementation>
-  <implementation name="com.sun.star.comp.configuration.ReadWriteAccess">
+  <implementation name="com.sun.star.comp.configuration.ReadWriteAccess"
+    constructor="com_sun_star_comp_configuration_ReadWriteAccess_get_implementation">
     <service name="com.sun.star.configuration.ReadWriteAccess"/>
   </implementation>
-  <implementation name="com.sun.star.comp.configuration.Update">
+  <implementation name="com.sun.star.comp.configuration.Update"
+    constructor="com_sun_star_comp_configuration_Update_get_implementation">
     <service name="com.sun.star.configuration.Update_Service"/>
     <singleton name="com.sun.star.configuration.Update"/>
   </implementation>

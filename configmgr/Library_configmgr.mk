@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/readwriteaccess \
     configmgr/source/rootaccess \
     configmgr/source/rootnode \
-    configmgr/source/services \
     configmgr/source/setnode \
     configmgr/source/type \
     configmgr/source/update \
