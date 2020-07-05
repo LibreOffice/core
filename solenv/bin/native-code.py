@@ -47,7 +47,6 @@ core_factory_list = [
     ("libutllo.a", "utl_component_getFactory"),
     ("libxoflo.a", "xof_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
@@ -59,7 +58,6 @@ core_factory_list = [
     ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
-    ("libcuilo.a", "cui_component_getFactory"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ("libguesslanglo.a", "guesslang_component_getFactory"),
     ("libbiblo.a", "bib_component_getFactory"),
@@ -147,6 +145,10 @@ core_constructor_list = [
     "com_sun_star_comp_configuration_ReadOnlyAccess_get_implementation",
     "com_sun_star_comp_configuration_ReadWriteAccess_get_implementation",
     "com_sun_star_comp_configuration_Update_get_implementation",
+# cppcanvas/source/uno/mtfrenderer.component
+    "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
+# cui/util/cui.component
+    "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # extensions/source/logging/log.component
