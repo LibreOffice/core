@@ -19,7 +19,6 @@
 
 #include <core_resource.hxx>
 #include <helpids.h>
-#include <uiservices.hxx>
 
 #include <sot/exchange.hxx>
 
@@ -52,7 +51,6 @@
 #include <browserids.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <dbu_reghelper.hxx>
 #include <dbexchange.hxx>
 #include <TableRowExchange.hxx>
 #include <TableRow.hxx>
@@ -80,37 +78,25 @@ using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::svt;
 
-extern "C" void createRegistryInfo_SbaXGridControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbu_SbaXGridControl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
+    return cppu::acquire(new SbaXGridControl(context));
 }
 
 css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.form.control.InteractionGridControl", "com.sun.star.form.control.GridControl",
+         "com.sun.star.awt.UnoControl" };
 }
 
-Reference< XInterface > SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new SbaXGridControl( comphelper::getComponentContext(_rxFactory) ));
-}
 
 // SbaXGridControl
 
 OUString SAL_CALL SbaXGridControl::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString SbaXGridControl::getImplementationName_Static()
-{
     return "com.sun.star.comp.dbu.SbaXGridControl";
-}
-
-Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.form.control.InteractionGridControl", "com.sun.star.form.control.GridControl",
-         "com.sun.star.awt.UnoControl" };
 }
 
 SbaXGridControl::SbaXGridControl(const Reference< XComponentContext >& _rM)

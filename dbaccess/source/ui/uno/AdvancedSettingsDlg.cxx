@@ -19,9 +19,7 @@
 
 #include <sal/config.h>
 
-#include <uiservices.hxx>
 #include <unoadmin.hxx>
-#include <dbu_reghelper.hxx>
 #include <advancedsettingsdlg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -42,24 +40,15 @@ namespace dbaui
             ,public ::comphelper::OPropertyArrayUsageHelper< OAdvancedSettingsDialog >
     {
 
-    protected:
+    public:
         explicit OAdvancedSettingsDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
-    public:
         // XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-        // XServiceInfo - static methods
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static();
-        static css::uno::Reference< css::uno::XInterface >
-                Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -83,27 +72,12 @@ namespace dbaui
         return css::uno::Sequence<sal_Int8>();
     }
 
-    Reference< XInterface > OAdvancedSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-    {
-        return *(new OAdvancedSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
-    }
-
     OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName()
-    {
-        return getImplementationName_Static();
-    }
-
-    OUString OAdvancedSettingsDialog::getImplementationName_Static()
     {
         return "org.openoffice.comp.dbu.OAdvancedSettingsDialog";
     }
 
     css::uno::Sequence<OUString> SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames()
-    {
-        return getSupportedServiceNames_Static();
-    }
-
-    css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static()
     {
         return { "com.sun.star.sdb.AdvancedDatabaseSettingsDialog" };
     }
@@ -134,9 +108,11 @@ namespace dbaui
 
 }   // namespace dbaui
 
-extern "C" void createRegistryInfo_OAdvancedSettingsDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OAdvancedSettingsDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OAdvancedSettingsDialog > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OAdvancedSettingsDialog(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

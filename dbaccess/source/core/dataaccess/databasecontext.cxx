@@ -196,26 +196,10 @@ ODatabaseContext::~ODatabaseContext()
     m_xDatabaseRegistrations.clear();
 }
 
-// Helper
-OUString ODatabaseContext::getImplementationName_static()
-{
-    return "com.sun.star.comp.dba.ODatabaseContext";
-}
-
-Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentContext >& _rxContext)
-{
-    return *( new ODatabaseContext( _rxContext ) );
-}
-
-Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static()
-{
-    return { "com.sun.star.sdb.DatabaseContext" };
-}
-
 // XServiceInfo
 OUString ODatabaseContext::getImplementationName(  )
 {
-    return getImplementationName_static();
+    return "com.sun.star.comp.dba.ODatabaseContext";
 }
 
 sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName )
@@ -225,7 +209,7 @@ sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.sdb.DatabaseContext" };
 }
 
 Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
@@ -759,5 +743,13 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
 }
 
 }   // namespace dbaccess
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dba_ODatabaseContext_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new dbaccess::ODatabaseContext(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

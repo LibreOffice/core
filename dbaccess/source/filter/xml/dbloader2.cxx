@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <flt_reghelper.hxx>
-#include "xmlservices.hxx"
 #include <strings.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -71,7 +69,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::ui::dialogs;
@@ -94,15 +91,6 @@ public:
     OUString                        SAL_CALL getImplementationName() override;
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
-
-    // static methods
-    static OUString                 getImplementationName_Static() throw(  )
-    {
-        return "org.openoffice.comp.dbflt.DBTypeDetection";
-    }
-    static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
-    static css::uno::Reference< css::uno::XInterface >
-            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
@@ -175,15 +163,10 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
     return OUString();
 }
 
-Reference< XInterface > DBTypeDetection::Create( const Reference< XMultiServiceFactory >  & rSMgr )
-{
-    return *(new DBTypeDetection( comphelper::getComponentContext(rSMgr) ));
-}
-
 // XServiceInfo
 OUString SAL_CALL DBTypeDetection::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.dbflt.DBTypeDetection";
 }
 
 // XServiceInfo
@@ -195,20 +178,16 @@ sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  )
-{
     return { "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 } // namespace dbaxml
 
-extern "C" void createRegistryInfo_DBTypeDetection()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbflt_DBTypeDetection_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBTypeDetection > aAutoRegistration;
+    return cppu::acquire(new ::dbaxml::DBTypeDetection(context));
 }
 
 namespace dbaxml
@@ -233,15 +212,6 @@ public:
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
-    // static methods
-    static OUString                 getImplementationName_Static() throw(  )
-    {
-        return "org.openoffice.comp.dbflt.DBContentLoader2";
-    }
-    static Sequence< OUString > getSupportedServiceNames_Static() throw(  );
-    static css::uno::Reference< css::uno::XInterface >
-            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
-
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
@@ -261,15 +231,10 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactor
 
 }
 
-Reference< XInterface > DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
-{
-    return *(new DBContentLoader( comphelper::getComponentContext(rSMgr) ));
-}
-
 // XServiceInfo
 OUString SAL_CALL DBContentLoader::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.dbflt.DBContentLoader2";
 }
 
 // XServiceInfo
@@ -281,15 +246,9 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.frame.FrameLoader" };
 }
 
-// ORegistryServiceManager_Static
-Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static() throw(  )
-{
-    Sequence<OUString> aSNS { "com.sun.star.frame.FrameLoader" };
-    return aSNS;
-}
 
 namespace
 {
@@ -565,9 +524,11 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
 
 }
 
-extern "C" void createRegistryInfo_DBContentLoader2()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbflt_DBContentLoader2_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBContentLoader > aAutoRegistration;
+    return cppu::acquire(new ::dbaxml::DBContentLoader(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
