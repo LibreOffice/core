@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include "DBTypeWizDlgSetup.hxx"
 #include <dbwizsetup.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -28,9 +26,11 @@
 
 using namespace dbaui;
 
-extern "C" void createRegistryInfo_ODBTypeWizDialogSetup()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_ODBTypeWizDialogSetup_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< ODBTypeWizDialogSetup > aAutoRegistration;
+    return cppu::acquire(new ODBTypeWizDialogSetup(context));
 }
 
 namespace dbaui
@@ -58,31 +58,14 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup( comphelper::getComponentContext(_rxFactory) ));
-    return xDBWizard;
-}
-
 OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString ODBTypeWizDialogSetup::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.ODBTypeWizDialogSetup";
 }
 
 css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> ODBTypeWizDialogSetup::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DatabaseWizardDialog" };
-    return aSupported;
+    return { "com.sun.star.sdb.DatabaseWizardDialog" };
 }
 
 Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo()

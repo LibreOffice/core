@@ -22,8 +22,6 @@
 #include <iterator>
 #include <map>
 
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <vcl/svapp.hxx>
@@ -54,9 +52,11 @@
 
 #define MAX_THREADS 10
 
-extern "C" void createRegistryInfo_ORelationControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_ORelationDesign_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ORelationController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::ORelationController(context));
 }
 
 using namespace ::com::sun::star::uno;
@@ -77,28 +77,12 @@ using namespace ::osl;
 
 OUString SAL_CALL ORelationController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString ORelationController::getImplementationName_Static()
-{
     return "org.openoffice.comp.dbu.ORelationDesign";
-}
-
-Sequence< OUString> ORelationController::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSupported { "com.sun.star.sdb.RelationDesign" };
-    return aSupported;
 }
 
 Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-Reference< XInterface > ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
+    return { "com.sun.star.sdb.RelationDesign" };
 }
 
 ORelationController::ORelationController(const Reference< XComponentContext >& _rM)

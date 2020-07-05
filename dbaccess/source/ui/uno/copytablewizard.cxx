@@ -18,11 +18,9 @@
  */
 
 #include <memory>
-#include <dbu_reghelper.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>
-#include <uiservices.hxx>
 #include <WCopyTable.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -152,13 +150,6 @@ namespace dbaui
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-        // XServiceInfo - static methods
-        /// @throws RuntimeException
-        static Sequence< OUString >  getSupportedServiceNames_Static();
-        /// @throws RuntimeException
-        static OUString              getImplementationName_Static();
-        static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
-
         // XCopyTableWizard
         virtual ::sal_Int16 SAL_CALL getOperation() override;
         virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) override;
@@ -189,10 +180,10 @@ namespace dbaui
         ::osl::Mutex&   getMutex() { return m_aMutex; }
         bool            isInitialized() const { return m_xSourceConnection.is() && m_pSourceObject && m_xDestConnection.is(); }
 
-    protected:
         explicit CopyTableWizard( const Reference< XComponentContext >& _rxORB );
         virtual ~CopyTableWizard() override;
 
+    protected:
         // OGenericUnoDialog overridables
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
@@ -411,27 +402,12 @@ CopyTableWizard::~CopyTableWizard()
     // some thinking - would it break existing clients which do not call a dispose, then?
 }
 
-Reference< XInterface > CopyTableWizard::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-{
-    return *( new CopyTableWizard( comphelper::getComponentContext(_rxFactory) ) );
-}
-
 OUString SAL_CALL CopyTableWizard::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString CopyTableWizard::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.CopyTableWizard";
 }
 
 css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> CopyTableWizard::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.sdb.application.CopyTableWizard" };
 }
@@ -1545,9 +1521,11 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
 
 } // namespace dbaui
 
-extern "C" void createRegistryInfo_CopyTableWizard()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_CopyTableWizard_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::CopyTableWizard > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::CopyTableWizard(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

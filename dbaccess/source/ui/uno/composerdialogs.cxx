@@ -18,9 +18,7 @@
  */
 
 #include "composerdialogs.hxx"
-#include <uiservices.hxx>
 
-#include <dbu_reghelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -32,10 +30,17 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
-extern "C" void createRegistryInfo_ComposerDialogs()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_uno_comp_sdb_RowsetOrderDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::RowsetOrderDialog > aOrderDialogRegistration;
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::RowsetFilterDialog > aFilterDialogRegistration;
+    return cppu::acquire(new ::dbaui::RowsetOrderDialog(context));
+}
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_uno_comp_sdb_RowsetFilterDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new ::dbaui::RowsetFilterDialog(context));
 }
 
 namespace dbaui
@@ -133,14 +138,14 @@ namespace dbaui
     {
     }
 
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetFilterDialog, "com.sun.star.uno.comp.sdb.RowsetFilterDialog")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetFilterDialog, "com.sun.star.sdb.FilterDialog")
-
-    css::uno::Reference< css::uno::XInterface >
-        RowsetFilterDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+    OUString SAL_CALL RowsetFilterDialog::getImplementationName()
     {
-        return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
+        return "com.sun.star.uno.comp.sdb.RowsetFilterDialog";
+    }
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
+    css::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
+    {
+        return { "com.sun.star.sdb.FilterDialog" };
     }
 
     std::unique_ptr<weld::GenericDialogController> RowsetFilterDialog::createComposerDialog(weld::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
@@ -181,14 +186,14 @@ namespace dbaui
     {
     }
 
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetOrderDialog, "com.sun.star.uno.comp.sdb.RowsetOrderDialog")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetOrderDialog, "com.sun.star.sdb.OrderDialog")
-
-    css::uno::Reference< css::uno::XInterface >
-        RowsetOrderDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+    OUString SAL_CALL RowsetOrderDialog::getImplementationName()
     {
-        return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
+        return "com.sun.star.uno.comp.sdb.RowsetOrderDialog";
+    }
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
+    css::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
+    {
+        return { "com.sun.star.sdb.OrderDialog" };
     }
 
     std::unique_ptr<weld::GenericDialogController> RowsetOrderDialog::createComposerDialog(weld::Window* pParent, const Reference< XConnection >& rxConnection, const Reference< XNameAccess >& rxColumns)
