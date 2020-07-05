@@ -30,8 +30,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include "xmlfilter.hxx"
-#include "xmlservices.hxx"
-#include <flt_reghelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -65,9 +63,11 @@
 
 using namespace ::com::sun::star;
 
-extern "C" void createRegistryInfo_ODBFilter( )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_sdb_DBFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBFilter > aAutoRegistration;
+    return cppu::acquire(new ::dbaxml::ODBFilter(context));
 }
 
 
