@@ -54,8 +54,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-#include "configurationregistry.hxx"
-
 namespace com::sun::star::util {
     class XFlushListener;
 }
@@ -79,14 +77,14 @@ private:
     virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return configuration_registry::getImplementationName(); }
+    { return "com.sun.star.comp.configuration.ConfigurationRegistry"; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return configuration_registry::getSupportedServiceNames(); }
+    { return { "com.sun.star.configuration.ConfigurationRegistry" }; }
 
     virtual OUString SAL_CALL getURL() override;
 
@@ -630,18 +628,11 @@ OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 
 }
 
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context));
-}
-
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.ConfigurationRegistry";
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.ConfigurationRegistry" };
+    return cppu::acquire(static_cast< cppu::OWeakObject * >(new Service(context)));
 }
 
 }
