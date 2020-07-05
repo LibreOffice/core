@@ -802,7 +802,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                 XML_id, OString::number(GetNewShapeID(xShape)),
                 XML_name, GetShapeName(xShape),
-                XML_hidden, isVisible ? nullptr : "1" );
+                XML_hidden, sax_fastparser::UseIf("1", !isVisible));
 
         if( GETA( URL ) )
         {
@@ -1194,7 +1194,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(GetNewShapeID(xShape)),
                           XML_name,   GetShapeName(xShape),
-                          XML_descr,  bHaveDesc ? sDescr.toUtf8().getStr() : nullptr );
+                          XML_descr,  sax_fastparser::UseIf(sDescr, bHaveDesc));
 
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
     if (bHasMediaURL)
@@ -1780,8 +1780,8 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     aRightMargin >>= nRightMargin;
 
     mpFS->startElementNS(XML_a, XML_tcPr,
-    XML_marL, nLeftMargin > 0 ? OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)).getStr() : nullptr,
-    XML_marR, nRightMargin > 0 ? OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)).getStr() : nullptr);
+    XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
+    XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)), nRightMargin > 0));
 
     // Write background fill for table cell.
     // TODO

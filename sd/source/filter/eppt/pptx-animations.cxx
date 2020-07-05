@@ -215,7 +215,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         if (aValues[i].hasValue())
         {
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
-                                sFormula.isEmpty() ? nullptr : sFormula.toUtf8().getStr(), XML_tm,
+                                sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
                                 OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
             pFS->startElementNS(XML_p, XML_val);
             ValuePair aPair;
@@ -901,10 +901,9 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
         }
 
         mpFS->startElementNS(XML_p, nXmlNodeType, XML_calcmode, pCalcMode, XML_valueType,
-                             pValueType, XML_from,
-                             sFrom.isEmpty() ? nullptr : sFrom.toUtf8().getStr(), XML_to,
-                             sTo.isEmpty() ? nullptr : sTo.toUtf8().getStr(), XML_by,
-                             sBy.isEmpty() ? nullptr : sBy.toUtf8().getStr());
+                             pValueType, XML_from, sax_fastparser::UseIf(sFrom, !sFrom.isEmpty()),
+                             XML_to, sax_fastparser::UseIf(sTo, !sTo.isEmpty()), XML_by,
+                             sax_fastparser::UseIf(sBy, !sBy.isEmpty()));
         bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
@@ -982,7 +981,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimateInside(bool bSimple, bool bWr
 void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
 {
     const Reference<XAnimationNode>& rXNode = getCurrentNode();
-    const char* pDuration = nullptr;
+    std::optional<OString> sDuration;
     const char* pRestart = nullptr;
     const char* pNodeType = nullptr;
     const char* pPresetClass = nullptr;
@@ -999,7 +998,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         if (aAny >>= eTiming)
         {
             if (eTiming == Timing_INDEFINITE)
-                pDuration = "indefinite";
+                sDuration = "indefinite";
         }
         else
             aAny >>= fDuration;
@@ -1013,16 +1012,19 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         pNodeType = convertEffectNodeType(nType);
         if (nType == EffectNodeType::TIMING_ROOT)
         {
-            if (!pDuration)
-                pDuration = "indefinite";
+            if (!sDuration)
+                sDuration = "indefinite";
             if (!pRestart)
                 pRestart = "never";
         }
         else if (nType == EffectNodeType::MAIN_SEQUENCE)
         {
-            pDuration = "indefinite";
+            sDuration = "indefinite";
         }
     }
+
+    if (fDuration != 0)
+        sDuration = OString::number(static_cast<sal_Int32>(fDuration * 1000.0));
 
     sal_uInt32 nPresetClass = mpContext->getEffectPresetClass();
     if (nPresetClass != DFF_ANIM_PRESS_CLASS_USER_DEFINED)
@@ -1057,13 +1059,11 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
     bool bAutoReverse = rXNode->getAutoReverse();
 
     mpFS->startElementNS(
-        XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)), XML_dur,
-        fDuration != 0 ? OString::number(static_cast<sal_Int32>(fDuration * 1000.0)).getStr()
-                       : pDuration,
-        XML_autoRev, bAutoReverse ? "1" : nullptr, XML_restart, pRestart, XML_nodeType, pNodeType,
-        XML_fill, pFill, XML_presetClass, pPresetClass, XML_presetID,
-        bPresetId ? OString::number(nPresetId).getStr() : nullptr, XML_presetSubtype,
-        bPresetSubType ? OString::number(nPresetSubType).getStr() : nullptr);
+        XML_p, XML_cTn, XML_id, OString::number(GetNextAnimationNodeId(rXNode)), XML_dur, sDuration,
+        XML_autoRev, sax_fastparser::UseIf("1", bAutoReverse), XML_restart, pRestart, XML_nodeType,
+        pNodeType, XML_fill, pFill, XML_presetClass, pPresetClass, XML_presetID,
+        sax_fastparser::UseIf(OString::number(nPresetId), bPresetId), XML_presetSubtype,
+        sax_fastparser::UseIf(OString::number(nPresetSubType), bPresetSubType));
 
     WriteAnimationCondList(mpContext->getCondition(true), XML_stCondLst);
     WriteAnimationCondList(mpContext->getCondition(false), XML_endCondLst);
@@ -1192,8 +1192,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
 
     mpFS->startElementNS(XML_p, XML_tgtEl);
     mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
-                          sRelId.isEmpty() ? nullptr : sRelId.toUtf8().getStr(), XML_name,
-                          sUrl.isEmpty() ? nullptr : sName.toUtf8().getStr());
+                          sax_fastparser::UseIf(sRelId, !sRelId.isEmpty()), XML_name,
+                          sax_fastparser::UseIf(sName, !sUrl.isEmpty()));
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);
