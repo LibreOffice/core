@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 #include <sax/saxdllapi.h>
 #include <memory>
 #include <utility>
@@ -62,6 +63,12 @@ public:
         pushAttributeValue(attribute, value);
         startElement(elementTokenId, std::forward<Args>(args)...);
     }
+    template<typename... Args>
+    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OUString& value, Args&&... args)
+    {
+        // The temporary created by toUtf8() must stay alive until startElement() ends using it
+        startElement(elementTokenId, attribute, value.toUtf8(), std::forward<Args>(args)...);
+    }
     void startElement(sal_Int32 elementTokenId);
 
     /// Start an element. After the first two arguments there can be a number of (attribute, value) pairs.
@@ -84,6 +91,12 @@ public:
     {
         pushAttributeValue(attribute, value);
         singleElement(elementTokenId, std::forward<Args>(args)...);
+    }
+    template<typename... Args>
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OUString& value, Args&&... args)
+    {
+        // The temporary created by toUtf8() must stay alive until singleElement() ends using it
+        singleElement(elementTokenId, attribute, value.toUtf8(), std::forward<Args>(args)...);
     }
     void singleElement(sal_Int32 elementTokenId);
 
