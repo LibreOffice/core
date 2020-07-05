@@ -340,7 +340,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
 
     rWorksheet->startElementNS(XML_x14, XML_iconSet,
             XML_iconSet, mpIconSetName,
-            XML_custom, mbCustom ? ToPsz10(mbCustom) : nullptr,
+            XML_custom, sax_fastparser::UseIf(ToPsz10(mbCustom), mbCustom),
             XML_reverse, ToPsz10(mbReverse),
             XML_showValue, ToPsz10(mbShowValue));
 
@@ -398,7 +398,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
                                 XML_type, pType,
-                                XML_priority, mnPriority == -1 ? nullptr : OString::number(mnPriority + 1).getStr(),
+                                XML_priority, sax_fastparser::UseIf(OString::number(mnPriority + 1), mnPriority != -1),
                                 XML_operator, mOperator,
                                 XML_id, maId );
 

@@ -525,14 +525,13 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
     OUString sId = !msTarget.isEmpty() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             oox::getRelationship(Relationship::HYPERLINK),
             msTarget, true ) : OUString();
+    std::optional<OString> sTextMark;
+    if (mxTextMark)
+        sTextMark = XclXmlUtils::ToOString(*mxTextMark);
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maScPos),
-            FSNS( XML_r, XML_id ),  !sId.isEmpty()
-                                       ? sId.toUtf8().getStr()
-                                       : nullptr,
-            XML_location,           mxTextMark
-                                        ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
-                                        : nullptr,
+            FSNS( XML_r, XML_id ),  sax_fastparser::UseIf(sId, !sId.isEmpty()),
+            XML_location,           sTextMark,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
             XML_display,            m_Repr );
 }
@@ -1549,8 +1548,8 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
     const char* pIconSetName = ScIconSetFormat::getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
     rWorksheet->startElement( XML_iconSet,
             XML_iconSet, pIconSetName,
-            XML_showValue, mrFormat.GetIconSetData()->mbShowValue ? nullptr : "0",
-            XML_reverse, mrFormat.GetIconSetData()->mbReverse ? "1" : nullptr );
+            XML_showValue, sax_fastparser::UseIf("0", !mrFormat.GetIconSetData()->mbShowValue),
+            XML_reverse, sax_fastparser::UseIf("1", mrFormat.GetIconSetData()->mbReverse));
 
     maCfvoList.SaveXml( rStrm );
 

@@ -860,8 +860,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         nEmuLineWidth = oox::drawingml::convertHmmToEmu(nLineWidth);
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
-                          XML_w, nLineWidth == 0 || (nLineWidth > 1 && nStyleLineWidth != nLineWidth) ?
-                              OString::number(nEmuLineWidth).getStr() : nullptr );
+                          XML_w, sax_fastparser::UseIf(OString::number(nEmuLineWidth),
+                              nLineWidth == 0 || (nLineWidth > 1 && nStyleLineWidth != nLineWidth)) );
 
     if( bColorSet )
     {
@@ -1344,8 +1344,8 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
     if (nBright || nContrast)
     {
         mpFS->singleElementNS(XML_a, XML_lum,
-                   XML_bright, nBright ? OString::number(nBright * 1000).getStr() : nullptr,
-                   XML_contrast, nContrast ? OString::number(nContrast * 1000).getStr() : nullptr);
+                   XML_bright, sax_fastparser::UseIf(OString::number(nBright * 1000), nBright != 0),
+                   XML_contrast, sax_fastparser::UseIf(OString::number(nContrast * 1000), nContrast != 0));
     }
 
     if (nTransparence)
@@ -1611,9 +1611,9 @@ void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
 {
 
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
-                          XML_flipH, bFlipH ? "1" : nullptr,
-                          XML_flipV, bFlipV ? "1" : nullptr,
-                          XML_rot, (nRotation % 21600000) ? OString::number(nRotation).getStr() : nullptr );
+                          XML_flipH, sax_fastparser::UseIf("1", bFlipH),
+                          XML_flipV, sax_fastparser::UseIf("1", bFlipV),
+                          XML_rot, sax_fastparser::UseIf(OString::number(nRotation), nRotation % 21600000 != 0));
 
     sal_Int32 nLeft = rRect.Left();
     sal_Int32 nTop = rRect.Top();
@@ -1890,13 +1890,13 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     mpFS->startElementNS( XML_a, nElement,
                           XML_b, bold,
                           XML_i, italic,
-                          XML_lang, usLanguage.isEmpty() ? nullptr : usLanguage.toUtf8().getStr(),
+                          XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()),
                           XML_sz, OString::number(nSize),
             // For Condensed character spacing spc value is negative.
-                          XML_spc, nCharKerning ? OString::number(nCharKerning).getStr() : nullptr,
+                          XML_spc, sax_fastparser::UseIf(OString::number(nCharKerning), nCharKerning != 0),
                           XML_strike, strikeout,
                           XML_u, underline,
-                          XML_baseline, nCharEscapement == 0 ? nullptr : OString::number(nCharEscapement*1000).getStr(),
+                          XML_baseline, sax_fastparser::UseIf(OString::number(nCharEscapement*1000), nCharEscapement != 0),
                           XML_cap, cap );
 
     // mso doesn't like text color to be placed after typeface
@@ -2409,7 +2409,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
                 aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS( XML_a, XML_buFont,
                                    XML_typeface, aFontDesc.Name,
-                                   XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : nullptr );
+                                   XML_charset, sax_fastparser::UseIf("2", aFontDesc.CharSet == awt::CharSet::SYMBOL));
         }
 
         OUString aAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
@@ -2418,7 +2418,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         {
             mpFS->singleElementNS(XML_a, XML_buAutoNum,
                                   XML_type, aAutoNumType,
-                                  XML_startAt, nStartWith > 1 ? OString::number(nStartWith).getStr() : nullptr);
+                                  XML_startAt, sax_fastparser::UseIf(OString::number(nStartWith), nStartWith > 1));
         }
         else
         {
@@ -2620,18 +2620,18 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
 
     if (nParaLeftMargin) // For Paragraph
         mpFS->startElementNS( XML_a, XML_pPr,
-                           XML_lvl, nLevel > 0 ? OString::number(nLevel).getStr() : nullptr,
-                           XML_marL, nParaLeftMargin > 0 ? OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)).getStr() : nullptr,
-                           XML_indent, nParaFirstLineIndent ? OString::number(oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)).getStr() : nullptr,
+                           XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
+                           XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
+                           XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), nParaFirstLineIndent != 0),
                            XML_algn, GetAlignment( nAlignment ),
-                           XML_rtl, bRtl ? ToPsz10(bRtl) : nullptr );
+                           XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
         mpFS->startElementNS( XML_a, XML_pPr,
-                           XML_lvl, nLevel > 0 ? OString::number(nLevel).getStr() : nullptr,
-                           XML_marL, nLeftMargin > 0 ? OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)).getStr() : nullptr,
-                           XML_indent, nLineIndentation ? OString::number(oox::drawingml::convertHmmToEmu(nLineIndentation)).getStr() : nullptr,
+                           XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
+                           XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
+                           XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLineIndentation)), nLineIndentation != 0),
                            XML_algn, GetAlignment( nAlignment ),
-                           XML_rtl, bRtl ? ToPsz10(bRtl) : nullptr );
+                           XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
 
 
     if( bHasLinespacing )
@@ -2836,15 +2836,15 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
-                               XML_fromWordArt, bFromWordArt ? "1" : nullptr,
-                               XML_lIns, (nLeft != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nLeft)).getStr() : nullptr,
-                               XML_rIns, (nRight != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nRight)).getStr() : nullptr,
-                               XML_tIns, (nTop != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nTop)).getStr() : nullptr,
-                               XML_bIns, (nBottom != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nBottom)).getStr() : nullptr,
+                               XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
+                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
+                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
+                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != DEFTBINS),
+                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != DEFTBINS),
                                XML_anchor, sVerticalAlignment,
-                               XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
+                               XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
                                XML_vert, sWritingMode,
-                               XML_rot, ((nTextPreRotateAngle + nTextRotateAngle) != 0) ? oox::drawingml::calcRotationValue( (nTextPreRotateAngle + nTextRotateAngle) * 100 ).getStr() : nullptr );
+                               XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
         if (bIsFontworkShape)
         {
             if (aAdjustmentSeq.hasElements())
@@ -2933,7 +2933,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 }
 
                 mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
-                    ( nFontScale < MAX_SCALE_VAL && nFontScale > 0 ) ? OString::number(nFontScale).getStr() : nullptr);
+                    sax_fastparser::UseIf(OString::number(nFontScale), nFontScale < MAX_SCALE_VAL && nFontScale > 0));
             }
             else
             {

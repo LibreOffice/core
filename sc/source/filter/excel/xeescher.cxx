@@ -1192,10 +1192,10 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
                 // Insets are used just as internal margins for text boxes within shapes.
                 // If this attribute is omitted, then a value of 45720 or 0.05 inches is implied.
                 pDrawing->startElementNS(XML_a, XML_bodyPr,
-                    XML_lIns, (nLeft != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nLeft)).getStr() : nullptr,
-                    XML_rIns, (nRight != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nRight)).getStr() : nullptr,
-                    XML_tIns, (nTop != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nTop)).getStr() : nullptr,
-                    XML_bIns, (nBottom != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nBottom)).getStr() : nullptr,
+                    XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
+                    XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
+                    XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != DEFTBINS),
+                    XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != DEFTBINS),
                     XML_anchor, "ctr");
 
                 {
