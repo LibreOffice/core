@@ -275,6 +275,9 @@ fatalexists = 0
 enables = [ ]
 dofatals = [ ]
 
+# buffers all printed output, so it isn't split in parallel builds
+output_buffer = ""
+
 #
 # XML browsing and printing functions
 #
@@ -468,7 +471,7 @@ def err(filename, tree, elm, msgtype, msg, error = True):
     """
     Emit a warning or error for an element
     """
-    global errors, errexists, warnings, warnexists, fatals, fatalexists
+    global errors, errexists, warnings, warnexists, fatals, fatalexists, output_buffer
 
     # Let user tune whether a warning or error
     fatal = is_enabled(elm, msgtype, dofatals, error)
@@ -503,7 +506,7 @@ def err(filename, tree, elm, msgtype, msg, error = True):
             "FATAL " if fatal else "",
             "ERROR" if error else "WARNING",
             elm_name(elm), msg)
-    print(msg)
+    output_buffer += msg + "\n"
     if outfile is not None:
         print(msg, file=outfile)
 
@@ -796,7 +799,7 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
 
         # no label for a button, warn
         if doprint:
-            warn(filename, tree, obj, "button-no-label", "does not have its own label");
+            warn(filename, tree, obj, "button-no-label", "does not have its own label")
         if not is_enabled(obj, "button-no-label", enables, True):
             # Warnings disabled
             return False
@@ -841,7 +844,6 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
         children = obj.findall("property[@name='title']")
         if len(children) >= 1:
             return False
-
 
     # Really no label, perhaps emit a warning
     if not is_enabled(obj, "no-labelled-by", enables, True):
@@ -987,6 +989,11 @@ def check_a11y_relation(filename, tree):
 
         visible = is_visible(obj)
 
+        # warning message type "syntax" used:
+        #
+        # multiple-*  => 2+ XML tags of the inspected element itself
+        # duplicate-* => 2+ XML tags of other elements referencing this element
+
         # Should have only one label
         if len(labelled_by) >= 1:
             if oid in mnemonic_for_elm:
@@ -994,6 +1001,13 @@ def check_a11y_relation(filename, tree):
                      "has both a mnemonic " + elm_name_line(mnemonic_for_elm[oid][0]) + "and labelled-by relation")
             if len(labelled_by) > 1:
                 warn(filename, tree, obj, "multiple-labelled-by", "has multiple labelled-by relations")
+
+        if oid in labelled_by_elm:
+            if len(labelled_by_elm[oid]) == 1:
+                paired = labelled_by_elm[oid][0]
+                if paired != None and visible != is_visible(paired):
+                    warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + elm_name_line(paired))
+
         if oid in label_for_elm:
             if len(label_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-label-for", "is referenced by multiple label-for " + elms_names_lines(label_for_elm[oid]))
@@ -1001,6 +1015,7 @@ def check_a11y_relation(filename, tree):
                 paired = label_for_elm[oid][0]
                 if visible != is_visible(paired):
                     warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + elm_name_line(paired))
+
         if oid in mnemonic_for_elm:
             if len(mnemonic_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
@@ -1168,7 +1183,7 @@ def widgets_opt(widgets_list, arg):
 def main():
     global pflag, gen_suppr, gen_supprfile, suppressions, suppr_prefix, false_positives, dofatals, enables, dofatals, warn_orphan_labels
     global widgets_toplevel, widgets_ignored, widgets_suffixignored, widgets_needlabel, widgets_buttons, widgets_labels
-    global outfile
+    global outfile, output_buffer
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hpiIg:s:f:P:o:L:", [
@@ -1298,16 +1313,21 @@ def main():
         elif o == '--disable-orphan-labels':
             warn_orphan_labels = False
 
+    output_header = ""
+
     # Read suppression file before overwriting it
     if suppr is not None:
         try:
+            output_header += "Suppression file: " + suppr + "\n"
             supprfile = open(suppr, 'r')
-            line_no = 1;
+            line_no = 0
             for line in supprfile.readlines():
+                line_no = line_no + 1
+                if line.startswith('#'):
+                    continue
                 prefix = line.rstrip()
                 suppressions[prefix] = True
                 suppressions_to_line[prefix] = line_no
-                line_no = line_no + 1;
             supprfile.close()
         except IOError:
             pass
@@ -1315,8 +1335,11 @@ def main():
     # Read false positives file
     if false is not None:
         try:
+            output_header += "False positive file: " + false + "\n"
             falsefile = open(false, 'r')
             for line in falsefile.readlines():
+                if line.startswith('#'):
+                    continue
                 prefix = line.rstrip()
                 false_positives[prefix] = True
             falsefile.close()
@@ -1351,26 +1374,26 @@ def main():
             check_a11y_relation(filename, tree)
         except Exception as error:
             import traceback
-            traceback.print_exc()
+            output_buffer += traceback.format_exc()
             err(filename, None, None, "parse", "error parsing file")
 
     if errors > 0 or errexists > 0:
-        estr = "%s new error%s" % (errors, 's' if errors > 1 else '')
+        output_buffer += "%s new error%s" % (errors, 's' if errors != 1 else '')
         if errexists > 0:
-            estr += " (%s suppressed by %s)" % (errexists, suppr)
-        print(estr)
+            output_buffer += " (%s suppressed)" % (errexists)
+        output_buffer += "\n"
 
     if warnings > 0 or warnexists > 0:
-        wstr = "%s new warning%s" % (warnings, 's' if warnings > 1 else '')
+        output_buffer += "%s new warning%s" % (warnings, 's' if warnings != 1 else '')
         if warnexists > 0:
-            wstr += " (%s suppressed by %s)" % (warnexists, suppr)
-        print(wstr)
+            output_buffer += " (%s suppressed)" % (warnexists)
+        output_buffer += "\n"
 
     if fatals > 0 or fatalexists > 0:
-        wstr = "%s new fatal%s" % (fatals, 's' if fatals > 1 else '')
+        output_buffer += "%s new fatal%s" % (fatals, 's' if fatals != 1 else '')
         if fatalexists > 0:
-            wstr += " (%s suppressed by %s)" % (fatalexists, suppr)
-        print(wstr)
+            output_buffer += " (%s suppressed)" % (fatalexists)
+        output_buffer += "\n"
 
     n = 0
     for (suppr,unused) in suppressions.items():
@@ -1378,19 +1401,22 @@ def main():
             n += 1
 
     if n > 0:
-        print("%s suppression%s unused:" % (n, 's' if n > 1 else ''))
+        output_buffer += "%s suppression%s unused:\n" % (n, 's' if n != 1 else '')
         for (suppr,unused) in suppressions.items():
             if unused:
-                print("    %s:%s" % (suppressions_to_line[suppr], suppr))
+                output_buffer += "    %s:%s\n" % (suppressions_to_line[suppr], suppr)
 
     if gen_supprfile is not None:
         gen_supprfile.close()
     if outfile is not None:
         outfile.close()
     if fatals > 0 and gen_suppr is None:
-        print("Explanations are available on https://wiki.documentfoundation.org/Development/Accessibility")
+        output_buffer += "Explanations are available on https://wiki.documentfoundation.org/Development/Accessibility"
+        print(output_header.rstrip() + "\n" + output_buffer)
         sys.exit(1)
 
+    if len(output_buffer) > 0:
+        print(output_header.rstrip() + "\n" + output_buffer)
 
 if __name__ == "__main__":
     try:
