@@ -18,7 +18,6 @@
  */
 
 #include <exsrcbrw.hxx>
-#include <uiservices.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -26,7 +25,6 @@
 #include <formadapter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <strings.hxx>
-#include <dbu_reghelper.hxx>
 #include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -43,9 +41,11 @@ using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
 // SbaExternalSourceBrowser
-extern "C" void createRegistryInfo_OFormGridView()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OFormGridView_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
+    return cppu::acquire(new SbaExternalSourceBrowser(context));
 }
 
 Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType)
@@ -70,33 +70,16 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< css::uno::XC
 
 SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 {
-
 }
 
 css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-OUString SbaExternalSourceBrowser::getImplementationName_Static()
-{
-    return "org.openoffice.comp.dbu.OFormGridView";
-}
-
-css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.FormGridView" };
-    return aSupported;
-}
-
-Reference< XInterface > SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
+    return { "com.sun.star.sdb.FormGridView" };
 }
 
 OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.dbu.OFormGridView";
 }
 
 Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()

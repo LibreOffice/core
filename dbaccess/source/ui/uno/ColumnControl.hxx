@@ -39,12 +39,6 @@ namespace dbaui
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-        static css::uno::Reference< css::uno::XInterface >
-        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // css::awt::XControl
         virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;

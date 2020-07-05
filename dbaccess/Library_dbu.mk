@@ -69,7 +69,6 @@ endif
 $(eval $(call gb_Library_set_componentfile,dbu,dbaccess/util/dbu))
 
 $(eval $(call gb_Library_add_exception_objects,dbu,\
-    dbaccess/source/shared/dbu_reghelper \
     dbaccess/source/ui/app/AppController \
     dbaccess/source/ui/app/AppControllerDnD \
     dbaccess/source/ui/app/AppControllerGen \
@@ -172,7 +171,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/stringlistitem \
     dbaccess/source/ui/misc/TableCopyHelper \
     dbaccess/source/ui/misc/TokenWriter \
-    dbaccess/source/ui/misc/uiservices \
     dbaccess/source/ui/misc/UITools \
     dbaccess/source/ui/misc/WColumnSelect \
     dbaccess/source/ui/misc/WCopyTable \
