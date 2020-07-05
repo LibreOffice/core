@@ -41,6 +41,7 @@ class SwTOXMark;
 class SwTextTOXMark;
 class SwDoc;
 class SwRootFrame;
+class SwContentFrame;
 
 typedef std::vector<SwTOXMark*> SwTOXMarks;
 
@@ -48,6 +49,18 @@ namespace sw {
     struct CollectTextMarksHint final : SfxHint {
         SwTOXMarks& m_rMarks;
         CollectTextMarksHint(SwTOXMarks& rMarks) : m_rMarks(rMarks) {}
+    };
+    struct FindContentFrameHint final : SfxHint {
+        SwContentFrame*& m_rpContentFrame;
+        const SwDoc& m_rDoc;
+        const SwRootFrame& m_rLayout;
+        const bool m_isReadOnlyAvailable;
+        FindContentFrameHint(SwContentFrame*& rpContentFrame, const SwDoc& rDoc, const SwRootFrame& rLayout, const bool isReadOnlyAvailable)
+            : m_rpContentFrame(rpContentFrame)
+            , m_rDoc(rDoc)
+            , m_rLayout(rLayout)
+            , m_isReadOnlyAvailable(isReadOnlyAvailable)
+        {}
     };
 }
 
@@ -161,6 +174,13 @@ public:
     inline TOXTypes         GetType() const;
     void CollectTextMarks(SwTOXMarks& rMarks) const
             { const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::CollectTextMarksHint(rMarks)); }
+    SwContentFrame* FindContentFrame(const SwDoc& rDoc, const SwRootFrame& rLayout, const bool isReadOnlyAvailable) const
+    {
+        SwContentFrame* pContentFrame = nullptr;
+        const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::FindContentFrameHint(pContentFrame, rDoc, rLayout, isReadOnlyAvailable));
+        return pContentFrame;
+    }
+
 
 private:
     OUString        m_aName;
