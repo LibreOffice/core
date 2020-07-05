@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,postgresql))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,postgresql,$(POSTGRESQL_TARBALL),,postgresql))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,postgresql,config))
+
 $(eval $(call gb_UnpackedTarball_set_patchlevel,postgresql,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,postgresql, \
@@ -25,7 +27,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,postgresql, \
 	external/postgresql/internal-zlib.patch.1 \
 ))
 endif
-
-$(eval $(call gb_UnpackedTarball_update_autoconf_configs,postgresql))
 
 # vim: set noet sw=4 ts=4:
