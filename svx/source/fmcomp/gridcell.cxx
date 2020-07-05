@@ -825,7 +825,6 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     }
 }
 
-
 void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel )
 {
     DBG_ASSERT( m_pWindow, "DbCellControl::implAdjustEnabled: not to be called without window!" );
@@ -838,8 +837,7 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
     }
 }
 
-
-void DbCellControl::Init( vcl::Window& rParent, const Reference< XRowSet >& _rxCursor )
+void DbCellControl::Init(BrowserDataWin& rParent, const Reference< XRowSet >& _rxCursor)
 {
     ImplInitWindow( rParent, InitWindowFacet::All );
 
@@ -1060,7 +1058,7 @@ DbTextField::~DbTextField( )
     m_pEdit.reset();
 }
 
-void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
+void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1243,7 +1241,7 @@ DbFormattedField::~DbFormattedField()
 {
 }
 
-void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
+void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1634,7 +1632,7 @@ namespace
 }
 
 
-void DbCheckBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
+void DbCheckBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     setTransparent( true );
 
@@ -1767,8 +1765,7 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     static_cast< PatternField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
 }
 
-
-void DbPatternField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
+void DbPatternField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1781,12 +1778,10 @@ void DbPatternField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCu
     DbCellControl::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbPatternField::CreateController() const
 {
     return new SpinCellController( static_cast< PatternField* >( m_pWindow.get() ) );
 }
-
 
 OUString DbPatternField::impl_formatText( const OUString& _rText )
 {
@@ -1851,7 +1846,7 @@ DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
 {
 }
 
-void DbSpinField::Init( vcl::Window& _rParent, const Reference< XRowSet >& _rxCursor )
+void DbSpinField::Init(BrowserDataWin& _rParent, const Reference< XRowSet >& _rxCursor)
 {
     m_rColumn.SetAlignmentFromModel( m_nStandardAlign );
 
@@ -1944,7 +1939,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     rPaintFormatter.SetFormat( sFormatString, aAppLanguage );
 }
 
-VclPtr<Control> DbNumericField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<Control> DbNumericField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/)
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<DoubleNumericField>::Create( _pParent, _nFieldStyle );
@@ -2072,7 +2067,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     static_cast< LongCurrencyField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
 }
 
-VclPtr<Control> DbCurrencyField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<LongCurrencyField>::Create( _pParent, _nFieldStyle );
@@ -2177,7 +2172,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-VclPtr<Control> DbDateField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& _rxModel  )
+VclPtr<Control> DbDateField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& _rxModel  )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     // check if there is a DropDown property set to TRUE
@@ -2304,7 +2299,7 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-VclPtr<Control> DbTimeField::createField( vcl::Window* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/ )
+VclPtr<Control> DbTimeField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/ )
 {
     WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     return VclPtr<TimeField>::Create( _pParent, _nFieldStyle );
@@ -2445,7 +2440,7 @@ void DbComboBox::implAdjustGenericFieldSetting(const Reference<XPropertySet>&)
     // we no longer pay attention to FM_PROP_LINECOUNT
 }
 
-void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
+void DbComboBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignmentFromModel(css::awt::TextAlign::LEFT);
 
@@ -2559,7 +2554,7 @@ void DbListBox::SetList(const Any& rItems)
     }
 }
 
-void DbListBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
+void DbListBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignment(css::awt::TextAlign::LEFT);
 
@@ -2712,7 +2707,7 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
     }
 }
 
-void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::beans::XPropertySet >& xModel)
+void DbFilterField::CreateControl(BrowserDataWin* pParent, const Reference< css::beans::XPropertySet >& xModel)
 {
     switch (m_nControlClass)
     {
@@ -2763,7 +2758,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
 }
 
 
-void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
+void DbFilterField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     Reference< css::beans::XPropertySet >  xModel(m_rColumn.getModel());
     m_rColumn.SetAlignment(css::awt::TextAlign::LEFT);
