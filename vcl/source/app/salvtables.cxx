@@ -48,7 +48,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/ivctrl.hxx>
 #include <vcl/layout.hxx>
