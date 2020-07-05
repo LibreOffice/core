@@ -955,14 +955,14 @@ void PowerPointExport::WriteAuthors()
                 "commentAuthors.xml");
 
     pFS->startElementNS(XML_p, XML_cmAuthorLst,
-                        FSNS(XML_xmlns, XML_p), this->getNamespaceURL(OOX_NS(ppt)).toUtf8());
+                        FSNS(XML_xmlns, XML_p), getNamespaceURL(OOX_NS(ppt)));
 
     for (const AuthorsMap::value_type& i : maAuthors)
     {
         pFS->singleElementNS(XML_p, XML_cmAuthor,
                              XML_id, OString::number(i.second.nId),
-                             XML_name, i.first.toUtf8(),
-                             XML_initials, lcl_GetInitials(i.first).toUtf8(),
+                             XML_name, i.first,
+                             XML_initials, lcl_GetInitials(i.first),
                              XML_lastIdx, OString::number(i.second.nLastIndex),
                              XML_clrIdx, OString::number(i.second.nId));
     }
@@ -1004,7 +1004,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                               "application/vnd.openxmlformats-officedocument.presentationml.comments+xml");
 
             pFS->startElementNS(XML_p, XML_cmLst,
-                                FSNS(XML_xmlns, XML_p), this->getNamespaceURL(OOX_NS(ppt)).toUtf8());
+                                FSNS(XML_xmlns, XML_p), this->getNamespaceURL(OOX_NS(ppt)));
 
             do
             {
@@ -1092,7 +1092,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     mPresentationFS->singleElementNS(XML_p, XML_sldId,
                                      XML_id, OString::number(GetNewSlideId()),
-                                     FSNS(XML_r, XML_id), sRelId.toUtf8());
+                                     FSNS(XML_r, XML_id), sRelId);
 
     if (nPageNum == mnPages - 1)
         mPresentationFS->endElementNS(XML_p, XML_sldIdLst);
@@ -1222,7 +1222,7 @@ void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 
 
     pFS->singleElementNS(XML_p, XML_sldLayoutId,
                          XML_id, OString::number(GetNewSlideMasterId()),
-                         FSNS(XML_r, XML_id), sRelId.toUtf8());
+                         FSNS(XML_r, XML_id), sRelId);
 }
 
 void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPropertySet > const& aXBackgroundPropSet)
@@ -1243,7 +1243,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     mPresentationFS->singleElementNS(XML_p, XML_sldMasterId,
                                      XML_id, OString::number(GetNewSlideMasterId()),
-                                     FSNS(XML_r, XML_id), sRelId.toUtf8());
+                                     FSNS(XML_r, XML_id), sRelId);
 
     if (nPageNum == mnMasterPages - 1)
         mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
@@ -1839,7 +1839,7 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum)
                       "application/vnd.openxmlformats-officedocument.theme+xml");
 
     pFS->startElementNS(XML_a, XML_theme,
-                        FSNS(XML_xmlns, XML_a), this->getNamespaceURL(OOX_NS(dml)).toUtf8(),
+                        FSNS(XML_xmlns, XML_a), this->getNamespaceURL(OOX_NS(dml)),
                         XML_name, "Office Theme");
 
     pFS->startElementNS(XML_a, XML_themeElements);
@@ -1896,7 +1896,7 @@ void PowerPointExport::WriteNotesMaster()
                                   "notesMasters/notesMaster1.xml");
 
     mPresentationFS->singleElementNS(XML_p, XML_notesMasterId,
-                                     FSNS(XML_r, XML_id), sRelId.toUtf8());
+                                     FSNS(XML_r, XML_id), sRelId);
 
     mPresentationFS->endElementNS(XML_p, XML_notesMasterIdLst);
 

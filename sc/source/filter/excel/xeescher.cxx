@@ -448,7 +448,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
 
     DrawingML aDML(pWorksheet, &rStrm, drawingml::DOCUMENT_XLSX);
     OUString rId = aDML.WriteImage( maGraphic );
-    pWorksheet->singleElement(XML_picture, FSNS(XML_r, XML_id), rId.toUtf8());
+    pWorksheet->singleElement(XML_picture, FSNS(XML_r, XML_id), rId);
 }
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
@@ -1098,9 +1098,9 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& pDrawing = rStrm.GetCurrentStream();
 
     pDrawing->startElement(FSNS(XML_mc, XML_AlternateContent),
-        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
     pDrawing->startElement(FSNS(XML_mc, XML_Choice),
-        FSNS(XML_xmlns, XML_a14), rStrm.getNamespaceURL(OOX_NS(a14)).toUtf8(),
+        FSNS(XML_xmlns, XML_a14), rStrm.getNamespaceURL(OOX_NS(a14)),
         XML_Requires, "a14");
 
     pDrawing->startElement(FSNS(XML_xdr, XML_twoCellAnchor), XML_editAs, "oneCell");
@@ -1119,8 +1119,8 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
             {
                 pDrawing->singleElement(FSNS(XML_xdr, XML_cNvPr),
                     XML_id, OString::number(mnShapeId).getStr(),
-                    XML_name, msCtrlName.toUtf8(), // control name
-                    XML_descr, msLabel.toUtf8(), // description as alt text
+                    XML_name, msCtrlName, // control name
+                    XML_descr, msLabel, // description as alt text
                     XML_hidden, mbVisible ? "0" : "1");
                 pDrawing->singleElement(FSNS(XML_xdr, XML_cNvSpPr));
             }
@@ -1222,7 +1222,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
                     pDrawing->startElementNS(XML_a, XML_p);
                     pDrawing->startElementNS(XML_a, XML_r);
                     pDrawing->startElementNS(XML_a, XML_t);
-                    pDrawing->write(msLabel.toUtf8());
+                    pDrawing->write(msLabel);
                     pDrawing->endElementNS(XML_a, XML_t);
                     pDrawing->endElementNS(XML_a, XML_r);
                     pDrawing->endElementNS(XML_a, XML_p);
@@ -1284,7 +1284,7 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
                 pFormControl->write(" fmlaLink=\"");
                 if (aCellLink.indexOf('!') < 0)
                 {
-                    pFormControl->write(GetTabInfo().GetScTabName( mxCellLinkAddress.Tab() ).toUtf8());
+                    pFormControl->write(GetTabInfo().GetScTabName(mxCellLinkAddress.Tab()));
                     pFormControl->write("!");
                 }
                 pFormControl->write(aCellLink);
@@ -1311,14 +1311,14 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
             rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
-                FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+                FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
             rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
 
             rWorksheet->startElement(
                 XML_control,
                 XML_shapeId, OString::number(mnShapeId).getStr(),
-                FSNS(XML_r, XML_id), aIdFormControlPr.toUtf8(),
-                XML_name, msLabel.toUtf8()); // text to display with checkbox button
+                FSNS(XML_r, XML_id), aIdFormControlPr,
+                XML_name, msLabel); // text to display with checkbox button
 
             rWorksheet->write("<controlPr defaultSize=\"0\" locked=\"1\" autoFill=\"0\" autoLine=\"0\" autoPict=\"0\"");
 
@@ -1330,7 +1330,7 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             if (!msCtrlName.isEmpty())
             {
                 rWorksheet->write(" altText=\"");
-                rWorksheet->write(msCtrlName.toUtf8()); // alt text
+                rWorksheet->write(msCtrlName); // alt text
                 rWorksheet->write("\"");
             }
 
@@ -1719,15 +1719,15 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
         rComments->startElement( XML_comments,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8(),
-            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)).toUtf8(),
-            FSNS(XML_xmlns, XML_v2), rStrm.getNamespaceURL(OOX_NS(mceTest)).toUtf8(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
+            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)),
+            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)),
+            FSNS(XML_xmlns, XML_v2), rStrm.getNamespaceURL(OOX_NS(mceTest)),
             FSNS( XML_mc, XML_Ignorable ), "v2" );
     else
         rComments->startElement( XML_comments,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)).toUtf8() );
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
+            FSNS(XML_xmlns, XML_xdr), rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr)) );
 
     rComments->startElement(XML_authors);
 

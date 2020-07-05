@@ -332,16 +332,15 @@ void DocxExport::DoComboBox(const OUString& rName,
 {
     m_pDocumentFS->startElementNS(XML_w, XML_ffData);
 
-    m_pDocumentFS->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), rName.toUtf8());
+    m_pDocumentFS->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), rName);
 
     m_pDocumentFS->singleElementNS(XML_w, XML_enabled);
 
     if ( !rHelp.isEmpty() )
-        m_pDocumentFS->singleElementNS(XML_w, XML_helpText, FSNS(XML_w, XML_val), rHelp.toUtf8());
+        m_pDocumentFS->singleElementNS(XML_w, XML_helpText, FSNS(XML_w, XML_val), rHelp);
 
     if ( !rToolTip.isEmpty() )
-        m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
-            FSNS( XML_w, XML_val ), rToolTip.toUtf8() );
+        m_pDocumentFS->singleElementNS(XML_w, XML_statusText, FSNS(XML_w, XML_val), rToolTip);
 
     m_pDocumentFS->startElementNS(XML_w, XML_ddList);
 
@@ -357,8 +356,7 @@ void DocxExport::DoComboBox(const OUString& rName,
     auto const nSize(std::min(sal_Int32(25), rListItems.getLength()));
     for (auto i = 0; i < nSize; ++i)
     {
-        m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
-                FSNS(XML_w, XML_val), rListItems[i].toUtf8() );
+        m_pDocumentFS->singleElementNS(XML_w, XML_listEntry, FSNS(XML_w, XML_val), rListItems[i]);
     }
 
     m_pDocumentFS->endElementNS( XML_w, XML_ddList );
@@ -471,11 +469,11 @@ std::pair<OString, OString> DocxExport::WriteActiveXObject(const uno::Reference<
                                                        sBinaryFileName.copy(sBinaryFileName.lastIndexOf("/") + 1) );
 
     pActiveXFS->singleElementNS(XML_ax, XML_ocx,
-                                FSNS(XML_xmlns, XML_ax), m_pFilter->getNamespaceURL(OOX_NS(ax)).toUtf8(),
-                                FSNS(XML_xmlns, XML_r), m_pFilter->getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
+                                FSNS(XML_xmlns, XML_ax), m_pFilter->getNamespaceURL(OOX_NS(ax)),
+                                FSNS(XML_xmlns, XML_r), m_pFilter->getNamespaceURL(OOX_NS(officeRel)),
                                 FSNS(XML_ax, XML_classid), "{" + sGUID + "}",
                                 FSNS(XML_ax, XML_persistence), "persistStorage",
-                                FSNS(XML_r, XML_id), sBinaryId.toUtf8());
+                                FSNS(XML_r, XML_id), sBinaryId);
 
     OString sXMLId = OUStringToOString(m_pFilter->addRelation(m_pDocumentFS->getOutputStream(),
                                                               oox::getRelationship(Relationship::CONTROL),
@@ -752,12 +750,12 @@ void DocxExport::WriteNumbering()
     m_pDrawingML->SetFS( pNumberingFS );
 
     pNumberingFS->startElementNS( XML_w, XML_numbering,
-            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)).toUtf8(),
-            FSNS( XML_xmlns, XML_o ), m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)).toUtf8(),
-            FSNS( XML_xmlns, XML_r ), m_pFilter->getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-            FSNS( XML_xmlns, XML_v ), m_pFilter->getNamespaceURL(OOX_NS(vml)).toUtf8(),
-            FSNS( XML_xmlns, XML_mc ), m_pFilter->getNamespaceURL(OOX_NS(mce)).toUtf8(),
-            FSNS( XML_xmlns, XML_w14 ), m_pFilter->getNamespaceURL(OOX_NS(w14)).toUtf8(),
+            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)),
+            FSNS( XML_xmlns, XML_o ), m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)),
+            FSNS( XML_xmlns, XML_r ), m_pFilter->getNamespaceURL(OOX_NS(officeRel)),
+            FSNS( XML_xmlns, XML_v ), m_pFilter->getNamespaceURL(OOX_NS(vml)),
+            FSNS( XML_xmlns, XML_mc ), m_pFilter->getNamespaceURL(OOX_NS(mce)),
+            FSNS( XML_xmlns, XML_w14 ), m_pFilter->getNamespaceURL(OOX_NS(w14)),
             FSNS( XML_mc, XML_Ignorable ), "w14" );
 
     BulletDefinitions();
@@ -846,7 +844,7 @@ void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const
     // and write the reference
     m_pDocumentFS->singleElementNS( XML_w, nReference,
             FSNS( XML_w, XML_type ), pType,
-            FSNS( XML_r, XML_id ), aRelId.toUtf8() );
+            FSNS( XML_r, XML_id ), aRelId );
 }
 
 void DocxExport::WriteFonts()
@@ -860,8 +858,8 @@ void DocxExport::WriteFonts()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" );
 
     pFS->startElementNS( XML_w, XML_fonts,
-            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)).toUtf8(),
-            FSNS( XML_xmlns, XML_r ), m_pFilter->getNamespaceURL(OOX_NS(officeRel)).toUtf8() );
+            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)),
+            FSNS( XML_xmlns, XML_r ), m_pFilter->getNamespaceURL(OOX_NS(officeRel)) );
 
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pFS );
@@ -934,8 +932,8 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
             bStarted = true;
             pFS->startElementNS(XML_w, XML_docVars);
         }
-        pFS->singleElementNS(XML_w, XML_docVar, FSNS(XML_w, XML_name), aKey.toUtf8(),
-                             FSNS(XML_w, XML_val), aValue.toUtf8());
+        pFS->singleElementNS(XML_w, XML_docVar, FSNS(XML_w, XML_name), aKey,
+                             FSNS(XML_w, XML_val), aValue);
     }
 
     if (bStarted)
@@ -978,7 +976,7 @@ void DocxExport::WriteSettings()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" );
 
     pFS->startElementNS( XML_w, XML_settings,
-            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)).toUtf8() );
+            FSNS( XML_xmlns, XML_w ), m_pFilter->getNamespaceURL(OOX_NS(doc)) );
 
     // View
     if (pViewShell && pViewShell->GetViewOptions()->getBrowseMode())
@@ -1157,9 +1155,9 @@ void DocxExport::WriteSettings()
                         rThemeFontLangProp.Value >>= aValues[2];
                 }
                 pFS->singleElementNS( XML_w, XML_themeFontLang,
-                                      FSNS( XML_w, XML_val ), aValues[0].toUtf8(),
-                                      FSNS( XML_w, XML_eastAsia ), aValues[1].toUtf8(),
-                                      FSNS( XML_w, XML_bidi ), aValues[2].toUtf8() );
+                                      FSNS( XML_w, XML_val ), aValues[0],
+                                      FSNS( XML_w, XML_eastAsia ), aValues[1],
+                                      FSNS( XML_w, XML_bidi ), aValues[2] );
             }
             else if ( rProp.Name == "CompatSettings" )
             {
@@ -1200,9 +1198,9 @@ void DocxExport::WriteSettings()
                     }
 
                     pFS->singleElementNS( XML_w, XML_compatSetting,
-                        FSNS( XML_w, XML_name ), aName.toUtf8(),
-                        FSNS( XML_w, XML_uri ),  aUri.toUtf8(),
-                        FSNS( XML_w, XML_val ),  aValue.toUtf8());
+                        FSNS( XML_w, XML_name ), aName,
+                        FSNS( XML_w, XML_uri ),  aUri,
+                        FSNS( XML_w, XML_val ),  aValue);
                 }
 
                 if ( !bHasCompatibilityMode )

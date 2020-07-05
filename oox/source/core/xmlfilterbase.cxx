@@ -633,11 +633,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
             "docProps/core.xml",
             "application/vnd.openxmlformats-package.core-properties+xml" );
     pCoreProps->startElementNS( XML_cp, XML_coreProperties,
-        FSNS(XML_xmlns, XML_cp),       rSelf.getNamespaceURL(OOX_NS(packageMetaCorePr)).toUtf8(),
-        FSNS(XML_xmlns, XML_dc),       rSelf.getNamespaceURL(OOX_NS(dc)).toUtf8(),
-        FSNS(XML_xmlns, XML_dcterms),  rSelf.getNamespaceURL(OOX_NS(dcTerms)).toUtf8(),
-        FSNS(XML_xmlns, XML_dcmitype), rSelf.getNamespaceURL(OOX_NS(dcmiType)).toUtf8(),
-        FSNS(XML_xmlns, XML_xsi),      rSelf.getNamespaceURL(OOX_NS(xsi)).toUtf8());
+        FSNS(XML_xmlns, XML_cp),       rSelf.getNamespaceURL(OOX_NS(packageMetaCorePr)),
+        FSNS(XML_xmlns, XML_dc),       rSelf.getNamespaceURL(OOX_NS(dc)),
+        FSNS(XML_xmlns, XML_dcterms),  rSelf.getNamespaceURL(OOX_NS(dcTerms)),
+        FSNS(XML_xmlns, XML_dcmitype), rSelf.getNamespaceURL(OOX_NS(dcmiType)),
+        FSNS(XML_xmlns, XML_xsi),      rSelf.getNamespaceURL(OOX_NS(xsi)));
 
 #ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_cp, XML_category ),         "category" );
@@ -675,8 +675,8 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
             "docProps/app.xml",
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
-            XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeExtPr)).toUtf8(),
-            FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)).toUtf8());
+            XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeExtPr)),
+            FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)));
 
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
 #ifdef OOXTODO
@@ -787,8 +787,8 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             "docProps/custom.xml",
             "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
     pAppProps->startElement( XML_Properties,
-            XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeCustomPr)).toUtf8(),
-            FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)).toUtf8());
+            XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeCustomPr)),
+            FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)));
 
     size_t nIndex = 0;
     for (const auto& rProp : aprop)

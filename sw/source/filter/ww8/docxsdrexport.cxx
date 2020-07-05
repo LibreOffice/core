@@ -900,14 +900,14 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
     pFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
-                        m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)).toUtf8());
+                        m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
     pFS->startElementNS(XML_a, XML_graphicData, XML_uri, pNamespace);
 
     bool bLockedCanvas = lcl_isLockedCanvas(xShape);
     if (bLockedCanvas)
         pFS->startElementNS(
             XML_lc, XML_lockedCanvas, FSNS(XML_xmlns, XML_lc),
-            m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dmlLockedCanvas)).toUtf8());
+            m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dmlLockedCanvas)));
 
     m_pImpl->getExport().OutputDML(xShape);
 
@@ -1228,7 +1228,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
         pFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
-                            m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)).toUtf8());
+                            m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
         pFS->startElementNS(XML_a, XML_graphicData, XML_uri,
                             "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
         pFS->startElementNS(XML_wps, XML_wsp);
@@ -1281,7 +1281,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         if (shapeType.isEmpty())
             shapeType = "rect";
 
-        pFS->singleElementNS(XML_a, XML_prstGeom, XML_prst, shapeType.toUtf8());
+        pFS->singleElementNS(XML_a, XML_prstGeom, XML_prst, shapeType);
         m_pImpl->setDMLTextFrameSyntax(true);
         m_pImpl->getExport().OutputFormat(pParentFrame->GetFrameFormat(), false, false, true);
         m_pImpl->setDMLTextFrameSyntax(false);

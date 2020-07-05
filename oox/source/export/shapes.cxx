@@ -815,7 +815,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                         mpURLTransformer->getTransformedString(sURL),
                         mpURLTransformer->isExternalURL(sURL));
 
-                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8());
+                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
             }
         }
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
@@ -1179,7 +1179,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         pFS->startElementNS(mnXmlNamespace, XML_pic);
     else
         pFS->startElementNS(mnXmlNamespace, XML_pic,
-            FSNS(XML_xmlns, XML_pic), pFB->getNamespaceURL(OOX_NS(dmlPicture)).toUtf8());
+            FSNS(XML_xmlns, XML_pic), pFB->getNamespaceURL(OOX_NS(dmlPicture)));
 
     pFS->startElementNS(mnXmlNamespace, XML_nvPicPr);
 
@@ -1208,7 +1208,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                 mpURLTransformer->getTransformedString(sURL),
                 mpURLTransformer->isExternalURL(sURL));
 
-        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8());
+        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
@@ -1882,7 +1882,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
                     mpURLTransformer->getTransformedString(sURL),
                     mpURLTransformer->isExternalURL(sURL));
 
-            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8());
+            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
         }
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
@@ -1927,7 +1927,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     // WordProcessingML so write a MCE like PPT 2010 does
     mpFS->startElementNS(XML_mc, XML_AlternateContent);
     mpFS->startElementNS(XML_mc, XML_Choice,
-        FSNS(XML_xmlns, XML_a14), mpFB->getNamespaceURL(OOX_NS(a14)).toUtf8(),
+        FSNS(XML_xmlns, XML_a14), mpFB->getNamespaceURL(OOX_NS(a14)),
         XML_Requires, "a14");
     mpFS->startElementNS(mnXmlNamespace, XML_sp);
     mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
@@ -2123,14 +2123,14 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
                           XML_progId, pProgID,
-                          FSNS(XML_r, XML_id), sRelId.toUtf8(),
+                          FSNS(XML_r, XML_id), sRelId,
                           XML_spid, "" );
     }
     else
     {
         mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
 //?                                              XML_name, "Document",
-                          FSNS(XML_r, XML_id), sRelId.toUtf8(),
+                          FSNS(XML_r, XML_id), sRelId,
                           // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
                           XML_spid, "" );
     }

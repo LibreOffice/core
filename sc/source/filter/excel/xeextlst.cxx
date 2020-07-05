@@ -461,7 +461,7 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_conditionalFormatting,
-                                FSNS( XML_xmlns, XML_xm ), rStrm.getNamespaceURL(OOX_NS(xm)).toUtf8() );
+                                FSNS( XML_xmlns, XML_xm ), rStrm.getNamespaceURL(OOX_NS(xm)) );
 
     maCfRules.SaveXml( rStrm );
     rWorksheet->startElementNS(XML_xm, XML_sqref);
@@ -505,7 +505,7 @@ void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
-                                FSNS(XML_xmlns, XML_loext), rStrm.getNamespaceURL(OOX_NS(loext)).toUtf8(),
+                                FSNS(XML_xmlns, XML_loext), rStrm.getNamespaceURL(OOX_NS(loext)),
                                 XML_uri, maURI );
 
     rWorksheet->singleElementNS(XML_loext, XML_extCalcPr, XML_stringRefSyntax, maSyntax);
@@ -523,7 +523,7 @@ void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_ext,
-                                FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
+                                FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)),
                                 XML_uri, maURI );
 
     rWorksheet->startElementNS(XML_x14, XML_conditionalFormattings);
