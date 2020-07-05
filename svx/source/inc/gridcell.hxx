@@ -277,7 +277,7 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
     // initializing before a control is displayed
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor );
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
     // writing the value into the model
@@ -392,7 +392,7 @@ public:
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit.get(); }
     bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -415,7 +415,7 @@ public:
     DbFormattedField(DbGridColumn& _rColumn);
     virtual ~DbFormattedField() override;
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -437,7 +437,7 @@ class DbCheckBox : public DbCellControl
 public:
     DbCheckBox(DbGridColumn& _rColumn);
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
@@ -458,7 +458,7 @@ class DbComboBox : public DbCellControl
 public:
     DbComboBox(DbGridColumn& _rColumn);
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -485,7 +485,7 @@ class DbListBox     :public DbCellControl
 public:
     DbListBox(DbGridColumn& _rColumn);
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -508,7 +508,7 @@ class DbPatternField : public DbCellControl
 {
 public:
     DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -541,12 +541,12 @@ protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = css::awt::TextAlign::RIGHT );
 
 public:
-    virtual void                        Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& _rxCursor ) override;
+    virtual void                        Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& _rxCursor ) override;
     virtual ::svt::CellControllerRef    CreateController() const override;
 
 protected:
     virtual VclPtr<Control> createField(
-                            vcl::Window* _pParent,
+                            BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) = 0;
@@ -567,7 +567,7 @@ protected:
 
     // DbSpinField
     virtual VclPtr<Control> createField(
-                            vcl::Window* _pParent,
+                            BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
@@ -591,7 +591,7 @@ protected:
 
     // DbSpinField
     virtual VclPtr<Control> createField(
-                            vcl::Window* _pParent,
+                            BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
@@ -619,7 +619,7 @@ protected:
 
     // DbSpinField
     virtual VclPtr<Control> createField(
-                            vcl::Window* _pParent,
+                            BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
@@ -643,7 +643,7 @@ protected:
 
     // DbSpinField
     virtual VclPtr<Control> createField(
-                            vcl::Window* _pParent,
+                            BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
@@ -661,7 +661,7 @@ public:
     DbFilterField(const css::uno::Reference< css::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField() override;
 
-    virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
     virtual void Update() override;
@@ -679,7 +679,7 @@ private:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     void SetList(const css::uno::Any& rItems, bool bComboBox);
-    void CreateControl(vcl::Window* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
+    void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
     DECL_LINK( OnClick, VclPtr<CheckBox>, void );
 
     css::uno::Sequence< OUString >  m_aValueList;
