@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ac4c735f_894b458b",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-05T01:46:32Z",
+      "side": 1,
+      "message": "No, just the other checks are here. And neither the member_of nor the label_for results are used.",
+      "parentUuid": "d272e5a6_43ab5401",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4b0506b_a8a4bfdb",
         "filename": "bin/gla11y",
         "patchSetId": 5
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "5d455480_46dd1508",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-05T01:46:32Z",
+      "side": 1,
+      "message": "Ok. Even reading the Wiki page didn\u0027t help me much to understand, what is actually expected. I\u0027ll add an extra visibility check.",
+      "parentUuid": "f4b0506b_a8a4bfdb",
+      "range": {
+        "startLine": 998,
+        "startChar": 19,
+        "endLine": 998,
+        "endChar": 34
+      },
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d0fda384_3b3dcba5",
         "filename": "bin/gla11y",
         "patchSetId": 5
@@ -70,6 +112,24 @@
       "writtenOn": "2020-07-04T20:02:43Z",
       "side": 1,
       "message": "I\u0027d rather keep a different name for the case when there are several relations of the same type foo in an element (\"multiple-foo\") and the case when there are several elements related to the same element (\"duplicate-foo\"), because that\u0027s a significantly different kind of fix to make.",
+      "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c2cd11d_ff94a668",
+        "filename": "bin/gla11y",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-05T01:46:32Z",
+      "side": 1,
+      "message": "A little bit too subtle, so I missed that, especially since the tests check \u003e 1, the explaining text contains multiple and a duplicate normally is single.\nOTOH I don\u0027t have a better understandable alternative, so I\u0027ll revert this part of the change too and add at least a source comment, which probably won\u0027t help much, but is better then nothing.",
+      "parentUuid": "d0fda384_3b3dcba5",
       "revId": "8fb3bfd744d5537b4ca9cfe49045c3307e7a64d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
