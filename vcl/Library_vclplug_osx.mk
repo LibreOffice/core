@@ -142,7 +142,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\
     Cocoa \
     Carbon \
     CoreFoundation \
-    $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
 ))
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
