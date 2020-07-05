@@ -213,7 +213,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( pSst );
 
     pSst->startElement( XML_sst,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
             XML_count, OString::number(mnTotal),
             XML_uniqueCount, OString::number(mnSize) );
 
@@ -534,7 +534,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : nullptr,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
-            XML_display,            m_Repr.toUtf8() );
+            XML_display,            m_Repr );
 }
 
 // Label ranges ===============================================================
@@ -1031,12 +1031,12 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         || eOperation == ScConditionMode::BottomPercent;
     bool bPercent = eOperation == ScConditionMode::TopPercent ||
         eOperation == ScConditionMode::BottomPercent;
-    OString aRank("0");
+    OUString aRank("0");
     if(IsTopBottomRule(eOperation))
     {
         // position and formula grammar are not important
         // we only store a number there
-        aRank = mrFormatEntry.GetExpression(ScAddress(0,0,0), 0).toUtf8();
+        aRank = mrFormatEntry.GetExpression(ScAddress(0,0,0), 0);
     }
     OString aText;
     if(IsTextRule(eOperation))
@@ -1423,7 +1423,7 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_conditionalFormatting,
-            XML_sqref, msSeqRef.toUtf8()
+            XML_sqref, msSeqRef
             // OOXTODO: XML_pivot
     );
 
@@ -1508,7 +1508,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
     // extLst entries for Excel 2010 and 2013
     rWorksheet->startElement(XML_extLst);
     rWorksheet->startElement(XML_ext,
-        FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
+        FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)),
         XML_uri, "{B025F937-C7B1-47D3-B67F-A62EFF666E3E}");
 
     rWorksheet->startElementNS( XML_x14, XML_id );

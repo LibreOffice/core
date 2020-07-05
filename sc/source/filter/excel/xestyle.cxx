@@ -1077,7 +1077,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         aFontName = XclTools::GetXclFontName(aFontName);
         if (!aFontName.isEmpty())
         {
-            rStyleSheet->singleElement(XML_name, XML_val, aFontName.toUtf8());
+            rStyleSheet->singleElement(XML_name, XML_val, aFontName);
         }
 
         rtl_TextEncoding eTextEnc = (*maDxfData.pFontAttr)->GetCharSet();
@@ -1328,7 +1328,7 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
             XML_numFmtId,   OString::number(mnXclNumFmt),
-            XML_formatCode, maNumFmtString.toUtf8() );
+            XML_formatCode, maNumFmtString );
 }
 
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
@@ -3193,8 +3193,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
             OUStringToOString(oox::getRelationship(Relationship::STYLES), RTL_TEXTENCODING_UTF8).getStr());
     rStrm.PushStream( aStyleSheet );
 
-    aStyleSheet->startElement( XML_styleSheet,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8() );
+    aStyleSheet->startElement(XML_styleSheet, XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)));
 
     CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
