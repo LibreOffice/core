@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc721b1a_1320e29f",
+        "filename": "include/vcl/BitmapFilter.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-05T21:38:48Z",
+      "side": 1,
+      "message": "My suspicion (that I used when modified blur algorithm; not tested on any actual data) was that if the last strip is to be done in the current thread (without a threading overhead), it could be useful to allow the last stripe to be slightly more than the stripe size (up to x2), instead of doing the rest after the division (5 pixel wide stripe in your example). Thus, *possibly* it might make sense to divide the example to\n\n    [0, 31, false], [32, 63, false], [64, 100, true]\n\n(last stripe is 37 pixel wide) which also could happen to be\n\n    [0, 31, false], [32, 63, false], [64, 126, true]\n\n(last stripe is 63 pixel wide). This would also avoid threaded processing for small images - less than 2x stripe size.\n\nI may be completely wrong of course; just wanted to mention what was my rationale to split the stripes the way I did.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 68
+      },
+      "revId": "8166f340511f49c91deba161f27d9ded11a14e14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
