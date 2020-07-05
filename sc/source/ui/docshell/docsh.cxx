@@ -2418,7 +2418,14 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (m_aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII);
+                {
+                    //rMed.SetError(SCWARN_EXPORT_ASCII);
+                    if ( ScTabViewShell* pViewShell = GetBestViewShell() )
+                        pViewShell->ExecuteOnlyActiveSheetSavedDlg();
+                    else
+                        // can this ever happen?
+                        rMed.SetError(SCWARN_EXPORT_ASCII);
+                }
         }
     }
     else if (aFltName == pFilterDBase)
@@ -2521,7 +2528,14 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (m_aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII);
+                {
+                    //rMed.SetError(SCWARN_EXPORT_ASCII);
+                    if ( ScTabViewShell* pViewShell = GetBestViewShell() )
+                        pViewShell->ExecuteOnlyActiveSheetSavedDlg();
+                    else
+                        // can this ever happen?
+                        rMed.SetError(SCWARN_EXPORT_ASCII);
+                }
         }
     }
     else if (aFltName == pFilterSylk)

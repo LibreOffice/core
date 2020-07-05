@@ -754,6 +754,14 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="OnlyActiveSheetSavedWarning" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Warn when saving only the active sheet</desc>
+          <label>Warn when saving only the active sheet</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <!-- OldPath: Calc/Input -->
         <!-- OldLocation: Soffice.cfg -->
