@@ -92,7 +92,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>

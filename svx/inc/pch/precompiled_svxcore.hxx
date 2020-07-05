@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-02 16:18:48 using:
+ Generated on 2020-07-05 17:54:04 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -119,7 +119,6 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>

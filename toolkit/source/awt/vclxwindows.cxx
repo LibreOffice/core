@@ -43,7 +43,7 @@
 #include <controls/filectrl.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
