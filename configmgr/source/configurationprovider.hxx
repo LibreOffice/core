@@ -24,10 +24,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/factory.hxx>
 
 namespace com::sun::star {
-    namespace lang { class XSingleComponentFactory; }
     namespace uno {
         class XComponentContext;
         class XInterface;
@@ -39,16 +37,6 @@ namespace configmgr::configuration_provider {
 css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext >
         const & context);
-
-OUString getImplementationName();
-
-css::uno::Sequence< OUString >
-getSupportedServiceNames();
-
-css::uno::Reference< css::lang::XSingleComponentFactory >
-createFactory(
-    cppu::ComponentFactoryFunc, OUString const &,
-    css::uno::Sequence< OUString > const &, rtl_ModuleCount *);
 
 }
 
