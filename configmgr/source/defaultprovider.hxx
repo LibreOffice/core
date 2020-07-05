@@ -25,19 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com::sun::star {
-    namespace uno {
-        class XComponentContext;
-        class XInterface;
-    }
-}
-
 namespace configmgr::default_provider {
-
-css::uno::Reference< css::uno::XInterface >
-create(
-    css::uno::Reference< css::uno::XComponentContext >
-        const & context);
 
 OUString getImplementationName();
 
