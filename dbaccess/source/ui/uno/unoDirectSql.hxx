@@ -40,20 +40,13 @@ namespace dbaui
     {
         OUString      m_sInitialSelection;
         css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
-    protected:
+    public:
         explicit ODirectSQLDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         virtual ~ODirectSQLDialog() override;
 
-    public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
         DECLARE_SERVICE_INFO();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-        static css::uno::Reference< css::uno::XInterface >
-        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 

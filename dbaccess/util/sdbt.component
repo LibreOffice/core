@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sdbt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.dbaccess.ConnectionTools">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.dbaccess.ConnectionTools"
+    constructor="com_sun_star_comp_dbaccess_ConnectionTools_get_implementation">
     <service name="com.sun.star.sdb.tools.ConnectionTools"/>
   </implementation>
 </component>

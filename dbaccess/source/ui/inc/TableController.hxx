@@ -119,13 +119,6 @@ namespace dbaui
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
-        // need by registration
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static();
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-        static css::uno::Reference< css::uno::XInterface >
-                Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     private:
         void startTableListening();

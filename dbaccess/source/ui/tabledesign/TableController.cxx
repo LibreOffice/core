@@ -26,14 +26,12 @@
 #include <UITools.hxx>
 #include <browserids.hxx>
 #include <core_resource.hxx>
-#include <dbu_reghelper.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
 #include <indexdialog.hxx>
 #include <sqlmessage.hxx>
-#include <uiservices.hxx>
 
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -60,9 +58,11 @@
 #include <algorithm>
 #include <functional>
 
-extern "C" void createRegistryInfo_OTableControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OTableDesign_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTableController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OTableController(context));
 }
 
 using namespace ::com::sun::star;
@@ -100,27 +100,12 @@ namespace
 
 OUString SAL_CALL OTableController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString OTableController::getImplementationName_Static()
-{
     return "org.openoffice.comp.dbu.OTableDesign";
 }
 
-Sequence< OUString> OTableController::getSupportedServiceNames_Static()
+Sequence< OUString> OTableController::getSupportedServiceNames()
 {
     return { "com.sun.star.sdb.TableDesign" };
-}
-
-Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-Reference< XInterface > OTableController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OTableController(comphelper::getComponentContext(_rxFactory)));
 }
 
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)

@@ -19,8 +19,6 @@
 
 #include "dbinteraction.hxx"
 #include <apitools.hxx>
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/dbexception.hxx>
@@ -39,10 +37,18 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-extern "C" void createRegistryInfo_OInteractionHandler()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbaccess_DatabaseInteractionHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SQLExceptionInteractionHandler > aSQLExceptionInteractionHandler_AutoRegistration;
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LegacyInteractionHandler > aLegacyInteractionHandler_AutoRegistration;
+    return cppu::acquire(new ::dbaui::SQLExceptionInteractionHandler(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbaccess_LegacyInteractionHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new ::dbaui::LegacyInteractionHandler(context));
 }
 
 namespace dbaui
@@ -341,25 +347,25 @@ namespace dbaui
     }
 
     // SQLExceptionInteractionHandler
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(SQLExceptionInteractionHandler, "com.sun.star.sdb.DatabaseInteractionHandler")
-
-    Reference< XInterface >
-        SQLExceptionInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    OUString SAL_CALL SQLExceptionInteractionHandler::getImplementationName()
     {
-        return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
+        return "com.sun.star.comp.dbaccess.DatabaseInteractionHandler";
+    }
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
+    css::uno::Sequence< OUString > SAL_CALL SQLExceptionInteractionHandler::getSupportedServiceNames()
+    {
+        return { "com.sun.star.sdb.DatabaseInteractionHandler" };
     }
 
     // LegacyInteractionHandler
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.InteractionHandler")
-
-    Reference< XInterface >
-        LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    OUString SAL_CALL LegacyInteractionHandler::getImplementationName()
     {
-        return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
+        return "com.sun.star.comp.dbaccess.LegacyInteractionHandler";
+    }
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
+    css::uno::Sequence< OUString > SAL_CALL LegacyInteractionHandler::getSupportedServiceNames()
+    {
+        return { "com.sun.star.sdb.InteractionHandler" };
     }
 
 }   // namespace dbaui
