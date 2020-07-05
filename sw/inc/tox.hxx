@@ -62,6 +62,11 @@ namespace sw {
             , m_isReadOnlyAvailable(isReadOnlyAvailable)
         {}
     };
+    struct CollectTextTOXMarksForLayoutHint final : SfxHint {
+        std::vector<std::reference_wrapper<SwTextTOXMark>>& m_rMarks;
+        const SwRootFrame* m_pLayout;
+        CollectTextTOXMarksForLayoutHint(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout) : m_rMarks(rMarks), m_pLayout(pLayout) {}
+    };
 }
 
 // Entry of content index, alphabetical index or user defined index
@@ -180,6 +185,8 @@ public:
         const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::FindContentFrameHint(pContentFrame, rDoc, rLayout, isReadOnlyAvailable));
         return pContentFrame;
     }
+    void CollectTextTOXMarksForLayout(std::vector<std::reference_wrapper<SwTextTOXMark>> rMarks, const SwRootFrame* pLayout) const
+            { const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::CollectTextTOXMarksForLayoutHint(rMarks, pLayout)); }
 
 
 private:

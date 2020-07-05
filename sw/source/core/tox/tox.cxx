@@ -17,18 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <swtypes.hxx>
-#include <ndtxt.hxx>
-#include <txttxmrk.hxx>
-#include <tox.hxx>
-#include <strings.hrc>
+#include <calbck.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <paratr.hxx>
 #include <editeng/tstpitem.hxx>
+#include <hintids.hxx>
 #include <hints.hxx>
-#include <calbck.hxx>
+#include <ndtxt.hxx>
+#include <paratr.hxx>
+#include <rootfrm.hxx>
+#include <scriptinfo.hxx>
+#include <strings.hrc>
+#include <swtypes.hxx>
+#include <tox.hxx>
+#include <txtfrm.hxx>
+#include <txttxmrk.hxx>
 
 #include <optional>
 #include <sal/log.hxx>
@@ -157,6 +160,23 @@ void SwTOXMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         if(GetTextTOXMark())
             pCollectHint->m_rMarks.push_back(this);
+    } else if (auto pCollectLayoutHint = dynamic_cast<const sw::CollectTextTOXMarksForLayoutHint*>(&rHint))
+    {
+        if(!GetTextTOXMark())
+            return;
+        auto& rTextMark = *GetTextTOXMark();
+        auto& rNode = rTextMark.GetTextNode();
+        auto pLayout = pCollectLayoutHint->m_pLayout;
+        // Check basic sanity and that it is part of our layout and not in undo
+        if(!rNode.GetNodes().IsDocNodes() || !rNode.GetText().getLength() || !rNode.HasWriterListeners() || !rNode.getLayoutFrame(pLayout))
+            return;
+        // Check for being hidden
+        if(rNode.IsHiddenByParaField() || SwScriptInfo::IsInHiddenRange(rNode, rTextMark.GetStart()))
+            return;
+        // Xhwxk for being hidden by hidden redlines
+        if(pLayout && pLayout->IsHideRedlines() && sw::IsMarkHintHidden(*pLayout, rNode, rTextMark))
+            return;
+        pCollectLayoutHint->m_rMarks.push_back(rTextMark);
     }
 }
 
