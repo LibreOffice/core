@@ -1172,6 +1172,31 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
     return pColl;
 }
 
+void SwTOXBaseSection::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if (auto pFindHint = dynamic_cast<const sw::FindContentFrameHint*>(&rHint))
+    {
+        if(pFindHint->m_rpContentFrame)
+            return;
+        auto pSectFormat = GetFormat();
+        if(!pSectFormat)
+            return;
+        const SwSectionNode* pSectNd = pSectFormat->GetSectionNode();
+        if(!pSectNd)
+            return;
+        SwNodeIndex aIdx(*pSectNd, 1);
+        SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
+        if(!pCNd)
+            pCNd = pFindHint->m_rDoc.GetNodes().GoNext(&aIdx);
+        if(!pCNd)
+            return;
+        if(pCNd->EndOfSectionIndex() >= pSectNd->EndOfSectionIndex())
+            return;
+        pFindHint->m_rpContentFrame = pCNd->getLayoutFrame(&pFindHint->m_rLayout);
+    } else
+        SwTOXBase::SwClientNotify(rModify, rHint);
+}
+
 /// Create from Marks
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTextNode* pOwnChapterNode,

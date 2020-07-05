@@ -32,7 +32,7 @@ class  SwTextFormatColl;
 struct SwPosition;
 struct SwTOXSortTabBase;
 
-class SwTOXBaseSection : public SwTOXBase, public SwSection
+class SwTOXBaseSection final : public SwTOXBase, public SwSection
 {
     std::vector<std::unique_ptr<SwTOXSortTabBase>> m_aSortArr;
 
@@ -73,6 +73,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
     // return text collection via name/ from format pool
     SwTextFormatColl* GetTextFormatColl( sal_uInt16 nLevel );
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override;
 
 public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat);

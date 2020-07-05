@@ -366,53 +366,19 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
 /// jump to index of TOXMark
 void SwCursorShell::GotoTOXMarkBase()
 {
-    bool bRet = false;
-
     SwTOXMarks aMarks;
-    sal_uInt16 nCnt = SwDoc::GetCurTOXMark( *m_pCurrentCursor->GetPoint(), aMarks );
-    if( nCnt )
-    {
-        // Take the 1. and get the index type. Search in its dependency list
-        // for the actual index
-        const SwTOXType* pType = aMarks[0]->GetTOXType();
-        SwIterator<SwTOXBase,SwTOXType> aIter( *pType );
-
-        for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
-        {
-            auto pTOXBaseSection = dynamic_cast<const SwTOXBaseSection*>( pTOX);
-            if( !pTOXBaseSection )
-                continue;
-            auto pSectFormat = pTOXBaseSection->GetFormat();
-            if( !pSectFormat )
-                continue;
-            const SwSectionNode* pSectNd = pSectFormat->GetSectionNode();
-            if (!pSectNd)
-                continue;
-            SwNodeIndex aIdx( *pSectNd, 1 );
-            SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
-            if( !pCNd )
-                pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-            if( !pCNd )
-                continue;
-            if( pCNd->EndOfSectionIndex() >= pSectNd->EndOfSectionIndex() )
-                continue;
-            const SwContentFrame* pCFrame = pCNd->getLayoutFrame( GetLayout() );
-            if( pCFrame && ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ) )
-            {
-                SwCallLink aLk( *this ); // watch Cursor-Moves
-                SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                assert(pCFrame->IsTextFrame());
-                *m_pCurrentCursor->GetPoint() =
-                    static_cast<SwTextFrame const*>(pCFrame)
-                        ->MapViewToModelPos(TextFrameIndex(0));
-                bRet = !m_pCurrentCursor->IsInProtectTable() &&
-                        !m_pCurrentCursor->IsSelOvr();
-                if( bRet )
-                    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
-                break;
-            }
-        }
-    }
+    sal_uInt16 nCnt = SwDoc::GetCurTOXMark(*m_pCurrentCursor->GetPoint(), aMarks);
+    if(!nCnt)
+        return;
+    // Take the 1. and get the index type. Ask it for the actual index.
+    const SwTOXType* pType = aMarks[0]->GetTOXType();
+    auto pContentFrame = pType->FindContentFrame(*GetDoc(), *GetLayout(), IsReadOnlyAvailable());
+    SwCallLink aLk(*this); // watch Cursor-Moves
+    SwCursorSaveState aSaveState(*m_pCurrentCursor);
+    assert(pContentFrame->IsTextFrame());
+    *m_pCurrentCursor->GetPoint() = static_cast<SwTextFrame const*>(pContentFrame)->MapViewToModelPos(TextFrameIndex(0));
+    if(!m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr())
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
 }
 
 /// Jump to next/previous table formula
