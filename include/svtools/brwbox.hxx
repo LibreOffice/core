@@ -26,6 +26,7 @@
 #include <vcl/event.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vector>
@@ -36,7 +37,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class BrowserColumn;
-class BrowserDataWin;
 class BrowserHeader;
 class ScrollBar;
 class StatusBar;
@@ -137,6 +137,88 @@ public:
     const tools::Rectangle&    GetRect() const { return aRect; }
 };
 
+class BrowseBox;
+class ScrollBarBox;
+class BrowserMouseEvent;
+
+class BrowserDataWin
+            :public Control
+            ,public DragSourceHelper
+            ,public DropTargetHelper
+{
+public:
+    VclPtr<BrowserHeader> pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
+    VclPtr<ScrollBarBox>  pCornerWin;     // Window in the corner btw the ScrollBars
+    bool            bInDtor;
+    AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
+    MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
+    Point           aLastMousePos;  // prevents pseudo-MouseMoves
+
+    OUString        aRealRowCount;  // to show in VScrollBar
+
+    std::vector<tools::Rectangle> aInvalidRegion; // invalidated Rectangles during !UpdateMode
+    bool            bInPaint;       // TRUE while in Paint
+    bool            bInCommand;     // TRUE while in Command
+    bool            bNoHScroll;     // no horizontal scrollbar
+    bool            bNoVScroll;     // no vertical scrollbar
+    bool            bAutoHScroll;   // autohide horizontaler Scrollbar
+    bool            bAutoVScroll;   // autohide horizontaler Scrollbar
+    bool            bUpdateMode;    // not SV-UpdateMode because of Invalidate()
+    bool            bAutoSizeLastCol; // last column always fills up window
+    bool            bResizeOnPaint;   // outstanding resize-event
+    bool            bUpdateOnUnlock;  // Update() while locked
+    bool            bInUpdateScrollbars;  // prevents recursions
+    bool            bHadRecursion;        // a recursion occurred
+    bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop currently
+    sal_uInt16          nUpdateLock;    // lock count, don't call Control::Update()!
+    short           nCursorHidden;  // new counter for DoHide/ShowCursor
+
+    long            m_nDragRowDividerLimit;
+    long            m_nDragRowDividerOffset;
+
+public:
+                    explicit BrowserDataWin( BrowseBox* pParent );
+    virtual         ~BrowserDataWin() override;
+    virtual void    dispose() override;
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual void    Command( const CommandEvent& rEvt ) override;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
+    virtual void    MouseMove( const MouseEvent& rEvt ) override;
+                    DECL_LINK( RepeatedMouseMove, Timer *, void );
+
+    virtual void    MouseButtonUp( const MouseEvent& rEvt ) override;
+    virtual void    KeyInput( const KeyEvent& rEvt ) override;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
+
+    // DropTargetHelper overridables
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+    // DragSourceHelper overridables
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
+
+
+    BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
+    BrowseBox*      GetParent() const;
+    const OUString& GetRealRowCount() const { return aRealRowCount; }
+
+    void            SetUpdateMode( bool bMode );
+    bool            GetUpdateMode() const { return bUpdateMode; }
+    void            EnterUpdateLock() { ++nUpdateLock; }
+    void            LeaveUpdateLock();
+    void            Update();
+    void            DoOutstandingInvalidations();
+    void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    void            Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    using Control::Invalidate;
+
+protected:
+    void            StartRowDividerDrag( const Point& _rStartPos );
+    bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
+};
 
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 {
@@ -160,7 +242,6 @@ class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
 public:
     BrowserExecuteDropEvent( BrowserDataWin* pWin, const ExecuteDropEvent& rEvt );
 };
-
 
 // TODO
 // The whole selection thingie in this class is somewhat... suspicious to me.
@@ -487,7 +568,7 @@ public:
     bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
-    vcl::Window&    GetDataWindow() const;
+    BrowserDataWin&        GetDataWindow() const;
     tools::Rectangle       GetRowRectPixel( long nRow ) const;
     tools::Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;

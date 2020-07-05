@@ -2331,7 +2331,7 @@ sal_uInt16 BrowseBox::GetVisibleRows() const
     return static_cast<sal_uInt16>((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1);
 }
 
-vcl::Window& BrowseBox::GetDataWindow() const
+BrowserDataWin& BrowseBox::GetDataWindow() const
 {
     return *pDataWin;
 }
