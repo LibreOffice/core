@@ -527,9 +527,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
             msTarget, true ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maScPos),
-            FSNS( XML_r, XML_id ),  !sId.isEmpty()
-                                       ? sId.toUtf8().getStr()
-                                       : nullptr,
+            FSNS( XML_r, XML_id ),  sax_fastparser::UseIf(sId, !sId.isEmpty()),
             XML_location,           mxTextMark
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : nullptr,

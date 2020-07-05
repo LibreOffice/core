@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sax/saxdllapi.h>
+#include <optional>
 #include <memory>
 #include <utility>
 
@@ -58,16 +59,26 @@ public:
         startElement(elementTokenId, std::forward<Args>(args)...);
     }
     template<typename... Args>
-    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
+    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute,
+                      const std::optional<OString>& value, Args&&... args)
     {
-        pushAttributeValue(attribute, value);
+        if (value)
+            pushAttributeValue(attribute, *value);
         startElement(elementTokenId, std::forward<Args>(args)...);
     }
     template<typename... Args>
-    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OUString& value, Args&&... args)
+    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute,
+                      const std::optional<OUString>& value, Args&&... args)
     {
         // The temporary created by toUtf8() must stay alive until startElement() ends using it
-        startElement(elementTokenId, attribute, value.toUtf8(), std::forward<Args>(args)...);
+        OString temp;
+        std::optional<OString> opt;
+        if (value)
+        {
+            temp = value->toUtf8();
+            opt = temp;
+        }
+        startElement(elementTokenId, attribute, opt, std::forward<Args>(args)...);
     }
     void startElement(sal_Int32 elementTokenId);
 
@@ -87,16 +98,26 @@ public:
         singleElement(elementTokenId, std::forward<Args>(args)...);
     }
     template<typename... Args>
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args &&... args)
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute,
+                       const std::optional<OString>& value, Args&&... args)
     {
-        pushAttributeValue(attribute, value);
+        if (value)
+            pushAttributeValue(attribute, *value);
         singleElement(elementTokenId, std::forward<Args>(args)...);
     }
     template<typename... Args>
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OUString& value, Args&&... args)
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute,
+                       const std::optional<OUString>& value, Args&&... args)
     {
         // The temporary created by toUtf8() must stay alive until singleElement() ends using it
-        singleElement(elementTokenId, attribute, value.toUtf8(), std::forward<Args>(args)...);
+        OString temp;
+        std::optional<OString> opt;
+        if (value)
+        {
+            temp = value->toUtf8();
+            opt = temp;
+        }
+        singleElement(elementTokenId, attribute, opt, std::forward<Args>(args)...);
     }
     void singleElement(sal_Int32 elementTokenId);
 
@@ -149,6 +170,15 @@ private:
 };
 
 typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
+
+template<class TString>
+std::optional<TString> UseIf(const TString& s, bool bUse)
+{
+    std::optional<TString> opt;
+    if (bUse)
+        opt = s;
+    return opt;
+}
 
 }
 

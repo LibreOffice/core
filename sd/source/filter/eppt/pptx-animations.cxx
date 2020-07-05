@@ -215,7 +215,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
         if (aValues[i].hasValue())
         {
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
-                                sFormula.isEmpty() ? nullptr : sFormula.toUtf8().getStr(), XML_tm,
+                                sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
                                 OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
             pFS->startElementNS(XML_p, XML_val);
             ValuePair aPair;
@@ -901,10 +901,9 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
         }
 
         mpFS->startElementNS(XML_p, nXmlNodeType, XML_calcmode, pCalcMode, XML_valueType,
-                             pValueType, XML_from,
-                             sFrom.isEmpty() ? nullptr : sFrom.toUtf8().getStr(), XML_to,
-                             sTo.isEmpty() ? nullptr : sTo.toUtf8().getStr(), XML_by,
-                             sBy.isEmpty() ? nullptr : sBy.toUtf8().getStr());
+                             pValueType, XML_from, sax_fastparser::UseIf(sFrom, !sFrom.isEmpty()),
+                             XML_to, sax_fastparser::UseIf(sTo, !sTo.isEmpty()), XML_by,
+                             sax_fastparser::UseIf(sBy, !sBy.isEmpty()));
         bTo = sTo.isEmpty() && sFrom.isEmpty() && sBy.isEmpty();
     }
 
@@ -1192,8 +1191,8 @@ void PPTXAnimationExport::WriteAnimationNodeAudio()
 
     mpFS->startElementNS(XML_p, XML_tgtEl);
     mpFS->singleElementNS(XML_p, XML_sndTgt, FSNS(XML_r, XML_embed),
-                          sRelId.isEmpty() ? nullptr : sRelId.toUtf8().getStr(), XML_name,
-                          sUrl.isEmpty() ? nullptr : sName.toUtf8().getStr());
+                          sax_fastparser::UseIf(sRelId, !sRelId.isEmpty()), XML_name,
+                          sax_fastparser::UseIf(sName, !sUrl.isEmpty()));
     mpFS->endElementNS(XML_p, XML_tgtEl);
 
     mpFS->endElementNS(XML_p, XML_cMediaNode);
