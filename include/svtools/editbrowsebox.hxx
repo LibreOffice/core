@@ -810,6 +810,8 @@ namespace svt
         virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
+        virtual bool ProcessKey(const KeyEvent& rEvt) override;
+
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
     protected:
         // creates the accessible which wraps the active cell

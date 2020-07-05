@@ -541,6 +541,113 @@ namespace svt
         BrowseBox::Dispatch( _nId );
     }
 
+    bool EditBrowseBox::ProcessKey(const KeyEvent& rKeyEvent)
+    {
+        sal_uInt16 nCode  = rKeyEvent.GetKeyCode().GetCode();
+        bool       bShift = rKeyEvent.GetKeyCode().IsShift();
+        bool       bCtrl  = rKeyEvent.GetKeyCode().IsMod1();
+        bool       bAlt =   rKeyEvent.GetKeyCode().IsMod2();
+        bool       bLocalSelect = false;
+        bool       bNonEditOnly = false;
+        sal_uInt16 nId = BROWSER_NONE;
+
+        if (!bAlt && !bCtrl && !bShift )
+            switch ( nCode )
+            {
+                case KEY_DOWN:          nId = BROWSER_CURSORDOWN; break;
+                case KEY_UP:            nId = BROWSER_CURSORUP; break;
+                case KEY_PAGEDOWN:      nId = BROWSER_CURSORPAGEDOWN; break;
+                case KEY_PAGEUP:        nId = BROWSER_CURSORPAGEUP; break;
+                case KEY_HOME:          nId = BROWSER_CURSORHOME; break;
+                case KEY_END:           nId = BROWSER_CURSOREND; break;
+
+                case KEY_TAB:
+                    // ask if traveling to the next cell is allowed
+                    if (IsTabAllowed(true))
+                        nId = BROWSER_CURSORRIGHT;
+                    break;
+
+                case KEY_RETURN:
+                    // save the cell content (if necessary)
+                    if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
+                    {
+                        // maybe we're not visible ...
+                        EnableAndShow();
+                        aController->GetWindow().GrabFocus();
+                        return true;
+                    }
+                    // ask if traveling to the next cell is allowed
+                    if (IsTabAllowed(true))
+                        nId = BROWSER_CURSORRIGHT;
+
+                    break;
+                case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
+                case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
+                case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = true; break;
+            }
+
+        if ( !bAlt && !bCtrl && bShift )
+            switch ( nCode )
+            {
+                case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = true; break;
+                case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = true; break;
+                case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = true; break;
+                case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = true; break;
+                case KEY_TAB:
+                    if (IsTabAllowed(false))
+                        nId = BROWSER_CURSORLEFT;
+                    break;
+            }
+
+        if ( !bAlt && bCtrl && bShift )
+            switch ( nCode )
+            {
+                case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = true; break;
+            }
+
+
+        if ( !bAlt && bCtrl && !bShift )
+            switch ( nCode )
+            {
+                case KEY_DOWN:          nId = BROWSER_SCROLLUP; break;
+                case KEY_UP:            nId = BROWSER_SCROLLDOWN; break;
+                case KEY_PAGEDOWN:      nId = BROWSER_CURSORENDOFFILE; break;
+                case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
+                case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
+                case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
+                case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = true; break;
+            }
+
+
+        if  (   ( nId != BROWSER_NONE )
+            &&  (   !IsEditing()
+                ||  (   !bNonEditOnly
+                    &&  aController->MoveAllowed(rKeyEvent)
+                    )
+                )
+            )
+        {
+            if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
+            {
+                // save the cell content (if necessary)
+                if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
+                {
+                    // maybe we're not visible ...
+                    EnableAndShow();
+                    aController->GetWindow().GrabFocus();
+                    return true;
+                }
+            }
+
+            Dispatch(nId);
+
+            if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
+                DeactivateCell();
+            return true;
+        }
+        return false;
+    }
+
     bool EditBrowseBox::PreNotify(NotifyEvent& rEvt)
     {
         if (rEvt.GetType() == MouseNotifyEvent::KEYINPUT)
@@ -550,109 +657,8 @@ namespace svt
                 ||  (!IsEditing() && HasChildPathFocus())
                 )
             {
-                const KeyEvent* pKeyEvent = rEvt.GetKeyEvent();
-                sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
-                bool       bShift = pKeyEvent->GetKeyCode().IsShift();
-                bool       bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                bool       bAlt =   pKeyEvent->GetKeyCode().IsMod2();
-                bool       bLocalSelect = false;
-                bool       bNonEditOnly = false;
-                sal_uInt16 nId = BROWSER_NONE;
-
-                if (!bAlt && !bCtrl && !bShift )
-                    switch ( nCode )
-                    {
-                        case KEY_DOWN:          nId = BROWSER_CURSORDOWN; break;
-                        case KEY_UP:            nId = BROWSER_CURSORUP; break;
-                        case KEY_PAGEDOWN:      nId = BROWSER_CURSORPAGEDOWN; break;
-                        case KEY_PAGEUP:        nId = BROWSER_CURSORPAGEUP; break;
-                        case KEY_HOME:          nId = BROWSER_CURSORHOME; break;
-                        case KEY_END:           nId = BROWSER_CURSOREND; break;
-
-                        case KEY_TAB:
-                            // ask if traveling to the next cell is allowed
-                            if (IsTabAllowed(true))
-                                nId = BROWSER_CURSORRIGHT;
-                            break;
-
-                        case KEY_RETURN:
-                            // save the cell content (if necessary)
-                            if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
-                            {
-                                // maybe we're not visible ...
-                                EnableAndShow();
-                                aController->GetWindow().GrabFocus();
-                                return true;
-                            }
-                            // ask if traveling to the next cell is allowed
-                            if (IsTabAllowed(true))
-                                nId = BROWSER_CURSORRIGHT;
-
-                            break;
-                        case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
-                        case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
-                        case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = true; break;
-                    }
-
-                if ( !bAlt && !bCtrl && bShift )
-                    switch ( nCode )
-                    {
-                        case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = true; break;
-                        case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = true; break;
-                        case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = true; break;
-                        case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = true; break;
-                        case KEY_TAB:
-                            if (IsTabAllowed(false))
-                                nId = BROWSER_CURSORLEFT;
-                            break;
-                    }
-
-                if ( !bAlt && bCtrl && bShift )
-                    switch ( nCode )
-                    {
-                        case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = true; break;
-                    }
-
-
-                if ( !bAlt && bCtrl && !bShift )
-                    switch ( nCode )
-                    {
-                        case KEY_DOWN:          nId = BROWSER_SCROLLUP; break;
-                        case KEY_UP:            nId = BROWSER_SCROLLDOWN; break;
-                        case KEY_PAGEDOWN:      nId = BROWSER_CURSORENDOFFILE; break;
-                        case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
-                        case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
-                        case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
-                        case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = true; break;
-                    }
-
-
-                if  (   ( nId != BROWSER_NONE )
-                    &&  (   !IsEditing()
-                        ||  (   !bNonEditOnly
-                            &&  aController->MoveAllowed( *pKeyEvent )
-                            )
-                        )
-                    )
-                {
-                    if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
-                    {
-                        // save the cell content (if necessary)
-                        if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
-                        {
-                            // maybe we're not visible ...
-                            EnableAndShow();
-                            aController->GetWindow().GrabFocus();
-                            return true;
-                        }
-                    }
-
-                    Dispatch(nId);
-
-                    if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
-                        DeactivateCell();
+                if (ProcessKey(*rEvt.GetKeyEvent()))
                     return true;
-                }
             }
         }
         return BrowseBox::PreNotify(rEvt);
