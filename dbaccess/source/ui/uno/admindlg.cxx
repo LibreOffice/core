@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include "admindlg.hxx"
 #include <dbadmin.hxx>
 #include <comphelper/processfactory.hxx>
@@ -26,9 +24,11 @@
 
 using namespace dbaui;
 
-extern "C" void createRegistryInfo_ODataSourcePropertyDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< ODataSourcePropertyDialog > aAutoRegistration;
+    return cppu::acquire(new ODataSourcePropertyDialog(context));
 }
 
 namespace dbaui
@@ -48,27 +48,12 @@ Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > ODataSourcePropertyDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ODataSourcePropertyDialog( comphelper::getComponentContext(_rxFactory) ));
-}
-
 OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString ODataSourcePropertyDialog::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.ODatasourceAdministrationDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> ODataSourcePropertyDialog::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.sdb.DatasourceAdministrationDialog" };
 }
