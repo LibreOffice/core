@@ -310,19 +310,19 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
 
     if( aTransformations.hasElements() )
     {
-        mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName.toUtf8());
+        mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName);
         WriteColorTransformations( aTransformations, nAlpha );
         mpFS->endElementNS( XML_a, XML_schemeClr );
     }
     else if(nAlpha < MAX_PERCENT)
     {
-        mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName.toUtf8());
+        mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName);
         mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OString::number(nAlpha));
         mpFS->endElementNS( XML_a, XML_schemeClr );
     }
     else
     {
-        mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName.toUtf8());
+        mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, sColorSchemeName);
     }
 }
 
@@ -1291,14 +1291,14 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     GetFS()->startElementNS(XML_p, XML_nvPr);
 
     GetFS()->singleElementNS(XML_a, eMediaType == Relationship::VIDEO ? XML_videoFile : XML_audioFile,
-                    FSNS(XML_r, XML_link), aVideoFileRelId.toUtf8());
+                    FSNS(XML_r, XML_link), aVideoFileRelId);
 
     GetFS()->startElementNS(XML_p, XML_extLst);
     // media extensions; google this ID for details
     GetFS()->startElementNS(XML_p, XML_ext, XML_uri, "{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}");
 
     GetFS()->singleElementNS(XML_p14, XML_media,
-            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), aMediaRelId.toUtf8());
+            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), aMediaRelId);
 
     GetFS()->endElementNS(XML_p, XML_ext);
     GetFS()->endElementNS(XML_p, XML_extLst);
@@ -1380,7 +1380,7 @@ OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const 
         }
     }
 
-    mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId.toUtf8());
+    mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
     WriteImageBrightnessContrastTransparence(rXPropSet);
 
@@ -1975,7 +1975,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             usTypeface = aSubstName;
 
         mpFS->singleElementNS( XML_a, XML_latin,
-                               XML_typeface, usTypeface.toUtf8(),
+                               XML_typeface, usTypeface,
                                XML_pitchFamily, pitch,
                                XML_charset, charset );
     }
@@ -1997,7 +1997,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             usTypeface = aSubstName;
 
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
-                               XML_typeface, usTypeface.toUtf8(),
+                               XML_typeface, usTypeface,
                                XML_pitchFamily, pitch,
                                XML_charset, charset );
     }
@@ -2022,7 +2022,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                   oox::getRelationship(Relationship::HYPERLINK),
                                   sURL, true );
 
-            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8());
+            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
         }
     }
 
@@ -2188,7 +2188,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
             OString sUUID(comphelper::xml::generateGUIDString());
             mpFS->startElementNS( XML_a, XML_fld,
                                   XML_id, sUUID.getStr(),
-                                  XML_type, sFieldValue.toUtf8() );
+                                  XML_type, sFieldValue );
         }
         else
         {
@@ -2384,7 +2384,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         mpFS->singleElementNS( XML_a, XML_buSzPct,
                                XML_val, OString::number(std::min<sal_Int32>(std::lround(100000.f * fBulletSizeRel), 400000)));
         mpFS->startElementNS(XML_a, XML_buBlip);
-        mpFS->singleElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelationId.toUtf8());
+        mpFS->singleElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelationId);
         mpFS->endElementNS( XML_a, XML_buBlip );
     }
     else
@@ -2408,7 +2408,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             if ( SVX_NUM_CHAR_SPECIAL == nNumberingType )
                 aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS( XML_a, XML_buFont,
-                                   XML_typeface, aFontDesc.Name.toUtf8(),
+                                   XML_typeface, aFontDesc.Name,
                                    XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : nullptr );
         }
 
@@ -2417,12 +2417,12 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         if (!aAutoNumType.isEmpty())
         {
             mpFS->singleElementNS(XML_a, XML_buAutoNum,
-                                  XML_type, aAutoNumType.toUtf8(),
+                                  XML_type, aAutoNumType,
                                   XML_startAt, nStartWith > 1 ? OString::number(nStartWith).getStr() : nullptr);
         }
         else
         {
-            mpFS->singleElementNS(XML_a, XML_buChar, XML_char, OUString(aBulletChar).toUtf8());
+            mpFS->singleElementNS(XML_a, XML_buChar, XML_char, OUString(aBulletChar));
         }
     }
 }
@@ -2849,7 +2849,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         {
             if (aAdjustmentSeq.hasElements())
             {
-                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8());
+                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp);
                 mpFS->startElementNS(XML_a, XML_avLst);
                 for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
                 {
@@ -2895,7 +2895,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             }
             else
             {
-                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8());
+                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp);
             }
         }
 
@@ -4282,7 +4282,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
     mpFS->startElementNS(XML_a, XML_extLst);
     mpFS->startElementNS(XML_a, XML_ext, XML_uri, "{BEBA8EAE-BF5A-486C-A8C5-ECC9F3942E4B}");
     mpFS->startElementNS( XML_a14, XML_imgProps,
-                          FSNS(XML_xmlns, XML_a14), mpFB->getNamespaceURL(OOX_NS(a14)).toUtf8() );
+                          FSNS(XML_xmlns, XML_a14), mpFB->getNamespaceURL(OOX_NS(a14)) );
     mpFS->startElementNS(XML_a14, XML_imgLayer, FSNS(XML_r, XML_embed), sRelId);
     mpFS->startElementNS(XML_a14, XML_imgEffect);
 
@@ -4378,9 +4378,8 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         mpFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
         mpFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr);
 
-        mpFS->startElementNS(
-            XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
-            mpFB->getNamespaceURL(OOX_NS(dml)).toUtf8());
+        mpFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
+                             mpFB->getNamespaceURL(OOX_NS(dml)));
     }
     else
     {
@@ -4394,7 +4393,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         // change tracking extension - required in PPTX
         mpFS->startElementNS(XML_p, XML_ext, XML_uri, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
         mpFS->singleElementNS(XML_p14, XML_modId,
-            FSNS(XML_xmlns, XML_p14), mpFB->getNamespaceURL(OOX_NS(p14)).toUtf8(),
+            FSNS(XML_xmlns, XML_p14), mpFB->getNamespaceURL(OOX_NS(p14)),
             XML_val,
             OString::number(comphelper::rng::uniform_uint_distribution(1, SAL_MAX_UINT32)));
         mpFS->endElementNS(XML_p, XML_ext);
@@ -4484,8 +4483,8 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     }
 
     mpFS->singleElementNS(XML_dgm, XML_relIds,
-        FSNS(XML_xmlns, XML_dgm), mpFB->getNamespaceURL(OOX_NS(dmlDiagram)).toUtf8(),
-        FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
+        FSNS(XML_xmlns, XML_dgm), mpFB->getNamespaceURL(OOX_NS(dmlDiagram)),
+        FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)),
         FSNS(XML_r, XML_dm), dataRelId, FSNS(XML_r, XML_lo), layoutRelId,
         FSNS(XML_r, XML_qs), styleRelId, FSNS(XML_r, XML_cs), colorRelId);
 

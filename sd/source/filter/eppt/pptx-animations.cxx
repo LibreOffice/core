@@ -129,8 +129,7 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
             pFS->singleElementNS(XML_p, XML_fltVal, XML_val, OString::number(fDouble));
             break;
         case TypeClass_STRING:
-            pFS->singleElementNS(XML_p, XML_strVal, XML_val,
-                                 (*o3tl::doAccess<OUString>(rAny)).toUtf8());
+            pFS->singleElementNS(XML_p, XML_strVal, XML_val, *o3tl::doAccess<OUString>(rAny));
             break;
         default:
             break;
@@ -837,7 +836,7 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
                 aPath = ::basegfx::utils::exportToSvgD(aPolyPoly, false, false, true, true);
         }
 
-        mpFS->startElementNS(XML_p, nXmlNodeType, XML_origin, "layout", XML_path, aPath.toUtf8());
+        mpFS->startElementNS(XML_p, nXmlNodeType, XML_origin, "layout", XML_path, aPath);
     }
     else if (nXmlNodeType == XML_animRot)
     {

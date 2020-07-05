@@ -689,7 +689,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(nID),
-                          XML_name,   sName.toUtf8());
+                          XML_name,   sName);
 
     OUString sURL;
     if ( GetProperty( xShapeProps, "URL" ) )
@@ -701,8 +701,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
                 mpURLTransformer->getTransformedString(sURL),
                 mpURLTransformer->isExternalURL(sURL));
 
-        mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                FSNS( XML_r,XML_id ), sRelId.toUtf8() );
+        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
@@ -769,9 +768,9 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     XmlFilterBase* pFB = GetFB();
     pFS->singleElement(  FSNS( XML_c, XML_chart ),
-            FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)).toUtf8(),
-            FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-            FSNS(XML_r, XML_id), sId.toUtf8() );
+            FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)),
+            FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)),
+            FSNS(XML_r, XML_id), sId );
 
     pFS->endElement( FSNS( XML_a, XML_graphicData ) );
     pFS->endElement( FSNS( XML_a, XML_graphic ) );
@@ -846,9 +845,9 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
     pFS->startElement( FSNS( XML_c, XML_chartSpace ),
-            FSNS( XML_xmlns, XML_c ), pFB->getNamespaceURL(OOX_NS(dmlChart)).toUtf8(),
-            FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)).toUtf8(),
-            FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)).toUtf8());
+            FSNS( XML_xmlns, XML_c ), pFB->getNamespaceURL(OOX_NS(dmlChart)),
+            FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+            FSNS( XML_xmlns, XML_r ), pFB->getNamespaceURL(OOX_NS(officeRel)));
     // TODO: get the correct editing language
     pFS->singleElement(FSNS(XML_c, XML_lang), XML_val, "en-US");
 
@@ -919,7 +918,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
     OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
                     type,
                     relationPath);
-    pFS->singleElementNS(XML_c, XML_externalData, FSNS(XML_r, XML_id), sRelId.toUtf8());
+    pFS->singleElementNS(XML_c, XML_externalData, FSNS(XML_r, XML_id), sRelId);
 }
 
 void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xChartDoc )
@@ -3147,7 +3146,7 @@ void ChartExport::_exportAxis(
                 {
                     pFS->startElement(FSNS(XML_c, XML_dispUnits));
 
-                    pFS->singleElement(FSNS(XML_c, XML_builtInUnit), XML_val, aVal.toUtf8());
+                    pFS->singleElement(FSNS(XML_c, XML_builtInUnit), XML_val, aVal);
 
                     pFS->singleElement(FSNS( XML_c, XML_dispUnitsLbl ));
                     pFS->endElement( FSNS( XML_c, XML_dispUnits ) );
@@ -3282,8 +3281,8 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         else
         {
             // Field
-            pFS->startElement(FSNS(XML_a, XML_fld), XML_id, rField->getGuid().toUtf8(), XML_type,
-                              sFieldType.toUtf8());
+            pFS->startElement(FSNS(XML_a, XML_fld), XML_id, rField->getGuid(), XML_type,
+                              sFieldType);
             writeRunProperties(pChartExport, xPropertySet);
 
             pFS->startElement(FSNS(XML_a, XML_t));
@@ -3514,7 +3513,7 @@ void ChartExport::exportDataLabels(
     if( eChartType != chart::TYPEID_PIE )
     {
         pFS->startElement(FSNS(XML_c, XML_extLst));
-        pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15), GetFB()->getNamespaceURL(OOX_NS(c15)).toUtf8());
+        pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15), GetFB()->getNamespaceURL(OOX_NS(c15)));
         pFS->singleElement(FSNS(XML_c15, XML_showLeaderLines), XML_val, "1");
         pFS->endElement(FSNS(XML_c, XML_ext));
         pFS->endElement(FSNS(XML_c, XML_extLst));
