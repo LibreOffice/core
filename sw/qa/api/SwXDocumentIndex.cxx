@@ -28,6 +28,9 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <tox.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 using namespace css;
 

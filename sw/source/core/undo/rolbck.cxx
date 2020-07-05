@@ -373,7 +373,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLon
     , m_nStart( pTextHt->GetStart() )
     , m_nEnd( pTextHt->GetAnyEnd() )
 {
-    m_TOXMark.EndListeningAll();
+    static_cast<SvtListener*>(&m_TOXMark)->EndListeningAll();
 }
 
 void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
