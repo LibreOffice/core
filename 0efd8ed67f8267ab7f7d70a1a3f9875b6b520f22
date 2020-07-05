@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "427fa497_efd71b66",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-07-05T11:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c9e1812_aeed2b01",
+      "revId": "0efd8ed67f8267ab7f7d70a1a3f9875b6b520f22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66d773d7_f2b25f3d",
         "filename": "sc/source/ui/uitest/uiobject.cxx",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "0efd8ed67f8267ab7f7d70a1a3f9875b6b520f22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a69c4e9_622d1a2e",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1002066
+      },
+      "writtenOn": "2020-07-05T11:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66d773d7_f2b25f3d",
+      "revId": "0efd8ed67f8267ab7f7d70a1a3f9875b6b520f22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
