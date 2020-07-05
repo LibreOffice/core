@@ -1194,7 +1194,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(GetNewShapeID(xShape)),
                           XML_name,   GetShapeName(xShape),
-                          XML_descr,  bHaveDesc ? sDescr.toUtf8().getStr() : nullptr );
+                          XML_descr,  sax_fastparser::UseIf(sDescr, bHaveDesc));
 
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
     if (bHasMediaURL)

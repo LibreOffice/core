@@ -119,9 +119,9 @@ void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUStr
 {
         pFS->startElementNS(XML_p, XML_sndAc);
         pFS->startElementNS(XML_p, XML_stSnd);
-        pFS->singleElementNS(XML_p, XML_snd,
-            FSNS(XML_r, XML_embed), sSoundRelId.isEmpty() ? nullptr : sSoundRelId.toUtf8().getStr(),
-            XML_name, sSoundName.isEmpty() ? nullptr : sSoundName.toUtf8().getStr());
+        pFS->singleElementNS(XML_p, XML_snd, FSNS(XML_r, XML_embed),
+                             sax_fastparser::UseIf(sSoundRelId, !sSoundRelId.isEmpty()), XML_name,
+                             sax_fastparser::UseIf(sSoundName, !sSoundName.isEmpty()));
         pFS->endElement(FSNS(XML_p, XML_stSnd));
         pFS->endElement(FSNS(XML_p, XML_sndAc));
 }

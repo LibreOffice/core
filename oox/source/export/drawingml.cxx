@@ -1890,10 +1890,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     mpFS->startElementNS( XML_a, nElement,
                           XML_b, bold,
                           XML_i, italic,
-                          XML_lang, usLanguage.isEmpty() ? nullptr : usLanguage.toUtf8().getStr(),
+                          XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()),
                           XML_sz, OString::number(nSize),
             // For Condensed character spacing spc value is negative.
-                          XML_spc, nCharKerning ? OString::number(nCharKerning).getStr() : nullptr,
+                          XML_spc, sax_fastparser::UseIf(OString::number(nCharKerning), nCharKerning),
                           XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? nullptr : OString::number(nCharEscapement*1000).getStr(),
