@@ -247,33 +247,82 @@ widgets_labels = [
 
 progname = os.path.basename(sys.argv[0])
 
+# This dictionary contains the set of suppression lines as read from the
+# suppression file(s). It is merely indexed by the text of the suppresion line
+# and contains whether the suppressions was unused.
 suppressions = {}
+
+# This dictionary is indexed like suppressions and returns a "file:line" string
+# to report where in the suppression file the suppression was read
 suppressions_to_line = {}
+
+# This dictionary is similar to the suppressions dictionary, but for false
+# positives rather than suppressions
 false_positives = {}
+
+# This dictionary is indexed by the xml id and returns the element object.
 ids = {}
+# This dictionary is indexed by the xml id and returns whether several objects
+# have the same id.
 ids_dup = {}
+
+# This dictionary is indexed by the xml id of an element A and returns the list
+# of objects which are labelled-by A.
 labelled_by_elm = {}
+
+# This dictionary is indexed by the xml id of an element A and returns the list
+# of objects which are label-for A.
 label_for_elm = {}
+
+# This dictionary is indexed by the xml id of an element A and returns the list
+# of objects which have a mnemonic-for A.
 mnemonic_for_elm = {}
 
+# Possibly a file name to put generated suppression lines in
 gen_suppr = None
+# The corresponding opened file
 gen_supprfile = None
+# A prefix to remove from file names in the generated suppression lines
 suppr_prefix = ""
+
+# Possibly an opened file in which our output should also be written to.
 outfile = None
 
+# Whether -p option was set, i.e. print XML class path instead of line number in
+# the output
 pflag = False
 
+# Whether we should warn about labels which are orphan
 warn_orphan_labels = True
 
+# Number of errors
 errors = 0
+# Number of suppressed errors
 errexists = 0
+# Number of warnings
 warnings = 0
+# Number of suppressed warnings
 warnexists = 0
+# Number of fatal errors
 fatals = 0
+# Number of suppressed fatal errors
 fatalexists = 0
 
-enables = [ ]
+# List of warnings and errors which are fatal
+#
+# Format of each element: (enabled, type, class)
+# See the is_enabled function: the list is traversed completely, each element
+# can specify whether it enables or disables the warning, possibly the type of
+# warning to be enabled/disabled, possibly the class of XML element for which it
+# should be enabled.
+#
+# This mechanism matches the semantic of the parameters on the command line,
+# each of which refining the semantic set by the previous parameters
 dofatals = [ ]
+
+# List of warnings and errors which are enabled
+# Same format as dofatals
+enables = [ ]
 
 # buffers all printed output, so it isn't split in parallel builds
 output_buffer = ""
