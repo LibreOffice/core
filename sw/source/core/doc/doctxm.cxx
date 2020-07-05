@@ -771,11 +771,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                               SwRootFrame const*const pLayout,
                               const bool        _bNewTOX)
 {
-    if (!SwTOXBase::GetRegisteredIn()->HasWriterListeners() ||
-        !GetFormat())
-    {
+    if (!GetFormat())
         return;
-    }
     SwSectionNode const*const pSectNd(GetFormat()->GetSectionNode());
     if (nullptr == pSectNd ||
         !pSectNd->GetNodes().IsDocNodes() ||
@@ -1198,68 +1195,40 @@ void SwTOXBaseSection::SwClientNotify(const SwModify& rModify, const SfxHint& rH
 }
 
 /// Create from Marks
-void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
-                                    const SwTextNode* pOwnChapterNode,
-                                    SwRootFrame const*const pLayout)
+void SwTOXBaseSection::UpdateMarks(const SwTOXInternational& rIntl,
+        const SwTextNode* pOwnChapterNode,
+        SwRootFrame const*const pLayout)
 {
-    const SwTOXType* pType = static_cast<SwTOXType*>( SwTOXBase::GetRegisteredIn() );
-    if( !pType->HasWriterListeners() )
-        return;
-
-    SwDoc* pDoc = GetFormat()->GetDoc();
-    TOXTypes eTOXTyp = GetTOXType()->GetType();
-    SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
-
-    for (SwTOXMark* pMark = aIter.First(); pMark; pMark = aIter.Next())
+    const auto pType = static_cast<SwTOXType*>(SwTOXBase::GetRegisteredIn());
+    auto pShell = GetFormat()->GetDoc()->GetDocShell();
+    const TOXTypes eTOXTyp = GetTOXType()->GetType();
+    std::vector<std::reference_wrapper<SwTextTOXMark>> vMarks;
+    pType->CollectTextTOXMarksForLayout(vMarks, pLayout);
+    for(auto& rMark: vMarks)
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
-
-        if (pMark->GetTOXType()->GetType() == eTOXTyp)
+        ::SetProgressState(0, pShell);
+        auto& rNode = rMark.get().GetTextNode();
+        if(IsFromChapter() && ::lcl_FindChapterNode(rNode, pLayout) != pOwnChapterNode)
+            continue;
+        auto rTOXMark = rMark.get().GetTOXMark();
+        if(TOX_INDEX == eTOXTyp)
         {
-            SwTextTOXMark *const pTextMark(pMark->GetTextTOXMark());
-            if (nullptr == pTextMark)
-                continue;
-            const SwTextNode* pTOXSrc = pTextMark->GetpTextNd();
-            // Only insert TOXMarks from the Doc, not from the
-            // UNDO.
-
-            // If selected use marks from the same chapter only
-            if( pTOXSrc->GetNodes().IsDocNodes() &&
-                pTOXSrc->GetText().getLength() && pTOXSrc->HasWriterListeners() &&
-                pTOXSrc->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-               (!IsFromChapter() || ::lcl_FindChapterNode(*pTOXSrc, pLayout) == pOwnChapterNode) &&
-               !pTOXSrc->IsHiddenByParaField() &&
-               !SwScriptInfo::IsInHiddenRange(*pTOXSrc, pTextMark->GetStart()) &&
-               (!pLayout || !pLayout->IsHideRedlines()
-                    || !sw::IsMarkHintHidden(*pLayout, *pTOXSrc, *pTextMark)))
+            // index entry mark
+            assert(g_pBreakIt);
+            lang::Locale aLocale = g_pBreakIt->GetLocale(rNode.GetLang(rMark.get().GetStart()));
+            InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, rNode, &rMark.get(), GetOptions(), FORM_ENTRY, rIntl, aLocale));
+            if(GetOptions() & SwTOIOptions::KeyAsEntry && !rTOXMark.GetPrimaryKey().isEmpty())
             {
-                if(TOX_INDEX == eTOXTyp)
+                InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, rNode, &rMark.get(), GetOptions(), FORM_PRIMARY_KEY, rIntl, aLocale));
+                if (!rTOXMark.GetSecondaryKey().isEmpty())
                 {
-                    // index entry mark
-                    assert(g_pBreakIt);
-                    lang::Locale aLocale = g_pBreakIt->GetLocale(pTOXSrc->GetLang(pTextMark->GetStart()));
-
-                    InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, *pTOXSrc, pTextMark,
-                                            GetOptions(), FORM_ENTRY, rIntl, aLocale ));
-                    if(GetOptions() & SwTOIOptions::KeyAsEntry &&
-                        !pTextMark->GetTOXMark().GetPrimaryKey().isEmpty())
-                    {
-                        InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, *pTOXSrc, pTextMark,
-                                                GetOptions(), FORM_PRIMARY_KEY, rIntl, aLocale ));
-                        if (!pTextMark->GetTOXMark().GetSecondaryKey().isEmpty())
-                        {
-                            InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, *pTOXSrc, pTextMark,
-                                                    GetOptions(), FORM_SECONDARY_KEY, rIntl, aLocale ));
-                        }
-                    }
-                }
-                else if( TOX_USER == eTOXTyp ||
-                    pMark->GetLevel() <= GetLevel())
-                {   // table of content mark
-                    // also used for user marks
-                    InsertSorted(MakeSwTOXSortTabBase<SwTOXContent>(pLayout, *pTOXSrc, pTextMark, rIntl));
+                    InsertSorted(MakeSwTOXSortTabBase<SwTOXIndex>(pLayout, rNode, &rMark.get(), GetOptions(), FORM_SECONDARY_KEY, rIntl, aLocale));
                 }
             }
+        }
+        else if(TOX_USER == eTOXTyp || rTOXMark.GetLevel() <= GetLevel())
+        {   // table of content mark, also used for user marks
+            InsertSorted(MakeSwTOXSortTabBase<SwTOXContent>(pLayout, rNode, &rMark.get(), rIntl));
         }
     }
 }
