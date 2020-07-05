@@ -345,7 +345,7 @@ namespace svt
         m_aModifyHdl.Call(nullptr);
     }
 
-    EditControlBase::EditControlBase(vcl::Window* pParent)
+    EditControlBase::EditControlBase(BrowserDataWin* pParent)
         : InterimItemWindow(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
     {
     }
@@ -368,7 +368,7 @@ namespace svt
         InterimItemWindow::dispose();
     }
 
-    EditControl::EditControl(vcl::Window* pParent)
+    EditControl::EditControl(BrowserDataWin* pParent)
         : EditControlBase(pParent)
         , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
@@ -381,7 +381,7 @@ namespace svt
         EditControlBase::dispose();
     }
 
-    FormattedControl::FormattedControl(vcl::Window* pParent)
+    FormattedControl::FormattedControl(BrowserDataWin* pParent)
         : EditControlBase(pParent)
         , m_xEntry(m_xBuilder->weld_entry("entry"))
         , m_xEntryFormatter(new weld::EntryFormatter(*m_xEntry))

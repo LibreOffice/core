@@ -35,6 +35,7 @@
 #include <vcl/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+class BrowserDataWin;
 class Button;
 class CheckBox;
 class SpinField;
@@ -188,7 +189,7 @@ namespace svt
     class SVT_DLLPUBLIC EditControlBase : public InterimItemWindow
     {
     public:
-        EditControlBase(vcl::Window* pParent);
+        EditControlBase(BrowserDataWin* pParent);
 
         virtual void dispose() override;
 
@@ -215,7 +216,7 @@ namespace svt
     class SVT_DLLPUBLIC EditControl final : public EditControlBase
     {
     public:
-        EditControl(vcl::Window* pParent);
+        EditControl(BrowserDataWin* pParent);
 
         virtual void dispose() override;
 
@@ -569,7 +570,7 @@ namespace svt
     class SVT_DLLPUBLIC FormattedControl : public EditControlBase
     {
     public:
-        FormattedControl(vcl::Window* pParent);
+        FormattedControl(BrowserDataWin* pParent);
 
         virtual void dispose() override;
 
