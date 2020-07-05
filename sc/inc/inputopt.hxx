@@ -38,6 +38,7 @@ private:
     bool        bTextWysiwyg;
     bool        bReplCellsWarn;
     bool        bLegacyCellSelection;
+    bool        bOnlyActiveSheetSavedWarn;
 
 public:
                 ScInputOptions();
@@ -68,6 +69,8 @@ public:
     bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
     void        SetLegacyCellSelection(bool bSet)   { bLegacyCellSelection = bSet; }
     bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
+    void        SetOnlyActiveSheetSavedWarn(bool bSet)  { bOnlyActiveSheetSavedWarn = bSet; }
+    bool        GetOnlyActiveSheetSavedWarn() const     { return bOnlyActiveSheetSavedWarn; }
 };
 
 // CfgItem for input options

@@ -112,6 +112,8 @@
 
 // misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
+// Put this here since all available slots for "SC_INPUT" are taken
+#define SID_SC_INPUT_ONLYACTIVESHEETSAVEDWARN   (SC_VIEW_START + 61)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
 #define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)
 #define SID_MIRROR_HORIZONTAL   (SC_VIEW_START + 66)

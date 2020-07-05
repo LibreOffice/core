@@ -368,6 +368,7 @@ public:
     bool    HasAccessibilityObjects() const;
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
+    void    ExecuteOnlyActiveSheetSavedDlg();
 
     using ScTabView::ShowCursor;
 
