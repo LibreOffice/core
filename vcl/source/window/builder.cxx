@@ -27,7 +27,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/fieldvalues.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/headbar.hxx>

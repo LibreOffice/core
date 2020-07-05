@@ -19,7 +19,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
-#include <vcl/fmtfield.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
