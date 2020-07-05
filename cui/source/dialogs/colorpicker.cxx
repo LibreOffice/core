@@ -33,7 +33,6 @@
 #include <vcl/weld.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <basegfx/color/bcolortools.hxx>
-#include <colorpicker.hxx>
 #include <cmath>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -1240,20 +1239,13 @@ private:
 
 }
 
-OUString ColorPicker_getImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_cui_ColorPicker_get_implementation(
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.cui.ColorPicker";
+    return cppu::acquire( new ColorPicker );
 }
 
-Reference< XInterface > ColorPicker_createInstance( Reference< XComponentContext > const & )
-{
-    return static_cast<XWeak*>( new ColorPicker );
-}
-
-Sequence< OUString > ColorPicker_getSupportedServiceNames()
-{
-    return { "com.sun.star.ui.dialogs.ColorPicker" };
-}
 
 const OUStringLiteral gsColorKey( "Color" );
 const OUStringLiteral gsModeKey( "Mode" );
@@ -1277,7 +1269,7 @@ void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments )
 // XInitialization
 OUString SAL_CALL ColorPicker::getImplementationName(  )
 {
-    return ColorPicker_getImplementationName();
+    return "com.sun.star.cui.ColorPicker";
 }
 
 sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
@@ -1287,7 +1279,7 @@ sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
 
 Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 {
-    return ColorPicker_getSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.ColorPicker" };
 }
 
 // XPropertyAccess

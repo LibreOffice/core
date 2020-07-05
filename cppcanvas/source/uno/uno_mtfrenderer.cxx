@@ -7,12 +7,41 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "uno_mtfrenderer.hxx"
 #include <cppcanvas/vclfactory.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <o3tl/any.hxx>
+#include <com/sun/star/rendering/XMtfRenderer.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <vcl/gdimtf.hxx>
 
 using namespace ::com::sun::star;
+
+typedef cppu::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::beans::XFastPropertySet> MtfRendererBase;
+
+namespace {
+
+class MtfRenderer : private cppu::BaseMutex, public MtfRendererBase
+{
+public:
+    MtfRenderer (css::uno::Sequence<css::uno::Any> const& args,
+                 css::uno::Reference<css::uno::XComponentContext> const&);
+
+    // XMtfRenderer iface
+    void SAL_CALL setMetafile (const css::uno::Sequence< sal_Int8 >& rMtf) override;
+    void SAL_CALL draw (double fScaleX, double fScaleY) override;
+
+    // XFastPropertySet
+    // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
+    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/) override { return css::uno::Any(); }
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any&) override;
+
+private:
+    GDIMetaFile* mpMetafile;
+    css::uno::Reference<css::rendering::XBitmapCanvas> mxCanvas;
+};
 
 void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/)
 {
@@ -45,18 +74,13 @@ MtfRenderer::MtfRenderer (uno::Sequence<uno::Any> const& aArgs, uno::Reference<u
     }
 }
 
-namespace sdecl = comphelper::service_decl;
- const sdecl::ServiceDecl MtfRendererDecl(
-     sdecl::class_<MtfRenderer, sdecl::with_args<true> >(),
-    "com.sun.star.comp.rendering.MtfRenderer",
-    "com.sun.star.rendering.MtfRenderer" );
+} // namespace
 
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* mtfrenderer_component_getFactory( char const* pImplName,
-                                         void*, void* )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_rendering_MtfRenderer_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    return sdecl::component_getFactoryHelper( pImplName, {&MtfRendererDecl} );
+    return cppu::acquire(new MtfRenderer(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
