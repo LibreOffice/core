@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aceb26c0_ab282230",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-05T21:40:56Z",
+      "side": 1,
+      "message": "Already used below for SID_ROTATE_GRAPHIC_RESET.",
+      "range": {
+        "startLine": 901,
+        "startChar": 58,
+        "endLine": 901,
+        "endChar": 78
+      },
+      "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "302ff784_6e745091",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-05T21:40:56Z",
+      "side": 1,
+      "message": "This lives under \"if( mxTable.is() \u0026\u0026 hasSelectedCells() )\", which means that it won\u0027t work if no cells are selected. It\u0027s also not consistent with the change in SvxTableController::GetState, which doesn\u0027t check for hasSelectedCells().\n\nTo reproduce the problematic case: Click inside a cell (entering the text edit mode), then move the mouse over the table\u0027s outer border so the cursor changes to selection, and click to select the whole table. In this case using the new command won\u0027t work.",
+      "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
