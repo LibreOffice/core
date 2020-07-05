@@ -1719,14 +1719,12 @@ void FormController::focusGained(const FocusEvent& e)
         xContext->makeVisible( xCurrentControl );
 }
 
-
 IMPL_LINK_NOARG( FormController, OnActivated, void*, void )
 {
     EventObject aEvent;
     aEvent.Source = *this;
     m_aActivateListeners.notifyEach( &XFormControllerListener::formActivated, aEvent );
 }
-
 
 IMPL_LINK_NOARG( FormController, OnDeactivated, void*, void )
 {
@@ -1735,7 +1733,6 @@ IMPL_LINK_NOARG( FormController, OnDeactivated, void*, void )
     m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvent );
 }
 
-
 void FormController::focusLost(const FocusEvent& e)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
@@ -1743,6 +1740,9 @@ void FormController::focusLost(const FocusEvent& e)
     m_aControlBorderManager.focusLost( e.Source );
 
     Reference< XWindowPeer >  xNext(e.NextFocus, UNO_QUERY);
+    // if focus hasn't passed to some other window, e.g. focus in a welded item, don't deactivate
+    if (!xNext)
+        return;
     Reference< XControl >  xNextControl = isInList(xNext);
     if (!xNextControl.is())
     {
@@ -1751,30 +1751,25 @@ void FormController::focusLost(const FocusEvent& e)
     }
 }
 
-
 void SAL_CALL FormController::mousePressed( const awt::MouseEvent& /*_rEvent*/ )
 {
     // not interested in
 }
-
 
 void SAL_CALL FormController::mouseReleased( const awt::MouseEvent& /*_rEvent*/ )
 {
     // not interested in
 }
 
-
 void SAL_CALL FormController::mouseEntered( const awt::MouseEvent& _rEvent )
 {
     m_aControlBorderManager.mouseEntered( _rEvent.Source );
 }
 
-
 void SAL_CALL FormController::mouseExited( const awt::MouseEvent& _rEvent )
 {
     m_aControlBorderManager.mouseExited( _rEvent.Source );
 }
-
 
 void SAL_CALL FormController::componentValidityChanged( const EventObject& _rSource )
 {
