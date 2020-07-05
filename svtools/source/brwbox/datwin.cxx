@@ -288,6 +288,10 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 }
 
+BrowseBox* BrowserDataWin::GetParent() const
+{
+    return static_cast<BrowseBox*>(Window::GetParent());
+}
 
 BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 {
