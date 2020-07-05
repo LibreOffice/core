@@ -116,7 +116,7 @@ private:
     {
         return default_
             ? default_provider::getImplementationName()
-            : configuration_provider::getImplementationName();
+            : "com.sun.star.comp.configuration.ConfigurationProvider";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -127,7 +127,7 @@ private:
     {
         return default_
             ? default_provider::getSupportedServiceNames()
-            : configuration_provider::getSupportedServiceNames();
+            : css::uno::Sequence<OUString> { "com.sun.star.configuration.ConfigurationProvider" };
     }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -342,53 +342,14 @@ void Service::flushModifications() const {
     components->flushModifications();
 }
 
-class Factory:
-    public cppu::WeakImplHelper<
-        css::lang::XSingleComponentFactory, css::lang::XServiceInfo >
-{
-public:
-    Factory() {}
-
-private:
-    Factory(const Factory&) = delete;
-    Factory& operator=(const Factory&) = delete;
-
-    virtual ~Factory() override {}
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
-
-    virtual OUString SAL_CALL getImplementationName() override
-    { return configuration_provider::getImplementationName(); }
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
-    { return cppu::supportsService(this, ServiceName); }
-
-    virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() override
-    { return configuration_provider::getSupportedServiceNames(); }
-};
-
-css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
-{
-    return createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any >(), Context);
-}
-
-css::uno::Reference< css::uno::XInterface >
-Factory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
+    css::uno::XComponentContext* Context, css::uno::Sequence<css::uno::Any> const& Arguments)
 {
     if (!Arguments.hasElements()) {
-        return css::configuration::theDefaultProvider::get(Context);
+        auto p = css::configuration::theDefaultProvider::get(Context);
+        p->acquire();
+        return p.get();
     } else {
         OUString locale;
         for (sal_Int32 i = 0; i < Arguments.getLength(); ++i) {
@@ -427,7 +388,7 @@ Factory::createInstanceWithArgumentsAndContext(
                     nullptr);
             }
         }
-        return static_cast< cppu::OWeakObject * >(new Service(Context, locale));
+        return cppu::acquire(static_cast< cppu::OWeakObject * >(new Service(Context, locale)));
     }
 }
 
@@ -437,24 +398,6 @@ css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(new Service(context));
-}
-
-OUString getImplementationName() {
-    return "com.sun.star.comp.configuration.ConfigurationProvider";
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString > { "com.sun.star.configuration.ConfigurationProvider" };
-}
-
-css::uno::Reference< css::lang::XSingleComponentFactory >
-createFactory(
-    SAL_UNUSED_PARAMETER cppu::ComponentFactoryFunc,
-    SAL_UNUSED_PARAMETER OUString const &,
-    SAL_UNUSED_PARAMETER css::uno::Sequence< OUString > const &,
-    SAL_UNUSED_PARAMETER rtl_ModuleCount *)
-{
-    return new Factory;
 }
 
 }
