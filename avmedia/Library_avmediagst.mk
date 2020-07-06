@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_libraries,avmediagst,\
 $(eval $(call gb_Library_add_exception_objects,avmediagst,\
 	avmedia/source/gstreamer/gstmanager \
 	avmedia/source/gstreamer/gstplayer \
-	avmedia/source/gstreamer/gstuno \
 	avmedia/source/gstreamer/gstwindow \
 	avmedia/source/gstreamer/gstframegrabber \
 ))

@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,avmediavlc,\
 $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
     avmedia/source/vlc/vlcmanager \
     avmedia/source/vlc/vlcplayer \
-    avmedia/source/vlc/vlcuno \
     avmedia/source/vlc/vlcwindow \
     avmedia/source/vlc/vlcframegrabber \
     avmedia/source/vlc/wrapper/Instance \

@@ -24,9 +24,6 @@
 
 #include <tools/urlobj.hxx>
 
-#define AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_GStreamer"
-#define AVMEDIA_GST_MANAGER_SERVICENAME "com.sun.star.media.Manager"
-
 using namespace ::com::sun::star;
 
 namespace avmedia::gstreamer {
@@ -53,7 +50,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 
 OUString SAL_CALL Manager::getImplementationName(  )
 {
-    return AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME;
+    return "com.sun.star.comp.avmedia.Manager_GStreamer";
 }
 
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
@@ -63,9 +60,16 @@ sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
 {
-    return { AVMEDIA_GST_MANAGER_SERVICENAME };
+    return { "com.sun.star.media.Manager" };
 }
 
 } // namespace
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_media_Manager_GStreamer_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new avmedia::gstreamer::Manager());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
