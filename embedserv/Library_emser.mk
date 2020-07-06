@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_exception_objects,emser,\
 	embedserv/source/embed/guid \
 	embedserv/source/embed/iipaobj \
 	embedserv/source/embed/intercept \
-	embedserv/source/embed/register \
 	embedserv/source/embed/servprov \
 	embedserv/source/embed/syswinwrapper \
 	embedserv/source/embed/tracker \

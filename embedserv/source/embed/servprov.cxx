@@ -224,4 +224,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*f
     return NOERROR;
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embedserv_EmbedServer(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new EmbedServer_Impl(context));
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
