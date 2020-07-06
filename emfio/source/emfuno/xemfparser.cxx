@@ -36,8 +36,6 @@
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
 
-#include "xemfparser.hxx"
-
 using namespace ::com::sun::star;
 
 namespace emfio::emfreader
@@ -49,7 +47,6 @@ namespace emfio::emfreader
         private:
             uno::Reference< uno::XComponentContext > context_;
 
-        protected:
         public:
             explicit XEmfParser(
                 uno::Reference< uno::XComponentContext > const & context);
@@ -69,29 +66,7 @@ namespace emfio::emfreader
         };
 
         }
-} // end of namespace emfio::emfreader
 
-// uno functions
-namespace emfio::emfreader
-{
-        uno::Sequence< OUString > XEmfParser_getSupportedServiceNames()
-        {
-            return uno::Sequence< OUString > { "com.sun.star.graphic.EmfTools" };
-        }
-
-        OUString XEmfParser_getImplementationName()
-        {
-            return "emfio::emfreader::XEmfParser";
-        }
-
-        uno::Reference< uno::XInterface > XEmfParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
-        {
-            return static_cast< ::cppu::OWeakObject* >(new XEmfParser(context));
-        }
-} // end of namespace emfio::emfreader
-
-namespace emfio::emfreader
-{
         XEmfParser::XEmfParser(
             uno::Reference< uno::XComponentContext > const & context):
             context_(context)
@@ -208,7 +183,7 @@ namespace emfio::emfreader
 
         OUString SAL_CALL XEmfParser::getImplementationName()
         {
-            return XEmfParser_getImplementationName();
+            return "emfio::emfreader::XEmfParser";
         }
 
         sal_Bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
@@ -218,9 +193,18 @@ namespace emfio::emfreader
 
         uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
         {
-            return XEmfParser_getSupportedServiceNames();
+            return { "com.sun.star.graphic.EmfTools" };
         }
 
 } // end of namespace emfio::emfreader
+
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+emfio_emfreader_XEmfParser_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new emfio::emfreader::XEmfParser(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

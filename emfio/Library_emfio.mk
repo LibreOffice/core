@@ -55,7 +55,6 @@ $(eval $(call gb_Library_use_libraries,emfio,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,emfio,\
-    emfio/source/emfuno/emfuno \
     emfio/source/emfuno/xemfparser \
     emfio/source/reader/mtftools \
     emfio/source/reader/wmfreader \
