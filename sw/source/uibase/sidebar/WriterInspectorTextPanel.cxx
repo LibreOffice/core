@@ -20,6 +20,7 @@
 #include "WriterInspectorTextPanel.hxx"
 #include <svx/svxids.hrc>
 #include <doc.hxx>
+#include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -245,6 +246,13 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     std::vector<svx::sidebar::TreeNode> aStore;
     std::unordered_map<OUString, bool> maIsDefined;
+
+    //tdf#134562
+    if (!pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
+    {
+        updateEntries(aStore); // show empty Inspector when the cursor is not on any text
+        return;
+    }
 
     switch (nSId)
     {
