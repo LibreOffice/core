@@ -1795,9 +1795,9 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     switch (eFieldType)
     {
         // map fields that are not supported in WW8 as of Word 2003
-        case ww::eBIBLIOGRPAHY:
+        case ww::eBIBLIOGRAPHY:
             eFieldType = ww::eQUOTE;
-            assert(rFieldCmd == FieldString(ww::eBIBLIOGRPAHY));
+            assert(rFieldCmd == FieldString(ww::eBIBLIOGRAPHY));
             sFieldCmd = FieldString(ww::eQUOTE);
             break;
         case ww::eCITATION:
@@ -2305,7 +2305,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 break;
 
             case TOX_AUTHORITIES:
-                eCode = ww::eBIBLIOGRPAHY;
+                eCode = ww::eBIBLIOGRAPHY;
                 sStr = FieldString(eCode);
                  break;
                 //      case TOX_USER:
@@ -2972,7 +2972,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             switch (nSubType)
             {
                 case DS_PAGE:
-                    eField = ww::eNUMPAGE;
+                    eField = ww::eNUMPAGES;
                     break;
                 case DS_WORD:
                     eField = ww::eNUMWORDS;
