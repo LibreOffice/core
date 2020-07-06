@@ -470,6 +470,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
+{
+    SwDoc* pDoc = createDoc("tdf134472.odt");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "height", "843");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
     loadURL("private:factory/swriter", nullptr);
