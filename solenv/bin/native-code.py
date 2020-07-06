@@ -23,7 +23,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libevtattlo.a", "evtatt_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
-    ("libemfiolo.a", "emfio_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
@@ -149,6 +148,8 @@ core_constructor_list = [
     "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
+# emfio/emfio.component
+    "emfio_emfreader_XEmfParser_get_implementation",
 # extensions/source/logging/log.component
     ("com_sun_star_comp_extensions_FileHandler", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
