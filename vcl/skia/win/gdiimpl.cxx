@@ -22,6 +22,7 @@
 #include <SkTypeface_win.h>
 #include <SkFont.h>
 #include <SkFontMgr.h>
+#include <SkFontLCDConfig.h>
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
 
@@ -213,16 +214,25 @@ SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
     // the glyphs will be rendered based on this setting (subpixel AA requires colors,
     // others do not).
     fontEdging = SkFont::Edging::kAlias;
+    SkFontLCDConfig::LCDOrder lcdOrder = SkFontLCDConfig::kNONE_LCDOrder;
     BOOL set;
     if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
     {
         UINT set2;
         if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &set2, 0)
             && set2 == FE_FONTSMOOTHINGCLEARTYPE)
+        {
             fontEdging = SkFont::Edging::kSubpixelAntiAlias;
+            if (SystemParametersInfo(SPI_GETFONTSMOOTHINGORIENTATION, 0, &set2, 0)
+                && set2 == FE_FONTSMOOTHINGORIENTATIONBGR)
+                lcdOrder = SkFontLCDConfig::kBGR_LCDOrder;
+            else
+                lcdOrder = SkFontLCDConfig::kRGB_LCDOrder; // default
+        }
         else
             fontEdging = SkFont::Edging::kAntiAlias;
     }
+    SkFontLCDConfig::SetSubpixelOrder(lcdOrder);
     // Cache this, it is actually visible a little bit when profiling.
     fontEdgingDone = true;
     return fontEdging;
