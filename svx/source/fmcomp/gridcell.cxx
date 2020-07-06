@@ -1079,17 +1079,7 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
 
     Reference< XPropertySet > xModel( m_rColumn.getModel() );
 
-    WinBits nStyle = WB_LEFT;
-    switch (nAlignment)
-    {
-    case awt::TextAlign::RIGHT:
-        nStyle = WB_RIGHT;
-        break;
-
-    case awt::TextAlign::CENTER:
-        nStyle = WB_CENTER;
-        break;
-    }
+    bool bLeftAlign = true;
 
     // is this a multi-line field?
     bool bIsMultiLine = false;
@@ -1109,11 +1099,28 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
     m_bIsSimpleEdit = !bIsMultiLine;
     if ( bIsMultiLine )
     {
-        m_pWindow = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
-        m_pEdit.reset(new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow.get() ) ));
+        auto xEditControl = VclPtr<MultiLineTextCell>::Create(&rParent);
+        auto xEditPainter = VclPtr<MultiLineTextCell>::Create(&rParent);
 
-        m_pPainter = VclPtr<MultiLineTextCell>::Create( &rParent, nStyle );
-        m_pPainterImplementation.reset(new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter.get() ) ));
+        switch (nAlignment)
+        {
+            case awt::TextAlign::RIGHT:
+                xEditControl->get_widget().set_alignment(TxtAlign::Right);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Right);
+                bLeftAlign = false;
+                break;
+            case awt::TextAlign::CENTER:
+                xEditControl->get_widget().set_alignment(TxtAlign::Center);
+                xEditPainter->get_widget().set_alignment(TxtAlign::Center);
+                bLeftAlign = false;
+                break;
+        }
+
+        m_pWindow = xEditControl;
+        m_pEdit.reset(new MultiLineEditImplementation(*xEditControl));
+
+        m_pPainter = xEditPainter;
+        m_pPainterImplementation.reset(new MultiLineEditImplementation(*xEditPainter));
     }
     else
     {
@@ -1125,10 +1132,12 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
             case awt::TextAlign::RIGHT:
                 xEditControl->get_widget().set_alignment(TxtAlign::Right);
                 xEditPainter->get_widget().set_alignment(TxtAlign::Right);
+                bLeftAlign = false;
                 break;
             case awt::TextAlign::CENTER:
                 xEditControl->get_widget().set_alignment(TxtAlign::Center);
                 xEditPainter->get_widget().set_alignment(TxtAlign::Center);
+                bLeftAlign = false;
                 break;
         }
 
@@ -1139,7 +1148,7 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
         m_pPainterImplementation.reset(new EntryImplementation(*xEditPainter));
     }
 
-    if ( WB_LEFT == nStyle )
+    if (bLeftAlign)
     {
         // this is so that when getting the focus, the selection is oriented left-to-right
         AllSettings aSettings = m_pWindow->GetSettings();
@@ -1155,12 +1164,10 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
     DbLimitedLengthField::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbTextField::CreateController() const
 {
     return new EditCellController( m_pEdit.get() );
 }
-
 
 void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
@@ -1169,7 +1176,6 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle&
 
     DbLimitedLengthField::PaintFieldToCell( _rDev, _rRect, _rxField, _rxFormatter );
 }
-
 
 OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
@@ -1191,13 +1197,11 @@ OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const 
 
 }
 
-
 void DbTextField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
 {
     m_pEdit->SetText( GetFormatText( _rxField, xFormatter ) );
     m_pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
-
 
 void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
