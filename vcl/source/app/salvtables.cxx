@@ -3165,24 +3165,32 @@ void SalInstanceEntry::paste_clipboard()
     m_xEntry->Paste();
 }
 
+namespace
+{
+    void set_alignment(Edit& rEntry, TxtAlign eXAlign)
+    {
+        WinBits nAlign(0);
+        switch (eXAlign)
+        {
+            case TxtAlign::Left:
+                nAlign = WB_LEFT;
+                break;
+            case TxtAlign::Center:
+                nAlign = WB_CENTER;
+                break;
+            case TxtAlign::Right:
+                nAlign = WB_RIGHT;
+                break;
+        }
+        WinBits nBits = rEntry.GetStyle();
+        nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
+        rEntry.SetStyle(nBits | nAlign);
+    }
+}
+
 void SalInstanceEntry::set_alignment(TxtAlign eXAlign)
 {
-    WinBits nAlign(0);
-    switch (eXAlign)
-    {
-        case TxtAlign::Left:
-            nAlign = WB_LEFT;
-            break;
-        case TxtAlign::Center:
-            nAlign = WB_CENTER;
-            break;
-        case TxtAlign::Right:
-            nAlign = WB_RIGHT;
-            break;
-    }
-    WinBits nBits = m_xEntry->GetStyle();
-    nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
-    m_xEntry->SetStyle(nBits | nAlign);
+    ::set_alignment(*m_xEntry, eXAlign);
 }
 
 SalInstanceEntry::~SalInstanceEntry()
@@ -5500,6 +5508,11 @@ public:
     virtual void paste_clipboard() override
     {
         m_xTextView->Paste();
+    }
+
+    virtual void set_alignment(TxtAlign eXAlign) override
+    {
+        ::set_alignment(*m_xTextView, eXAlign);
     }
 
     virtual int vadjustment_get_value() const override
