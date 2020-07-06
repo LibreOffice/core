@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="emser" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ole.EmbedServer">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ole.EmbedServer"
+    constructor="embedserv_EmbedServer">
     <service name="com.sun.star.document.OleEmbeddedServerRegistration"/>
   </implementation>
 </component>
