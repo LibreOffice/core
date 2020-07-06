@@ -157,7 +157,7 @@ http://www.microsoft.com/en-us/download/details.aspx?id=30425
 == Export ==
 Here is how LO's enhanced custom shapes are exported:
 * Shape name is ooxml-* - they are imported from ooxml, export as is.
-* Blacklist - ODF presets that has OOXML equivalent.
+* Denylist - ODF presets that has OOXML equivalent.
   We convert adjustment values case by case. Microsoft Office
   is rather strict about adjustment values, either none of them
   are provided so that default values are taken, or the exact set
@@ -165,7 +165,7 @@ Here is how LO's enhanced custom shapes are exported:
   from the preset with less handles to the one with more handles
   so that default values suitable for the odf one need to be
   provided.
-* Whitelist - ODF presets that has OOXML equivalent but looks a bit
+* Allowlist - ODF presets that has OOXML equivalent but looks a bit
 different, export them as PolyPolygon.
 
 Check Andras Timar's presentation[1] and ShapeExport::WriteCustomShape()

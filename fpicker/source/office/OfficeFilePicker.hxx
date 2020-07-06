@@ -75,7 +75,7 @@ protected:
 
     OUString            m_aStandardDir;
     css::uno::Sequence< OUString >
-                        m_aBlackList;
+                        m_aDenyList;
 
     css::uno::Reference< css::ui::dialogs::XFilePickerListener >
                         m_xListener;

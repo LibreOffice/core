@@ -82,7 +82,7 @@ namespace svt
         ,m_xCommandEnv           ( _rxCommandEnv   )
         ,m_pResultHandler        ( nullptr            )
         ,m_bCancelled            ( false           )
-        ,m_rBlackList            ( css::uno::Sequence< OUString >() )
+        ,m_rDenyList            ( css::uno::Sequence< OUString >() )
     {
     }
 
@@ -104,13 +104,13 @@ namespace svt
 
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
-        const css::uno::Sequence< OUString >& rBlackList )
+        const css::uno::Sequence< OUString >& rDenyList )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             m_aFolder = _rFolder;
             m_pResultHandler = nullptr;
-            m_rBlackList = rBlackList;
+            m_rDenyList = rDenyList;
         }
         return enumerateFolderContent();
     }
@@ -220,7 +220,7 @@ namespace svt
                             // check for restrictions
                             {
                                 ::osl::MutexGuard aGuard( m_aMutex );
-                                if ( /* m_rBlackList.hasElements() && */ URLOnBlackList ( sRealURL ) )
+                                if ( /* m_rDenyList.hasElements() && */ URLOnDenyList ( sRealURL ) )
                                     continue;
                             }
 
@@ -310,11 +310,11 @@ namespace svt
     }
 
 
-    bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
+    bool FileViewContentEnumerator::URLOnDenyList ( const OUString& sRealURL )
     {
         OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
 
-        return comphelper::findValue(m_rBlackList, entryName) != -1;
+        return comphelper::findValue(m_rDenyList, entryName) != -1;
     }
 
 

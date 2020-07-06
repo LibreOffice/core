@@ -122,7 +122,7 @@ private:
 };
 
 void Test::test() {
-    // On Windows, blacklist the com.sun.star.comp.report.OReportDefinition
+    // On Windows, denylist the com.sun.star.comp.report.OReportDefinition
     // implementation (reportdesign::OReportDefinition in
     // reportdesign/source/core/api/ReportDefinition.cxx), as it spawns a thread
     // that forever blocks in SendMessageW when no VCL event loop is running
@@ -136,12 +136,12 @@ void Test::test() {
     // WorkWindow::ImplInit -> ImplBorderWindow::ImplBorderWindow ->
     // ImplBorderWindow::ImplInit -> Window::ImplInit ->
     // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
-    std::vector<OUString> blacklist;
-    blacklist.emplace_back("com.sun.star.comp.report.OReportDefinition");
+    std::vector<OUString> denylist;
+    denylist.emplace_back("com.sun.star.comp.report.OReportDefinition");
 
     // <https://bugs.documentfoundation.org/show_bug.cgi?id=89343>
     // "~SwXMailMerge() goes into endless SwCache::Check()":
-    blacklist.emplace_back("SwXMailMerge");
+    denylist.emplace_back("SwXMailMerge");
 
     css::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
         m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
@@ -263,8 +263,8 @@ void Test::test() {
     }
     std::vector<css::uno::Reference<css::lang::XComponent>> comps;
     for (auto const & i: impls) {
-        if (std::find(blacklist.begin(), blacklist.end(), i.first)
-            == blacklist.end())
+        if (std::find(denylist.begin(), denylist.end(), i.first)
+            == denylist.end())
         {
             if (i.second.constructors.empty()) {
                 if (i.second.accumulationBased) {
@@ -458,7 +458,7 @@ void Test::createInstance(
                 }
             }
             if (!propsinfo->hasPropertyByName(prop->getName())) {
-                static std::set<std::pair<OUString, OUString>> const blacklist{
+                static std::set<std::pair<OUString, OUString>> const denylist{
                     {"com.sun.star.comp.chart.DataSeries", "BorderDash"},
                     {"com.sun.star.comp.chart2.ChartDocumentWrapper", "UserDefinedAttributes"},
                     {"com.sun.star.comp.dbu.OColumnControlModel", "Tabstop"},
@@ -485,7 +485,7 @@ void Test::createInstance(
                     {"com.sun.star.comp.report.OFormattedField", "TextLineColor"},
                     {"com.sun.star.comp.report.OFormattedField", "TreatAsNumber"},
                     {"stardiv.Toolkit.UnoControlRoadmapModel", "Interactive"}};
-                if (blacklist.find({implementationName, prop->getName()}) != blacklist.end()) {
+                if (denylist.find({implementationName, prop->getName()}) != denylist.end()) {
                     continue;
                 }
                 CPPUNIT_ASSERT_MESSAGE(

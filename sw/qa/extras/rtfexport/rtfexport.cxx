@@ -43,16 +43,16 @@ public:
     bool mustTestImportOf(const char* filename) const override
     {
         // Don't test the first import of these, for some reason those tests fail
-        const char* aBlacklist[] = {
+        const char* aDenylist[] = {
             "math-eqarray.rtf",         "math-escaping.rtf", "math-lim.rtf",
             "math-mso2007.rtf",         "math-nary.rtf",     "math-rad.rtf",
             "math-vertical-stacks.rtf", "math-runs.rtf",
         };
-        std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
 
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".rtf")
-                && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
+                && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
     }
 
     virtual void postLoad(const char* pFilename) override
