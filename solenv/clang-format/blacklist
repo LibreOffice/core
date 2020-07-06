@@ -6953,7 +6953,6 @@ include/svx/tabarea.hxx
 include/svx/tabline.hxx
 include/svx/tbcontrl.hxx
 include/svx/tbxcolor.hxx
-include/svx/tbxcolorupdate.hxx
 include/svx/tbxctl.hxx
 include/svx/transfrmhelper.hxx
 include/svx/txencbox.hxx
@@ -13253,6 +13252,7 @@ svx/inc/sxsalitm.hxx
 svx/inc/sxsiitm.hxx
 svx/inc/sxsoitm.hxx
 svx/inc/sxtraitm.hxx
+svx/inc/tbxcolorupdate.hxx
 svx/inc/textchain.hxx
 svx/inc/textchaincursor.hxx
 svx/inc/textchainflow.hxx

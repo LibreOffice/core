@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_TBXCOLORUPDATE_HXX
-#define INCLUDED_SVX_TBXCOLORUPDATE_HXX
-
-#include <svx/svxdllapi.h>
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
@@ -136,7 +133,5 @@ namespace svx
         int GetStyleIndex() const;
     };
 }
-
-#endif // INCLUDED_SVX_TBXCOLORUPDATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
