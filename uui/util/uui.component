@@ -18,9 +18,10 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="uui" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation
-      name="com.sun.star.comp.uui.PasswordContainerInteractionHandler">
+      name="com.sun.star.comp.uui.PasswordContainerInteractionHandler"
+      constructor="com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation">
     <service name="com.sun.star.task.PasswordContainerInteractionHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.uui.UUIInteractionHandler"

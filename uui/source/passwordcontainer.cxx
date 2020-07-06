@@ -292,7 +292,7 @@ PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 OUString SAL_CALL
 PasswordContainerInteractionHandler::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.uui.PasswordContainerInteractionHandler";
 }
 
 
@@ -309,24 +309,7 @@ PasswordContainerInteractionHandler::supportsService(
 uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-// static
-OUString
-PasswordContainerInteractionHandler::getImplementationName_Static()
-{
-    return "com.sun.star.comp.uui.PasswordContainerInteractionHandler";
-}
-
-
-// static
-uno::Sequence< OUString >
-PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aSNS { "com.sun.star.task.PasswordContainerInteractionHandler" };
-    return aSNS;
+    return { "com.sun.star.task.PasswordContainerInteractionHandler" };
 }
 
 
@@ -395,31 +378,13 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 }
 
 
-// Service factory implementation.
-
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface >
-PasswordContainerInteractionHandler_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
-{
-    lang::XServiceInfo* pX
-        = new PasswordContainerInteractionHandler(comphelper::getComponentContext(rSMgr));
-    return uno::Reference< uno::XInterface >::query( pX );
-}
-
-
-// static
-uno::Reference< lang::XSingleServiceFactory >
-PasswordContainerInteractionHandler::createServiceFactory(
-    const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-            rxServiceMgr,
-            PasswordContainerInteractionHandler::getImplementationName_Static(),
-            PasswordContainerInteractionHandler_CreateInstance,
-            PasswordContainerInteractionHandler::getSupportedServiceNames_Static() );
-}
-
 } // namespace uui
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new uui::PasswordContainerInteractionHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -64,7 +64,6 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/passworddlg \
 	uui/source/requeststringresolver \
 	uui/source/secmacrowarnings \
-	uui/source/services \
 	uui/source/sslwarndlg \
 	uui/source/trylater \
 	uui/source/unknownauthdlg \
