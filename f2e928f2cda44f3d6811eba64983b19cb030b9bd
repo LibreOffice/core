@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee3846a0_7e99bf46",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5632,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:42:15Z",
+      "side": 1,
+      "message": "same problem here as with removing BlackList",
+      "revId": "f2e928f2cda44f3d6811eba64983b19cb030b9bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
