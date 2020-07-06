@@ -50,7 +50,7 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
 
     /**
-     * Blacklist handling
+     * Denylist handling
      */
     bool mustTestImportOf(const char* filename) const override {
         // Only test import of .odt document

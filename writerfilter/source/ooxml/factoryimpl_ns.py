@@ -97,7 +97,7 @@ def resourceForAttribute(nsNode, attrNode):
             dataNodes = attrNode.getElementsByTagName("data")
             if len(dataNodes):
                 t = dataNodes[0].getAttribute("type")
-                # Blacklist existing unexpected data types.
+                # Denylist existing unexpected data types.
                 if t not in ("token", "long", "decimal", "float", "byte", "ST_DecimalNumber", "positiveInteger"):
                     raise Exception("unexpected data type: " + dataNodes[0].getAttribute("type"))
     return resourceName

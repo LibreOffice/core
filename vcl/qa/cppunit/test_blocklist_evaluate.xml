@@ -20,7 +20,7 @@
 <root>
     <whitelist>
     </whitelist>
-    <blacklist>
+    <denylist>
 
         <entry os="all" vendor="amd" compare="less" version="10.20.30.40">
             <device id="all"/>
@@ -34,5 +34,5 @@
             <device id="all"/>
         </entry>
 
-    </blacklist>
+    </denylist>
 </root>

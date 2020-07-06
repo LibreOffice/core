@@ -345,7 +345,7 @@ int pickBestDevice(std::unique_ptr<ds_profile> const & profile)
     {
         ds_device& device = profile->devices[d];
 
-        // Check blacklist and whitelist for actual devices
+        // Check denylist and whitelist for actual devices
         if (device.eType == DeviceType::OpenCLDevice)
         {
             // There is a silly impedance mismatch here. Why do we
@@ -360,10 +360,10 @@ int pickBestDevice(std::unique_ptr<ds_profile> const & profile)
             aDevice.maName = OStringToOUString(device.sDeviceName, RTL_TEXTENCODING_UTF8);
             aDevice.maDriver = OStringToOUString(device.sDriverVersion, RTL_TEXTENCODING_UTF8);
 
-            // If blacklisted or not whitelisted, ignore it
+            // If denylisted or not whitelisted, ignore it
             if (OpenCLConfig::get().checkImplementation(aPlatform, aDevice))
             {
-                SAL_INFO("opencl.device", "Device[" << d << "] " << device.sDeviceName << " is blacklisted or not whitelisted");
+                SAL_INFO("opencl.device", "Device[" << d << "] " << device.sDeviceName << " is denylisted or not whitelisted");
                 device.fTime = DBL_MAX;
                 device.bErrors = false;
             }

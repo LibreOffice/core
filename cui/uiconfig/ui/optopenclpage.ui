@@ -17,7 +17,7 @@
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
         <child>
-          <object class="GtkBox" id="blacklistbox">
+          <object class="GtkBox" id="denylistbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>

@@ -288,12 +288,12 @@ public:
     FileViewResult          GetFolderContent_Impl(
         const OUString& rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const css::uno::Sequence< OUString >& rBlackList );
+        const css::uno::Sequence< OUString >& rDenyList );
 
     FileViewResult          GetFolderContent_Impl(
         const FolderDescriptor& _rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const css::uno::Sequence< OUString >& rBlackList );
+        const css::uno::Sequence< OUString >& rDenyList );
     void                    FilterFolderContent_Impl( const OUString &rFilter );
     void                    CancelRunningAsyncAction();
 
@@ -879,7 +879,7 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 
     OUString sParentURL;
     if ( GetParentURL( sParentURL ) )
-        eResult = Initialize( sParentURL, mpImpl->maCurrentFilter, pAsyncDescriptor, maBlackList );
+        eResult = Initialize( sParentURL, mpImpl->maCurrentFilter, pAsyncDescriptor, maDenyList );
 
     return eResult;
 }
@@ -931,10 +931,10 @@ FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rBlackList )
+    const css::uno::Sequence< OUString >& rDenyList )
 {
     weld::WaitObject aWaitCursor(mpImpl->m_pTopLevel);
-    maBlackList = rBlackList;
+    maDenyList = rDenyList;
 
     OUString sPushURL( mpImpl->maViewURL );
 
@@ -963,7 +963,7 @@ FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileVi
     mpImpl->maCurrentFilter = rFilter.toAsciiLowerCase();
 
     mpImpl->Clear();
-    FileViewResult eResult = mpImpl->GetFolderContent_Impl(mpImpl->maViewURL, pAsyncDescriptor, maBlackList);
+    FileViewResult eResult = mpImpl->GetFolderContent_Impl(mpImpl->maViewURL, pAsyncDescriptor, maDenyList);
     OSL_ENSURE( ( eResult != eStillRunning ) || pAsyncDescriptor, "SvtFileView::ExecuteFilter: we told it to read synchronously!" );
     return eResult;
 }
@@ -1167,7 +1167,7 @@ void SvtFileView_Impl::Clear()
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const OUString& rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rBlackList )
+    const css::uno::Sequence< OUString >& rDenyList )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
@@ -1176,13 +1176,13 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     aGuard.clear();
-    return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rBlackList );
+    return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rDenyList );
 }
 
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rBlackList )
+    const css::uno::Sequence< OUString >& rDenyList )
 {
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );
@@ -1194,7 +1194,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     if ( !pAsyncDescriptor )
     {
-        ::svt::EnumerationResult eResult = m_xContentEnumerator->enumerateFolderContentSync( _rFolder, rBlackList );
+        ::svt::EnumerationResult eResult = m_xContentEnumerator->enumerateFolderContentSync( _rFolder, rDenyList );
         if ( ::svt::EnumerationResult::SUCCESS == eResult )
         {
             implEnumerationSuccess();

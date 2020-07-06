@@ -5,7 +5,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-# Reformat files which are not blacklisted. This is interesting if the
+# Reformat files which are not excluded. This is interesting if the
 # clang-format version or config changes.
 # -n allows just listing the formatted files.
 
@@ -16,7 +16,7 @@ use ClangFormat;
 
 my $clang_format = ClangFormat::find();
 my $src = ClangFormat::get_extension_regex();
-my $blacklist_names = ClangFormat::get_blacklist();
+my $excluded_list_names = ClangFormat::get_excludelist();
 my @filenames = ();
 my $dry_run = 0;
 
@@ -25,7 +25,7 @@ open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
 while (my $filename = <FILES>)
 {
     chomp $filename;
-    if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
+    if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
     {
         push @filenames, $filename;
     }

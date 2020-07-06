@@ -134,7 +134,7 @@ void X11OpenGLDeviceInfo::GetData()
     glx::glxtest_pipe = 0;
 
     // bytesread < 0 would mean that the above read() call failed.
-    // This should never happen. If it did, the outcome would be to blacklist anyway.
+    // This should never happen. If it did, the outcome would be to denylist anyway.
     if (bytesread < 0)
         bytesread = 0;
 
@@ -163,7 +163,7 @@ void X11OpenGLDeviceInfo::GetData()
                 // Bug moz#718629
                 // ECHILD happens when the glxtest process got reaped got reaped after a PR_CreateProcess
                 // as per bug moz#227246. This shouldn't matter, as we still seem to get the data
-                // from the pipe, and if we didn't, the outcome would be to blacklist anyway.
+                // from the pipe, and if we didn't, the outcome would be to denylist anyway.
                 waiting_for_glxtest_process_failed = (waitpid_errno != ECHILD);
             }
         }

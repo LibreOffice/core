@@ -54,9 +54,9 @@ public:
     }
 
     /// Should we intentionally not sign this stream?
-    static bool isOOXMLBlacklist(const OUString& rStreamName);
+    static bool isOOXMLDenylist(const OUString& rStreamName);
     /// Should we intentionally not sign this relation type?
-    static bool isOOXMLRelationBlacklist(const OUString& rRelationName);
+    static bool isOOXMLRelationDenylist(const OUString& rRelationName);
 
     const uno::Reference<xml::sax::XDocumentHandler>& getDocumentHandler() const
     {
@@ -84,26 +84,26 @@ public:
     void writeSignatureLineImages();
 };
 
-bool OOXMLSecExporter::Impl::isOOXMLBlacklist(const OUString& rStreamName)
+bool OOXMLSecExporter::Impl::isOOXMLDenylist(const OUString& rStreamName)
 {
-    static const std::initializer_list<OUStringLiteral> vBlacklist
+    static const std::initializer_list<OUStringLiteral> vDenylist
         = { "/%5BContent_Types%5D.xml", "/docProps/app.xml", "/docProps/core.xml",
             // Don't attempt to sign other signatures for now.
             "/_xmlsignatures" };
     // Just check the prefix, as we don't care about the content type part of the stream name.
-    return std::any_of(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral) {
+    return std::any_of(vDenylist.begin(), vDenylist.end(), [&](const OUStringLiteral& rLiteral) {
         return rStreamName.startsWith(rLiteral);
     });
 }
 
-bool OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(const OUString& rRelationName)
+bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationName)
 {
-    static const std::initializer_list<OUStringLiteral> vBlacklist = {
+    static const std::initializer_list<OUStringLiteral> vDenylist = {
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
         "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
         "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
     };
-    return std::find(vBlacklist.begin(), vBlacklist.end(), rRelationName) != vBlacklist.end();
+    return std::find(vDenylist.begin(), vDenylist.end(), rRelationName) != vDenylist.end();
 }
 
 void OOXMLSecExporter::Impl::writeSignedInfo()
@@ -232,7 +232,7 @@ void OOXMLSecExporter::Impl::writeManifest()
     {
         if (rReference.nType != SignatureReferenceType::SAMEDOCUMENT)
         {
-            if (OOXMLSecExporter::Impl::isOOXMLBlacklist(rReference.ouURI))
+            if (OOXMLSecExporter::Impl::isOOXMLDenylist(rReference.ouURI))
                 continue;
 
             writeManifestReference(rReference);
@@ -271,7 +271,7 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
                 aType = rPair.Second;
         }
 
-        if (OOXMLSecExporter::Impl::isOOXMLRelationBlacklist(aType))
+        if (OOXMLSecExporter::Impl::isOOXMLRelationDenylist(aType))
             continue;
 
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());

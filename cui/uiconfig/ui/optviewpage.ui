@@ -526,7 +526,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="forceskia">
-                        <property name="label" translatable="yes" context="optviewpage|forceskia">Ignore Skia blacklist</property>
+                        <property name="label" translatable="yes" context="optviewpage|forceskia">Ignore Skia denylist</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

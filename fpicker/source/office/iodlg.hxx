@@ -160,8 +160,8 @@ public:
             void                FileSelect();
             void                FilterSelect() override;
 
-    void                        SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) override;
-    const css::uno::Sequence< OUString >& GetBlackList() const override;
+    void                        SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
+    const css::uno::Sequence< OUString >& GetDenyList() const override;
     void                        SetStandardDir( const OUString& rStdDir ) override;
     const OUString&             GetStandardDir() const override;
     std::vector<OUString>       GetPathList() const override;        // for MultiSelection

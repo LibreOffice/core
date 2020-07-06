@@ -63,8 +63,8 @@ namespace dxcanvas
         ~DXCanvasItem() override;
 
         bool isDeviceUsable( const DeviceInfo& rDeviceInfo ) const;
-        bool isBlacklistCurrentDevice() const;
-        void blacklistDevice( const DeviceInfo& rDeviceInfo );
+        bool isDenylistCurrentDevice() const;
+        void denylistDevice( const DeviceInfo& rDeviceInfo );
         void adaptMaxTextureSize( basegfx::B2IVector& io_maxTextureSize ) const;
         virtual void               Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
@@ -73,7 +73,7 @@ namespace dxcanvas
         typedef std::set< DeviceInfo > ValueSet;
         ValueSet                   maValues;
         std::optional<sal_Int32> maMaxTextureSize;
-        bool                       mbBlacklistCurrentDevice;
+        bool                       mbDenylistCurrentDevice;
         bool                       mbValuesDirty;
     };
 }

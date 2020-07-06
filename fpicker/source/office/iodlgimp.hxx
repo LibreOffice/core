@@ -107,7 +107,7 @@ private:
     const SvtFileDialogFilter_Impl* m_pCurFilter;
     OUString                        m_sCurrentFilterDisplayName;    // may differ from m_pCurFilter->GetName in case it is a cached entry
 
-    css::uno::Sequence< OUString > m_aBlackList;
+    css::uno::Sequence< OUString > m_aDenyList;
 
 public:
     SvtFileDialogFilterList_Impl    m_aFilter;
@@ -156,8 +156,8 @@ public:
     explicit SvtExpFileDlg_Impl();
     ~SvtExpFileDlg_Impl();
 
-    void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { m_aBlackList = rBlackList; }
-    const css::uno::Sequence< OUString >& GetBlackList() const { return m_aBlackList; }
+    void             SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) { m_aDenyList = rDenyList; }
+    const css::uno::Sequence< OUString >& GetDenyList() const { return m_aDenyList; }
     void                    SetStandardDir( const OUString& rDir );
     const OUString&  GetStandardDir() const { return m_aStdDir; }
 

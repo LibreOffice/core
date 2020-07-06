@@ -1692,13 +1692,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
                 const uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
                 // Ignore write-only properties.
-                static const o3tl::sorted_vector<OUString> aBlacklist
+                static const o3tl::sorted_vector<OUString> aDenylist
                     = { "FooterBackGraphicURL", "BackGraphicURL", "HeaderBackGraphicURL" };
                 for ( const auto& rProperty : propertyList )
                 {
                     if ( (rProperty.Attributes & beans::PropertyAttribute::READONLY) == 0 )
                     {
-                        if (aBlacklist.find(rProperty.Name) == aBlacklist.end())
+                        if (aDenylist.find(rProperty.Name) == aDenylist.end())
                             evenOddStyle->setPropertyValue(
                                 rProperty.Name,
                                 pageProperties->getPropertyValue(rProperty.Name));

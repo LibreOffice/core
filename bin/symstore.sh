@@ -2,19 +2,19 @@
 
 # Files listed here would not be store in the symbolestore-server.
 # The format is a string with files e.g.
-#  BLACKLIST="python.exe
+#  EXCLUDE_LIST="python.exe
 #  file.dll
 #  next_file.exe"
 #
 # It removes "python.exe", "file.dll", and "next_file.exe" from what's
 # added to the symstore. Separator is the newline
-BLACK_LIST="python.exe"
+EXCLUDE_LIST="python.exe"
 
 # List files here where it's ok for this script to find more than one
 # occurrence in the build tree. Files _not_ included here will generate
 # an error, if duplicates are found.
 #
-# Same format as for BLACK_LIST above
+# Same format as for EXCLUDE_LIST above
 MOREPDBS_OKLIST="libcurl.dll
 freebl3.dll
 libeay32.dll
@@ -46,7 +46,7 @@ add_pdb()
     stats_morefound=0
     declare -a pdball
     echo "Collect $extension"
-    ret=$(find "${INSTDIR}/" -type f -name "*.${extension}" | grep -vF "$BLACK_LIST")
+    ret=$(find "${INSTDIR}/" -type f -name "*.${extension}" | grep -vF "$EXCLUDE_LIST")
     while IFS= read -r file
     do
         ${VERBOSE} -n "Found: $file"

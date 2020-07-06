@@ -6,10 +6,10 @@
       <!-- NVidia Quadro NVS 285 simply refuses rendering (failing silently) if we take the maximum texture size -->
       <value>2048</value>
     </prop>
-    <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
+    <prop oor:name="DenylistCurrentDevice" oor:type="xs:boolean">
       <value>false</value>
     </prop>
-    <prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
+    <prop oor:name="DeviceDenylist" oor:type="oor:int-list">
       <value><!-- Matrox G550 - blank display on 2nd head -->
         4139 9511 260313131 1 5 13 1 1320
         <!-- Matrox G550 - blank display (single head?) -->

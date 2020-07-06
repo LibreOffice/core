@@ -610,7 +610,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 # runtime dependency
 $(eval $(call gb_Library_use_package,vcl,vcl_opengl_shader))
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_package,vcl,vcl_opengl_blacklist))
+$(eval $(call gb_Library_use_package,vcl,vcl_opengl_denylist))
 endif
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))

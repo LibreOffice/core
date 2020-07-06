@@ -780,7 +780,7 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnForceSkiaToggled, weld::ToggleButton&, void)
 {
     if (m_xForceSkia->get_active())
     {
-        // Ignoring the Skia blacklist implies that Skia is on.
+        // Ignoring the Skia denylist implies that Skia is on.
         m_xUseSkia->set_active(true);
     }
 }

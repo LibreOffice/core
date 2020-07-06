@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,vcl_skia_blacklist,$(SRCDIR)/vcl/skia))
+$(eval $(call gb_Package_Package,vcl_opengl_denylist,$(SRCDIR)/vcl/opengl))
 
-$(eval $(call gb_Package_add_files,vcl_skia_blacklist,$(LIBO_SHARE_FOLDER)/skia,\
-	skia_blacklist_vulkan.xml \
+$(eval $(call gb_Package_add_files,vcl_opengl_denylist,$(LIBO_SHARE_FOLDER)/opengl,\
+	opengl_denylist_windows.xml \
 ))
 
 # vim: set noet sw=4 ts=4:

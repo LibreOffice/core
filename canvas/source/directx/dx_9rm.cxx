@@ -617,7 +617,7 @@ namespace dxcanvas
                 return false;
             maPageSize = ::basegfx::B2IVector(aCaps.MaxTextureWidth,aCaps.MaxTextureHeight);
 
-            // check device against white & blacklist entries
+            // check device against white & denylist entries
             D3DADAPTER_IDENTIFIER9 aIdent;
             if(FAILED(mpDirect3D9->GetAdapterIdentifier(nAdapter,0,&aIdent)))
                 return false;
@@ -637,9 +637,9 @@ namespace dxcanvas
             if( !aConfigItem.isDeviceUsable(aInfo) )
                 return false;
 
-            if( aConfigItem.isBlacklistCurrentDevice() )
+            if( aConfigItem.isDenylistCurrentDevice() )
             {
-                aConfigItem.blacklistDevice(aInfo);
+                aConfigItem.denylistDevice(aInfo);
                 return false;
             }
 

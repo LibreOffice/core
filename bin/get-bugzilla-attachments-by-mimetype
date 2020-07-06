@@ -356,7 +356,7 @@ rss_bugzillas = (
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
 # note: running this script against bz.apache.org apparently causes one's IP
-# to be blacklisted or something; you won't get new files in any case...
+# to be banned or something; you won't get new files in any case...
 #    ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi' ),
     ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi' ),
 )

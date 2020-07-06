@@ -172,7 +172,7 @@ namespace sfx2
                                     sal_Int16 nDialog,
                                     weld::Window* pFrameWeld,
                                     const OUString& sStandardDir = OUString(),
-                                    const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
+                                    const css::uno::Sequence< OUString >&   rDenyList = css::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl() override;
 

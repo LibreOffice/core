@@ -846,7 +846,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialog,
     weld::Window* pFrameWeld,
     const OUString& sStandardDir,
-    const css::uno::Sequence< OUString >& rBlackList
+    const css::uno::Sequence< OUString >& rDenyList
     )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
@@ -1053,8 +1053,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                 );
 
             aInitArguments[2] <<= NamedValue(
-                                    "BlackList",
-                                    makeAny( rBlackList )
+                                    "DenyList",
+                                    makeAny( rDenyList )
                                 );
 
 
@@ -2286,10 +2286,10 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
-    const css::uno::Sequence< OUString >& rBlackList,
+    const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rStandardDir, rBlackList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rStandardDir, rDenyList ) )
 {
     // create the list of filters
     mpImpl->addFilters(
@@ -2308,10 +2308,10 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aFilterUIName,
     const OUString& aExtName,
     const OUString& rStandardDir,
-    const css::uno::Sequence< OUString >& rBlackList,
+    const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent )
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rStandardDir, rBlackList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rStandardDir, rDenyList ) )
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
@@ -2624,7 +2624,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
-                             const css::uno::Sequence< OUString >& rBlackList )
+                             const css::uno::Sequence< OUString >& rDenyList )
 {
     ErrCode nRet;
     std::unique_ptr<FileDialogHelper> pDialog;
@@ -2632,9 +2632,9 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rBlackList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rDenyList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rDenyList, pParent));
 
     OUString aPath;
     if ( pPath )

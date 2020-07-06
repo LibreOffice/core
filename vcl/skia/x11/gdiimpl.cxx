@@ -74,7 +74,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     // that the X11 visual is always the same. Ensure it is so.
     static VisualID checkVisualID = -1U;
     // Exception is for the temporary case during startup, when SkiaHelper's
-    // checkDeviceBlacklisted() needs a WindowContext and may be called before SalVisual
+    // checkDeviceDenylisted() needs a WindowContext and may be called before SalVisual
     // is ready.
     if (!temporary)
     {

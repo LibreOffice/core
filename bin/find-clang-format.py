@@ -11,7 +11,7 @@ from difflib import unified_diff
 from pathlib import Path
 from subprocess import PIPE, Popen
 
-BLACKLIST = Path("solenv/clang-format/blacklist")
+EXCLUDELIST = Path("solenv/clang-format/excludelist")
 THRESHOLD = os.getenv("CLANG_THRESHOLD", 5)
 CLANG_BINARY = Path(os.getenv("CLANG_FORMAT", "/opt/lo/bin/clang-format"))
 
@@ -47,7 +47,7 @@ def main(*args):
         print("Couldn't find clang-format on {!s}".format(CLANG_BINARY))
         exit(1)
 
-    for path in BLACKLIST.read_text().splitlines():
+    for path in EXCLUDELIST.read_text().splitlines():
         path = Path(path)
         if not path.exists():
             continue

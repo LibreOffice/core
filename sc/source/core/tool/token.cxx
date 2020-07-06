@@ -1282,7 +1282,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
 #if HAVE_CPP_CONSTINIT_SORTED_VECTOR
     constinit
 #endif
-    static const o3tl::sorted_vector<OpCode> aThreadedCalcBlackList({
+    static const o3tl::sorted_vector<OpCode> aThreadedCalcDenyList({
         ocIndirect,
         ocMacro,
         ocOffset,
@@ -1325,7 +1325,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
 
     OpCode eOp = r.GetOpCode();
 
-    if (aThreadedCalcBlackList.find(eOp) != aThreadedCalcBlackList.end())
+    if (aThreadedCalcDenyList.find(eOp) != aThreadedCalcDenyList.end())
     {
         SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
             << "(" << int(eOp) << ") disables threaded calculation of formula group");

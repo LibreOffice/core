@@ -27,7 +27,7 @@ private:
     weld::Window* m_pTopLevel;
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
-    Sequence< OUString > m_aBlackList;
+    Sequence< OUString > m_aDenyList;
 
     OUString m_sLastUpdatedDir;
 
@@ -44,7 +44,7 @@ public:
     void FillTreeEntry(const weld::TreeIter& rEntry);
     void FillTreeEntry(const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders);
     void SetTreePath(OUString const & sUrl);
-    void SetBlackList(const css::uno::Sequence< OUString >& rBlackList);
+    void SetDenyList(const css::uno::Sequence< OUString >& rDenyList);
 };
 
 #endif

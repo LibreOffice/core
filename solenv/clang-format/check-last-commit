@@ -26,7 +26,7 @@ sub check_style()
     my $src = ClangFormat::get_extension_regex();
     my @good_names = ();
     my @bad_names = ();
-    my $blacklist_names = ClangFormat::get_blacklist();
+    my $excluded_list_names = ClangFormat::get_excludelist();
     my $clang_format = ClangFormat::find();
     my $parent = $commit + 1;
 
@@ -38,7 +38,7 @@ sub check_style()
     while (my $filename = <FILES>)
     {
         chomp $filename;
-        if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
+        if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
         {
             if (! -x $clang_format)
             {
@@ -67,7 +67,7 @@ sub check_style()
         print("and the clang-format rules. Tips:\n");
         print("\n- You may run '/opt/lo/bin/clang-format -i <problematic file>' to fix up style automatically.\n");
         print("- See solenv/clang-format/README on where to get the required version of clang-format binaries.\n");
-        print("- If you renamed a blacklisted file, update solenv/clang-format/blacklist accordingly to keep it blacklisted.\n");
+        print("- If you renamed an excluded file, update solenv/clang-format/excludelist accordingly to keep it excluded.\n");
         print("\nsolenv/clang-format/check-last-commit: KO\n");
         exit(1);
     }

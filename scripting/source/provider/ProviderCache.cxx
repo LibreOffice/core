@@ -44,7 +44,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
 }
 
 
-ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< OUString >& blackList ) : m_sBlackList( blackList ), m_Sctx( scriptContext ), m_xContext( xContext )
+ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< OUString >& denyList ) : m_sDenyList( denyList ), m_Sctx( scriptContext ), m_xContext( xContext )
 
 {
     // initialise m_hProviderDetailsCache with details of ScriptProviders
@@ -151,7 +151,7 @@ ProviderCache::populateCache()
                 auto pName = std::find_if(serviceNames.begin(), serviceNames.end(),
                     [this](const OUString& rName) {
                         return rName.startsWith("com.sun.star.script.provider.ScriptProviderFor")
-                            && !isInBlackList(rName);
+                            && !isInDenyList(rName);
                     });
                 if (pName != serviceNames.end())
                 {
@@ -193,9 +193,9 @@ ProviderCache::createProvider( ProviderDetails& details )
 }
 
 bool
-ProviderCache::isInBlackList( const OUString& serviceName )
+ProviderCache::isInDenyList( const OUString& serviceName )
 {
-    return comphelper::findValue(m_sBlackList, serviceName) != -1;
+    return comphelper::findValue(m_sDenyList, serviceName) != -1;
 }
 } //end namespace
 

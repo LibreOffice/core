@@ -134,7 +134,7 @@ sub check_style($)
     my ($h) = @_;
     my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
-    my $blacklist_names = ClangFormat::get_blacklist();
+    my $excluded_list_names = ClangFormat::get_excludelist();
     my $clang_format = ClangFormat::find();
 
     # Get a list of non-deleted changed files.
@@ -142,14 +142,14 @@ sub check_style($)
     while (my $filename = <FILES>)
     {
         chomp $filename;
-        if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
+        if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
         {
             if (!defined($clang_format))
             {
                 my $version = ClangFormat::get_wanted_version();
                 my $opt_lo = ClangFormat::get_own_directory();
 
-                print("\nWARNING: Commit touches new (non-blacklisted) files, but no clang-format"
+                print("\nWARNING: Commit touches new (non-excluded) files, but no clang-format"
                       . " ${version}\n");
                 print(" found (via CLANG_FORMAT or PATH env vars, or in ${opt_lo}).\n\n");
 

@@ -1630,7 +1630,7 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action eAction,
     m_aConfiguration.getNodeValue( OUString( "Timeout/Max" ) ) >>= nMaxTimeout;
 
     m_bInExecuteAsync = true;
-    m_pCurrentAsyncAction->execute(rURL, rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout, GetBlackList());
+    m_pCurrentAsyncAction->execute(rURL, rFilter, bReallyAsync ? nMinTimeout : -1, nMaxTimeout, GetDenyList());
     m_bInExecuteAsync = false;
 }
 
@@ -1662,15 +1662,15 @@ void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
     m_xImpl->SetStandardDir( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 }
 
-void SvtFileDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
+void SvtFileDialog::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
 {
-    m_xImpl->SetBlackList( rBlackList );
+    m_xImpl->SetDenyList( rDenyList );
 }
 
 
-const css::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
+const css::uno::Sequence< OUString >& SvtFileDialog::GetDenyList() const
 {
-    return m_xImpl->GetBlackList();
+    return m_xImpl->GetDenyList();
 }
 
 

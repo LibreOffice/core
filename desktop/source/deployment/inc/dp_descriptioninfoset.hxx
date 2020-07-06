@@ -252,16 +252,16 @@ private:
     SAL_DLLPRIVATE OUString
         getNodeValueFromExpression(OUString const & expression) const;
 
-    /** Check the extensions blacklist if additional extension meta data (e.g. dependencies)
+    /** Check the extensions denylist if additional extension meta data (e.g. dependencies)
         are defined for this extension and have to be taken into account.
     */
     SAL_DLLPRIVATE void
-        checkBlacklist() const;
+        checkDenylist() const;
 
     /** Helper method to compare the versions with the current version
      */
     SAL_DLLPRIVATE static bool
-        checkBlacklistVersion(const OUString& currentversion,
+        checkDenylistVersion(const OUString& currentversion,
                               css::uno::Sequence< OUString > const & versions);
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
