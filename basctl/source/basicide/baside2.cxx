@@ -1009,8 +1009,13 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         case SID_BASICIDE_DELETECURRENT:
         {
             if (QueryDelModule(m_aName, GetFrameWeld()))
+            {
+                // tdf#134551 don't delete the window if last module is removed until this block
+                // is complete
+                VclPtr<ModulWindow> xKeepRef(this);
                 if (m_aDocument.removeModule(m_aLibName, m_aName))
                     MarkDocumentModified(m_aDocument);
+            }
         }
         break;
         case FID_SEARCH_OFF:
@@ -1049,7 +1054,6 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
         break;
     }
 }
-
 
 void ModulWindow::GetState( SfxItemSet &rSet )
 {
