@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
-#include "service.hxx"
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -184,11 +183,7 @@ ScVbaUserForm::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaUserForm::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
-    {
-        "ooo.vba.excel.UserForm"
-    };
-    return aServiceNames;
+    return { "ooo.vba.excel.UserForm" };
 }
 
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL
@@ -307,14 +302,11 @@ ScVbaUserForm::hasProperty( const OUString& aName )
     return false;
 }
 
-namespace userform
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ScVbaUserForm_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaUserForm, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaUserForm",
-    "ooo.vba.msforms.UserForm" );
+    return cppu::acquire(new ScVbaUserForm(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
