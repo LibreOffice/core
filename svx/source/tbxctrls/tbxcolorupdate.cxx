@@ -19,7 +19,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/tbxcolorupdate.hxx>
+#include <tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <svx/xlineit0.hxx>

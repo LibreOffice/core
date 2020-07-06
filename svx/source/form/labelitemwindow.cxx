@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/labelitemwindow.hxx>
+#include <labelitemwindow.hxx>
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
     : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
