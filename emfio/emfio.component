@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="emfio" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="emfio::emfreader::XEmfParser">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="emfio::emfreader::XEmfParser"
+    constructor="emfio_emfreader_XEmfParser_get_implementation">
     <service name="com.sun.star.graphic.EmfTools"/>
   </implementation>
 </component>
