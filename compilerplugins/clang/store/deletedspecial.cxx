@@ -42,7 +42,7 @@ public:
     bool VisitCXXMethodDecl(CXXMethodDecl const * decl);
 
 private:
-    bool whitelist(
+    bool allowlist(
         CXXMethodDecl const * decl, std::string const & name,
         std::string const & path);
 };
@@ -64,8 +64,8 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     }
     std::string desc;
     if (decl->isCopyAssignmentOperator()) {
-        if (whitelist(decl, "ImpGraphic", "vcl/inc/impgraph.hxx")
-            || whitelist(decl, "SwSubFont", "sw/source/core/inc/swfont.hxx"))
+        if (allowlist(decl, "ImpGraphic", "vcl/inc/impgraph.hxx")
+            || allowlist(decl, "SwSubFont", "sw/source/core/inc/swfont.hxx"))
         {
             return true;
         }
@@ -76,24 +76,24 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         CXXConstructorDecl const * ctor = dyn_cast<CXXConstructorDecl>(decl);
         CXXRecordDecl const * cls = getClass(decl);
         if (ctor != nullptr && ctor->isCopyConstructor()) {
-            if (whitelist(decl, "ImpGraphic", "vcl/inc/impgraph.hxx")
-                || whitelist(decl, "SbMethod", "include/basic/sbmeth.hxx")
-                || whitelist(decl, "ScDBCollection::NamedDBs", "sc/inc/dbdata.hxx")
-                || whitelist(decl, "ScDrawPage", "sc/inc/drawpage.hxx")
-                || whitelist(decl, "SmEditSource", "starmath/source/accessibility.hxx")
-                || whitelist(decl, "SwChartDataSequence", "sw/inc/unochart.hxx")
-                || whitelist(decl, "SwDPage", "sw/inc/dpage.hxx")
-                || whitelist(decl, "SwRedlineExtraData_Format", "sw/inc/redline.hxx")
-                || whitelist(decl, "SwRedlineExtraData_FormattingChanges", "sw/inc/redline.hxx")
-                || whitelist(decl, "SwTextAPIEditSource", "sw/source/core/inc/textapi.hxx")
-                || whitelist(decl, "XclImpBiff5Decrypter", "sc/source/filter/inc/xistream.hxx")
-                || whitelist(decl, "XclImpBiff8Decrypter", "sc/source/filter/inc/xistream.hxx")
-                || whitelist(decl, "configmgr::LocalizedPropertyNode", "configmgr/source/localizedpropertynode.hxx")
-                || whitelist(decl, "configmgr::LocalizedValueNode", "configmgr/source/localizedvaluenode.hxx")
-                || whitelist(decl, "configmgr::PropertyNode", "configmgr/source/propertynode.hxx")
-                || whitelist(decl, "oox::xls::BiffDecoder_RCF", "sc/source/filter/inc/biffcodec.hxx")
-                || whitelist(decl, "oox::xls::BiffDecoder_XOR", "sc/source/filter/inc/biffcodec.hxx")
-                || whitelist(decl, "rptui::OReportPage", "reportdesign/inc/RptPage.hxx"))
+            if (allowlist(decl, "ImpGraphic", "vcl/inc/impgraph.hxx")
+                || allowlist(decl, "SbMethod", "include/basic/sbmeth.hxx")
+                || allowlist(decl, "ScDBCollection::NamedDBs", "sc/inc/dbdata.hxx")
+                || allowlist(decl, "ScDrawPage", "sc/inc/drawpage.hxx")
+                || allowlist(decl, "SmEditSource", "starmath/source/accessibility.hxx")
+                || allowlist(decl, "SwChartDataSequence", "sw/inc/unochart.hxx")
+                || allowlist(decl, "SwDPage", "sw/inc/dpage.hxx")
+                || allowlist(decl, "SwRedlineExtraData_Format", "sw/inc/redline.hxx")
+                || allowlist(decl, "SwRedlineExtraData_FormattingChanges", "sw/inc/redline.hxx")
+                || allowlist(decl, "SwTextAPIEditSource", "sw/source/core/inc/textapi.hxx")
+                || allowlist(decl, "XclImpBiff5Decrypter", "sc/source/filter/inc/xistream.hxx")
+                || allowlist(decl, "XclImpBiff8Decrypter", "sc/source/filter/inc/xistream.hxx")
+                || allowlist(decl, "configmgr::LocalizedPropertyNode", "configmgr/source/localizedpropertynode.hxx")
+                || allowlist(decl, "configmgr::LocalizedValueNode", "configmgr/source/localizedvaluenode.hxx")
+                || allowlist(decl, "configmgr::PropertyNode", "configmgr/source/propertynode.hxx")
+                || allowlist(decl, "oox::xls::BiffDecoder_RCF", "sc/source/filter/inc/biffcodec.hxx")
+                || allowlist(decl, "oox::xls::BiffDecoder_XOR", "sc/source/filter/inc/biffcodec.hxx")
+                || allowlist(decl, "rptui::OReportPage", "reportdesign/inc/RptPage.hxx"))
             {
                 return true;
             }
@@ -103,22 +103,22 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         } else if (ctor != nullptr && ctor->isDefaultConstructor()
                    && std::distance(cls->ctor_begin(), cls->ctor_end()) == 1)
         {
-            if (whitelist(decl, "AquaA11yFocusListener", "vcl/osx/a11yfocuslistener.hxx")
-                || whitelist(decl, "DocTemplLocaleHelper", "sfx2/source/doc/doctemplateslocal.hxx")
-                || whitelist(decl, "ScViewDataTable", "sc/source/filter/excel/../../ui/inc/viewdata.hxx")
-                || whitelist(decl, "ScViewDataTable", "sc/source/ui/inc/viewdata.hxx")
-                || whitelist(decl, "SwLineInfo", "sw/source/core/text/inftxt.hxx")
-                || whitelist(decl, "XRenderPeer", "vcl/unx/generic/gdi/xrender_peer.hxx")
-                || whitelist(decl, "desktop::DispatchWatcher", "desktop/source/app/dispatchwatcher.hxx")
-                || whitelist(decl, "desktop::RequestHandler", "desktop/source/app/officeipcthread.hxx")
-                || whitelist(decl, "desktop::RequestHandler", "desktop/source/lib/../app/officeipcthread.hxx")
-                || whitelist(decl, "sd::DiscoveryService", "sd/source/ui/remotecontrol/DiscoveryService.hxx")
-                || whitelist(decl, "sd::IconCache", "sd/source/ui/inc/tools/IconCache.hxx")
-                || whitelist(decl, "sd::RemoteServer", "sd/source/ui/inc/RemoteServer.hxx")
-                || whitelist(decl, "sd::slidesorter::cache::PageCacheManager", "sd/source/ui/slidesorter/inc/cache/SlsPageCacheManager.hxx")
-                || whitelist(decl, "framework::CommandInfoProvider", "include/framework/commandinfoprovider.hxx")
-                || whitelist(decl, "vcl::SettingsConfigItem", "vcl/inc/configsettings.hxx")
-                || whitelist(decl, "writerfilter::ooxml::OOXMLFactory", "writerfilter/source/ooxml/OOXMLFactory.hxx"))
+            if (allowlist(decl, "AquaA11yFocusListener", "vcl/osx/a11yfocuslistener.hxx")
+                || allowlist(decl, "DocTemplLocaleHelper", "sfx2/source/doc/doctemplateslocal.hxx")
+                || allowlist(decl, "ScViewDataTable", "sc/source/filter/excel/../../ui/inc/viewdata.hxx")
+                || allowlist(decl, "ScViewDataTable", "sc/source/ui/inc/viewdata.hxx")
+                || allowlist(decl, "SwLineInfo", "sw/source/core/text/inftxt.hxx")
+                || allowlist(decl, "XRenderPeer", "vcl/unx/generic/gdi/xrender_peer.hxx")
+                || allowlist(decl, "desktop::DispatchWatcher", "desktop/source/app/dispatchwatcher.hxx")
+                || allowlist(decl, "desktop::RequestHandler", "desktop/source/app/officeipcthread.hxx")
+                || allowlist(decl, "desktop::RequestHandler", "desktop/source/lib/../app/officeipcthread.hxx")
+                || allowlist(decl, "sd::DiscoveryService", "sd/source/ui/remotecontrol/DiscoveryService.hxx")
+                || allowlist(decl, "sd::IconCache", "sd/source/ui/inc/tools/IconCache.hxx")
+                || allowlist(decl, "sd::RemoteServer", "sd/source/ui/inc/RemoteServer.hxx")
+                || allowlist(decl, "sd::slidesorter::cache::PageCacheManager", "sd/source/ui/slidesorter/inc/cache/SlsPageCacheManager.hxx")
+                || allowlist(decl, "framework::CommandInfoProvider", "include/framework/commandinfoprovider.hxx")
+                || allowlist(decl, "vcl::SettingsConfigItem", "vcl/inc/configsettings.hxx")
+                || allowlist(decl, "writerfilter::ooxml::OOXMLFactory", "writerfilter/source/ooxml/OOXMLFactory.hxx"))
             {
                 return true;
             }
@@ -136,7 +136,7 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     return true;
 }
 
-bool DeletedSpecial::whitelist(
+bool DeletedSpecial::allowlist(
     CXXMethodDecl const * decl, std::string const & name,
     std::string const & path)
 {

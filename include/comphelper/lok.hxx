@@ -109,7 +109,7 @@ COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
 /// Get the current LOK's language.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLanguageTag();
 /// If the language name should be used for this LOK instance.
-COMPHELPER_DLLPUBLIC bool isWhitelistedLanguage(const OUString& lang);
+COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of

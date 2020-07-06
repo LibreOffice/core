@@ -582,7 +582,7 @@ int main( int argc, char* argv[] )
     if (pre_init)
     {
         aTimes.emplace_back("pre-initialization");
-        setenv("LOK_WHITELIST_LANGUAGES", "en_US", 0);
+        setenv("LOK_ALLOWLIST_LANGUAGES", "en_US", 0);
         // coverity[tainted_string] - build time test tool
         lok_preinit(argv[1], user_url.c_str());
         aTimes.emplace_back();
