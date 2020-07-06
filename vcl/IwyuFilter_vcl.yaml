@@ -1,6 +1,6 @@
 ---
 assumeFilename: vcl/source/app/svapp.cxx
-blacklist:
+excludelist:
     vcl/inc/salusereventlist.hxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx

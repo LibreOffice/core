@@ -1,6 +1,6 @@
 ---
 assumeFilename: unoidl/source/unoidl.cxx
-blacklist:
+excludelist:
     unoidl/source/unoidl-write.cxx:
     # Avoid loplugin:oslendian error
     - osl/endian.h

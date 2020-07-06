@@ -1,6 +1,6 @@
 ---
 assumeFilename: registry/source/registry.cxx
-blacklist:
+excludelist:
     registry/source/regimpl.hxx:
     # Needed for correct linker visibility
     - regapi.hxx

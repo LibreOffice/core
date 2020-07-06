@@ -1,6 +1,6 @@
 ---
 assumeFilename: cppuhelper/source/implbase.cxx
-blacklist:
+excludelist:
     cppuhelper/source/typemanager.hxx:
     # base class needs full type
     - com/sun/star/container/XHierarchicalNameAccess.hpp
