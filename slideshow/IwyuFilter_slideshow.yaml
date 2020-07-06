@@ -1,6 +1,6 @@
 ---
 assumeFilename: slideshow/source/engine/slideshowimpl.cxx
-blacklist:
+excludelist:
     slideshow/source/inc/mouseeventhandler.hxx:
     # Needed for css shortcut
     - sal/types.h

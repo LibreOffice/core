@@ -1,6 +1,6 @@
 ---
 assumeFilename: i18npool/source/localedata/localedata.cxx
-blacklist:
+excludelist:
     i18npool/inc/breakiterator_unicode.hxx:
     # contains versioned namespace so cannot forward declare
     - unicode/brkiter.h

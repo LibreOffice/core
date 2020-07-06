@@ -1,6 +1,6 @@
 ---
 assumeFilename: drawinglayer/source/primitive2d/svggradientprimitive2d.cxx
-blacklist:
+excludelist:
     drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx:
     # Actually used
     - com/sun/star/lang/XMultiServiceFactory.hpp

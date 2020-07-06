@@ -1,6 +1,6 @@
 ---
 assumeFilename: UnoControls/source/base/basecontrol.cxx
-blacklist:
+excludelist:
     UnoControls/inc/multiplexer.hxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

@@ -1,6 +1,6 @@
 ---
 assumeFilename: canvas/source/cairo/cairo_canvas.cxx
-blacklist:
+excludelist:
     canvas/inc/parametricpolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

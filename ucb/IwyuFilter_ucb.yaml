@@ -1,6 +1,6 @@
 ---
 assumeFilename: ucb/source/core/ucb.cxx
-blacklist:
+excludelist:
     ucb/source/ucp/cmis/std_outputstream.hxx:
     - boost/shared_ptr.hpp
     ucb/source/ucp/cmis/std_inputstream.hxx:

@@ -1,6 +1,6 @@
 ---
 assumeFilename: javaunohelper/source/vm.cxx
-blacklist:
+excludelist:
     javaunohelper/source/bootstrap.cxx:
     # Needed for direct member access
     - com/sun/star/uno/XComponentContext.hpp
