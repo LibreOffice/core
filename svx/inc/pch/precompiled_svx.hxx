@@ -397,7 +397,6 @@
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>
-#include <svx/labelitemwindow.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rotmodit.hxx>

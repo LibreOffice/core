@@ -40,7 +40,7 @@
 #include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/tbxcolorupdate.hxx>
+#include <tbxcolorupdate.hxx>
 
 #include <memory>
 

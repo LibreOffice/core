@@ -56,7 +56,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
-#include <svx/labelitemwindow.hxx>
+#include <labelitemwindow.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/event.hxx>
 

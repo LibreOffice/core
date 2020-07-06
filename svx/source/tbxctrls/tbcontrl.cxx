@@ -82,7 +82,7 @@
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
-#include <svx/tbxcolorupdate.hxx>
+#include <tbxcolorupdate.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/xdef.hxx>

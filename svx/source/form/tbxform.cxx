@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 
 #include <svx/dialmgr.hxx>
-#include <svx/labelitemwindow.hxx>
+#include <labelitemwindow.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <tbxform.hxx>

@@ -27,7 +27,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/tbxcolorupdate.hxx>
+#include <tbxcolorupdate.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 # Look for headers inside include/ that can be moved into their respective modules.
+# Not 100% accurate
 
 import subprocess
 import sys
@@ -31,7 +32,8 @@ a = subprocess.Popen("git grep '^#include <'", stdout=subprocess.PIPE, shell=Tru
 with a.stdout as txt:
     for line in txt:
         idx1 = line.find("#include <")
-        include = line[idx1 + 10 : len(line)-2]
+        idx2 = line.find(">", idx1 + 10)
+        include = line[idx1 + 10 : idx2]
         headerSetUnused.discard(include)
         #
         idx1 = line.find("/")
