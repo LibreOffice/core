@@ -1714,7 +1714,10 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     }
 
     // tdf#128195 Consider para spacing below last paragraph in header
-    if (!m_rThis.IsInFly() && m_rThis.FindFooterOrHeader() && !GetFollow() && !m_rThis.GetIndNext())
+    bool bHasSpacingBelowPara = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(
+        DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA);
+    if (bHasSpacingBelowPara && !m_rThis.IsInFly() && m_rThis.FindFooterOrHeader() && !GetFollow()
+        && !m_rThis.GetIndNext())
         nLowerSpace += _pAttrs->GetULSpace().GetLower() + _pAttrs->CalcLineSpacing();
 
     return nLowerSpace;
