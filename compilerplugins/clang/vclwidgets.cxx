@@ -366,7 +366,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/source/window/layout.cxx"))
         return true;
-    // whitelist the valid things that can contain pointers.
+    // allowlist the valid things that can contain pointers.
     // It is containing stuff like std::unique_ptr we get worried
     if (pVarDecl->getType()->isArrayType()) {
         return true;

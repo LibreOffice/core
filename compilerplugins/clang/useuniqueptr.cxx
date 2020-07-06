@@ -1296,7 +1296,7 @@ void UseUniquePtr::CheckDeleteParmVar(const CXXDeleteExpr* deleteExpr, const Par
     */
     report(
         DiagnosticsEngine::Warning,
-        "calling delete on a pointer param, should be either whitelisted or simplified",
+        "calling delete on a pointer param, should be either allowlisted or simplified",
         compat::getBeginLoc(deleteExpr))
         << deleteExpr->getSourceRange();
 }

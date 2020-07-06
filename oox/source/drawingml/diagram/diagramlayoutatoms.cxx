@@ -340,7 +340,7 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                                      bool bRequireForName) const
 {
-    // Whitelist for cases where empty forName is handled.
+    // Allowlist for cases where empty forName is handled.
     if (bRequireForName)
     {
         switch (maConstraint.mnType)

@@ -18,8 +18,8 @@
 -->
 
 <root>
-    <whitelist>
-    </whitelist>
+    <allowlist>
+    </allowlist>
     <denylist>
         <entry os="all" vendor="intel" compare="less" version="10.18.14.4264">
             <device id="all"/>

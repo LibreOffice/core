@@ -372,13 +372,13 @@ void Parser::handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 
 void Parser::handleEntry(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 {
-    if (meBlockType == BlockType::WHITELIST)
+    if (meBlockType == BlockType::ALLOWLIST)
     {
-        rDriver.mbWhitelisted = true;
+        rDriver.mbAllowlisted = true;
     }
     else if (meBlockType == BlockType::DENYLIST)
     {
-        rDriver.mbWhitelisted = false;
+        rDriver.mbAllowlisted = false;
     }
     else if (meBlockType == BlockType::UNKNOWN)
     {
@@ -484,9 +484,9 @@ void Parser::handleContent(xmlreader::XmlReader& rReader)
 
         if (res == xmlreader::XmlReader::Result::Begin)
         {
-            if (name == "whitelist")
+            if (name == "allowlist")
             {
-                meBlockType = BlockType::WHITELIST;
+                meBlockType = BlockType::ALLOWLIST;
                 handleList(rReader);
             }
             else if (name == "denylist")
@@ -504,7 +504,7 @@ void Parser::handleContent(xmlreader::XmlReader& rReader)
         }
         else if (res == xmlreader::XmlReader::Result::End)
         {
-            if (name == "whitelist" || name == "denylist")
+            if (name == "allowlist" || name == "denylist")
             {
                 meBlockType = BlockType::UNKNOWN;
             }
@@ -562,7 +562,7 @@ const uint64_t allDriverVersions = ~(uint64_t(0));
 DriverInfo::DriverInfo()
     : meOperatingSystem(DRIVER_OS_UNKNOWN)
     , maAdapterVendor(GetVendorId(VendorAll))
-    , mbWhitelisted(false)
+    , mbAllowlisted(false)
     , meComparisonOp(DRIVER_COMPARISON_IGNORED)
     , mnDriverVersion(0)
     , mnDriverVersionMax(0)
@@ -570,11 +570,11 @@ DriverInfo::DriverInfo()
 }
 
 DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
-                       uint64_t driverVersion, bool bWhitelisted,
+                       uint64_t driverVersion, bool bAllowlisted,
                        const char* suggestedVersion /* = nullptr */)
     : meOperatingSystem(os)
     , maAdapterVendor(vendor)
-    , mbWhitelisted(bWhitelisted)
+    , mbAllowlisted(bAllowlisted)
     , meComparisonOp(op)
     , mnDriverVersion(driverVersion)
     , mnDriverVersionMax(0)
@@ -658,9 +658,9 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
         if (match || aDeviceInfos[i].mnDriverVersion == allDriverVersions)
         {
             // white listed drivers
-            if (aDeviceInfos[i].mbWhitelisted)
+            if (aDeviceInfos[i].mbAllowlisted)
             {
-                SAL_INFO("vcl.driver", "whitelisted driver");
+                SAL_INFO("vcl.driver", "allowlisted driver");
                 return false;
             }
 

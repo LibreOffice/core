@@ -15,7 +15,7 @@
 #include <unordered_set>
 
 /*
- * Very aggressive unused variable checker, we whitelist types that are known
+ * Very aggressive unused variable checker, we allowlist types that are known
  * good when unused.
 */
 

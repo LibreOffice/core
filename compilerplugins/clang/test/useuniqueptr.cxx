@@ -195,17 +195,17 @@ class Foo14 {
 
 void Foo15(int * p)
 {
-    delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
+    delete p; // expected-error {{calling delete on a pointer param, should be either allowlisted or simplified [loplugin:useuniqueptr]}}
 };
 
 class Foo16 {
     Foo16(int * p)
     {
-        delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
+        delete p; // expected-error {{calling delete on a pointer param, should be either allowlisted or simplified [loplugin:useuniqueptr]}}
     };
     void foo(int * p)
     {
-        delete p; // expected-error {{calling delete on a pointer param, should be either whitelisted or simplified [loplugin:useuniqueptr]}}
+        delete p; // expected-error {{calling delete on a pointer param, should be either allowlisted or simplified [loplugin:useuniqueptr]}}
     };
 };
 

@@ -46,46 +46,46 @@ void BlocklistParserTest::testParse()
 
     size_t i = 0;
 
-    for (bool bIsWhitelisted : {true, false})
+    for (bool bIsAllowlisted : {true, false})
     {
         DriverInfo& aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor); // "all"
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_LESS_THAN, aDriveInfo.meComparisonOp);
         CPPUNIT_ASSERT_EQUAL(V(10,20,30,40), aDriveInfo.mnDriverVersion);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorNVIDIA), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorMicrosoft), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(OUString("0xcafe"), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_EXCLUSIVE, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE_START, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
-        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(bIsAllowlisted, aDriveInfo.mbAllowlisted);
         CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_COMPARISON_IGNORED, aDriveInfo.meComparisonOp);
     }

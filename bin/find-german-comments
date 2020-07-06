@@ -210,7 +210,7 @@ class Parser:
 
     def first_elem(self, path):
         """
-        Returns the root directory in our repo of a given path, so we can check against the whitelist.
+        Returns the root directory in our repo of a given path, so we can check against the allowlist.
         """
         lastElem = os.path.dirname(path)
         done = False
@@ -227,7 +227,7 @@ class Parser:
         checks each _tracked_ file in a directory recursively
         """
 
-	# top-level project directory -> use whitelist.
+	# top-level project directory -> use allowlist.
         globalscan = False
         if os.path.exists(directory + "/.git/config"):
            globalscan = True
@@ -240,7 +240,7 @@ class Parser:
         sock.close()
 
         # Helps to speedup a global scan
-        directory_whitelist = {
+        directory_allowlist = {
             "ure" : 1,
             "ios" : 1,
             "bean" : 1,
@@ -376,17 +376,17 @@ class Parser:
 
         for path in lines:
             baseDir = self.first_elem(path)
-            # If we have a globalscan use the whitelist.
+            # If we have a globalscan use the allowlist.
             if globalscan:
-                if not baseDir in directory_whitelist:
+                if not baseDir in directory_allowlist:
                     sys.stderr.write("\n - Error: Missing path %s -\n\n" % baseDir)
                     sys.exit(1)
-                elif directory_whitelist[baseDir] is 0:
+                elif directory_allowlist[baseDir] is 0:
                     self.check_file(path.strip())
                     num_checked = num_checked + 1
-                elif directory_whitelist[baseDir] is 1:
-                    sys.stderr.write("Skipping whitelisted directory %s\n" % baseDir)
-                    directory_whitelist[baseDir] = 2
+                elif directory_allowlist[baseDir] is 1:
+                    sys.stderr.write("Skipping excluded directory %s\n" % baseDir)
+                    directory_allowlist[baseDir] = 2
             elif not globalscan:
                 self.check_file(path.strip())
                 num_checked = num_checked + 1

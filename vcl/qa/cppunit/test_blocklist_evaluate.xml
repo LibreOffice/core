@@ -18,8 +18,8 @@
 -->
 
 <root>
-    <whitelist>
-    </whitelist>
+    <allowlist>
+    </allowlist>
     <denylist>
 
         <entry os="all" vendor="amd" compare="less" version="10.20.30.40">

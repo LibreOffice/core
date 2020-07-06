@@ -139,7 +139,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             {
                 for (const auto& rLocaleName : dict.aLocaleNames)
                 {
-                    if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(rLocaleName))
+                    if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(rLocaleName))
                         continue;
 
                     aLocaleNamesSet.insert( rLocaleName );

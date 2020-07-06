@@ -172,11 +172,11 @@ bool StaticVar::VisitVarDecl(VarDecl const* varDecl)
             return true;
 
         if (varDecl->isLocalVarDecl())
-            report(DiagnosticsEngine::Warning, "var should be static const, or whitelisted",
+            report(DiagnosticsEngine::Warning, "var should be static const, or allowlisted",
                    varDecl->getLocation())
                 << varDecl->getSourceRange();
         else
-            report(DiagnosticsEngine::Warning, "var should be const, or whitelisted",
+            report(DiagnosticsEngine::Warning, "var should be const, or allowlisted",
                    varDecl->getLocation())
                 << varDecl->getSourceRange();
     }

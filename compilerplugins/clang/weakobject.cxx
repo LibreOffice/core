@@ -133,7 +133,7 @@ public:
             }
         }
 
-        // whitelist
+        // allowlist
         auto tc  = loplugin::TypeCheck(pMethodDecl->getParent());
         if (   tc.Class("OWeakAggObject").Namespace("cppu").GlobalNamespace() // conditional call
             || tc.Class("WeakComponentImplHelperBase").Namespace("cppu").GlobalNamespace() // extra magic

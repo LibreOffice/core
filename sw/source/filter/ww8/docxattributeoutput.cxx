@@ -5986,7 +5986,7 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
             nWwId == ww::stiEmphasis )
         return true;
 
-    static o3tl::sorted_vector<OUString, OUStringIgnoreCase> const aWhitelist
+    static o3tl::sorted_vector<OUString, OUStringIgnoreCase> const aAllowlist
     {
         "No Spacing",
         "List Paragraph",
@@ -6000,7 +6000,7 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
         "TOC Heading",
     };
     // Not custom style? Then we have a list of standard styles which should be qFormat.
-    return aWhitelist.find(rName) != aWhitelist.end();
+    return aAllowlist.find(rName) != aAllowlist.end();
 }
 
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
