@@ -20,6 +20,7 @@
 #include "WriterInspectorTextPanel.hxx"
 #include <svx/svxids.hrc>
 #include <doc.hxx>
+#include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -241,7 +242,7 @@ void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
         case SID_STYLE_FAMILY1:
         case SID_STYLE_FAMILY2:
         {
-            if (pDocSh)
+            if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
             {
                 /*
                 First check in the property set of Character Styles
