@@ -43,9 +43,6 @@
 #include "cairo_surfaceprovider.hxx"
 #include "cairo_spritecanvashelper.hxx"
 
-#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.Cairo"
-#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.Cairo"
-
 namespace cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
