@@ -108,6 +108,10 @@ published service DocumentSettings
         grid settings in the user interface.
      */
     [optional, property] boolean IsRasterAxisSynchronized;
+
+    /** enables the document sharing feature (Tools->Share Spreadsheet)
+     */
+    [optional, property] boolean IsDocumentShared;
 };
 
 
