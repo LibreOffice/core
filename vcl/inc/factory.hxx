@@ -34,23 +34,7 @@ namespace com::sun::star {
     namespace uno { class XInterface; }
 }
 
-css::uno::Sequence<OUString> vcl_session_getSupportedServiceNames();
-
-OUString vcl_session_getImplementationName();
-
-css::uno::Reference<css::uno::XInterface> vcl_session_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory > const &);
-
 namespace vcl {
-
-css::uno::Sequence<OUString>
-FontIdentificator_getSupportedServiceNames();
-
-OUString FontIdentificator_getImplementationName();
-
-css::uno::Reference<css::uno::XInterface>
-FontIdentificator_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
 OUString Clipboard_getImplementationName();
 
