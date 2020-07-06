@@ -1,6 +1,6 @@
 ---
 assumeFilename: writerperfect/source/common/WPXSvInputStream.cxx
-blacklist:
+excludelist:
     writerperfect/inc/DocumentHandler.hxx:
     # Wrapper header for external library
     - libodfgen/libodfgen.hxx

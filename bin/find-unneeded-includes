@@ -12,7 +12,7 @@
 # you can generate one with 'make vim-ide-integration'.
 #
 # Design goals:
-# - blacklist mechanism, so a warning is either fixed or blacklisted
+# - exludelist mechanism, so a warning is either fixed or excluded
 # - works in a plugins-enabled clang build
 # - no custom configure options required
 # - no need to generate a dummy library to build a header
@@ -133,10 +133,10 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
 
     # yaml rules
 
-    if "blacklist" in moduleRules.keys():
-        blacklistRules = moduleRules["blacklist"]
-        if fileName in blacklistRules.keys():
-            if include in blacklistRules[fileName]:
+    if "excludelist" in moduleRules.keys():
+        excludelistRules = moduleRules["excludelist"]
+        if fileName in excludelistRules.keys():
+            if include in excludelistRules[fileName]:
                 return True
 
     return False

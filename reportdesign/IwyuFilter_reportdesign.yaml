@@ -1,6 +1,6 @@
 ---
 assumeFilename: reportdesign/source/ui/report/ReportController.cxx
-blacklist:
+excludelist:
     reportdesign/inc/RptDef.hxx:
     # Needed for macro define
     - svx/fmglob.hxx

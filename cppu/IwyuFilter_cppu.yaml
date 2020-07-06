@@ -1,6 +1,6 @@
 ---
 assumeFilename: cppu/source/uno/data.cxx
-blacklist:
+excludelist:
     cppu/qa/test_any.cxx:
     # No hpp -> hdl replacement needed
     - Enum1.hpp

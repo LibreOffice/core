@@ -1,6 +1,6 @@
 ---
 assumeFilename: sfx2/source/appl/app.cxx
-blacklist:
+excludelist:
     sfx2/inc/sidebar/Accessible.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp

@@ -1,6 +1,6 @@
 ---
 assumeFilename: xmloff/source/core/xmlexp.cxx
-blacklist:
+excludelist:
     xmloff/inc/XMLImageMapExport.hxx:
     # Needed for css shortcut
     - sal/types.h

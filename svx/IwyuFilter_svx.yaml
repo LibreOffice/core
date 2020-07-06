@@ -1,6 +1,6 @@
 ---
 assumeFilename: svx/source/svdraw/svdobj.cxx
-blacklist:
+excludelist:
     svx/source/svdraw/svdpdf.hxx:
     # Needed on WIN32
     - prewin.h

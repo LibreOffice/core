@@ -1,6 +1,6 @@
 ---
 assumeFilename: unotools/source/i18n/resmgr.cxx
-blacklist:
+excludelist:
     unotools/inc/unotoolsservices.hxx:
     # Needed for extern declaration
     - namespace comphelper::service_decl { class ServiceDecl; } }
