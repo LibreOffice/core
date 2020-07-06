@@ -31,7 +31,7 @@
 #include <svtools/brwhead.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -200,6 +200,7 @@ namespace svt
     protected:
         void InitControlBase(weld::Widget* pWidget);
 
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     private:
         weld::Widget* m_pWidget;
     };
@@ -220,8 +221,6 @@ namespace svt
 
     private:
         weld::Entry* m_pEntry;
-
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     };
 
     class SVT_DLLPUBLIC EditControl final : public EditControlBase
@@ -358,6 +357,25 @@ namespace svt
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineTextCell final : public ControlBase
+    {
+    public:
+        MultiLineTextCell(BrowserDataWin* pParent);
+
+        virtual void dispose() override;
+
+        void connect_changed(const Link<weld::TextView&, void>& rLink)
+        {
+            m_xWidget->connect_changed(rLink);
+        }
+
+        weld::TextView& get_widget() { return *m_xWidget; }
+
+    private:
+        std::unique_ptr<weld::TextView> m_xWidget;
+    };
+
+#if 0
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineTextCell final : public VclMultiLineEdit
     {
     public:
@@ -375,10 +393,9 @@ namespace svt
 
         bool         dispatchKeyEvent( const KeyEvent& _rEvent );
     };
-
+#endif
 
     //= concrete edit implementations
-
     typedef GenericEditImplementation< Edit >             EditImplementation_Base;
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) EditImplementation final : public EditImplementation_Base
     {
@@ -390,19 +407,106 @@ namespace svt
         }
     };
 
-    typedef GenericEditImplementation< MultiLineTextCell >  MultiLineEditImplementation_Base;
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineEditImplementation final : public MultiLineEditImplementation_Base
+    class SVT_DLLPUBLIC MultiLineEditImplementation : public IEditImplementation
     {
-        DECL_LINK(ModifyHdl, Edit&, void);
+        MultiLineTextCell& m_rEdit;
+        int m_nMaxTextLen;
+        Link<LinkParamNone*,void> m_aModifyHdl;
+
+        DECL_LINK(ModifyHdl, weld::TextView&, void);
     public:
-        MultiLineEditImplementation( MultiLineTextCell& _rEdit ) : MultiLineEditImplementation_Base( _rEdit )
+        MultiLineEditImplementation(MultiLineTextCell& rEdit)
+            : m_rEdit(rEdit)
+            , m_nMaxTextLen(EDIT_NOLIMIT)
         {
-            _rEdit.SetModifyHdl(LINK(this, MultiLineEditImplementation, ModifyHdl));
+            m_rEdit.connect_changed(LINK(this, MultiLineEditImplementation, ModifyHdl));
         }
 
-        virtual OUString GetText( LineEnd aSeparator ) const override;
+        virtual Control& GetControl() override
+        {
+            return m_rEdit;
+        }
+
+        virtual OUString GetText(LineEnd aSeparator) const override;
+
+        virtual void SetText(const OUString& rStr) override
+        {
+            return m_rEdit.get_widget().set_text(rStr);
+        }
+
+        virtual bool IsReadOnly() const override
+        {
+            return !m_rEdit.get_widget().get_editable();
+        }
+
+        virtual void SetReadOnly( bool bReadOnly ) override
+        {
+            m_rEdit.get_widget().set_editable(!bReadOnly);
+        }
+
+        virtual sal_Int32 GetMaxTextLen() const override
+        {
+            return m_nMaxTextLen;
+        }
+
+        virtual void SetMaxTextLen( sal_Int32 nMaxLen ) override
+        {
+            m_nMaxTextLen = nMaxLen;
+            m_rEdit.get_widget().set_max_length(nMaxLen == EDIT_NOLIMIT ? 0 : nMaxLen);
+        }
+
+        virtual Selection GetSelection() const override
+        {
+            int nStartPos, nEndPos;
+            m_rEdit.get_widget().get_selection_bounds(nStartPos, nEndPos);
+            return Selection(nStartPos, nEndPos);
+        }
+
+        virtual void SetSelection( const Selection& rSelection ) override
+        {
+            auto nMin = rSelection.Min();
+            auto nMax = rSelection.Max();
+            m_rEdit.get_widget().select_region(nMin < 0 ? 0 : nMin, nMax == SELECTION_MAX ? -1 : nMax);
+        }
+
+        virtual void ReplaceSelected( const OUString& rStr ) override
+        {
+            m_rEdit.get_widget().replace_selection(rStr);
+        }
+
         virtual OUString GetSelected( LineEnd aSeparator ) const override;
+
+        virtual bool IsValueChangedFromSaved() const override
+        {
+            return m_rEdit.get_widget().get_value_changed_from_saved();
+        }
+
+        virtual void SaveValue() override
+        {
+            m_rEdit.get_widget().save_value();
+        }
+
+        virtual void SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) override
+        {
+            m_aModifyHdl = rLink;
+        }
+
+        virtual void Cut() override
+        {
+            m_rEdit.get_widget().cut_clipboard();
+        }
+
+        virtual void Copy() override
+        {
+            m_rEdit.get_widget().copy_clipboard();
+        }
+
+        virtual void Paste() override
+        {
+            m_rEdit.get_widget().paste_clipboard();
+        }
     };
+
 
     //= EditCellController
     class SVT_DLLPUBLIC EditCellController : public CellController

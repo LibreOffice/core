@@ -302,20 +302,21 @@ namespace svt
     }
 
     //= MultiLineEditImplementation
-
-
-    OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetText(LineEnd eSeparator) const
     {
-        return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetText( aSeparator );
+        weld::TextView& rEntry = m_rEdit.get_widget();
+        return convertLineEnd(rEntry.get_text(), eSeparator);
     }
 
-
-    OUString MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetSelected(LineEnd eSeparator) const
     {
-        return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
+        int nStartPos, nEndPos;
+        weld::TextView& rEntry = m_rEdit.get_widget();
+        rEntry.get_selection_bounds(nStartPos, nEndPos);
+        return convertLineEnd(rEntry.get_text().copy(nStartPos, nEndPos - nStartPos), eSeparator);
     }
 
-    IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, weld::TextView&, void)
     {
         m_aModifyHdl.Call(nullptr);
     }
@@ -388,10 +389,10 @@ namespace svt
         m_pEntry = pEntry;
         m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
-        m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
+        m_pEntry->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
     }
 
-    IMPL_LINK(EditControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    IMPL_LINK(ControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     {
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
     }
@@ -591,6 +592,22 @@ namespace svt
         static_cast<FormattedControl&>(GetWindow()).get_formatter().Commit();
     }
 
+    MultiLineTextCell::MultiLineTextCell(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/textviewcontrol.ui", "TextViewControl")
+        , m_xWidget(m_xBuilder->weld_text_view("textview"))
+    {
+        InitControlBase(m_xWidget.get());
+//TODO        m_xWidget->set_width_chars(1); // so a smaller than default width can be used
+        m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+    }
+
+    void MultiLineTextCell::dispose()
+    {
+        m_xWidget.reset();
+        ControlBase::dispose();
+    }
+
+#if 0
     //= MultiLineTextCell
     void MultiLineTextCell::Modify()
     {
@@ -661,7 +678,7 @@ namespace svt
         }
         return VclMultiLineEdit::PreNotify( rNEvt );
     }
-
+#endif
 
 }   // namespace svt
 

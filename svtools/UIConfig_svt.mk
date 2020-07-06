@@ -29,6 +29,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/querydeletedialog \
 	svtools/uiconfig/ui/restartdialog \
 	svtools/uiconfig/ui/spinfieldcontrol \
+	svtools/uiconfig/ui/textviewcontrol \
 	svtools/uiconfig/ui/thineditcontrol \
 ))
 
