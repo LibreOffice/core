@@ -12484,6 +12484,11 @@ public:
         gtk_text_view_set_editable(m_pTextView, bEditable);
     }
 
+    virtual bool get_editable() const override
+    {
+        return gtk_text_view_get_editable(m_pTextView);
+    }
+
     virtual void set_monospace(bool bMonospace) override
     {
         gtk_text_view_set_monospace(m_pTextView, bMonospace);
@@ -12503,6 +12508,30 @@ public:
         g_signal_handler_unblock(m_pTextBuffer, m_nChangedSignalId);
         g_signal_handler_unblock(m_pTextBuffer, m_nCursorPosSignalId);
         g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);
+    }
+
+    virtual void cut_clipboard() override
+    {
+        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
+                                                            GDK_SELECTION_CLIPBOARD);
+        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
+        gtk_text_buffer_cut_clipboard(pBuffer, pClipboard, get_editable());
+    }
+
+    virtual void copy_clipboard() override
+    {
+        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
+                                                            GDK_SELECTION_CLIPBOARD);
+        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
+        gtk_text_buffer_copy_clipboard(pBuffer, pClipboard);
+    }
+
+    virtual void paste_clipboard() override
+    {
+        GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
+                                                            GDK_SELECTION_CLIPBOARD);
+        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
+        gtk_text_buffer_paste_clipboard(pBuffer, pClipboard, nullptr, get_editable());
     }
 
     virtual int vadjustment_get_value() const override

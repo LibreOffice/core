@@ -5463,6 +5463,7 @@ public:
     }
 
     virtual void set_editable(bool bEditable) override { m_xTextView->SetReadOnly(!bEditable); }
+    virtual bool get_editable() const override { return !m_xTextView->IsReadOnly(); }
 
     virtual void set_monospace(bool bMonospace) override
     {
@@ -5483,6 +5484,21 @@ public:
         assert(!m_aCursorPositionHdl.IsSet());
         m_xTextView->AddEventListener(LINK(this, SalInstanceTextView, CursorListener));
         weld::TextView::connect_cursor_position(rLink);
+    }
+
+    virtual void cut_clipboard() override
+    {
+        m_xTextView->Cut();
+    }
+
+    virtual void copy_clipboard() override
+    {
+        m_xTextView->Copy();
+    }
+
+    virtual void paste_clipboard() override
+    {
+        m_xTextView->Paste();
     }
 
     virtual int vadjustment_get_value() const override

@@ -2014,6 +2014,7 @@ public:
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;
     virtual void set_editable(bool bEditable) = 0;
+    virtual bool get_editable() const = 0;
     virtual void set_monospace(bool bMonospace) = 0;
     int get_height_rows(int nRows) const
     {
@@ -2029,6 +2030,10 @@ public:
     {
         m_aCursorPositionHdl = rLink;
     }
+
+    virtual void cut_clipboard() = 0;
+    virtual void copy_clipboard() = 0;
+    virtual void paste_clipboard() = 0;
 
     virtual int vadjustment_get_value() const = 0;
     virtual int vadjustment_get_upper() const = 0;
