@@ -1,6 +1,6 @@
 ---
 assumeFilename: lotuswordpro/source/filter/lwplayout.cxx
-blacklist:
+excludelist:
     lotuswordpro/inc/lwpatomholder.hxx:
     # Needed for MPL subset
     - config_lgpl.h

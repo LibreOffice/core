@@ -1,6 +1,6 @@
 ---
 assumeFilename: scaddins/source/analysis/analysis.cxx
-blacklist:
+excludelist:
     scaddins/source/analysis/analysis.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XServiceInfo.hpp

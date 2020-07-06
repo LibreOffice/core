@@ -1,6 +1,6 @@
 ---
 assumeFilename: shell/source/unix/exec/shellexec.cxx
-blacklist:
+excludelist:
     shell/source/sessioninstall/SyncDbusSessionHelper.hxx:
     # No hpp->hdl replacement
     - org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp

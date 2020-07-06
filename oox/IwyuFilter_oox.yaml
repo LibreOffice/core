@@ -1,6 +1,6 @@
 ---
 assumeFilename: oox/source/export/drawingml.cxx
-blacklist:
+excludelist:
     oox/source/docprop/docprophandler.hxx:
     # Needed for macro defines
     - oox/token/namespaces.hxx

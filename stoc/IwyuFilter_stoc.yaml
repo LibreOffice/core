@@ -1,6 +1,6 @@
 ---
 assumeFilename: stoc/source/javavm/javavm.cxx
-blacklist:
+excludelist:
     stoc/source/implementationregistration/mergekeys.hxx:
     # Needed for css shortcut
     - sal/types.h

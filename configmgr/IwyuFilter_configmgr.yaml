@@ -1,6 +1,6 @@
 ---
 assumeFilename: configmgr/source/access.cxx
-blacklist:
+excludelist:
     configmgr/source/nodemap.hxx:
     # Needed for direct member access
     - node.hxx

@@ -1,6 +1,6 @@
 ---
 assumeFilename: cui/source/options/optgenrl.cxx
-blacklist:
+excludelist:
     cui/source/customize/macropg.cxx:
     # Needed for TypedWhichId macro
     - svl/macitem.hxx

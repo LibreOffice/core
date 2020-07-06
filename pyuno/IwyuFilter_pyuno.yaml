@@ -1,6 +1,6 @@
 ---
 assumeFilename: pyuno/source/module/pyuno.cxx
-blacklist:
+excludelist:
     pyuno/inc/pyuno.hxx:
     # Used in #ifdef
     - Python.h

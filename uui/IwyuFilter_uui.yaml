@@ -1,6 +1,6 @@
 ---
 assumeFilename: uui/source/iahndl.cxx
-blacklist:
+excludelist:
     uui/inc/ids.hxx:
     # Needed by macro defines
     - vcl/errcode.hxx

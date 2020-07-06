@@ -1,6 +1,6 @@
 ---
 assumeFilename: ucbhelper/source/provider/resultset.cxx
-blacklist:
+excludelist:
     ucbhelper/source/client/content.cxx:
     # Needed for direct member access
     - com/sun/star/ucb/XCommandInfo.hpp

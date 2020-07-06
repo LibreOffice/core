@@ -1,6 +1,6 @@
 ---
 assumeFilename: starmath/source/document.cxx
-blacklist:
+excludelist:
     starmath/inc/smmod.hxx:
     # Needed for define
     - sfx2/app.hxx

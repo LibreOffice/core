@@ -1,6 +1,6 @@
 ---
 assumeFilename: basctl/source/basicide/baside2b.cxx
-blacklist:
+excludelist:
     basctl/source/basicide/basidesh.cxx:
     # Needed for TypedWhichId defines is basslots.hxx
     - sfx2/dinfdlg.hxx

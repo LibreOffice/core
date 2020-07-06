@@ -1,6 +1,6 @@
 ---
 assumeFilename: comphelper/source/misc/solarmutex.cxx
-blacklist:
+excludelist:
     comphelper/source/misc/instancelocker.hxx:
     # Base class has to be a complete type
     - com/sun/star/lang/XComponent.hpp

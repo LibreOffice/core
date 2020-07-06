@@ -1,6 +1,6 @@
 ---
 assumeFilename: extensions/source/propctrlr/formcomponenthandler.cxx
-blacklist:
+excludelist:
     extensions/source/logging/loghandler.hxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

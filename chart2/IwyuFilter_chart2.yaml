@@ -1,6 +1,6 @@
 ---
 assumeFilename: chart2/source/controller/main/ChartWindow.cxx
-blacklist:
+excludelist:
     chart2/inc/ChartModel.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/X3DChartWindowProvider.hpp

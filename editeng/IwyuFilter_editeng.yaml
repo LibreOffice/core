@@ -1,6 +1,6 @@
 ---
 assumeFilename: editeng/source/editeng/impedit.cxx
-blacklist:
+excludelist:
     editeng/source/editeng/impedit.hxx:
     # Complete type needed for pointer arithmetic
     - editeng/SpellPortions.hxx

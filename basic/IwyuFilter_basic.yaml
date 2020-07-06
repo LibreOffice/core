@@ -1,6 +1,6 @@
 ---
 assumeFilename: basic/source/classes/global.cxx
-blacklist:
+excludelist:
     basic/source/runtime/methods.cxx:
     # Needed on WIN
     - o3tl/char16_t2wchar_t.hxx

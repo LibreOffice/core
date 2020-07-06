@@ -1,6 +1,6 @@
 ---
 assumeFilename: unoxml/source/dom/document.cxx
-blacklist:
+excludelist:
     unoxml/source/rdf/librdf_repository.cxx:
     # Wrapper header needed for platform independence
     - redland.h

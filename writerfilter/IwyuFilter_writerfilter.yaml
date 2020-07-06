@@ -1,6 +1,6 @@
 ---
 assumeFilename: writerfilter/source/filter/WriterFilter.cxx
-blacklist:
+excludelist:
     writerfilter/source/dmapper/BorderHandler.cxx:
     # Needed for method parameter type
     - tools/color.hxx

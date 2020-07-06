@@ -1,6 +1,6 @@
 ---
 assumeFilename: desktop/source/app/app.cxx
-blacklist:
+excludelist:
     include/sal/typesizes.h:
     # needed for build to work
     - config_typesizes.h

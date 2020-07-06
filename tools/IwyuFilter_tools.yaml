@@ -1,6 +1,6 @@
 ---
 assumeFilename: tools/source/generic/gen.cxx
-blacklist:
+excludelist:
     tools/qa/cppunit/test_pathutils.cxx:
     # Needed for WIN32 specific unit test
     - cppunit/TestAssert.h

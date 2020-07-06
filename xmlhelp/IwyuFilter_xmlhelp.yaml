@@ -1,6 +1,6 @@
 ---
 assumeFilename: xmlhelp/source/cxxhelp/provider/content.cxx
-blacklist:
+excludelist:
     xmlhelp/source/cxxhelp/provider/content.cxx:
     # Needed for CPPU_TYPE_REF macro
     - com/sun/star/ucb/XCommandInfo.hpp

@@ -1,6 +1,6 @@
 ---
 assumeFilename: filter/source/msfilter/msdffimp.cxx
-blacklist:
+excludelist:
     filter/source/graphicfilter/icgm/cgm.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h

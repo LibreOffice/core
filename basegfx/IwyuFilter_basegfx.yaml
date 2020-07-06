@@ -1,6 +1,6 @@
 ---
 assumeFilename: basegfx/source/point/b2dpoint.cxx
-blacklist:
+excludelist:
     basegfx/source/color/bcolortools.cxx:
     # Needed to inherit linker visibility from function declaration
     - basegfx/color/bcolortools.hxx

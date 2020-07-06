@@ -1,6 +1,6 @@
 ---
 assumeFilename: svl/source/items/intitem.cxx
-blacklist:
+excludelist:
     svl/source/config/itemholder2.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XEventListener.hpp

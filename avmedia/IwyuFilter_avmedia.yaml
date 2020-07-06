@@ -1,6 +1,6 @@
 ---
 assumeFilename: avmedia/source/gstreamer/gstplayer.cxx
-blacklist:
+excludelist:
     avmedia/source/viewer/mediawindow_impl.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

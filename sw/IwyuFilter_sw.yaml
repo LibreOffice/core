@@ -1,6 +1,6 @@
 ---
 assumeFilename: sw/source/core/doc/docnew.cxx
-blacklist:
+excludelist:
     sw/inc/extinput.hxx:
     - vector
     sw/inc/fmtmeta.hxx:

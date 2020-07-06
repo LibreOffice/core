@@ -1,6 +1,6 @@
 ---
 assumeFilename: accessibility/source/standard/accessiblemenucomponent.cxx
-blacklist:
+excludelist:
     accessibility/source/standard/vclxaccessiblecombobox.cxx:
     # Needed for implicit dtor
     - vcl/window.hxx

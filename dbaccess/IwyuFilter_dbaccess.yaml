@@ -1,6 +1,6 @@
 ---
 assumeFilename: dbaccess/source/ui/querydesign/QueryDesignView.cxx
-blacklist:
+excludelist:
     dbaccess/source/inc/dbu_reghelper.hxx:
     # Needed for registrationhelper.hxx
     - com/sun/star/lang/XSingleServiceFactory.hpp

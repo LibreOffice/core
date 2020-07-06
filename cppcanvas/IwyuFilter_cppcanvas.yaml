@@ -1,6 +1,6 @@
 ---
 assumeFilename: cppcanvas/source/wrapper/implcanvas.cxx
-blacklist:
+excludelist:
     cppcanvas/source/wrapper/implcanvas.cxx:
     # Actually used
     - com/sun/star/rendering/XCanvas.hpp

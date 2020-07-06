@@ -1,6 +1,6 @@
 ---
 assumeFilename: jvmfwk/source/fwkbase.cxx
-blacklist:
+excludelist:
     jvmfwk/inc/fwkutil.hxx:
     # Needed on MACOSX
     - config_folders.h

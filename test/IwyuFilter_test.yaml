@@ -1,6 +1,6 @@
 ---
 assumeFilename: test/source/unoapi_test.cxx
-blacklist:
+excludelist:
     test/source/vclbootstrapprotector.cxx:
     # Used in Coverity-specific #ifdef
     - sal/log.hxx

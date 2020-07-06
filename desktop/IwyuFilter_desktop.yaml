@@ -1,6 +1,6 @@
 ---
 assumeFilename: desktop/source/lib/init.cxx
-blacklist:
+excludelist:
     desktop/inc/lib/init.hxx:
     # Complete type is needed
     - boost/property_tree/ptree.hpp

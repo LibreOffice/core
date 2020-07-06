@@ -1,6 +1,6 @@
 ---
 assumeFilename: toolkit/source/controls/unocontrol.cxx
-blacklist:
+excludelist:
     toolkit/source/awt/vclxmenu.cxx:
     # Needed for direct member access
     - vcl/window.hxx

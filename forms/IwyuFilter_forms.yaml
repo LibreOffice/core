@@ -1,6 +1,6 @@
 ---
 assumeFilename: forms/source/component/DatabaseForm.cxx
-blacklist:
+excludelist:
     forms/source/inc/property.hxx:
     # Needed for macro defines
     - frm_strings.hxx

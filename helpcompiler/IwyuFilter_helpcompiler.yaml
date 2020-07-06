@@ -1,6 +1,6 @@
 ---
 assumeFilename: helpcompiler/source/HelpCompiler.cxx
-blacklist:
+excludelist:
     helpcompiler/inc/HelpCompiler.hxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx

@@ -1,6 +1,6 @@
 ---
 assumeFilename: sdext/source/presenter/PresenterSlideSorter.cxx
-blacklist:
+excludelist:
     sdext/source/pdfimport/odf/odfemitter.cxx:
     # Actually in use
     - com/sun/star/io/XOutputStream.hpp

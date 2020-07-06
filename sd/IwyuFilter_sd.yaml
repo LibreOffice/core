@@ -1,6 +1,6 @@
 ---
 assumeFilename: sd/source/core/drawdoc.cxx
-blacklist:
+excludelist:
     sd/inc/CustomAnimationCloner.hxx:
     # base class has to be a complete type
     - com/sun/star/animations/XAnimationNode.hpp
