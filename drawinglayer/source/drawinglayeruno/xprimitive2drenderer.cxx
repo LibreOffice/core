@@ -20,8 +20,8 @@
 #include <sal/config.h>
 
 #include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
@@ -34,8 +34,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include <converters.hxx>
-
-#include "xprimitive2drenderer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -70,32 +68,7 @@ namespace drawinglayer::unorenderer
         };
 
         }
-} // end of namespace drawinglayer::unorenderer
 
-
-// uno functions
-
-namespace drawinglayer::unorenderer
-{
-        uno::Sequence< OUString > XPrimitive2DRenderer_getSupportedServiceNames()
-        {
-            return { "com.sun.star.graphic.Primitive2DTools" };
-        }
-
-        OUString XPrimitive2DRenderer_getImplementationName()
-        {
-            return "drawinglayer::unorenderer::XPrimitive2DRenderer";
-        }
-
-        uno::Reference< uno::XInterface > XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)
-        {
-            return static_cast< ::cppu::OWeakObject* >(new XPrimitive2DRenderer);
-        }
-} // end of namespace drawinglayer::unorenderer
-
-
-namespace drawinglayer::unorenderer
-{
         XPrimitive2DRenderer::XPrimitive2DRenderer()
         {
         }
@@ -175,7 +148,7 @@ namespace drawinglayer::unorenderer
 
         OUString SAL_CALL XPrimitive2DRenderer::getImplementationName()
         {
-            return XPrimitive2DRenderer_getImplementationName();
+            return "drawinglayer::unorenderer::XPrimitive2DRenderer";
         }
 
         sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
@@ -185,9 +158,17 @@ namespace drawinglayer::unorenderer
 
         uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames()
         {
-            return XPrimitive2DRenderer_getSupportedServiceNames();
+            return { "com.sun.star.graphic.Primitive2DTools" };
         }
 
 } // end of namespace
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+drawinglayer_XPrimitive2DRenderer(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new drawinglayer::unorenderer::XPrimitive2DRenderer());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
