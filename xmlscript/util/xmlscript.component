@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xmlscript" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.xml.input.SaxDocumentHandler">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.xml.input.SaxDocumentHandler"
+    constructor="com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation">
     <service name="com.sun.star.xml.input.SaxDocumentHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.xmlscript.XMLBasicExporter"

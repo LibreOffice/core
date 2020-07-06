@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <unoservices.hxx>
 #include <xml_import.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -43,16 +42,6 @@ namespace xmlscript
 {
 
 const sal_Int32 UID_UNKNOWN = -1;
-
-Sequence< OUString > getSupportedServiceNames_DocumentHandlerImpl()
-{
-    return Sequence< OUString > { "com.sun.star.xml.input.SaxDocumentHandler" };
-}
-
-OUString getImplementationName_DocumentHandlerImpl()
-{
-    return "com.sun.star.comp.xml.input.SaxDocumentHandler";
-}
 
 typedef std::unordered_map< OUString, sal_Int32 > t_OUString2LongMap;
 
@@ -363,7 +352,7 @@ inline ExtendedAttributes::ExtendedAttributes(
 
 OUString DocumentHandlerImpl::getImplementationName()
 {
-    return getImplementationName_DocumentHandlerImpl();
+    return "com.sun.star.comp.xml.input.SaxDocumentHandler";
 }
 
 sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
@@ -373,7 +362,7 @@ sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
 
 Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_DocumentHandlerImpl();
+    return { "com.sun.star.xml.input.SaxDocumentHandler" };
 }
 
 // XInitialization
@@ -716,14 +705,14 @@ Reference< xml::sax::XDocumentHandler > createDocumentHandler(
     return Reference< xml::sax::XDocumentHandler >();
 }
 
-Reference< XInterface > create_DocumentHandlerImpl(
-    SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new DocumentHandlerImpl(
-            Reference< xml::input::XRoot >(), false /* mt use */ ) );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new xmlscript::DocumentHandlerImpl(
+            Reference< xml::input::XRoot >(), false /* mt use */ )));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,6 @@ $(eval $(call gb_Library_add_defs,xmlscript,\
 $(eval $(call gb_Library_set_precompiled_header,xmlscript,xmlscript/inc/pch/precompiled_xmlscript))
 
 $(eval $(call gb_Library_add_exception_objects,xmlscript,\
-    xmlscript/source/misc/unoservices \
     xmlscript/source/xml_helper/xml_byteseq \
     xmlscript/source/xml_helper/xml_element \
     xmlscript/source/xml_helper/xml_impctx \

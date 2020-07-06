@@ -49,7 +49,6 @@ core_factory_list = [
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
-    ("libxmlscriptlo.a", "xmlscript_component_getFactory"),
     ("libmcnttype.a", "mcnttype_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
@@ -383,6 +382,7 @@ core_constructor_list = [
     "com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation",
 # xmlscript/util/xmlscript.component
+    "com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation",
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
 # xmlsecurity/util/xmlsecurity.component
