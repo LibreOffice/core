@@ -518,9 +518,9 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     return *this;
 }
 
-static bool lcl_IsOnBlacklist(OUString const & rShapeType)
+static bool lcl_IsOnDenylist(OUString const & rShapeType)
 {
-    static const std::initializer_list<OUStringLiteral> vBlacklist = {
+    static const std::initializer_list<OUStringLiteral> vDenylist = {
         "block-arc",
         "rectangle",
         "ellipse",
@@ -582,7 +582,7 @@ static bool lcl_IsOnBlacklist(OUString const & rShapeType)
         "flowchart-display"
     };
 
-    return std::find(vBlacklist.begin(), vBlacklist.end(), rShapeType) != vBlacklist.end();
+    return std::find(vDenylist.begin(), vDenylist.end(), rShapeType) != vDenylist.end();
 }
 
 static bool lcl_IsOnWhitelist(OUString const & rShapeType)
@@ -812,20 +812,20 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // we export non-primitive shapes to custom geometry
     // we also export non-ooxml shapes which have handles/equations to custom geometry, because
     // we cannot convert ODF equations to DrawingML equations. TODO: see what binary DOC export filter does.
-    // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a blacklist
+    // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a denylist
     // we use a whitelist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
-    bool bOnBlacklist = false;
+    bool bOnDenylist = false;
     if( sShapeType == "ooxml-non-primitive" )
         bCustGeom = true;
     else if( sShapeType.startsWith("ooxml") )
         bCustGeom = false;
     else if( lcl_IsOnWhitelist(sShapeType) )
         bCustGeom = true;
-    else if( lcl_IsOnBlacklist(sShapeType) )
+    else if( lcl_IsOnDenylist(sShapeType) )
     {
         bCustGeom = false;
-        bOnBlacklist = true;
+        bOnDenylist = true;
     }
     else if( bHasHandles )
         bCustGeom = true;
@@ -853,7 +853,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         if (!bSuccess)
             WritePresetShape( sPresetShape );
     }
-    else if (bOnBlacklist && bHasHandles && nAdjustmentValuesIndex !=-1 && !sShapeType.startsWith("mso-spt"))
+    else if (bOnDenylist && bHasHandles && nAdjustmentValuesIndex !=-1 && !sShapeType.startsWith("mso-spt"))
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;

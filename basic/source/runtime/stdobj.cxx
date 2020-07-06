@@ -32,7 +32,7 @@
 // struct below.
 // note: the limitation of 63 args is only for RTL functions defined here and
 // does NOT impose a limit on User defined procedures ). This changes is to
-// allow us space for a flag to blacklist some functions in vba mode
+// allow us space for a flag to denylist some functions in vba mode
 
 #define ARGSMASK_   0x003F  // 63 Arguments
 #define COMPTMASK_  0x00C0  // COMPATIBILITY mask

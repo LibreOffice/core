@@ -54,7 +54,7 @@ namespace connectivity::evoab
         static ColumnProperty **pFields=nullptr;
         static guint        nFields = 0;
 
-        static const char *pBlackList[] =
+        static const char *pDenyList[] =
         {
             "id",
             "list-show-addresses",
@@ -114,9 +114,9 @@ namespace connectivity::evoab
                 {
                     bool bAdd = true;
                     const char *pName = g_param_spec_get_name( pProps[i] );
-                    for (unsigned int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
+                    for (unsigned int j = 0; j < G_N_ELEMENTS( pDenyList ); j++ )
                     {
-                        if( !strcmp( pBlackList[j], pName ) )
+                        if( !strcmp( pDenyList[j], pName ) )
                         {
                             bAdd = false;
                             break;

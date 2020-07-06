@@ -76,7 +76,7 @@ struct OPENCL_DLLPUBLIC OpenCLConfig
 
     typedef std::set<ImplMatcher> ImplMatcherSet;
 
-    ImplMatcherSet maBlackList;
+    ImplMatcherSet maDenyList;
     ImplMatcherSet maWhiteList;
 
     OpenCLConfig();

@@ -120,7 +120,7 @@ public:
                                              SfxFilterFlags nMust,
                                              SfxFilterFlags nDont,
                                              const OUString& rStandardDir,
-                                             const css::uno::Sequence< OUString >& rBlackList,
+                                             const css::uno::Sequence< OUString >& rDenyList,
                                              weld::Window* pPreferredParent);
 
                             FileDialogHelper(sal_Int16 nDialogType,
@@ -128,7 +128,7 @@ public:
                                              const OUString& aFilterUIName,
                                              const OUString& aExtName,
                                              const OUString& rStandardDir,
-                                             const css::uno::Sequence< OUString >& rBlackList,
+                                             const css::uno::Sequence< OUString >& rDenyList,
                                              weld::Window* pPreferredParent);
 
     virtual                 ~FileDialogHelper();
@@ -253,7 +253,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
-                             const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
+                             const css::uno::Sequence< OUString >& rDenyList = css::uno::Sequence< OUString >());
 
 
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent);

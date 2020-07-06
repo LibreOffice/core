@@ -61,8 +61,8 @@ public:
     virtual SvtFileView* GetView() override;
 
     virtual void SetHasFilename( bool ) override;
-    virtual void SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) override;
-    virtual const css::uno::Sequence< OUString >& GetBlackList() const override;
+    virtual void SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
+    virtual const css::uno::Sequence< OUString >& GetDenyList() const override;
     virtual void SetStandardDir( const OUString& rStdDir ) override;
     virtual const OUString& GetStandardDir() const override;
     virtual void SetPath( const OUString& rNewURL ) override;
@@ -121,7 +121,7 @@ private:
 
     ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
 
-    css::uno::Sequence< OUString > m_aBlackList;
+    css::uno::Sequence< OUString > m_aDenyList;
 
     std::unique_ptr<weld::Button> m_xOk_btn;
     std::unique_ptr<weld::Button> m_xCancel_btn;

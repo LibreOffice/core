@@ -36,7 +36,7 @@ public:
 
 protected:
     /**
-     * Blacklist handling
+     * Denylist handling
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.

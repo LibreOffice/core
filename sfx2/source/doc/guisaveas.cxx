@@ -314,7 +314,7 @@ public:
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
                                 const OUString& rStandardDir,
-                                const css::uno::Sequence< OUString >& rBlackList
+                                const css::uno::Sequence< OUString >& rDenyList
                                 );
 
     bool ShowDocumentInfoDialog(const std::function< void () >&);
@@ -800,7 +800,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
                                             const OUString& rStandardDir,
-                                            const css::uno::Sequence< OUString >& rBlackList)
+                                            const css::uno::Sequence< OUString >& rDenyList)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nStoreMode = SAVEAS_REQUESTED;
@@ -865,20 +865,20 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             // this is a PDF export
             // the filter options has been shown already
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rBlackList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rDenyList, pFrameWin ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else if ((nStoreMode & EPUBEXPORT_REQUESTED) && !aPreselectedFilterPropsHM.empty())
         {
             // This is an EPUB export, the filter options has been shown already.
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, "epub", rStandardDir, rBlackList, pFrameWin));
+            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, "epub", rStandardDir, rDenyList, pFrameWin));
             pFileDlg->SetCurrentFilter(aFilterUIName);
         }
         else
         {
             // This is the normal dialog
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
         }
 
         sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UNKNOWN_CONTEXT;
@@ -907,7 +907,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     {
         // This is the normal dialog
         pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
-            nMust, nDont, rStandardDir, rBlackList, pFrameWin ));
+            nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
         pFileDlg->CreateMatcher( aDocServiceName );
     }
 
@@ -1518,17 +1518,17 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
-        css::uno::Sequence< OUString >  aBlackList;
+        css::uno::Sequence< OUString >  aDenyList;
 
-        ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
-            aModelData.GetMediaDescr().find( OUString("BlackList") );
-        if ( aBlackListIter != aModelData.GetMediaDescr().end() )
-            aBlackListIter->second >>= aBlackList;
+        ::comphelper::SequenceAsHashMap::const_iterator aDenyListIter =
+            aModelData.GetMediaDescr().find( OUString("DenyList") );
+        if ( aDenyListIter != aModelData.GetMediaDescr().end() )
+            aDenyListIter->second >>= aDenyList;
 
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList );
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning

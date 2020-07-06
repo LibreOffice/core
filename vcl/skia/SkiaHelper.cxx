@@ -45,12 +45,12 @@ bool isVCLSkiaEnabled() { return false; }
 
 namespace SkiaHelper
 {
-static OUString getBlacklistFile()
+static OUString getDenylistFile()
 {
     OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
     rtl::Bootstrap::expandMacros(url);
 
-    return url + "/skia/skia_blacklist_vulkan.xml";
+    return url + "/skia/skia_denylist_vulkan.xml";
 }
 
 static uint32_t driverVersion = 0;
@@ -90,7 +90,7 @@ static void writeToLog(SvStream& stream, const char* key, const OUString& value)
 }
 
 // Note that this function also logs system information about Vulkan.
-static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
+static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
 {
     static const char* const types[]
         = { "other", "integrated", "discrete", "virtual", "cpu", "??" }; // VkPhysicalDeviceType
@@ -125,10 +125,10 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
                                     << ", vendor: " << vendorIdStr << " ("
                                     << vendorAsString(vendorId) << "), device: " << deviceIdStr
                                     << ", type: " << deviceType << ", name: " << props.deviceName);
-    bool blacklisted = DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersionString,
-                                                        vendorIdStr, deviceIdStr);
-    writeToLog(logFile, "Blacklisted", blacklisted ? "yes" : "no");
-    return blacklisted;
+    bool denylisted = DriverBlocklist::IsDeviceBlocked(getDenylistFile(), driverVersionString,
+                                                       vendorIdStr, deviceIdStr);
+    writeToLog(logFile, "Denylisted", denylisted ? "yes" : "no");
+    return denylisted;
 }
 
 static void writeSkiaRasterInfo()
@@ -141,7 +141,7 @@ static void writeSkiaRasterInfo()
 
 static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext();
 
-static void checkDeviceBlacklisted(bool blockDisable = false)
+static void checkDeviceDenylisted(bool blockDisable = false)
 {
     static bool done = false;
     if (!done)
@@ -167,16 +167,16 @@ static void checkDeviceBlacklisted(bool blockDisable = false)
                     // the temporary context will clean up again.
                     grContext = getTemporaryGrContext();
                 }
-                bool blacklisted = true; // assume the worst
+                bool denylisted = true; // assume the worst
                 if (grContext.getGrContext()) // Vulkan was initialized properly
                 {
-                    blacklisted = isVulkanBlacklisted(
+                    denylisted = isVulkanDenylisted(
                         sk_app::VulkanWindowContext::getPhysDeviceProperties());
-                    SAL_INFO("vcl.skia", "Vulkan blacklisted: " << blacklisted);
+                    SAL_INFO("vcl.skia", "Vulkan denylisted: " << denylisted);
                 }
                 else
                     SAL_INFO("vcl.skia", "Vulkan could not be initialized");
-                if (blacklisted && !blockDisable)
+                if (denylisted && !blockDisable)
                 {
                     disableRenderMethod(RenderVulkan);
                     writeSkiaRasterInfo();
@@ -186,7 +186,7 @@ static void checkDeviceBlacklisted(bool blockDisable = false)
             case RenderRaster:
                 SAL_INFO("vcl.skia", "Using Skia raster mode");
                 writeSkiaRasterInfo();
-                return; // software, never blacklisted
+                return; // software, never denylisted
         }
         done = true;
     }
@@ -226,7 +226,7 @@ bool isVCLSkiaEnabled()
 
     /*
      * There are a number of cases that these environment variables cover:
-     *  * SAL_FORCESKIA forces Skia if disabled by UI options or blacklisted
+     *  * SAL_FORCESKIA forces Skia if disabled by UI options or denylisted
      *  * SAL_DISABLESKIA avoids the use of Skia regardless of any option
      */
 
@@ -239,8 +239,8 @@ bool isVCLSkiaEnabled()
     {
         bRet = true;
         SkGraphics::Init();
-        // don't actually block if blacklisted, but log it if enabled, and also get the vendor id
-        checkDeviceBlacklisted(true);
+        // don't actually block if denylisted, but log it if enabled, and also get the vendor id
+        checkDeviceDenylisted(true);
     }
     else if (getenv("SAL_FORCEGL"))
     {
@@ -264,7 +264,7 @@ bool isVCLSkiaEnabled()
         if (bEnable)
         {
             SkGraphics::Init();
-            checkDeviceBlacklisted(); // switch to raster if driver is blacklisted
+            checkDeviceDenylisted(); // switch to raster if driver is denylisted
         }
 
         bRet = bEnable;

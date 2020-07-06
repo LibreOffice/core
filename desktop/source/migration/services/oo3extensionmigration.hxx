@@ -54,7 +54,7 @@ namespace migration
         ::osl::Mutex            m_aMutex;
         OUString                m_sSourceDir;
         OUString                m_sTargetDir;
-        TStringVector           m_aBlackList;
+        TStringVector           m_aDenyList;
 
         enum ScanResult
         {

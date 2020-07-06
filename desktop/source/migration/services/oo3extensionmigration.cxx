@@ -192,7 +192,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
         if ( !aExtIdentifier.isEmpty() )
         {
             // scan extension identifier and try to match with our black list entries
-            for (const OUString & i : m_aBlackList)
+            for (const OUString & i : m_aDenyList)
             {
                 utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
@@ -217,7 +217,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
         // Try to use the folder name to match our black list
         // as some extensions don't provide an identifier in the
         // description.xml!
-        for (const OUString & i : m_aBlackList)
+        for (const OUString & i : m_aDenyList)
         {
             utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
             utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
@@ -297,13 +297,13 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments )
                 OSL_FAIL( "ExtensionMigration::initialize: argument UserData has wrong type!" );
             }
         }
-        else if ( aValue.Name == "ExtensionBlackList" )
+        else if ( aValue.Name == "ExtensionDenyList" )
         {
-            Sequence< OUString > aBlackList;
-            if ( (aValue.Value >>= aBlackList ) && aBlackList.hasElements())
+            Sequence< OUString > aDenyList;
+            if ( (aValue.Value >>= aDenyList ) && aDenyList.hasElements())
             {
-                m_aBlackList.resize( aBlackList.getLength() );
-                ::comphelper::sequenceToArray< OUString >( m_aBlackList.data(), aBlackList );
+                m_aDenyList.resize( aDenyList.getLength() );
+                ::comphelper::sequenceToArray< OUString >( m_aDenyList.data(), aDenyList );
             }
         }
     }

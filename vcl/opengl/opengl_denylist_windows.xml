@@ -20,7 +20,7 @@
 <root>
     <whitelist>
     </whitelist>
-    <blacklist>
+    <denylist>
         <entry os="all" vendor="intel" compare="less" version="10.18.14.4264">
             <device id="all"/>
         </entry>
@@ -63,5 +63,5 @@
         <entry os="all" vendor="microsoft" compare="less" version="6.2.0.0"> <!-- 6.2.0.0 -->
             <device id="all"/>
         </entry>
-    </blacklist>
+    </denylist>
 </root>
