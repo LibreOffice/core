@@ -31,19 +31,19 @@ OpenCLConfig::OpenCLConfig() :
     maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
 
     // This is what I have tested on Linux and it works for our unit tests.
-    maWhiteList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
+    maAllowList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
 
     // For now, assume that AMD, Intel and NVIDIA drivers are good
-    maWhiteList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
-    maWhiteList.insert(ImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
-    maWhiteList.insert(ImplMatcher("", "", "NVIDIA Corporation", "", ""));
+    maAllowList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
+    maAllowList.insert(ImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
+    maAllowList.insert(ImplMatcher("", "", "NVIDIA Corporation", "", ""));
 }
 
 bool OpenCLConfig::operator== (const OpenCLConfig& r) const
 {
     return (mbUseOpenCL == r.mbUseOpenCL &&
             maDenyList == r.maDenyList &&
-            maWhiteList == r.maWhiteList);
+            maAllowList == r.maAllowList);
 }
 
 bool OpenCLConfig::operator!= (const OpenCLConfig& r) const
@@ -181,7 +181,7 @@ OpenCLConfig OpenCLConfig::get()
     result.mbUseOpenCL = officecfg::Office::Common::Misc::UseOpenCL::get();
 
     result.maDenyList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLDenyList::get());
-    result.maWhiteList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLWhiteList::get());
+    result.maAllowList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLAllowList::get());
 
     return result;
 }
@@ -192,7 +192,7 @@ void OpenCLConfig::set()
 
     officecfg::Office::Common::Misc::UseOpenCL::set(mbUseOpenCL, batch);
     officecfg::Office::Common::Misc::OpenCLDenyList::set(SetOfImplMatcherToStringSequence(maDenyList), batch);
-    officecfg::Office::Common::Misc::OpenCLWhiteList::set(SetOfImplMatcherToStringSequence(maWhiteList), batch);
+    officecfg::Office::Common::Misc::OpenCLAllowList::set(SetOfImplMatcherToStringSequence(maAllowList), batch);
 
     batch->commit();
 }
@@ -206,8 +206,8 @@ bool OpenCLConfig::checkImplementation(const OpenCLPlatformInfo& rPlatform, cons
         return true;
     }
 
-    // Check for whitelist of known good OpenCL implementations
-    if (match(maWhiteList, rPlatform, rDevice, "whitelist"))
+    // Check for allowlist of known good OpenCL implementations
+    if (match(maAllowList, rPlatform, rDevice, "allowlist"))
     {
         SAL_INFO("opencl", "Approving");
         return false;
@@ -223,7 +223,7 @@ std::ostream& operator<<(std::ostream& rStream, const OpenCLConfig& rConfig)
     rStream << "{"
         "UseOpenCL=" << (rConfig.mbUseOpenCL ? "YES" : "NO") << ","
         "DenyList=" << rConfig.maDenyList << ","
-        "WhiteList=" << rConfig.maWhiteList <<
+        "AllowList=" << rConfig.maAllowList <<
         "}";
     return rStream;
 }

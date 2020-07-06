@@ -5625,11 +5625,11 @@
       <prop oor:name="OpenCLDenyList" oor:type="oor:string-list" oor:nillable="false">
         <!-- UIHints: Tools - Options General OpenCL -->
         <info>
-          <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be bad. Each entry is a string consisting of five parts separated by slashes. An empty part matches anything. In case a slash, percent or semicolon occurs inside a part, it is replaced by a percent followed by the corresponding number as two hex digits. The parts except OS can contain regular expressions. Inside these regular expressions the usual characters .*()[]\ are special and should be quoted with a backslash to be interpreted literally. OS should be just one of "Linux", "OS X" (including the space) or "Windows" (without quotes). Has higher priority than OpenCLWhiteList.</desc>
+          <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be bad. Each entry is a string consisting of five parts separated by slashes. An empty part matches anything. In case a slash, percent or semicolon occurs inside a part, it is replaced by a percent followed by the corresponding number as two hex digits. The parts except OS can contain regular expressions. Inside these regular expressions the usual characters .*()[]\ are special and should be quoted with a backslash to be interpreted literally. OS should be just one of "Linux", "OS X" (including the space) or "Windows" (without quotes). Has higher priority than OpenCLAllowList.</desc>
         </info>
         <value oor:separator=";">Windows//Intel\(R\) Corporation//9\.17\.10\.2884;Windows//Intel\(R\) Corporation//4\.2\.0\.99;Windows//Intel\(R\) Corporation//5\.2\.0\.10049;Windows//Intel\(R\) Corporation//3\.0\.1\.10891</value>
       </prop>
-      <prop oor:name="OpenCLWhiteList" oor:type="oor:string-list" oor:nillable="false">
+      <prop oor:name="OpenCLAllowList" oor:type="oor:string-list" oor:nillable="false">
         <!-- UIHints: Tools - Options General OpenCL  -->
         <info>
           <desc>Like OpenCLDenyList, but for combinations known to be good.</desc>

@@ -8,7 +8,7 @@
 -->
 
 <root>
-    <whitelist>
+    <allowlist>
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
             <device id="all"/>
         </entry>
@@ -33,7 +33,7 @@
         <entry os="all">
             <device id="all"/>
         </entry>
-    </whitelist>
+    </allowlist>
     <denylist>
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
             <device id="all"/>
