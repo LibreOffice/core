@@ -39,6 +39,7 @@
 using namespace com::sun::star;
 using namespace chelp;
 
+
 // ContentProvider Implementation.
 
 ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >& rxContext )
@@ -103,11 +104,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
 
 OUString SAL_CALL ContentProvider::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString ContentProvider::getImplementationName_Static()
-{
     return "CHelpContentProvider";
 }
 
@@ -120,35 +116,7 @@ ContentProvider::supportsService(const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 ContentProvider::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface >
-ContentProvider_CreateInstance(
-         const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
-{
-    lang::XServiceInfo * pX = new ContentProvider( comphelper::getComponentContext(rSMgr) );
-    return uno::Reference< uno::XInterface >::query( pX );
-}
-
-uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames_Static()
-{
-    return { MYUCP_CONTENT_PROVIDER_SERVICE_NAME1, MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 };
-}
-
-// Service factory implementation.
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-ContentProvider::createServiceFactory( const css::uno::Reference<
-            css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                ContentProvider::getImplementationName_Static(),
-                ContentProvider_CreateInstance,
-                ContentProvider::getSupportedServiceNames_Static() );
+    return { "com.sun.star.help.XMLHelp", "com.sun.star.ucb.HelpContentProvider" };
 }
 
 // XContentProvider methods.
@@ -266,6 +234,13 @@ void ContentProvider::subst( OUString& instpath )
 {
     SvtPathOptions aOptions;
     instpath = aOptions.SubstituteVariable( instpath );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+CHelpContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

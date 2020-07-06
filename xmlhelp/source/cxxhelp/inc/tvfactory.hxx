@@ -65,21 +65,6 @@ class TVFactory final : public cppu::WeakImplHelper <
         virtual css::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( ) override;
 
-        // Other
-
-        static OUString getImplementationName_static();
-
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory >
-        createServiceFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
-
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        CreateInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& xMultiServiceFactory );
-
-
     private:
 
         // Members

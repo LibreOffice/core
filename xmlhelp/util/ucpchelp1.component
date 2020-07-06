@@ -18,12 +18,14 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpchelp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="CHelpContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="CHelpContentProvider"
+    constructor="CHelpContentProvider_get_implementation">
     <service name="com.sun.star.help.XMLHelp"/>
     <service name="com.sun.star.ucb.HelpContentProvider"/>
   </implementation>
-  <implementation name="com.sun.star.help.TreeViewImpl">
+  <implementation name="com.sun.star.help.TreeViewImpl"
+    constructor="com_sun_star_help_TreeViewImpl_get_implementation">
     <service name="com.sun.star.help.TreeView"/>
     <service name="com.sun.star.ucb.HiearchyDataSource"/>
   </implementation>

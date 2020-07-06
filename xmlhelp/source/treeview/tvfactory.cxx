@@ -48,7 +48,7 @@ TVFactory::~TVFactory()
 OUString SAL_CALL
 TVFactory::getImplementationName()
 {
-    return TVFactory::getImplementationName_static();
+    return "com.sun.star.help.TreeViewImpl";
 }
 
 sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
@@ -59,7 +59,7 @@ sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames()
 {
-    return TVFactory::getSupportedServiceNames_static();
+    return { "com.sun.star.help.TreeView", "com.sun.star.ucb.HiearchyDataSource" };
 }
 
 // XMultiServiceFactory
@@ -121,37 +121,12 @@ TVFactory::getAvailableServiceNames( )
     return { "com.sun.star.ucb.HierarchyDataReadAccess" };
 }
 
-// static
-
-OUString
-TVFactory::getImplementationName_static()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_help_TreeViewImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.help.TreeViewImpl";
+    return cppu::acquire(new TVFactory(context));
 }
 
-Sequence< OUString >
-TVFactory::getSupportedServiceNames_static()
-{
-    return { "com.sun.star.help.TreeView", "com.sun.star.ucb.HiearchyDataSource" };
-}
-
-Reference< XSingleServiceFactory >
-TVFactory::createServiceFactory(
-    const Reference< XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createSingleFactory(
-            rxServiceMgr,
-            TVFactory::getImplementationName_static(),
-            TVFactory::CreateInstance,
-            TVFactory::getSupportedServiceNames_static() );
-}
-
-Reference< XInterface > SAL_CALL
-TVFactory::CreateInstance(
-    const Reference< XMultiServiceFactory >& xMultiServiceFactory )
-{
-    return static_cast<XServiceInfo*>(
-        new TVFactory(comphelper::getComponentContext(xMultiServiceFactory)));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
