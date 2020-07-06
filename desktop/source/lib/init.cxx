@@ -58,6 +58,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -2126,6 +2127,15 @@ void setLanguageAndLocale(OUString const & aLangISO)
     aLocalOptions.Commit();
 }
 
+void setFormatSpecificFilterData(OUString const & sFormat, comphelper::SequenceAsHashMap & rFilterDataMap)
+{
+    if (sFormat == "pdf")
+    {
+        // always export bookmarks, which is needed for annotations
+        rFilterDataMap["ExportBookmarks"] <<= true;
+    }
+}
+
 } // anonymous namespace
 
 // Wonder global state ...
@@ -2556,25 +2566,19 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         aFilterOptions = comphelper::string::convertCommaSeparated(aFilteredOptionSeq);
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
-        if(!watermarkText.isEmpty() || bFullSheetPreview)
+        comphelper::SequenceAsHashMap aFilterDataMap;
+
+        setFormatSpecificFilterData(sFormat, aFilterDataMap);
+
+        if (!watermarkText.isEmpty())
+            aFilterDataMap["TiledWatermark"] <<= watermarkText;
+
+        if (bFullSheetPreview)
+            aFilterDataMap["SinglePageSheets"] <<= true;
+
+        if (!aFilterDataMap.empty())
         {
-            uno::Sequence< beans::PropertyValue > aFilterData( static_cast<int>(bFullSheetPreview) + static_cast<int>(!watermarkText.isEmpty()) );
-
-            if (!watermarkText.isEmpty())
-            {
-                aFilterData[ 0 ].Name = "TiledWatermark";
-                aFilterData[ 0 ].Value <<= watermarkText;
-            }
-
-            if (bFullSheetPreview)
-            {
-                int nOptIndex = static_cast<int>(!watermarkText.isEmpty());
-
-                aFilterData[ nOptIndex ].Name = "SinglePageSheets";
-                aFilterData[ nOptIndex ].Value <<= true;
-            }
-
-            aSaveMediaDescriptor["FilterData"] <<= aFilterData;
+            aSaveMediaDescriptor["FilterData"] <<= aFilterDataMap.getAsConstPropertyValueList();
         }
 
         // add interaction handler too
