@@ -2016,6 +2016,8 @@ public:
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
     virtual void set_monospace(bool bMonospace) = 0;
+    // The maximum length of the entry. Use 0 for no maximum
+    virtual void set_max_length(int nChars) = 0;
     int get_height_rows(int nRows) const
     {
         //can improve this if needed

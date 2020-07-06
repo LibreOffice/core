@@ -5464,6 +5464,7 @@ public:
 
     virtual void set_editable(bool bEditable) override { m_xTextView->SetReadOnly(!bEditable); }
     virtual bool get_editable() const override { return !m_xTextView->IsReadOnly(); }
+    virtual void set_max_length(int nChars) override { m_xTextView->SetMaxTextLen(nChars); }
 
     virtual void set_monospace(bool bMonospace) override
     {
