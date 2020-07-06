@@ -846,8 +846,6 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     // system this is often the case when a Lookup Choice Window has
     // the focus - because this windows send the KeyInput directly to
     // the window without resetting the focus
-    SAL_WARN_IF(pChild != pSVData->mpWinData->mpFocusWin, "vcl",
-                "ImplHandleKey: Keyboard-Input is sent to a frame without focus");
 
     // no keyinput to disabled windows
     if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() )
