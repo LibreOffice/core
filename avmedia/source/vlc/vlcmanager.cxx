@@ -19,6 +19,7 @@
 #include <wrapper/Media.hxx>
 #include <wrapper/Player.hxx>
 #include <wrapper/Common.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -26,9 +27,6 @@ namespace avmedia::vlc {
 
 namespace
 {
-    const OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager_VLC";
-    const OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
-
     const char * const VLC_ARGS[] = {
         "--demux",
         "ffmpeg",
@@ -106,7 +104,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 
 OUString SAL_CALL Manager::getImplementationName()
 {
-    return VLC_IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.avmedia.Manager_VLC";
 }
 
 sal_Bool SAL_CALL Manager::supportsService( const OUString& serviceName )
@@ -116,9 +114,23 @@ sal_Bool SAL_CALL Manager::supportsService( const OUString& serviceName )
 
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames()
 {
-    return { VLC_SERVICENAME };
+    return {  "com.sun.star.media.Manager_VLC" };
 }
 
 } // end namespace
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_media_Manager_VLC_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    // Experimental for now - code is neither elegant nor well tested.
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get(context))
+        return nullptr;
+    static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager );
+    manager->acquire();
+    return manager.get();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

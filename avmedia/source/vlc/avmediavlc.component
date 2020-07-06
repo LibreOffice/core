@@ -8,8 +8,9 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="avmediavlc" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.media.Manager_VLC">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.media.Manager_VLC"
+    constructor="com_sun_star_comp_media_Manager_VLC_get_implementation">
     <service name="com.sun.star.comp.avmedia.Manager_VLC"/>
   </implementation>
 </component>
