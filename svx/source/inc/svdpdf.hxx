@@ -113,8 +113,10 @@ class ImpSdrPdfImport final
     void ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
-    void ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
-    void ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
+    void ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                     int nPageObjectIndex);
+    void ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                    int nPageObjectIndex);
     void ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                     std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                     int nPageObjectIndex);
