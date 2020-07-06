@@ -206,7 +206,7 @@ const LanguageTag& getLanguageTag()
     return rLanguage;
 }
 
-bool isWhitelistedLanguage(const OUString& lang)
+bool isAllowlistedLanguage(const OUString& lang)
 {
     if (!isActive())
         return true;
@@ -216,37 +216,37 @@ bool isWhitelistedLanguage(const OUString& lang)
     return true;
 #else
     static bool bInitialized = false;
-    static std::vector<OUString> aWhitelist;
+    static std::vector<OUString> aAllowlist;
     if (!bInitialized)
     {
         // coverity[tainted_data] - we trust the contents of this variable
-        const char* pWhitelist = getenv("LOK_WHITELIST_LANGUAGES");
-        if (pWhitelist)
+        const char* pAllowlist = getenv("LOK_ALLOWLIST_LANGUAGES");
+        if (pAllowlist)
         {
-            std::stringstream stream(pWhitelist);
+            std::stringstream stream(pAllowlist);
             std::string s;
 
-            std::cerr << "Whitelisted languages: ";
+            std::cerr << "Allowlisted languages: ";
             while (getline(stream, s, ' ')) {
                 if (s.length() == 0)
                     continue;
 
                 std::cerr << s << " ";
-                aWhitelist.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
+                aAllowlist.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
             }
             std::cerr << std::endl;
         }
 
-        if (aWhitelist.empty())
-            std::cerr << "No language whitelisted, turning off the language support." << std::endl;
+        if (aAllowlist.empty())
+            std::cerr << "No language allowlisted, turning off the language support." << std::endl;
 
         bInitialized = true;
     }
 
-    if (aWhitelist.empty())
+    if (aAllowlist.empty())
         return false;
 
-    for (const auto& entry : aWhitelist)
+    for (const auto& entry : aAllowlist)
     {
         if (lang.startsWith(entry))
             return true;

@@ -55,16 +55,16 @@ protected:
      */
     bool mustValidate(const char* filename) const override
     {
-        const char* aWhitelist[] = {
+        const char* aAllowlist[] = {
             "page-graphic-background.odt",
             "zoom.docx",
             "empty.odt",
             "fdo38244.docx",
             "comments-nested.odt"
         };
-        std::vector<const char*> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
+        std::vector<const char*> vAllowlist(aAllowlist, aAllowlist + SAL_N_ELEMENTS(aAllowlist));
 
-        return std::find(vWhitelist.begin(), vWhitelist.end(), filename) != vWhitelist.end();
+        return std::find(vAllowlist.begin(), vAllowlist.end(), filename) != vAllowlist.end();
     }
 };
 

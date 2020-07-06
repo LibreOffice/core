@@ -265,7 +265,7 @@ llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
             else
                 m_CannotFix.back() = true;
         }
-        // Whitelist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
+        // Allowlist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
         // css::uno::XInterface::acquire
         // css::uno::XInterface::release
         if (calleeFunctionDecl->getIdentifier())
@@ -305,7 +305,7 @@ llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
         return llvm::Optional<bool>();
     }
 
-    // whitelist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
+    // allowlist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
     if (auto typedefType = calleeType->getAs<TypedefType>())
         if (typedefType->getDecl()->getName() == "uno_ReleaseMappingFunc")
             return false;
