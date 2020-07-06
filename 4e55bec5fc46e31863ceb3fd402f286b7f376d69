@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "942fa9d3_ccf7fc93",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-07-06T14:18:01Z",
+      "side": 1,
+      "message": "I\u0027d just not add the key to the map if there is no note.",
+      "revId": "4e55bec5fc46e31863ceb3fd402f286b7f376d69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
