@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="evtatt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.EventAttacher">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.EventAttacher"
+    constructor="eventattacher_EventAttacher">
     <service name="com.sun.star.script.EventAttacher"/>
   </implementation>
 </component>

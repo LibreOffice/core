@@ -150,6 +150,8 @@ core_constructor_list = [
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # emfio/emfio.component
     "emfio_emfreader_XEmfParser_get_implementation",
+# eventattacher/source/evtatt.component
+    "eventattacher_EventAttacher",
 # extensions/source/logging/log.component
     ("com_sun_star_comp_extensions_FileHandler", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
