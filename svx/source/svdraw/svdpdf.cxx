@@ -697,10 +697,10 @@ void ImpSdrPdfImport::ImportPdfObject(
             ImportText(pPageObject, pTextPage, nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_PATH:
-            ImportPath(pPageObject->getPointer(), nPageObjectIndex);
+            ImportPath(pPageObject, nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_IMAGE:
-            ImportImage(pPageObject->getPointer(), nPageObjectIndex);
+            ImportImage(pPageObject, nPageObjectIndex);
             break;
         case FPDF_PAGEOBJ_SHADING:
             SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
@@ -893,10 +893,11 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
-void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
+void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                  int /*nPageObjectIndex*/)
 {
     std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
-        FPDFImageObj_GetBitmap(pPageObject));
+        FPDFImageObj_GetBitmap(pPageObject->getPointer()));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
@@ -939,7 +940,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
     float bottom;
     float right;
     float top;
-    if (!FPDFPageObj_GetBounds(pPageObject, &left, &bottom, &right, &top))
+    if (!FPDFPageObj_GetBounds(pPageObject->getPointer(), &left, &bottom, &right, &top))
     {
         SAL_WARN("sd.filter", "FAILED to get image bounds");
     }
@@ -956,34 +957,26 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
     InsertObj(pGraf);
 }
 
-void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
+void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
+                                 int /*nPageObjectIndex*/)
 {
-    double a, b, c, d, e, f;
-    FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    auto aPathMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    auto aPathMatrix = pPageObject->getMatrix();
     aPathMatrix *= maCurrentMatrix;
 
     basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
     std::vector<basegfx::B2DPoint> aBezier;
 
-    const int nSegments = FPDFPath_CountSegments(pPageObject);
+    const int nSegments = pPageObject->getPathSegmentCount();
     for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
     {
-        FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(pPageObject, nSegmentIndex);
+        auto pPathSegment = pPageObject->getPathSegment(nSegmentIndex);
         if (pPathSegment != nullptr)
         {
-            float fx, fy;
-            if (!FPDFPathSegment_GetPoint(pPathSegment, &fx, &fy))
-            {
-                SAL_WARN("sd.filter", "Failed to get PDF path segment point");
-                continue;
-            }
-
-            basegfx::B2DPoint aB2DPoint(fx, fy);
+            basegfx::B2DPoint aB2DPoint = pPathSegment->getPoint();
             aB2DPoint *= aPathMatrix;
 
-            const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
+            const bool bClose = pPathSegment->isClosed();
             if (bClose)
                 aPoly.setClosed(bClose); // TODO: Review
 
@@ -991,7 +984,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
             aB2DPoint.setX(aPoint.X());
             aB2DPoint.setY(aPoint.Y());
 
-            const int nSegmentType = FPDFPathSegment_GetType(pPathSegment);
+            const int nSegmentType = pPathSegment->getType();
             switch (nSegmentType)
             {
                 case FPDF_SEGMENT_LINETO:
@@ -1043,13 +1036,13 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     aPolyPoly.transform(aTransform);
 
     float fWidth = 1;
-    FPDFPageObj_GetStrokeWidth(pPageObject, &fWidth);
+    FPDFPageObj_GetStrokeWidth(pPageObject->getPointer(), &fWidth);
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = convertPointToMm100(dWidth);
 
     int nFillMode = FPDF_FILLMODE_ALTERNATE;
     FPDF_BOOL bStroke = 1; // Assume we have to draw, unless told otherwise.
-    if (FPDFPath_GetDrawMode(pPageObject, &nFillMode, &bStroke))
+    if (FPDFPath_GetDrawMode(pPageObject->getPointer(), &nFillMode, &bStroke))
     {
         if (nFillMode == FPDF_FILLMODE_ALTERNATE)
             mpVD->SetDrawMode(DrawModeFlags::Default);
@@ -1063,12 +1056,12 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     unsigned int nG;
     unsigned int nB;
     unsigned int nA;
-    FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
+    FPDFPageObj_GetFillColor(pPageObject->getPointer(), &nR, &nG, &nB, &nA);
     mpVD->SetFillColor(Color(nR, nG, nB));
 
     if (bStroke)
     {
-        FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        FPDFPageObj_GetStrokeColor(pPageObject->getPointer(), &nR, &nG, &nB, &nA);
         mpVD->SetLineColor(Color(nR, nG, nB));
     }
     else

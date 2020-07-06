@@ -315,6 +315,39 @@ Color PDFiumPageObject::getStrokeColor()
     return aColor;
 }
 
+int PDFiumPageObject::getPathSegmentCount() { return FPDFPath_CountSegments(mpPageObject); }
+
+std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
+{
+    std::unique_ptr<PDFiumPathSegment> pPDFiumPathSegment;
+    FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(mpPageObject, index);
+    if (pPathSegment)
+    {
+        pPDFiumPathSegment = std::make_unique<PDFiumPathSegment>(pPathSegment);
+    }
+    return pPDFiumPathSegment;
+}
+
+PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
+    : mpPathSegment(pPathSegment)
+{
+}
+
+PDFiumPathSegment::~PDFiumPathSegment() {}
+
+basegfx::B2DPoint PDFiumPathSegment::getPoint()
+{
+    basegfx::B2DPoint aPoint;
+    float fx, fy;
+    if (FPDFPathSegment_GetPoint(mpPathSegment, &fx, &fy))
+        aPoint = basegfx::B2DPoint(fx, fy);
+    return aPoint;
+}
+
+bool PDFiumPathSegment::isClosed() { return FPDFPathSegment_GetClose(mpPathSegment); }
+
+int PDFiumPathSegment::getType() { return FPDFPathSegment_GetType(mpPathSegment); }
+
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
 {
