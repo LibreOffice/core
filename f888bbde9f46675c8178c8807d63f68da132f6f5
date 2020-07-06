@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbcff785_a906a7e3",
+        "filename": "sw/qa/uitest/writer_tests/comments.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-07-06T14:15:33Z",
+      "side": 1,
+      "message": "This is unused.",
+      "revId": "f888bbde9f46675c8178c8807d63f68da132f6f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
