@@ -235,7 +235,7 @@ public:
     JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 
-    void signal_clicked(const OString& rIdent) override;
+    virtual void signal_clicked(const OString& rIdent) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
