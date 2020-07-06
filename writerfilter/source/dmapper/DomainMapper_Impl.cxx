@@ -91,6 +91,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <filter/msfilter/util.hxx>
+#include <filter/msfilter/ww8fields.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -3909,6 +3910,110 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
 
 typedef std::multimap < sal_Int32, OUString > TOCStyleMap;
 
+
+static ww::eField GetWW8FieldId(OUString const& rType)
+{
+    std::unordered_map<OUString, ww::eField> mapID
+    {
+        {"ADDRESSBLOCK",    ww::eADDRESSBLOCK},
+        {"ADVANCE",         ww::eADVANCE},
+        {"ASK",             ww::eASK},
+        {"AUTONUM",         ww::eAUTONUM},
+        {"AUTONUMLGL",      ww::eAUTONUMLGL},
+        {"AUTONUMOUT",      ww::eAUTONUMOUT},
+        {"AUTOTEXT",        ww::eAUTOTEXT},
+        {"AUTOTEXTLIST",    ww::eAUTOTEXTLIST},
+        {"AUTHOR",          ww::eAUTHOR},
+        {"BARCODE",         ww::eBARCODE},
+        {"BIDIOUTLINE",     ww::eBIDIOUTLINE},
+        {"DATE",            ww::eDATE},
+        {"COMMENTS",        ww::eCOMMENTS},
+        {"COMPARE",         ww::eCOMPARE},
+        {"CONTROL",         ww::eCONTROL},
+        {"CREATEDATE",      ww::eCREATEDATE},
+        {"DATABASE",        ww::eDATABASE},
+        {"DDEAUTOREF",      ww::eDDEAUTOREF},
+        {"DDEREF",          ww::eDDEREF},
+        {"DOCPROPERTY",     ww::eDOCPROPERTY},
+        {"DOCVARIABLE",     ww::eDOCVARIABLE},
+        {"EDITTIME",        ww::eEDITTIME},
+        {"EMBED",           ww::eEMBED},
+        {"EQ",              ww::eEQ},
+        {"FILLIN",          ww::eFILLIN},
+        {"FILENAME",        ww::eFILENAME},
+        {"FILESIZE",        ww::eFILESIZE},
+        {"FOOTREF",         ww::eFOOTREF},
+//        {"FORMULA",         ww::},
+        {"FORMCHECKBOX",    ww::eFORMCHECKBOX},
+        {"FORMDROPDOWN",    ww::eFORMDROPDOWN},
+        {"FORMTEXT",        ww::eFORMTEXT},
+        {"GLOSSREF",        ww::eGLOSSREF},
+        {"GOTOBUTTON",      ww::eGOTOBUTTON},
+        {"GREETINGLINE",    ww::eGREETINGLINE},
+        {"HTMLCONTROL",     ww::eHTMLCONTROL},
+        {"HYPERLINK",       ww::eHYPERLINK},
+        {"IF",              ww::eIF},
+        {"INFO",            ww::eINFO},
+        {"INCLUDEPICTURE",  ww::eINCLUDEPICTURE},
+        {"INCLUDETEXT",     ww::eINCLUDETEXT},
+        {"INCLUDETIFF",     ww::eINCLUDETIFF},
+        {"KEYWORDS",        ww::eKEYWORDS},
+        {"LASTSAVEDBY",     ww::eLASTSAVEDBY},
+        {"LINK",            ww::eLINK},
+        {"LISTNUM",         ww::eLISTNUM},
+        {"MACRO",           ww::eMACRO},
+        {"MACROBUTTON",     ww::eMACROBUTTON},
+        {"MERGEDATA",       ww::eMERGEDATA},
+        {"MERGEFIELD",      ww::eMERGEFIELD},
+        {"MERGEINC",        ww::eMERGEINC},
+        {"MERGEREC",        ww::eMERGEREC},
+        {"MERGESEQ",        ww::eMERGESEQ},
+        {"NEXT",            ww::eNEXT},
+        {"NEXTIF",          ww::eNEXTIF},
+        {"NOTEREF",         ww::eNOTEREF},
+        {"PAGE",            ww::ePAGE},
+        {"PAGEREF",         ww::ePAGEREF},
+        {"PLUGIN",          ww::ePLUGIN},
+        {"PRINT",           ww::ePRINT},
+        {"PRINTDATE",       ww::ePRINTDATE},
+        {"PRIVATE",         ww::ePRIVATE},
+        {"QUOTE",           ww::eQUOTE},
+        {"RD",              ww::eRD},
+        {"REF",             ww::eREF},
+        {"REVNUM",          ww::eREVNUM},
+        {"SAVEDATE",        ww::eSAVEDATE},
+        {"SECTION",         ww::eSECTION},
+        {"SECTIONPAGES",    ww::eSECTIONPAGES},
+        {"SEQ",             ww::eSEQ},
+        {"SET",             ww::eSET},
+        {"SKIPIF",          ww::eSKIPIF},
+        {"STYLEREF",        ww::eSTYLEREF},
+        {"SUBSCRIBER",      ww::eSUBSCRIBER},
+        {"SUBJECT",         ww::eSUBJECT},
+        {"SYMBOL",          ww::eSYMBOL},
+        {"TA",              ww::eTA},
+        {"TEMPLATE",        ww::eTEMPLATE},
+        {"TIME",            ww::eTIME},
+        {"TITLE",           ww::eTITLE},
+        {"TOA",             ww::eTOA},
+        {"USERINITIALS",    ww::eUSERINITIALS},
+        {"USERADDRESS",     ww::eUSERADDRESS},
+        {"USERNAME",        ww::eUSERNAME},
+
+        {"TOC",             ww::eTOC},
+        {"TC",              ww::eTC},
+        {"NUMCHARS",        ww::eNUMCHARS},
+        {"NUMWORDS",        ww::eNUMWORDS},
+        {"NUMPAGES",        ww::eNUMPAGES},
+        {"INDEX",           ww::eINDEX},
+        {"XE",              ww::eXE},
+        {"BIBLIOGRAPHY",    ww::eBIBLIOGRAPHY},
+        {"CITATION",        ww::eCITATION},
+    };
+    auto const it = mapID.find(rType);
+    return (it == mapID.end()) ? ww::eNONE : it->second;
+}
+
 static const FieldConversionMap_t & lcl_GetFieldConversion()
 {
     static const FieldConversionMap_t aFieldConversionMap
@@ -5657,9 +5762,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // the ODF_UNHANDLED string!
                     assert(!m_bForceGenericFields || aCode.isEmpty());
                     xNameCont->insertByName(ODF_CODE_PARAM, uno::makeAny(aCode));
-                    if (sType == "CONTROL")
-                    { // tdf#129247 HACK probably this should be imported as something else, like in ww8?
-                        xNameCont->insertByName(ODF_ID_PARAM, uno::makeAny(OUString::number(87))); // ww8::eCONTROL
+                    ww::eField const id(GetWW8FieldId(sType));
+                    if (id != ww::eNONE)
+                    {   // tdf#129247 tdf#134264 set WW8 id for WW8 export
+                        xNameCont->insertByName(ODF_ID_PARAM, uno::makeAny(OUString::number(id)));
                     }
                 }
                 else
