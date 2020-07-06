@@ -1,6 +1,6 @@
 ---
 assumeFilename: emfio/source/emfuno/xemfparser.cxx
-blacklist:
+excludelist:
     emfio/source/reader/wmfreader.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h

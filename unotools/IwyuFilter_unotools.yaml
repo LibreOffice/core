@@ -1,6 +1,6 @@
 ---
 assumeFilename: unotools/source/i18n/resmgr.cxx
-blacklist:
+excludelist:
     unotools/source/config/itemholder1.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XEventListener.hpp

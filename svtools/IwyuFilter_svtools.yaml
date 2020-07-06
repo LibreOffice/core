@@ -1,6 +1,6 @@
 ---
 assumeFilename: svtools/source/control/ruler.cxx
-blacklist:
+excludelist:
     svtools/source/control/accessibleruler.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp

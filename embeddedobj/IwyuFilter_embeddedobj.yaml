@@ -1,6 +1,6 @@
 ---
 assumeFilename: embeddedobj/source/commonembedding/embedobj.cxx
-blacklist:
+excludelist:
     embeddedobj/qa/cppunit/general.cxx:
     - comphelper/scopeguard.hxx
     embeddedobj/source/inc/dummyobject.hxx:
