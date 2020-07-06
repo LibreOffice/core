@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="msforms" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="ControlProviderImpl">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="ControlProviderImpl"
+    constructor="ControlProviderImpl_get_implementation">
     <service name="ooo.vba.ControlProvider"/>
   </implementation>
-  <implementation name="ScVbaUserForm">
+  <implementation name="ScVbaUserForm"
+    constructor="ScVbaUserForm_get_implementation">
     <service name="ooo.vba.msforms.UserForm"/>
   </implementation>
 </component>

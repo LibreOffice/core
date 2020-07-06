@@ -58,7 +58,6 @@ $(eval $(call gb_Library_use_libraries,msforms,\
 # add all source files that shall be compiled with exceptions enabled
 # the name is relative to $(SRCROOT) and must not contain an extension
 $(eval $(call gb_Library_add_exception_objects,msforms,\
-    vbahelper/source/msforms/service \
     vbahelper/source/msforms/vbabutton \
     vbahelper/source/msforms/vbacheckbox \
     vbahelper/source/msforms/vbacombobox \

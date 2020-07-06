@@ -37,7 +37,6 @@
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/msforms/fmMousePointer.hpp>
 #include <svtools/bindablecontrolhelper.hxx>
-#include "service.hxx"
 #include "vbacontrol.hxx"
 #include "vbacombobox.hxx"
 #include "vbabutton.hxx"
@@ -56,7 +55,6 @@
 #include "vbaimage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svdobj.hxx>
@@ -787,15 +785,11 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 }
 
-namespace controlprovider
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ControlProviderImpl_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<ControlProviderImpl, sdecl::with_args<false> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ControlProviderImpl",
-    "ooo.vba.ControlProvider" );
+    return cppu::acquire(new ControlProviderImpl(context));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
