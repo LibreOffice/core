@@ -50,7 +50,7 @@ class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XI
 {
     Font        m_aFont;
 public:
-FontIdentificator() {}
+    FontIdentificator() {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -148,25 +148,10 @@ Any SAL_CALL FontIdentificator::getMaterial()
     return makeAny( aFD );
 }
 
-Sequence< OUString > FontIdentificator_getSupportedServiceNames()
-{
-    return Sequence< OUString >{ "com.sun.star.awt.FontIdentificator" };
-}
-
-OUString FontIdentificator_getImplementationName()
-{
-    return "vcl::FontIdentificator";
-}
-
-Reference< XInterface > FontIdentificator_createInstance( const Reference< XMultiServiceFactory >&  )
-{
-    return static_cast< ::cppu::OWeakObject * >( new FontIdentificator );
-}
-
 // XServiceInfo
 OUString SAL_CALL FontIdentificator::getImplementationName()
 {
-    return FontIdentificator_getImplementationName();
+    return "vcl::FontIdentificator";
 }
 
 sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
@@ -176,9 +161,16 @@ sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rService
 
 Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames()
 {
-    return FontIdentificator_getSupportedServiceNames();
+    return { "com.sun.star.awt.FontIdentificator" };
 }
 
 } // namespace vcl
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+vcl_FontIdentificator_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new vcl::FontIdentificator());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,19 +43,7 @@ extern "C" {
                 static_cast< css::lang::XMultiServiceFactory* >( pXUnoSMgr )
                 );
             Reference< css::lang::XSingleServiceFactory > xFactory;
-            if( vcl_session_getImplementationName().equalsAscii( pImplementationName ) )
-            {
-                xFactory = ::cppu::createOneInstanceFactory(
-                    xMgr, vcl_session_getImplementationName(), vcl_session_createInstance,
-                    vcl_session_getSupportedServiceNames() );
-            }
-            else if( vcl::FontIdentificator_getImplementationName().equalsAscii( pImplementationName ) )
-            {
-                xFactory = ::cppu::createSingleFactory(
-                    xMgr, vcl::FontIdentificator_getImplementationName(), vcl::FontIdentificator_createInstance,
-                    vcl::FontIdentificator_getSupportedServiceNames() );
-            }
-            else if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
+            if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
             {
                 xFactory = vcl::Clipboard_createFactory();
             }

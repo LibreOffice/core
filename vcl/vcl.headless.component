@@ -19,10 +19,12 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="vcl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.frame.VCLSessionManagerClient">
+  <implementation name="com.sun.star.frame.VCLSessionManagerClient"
+    constructor="com_sun_star_frame_VCLSessionManagerClient_get_implementation">
     <service name="com.sun.star.frame.SessionManagerClient"/>
   </implementation>
-  <implementation name="vcl::FontIdentificator">
+  <implementation name="vcl::FontIdentificator"
+    constructor="vcl_FontIdentificator_get_implementation">
     <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>
 </component>

@@ -389,26 +389,11 @@ void VCLSession::disposing() {
 
 // service implementation
 
-OUString vcl_session_getImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_frame_VCLSessionManagerClient_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    SAL_INFO("vcl.se", "vcl_session_getImplementationName");
-
-    return "com.sun.star.frame.VCLSessionManagerClient";
-}
-
-Sequence< OUString > vcl_session_getSupportedServiceNames()
-{
-    SAL_INFO("vcl.se", "vcl_session_getSupportedServiceNames");
-
-    Sequence< OUString > aRet { "com.sun.star.frame.SessionManagerClient" };
-    return aRet;
-}
-
-css::uno::Reference< XInterface > vcl_session_createInstance( SAL_UNUSED_PARAMETER const css::uno::Reference< XMultiServiceFactory > & )
-{
-    SAL_INFO("vcl.se", "vcl_session_createInstance");
-
-    return static_cast< cppu::OWeakObject * >(new VCLSession);
+    return cppu::acquire(static_cast< cppu::OWeakObject * >(new VCLSession));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

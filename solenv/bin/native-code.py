@@ -255,6 +255,8 @@ core_constructor_list = [
 # vcl/vcl.android.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
+    "com_sun_star_frame_VCLSessionManagerClient_get_implementation",
+    "vcl_FontIdentificator_get_implementation",
 # svx/util/svx.component
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_SmartTagMenuController_get_implementation",
