@@ -52,7 +52,7 @@ public:
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext );
      /// @throws css::uno::RuntimeException
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext,
-        const css::uno::Sequence< OUString >& blackList );
+        const css::uno::Sequence< OUString >& denyList );
     ~ProviderCache();
      css::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const OUString& providerName );
@@ -66,8 +66,8 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details );
-    bool isInBlackList( const OUString& serviceName );
-    css::uno::Sequence< OUString >  m_sBlackList;
+    bool isInDenyList( const OUString& serviceName );
+    css::uno::Sequence< OUString >  m_sDenyList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;
     css::uno::Sequence< css::uno::Any >  m_Sctx;

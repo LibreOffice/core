@@ -342,7 +342,7 @@ OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & express
     return n.is() ? getNodeValue(n) : OUString();
 }
 
-void DescriptionInfoset::checkBlacklist() const
+void DescriptionInfoset::checkDenylist() const
 {
     if (!m_element.is())
         return;
@@ -358,25 +358,25 @@ void DescriptionInfoset::checkBlacklist() const
     {
         {"nodepath", css::uno::Any(OUString("/org.openoffice.Office.ExtensionDependencies/Extensions"))}
     }));
-    css::uno::Reference< css::container::XNameAccess > blacklist(
+    css::uno::Reference< css::container::XNameAccess > denylist(
         (css::configuration::theDefaultProvider::get(m_context)
          ->createInstanceWithArguments(
              "com.sun.star.configuration.ConfigurationAccess", args)),
         css::uno::UNO_QUERY_THROW);
 
-    // check first if a blacklist entry is available
-    if (!(blacklist.is() && blacklist->hasByName(*id)))        return;
+    // check first if a denylist entry is available
+    if (!(denylist.is() && denylist->hasByName(*id)))        return;
 
     css::uno::Reference< css::beans::XPropertySet > extProps(
-        blacklist->getByName(*id), css::uno::UNO_QUERY_THROW);
+        denylist->getByName(*id), css::uno::UNO_QUERY_THROW);
 
     css::uno::Any anyValue = extProps->getPropertyValue("Versions");
 
     css::uno::Sequence< OUString > blversions;
     anyValue >>= blversions;
 
-    // check if the current version requires further dependency checks from the blacklist
-    if (!checkBlacklistVersion(currentversion, blversions))        return;
+    // check if the current version requires further dependency checks from the denylist
+    if (!checkDenylistVersion(currentversion, blversions))        return;
 
     anyValue = extProps->getPropertyValue("Dependencies");
     OUString udeps;
@@ -404,7 +404,7 @@ void DescriptionInfoset::checkBlacklist() const
     // get the parent xml document  of current description info for the import
     css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
 
-    // get dependency node of current description info to merge the new dependencies from the blacklist
+    // get dependency node of current description info to merge the new dependencies from the denylist
     css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
         m_xpath->selectSingleNode(m_element, "desc:dependencies"));
 
@@ -422,14 +422,14 @@ void DescriptionInfoset::checkBlacklist() const
         css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
         css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
         if (xDep.is()) {
-            // found valid blacklist dependency, import the node first and append it to the existing dependency node
+            // found valid denylist dependency, import the node first and append it to the existing dependency node
             css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
             xCurrentDeps->appendChild(importedNode);
         }
     }
 }
 
-bool DescriptionInfoset::checkBlacklistVersion(
+bool DescriptionInfoset::checkDenylistVersion(
     const OUString& currentversion,
     css::uno::Sequence< OUString > const & versions)
 {
@@ -484,8 +484,8 @@ css::uno::Reference< css::xml::dom::XNodeList >
 DescriptionInfoset::getDependencies() const {
     if (m_element.is()) {
         try {
-            // check the extension blacklist first and expand the dependencies if applicable
-            checkBlacklist();
+            // check the extension denylist first and expand the dependencies if applicable
+            checkDenylist();
 
             return m_xpath->selectNodeList(m_element, "desc:dependencies/*");
         } catch (const css::xml::xpath::XPathException &) {

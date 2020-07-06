@@ -637,17 +637,17 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pStandardDirItem )
             sStandardDir = pStandardDirItem->GetValue();
 
-        css::uno::Sequence< OUString >  aBlackList;
+        css::uno::Sequence< OUString >  aDenyList;
 
-        const SfxStringListItem* pBlackListItem = rReq.GetArg<SfxStringListItem>(SID_BLACK_LIST);
-        if ( pBlackListItem )
-            pBlackListItem->GetStringList( aBlackList );
+        const SfxStringListItem* pDenyListItem = rReq.GetArg<SfxStringListItem>(SID_DENY_LIST);
+        if ( pDenyListItem )
+            pDenyListItem->GetStringList( aDenyList );
 
         vcl::Window* pTopWindow = GetTopWindow();
         ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow ? pTopWindow->GetFrameWeld() : nullptr,
                 nDialogType,
                 eDialogFlags, aURLList,
-                aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList);
+                aFilter, pSet, &aPath, nDialog, sStandardDir, aDenyList);
 
         if ( nErr == ERRCODE_ABORT )
         {

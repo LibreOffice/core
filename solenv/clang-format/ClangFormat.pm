@@ -9,33 +9,33 @@ package ClangFormat;
 use strict;
 use warnings;
 
-our @EXPORT_OK = qw(get_blacklist set_blacklist get_wanted_version get_own_directory get_extension_regex find check_style);
+our @EXPORT_OK = qw(get_excludelist set_excludelist get_wanted_version get_own_directory get_extension_regex find check_style);
 
-# Reads the blacklist.
-sub get_blacklist()
+# Reads the excludelist.
+sub get_excludelist()
 {
     my $src = "c|cpp|cxx|h|hxx|inl";
-    my %blacklist_names = ();
+    my %excludelist_names = ();
 
-    # Read the blacklist.
-    if (open(LINES, "solenv/clang-format/blacklist"))
+    # Read the excludelist.
+    if (open(LINES, "solenv/clang-format/excludelist"))
     {
         while (my $line = <LINES>)
         {
             chomp $line;
-            $blacklist_names{$line} = 1;
+            $excludelist_names{$line} = 1;
         }
     }
 
-    return \%blacklist_names;
+    return \%excludelist_names;
 }
 
-# Writes the blacklist.
+# Writes the excludelist.
 # The single argument is a reference to an array.
-sub set_blacklist
+sub set_excludelist
 {
     my @filenames = @{$_[0]};
-    open my $fh, ">", "solenv/clang-format/blacklist" or die $!;
+    open my $fh, ">", "solenv/clang-format/excludelist" or die $!;
     print $fh "$_\n" for @filenames;
     close $fh;
 }

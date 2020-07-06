@@ -26,9 +26,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_tipoftheday \
     UIConfig_vcl \
     $(if $(filter WNT,$(OS)), \
-        Package_opengl_blacklist ) \
+        Package_opengl_denylist ) \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
-        Package_skia_blacklist ) \
+        Package_skia_denylist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         $(if $(ENABLE_MACOSX_SANDBOX),, \

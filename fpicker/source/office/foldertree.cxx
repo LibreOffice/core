@@ -74,7 +74,7 @@ void FolderTree::FillTreeEntry(const weld::TreeIter& rEntry)
         FolderDescriptor aFolder(sURL);
 
         EnumerationResult eResult =
-            xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
+            xContentEnumerator->enumerateFolderContentSync( aFolder, m_aDenyList );
 
         if (EnumerationResult::SUCCESS == eResult)
         {
@@ -169,9 +169,9 @@ void FolderTree::SetTreePath( OUString const & sUrl )
     }
 }
 
-void FolderTree::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
+void FolderTree::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
 {
-    m_aBlackList = rBlackList;
+    m_aDenyList = rDenyList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

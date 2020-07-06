@@ -114,7 +114,7 @@ private:
     enum class BlockType
     {
         WHITELIST,
-        BLACKLIST,
+        DENYLIST,
         UNKNOWN
     };
 

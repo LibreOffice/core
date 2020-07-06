@@ -166,17 +166,17 @@ WinOpenGLDeviceInfo::~WinOpenGLDeviceInfo()
 {
 }
 
-static OUString getBlacklistFile()
+static OUString getDenylistFile()
 {
     OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
     rtl::Bootstrap::expandMacros(url);
 
-    return url + "/opengl/opengl_blacklist_windows.xml";
+    return url + "/opengl/opengl_denylist_windows.xml";
 }
 
 bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
 {
-    return DriverBlocklist::IsDeviceBlocked( getBlacklistFile(), maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
+    return DriverBlocklist::IsDeviceBlocked( getDenylistFile(), maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
 }
 
 namespace {

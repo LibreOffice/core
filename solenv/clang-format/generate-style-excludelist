@@ -5,7 +5,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-# Generates a blacklist containing all existing cxx/hxx files.
+# Generates an excludelist containing all existing cxx/hxx files.
 
 use strict;
 use warnings;
@@ -26,6 +26,6 @@ while (my $filename = <FILES>)
     }
 }
 
-ClangFormat::set_blacklist(\@filenames);
+ClangFormat::set_excludelist(\@filenames);
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

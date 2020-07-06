@@ -342,7 +342,7 @@ MasterScriptProvider::providerCache()
         ::osl::MutexGuard aGuard( m_mutex );
         if ( !m_pPCache )
         {
-            Sequence<OUString> blacklist { "com.sun.star.script.provider.ScriptProviderForBasic" };
+            Sequence<OUString> denylist { "com.sun.star.script.provider.ScriptProviderForBasic" };
 
             if ( !m_bIsPkgMSP )
             {
@@ -350,7 +350,7 @@ MasterScriptProvider::providerCache()
             }
             else
             {
-                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs, blacklist ) );
+                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs, denylist ) );
             }
         }
     }

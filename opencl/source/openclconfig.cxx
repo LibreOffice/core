@@ -25,10 +25,10 @@
 OpenCLConfig::OpenCLConfig() :
     mbUseOpenCL(true)
 {
-    // This entry we have had for some time (when blacklisting was
+    // This entry we have had for some time (when denylisting was
     // done elsewhere in the code), so presumably there is a known
     // good reason for it.
-    maBlackList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
+    maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
 
     // This is what I have tested on Linux and it works for our unit tests.
     maWhiteList.insert(ImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
@@ -42,7 +42,7 @@ OpenCLConfig::OpenCLConfig() :
 bool OpenCLConfig::operator== (const OpenCLConfig& r) const
 {
     return (mbUseOpenCL == r.mbUseOpenCL &&
-            maBlackList == r.maBlackList &&
+            maDenyList == r.maDenyList &&
             maWhiteList == r.maWhiteList);
 }
 
@@ -180,7 +180,7 @@ OpenCLConfig OpenCLConfig::get()
 
     result.mbUseOpenCL = officecfg::Office::Common::Misc::UseOpenCL::get();
 
-    result.maBlackList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLBlackList::get());
+    result.maDenyList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLDenyList::get());
     result.maWhiteList = StringSequenceToSetOfImplMatcher(officecfg::Office::Common::Misc::OpenCLWhiteList::get());
 
     return result;
@@ -191,7 +191,7 @@ void OpenCLConfig::set()
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     officecfg::Office::Common::Misc::UseOpenCL::set(mbUseOpenCL, batch);
-    officecfg::Office::Common::Misc::OpenCLBlackList::set(SetOfImplMatcherToStringSequence(maBlackList), batch);
+    officecfg::Office::Common::Misc::OpenCLDenyList::set(SetOfImplMatcherToStringSequence(maDenyList), batch);
     officecfg::Office::Common::Misc::OpenCLWhiteList::set(SetOfImplMatcherToStringSequence(maWhiteList), batch);
 
     batch->commit();
@@ -199,8 +199,8 @@ void OpenCLConfig::set()
 
 bool OpenCLConfig::checkImplementation(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice) const
 {
-    // Check blacklist of known bad OpenCL implementations
-    if (match(maBlackList, rPlatform, rDevice, "blacklist"))
+    // Check denylist of known bad OpenCL implementations
+    if (match(maDenyList, rPlatform, rDevice, "denylist"))
     {
         SAL_INFO("opencl", "Rejecting");
         return true;
@@ -222,7 +222,7 @@ std::ostream& operator<<(std::ostream& rStream, const OpenCLConfig& rConfig)
 {
     rStream << "{"
         "UseOpenCL=" << (rConfig.mbUseOpenCL ? "YES" : "NO") << ","
-        "BlackList=" << rConfig.maBlackList << ","
+        "DenyList=" << rConfig.maDenyList << ","
         "WhiteList=" << rConfig.maWhiteList <<
         "}";
     return rStream;
