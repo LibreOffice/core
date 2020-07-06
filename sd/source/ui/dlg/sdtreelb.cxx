@@ -1111,7 +1111,16 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
         }
     }
     if (!aSelection.isEmpty())
-        m_xTreeView->select_text(aSelection);
+    {
+        m_xTreeView->all_foreach([this, &aSelection](weld::TreeIter& rEntry){
+            if (m_xTreeView->get_text(rEntry) == aSelection)
+            {
+                m_xTreeView->select(rEntry);
+                return true;
+            }
+            return false;
+        });
+    }
 }
 
 /**
