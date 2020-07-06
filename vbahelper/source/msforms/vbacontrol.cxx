@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -37,7 +38,6 @@
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/msforms/fmMousePointer.hpp>
 #include <svtools/bindablecontrolhelper.hxx>
-#include "service.hxx"
 #include "vbacontrol.hxx"
 #include "vbacombobox.hxx"
 #include "vbabutton.hxx"
@@ -56,11 +56,11 @@
 #include "vbaimage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svdobj.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -707,11 +707,7 @@ ScVbaControl::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaControl::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
-    {
-        "ooo.vba.excel.Control"
-    };
-    return aServiceNames;
+    return { "ooo.vba.excel.Control" };
 }
 
 sal_Int32 const nSysCols[] = { 0xC8D0D4, 0x0, 0x6A240A, 0x808080, 0xE4E4E4, 0xFFFFFF, 0x0, 0x0, 0x0, 0xFFFFFF, 0xE4E4E4, 0xE4E4E4, 0x808080, 0x6A240A, 0xFFFFFF, 0xE4E4E4, 0x808080, 0x808080, 0x0, 0xC8D0D4, 0xFFFFFF, 0x404040, 0xE4E4E4, 0x0, 0xE1FFFF };
@@ -767,14 +763,33 @@ void ScVbaControl::setLocked( bool bLocked )
 
 namespace {
 
-class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider >
+class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider, css::lang::XServiceInfo >
 {
     uno::Reference< uno::XComponentContext > m_xCtx;
 public:
     explicit ControlProviderImpl( const uno::Reference< uno::XComponentContext >& xCtx ) : m_xCtx( xCtx ) {}
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) override;
+
+    //  XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+}
+
+//  XServiceInfo
+sal_Bool ControlProviderImpl::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString ControlProviderImpl::getImplementationName()
+{
+    return "ControlProviderImpl";
+}
+css::uno::Sequence< OUString > ControlProviderImpl::getSupportedServiceNames()
+{
+    return { "ooo.vba.ControlProvider" };
 }
 
 uno::Reference< msforms::XControl > SAL_CALL
@@ -787,15 +802,11 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 }
 
-namespace controlprovider
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ControlProviderImpl_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<ControlProviderImpl, sdecl::with_args<false> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ControlProviderImpl",
-    "ooo.vba.ControlProvider" );
+    return cppu::acquire(new ControlProviderImpl(context));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
