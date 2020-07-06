@@ -73,6 +73,24 @@ public:
 
 class PDFiumTextPage;
 
+class VCL_DLLPUBLIC PDFiumPathSegment final
+{
+private:
+    FPDF_PATHSEGMENT mpPathSegment;
+
+    PDFiumPathSegment(const PDFiumPathSegment&) = delete;
+    PDFiumPathSegment& operator=(const PDFiumPathSegment&) = delete;
+
+public:
+    PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment);
+    ~PDFiumPathSegment();
+
+    FPDF_PATHSEGMENT getPointer() { return mpPathSegment; }
+    basegfx::B2DPoint getPoint();
+    bool isClosed();
+    int getType();
+};
+
 class VCL_DLLPUBLIC PDFiumPageObject final
 {
 private:
@@ -100,6 +118,9 @@ public:
     int getTextRenderMode();
     Color getFillColor();
     Color getStrokeColor();
+    // Path
+    int getPathSegmentCount();
+    std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
