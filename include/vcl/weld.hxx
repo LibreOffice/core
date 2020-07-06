@@ -2037,6 +2037,8 @@ public:
     virtual void copy_clipboard() = 0;
     virtual void paste_clipboard() = 0;
 
+    virtual void set_alignment(TxtAlign eXAlign) = 0;
+
     virtual int vadjustment_get_value() const = 0;
     virtual int vadjustment_get_upper() const = 0;
     virtual int vadjustment_get_lower() const = 0;

@@ -12557,6 +12557,24 @@ public:
         gtk_text_buffer_paste_clipboard(m_pTextBuffer, pClipboard, nullptr, get_editable());
     }
 
+    virtual void set_alignment(TxtAlign eXAlign) override
+    {
+        GtkJustification eJust;
+        switch (eXAlign)
+        {
+            case TxtAlign::Left:
+                eJust = GTK_JUSTIFY_LEFT;
+                break;
+            case TxtAlign::Center:
+                eJust = GTK_JUSTIFY_CENTER;
+                break;
+            case TxtAlign::Right:
+                eJust = GTK_JUSTIFY_RIGHT;
+                break;
+        }
+        gtk_text_view_set_justification(m_pTextView, eJust);
+    }
+
     virtual int vadjustment_get_value() const override
     {
         return gtk_adjustment_get_value(m_pVAdjustment);
