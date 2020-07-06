@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
     xmlhelp/source/cxxhelp/provider/resultsetbase \
     xmlhelp/source/cxxhelp/provider/resultsetforquery \
     xmlhelp/source/cxxhelp/provider/resultsetforroot \
-    xmlhelp/source/cxxhelp/provider/services \
     xmlhelp/source/cxxhelp/provider/urlparameter \
     xmlhelp/source/treeview/tvfactory \
     xmlhelp/source/treeview/tvread \

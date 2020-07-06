@@ -31,13 +31,6 @@
 
 namespace chelp {
 
-// UNO service name for the provider. This name will be used by the UCB to
-// create instances of the provider.
-
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME1   "com.sun.star.help.XMLHelp"
-
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME2  "com.sun.star.ucb.HelpContentProvider"
-
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
@@ -73,13 +66,6 @@ namespace chelp {
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        static OUString getImplementationName_Static();
-
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory > createServiceFactory(
-                const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
 
         // XContentProvider
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
