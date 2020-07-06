@@ -13,6 +13,26 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
 
+class LOKTrigger
+{
+public:
+    static void trigger_changed(weld::TextView& rView) { rView.signal_changed(); }
+
+    static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
+
+    static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
+
+    static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
+    {
+        rToolbar.signal_clicked(rIdent);
+    }
+
+    static void trigger_click(weld::DrawingArea& rDrawingArea, const Point& rPos)
+    {
+        rDrawingArea.click(rPos);
+    }
+};
+
 namespace jsdialog
 {
 VCL_DLLPUBLIC bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData);
