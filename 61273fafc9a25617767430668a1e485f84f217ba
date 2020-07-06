@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13369508_e4ed0158",
+        "filename": "canvas/source/directx/dx_9rm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 1,
+      "message": "this also needs replacing? ... where is that checked actually?",
+      "range": {
+        "startLine": 620,
+        "startChar": 36,
+        "endLine": 620,
+        "endChar": 41
+      },
+      "revId": "61273fafc9a25617767430668a1e485f84f217ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef6fb3e9_fd6637fd",
+        "filename": "desktop/source/migration/services/oo3extensionmigration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 1,
+      "message": "should be okay to change this, this service will only be used internally",
+      "revId": "61273fafc9a25617767430668a1e485f84f217ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3cca493_6163a41f",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Canvas.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 1,
+      "message": "same here i guess",
+      "revId": "61273fafc9a25617767430668a1e485f84f217ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "883db026_e1410d5b",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5625,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 1,
+      "message": "this is going to invalidate the users\u0027 current configurations - can we add DenyList and keep BlackList as deprecated read-only alias?",
+      "revId": "61273fafc9a25617767430668a1e485f84f217ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97ee6f1b_209a496e",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 1,
+      "message": "missed a search term :)",
+      "range": {
+        "startLine": 642,
+        "startChar": 84,
+        "endLine": 642,
+        "endChar": 94
+      },
+      "revId": "61273fafc9a25617767430668a1e485f84f217ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

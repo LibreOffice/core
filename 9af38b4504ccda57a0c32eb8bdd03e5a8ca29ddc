@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31fa9a8c_3a9f8863",
+        "filename": "fpicker/source/office/OfficeFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 0,
+      "message": "can this be called from extension?",
+      "revId": "9af38b4504ccda57a0c32eb8bdd03e5a8ca29ddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adec70e6_1df5f454",
+        "filename": "fpicker/source/office/OfficeFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 0,
+      "message": "or this?",
+      "revId": "9af38b4504ccda57a0c32eb8bdd03e5a8ca29ddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aadffbd8_f33137ee",
+        "filename": "sfx2/source/appl/appuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-06T09:34:30Z",
+      "side": 0,
+      "message": "hmm.. a Property name from media descriptor ... presumably this is some API?",
+      "revId": "9af38b4504ccda57a0c32eb8bdd03e5a8ca29ddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
