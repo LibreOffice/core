@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_WELD_HXX
 #define INCLUDED_VCL_WELD_HXX
 
-#include <vcl/jsdialog/executor.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -72,6 +71,8 @@ namespace vcl
 {
 class ILibreOfficeKitNotifier;
 }
+
+class LOKTrigger;
 
 namespace weld
 {
@@ -563,9 +564,6 @@ enum class EntryMessageType
 /// A widget used to choose from a list of items.
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
-    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
-                                                      StringMap& rData);
-
 private:
     OUString m_sSavedValue;
 
@@ -575,7 +573,10 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
+    friend class ::LOKTrigger;
+
     void signal_changed() { m_aChangeHdl.Call(*this); }
+
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
 public:
@@ -1246,9 +1247,6 @@ public:
 
 class VCL_DLLPUBLIC Entry : virtual public Widget
 {
-    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
-                                                      StringMap& rData);
-
 private:
     OUString m_sSavedValue;
 
@@ -1257,6 +1255,8 @@ protected:
     Link<OUString&, bool> m_aInsertTextHdl;
     Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
+
+    friend class ::LOKTrigger;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
@@ -1760,8 +1760,7 @@ public:
 
 class VCL_DLLPUBLIC TextView : virtual public Container
 {
-    friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget,
-                                                      StringMap& rData);
+    friend class ::LOKTrigger;
 
 private:
     OUString m_sSavedValue;
@@ -1862,7 +1861,10 @@ public:
     virtual a11yrelationset get_accessible_relation_set() = 0;
     virtual Point get_accessible_location() = 0;
 
-    virtual void click(Point pos) = 0;
+private:
+    friend class ::LOKTrigger;
+
+    virtual void click(const Point& rPos) = 0;
 };
 
 class VCL_DLLPUBLIC Menu
@@ -1917,6 +1919,10 @@ class VCL_DLLPUBLIC Toolbar : virtual public Widget
 protected:
     Link<const OString&, void> m_aClickHdl;
 
+    friend class ::LOKTrigger;
+
+    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
+
 public:
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
@@ -1944,7 +1950,6 @@ public:
     virtual vcl::ImageType get_icon_size() const = 0;
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
-    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
 };
 
 class VCL_DLLPUBLIC SizeGroup

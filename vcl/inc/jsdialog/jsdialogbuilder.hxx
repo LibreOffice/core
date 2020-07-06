@@ -253,7 +253,7 @@ public:
     JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 
-    void signal_clicked(const OString& rIdent) override;
+    virtual void signal_clicked(const OString& rIdent) override;
 };
 
 class JSTextView : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>

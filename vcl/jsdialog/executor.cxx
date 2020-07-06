@@ -53,14 +53,14 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                         OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
                         int pos = std::atoi(posString.getStr());
                         pCombobox->set_active(pos);
-                        pCombobox->signal_changed();
+                        LOKTrigger::trigger_changed(*pCombobox);
                         return true;
                     }
                 }
                 else if (sAction == "change")
                 {
                     pCombobox->set_entry_text(rData["data"]);
-                    pCombobox->signal_changed();
+                    LOKTrigger::trigger_changed(*pCombobox);
                     return true;
                 }
             }
@@ -84,7 +84,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             {
                 if (sAction == "click")
                 {
-                    pArea->click(Point(10, 10));
+                    LOKTrigger::trigger_click(*pArea, Point(10, 10));
                     return true;
                 }
             }
@@ -113,8 +113,8 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             {
                 if (sAction == "click")
                 {
-                    pToolbar->signal_clicked(
-                        OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
+                    LOKTrigger::trigger_clicked(
+                        *pToolbar, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
                     return true;
                 }
             }
@@ -127,7 +127,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 if (sAction == "change")
                 {
                     pEdit->set_text(rData["data"]);
-                    pEdit->signal_changed();
+                    LOKTrigger::trigger_changed(*pEdit);
                     return true;
                 }
             }
@@ -138,7 +138,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 if (sAction == "change")
                 {
                     pTextView->set_text(rData["data"]);
-                    pTextView->signal_changed();
+                    LOKTrigger::trigger_changed(*pTextView);
                     return true;
                 }
             }

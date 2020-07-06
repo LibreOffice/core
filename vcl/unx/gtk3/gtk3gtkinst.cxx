@@ -11136,9 +11136,11 @@ public:
         return *m_xDevice;
     }
 
-    void click(Point /*pos*/) override
+    virtual void click(const Point& rPos) override
     {
-        //TODO
+        MouseEvent aEvent(rPos);
+        m_aMousePressHdl.Call(aEvent);
+        m_aMouseReleaseHdl.Call(aEvent);
     }
 };
 
