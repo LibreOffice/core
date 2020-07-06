@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/TransformerBase \
     xmloff/source/transform/TransformerContext \
     xmloff/source/transform/TransformerTokenMap \
-    xmloff/source/transform/XMLFilterRegistration \
 ))
 
 # vim: set noet sw=4 ts=4:

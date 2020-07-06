@@ -20,6 +20,7 @@
 #include <comphelper/base64.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -42,7 +43,6 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
-#include "XMLFilterRegistration.hxx"
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 #include <cppuhelper/supportsservice.hxx>
@@ -1967,7 +1967,7 @@ sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 
 // XServiceInfo
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
 {
-    return Oasis2OOoTransformer_getImplementationName();
+    return "com.sun.star.comp.Oasis2OOoTransformer";
 }
 
 sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
@@ -1982,22 +1982,12 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 // Service registration
 
-OUString Oasis2OOoTransformer_getImplementationName() throw()
-{
-    return "com.sun.star.comp.Oasis2OOoTransformer";
-}
-
-Sequence< OUString > Oasis2OOoTransformer_getSupportedServiceNames()
-    throw()
-{
-    return { Oasis2OOoTransformer_getImplementationName() };
-}
-
-Reference< XInterface > Oasis2OOoTransformer_createInstance(
-        const Reference< XMultiServiceFactory > &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+xmloff_Oasis2OOoTransformer_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
-    return static_cast<cppu::OWeakObject*>(new Oasis2OOoTransformer);
+    return cppu::acquire(new Oasis2OOoTransformer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

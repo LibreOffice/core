@@ -40,7 +40,6 @@
 #include "PropertyActionsOOo.hxx"
 #include "TransformerActions.hxx"
 #include "OOo2Oasis.hxx"
-#include "XMLFilterRegistration.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -1999,38 +1998,21 @@ Sequence< css::uno::Type > SAL_CALL OOo2OasisTransformer::getTypes()
 
 // Service registration
 
-OUString OOo2OasisTransformer_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+xmloff_OOo2OasisTransformer_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.comp.OOo2OasisTransformer";
-}
-
-Sequence< OUString > OOo2OasisTransformer_getSupportedServiceNames() throw()
-{
-    return { OOo2OasisTransformer_getImplementationName() };
-}
-
-Reference< XInterface > OOo2OasisTransformer_createInstance(
-        const Reference< XMultiServiceFactory > & )
-{
-    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer(OOo2OasisTransformer_getImplementationName(), OUString()));
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.OOo2OasisTransformer", OUString()));
 }
 
 #define OOO_IMPORTER( className, implName, subServiceName )             \
-OUString className##_getImplementationName() throw()           \
-{                                                                       \
-    return implName;         \
-}                                                                       \
-                                                                        \
-Sequence< OUString > className##_getSupportedServiceNames() throw()\
-{                                                                       \
-    return { className##_getImplementationName() };                     \
-}                                                                       \
-                                                                        \
-Reference< XInterface > className##_createInstance(            \
-        const Reference< XMultiServiceFactory > & )                     \
-{                                                                       \
-    return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer( implName,      \
-                                         subServiceName ));              \
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* \
+xmloff_##className##_get_implementation( \
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&) \
+{ \
+    return cppu::acquire(new OOo2OasisTransformer( \
+              implName, \
+              subServiceName )); \
 }
 
 OOO_IMPORTER( XMLWriterImportOOO,
