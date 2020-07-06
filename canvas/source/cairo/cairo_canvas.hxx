@@ -40,9 +40,6 @@
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
 
-#define CANVAS_SERVICE_NAME        "com.sun.star.rendering.Canvas.Cairo"
-#define CANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.Canvas.Cairo"
-
 namespace cairocanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,

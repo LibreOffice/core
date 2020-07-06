@@ -132,7 +132,7 @@ namespace cairocanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return SPRITECANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.SpriteCanvas.Cairo";
     }
 
     SurfaceSharedPtr SpriteCanvas::getSurface()
@@ -202,6 +202,16 @@ namespace cairocanvas
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    auto p = new cairocanvas::SpriteCanvas(args, context);
+    p->acquire();
+    p->initialize();
+    return static_cast<cppu::OWeakObject*>(p);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

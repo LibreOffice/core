@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="cairocanvas" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.Canvas.Cairo">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.rendering.Canvas.Cairo"
+    constructor="com_sun_star_comp_rendering_Canvas_Cairo_get_implementation">
     <service name="com.sun.star.rendering.Canvas.Cairo"/>
   </implementation>
-  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.Cairo">
+  <implementation name="com.sun.star.comp.rendering.SpriteCanvas.Cairo"
+    constructor="com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation">
     <service name="com.sun.star.rendering.SpriteCanvas.Cairo"/>
   </implementation>
 </component>

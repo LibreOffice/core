@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_canvashelper \
 	canvas/source/cairo/cairo_canvashelper_text \
 	canvas/source/cairo/cairo_devicehelper \
-	canvas/source/cairo/cairo_services \
 	canvas/source/cairo/cairo_spritecanvas \
 	canvas/source/cairo/cairo_spritecanvashelper \
 	canvas/source/cairo/cairo_spritedevicehelper \
