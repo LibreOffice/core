@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e12c910_16d98dc8",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-06T09:59:42Z",
+      "side": 1,
+      "message": "these conflicted with earlier entries in include/svx/svxids.hrc",
+      "range": {
+        "startLine": 570,
+        "startChar": 61,
+        "endLine": 570,
+        "endChar": 65
+      },
+      "revId": "43cce4ef2cf865b2bb637e17b70102a4260295b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
