@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8517e97_1cca97a5",
+        "filename": "include/sax/fshelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-06T07:53:50Z",
+      "side": 1,
+      "message": "possibly this should be \n    TString\u0026\u0026 s\nwhich can then be\n   std::move\ninto the optional\nto avoid creating an unnecessary copy of a temporary",
+      "revId": "3ec38dab95d18794c44f89c8cb90350cd830f69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
