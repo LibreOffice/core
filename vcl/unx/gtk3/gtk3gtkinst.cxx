@@ -12378,7 +12378,9 @@ private:
     GtkTextView* m_pTextView;
     GtkTextBuffer* m_pTextBuffer;
     GtkAdjustment* m_pVAdjustment;
-    gulong m_nChangedSignalId;
+    int m_nMaxTextLength;
+    gulong m_nChangedSignalId; // we don't disable/enable this one, its to implement max-length
+    gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
     gulong m_nVAdjustChangedSignalId;
 
@@ -12387,6 +12389,28 @@ private:
         GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_changed();
+    }
+
+    static void signalInserText(GtkTextBuffer *pBuffer, GtkTextIter *pLocation, gchar* /*pText*/, gint /*nLen*/, gpointer widget)
+    {
+        GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
+        pThis->insert_text(pBuffer, pLocation);
+    }
+
+    void insert_text(GtkTextBuffer *pBuffer, GtkTextIter *pLocation)
+    {
+        if (m_nMaxTextLength)
+        {
+            gint nCount = gtk_text_buffer_get_char_count(pBuffer);
+            if (nCount > m_nMaxTextLength)
+            {
+                GtkTextIter nStart, nEnd;
+                gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &nStart, m_nMaxTextLength);
+                gtk_text_buffer_get_end_iter(m_pTextBuffer, &nEnd);
+                gtk_text_buffer_delete(m_pTextBuffer, &nStart, &nEnd);
+                gtk_text_iter_assign(pLocation, &nStart);
+            }
+        }
     }
 
     static void signalCursorPosition(GtkTextView*, GParamSpec*, gpointer widget)
@@ -12408,7 +12432,9 @@ public:
         , m_pTextView(pTextView)
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
+        , m_nMaxTextLength(0)
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
+        , m_nInsertTextSignalId(g_signal_connect_after(m_pTextBuffer, "insert-text", G_CALLBACK(signalInserText), this))
         , m_nCursorPosSignalId(g_signal_connect(m_pTextBuffer, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
     {
@@ -12429,18 +12455,16 @@ public:
     virtual void set_text(const OUString& rText) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gtk_text_buffer_set_text(pBuffer, sText.getStr(), sText.getLength());
+        gtk_text_buffer_set_text(m_pTextBuffer, sText.getStr(), sText.getLength());
         enable_notify_events();
     }
 
     virtual OUString get_text() const override
     {
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_bounds(pBuffer, &start, &end);
-        char* pStr = gtk_text_buffer_get_text(pBuffer, &start, &end, true);
+        gtk_text_buffer_get_bounds(m_pTextBuffer, &start, &end);
+        char* pStr = gtk_text_buffer_get_text(m_pTextBuffer, &start, &end, true);
         OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
@@ -12449,18 +12473,16 @@ public:
     virtual void replace_selection(const OUString& rText) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
-        gtk_text_buffer_delete_selection(pBuffer, false, gtk_text_view_get_editable(m_pTextView));
+        gtk_text_buffer_delete_selection(m_pTextBuffer, false, gtk_text_view_get_editable(m_pTextView));
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gtk_text_buffer_insert_at_cursor(pBuffer, sText.getStr(), sText.getLength());
+        gtk_text_buffer_insert_at_cursor(m_pTextBuffer, sText.getStr(), sText.getLength());
         enable_notify_events();
     }
 
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override
     {
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_selection_bounds(pBuffer, &start, &end);
+        gtk_text_buffer_get_selection_bounds(m_pTextBuffer, &start, &end);
         rStartPos = gtk_text_iter_get_offset(&start);
         rEndPos = gtk_text_iter_get_offset(&end);
         return rStartPos != rEndPos;
@@ -12469,12 +12491,11 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
         GtkTextIter start, end;
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &start, nStartPos);
-        gtk_text_buffer_get_iter_at_offset(pBuffer, &end, nEndPos);
-        gtk_text_buffer_select_range(pBuffer, &start, &end);
-        GtkTextMark* mark = gtk_text_buffer_create_mark(pBuffer, "scroll", &end, true);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &start, nStartPos);
+        gtk_text_buffer_get_iter_at_offset(m_pTextBuffer, &end, nEndPos);
+        gtk_text_buffer_select_range(m_pTextBuffer, &start, &end);
+        GtkTextMark* mark = gtk_text_buffer_create_mark(m_pTextBuffer, "scroll", &end, true);
         gtk_text_view_scroll_mark_onscreen(m_pTextView, mark);
         enable_notify_events();
     }
@@ -12487,6 +12508,11 @@ public:
     virtual bool get_editable() const override
     {
         return gtk_text_view_get_editable(m_pTextView);
+    }
+
+    virtual void set_max_length(int nChars) override
+    {
+        m_nMaxTextLength = nChars;
     }
 
     virtual void set_monospace(bool bMonospace) override
@@ -12514,24 +12540,21 @@ public:
     {
         GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
                                                             GDK_SELECTION_CLIPBOARD);
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
-        gtk_text_buffer_cut_clipboard(pBuffer, pClipboard, get_editable());
+        gtk_text_buffer_cut_clipboard(m_pTextBuffer, pClipboard, get_editable());
     }
 
     virtual void copy_clipboard() override
     {
         GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
                                                             GDK_SELECTION_CLIPBOARD);
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
-        gtk_text_buffer_copy_clipboard(pBuffer, pClipboard);
+        gtk_text_buffer_copy_clipboard(m_pTextBuffer, pClipboard);
     }
 
     virtual void paste_clipboard() override
     {
         GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),
                                                             GDK_SELECTION_CLIPBOARD);
-        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);
-        gtk_text_buffer_paste_clipboard(pBuffer, pClipboard, nullptr, get_editable());
+        gtk_text_buffer_paste_clipboard(m_pTextBuffer, pClipboard, nullptr, get_editable());
     }
 
     virtual int vadjustment_get_value() const override
@@ -12580,6 +12603,7 @@ public:
     virtual ~GtkInstanceTextView() override
     {
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_disconnect(m_pTextBuffer, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nCursorPosSignalId);
     }
