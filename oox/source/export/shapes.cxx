@@ -585,14 +585,14 @@ static bool lcl_IsOnDenylist(OUString const & rShapeType)
     return std::find(vDenylist.begin(), vDenylist.end(), rShapeType) != vDenylist.end();
 }
 
-static bool lcl_IsOnWhitelist(OUString const & rShapeType)
+static bool lcl_IsOnAllowlist(OUString const & rShapeType)
 {
-    static const std::initializer_list<OUStringLiteral> vWhitelist = {
+    static const std::initializer_list<OUStringLiteral> vAllowlist = {
         "heart",
         "puzzle"
     };
 
-    return std::find(vWhitelist.begin(), vWhitelist.end(), rShapeType) != vWhitelist.end();
+    return std::find(vAllowlist.begin(), vAllowlist.end(), rShapeType) != vAllowlist.end();
 }
 
 static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParameter &rParam, Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
@@ -813,14 +813,14 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // we also export non-ooxml shapes which have handles/equations to custom geometry, because
     // we cannot convert ODF equations to DrawingML equations. TODO: see what binary DOC export filter does.
     // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a denylist
-    // we use a whitelist for shapes where mapping to MSO preset shape is not optimal
+    // we use a allowlist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
     bool bOnDenylist = false;
     if( sShapeType == "ooxml-non-primitive" )
         bCustGeom = true;
     else if( sShapeType.startsWith("ooxml") )
         bCustGeom = false;
-    else if( lcl_IsOnWhitelist(sShapeType) )
+    else if( lcl_IsOnAllowlist(sShapeType) )
         bCustGeom = true;
     else if( lcl_IsOnDenylist(sShapeType) )
     {

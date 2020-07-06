@@ -342,7 +342,7 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
                 if (name == "OUStringToOString" || name == "OStringToOUString")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
-                // whitelist some known-safe methods
+                // allowlist some known-safe methods
                 if (name.endswith("ResId") || name == "GetXMLToken")
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;

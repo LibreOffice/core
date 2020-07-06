@@ -5979,7 +5979,7 @@ static void preloadData()
     // Hack to load and cache the module liblocaledata_others.so which is not loaded normally
     // (when loading dictionaries of just non-Asian locales). Creating a XCalendar4 of one Asian locale
     // will cheaply load this missing "others" locale library. Appending an Asian locale in
-    // LOK_WHITELIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
+    // LOK_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
     css::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
     css::lang::Locale aAsianLocale = {"hi", "IN", ""};
     xCal->loadDefaultCalendar(aAsianLocale);

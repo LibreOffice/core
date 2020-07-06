@@ -77,7 +77,7 @@ enum VersionComparisonOp
 struct DriverInfo
 {
     DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
-               uint64_t driverVersion, bool bWhiteListed = false,
+               uint64_t driverVersion, bool bAllowListed = false,
                const char* suggestedVersion = nullptr);
 
     DriverInfo();
@@ -86,7 +86,7 @@ struct DriverInfo
     OUString maAdapterVendor;
     std::vector<OUString> maDevices;
 
-    bool mbWhitelisted;
+    bool mbAllowlisted;
 
     VersionComparisonOp meComparisonOp;
 
@@ -113,7 +113,7 @@ private:
 
     enum class BlockType
     {
-        WHITELIST,
+        ALLOWLIST,
         DENYLIST,
         UNKNOWN
     };

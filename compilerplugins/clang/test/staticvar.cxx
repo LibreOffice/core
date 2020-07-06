@@ -19,7 +19,7 @@ struct S1
 S1 const& f1(int a)
 {
     static S1 s1[]{
-        // expected-error@-1 {{var should be static const, or whitelisted [loplugin:staticvar]}}
+        // expected-error@-1 {{var should be static const, or allowlisted [loplugin:staticvar]}}
         { 1, 1 }
     };
     // no warning expected

@@ -84,106 +84,106 @@ files=$(find "${check_path}/program" "${check_path}/sdk/bin" -type f)
 # all RPATHs should point to ${INSTDIR}/program so that's the files they find
 programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 
-# whitelists should contain only system libraries that have a good reputation
+# allowlists should contain only system libraries that have a good reputation
 # of maintaining ABI stability
-# allow extending the whitelist using the environment variable to be able to work
+# allow extending the allowlist using the environment variable to be able to work
 # on the installer stuff without the need for a baseline setup
-globalwhitelist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 ${LO_ELFCHECK_WHITELIST-}"
-x11whitelist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
-openglwhitelist="libGL.so.1"
-giowhitelist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
-gstreamerwhitelist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
-gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3 libharfbuzz.so.0"
-qt5whitelist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libglib-2.0.so.0 libgobject-2.0.so.0 libxcb.so.1 libxcb-icccm.so.4"
-kf5whitelist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
-avahiwhitelist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
-kerberoswhitelist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
-dconfwhitelist="libdconf.so.1 libgio-2.0.so.0 libglib-2.0.so.0 libgobject-2.0.so.0"
+globalallowlist="ld-linux-x86-64.so.2 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 ${LO_ELFCHECK_ALLOWLIST-}"
+x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
+openglallowlist="libGL.so.1"
+gioallowlist="libgio-2.0.so.0 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
+gstreamerallowlist="libgstaudio-1.0.so.0 libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.so.0 libgstreamer-1.0.so.0"
+gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3 libharfbuzz.so.0"
+qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libglib-2.0.so.0 libgobject-2.0.so.0 libxcb.so.1 libxcb-icccm.so.4"
+kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
+avahiallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
+kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
+dconfallowlist="libdconf.so.1 libgio-2.0.so.0 libglib-2.0.so.0 libgobject-2.0.so.0"
 
 check_one_file()
 {
 local file="$1"
 
     skip=0
-    whitelist="${globalwhitelist}"
+    allowlist="${globalallowlist}"
     case "${file}" in
         */sdk/docs/*)
             # skip the majority of files, no ELF binaries here
             skip=1
         ;;
         */_uuid.cpython-*.so)
-            whitelist="${whitelist} libuuid.so.1"
+            allowlist="${allowlist} libuuid.so.1"
         ;;
         */libcairo.so.2)
-            whitelist="${whitelist} ${x11whitelist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
+            allowlist="${allowlist} ${x11allowlist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
         ;;
         */libcairocanvaslo.so)
-            whitelist="${whitelist} libcairo.so.2"
+            allowlist="${allowlist} libcairo.so.2"
         ;;
         */libucpgio1lo.so|*/liblosessioninstalllo.so|*/libevoablo.so)
-            whitelist="${whitelist} ${giowhitelist}"
+            allowlist="${allowlist} ${gioallowlist}"
         ;;
         */libavmediagst.so)
-            whitelist="${whitelist} ${gtk3whitelist} ${gstreamerwhitelist}"
+            allowlist="${allowlist} ${gtk3allowlist} ${gstreamerallowlist}"
         ;;
         */libvclplug_kf5lo.so|*/libkf5be1lo.so)
             if [ "$ENABLE_KF5" = TRUE ]; then
-                whitelist="${whitelist} ${qt5whitelist} ${kf5whitelist}"
+                allowlist="${allowlist} ${qt5allowlist} ${kf5allowlist}"
             fi
         ;;
         */libvclplug_gtk3lo.so|*/updater)
-            whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
+            allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist}"
         ;;
         */libvclplug_qt5lo.so)
             if [ "$ENABLE_QT5" = TRUE ]; then
-                whitelist="${whitelist} ${qt5whitelist}"
+                allowlist="${allowlist} ${qt5allowlist}"
             fi
         ;;
         */libvclplug_gtk3_kde5lo.so)
             if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
-                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist} ${qt5whitelist} ${kf5whitelist}"
+                allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist} ${qt5allowlist} ${kf5allowlist}"
             fi
         ;;
         */lo_kde5filepicker)
             if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
-                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist} ${qt5whitelist} \
-                    ${kf5whitelist}"
+                allowlist="${allowlist} ${x11allowlist} ${gtk3allowlist} ${qt5allowlist} \
+                    ${kf5allowlist}"
             fi
         ;;
         */libdesktop_detectorlo.so|*/ui-previewer|*/oosplash|*/gengal.bin)
-            whitelist="${whitelist} ${x11whitelist}"
+            allowlist="${allowlist} ${x11allowlist}"
         ;;
         */libvclplug_genlo.so|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so)
-            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist}"
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist}"
         ;;
         */libvcllo.so)
-            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2"
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2"
         ;;
         */libsofficeapp.so)
-            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2"
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2"
         ;;
         */liblibreofficekitgtk.so)
-            whitelist="${whitelist} ${gtk3whitelist}"
+            allowlist="${allowlist} ${gtk3allowlist}"
         ;;
         */libsdlo.so)
-            whitelist="${whitelist} ${avahiwhitelist}"
+            allowlist="${allowlist} ${avahiallowlist}"
         ;;
         */libskialo.so)
-            whitelist="${whitelist} ${openglwhitelist} ${x11whitelist}"
+            allowlist="${allowlist} ${openglallowlist} ${x11allowlist}"
         ;;
         */libofficebean.so)
-            whitelist="${whitelist} libjawt.so"
+            allowlist="${allowlist} libjawt.so"
         ;;
         */libpostgresql-sdbc-impllo.so)
-            whitelist="${whitelist} ${kerberoswhitelist}"
+            allowlist="${allowlist} ${kerberosallowlist}"
         ;;
         */libconfigmgrlo.so)
             if [ "$ENABLE_DCONF" = TRUE ]; then
-                whitelist="${whitelist} ${dconfwhitelist}"
+                allowlist="${allowlist} ${dconfallowlist}"
             fi
         ;;
         */libmergedlo.so)
-            whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2 libcairo.so.2"
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} libcups.so.2 libcairo.so.2"
         ;;
     esac
     if test "${skip}" = 0 && readelf -d "${file}" &> /dev/null ; then
@@ -192,7 +192,7 @@ local file="$1"
         neededsinternal=
         for needed in ${neededs}
         do
-            if ! echo ${whitelist} | grep -q -w "${needed}" ; then
+            if ! echo ${allowlist} | grep -q -w "${needed}" ; then
                 neededsinternal="${neededsinternal} ${needed}"
                 if ! echo ${programfiles} | grep -q -w "${needed}" ; then
                     echo "${file}" has suspicious NEEDED: "${needed}"

@@ -32,9 +32,9 @@ BEGIN {
         showincludes_prefix = "Note: including file:"
     }
 
-    # to match especially drive letters in whitelist case insensitive
+    # to match especially drive letters in allowlist case insensitive
     IGNORECASE = 1
-    whitelist = \
+    allowlist = \
         "^(" ENVIRON["SRCDIR"] "|" ENVIRON["WORKDIR"] ")"
     firstline = 1
 }
@@ -54,7 +54,7 @@ BEGIN {
 
         gsub(/\\/, "/")
         gsub(/ /, "\\ ")
-        if ($0 ~ whitelist) { # filter out system headers
+        if ($0 ~ allowlist) { # filter out system headers
             if (!($0 in incfiles)) {
                 incfiles[$0]
                 print " " $0 " \\" > tempfile
