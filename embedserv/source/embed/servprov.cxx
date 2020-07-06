@@ -21,6 +21,7 @@
 #include <servprov.hxx>
 #include <embeddoc.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -223,5 +224,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*f
 {
     return NOERROR;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embedserv_EmbedServer(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    auto msf = uno::Reference<lang::XMultiServiceFactory>(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    return cppu::acquire(new EmbedServer_Impl(msf));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
