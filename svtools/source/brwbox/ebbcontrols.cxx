@@ -21,10 +21,10 @@
 #include <vcl/spinfld.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
+#include <vcl/virdev.hxx>
 
 namespace svt
 {
-
     //= ComboBoxControl
     ComboBoxControl::ComboBoxControl(BrowserDataWin* pParent)
         : ControlBase(pParent, "svt/ui/combocontrol.ui", "ComboControl")
@@ -302,20 +302,21 @@ namespace svt
     }
 
     //= MultiLineEditImplementation
-
-
-    OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetText(LineEnd eSeparator) const
     {
-        return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetText( aSeparator );
+        weld::TextView& rEntry = m_rEdit.get_widget();
+        return convertLineEnd(rEntry.get_text(), eSeparator);
     }
 
-
-    OUString MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetSelected(LineEnd eSeparator) const
     {
-        return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
+        int nStartPos, nEndPos;
+        weld::TextView& rEntry = m_rEdit.get_widget();
+        rEntry.get_selection_bounds(nStartPos, nEndPos);
+        return convertLineEnd(rEntry.get_text().copy(nStartPos, nEndPos - nStartPos), eSeparator);
     }
 
-    IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, weld::TextView&, void)
     {
         m_aModifyHdl.Call(nullptr);
     }
@@ -359,6 +360,13 @@ namespace svt
         return m_pWidget->has_focus();
     }
 
+    void ControlBase::Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags /*nFlags*/)
+    {
+        if (!m_pWidget)
+            return;
+        m_pWidget->draw(*pDevice, tools::Rectangle(rPos, GetSizePixel()));
+    }
+
     void ControlBase::dispose()
     {
         m_pWidget = nullptr;
@@ -388,12 +396,17 @@ namespace svt
         m_pEntry = pEntry;
         m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
-        m_pEntry->connect_key_press(LINK(this, EditControl, KeyInputHdl));
+        m_pEntry->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
     }
 
-    IMPL_LINK(EditControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    bool ControlBase::ProcessKey(const KeyEvent& rKEvt)
     {
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
+    }
+
+    IMPL_LINK(ControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    {
+        return ProcessKey(rKEvt);
     }
 
     void EditControlBase::dispose()
@@ -500,13 +513,25 @@ namespace svt
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Max() == m_pEditImplementation->GetText( LINEEND_LF ).getLength();
-            }   break;
+                break;
+            }
             case KEY_HOME:
             case KEY_LEFT:
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Min() == 0;
-            }   break;
+                break;
+            }
+            case KEY_DOWN:
+            {
+                bResult = !m_pEditImplementation->CanDown();
+                break;
+            }
+            case KEY_UP:
+            {
+                bResult = !m_pEditImplementation->CanUp();
+                break;
+            }
             default:
                 bResult = true;
         }
@@ -524,8 +549,6 @@ namespace svt
     }
 
     //= SpinCellController
-
-
     SpinCellController::SpinCellController(SpinField* pWin)
                          :CellController(pWin)
     {
@@ -591,79 +614,55 @@ namespace svt
         static_cast<FormattedControl&>(GetWindow()).get_formatter().Commit();
     }
 
-    //= MultiLineTextCell
-    void MultiLineTextCell::Modify()
+    MultiLineTextCell::MultiLineTextCell(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/textviewcontrol.ui", "TextViewControl")
+        , m_xWidget(m_xBuilder->weld_text_view("textview"))
     {
-        GetTextEngine()->SetModified( true );
-        VclMultiLineEdit::Modify();
+        InitControlBase(m_xWidget.get());
+        m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+        // so any the natural size doesn't have an effect
+        m_xWidget->set_size_request(1, 1);
     }
 
-    bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
+    void MultiLineTextCell::GetFocus()
     {
-        Selection aOldSelection( GetSelection() );
-
-        bool bWasModified = IsModified();
-        ClearModifyFlag( );
-
-        bool bHandled = GetTextView()->KeyInput( _rEvent );
-
-        bool bIsModified = IsModified();
-        if ( bWasModified && !bIsModified )
-            // not sure whether this can really happen
-            SetModifyFlag();
-
-        if ( bHandled ) // the view claimed it handled the key input
-        {
-            // unfortunately, KeyInput also returns <TRUE/> (means "I handled this key input")
-            // when nothing really changed. Let's care for this.
-            Selection aNewSelection( GetSelection() );
-            if  (  aNewSelection != aOldSelection   // selection changed
-                || bIsModified                      // or some other modification
-                )
-                return true;
-        }
-        return false;
+        if (m_xWidget)
+            m_xWidget->select_region(-1, 0);
+        ControlBase::GetFocus();
     }
 
-
-    bool MultiLineTextCell::PreNotify( NotifyEvent& rNEvt )
+    void MultiLineTextCell::dispose()
     {
-        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        m_xWidget.reset();
+        ControlBase::dispose();
+    }
+
+    bool MultiLineTextCell::ProcessKey(const KeyEvent& rKEvt)
+    {
+        bool bSendToDataWindow = true;
+
+        sal_uInt16 nCode  = rKEvt.GetKeyCode().GetCode();
+        bool bShift = rKEvt.GetKeyCode().IsShift();
+        bool bCtrl = rKEvt.GetKeyCode().IsMod1();
+        bool bAlt =  rKEvt.GetKeyCode().IsMod2();
+
+        if (!bAlt && !bCtrl && !bShift)
         {
-            if ( IsWindowOrChild( rNEvt.GetWindow() ) )
+            switch (nCode)
             {
-                // give the text view a chance to handle the keys
-                // this is necessary since a lot of keys which are normally handled
-                // by this view (in KeyInput) are intercepted by the EditBrowseBox,
-                // which uses them for other reasons. An example is the KeyUp key,
-                // which is used by both the text view and the edit browse box
-
-                const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-                const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-                sal_uInt16 nCode = rKeyCode.GetCode();
-
-                if ( ( nCode == KEY_RETURN ) && ( rKeyCode.GetModifier() == KEY_MOD1 ) )
-                {
-                    KeyEvent aEvent( pKeyEvent->GetCharCode(),
-                        vcl::KeyCode( KEY_RETURN ),
-                        pKeyEvent->GetRepeat()
-                    );
-                    if ( dispatchKeyEvent( aEvent ) )
-                        return true;
-                }
-
-                if ( ( nCode != KEY_TAB ) && ( nCode != KEY_RETURN ) )   // everything but tab and enter
-                {
-                    if ( dispatchKeyEvent( *pKeyEvent ) )
-                        return true;
-                }
+                case KEY_DOWN:
+                    bSendToDataWindow = !m_xWidget->can_move_cursor_with_down();
+                    break;
+                case KEY_UP:
+                    bSendToDataWindow = !m_xWidget->can_move_cursor_with_up();
+                    break;
             }
         }
-        return VclMultiLineEdit::PreNotify( rNEvt );
+
+        if (bSendToDataWindow)
+            return ControlBase::ProcessKey(rKEvt);
+        return false;
     }
-
-
 }   // namespace svt
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
