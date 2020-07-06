@@ -187,6 +187,30 @@ static void SetLastExceptionMsg(const OUString& s = OUString())
         gImpl->maLastExceptionMsg = s;
 }
 
+class LOKTrigger
+{
+public:
+    static void trigger_changed(weld::Entry& rEdit)
+    {
+        rEdit.signal_changed();
+    }
+
+    static void trigger_changed(weld::ComboBox& rComboBox)
+    {
+        rComboBox.signal_changed();
+    }
+
+    static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
+    {
+        rToolbar.signal_clicked(rIdent);
+    }
+
+    static void trigger_click(weld::DrawingArea& rDrawingArea, const Point& rPos)
+    {
+        rDrawingArea.click(rPos);
+    }
+};
+
 namespace {
 
 struct ExtensionMap
@@ -3669,13 +3693,13 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                                 OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
                                 int pos = std::atoi(posString.getStr());
                                 pCombobox->set_active(pos);
-                                pCombobox->signal_changed();
+                                LOKTrigger::trigger_changed(*pCombobox);
                             }
                         }
                         else if (sAction == "change")
                         {
                             pCombobox->set_entry_text(aMap["data"]);
-                            pCombobox->signal_changed();
+                            LOKTrigger::trigger_changed(*pCombobox);
                         }
                         else
                             bContinueWithLOKWindow = true;
@@ -3701,7 +3725,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                     {
                         if (sAction == "click")
                         {
-                            pArea->click(Point(10, 10));
+                            LOKTrigger::trigger_click(*pArea, Point(10, 10));
                         }
                         else
                             bContinueWithLOKWindow = true;
@@ -3731,7 +3755,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                     {
                         if (sAction == "click")
                         {
-                            pToolbar->signal_clicked(OUStringToOString(aMap["data"], RTL_TEXTENCODING_ASCII_US));
+                            LOKTrigger::trigger_clicked(*pToolbar, OUStringToOString(aMap["data"], RTL_TEXTENCODING_ASCII_US));
                         }
                         else
                             bContinueWithLOKWindow = true;
@@ -3745,7 +3769,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                         if (sAction == "change")
                         {
                             pEdit->set_text(aMap["data"]);
-                            pEdit->signal_changed();
+                            LOKTrigger::trigger_changed(*pEdit);
                         }
                         else
                             bContinueWithLOKWindow = true;

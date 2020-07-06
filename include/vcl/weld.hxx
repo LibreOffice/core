@@ -80,6 +80,8 @@ namespace tools
 class JsonWriter;
 }
 
+class LOKTrigger;
+
 namespace weld
 {
 class Container;
@@ -616,6 +618,10 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
+    friend class ::LOKTrigger;
+
+    void signal_changed() { m_aChangeHdl.Call(*this); }
+
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
     Link<render_args, void> m_aRenderHdl;
@@ -629,8 +635,6 @@ protected:
     Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
 
 public:
-    void signal_changed() { m_aChangeHdl.Call(*this); }
-
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
@@ -1470,12 +1474,13 @@ protected:
     Link<Entry&, void> m_aCursorPositionHdl;
     Link<Entry&, bool> m_aActivateHdl;
 
+    friend class ::LOKTrigger;
+
+    void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
     void signal_insert_text(OUString& rString);
 
 public:
-    void signal_changed() { m_aChangeHdl.Call(*this); }
-
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
@@ -2110,7 +2115,10 @@ public:
     virtual a11yrelationset get_accessible_relation_set() = 0;
     virtual Point get_accessible_location() = 0;
 
-    virtual void click(Point pos) = 0;
+private:
+    friend class ::LOKTrigger;
+
+    virtual void click(const Point& rPos) = 0;
 };
 
 class VCL_DLLPUBLIC Menu
@@ -2177,6 +2185,9 @@ protected:
     Link<const OString&, void> m_aClickHdl;
     Link<const OString&, void> m_aToggleMenuHdl;
 
+    friend class ::LOKTrigger;
+
+    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
     void signal_toggle_menu(const OString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }
 
 public:
@@ -2225,7 +2236,6 @@ public:
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
     void connect_menu_toggled(const Link<const OString&, void>& rLink) { m_aToggleMenuHdl = rLink; }
-    virtual void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
 };
 
 class VCL_DLLPUBLIC SizeGroup

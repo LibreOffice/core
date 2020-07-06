@@ -1168,7 +1168,7 @@ public:
 
     virtual OutputDevice& get_ref_device() override;
 
-    virtual void click(Point pos) override;
+    virtual void click(const Point& rPos) override;
 };
 
 class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
