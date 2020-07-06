@@ -1,6 +1,6 @@
 ---
 assumeFilename: io/source/services.cxx
-blacklist:
+excludelist:
     io/source/acceptor/acceptor.cxx:
     # Avoid loplugin:unreffun error
     - services.hxx

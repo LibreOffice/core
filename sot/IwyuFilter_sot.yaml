@@ -1,6 +1,6 @@
 ---
 assumeFilename: sot/source/base/object.cxx
-blacklist:
+excludelist:
     sot/source/unoolestorage/xolesimplestorage.hxx:
     # Base class needs complete type
     - com/sun/star/embed/XOLESimpleStorage.hpp

@@ -1,6 +1,6 @@
 ---
 assumeFilename: linguistic/source/lngsvcmgr.cxx
-blacklist:
+excludelist:
     linguistic/source/hyphdsp.cxx:
     # Needed for direct member access
     - com/sun/star/linguistic2/XLinguProperties.hpp

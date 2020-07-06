@@ -1,6 +1,6 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
-blacklist:
+excludelist:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleStateSet.hpp
     sc/inc/addruno.hxx:

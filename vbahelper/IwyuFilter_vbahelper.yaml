@@ -1,6 +1,6 @@
 ---
 assumeFilename: vbahelper/source/vbahelper/vbahelper.cxx
-blacklist:
+excludelist:
     vbahelper/source/vbahelper/vbaglobalbase.cxx:
     # Actually used
     - com/sun/star/beans/PropertyValue.hpp
