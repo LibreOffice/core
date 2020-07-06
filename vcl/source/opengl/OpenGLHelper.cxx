@@ -753,21 +753,21 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
     }
 }
 
-bool OpenGLHelper::isDeviceBlacklisted()
+bool OpenGLHelper::isDeviceDenylisted()
 {
     static bool bSet = false;
-    static bool bBlacklisted = true; // assume the worst
+    static bool bDenylisted = true; // assume the worst
     if (!bSet)
     {
         OpenGLZone aZone;
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
         X11OpenGLDeviceInfo aInfo;
-        bBlacklisted = aInfo.isDeviceBlocked();
-        SAL_INFO("vcl.opengl", "blacklisted: " << bBlacklisted);
+        bDenylisted = aInfo.isDeviceBlocked();
+        SAL_INFO("vcl.opengl", "denylisted: " << bDenylisted);
 #elif defined( _WIN32 )
         WinOpenGLDeviceInfo aInfo;
-        bBlacklisted = aInfo.isDeviceBlocked();
+        bDenylisted = aInfo.isDeviceBlocked();
 
         if (DriverBlocklist::GetWindowsVersion() == 0x00060001 && /* Windows 7 */
             (aInfo.GetAdapterVendorID() == "0x1002" || aInfo.GetAdapterVendorID() == "0x1022")) /* AMD */
@@ -776,20 +776,20 @@ bool OpenGLHelper::isDeviceBlacklisted()
             OpenGLZone::relaxWatchdogTimings();
         }
 #else
-        bBlacklisted = false;
+        bDenylisted = false;
 #endif
         bSet = true;
     }
 
-    return bBlacklisted;
+    return bDenylisted;
 }
 
 bool OpenGLHelper::supportsVCLOpenGL()
 {
     static bool bDisableGL = !!getenv("SAL_DISABLEGL");
-    bool bBlacklisted = isDeviceBlacklisted();
+    bool bDenylisted = isDeviceDenylisted();
 
-    return !bDisableGL && !bBlacklisted;
+    return !bDisableGL && !bDenylisted;
 }
 
 namespace
@@ -950,7 +950,7 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     /*
      * There are a number of cases that these environment variables cover:
      *  * SAL_FORCEGL forces OpenGL independent of any other option
-     *  * SAL_DISABLEGL or a blacklisted driver avoid the use of OpenGL if SAL_FORCEGL is not set
+     *  * SAL_DISABLEGL or a denylisted driver avoid the use of OpenGL if SAL_FORCEGL is not set
      */
 
     bSet = true;

@@ -167,9 +167,9 @@ namespace svt
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        css::uno::Sequence< OUString > m_rBlackList;
+        css::uno::Sequence< OUString > m_rDenyList;
 
-        bool URLOnBlackList ( const OUString& sRealURL );
+        bool URLOnDenyList ( const OUString& sRealURL );
 
     public:
         /** constructs an enumerator instance
@@ -205,7 +205,7 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const css::uno::Sequence< OUString >& rBlackList
+                    const css::uno::Sequence< OUString >& rDenyList
                 );
 
         /** cancels the running operation.

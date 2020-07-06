@@ -67,7 +67,7 @@ public:
      */
     bool mustValidate(const char* filename) const override
     {
-        const std::vector<const char*> aBlacklist =
+        const std::vector<const char*> aDenylist =
         {
             // the following doc exports currently don't pass binary validation
             "tdf56321_flipImage_both.doc",
@@ -91,8 +91,8 @@ public:
             "first-header-footer.doc"
         };
 
-        // Don't bother with non-.doc files; weed out blacklisted .doc files
-        return (OString(filename).endsWith(".doc") && std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end());
+        // Don't bother with non-.doc files; weed out denylisted .doc files
+        return (OString(filename).endsWith(".doc") && std::find(aDenylist.begin(), aDenylist.end(), filename) == aDenylist.end());
     }
 protected:
 

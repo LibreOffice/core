@@ -18,7 +18,7 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
      * Returns true if calculation with OpenCL is enabled (at all).
      * The actual use of OpenCL for a formula is also affected by the
      * configuration settings specifying whether OpenCL is used for
-     * all opcodes or just for a subset, and the black- and whitelists
+     * all opcodes or just for a subset, and the deny- and allowlists
      * of OpenCL implementations that are in use.
      */
     boolean isOpenCLEnabled();

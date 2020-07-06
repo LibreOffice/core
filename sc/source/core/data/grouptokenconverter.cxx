@@ -187,7 +187,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 // matrix operations and possibly incorrect results (=C:C/D:D). That is handled by
                 // having ScCompiler check that there are no possible implicit intersections.
                 // Additionally some functions such as INDEX() and OFFSET() require a reference,
-                // that is handled by blacklisting those opcodes in ScTokenArray::CheckToken().
+                // that is handled by denylisting those opcodes in ScTokenArray::CheckToken().
 
                 ScComplexRefData aRef = *p->GetDoubleRef();
                 if( aRef.IsDeleted())

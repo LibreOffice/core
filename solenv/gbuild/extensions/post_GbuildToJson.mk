@@ -18,9 +18,9 @@
 #   --JAVAOBJECTS
 #   --PYTHONOBJECTS
 #
-# Add black listed modules a json files (--BLACKLIST)
+# Add black listed modules a json files (--DENYLIST)
 #
-# Reduce number of blacklisted modules
+# Reduce number of denylisted modules
 
 ifneq ($(filter gbuildtojson,$(MAKECMDGOALS)),)
 
@@ -186,7 +186,7 @@ endef
 
 gb_Module_add_l10n_target =
 
-gb_GbuildToJson_BLACKLISTEDMODULES := cli_ure jurt external
+gb_GbuildToJson_DENYLISTEDMODULES := cli_ure jurt external
 
 define gb_Module__add_moduledir_impl
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(notdir $(2)).mk
@@ -196,7 +196,7 @@ gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb
 endef
 
 define gb_Module_add_moduledir
-$(if $(filter $(gb_GbuildToJson_BLACKLISTEDMODULES),$(2)),,$(call gb_Module__add_moduledir_impl,$(1),$(2)))
+$(if $(filter $(gb_GbuildToJson_DENYLISTEDMODULES),$(2)),,$(call gb_Module__add_moduledir_impl,$(1),$(2)))
 
 endef
 

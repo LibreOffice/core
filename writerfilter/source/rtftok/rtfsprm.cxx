@@ -196,7 +196,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
 }
 
 /// Is it problematic to deduplicate this SPRM?
-static bool isSPRMDeduplicateBlacklist(Id nId)
+static bool isSPRMDeduplicateDenylist(Id nId)
 {
     switch (nId)
     {
@@ -259,7 +259,7 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
     {
         if (rSprm.second->equals(*pValue))
         {
-            if (!isSPRMDeduplicateBlacklist(rSprm.first))
+            if (!isSPRMDeduplicateDenylist(rSprm.first))
                 ret.erase(rSprm.first); // duplicate to style
         }
         else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())

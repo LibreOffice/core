@@ -362,7 +362,7 @@ void RemoteFilesDialog::OpenURL( OUString const & sURL )
         m_pCurrentAsyncAction = new AsyncPickerAction( this, m_xFileView.get(), AsyncPickerAction::Action::eOpenURL );
 
         // -1 timeout - sync
-        m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetBlackList() );
+        m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetDenyList() );
 
         if( m_eMode != REMOTEDLG_MODE_SAVE )
             m_xName_ed->set_text( "" );
@@ -929,15 +929,15 @@ void RemoteFilesDialog::SetHasFilename( bool )
 {
 }
 
-void RemoteFilesDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
+void RemoteFilesDialog::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
 {
-    m_aBlackList = rBlackList;
-    m_xTreeView->SetBlackList( rBlackList );
+    m_aDenyList = rDenyList;
+    m_xTreeView->SetDenyList( rDenyList );
 }
 
-const css::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
+const css::uno::Sequence< OUString >& RemoteFilesDialog::GetDenyList() const
 {
-    return m_aBlackList;
+    return m_aDenyList;
 }
 
 void RemoteFilesDialog::SetStandardDir( const OUString& rStdDir )

@@ -7,7 +7,7 @@ Environment variables used:
 SAL_USE_VCLPLUGIN - use the specified VCL plugin (GTK2 in this case - currently
 needed on Linux because the default GTK3 doesn't support OpenGL yet)
 
-SAL_FORCEGL - enable OpenGL even if the card is blacklisted.
+SAL_FORCEGL - enable OpenGL even if the card is whitelisted.
 
 Other variables:
 

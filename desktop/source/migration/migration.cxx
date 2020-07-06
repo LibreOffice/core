@@ -774,13 +774,13 @@ void MigrationImpl::runServices()
 
             try {
                 // set black list for extension migration
-                uno::Sequence< OUString > seqExtBlackList;
+                uno::Sequence< OUString > seqExtDenyList;
                 sal_uInt32 nSize = rMigration.excludeExtensions.size();
                 if ( nSize > 0 )
-                    seqExtBlackList = comphelper::arrayToSequence< OUString >(
+                    seqExtDenyList = comphelper::arrayToSequence< OUString >(
                                           rMigration.excludeExtensions.data(), nSize );
-                seqArguments[2] <<= NamedValue("ExtensionBlackList",
-                                               uno::makeAny( seqExtBlackList ));
+                seqArguments[2] <<= NamedValue("ExtensionDenyList",
+                                               uno::makeAny( seqExtDenyList ));
 
                 xMigrationJob.set(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(rMigration.service, seqArguments, xContext),

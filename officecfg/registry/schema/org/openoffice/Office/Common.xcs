@@ -861,7 +861,7 @@
         <info>
            <desc>Specifies if OpenGL rendering should be used in VCL backends
                supporting it. This one forces the use of OpenGL even if the
-                blacklist would block the OpenGL driver.</desc>
+                denylist would block the OpenGL driver.</desc>
         </info>
         <value>false</value>
       </prop>
@@ -876,7 +876,7 @@
         <info>
            <desc>Specifies if Skia rendering should be used in VCL backends
                supporting it. This one forces the use of Skia even if the
-                blacklist would block the driver.</desc>
+                denylist would block the driver.</desc>
         </info>
         <value>false</value>
       </prop>
@@ -5622,7 +5622,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="OpenCLBlackList" oor:type="oor:string-list" oor:nillable="false">
+      <prop oor:name="OpenCLDenyList" oor:type="oor:string-list" oor:nillable="false">
         <!-- UIHints: Tools - Options General OpenCL -->
         <info>
           <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be bad. Each entry is a string consisting of five parts separated by slashes. An empty part matches anything. In case a slash, percent or semicolon occurs inside a part, it is replaced by a percent followed by the corresponding number as two hex digits. The parts except OS can contain regular expressions. Inside these regular expressions the usual characters .*()[]\ are special and should be quoted with a backslash to be interpreted literally. OS should be just one of "Linux", "OS X" (including the space) or "Windows" (without quotes). Has higher priority than OpenCLWhiteList.</desc>
@@ -5632,7 +5632,7 @@
       <prop oor:name="OpenCLWhiteList" oor:type="oor:string-list" oor:nillable="false">
         <!-- UIHints: Tools - Options General OpenCL  -->
         <info>
-          <desc>Like OpenCLBlackList, but for combinations known to be good.</desc>
+          <desc>Like OpenCLDenyList, but for combinations known to be good.</desc>
         </info>
         <value oor:separator=";">Linux//Advanced Micro Devices, Inc\.//1445\.5 \(sse2,avx\);//Advanced Micro Devices, Inc\.//;//Intel\(R\) Corporation//;//NVIDIA Corporation//</value>
       </prop>
