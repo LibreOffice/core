@@ -153,7 +153,7 @@ class SvxSearchItem;
 #define SID_PATH                            (SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
 #define SID_STANDARD_DIR                    (SID_SFX_START + 450)
-#define SID_BLACK_LIST                      (SID_SFX_START + 451)
+#define SID_DENY_LIST                       (SID_SFX_START + 451)
 
 // browse-ids
 #define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)

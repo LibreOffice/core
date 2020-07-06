@@ -376,7 +376,7 @@ void Parser::handleEntry(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
     {
         rDriver.mbWhitelisted = true;
     }
-    else if (meBlockType == BlockType::BLACKLIST)
+    else if (meBlockType == BlockType::DENYLIST)
     {
         rDriver.mbWhitelisted = false;
     }
@@ -489,9 +489,9 @@ void Parser::handleContent(xmlreader::XmlReader& rReader)
                 meBlockType = BlockType::WHITELIST;
                 handleList(rReader);
             }
-            else if (name == "blacklist")
+            else if (name == "denylist")
             {
-                meBlockType = BlockType::BLACKLIST;
+                meBlockType = BlockType::DENYLIST;
                 handleList(rReader);
             }
             else if (name == "root")
@@ -504,7 +504,7 @@ void Parser::handleContent(xmlreader::XmlReader& rReader)
         }
         else if (res == xmlreader::XmlReader::Result::End)
         {
-            if (name == "whitelist" || name == "blacklist")
+            if (name == "whitelist" || name == "denylist")
             {
                 meBlockType = BlockType::UNKNOWN;
             }
@@ -673,7 +673,7 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
         }
     }
 
-    SAL_INFO("vcl.driver", (match ? "blacklisted" : "not blacklisted") << " in " << blocklistURL);
+    SAL_INFO("vcl.driver", (match ? "denylisted" : "not denylisted") << " in " << blocklistURL);
     return match;
 }
 
@@ -684,7 +684,7 @@ bool IsDeviceBlocked(const OUString& blocklistURL, const OUString& driverVersion
     Parser parser(blocklistURL, driverList);
     if (!parser.parse())
     {
-        SAL_WARN("vcl.driver", "error parsing blacklist " << blocklistURL);
+        SAL_WARN("vcl.driver", "error parsing denylist " << blocklistURL);
         return false;
     }
     return FindBlocklistedDeviceInList(driverList, driverVersion, vendorId, deviceId,

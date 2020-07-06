@@ -20,7 +20,7 @@ Style enforcing code.
 
 == Directory contents ==
 
-- blacklist: list of existing files not to be formatted:
+- excludelist: list of existing files not to be formatted:
 
   - if you rename a file mentioned in this list, please update the entry (and
     keep the file sorted)
@@ -29,7 +29,7 @@ Style enforcing code.
 
 - ClangFormat.pm: shared code between the git hook and these scripts
 
-- generate-style-blacklist: was used to generate `blacklist`
+- generate-style-excludelist: was used to generate `excludelist`
 
 - reformat-formatted-files: run this script in case the style config changes or
   clang-format version is updated

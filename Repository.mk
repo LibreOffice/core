@@ -942,11 +942,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	vcl_opengl_shader \
 	vcl_theme_definitions \
 	$(if $(filter WNT,$(OS)), \
-		vcl_opengl_blacklist \
+		vcl_opengl_denylist \
 	) \
 	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
-		vcl_skia_blacklist ) \
+		vcl_skia_denylist ) \
 	$(if $(DISABLE_PYTHON),,$(if $(filter-out AIX,$(OS)), \
 		Pyuno/commonwizards \
 		Pyuno/fax \

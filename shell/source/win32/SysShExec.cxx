@@ -166,10 +166,10 @@ CSysShExec::~CSysShExec()
 
 namespace
 {
-bool checkExtension(OUString const & extension, OUString const & blacklist) {
+bool checkExtension(OUString const & extension, OUString const & denylist) {
     assert(!extension.isEmpty());
     for (sal_Int32 i = 0; i != -1;) {
-        OUString tok = blacklist.getToken(0, ';', i);
+        OUString tok = denylist.getToken(0, ';', i);
         tok.startsWith(".", &tok);
         if (extension.equalsIgnoreAsciiCase(tok)) {
             return false;

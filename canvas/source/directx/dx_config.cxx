@@ -40,12 +40,12 @@ namespace dxcanvas
             ConfigItemMode::NONE ),
         maValues(),
         maMaxTextureSize(),
-        mbBlacklistCurrentDevice(false),
+        mbDenylistCurrentDevice(false),
         mbValuesDirty(false)
     {
         try
         {
-            uno::Sequence< OUString > aName { "DeviceBlacklist" };
+            uno::Sequence< OUString > aName { "DeviceDenylist" };
 
             uno::Sequence< uno::Any > aProps( GetProperties( aName ));
             uno::Sequence< sal_Int32 > aValues;
@@ -70,10 +70,10 @@ namespace dxcanvas
                 }
             }
 
-            aName[0] = "BlacklistCurrentDevice";
+            aName[0] = "DenylistCurrentDevice";
             aProps = GetProperties( aName );
             if( aProps.getLength() > 0 )
-                aProps[0] >>= mbBlacklistCurrentDevice;
+                aProps[0] >>= mbDenylistCurrentDevice;
 
             aName[0] = "MaxTextureSize";
             aProps = GetProperties( aName );
@@ -111,7 +111,7 @@ namespace dxcanvas
                 *pValues++ = rInfo.nDriverBuildId;
             }
 
-            PutProperties({"DeviceBlacklist"}, {css::uno::Any(aValues)});
+            PutProperties({"DeviceDenylist"}, {css::uno::Any(aValues)});
         }
         catch( const uno::Exception& )
         {
@@ -127,12 +127,12 @@ namespace dxcanvas
         return maValues.find(rDeviceInfo) == maValues.end();
     }
 
-    bool DXCanvasItem::isBlacklistCurrentDevice() const
+    bool DXCanvasItem::isDenylistCurrentDevice() const
     {
-        return mbBlacklistCurrentDevice;
+        return mbDenylistCurrentDevice;
     }
 
-    void DXCanvasItem::blacklistDevice( const DeviceInfo& rDeviceInfo )
+    void DXCanvasItem::denylistDevice( const DeviceInfo& rDeviceInfo )
     {
         mbValuesDirty = true;
         maValues.insert(rDeviceInfo);

@@ -49,29 +49,29 @@
       <info>
         <desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
       </info>
-      <prop oor:name="DeviceBlacklist" oor:type="oor:int-list" oor:nillable="false">
+      <prop oor:name="DeviceDenylist" oor:type="oor:int-list" oor:nillable="false">
         <info>
           <desc>Sequence of 8 integers per device/driver
 	    combination, that uniquely mark them as not being compatible with the
 	    DirectX9 canvas implementation. If you have
 	    trouble with your graphic adapter, and want to
-	    add it to the blacklisting, set
-	    BlacklistCurrentDevice below to false. After
+	    add it to the denylisting, set
+	    DenylistCurrentDevice below to false. After
 	    running the Impress slideshow once, your card
 	    identification has been added to the list.
 	  </desc>
-          <label>Sequence of blacklisted devices</label>
+          <label>Sequence of denylisted devices</label>
         </info>
         <value>0</value>
       </prop>
-      <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="DenylistCurrentDevice" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether the current DirectX device
-            ids should get blacklisted. When true, a
-	    running DXCanvas will write a DeviceBlacklist entry, and refuse to run
+            ids should get denylisted. When true, a
+	    running DXCanvas will write a DeviceDenylist entry, and refuse to run
 	    on that device subsequently.
 	  </desc>
-          <label>Blacklist current DirectX device</label>
+          <label>Denylist current DirectX device</label>
         </info>
         <value>false</value>
       </prop>

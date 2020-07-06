@@ -443,7 +443,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
     {
         OUString sStandardDir = m_aStandardDir;
         dialog->SetStandardDir( sStandardDir );
-        dialog->SetBlackList( m_aBlackList );
+        dialog->SetDenyList( m_aDenyList );
     }
 
     return dialog;
@@ -983,9 +983,9 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
                         m_aStandardDir = sStandardDir;
                     }
                 }
-                else if ( namedValue.Name == "BlackList" )
+                else if ( namedValue.Name == "DenyList" )
                 {
-                    namedValue.Value >>= m_aBlackList;
+                    namedValue.Value >>= m_aDenyList;
                 }
             }
         }
@@ -1010,9 +1010,9 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
         return true;
     }
 
-    if ( _rName == "BlackList" )
+    if ( _rName == "DenyList" )
     {
-        OSL_VERIFY( _rValue >>= m_aBlackList );
+        OSL_VERIFY( _rValue >>= m_aDenyList );
         return true;
     }
 
@@ -1079,7 +1079,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::
     {
         OUString sStandardDir = m_aStandardDir;
         dialog->SetStandardDir( sStandardDir );
-        dialog->SetBlackList( m_aBlackList );
+        dialog->SetDenyList( m_aDenyList );
     }
 
     return dialog;

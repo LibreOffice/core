@@ -139,7 +139,7 @@ char const sNoAutoSave[] = "NoAutoSave";
 char const sFolderName[] = "FolderName";
 char const sUseSystemDialog[] = "UseSystemDialog";
 char const sStandardDir[] = "StandardDir";
-char const sBlackList[] = "BlackList";
+char const sDenyList[] = "DenyList";
 char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
 char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
 char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
@@ -622,14 +622,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
             }
-            else if ( aName == sBlackList )
+            else if ( aName == sDenyList )
             {
                 uno::Sequence<OUString> xVal;
                 bool bOK = (rProp.Value >>= xVal);
-                DBG_ASSERT( bOK, "invalid type or value for BlackList" );
+                DBG_ASSERT( bOK, "invalid type or value for DenyList" );
                 if (bOK)
                 {
-                    SfxStringListItem stringList(SID_BLACK_LIST);
+                    SfxStringListItem stringList(SID_DENY_LIST);
                     stringList.SetStringList( xVal );
                     rSet.Put( stringList );
                 }
@@ -994,7 +994,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_STANDARD_DIR ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_BLACK_LIST ) == SfxItemState::SET )
+            if ( rSet.GetItemState( SID_DENY_LIST ) == SfxItemState::SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SfxItemState::SET )
                 nAdditional++;
@@ -1207,7 +1207,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         continue;
                     if ( nId == SID_STANDARD_DIR )
                         continue;
-                    if ( nId == SID_BLACK_LIST )
+                    if ( nId == SID_DENY_LIST )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
                         continue;
@@ -1539,9 +1539,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             pValue[nActProp].Name = sStandardDir;
             pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
-        if ( rSet.GetItemState( SID_BLACK_LIST, false, &pItem ) == SfxItemState::SET )
+        if ( rSet.GetItemState( SID_DENY_LIST, false, &pItem ) == SfxItemState::SET )
         {
-            pValue[nActProp].Name = sBlackList;
+            pValue[nActProp].Name = sDenyList;
 
             css::uno::Sequence< OUString > aList;
             static_cast<const SfxStringListItem*>(pItem)->GetStringList( aList );

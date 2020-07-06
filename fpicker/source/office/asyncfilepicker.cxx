@@ -61,7 +61,7 @@ namespace svt
         const OUString& _rFilter,
         sal_Int32 _nMinTimeout,
         sal_Int32 _nMaxTimeout,
-        const css::uno::Sequence< OUString >& rBlackList )
+        const css::uno::Sequence< OUString >& rDenyList )
     {
         DBG_TESTSOLARMUTEX();
             // if this asserts, we'd need to have an own mutex per instance
@@ -95,7 +95,7 @@ namespace svt
             break;
 
         case eOpenURL:
-            eResult = m_pView->Initialize( _rURL, _rFilter, pActionDescriptor.get(), rBlackList );
+            eResult = m_pView->Initialize( _rURL, _rFilter, pActionDescriptor.get(), rDenyList );
             break;
 
         case eExecuteFilter:

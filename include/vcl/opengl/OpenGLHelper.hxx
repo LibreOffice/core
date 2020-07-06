@@ -100,9 +100,9 @@ public:
     static void debugMsgStreamWarn(std::ostringstream const &pStream);
 
     /**
-     * checks if the device/driver pair is on our OpenGL blacklist
+     * checks if the device/driver pair is on our OpenGL denylist
      */
-    static bool isDeviceBlacklisted();
+    static bool isDeviceDenylisted();
 
     /**
      * checks if the system supports all features that are necessary for the OpenGL VCL support
