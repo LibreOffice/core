@@ -66,7 +66,8 @@ StyleStatusListener::StyleStatusListener(
 void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolItem* pState)
 {
     const SfxTemplateItem* pStateItem = dynamic_cast<const SfxTemplateItem*>(pState);
-    m_pPreviewControl->Select(pStateItem->GetStyleName());
+    if (pStateItem)
+        m_pPreviewControl->Select(pStateItem->GetStyleName());
 }
 
 StyleItemController::StyleItemController(
