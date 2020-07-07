@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -40,6 +40,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="load_docprinter-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="load_docprinter">If enabled, the printer settings will be loaded with the document. This can cause a document to be printed on a distant printer, if you do not change the printer manually in the &lt;b&gt;Print&lt;/b&gt; dialog. If disabled, your standard printer will be used to print this document. The current printer settings will be stored with the document whether or not this option is checked.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -55,6 +60,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="load_settings-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="load_settings">Loads the user-specific settings saved in a document with the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -113,6 +123,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="autosave-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="autosave">Specifies that %PRODUCTNAME saves the information needed to restore all open documents in case of a crash. You can specify the saving time interval.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -126,6 +141,11 @@
                         <property name="max_length">2</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="autosave_spin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="autosave_spin">Specifies the time interval in minutes for the automatic recovery option.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -158,6 +178,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="userautosave-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that %PRODUCTNAME saves all open documents when saving auto recovery information. Uses the same time interval as AutoRecovery does.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -173,6 +198,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="relative_fsys-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_fsys">Select this box for &lt;b&gt;relative saving&lt;/b&gt; of URLs in the file system.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -188,6 +218,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="docinfo-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docinfo">Specifies that the &lt;b&gt;Properties&lt;/b&gt; dialog will appear every time you select the &lt;b&gt;Save As&lt;/b&gt; command.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -203,6 +238,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="relative_inet-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_inet">Select this box for &lt;b&gt;relative saving&lt;/b&gt; of URLs to the Internet.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -218,6 +258,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="backup-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="backup">Saves the previous version of a document as a backup copy whenever you save a document. Every time %PRODUCTNAME creates a backup copy, the previous backup copy is replaced. The backup copy gets the extension &lt;b&gt;.BAK&lt;/b&gt;.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -271,6 +316,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="warnalienformat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="warnalienformat">You can choose to get a warning message when you save a document in a format that is not OpenDocument or which you did not set as default format in &lt;b&gt;Load/Save - General&lt;/b&gt; in the Options dialog box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -325,6 +375,11 @@
                       <item translatable="yes" context="optsavepage|odfversion">1.3</item>
                       <item translatable="yes" context="optsavepage|odfversion">1.3 Extended (recommended)</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="odfversion-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="odfversion">Some companies or organizations may require ODF documents in the ODF 1.0/1.1, or ODF 1.2 format. You can select these format to save in the listbox. These older formats cannot store all new features, so the new format ODF 1.3 (Extended) is recommended where possible.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -372,6 +427,11 @@
                       <item translatable="yes" context="optsavepage|doctype">Drawing</item>
                       <item translatable="yes" context="optsavepage|doctype">Formula</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="doctype-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="doctype">Specifies the document type for which you want to define the default file format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -382,6 +442,11 @@
                   <object class="GtkComboBoxText" id="saveas">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="saveas-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="saveas">Specifies &lt;b&gt;how documents of the type selected&lt;/b&gt; on the left will&lt;br /&gt; always be saved as this file type. You may select &lt;i&gt;another file&lt;/i&gt; type for the current document in the &lt;b&gt;Save as&lt;/b&gt; dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -421,6 +486,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptSavePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="OptSavePage">In the &lt;b&gt;General&lt;/b&gt; section, you can select default settings for saving documents, and can select default file formats.</property>
+      </object>
     </child>
   </object>
 </interface>
