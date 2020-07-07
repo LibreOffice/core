@@ -7,23 +7,41 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
+#include <config_folders.h>
 
 #include <AdditionsDialog.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <unordered_set>
 #include <sal/log.hxx>
-#include <tools/stream.hxx>
 #include <strings.hrc>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <dialmgr.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/mnemonic.hxx>
+
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
+#include <ucbhelper/content.hxx>
+#include <comphelper/simplefileaccessinteraction.hxx>
 
 #include <curl/curl.h>
 #include <orcus/json_document_tree.hpp>
@@ -40,14 +58,25 @@ using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::graphic::XGraphic;
+using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::beans;
+
+#ifdef UNX
+const char kUserAgent[] = "LibreOffice AdditionsDownloader/1.0 (Linux)";
+#else
+const char kUserAgent[] = "LibreOffice AdditionsDownloader/1.0 (unknown platform)";
+#endif
 
 namespace
 {
 struct AdditionInfo
 {
+    OUString sExtensionID;
     OUString sName;
     OUString sAuthorName;
-    OUString sPreviewURL;
+    OUString sExtensionURL;
     OUString sScreenshotURL;
     OUString sIntroduction;
     OUString sDescription;
@@ -69,6 +98,18 @@ size_t WriteCallback(void* ptr, size_t size, size_t nmemb, void* userp)
     std::string* response = static_cast<std::string*>(userp);
     size_t real_size = size * nmemb;
     response->append(static_cast<char*>(ptr), real_size);
+    return real_size;
+}
+
+// Callback to get the response data from server to a file.
+size_t WriteCallbackFile(void* ptr, size_t size, size_t nmemb, void* userp)
+{
+    if (!userp)
+        return 0;
+
+    SvStream* response = static_cast<SvStream*>(userp);
+    size_t real_size = size * nmemb;
+    response->WriteBytes(ptr, real_size);
     return real_size;
 }
 
@@ -104,6 +145,36 @@ std::string curlGet(const OString& rURL)
     return response_body;
 }
 
+// Downloads and saves the file at the given rURL to a local path (sFileURL)
+void curlDownload(const OString& rURL, const OUString& sFileURL)
+{
+    CURL* curl = curl_easy_init();
+    SvFileStream aFile(sFileURL, StreamMode::WRITE);
+
+    if (!curl)
+        return;
+
+    curl_easy_setopt(curl, CURLOPT_URL, rURL.getStr());
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, kUserAgent);
+
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallbackFile);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, static_cast<void*>(&aFile));
+
+    CURLcode cc = curl_easy_perform(curl);
+    long http_code = 0;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+    if (http_code != 200)
+    {
+        SAL_WARN("cui.dialogs", "Download failed. Error code: " << http_code);
+    }
+
+    if (cc != CURLE_OK)
+    {
+        SAL_WARN("cui.dialogs", "curl error: " << cc);
+    }
+}
+
 void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdditions)
 {
     orcus::json::document_tree aJsonDoc;
@@ -130,6 +201,8 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
         try
         {
             AdditionInfo aNewAddition = {
+                OStringToOUString(OString(arrayElement.child("id").string_value().get()),
+                                  RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("name").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("author").string_value().get()),
@@ -189,6 +262,156 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
         }
     }
 }
+
+bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
+{
+    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
+        = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
+    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+
+    // copy the images to the user's additions folder
+    OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                          "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros(userFolder);
+    userFolder += "/user/additions/" + aAdditionInfo.sExtensionID + "/";
+
+    OUString aPreviewFile(INetURLObject(aAdditionInfo.sScreenshotURL).getName());
+    OString aPreviewURL = OUStringToOString(aAdditionInfo.sScreenshotURL, RTL_TEXTENCODING_UTF8);
+
+    try
+    {
+        osl::Directory::createPath(userFolder);
+
+        if (!xFileAccess->exists(userFolder + aPreviewFile))
+            curlDownload(aPreviewURL, userFolder + aPreviewFile);
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
+    }
+    sPreviewFile = userFolder + aPreviewFile;
+    return true;
+}
+
+} // End of the anonymous namespace
+
+SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const OUString& rURL,
+                                           const bool& isFirstLoading)
+    : Thread("cuiAdditionsSearchThread")
+    , m_pAdditionsDialog(pDialog)
+    , m_aURL(rURL)
+    , m_bExecute(true)
+    , m_bIsFirstLoading(isFirstLoading)
+{
+}
+
+SearchAndParseThread::~SearchAndParseThread() {}
+
+void SearchAndParseThread::execute()
+{
+    //m_pAdditionsDialog->ClearSearchResults();
+    OUString sProgress;
+    if (m_bIsFirstLoading)
+        sProgress = CuiResId(RID_SVXSTR_ADDITIONS_LOADING);
+    else
+        sProgress = CuiResId(RID_SVXSTR_ADDITIONS_SEARCHING);
+
+    m_pAdditionsDialog->SetProgress(sProgress);
+
+    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
+        = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
+    OString rURL = OUStringToOString(m_aURL, RTL_TEXTENCODING_UTF8);
+    std::string sResponse = curlGet(rURL);
+
+    std::vector<AdditionInfo> additionInfos;
+
+    parseResponse(sResponse, additionInfos);
+
+    if (additionInfos.empty())
+    {
+        sProgress = CuiResId(RID_SVXSTR_ADDITIONS_NORESULTS);
+        m_pAdditionsDialog->SetProgress(sProgress);
+        return;
+    }
+    else
+    {
+        //Get Preview Files
+        sal_Int32 i = 0;
+        for (const auto& additionInfo : additionInfos)
+        {
+            if (!m_bExecute)
+                return;
+
+            OUString aPreviewFile;
+            bool bResult = getPreviewFile(additionInfo, aPreviewFile);
+
+            if (!bResult)
+            {
+                SAL_INFO("cui.dialogs",
+                         "Couldn't get the preview file. Skipping: " << aPreviewFile);
+                continue;
+            }
+
+            SolarMutexGuard aGuard;
+            m_pAdditionsDialog->m_aAdditionsItems.emplace_back(
+                m_pAdditionsDialog->m_xContentGrid.get());
+            AdditionsItem& aCurrentItem = m_pAdditionsDialog->m_aAdditionsItems.back();
+
+            sal_Int32 nGridPositionY = i++;
+            aCurrentItem.m_xContainer->set_grid_left_attach(0);
+            aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
+
+            aCurrentItem.m_xLinkButtonName->set_label(additionInfo.sName);
+            aCurrentItem.m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
+            aCurrentItem.m_xLabelDescription->set_label(additionInfo.sIntroduction);
+            aCurrentItem.m_xLabelAuthor->set_label(additionInfo.sAuthorName);
+            aCurrentItem.m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
+            OUString sLicenseString
+                = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
+            aCurrentItem.m_xLabelLicense->set_label(sLicenseString);
+            OUString sVersionString
+                = CuiResId(RID_SVXSTR_ADDITIONS_REQUIREDVERSION) + additionInfo.sCompatibleVersion;
+            aCurrentItem.m_xLabelVersion->set_label(sVersionString);
+            aCurrentItem.m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
+            aCurrentItem.m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
+            aCurrentItem.m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
+
+            GraphicFilter aFilter;
+            Graphic aGraphic;
+
+            INetURLObject aURLObj(aPreviewFile);
+
+            // This block may be added according to need
+            /*OUString aAdditionsSetting = additionInfo.sSlug
+                    + ";" + additionInfo.sName
+                    + ";" + additionInfo.sPreviewURL
+                    + ";" + additionInfo.sHeaderURL
+                    + ";" + additionInfo.sFooterURL
+                    + ";" + additionInfo.sTextColor;
+
+            m_pAdditionsDialog->AddPersonaSetting( aPersonaSetting );
+            */
+
+            // for VCL to be able to create bitmaps / do visual changes in the thread
+            aFilter.ImportGraphic(aGraphic, aURLObj);
+            BitmapEx aBmp = aGraphic.GetBitmapEx();
+
+            ScopedVclPtr<VirtualDevice> xVirDev
+                = aCurrentItem.m_xImageScreenshot->create_virtual_device();
+            xVirDev->SetOutputSizePixel(aBmp.GetSizePixel());
+            xVirDev->DrawBitmapEx(Point(0, 0), aBmp);
+
+            aCurrentItem.m_xImageScreenshot->set_image(xVirDev.get());
+            xVirDev.disposeAndClear();
+        }
+    }
+
+    if (!m_bExecute)
+        return;
+
+    SolarMutexGuard aGuard;
+    sProgress.clear();
+    m_pAdditionsDialog->SetProgress(sProgress);
 }
 
 AdditionsDialog::AdditionsDialog(weld::Window* pParent)
@@ -197,63 +420,39 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent)
     , m_xMenuButtonSettings(m_xBuilder->weld_menu_button("buttonGear"))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
-{
-    fillGrid();
-}
-
-AdditionsDialog::~AdditionsDialog() {}
-
-void AdditionsDialog::fillGrid()
+    , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
 {
     // TODO - Temporary URL
     OString rURL = "https://yusufketen.com/extensionTest.json";
-    std::string sResponse = curlGet(rURL);
-    std::vector<AdditionInfo> additionInfos;
-    parseResponse(sResponse, additionInfos);
 
-    sal_Int32 i = 0;
-    for (const auto& additionInfo : additionInfos)
+    m_pSearchThread
+        = new SearchAndParseThread(this, OStringToOUString(rURL, RTL_TEXTENCODING_UTF8), true);
+    m_pSearchThread->launch();
+    // fillGrid();
+}
+
+AdditionsDialog::~AdditionsDialog()
+{
+    if (m_pSearchThread.is())
     {
-        m_aAdditionsItems.emplace_back(m_xContentGrid.get());
-        AdditionsItem& aCurrentItem = m_aAdditionsItems.back();
+        // Release the solar mutex, so the thread is not affected by the race
+        // when it's after the m_bExecute check but before taking the solar
+        // mutex.
+        SolarMutexReleaser aReleaser;
+        m_pSearchThread->join();
+    }
+}
 
-        sal_Int32 nGridPositionY = i++;
-        aCurrentItem.m_xContainer->set_grid_left_attach(0);
-        aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
-
-        aCurrentItem.m_xLinkButtonName->set_label(additionInfo.sName);
-        aCurrentItem.m_xLinkButtonName->set_uri(additionInfo.sPreviewURL);
-        aCurrentItem.m_xLabelDescription->set_label(additionInfo.sIntroduction);
-        aCurrentItem.m_xLabelAuthor->set_label(additionInfo.sAuthorName);
-        aCurrentItem.m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
-        OUString sLicenseString = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
-        aCurrentItem.m_xLabelLicense->set_label(sLicenseString);
-        OUString sVersionString
-            = CuiResId(RID_SVXSTR_ADDITIONS_REQUIREDVERSION) + additionInfo.sCompatibleVersion;
-        aCurrentItem.m_xLabelVersion->set_label(sVersionString);
-        aCurrentItem.m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
-        aCurrentItem.m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
-        aCurrentItem.m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
-
-        Reference<XGraphic> xGraphic;
-        try
-        {
-            Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
-            Reference<XGraphicProvider> xGraphicProvider(GraphicProvider::create(xContext));
-
-            Sequence<PropertyValue> aMediaProperties(1);
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= additionInfo.sScreenshotURL;
-
-            xGraphic = Reference<XGraphic>(xGraphicProvider->queryGraphic(aMediaProperties),
-                                           css::uno::UNO_SET_THROW);
-        }
-        catch (const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("cui.dialogs");
-        }
-
-        aCurrentItem.m_xImageScreenshot->set_image(xGraphic);
+void AdditionsDialog::SetProgress(const OUString& rProgress)
+{
+    if (rProgress.isEmpty())
+        m_xLabelProgress->hide();
+    else
+    {
+        SolarMutexGuard aGuard;
+        m_xLabelProgress->show();
+        m_xLabelProgress->set_label(rProgress);
+        m_xDialog->resize_to_request(); //TODO
     }
 }
 
