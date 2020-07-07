@@ -44,7 +44,7 @@
 
 using namespace drawinglayer::primitive2d;
 
-namespace drawinglayer::tools
+namespace drawinglayer
 {
 
 namespace
@@ -451,6 +451,6 @@ void Primitive2dXmlDump::decomposeAndWrite(
     }
 }
 
-} // end namespace drawinglayer::tools
+} // end namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
