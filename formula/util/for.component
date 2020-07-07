@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="for" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="simple.formula.FormulaOpCodeMapperObj">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="simple.formula.FormulaOpCodeMapperObj"
+    constructor="simple_formula_FormulaOpCodeMapperObj">
     <service name="com.sun.star.sheet.FormulaOpCodeMapper"/>
   </implementation>
 </component>
