@@ -42,8 +42,7 @@ class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) TabBar final
-    : public vcl::Window
+class TabBar final : public vcl::Window
 {
 public:
     /** DeckMenuData has entries for display name, and a flag:

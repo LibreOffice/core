@@ -14,7 +14,7 @@
 
 class FormattedField;
 
-class UITEST_DLLPUBLIC FormattedFieldUIObject : public SpinFieldUIObject
+class FormattedFieldUIObject : public SpinFieldUIObject
 {
     VclPtr<FormattedField> mxFormattedField;
 

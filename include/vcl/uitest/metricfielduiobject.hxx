@@ -14,7 +14,7 @@
 
 class MetricField;
 
-class UITEST_DLLPUBLIC MetricFieldUIObject : public SpinFieldUIObject
+class MetricFieldUIObject : public SpinFieldUIObject
 {
     VclPtr<MetricField> mxMetricField;
 

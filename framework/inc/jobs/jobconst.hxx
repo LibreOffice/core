@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 
 #include <rtl/ustring.hxx>
-#include <framework/fwkdllapi.h>
 
 namespace framework{
 
@@ -33,7 +32,7 @@ namespace framework{
             it's code. Typos can occur or code will be changed by new developers ...
             Shared set of constant values can help to improve the maintenance of this code.
  */
-class FWK_DLLPUBLIC JobConst
+class JobConst
 {
     public:
         static const OUString ANSWER_DEACTIVATE_JOB;

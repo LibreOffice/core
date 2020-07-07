@@ -1,4 +1,3 @@
-GrGLAssembleInterface(void*, void (*(*)(void*, char const*))())
 ImplCallPreNotify(NotifyEvent&)
 ImplDestroyHelpWindow(bool)
 ImplFastBitmapConversion(BitmapBuffer&, BitmapBuffer const&, SalTwoRect const&)

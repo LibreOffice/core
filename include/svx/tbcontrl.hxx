@@ -153,7 +153,7 @@ namespace svx
     class ToolboxButtonColorUpdaterBase;
 }
 
-class SVXCORE_DLLPUBLIC SvxStyleToolBoxControl final : public cppu::ImplInheritanceHelper<svt::ToolboxController,
+class SvxStyleToolBoxControl final : public cppu::ImplInheritanceHelper<svt::ToolboxController,
                                                                                           css::lang::XServiceInfo>
 {
     struct Impl;
@@ -192,14 +192,14 @@ private:
     std::unique_ptr<SfxTemplateItem> pFamilyState[MAX_FAMILIES];
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
 
-    SVX_DLLPRIVATE void Update();
-    SVX_DLLPRIVATE void FillStyleBox();
-    SVX_DLLPRIVATE void SelectStyle(const OUString& rStyleName);
+    void Update();
+    void FillStyleBox();
+    void SelectStyle(const OUString& rStyleName);
 
 friend class SfxStyleControllerItem_Impl;
 
-    SVX_DLLPRIVATE void SetFamilyState(sal_uInt16 nIdx, const SfxTemplateItem* pItem);
-    SVX_DLLPRIVATE SfxStyleFamily GetActFamily() const;
+    void SetFamilyState(sal_uInt16 nIdx, const SfxTemplateItem* pItem);
+    SfxStyleFamily GetActFamily() const;
 };
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
