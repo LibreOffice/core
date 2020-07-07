@@ -11,6 +11,8 @@
 #pragma once
 
 #include <vcl/svapp.hxx>
+#include <salhelper/thread.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/weld.hxx>
 
 struct AdditionsItem
@@ -61,11 +63,51 @@ private:
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentGrid;
 
+    std::unique_ptr<weld::Label> m_xLabelProgress;
+
     void fillGrid();
 
 public:
+    ::rtl::Reference<SearchAndParseThread> m_pSearchThread;
+    ::rtl::Reference<GetAdditionThread> m_pGetAdditionThread;
+
     AdditionsDialog(weld::Window* pParent);
     ~AdditionsDialog() override;
+
+    void SetProgress(const OUString& rProgress);
+};
+
+class SearchAndParseThread : public salhelper::Thread
+{
+private:
+    AdditionsDialog* m_pAdditionsDialog;
+    OUString m_aURL;
+    std::atomic<bool> m_bExecute;
+    bool m_bIsFirstLoading;
+
+    virtual ~SearchAndParseThread() override;
+    virtual void execute() override;
+
+public:
+    SearchAndParseThread(AdditionsDialog* pDialog, const OUString& rURL, bool m_bIsFirstLoading);
+
+    void StopExecution() { m_bExecute = false; }
+};
+
+class GetAdditionThread : public salhelper::Thread
+{
+private:
+    AdditionsDialog* m_pPersonaDialog;
+    OUString m_aSelectedPersona;
+    std::atomic<bool> m_bExecute;
+
+    virtual ~GetAdditionThread() override;
+    virtual void execute() override;
+
+public:
+    GetAdditionThread(SelectPersonaDialog* pDialog, const OUString& rSelectedPersona);
+
+    void StopExecution() { m_bExecute = false; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
