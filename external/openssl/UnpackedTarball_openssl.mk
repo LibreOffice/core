@@ -12,15 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,openssl))
 $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	external/openssl/openssllnx.patch \
-	external/openssl/opensslwnt.patch \
-	$(if $(filter INTEL,$(CPUNAME)),external/openssl/opensslwnt_safeseh.patch) \
-	external/openssl/openssl-1.0.1h-win64.patch.1 \
-	external/openssl/opensslsol.patch \
-	external/openssl/opensslios.patch \
-	external/openssl/openssl-3650-masm.patch.1 \
-	external/openssl/openssl-fixbuild.patch.1 \
-	external/openssl/openssl-macos-arm64.patch.1 \
+	external/openssl/openssl-no-multilib.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
