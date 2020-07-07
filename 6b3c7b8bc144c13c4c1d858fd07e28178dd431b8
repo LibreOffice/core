@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2aea47f_40fd3a73",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-07T19:56:24Z",
+      "side": 1,
+      "message": "You dereference pDocSh here, but then check if it\u0027s valid below, in line 262.\n\nBetter put the check there in line 262, like this:\n\n    if (pDocSh \u0026\u0026 pDocSh-\u003eGetDoc()-\u003eGetEditShell()-\u003eGetCursor()-\u003eGetNode().GetTextNode())",
+      "range": {
+        "startLine": 251,
+        "startChar": 9,
+        "endLine": 251,
+        "endChar": 15
+      },
+      "revId": "6b3c7b8bc144c13c4c1d858fd07e28178dd431b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
