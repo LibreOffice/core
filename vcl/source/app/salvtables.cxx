@@ -1133,10 +1133,12 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
-void SalInstanceWidget::draw(VirtualDevice& rOutput)
+void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRect)
 {
-    rOutput.SetOutputSizePixel(m_xWidget->GetSizePixel());
-    m_xWidget->PaintToDevice(&rOutput, Point());
+    Size aOrigSize(m_xWidget->GetSizePixel());
+    m_xWidget->SetSizePixel(rRect.GetSize());
+    m_xWidget->Draw(&rOutput, rRect.TopLeft(), DrawFlags::NONE);
+    m_xWidget->SetSizePixel(aOrigSize);
 }
 
 namespace
@@ -1321,11 +1323,11 @@ void SalInstanceWindow::HandleEventListener(VclWindowEvent& rEvent)
     SalInstanceContainer::HandleEventListener(rEvent);
 }
 
-void SalInstanceWindow::draw(VirtualDevice& rOutput)
+VclPtr<VirtualDevice> SalInstanceWindow::screenshot()
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
     assert(pSysWin);
-    pSysWin->createScreenshot(rOutput);
+    return pSysWin->createScreenshot();
 }
 
 weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()

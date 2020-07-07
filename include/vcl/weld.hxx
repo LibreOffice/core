@@ -272,7 +272,7 @@ public:
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) = 0;
 
     // render the widget to an output device
-    virtual void draw(VirtualDevice& rOutput) = 0;
+    virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) = 0;
 
     virtual ~Widget() {}
 };
@@ -468,6 +468,9 @@ public:
 
     // collect positions of widgets and their help ids for screenshot purposes
     virtual ScreenShotCollection collect_screenshot_data() = 0;
+
+    // render the widget to an output device
+    virtual VclPtr<VirtualDevice> screenshot() = 0;
 };
 
 class VCL_DLLPUBLIC WaitObject
