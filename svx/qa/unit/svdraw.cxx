@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
         = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
 
     // Make sure the text is semi-transparent.
-    drawinglayer::tools::Primitive2dXmlDump aDumper;
+    drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
 
     // Without the accompanying fix in place, this test would have failed with:

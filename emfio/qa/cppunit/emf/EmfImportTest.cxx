@@ -76,7 +76,7 @@ Primitive2DSequence Test::parseEmf(const OUString& aSource)
 
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
@@ -103,7 +103,7 @@ void Test::TestDrawString()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
@@ -125,7 +125,7 @@ void Test::TestDrawStringTransparent()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
@@ -148,7 +148,7 @@ void Test::TestDrawLine()
     // first, get the sequence of primitives and dump it
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
@@ -162,7 +162,7 @@ void Test::TestLinearGradient()
     // This unit checks for a correct import of an EMF+ file with LinearGradient brush
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
