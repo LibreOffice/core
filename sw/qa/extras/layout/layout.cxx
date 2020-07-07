@@ -2823,6 +2823,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
                        "Category 1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122014)
+{
+    SwDoc* pDoc = createDoc("tdf122014.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if the chart title is aligned to left.
+    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[13]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[14]", "x").toInt32();
+    CPPUNIT_ASSERT_GREATER(nX1 + 100, nX2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134235)
 {
     SwDoc* pDoc = createDoc("tdf134235.docx");
