@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd54741b_39fa04d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-07-07T06:39:16Z",
+      "side": 1,
+      "message": "this should be \"document compatibility option\"",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "6b0f9cea60f84e2e91f0c0db48ba04ac72a83fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "accfbab6_9d49eb34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-07-07T06:39:16Z",
+      "side": 1,
+      "message": "Please use \"Co-authored-by:\"",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "6b0f9cea60f84e2e91f0c0db48ba04ac72a83fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
