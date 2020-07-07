@@ -33,20 +33,20 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(SystemExec                   ,
-                                 ::cppu::OWeakObject          ,
-                                 SERVICENAME_PROTOCOLHANDLER  ,
-                                 IMPLEMENTATIONNAME_SYSTEMEXEC)
+OUString SAL_CALL SystemExec::getImplementationName()
+{
+    return "com.sun.star.comp.framework.SystemExecute";
+}
 
-DEFINE_INIT_SERVICE(SystemExec,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+sal_Bool SAL_CALL SystemExec::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL SystemExec::getSupportedServiceNames()
+{
+    return { SERVICENAME_PROTOCOLHANDLER };
+}
 
 SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         : m_xContext    ( rxContext                     )
@@ -143,5 +143,12 @@ void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame
 }
 
 }       //  namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_SystemExecute_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::SystemExec(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

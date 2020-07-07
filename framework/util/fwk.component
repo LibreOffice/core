@@ -242,40 +242,52 @@
   <implementation name="com.sun.star.comp.framework.MediaTypeDetectionHelper">
     <service name="com.sun.star.frame.MediaTypeDetectionHelper"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.NewMenuController">
+  <implementation name="com.sun.star.comp.framework.NewMenuController"
+    constructor="framework_NewMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.OXTFileHandler">
+  <implementation name="com.sun.star.comp.framework.OXTFileHandler"
+    constructor="framework_Oxt_Handler_get_implementation">
     <service name="com.sun.star.frame.ContentHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher">
+  <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher"
+    constructor="framework_PopupMenuDispatcher_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ServiceHandler">
+  <implementation name="com.sun.star.comp.framework.ServiceHandler"
+    constructor="framework_ServiceHandler_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolbarModeMenuController">
+  <implementation name="com.sun.star.comp.framework.ToolbarModeMenuController"
+    constructor="framework_ToolbarModeMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolBarsMenuController">
+  <implementation name="com.sun.star.comp.framework.ToolBarsMenuController"
+    constructor="framework_ToolbarsMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.UriAbbreviation">
+  <implementation name="com.sun.star.comp.framework.UriAbbreviation"
+    constructor="framework_UriAbbreviation_get_implementation">
     <service name="com.sun.star.util.UriAbbreviation"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.services.DispatchHelper">
+  <implementation name="com.sun.star.comp.framework.services.DispatchHelper"
+    constructor="framework_DispatchHelper_get_implementation">
     <service name="com.sun.star.frame.DispatchHelper"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.services.DispatchDisabler">
+  <implementation name="com.sun.star.comp.framework.services.DispatchDisabler"
+    constructor="framework_DispatchDisabler_get_implementation">
     <service name="com.sun.star.frame.DispatchDisabler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.HelpOnStartup">
+  <implementation name="com.sun.star.comp.framework.HelpOnStartup"
+    constructor="framework_HelpOnStartup_get_implementation">
     <service name="com.sun.star.task.Job"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ShellJob">
+  <implementation name="com.sun.star.comp.framework.ShellJob"
+    constructor="framework_ShellJob_get_implementation">
     <service name="com.sun.star.task.Job"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.SystemExecute">
+  <implementation name="com.sun.star.comp.framework.SystemExecute"
+    constructor="framework_SystemExecute_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
 </component>

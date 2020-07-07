@@ -33,20 +33,21 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE(ServiceHandler                   ,
-                                 ::cppu::OWeakObject              ,
-                                 SERVICENAME_PROTOCOLHANDLER      ,
-                                 IMPLEMENTATIONNAME_SERVICEHANDLER)
+OUString SAL_CALL ServiceHandler::getImplementationName()
+{
+    return "com.sun.star.comp.framework.ServiceHandler";
+}
 
-DEFINE_INIT_SERVICE(ServiceHandler,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+sal_Bool SAL_CALL ServiceHandler::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ServiceHandler::getSupportedServiceNames()
+{
+    return { SERVICENAME_PROTOCOLHANDLER };
+}
+
 
 /**
     @short      standard ctor
@@ -55,8 +56,8 @@ DEFINE_INIT_SERVICE(ServiceHandler,
     @param      xFactory
                 reference to uno servicemanager for creation of new services
 */
-ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        : m_xFactory    ( xFactory                      )
+ServiceHandler::ServiceHandler( const css::uno::Reference< css::uno::XComponentContext >& xContext )
+        : m_xContext    ( xContext                      )
 {
 }
 
@@ -174,9 +175,6 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
 */
 css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
 {
-    if (!m_xFactory.is())
-        return css::uno::Reference< css::uno::XInterface >();
-
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
     OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
@@ -206,7 +204,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     try
     {
         // => a) a service starts running inside his own ctor and we create it only
-        xService = m_xFactory->createInstance(sServiceName);
+        xService = m_xContext->getServiceManager()->createInstanceWithContext(sServiceName, m_xContext);
         // or b) he implements the right interface and starts there (may with optional parameters)
         css::uno::Reference< css::task::XJobExecutor > xExecuteable(xService, css::uno::UNO_QUERY);
         if (xExecuteable.is())
@@ -248,5 +246,13 @@ void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< c
 }
 
 }       //  namespace framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_ServiceHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::ServiceHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,13 +56,20 @@ using namespace com::sun::star::ui;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   NewMenuController                           ,
-                                            OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER             ,
-                                            IMPLEMENTATIONNAME_NEWMENUCONTROLLER
-                                        )
+OUString SAL_CALL NewMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.NewMenuController";
+}
 
-DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
+sal_Bool SAL_CALL NewMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL NewMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 {
@@ -507,6 +514,14 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
     }
 }
 
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_NewMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::NewMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

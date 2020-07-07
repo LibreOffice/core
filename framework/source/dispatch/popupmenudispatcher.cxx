@@ -61,7 +61,7 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
 
 OUString SAL_CALL PopupMenuDispatcher::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return "com.sun.star.comp.framework.PopupMenuControllerDispatcher";
 }
 
 sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
@@ -71,54 +71,8 @@ sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sService
 
 css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
+    return { SERVICENAME_PROTOCOLHANDLER };
 }
-
-css::uno::Sequence< OUString > PopupMenuDispatcher::impl_getStaticSupportedServiceNames()
-{
-    css::uno::Sequence<OUString> seqServiceNames { SERVICENAME_PROTOCOLHANDLER };
-    return seqServiceNames;
-}
-
-OUString PopupMenuDispatcher::impl_getStaticImplementationName()
-{
-    return IMPLEMENTATIONNAME_POPUPMENUDISPATCHER;
-}
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL PopupMenuDispatcher::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
-{
-    /* create new instance of service */
-    PopupMenuDispatcher* pClass = new PopupMenuDispatcher( comphelper::getComponentContext(xServiceManager) );
-    /* hold it alive by increasing his ref count!!! */
-    css::uno::Reference< css::uno::XInterface > xService( static_cast< ::cppu::OWeakObject* >(pClass), css::uno::UNO_QUERY );
-    /* initialize new service instance ... he can use his own refcount ... we hold it! */
-    pClass->impl_initService();
-    /* return new created service as reference */
-    return xService;
-}
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-PopupMenuDispatcher::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
-{
-    css::uno::Reference< css::lang::XSingleServiceFactory > xReturn (
-       cppu::createSingleFactory ( xServiceManager,
-                                PopupMenuDispatcher::impl_getStaticImplementationName()   ,
-                                PopupMenuDispatcher::impl_createInstance                  ,
-                                PopupMenuDispatcher::impl_getStaticSupportedServiceNames() )
-                                                                    );
-    return xReturn;
-}
-
-DEFINE_INIT_SERVICE(PopupMenuDispatcher,
-{
-    /*Attention
-    I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-    to create a new instance of this class by our own supported service factory.
-    see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-    */
-}
-)
 
 void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< css::uno::Any >& lArguments )
 {
@@ -305,5 +259,13 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 }
 
 } //  namespace framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_PopupMenuDispatcher_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::PopupMenuDispatcher(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

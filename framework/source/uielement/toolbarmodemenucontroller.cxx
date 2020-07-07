@@ -53,13 +53,23 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarModeMenuController                  ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_TOOLBARMODEMENUCONTROLLER
-                                        )
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE                     (   ToolbarModeMenuController, {} )
+OUString SAL_CALL ToolbarModeMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.ToolbarModeMenuController";
+}
+
+sal_Bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ToolbarModeMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
+
 
 ToolbarModeMenuController::ToolbarModeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
@@ -356,6 +366,13 @@ IMPL_STATIC_LINK( ToolbarModeMenuController, ExecuteHdl_Impl, void*, p, void )
     delete pExecuteInfo;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_ToolbarModeMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::ToolbarModeMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
