@@ -38,6 +38,7 @@ class SAL_DLLPUBLIC_TEMPLATE SvxVertCTLTextTbxCtrl_Base:
  */
 class SvxVertCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl_Base
 {
+    bool m_bVisible;
 public:
     explicit SvxVertCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
