@@ -34,7 +34,6 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
-#include <framework/fwkdllapi.h>
 
 namespace framework
 {
@@ -53,9 +52,9 @@ class RootItemContainer final : private cppu::BaseMutex,
     friend class ConstItemContainer;
 
     public:
-        FWK_DLLPUBLIC RootItemContainer();
-        FWK_DLLPUBLIC RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
-        virtual FWK_DLLPUBLIC ~RootItemContainer() override;
+        RootItemContainer();
+        RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
+        virtual ~RootItemContainer() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw () override
@@ -68,7 +67,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XUnoTunnel
-        static FWK_DLLPUBLIC const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
         sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexContainer

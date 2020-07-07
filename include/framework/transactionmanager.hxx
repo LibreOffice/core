@@ -91,7 +91,7 @@ enum EExceptionMode
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TransactionManager
+class TransactionManager
 {
 
     //  public methods

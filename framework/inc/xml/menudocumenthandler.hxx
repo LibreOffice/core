@@ -29,7 +29,6 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <framework/fwkdllapi.h>
 
 namespace framework{
 

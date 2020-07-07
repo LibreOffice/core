@@ -380,7 +380,7 @@ namespace svt
     //= concrete edit implementations
 
     typedef GenericEditImplementation< Edit >             EditImplementation_Base;
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) EditImplementation final : public EditImplementation_Base
+    class EditImplementation final : public EditImplementation_Base
     {
         DECL_LINK(ModifyHdl, Edit&, void);
     public:

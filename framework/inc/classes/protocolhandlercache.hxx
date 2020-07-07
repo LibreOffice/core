@@ -27,7 +27,6 @@
 
 #include <unotools/configitem.hxx>
 #include <rtl/ustring.hxx>
-#include <framework/fwkdllapi.h>
 
 namespace framework{
 
@@ -44,7 +43,7 @@ namespace framework{
     This struct holds the information about one such registered protocol handler.
     A list of handler objects is defined as ProtocolHandlerHash. see below
 */
-struct FWK_DLLPUBLIC ProtocolHandler
+struct ProtocolHandler
 {
     /* member */
     public:
@@ -87,7 +86,7 @@ typedef std::unordered_map<OUString, ProtocolHandler> HandlerHash;
 */
 
 class HandlerCFGAccess;
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) HandlerCache final
+class HandlerCache final
 {
     /* member */
     private:

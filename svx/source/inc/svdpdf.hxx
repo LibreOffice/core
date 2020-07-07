@@ -54,7 +54,7 @@ class SdrObject;
 class SvdProgressInfo;
 
 // Helper Class to import PDF
-class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
+class ImpSdrPdfImport final
 {
     std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;

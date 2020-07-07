@@ -202,7 +202,7 @@ private:
     virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
-class VCL_DLLPUBLIC DoubleNumericEntry final : public EntryFormatter
+class DoubleNumericEntry final : public EntryFormatter
 {
 public:
     DoubleNumericEntry(weld::Entry& rEntry);

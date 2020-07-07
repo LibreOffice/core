@@ -27,7 +27,7 @@ namespace oox
 {
 namespace crypto
 {
-class OOX_DLLPUBLIC StrongEncryptionDataSpace final
+class StrongEncryptionDataSpace final
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::packages::XPackageEncryption>
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;

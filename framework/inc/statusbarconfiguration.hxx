@@ -31,7 +31,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 namespace framework
 {
 
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) StatusBarConfiguration
+class StatusBarConfiguration
 {
     public:
         static bool LoadStatusBar(

@@ -39,7 +39,7 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ConstItemContainer final : public ::cppu::WeakImplHelper<
+class ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
                                                     css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,
