@@ -43,7 +43,7 @@ struct SvViewDataItem
  * highlighted. When an entry is only highlighted, it looks visually
  * highlighted, but not logically selected.
  */
-class VCL_DLLPUBLIC SvViewDataEntry
+class SvViewDataEntry
 {
     friend class SvTreeList;
 

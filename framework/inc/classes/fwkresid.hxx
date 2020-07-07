@@ -20,10 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FWKRESID_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_FWKRESID_HXX
 
-#include <framework/fwkdllapi.h>
 #include <rtl/ustring.hxx>
 
-FWK_DLLPUBLIC OUString FwkResId(const char* pId);
+OUString FwkResId(const char* pId);
 
 #endif // __FRAMEWORK_CLASSES_FWKRESID
 

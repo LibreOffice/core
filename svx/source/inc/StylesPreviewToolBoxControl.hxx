@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-class SVXCORE_DLLPUBLIC StylesPreviewToolBoxControl final
+class StylesPreviewToolBoxControl final
     : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<StylesPreviewWindow_Impl> m_xVclBox;
