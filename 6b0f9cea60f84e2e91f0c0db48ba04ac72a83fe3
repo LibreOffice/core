@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aa750691_f6b5936e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-07-07T06:59:33Z",
+      "side": 1,
+      "message": "Thx, and sorry that i forgot to update the commit message.\nThis is my first commit to LibreOffice.",
+      "parentUuid": "bd54741b_39fa04d3",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "6b0f9cea60f84e2e91f0c0db48ba04ac72a83fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "accfbab6_9d49eb34",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "6b0f9cea60f84e2e91f0c0db48ba04ac72a83fe3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5be53f2d_9d7df3a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-07-07T06:59:33Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "accfbab6_9d49eb34",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "6b0f9cea60f84e2e91f0c0db48ba04ac72a83fe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
