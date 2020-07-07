@@ -1086,6 +1086,10 @@ void ObjectFormatter::convertTextWrap( PropertySet& rPropSet, const ModelRef< Te
             }
         }
     }
+    else
+    {    // set default value (in OOXML the default value is true)
+        rPropSet.setProperty( PROP_TextWordWrap, true );
+    }
 }
 
 void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bAxis, bool bShowPercent )
