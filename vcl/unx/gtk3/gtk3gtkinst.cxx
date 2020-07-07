@@ -12396,7 +12396,7 @@ private:
     GtkTextBuffer* m_pTextBuffer;
     GtkAdjustment* m_pVAdjustment;
     int m_nMaxTextLength;
-    gulong m_nChangedSignalId; // we don't disable/enable this one, its to implement max-length
+    gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
     gulong m_nVAdjustChangedSignalId;
