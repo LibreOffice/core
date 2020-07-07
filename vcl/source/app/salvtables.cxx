@@ -1137,7 +1137,10 @@ void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRec
 {
     Size aOrigSize(m_xWidget->GetSizePixel());
     m_xWidget->SetSizePixel(rRect.GetSize());
+    rOutput.Push(PushFlags::CLIPREGION);
+    rOutput.IntersectClipRegion(rRect);
     m_xWidget->Draw(&rOutput, rRect.TopLeft(), DrawFlags::NONE);
+    rOutput.Pop();
     m_xWidget->SetSizePixel(aOrigSize);
 }
 
