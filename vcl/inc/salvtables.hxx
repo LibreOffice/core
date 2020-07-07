@@ -387,7 +387,7 @@ public:
 
     virtual void set_highlight_background() override;
 
-    virtual void draw(VirtualDevice& rOutput) override;
+    virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) override;
 
     SystemWindow* getSystemWindow();
 };
@@ -486,9 +486,9 @@ public:
 
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
-    virtual void draw(VirtualDevice& rOutput) override;
-
     virtual weld::ScreenShotCollection collect_screenshot_data() override;
+
+    virtual VclPtr<VirtualDevice> screenshot() override;
 
     virtual ~SalInstanceWindow() override;
 };

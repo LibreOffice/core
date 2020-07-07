@@ -217,7 +217,7 @@ public:
     virtual        void    doDeferredInit(WinBits nBits);
 
     // Screenshot interface
-    void createScreenshot(VirtualDevice& rOutput);
+    VclPtr<VirtualDevice> createScreenshot();
 };
 
 inline void SystemWindow::SetIdleDebugName( const char *pDebugName )

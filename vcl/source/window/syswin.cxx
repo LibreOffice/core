@@ -1156,7 +1156,7 @@ void SystemWindow::doDeferredInit(WinBits /*nBits*/)
     SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
 }
 
-void SystemWindow::createScreenshot(VirtualDevice& rOutput)
+VclPtr<VirtualDevice> SystemWindow::createScreenshot()
 {
     // same prerequisites as in Execute()
     setDeferredProperties();
@@ -1165,11 +1165,15 @@ void SystemWindow::createScreenshot(VirtualDevice& rOutput)
     ToTop();
     ensureRepaint();
 
-    Point aPos;
     Size aSize(GetOutputSizePixel());
 
-    rOutput.SetOutputSizePixel(aSize);
-    rOutput.DrawOutDev(aPos, aSize, aPos, aSize, *this);
+    VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    xOutput->SetOutputSizePixel(aSize);
+
+    Point aPos;
+    xOutput->DrawOutDev(aPos, aSize, aPos, aSize, *this);
+
+    return xOutput;
 }
 
 void SystemWindow::PrePaint(vcl::RenderContext& rRenderContext)
