@@ -185,64 +185,16 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
-namespace {
 
-class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
-    css::lang::XSingleServiceFactory
->
-{
-    osl::Mutex m_aMutex;
-public:
-    ClipboardFactory();
 
-    /*
-     *  XSingleServiceFactory
-     */
-    virtual Reference< XInterface > SAL_CALL createInstance() override;
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) override;
-};
-
-}
-
-ClipboardFactory::ClipboardFactory() :
-        cppu::WeakComponentImplHelper<
-    css::lang::XSingleServiceFactory
->( m_aMutex )
-{
-}
-
-Reference< XInterface > ClipboardFactory::createInstance()
-{
-    return createInstanceWithArguments( Sequence< Any >() );
-}
-
-Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+vcl_SystemClipboard_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
-    Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateClipboard( arguments );
-    return xResult;
-}
-
-OUString Clipboard_getImplementationName()
-{
-    return
-    #if defined MACOSX
-    "com.sun.star.datatransfer.clipboard.AquaClipboard"
-    #elif defined IOS
-    "com.sun.star.datatransfer.clipboard.iOSClipboard"
-    #elif defined ANDROID
-    "com.sun.star.datatransfer.VCLGenericClipboard"
-    #elif defined UNX
-    "com.sun.star.datatransfer.X11ClipboardSupport"
-    #else
-    "com.sun.star.datatransfer.VCLGenericClipboard"
-    #endif
-     ;
-}
-
-Reference< XSingleServiceFactory > Clipboard_createFactory()
-{
-    return Reference< XSingleServiceFactory >( new ClipboardFactory() );
+    auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );
+    xClipboard->acquire();
+    return xClipboard.get();
 }
 
 namespace {

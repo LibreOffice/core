@@ -25,7 +25,8 @@
   <implementation name="com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1">
     <service name="com.sun.star.datatransfer.dnd.OleDropTarget"/>
   </implementation>
-  <implementation name="com.sun.star.datatransfer.clipboard.AquaClipboard">
+  <implementation name="com.sun.star.datatransfer.clipboard.AquaClipboard"
+    constructor="vcl_SystemClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
   </implementation>
   <implementation name="com.sun.star.frame.VCLSessionManagerClient"

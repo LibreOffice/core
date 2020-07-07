@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="vcl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.datatransfer.X11ClipboardSupport">
+  <implementation name="com.sun.star.datatransfer.X11ClipboardSupport"
+    constructor="vcl_SystemClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
   </implementation>
   <implementation name="com.sun.star.datatransfer.dnd.XdndDropTarget">
