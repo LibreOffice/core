@@ -1072,7 +1072,19 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
 
 void ObjectFormatter::convertTextWrap( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
 {
+<<<<<<< HEAD   (b83741 tdf#134606 DOCX table import: fix gridBefore + nesting)
     if( rxTextProp.is() )
+=======
+    if( !rxTextProp.is() )
+    {
+        // set default value (in OOXML the default value is true)
+        rPropSet.setProperty( PROP_TextWordWrap, true );
+        return;
+    }
+
+    PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
+    if( aPropMap.hasProperty(PROP_TextWordWrap) )
+>>>>>>> CHANGE (c777cb tdf#134255 Chart OOXML Import: set the auto text wrap)
     {
         PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
         if( aPropMap.hasProperty(PROP_TextWordWrap) )
