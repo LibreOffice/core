@@ -187,7 +187,9 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                     break;
                 }
 
-                if( !aExt.isEmpty() )
+                // tdf#60684: use native format if possible but it must correspond to filter name
+                // if not you may save for example file with png extension but jpg content
+                if( !aExt.isEmpty() && aExt == rFilterName )
                 {
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
