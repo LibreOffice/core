@@ -2853,7 +2853,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134146)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14
     // - Actual  : 13
-    // i.e. the Y axis title didn't break to multilple lines.
+    // i.e. the Y axis title didn't break to multiple lines.
     assertXPath(pXmlDoc, "//textarray", 14);
 }
 
