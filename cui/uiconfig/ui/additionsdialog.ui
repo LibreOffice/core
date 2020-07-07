@@ -26,17 +26,54 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkBox">
+                <property name="width_request">300</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">5</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelProgress">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="additionsdialog|ProgressLabel">Progress Label</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="labelProgress-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|ProgressLabel">ProgressLabel</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|ProgressLabel">This label shows that the progress of the operations such as loading extensions, not found, etc.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="buttonClose">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="valign">end</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -67,8 +104,8 @@
                     <property name="primary_icon_sensitive">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entrySearch-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|entrySearch">searchEntry</property>
-                        <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|entrySearch">searchEntry</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>
                       </object>
                     </child>
                   </object>
@@ -95,7 +132,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="buttonGear-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes"  context="additionsdialog|buttonGear">Gear Menu</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|buttonGear">Gear Menu</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|buttonGear">Contains commands to modify settings of the additions list such as sorting type or view type.</property>
                       </object>
                     </child>
