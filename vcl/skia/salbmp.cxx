@@ -925,22 +925,10 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
 #ifdef DBG_UTIL
 void SkiaSalBitmap::dump(const char* file) const
 {
-    sk_sp<SkImage> saveImage = mImage;
-    sk_sp<SkImage> saveAlphaImage = mAlphaImage;
-    bool resetBuffer = !mBuffer;
-    int saveWriteAccessCount = mWriteAccessCount;
-    Size savePrescaleSize = mPixelsSize;
-    SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-    // avoid possible assert
-    thisPtr->mWriteAccessCount = 0;
-    SkiaHelper::dump(GetSkImage(), file);
-    // restore old state, so that debugging doesn't affect it
-    if (resetBuffer)
-        thisPtr->mBuffer.reset();
-    thisPtr->mImage = saveImage;
-    thisPtr->mAlphaImage = saveAlphaImage;
-    thisPtr->mWriteAccessCount = saveWriteAccessCount;
-    thisPtr->mPixelsSize = savePrescaleSize;
+    // Use a copy, so that debugging doesn't affect this instance.
+    SkiaSalBitmap copy;
+    copy.Create(*this);
+    SkiaHelper::dump(copy.GetSkImage(), file);
 }
 
 void SkiaSalBitmap::verify() const
