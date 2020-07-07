@@ -22,6 +22,30 @@
       "revId": "ed096a6dda13ab18625f97fbb62262ff0eca54d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9c9815_ef958db1",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-07-07T06:36:18Z",
+      "side": 1,
+      "message": "You are right!\nChecked the example mentioned, and it is really good for our case. \nI hope it is ok now.\nThank you!",
+      "parentUuid": "bc336d33_81a3010c",
+      "range": {
+        "startLine": 2522,
+        "startChar": 0,
+        "endLine": 2522,
+        "endChar": 75
+      },
+      "revId": "ed096a6dda13ab18625f97fbb62262ff0eca54d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
