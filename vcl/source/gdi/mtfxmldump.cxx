@@ -528,6 +528,15 @@ void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
 
 void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)
 {
+    MapMode aMtfMapMode = rMetaFile.GetPrefMapMode();
+    rWriter.attribute("mapunit", convertMapUnitToString(aMtfMapMode.GetMapUnit()));
+    writePoint(rWriter, aMtfMapMode.GetOrigin());
+    rWriter.attribute("scalex", convertFractionToString(aMtfMapMode.GetScaleX()));
+    rWriter.attribute("scaley", convertFractionToString(aMtfMapMode.GetScaleY()));
+
+    Size aMtfSize = rMetaFile.GetPrefSize();
+    writeSize(rWriter, aMtfSize);
+
     for(size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
     {
         MetaAction* pAction = rMetaFile.GetAction(nAction);
@@ -1201,14 +1210,22 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             break;
 
             //case MetaActionType::EPS:
-            //case MetaActionType::REFPOINT:
+
+            case MetaActionType::REFPOINT:
+            {
+                auto* pMeta = static_cast<MetaRefPointAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                writePoint(rWriter, pMeta->GetRefPoint());
+                rWriter.attribute("set", pMeta->IsSetting() ? "true" : "false");
+                rWriter.endElement();
+            }
+            break;
 
             case MetaActionType::TEXTLINECOLOR:
             {
-                MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
+                auto* pMeta = static_cast<MetaTextLineColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
-
-                rWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
+                rWriter.attribute("color", convertColorToString(pMeta->GetColor()));
                 rWriter.endElement();
             }
             break;
@@ -1226,7 +1243,26 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             }
             break;
 
-            //case MetaActionType::FLOATTRANSPARENT:
+            case MetaActionType::FLOATTRANSPARENT:
+            {
+                const auto* pMeta = static_cast<MetaFloatTransparentAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                writePoint(rWriter, pMeta->GetPoint());
+                writeSize(rWriter, pMeta->GetSize());
+                rWriter.attribute("transparent", pMeta->IsTransparent() ? "true" : "false");
+
+                rWriter.startElement("gradient");
+                writeGradient(rWriter, pMeta->GetGradient());
+                rWriter.endElement();
+
+                rWriter.startElement("metafile");
+                writeXml(pMeta->GetGDIMetaFile(), rWriter);
+                rWriter.endElement();
+
+                rWriter.endElement();
+            }
+            break;
+
             //case MetaActionType::GRADIENTEX:
             //case MetaActionType::LAYOUTMODE:
             //case MetaActionType::TEXTLANGUAGE:
