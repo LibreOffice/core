@@ -250,7 +250,7 @@ widgets_labels = [
 progname = os.path.basename(sys.argv[0])
 
 # This dictionary contains the set of suppression lines as read from the
-# suppression file(s). It is merely indexed by the text of the suppresion line
+# suppression file(s). It is merely indexed by the text of the suppression line
 # and contains whether the suppressions was unused.
 suppressions = {}
 
