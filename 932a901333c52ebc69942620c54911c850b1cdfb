@@ -99,6 +99,24 @@
       "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad4046ad_612c0b52",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-07T19:41:31Z",
+      "side": 1,
+      "message": "This patch set is killing me. I don\u0027t know why I am so sloppy and clueless this time.  (Fixed by a few undo\u0027s before I \"optimized\" out that test.).\n\nAlso fixed the reported crash situation.",
+      "parentUuid": "4710c639_ac1fd91d",
+      "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
