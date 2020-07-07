@@ -82,31 +82,23 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
 
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  )
 {
-    return getImplementationName_Static();
-}
-
-OUString FormulaOpCodeMapperObj::getImplementationName_Static()
-{
     return "simple.formula.FormulaOpCodeMapperObj";
 }
 
 uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
-}
-uno::Sequence< OUString > FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aSeq { "com.sun.star.sheet.FormulaOpCodeMapper" };
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > FormulaOpCodeMapperObj::create(
-                uno::Reference< uno::XComponentContext > const & /*_xContext*/)
-{
-    return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(std::make_unique<FormulaCompiler>()));
+    return { "com.sun.star.sheet.FormulaOpCodeMapper" };
 }
 
 } // formula
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+simple_formula_FormulaOpCodeMapperObj(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(
+            new formula::FormulaOpCodeMapperObj(std::make_unique<formula::FormulaCompiler>()));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
