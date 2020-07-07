@@ -31,7 +31,7 @@
 
 namespace framework{
 
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) Converter
+class Converter
 {
     public:
         // Seq<beans.NamedValue> <=> Seq<beans.PropertyValue>

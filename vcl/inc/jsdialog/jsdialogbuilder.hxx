@@ -34,7 +34,7 @@ public:
     void Invoke() override;
 };
 
-class VCL_DLLPUBLIC JSDialogSender
+class JSDialogSender
 {
     std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
 
@@ -189,7 +189,7 @@ public:
     virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
 };
 
-class VCL_DLLPUBLIC JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
+class JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
 {
 public:
     JSSpinButton(VclPtr<vcl::Window> aOwnedToplevel, ::FormattedField* pSpin,
@@ -198,7 +198,7 @@ public:
     virtual void set_value(int value) override;
 };
 
-class VCL_DLLPUBLIC JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
+class JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
 {
 public:
     JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -208,7 +208,7 @@ public:
     virtual void set_secondary_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
+class JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
 {
 public:
     JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCheckBox,
@@ -217,7 +217,7 @@ public:
     virtual void set_active(bool active) override;
 };
 
-class VCL_DLLPUBLIC JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
+class JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
 {
 public:
     JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
@@ -229,7 +229,7 @@ public:
     virtual void queue_draw_area(int x, int y, int width, int height) override;
 };
 
-class VCL_DLLPUBLIC JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
+class JSToolbar : public JSWidget<SalInstanceToolbar, ::ToolBox>
 {
 public:
     JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,

@@ -38,7 +38,7 @@ class PopupMenu;
 namespace framework
 {
 
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonMenuManager
+class AddonMenuManager
 {
     public:
         static bool       HasAddonMenuElements();

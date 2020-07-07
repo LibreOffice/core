@@ -34,7 +34,7 @@ namespace framework{
             instead of using specialized config items of the svtools
             project. This class can wrap such configuration access.
  */
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ConfigAccess final
+class ConfigAccess final
 {
 
     public:

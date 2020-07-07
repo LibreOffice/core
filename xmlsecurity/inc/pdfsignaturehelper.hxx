@@ -49,7 +49,7 @@ class XSecurityEnvironment;
 }
 
 /// Handles signatures of a PDF file.
-class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
+class PDFSignatureHelper
 {
     SignatureInformations m_aSignatureInfos;
 

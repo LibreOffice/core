@@ -28,7 +28,7 @@ class PDFObjectElement;
 }
 
 /// Copies objects from one PDF file into another one.
-class VCL_DLLPUBLIC PDFObjectCopier
+class PDFObjectCopier
 {
     PDFObjectContainer& m_rContainer;
 

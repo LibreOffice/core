@@ -34,7 +34,6 @@
 #include <i18nlangtag/lang.h>
 #include <svl/languageoptions.hxx>
 #include <rtl/ustring.hxx>
-#include <framework/fwkdllapi.h>
 
 #include <functional>
 #include <set>
@@ -115,7 +114,7 @@ public:
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
 };
 
-FWK_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
+void FillLangItems( std::set< OUString > &rLangItems,
         const css::uno::Reference< css::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         SvtScriptType    nScriptType,
@@ -245,12 +244,12 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
         }
 };
 
-FWK_DLLPUBLIC css::uno::Reference<css::ui::XContextChangeEventListener>
+css::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith_Impl(
     css::uno::Reference<css::uno::XInterface> const& xEventFocus,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
 
-FWK_DLLPUBLIC extern auto (*g_pGetMultiplexerListener)(
+extern auto (*g_pGetMultiplexerListener)(
     css::uno::Reference<css::uno::XInterface> const&,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
     -> css::uno::Reference<css::ui::XContextChangeEventListener>;

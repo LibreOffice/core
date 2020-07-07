@@ -180,7 +180,7 @@ public:
     This primitive defines a waveline based on a PolygonStrokePrimitive2D
     where the wave is defined by wave width and wave length.
  */
-class DRAWINGLAYER_DLLPUBLIC PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
+class PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
 {
 private:
     /// wave definition

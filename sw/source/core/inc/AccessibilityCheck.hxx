@@ -16,7 +16,7 @@
 
 namespace sw
 {
-class SW_DLLPUBLIC AccessibilityCheck final : public sfx::AccessibilityCheck
+class AccessibilityCheck final : public sfx::AccessibilityCheck
 {
 private:
     SwDoc* m_pDoc;

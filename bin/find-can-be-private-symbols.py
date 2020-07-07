@@ -30,14 +30,14 @@ classes_with_imported_symbols = set()
 all_source_names = set()
 
 
-# look for imported symbols in executables
-subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*'", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+subprocess_find_all_source_names = subprocess.Popen("git grep -oh -P '\\b\\w\\w\\w+\\b' -- '*.h*' | sort -u", stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 with subprocess_find_all_source_names.stdout as txt:
     for line in txt:
         line = line.strip()
         all_source_names.add(line)
 subprocess_find_all_source_names.terminate()
 
+# find all our shared libs
 subprocess_find = subprocess.Popen("find ./instdir -name *.so && find ./workdir/LinkTarget/CppunitTest -name *.so", stdout=subprocess.PIPE, shell=True)
 with subprocess_find.stdout as txt:
     for line in txt:
@@ -51,7 +51,8 @@ with subprocess_find.stdout as txt:
             for line2 in txt2:
                 line2 = line2.strip()
                 if line_regex.match(line2):
-                    exported_symbols.add(line2.split(" ")[2])
+                    sym = line2.split(" ")[2]
+                    exported_symbols.add(sym)
         # look for imported symbols
         subprocess_objdump = subprocess.Popen("objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
         with subprocess_objdump.stdout as txt2:
