@@ -81,6 +81,24 @@
       "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4710c639_ac1fd91d",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-07-07T10:06:33Z",
+      "side": 1,
+      "message": "Don\u0027t confuse mxTableObj with mxTable.",
+      "parentUuid": "c0a44ed6_28f6ba45",
+      "revId": "932a901333c52ebc69942620c54911c850b1cdfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
