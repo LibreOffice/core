@@ -907,7 +907,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 // tdf#129452 Checking if current cell is vertically merged with all the other cells below to the bottom.
                 // This must be done in order to apply the bottom border of the table to the first cell in a vertical merge.
-                bool bMergedVertically = bool(m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE));
+                std::optional<PropertyMap::Property> oProp = m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE);
+                bool bMergedVertically = oProp && oProp->second.get<bool>();  // starting cell
                 if ( bMergedVertically )
                 {
                     const sal_uInt32 nColumn = m_rDMapper_Impl.getTableManager().findColumn(nRow, nCell);
@@ -916,7 +917,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                         const sal_uInt32 nColumnCell = m_rDMapper_Impl.getTableManager().findColumnCell(i, nColumn);
                         if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nColumnCell) )
                         {
-                            bMergedVertically = bool(m_aCellProperties[i][nColumnCell]->getProperty(PROP_VERTICAL_MERGE));
+                            oProp = m_aCellProperties[i][nColumnCell]->getProperty(PROP_VERTICAL_MERGE);
+                            bMergedVertically = oProp && !oProp->second.get<bool>(); //continuing cell
                         }
                         else
                             bMergedVertically = false;
