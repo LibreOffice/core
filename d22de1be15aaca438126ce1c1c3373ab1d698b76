@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "163fc1ff_385f5381",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-07T09:39:03Z",
+      "side": 1,
+      "message": "In earlier comments I mentioned doing this in a later commit. Well, I instead changed this commit to do it immediately. It really helps to keep the code simple. The only \"bad\" part is that the HXX file tableData.hxx has slightly non-trivial functions - I don\u0027t know if that is good or bad. (Google seems to say it is fine in C++).",
+      "range": {
+        "startLine": 15,
+        "startChar": 32,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "d22de1be15aaca438126ce1c1c3373ab1d698b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
