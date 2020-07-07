@@ -129,6 +129,8 @@ public:
 
     void HandleRedline( Sprm& rSprm );
 
+    sal_Int16 GetCompatibilityVersion();
+
 private:
     // Stream
     virtual void lcl_startSectionGroup() override;

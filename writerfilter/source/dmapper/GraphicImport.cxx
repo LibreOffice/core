@@ -615,7 +615,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
-            m_pImpl->bLayoutInCell = nIntValue != 0;
+            if ( m_pImpl->rDomainMapper.GetCompatibilityVersion() < 15 )
+                m_pImpl->bLayoutInCell = nIntValue != 0;
         break;
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
         break;
@@ -1246,10 +1247,12 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
                 uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::makeAny(rxGraphic));
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
-                uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
-                                    text::TextContentAnchorType_AT_CHARACTER :
-                                    text::TextContentAnchorType_AS_CHARACTER ));
+
+            xGraphicObjectProperties->setPropertyValue(
+                getPropertyName(PROP_ANCHOR_TYPE),
+                uno::makeAny(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR
+                                    ? text::TextContentAnchorType_AT_CHARACTER
+                                    : text::TextContentAnchorType_AS_CHARACTER));
             xGraphicObject.set( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
             //shapes have only one border
