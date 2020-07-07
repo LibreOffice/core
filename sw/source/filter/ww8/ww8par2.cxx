@@ -609,6 +609,9 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
             return;
         }
         sText = OUString(reinterpret_cast<char const *>(pText), nLen, eCharSet);
+        // ofz#23961 in case of multi-byte input encoding resulting in shorter
+        // output pad to full length with something semi-arbitrary
+        comphelper::string::padToLength(sText, nLen, cBulletChar);
     }
     else
     {
