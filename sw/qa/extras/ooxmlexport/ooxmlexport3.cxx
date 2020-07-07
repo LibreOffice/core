@@ -1059,6 +1059,9 @@ DECLARE_OOXMLEXPORT_TEST(testBottomBorders, "tdf129452_BottomBorders.docx")
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
+
+    // But also don't treat separately merged cells as one - the topmost merged cell shouldn't gain a border.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcBorders/w:bottom", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFontTypes, "tdf120344_FontTypes.docx")
