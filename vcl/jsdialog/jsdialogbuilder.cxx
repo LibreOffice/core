@@ -22,9 +22,12 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
     : Idle("JSDialog notify")
     , m_aWindow(aWindow)
     , m_LastNotificationMessage()
+    , m_bForce(false)
 {
     SetPriority(TaskPriority::POST_PAINT);
 }
+
+void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
 void JSDialogNotifyIdle::Invoke()
 {
@@ -41,8 +44,9 @@ void JSDialogNotifyIdle::Invoke()
             aTree.put("id", m_aWindow->GetLOKWindowId());
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
-            if (message != m_LastNotificationMessage)
+            if (m_bForce || message != m_LastNotificationMessage)
             {
+                m_bForce = false;
                 m_LastNotificationMessage = message;
                 pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
             }
@@ -54,7 +58,12 @@ void JSDialogNotifyIdle::Invoke()
     }
 }
 
-void JSDialogSender::notifyDialogState() { mpIdleNotify->Start(); }
+void JSDialogSender::notifyDialogState(bool bForce)
+{
+    if (bForce)
+        mpIdleNotify->ForceUpdate();
+    mpIdleNotify->Start();
+}
 
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
@@ -479,14 +488,24 @@ JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pContro
 
 void JSNotebook::set_current_page(int nPage)
 {
+    bool bForce = false;
+    int nCurrent = get_current_page();
+    if (nCurrent == nPage)
+        bForce = true;
+
     SalInstanceNotebook::set_current_page(nPage);
-    notifyDialogState();
+    notifyDialogState(bForce);
 }
 
 void JSNotebook::set_current_page(const OString& rIdent)
 {
+    bool bForce = false;
+    OString sCurrent = get_current_page_ident();
+    if (sCurrent == rIdent)
+        bForce = true;
+
     SalInstanceNotebook::set_current_page(rIdent);
-    notifyDialogState();
+    notifyDialogState(bForce);
 }
 
 void JSNotebook::remove_page(const OString& rIdent)

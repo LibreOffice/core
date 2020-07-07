@@ -30,11 +30,13 @@ class JSDialogNotifyIdle : public Idle
 {
     VclPtr<vcl::Window> m_aWindow;
     std::string m_LastNotificationMessage;
+    bool m_bForce;
 
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow);
 
     void Invoke() override;
+    void ForceUpdate();
 };
 
 class VCL_DLLPUBLIC JSDialogSender
@@ -47,7 +49,7 @@ public:
     {
     }
 
-    void notifyDialogState();
+    void notifyDialogState(bool bForce = false);
 };
 
 class JSInstanceBuilder : public SalInstanceBuilder
