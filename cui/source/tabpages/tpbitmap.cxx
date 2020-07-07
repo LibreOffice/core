@@ -165,7 +165,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
         nPos = SearchBitmapList( aItem.GetGraphicObject() );
         if (nPos == -1)
             //return;
-        // tdf#125969 start - Writer cannot load existed background image into Bitmap list
+        // tdf#125969 Writer cannot load existed background image into Bitmap list
         {
             css::uno::Any aBitmap;
             css::uno::Reference<css::awt::XBitmap> xBitmap;
@@ -190,7 +190,6 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 return;
         }
-        // tdf#125969 end
     }
     else
     {
