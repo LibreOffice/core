@@ -705,11 +705,16 @@
         <xsl:choose>
             <xsl:when test="
                 $style/@style:family='paragraph'
-                and((
+                and
+            (
+                (
                     (
                         $style/*/@fo:border-top
                         or $style/*/@fo:border-bottom
-                        or $style/*/@fo:border
+                        or ($style/*/@fo:border
+                        and
+                        not($style/*/@fo:border='none')
+                        )
                     )
                     and
                     (
@@ -727,10 +732,10 @@
                     and
                     (     $style/*/@fo:background-color
                     and
-                        not($style/*/fo:background-color='transparent')
+                        not($style/*/@fo:background-color='transparent')
                     )
                 )
-                )">
+            )">
                 <xsl:element name="style" namespace="">
                     <xsl:copy-of select="$style/@style:family" />
                     <xsl:attribute name="style:name"><xsl:value-of select="concat($style/@style:name, '_borderStart')" /></xsl:attribute>

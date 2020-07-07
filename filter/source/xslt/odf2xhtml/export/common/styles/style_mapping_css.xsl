@@ -303,6 +303,9 @@
             <xsl:when test=".='tb-lr'">
                 <xsl:text>vertical-lr; </xsl:text>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>horizontal-tb; direction:ltr;</xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
