@@ -144,7 +144,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
 
     SwWriter aWriter( aStream, rPam );
     xWrt->m_bASCII_NoLastLineEnd = true;
-    xWrt->m_bExportPargraphNumbering = false;
+    xWrt->m_bExportParagraphNumbering = false;
     SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
     aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
     xWrt->SetAsciiOptions( aOpt );

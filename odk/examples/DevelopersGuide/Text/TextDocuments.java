@@ -1591,7 +1591,7 @@ public class TextDocuments {
             // Insert a new paragraph
             mxDocText.insertControlCharacter (
                 mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false );
-            // And select the new pargraph
+            // And select the new paragraph
             xParaCursor.gotoPreviousParagraph ( true );
 
             // Create a new Text Section and access its XNamed interface
