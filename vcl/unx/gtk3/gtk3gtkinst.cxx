@@ -3047,10 +3047,10 @@ public:
         // has to be mapped for draw to work
         bool bAlreadyMapped = gtk_widget_get_mapped(m_pWidget);
 
-        if (!bAlreadyVisible)
-            gtk_widget_show(m_pWidget);
         if (!bAlreadyRealized)
             gtk_widget_realize(m_pWidget);
+        if (!bAlreadyVisible)
+            gtk_widget_show(m_pWidget);
         if (!bAlreadyMapped)
             gtk_widget_map(m_pWidget);
 
@@ -3065,7 +3065,7 @@ public:
                                       aOrigAllocation.y,
                                       static_cast<int>(aSize.Width()),
                                       static_cast<int>(aSize.Height()) };
-        gtk_widget_set_allocation(m_pWidget, &aNewAllocation);
+        gtk_widget_size_allocate(m_pWidget, &aNewAllocation);
 
         if (GTK_IS_CONTAINER(m_pWidget))
             gtk_container_resize_children(GTK_CONTAINER(m_pWidget));
@@ -3080,13 +3080,14 @@ public:
         cairo_destroy(cr);
 
         gtk_widget_set_allocation(m_pWidget, &aOrigAllocation);
+        gtk_widget_size_allocate(m_pWidget, &aOrigAllocation);
 
         rOutput.DrawOutDev(rRect.TopLeft(), aSize, Point(), aSize, *xOutput);
 
-        if (!bAlreadyVisible)
-            gtk_widget_hide(m_pWidget);
         if (!bAlreadyMapped)
             gtk_widget_unmap(m_pWidget);
+        if (!bAlreadyVisible)
+            gtk_widget_hide(m_pWidget);
         if (!bAlreadyRealized)
             gtk_widget_unrealize(m_pWidget);
     }
