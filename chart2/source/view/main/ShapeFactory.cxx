@@ -44,6 +44,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -2407,7 +2408,7 @@ uno::Reference< drawing::XShape >
             aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
             aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } ); // sal_Bool
             aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } ); // sal_Bool
-            aValueMap.insert({ "TextMaximumFrameWidth", uno::Any(nTextMaxWidth) }); // sal_Int32
+            aValueMap.insert( { "TextMaximumFrameWidth", uno::Any(nTextMaxWidth) } ); // sal_Int32
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
@@ -2506,6 +2507,8 @@ uno::Reference< drawing::XShape >
         aM.rotate( -basegfx::deg2rad(nRotation) );//#i78696#->#i80521#
         aM.translate( nXPos, nYPos );
         xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
+
+        xShapeProp->setPropertyValue( "ParaAdjust", uno::Any( style::ParagraphAdjust_CENTER ) );
     }
     catch( const uno::Exception& )
     {
