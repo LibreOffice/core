@@ -123,13 +123,22 @@ struct ToolBarInfo
 
 }
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController                  ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER
-                                        )
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
+OUString SAL_CALL ToolbarsMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.ToolBarsMenuController";
+}
+
+sal_Bool SAL_CALL ToolbarsMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 constexpr OUStringLiteral g_aPropUIName( "UIName" );
 constexpr OUStringLiteral g_aPropResourceURL( "ResourceURL" );
@@ -804,6 +813,13 @@ IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
     delete pExecuteInfo;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_ToolbarsMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::ToolbarsMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

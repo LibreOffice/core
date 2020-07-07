@@ -33,11 +33,20 @@ namespace framework
 {
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper, ::cppu::OWeakObject,
-                                   "com.sun.star.frame.DispatchHelper",
-                                   IMPLEMENTATIONNAME_DISPATCHHELPER)
+OUString SAL_CALL DispatchHelper::getImplementationName()
+{
+    return "com.sun.star.comp.framework.services.DispatchHelper";
+}
 
-DEFINE_INIT_SERVICE(DispatchHelper, {})
+sal_Bool SAL_CALL DispatchHelper::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.DispatchHelper" };
+}
 
 /** ctor.
 
@@ -190,6 +199,13 @@ void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
     m_aBlock.set();
     m_xBroadcaster.clear();
 }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_DispatchHelper_get_implementation(css::uno::XComponentContext* context,
+                                            css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new framework::DispatchHelper(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

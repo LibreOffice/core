@@ -140,12 +140,28 @@ void DispatchDisabler::removeByName( const OUString& rName )
         maDisabledURLs.erase(it);
 }
 
-DEFINE_INIT_SERVICE(DispatchDisabler, {})
+// XInterface, XTypeProvider, XServiceInfo
 
-// XServiceInfo
-DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchDisabler,
-                                   ::cppu::OWeakObject,
-                                   "com.sun.star.frame.DispatchDisabler",
-                                   IMPLEMENTATIONNAME_DISPATCHDISABLER)
+OUString SAL_CALL DispatchDisabler::getImplementationName()
+{
+    return "com.sun.star.comp.framework.services.DispatchDisabler";
+}
+
+sal_Bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.DispatchDisabler" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_DispatchDisabler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::DispatchDisabler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

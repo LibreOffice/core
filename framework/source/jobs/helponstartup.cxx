@@ -38,46 +38,48 @@
 
 namespace framework{
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(HelpOnStartup                   ,
-                                      ::cppu::OWeakObject             ,
-                                      SERVICENAME_JOB                 ,
-                                      IMPLEMENTATIONNAME_HELPONSTARTUP)
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE(HelpOnStartup,
-                    {
-                        /*  Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                        // create some needed uno services and cache it
-                        m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
+OUString SAL_CALL HelpOnStartup::getImplementationName()
+{
+    return "com.sun.star.comp.framework.HelpOnStartup";
+}
 
-                        m_xDesktop = css::frame::Desktop::create(m_xContext);
+sal_Bool SAL_CALL HelpOnStartup::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
 
-                        // ask for office locale
-                        m_sLocale = officecfg::Setup::L10N::ooLocale::get(m_xContext);
-
-                        // detect system
-                        m_sSystem = officecfg::Office::Common::Help::System::get(m_xContext);
-
-                        // Start listening for disposing events of these services,
-                        // so we can react e.g. for an office shutdown
-                        css::uno::Reference< css::lang::XComponent > xComponent;
-                        xComponent.set(m_xModuleManager, css::uno::UNO_QUERY);
-                        if (xComponent.is())
-                            xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                        if (m_xDesktop.is())
-                            m_xDesktop->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                        xComponent.set(m_xConfig, css::uno::UNO_QUERY);
-                        if (xComponent.is())
-                            xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                    }
-                   )
+css::uno::Sequence< OUString > SAL_CALL HelpOnStartup::getSupportedServiceNames()
+{
+    return { SERVICENAME_JOB };
+}
 
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext    (xContext)
 {
+    // create some needed uno services and cache it
+    m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
+
+    m_xDesktop = css::frame::Desktop::create(m_xContext);
+
+    // ask for office locale
+    m_sLocale = officecfg::Setup::L10N::ooLocale::get(m_xContext);
+
+    // detect system
+    m_sSystem = officecfg::Office::Common::Help::System::get(m_xContext);
+
+    // Start listening for disposing events of these services,
+    // so we can react e.g. for an office shutdown
+    css::uno::Reference< css::lang::XComponent > xComponent;
+    xComponent.set(m_xModuleManager, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    if (m_xDesktop.is())
+        m_xDesktop->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    xComponent.set(m_xConfig, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
 }
 
 HelpOnStartup::~HelpOnStartup()
@@ -321,5 +323,12 @@ OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_HelpOnStartup_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::HelpOnStartup(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

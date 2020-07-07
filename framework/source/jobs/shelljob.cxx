@@ -36,20 +36,23 @@
 namespace framework{
 
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
-                                   ::cppu::OWeakObject        ,
-                                   SERVICENAME_JOB            ,
-                                   IMPLEMENTATIONNAME_SHELLJOB)
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE(ShellJob,
-                    {
-                        /*  Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+OUString SAL_CALL ShellJob::getImplementationName()
+{
+    return "com.sun.star.comp.framework.ShellJob";
+}
+
+sal_Bool SAL_CALL ShellJob::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ShellJob::getSupportedServiceNames()
+{
+    return { SERVICENAME_JOB };
+}
+
 
 ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext    (xContext)
@@ -152,5 +155,12 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_ShellJob_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::ShellJob(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

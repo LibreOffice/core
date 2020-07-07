@@ -58,26 +58,14 @@
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::MediaTypeDetectionHelper                )
                         IFFACTORY( ::framework::MailToDispatcher                        )   else
-                        IFFACTORY( ::framework::ServiceHandler                          )   else
-                        IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
-                        IFFACTORY( ::framework::DispatchHelper                          )   else
-                        IFFACTORY( ::framework::DispatchDisabler                        )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
-                        IFFACTORY( ::framework::ToolbarModeMenuController               )   else
-                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::MacrosMenuController                    )   else
-                        IFFACTORY( ::framework::NewMenuController                       )   else
                         IFFACTORY( ::framework::FontSizeMenuController                  )   else
-                        IFFACTORY( ::framework::UriAbbreviation                         )   else
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
-                        IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
-                        IFFACTORY( ::framework::Oxt_Handler                             )   else
-                        IFFACTORY( ::framework::HelpOnStartup       ) else
-                        IFFACTORY( ::framework::SystemExec          ) else
-                        IFFACTORY( ::framework::ShellJob            )
+                        IFFACTORY( ::framework::LanguageSelectionMenuController         )
                     )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

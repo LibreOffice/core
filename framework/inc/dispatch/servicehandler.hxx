@@ -56,21 +56,19 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
     private:
 
         /// reference to global uno service manager which had created us
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /* interface */
     public:
 
         // ctor/dtor
-                 ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+                 ServiceHandler( const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~ServiceHandler(                                                                        ) override;
 
-        // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO_NOFACTORY
-        /* Helper for registry */
-        /// @throws css::uno::Exception
-        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        /* interface XServiceInfo */
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
