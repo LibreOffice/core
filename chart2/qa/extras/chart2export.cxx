@@ -173,6 +173,7 @@ public:
     void testTdf133191();
     void testTdf132594();
     void testTdf136267();
+    void testTdf134255();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf133191);
     CPPUNIT_TEST(testTdf132594);
     CPPUNIT_TEST(testTdf136267);
+    CPPUNIT_TEST(testTdf134255);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2825,6 +2827,26 @@ void Chart2ExportTest::testTdf136267()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:strCache/c:pt/c:v", "John");
+}
+
+void Chart2ExportTest::testTdf134255()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf134255.docx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // import test
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference< beans::XPropertySet > xPropSet(xDataSeries, UNO_QUERY_THROW);
+    bool bWrap = false;
+    CPPUNIT_ASSERT((xPropSet->getPropertyValue("TextWordWrap") >>= bWrap) && bWrap);
+
+    // export test
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "wrap", "square");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

@@ -1077,7 +1077,11 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
 void ObjectFormatter::convertTextWrap( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
 {
     if( !rxTextProp.is() )
+    {
+        // set default value (in OOXML the default value is true)
+        rPropSet.setProperty( PROP_TextWordWrap, true );
         return;
+    }
 
     PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
     if( aPropMap.hasProperty(PROP_TextWordWrap) )
