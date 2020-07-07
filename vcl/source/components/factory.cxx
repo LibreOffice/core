@@ -43,11 +43,7 @@ extern "C" {
                 static_cast< css::lang::XMultiServiceFactory* >( pXUnoSMgr )
                 );
             Reference< css::lang::XSingleServiceFactory > xFactory;
-            if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
-            {
-                xFactory = vcl::Clipboard_createFactory();
-            }
-            else if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
+            if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
             {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::DragSource_getImplementationName(), vcl::DragSource_createInstance,

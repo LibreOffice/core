@@ -36,11 +36,6 @@ namespace com::sun::star {
 
 namespace vcl {
 
-OUString Clipboard_getImplementationName();
-
-css::uno::Reference<css::lang::XSingleServiceFactory>
-Clipboard_createFactory();
-
 css::uno::Sequence<OUString> DragSource_getSupportedServiceNames();
 
 OUString DragSource_getImplementationName();

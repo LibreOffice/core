@@ -304,6 +304,8 @@ core_constructor_list = [
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
+# vcl/*.component
+    "vcl_SystemClipboard_get_implementation",
 # xmloff/source/transform/xof.component
     "xmloff_XMLCalcContentImportOOO_get_implementation",
     "xmloff_XMLCalcImportOOO_get_implementation",
