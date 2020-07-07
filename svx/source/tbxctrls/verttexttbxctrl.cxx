@@ -64,6 +64,7 @@ com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
 
 SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl_Base(rContext, nullptr, OUString())
+    , m_bVisible(false)
 {
 }
 
@@ -76,6 +77,17 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::un
     SvxVertCTLTextTbxCtrl_Base::initialize(rArguments);
     // fdo#83320 Hide vertical text commands early
     setFastPropertyValue_NoBroadcast(1, css::uno::makeAny(true));
+
+    if (m_pToolbar)
+    {
+        m_bVisible = m_pToolbar->get_item_visible(m_aCommandURL.toUtf8());
+        return;
+    }
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nItemId = 0;
+    getToolboxId(nItemId, &pToolBox);
+    m_bVisible = pToolBox && pToolBox->IsItemVisible(nItemId);
 }
 
 void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
@@ -88,12 +100,12 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
     if (rEvent.FeatureURL.Complete == ".uno:VerticalTextState")
     {
         SvtLanguageOptions aLangOptions;
-        bEnabled = aLangOptions.IsVerticalTextEnabled();
+        bEnabled = m_bVisible && aLangOptions.IsVerticalTextEnabled();
     }
     else if (rEvent.FeatureURL.Complete == ".uno:CTLFontState")
     {
         SvtLanguageOptions aLangOptions;
-        bEnabled = aLangOptions.IsCTLFontEnabled();
+        bEnabled = m_bVisible && aLangOptions.IsCTLFontEnabled();
     }
     else
     {
