@@ -26,9 +26,12 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
     : Idle("JSDialog notify")
     , m_aWindow(aWindow)
     , m_LastNotificationMessage()
+    , m_bForce(false)
 {
     SetPriority(TaskPriority::POST_PAINT);
 }
+
+void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
 void JSDialogNotifyIdle::Invoke()
 {
@@ -43,8 +46,9 @@ void JSDialogNotifyIdle::Invoke()
             tools::JsonWriter aJsonWriter;
             m_aWindow->DumpAsPropertyTree(aJsonWriter);
             aJsonWriter.put("id", m_aWindow->GetLOKWindowId());
-            if (!aJsonWriter.isDataEquals(m_LastNotificationMessage))
+            if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
             {
+                m_bForce = false;
                 m_LastNotificationMessage = aJsonWriter.extractAsStdString();
                 pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
                                                       m_LastNotificationMessage.c_str());
@@ -57,7 +61,12 @@ void JSDialogNotifyIdle::Invoke()
     }
 }
 
-void JSDialogSender::notifyDialogState() { mpIdleNotify->Start(); }
+void JSDialogSender::notifyDialogState(bool bForce)
+{
+    if (bForce)
+        mpIdleNotify->ForceUpdate();
+    mpIdleNotify->Start();
+}
 
 namespace
 {
@@ -485,14 +494,24 @@ JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pContro
 
 void JSNotebook::set_current_page(int nPage)
 {
+    bool bForce = false;
+    int nCurrent = get_current_page();
+    if (nCurrent == nPage)
+        bForce = true;
+
     SalInstanceNotebook::set_current_page(nPage);
-    notifyDialogState();
+    notifyDialogState(bForce);
 }
 
 void JSNotebook::set_current_page(const OString& rIdent)
 {
+    bool bForce = false;
+    OString sCurrent = get_current_page_ident();
+    if (sCurrent == rIdent)
+        bForce = true;
+
     SalInstanceNotebook::set_current_page(rIdent);
-    notifyDialogState();
+    notifyDialogState(bForce);
 }
 
 void JSNotebook::remove_page(const OString& rIdent)
