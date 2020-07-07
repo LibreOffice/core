@@ -417,7 +417,7 @@ public:
     bool m_bASCII_ParaAsBlank : 1;
     bool m_bASCII_NoLastLineEnd : 1;
     bool m_bUCS2_WithStartChar : 1;
-    bool m_bExportPargraphNumbering : 1;
+    bool m_bExportParagraphNumbering : 1;
 
     bool m_bBlock : 1;
     bool m_bOrganizerMode : 1;

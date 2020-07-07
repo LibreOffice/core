@@ -123,7 +123,7 @@ Writer::Writer()
     m_bASCII_NoLastLineEnd = m_bASCII_ParaAsBlank = m_bASCII_ParaAsCR =
         m_bWriteClipboardDoc = m_bWriteOnlyFirstTable = m_bBlock =
         m_bOrganizerMode = false;
-    m_bExportPargraphNumbering = true;
+    m_bExportParagraphNumbering = true;
 }
 
 Writer::~Writer()

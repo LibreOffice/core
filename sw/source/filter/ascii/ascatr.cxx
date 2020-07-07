@@ -264,7 +264,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     }
 
     const SwNumRule* pNumRule = rNd.GetNumRule();
-    if (pNumRule && !nStrPos && rWrt.m_bExportPargraphNumbering && !bIsOneParagraph)
+    if (pNumRule && !nStrPos && rWrt.m_bExportParagraphNumbering && !bIsOneParagraph)
     {
         bool bIsOutlineNumRule = pNumRule == rNd.GetDoc()->GetOutlineNumRule();
 

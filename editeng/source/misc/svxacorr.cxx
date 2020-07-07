@@ -1722,7 +1722,7 @@ OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const O
     // auto.
     sal_Int32 nCapLttrPos = nPos+1;        // on the 1st Character
     if( !nPos && !IsWordDelim( rTxt[ 0 ]))
-        --nCapLttrPos;          // Beginning of pargraph and no Blank!
+        --nCapLttrPos;          // Beginning of paragraph and no Blank!
 
     while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
         if( ++nCapLttrPos >= nEnd )
