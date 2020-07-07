@@ -62,10 +62,10 @@ SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogCon
 IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::ToggleButton&, void)
 {
     bool bActive = m_xCbStacked->get_active();
-    m_xNfRotate->set_sensitive(bActive);
-    m_xCtrlDialWin->set_sensitive(bActive);
+    m_xNfRotate->set_sensitive(!bActive);
+    m_xCtrlDialWin->set_sensitive(!bActive);
     m_xCtrlDial->StyleUpdated();
-    m_xFtRotate->set_sensitive(bActive);
+    m_xFtRotate->set_sensitive(!bActive);
 }
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
