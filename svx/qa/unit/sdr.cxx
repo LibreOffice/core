@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
         = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
 
     // Examine the created primitives.
-    drawinglayer::tools::Primitive2dXmlDump aDumper;
+    drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     double fShadowX = getXPath(pDocument, "//shadow/transform", "xy13").toDouble();
     double fShadowY = getXPath(pDocument, "//shadow/transform", "xy23").toDouble();

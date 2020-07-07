@@ -127,7 +127,7 @@ Primitive2DSequence Test::parseSvg(const OUString& aSource)
 
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
@@ -183,7 +183,7 @@ void Test::testTdf87309()
     Primitive2DSequence aSequenceTdf87309 = parseSvg("/svgio/qa/cppunit/data/tdf87309.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf87309.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf87309));
 
     CPPUNIT_ASSERT (pDocument);
@@ -202,7 +202,7 @@ void Test::testFontsizeKeywords()
     Primitive2DSequence aSequenceFontsizeKeywords = parseSvg("/svgio/qa/cppunit/data/FontsizeKeywords.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizeKeywords.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizeKeywords));
 
     CPPUNIT_ASSERT (pDocument);
@@ -265,7 +265,7 @@ void Test::testFontsizePercentage()
     Primitive2DSequence aSequenceFontsizePercentage = parseSvg("/svgio/qa/cppunit/data/FontsizePercentage.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizePercentage.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizePercentage));
 
     CPPUNIT_ASSERT (pDocument);
@@ -282,7 +282,7 @@ void Test::testFontsizeRelative()
     Primitive2DSequence aSequenceFontsizeRelative = parseSvg("/svgio/qa/cppunit/data/FontsizeRelative.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceFontsizeRelative.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceFontsizeRelative));
 
     CPPUNIT_ASSERT (pDocument);
@@ -304,7 +304,7 @@ void Test::testTdf45771()
     Primitive2DSequence aSequenceTdf45771 = parseSvg("/svgio/qa/cppunit/data/tdf45771.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf45771.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf45771));
 
     CPPUNIT_ASSERT (pDocument);
@@ -321,7 +321,7 @@ void Test::testTdf97941()
     Primitive2DSequence aSequenceTdf97941 = parseSvg("/svgio/qa/cppunit/data/tdf97941.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97941.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97941));
 
     CPPUNIT_ASSERT (pDocument);
@@ -337,7 +337,7 @@ void Test::testTdf104339()
     Primitive2DSequence aSequenceTdf104339 = parseSvg("/svgio/qa/cppunit/data/tdf104339.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf104339.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf104339));
 
     CPPUNIT_ASSERT (pDocument);
@@ -349,7 +349,7 @@ void Test::testTdf85770()
     Primitive2DSequence aSequenceTdf85770 = parseSvg("/svgio/qa/cppunit/data/tdf85770.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf85770.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf85770));
 
     CPPUNIT_ASSERT (pDocument);
@@ -375,7 +375,7 @@ void Test::testTdf79163()
     Primitive2DSequence aSequenceTdf79163 = parseSvg("/svgio/qa/cppunit/data/tdf79163.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf79163.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf79163));
 
     CPPUNIT_ASSERT (pDocument);
@@ -388,7 +388,7 @@ void Test::testTdf97542_1()
     Primitive2DSequence aSequenceTdf97542_1 = parseSvg("/svgio/qa/cppunit/data/tdf97542_1.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97542_1.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_1));
 
     CPPUNIT_ASSERT (pDocument);
@@ -404,7 +404,7 @@ void Test::testTdf97542_2()
     Primitive2DSequence aSequenceTdf97542_2 = parseSvg("/svgio/qa/cppunit/data/tdf97542_2.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97542_2.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_2));
 
     CPPUNIT_ASSERT (pDocument);
@@ -420,7 +420,7 @@ void Test::testTdf97543()
     Primitive2DSequence aSequenceTdf97543 = parseSvg("/svgio/qa/cppunit/data/tdf97543.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97543.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97543));
 
     CPPUNIT_ASSERT (pDocument);
@@ -439,7 +439,7 @@ void Test::testRGBColor()
     Primitive2DSequence aSequenceRGBColor = parseSvg("/svgio/qa/cppunit/data/RGBColor.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBColor.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBColor));
 
     CPPUNIT_ASSERT (pDocument);
@@ -458,7 +458,7 @@ void Test::testRGBAColor()
     Primitive2DSequence aSequenceRGBAColor = parseSvg("/svgio/qa/cppunit/data/RGBAColor.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBAColor.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
 
     CPPUNIT_ASSERT (pDocument);
@@ -471,7 +471,7 @@ void Test::testNoneColor()
     Primitive2DSequence aSequenceRGBAColor = parseSvg("/svgio/qa/cppunit/data/noneColor.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceRGBAColor.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
 
     CPPUNIT_ASSERT (pDocument);
@@ -488,7 +488,7 @@ void Test::testTdf97936()
     Primitive2DSequence aSequenceTdf97936 = parseSvg("/svgio/qa/cppunit/data/tdf97936.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf97936.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97936));
 
     CPPUNIT_ASSERT (pDocument);
@@ -516,7 +516,7 @@ void Test::testClipPathAndParentStyle()
     Primitive2DSequence aSequenceClipPathAndParentStyle = parseSvg("/svgio/qa/cppunit/data/ClipPathAndParentStyle.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndParentStyle.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceClipPathAndParentStyle));
 
     CPPUNIT_ASSERT (pDocument);
@@ -534,7 +534,7 @@ void Test::testClipPathAndStyle()
     Primitive2DSequence aSequenceClipPathAndStyle = parseSvg("/svgio/qa/cppunit/data/ClipPathAndStyle.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndStyle.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceClipPathAndStyle));
 
     CPPUNIT_ASSERT (pDocument);
@@ -551,7 +551,7 @@ void Test::testi125329()
     Primitive2DSequence aSequencei125329 = parseSvg("/svgio/qa/cppunit/data/i125329.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequencei125329.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequencei125329));
 
     CPPUNIT_ASSERT (pDocument);
@@ -574,7 +574,7 @@ void Test::testMaskingPath07b()
     Primitive2DSequence aSequenceMaskingPath07b = parseSvg("/svgio/qa/cppunit/data/masking-path-07-b.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceMaskingPath07b.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskingPath07b));
 
     CPPUNIT_ASSERT (pDocument);
@@ -586,7 +586,7 @@ void Test::test123926()
     Primitive2DSequence aSequence123926 = parseSvg("/svgio/qa/cppunit/data/tdf123926.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence123926.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence123926));
 
     CPPUNIT_ASSERT (pDocument);
@@ -600,7 +600,7 @@ void Test::test47446()
     Primitive2DSequence aSequence47446 = parseSvg("/svgio/qa/cppunit/data/47446.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence47446.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446));
 
     CPPUNIT_ASSERT (pDocument);
@@ -615,7 +615,7 @@ void Test::test47446b()
     Primitive2DSequence aSequence47446b = parseSvg("/svgio/qa/cppunit/data/47446b.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence47446b.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence47446b));
 
     CPPUNIT_ASSERT (pDocument);
@@ -630,7 +630,7 @@ void Test::testMaskText()
     Primitive2DSequence aSequenceMaskText = parseSvg("/svgio/qa/cppunit/data/maskText.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceMaskText.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceMaskText));
 
     CPPUNIT_ASSERT (pDocument);
@@ -648,7 +648,7 @@ void Test::testTdf99994()
     Primitive2DSequence aSequenceTdf99994 = parseSvg("/svgio/qa/cppunit/data/tdf99994.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf99994.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99994));
 
     CPPUNIT_ASSERT (pDocument);
@@ -665,7 +665,7 @@ void Test::testTdf99115()
     Primitive2DSequence aSequenceTdf99115 = parseSvg("/svgio/qa/cppunit/data/tdf99115.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf99115.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99115) );
 
     CPPUNIT_ASSERT (pDocument);
@@ -714,7 +714,7 @@ void Test::testTdf101237()
     Primitive2DSequence aSequenceTdf101237 = parseSvg("/svgio/qa/cppunit/data/tdf101237.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf101237.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf101237));
 
     CPPUNIT_ASSERT (pDocument);
@@ -729,7 +729,7 @@ void Test::testTdf94765()
     Primitive2DSequence aSequenceTdf94765 = parseSvg("/svgio/qa/cppunit/data/tdf94765.svg");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf94765.getLength()));
 
-    drawinglayer::tools::Primitive2dXmlDump dumper;
+    drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf94765));
 
     CPPUNIT_ASSERT (pDocument);

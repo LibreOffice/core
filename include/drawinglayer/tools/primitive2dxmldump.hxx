@@ -19,14 +19,14 @@
 
 namespace tools { class XmlWriter; }
 
-namespace drawinglayer::tools
+namespace drawinglayer
 {
 
 class DRAWINGLAYER_DLLPUBLIC Primitive2dXmlDump final
 {
 private:
     std::vector<bool> maFilter;
-    void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, ::tools::XmlWriter& rWriter);
+    void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, tools::XmlWriter& rWriter);
 
 public:
     Primitive2dXmlDump();
