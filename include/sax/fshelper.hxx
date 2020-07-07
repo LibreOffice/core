@@ -161,7 +161,7 @@ private:
 
 typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
 
-// Helpers to make intention to pass optional attributes to *Element finctions explicit, instead of
+// Helpers to make intention to pass optional attributes to *Element functions explicit, instead of
 // using `(condition) ? value.toUtf8().getStr() : nullptr` syntax.
 inline const char* UseIf(const char* s, bool bUse) { return bUse ? s : nullptr; }
 // OString, OUString
