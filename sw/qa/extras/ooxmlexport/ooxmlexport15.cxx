@@ -28,6 +28,17 @@ protected:
     }
 };
 
+DECLARE_OOXMLIMPORT_TEST(testTdf77794, "tdf77794.docx")
+{
+    uno::Reference<beans::XPropertySet> xGraphicProps( getShape(2), uno::UNO_QUERY_THROW );
+
+    bool bLayoutInCell;
+    xGraphicProps->getPropertyValue("IsFollowingTextFlow") >>= bLayoutInCell;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Logo is not in table!", true, bLayoutInCell);
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());

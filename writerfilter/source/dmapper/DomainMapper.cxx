@@ -3996,6 +3996,14 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     m_pImpl->SetCurrentRedlineIsRead();
 }
 
+sal_Int16 DomainMapper::GetCompatibilityVersion()
+{
+    if (!m_pImpl->GetSettingsTable())
+        return -1;
+
+    return m_pImpl->GetSettingsTable()->GetWordCompatibilityMode();
+}
+
 void DomainMapper::finishParagraph(const bool bRemove)
 {
     if (m_pImpl->m_pSdtHelper->validateDateFormat())
