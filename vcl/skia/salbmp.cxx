@@ -296,8 +296,8 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     if (mSize == newSize)
         return true;
 
-    SAL_INFO("vcl.skia.trace", "scale(" << this << "): " << mSize << "->" << newSize << ":"
-                                        << static_cast<int>(nScaleFlag));
+    SAL_INFO("vcl.skia.trace", "scale(" << this << "): " << mSize << "/" << mBitCount << "->"
+                                        << newSize << ":" << static_cast<int>(nScaleFlag));
 
     // The idea here is that the actual scaling will be delayed until the result
     // is actually needed. Usually the scaled bitmap will be drawn somewhere,
@@ -319,7 +319,17 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
             currentQuality = kHigh_SkFilterQuality;
             break;
         default:
+            SAL_INFO("vcl.skia.trace", "scale(" << this << "): unsupported scale algorithm");
             return false;
+    }
+    if (mBitCount < 24 && !mPalette.IsGreyPalette8Bit())
+    {
+        // Scaling can introduce additional colors not present in the original
+        // bitmap (e.g. when smoothing). If the bitmap is indexed (has non-trivial palette),
+        // this would break the bitmap, because the actual scaling is done only somewhen later.
+        // Linear 8bit palette (grey) is ok, since there we use directly the values as colors.
+        SAL_INFO("vcl.skia.trace", "scale(" << this << "): indexed bitmap");
+        return false;
     }
     // if there is already one scale() pending, use the lowest quality of all requested
     static_assert(kMedium_SkFilterQuality < kHigh_SkFilterQuality);
