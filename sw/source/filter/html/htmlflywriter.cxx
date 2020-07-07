@@ -1825,7 +1825,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
                             MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
 
-            OUString aFilterName("JPG");
+            OUString aFilterName("");
 
             if (rHTMLWrt.mbReqIF)
             {
