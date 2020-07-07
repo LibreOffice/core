@@ -58,7 +58,7 @@ namespace uno = com::sun::star::uno ;
 
 #define PROPERTY_VERSION        "Version"
 
-static const char * const aUpdateEntryProperties[] = {
+const char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
     UPDATE_BUILDID,
     UPDATE_DESCRIPTION,
@@ -72,7 +72,7 @@ static const char * const aUpdateEntryProperties[] = {
     OLD_VERSION
 };
 
-static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
+const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
 NamedValueByNameAccess::~NamedValueByNameAccess()
 {
