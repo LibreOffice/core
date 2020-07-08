@@ -2041,6 +2041,16 @@ public:
         m_aCursorPositionHdl = rLink;
     }
 
+    // returns true if pressing up would move the cursor
+    // doesn't matter if that move is to a previous line or to the start of the
+    // current line just so long as the cursor would move
+    virtual bool can_move_cursor_with_up() const = 0;
+
+    // returns true if pressing down would move the cursor
+    // doesn't matter if that move is to a next line or to the end of the
+    // current line just so long as the cursor would move
+    virtual bool can_move_cursor_with_down() const = 0;
+
     virtual void cut_clipboard() = 0;
     virtual void copy_clipboard() = 0;
     virtual void paste_clipboard() = 0;

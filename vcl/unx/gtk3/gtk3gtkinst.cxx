@@ -12553,6 +12553,24 @@ public:
         g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);
     }
 
+    // in gtk, 'up' when on the first line, will jump to the start of the line
+    // if not there already
+    virtual bool can_move_cursor_with_up() const override
+    {
+        GtkTextIter start, end;
+        gtk_text_buffer_get_selection_bounds(m_pTextBuffer, &start, &end);
+        return !gtk_text_iter_equal(&start, &end) || !gtk_text_iter_is_start(&start);
+    }
+
+    // in gtk, 'down' when on the first line, will jump to the end of the line
+    // if not there already
+    virtual bool can_move_cursor_with_down() const override
+    {
+        GtkTextIter start, end;
+        gtk_text_buffer_get_selection_bounds(m_pTextBuffer, &start, &end);
+        return !gtk_text_iter_equal(&start, &end) || !gtk_text_iter_is_end(&end);
+    }
+
     virtual void cut_clipboard() override
     {
         GtkClipboard *pClipboard = gtk_widget_get_clipboard(GTK_WIDGET(m_pTextView),

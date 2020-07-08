@@ -1515,6 +1515,22 @@ void VclMultiLineEdit::EnableCursor( bool bEnable )
     GetTextView()->EnableCursor( bEnable );
 }
 
+bool VclMultiLineEdit::CanUp() const
+{
+    TextView* pTextView = GetTextView();
+    const TextSelection& rTextSelection = pTextView->GetSelection();
+    TextPaM aPaM(rTextSelection.GetEnd());
+    return aPaM != pTextView->CursorUp(aPaM);
+}
+
+bool VclMultiLineEdit::CanDown() const
+{
+    TextView* pTextView = GetTextView();
+    const TextSelection& rTextSelection = pTextView->GetSelection();
+    TextPaM aPaM(rTextSelection.GetEnd());
+    return aPaM != pTextView->CursorDown(aPaM);
+}
+
 TextWindow* VclMultiLineEdit::GetTextWindow()
 {
     return pImpVclMEdit->GetTextWindow();
