@@ -140,7 +140,7 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
         properties->getPropertyValue("ParaStyleName") >>= sCurrentStyleName;
 
     if (sCurrentStyleName.isEmpty())
-        sCurrentStyleName = "Standard";
+        return; // In case of Default Character Styles;
 
     while (true)
     {
