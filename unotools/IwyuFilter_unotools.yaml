@@ -1,9 +1,6 @@
 ---
 assumeFilename: unotools/source/i18n/resmgr.cxx
 blacklist:
-    unotools/inc/unotoolsservices.hxx:
-    # Needed for extern declaration
-    - namespace comphelper::service_decl { class ServiceDecl; } }
     unotools/source/config/itemholder1.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XEventListener.hpp
