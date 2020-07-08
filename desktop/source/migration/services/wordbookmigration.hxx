@@ -35,15 +35,6 @@ class INetURLObject;
 namespace migration
 {
 
-
-    OUString WordbookMigration_getImplementationName();
-    css::uno::Sequence< OUString > WordbookMigration_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > WordbookMigration_create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
-
-
-
-
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XInitialization,

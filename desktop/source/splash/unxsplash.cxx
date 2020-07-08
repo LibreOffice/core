@@ -22,6 +22,7 @@
 #include <osl/process.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 
@@ -102,7 +103,7 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
 
 OUString UnxSplashScreen::getImplementationName()
 {
-    return UnxSplash_getImplementationName();
+    return "com.sun.star.office.comp.PipeSplashScreen";
 }
 
 sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
@@ -112,37 +113,19 @@ sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 {
-    return UnxSplash_getSupportedServiceNames();
+    return { "com.sun.star.office.PipeSplashScreen" };
 }
 
 }
 
-using namespace desktop;
-
-// get service instance...
-static uno::Reference< uno::XInterface > m_xINSTANCE;
-
-uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > &  )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_UnxSplash_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static osl::Mutex s_aMutex;
-    if ( !m_xINSTANCE.is() )
-    {
-        osl::MutexGuard guard( s_aMutex );
-        if ( !m_xINSTANCE.is() )
-            m_xINSTANCE = static_cast<cppu::OWeakObject*>(new UnxSplashScreen);
-    }
+    static rtl::Reference< desktop::UnxSplashScreen > m_xINSTANCE(new desktop::UnxSplashScreen());
 
-    return m_xINSTANCE;
-}
-
-OUString UnxSplash_getImplementationName()
-{
-    return "com.sun.star.office.comp.PipeSplashScreen";
-}
-
-uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw()
-{
-    return uno::Sequence< OUString > { "com.sun.star.office.PipeSplashScreen" };
+    m_xINSTANCE->acquire();
+    return static_cast<cppu::OWeakObject*>(m_xINSTANCE.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

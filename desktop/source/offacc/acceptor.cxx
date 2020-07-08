@@ -183,21 +183,13 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
 }
 
 // XServiceInfo
-OUString Acceptor::impl_getImplementationName()
+OUString Acceptor::getImplementationName()
 {
     return "com.sun.star.office.comp.Acceptor";
 }
-OUString Acceptor::getImplementationName()
-{
-    return Acceptor::impl_getImplementationName();
-}
-Sequence<OUString> Acceptor::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.office.Acceptor" };
-}
 Sequence<OUString> Acceptor::getSupportedServiceNames()
 {
-    return Acceptor::impl_getSupportedServiceNames();
+    return { "com.sun.star.office.Acceptor" };
 }
 
 sal_Bool Acceptor::supportsService(OUString const & ServiceName)
@@ -205,16 +197,6 @@ sal_Bool Acceptor::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-// Factory
-Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServiceFactory >& aFactory )
-{
-    try {
-        return static_cast<cppu::OWeakObject *>(
-            new Acceptor(comphelper::getComponentContext(aFactory)));
-    } catch ( const Exception& ) {
-        return css::uno::Reference<css::uno::XInterface>();
-    }
-}
 
 // InstanceProvider
 AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext)
@@ -256,41 +238,12 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 
 }
 
-// component management stuff...
-
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_Acceptor_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-using namespace desktop;
-
-SAL_DLLPUBLIC_EXPORT void * offacc_component_getFactory(char const *pImplementationName, void *pServiceManager, void *)
-{
-    void* pReturn = nullptr ;
-    if  ( pImplementationName && pServiceManager )
-    {
-        // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory > xFactory;
-        Reference< XMultiServiceFactory >  xServiceManager(
-            static_cast< XMultiServiceFactory* >(pServiceManager));
-
-        if (desktop::Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
-        {
-            xFactory.set( cppu::createSingleFactory(
-                xServiceManager, desktop::Acceptor::impl_getImplementationName(),
-                desktop::Acceptor::impl_getInstance, desktop::Acceptor::impl_getSupportedServiceNames()) );
-        }
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-
-    // Return with result of this operation.
-    return pReturn ;
+    return cppu::acquire(new desktop::Acceptor(context));
 }
 
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

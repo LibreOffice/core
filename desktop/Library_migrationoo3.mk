@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,migrationoo3,\
 $(eval $(call gb_Library_set_componentfile,migrationoo3,desktop/source/migration/services/migrationoo3))
 
 $(eval $(call gb_Library_add_exception_objects,migrationoo3,\
-    desktop/source/migration/services/cexportsoo3 \
     desktop/source/migration/services/oo3extensionmigration \
 ))
 

@@ -18,7 +18,6 @@
  */
 
 
-#include "splash.hxx"
 #include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
@@ -111,13 +110,13 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return desktop::splash::getImplementationName(); }
+    { return "com.sun.star.office.comp.SplashScreen"; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return desktop::splash::getSupportedServiceNames(); }
+    { return { "com.sun.star.office.SplashScreen" }; }
 };
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
@@ -626,19 +625,12 @@ osl::Mutex SplashScreen::_aMutex;
 
 }
 
-css::uno::Reference< css::uno::XInterface > desktop::splash::create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_SplashScreen_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast< cppu::OWeakObject * >(new SplashScreen);
+    return cppu::acquire(new SplashScreen());
 }
 
-OUString desktop::splash::getImplementationName() {
-    return "com.sun.star.office.comp.SplashScreen";
-}
-
-css::uno::Sequence< OUString > desktop::splash::getSupportedServiceNames()
-{
-    return { "com.sun.star.office.SplashScreen" };
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

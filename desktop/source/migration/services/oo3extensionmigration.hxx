@@ -40,14 +40,6 @@ class INetURLObject;
 namespace migration
 {
 
-    OUString OO3ExtensionMigration_getImplementationName();
-    css::uno::Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames();
-    css::uno::Reference< css::uno::XInterface > OO3ExtensionMigration_create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
-
-
-
-
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XInitialization,

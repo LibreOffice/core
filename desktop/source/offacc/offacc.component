@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="offacc" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.office.comp.Acceptor">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.office.comp.Acceptor"
+    constructor="desktop_Acceptor_get_implementation">
     <service name="com.sun.star.office.Acceptor"/>
   </implementation>
 </component>

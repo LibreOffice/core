@@ -37,22 +37,6 @@ namespace migration
     #define sTargetUserBasic "/user/__basic_80"
 
 
-    // component operations
-
-
-    OUString BasicMigration_getImplementationName()
-    {
-        return "com.sun.star.comp.desktop.migration.Basic";
-    }
-
-
-    Sequence< OUString > BasicMigration_getSupportedServiceNames()
-    {
-        Sequence< OUString > aNames { "com.sun.star.migration.Basic" };
-        return aNames;
-    }
-
-
     // BasicMigration
 
 
@@ -148,7 +132,7 @@ namespace migration
 
     OUString BasicMigration::getImplementationName()
     {
-        return BasicMigration_getImplementationName();
+        return "com.sun.star.comp.desktop.migration.Basic";
     }
 
 
@@ -160,7 +144,7 @@ namespace migration
 
     Sequence< OUString > BasicMigration::getSupportedServiceNames()
     {
-        return BasicMigration_getSupportedServiceNames();
+        return { "com.sun.star.migration.Basic" };
     }
 
 
@@ -203,17 +187,15 @@ namespace migration
     }
 
 
-    // component operations
-
-
-    Reference< XInterface > BasicMigration_create(
-        Reference< XComponentContext > const & )
-    {
-        return static_cast< lang::XTypeProvider * >( new BasicMigration() );
-    }
-
-
 }   // namespace migration
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_BasicMigration_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new migration::BasicMigration());
+}
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
