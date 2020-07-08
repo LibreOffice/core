@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="utl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.io.comp.TempFile">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.io.comp.TempFile"
+    constructor="unotools_OTempFileService_get_implementation">
     <service name="com.sun.star.io.TempFile"/>
   </implementation>
-  <implementation name="com.sun.star.comp.unotools.misc.ServiceDocumenter">
+  <implementation name="com.sun.star.comp.unotools.misc.ServiceDocumenter"
+    constructor="unotools_ServiceDocument_get_implementation">
     <singleton name="com.sun.star.util.theServiceDocumenter"/>
   </implementation>
 </component>

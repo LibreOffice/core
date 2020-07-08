@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
@@ -42,7 +43,8 @@ typedef ::cppu::WeakImplHelper< css::io::XTempFile
     , css::io::XTruncate
     , css::beans::XPropertySet
     , css::beans::XFastPropertySet
-    , css::beans::XPropertyAccess > OTempFileBase;
+    , css::beans::XPropertyAccess
+    , css::lang::XServiceInfo> OTempFileBase;
 
 class OTempFileService : public OTempFileBase
 {
@@ -66,6 +68,11 @@ public:
     //Methods
     //  XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+
+    //  XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //  XTempFile
     virtual sal_Bool SAL_CALL getRemoveFile() override;

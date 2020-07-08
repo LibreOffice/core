@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/misc/mediadescriptor \
     unotools/source/misc/sharedunocomponent \
     unotools/source/misc/syslocale \
-    unotools/source/misc/unotoolsservices \
     unotools/source/misc/wincodepage \
     unotools/source/misc/ServiceDocumenter \
     unotools/source/misc/ZipPackageHelper \
