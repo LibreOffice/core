@@ -26,31 +26,25 @@
 
 namespace framework{
 
-//  XInterface, XTypeProvider
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE(
-    DispatchRecorderSupplier,
-    ::cppu::OWeakObject,
-    "com.sun.star.frame.DispatchRecorderSupplier",
-    IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER)
+OUString SAL_CALL DispatchRecorderSupplier::getImplementationName()
+{
+    return "com.sun.star.comp.framework.DispatchRecorderSupplier";
+}
 
-DEFINE_INIT_SERVICE(
-    DispatchRecorderSupplier,
-    {
-        /*Attention
-            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-            to create a new instance of this class by our own supported service factory.
-            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-        */
-    }
-)
+sal_Bool SAL_CALL DispatchRecorderSupplier::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
 
-/**
-    @short  standard constructor to create instance
-    @descr  Because an instance will be initialized by her interface methods
-            it's not necessary to do anything here.
- */
-DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
+css::uno::Sequence< OUString > SAL_CALL DispatchRecorderSupplier::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.DispatchRecorderSupplier" };
+}
+
+
+DispatchRecorderSupplier::DispatchRecorderSupplier()
 {
 }
 
@@ -156,5 +150,12 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
 }
 
 }   // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_DispatchRecorderSupplier_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::DispatchRecorderSupplier());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

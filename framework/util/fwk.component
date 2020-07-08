@@ -218,28 +218,36 @@
   <implementation name="com.sun.star.comp.framework.DispatchRecorder">
     <service name="com.sun.star.frame.DispatchRecorder"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.DispatchRecorderSupplier">
+  <implementation name="com.sun.star.comp.framework.DispatchRecorderSupplier"
+    constructor="framework_DispatchRecorderSupplier_get_implementation">
     <service name="com.sun.star.frame.DispatchRecorderSupplier"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.FontMenuController">
+  <implementation name="com.sun.star.comp.framework.FontMenuController"
+    constructor="framework_FontMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.FontSizeMenuController">
+  <implementation name="com.sun.star.comp.framework.FontSizeMenuController"
+    constructor="framework_FontSizeMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.FooterMenuController">
+  <implementation name="com.sun.star.comp.framework.FooterMenuController"
+    constructor="framework_FooterMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.HeaderMenuController">
+  <implementation name="com.sun.star.comp.framework.HeaderMenuController"
+    constructor="framework_HeaderMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.MacrosMenuController">
+  <implementation name="com.sun.star.comp.framework.MacrosMenuController"
+    constructor="framework_MacrosMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.MailToDispatcher">
+  <implementation name="com.sun.star.comp.framework.MailToDispatcher"
+    constructor="framework_MailToDispatcher_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.MediaTypeDetectionHelper">
+  <implementation name="com.sun.star.comp.framework.MediaTypeDetectionHelper"
+    constructor="framework_MediaTypeDetectionHelper_get_implementation">
     <service name="com.sun.star.frame.MediaTypeDetectionHelper"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.NewMenuController"
