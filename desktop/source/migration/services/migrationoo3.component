@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="migrationoo3" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.desktop.migration.OOo3Extensions">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.desktop.migration.OOo3Extensions"
+    constructor="desktop_OO3ExtensionMigration_get_implementation">
     <service name="com.sun.star.migration.Extensions"/>
   </implementation>
 </component>

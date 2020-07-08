@@ -31,24 +31,6 @@ using namespace ::com::sun::star::uno;
 
 namespace migration
 {
-    // component operations
-
-
-    OUString WordbookMigration_getImplementationName()
-    {
-        return "com.sun.star.comp.desktop.migration.Wordbooks";
-    }
-
-
-    Sequence< OUString > WordbookMigration_getSupportedServiceNames()
-    {
-        return { "com.sun.star.migration.Wordbooks" };
-    }
-
-
-    // WordbookMigration
-
-
     WordbookMigration::WordbookMigration()
     {
     }
@@ -181,7 +163,7 @@ static bool IsUserWordbook( const OUString& rFile )
 
     OUString WordbookMigration::getImplementationName()
     {
-        return WordbookMigration_getImplementationName();
+        return "com.sun.star.comp.desktop.migration.Wordbooks";
     }
 
 
@@ -193,7 +175,7 @@ static bool IsUserWordbook( const OUString& rFile )
 
     Sequence< OUString > WordbookMigration::getSupportedServiceNames()
     {
-        return WordbookMigration_getSupportedServiceNames();
+        return { "com.sun.star.migration.Wordbooks" };
     }
 
 
@@ -235,18 +217,14 @@ static bool IsUserWordbook( const OUString& rFile )
         return Any();
     }
 
-
-    // component operations
-
-
-    Reference< XInterface > WordbookMigration_create(
-        Reference< XComponentContext > const & )
-    {
-        return static_cast< lang::XTypeProvider * >( new WordbookMigration() );
-    }
-
-
 }   // namespace migration
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_WordbookMigration_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new migration::WordbookMigration());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

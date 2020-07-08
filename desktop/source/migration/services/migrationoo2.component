@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="migrationoo2" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.desktop.migration.Basic">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.desktop.migration.Basic"
+    constructor="desktop_BasicMigration_get_implementation">
     <service name="com.sun.star.migration.Basic"/>
   </implementation>
-  <implementation name="com.sun.star.comp.desktop.migration.Wordbooks">
+  <implementation name="com.sun.star.comp.desktop.migration.Wordbooks"
+    constructor="desktop_WordbookMigration_get_implementation">
     <service name="com.sun.star.migration.Wordbooks"/>
   </implementation>
 </component>
