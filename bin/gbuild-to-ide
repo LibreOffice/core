@@ -94,12 +94,12 @@ class GbuildParser:
         (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
         (self.target_by_path, self.target_by_location) = ({}, {})
 
-    includepattern = re.compile('-I(\S+)')
-    isystempattern = re.compile('-isystem\s*(\S+)')
-    warningpattern = re.compile('-W\S+')
-    libpattern = re.compile('Library_(.*)\.mk')
-    exepattern = re.compile('Executable_(.*)\.mk')
-    testpattern = re.compile('CppunitTest_(.*)\.mk')
+    includepattern = re.compile(r'-I(\S+)')
+    isystempattern = re.compile(r'-isystem\s*(\S+)')
+    warningpattern = re.compile(r'-W\S+')
+    libpattern = re.compile(r'Library_(.*)\.mk')
+    exepattern = re.compile(r'Executable_(.*)\.mk')
+    testpattern = re.compile(r'CppunitTest_(.*)\.mk')
 
     @staticmethod
     def __split_includes(includes):
@@ -1071,7 +1071,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
         proj_name_node.text = target.short_name()
 
-        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\\Microsoft.Cpp.Default.props')
         for configuration in self.configurations:
             conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label="Configuration",
                                       Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
@@ -1082,14 +1082,14 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
             platform_toolset_node.text = self.toolset
 
-        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\\Microsoft.Cpp.props')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
         for configuration in self.configurations:
             prop_sheets_node = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='Configuration',
                                              Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
             ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
-                          Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
-                          Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                          Project='$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props',
+                          Condition="exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')",
                           Label='LocalAppDataPlatform')
 
         ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
@@ -1156,7 +1156,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             hfile = include_abs_path + '.h'
             if os.path.isfile(hfile):
                 ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
-        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
         self.write_filters(project_path + '.filters',

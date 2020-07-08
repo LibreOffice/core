@@ -32,8 +32,8 @@ with open("workdir/loplugin.finalclasses.log") as txt:
         else:
             print( "unknown line: " + line)
 
-match_module_inc1 = re.compile('^\w+/inc/')
-match_module_inc2 = re.compile('^\w+/.*/inc/')
+match_module_inc1 = re.compile(r'^\w+/inc/')
+match_module_inc2 = re.compile(r'^\w+/.*/inc/')
 tmpset = set()
 for clazz in sorted(definitionSet - inheritFromSet):
     file = definitionToFileDict[clazz]

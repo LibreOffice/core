@@ -3,7 +3,7 @@
 import subprocess
 
 # find typedefs, excluding the externals folder
-a = subprocess.Popen("git grep -P 'typedef\s+.+\s+\w+;' -- \"[!e][!x][!t]*\"", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen(r"git grep -P 'typedef\s+.+\s+\w+;' -- \"[!e][!x][!t]*\"", stdout=subprocess.PIPE, shell=True)
 
 # parse out the typedef names
 typedefSet = set()
