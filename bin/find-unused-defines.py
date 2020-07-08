@@ -99,9 +99,9 @@ def in_exclusion_set( a ):
     return False;
 
 # find defines, excluding the externals folder
-a = subprocess.Popen("git grep -hP '^#define\s+\w\w\w\w+\s*' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen(r"git grep -hP '^#define\s+\w\w\w\w+\s*' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
 
-name_re = re.compile("#define\s+(\w+)")
+name_re = re.compile(r"#define\s+(\w+)")
 with a.stdout as txt:
     for line in txt:
         idName = name_re.match(line).group(1)

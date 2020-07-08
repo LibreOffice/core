@@ -99,11 +99,11 @@ with open("compilerplugins/clang/pahole.results", "wt") as f:
 
         _thread.start_new_thread( write_pahole_commands, (currClassList,) )
 
-        firstLineRegex = re.compile("/\*\s+(\d+)\s+\*/ struct") # /* 16 */ struct Foo
-        fieldLineRegex = re.compile("/\*\s+(\d+)\s+(\d+)\s+\*/ ") # /* 12 8 */ class rtl::OUString aName
-        holeLineRegex = re.compile("/\* XXX (\d+) bit hole, try to pack \*/")
+        firstLineRegex = re.compile(r"/\*\s+(\d+)\s+\*/ struct") # /* 16 */ struct Foo
+        fieldLineRegex = re.compile(r"/\*\s+(\d+)\s+(\d+)\s+\*/ ") # /* 12 8 */ class rtl::OUString aName
+        holeLineRegex = re.compile(r"/\* XXX (\d+) bit hole, try to pack \*/")
         # sometimes pahole can't determine the size of a sub-struct, and then it returns bad data
-        bogusLineRegex = re.compile("/\*\s+\d+\s+0\s+\*/")
+        bogusLineRegex = re.compile(r"/\*\s+\d+\s+0\s+\*/")
         structLines = list()
         foundHole = False
         cumulativeHoleBits = 0

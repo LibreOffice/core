@@ -38,7 +38,7 @@ class CheckStyle(unittest.TestCase):
             self.assertTrue(xStyleFamilies.supportsService(servicename))
         self.assertFalse(xStyleFamilies.supportsService("foobarbaz"))
         self.assertTrue(xStyleFamilies.hasElements())
-        self.assertRegex(str(xStyleFamilies.ElementType), "com\.sun\.star\.container\.XNameContainer")
+        self.assertRegex(str(xStyleFamilies.ElementType), r"com\.sun\.star\.container\.XNameContainer")
         self.assertEqual(len(xStyleFamilies.ElementNames), 7)
 
         for sFamilyname in xStyleFamilies.ElementNames:
@@ -58,7 +58,7 @@ class CheckStyle(unittest.TestCase):
             self.assertTrue(xFamily.supportsService(sServicename))
         self.assertFalse(xFamily.supportsService("foobarbaz"))
         self.assertTrue(xFamily.hasElements())
-        self.assertRegex(str(xFamily.ElementType), "com\.sun\.star\.style\.XStyle")
+        self.assertRegex(str(xFamily.ElementType), r"com\.sun\.star\.style\.XStyle")
 
         with self.assertRaises(NoSuchElementException):
             xFamily.getByName("foobarbaz")

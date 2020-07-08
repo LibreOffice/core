@@ -58,7 +58,7 @@ def init_core_files():
     elif not args['git_static']:
         subprocess.call(['git','fetch','origin'])
     allfiles = subprocess.check_output(['git','ls-tree','--name-only','--full-name','-r','master'])
-    return re.findall('.*\.ui',allfiles)
+    return re.findall(r'.*\.ui',allfiles)
 
 
 if __name__ == "__main__":

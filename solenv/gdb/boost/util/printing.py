@@ -42,7 +42,7 @@ class NameLookup(Mapping):
 
     def __init__(self):
         self.map = {}
-        self.name_regex = re.compile('^([\w:]+)(<.*>)?')
+        self.name_regex = re.compile(r'^([\w:]+)(<.*>)?')
 
     def add(self, name, printer):
         self.map[name] = printer
