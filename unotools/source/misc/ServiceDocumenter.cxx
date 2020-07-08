@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "ServiceDocumenter.hxx"
-#include <unotoolsservices.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
+
 using namespace com::sun::star;
 using uno::Reference;
 using lang::XServiceInfo;
@@ -65,10 +67,43 @@ void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XService
     }
 }
 
-namespace sdecl = ::comphelper::service_decl;
-sdecl::class_< unotools::misc::ServiceDocumenter > const ServiceDocumenterImpl;
-const sdecl::ServiceDecl ServiceDocumenterDecl(
-    ServiceDocumenterImpl,
-    "com.sun.star.comp.unotools.misc.ServiceDocumenter",
-    "");
+//  XServiceInfo
+sal_Bool unotools::misc::ServiceDocumenter::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString unotools::misc::ServiceDocumenter::getImplementationName()
+{
+    return "com.sun.star.comp.unotools.misc.ServiceDocumenter";
+}
+css::uno::Sequence< OUString > unotools::misc::ServiceDocumenter::getSupportedServiceNames()
+{
+    return { "com.sun.star.script.ServiceDocumenter" };
+}
 
+
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(new unotools::misc::ServiceDocumenter(context))
+    {}
+
+    rtl::Reference<unotools::misc::ServiceDocumenter> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unotools_ServiceDocument_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
