@@ -11,13 +11,19 @@ elif [ "$glv_var" = "--host" ] ; then
     shift
 fi
 
+# full path, in case we export a "wrong" PATH
+test -n "$GREP" && glv_grep="$GREP" || glv_grep=$(command -v grep)
+test -n "$SED" && glv_sed="$SED" || glv_sed=$(command -v sed)
+
 while [ -n "$1" ] ; do
     glv_var="$1"
     shift
-    glv_value=$(grep "^ *export ${glv_var}=" ${glv_config} | sed -e "s/[^=]*=//")
+    glv_value=$("${glv_grep}" "^ *export ${glv_var}=" ${glv_config} | "${glv_sed}" -e 's/[^=]*=//')
     export ${glv_var}="${glv_value}"
 done
 
 unset glv_var
 unset glv_value
 unset glv_config
+unset glv_sed
+unset glv_grep
