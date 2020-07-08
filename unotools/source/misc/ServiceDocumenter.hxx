@@ -11,13 +11,14 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XServiceDocumenter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace unotools::misc {
 
 class ServiceDocumenter : public ::cppu::WeakImplHelper<
-    css::script::XServiceDocumenter>
+    css::script::XServiceDocumenter, css::lang::XServiceInfo>
 {
     public:
         ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> const& xContext)
@@ -25,6 +26,12 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
             , m_sCoreBaseUrl("http://example.com")
             , m_sServiceBaseUrl("https://api.libreoffice.org/docs/idl/ref")
             {};
+
+        //  XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
         // XServiceDocumenter
         virtual OUString SAL_CALL getCoreBaseUrl() override
             { return m_sCoreBaseUrl; };
