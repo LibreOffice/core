@@ -51,7 +51,6 @@ core_factory_list = [
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
-    ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
@@ -258,6 +257,8 @@ core_constructor_list = [
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
     "com_sun_star_frame_VCLSessionManagerClient_get_implementation",
     "vcl_FontIdentificator_get_implementation",
+# svgio/svgio.component
+    "svgio_XSvgParser_get_implementation",
 # svx/util/svx.component
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_SmartTagMenuController_get_implementation",

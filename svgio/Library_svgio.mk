@@ -79,7 +79,6 @@ $(eval $(call gb_Library_add_exception_objects,svgio,\
     svgio/source/svgreader/svgtspannode \
     svgio/source/svgreader/svgusenode \
     svgio/source/svgreader/svgvisitor \
-    svgio/source/svguno/svguno \
     svgio/source/svguno/xsvgparser \
 ))
 

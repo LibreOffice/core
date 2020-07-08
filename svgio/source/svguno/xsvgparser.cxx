@@ -33,8 +33,6 @@
 
 #include <svgvisitor.hxx>
 
-#include "xsvgparser.hxx"
-
 using namespace ::com::sun::star;
 
 namespace svgio::svgreader
@@ -71,29 +69,7 @@ namespace svgio::svgreader
         };
 
         }
-} // end of namespace svgio::svgreader
 
-// uno functions
-namespace svgio::svgreader
-{
-        uno::Sequence< OUString > XSvgParser_getSupportedServiceNames()
-        {
-            return uno::Sequence< OUString > { "com.sun.star.graphic.SvgTools" };
-        }
-
-        OUString XSvgParser_getImplementationName()
-        {
-            return "svgio::svgreader::XSvgParser";
-        }
-
-        uno::Reference< uno::XInterface > XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
-        {
-            return static_cast< ::cppu::OWeakObject* >(new XSvgParser(context));
-        }
-} // end of namespace svgio::svgreader
-
-namespace svgio::svgreader
-{
         XSvgParser::XSvgParser(
             uno::Reference< uno::XComponentContext > const & context):
             context_(context)
@@ -200,7 +176,7 @@ namespace svgio::svgreader
 
         OUString SAL_CALL XSvgParser::getImplementationName()
         {
-            return XSvgParser_getImplementationName();
+            return "svgio::svgreader::XSvgParser";
         }
 
         sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)
@@ -210,9 +186,16 @@ namespace svgio::svgreader
 
         uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames()
         {
-            return XSvgParser_getSupportedServiceNames();
+            return { "com.sun.star.graphic.SvgTools" };
         }
 
 } // end of namespace svgio::svgreader
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+svgio_XSvgParser_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new svgio::svgreader::XSvgParser(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
