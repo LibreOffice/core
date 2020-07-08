@@ -596,7 +596,7 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
 bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
 {
     // we get all key events here, ignore them unless we have focus
-    if (!has_focus())
+    if (!m_xWidget->HasChildPathFocus())
         return false;
     if (rEvent.GetId() == VclEventId::WindowKeyInput)
     {
