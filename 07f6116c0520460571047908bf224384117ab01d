@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "920d2034_4a97172a",
+        "filename": "solenv/bin/polib.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-08T14:09:53Z",
+      "side": 1,
+      "message": "I\u0027m fairly sure all of these are meant to be octal or hex escapes",
+      "revId": "07f6116c0520460571047908bf224384117ab01d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
