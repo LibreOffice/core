@@ -1244,6 +1244,20 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
         appicon = g_strdup ("libreoffice-startcenter");
 
     gtk_window_set_icon_name (GTK_WINDOW (m_pWindow), appicon);
+
+#if defined(GDK_WINDOWING_WAYLAND)
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+    {
+        static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
+                                             dlsym(nullptr, "gdk_wayland_window_set_application_id"));
+        if (set_application_id)
+        {
+            GdkWindow* gdkWindow = gtk_widget_get_window(m_pWindow);
+            set_application_id(gdkWindow, appicon);
+        }
+    }
+#endif
+
     g_free (appicon);
 }
 
@@ -1312,13 +1326,18 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             }
 
 #if defined(GDK_WINDOWING_WAYLAND)
-            //rhbz#1334915, gnome#779143, tdf#100158
-            //gtk under wayland lacks a way to change the app_id
-            //of a window, so brute force everything as a
-            //startcenter when initially shown to at least get
-            //the default LibreOffice icon and not the broken
-            //app icon
-            if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+            /*
+             rhbz#1334915, gnome#779143, tdf#100158
+             https://gitlab.gnome.org/GNOME/gtk/-/issues/767
+
+             before gdk_wayland_window_set_application_id was available gtk
+             under wayland lacked a way to change the app_id of a window, so
+             brute force everything as a startcenter when initially shown to at
+             least get the default LibreOffice icon and not the broken app icon
+            */
+            static bool bAppIdImmutable = DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()) &&
+                                          !dlsym(nullptr, "gdk_wayland_window_set_application_id");
+            if (bAppIdImmutable)
             {
                 OString sOrigName(g_get_prgname());
                 g_set_prgname("libreoffice-startcenter");
