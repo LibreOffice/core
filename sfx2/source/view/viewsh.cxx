@@ -1483,7 +1483,7 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);
     else
-        SAL_WARN(
+        SAL_INFO(
             "sfx.view",
             "SfxViewShell::libreOfficeKitViewCallback no callback set! Dropped payload of type "
             << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
