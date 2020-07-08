@@ -96,28 +96,14 @@ namespace DOM
         xmlInitParser();
     }
 
-    Reference< XInterface > CDocumentBuilder::_getInstance(const Reference< XMultiServiceFactory >& )
-    {
-        return static_cast< XDocumentBuilder* >(new CDocumentBuilder);
-    }
-
-    OUString CDocumentBuilder::_getImplementationName()
-    {
-        return "com.sun.star.comp.xml.dom.DocumentBuilder";
-    }
-    Sequence<OUString> CDocumentBuilder::_getSupportedServiceNames()
+    Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
     {
         return { "com.sun.star.xml.dom.DocumentBuilder" };
     }
 
-    Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
-    {
-        return CDocumentBuilder::_getSupportedServiceNames();
-    }
-
     OUString SAL_CALL CDocumentBuilder::getImplementationName()
     {
-        return CDocumentBuilder::_getImplementationName();
+        return "com.sun.star.comp.xml.dom.DocumentBuilder";
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
@@ -440,6 +426,13 @@ namespace DOM
 
         m_xErrorHandler = xEH;
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CDocumentBuilder_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new DOM::CDocumentBuilder());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

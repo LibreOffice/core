@@ -40,8 +40,6 @@ core_factory_list = [
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
-    ("libunordflo.a", "unordf_component_getFactory"),
-    ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
@@ -308,6 +306,15 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# unoxml/source/rdf/unordf.component
+    "unoxml_rdfRepository_get_implementation",
+    "unoxml_CURI_get_implementation",
+    "unoxml_CLiteral_get_implementation",
+    "unoxml_CBlankNode_get_implementation",
+# unoxml/source/service/unoxml.component
+    "unoxml_CXPathAPI_get_implementation",
+    "unoxml_CSAXDocumentBuilder_get_implementation",
+    "unoxml_CDocumentBuilder_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
