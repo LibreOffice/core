@@ -617,6 +617,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134606, "tdf134606.docx")
+{
+    // The problem was that the importer lost the nested table structure with w:gridBefore
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
