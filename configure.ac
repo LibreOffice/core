@@ -9052,7 +9052,7 @@ internal)
     fi
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
-    if test "$OS" = LINUX; then
+    if test "$OS" = LINUX -o "$OS" = WNT ; then
         BUILD_TYPE="$BUILD_TYPE LIBFFI"
     fi
     # Embedded Python dies without Home set
