@@ -30,20 +30,21 @@ namespace framework{
 
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
-                                 ::cppu::OWeakObject                ,
-                                 SERVICENAME_PROTOCOLHANDLER        ,
-                                 IMPLEMENTATIONNAME_MAILTODISPATCHER)
+OUString SAL_CALL MailToDispatcher::getImplementationName()
+{
+    return "com.sun.star.comp.framework.MailToDispatcher";
+}
 
-DEFINE_INIT_SERVICE(MailToDispatcher,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+sal_Bool SAL_CALL MailToDispatcher::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL MailToDispatcher::getSupportedServiceNames()
+{
+    return { SERVICENAME_PROTOCOLHANDLER };
+}
+
 
 /**
     @short      standard ctor
@@ -218,5 +219,12 @@ void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference<
 }
 
 } //  namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_MailToDispatcher_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::MailToDispatcher(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

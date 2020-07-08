@@ -48,13 +48,20 @@ using namespace com::sun::star::view;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontSizeMenuController                      ,
-                                            OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER             ,
-                                            IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER
-                                        )
+OUString SAL_CALL FontSizeMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.FontSizeMenuController";
+}
 
-DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
+sal_Bool SAL_CALL FontSizeMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL FontSizeMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
@@ -305,6 +312,13 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu()
 
     svt::PopupMenuControllerBase::updatePopupMenu();
 }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_FontSizeMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::FontSizeMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

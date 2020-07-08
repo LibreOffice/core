@@ -49,13 +49,22 @@ const sal_uInt16 ALL_MENUITEM_ID = 1;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   HeaderMenuController                    ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_HEADERMENUCONTROLLER
-                                        )
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE                     (   HeaderMenuController, {} )
+OUString SAL_CALL HeaderMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.HeaderMenuController";
+}
+
+sal_Bool SAL_CALL HeaderMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL HeaderMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 HeaderMenuController::HeaderMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext, bool _bFooter ) :
     svt::PopupMenuControllerBase( xContext )
@@ -223,6 +232,13 @@ void SAL_CALL HeaderMenuController::updatePopupMenu()
         fillPopupMenu( m_xModel, m_xPopupMenu );
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_HeaderMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::HeaderMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

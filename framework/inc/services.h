@@ -35,15 +35,7 @@ namespace framework{
 
 //  used implementationnames by framework
 
-#define IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER             "com.sun.star.comp.framework.MediaTypeDetectionHelper"
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
-#define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER             "com.sun.star.comp.framework.DispatchRecorderSupplier"
-#define IMPLEMENTATIONNAME_MAILTODISPATCHER                     "com.sun.star.comp.framework.MailToDispatcher"
-#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                 "com.sun.star.comp.framework.MacrosMenuController"
-#define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   "com.sun.star.comp.framework.FontMenuController"
-#define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               "com.sun.star.comp.framework.FontSizeMenuController"
-#define IMPLEMENTATIONNAME_HEADERMENUCONTROLLER                 "com.sun.star.comp.framework.HeaderMenuController"
-#define IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER                 "com.sun.star.comp.framework.FooterMenuController"
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
 #define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      "com.sun.star.comp.framework.LanguageSelectionMenuController"
 

@@ -56,15 +56,7 @@
 #include <jobs/shelljob.hxx>
 
 COMPONENTGETFACTORY ( fwk,
-                        IFFACTORY( ::framework::MediaTypeDetectionHelper                )
-                        IFFACTORY( ::framework::MailToDispatcher                        )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
-                        IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
-                        IFFACTORY( ::framework::FontMenuController                      )   else
-                        IFFACTORY( ::framework::MacrosMenuController                    )   else
-                        IFFACTORY( ::framework::FontSizeMenuController                  )   else
-                        IFFACTORY( ::framework::FooterMenuController                    )   else
-                        IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )
                     )
 

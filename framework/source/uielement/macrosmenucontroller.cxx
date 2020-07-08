@@ -37,14 +37,23 @@ using namespace com::sun::star::container;
 
 namespace framework
 {
-class
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   MacrosMenuController                    ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_MACROSMENUCONTROLLER
-                                        )
 
-DEFINE_INIT_SERVICE                     (   MacrosMenuController, {} )
+// XInterface, XTypeProvider, XServiceInfo
+
+OUString SAL_CALL MacrosMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.MacrosMenuController";
+}
+
+sal_Bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL MacrosMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 MacrosMenuController::MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
@@ -153,6 +162,13 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
     }
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_MacrosMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::MacrosMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

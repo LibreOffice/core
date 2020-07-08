@@ -55,13 +55,22 @@ static bool lcl_I18nCompareString(const OUString& rStr1, const OUString& rStr2)
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontMenuController                      ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_FONTMENUCONTROLLER
-                                        )
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE                     (   FontMenuController, {} )
+OUString SAL_CALL FontMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.FontMenuController";
+}
+
+sal_Bool SAL_CALL FontMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL FontMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
 
 FontMenuController::FontMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
@@ -212,6 +221,13 @@ void SAL_CALL FontMenuController::updatePopupMenu()
     }
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_FontMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::FontMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
