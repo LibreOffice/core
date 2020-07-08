@@ -5500,6 +5500,18 @@ public:
         weld::TextView::connect_cursor_position(rLink);
     }
 
+    virtual bool can_move_cursor_with_up() const override
+    {
+        bool bNoSelection = !m_xTextView->GetSelection();
+        return !bNoSelection || m_xTextView->CanUp();
+    }
+
+    virtual bool can_move_cursor_with_down() const override
+    {
+        bool bNoSelection = !m_xTextView->GetSelection();
+        return !bNoSelection || m_xTextView->CanDown();
+    }
+
     virtual void cut_clipboard() override
     {
         m_xTextView->Cut();

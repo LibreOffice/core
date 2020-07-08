@@ -134,6 +134,9 @@ public:
     virtual OUString    GetSelected() const override;
     OUString            GetSelected( LineEnd aSeparator ) const;
 
+    bool CanUp() const;
+    bool CanDown() const;
+
     virtual void    Cut() override;
     virtual void    Copy() override;
     virtual void    Paste() override;
