@@ -18,17 +18,18 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="unordf" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="CBlankNode">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="CBlankNode" constructor="unoxml_CBlankNode_get_implementation">
     <service name="com.sun.star.rdf.BlankNode"/>
   </implementation>
-  <implementation name="CLiteral">
+  <implementation name="CLiteral" constructor="unoxml_CLiteral_get_implementation">
     <service name="com.sun.star.rdf.Literal"/>
   </implementation>
-  <implementation name="CURI">
+  <implementation name="CURI" constructor="unoxml_CURI_get_implementation">
     <service name="com.sun.star.rdf.URI"/>
   </implementation>
-  <implementation name="librdf_Repository">
+  <implementation name="librdf_Repository"
+    constructor="unoxml_rdfRepository_get_implementation">
     <service name="com.sun.star.rdf.Repository"/>
   </implementation>
 </component>
