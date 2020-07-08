@@ -139,8 +139,12 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
         case C_TOKEN( leaderLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
         case C_TOKEN( showLeaderLines ):
-            mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, !bMSO2007Doc );
+        case C15_TOKEN( showLeaderLines ):
+            mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, true );
             return nullptr;
+        case C_TOKEN( extLst ):
+        case C_TOKEN( ext ):
+            return new DataLabelsContext( *this, mrModel );
     }
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007Doc );
 }

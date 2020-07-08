@@ -2373,7 +2373,7 @@ void Chart2ExportTest::testLeaderLines()
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "0");
 }
 
 void Chart2ExportTest::testNumberFormatExportPPTX()
