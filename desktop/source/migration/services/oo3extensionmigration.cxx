@@ -45,21 +45,6 @@ using namespace ::com::sun::star::uno;
 namespace migration
 {
 
-// component operations
-
-
-OUString OO3ExtensionMigration_getImplementationName()
-{
-    return "com.sun.star.comp.desktop.migration.OOo3Extensions";
-}
-
-
-Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
-{
-    return { "com.sun.star.migration.Extensions" };
-}
-
-
 // ExtensionMigration
 
 
@@ -276,7 +261,7 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 
 OUString OO3ExtensionMigration::getImplementationName()
 {
-    return OO3ExtensionMigration_getImplementationName();
+    return "com.sun.star.comp.desktop.migration.OOo3Extensions";
 }
 
 
@@ -288,7 +273,7 @@ sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
 
 Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames()
 {
-    return OO3ExtensionMigration_getSupportedServiceNames();
+    return { "com.sun.star.migration.Extensions" };
 }
 
 
@@ -412,17 +397,15 @@ void TmpRepositoryCommandEnv::pop()
 }
 
 
-// component operations
+}   // namespace migration
 
 
-Reference< XInterface > OO3ExtensionMigration_create(
-    Reference< XComponentContext > const & ctx )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_OO3ExtensionMigration_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast< lang::XTypeProvider * >( new OO3ExtensionMigration(
-        ctx) );
+    return cppu::acquire(new migration::OO3ExtensionMigration(context));
 }
 
-
-}   // namespace migration
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

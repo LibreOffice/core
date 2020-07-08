@@ -69,16 +69,12 @@ public:
     void run();
 
     // XService info
-    static OUString impl_getImplementationName();
     virtual OUString SAL_CALL getImplementationName() override;
-    static css::uno::Sequence<OUString> impl_getSupportedServiceNames();
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) override;
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments ) override;
-
-    static css::uno::Reference<css::uno::XInterface> impl_getInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
 };
 
 class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
