@@ -187,6 +187,13 @@ service DataSeries
         @since LibreOffice 7.0
      */
     [optional, property] sequence<long>             DeletedLegendEntries;
+
+    /** This property describes whether the data point and the data label
+        are connected with a leader line.
+
+        @since LibreOffice 7.1
+      */
+    [optional, property] boolean                    ShowCustomLeaderLines;
 };
 
 } ; // chart2
