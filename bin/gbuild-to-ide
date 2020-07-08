@@ -1028,6 +1028,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         else:
             return shortnames
 
+    # Unescape the values: \"tklo.dll\" => "tklo.dll"
+    escapepattern = re.compile(r'\\(.)')
+
     @staticmethod
     def defs_list(defs):
         defines_list = []
@@ -1035,7 +1038,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for key, value in defs.items():
             define = key
             if value is not None:
-                define += '=' + value
+                define += '=' + VisualStudioIntegrationGenerator.escapepattern.sub(r'\1', value)
             defines_list.append(define)
         return defines_list
 
