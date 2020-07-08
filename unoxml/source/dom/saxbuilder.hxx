@@ -35,7 +35,7 @@
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace DOM
 {
@@ -45,7 +45,7 @@ namespace DOM
 
     private:
         ::osl::Mutex m_Mutex;
-        const css::uno::Reference< css::lang::XMultiServiceFactory > m_aServiceManager;
+        const css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
         std::stack< css::uno::Reference< css::xml::dom::XNode > > m_aNodeStack;
@@ -55,12 +55,7 @@ namespace DOM
 
 
     public:
-        // static helpers for service info and component management
-        static OUString _getImplementationName();
-        static css::uno::Sequence< OUString > _getSupportedServiceNames();
-        static css::uno::Reference< XInterface > _getInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr);
-
-        explicit CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
+        explicit CSAXDocumentBuilder(const css::uno::Reference< css::uno::XComponentContext >& );
         static void setElementFastAttributes(const css::uno::Reference< css::xml::dom::XElement >& aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
 
 
