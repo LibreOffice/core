@@ -57,13 +57,6 @@ namespace DOM
         // ctor
         explicit CDocumentBuilder();
 
-        // static helpers for service info and component management
-        static OUString _getImplementationName();
-        static css::uno::Sequence< OUString > _getSupportedServiceNames();
-        static css::uno::Reference< XInterface > _getInstance(
-            css::uno::Reference< css::lang::XMultiServiceFactory > const&
-                rSMgr);
-
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
