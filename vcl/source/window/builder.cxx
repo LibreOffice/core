@@ -1996,8 +1996,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
         //IconView manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        if (pRealParent != pParent)
-            nWinStyle |= WB_BORDER;
 
         VclPtr<IconView> xBox = VclPtr<IconView>::Create(pRealParent, nWinStyle);
         xWindowForPackingProps = xBox;
@@ -2037,8 +2035,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         }
         //ListBox/SvHeaderTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        if (pRealParent != pParent)
-            nWinStyle |= WB_BORDER;
         if (m_bLegacy)
         {
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle | WB_SIMPLEMODE);
@@ -2185,8 +2181,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
         //VclMultiLineEdit manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        if (pRealParent != pParent)
-            nWinStyle |= WB_BORDER;
         xWindow = VclPtr<VclMultiLineEdit>::Create(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
