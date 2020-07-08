@@ -11930,8 +11930,13 @@ then
         AC_MSG_ERROR([Qt5 headers not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
     # check for scenario: qt5-qtbase-devel-*.86_64 installed but host is i686
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    CPPFLAGS="${CPPFLAGS} -I${qt5_incdir}"
     AC_CHECK_HEADER(QtCore/qconfig.h, [],
         [AC_MSG_ERROR(qconfig.h header not found.)], [])
+    CPPFLAGS=$save_CPPFLAGS
+    AC_LANG_POP([C++])
 
     AC_MSG_CHECKING([for Qt5 libraries])
     qt5_libdir="no"
