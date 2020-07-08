@@ -142,7 +142,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <unotoolsservices.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
