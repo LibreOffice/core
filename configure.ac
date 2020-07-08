@@ -9045,8 +9045,8 @@ int main(int argc, char **argv) {
 internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    PYTHON_VERSION_MINOR=7
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.7
+    PYTHON_VERSION_MINOR=8
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.4
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
