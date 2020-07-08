@@ -44,7 +44,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(27));
+    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(25));
 }
 
 static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& current,
@@ -74,6 +74,11 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
         pTreeDiagram->expand_row(rEntry);
         return false;
     });
+
+    std::unique_ptr<weld::TreeIter> xEntry = mxListBoxStyles->make_iterator();
+    mxListBoxStyles->get_iter_first(*xEntry);
+    mxListBoxStyles->iter_next(*xEntry);
+    mxListBoxStyles->collapse_row(*xEntry); // Collapse "Default Paragraph Style"
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }

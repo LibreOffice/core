@@ -146,10 +146,8 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     {
         uno::Reference<style::XStyle> xProp1;
         uno::Reference<beans::XPropertySet> xProp1Set;
-        uno::Reference<beans::XPropertyState> xProp1State;
         xStyleFamily->getByName(sCurrentStyleName) >>= xProp1;
         xStyleFamily->getByName(sCurrentStyleName) >>= xProp1Set;
-        xStyleFamily->getByName(sCurrentStyleName) >>= xProp1State;
         OUString aParentCharStyle = xProp1->getParentStyle();
         xProp1Set->getPropertyValue("DisplayName") >>= sDisplayName;
         svx::sidebar::TreeNode pCurrentChild;
@@ -170,10 +168,6 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
             for (const beans::Property& rProperty : aProperties)
             {
                 OUString sPropName = rProperty.Name;
-                // If property's current value equals default value
-                if (xProp1Set->getPropertyValue(sPropName)
-                    == xProp1State->getPropertyDefault(sPropName))
-                    continue;
 
                 if (maIsDefined[sPropName])
                     continue;
@@ -204,9 +198,7 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     }
 
     uno::Reference<beans::XPropertySet> aProp1Set;
-    uno::Reference<beans::XPropertyState> aProp1State;
     xStyleFamily->getByName(sCurrentStyleName) >>= aProp1Set;
-    xStyleFamily->getByName(sCurrentStyleName) >>= aProp1State;
 
     const uno::Sequence<beans::Property> aProperties
         = aProp1Set->getPropertySetInfo()->getProperties();
@@ -216,8 +208,6 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     for (const beans::Property& rProperty : aProperties)
     {
         OUString aPropertyValuePair, sPropName = rProperty.Name;
-        if (aProp1Set->getPropertyValue(sPropName) == aProp1State->getPropertyDefault(sPropName))
-            continue;
         if (maIsDefined[sPropName])
             continue;
         maIsDefined[sPropName] = true;
