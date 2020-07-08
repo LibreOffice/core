@@ -37,7 +37,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace XPath
 {
@@ -56,21 +56,12 @@ namespace XPath
     private:
         ::osl::Mutex m_Mutex;
         nsmap_t m_nsmap;
-        const css::uno::Reference< css::lang::XMultiServiceFactory > m_aFactory;
+        const css::uno::Reference< css::uno::XComponentContext > m_xContext;
         extensions_t m_extensions;
 
     public:
         // ctor
-        explicit CXPathAPI(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >&
-                rSMgr);
-
-        // static helpers for service info and component management
-        static OUString _getImplementationName();
-        static css::uno::Sequence< OUString > _getSupportedServiceNames();
-        static css::uno::Reference< XInterface > _getInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >&
-                rSMgr);
+        explicit CXPathAPI( const css::uno::Reference< css::uno::XComponentContext >& );
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

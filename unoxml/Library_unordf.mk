@@ -45,7 +45,6 @@ $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/CURI \
     unoxml/source/rdf/CLiteral \
     unoxml/source/rdf/librdf_repository \
-    unoxml/source/rdf/librdf_services \
 ))
 
 # vim: set noet sw=4 ts=4:

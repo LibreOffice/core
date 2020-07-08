@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CNodes.hxx"
-
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rdf/XURI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -74,7 +73,7 @@ CURI::CURI() :
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CURI::getImplementationName()
 {
-    return comp_CURI::_getImplementationName();
+    return "CURI";
 }
 
 sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName)
@@ -84,7 +83,7 @@ sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
 {
-    return comp_CURI::_getSupportedServiceNames();
+    return { "com.sun.star.rdf.URI" };
 }
 
 const char s_nsXSD      [] = "http://www.w3.org/2001/XMLSchema-datatypes#";
@@ -792,26 +791,11 @@ OUString SAL_CALL CURI::getLocalName()
 } // closing anonymous implementation namespace
 
 
-// component helper namespace
-namespace comp_CURI {
-
-OUString _getImplementationName() {
-    return
-        "CURI";
-}
-
-css::uno::Sequence< OUString > _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CURI_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.rdf.URI" };
-    return s;
+    return cppu::acquire(new CURI());
 }
-
-css::uno::Reference< css::uno::XInterface > _create(
-    const css::uno::Reference< css::uno::XComponentContext > & )
-{
-    return static_cast< ::cppu::OWeakObject * >(new CURI);
-}
-
-} // closing component helper namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

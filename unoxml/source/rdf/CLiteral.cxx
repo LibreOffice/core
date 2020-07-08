@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CNodes.hxx"
-
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -72,7 +71,7 @@ CLiteral::CLiteral() :
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CLiteral::getImplementationName()
 {
-    return comp_CLiteral::_getImplementationName();
+    return "CLiteral";
 }
 
 sal_Bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
@@ -82,7 +81,7 @@ sal_Bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CLiteral::getSupportedServiceNames()
 {
-    return comp_CLiteral::_getSupportedServiceNames();
+    return { "com.sun.star.rdf.Literal" };
 }
 
 // css::lang::XInitialization:
@@ -158,25 +157,11 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
 
 } // closing anonymous implementation namespace
 
-
-// component helper namespace
-namespace comp_CLiteral {
-
-OUString _getImplementationName() {
-    return "CLiteral";
-}
-
-css::uno::Sequence< OUString > _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CLiteral_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return { "com.sun.star.rdf.Literal" };
+    return cppu::acquire(new CLiteral());
 }
-
-css::uno::Reference< css::uno::XInterface > _create(
-    const css::uno::Reference< css::uno::XComponentContext > & )
-{
-    return static_cast< ::cppu::OWeakObject * >(new CLiteral);
-}
-
-} // closing component helper namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
