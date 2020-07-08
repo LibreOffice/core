@@ -16,6 +16,24 @@
       "revId": "07f6116c0520460571047908bf224384117ab01d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e73ce0e2_4b3d5ac8",
+        "filename": "solenv/bin/polib.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-08T14:13:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "920d2034_4a97172a",
+      "revId": "07f6116c0520460571047908bf224384117ab01d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
