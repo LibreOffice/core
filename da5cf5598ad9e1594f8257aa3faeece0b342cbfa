@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d020e6b1_f647fb73",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-08T05:25:02Z",
+      "side": 0,
+      "message": "27 would lead to scrolling; decreased the panel height",
+      "range": {
+        "startLine": 47,
+        "startChar": 75,
+        "endLine": 47,
+        "endChar": 77
+      },
+      "revId": "da5cf5598ad9e1594f8257aa3faeece0b342cbfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
