@@ -9,7 +9,7 @@
 import subprocess
 
 # search for entries in .sdi files that declare UNO/SID commands
-a = subprocess.Popen("git grep -P '^\s*\w+Item\s+\w+\s+SID_\w+$' -- *.sdi", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen(r"git grep -P '^\s*\w+Item\s+\w+\s+SID_\w+$' -- *.sdi", stdout=subprocess.PIPE, shell=True)
 
 # parse out the UNO command names
 commandSet = list()

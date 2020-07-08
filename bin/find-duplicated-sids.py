@@ -30,8 +30,8 @@ def extractSidValue(sidValue):
     return rv
 
 
-#a = subprocess.Popen("git grep -P '#define\s+(SID_|SC_|DETECTIVE_|DRAWTEXTBAR_|DRAW_BAR_|RID_|OBJBAR_FORMAT_|TAB_POPUP_|DATA_MENU_|EXTRA_MENU_|FORMAT_MENU_|INSERT_MENU_|VIEW_MENU_|EDIT_MENU_|FILE_MENU_|SC_FUNCTION_|RC_)'", stdout=subprocess.PIPE, shell=True)
-a = subprocess.Popen("git grep -Pn '#define\s+(\S+)' -- *.hrc", stdout=subprocess.PIPE, shell=True)
+#a = subprocess.Popen(r"git grep -P '#define\s+(SID_|SC_|DETECTIVE_|DRAWTEXTBAR_|DRAW_BAR_|RID_|OBJBAR_FORMAT_|TAB_POPUP_|DATA_MENU_|EXTRA_MENU_|FORMAT_MENU_|INSERT_MENU_|VIEW_MENU_|EDIT_MENU_|FILE_MENU_|SC_FUNCTION_|RC_)'", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen(r"git grep -Pn '#define\s+(\S+)' -- *.hrc", stdout=subprocess.PIPE, shell=True)
 
 with a.stdout as txt:
     for line in txt:

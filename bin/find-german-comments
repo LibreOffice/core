@@ -96,12 +96,12 @@ class Parser:
                 # start of a real multiline comment
                 in_comment = True
                 linenum = count
-                s = re.sub(".*/\*+", "", i.strip(self.strip))
+                s = re.sub(r".*/\*+", "", i.strip(self.strip))
                 if len(s):
                     buf.append(s.strip(self.strip))
             elif in_comment and not "*/" in i:
                 # in multiline comment
-                s = re.sub("^( |\|)*\*?", "", i)
+                s = re.sub(r"^( |\|)*\*?", "", i)
                 if len(s.strip(self.strip)):
                     buf.append(s.strip(self.strip))
             elif "*/" in i and in_comment:
@@ -114,7 +114,7 @@ class Parser:
                 buf = []
             elif "/*" in i and "*/" in i:
                 # c-style oneliner comment
-                yield (count, re.sub(".*/\*(.*)\*/.*", r"\1", i).strip(self.strip))
+                yield (count, re.sub(r".*/\*(.*)\*/.*", r"\1", i).strip(self.strip))
             count += 1
 
     def start_text_cat(self):

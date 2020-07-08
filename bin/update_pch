@@ -581,7 +581,7 @@ def parse_makefile(groups, lines, lineno, lastif, ifstack):
     ingeneratedobjects = False
     inelse = False
     suffix = 'cxx'
-    os_cond_re = re.compile('(ifeq|ifneq)\s*\(\$\(OS\)\,(\w*)\)')
+    os_cond_re = re.compile(r'(ifeq|ifneq)\s*\(\$\(OS\)\,(\w*)\)')
 
     line = lines[lineno]
     if line.startswith('if'):

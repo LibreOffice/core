@@ -550,19 +550,19 @@ class _BaseFile(list):
             if e.msgctxt:
                 # Contexts are stored by storing the concatenation of the
                 # context, a <EOT> byte, and the original string
-                msgid = self._encode(e.msgctxt + '\4')
+                msgid = self._encode(e.msgctxt + '\\4')
             if e.msgid_plural:
                 msgstr = []
                 for index in sorted(e.msgstr_plural.keys()):
                     msgstr.append(e.msgstr_plural[index])
-                msgid += self._encode(e.msgid + '\0' + e.msgid_plural)
-                msgstr = self._encode('\0'.join(msgstr))
+                msgid += self._encode(e.msgid + '\\0' + e.msgid_plural)
+                msgstr = self._encode('\\0'.join(msgstr))
             else:
                 msgid += self._encode(e.msgid)
                 msgstr = self._encode(e.msgstr)
             offsets.append((len(ids), len(msgid), len(strs), len(msgstr)))
-            ids += msgid + b('\0')
-            strs += msgstr + b('\0')
+            ids += msgid + b('\\0')
+            strs += msgstr + b('\\0')
 
         # The header is 7 32-bit unsigned integers.
         keystart = 7 * 4 + 16 * entries_len
@@ -1714,13 +1714,13 @@ class _MOFileParser(object):
                 self.instance.metadata = metadata
                 continue
             # test if we have a plural entry
-            msgid_tokens = msgid.split(b('\0'))
+            msgid_tokens = msgid.split(b('\\0'))
             if len(msgid_tokens) > 1:
                 entry = self._build_entry(
                     msgid=msgid_tokens[0],
                     msgid_plural=msgid_tokens[1],
                     msgstr_plural=dict((k, v) for k, v in
-                                       enumerate(msgstr.split(b('\0'))))
+                                       enumerate(msgstr.split(b('\\0'))))
                 )
             else:
                 entry = self._build_entry(msgid=msgid, msgstr=msgstr)
