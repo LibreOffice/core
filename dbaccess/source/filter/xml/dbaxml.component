@@ -18,23 +18,29 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dbaxml" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdb.DBExportFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sdb.DBExportFilter"
+    constructor="com_sun_star_comp_sdb_DBExportFilter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sdb.DBFilter">
+  <implementation name="com.sun.star.comp.sdb.DBFilter"
+    constructor="com_sun_star_comp_sdb_DBFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sdb.XMLFullExporter">
+  <implementation name="com.sun.star.comp.sdb.XMLFullExporter"
+    constructor="com_sun_star_comp_sdb_XMLFullExporter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sdb.XMLSettingsExporter">
+  <implementation name="com.sun.star.comp.sdb.XMLSettingsExporter"
+    constructor="com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbflt.DBContentLoader2">
+  <implementation name="org.openoffice.comp.dbflt.DBContentLoader2"
+    constructor="org_openoffice_comp_dbflt_DBContentLoader2_get_implementation">
     <service name="com.sun.star.frame.FrameLoader"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbflt.DBTypeDetection">
+  <implementation name="org.openoffice.comp.dbflt.DBTypeDetection"
+    constructor="org_openoffice_comp_dbflt_DBTypeDetection_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
 </component>

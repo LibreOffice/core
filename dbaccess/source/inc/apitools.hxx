@@ -64,15 +64,6 @@ public:
         return implasciiname; \
     }   \
 
-#define IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
-    OUString SAL_CALL classname::getImplementationName(  )   \
-    {   \
-        return getImplementationName_Static();  \
-    }   \
-    OUString classname::getImplementationName_Static(  )    \
-    {   \
-        return implasciiname; \
-    }   \
 
 #define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) \
@@ -85,25 +76,7 @@ public:
         return false;   \
     }   \
 
-#define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
-    {   \
-        return getSupportedServiceNames_Static();   \
-    }   \
-    css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
-    {   \
-        return { serviceasciiname }; \
-    }   \
 
-#define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
-    {   \
-        return getSupportedServiceNames_Static();   \
-    }   \
-    css::uno::Sequence< OUString > classname::getSupportedServiceNames_Static(  )   \
-    {   \
-        return { serviceasciiname1, serviceasciiname2 };    \
-    }   \
 
 #define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
@@ -122,16 +95,6 @@ public:
         return { serviceasciiname1, serviceasciiname2 };    \
     }
 
-
-#define IMPLEMENT_SERVICE_INFO2_STATIC(classname, implasciiname, serviceasciiname1, serviceasciiname2)  \
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1,serviceasciiname2) \
-    css::uno::Reference< css::uno::XInterface >   \
-        classname::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)  \
-    {   \
-        return static_cast< XServiceInfo* >(new classname(_rxORB)); \
-    }
 
 
 #define IMPLEMENT_SERVICE_INFO3(classname, implasciiname, serviceasciiname1, serviceasciiname2, serviceasciiname3)  \

@@ -19,8 +19,6 @@
 
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
-#include "xmlservices.hxx"
-#include <flt_reghelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -61,80 +59,34 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
-namespace dbaxml
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_sdb_DBExportFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    namespace {
-
-    class ODBExportHelper
-    {
-    public:
-        /// @throws RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_Static(  );
-        static Reference< XInterface > Create(const Reference< css::lang::XMultiServiceFactory >&);
-    };
-    class ODBFullExportHelper
-    {
-    public:
-        /// @throws RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_Static(  );
-        static Reference< XInterface > Create(const Reference< css::lang::XMultiServiceFactory >&);
-    };
-
-    }
+    return cppu::acquire(new ::dbaxml::ODBExport(context,
+        "com.sun.star.comp.sdb.DBExportFilter"));
 }
 
-extern "C" void createRegistryInfo_ODBFilterExport( )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExport > aAutoRegistration;
+    return cppu::acquire(new ::dbaxml::ODBExport(context,
+        "com.sun.star.comp.sdb.XMLSettingsExporter",
+        SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
 }
 
-extern "C" void createRegistryInfo_OSettingsExport( )
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExportHelper > aAutoRegistration;
-}
-
-extern "C" void createRegistryInfo_OFullExport( )
-{
-    static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBFullExportHelper > aAutoRegistration;
+    return cppu::acquire(new ::dbaxml::ODBExport(context,
+        "com.sun.star.comp.sdb.XMLFullExporter",
+        SvXMLExportFlags::ALL));
 }
 
 namespace dbaxml
 {
-    Reference< XInterface > ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
-    }
-
-    OUString ODBExportHelper::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.sdb.XMLSettingsExporter";
-    }
-
-    Sequence< OUString > ODBExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
-    }
-
-    Reference< XInterface > ODBFullExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::ALL));
-    }
-    OUString ODBFullExportHelper::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.sdb.XMLFullExporter";
-    }
-    Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
-    }
-
     static OUString lcl_implGetPropertyXMLType(const Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
@@ -253,23 +205,6 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
         m_xRowExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
-}
-
-OUString ODBExport::getImplementationName_Static()
-{
-    return "com.sun.star.comp.sdb.DBExportFilter";
-}
-
-css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> s { "com.sun.star.document.ExportFilter" };
-    return s;
-}
-
-css::uno::Reference< css::uno::XInterface >
-    ODBExport::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
-{
-    return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB), getImplementationName_Static()));
 }
 
 void ODBExport::exportDataSource()

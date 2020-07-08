@@ -19,9 +19,7 @@
 
 #include <sal/config.h>
 
-#include <uiservices.hxx>
 #include "unoDirectSql.hxx"
-#include <dbu_reghelper.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -31,9 +29,11 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
-extern "C" void createRegistryInfo_ODirectSQLDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_sdb_DirectSQLDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ODirectSQLDialog > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::ODirectSQLDialog(context));
 }
 
 namespace dbaui
@@ -63,14 +63,14 @@ namespace dbaui
         return css::uno::Sequence<sal_Int8>();
     }
 
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG)
-
-    css::uno::Reference< css::uno::XInterface >
-        ODirectSQLDialog::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+    OUString SAL_CALL ODirectSQLDialog::getImplementationName()
     {
-        return static_cast< XServiceInfo* >(new ODirectSQLDialog( comphelper::getComponentContext(_rxORB)));
+        return "com.sun.star.comp.sdb.DirectSQLDialog";
+    }
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
+    css::uno::Sequence< OUString > SAL_CALL ODirectSQLDialog::getSupportedServiceNames(  )
+    {
+        return { SERVICE_SDB_DIRECTSQLDIALOG };
     }
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
