@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d36f254_9ffd7378",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-08T06:16:39Z",
+      "side": 1,
+      "message": "Originally I was only thinking of correctly formed documents (and who cares about what happens with incorrectly formed documents, right?). Except that somewhere the code assumes non-zero gridspan (divides by gridspan), so an assert isn\u0027t good enough to avoid program crash. This last minute change lets us be more robust.",
+      "range": {
+        "startLine": 522,
+        "startChar": 9,
+        "endLine": 522,
+        "endChar": 24
+      },
+      "revId": "4c7de5bc0829df27e6a317be215ddd936a8d7e50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
