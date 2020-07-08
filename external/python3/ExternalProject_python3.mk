@@ -30,6 +30,12 @@ ifeq ($(OS),WNT)
 
 # TODO: using Debug configuration and related mangling of pyconfig.h
 
+gb_WIN_PLATFORM_MSBUILD := $(strip \
+	$(if $(filter INTEL,$(CPUNAME)),Win32) \
+	$(if $(filter X86_64,$(CPUNAME)),x64) \
+	$(if $(filter ARM64,$(CPUNAME)),arm64) \
+	)
+
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
@@ -37,10 +43,12 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/p:Platform=$(gb_WIN_PLATFORM_MSBUILD) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
 			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
+			/p:libffiOutDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs \
+			/p:libffiIncludeDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
 			/maxcpucount \
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
