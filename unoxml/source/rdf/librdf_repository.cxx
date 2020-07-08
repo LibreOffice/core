@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "librdf_repository.hxx"
-
 #include <string.h>
 
 #include <map>
@@ -911,7 +909,7 @@ librdf_Repository::~librdf_Repository()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL librdf_Repository::getImplementationName()
 {
-    return comp_librdf_Repository::_getImplementationName();
+    return "librdf_Repository";
 }
 
 sal_Bool SAL_CALL librdf_Repository::supportsService(
@@ -923,7 +921,7 @@ sal_Bool SAL_CALL librdf_Repository::supportsService(
 uno::Sequence< OUString > SAL_CALL
 librdf_Repository::getSupportedServiceNames()
 {
-    return comp_librdf_Repository::_getSupportedServiceNames();
+    return { "com.sun.star.rdf.Repository" };
 }
 
 // css::rdf::XRepository:
@@ -2455,24 +2453,11 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 } // closing anonymous implementation namespace
 
 
-// component helper namespace
-namespace comp_librdf_Repository {
-
-OUString _getImplementationName() {
-    return "librdf_Repository";
-}
-
-uno::Sequence< OUString > _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_rdfRepository_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return { "com.sun.star.rdf.Repository" };
+    return cppu::acquire(new librdf_Repository(context));
 }
-
-uno::Reference< uno::XInterface > _create(
-    const uno::Reference< uno::XComponentContext > & context)
-{
-    return static_cast< ::cppu::OWeakObject * >(new librdf_Repository(context));
-}
-
-} // closing component helper namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

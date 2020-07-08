@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CNodes.hxx"
-
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rdf/XBlankNode.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -65,7 +64,7 @@ CBlankNode::CBlankNode() :
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CBlankNode::getImplementationName()
 {
-    return comp_CBlankNode::_getImplementationName();
+    return  "CBlankNode";
 }
 
 sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName)
@@ -75,7 +74,7 @@ sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames()
 {
-    return comp_CBlankNode::_getSupportedServiceNames();
+    return { "com.sun.star.rdf.BlankNode" };
 }
 
 // css::lang::XInitialization:
@@ -109,25 +108,11 @@ OUString SAL_CALL CBlankNode::getStringValue()
 } // closing anonymous implementation namespace
 
 
-// component helper namespace
-namespace comp_CBlankNode {
-
-OUString _getImplementationName() {
-    return "CBlankNode";
-}
-
-css::uno::Sequence< OUString > _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CBlankNode_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.rdf.BlankNode" };
-    return s;
+    return cppu::acquire(new CBlankNode());
 }
-
-css::uno::Reference< css::uno::XInterface > _create(
-    const css::uno::Reference< css::uno::XComponentContext > & )
-{
-    return static_cast< ::cppu::OWeakObject * >(new CBlankNode);
-}
-
-} // closing component helper namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

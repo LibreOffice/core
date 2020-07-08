@@ -33,33 +33,19 @@ using namespace css::xml::sax;
 
 namespace DOM
 {
-    Reference< XInterface > CSAXDocumentBuilder::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
-    {
-        return static_cast< XSAXDocumentBuilder* >(new CSAXDocumentBuilder(rSMgr));
-    }
-
-    CSAXDocumentBuilder::CSAXDocumentBuilder(const Reference< XMultiServiceFactory >& mgr)
-        : m_aServiceManager(mgr)
+    CSAXDocumentBuilder::CSAXDocumentBuilder(const Reference< XComponentContext >& ctx)
+        : m_xContext(ctx)
         , m_aState( SAXDocumentBuilderState_READY)
     {}
 
-    OUString CSAXDocumentBuilder::_getImplementationName()
-    {
-        return "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
-    }
-    Sequence<OUString> CSAXDocumentBuilder::_getSupportedServiceNames()
+    Sequence< OUString > SAL_CALL CSAXDocumentBuilder::getSupportedServiceNames()
     {
         return { "com.sun.star.xml.dom.SAXDocumentBuilder" };
     }
 
-    Sequence< OUString > SAL_CALL CSAXDocumentBuilder::getSupportedServiceNames()
-    {
-        return CSAXDocumentBuilder::_getSupportedServiceNames();
-    }
-
     OUString SAL_CALL CSAXDocumentBuilder::getImplementationName()
     {
-        return CSAXDocumentBuilder::_getImplementationName();
+        return "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
     }
 
     sal_Bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
@@ -144,7 +130,7 @@ namespace DOM
         if (m_aState != SAXDocumentBuilderState_READY)
             throw SAXException();
 
-        Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aServiceManager)));
+        Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(m_xContext));
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(aDocument);
         m_aDocument = aDocument;
@@ -347,6 +333,13 @@ namespace DOM
         Reference< XText > aText = m_aDocument->createTextNode(rChars);
         m_aNodeStack.top()->appendChild(aText);
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CSAXDocumentBuilder_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new DOM::CSAXDocumentBuilder(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
