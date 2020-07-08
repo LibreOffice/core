@@ -1384,8 +1384,12 @@ bool ComboBox::IsEntryPosSelected( sal_Int32 nPos ) const
 void ComboBox::SelectEntryPos( sal_Int32 nPos, bool bSelect)
 {
     if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount())
+    {
         m_pImpl->m_pImplLB->SelectEntry(
             nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount(), bSelect);
+        if (GetModifyHdl().IsSet())
+            GetModifyHdl().Call(*this);
+    }
 }
 
 void ComboBox::SetNoSelection()
