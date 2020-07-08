@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="unoxml" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.xml.dom.DocumentBuilder">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.xml.dom.DocumentBuilder"
+    constructor="unoxml_CDocumentBuilder_get_implementation">
     <service name="com.sun.star.xml.dom.DocumentBuilder"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xml.dom.SAXDocumentBuilder">
+  <implementation name="com.sun.star.comp.xml.dom.SAXDocumentBuilder"
+    constructor="unoxml_CSAXDocumentBuilder_get_implementation">
     <service name="com.sun.star.xml.dom.SAXDocumentBuilder"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xml.xpath.XPathAPI">
+  <implementation name="com.sun.star.comp.xml.xpath.XPathAPI"
+    constructor="unoxml_CXPathAPI_get_implementation">
     <service name="com.sun.star.xml.xpath.XPathAPI"/>
   </implementation>
 </component>

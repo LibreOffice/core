@@ -44,40 +44,23 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::xpath;
-using css::lang::XMultiServiceFactory;
 
 namespace XPath
 {
-    // factory
-    Reference< XInterface > CXPathAPI::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
-    {
-        return static_cast<XXPathAPI*>(new CXPathAPI(rSMgr));
-    }
-
     // ctor
-    CXPathAPI::CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr)
-        : m_aFactory(rSMgr)
+    CXPathAPI::CXPathAPI(const Reference< XComponentContext >& rxContext)
+        : m_xContext(rxContext)
     {
-    }
-
-    OUString CXPathAPI::_getImplementationName()
-    {
-        return "com.sun.star.comp.xml.xpath.XPathAPI";
-    }
-
-    Sequence<OUString> CXPathAPI::_getSupportedServiceNames()
-    {
-        return { "com.sun.star.xml.xpath.XPathAPI" };
     }
 
     Sequence< OUString > SAL_CALL CXPathAPI::getSupportedServiceNames()
     {
-        return CXPathAPI::_getSupportedServiceNames();
+        return { "com.sun.star.xml.xpath.XPathAPI" };
     }
 
     OUString SAL_CALL CXPathAPI::getImplementationName()
     {
-        return CXPathAPI::_getImplementationName();
+        return "com.sun.star.comp.xml.xpath.XPathAPI";
     }
 
     sal_Bool SAL_CALL CXPathAPI::supportsService(const OUString& aServiceName)
@@ -386,7 +369,7 @@ namespace XPath
 
         // get extension from service manager
         Reference< XXPathExtension > const xExtension(
-                m_aFactory->createInstance(aName), UNO_QUERY_THROW);
+                m_xContext->getServiceManager()->createInstanceWithContext(aName, m_xContext), UNO_QUERY_THROW);
         m_extensions.push_back(xExtension);
     }
 
@@ -403,6 +386,13 @@ namespace XPath
         ::osl::MutexGuard const g(m_Mutex);
         m_extensions.push_back( xExtension );
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unoxml_CXPathAPI_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new XPath::CXPathAPI(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
