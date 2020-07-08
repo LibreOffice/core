@@ -1579,7 +1579,9 @@ vcl::Window* VclBuilder::prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits
     {
         WinBits nScrollBits = pParent->GetStyle();
         nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
-        rWinStyle |= nScrollBits | WB_BORDER;
+        rWinStyle |= nScrollBits;
+        if (static_cast<VclScrolledWindow*>(pParent)->HasVisibleBorder())
+            rWinStyle |= WB_BORDER;
         pParent = pParent->GetParent();
     }
 
