@@ -31,8 +31,7 @@ class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                                     css::lang::XServiceInfo >
 {
 public:
-
-    explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit FrameGrabber();
     ~FrameGrabber() override;
 
     bool    create( const OUString& rURL );
@@ -46,8 +45,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory >    mxMgr;
     OUString                                                  maURL;
 };
 

@@ -54,7 +54,7 @@ class Player : public cppu::BaseMutex,
 {
 public:
 
-    explicit Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
+    explicit Player();
     ~Player() override;
 
     bool                create( const OUString& rURL );
@@ -90,8 +90,6 @@ public:
     virtual void SAL_CALL disposing() override;
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
     OUString                maURL;
     IGraphBuilder*          mpGB;
