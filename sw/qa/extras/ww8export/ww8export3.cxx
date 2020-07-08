@@ -245,6 +245,14 @@ DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFiel
     CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf134264, "tdf134264.docx")
+{
+    // Without the fix in place, ADDRESSBLOCK fields would have been lost after RT
+    CPPUNIT_ASSERT_EQUAL(OUString("MF"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("M19"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("1815"), getParagraph(3)->getString());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControlCrossRef.doc")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
