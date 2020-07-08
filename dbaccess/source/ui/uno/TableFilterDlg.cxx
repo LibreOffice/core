@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include "TableFilterDlg.hxx"
 #include <TablesSingleDlg.hxx>
 #include <comphelper/processfactory.hxx>
@@ -26,9 +24,11 @@
 
 using namespace dbaui;
 
-extern "C" void createRegistryInfo_OTableFilterDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OTableFilterDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< OTableFilterDialog > aAutoRegistration;
+    return cppu::acquire(new OTableFilterDialog(context));
 }
 
 namespace dbaui
@@ -48,27 +48,12 @@ Sequence<sal_Int8> SAL_CALL OTableFilterDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > OTableFilterDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OTableFilterDialog( comphelper::getComponentContext(_rxFactory) ));
-}
-
 OUString SAL_CALL OTableFilterDialog::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString OTableFilterDialog::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.OTableFilterDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> OTableFilterDialog::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.sdb.TableFilterDialog" };
 }

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbu_reghelper.hxx>
-#include <uiservices.hxx>
 #include "UserSettingsDlg.hxx"
 #include <UserAdminDlg.hxx>
 #include <comphelper/processfactory.hxx>
@@ -26,9 +24,11 @@
 
 using namespace dbaui;
 
-extern "C" void createRegistryInfo_OUserSettingsDialog()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OUserSettingsDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static OMultiInstanceAutoRegistration< OUserSettingsDialog > aAutoRegistration;
+    return cppu::acquire(new OUserSettingsDialog(context));
 }
 
 namespace dbaui
@@ -48,27 +48,12 @@ Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-Reference< XInterface > OUserSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OUserSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
-}
-
 OUString SAL_CALL OUserSettingsDialog::getImplementationName()
-{
-    return getImplementationName_Static();
-}
-
-OUString OUserSettingsDialog::getImplementationName_Static()
 {
     return "org.openoffice.comp.dbu.OUserSettingsDialog";
 }
 
 css::uno::Sequence<OUString> SAL_CALL OUserSettingsDialog::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-css::uno::Sequence<OUString> OUserSettingsDialog::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.sdb.UserAdministrationDialog" };
 }

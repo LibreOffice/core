@@ -56,7 +56,6 @@ core_factory_list = [
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ("libguesslanglo.a", "guesslang_component_getFactory"),
     ("libbiblo.a", "bib_component_getFactory"),
-    ("libdbalo.a", "dba_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -145,6 +144,13 @@ core_constructor_list = [
 # cui/util/cui.component
     "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component
+    "com_sun_star_comp_dbaccess_DatabaseDataProvider_get_implementation",
+    "com_sun_star_comp_dba_DataAccessDescriptorFactory",
+    "com_sun_star_comp_dba_OCommandDefinition",
+    "com_sun_star_comp_dba_OComponentDefinition",
+    "com_sun_star_comp_dba_ODatabaseContext_get_implementation",
+    "com_sun_star_comp_dba_ODatabaseDocument",
+    "com_sun_star_comp_dba_ODatabaseSource",
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # drawinglayer/drawinglayer.component
     "drawinglayer_XPrimitive2DRenderer",

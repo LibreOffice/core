@@ -18,15 +18,15 @@
  */
 
 #include "ColumnModel.hxx"
-#include <uiservices.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <stringconstants.hxx>
-#include <dbu_reghelper.hxx>
 
-extern "C" void createRegistryInfo_OColumnControlModel()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbu_OColumnControlModel_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControlModel> aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OColumnControlModel());
 }
 
 namespace dbaui
@@ -106,13 +106,14 @@ css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()
 
 IMPLEMENT_GETTYPES2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OColumnControlModel)
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControlModel, "com.sun.star.comp.dbu.OColumnControlModel")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControlModel)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControlModel, "com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel")
-css::uno::Reference< css::uno::XInterface >
-    OColumnControlModel::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
+OUString SAL_CALL OColumnControlModel::getImplementationName()
 {
-    return static_cast< XServiceInfo* >(new OColumnControlModel());
+    return "com.sun.star.comp.dbu.OColumnControlModel";
+}
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControlModel)
+css::uno::Sequence< OUString > SAL_CALL OColumnControlModel::getSupportedServiceNames()
+{
+    return { "com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel" };
 }
 IMPLEMENT_FORWARD_REFCOUNT( OColumnControlModel, OColumnControlModel_BASE )
 Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType )
