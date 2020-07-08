@@ -38,17 +38,21 @@ namespace framework{
 
 //  XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(
-    DispatchRecorder,
-    ::cppu::OWeakObject,
-    "com.sun.star.frame.DispatchRecorder",
-    "com.sun.star.comp.framework.DispatchRecorder")
+OUString SAL_CALL DispatchRecorder::getImplementationName()
+{
+    return "com.sun.star.comp.framework.DispatchRecorder";
+}
 
-DEFINE_INIT_SERVICE(
-    DispatchRecorder,
-    {
-    }
-)
+sal_Bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DispatchRecorder::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.DispatchRecorder" };
+}
+
 
 
 static void flatten_struct_members(
@@ -426,5 +430,13 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
 }
 
 } // namespace framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_DispatchRecorder_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::DispatchRecorder(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

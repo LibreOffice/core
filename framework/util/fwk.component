@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="fwk" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.frame.SessionListener"
       constructor="com_sun_star_comp_frame_SessionListener_get_implementation">
     <service name="com.sun.star.frame.SessionListener"/>
@@ -212,10 +212,12 @@
       constructor="com_sun_star_comp_framework_ResourceMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.LanguageSelectionMenuController">
+  <implementation name="com.sun.star.comp.framework.LanguageSelectionMenuController"
+    constructor="framework_LanguageSelectionMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.DispatchRecorder">
+  <implementation name="com.sun.star.comp.framework.DispatchRecorder"
+    constructor="framework_DispatchRecorder_get_implementation">
     <service name="com.sun.star.frame.DispatchRecorder"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.DispatchRecorderSupplier"

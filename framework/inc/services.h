@@ -35,7 +35,6 @@ namespace framework{
 
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
-#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      "com.sun.star.comp.framework.LanguageSelectionMenuController"
 
 }       //  namespace framework
 

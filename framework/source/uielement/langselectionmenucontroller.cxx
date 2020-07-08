@@ -53,13 +53,23 @@ using namespace com::sun::star::util;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LanguageSelectionMenuController         ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER
-                                        )
+// XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
+OUString SAL_CALL LanguageSelectionMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.LanguageSelectionMenuController";
+}
+
+sal_Bool SAL_CALL LanguageSelectionMenuController::supportsService( const OUString& sServiceName )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LanguageSelectionMenuController::getSupportedServiceNames()
+{
+    return { SERVICENAME_POPUPMENUCONTROLLER };
+}
+
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : svt::PopupMenuControllerBase(xContext)
@@ -282,5 +292,13 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 }
 
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+framework_LanguageSelectionMenuController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new framework::LanguageSelectionMenuController(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
