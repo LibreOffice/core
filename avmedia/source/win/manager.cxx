@@ -23,15 +23,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 
-#define AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_DirectX"
-#define AVMEDIA_WIN_MANAGER_SERVICENAME "com.sun.star.media.Manager"
-
 using namespace ::com::sun::star;
 
 namespace avmedia::win {
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
-    mxMgr( rxMgr )
+Manager::Manager()
 {
 }
 
@@ -43,7 +39,7 @@ Manager::~Manager()
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
 {
-    Player*                             pPlayer( new Player( mxMgr ) );
+    Player*                             pPlayer( new Player() );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
     const INetURLObject                 aURL( rURL );
 
@@ -56,7 +52,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 
 OUString SAL_CALL Manager::getImplementationName(  )
 {
-    return AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME;
+    return "com.sun.star.comp.avmedia.Manager_DirectX";
 }
 
 
@@ -68,10 +64,16 @@ sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
 {
-    return { AVMEDIA_WIN_MANAGER_SERVICENAME };
+    return { "com.sun.star.media.Manager" };
 }
 
 } // namespace avmedia::win
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+avmedia_Manager_DirectX_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new avmedia::win::Manager());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

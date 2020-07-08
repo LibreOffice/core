@@ -47,8 +47,7 @@ using namespace ::com::sun::star;
 namespace avmedia::win {
 
 
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
-    mxMgr( rxMgr )
+FrameGrabber::FrameGrabber()
 {
     ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 }

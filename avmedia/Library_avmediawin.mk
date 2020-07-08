@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_exception_objects,avmediawin,\
 	avmedia/source/win/manager \
 	avmedia/source/win/player \
 	avmedia/source/win/window \
-	avmedia/source/win/winuno \
 ))
 
 # vim: set noet sw=4 ts=4:

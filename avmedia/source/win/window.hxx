@@ -41,8 +41,7 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 {
 public:
 
-            Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr,
-                    Player& rPlayer );
+            Window( Player& rPlayer );
             ~Window() override;
 
     bool    create( const css::uno::Sequence< css::uno::Any >& aArguments );
@@ -95,8 +94,6 @@ public:
     HWND getParentWnd() const { return mnParentWnd; }
 
 private:
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 
     ::osl::Mutex                                maMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;

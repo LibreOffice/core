@@ -61,9 +61,8 @@ static LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1,
 }
 
 
-Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Player::Player() :
     Player_BASE(m_aMutex),
-    mxMgr( rxMgr ),
     mpGB( nullptr ),
     mpOMF( nullptr ),
     mpMC( nullptr ),
@@ -410,7 +409,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( mpVW && aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::win::Window* pWindow = new ::avmedia::win::Window( mxMgr, *this );
+        ::avmedia::win::Window* pWindow = new ::avmedia::win::Window( *this );
 
         xRet = pWindow;
 
@@ -428,7 +427,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
     if( !maURL.isEmpty() )
     {
-        FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
+        FrameGrabber* pGrabber = new FrameGrabber();
 
         xRet = pGrabber;
 

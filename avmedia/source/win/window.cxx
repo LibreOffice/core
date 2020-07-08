@@ -97,8 +97,7 @@ static WNDCLASSW* lcl_getWndClass()
     return s_pWndClass;
 }
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
-    mxMgr( rxMgr ),
+Window::Window( Player& rPlayer ) :
     maListeners( maMutex ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mrPlayer( rPlayer ),
