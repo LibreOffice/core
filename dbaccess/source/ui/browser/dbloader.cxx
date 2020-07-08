@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbu_reghelper.hxx>
 #include <strings.hxx>
-#include <uiservices.hxx>
 #include <UITools.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
@@ -53,7 +51,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace dbaui;
 
 namespace {
@@ -69,17 +66,8 @@ public:
 
     // XServiceInfo
     OUString                 SAL_CALL getImplementationName() override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    sal_Bool                 SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >     SAL_CALL getSupportedServiceNames() override;
-
-    // static methods
-    static OUString          getImplementationName_Static() throw(  )
-    {
-        return "org.openoffice.comp.dbu.DBContentLoader";
-    }
-    static Sequence< OUString> getSupportedServiceNames_Static() throw(  );
-    static css::uno::Reference< css::uno::XInterface >
-            Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
@@ -96,20 +84,17 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContex
 
 }
 
-extern "C" void createRegistryInfo_DBContentLoader()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_DBContentLoader_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
-}
-
-Reference< XInterface > DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
-{
-    return *(new DBContentLoader(comphelper::getComponentContext(rSMgr)));
+    return cppu::acquire(new DBContentLoader(context));
 }
 
 // XServiceInfo
 OUString SAL_CALL DBContentLoader::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.dbu.DBContentLoader";
 }
 
 // XServiceInfo
@@ -120,12 +105,6 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static() throw(  )
 {
     return { "com.sun.star.frame.FrameLoader", "com.sun.star.sdb.ContentLoader" };
 }

@@ -89,7 +89,7 @@ namespace sdbtools
 
     OUString SAL_CALL ConnectionTools::getImplementationName()
     {
-        return getImplementationName_static();
+        return "com.sun.star.comp.dbaccess.ConnectionTools";
     }
 
     sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName)
@@ -99,23 +99,7 @@ namespace sdbtools
 
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames()
     {
-        return getSupportedServiceNames_static();
-    }
-
-    OUString ConnectionTools::getImplementationName_static()
-    {
-        return "com.sun.star.comp.dbaccess.ConnectionTools";
-    }
-
-    Sequence< OUString > ConnectionTools::getSupportedServiceNames_static()
-    {
-        Sequence<OUString> aSupported { "com.sun.star.sdb.tools.ConnectionTools" };
-        return aSupported;
-    }
-
-    Reference< XInterface > ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new ConnectionTools( _rxContext ) );
+        return  { "com.sun.star.sdb.tools.ConnectionTools" };
     }
 
     void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments)
@@ -139,4 +123,10 @@ namespace sdbtools
 
 } // namespace sdbtools
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbaccess_ConnectionTools_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new sdbtools::ConnectionTools(context)));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

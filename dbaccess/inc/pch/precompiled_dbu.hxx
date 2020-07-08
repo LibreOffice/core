@@ -214,7 +214,6 @@
 #include <callbacks.hxx>
 #include <dbaccess/dataview.hxx>
 #include <dbaccess/dbaccessdllapi.h>
-#include <dbu_reghelper.hxx>
 #include <dsitems.hxx>
 #include <sqlmessage.hxx>
 #include <stringconstants.hxx>

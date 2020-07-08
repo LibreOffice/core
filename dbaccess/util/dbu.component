@@ -18,87 +18,113 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dbu" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.dbaccess.DatabaseInteractionHandler">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.dbaccess.DatabaseInteractionHandler"
+    constructor="com_sun_star_comp_dbaccess_DatabaseInteractionHandler_get_implementation">
     <service name="com.sun.star.sdb.DatabaseInteractionHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dbaccess.LegacyInteractionHandler">
+  <implementation name="com.sun.star.comp.dbaccess.LegacyInteractionHandler"
+    constructor="com_sun_star_comp_dbaccess_LegacyInteractionHandler_get_implementation">
     <service name="com.sun.star.sdb.InteractionHandler"/>
   </implementation>
   <implementation
-      name="com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog">
+      name="com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog"
+      constructor="com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.TextConnectionSettings"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dbu.OColumnControl">
+  <implementation name="com.sun.star.comp.dbu.OColumnControl"
+    constructor="com_sun_star_comp_dbu_OColumnControl_get_implementation">
     <service name="com.sun.star.sdb.ColumnDescriptorControl"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dbu.OColumnControlModel">
+  <implementation name="com.sun.star.comp.dbu.OColumnControlModel"
+    constructor="com_sun_star_comp_dbu_OColumnControlModel_get_implementation">
     <service name="com.sun.star.sdb.ColumnDescriptorControlModel"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dbu.SbaXGridControl">
+  <implementation name="com.sun.star.comp.dbu.SbaXGridControl"
+    constructor="com_sun_star_comp_dbu_SbaXGridControl_get_implementation">
     <service name="com.sun.star.form.control.GridControl"/>
     <service name="com.sun.star.form.control.InteractionGridControl"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sdb.DirectSQLDialog">
+  <implementation name="com.sun.star.comp.sdb.DirectSQLDialog"
+    constructor="com_sun_star_comp_sdb_DirectSQLDialog_get_implementation">
     <service name="org.openoffice.comp.dbu.DirectSqlDialog"/>
   </implementation>
-  <implementation name="com.sun.star.uno.comp.sdb.RowsetFilterDialog">
+  <implementation name="com.sun.star.uno.comp.sdb.RowsetFilterDialog"
+    constructor="com_sun_star_uno_comp_sdb_RowsetFilterDialog_get_implementation">
     <service name="com.sun.star.sdb.FilterDialog"/>
   </implementation>
-  <implementation name="com.sun.star.uno.comp.sdb.RowsetOrderDialog">
+  <implementation name="com.sun.star.uno.comp.sdb.RowsetOrderDialog"
+    constructor="com_sun_star_uno_comp_sdb_RowsetOrderDialog_get_implementation">
     <service name="com.sun.star.sdb.OrderDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.CopyTableWizard">
+  <implementation name="org.openoffice.comp.dbu.CopyTableWizard"
+    constructor="org_openoffice_comp_dbu_CopyTableWizard_get_implementation">
     <service name="com.sun.star.sdb.application.CopyTableWizard"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.DBContentLoader">
+  <implementation name="org.openoffice.comp.dbu.DBContentLoader"
+    constructor="org_openoffice_comp_dbu_DBContentLoader_get_implementation">
     <service name="com.sun.star.frame.FrameLoader"/>
     <service name="com.sun.star.sdb.ContentLoader"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OAdvancedSettingsDialog">
+  <implementation name="org.openoffice.comp.dbu.OAdvancedSettingsDialog"
+    constructor="org_openoffice_comp_dbu_OAdvancedSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.AdvancedDatabaseSettingsDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OApplicationController">
+  <implementation name="org.openoffice.comp.dbu.OApplicationController"
+    constructor="org_openoffice_comp_dbu_OApplicationController_get_implementation">
     <service name="com.sun.star.sdb.application.DefaultViewController"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialog">
+  <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialog"
+    constructor="org_openoffice_comp_dbu_ODBTypeWizDialog_get_implementation">
     <service name="com.sun.star.sdb.DataSourceTypeChangeDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialogSetup">
+  <implementation name="org.openoffice.comp.dbu.ODBTypeWizDialogSetup"
+    constructor="org_openoffice_comp_dbu_ODBTypeWizDialogSetup_get_implementation">
     <service name="com.sun.star.sdb.DatabaseWizardDialog"/>
   </implementation>
   <implementation
-      name="org.openoffice.comp.dbu.ODatasourceAdministrationDialog">
+      name="org.openoffice.comp.dbu.ODatasourceAdministrationDialog"
+      constructor="org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation">
     <service name="com.sun.star.sdb.DatasourceAdministrationDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.ODatasourceBrowser">
+  <implementation name="org.openoffice.comp.dbu.ODatasourceBrowser"
+    constructor="org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation">
     <service name="com.sun.star.sdb.DataSourceBrowser"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OFormGridView">
+  <implementation name="org.openoffice.comp.dbu.OFormGridView"
+    constructor="org_openoffice_comp_dbu_OFormGridView_get_implementation">
     <service name="com.sun.star.sdb.FormGridView"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OQueryDesign">
+  <implementation name="org.openoffice.comp.dbu.OQueryDesign"
+    constructor="org_openoffice_comp_dbu_OQueryDesign_get_implementation">
     <service name="com.sun.star.sdb.QueryDesign"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.ORelationDesign">
+  <implementation name="org.openoffice.comp.dbu.ORelationDesign"
+    constructor="org_openoffice_comp_dbu_ORelationDesign_get_implementation">
     <service name="com.sun.star.sdb.RelationDesign"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OSQLMessageDialog">
+  <implementation name="org.openoffice.comp.dbu.OSQLMessageDialog"
+    constructor="org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation">
     <service name="com.sun.star.sdb.ErrorMessageDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OTableDesign">
+  <implementation name="org.openoffice.comp.dbu.OTableDesign"
+    constructor="org_openoffice_comp_dbu_OTableDesign_get_implementation">
     <service name="com.sun.star.sdb.TableDesign"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OTableFilterDialog">
+  <implementation name="org.openoffice.comp.dbu.OTableFilterDialog"
+    constructor="org_openoffice_comp_dbu_OTableFilterDialog_get_implementation">
     <service name="com.sun.star.sdb.TableFilterDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OUserSettingsDialog">
+  <implementation name="org.openoffice.comp.dbu.OUserSettingsDialog"
+    constructor="org_openoffice_comp_dbu_OUserSettingsDialog_get_implementation">
     <service name="com.sun.star.sdb.UserAdministrationDialog"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbu.OViewDesign">
+  <implementation name="org.openoffice.comp.dbu.OViewDesign"
+    constructor="org_openoffice_comp_dbu_OViewDesign_get_implementation">
     <service name="com.sun.star.sdb.ViewDesign"/>
   </implementation>
-  <implementation name="org.libreoffice.comp.dbu.LimitBoxController">
+  <implementation name="org.libreoffice.comp.dbu.LimitBoxController"
+    constructor="org_libreoffice_comp_dbu_LimitBoxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
 </component>
