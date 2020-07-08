@@ -3367,7 +3367,7 @@ public:
 
     double operator()(const svl::SharedString& rStr) const
     {
-        return convertStringToValue( mpErrorInterpreter, rStr.getString());
+        return maOp( convertStringToValue( mpErrorInterpreter, rStr.getString()), mfVal);
     }
 
     TEmptyRes operator()(char) const
