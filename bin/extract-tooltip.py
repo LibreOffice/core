@@ -16,7 +16,7 @@ def parseFile(filename):
     data = [line.rstrip('\n') for line in data]
 
     pairs = {}
-    regEx = re.compile("^(\S+)\s(\S+)\s(\S+)\s((?:\s*\S*)+)$")
+    regEx = re.compile(r"^(\S+)\s(\S+)\s(\S+)\s((?:\s*\S*)+)$")
     old_line = None
     for line in data:
         if len(line) > 0:

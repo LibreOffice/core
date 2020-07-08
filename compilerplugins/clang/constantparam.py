@@ -38,7 +38,7 @@ def RepresentsInt(s):
     except ValueError:
         return False
 
-constructor_regex = re.compile("^\w+\(\)$")
+constructor_regex = re.compile(r"^\w+\(\)$")
 
 tmp1list = list()
 tmp2list = list()

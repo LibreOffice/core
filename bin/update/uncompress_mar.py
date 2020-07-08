@@ -27,7 +27,7 @@ def extract_mar(mar_file, target_dir):
     subprocess.check_call([mar, "-C", convert_to_native(target_dir), "-x", convert_to_native(mar_file)])
     file_info = subprocess.check_output([mar, "-t", convert_to_native(mar_file)])
     lines = file_info.splitlines()
-    prog = re.compile("\d+\s+\d+\s+(.+)")
+    prog = re.compile(r"\d+\s+\d+\s+(.+)")
     for line in lines:
         match = prog.match(line.decode("utf-8", "strict"))
         if match is None:
