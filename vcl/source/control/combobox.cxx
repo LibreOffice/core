@@ -454,6 +454,9 @@ IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
         if (!m_pSubEdit->IsReadOnly() && m_pImplLB->GetEntryList()->IsEntryPosSelected(nChanged))
             m_pSubEdit->SetText(m_pImplLB->GetEntryList()->GetEntryText(nChanged));
     }
+
+    if (m_rThis.GetModifyHdl().IsSet())
+        m_rThis.GetModifyHdl().Call(m_rThis);
 }
 
 IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl, ImplListBoxWindow*, void)
