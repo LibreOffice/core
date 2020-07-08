@@ -18,9 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="textconversiondlgs"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.linguistic2.ChineseTranslationDialog">
+  <implementation name="com.sun.star.comp.linguistic2.ChineseTranslationDialog"
+    constructor="svx_ChineseTranslation_UnoDialog_get_implementation">
     <service name="com.sun.star.linguistic2.ChineseTranslationDialog"/>
   </implementation>
 </component>

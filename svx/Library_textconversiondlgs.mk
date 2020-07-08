@@ -45,7 +45,6 @@ $(eval $(call gb_Library_use_libraries,textconversiondlgs,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
-    svx/source/unodialogs/textconversiondlgs/services \
     svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog \
     svx/source/unodialogs/textconversiondlgs/chinese_translationdialog \
     svx/source/unodialogs/textconversiondlgs/chinese_translation_unodialog \

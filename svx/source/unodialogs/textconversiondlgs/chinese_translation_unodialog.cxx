@@ -55,11 +55,6 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
 // lang::XServiceInfo
 OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString ChineseTranslation_UnoDialog::getImplementationName_Static()
-{
     return "com.sun.star.comp.linguistic2.ChineseTranslationDialog";
 }
 
@@ -69,11 +64,6 @@ sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString&
 }
 
 uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames_Static()
 {
     return { "com.sun.star.linguistic2.ChineseTranslationDialog" };
 }
@@ -225,5 +215,13 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const 
 }
 
 } //end namespace
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+svx_ChineseTranslation_UnoDialog_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new textconversiondlgs::ChineseTranslation_UnoDialog());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
