@@ -3416,7 +3416,8 @@ win_get_env_from_vsvars32bat()
     # Also seems to be located in another directory under the same name: vsvars32.bat
     # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
     printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
-    printf '@setlocal\r\n@echo %%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
+    # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
+    printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
     _win_get_env_from_vsvars32bat=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
     rm -f $WRAPPERBATCHFILEPATH
