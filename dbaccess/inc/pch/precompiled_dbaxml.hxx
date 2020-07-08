@@ -102,7 +102,6 @@
 #include <xmloff/xmluconv.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <flt_reghelper.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_exception_objects,sdbt,\
     dbaccess/source/sdbtools/connection/datasourcemetadata \
     dbaccess/source/sdbtools/connection/objectnames \
     dbaccess/source/sdbtools/connection/tablename \
-    dbaccess/source/sdbtools/misc/sdbt_services \
 ))
 
 # vim: set noet sw=4 ts=4:

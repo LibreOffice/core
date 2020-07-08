@@ -9,7 +9,6 @@
 
 #include "limitboxcontroller.hxx"
 #include <apitools.hxx>
-#include <uiservices.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -25,7 +24,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <core_resource.hxx>
-#include <dbu_reghelper.hxx>
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
@@ -218,14 +216,16 @@ void SAL_CALL LimitBoxController::release() throw ()
 
 
 /// XServiceInfo
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LimitBoxController, "org.libreoffice.comp.dbu.LimitBoxController")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolbarController")
-
-uno::Reference< uno::XInterface >
-    LimitBoxController::Create(const uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+OUString SAL_CALL LimitBoxController::getImplementationName()
 {
-    return static_cast< XServiceInfo* >(new LimitBoxController( comphelper::getComponentContext(_rxORB) ));
+    return "org.libreoffice.comp.dbu.LimitBoxController";
+}
+
+IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
+
+css::uno::Sequence< OUString > SAL_CALL LimitBoxController::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 /// XComponent
@@ -313,9 +313,11 @@ void LimitBoxController::dispatchCommand(
 
 } // dbaui namespace
 
-extern "C" void createRegistryInfo_LimitBoxController()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_libreoffice_comp_dbu_LimitBoxController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LimitBoxController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::LimitBoxController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
