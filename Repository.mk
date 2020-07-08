@@ -147,6 +147,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	$(if $(filter WNT,$(OS)), \
 		soffice \
+		soffice_safe \
 		unoinfo \
 		unopkg \
 		unopkg_com \
