@@ -22,6 +22,30 @@
       "revId": "6b3c7b8bc144c13c4c1d858fd07e28178dd431b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f9e0ad_db3aed17",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-08T03:45:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2aea47f_40fd3a73",
+      "range": {
+        "startLine": 251,
+        "startChar": 9,
+        "endLine": 251,
+        "endChar": 15
+      },
+      "revId": "6b3c7b8bc144c13c4c1d858fd07e28178dd431b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
