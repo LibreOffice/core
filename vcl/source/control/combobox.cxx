@@ -453,7 +453,10 @@ IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
     if (!m_pImplLB->IsTrackingSelect())
     {
         if (!m_pSubEdit->IsReadOnly() && m_pImplLB->GetEntryList()->IsEntryPosSelected(nChanged))
+        {
             m_pSubEdit->SetText(m_pImplLB->GetEntryList()->GetEntryText(nChanged));
+            m_pSubEdit->Modify();
+        }
     }
 }
 
