@@ -702,7 +702,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             if( aRelPos.X != -1 )
             {
                 xTextShape->setPosition(aRelPos);
-                if( !m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+                if( !m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) &&
+                    rDataSeries.getPropertiesOfSeries()->getPropertyValue( "ShowCustomLeaderLines" ).get<sal_Bool>())
                 {
                     sal_Int32 nX1 = rScreenPosition2D.X;
                     sal_Int32 nY1 = rScreenPosition2D.Y;

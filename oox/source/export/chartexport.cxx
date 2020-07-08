@@ -3600,14 +3600,16 @@ void ChartExport::exportDataLabels(
     // Baseline label properties for all labels.
     writeLabelProperties(pFS, this, xPropSet, aParam);
 
-    pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, "0");
+    bool bShowLeaderLines = false;
+    xPropSet->getPropertyValue("ShowCustomLeaderLines") >>= bShowLeaderLines;
+    pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
 
     // Export leader line
     if( eChartType != chart::TYPEID_PIE )
     {
         pFS->startElement(FSNS(XML_c, XML_extLst));
         pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15), GetFB()->getNamespaceURL(OOX_NS(c15)));
-        pFS->singleElement(FSNS(XML_c15, XML_showLeaderLines), XML_val, "1");
+        pFS->singleElement(FSNS(XML_c15, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
         pFS->endElement(FSNS(XML_c, XML_ext));
         pFS->endElement(FSNS(XML_c, XML_extLst));
     }

@@ -463,6 +463,7 @@ Show
 ShowBorder
 ShowCharts
 ShowCorrelationCoefficient
+ShowCustomLeaderLines
 ShowDetail
 ShowDrawing
 ShowEmpty
@@ -474,7 +475,6 @@ ShowFormulas
 ShowGrid
 ShowHighLow
 ShowInputMessage
-ShowLeaderLines
 ShowLegendEntry
 ShowList
 ShowNegativeError

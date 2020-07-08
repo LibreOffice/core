@@ -419,7 +419,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     }
     // import leaderline of data labels
     if( !mrModel.mbShowLeaderLines )
-        aPropSet.setProperty( PROP_ShowLeaderLines, false );
+        aPropSet.setProperty( PROP_ShowCustomLeaderLines, false );
 
     // data point label settings
     for (auto const& pointLabel : mrModel.maPointLabels)

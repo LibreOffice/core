@@ -69,6 +69,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( "ShowCustomLeaderLines",
+                  PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }
@@ -80,6 +86,7 @@ void DataSeriesProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_VARY_COLORS_BY_POINT, false );
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATASERIES_ATTACHED_AXIS_INDEX, 0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_LEGEND_ENTRY, true );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES, true );
 
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 
