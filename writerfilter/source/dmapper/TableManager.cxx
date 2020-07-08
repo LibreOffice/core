@@ -410,11 +410,19 @@ void TableManager::endRow()
     TableData::Pointer_t pTableData = mTableDataStack.top();
 
     // Add borderless w:gridBefore cell(s) to the row
-    if (pTableData)
+    sal_uInt32 nGridBefore = getCurrentGridBefore();
+    if (pTableData && nGridBefore > 0 && pTableData->getCurrentRow()->getCellCount() > 0)
     {
+<<<<<<< HEAD   (3d48a1 tdf#134146 Chart OOXML import: break long horizontal Y axis )
         sal_uInt32 nGridBefore = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
         for (unsigned int i = 0; i < nGridBefore; ++i)
+=======
+        const css::uno::Reference<css::text::XTextRange>& xRowStart
+            = pTableData->getCurrentRow()->getCellStart(0);
+        if (xRowStart.is())
+>>>>>>> CHANGE (5483d4 tdf#134606 DOCX table import: fix gridBefore + nesting)
         {
+<<<<<<< HEAD   (3d48a1 tdf#134146 Chart OOXML import: break long horizontal Y axis )
             css::table::BorderLine2 aBorderLine;
             aBorderLine.Color = 0;
             aBorderLine.InnerLineWidth = 0;
@@ -425,6 +433,33 @@ void TableManager::endRow()
             pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
             pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
             pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0), pCellProperties, /*bAddBefore=*/true);
+=======
+            try
+            {
+                // valid TextRange for table creation (not a nested table)?
+                xRowStart->getText()->createTextCursorByRange(xRowStart);
+
+                for (unsigned int i = 0; i < nGridBefore; ++i)
+                {
+                    css::table::BorderLine2 aBorderLine;
+                    aBorderLine.Color = 0;
+                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.OuterLineWidth = 0;
+                    TablePropertyMapPtr pCellProperties(new TablePropertyMap);
+                    pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
+                    pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
+                    pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
+                    pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
+                    pTableData->getCurrentRow()->addCell(xRowStart, pCellProperties,
+                                                         /*bAddBefore=*/true);
+                }
+            }
+            catch (css::uno::Exception const&)
+            {
+                // don't add gridBefore cells in not valid TextRange
+                setCurrentGridBefore(0);
+            }
+>>>>>>> CHANGE (5483d4 tdf#134606 DOCX table import: fix gridBefore + nesting)
         }
     }
 
