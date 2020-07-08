@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eec5e8c_2a77fb05",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-08T09:37:29Z",
+      "side": 0,
+      "message": "Removed this, because aPropertyValuePair is never supposed to be empty.\nAlways returns true.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 54
+      },
+      "revId": "da5cf5598ad9e1594f8257aa3faeece0b342cbfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
