@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_URIABBREVIATION_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_URIABBREVIATION_HXX
 
-#include <macros/xserviceinfo.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XStringAbbreviation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

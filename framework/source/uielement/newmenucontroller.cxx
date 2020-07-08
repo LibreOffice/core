@@ -40,6 +40,7 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 //  Defines
 #define aSlotNewDocDirect ".uno:AddDirect"

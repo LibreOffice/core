@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX
 
-#include <macros/xserviceinfo.hxx>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

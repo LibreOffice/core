@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/mnemonic.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 //  Defines
 

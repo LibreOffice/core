@@ -23,6 +23,7 @@
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework{
 
@@ -40,7 +41,7 @@ sal_Bool SAL_CALL Oxt_Handler::supportsService( const OUString& sServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL Oxt_Handler::getSupportedServiceNames()
 {
-    return { SERVICENAME_CONTENTHANDLER };
+    return { "com.sun.star.frame.ContentHandler" };
 }
 
 

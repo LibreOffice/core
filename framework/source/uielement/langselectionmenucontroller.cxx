@@ -36,6 +36,7 @@
 
 #include <helper/mischelper.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <map>
 #include <set>

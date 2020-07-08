@@ -18,7 +18,6 @@
  */
 
 #include <framework/dispatchhelper.hxx>
-#include <macros/xserviceinfo.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -28,6 +27,7 @@
 #include <comphelper/profilezone.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/threadex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework
 {
