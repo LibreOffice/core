@@ -40,7 +40,6 @@ core_factory_list = [
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
-    ("libutllo.a", "utl_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
@@ -304,6 +303,9 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# unotools/util/utl.component
+    "unotools_ServiceDocument_get_implementation",
+    "unotools_OTempFileService_get_implementation",
 # unoxml/source/rdf/unordf.component
     "unoxml_rdfRepository_get_implementation",
     "unoxml_CURI_get_implementation",

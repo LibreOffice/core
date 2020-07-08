@@ -18,15 +18,14 @@
  */
 
 #include "XTempFile.hxx"
-#include <unotoolsservices.hxx>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentContext > const &)
 : mpStream( nullptr )
@@ -439,11 +438,26 @@ void OTempFileService::setPropertyValues( const ::css::uno::Sequence< ::css::bea
         setPropertyValue( rPropVal.Name, rPropVal.Value );
 }
 
-namespace sdecl = ::comphelper::service_decl;
-sdecl::class_< OTempFileService> const OTempFileServiceImpl;
-const sdecl::ServiceDecl OTempFileServiceDecl(
-    OTempFileServiceImpl,
-    "com.sun.star.io.comp.TempFile",
-    "com.sun.star.io.TempFile");
+//  XServiceInfo
+sal_Bool OTempFileService::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString OTempFileService::getImplementationName()
+{
+    return "com.sun.star.io.comp.TempFile";
+}
+css::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
+{
+    return { "com.sun.star.io.TempFile" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+unotools_OTempFileService_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OTempFileService(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
