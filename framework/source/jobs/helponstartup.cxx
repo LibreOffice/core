@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework{
 

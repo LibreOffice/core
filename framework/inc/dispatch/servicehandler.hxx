@@ -20,14 +20,14 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_SERVICEHANDLER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_SERVICEHANDLER_HXX
 
-#include <macros/xserviceinfo.hxx>
-
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

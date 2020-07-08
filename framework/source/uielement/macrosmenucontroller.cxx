@@ -20,12 +20,14 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <services.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

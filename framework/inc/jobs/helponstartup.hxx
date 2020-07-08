@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 
-#include <macros/xserviceinfo.hxx>
-
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/task/XJob.hpp>
@@ -29,6 +27,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework{
 

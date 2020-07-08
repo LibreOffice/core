@@ -22,6 +22,7 @@
 #include <services.h>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 //  Defines
 

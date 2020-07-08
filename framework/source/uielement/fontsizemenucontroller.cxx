@@ -35,6 +35,7 @@
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
+#include <cppuhelper/supportsservice.hxx>
 
 //  Defines
 

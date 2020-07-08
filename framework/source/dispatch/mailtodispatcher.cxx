@@ -25,6 +25,7 @@
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework{
 

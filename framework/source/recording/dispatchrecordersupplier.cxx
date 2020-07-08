@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XRecordableDispatch.hpp>
 
 #include <vcl/svapp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework{
 

@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <macros/xserviceinfo.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
@@ -35,6 +34,8 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace framework{

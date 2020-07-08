@@ -4,31 +4,6 @@ blacklist:
     framework/inc/stdtypes.h:
     #  Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
-    framework/inc/macros/xinterface.hxx:
-    # Used in macros
-    - com/sun/star/uno/Any.hxx
-    - com/sun/star/uno/Type.hxx
-    - cppuhelper/queryinterface.hxx
-    framework/inc/macros/xserviceinfo.hxx:
-    # Used in macros
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XSingleServiceFactory.hpp
-    - com/sun/star/uno/Reference.hxx
-    - com/sun/star/uno/Sequence.hxx
-    - com/sun/star/uno/XComponentContext.hpp
-    - comphelper/processfactory.hxx
-    - cppuhelper/factory.hxx
-    - cppuhelper/supportsservice.hxx
-    - rtl/ustring.hxx
-    framework/inc/macros/registration.hxx:
-    # Used in macros
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    framework/inc/macros/xtypeprovider.hxx:
-    # Used in macros
-    - com/sun/star/lang/XTypeProvider.hpp
-    - com/sun/star/uno/Sequence.hxx
-    - com/sun/star/uno/Type.hxx
-    - cppuhelper/typeprovider.hxx
     framework/inc/services/layoutmanager.hxx:
     #  Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

@@ -32,6 +32,7 @@
 
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace framework{
 

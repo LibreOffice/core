@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <tools/urlobj.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // framework namespace
 namespace framework
@@ -42,7 +43,7 @@ sal_Bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName
 
 css::uno::Sequence< OUString > SAL_CALL UriAbbreviation::getSupportedServiceNames()
 {
-    return { SERVICENAME_STRINGABBREVIATION };
+    return { "com.sun.star.util.UriAbbreviation" };
 }
 
 UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & )

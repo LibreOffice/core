@@ -27,11 +27,9 @@ namespace framework{
 #define SERVICENAME_FILTERFACTORY                               "com.sun.star.document.FilterFactory"
 #define SERVICENAME_CFGUPDATEACCESS                             "com.sun.star.configuration.ConfigurationUpdateAccess"   // provides read/write access to the configuration
 #define SERVICENAME_CFGREADACCESS                               "com.sun.star.configuration.ConfigurationAccess"         // provides readonly access to the configuration
-#define SERVICENAME_CONTENTHANDLER                              "com.sun.star.frame.ContentHandler"
 #define SERVICENAME_JOB                                         "com.sun.star.task.Job"
 #define SERVICENAME_PROTOCOLHANDLER                             "com.sun.star.frame.ProtocolHandler"
 #define SERVICENAME_POPUPMENUCONTROLLER                         "com.sun.star.frame.PopupMenuController"
-#define SERVICENAME_STRINGABBREVIATION                          "com.sun.star.util.UriAbbreviation"
 
 //  used implementationnames by framework
 

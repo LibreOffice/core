@@ -13,6 +13,7 @@
 #include <dispatch/dispatchdisabler.hxx>
 
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
 using namespace framework;

@@ -55,6 +55,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 //  Defines
 

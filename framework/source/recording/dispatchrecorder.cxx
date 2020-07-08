@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <typelib/typedescription.h>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 
