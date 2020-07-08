@@ -63,12 +63,10 @@ $(eval $(call gb_Library_add_exception_objects,dbaxml,\
     dbaccess/source/filter/xml/xmlLogin \
     dbaccess/source/filter/xml/xmlQuery \
     dbaccess/source/filter/xml/xmlServerDatabase \
-    dbaccess/source/filter/xml/xmlservices \
     dbaccess/source/filter/xml/xmlStyleImport \
     dbaccess/source/filter/xml/xmlTable \
     dbaccess/source/filter/xml/xmlTableFilterList \
     dbaccess/source/filter/xml/xmlTableFilterPattern \
-    dbaccess/source/shared/flt_reghelper \
 ))
 
 # vim: set noet sw=4 ts=4:

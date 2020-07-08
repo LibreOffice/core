@@ -214,11 +214,9 @@
 #include <callbacks.hxx>
 #include <dbaccess/dataview.hxx>
 #include <dbaccess/dbaccessdllapi.h>
-#include <dbu_reghelper.hxx>
 #include <dsitems.hxx>
 #include <sqlmessage.hxx>
 #include <stringconstants.hxx>
-#include <uiservices.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

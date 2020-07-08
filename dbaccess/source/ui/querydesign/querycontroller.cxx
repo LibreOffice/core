@@ -22,11 +22,9 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <query.hrc>
-#include <dbu_reghelper.hxx>
 #include <stringconstants.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
-#include <uiservices.hxx>
 #include <querycontainerwindow.hxx>
 #include <querycontroller.hxx>
 #include <QueryDesignView.hxx>
@@ -40,6 +38,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -73,9 +72,11 @@
 #include <memory>
 #include <vector>
 
-extern "C" void createRegistryInfo_OQueryControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OQueryDesign_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OQueryController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OQueryController(context));
 }
 
 namespace dbaui
@@ -92,40 +93,25 @@ namespace dbaui
     {
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return getImplementationName_Static();
+            return "org.openoffice.comp.dbu.OViewDesign";
         }
         virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() override
         {
-            return getSupportedServiceNames_Static();
+            return { "com.sun.star.sdb.ViewDesign" };
         }
 
     public:
         explicit OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
-
-        // need by registration
-        /// @throws RuntimeException
-        static OUString getImplementationName_Static()
-        {
-            return "org.openoffice.comp.dbu.OViewDesign";
-        }
-        /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_Static()
-        {
-            Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };
-            return aSupported;
-        }
-        static Reference< XInterface > Create(const Reference< XMultiServiceFactory >& _rM)
-        {
-            return *(new OViewController(comphelper::getComponentContext(_rM)));
-        }
     };
 
     }
 }
 
-extern "C" void createRegistryInfo_OViewControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OViewDesign_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OViewController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OViewController(context));
 }
 
 namespace dbaui
@@ -203,28 +189,12 @@ namespace
 
 OUString SAL_CALL OQueryController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString OQueryController::getImplementationName_Static()
-{
     return "org.openoffice.comp.dbu.OQueryDesign";
-}
-
-Sequence< OUString> OQueryController::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSupported { "com.sun.star.sdb.QueryDesign" };
-    return aSupported;
 }
 
 Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-Reference< XInterface > OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
+    return { "com.sun.star.sdb.QueryDesign" };
 }
 
 OQueryController::OQueryController(const Reference< XComponentContext >& _rM)

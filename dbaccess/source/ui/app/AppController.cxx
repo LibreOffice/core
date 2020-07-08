@@ -23,7 +23,6 @@
 #include <strings.hxx>
 #include <advancedsettingsdlg.hxx>
 #include "subcomponentmanager.hxx"
-#include <uiservices.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -95,7 +94,6 @@
 #include <osl/mutex.hxx>
 #include "AppView.hxx"
 #include <browserids.hxx>
-#include <dbu_reghelper.hxx>
 #include <strings.hrc>
 #include <defaultobjectnamecheck.hxx>
 #include <databaseobjectview.hxx>
@@ -106,9 +104,11 @@
 #include <dlgsave.hxx>
 #include <dbaccess_slotid.hrc>
 
-extern "C" void createRegistryInfo_ODBApplication()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_openoffice_comp_dbu_OApplicationController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OApplicationController > aAutoRegistration;
+    return cppu::acquire(new ::dbaui::OApplicationController(context));
 }
 
 namespace dbaui
@@ -139,28 +139,12 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 
 OUString SAL_CALL OApplicationController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString OApplicationController::getImplementationName_Static()
-{
     return SERVICE_SDB_APPLICATIONCONTROLLER;
-}
-
-Sequence< OUString> OApplicationController::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSupported { "com.sun.star.sdb.application.DefaultViewController" };
-    return aSupported;
 }
 
 Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-Reference< XInterface > OApplicationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
+    return { "com.sun.star.sdb.application.DefaultViewController" };
 }
 
 namespace {
