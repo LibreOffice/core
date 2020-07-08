@@ -441,11 +441,25 @@ void TableManager::endRow()
     TableData::Pointer_t pTableData = mTableDataStack.top();
 
     // Add borderless w:gridBefore cell(s) to the row
-    if (pTableData)
+    if (pTableData && pTableData->getCurrentRow()->getCellCount() > 0)
     {
-        sal_uInt32 nGridBefore
-            = mpTableDataHandler->getDomainMapperImpl().getTableManager().getCurrentGridBefore();
-        for (unsigned int i = 0; i < nGridBefore; ++i)
+        const css::uno::Reference<css::text::XTextRange>& xRowStart
+            = pTableData->getCurrentRow()->getCellStart(0);
+        if (getCurrentGridBefore() > 0)
+        {
+            try
+            {
+                // valid TextRange for table creation?
+                xRowStart->getText()->createTextCursorByRange(xRowStart);
+            }
+            catch (css::uno::Exception const&)
+            {
+                // don't add gridBefore cells in not valid TextRange
+                setCurrentGridBefore(0);
+            }
+        }
+
+        for (unsigned int i = 0; i < getCurrentGridBefore(); ++i)
         {
             css::table::BorderLine2 aBorderLine;
             aBorderLine.Color = 0;
@@ -456,8 +470,8 @@ void TableManager::endRow()
             pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
             pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
             pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
-            pTableData->getCurrentRow()->addCell(pTableData->getCurrentRow()->getCellStart(0),
-                                                 pCellProperties, /*bAddBefore=*/true);
+            pTableData->getCurrentRow()->addCell(xRowStart, pCellProperties,
+                                                 /*bAddBefore=*/true);
         }
     }
 
