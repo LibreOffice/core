@@ -195,6 +195,7 @@ public:
     void testCustomNumFormatHybridCellODS();
     void testTdf121040();
     void testTdf118624();
+    void testTdf124454();
 
     void testPrintRangeODS();
     void testOutlineODS();
@@ -357,6 +358,7 @@ public:
     CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
     CPPUNIT_TEST(testTdf121040);
     CPPUNIT_TEST(testTdf118624);
+    CPPUNIT_TEST(testTdf124454);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
@@ -2948,6 +2950,22 @@ void ScFiltersTest::testTdf118624()
 
     CPPUNIT_ASSERT_MESSAGE("RAND() in array/matrix mode shouldn't return the same value",
             rDoc.GetString(ScAddress(0,0,0)) != rDoc.GetString(ScAddress(0,1,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf124454()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf124454.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(2,0,0)));
+    // Without the fix in place, double negation with text in array
+    // would have returned -1
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(3,0,0)));
 
     xDocSh->DoClose();
 }
