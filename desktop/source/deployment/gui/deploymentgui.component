@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="deploymentgui" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.deployment.ui.LicenseDialog">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.deployment.ui.LicenseDialog"
+    constructor="desktop_LicenseDialog_get_implementation">
     <service name="com.sun.star.deployment.ui.LicenseDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.ui.PackageManagerDialog">
+  <implementation name="com.sun.star.comp.deployment.ui.PackageManagerDialog"
+    constructor="desktop_ServiceImpl_get_implementation">
     <service name="com.sun.star.deployment.ui.PackageManagerDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.ui.UpdateRequiredDialog">
+  <implementation name="com.sun.star.comp.deployment.ui.UpdateRequiredDialog"
+    constructor="desktop_UpdateRequiredDialogService_get_implementation">
     <service name="com.sun.star.deployment.ui.UpdateRequiredDialog"/>
   </implementation>
 </component>

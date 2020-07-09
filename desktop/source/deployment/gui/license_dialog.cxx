@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/threadex.hxx>
 #include <vcl/weld.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "license_dialog.hxx"
 
@@ -199,6 +200,23 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 {
     comphelper::unwrapArgs( args, m_parent, m_sExtensionName, m_sLicenseText );
 }
+
+// XServiceInfo
+OUString LicenseDialog::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.ui.LicenseDialog";
+}
+
+sal_Bool LicenseDialog::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > LicenseDialog::getSupportedServiceNames()
+{
+    return { "com.sun.star.deployment.ui.LicenseDialog" };
+}
+
 
 // XExecutableDialog
 
