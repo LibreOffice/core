@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:44 using:
+ Generated on 2020-07-09 17:06:27 using:
  ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,6 +45,7 @@
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -53,7 +54,6 @@
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
@@ -62,25 +62,23 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/dllapi.h>
-#include <vcl/svapp.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/cppuhelperdllapi.h>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <sfx2/dllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <xmloff/attrlist.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4
