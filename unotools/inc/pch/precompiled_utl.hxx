@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:31 using:
+ Generated on 2020-07-09 17:07:21 using:
  ./bin/update_pch unotools utl --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,9 +30,6 @@
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
-#include <boost/locale.hpp>
-#include <boost/locale/gnu_gettext.hpp>
-#include <optional>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/detail/file.h>
@@ -48,7 +45,6 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
-#include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
@@ -102,7 +98,6 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
@@ -112,6 +107,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/condition.hxx>
