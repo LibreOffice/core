@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72e5f1fa_8ffe077f",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4376,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-09T15:09:14Z",
+      "side": 1,
+      "message": "Nitpick: for unconditionally obtaining the first character of a string it\u0027s best to use OUString::toChar() as that even for empty strings (which shouldn\u0027t happen here as every locale must have a decimal separator) returns a null character, whereas OUString::operator[] would fail with an assert in such case.",
+      "range": {
+        "startLine": 4376,
+        "startChar": 62,
+        "endLine": 4376,
+        "endChar": 65
+      },
+      "revId": "9ab82981c585873d010744b3e2e16f8b89c340d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
