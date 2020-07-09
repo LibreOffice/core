@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:56 using:
+ Generated on 2020-07-09 17:06:21 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -68,6 +68,7 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -96,7 +97,6 @@
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -120,8 +120,6 @@
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxvar.hxx>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -242,6 +240,7 @@
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svldllapi.h>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>

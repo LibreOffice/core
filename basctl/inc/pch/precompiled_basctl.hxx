@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:48 using:
+ Generated on 2020-07-09 17:06:13 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <climits>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -56,6 +57,7 @@
 #include <utility>
 #include <vector>
 #include <boost/functional/hash.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -73,13 +75,14 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
@@ -93,11 +96,12 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <vcl/IContext.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -120,13 +124,11 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -135,6 +137,7 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salctype.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -145,7 +148,6 @@
 #include <vcl/task.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/transfer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -169,6 +171,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
@@ -456,6 +459,7 @@
 #include <svx/xtable.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -473,6 +477,7 @@
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
