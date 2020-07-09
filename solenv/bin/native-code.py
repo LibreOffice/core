@@ -146,7 +146,6 @@ core_constructor_list = [
     "com_sun_star_comp_dba_DataAccessDescriptorFactory",
     "com_sun_star_comp_dba_OCommandDefinition",
     "com_sun_star_comp_dba_OComponentDefinition",
-    "com_sun_star_comp_dba_ODatabaseContext_get_implementation",
     "com_sun_star_comp_dba_ODatabaseDocument",
     "com_sun_star_comp_dba_ODatabaseSource",
     "com_sun_star_comp_dba_ORowSet_get_implementation",
