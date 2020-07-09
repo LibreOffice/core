@@ -35,6 +35,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace dp_gui {
 
@@ -242,12 +243,17 @@ public:
     virtual ~ShowLicenseDialog() override;
 };
 
-class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog >
+class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog, css::lang::XServiceInfo >
 {
     css::uno::Reference< css::uno::XComponentContext > const m_xComponentContext;
 public:
     UpdateRequiredDialogService( css::uno::Sequence< css::uno::Any > const & args,
                                  css::uno::Reference< css::uno::XComponentContext> const & xComponentContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XExecutableDialog
     virtual void SAL_CALL         setTitle( OUString const & title ) override;

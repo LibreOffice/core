@@ -22,9 +22,9 @@
 #include "dp_gui_theextmgr.hxx"
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/weld.hxx>
@@ -41,8 +41,6 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-namespace sdecl = comphelper::service_decl;
 
 namespace dp_gui {
 
@@ -108,7 +106,7 @@ namespace {
 
 class ServiceImpl
     : public ::cppu::WeakImplHelper<ui::dialogs::XAsynchronousExecutableDialog,
-                                     task::XJobExecutor>
+                                     task::XJobExecutor, css::lang::XServiceInfo>
 {
     Reference<XComponentContext> const m_xComponentContext;
     std::optional< Reference<awt::XWindow> > /* const */ m_parent;
@@ -119,6 +117,11 @@ class ServiceImpl
 public:
     ServiceImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAsynchronousExecutableDialog
     virtual void SAL_CALL setDialogTitle( OUString const & aTitle ) override;
@@ -152,6 +155,22 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     ResHookProc pProc = Translate::GetReadStringHook();
     if ( !pProc )
         Translate::SetReadStringHook(ReplaceProductNameHookProc);
+}
+
+// XServiceInfo
+OUString ServiceImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.ui.PackageManagerDialog";
+}
+
+sal_Bool ServiceImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > ServiceImpl::getSupportedServiceNames()
+{
+    return { "com.sun.star.deployment.ui.PackageManagerDialog" };
 }
 
 // XAsynchronousExecutableDialog
@@ -270,35 +289,27 @@ void ServiceImpl::trigger( OUString const &rEvent )
     startExecuteModal( Reference< ui::dialogs::XDialogClosedListener >() );
 }
 
-sdecl::class_<ServiceImpl, sdecl::with_args<true> > const serviceSI;
-sdecl::ServiceDecl const serviceDecl(
-    serviceSI,
-    "com.sun.star.comp.deployment.ui.PackageManagerDialog",
-    "com.sun.star.deployment.ui.PackageManagerDialog" );
-
-sdecl::class_<LicenseDialog, sdecl::with_args<true> > const licenseSI;
-sdecl::ServiceDecl const licenseDecl(
-    licenseSI,
-    "com.sun.star.comp.deployment.ui.LicenseDialog",
-    "com.sun.star.deployment.ui.LicenseDialog" );
-
-sdecl::class_<UpdateRequiredDialogService, sdecl::with_args<true> > const updateSI;
-sdecl::ServiceDecl const updateDecl(
-    updateSI,
-    "com.sun.star.comp.deployment.ui.UpdateRequiredDialog",
-    "com.sun.star.deployment.ui.UpdateRequiredDialog" );
 } // namespace dp_gui
 
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * deploymentgui_component_getFactory(
-    char const * pImplName, void *, void *)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_LicenseDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    return sdecl::component_getFactoryHelper(
-        pImplName,
-        {&dp_gui::serviceDecl, &dp_gui::licenseDecl, &dp_gui::updateDecl});
+    return cppu::acquire(new dp_gui::LicenseDialog(args, context));
 }
 
-} // extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_ServiceImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_gui::ServiceImpl(args, context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+desktop_UpdateRequiredDialogService_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_gui::UpdateRequiredDialogService(args, context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
