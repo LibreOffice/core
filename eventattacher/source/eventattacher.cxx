@@ -40,6 +40,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
@@ -52,9 +53,6 @@ using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
 
-
-#define SERVICENAME "com.sun.star.script.EventAttacher"
-#define IMPLNAME    "com.sun.star.comp.EventAttacher"
 
 namespace comp_EventAttacher {
 
@@ -213,7 +211,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
@@ -282,19 +279,9 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 }
 
 /// @throws Exception
-static Reference< XInterface > EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
-{
-    XEventAttacher* pEventAttacher = new EventAttacherImpl(comphelper::getComponentContext(rSMgr));
-
-    Reference< XInterface > xRet(pEventAttacher, UNO_QUERY);
-
-    return xRet;
-}
-
-
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
 {
-    return IMPLNAME;
+    return "com.sun.star.comp.EventAttacher";
 }
 
 sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
@@ -304,13 +291,7 @@ sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceNam
 
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-Sequence<OUString> EventAttacherImpl::getSupportedServiceNames_Static(  )
-{
-    return { SERVICENAME };
+    return { "com.sun.star.script.EventAttacher" };
 }
 
 void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
@@ -858,30 +839,13 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 
 }
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+eventattacher_EventAttacher(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-SAL_DLLPUBLIC_EXPORT void * evtatt_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * )
-{
-    void * pRet = nullptr;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            static_cast< XMultiServiceFactory * >( pServiceManager ),
-            IMPLNAME,
-            ::comp_EventAttacher::EventAttacherImpl_CreateInstance,
-            ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
+    static rtl::Reference<comp_EventAttacher::EventAttacherImpl> instance(new comp_EventAttacher::EventAttacherImpl(context));
+    instance->acquire();
+    return static_cast<cppu::OWeakObject*>(instance.get());
 }
 
 
