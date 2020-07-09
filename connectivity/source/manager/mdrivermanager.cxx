@@ -31,10 +31,15 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 #include <algorithm>
 #include <iterator>
 #include <vector>
+
+static osl::Mutex g_InstanceGuard;
+static rtl::Reference<drivermanager::OSDBCDriverManager> g_Instance;
+static bool g_Disposed = false;
 
 namespace drivermanager
 {
@@ -237,7 +242,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     }
 
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
-    :m_xContext( _rxContext )
+    :OSDBCDriverManager_Base(m_aMutex)
+    ,m_xContext( _rxContext )
     ,m_aEventLogger( _rxContext, "org.openoffice.logging.sdbc.DriverManager" )
     ,m_aDriverConfig(m_xContext)
     ,m_nLoginTimeout(0)
@@ -252,6 +258,15 @@ OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _r
 
 OSDBCDriverManager::~OSDBCDriverManager()
 {
+}
+
+// XComponent
+void SAL_CALL OSDBCDriverManager::dispose()
+{
+    OSDBCDriverManager_Base::dispose();
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    g_Instance.clear();
+    g_Disposed = true;
 }
 
 void OSDBCDriverManager::bootstrapDrivers()
@@ -507,7 +522,7 @@ sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  )
 
 OUString SAL_CALL OSDBCDriverManager::getImplementationName(  )
 {
-    return getImplementationName_static();
+    return "com.sun.star.comp.sdbc.OSDBCDriverManager";
 }
 
 sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName )
@@ -518,31 +533,7 @@ sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rService
 
 Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_static();
-}
-
-
-Reference< XInterface > OSDBCDriverManager::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-{
-    return *( new OSDBCDriverManager( comphelper::getComponentContext(_rxFactory) ) );
-}
-
-
-OUString OSDBCDriverManager::getImplementationName_static(  )
-{
-    return "com.sun.star.comp.sdbc.OSDBCDriverManager";
-}
-
-
-Sequence< OUString > OSDBCDriverManager::getSupportedServiceNames_static(  )
-{
-    return { getSingletonName_static() };
-}
-
-
-OUString OSDBCDriverManager::getSingletonName_static(  )
-{
-    return "com.sun.star.sdbc.DriverManager";
+    return { "com.sun.star.sdbc.DriverManager" };
 }
 
 
@@ -676,5 +667,19 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
 }
 
 }   // namespace drivermanager
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_OSDBCDriverManager_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    if (g_Disposed)
+        return nullptr;
+    if (!g_Instance)
+        g_Instance.set(new drivermanager::OSDBCDriverManager(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

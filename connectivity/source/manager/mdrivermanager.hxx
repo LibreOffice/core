@@ -31,7 +31,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/logging.hxx>
 #include <osl/mutex.hxx>
 #include <connectivity/DriversConfig.hxx>
@@ -51,16 +52,15 @@ namespace drivermanager
 
     // OSDBCDriverManager - the one-instance service for managing SDBC drivers
 
-    typedef ::cppu::WeakImplHelper<   css::sdbc::XDriverManager2
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriverManager2
                                   ,   css::lang::XServiceInfo
                                   ,   css::uno::XNamingService
                                   >   OSDBCDriverManager_Base;
 
-    class OSDBCDriverManager final : public OSDBCDriverManager_Base
+    class OSDBCDriverManager final : public cppu::BaseMutex, public OSDBCDriverManager_Base
     {
         friend class ODriverEnumeration;
 
-        ::osl::Mutex                    m_aMutex;
         css::uno::Reference<css::uno::XComponentContext>  m_xContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
@@ -75,11 +75,14 @@ namespace drivermanager
         ::connectivity::DriversConfig   m_aDriverConfig;
         sal_Int32                       m_nLoginTimeout;
 
+    public:
+
         explicit OSDBCDriverManager(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager() override;
 
-    public:
+    // XComponent
+        virtual void SAL_CALL dispose() override;
 
     // XDriverManager
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;
@@ -101,15 +104,6 @@ namespace drivermanager
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XServiceInfo - static methods
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        /// @throws css::uno::RuntimeException
-        static OUString getSingletonName_static(  );
-        static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxContext );
 
     // XNamingService
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
