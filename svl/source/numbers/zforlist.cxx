@@ -3049,6 +3049,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
 
     if (eType & SvNumFormatType::TIME)
     {
+        assert(pFormat && "with !pFormat eType can only be SvNumFormatType::UNDEFINED");
         sString = pFormat->GetFormatStringForTimePrecision( nPrecision );
     }
     else if (nLeadingZeros == 0)
