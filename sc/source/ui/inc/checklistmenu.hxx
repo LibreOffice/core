@@ -311,7 +311,7 @@ public:
 private:
     VclPtr<ScCheckListMenuWindow> mxParentMenu;
     VclPtr<vcl::Window> mxBox;
-    std::unique_ptr<ScCheckListMenuControl> mxControl;
+    std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
 };
 
 #endif
