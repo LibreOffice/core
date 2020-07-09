@@ -44,7 +44,6 @@ lo_get_factory_map(void)
     static lib_to_factory_mapping map[] = {
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
-        { "libemfiolo.a", emfio_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { 0, 0 }
     };
