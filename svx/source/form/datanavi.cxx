@@ -788,7 +788,11 @@ namespace svxform
             try
             {
                 std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-                m_xItemList->get_selected(xEntry.get());
+                if (!m_xItemList->get_selected(xEntry.get()))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
 
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we
@@ -801,24 +805,44 @@ namespace svxform
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                m_xItemList->iter_children(*xEntry);
+                if (!m_xItemList->iter_children(*xEntry))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
                 m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF ) + sTemp;
-                m_xItemList->iter_next_sibling(*xEntry);
+                if (!m_xItemList->iter_next_sibling(*xEntry))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
                 m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION ) + sTemp;
-                m_xItemList->iter_next_sibling(*xEntry);
+                if (!m_xItemList->iter_next_sibling(*xEntry))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD ) +
                     m_aMethodString.toUI( sTemp );
-                m_xItemList->iter_next_sibling(*xEntry);
+                if (!m_xItemList->iter_next_sibling(*xEntry))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
                 m_xItemList->set_text(*xEntry, sEntry);
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE ) +
                     m_aReplaceString.toUI( sTemp );
-                m_xItemList->iter_next_sibling(*xEntry);
+                if (!m_xItemList->iter_next_sibling(*xEntry))
+                {
+                    SAL_WARN( "svx.form", "corrupt tree" );
+                    return;
+                }
                 m_xItemList->set_text(*xEntry, sEntry);
             }
             catch ( Exception const & )
