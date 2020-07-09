@@ -501,7 +501,6 @@ calc_constructor_list = [
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
-    ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
     ]
 
@@ -518,6 +517,17 @@ draw_constructor_list = [
     "com_sun_star_animations_ParallelTimeContainer_get_implementation",
     "com_sun_star_animations_SequenceTimeContainer_get_implementation",
     "com_sun_star_animations_TransitionFilter_get_implementation",
+# desktop/source/deployment/deployment.component
+    "com_sun_star_comp_deployment_ExtensionManager_get_implementation",
+    "com_sun_star_comp_deployment_PackageInformationProvider_get_implementation",
+    "com_sun_star_comp_deployment_PackageManagerFactory_get_implementation",
+    "com_sun_star_comp_deployment_ProgressLog_get_implementation",
+    "com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation",
+    "com_sun_star_comp_deployment_configuration_PackageRegistryBackend_get_implementation",
+    "com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation",
+    "com_sun_star_comp_deployment_help_PackageRegistryBackend_get_implementation",
+    "com_sun_star_comp_deployment_script_PackageRegistryBackend_get_implementation",
+    "com_sun_star_comp_deployment_sfwk_PackageRegistryBackend_get_implementation",
 # sd/util/sd.component
     "RandomAnimationNode_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation",

@@ -18,38 +18,48 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="deployment" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.deployment.ExtensionManager">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.deployment.ExtensionManager"
+    constructor="com_sun_star_comp_deployment_ExtensionManager_get_implementation">
     <service name="com.sun.star.comp.deployment.ExtensionManager"/>
     <singleton name="com.sun.star.deployment.ExtensionManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.PackageInformationProvider">
+  <implementation name="com.sun.star.comp.deployment.PackageInformationProvider"
+    constructor="com_sun_star_comp_deployment_PackageInformationProvider_get_implementation">
     <service name="com.sun.star.comp.deployment.PackageInformationProvider"/>
     <singleton name="com.sun.star.deployment.PackageInformationProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.PackageManagerFactory">
+  <implementation name="com.sun.star.comp.deployment.PackageManagerFactory"
+    constructor="com_sun_star_comp_deployment_PackageManagerFactory_get_implementation">
     <service name="com.sun.star.comp.deployment.PackageManagerFactory"/>
     <singleton name="com.sun.star.deployment.thePackageManagerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.ProgressLog">
+  <implementation name="com.sun.star.comp.deployment.ProgressLog"
+    constructor="com_sun_star_comp_deployment_ProgressLog_get_implementation">
     <service name="com.sun.star.comp.deployment.ProgressLog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.component.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.component.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.configuration.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.configuration.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_configuration_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.executable.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.executable.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.help.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.help.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_help_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.script.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.script.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_script_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
-  <implementation name="com.sun.star.comp.deployment.sfwk.PackageRegistryBackend">
+  <implementation name="com.sun.star.comp.deployment.sfwk.PackageRegistryBackend"
+    constructor="com_sun_star_comp_deployment_sfwk_PackageRegistryBackend_get_implementation">
     <service name="com.sun.star.deployment.PackageRegistryBackend"/>
   </implementation>
 </component>

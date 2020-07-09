@@ -51,16 +51,11 @@ excludelist:
     desktop/source/deployment/manager/dp_properties.cxx:
     # Actually used
     - com/sun/star/ucb/XCommandEnvironment.hpp
-    desktop/source/deployment/manager/dp_informationprovider.cxx:
-    # Needed for extern functions
-    - dp_services.hxx
     desktop/source/deployment/manager/dp_extensionmanager.cxx:
     # Actually used
     - com/sun/star/deployment/XPackage.hpp
     - com/sun/star/deployment/XPackageManager.hpp
     - com/sun/star/uno/XComponentContext.hpp
-    # Needed for extern functions
-    - dp_services.hxx
     desktop/source/deployment/misc/lockfile.cxx:
     # Needed on WIN32
     - memory

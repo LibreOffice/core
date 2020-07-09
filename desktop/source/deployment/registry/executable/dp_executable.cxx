@@ -21,15 +21,14 @@
 #include <memory>
 #include <dp_misc.h>
 #include <dp_backend.h>
-#include <dp_services.hxx>
 #include <dp_ucb.h>
 #include <dp_interact.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <osl/file.hxx>
 #include <ucbhelper/content.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include "dp_executablebackenddb.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -87,6 +86,11 @@ public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() override;
@@ -109,6 +113,22 @@ BackendImpl::BackendImpl(
         m_backendDb.reset(
             new ExecutableBackendDb(getComponentContext(), dbFile));
    }
+}
+
+// XServiceInfo
+OUString BackendImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.executable.PackageRegistryBackend";
+}
+
+sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+{
+    return { BACKEND_SERVICE_NAME };
 }
 
 void BackendImpl::addDataToDb(OUString const & url)
@@ -301,14 +321,14 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
 
 } // anon namespace
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-sdecl::ServiceDecl const serviceDecl(
-    serviceBI,
-    "com.sun.star.comp.deployment.executable.PackageRegistryBackend",
-    BACKEND_SERVICE_NAME );
 
 } // namespace dp_registry::backend::executable
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_registry::backend::executable::BackendImpl(args, context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,18 +19,17 @@
 
 
 #include <strings.hrc>
-#include <dp_services.hxx>
 #include "dp_lib_container.h"
 #include <dp_backend.h>
 #include <dp_ucb.h>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <memory>
 #include "dp_scriptbackenddb.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -92,6 +91,11 @@ class BackendImpl : public t_helper
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
@@ -162,6 +166,23 @@ BackendImpl::BackendImpl(
     }
 
 }
+
+// XServiceInfo
+OUString BackendImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.script.PackageRegistryBackend";
+}
+
+sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+{
+    return { BACKEND_SERVICE_NAME };
+}
+
 void BackendImpl::addDataToDb(OUString const & url)
 {
     if (m_backendDb)
@@ -447,13 +468,13 @@ void BackendImpl::PackageImpl::processPackage_(
 
 } // anon namespace
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-sdecl::ServiceDecl const serviceDecl(
-    serviceBI,
-    "com.sun.star.comp.deployment.script.PackageRegistryBackend",
-    BACKEND_SERVICE_NAME );
-
 } // namespace dp_registry::backend::script
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_script_PackageRegistryBackend_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_registry::backend::script::BackendImpl(args, context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
