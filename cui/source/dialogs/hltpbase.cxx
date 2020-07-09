@@ -382,7 +382,7 @@ HyperDialogEvent SvxHyperlinkTabPageBase::GetMacroEvents() const
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
 
-    return pHyperlinkItem->GetMacroEvents();
+    return pHyperlinkItem ? pHyperlinkItem->GetMacroEvents() : HyperDialogEvent();
 }
 
 SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
