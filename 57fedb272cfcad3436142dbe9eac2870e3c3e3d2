@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5b4b1c_d857421d",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2550,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-09T19:22:45Z",
+      "side": 1,
+      "message": "I wonder if this test is reliable, there seems to be a lot of failures of this in ci. It possibly seems to use a \"Comic Sans MS\" which may not be available. Maybe a version that used one of the standard fonts would be more reliable.",
+      "revId": "57fedb272cfcad3436142dbe9eac2870e3c3e3d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
