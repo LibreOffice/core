@@ -138,6 +138,8 @@ private:
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
 
+    std::shared_ptr<weld::MessageDialog> m_xMessageBox;
+
     std::array<VclPtr<ScGridWindow>, 4> pGridWin;
     std::array<VclPtr<ScColBar>, 2> pColBar;
     std::array<VclPtr<ScRowBar>, 2> pRowBar;
