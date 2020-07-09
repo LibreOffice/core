@@ -12399,9 +12399,10 @@ private:
     gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
+    gulong m_nHasSelectionSignalId; // we don't disable/enable this one, its to implement auto-scroll to cursor on losing selection
     gulong m_nVAdjustChangedSignalId;
 
-    static void signalChanged(GtkTextView*, gpointer widget)
+    static void signalChanged(GtkTextBuffer*, gpointer widget)
     {
         GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
         SolarMutexGuard aGuard;
@@ -12430,10 +12431,33 @@ private:
         }
     }
 
-    static void signalCursorPosition(GtkTextView*, GParamSpec*, gpointer widget)
+    static void signalCursorPosition(GtkTextBuffer*, GParamSpec*, gpointer widget)
     {
         GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
         pThis->signal_cursor_position();
+    }
+
+    static void signalHasSelection(GtkTextBuffer*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
+        pThis->signal_has_selection();
+    }
+
+    void signal_has_selection()
+    {
+        /*
+          in the data browser (Data Sources, shift+ctrl+f4), entering a
+          multiline cell selects all, on cursoring to the right, the selection
+          is lost and the cursor is at the end but gtk doesn't auto-scroll to
+          the cursor so if the text needs scrolling to see the cursor it is off
+          screen, another cursor makes gtk auto-scroll as wanted. So on losing
+          selection help gtk out and do the initial scroll ourselves here
+        */
+        if (!gtk_text_buffer_get_has_selection(m_pTextBuffer))
+        {
+            GtkTextMark* pMark = gtk_text_buffer_get_insert(m_pTextBuffer);
+            gtk_text_view_scroll_mark_onscreen(m_pTextView, pMark);
+        }
     }
 
     static void signalVAdjustValueChanged(GtkAdjustment*, gpointer widget)
@@ -12453,6 +12477,7 @@ public:
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect_after(m_pTextBuffer, "insert-text", G_CALLBACK(signalInserText), this))
         , m_nCursorPosSignalId(g_signal_connect(m_pTextBuffer, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
+        , m_nHasSelectionSignalId(g_signal_connect(m_pTextBuffer, "notify::has-selection", G_CALLBACK(signalHasSelection), this))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
     {
     }
@@ -12659,6 +12684,7 @@ public:
         g_signal_handler_disconnect(m_pTextBuffer, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nCursorPosSignalId);
+        g_signal_handler_disconnect(m_pTextBuffer, m_nHasSelectionSignalId);
     }
 };
 
