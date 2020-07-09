@@ -356,6 +356,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     PDFObjectCopier aCopier(*this);
     if (!aContentStreams.empty())
     {
+        assert(pPage && "aContentStreams is only filled if there was a pPage");
         OStringBuffer aBuffer;
         aCopier.copyPageResources(pPage, aBuffer);
         aEditBuffer.WriteOString(aBuffer.makeStringAndClear());
