@@ -34,7 +34,6 @@
 #include <strings.hxx>
 #include <helpids.h>
 #include "QTableWindow.hxx"
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
@@ -134,7 +133,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     m_pFunctionCell->SetHelpId(HID_QRYDGN_ROW_FUNCTION);
 
     // switch off triState of css::form::CheckBox
-    m_pVisibleCell->GetBox().EnableTriState( false );
+    m_pVisibleCell->EnableTriState( false );
 
     vcl::Font aTitleFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),GetDefaultFontFlags::OnlyOne);
     aTitleFont.SetFontSize(Size(0, 6));
@@ -513,8 +512,8 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
         }   break;
         case BROW_VIS_ROW:
         {
-            m_pVisibleCell->GetBox().Check(pEntry->IsVisible());
-            m_pVisibleCell->GetBox().SaveValue();
+            m_pVisibleCell->GetBox().set_active(pEntry->IsVisible());
+            m_pVisibleCell->GetBox().save_state();
 
             enableControl(pEntry,m_pTextCell);
 
@@ -522,10 +521,9 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             {
                // a column has to visible in order to show up in ORDER BY
                 pEntry->SetVisible();
-                m_pVisibleCell->GetBox().Check(pEntry->IsVisible());
-                m_pVisibleCell->GetBox().SaveValue();
-                m_pVisibleCell->GetBox().Disable();
-                m_pVisibleCell->GetBox().EnableInput(false);
+                m_pVisibleCell->GetBox().set_active(pEntry->IsVisible());
+                m_pVisibleCell->GetBox().save_state();
+                m_pVisibleCell->GetBox().set_sensitive(false);
                 OUString aMessage(DBA_RES(STR_QRY_ORDERBY_UNRELATED));
                 OQueryDesignView* paDView = getDesignView();
                 std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(paDView ? paDView->GetFrameWeld() : nullptr,
@@ -914,19 +912,19 @@ bool OSelectionBrowseBox::SaveModified()
         {
             case BROW_VIS_ROW:
                 {
-                    bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != TRISTATE_FALSE;
+                    bool bOldValue = m_pVisibleCell->GetBox().get_saved_state() != TRISTATE_FALSE;
                     strOldCellContents = bOldValue ? OUStringLiteral("1") : OUStringLiteral("0");
                     sNewValue          = !bOldValue ? OUStringLiteral("1") : OUStringLiteral("0");
                 }
                 if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
                 {
-                    pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
+                    pEntry->SetVisible(m_pVisibleCell->GetBox().get_active());
                 }
                 else
                 {
                     pEntry->SetVisible();
-                    m_pVisibleCell->GetBox().Check();
+                    m_pVisibleCell->GetBox().set_active(true);
                 }
                 break;
 
@@ -1030,7 +1028,7 @@ bool OSelectionBrowseBox::SaveModified()
                 if(!m_bOrderByUnRelated)
                 {
                     pEntry->SetVisible();
-                    m_pVisibleCell->GetBox().Check();
+                    m_pVisibleCell->GetBox().set_active(true);
                     RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                 }
                 sNewValue = OUString::number(static_cast<sal_uInt16>(pEntry->GetOrderDir()));
@@ -1058,7 +1056,7 @@ bool OSelectionBrowseBox::SaveModified()
                         {
                             // we have to change the visible flag, so we must append also an undo action
                             pEntry->SetVisible();
-                            m_pVisibleCell->GetBox().Check();
+                            m_pVisibleCell->GetBox().set_active(true);
                             appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
                             RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                         }
@@ -1873,11 +1871,11 @@ void OSelectionBrowseBox::CellModified()
                     !pEntry->IsEmpty()              &&
                     pEntry->GetOrderDir() != ORDER_NONE)
                 {
-                    m_pVisibleCell->GetBox().Check();
+                    m_pVisibleCell->GetBox().set_active(true);
                     pEntry->SetVisible();
                 }
                 else
-                    pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
+                    pEntry->SetVisible(m_pVisibleCell->GetBox().get_active());
             }
             break;
     }

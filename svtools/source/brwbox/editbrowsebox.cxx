@@ -19,12 +19,11 @@
 
 #include <svtools/editbrowsebox.hxx>
 
-#include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/window.hxx>
-
-#include <vcl/button.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 
 #include <bitmaps.hlst>
 
@@ -1204,12 +1203,10 @@ namespace svt
         return nNewColWidth;
     }
 
-
     sal_uInt32 EditBrowseBox::GetTotalCellWidth(long, sal_uInt16)
     {
         return 0;
     }
-
 
     void EditBrowseBox::InvalidateHandleColumn()
     {
@@ -1219,20 +1216,21 @@ namespace svt
         Invalidate( aInvalidRect );
     }
 
-
     void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
-        pCheckBoxPaint->GetBox().SetState(eState);
-        pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
+        pCheckBoxPaint->SetState(eState);
 
-        pCheckBoxPaint->GetBox().Enable(_bEnabled);
-        pCheckBoxPaint->Show();
-        pCheckBoxPaint->SetParentUpdateMode( false );
-        pCheckBoxPaint->PaintImmediately();
-        pCheckBoxPaint->Hide();
-        pCheckBoxPaint->SetParentUpdateMode( true );
+        pCheckBoxPaint->GetBox().set_sensitive(_bEnabled);
+
+        auto nWidth = pCheckBoxPaint->GetBox().get_preferred_size().Width();
+        auto nHeight = pCheckBoxPaint->GetBox().get_preferred_size().Height();
+        tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - nWidth) / 2),
+                                     rRect.Top() + ((rRect.GetHeight() - nHeight) / 2)),
+                               Size(nWidth, nHeight));
+        pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
+
+        pCheckBoxPaint->Draw(&GetDataWindow(), aRect.TopLeft(), DrawFlags::NONE);
     }
-
 
     void EditBrowseBox::AsynchGetFocus()
     {
