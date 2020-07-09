@@ -1202,12 +1202,10 @@ namespace svt
         return nNewColWidth;
     }
 
-
     sal_uInt32 EditBrowseBox::GetTotalCellWidth(long, sal_uInt16)
     {
         return 0;
     }
-
 
     void EditBrowseBox::InvalidateHandleColumn()
     {
@@ -1217,20 +1215,18 @@ namespace svt
         Invalidate( aInvalidRect );
     }
 
-
     void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
-        pCheckBoxPaint->GetBox().SetState(eState);
+        pCheckBoxPaint->SetState(eState);
         pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
 
-        pCheckBoxPaint->GetBox().Enable(_bEnabled);
+        pCheckBoxPaint->GetBox().set_sensitive(_bEnabled);
         pCheckBoxPaint->Show();
         pCheckBoxPaint->SetParentUpdateMode( false );
         pCheckBoxPaint->PaintImmediately();
         pCheckBoxPaint->Hide();
         pCheckBoxPaint->SetParentUpdateMode( true );
     }
-
 
     void EditBrowseBox::AsynchGetFocus()
     {
