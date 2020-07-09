@@ -85,7 +85,7 @@ DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& colum
 {
 }
 
-DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
+DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells() COVERITY_NOEXCEPT_FALSE
 {
     mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
 }
