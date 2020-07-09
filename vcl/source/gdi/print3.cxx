@@ -218,8 +218,6 @@ public:
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
-    bool isFixedPageSize() const
-    { return mbPapersizeFromSetup; }
     PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
 };
@@ -812,7 +810,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 
     if ( bSavedSizeOrientation )
     {
-          mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
+          mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize);
           mpImplData->mxPrinter->SetOrientation(eOrientation);
     }
 
@@ -892,7 +890,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
             //restore to whatever it was before we entered this method
             xPrinter->SetOrientation( eOrientation );
             if (aPaperSize != aNewPaperSize)
-                xPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
+                xPrinter->SetPaperSizeUser(aPaperSize);
         }
         xPrinter->Pop();
     }
@@ -945,7 +943,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 
         Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, true/*bNoNUP*/ ) );
         if( aRealPaperSize != aCurSize )
-            mxPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
+            mxPrinter->SetPaperSizeUser( aRealPaperSize );
     }
 
     // paper bin set from properties in print dialog overrides
@@ -974,7 +972,7 @@ void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
     mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     Size aCurSize(mxPrinter->GetPaperSize());
     if (aCurSize != maDefaultPageSize)
-        mxPrinter->SetPaperSizeUser(maDefaultPageSize, !isFixedPageSize());
+        mxPrinter->SetPaperSizeUser(maDefaultPageSize);
     mxPrinter->Pop();
 }
 
@@ -1121,7 +1119,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         }
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
         mpImplData->mxPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
-        mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
+        mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize );
         if( aPaperSize != aPageSize.aSize )
         {
             // user overridden page size, center Metafile
@@ -1231,7 +1229,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
 
     // subsequent getPageFile calls have changed the paper, reset it to current value
     mpImplData->mxPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
-    mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
+    mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize );
 
     return PrinterController::PageSize( aPaperSize, true );
 }
@@ -1327,7 +1325,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     // in N-Up printing set the correct page size
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
-    mpImplData->mxPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
+    mpImplData->mxPrinter->SetPaperSizeUser( aPageSize.aSize );
     if( mpImplData->mnFixedPaperBin != -1 &&
         mpImplData->mxPrinter->GetPaperBin() != mpImplData->mnFixedPaperBin )
     {

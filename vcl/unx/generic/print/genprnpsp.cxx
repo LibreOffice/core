@@ -1032,7 +1032,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         else
         {
             xPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
-            xPrinter->SetPaperSizeUser( aPageSize.aSize, true );
+            xPrinter->SetPaperSizeUser( aPageSize.aSize );
             PDFNewJobParameters aNewParm(xPrinter->GetPaperSize(), xPrinter->GetPaperBin());
 
             // create PDF writer on demand

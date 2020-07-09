@@ -448,7 +448,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             // platform independent paper matching algorithm
             VclPtr<Printer> pPrinter( i_rController.getPrinter() );
             pPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
-            pPrinter->SetPaperSizeUser( aCurSize, true );
+            pPrinter->SetPaperSizeUser( aCurSize );
 
             // create view
             NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
