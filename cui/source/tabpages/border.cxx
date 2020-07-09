@@ -847,35 +847,47 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
     {
         sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_TLBR);
-        SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(rCoreAttrs->GetItem(nBorderDiagId)));
-        aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::TLBR));
-        rCoreAttrs->Put(aLineItem);
-        bAttrsChanged = true;
+        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nBorderDiagId))
+        {
+            SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(pItem));
+            aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::TLBR));
+            rCoreAttrs->Put(aLineItem);
+            bAttrsChanged = true;
+        }
     }
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
     {
         sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_BLTR);
-        SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(rCoreAttrs->GetItem(nBorderDiagId)));
-        aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::BLTR));
-        rCoreAttrs->Put(aLineItem);
-        bAttrsChanged = true;
+        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nBorderDiagId))
+        {
+            SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(pItem));
+            aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::BLTR));
+            rCoreAttrs->Put(aLineItem);
+            bAttrsChanged = true;
+        }
     }
 
     if (m_xShadowControls && m_xShadowControls->get_value_changed_from_saved())
     {
         sal_uInt16 nShadowId = pPool->GetWhich(mnShadowSlot);
-        const SvxShadowItem& rOldShadowItem = *static_cast<const SvxShadowItem*>(rCoreAttrs->GetItem(nShadowId));
-        rCoreAttrs->Put(m_xShadowControls->GetControlValue(rOldShadowItem));
-        bAttrsChanged = true;
+        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nShadowId))
+        {
+            const SvxShadowItem& rOldShadowItem = *static_cast<const SvxShadowItem*>(pItem);
+            rCoreAttrs->Put(m_xShadowControls->GetControlValue(rOldShadowItem));
+            bAttrsChanged = true;
+        }
     }
 
     if (m_xMarginControls && m_xMarginControls->get_value_changed_from_saved())
     {
         sal_uInt16 nAlignMarginId = pPool->GetWhich(SID_ATTR_ALIGN_MARGIN);
-        const SvxMarginItem& rOldMarginItem = *static_cast<const SvxMarginItem*>(rCoreAttrs->GetItem(nAlignMarginId));
-        rCoreAttrs->Put(m_xMarginControls->GetControlValue(rOldMarginItem));
-        bAttrsChanged = true;
+        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nAlignMarginId))
+        {
+            const SvxMarginItem& rOldMarginItem = *static_cast<const SvxMarginItem*>(pItem);
+            rCoreAttrs->Put(m_xMarginControls->GetControlValue(rOldMarginItem));
+            bAttrsChanged = true;
+        }
     }
 
     if (m_xMergeAdjacentBordersCB->get_state_changed_from_saved())
