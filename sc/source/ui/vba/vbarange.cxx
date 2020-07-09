@@ -4363,7 +4363,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     else
         rFilterField.Operator = sheet::FilterOperator2::EQUAL;
 
-    // tdf#107885 - check if criteria is numeric using locale dependent settings without group seperator
+    // tdf#107885 - check if criteria is numeric using locale dependent settings without group separator
     // or, if the decimal separator is different from the English locale, without any locale.
     sal_Int32 nParseEnd = 0;
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
