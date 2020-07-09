@@ -39,7 +39,6 @@
 #include <osl/security.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/logging.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
@@ -77,9 +76,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::logging;
 
-namespace dp_log {
-extern comphelper::service_decl::ServiceDecl const serviceDecl;
-}
 
 namespace dp_manager {
 
@@ -427,7 +423,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
-                    dp_log::serviceDecl.getSupportedServiceNames()[0],
+                    "com.sun.star.comp.deployment.ProgressLog",
                     Sequence<Any>(),
                     that->m_xComponentContext ),
                 UNO_QUERY_THROW );

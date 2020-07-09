@@ -38,7 +38,6 @@
 #include <svl/inettype.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -81,8 +80,7 @@ using namespace ::com::sun::star::uno;
 namespace dp_registry::backend::bundle {
 namespace {
 
-typedef cppu::ImplInheritanceHelper<PackageRegistryBackend,
-                                     lang::XServiceInfo> ImplBaseT;
+typedef cppu::ImplInheritanceHelper<PackageRegistryBackend> ImplBaseT;
 
 
 class BackendImpl : public ImplBaseT
