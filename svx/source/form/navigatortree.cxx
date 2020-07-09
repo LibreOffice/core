@@ -1895,8 +1895,10 @@ namespace svxform
         if ((m_arrCurrentSelection.size() == 1) && (m_nFormsSelected == 1))
         {
             std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-            m_xTreeView->get_selected(xSelected.get());
-            FmFormData* pSingleSelectionData = dynamic_cast<FmFormData*>(reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*xSelected).toInt64()));
+            if (!m_xTreeView->get_selected(xSelected.get()))
+                xSelected.reset();
+            FmFormData* pSingleSelectionData = xSelected ? dynamic_cast<FmFormData*>(reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*xSelected).toInt64()))
+                                                         : nullptr;
             DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
             if ( pSingleSelectionData )
             {
