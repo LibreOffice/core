@@ -1136,10 +1136,11 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
 void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRect)
 {
     Size aOrigSize(m_xWidget->GetSizePixel());
-    m_xWidget->SetSizePixel(rRect.GetSize());
+    Size aSize = rRect.GetSize();
+    m_xWidget->SetSizePixel(aSize);
     rOutput.Push(PushFlags::CLIPREGION);
     rOutput.IntersectClipRegion(rRect);
-    m_xWidget->Draw(&rOutput, rRect.TopLeft(), DrawFlags::NONE);
+    m_xWidget->PaintToDevice(&rOutput, rRect.TopLeft());
     rOutput.Pop();
     m_xWidget->SetSizePixel(aOrigSize);
 }

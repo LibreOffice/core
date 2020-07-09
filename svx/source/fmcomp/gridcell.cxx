@@ -56,7 +56,6 @@
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
-#include <vcl/button.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>
@@ -1625,7 +1624,6 @@ namespace
     }
 }
 
-
 void DbCheckBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     setTransparent( true );
@@ -1650,8 +1648,8 @@ void DbCheckBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCurs
 
         bool bTristate = true;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
-        static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().EnableTriState( bTristate );
-        static_cast< CheckBoxControl* >( m_pPainter.get() )->GetBox().EnableTriState( bTristate );
+        static_cast< CheckBoxControl* >( m_pWindow.get() )->EnableTriState( bTristate );
+        static_cast< CheckBoxControl* >( m_pPainter.get() )->EnableTriState( bTristate );
     }
     catch( const Exception& )
     {
@@ -1660,7 +1658,6 @@ void DbCheckBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCurs
 
     DbCellControl::Init( rParent, xCursor );
 }
-
 
 CellControllerRef DbCheckBox::CreateController() const
 {
@@ -1684,15 +1681,13 @@ static void lcl_setCheckBoxState(   const Reference< css::sdb::XColumn >& _rxFie
             DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
-    _pCheckBoxControl->GetBox().SetState(eState);
+    _pCheckBoxControl->SetState(eState);
 }
-
 
 void DbCheckBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pWindow.get()) );
 }
-
 
 void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                           const Reference< css::sdb::XColumn >& _rxField,
@@ -1710,24 +1705,21 @@ void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rR
     DbCellControl::PaintFieldToCell(rDev, aRect, _rxField, xFormatter);
 }
 
-
 void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbCheckBox::updateFromModel: invalid call!" );
 
     sal_Int16 nState = TRISTATE_INDET;
     _rxModel->getPropertyValue( FM_PROP_STATE ) >>= nState;
-    static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().SetState( static_cast< TriState >( nState ) );
+    static_cast< CheckBoxControl* >( m_pWindow.get() )->SetState( static_cast< TriState >( nState ) );
 }
-
 
 bool DbCheckBox::commitControl()
 {
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
-                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetBox().GetState() ) ) );
+                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetState() ) ) );
     return true;
 }
-
 
 OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
@@ -2120,18 +2112,15 @@ namespace
     }
 }
 
-
 OUString DbCurrencyField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pPainter ), *this, _rxField, _rxFormatter );
 }
 
-
 void DbCurrencyField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pWindow ), *this, _rxField, _rxFormatter );
 }
-
 
 void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -2266,12 +2255,10 @@ OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxFie
      return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter), _rxField);
 }
 
-
 void DbDateField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pWindow), _rxField);
 }
-
 
 void DbDateField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -2283,7 +2270,6 @@ void DbDateField::updateFromModel( Reference< XPropertySet > _rxModel )
     else
         static_cast< DateField* >( m_pWindow.get() )->SetText( OUString() );
 }
-
 
 bool DbDateField::commitControl()
 {
@@ -2373,12 +2359,10 @@ OUString DbTimeField::GetFormatText(const Reference< css::sdb::XColumn >& _rxFie
     return lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pPainter.get() ), _rxField );
 }
 
-
 void DbTimeField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pWindow.get() ), _rxField );
 }
-
 
 void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -2390,7 +2374,6 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
     else
         static_cast< TimeField* >( m_pWindow.get() )->SetText( OUString() );
 }
-
 
 bool DbTimeField::commitControl()
 {
@@ -2470,12 +2453,10 @@ void DbComboBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCurs
     DbCellControl::Init( rParent, xCursor );
 }
 
-
 CellControllerRef DbComboBox::CreateController() const
 {
     return new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
 }
-
 
 OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
@@ -2670,7 +2651,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == css::form::FormComponentType::CHECKBOX)
-        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<VclPtr<CheckBox>,void>() );
+        static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<weld::Button&,void>() );
 
 }
 
@@ -2932,8 +2913,8 @@ void DbFilterField::SetText(const OUString& rText)
             else
                 eState = TRISTATE_INDET;
 
-            static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().SetState(eState);
-            static_cast<CheckBoxControl*>(m_pPainter.get())->GetBox().SetState(eState);
+            static_cast<CheckBoxControl*>(m_pWindow.get())->SetState(eState);
+            static_cast<CheckBoxControl*>(m_pPainter.get())->SetState(eState);
         }   break;
         case css::form::FormComponentType::LISTBOX:
         {
@@ -3073,16 +3054,14 @@ OUString DbFilterField::GetFormatText(const Reference< XColumn >& /*_rxField*/, 
     return OUString();
 }
 
-
 void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     OSL_FAIL( "DbFilterField::UpdateFromField: cannot update a filter control from a field!" );
 }
 
-
-IMPL_LINK_NOARG(DbFilterField, OnClick, VclPtr<CheckBox>, void)
+IMPL_LINK_NOARG(DbFilterField, OnClick, weld::Button&, void)
 {
-    TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().GetState();
+    TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetState();
     OUStringBuffer aTextBuf;
 
     Reference< XRowSet > xDataSourceRowSet(
@@ -3578,12 +3557,9 @@ FmXEditCell::~FmXEditCell()
         acquire();
         dispose();
     }
-
-
 }
 
 // OComponentHelper
-
 void FmXEditCell::disposing()
 {
     css::lang::EventObject aEvt(*this);
@@ -3597,7 +3573,6 @@ void FmXEditCell::disposing()
     FmXDataCell::disposing();
 }
 
-
 Any SAL_CALL FmXEditCell::queryAggregation( const css::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation( _rType );
@@ -3608,7 +3583,6 @@ Any SAL_CALL FmXEditCell::queryAggregation( const css::uno::Type& _rType )
     return aReturn;
 }
 
-
 Sequence< css::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
@@ -3617,11 +3591,9 @@ Sequence< css::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
     );
 }
 
-
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXEditCell )
 
 // css::awt::XTextComponent
-
 void SAL_CALL FmXEditCell::addTextListener(const Reference< css::awt::XTextListener >& l)
 {
     m_aTextListeners.addInterface( l );
@@ -3721,7 +3693,6 @@ sal_Bool SAL_CALL FmXEditCell::isEditable()
     return m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled();
 }
 
-
 void SAL_CALL FmXEditCell::setEditable( sal_Bool bEditable )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3730,14 +3701,12 @@ void SAL_CALL FmXEditCell::setEditable( sal_Bool bEditable )
         m_pEditImplementation->SetReadOnly( !bEditable );
 }
 
-
 sal_Int16 SAL_CALL FmXEditCell::getMaxTextLen()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pEditImplementation ? m_pEditImplementation->GetMaxTextLen() : 0;
 }
-
 
 void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen )
 {
@@ -3747,18 +3716,15 @@ void SAL_CALL FmXEditCell::setMaxTextLen( sal_Int16 nLen )
         m_pEditImplementation->SetMaxTextLen( nLen );
 }
 
-
 void SAL_CALL FmXEditCell::addChangeListener( const Reference< form::XChangeListener >& Listener )
 {
     m_aChangeListeners.addInterface( Listener );
 }
 
-
 void SAL_CALL FmXEditCell::removeChangeListener( const Reference< form::XChangeListener >& Listener )
 {
     m_aChangeListeners.removeInterface( Listener );
 }
-
 
 void FmXEditCell::onTextChanged()
 {
@@ -3794,8 +3760,9 @@ FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellC
                 :FmXDataCell( pColumn, std::move(pControl) )
                 ,m_aItemListeners(m_aMutex)
                 ,m_aActionListeners( m_aMutex )
-                ,m_pBox( & static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).GetBox() )
+                ,m_pBox( & static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ) )
 {
+    m_pBox->SetAuxModifyHdl(LINK(this, FmXCheckBoxCell, ModifyHdl));
 }
 
 FmXCheckBoxCell::~FmXCheckBoxCell()
@@ -3814,7 +3781,7 @@ void FmXCheckBoxCell::disposing()
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
-    static_cast< CheckBoxControl& >( m_pCellControl->GetWindow() ).SetClickHdl(Link<VclPtr<CheckBox>,void>());
+    m_pBox->SetClickHdl(Link<weld::Button&,void>());
     m_pBox = nullptr;
 
     FmXDataCell::disposing();
@@ -3843,18 +3810,15 @@ Sequence< css::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  )
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXCheckBoxCell )
 
-
 void SAL_CALL FmXCheckBoxCell::addItemListener( const Reference< css::awt::XItemListener >& l )
 {
     m_aItemListeners.addInterface( l );
 }
 
-
 void SAL_CALL FmXCheckBoxCell::removeItemListener( const Reference< css::awt::XItemListener >& l )
 {
     m_aItemListeners.removeInterface( l );
 }
-
 
 void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
 {
@@ -3866,7 +3830,6 @@ void SAL_CALL FmXCheckBoxCell::setState( sal_Int16 n )
         m_pBox->SetState( static_cast<TriState>(n) );
     }
 }
-
 
 sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
 {
@@ -3880,15 +3843,13 @@ sal_Int16 SAL_CALL FmXCheckBoxCell::getState()
     return TRISTATE_INDET;
 }
 
-
-void SAL_CALL FmXCheckBoxCell::enableTriState( sal_Bool b )
+void SAL_CALL FmXCheckBoxCell::enableTriState(sal_Bool b)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if (m_pBox)
         m_pBox->EnableTriState( b );
 }
-
 
 void SAL_CALL FmXCheckBoxCell::addActionListener( const Reference< awt::XActionListener >& Listener )
 {
@@ -3901,7 +3862,6 @@ void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActi
     m_aActionListeners.removeInterface( Listener );
 }
 
-
 void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
 {
     SolarMutexGuard aGuard;
@@ -3912,52 +3872,33 @@ void SAL_CALL FmXCheckBoxCell::setLabel( const OUString& Label )
     }
 }
 
-
 void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& Command )
 {
     m_aActionCommand = Command;
 }
 
-
-vcl::Window* FmXCheckBoxCell::getEventWindow() const
+IMPL_LINK_NOARG(FmXCheckBoxCell, ModifyHdl, LinkParamNone*, void)
 {
-    return m_pBox;
-}
+    // check boxes are to be committed immediately (this holds for ordinary check box controls in
+    // documents, and this must hold for check boxes in grid columns, too
+    // 91210 - 22.08.2001 - frank.schoenheit@sun.com
+    m_pCellControl->Commit();
 
-
-void FmXCheckBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
-{
-    switch ( _nEventId )
+    Reference< XWindow > xKeepAlive( this );
+    if ( m_aItemListeners.getLength() && m_pBox )
     {
-    case VclEventId::CheckboxToggle:
-    {
-        // check boxes are to be committed immediately (this holds for ordinary check box controls in
-        // documents, and this must hold for check boxes in grid columns, too
-        // 91210 - 22.08.2001 - frank.schoenheit@sun.com
-        m_pCellControl->Commit();
-
-        Reference< XWindow > xKeepAlive( this );
-        if ( m_aItemListeners.getLength() && m_pBox )
-        {
-            awt::ItemEvent aEvent;
-            aEvent.Source = *this;
-            aEvent.Highlighted = 0;
-            aEvent.Selected = m_pBox->GetState();
-            m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
-        }
-        if ( m_aActionListeners.getLength() )
-        {
-            awt::ActionEvent aEvent;
-            aEvent.Source = *this;
-            aEvent.ActionCommand = m_aActionCommand;
-            m_aActionListeners.notifyEach( &awt::XActionListener::actionPerformed, aEvent );
-        }
+        awt::ItemEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.Highlighted = 0;
+        aEvent.Selected = m_pBox->GetState();
+        m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
     }
-    break;
-
-    default:
-        FmXDataCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
-        break;
+    if ( m_aActionListeners.getLength() )
+    {
+        awt::ActionEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.ActionCommand = m_aActionCommand;
+        m_aActionListeners.notifyEach( &awt::XActionListener::actionPerformed, aEvent );
     }
 }
 
