@@ -19,10 +19,10 @@
 
 
 #include "dp_manager.h"
-#include <dp_services.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/deployment/XPackageManagerFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <unordered_map>
 
 using namespace ::dp_misc;
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 namespace dp_manager::factory {
 
 typedef ::cppu::WeakComponentImplHelper<
-    deployment::XPackageManagerFactory > t_pmfac_helper;
+    deployment::XPackageManagerFactory, lang::XServiceInfo > t_pmfac_helper;
 
 namespace {
 
@@ -57,6 +57,11 @@ public:
     explicit PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
         OUString const & context ) override;
@@ -64,20 +69,28 @@ public:
 
 }
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<PackageManagerFactoryImpl> const servicePMFI;
-sdecl::ServiceDecl const serviceDecl(
-    servicePMFI,
-    // a private one:
-    "com.sun.star.comp.deployment.PackageManagerFactory",
-    "com.sun.star.comp.deployment.PackageManagerFactory" );
-
-
 PackageManagerFactoryImpl::PackageManagerFactoryImpl(
     Reference<XComponentContext> const & xComponentContext )
     : t_pmfac_helper( getMutex() ),
       m_xComponentContext( xComponentContext )
 {
+}
+
+// XServiceInfo
+OUString PackageManagerFactoryImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.PackageManagerFactory";
+}
+
+sal_Bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNames()
+{
+    // a private one:
+    return { "com.sun.star.comp.deployment.PackageManagerFactory" };
 }
 
 inline void PackageManagerFactoryImpl::check()
@@ -161,5 +174,12 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
 }
 
 } // namespace dp_manager::factory
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_PackageManagerFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new dp_manager::factory::PackageManagerFactoryImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

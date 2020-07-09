@@ -19,8 +19,8 @@
 
 
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/servicedecl.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/bootstrap.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
@@ -31,6 +31,7 @@
 #include <com/sun/star/deployment/InstallException.hpp>
 #include <com/sun/star/deployment/VersionException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/beans/Ambiguous.hpp>
@@ -43,7 +44,6 @@
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
 #include <dp_interact.h>
-#include <dp_services.hxx>
 #include <dp_ucb.h>
 #include <dp_identifier.hxx>
 #include <dp_descriptioninfoset.hxx>
@@ -155,7 +155,7 @@ namespace dp_manager {
 
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
-    ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >(getMutex())
+    ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >(getMutex())
     , m_xContext(xContext)
 {
     m_xPackageManagerFactory = css::deployment::thePackageManagerFactory::get(m_xContext);
@@ -168,6 +168,23 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
 
 ExtensionManager::~ExtensionManager()
 {
+}
+
+// XServiceInfo
+OUString ExtensionManager::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.ExtensionManager";
+}
+
+sal_Bool ExtensionManager::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > ExtensionManager::getSupportedServiceNames()
+{
+    // a private one:
+    return { "com.sun.star.comp.deployment.ExtensionManager" };
 }
 
 Reference<css::deployment::XPackageManager> ExtensionManager::getUserRepository()
@@ -1354,14 +1371,6 @@ sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
 }
 
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<ExtensionManager> const servicePIP;
-sdecl::ServiceDecl const serviceDecl(
-    servicePIP,
-    // a private one:
-    "com.sun.star.comp.deployment.ExtensionManager",
-    "com.sun.star.comp.deployment.ExtensionManager");
-
 // XModifyBroadcaster
 
 void ExtensionManager::addModifyListener(
@@ -1401,5 +1410,13 @@ void ExtensionManager::fireModified()
 }
 
 } // namespace dp_manager
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_ExtensionManager_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new dp_manager::ExtensionManager(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

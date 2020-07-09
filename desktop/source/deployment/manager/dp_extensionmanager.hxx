@@ -38,7 +38,7 @@ typedef std::unordered_map<
     std::vector<css::uno::Reference<css::deployment::XPackage> > > id2extensions;
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
-        public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >
+        public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >
 {
 public:
     explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
@@ -48,6 +48,11 @@ public:
     void fireModified();
 
 public:
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 //    XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(

@@ -19,18 +19,17 @@
 
 #include <sal/config.h>
 
-#include <dp_services.hxx>
 #include <strings.hrc>
 #include <dp_backend.h>
 #include <dp_ucb.h>
 #include "dp_parceldesc.hxx"
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 
 using namespace ::dp_misc;
@@ -92,6 +91,11 @@ public:
     BackendImpl(
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -166,6 +170,22 @@ BackendImpl::BackendImpl(
 {
 }
 
+
+// XServiceInfo
+OUString BackendImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend";
+}
+
+sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+{
+    return { BACKEND_SERVICE_NAME };
+}
 
 // XPackageRegistry
 
@@ -346,13 +366,13 @@ void BackendImpl::PackageImpl::processPackage_(
     }
 }
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<BackendImpl, sdecl::with_args<true> > const serviceBI;
-sdecl::ServiceDecl const serviceDecl(
-    serviceBI,
-    "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
-    BACKEND_SERVICE_NAME );
-
 } // namespace dp_registry::backend::sfwk
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_sfwk_PackageRegistryBackend_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_registry::backend::sfwk::BackendImpl(args, context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
