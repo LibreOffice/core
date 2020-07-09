@@ -52,14 +52,6 @@ class DatabaseDataProvider: private ::cppu::BaseMutex,
 public:
     explicit DatabaseDataProvider(css::uno::Reference< css::uno::XComponentContext > const & context);
 
-    // css::lang::XServiceInfo - static methods
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static();
-    static css::uno::Reference< css::uno::XInterface >
-        Create(css::uno::Reference< css::uno::XComponentContext > const & context);
-
 private:
     // css::uno::XInterface:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
