@@ -681,7 +681,7 @@ private:
 
     void SetList(const css::uno::Any& rItems, bool bComboBox);
     void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
-    DECL_LINK( OnClick, VclPtr<CheckBox>, void );
+    DECL_LINK( OnClick, weld::Button&, void );
 
     css::uno::Sequence< OUString >  m_aValueList;
     OUString    m_aText;
@@ -785,7 +785,6 @@ public:
         { m_pCellControl->AlignControl(nAlignment);}
 
 protected:
-    virtual vcl::Window* getEventWindow() const;
     virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
@@ -793,6 +792,7 @@ protected:
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent );
 
 private:
+    vcl::Window* getEventWindow() const;
     DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 };
 
@@ -916,7 +916,7 @@ class FmXCheckBoxCell : public FmXDataCell,
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners;
     ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
     OUString                            m_aActionCommand;
-    VclPtr<CheckBox>                    m_pBox;
+    VclPtr<::svt::CheckBoxControl> m_pBox;
 
 protected:
     virtual ~FmXCheckBoxCell() override;
@@ -948,7 +948,6 @@ public:
     virtual void SAL_CALL setActionCommand( const OUString& Command ) override;
 
 protected:
-    virtual vcl::Window* getEventWindow() const override;
     virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 };
 
