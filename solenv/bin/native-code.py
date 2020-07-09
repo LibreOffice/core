@@ -142,7 +142,6 @@ core_constructor_list = [
 # cui/util/cui.component
     "com_sun_star_cui_ColorPicker_get_implementation",
 # dbaccess/util/dba.component
-    "com_sun_star_comp_dbaccess_DatabaseDataProvider_get_implementation",
     "com_sun_star_comp_dba_DataAccessDescriptorFactory",
     "com_sun_star_comp_dba_OCommandDefinition",
     "com_sun_star_comp_dba_OComponentDefinition",
