@@ -236,7 +236,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
     // Vertical position of the shape was incorrect due to incorrect nested mce handling.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     // positionV's posOffset from the bugdoc, was 0.
-    CPPUNIT_ASSERT(6985 <= getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+    CPPUNIT_ASSERT(6879 <= getProperty<sal_Int32>(xShape, "VertOrientPosition"));
     // This was -1 (default), make sure the background color is set.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
 
