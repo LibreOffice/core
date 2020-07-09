@@ -75,11 +75,11 @@ namespace drivermanager
         ::connectivity::DriversConfig   m_aDriverConfig;
         sal_Int32                       m_nLoginTimeout;
 
+    public:
+
         explicit OSDBCDriverManager(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager() override;
-
-    public:
 
     // XDriverManager
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;
@@ -101,15 +101,6 @@ namespace drivermanager
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XServiceInfo - static methods
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        /// @throws css::uno::RuntimeException
-        static OUString getSingletonName_static(  );
-        static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxContext );
 
     // XNamingService
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
