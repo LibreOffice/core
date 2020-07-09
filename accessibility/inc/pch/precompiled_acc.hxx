@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-06-19 17:39:54 using:
+ Generated on 2020-07-09 17:06:12 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -65,6 +66,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -87,6 +89,7 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GestureEvent.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
@@ -95,6 +98,8 @@
 #include <vcl/accessibletable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -110,6 +115,8 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
@@ -123,6 +130,7 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salctype.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -143,6 +151,7 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
@@ -162,6 +171,7 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -321,6 +331,7 @@
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>

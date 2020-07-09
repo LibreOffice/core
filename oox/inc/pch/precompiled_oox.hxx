@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:03 using:
+ Generated on 2020-07-09 17:06:27 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,7 +43,6 @@
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
-#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -112,14 +111,17 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -155,6 +157,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
@@ -188,6 +191,7 @@
 #include <svx/msdffdef.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
@@ -231,6 +235,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/helper.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/refmap.hxx>

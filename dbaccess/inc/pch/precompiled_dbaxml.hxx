@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:57 using:
+ Generated on 2020-07-09 17:06:21 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,7 +32,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -41,7 +40,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
@@ -57,6 +55,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

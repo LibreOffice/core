@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:50 using:
+ Generated on 2020-07-09 17:06:15 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -88,6 +89,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
@@ -152,6 +154,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -193,6 +196,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
@@ -385,6 +389,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

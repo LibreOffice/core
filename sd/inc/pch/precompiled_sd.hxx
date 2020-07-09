@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:27 using:
+ Generated on 2020-07-09 17:06:48 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
@@ -199,6 +200,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -213,6 +215,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:19 using:
+ Generated on 2020-07-09 17:06:41 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -58,6 +59,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -107,6 +109,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
@@ -125,7 +128,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -167,6 +169,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -218,6 +221,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -428,6 +432,7 @@
 #include <svx/xit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -437,6 +442,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
