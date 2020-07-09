@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc0c9109_1cc5b12c",
+        "filename": "writerfilter/source/dmapper/TableManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-09T15:48:39Z",
+      "side": 1,
+      "message": "gives wrong impression. GridAfter is also made with fake Cells (and thus now is counted in gridSpans - not sure if that was true earlier). [Actually m_nGridAfter seems to be never set, even in known documents with gridAfter. Dead code? I think Laszlo found the same thing with GridBefore. In his case, it was kinda nice that nothing was cleaned up, so he could use it like before, but would have been even better if it was flagged as \"now obsolete/unused\".]",
+      "range": {
+        "startLine": 103,
+        "startChar": 41,
+        "endLine": 103,
+        "endChar": 50
+      },
+      "revId": "15b2185853c99399a2e145fdda8ae4db5a9d46c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
