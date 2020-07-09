@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:44 using:
+ Generated on 2020-07-09 17:06:24 using:
  ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,7 +22,6 @@
 
 #if PCH_LEVEL >= 1
 #include <memory>
-#include <stddef.h>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -35,13 +34,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/unload.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
-#include <sal/typesizes.h>
 #include <vcl/dllapi.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3

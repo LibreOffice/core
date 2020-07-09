@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:56:05 using:
+ Generated on 2020-07-09 17:07:25 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,7 +32,6 @@
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -45,7 +44,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -90,18 +88,13 @@
 #include <vcl/errcode.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/keycod.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/task.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vclreferencebase.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -124,8 +117,6 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -168,6 +159,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <svl/sigstruct.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/fldunit.hxx>
@@ -185,6 +177,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/datetime.hxx>
+#include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

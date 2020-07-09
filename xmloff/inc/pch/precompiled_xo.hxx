@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:56:05 using:
+ Generated on 2020-07-09 17:07:24 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -66,7 +66,6 @@
 #include <rtl/string.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -119,6 +118,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -178,6 +179,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

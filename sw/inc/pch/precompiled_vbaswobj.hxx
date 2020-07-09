@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:56:01 using:
+ Generated on 2020-07-09 17:07:20 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <climits>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <deque>
 #include <exception>
 #include <float.h>
@@ -209,6 +210,7 @@
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -264,6 +266,7 @@
 #include <svl/undo.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
