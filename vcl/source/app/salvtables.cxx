@@ -3051,7 +3051,9 @@ void SalInstanceEntry::set_max_length(int nChars)
 void SalInstanceEntry::select_region(int nStartPos, int nEndPos)
 {
     disable_notify_events();
-    m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
+    long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
+    m_xEntry->SetSelection(Selection(nStart, nEnd));
     enable_notify_events();
 }
 
@@ -5471,7 +5473,9 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         disable_notify_events();
-        m_xTextView->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+        long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
+        long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
+        m_xTextView->SetSelection(Selection(nStart, nEnd));
         enable_notify_events();
     }
 
