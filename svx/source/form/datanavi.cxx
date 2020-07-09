@@ -788,7 +788,11 @@ namespace svxform
             try
             {
                 std::unique_ptr<weld::TreeIter> xEntry(m_xItemList->make_iterator());
-                m_xItemList->get_selected(xEntry.get());
+                if (!m_xItemList->get_selected(xEntry.get()))
+                {
+                    // No edit without an entry
+                    return;
+                }
 
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we
