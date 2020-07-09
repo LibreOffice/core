@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
     SvxHyperlinkItem *pHyperlinkItem = const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK)));
 
-    if ( pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE )
+    if (!pHyperlinkItem || pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE)
         return;
 
     // get macros from itemset
