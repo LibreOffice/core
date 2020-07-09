@@ -355,10 +355,13 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     OUString sViewName = aMediaDesc.getOrDefault( "ViewName", OUString( "Default" ) );
     aMediaDesc.remove( "ViewName" );
 
+    // this needs to stay alive for duration of this method
+    Reference< XDatabaseContext > xDatabaseContext;
+
     sal_Int32 nInitialSelection = -1;
     if ( !xModel.is() )
     {
-        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext) );
+        xDatabaseContext = DatabaseContext::create(m_aContext);
 
         OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::DATABASE);
         bCreateNew = sFactoryName.match(_rURL);

@@ -96,15 +96,10 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type)
     return TDatabaseDataProvider::queryInterface(type);
 }
 
-OUString DatabaseDataProvider::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.dbaccess.DatabaseDataProvider";
-}
-
 // XServiceInfo
 OUString SAL_CALL DatabaseDataProvider::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.dbaccess.DatabaseDataProvider";
 }
 
 sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName )
@@ -112,19 +107,9 @@ sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServi
     return cppu::supportsService(this, _rServiceName);
 }
 
-uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  )
-{
-    return { "com.sun.star.chart2.data.DatabaseDataProvider" };
-}
-
 uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Reference< uno::XInterface > DatabaseDataProvider::Create(uno::Reference< uno::XComponentContext > const & context)
-{
-    return *(new DatabaseDataProvider(context)) ;
+    return { "com.sun.star.chart2.data.DatabaseDataProvider" };
 }
 
 // lang::XInitialization:
@@ -1076,5 +1061,14 @@ void DatabaseDataProvider::impl_invalidateParameter_nothrow()
 }
 
 } // namespace dbaccess
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_dbaccess_DatabaseDataProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new dbaccess::DatabaseDataProvider(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
