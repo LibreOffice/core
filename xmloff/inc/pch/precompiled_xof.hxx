@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:56:05 using:
+ Generated on 2020-07-09 17:07:24 using:
  ./bin/update_pch xmloff xof --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,7 +22,6 @@
 
 #if PCH_LEVEL >= 1
 #include <array>
-#include <string.h>
 #include <unordered_map>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -39,7 +38,6 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
@@ -51,7 +49,6 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <sax/tools/converter.hxx>

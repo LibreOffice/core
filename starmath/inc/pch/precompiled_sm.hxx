@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:30 using:
+ Generated on 2020-07-09 17:06:51 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,7 +28,6 @@
 #include <functional>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
 #include <memory>
 #include <new>
@@ -38,6 +37,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -69,7 +69,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/font.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -82,7 +81,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
@@ -126,6 +124,7 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>

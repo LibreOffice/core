@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:59 using:
+ Generated on 2020-07-09 17:06:23 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,23 +35,20 @@
 #include <string_view>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -153,8 +150,10 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
@@ -163,8 +162,10 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>

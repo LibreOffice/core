@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:23 using:
+ Generated on 2020-07-09 17:06:45 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -112,6 +112,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -133,6 +134,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
