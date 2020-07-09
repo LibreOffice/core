@@ -23,12 +23,13 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 
 namespace dp_gui {
 
 class LicenseDialog
-    : public ::cppu::WeakImplHelper<css::ui::dialogs::XExecutableDialog>
+    : public ::cppu::WeakImplHelper<css::ui::dialogs::XExecutableDialog, css::lang::XServiceInfo>
 {
     css::uno::Reference<css::awt::XWindow> /* const */ m_parent;
     OUString m_sExtensionName;
@@ -39,6 +40,11 @@ class LicenseDialog
 public:
     LicenseDialog( css::uno::Sequence<css::uno::Any> const & args,
                  css::uno::Reference<css::uno::XComponentContext> const & xComponentContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( OUString const & title ) override;

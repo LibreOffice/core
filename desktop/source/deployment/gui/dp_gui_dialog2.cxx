@@ -48,6 +48,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
@@ -1345,6 +1346,22 @@ UpdateRequiredDialogService::UpdateRequiredDialogService( SAL_UNUSED_PARAMETER u
                                                           uno::Reference< uno::XComponentContext > const& xComponentContext )
     : m_xComponentContext( xComponentContext )
 {
+}
+
+// XServiceInfo
+OUString UpdateRequiredDialogService::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.ui.UpdateRequiredDialog";
+}
+
+sal_Bool UpdateRequiredDialogService::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > UpdateRequiredDialogService::getSupportedServiceNames()
+{
+    return { "com.sun.star.deployment.ui.UpdateRequiredDialog" };
 }
 
 
