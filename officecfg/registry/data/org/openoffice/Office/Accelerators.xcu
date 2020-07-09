@@ -1223,7 +1223,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="is">.uno:InsertCurrentDate</value>
             <value xml:lang="it">.uno:InsertCurrentDate</value>
             <value xml:lang="nb">.uno:InsertCurrentDate</value>
-            <value xml:lang="nl-NL">.uno:InsertCurrentDate</value>
             <value xml:lang="nn">.uno:InsertCurrentDate</value>
             <value xml:lang="pt">.uno:InsertCurrentDate</value>
             <value xml:lang="pt-BR">.uno:InsertCurrentDate</value>
@@ -1250,7 +1249,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="is">.uno:InsertCurrentTime</value>
             <value xml:lang="it">.uno:InsertCurrentTime</value>
             <value xml:lang="nb">.uno:InsertCurrentTime</value>
-            <value xml:lang="nl-NL">.uno:InsertCurrentTime</value>
             <value xml:lang="nn">.uno:InsertCurrentTime</value>
             <value xml:lang="pt">.uno:InsertCurrentTime</value>
             <value xml:lang="pt-BR">.uno:InsertCurrentTime</value>
