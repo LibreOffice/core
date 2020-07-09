@@ -4373,7 +4373,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
         rFilterField.IsNumeric = true;
         rFilterField.NumericValue = fValue;
     }
-    else if ( ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0] != '.' )
+    else if ( ScGlobal::getLocaleDataPtr()->getNumDecimalSep().toChar() != '.' )
     {
         eStatus = rtl_math_ConversionStatus_Ok;
         fValue = ::rtl::math::stringToDouble( sCriteria1, '.', 0, &eStatus, &nParseEnd );
