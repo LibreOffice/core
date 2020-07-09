@@ -36,6 +36,7 @@ public:
     void testMSP();
     void testPasswordProtectedStarBasic();
     void testRowColumn();
+    void testTdf131562();
     void testPasswordProtectedUnicodeString();
     void testTdf131296_legacy();
     void testTdf131296_new();
@@ -46,6 +47,7 @@ public:
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testRowColumn);
+    CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
@@ -389,6 +391,40 @@ void ScMacrosTest::testRowColumn()
         aParams, aRet, aOutParamIndex, aOutParam);
     sal_uInt16 nWidth  = rDoc.GetColWidth(0, 0) * HMM_PER_TWIPS;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+
+    pDocSh->DoClose();
+}
+
+void ScMacrosTest::testTdf131562()
+{
+    OUString aFileName;
+    createFileURL("tdf131562.xlsm", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(0,3,0)));
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    //Without the fix in place, the macro wouldn't have concatenated 1 and " ."
+    CPPUNIT_ASSERT_EQUAL(OUString("1 ."), rDoc.GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1 .cat"), rDoc.GetString(ScAddress(0,3,0)));
 
     pDocSh->DoClose();
 }
