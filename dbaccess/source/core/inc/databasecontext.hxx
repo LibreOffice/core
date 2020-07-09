@@ -116,6 +116,9 @@ public:
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& _rArguments ) override;
@@ -124,14 +127,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XServiceInfo - static methods
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_static();
-    static css::uno::Reference< css::uno::XInterface >
-        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
