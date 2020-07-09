@@ -3068,7 +3068,7 @@ public:
         GtkAllocation aOrigAllocation;
         gtk_widget_get_allocation(m_pWidget, &aOrigAllocation);
 
-        GtkAllocation aNewAllocation {aOrigAllocation.x + 100,
+        GtkAllocation aNewAllocation {aOrigAllocation.x,
                                       aOrigAllocation.y,
                                       static_cast<int>(aSize.Width()),
                                       static_cast<int>(aSize.Height()) };
