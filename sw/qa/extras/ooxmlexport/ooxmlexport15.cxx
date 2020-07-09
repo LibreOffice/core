@@ -29,6 +29,17 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "1080135");
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());

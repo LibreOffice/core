@@ -34,6 +34,7 @@
 #include <viewimp.hxx>
 #include <textboxhelper.hxx>
 #include <unomid.h>
+#include <svx/svdoashp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -681,8 +682,9 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
         }
 
+        auto pObjCustomShape = dynamic_cast<const SdrObjCustomShape*>(GetDrawObj());
         long nTargetHeight = aCurrObjRect.GetHeight( );
-        if ( GetDrawObj( )->GetRelativeHeight( ) )
+        if ( GetDrawObj( )->GetRelativeHeight( ) && (!pObjCustomShape || !pObjCustomShape->IsAutoGrowHeight()) )
         {
             long nHeight = 0;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
