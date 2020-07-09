@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f9f4ad8_8bcad99f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport15.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "missing spaces",
+      "range": {
+        "startLine": 38,
+        "startChar": 84,
+        "endLine": 38,
+        "endChar": 86
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c8f2e0_69708822",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3500,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "typo",
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edff577d_7ed047ed",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3501,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 3501,
+        "startChar": 71,
+        "endLine": 3501,
+        "endChar": 72
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee1e4954_2b03f8c4",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 3517,
+        "startChar": 23,
+        "endLine": 3517,
+        "endChar": 24
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55c5792e_862a3502",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "this is unnecessary",
+      "range": {
+        "startLine": 478,
+        "startChar": 21,
+        "endLine": 478,
+        "endChar": 40
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a49926e_362aa598",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "this is unnecessary",
+      "range": {
+        "startLine": 479,
+        "startChar": 76,
+        "endLine": 479,
+        "endChar": 94
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3994845e_0d1811f0",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-09T09:20:03Z",
+      "side": 1,
+      "message": "the last paragraph is empty, if they are newlines",
+      "range": {
+        "startLine": 486,
+        "startChar": 10,
+        "endLine": 486,
+        "endChar": 77
+      },
+      "revId": "685656d471bce9e8580e7f7b61e7769068a0dba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
