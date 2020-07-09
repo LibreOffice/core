@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <unordered_map>
 #include <strings.hrc>
@@ -189,7 +190,8 @@ public:
 
 typedef ::cppu::WeakComponentImplHelper<
     css::lang::XEventListener,
-    css::deployment::XPackageRegistry > t_BackendBase;
+    css::deployment::XPackageRegistry,
+    css::lang::XServiceInfo > t_BackendBase;
 
 
 class PackageRegistryBackend

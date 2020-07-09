@@ -19,14 +19,14 @@
 
 
 #include <dp_misc.h>
-#include <dp_services.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/logging.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::logging;
 
 namespace dp_log {
 
-typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler> t_log_helper;
+typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler, lang::XServiceInfo> t_log_helper;
 
 namespace {
 
@@ -49,6 +49,11 @@ protected:
 public:
     ProgressLogImpl( Sequence<Any> const & args,
                      Reference<XComponentContext> const & xContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XProgressHandler
     virtual void SAL_CALL push( Any const & Status ) override;
@@ -75,6 +80,23 @@ ProgressLogImpl::ProgressLogImpl(
 {
     // Use the logger created by unopkg app
     m_logger.reset(new comphelper::EventLogger(xContext, "unopkg"));
+}
+
+// XServiceInfo
+OUString ProgressLogImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.ProgressLog";
+}
+
+sal_Bool ProgressLogImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > ProgressLogImpl::getSupportedServiceNames()
+{
+    // a private one
+    return { "com.sun.star.comp.deployment.ProgressLog" };
 }
 
 // XProgressHandler
@@ -108,14 +130,14 @@ void ProgressLogImpl::pop()
 {
 }
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<ProgressLogImpl, sdecl::with_args<true> > const servicePLI;
-sdecl::ServiceDecl const serviceDecl(
-    servicePLI,
-    // a private one:
-    "com.sun.star.comp.deployment.ProgressLog",
-    "com.sun.star.comp.deployment.ProgressLog" );
-
 } // namespace dp_log
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_ProgressLog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_log::ProgressLogImpl(args, context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

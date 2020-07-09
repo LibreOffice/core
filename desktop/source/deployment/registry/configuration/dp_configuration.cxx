@@ -26,15 +26,14 @@
 #if HAVE_FEATURE_EXTENSIONS
 #include <dp_persmap.h>
 #endif
-#include <dp_services.hxx>
 #include <dp_ucb.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/inettype.hxx>
@@ -139,6 +138,11 @@ public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() override;
@@ -231,6 +235,22 @@ BackendImpl::BackendImpl(
         m_registeredPackages = std::move(pMap);
 #endif
      }
+}
+
+// XServiceInfo
+OUString BackendImpl::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.configuration.PackageRegistryBackend";
+}
+
+sal_Bool BackendImpl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+{
+    return { BACKEND_SERVICE_NAME };
 }
 
 void BackendImpl::addDataToDb(
@@ -786,13 +806,13 @@ void BackendImpl::PackageImpl::processPackage_(
 
 } // anon namespace
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
-sdecl::ServiceDecl const serviceDecl(
-    serviceBI,
-    "com.sun.star.comp.deployment.configuration.PackageRegistryBackend",
-    BACKEND_SERVICE_NAME );
-
 } // namespace dp_registry
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_configuration_PackageRegistryBackend_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new dp_registry::backend::configuration::BackendImpl(args, context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

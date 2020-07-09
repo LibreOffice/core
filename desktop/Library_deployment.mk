@@ -42,7 +42,6 @@ $(eval $(call gb_Library_set_componentfile,deployment,desktop/source/deployment/
 $(eval $(call gb_Library_add_exception_objects,deployment,\
     desktop/source/deployment/dp_log \
     desktop/source/deployment/dp_persmap \
-    desktop/source/deployment/dp_services \
     desktop/source/deployment/dp_xml \
     desktop/source/deployment/manager/dp_activepackages \
     desktop/source/deployment/manager/dp_commandenvironments \
