@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
@@ -26,6 +26,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -41,7 +42,6 @@
 #include <dp_dependencies.hxx>
 #include <dp_descriptioninfoset.hxx>
 #include <dp_identifier.hxx>
-#include <dp_services.hxx>
 #include <dp_version.hxx>
 #include <dp_update.hxx>
 
@@ -59,11 +59,16 @@ namespace dp_info {
 namespace {
 
 class PackageInformationProvider :
-        public ::cppu::WeakImplHelper< deployment::XPackageInformationProvider >
+        public ::cppu::WeakImplHelper< deployment::XPackageInformationProvider, lang::XServiceInfo >
 
 {
     public:
     explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId ) override;
@@ -86,6 +91,23 @@ PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XCo
     mxContext( xContext ),
     mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
 {
+}
+
+// XServiceInfo
+OUString PackageInformationProvider::getImplementationName()
+{
+    return "com.sun.star.comp.deployment.PackageInformationProvider";
+}
+
+sal_Bool PackageInformationProvider::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > PackageInformationProvider::getSupportedServiceNames()
+{
+    // a private one:
+    return { "com.sun.star.comp.deployment.PackageInformationProvider" };
 }
 
 OUString PackageInformationProvider::getPackageLocation(
@@ -305,15 +327,14 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 }
 
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<PackageInformationProvider> const servicePIP;
-sdecl::ServiceDecl const serviceDecl(
-    servicePIP,
-    // a private one:
-    "com.sun.star.comp.deployment.PackageInformationProvider",
-    "com.sun.star.comp.deployment.PackageInformationProvider" );
-
 } // namespace dp_info
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_deployment_PackageInformationProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
+{
+    return cppu::acquire(new dp_info::PackageInformationProvider(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
