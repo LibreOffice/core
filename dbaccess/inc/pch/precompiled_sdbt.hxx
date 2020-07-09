@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:14:28 using:
+ Generated on 2020-07-09 17:06:22 using:
  ./bin/update_pch dbaccess sdbt --cutoff=1 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,7 +37,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/statementcomposer.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #endif // PCH_LEVEL >= 3

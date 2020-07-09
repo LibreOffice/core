@@ -22,53 +22,49 @@
 #include <osl/endian.h>
 #include <tools/stream.hxx>
 
-using namespace ::exif;
-
 Exif::Exif() :
-    maOrientation(TOP_LEFT),
+    maOrientation(exif::TOP_LEFT),
     mbExifPresent(false)
 {}
 
 Exif::~Exif()
 {}
 
-
-void Exif::setOrientation(Orientation aOrientation) {
+void Exif::setOrientation(exif::Orientation aOrientation) {
     maOrientation = aOrientation;
 }
 
-Orientation Exif::convertToOrientation(sal_Int32 value)
+exif::Orientation Exif::convertToOrientation(sal_Int32 value)
 {
     switch(value) {
-        case 1: return TOP_LEFT;
-        case 2: return TOP_RIGHT;
-        case 3: return BOTTOM_RIGHT;
-        case 4: return BOTTOM_LEFT;
-        case 5: return LEFT_TOP;
-        case 6: return RIGHT_TOP;
-        case 7: return RIGHT_BOTTOM;
-        case 8: return LEFT_BOTTOM;
+        case 1: return exif::TOP_LEFT;
+        case 2: return exif::TOP_RIGHT;
+        case 3: return exif::BOTTOM_RIGHT;
+        case 4: return exif::BOTTOM_LEFT;
+        case 5: return exif::LEFT_TOP;
+        case 6: return exif::RIGHT_TOP;
+        case 7: return exif::RIGHT_BOTTOM;
+        case 8: return exif::LEFT_BOTTOM;
     }
-    return TOP_LEFT;
+    return exif::TOP_LEFT;
 }
 
 sal_Int32 Exif::getRotation() const
 {
     switch(maOrientation) {
-        case TOP_LEFT:
+        case exif::TOP_LEFT:
             return 0;
-        case BOTTOM_RIGHT:
+        case exif::BOTTOM_RIGHT:
             return 1800;
-        case RIGHT_TOP:
+        case exif::RIGHT_TOP:
             return 2700;
-        case LEFT_BOTTOM:
+        case exif::LEFT_BOTTOM:
             return 900;
         default:
             break;
     }
     return 0;
 }
-
 
 bool Exif::read(SvStream& rStream)
 {

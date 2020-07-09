@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:30 using:
+ Generated on 2020-07-09 17:06:51 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,7 +24,6 @@
 #include <memory>
 #include <ostream>
 #include <set>
-#include <stddef.h>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -32,14 +31,11 @@
 #include <osl/endian.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
-#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
-#include <sal/typesizes.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>

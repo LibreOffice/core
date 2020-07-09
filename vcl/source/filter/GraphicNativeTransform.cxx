@@ -28,8 +28,6 @@
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"
 
-using namespace ::exif;
-
 GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic)
     : mrGraphic(rGraphic)
 {
@@ -135,7 +133,7 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());
         aSourceStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-        Orientation aOrientation = TOP_LEFT;
+        exif::Orientation aOrientation = exif::TOP_LEFT;
 
         Exif exif;
         if (exif.read(aSourceStream))
@@ -151,9 +149,9 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         aTargetStream.Seek(STREAM_SEEK_TO_BEGIN);
 
         // Reset orientation in exif if needed
-        if (exif.hasExif() && aOrientation != TOP_LEFT)
+        if (exif.hasExif() && aOrientation != exif::TOP_LEFT)
         {
-            exif.setOrientation(TOP_LEFT);
+            exif.setOrientation(exif::TOP_LEFT);
             exif.write(aTargetStream);
         }
 
