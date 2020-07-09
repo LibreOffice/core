@@ -1712,8 +1712,9 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
     switch (eXFS)
     {
         case drawing::FillStyle_SOLID:
+        if (const XFillColorItem* pColorItem = rPageAttr.GetItem(XATTR_FILLCOLOR))
         {
-            Color aColor =  rPageAttr.GetItem( XATTR_FILLCOLOR )->GetColorValue();
+            Color aColor = pColorItem->GetColorValue();
             XFillColorItem aFillColorItem( OUString(), aColor );
             aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
             rSet.Put( aFillColorItem );
