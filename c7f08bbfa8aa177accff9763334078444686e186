@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45dbe1bb_59fbe1b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-09T11:47:34Z",
+      "side": 1,
+      "message": "The followup patch ALSO would handle this situation - since it distinctly checks whether the cell is a \"start merge\" or \"continue merge\". So in the end this isn\u0027t strictly necessary, although it shouldn\u0027t be incorrect to have it here and does avoid one more loop. I guess the question is what should happen if ALL of the remaining rows are short... I hadn\u0027t thought of that. I guess the only way to know would be a unit test example and see how WORD handles it.",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 48
+      },
+      "revId": "c7f08bbfa8aa177accff9763334078444686e186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
