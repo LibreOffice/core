@@ -1431,13 +1431,15 @@ void ScTabView::ErrorMessage(const char* pGlobStrId)
         }
     }
 
-    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
-                                                  VclMessageType::Info, VclButtonsType::Ok,
-                                                  ScResId(pGlobStrId)));
-    xInfoBox->run();
-
-    if (bFocus)
-        pParent->grab_focus();
+    m_xMessageBox.reset(Application::CreateMessageDialog(pParent,
+                                                         VclMessageType::Info, VclButtonsType::Ok,
+                                                         ScResId(pGlobStrId)));
+    weld::Window* pGrabOnClose = bFocus ? pParent : nullptr;
+    m_xMessageBox->runAsync(m_xMessageBox, [this, pGrabOnClose](sal_Int32 /*nResult*/) {
+        m_xMessageBox.reset();
+        if (pGrabOnClose)
+            pGrabOnClose->grab_focus();
+    });
 }
 
 void ScTabView::UpdatePageBreakData( bool bForcePaint )
