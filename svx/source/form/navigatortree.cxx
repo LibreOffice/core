@@ -711,7 +711,8 @@ namespace svxform
 
         sal_Int8 nAction = m_aControlExchange.isClipboardOwner() && doingKeyboardCut( ) ? DND_ACTION_MOVE : DND_ACTION_COPY;
         std::unique_ptr<weld::TreeIter> xSelected(m_xTreeView->make_iterator());
-        m_xTreeView->get_selected(xSelected.get());
+        if (!m_xTreeView->get_selected(xSelected.get()))
+            xSelected.reset();
         return nAction == implAcceptDataTransfer(aClipboardContent.GetDataFlavorExVector(), nAction, xSelected.get(), false);
     }
 
