@@ -176,7 +176,7 @@ private:
                                 ImplGetQueueInfo( const OUString& rPrinterName, const OUString* pDriver );
     VCL_DLLPRIVATE void         ImplUpdatePageData();
     VCL_DLLPRIVATE void         ImplUpdateFontList();
-    VCL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
+    VCL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
 
     VCL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
 
@@ -293,7 +293,6 @@ public:
     sal_uInt16                  GetPaperBin() const;
     void                        SetPaper( Paper ePaper );
     bool                        SetPaperSizeUser( const Size& rSize );
-    bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                       GetPaper() const;
     static OUString             GetPaperName( Paper ePaper );
 
