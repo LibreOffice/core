@@ -166,9 +166,14 @@ namespace svt
     }
 
     //= CheckBoxControl
-    CheckBoxControl::CheckBoxControl(vcl::Window* pParent)
-                   :Control(pParent, 0)
+    CheckBoxControl::CheckBoxControl(BrowserDataWin* pParent)
+        : ControlBase(pParent, "svt/ui/checkboxcontrol.ui", "CheckBoxControl")
+        , m_xBox(m_xBuilder->weld_check_button("checkbox"))
+        , m_bTriState(true)
     {
+        InitControlBase(m_xBox.get());
+        m_xBox->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+#if 0
         const Wallpaper& rParentBackground = pParent->GetBackground();
         if ( (pParent->GetStyle() & WB_CLIPCHILDREN) || rParentBackground.IsFixed() )
             SetBackground( rParentBackground );
@@ -180,13 +185,29 @@ namespace svt
 
         EnableChildTransparentMode();
 
-        pBox = VclPtr<CheckBox>::Create(this,WB_CENTER|WB_VCENTER);
-        pBox->EnableTriState( true );
         pBox->SetLegacyNoTextAlign( true );
         pBox->EnableChildTransparentMode();
         pBox->SetPaintTransparent( true );
-        pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
-        pBox->Show();
+#endif
+        m_xBox->connect_clicked(LINK(this, CheckBoxControl, OnClick));
+    }
+
+    void CheckBoxControl::EnableTriState( bool bTriState )
+    {
+        if (m_bTriState != bTriState)
+        {
+            m_bTriState = bTriState;
+
+            if (!m_bTriState && GetState() == TRISTATE_INDET)
+                SetState(TRISTATE_FALSE);
+        }
+    }
+
+    void CheckBoxControl::SetState(TriState eState)
+    {
+        if (!m_bTriState && (eState == TRISTATE_INDET))
+            eState = TRISTATE_FALSE;
+        m_xBox->set_state(eState);
     }
 
     CheckBoxControl::~CheckBoxControl()
@@ -196,39 +217,17 @@ namespace svt
 
     void CheckBoxControl::dispose()
     {
-        pBox.disposeAndClear();
-        Control::dispose();
+        m_xBox.reset();
+        ControlBase::dispose();
     }
 
-
-    IMPL_LINK_NOARG(CheckBoxControl, OnClick, Button*, void)
+    IMPL_LINK_NOARG(CheckBoxControl, OnClick, weld::Button&, void)
     {
-        m_aClickLink.Call(pBox);
+        m_aClickLink.Call(*m_xBox);
         m_aModifyLink.Call(nullptr);
     }
 
-
-    void CheckBoxControl::Resize()
-    {
-        Control::Resize();
-        pBox->SetPosSizePixel(Point(0,0),GetSizePixel());
-    }
-
-
-    void CheckBoxControl::DataChanged( const DataChangedEvent& _rEvent )
-    {
-        if ( _rEvent.GetType() == DataChangedEventType::SETTINGS )
-            pBox->SetSettings( GetSettings() );
-    }
-
-
-    void CheckBoxControl::StateChanged( StateChangedType nStateChange )
-    {
-        Control::StateChanged(nStateChange);
-        if ( nStateChange == StateChangedType::Zoom )
-            pBox->SetZoom(GetZoom());
-    }
-
+#if 0
     void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     {
         pBox->Draw(pDev, rPos, nFlags);
@@ -240,14 +239,12 @@ namespace svt
             pBox->GrabFocus();
     }
 
-
     void CheckBoxControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect)
     {
         Control::Paint(rRenderContext, rClientRect);
         if (HasFocus())
             ShowFocus(tools::Rectangle());
     }
-
 
     bool CheckBoxControl::PreNotify(NotifyEvent& rEvt)
     {
@@ -264,11 +261,9 @@ namespace svt
         }
         return Control::PreNotify(rEvt);
     }
-
+#endif
 
     //= CheckBoxCellController
-
-
     CheckBoxCellController::CheckBoxCellController(CheckBoxControl* pWin)
         : CellController(pWin)
     {
@@ -280,20 +275,19 @@ namespace svt
         return true;
     }
 
-
-    CheckBox& CheckBoxCellController::GetCheckBox() const
+    weld::CheckButton& CheckBoxCellController::GetCheckBox() const
     {
         return static_cast<CheckBoxControl &>(GetWindow()).GetBox();
     }
 
     bool CheckBoxCellController::IsValueChangedFromSaved() const
     {
-        return GetCheckBox().IsValueChangedFromSaved();
+        return GetCheckBox().get_state_changed_from_saved();
     }
 
     void CheckBoxCellController::SaveValue()
     {
-        GetCheckBox().SaveValue();
+        GetCheckBox().save_state();
     }
 
     IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
