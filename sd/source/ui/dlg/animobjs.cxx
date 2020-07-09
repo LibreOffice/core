@@ -1055,7 +1055,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 // the clone remains in the animation; we insert a clone of the
                 // clone into the group
                 pClone = pPage->GetObj(i);
-                SdrObject* pCloneOfClone(pClone->CloneSdrObject(pPage->getSdrModelFromSdrPage()));
+                SdrObject* pCloneOfClone(pClone->CloneSdrObject(pTargetSdPage->getSdrModelFromSdrPage()));
                 //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
                 pObjList->InsertObject(pCloneOfClone);
             }
