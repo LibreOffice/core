@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -457,6 +458,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     aValueMap.emplace( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ); //drawing::TextVerticalAdjust - needs to be overwritten
     aValueMap.emplace( "TextAutoGrowHeight", uno::Any(true) ); // sal_Bool
     aValueMap.emplace( "TextAutoGrowWidth", uno::Any(true) ); // sal_Bool
+    aValueMap.emplace( "ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER) ); // style::ParagraphAdjust_CENTER - needs to be overwritten
     if( bName )
         aValueMap.emplace( "Name", uno::Any( OUString() ) ); //CID OUString - needs to be overwritten for each point
 

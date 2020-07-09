@@ -2824,6 +2824,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122014)
+
 {
     SwDoc* pDoc = createDoc("tdf122014.docx");
     SwDocShell* pShell = pDoc->GetDocShell();
@@ -2838,6 +2839,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122014)
     sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[13]", "x").toInt32();
     sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[14]", "x").toInt32();
     CPPUNIT_ASSERT_GREATER(nX1 + 100, nX2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134659)
+
+{
+    SwDoc* pDoc = createDoc("tdf134659.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if the axis label is aligned to left.
+    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[2]", "x").toInt32();
+    CPPUNIT_ASSERT_GREATER(nX1 + 250, nX2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134235)
