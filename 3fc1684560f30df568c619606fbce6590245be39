@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b55cf07d_f36920d7",
+        "filename": "desktop/win32/source/applauncher/soffice_safe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-07-09T07:02:55Z",
+      "side": 1,
+      "message": "you can use the plain MPL header here.",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 47
+      },
+      "revId": "3fc1684560f30df568c619606fbce6590245be39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
