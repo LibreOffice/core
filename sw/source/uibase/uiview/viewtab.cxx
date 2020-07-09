@@ -2416,14 +2416,17 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             rSet.Put( SfxBoolItem(SID_ATTR_PAGE_HEADER, bHeaderOn ) );
             if(bHeaderOn)
             {
-                const SvxLRSpaceItem* rLR = static_cast<const SvxLRSpaceItem*>(
+                const SvxLRSpaceItem* pLR = static_cast<const SvxLRSpaceItem*>(
                                             rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE));
-                const SvxULSpaceItem* rUL = static_cast<const SvxULSpaceItem*>(
+                const SvxULSpaceItem* pUL = static_cast<const SvxULSpaceItem*>(
                                             rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE));
-                SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_HEADER_LRMARGIN);
-                rSet.Put(aLR);
-                SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_HEADER_SPACING);
-                rSet.Put(aUL);
+                if (pLR && pUL)
+                {
+                    SvxLongLRSpaceItem aLR(pLR->GetLeft(), pLR->GetRight(), SID_ATTR_PAGE_HEADER_LRMARGIN);
+                    rSet.Put(aLR);
+                    SvxLongULSpaceItem aUL( pUL->GetUpper(), pUL->GetLower(), SID_ATTR_PAGE_HEADER_SPACING);
+                    rSet.Put(aUL);
+                }
 
                 bool bShared = !rDesc.IsHeaderShared();
                 bool bFirst = !rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
