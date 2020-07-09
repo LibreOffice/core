@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
@@ -133,8 +132,8 @@ void OTableGrantControl::Init()
     // instantiate ComboBox
     if(!m_pCheckCell)
     {
-        m_pCheckCell    = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
-        m_pCheckCell->GetBox().EnableTriState(false);
+        m_pCheckCell = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
+        m_pCheckCell->EnableTriState(false);
 
         m_pEdit = VclPtr<EditControl>::Create(&GetDataWindow());
         weld::Entry& rEntry = m_pEdit->get_widget();
@@ -195,7 +194,7 @@ bool OTableGrantControl::IsTabAllowed(bool bForward) const
 }
 
 #define GRANT_REVOKE_RIGHT(what)                \
-    if(m_pCheckCell->GetBox().IsChecked())      \
+    if (m_pCheckCell->GetBox().get_active())    \
         xAuth->grantPrivileges(sTableName,PrivilegeObject::TABLE,what);\
     else                                        \
         xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
@@ -281,7 +280,7 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
     {
         // get the privileges from the user
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
-        m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nRights));
+        m_pCheckCell->GetBox().set_active(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nRights));
     }
 }
 
