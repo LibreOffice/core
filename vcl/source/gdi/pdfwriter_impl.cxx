@@ -587,7 +587,7 @@ namespace
 {
 
 void appendPdfTimeDate(OStringBuffer & rBuffer,
-    sal_Int16 year, sal_uInt16 month, sal_uInt16 day, sal_uInt16 hours, sal_uInt16 minutes, sal_uInt16 seconds, sal_uInt32 tzDelta)
+    sal_Int16 year, sal_uInt16 month, sal_uInt16 day, sal_uInt16 hours, sal_uInt16 minutes, sal_uInt16 seconds, sal_Int32 tzDelta)
 {
     rBuffer.append("D:");
     rBuffer.append(char('0' + ((year / 1000) % 10)));
@@ -1380,15 +1380,7 @@ OString PDFWriter::GetDateTime()
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
     osl_getDateTimeFromTimeValue(&aTVal, &aDT);
 
-    sal_uInt32 nDelta = 0;
-    if (aGMT.Seconds > aTVal.Seconds)
-    {
-        nDelta = aGMT.Seconds-aTVal.Seconds;
-    }
-    else if (aGMT.Seconds < aTVal.Seconds)
-    {
-        nDelta = aTVal.Seconds-aGMT.Seconds;
-    }
+    sal_Int32 nDelta = aTVal.Seconds-aGMT.Seconds;
 
     appendPdfTimeDate(aRet, aDT.Year, aDT.Month, aDT.Day, aDT.Hours, aDT.Minutes, aDT.Seconds, nDelta);
 
