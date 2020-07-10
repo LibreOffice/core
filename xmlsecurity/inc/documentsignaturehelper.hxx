@@ -26,14 +26,10 @@
 
 #include <vector>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace io {
-    class XStream; }
-namespace embed {
-    class XStorage; }
-}}}
+namespace com::sun::star {
+    namespace io { class XStream; }
+    namespace embed { class XStorage; }
+}
 
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 

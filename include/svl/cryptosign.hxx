@@ -18,19 +18,11 @@
 
 #include <svl/svldllapi.h>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace security {
-    class XCertificate; }
-}}}
-
+namespace com::sun::star::security { class XCertificate; }
 class SvStream;
 struct SignatureInformation;
 
-namespace svl {
-
-namespace crypto {
+namespace svl::crypto {
 
 /// Converts a hex-encoded string into a byte array.
 SVL_DLLPUBLIC std::vector<unsigned char> DecodeHexString(const OString& rHex);
@@ -84,7 +76,6 @@ private:
     OUString m_aSignPassword;
 };
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 
 #include <sal/types.h>
 
-namespace sca {
-namespace analysis {
+namespace sca::analysis {
 
 
 //     BESSEL functions
@@ -57,8 +56,7 @@ double BesselY( double x, sal_Int32 n );
 */
 double BesselK( double x, sal_Int32 n );
 
-} // namespace analysis
-} // namespace sca
+} // namespace sca::analysis
 
 #endif
 

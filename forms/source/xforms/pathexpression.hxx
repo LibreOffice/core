@@ -25,13 +25,10 @@
 #include <vector>
 
 // forward declaractions
-namespace com::sun::star
+namespace com::sun::star::xml::dom
 {
-    namespace xml::dom
-    {
-        class XNodeList;
-        namespace events { class XEventListener; }
-    }
+    class XNodeList;
+    namespace events { class XEventListener; }
 }
 
 

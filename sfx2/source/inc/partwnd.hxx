@@ -23,19 +23,7 @@
 #include <sfx2/dockwin.hxx>
 
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace frame
-            {
-                class XFrame;
-            }
-        }
-    }
-}
+namespace com::sun::star::frame { class XFrame; }
 
 // forward ---------------------------------------------------------------
 

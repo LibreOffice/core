@@ -30,9 +30,7 @@ namespace com :: sun :: star :: uno { class XComponentContext; }
 
 class SvStream;
 
-namespace svt
-{
-namespace GraphicAccess
+namespace svt::GraphicAccess
 {
 
 /** Helpers for obtaining streams (which also can be used with the ImageProducer)
@@ -62,8 +60,7 @@ UNLESS_MERGELIBS(SVT_DLLPUBLIC) css::uno::Reference<css::io::XInputStream> getIm
             css::uno::Reference<css::uno::XComponentContext> const & rxContext,
             OUString const & rImageResourceURL);
 
-} // namespace GraphicAccess
-} // namespace svt
+} // namespace svt::GraphicAccess
 
 #endif // INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 

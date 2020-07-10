@@ -42,7 +42,6 @@ namespace drawinglayer {
     namespace processor2d {
         class BaseProcessor2D;
     }
-
     namespace primitive2d {
         class PolygonHairlinePrimitive2D;
     }

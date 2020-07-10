@@ -27,9 +27,7 @@
 #include <sal/types.h>
 #include <vbahelper/vbahelper.hxx>
 
-namespace ooo
-{
-    namespace vba
+namespace ooo::vba
     {
         template< typename T1,  typename T2 >
         class DefaultReturnHelper : public ::cppu::WeakImplHelper< T2, css::script::XDefaultProperty >
@@ -49,8 +47,7 @@ namespace ooo
             ReturnInteger( sal_Int32 nValue ) : ReturnInteger_BASE( nValue ){}
         };
 
-    } // vba
-} // ooo
+} // ooo::vba
 
 #endif
 

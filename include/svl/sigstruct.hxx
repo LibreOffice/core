@@ -71,9 +71,7 @@ struct SignatureReferenceInformation
 
 typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInformations;
 
-namespace svl
-{
-namespace crypto
+namespace svl::crypto
 {
 /// Specifies the algorithm used for signature generation and validation.
 enum class SignatureMethodAlgorithm
@@ -82,7 +80,7 @@ enum class SignatureMethodAlgorithm
     ECDSA
 };
 }
-}
+
 
 struct SignatureInformation
 {
