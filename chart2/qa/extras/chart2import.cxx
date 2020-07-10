@@ -2539,16 +2539,20 @@ void Chart2ImportTest::testTdf134225()
     Reference<drawing::XShape> xDataPointLabel1(getShapeByName(xShapes,
         "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
     CPPUNIT_ASSERT(xDataPointLabel1.is());
-    awt::Point aLabelPosition1 = xDataPointLabel1->getPosition();
 
     Reference<drawing::XShape> xDataPointLabel2(getShapeByName(xShapes,
         "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1"), UNO_SET_THROW);
     CPPUNIT_ASSERT(xDataPointLabel2.is());
+
+#if defined(_WIN32)
+    // font is MS Comic Sans which we can only assume is available under windows
+    awt::Point aLabelPosition1 = xDataPointLabel1->getPosition();
     awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
 
     // Check the distance between the position of the 1st data point label and the second one
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1800, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2123, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
+#endif
 }
 
 void Chart2ImportTest::testTdf91250()
