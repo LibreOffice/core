@@ -213,7 +213,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptPathsPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="OptPathsPage">This section contains the default paths to important folders in $[officename]. These paths can be edited by the user.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="OptPathsPage">This section contains the default paths to important folders in %PRODUCTNAME. These paths can be edited by the user.</property>
       </object>
     </child>
   </object>
