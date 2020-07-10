@@ -49,6 +49,14 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
 
 bool TableManager::isIgnore() const { return isRowEnd(); }
 
+sal_uInt32 TableManager::getGridBefore(sal_uInt32 nRow)
+{
+    assert(isInTable());
+    if (nRow >= mTableDataStack.top()->getRowCount())
+        return 0;
+    return mTableDataStack.top()->getRow(nRow)->getGridBefore();
+}
+
 sal_uInt32 TableManager::getCurrentGridBefore()
 {
     return mTableDataStack.top()->getCurrentRow()->getGridBefore();
