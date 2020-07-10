@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -48,7 +49,8 @@ namespace cairocanvas
                                              css::lang::XMultiServiceFactory,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
-                                             css::lang::XServiceName >  GraphicDeviceBase_Base;
+                                             css::lang::XServiceName,
+                                             css::lang::XServiceInfo >  GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                                  DeviceHelper,
                                                  ::osl::MutexGuard,
@@ -114,6 +116,11 @@ namespace cairocanvas
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override;
+
+        //  XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr& pSurface,

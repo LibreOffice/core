@@ -27,6 +27,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "cairo_canvas.hxx"
 
@@ -114,6 +115,21 @@ namespace cairocanvas
     OUString SAL_CALL Canvas::getServiceName(  )
     {
         return "com.sun.star.rendering.Canvas.Cairo";
+    }
+
+    //  XServiceInfo
+    sal_Bool Canvas::supportsService(const OUString& sServiceName)
+    {
+        return cppu::supportsService(this, sServiceName);
+
+    }
+    OUString Canvas::getImplementationName()
+    {
+        return "com.sun.star.comp.rendering.Canvas.Cairo";
+    }
+    css::uno::Sequence< OUString > Canvas::getSupportedServiceNames()
+    {
+        return { getServiceName() };
     }
 
     bool Canvas::repaint( const SurfaceSharedPtr&       pSurface,
