@@ -12,7 +12,7 @@
 # you can generate one with 'make vim-ide-integration'.
 #
 # Design goals:
-# - exludelist mechanism, so a warning is either fixed or excluded
+# - excludelist mechanism, so a warning is either fixed or excluded
 # - works in a plugins-enabled clang build
 # - no custom configure options required
 # - no need to generate a dummy library to build a header
