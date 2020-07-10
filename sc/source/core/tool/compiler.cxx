@@ -1440,6 +1440,25 @@ struct ConventionXL_OOX : public ConventionXL_A1
             return;
         }
 
+        {
+            ScAddress aAbs1 = rRef.Ref1.toAbs(rPos);
+            if (std::make_unsigned_t<sal_Int16>(aAbs1.Tab()) >= rTabNames.size())
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
+        if (!bSingleRef)
+        {
+            ScAddress aAbs2 = rRef.Ref2.toAbs(rPos);
+            if (std::make_unsigned_t<sal_Int16>(aAbs2.Tab()) >= rTabNames.size())
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
         ConventionXL_A1::makeRefStr( pDoc, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
     }
 
