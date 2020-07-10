@@ -41,6 +41,8 @@
 #include <unotools/confignode.hxx>
 #include <tools/json_writer.hxx>
 
+#include <vcl/uitest/uiobject.hxx>
+
 using namespace vcl;
 
 #define TB_SEP_SIZE     8  // Separator size
@@ -348,6 +350,11 @@ void ToolBox::Deactivate()
 void ToolBox::Highlight()
 {
     CallEventListeners( VclEventId::ToolboxHighlight );
+}
+
+FactoryFunction ToolBox::GetUITestFactory() const
+{
+    return ToolBoxUIObject::create;
 }
 
 void ToolBox::Select()
