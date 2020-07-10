@@ -531,10 +531,10 @@ bool DomainMapperTableManager::shouldInsertRow(IntVectorPtr pCellWidths, IntVect
         return false;
     if (m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed)
         return true;
-    if (pCellWidths->size() == (nGrids + m_nGridAfter))
+    if (pCellWidths->size() == nGrids)
         return true;
     rIsIncompleteGrid = true;
-    return nGrids + m_nGridAfter > pTableGrid->size();
+    return nGrids > pTableGrid->size();
 }
 
 void DomainMapperTableManager::endOfRowAction()
@@ -656,7 +656,7 @@ void DomainMapperTableManager::endOfRowAction()
         nFullWidthRelative = o3tl::saturating_add(nFullWidthRelative, i);
 
     bool bIsIncompleteGrid = false;
-    if( pTableGrid->size() == ( nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
+    if( pTableGrid->size() == nGrids && m_nCell.back( ) > 0 )
     {
         /*
          * If table width property set earlier is smaller than the current table width,
