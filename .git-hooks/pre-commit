@@ -134,8 +134,14 @@ sub check_style($)
     my ($h) = @_;
     my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
-    my $excluded_list_names = ClangFormat::get_excludelist();
     my $clang_format = ClangFormat::find();
+
+    ## Check if ClangFormat has get_excludelist or the old
+    ## get_blacklist
+    my $excluded_list_names;
+    eval    { ClangFormat::get_excludelist() };
+    if ($@) { $excluded_list_names = ClangFormat::get_blacklist(); }
+    else    { $excluded_list_names = ClangFormat::get_excludelist(); }
 
     # Get a list of non-deleted changed files.
     open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
