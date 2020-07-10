@@ -1135,7 +1135,15 @@ OUString Application::GetAppName()
 
 enum {hwAll=0, hwEnv=1, hwUI=2};
 
-OUString Application::GetHWOSConfInfo(const int bSelection)
+static OUString Localize(const char *pId, const bool bLocalize)
+{
+    if (bLocalize)
+        return VclResId(pId);
+    else
+        return Translate::get(pId, Translate::Create("vcl", LanguageTag("en-US")));
+}
+
+OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize)
 {
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
@@ -1147,7 +1155,7 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
     };
 
     if (bSelection != hwUI) {
-        appendDetails("; ", VclResId(SV_APP_CPUTHREADS)
+        appendDetails("; ", Localize(SV_APP_CPUTHREADS, bLocalize)
                                 + OUString::number(std::thread::hardware_concurrency()));
 
         OUString aVersion;
@@ -1156,21 +1164,21 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
         else
             aVersion = "-";
 
-        appendDetails("; ", VclResId(SV_APP_OSVERSION) + aVersion);
+        appendDetails("; ", Localize(SV_APP_OSVERSION, bLocalize) + aVersion);
     }
 
     if (bSelection != hwEnv) {
-        appendDetails("; ", VclResId(SV_APP_UIRENDER));
+        appendDetails("; ", Localize(SV_APP_UIRENDER, bLocalize));
 #if HAVE_FEATURE_SKIA
         if ( SkiaHelper::isVCLSkiaEnabled() )
         {
             switch(SkiaHelper::renderMethodToUse())
             {
                 case SkiaHelper::RenderVulkan:
-                    appendDetails("", VclResId(SV_APP_SKIA_VULKAN));
+                    appendDetails("", Localize(SV_APP_SKIA_VULKAN, bLocalize));
                     break;
                 case SkiaHelper::RenderRaster:
-                    appendDetails("", VclResId(SV_APP_SKIA_RASTER));
+                    appendDetails("", Localize(SV_APP_SKIA_RASTER, bLocalize));
                     break;
             }
         }
@@ -1178,10 +1186,10 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
 #endif
 #if HAVE_FEATURE_OPENGL
         if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-            appendDetails("", VclResId(SV_APP_GL));
+            appendDetails("", Localize(SV_APP_GL, bLocalize));
         else
 #endif
-            appendDetails("", VclResId(SV_APP_DEFAULT));
+            appendDetails("", Localize(SV_APP_DEFAULT, bLocalize));
 
 #if (defined LINUX || defined _WIN32 || defined MACOSX)
         appendDetails("; ", SV_APP_VCLBACKEND + GetToolkitName());
