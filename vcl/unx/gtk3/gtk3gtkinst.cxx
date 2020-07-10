@@ -3056,12 +3056,19 @@ public:
 
         assert(gtk_widget_is_drawable(m_pWidget)); // all that should result in this holding
 
+        // turn off animations, otherwise we get a frame of an animation sequence
+        gboolean bAnimations;
+        GtkSettings* pSettings = gtk_widget_get_settings(m_pWidget);
+        g_object_get(pSettings, "gtk-enable-animations", &bAnimations, nullptr);
+        if (bAnimations)
+            g_object_set(pSettings, "gtk-enable-animations", false, nullptr);
+
         Size aSize(rRect.GetSize());
 
         GtkAllocation aOrigAllocation;
         gtk_widget_get_allocation(m_pWidget, &aOrigAllocation);
 
-        GtkAllocation aNewAllocation {aOrigAllocation.x,
+        GtkAllocation aNewAllocation {aOrigAllocation.x + 100,
                                       aOrigAllocation.y,
                                       static_cast<int>(aSize.Width()),
                                       static_cast<int>(aSize.Height()) };
@@ -3083,6 +3090,9 @@ public:
         gtk_widget_size_allocate(m_pWidget, &aOrigAllocation);
 
         rOutput.DrawOutDev(rRect.TopLeft(), aSize, Point(), aSize, *xOutput);
+
+        if (bAnimations)
+            g_object_set(pSettings, "gtk-enable-animations", true, nullptr);
 
         if (!bAlreadyMapped)
             gtk_widget_unmap(m_pWidget);
