@@ -309,7 +309,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaHadField(false),
         m_bParaAutoBefore(false),
         m_bFirstParagraphInCell(true),
-        m_bSaveFirstParagraphInCell(false)
+        m_bSaveFirstParagraphInCell(false),
+        m_bParaWithInlineObject(false)
 
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
@@ -472,22 +473,6 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
             SetIsDummyParaAddedForTableInSection(true);
         }
     }
-}
-
-bool DomainMapper_Impl::IsLastParaEmpty()
-{
-    bool bRet = true;
-    if (!m_aTextAppendStack.empty() && m_aTextAppendStack.top().xTextAppend)
-    {
-        //creating cursor for finding text content
-        uno::Reference<text::XTextCursor> xCursor = m_aTextAppendStack.top().xTextAppend->createTextCursor();
-        xCursor->gotoEnd(false);
-        //selecting the last 2 characters in the document
-        xCursor->goLeft(2, true);
-        //the last paragraph is empty, if they are newlines
-        bRet = xCursor->getString().match(OUString(SAL_NEWLINE_STRING).concat(SAL_NEWLINE_STRING));
-    }
-    return bRet;
 }
 
 void DomainMapper_Impl::RemoveLastParagraph( )
@@ -2056,6 +2041,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         m_bFirstParagraphInCell = false;
 
     m_bParaAutoBefore = false;
+    m_bParaWithInlineObject = false;
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
@@ -6600,6 +6586,8 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
             }
             m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
         }
+        else if (eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+            m_bParaWithInlineObject = true;
     }
 
     // Clear the reference, so in case the embedded object is inside a
