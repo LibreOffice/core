@@ -41,7 +41,8 @@ protected:
     TextFrameIndex m_nStart;          // Start in the text string, end = pCurr->GetLen()
     sal_uInt16 m_nRegDiff;            // Register's line distance
     sal_uInt16 m_nLineNr;             // Line number
-    bool m_bPrev          : 1;
+    sal_uInt16 m_nMaxLineTextHeight; // Line number
+    bool m_bPrev : 1;
     bool m_bRegisterOn    : 1;    // Keep in register
     bool m_bOneBlock      : 1;    // Justified text: Dispose single words
     bool m_bLastBlock     : 1;    // Justified text: Also the last line
