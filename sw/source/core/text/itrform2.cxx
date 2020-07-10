@@ -1752,6 +1752,7 @@ void SwTextFormatter::RecalcRealHeight()
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
     sal_uInt16 nLineHeight = m_pCurr->Height();
+
     m_pCurr->SetClipping( false );
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
@@ -1868,14 +1869,30 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         long nTmp = pSpace->GetPropLineSpace();
                         // 50% is the minimum, if 0% we switch to the
                         // default value 100% ...
-                        if( nTmp < 50 )
+                        if (nTmp < 50)
                             nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nLineHeight;
-                        nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
-                        nLineHeight = static_cast<sal_uInt16>(nTmp);
+                        sal_uInt16 nLineHeightPrev = 0;
+                        if (m_pPrev)
+                            nLineHeightPrev = m_pPrev->Height();
+
+                        if (m_pPrev && nLineHeightPrev < nLineHeight)
+                        {
+                            nTmp *= nLineHeightPrev;
+                            nTmp /= 100;
+                            if (!nTmp)
+                                ++nTmp;
+                            nLineHeight
+                                += static_cast<sal_uInt16>(nTmp - nLineHeightPrev);
+                        }
+                        else
+                        {
+                            nTmp *= nLineHeight;
+                            nTmp /= 100;
+                            if (!nTmp)
+                                ++nTmp;
+                            nLineHeight = static_cast<sal_uInt16>(nTmp);
+                        }
                         break;
                     }
                     case SvxInterLineSpaceRule::Fix:
