@@ -2666,6 +2666,10 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     // write footnotes/endnotes if we have any
     FootnoteEndnoteReference();
 
+    // merge the properties _before_ the run text (strictly speaking, just
+    // after the start of the run)
+    m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MergeMarks::PREPEND);
+
     WritePostponedGraphic();
 
     WritePostponedDiagram();
@@ -2678,10 +2682,6 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedOLE();
 
     WritePostponedActiveXControl(true);
-
-    // merge the properties _before_ the run text (strictly speaking, just
-    // after the start of the run)
-    m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MergeMarks::PREPEND);
 }
 
 void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
@@ -5731,7 +5731,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
             break;
     }
 
-    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame, sax_fastparser::MergeMarks::POSTPONE);
+    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame);
 }
 
 void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
