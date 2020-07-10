@@ -30,6 +30,8 @@
 #include <memory>
 #include <vector>
 
+class SgaObjectSvDraw;
+struct GalleryObject;
 class GalleryBinaryEngine;
 
 class GalleryThemeEntry
@@ -54,6 +56,12 @@ public:
     const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
 
     void callGalleryThemeInit();
+
+    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
+    bool insertModel(const FmFormModel& rModel, INetURLObject& aURL);
+
+    bool readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream);
+    SgaObjectSvDraw insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream, INetURLObject& rURL);
 
     const OUString&         GetThemeName() const { return aName; }
 
