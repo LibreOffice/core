@@ -672,20 +672,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
         const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
-
-        if( xStor.is() )
-        {
-            const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
-
-            if( xIStm.is() && !xIStm->GetError() )
-            {
-                xIStm->SetBufferSize( STREAMBUF_SIZE );
-                bRet = GallerySvDrawImport( *xIStm, rModel );
-                xIStm->SetBufferSize( 0 );
-            }
-        }
+        bRet = pThm->getGalleryBinaryEngine()->readModel(aURL, rModel);
     }
 
     return bRet;
