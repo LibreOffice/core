@@ -34,9 +34,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf118701, "tdf118701.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118701, "tdf118701.docx")
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("At least one paragraph is missing from the file!", 3, getParagraphs());
+    // This was 6, related to moving inline images after the page breaks
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr[1]/w:numPr", 1);
+
+    // Keep numbering of the paragraph of the inline image
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr[1]/w:numPr", 1);
+    // This was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr[1]/w:numPr", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
