@@ -26,6 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <tools/urlobj.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
@@ -548,6 +549,16 @@ bool GalleryTransferable::StartDrag()
         return false;
     }
     return true;
+}
+
+INetURLObject ImplGetURL(const GalleryObject* pObject)
+{
+    INetURLObject aURL;
+
+    if (pObject)
+        aURL = pObject->aURL;
+
+    return aURL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

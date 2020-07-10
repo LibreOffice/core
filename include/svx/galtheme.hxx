@@ -98,7 +98,6 @@ private:
                                             return i;
                                     return SAL_MAX_UINT32;
                                 }
-    SAL_DLLPRIVATE static INetURLObject ImplGetURL( const GalleryObject* pObject );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
@@ -182,6 +181,8 @@ public:
     SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream> const & rModelStreamRef);
     SAL_DLLPRIVATE bool         InsertModelStream(const tools::SvRef<SotStorageStream>& rModelStream, sal_uInt32 nInsertPos);
 
+    INetURLObject implCreateUniqueURL(SgaObjKind eObjKind, ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+
     SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL);
     bool                        InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos = SAL_MAX_UINT32);
     SAL_DLLPRIVATE bool         InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uInt32 nInsertPos);
@@ -201,7 +202,6 @@ public:
     SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
-SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
 SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif // INCLUDED_SVX_GALTHEME_HXX
