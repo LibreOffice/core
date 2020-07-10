@@ -35,6 +35,7 @@ public:
     void testVba();
     void testMSP();
     void testPasswordProtectedStarBasic();
+    void testTdf107885();
     void testRowColumn();
     void testTdf131562();
     void testPasswordProtectedUnicodeString();
@@ -46,6 +47,7 @@ public:
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
+    CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
@@ -356,6 +358,44 @@ void ScMacrosTest::testVba()
                 osl::File::remove( sFileUrl );
         }
     }
+}
+
+void ScMacrosTest::testTdf107885()
+{
+    OUString aFileName;
+    createFileURL("tdf107885.xlsm", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT(!rDoc.RowHidden(1,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(2,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(4,0));
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    //Without the fix in place, all rows in autofilter would have been hidden
+    CPPUNIT_ASSERT(rDoc.RowHidden(1,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(2,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(4,0));
+
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testRowColumn()
