@@ -1458,6 +1458,25 @@ struct ConventionXL_OOX : public ConventionXL_A1
             return;
         }
 
+        {
+            ScAddress aAbs1 = rRef.Ref1.toAbs(rLimits, rPos);
+            if (!rLimits.ValidAddress(aAbs1))
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
+        if (!bSingleRef)
+        {
+            ScAddress aAbs2 = rRef.Ref2.toAbs(rLimits, rPos);
+            if (!rLimits.ValidAddress(aAbs2))
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
         ConventionXL_A1::makeRefStr( rLimits, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
     }
 
