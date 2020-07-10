@@ -890,18 +890,25 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         if (sListFormat.getLength())
         {
             sal_uInt32 nExtraOffset = 0;
-            for (sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+            sal_uInt8 nLevelB = 0;
+            while (aLVL.aOfsNumsXCH[nLevelB] && nLevelB < nMaxLevel)
             {
-                OUString sReplacement("%" + OUString::number(nLevelB + 1));
-                if (aLVL.aOfsNumsXCH[nLevelB])
+                // Replacement symbol is read from source string from position taken from aOfsNumsXCH array
+                sal_uInt8 nOffset = aLVL.aOfsNumsXCH[nLevelB] + nExtraOffset - 1;
+                if (nOffset >= sListFormat.getLength())
                 {
-                    if (aLVL.aOfsNumsXCH[nLevelB] <= sNumString.getLength())
-                        sListFormat = sListFormat.replaceAt(aLVL.aOfsNumsXCH[nLevelB] + nExtraOffset - 1, 1, sReplacement);
-                    else
-                        SAL_WARN("sw.ww8", "List level reference is beyond the border. Ignored.");
+                    SAL_WARN("sw.ww8", "List level reference is beyond the border. Ignored.");
+                    nLevelB++;
+                    continue;
                 }
+                sal_uInt8 nReplacement = sListFormat[nOffset] + 1;
+
+                OUString sReplacement("%" + OUString::number(nReplacement));
+                sListFormat = sListFormat.replaceAt(nOffset, 1, sReplacement);
+
                 // We need also update an offset, since we are replacing one symbol by at least two
                 nExtraOffset += sReplacement.getLength() - 1;
+                nLevelB++;
             }
         }
 
