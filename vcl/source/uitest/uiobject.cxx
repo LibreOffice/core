@@ -29,6 +29,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -1558,6 +1559,53 @@ std::unique_ptr<UIObject> VerticalTabControlUIObject::create(vcl::Window* pWindo
     VerticalTabControl* pTabControl = dynamic_cast<VerticalTabControl*>(pWindow);
     assert(pTabControl);
     return std::unique_ptr<UIObject>(new VerticalTabControlUIObject(pTabControl));
+}
+
+
+ToolBoxUIObject::ToolBoxUIObject(const VclPtr<ToolBox>& xToolBox):
+    WindowUIObject(xToolBox),
+    mxToolBox(xToolBox)
+{
+}
+
+ToolBoxUIObject::~ToolBoxUIObject()
+{
+}
+
+void ToolBoxUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            sal_uInt16 nPos = itr->second.toUInt32();
+            mxToolBox->SetCurItemId(nPos);
+            mxToolBox->Click();
+            mxToolBox->Select();
+        }
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap ToolBoxUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    return aMap;
+}
+
+OUString ToolBoxUIObject::get_name() const
+{
+    return "ToolBoxUIObject";
+}
+
+std::unique_ptr<UIObject> ToolBoxUIObject::create(vcl::Window* pWindow)
+{
+    ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
+    assert(pToolBox);
+    return std::unique_ptr<UIObject>(new ToolBoxUIObject(pToolBox));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
