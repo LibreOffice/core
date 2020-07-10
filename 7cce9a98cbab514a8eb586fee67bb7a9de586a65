@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6bd103a_84c4ab9e",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-10T07:52:32Z",
+      "side": 1,
+      "message": "Doesn\u0027t seem right.",
+      "range": {
+        "startLine": 300,
+        "startChar": 14,
+        "endLine": 300,
+        "endChar": 37
+      },
+      "revId": "7cce9a98cbab514a8eb586fee67bb7a9de586a65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e4eaa1_12a4adfb",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-10T07:52:32Z",
+      "side": 1,
+      "message": "m means \"member of class\". Meaningless to have such a prefix for a method argument. Also please see if this can be a const reference.",
+      "range": {
+        "startLine": 91,
+        "startChar": 78,
+        "endLine": 91,
+        "endChar": 80
+      },
+      "revId": "7cce9a98cbab514a8eb586fee67bb7a9de586a65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
