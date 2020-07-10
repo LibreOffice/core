@@ -1544,6 +1544,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
+    pToolBox->set_id("FindBar");
     if ( pToolBox )
     {
         ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
