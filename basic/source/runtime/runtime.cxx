@@ -2201,6 +2201,9 @@ static void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, sa
         else
         {
             SbxVariable* pSource = pOldArray->Get32( pActualIndices );
+            if (pSource && pOldArray->GetRefCount() > 1)
+                // tdf#134692: old array will stay alive after the redim - we need to copy deep
+                pSource = new SbxVariable(*pSource);
             pNewArray->Put32(pSource, pActualIndices);
         }
     }
