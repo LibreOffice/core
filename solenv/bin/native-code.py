@@ -21,7 +21,6 @@ import xml.etree.ElementTree as ET
 
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
-    ("libevtattlo.a", "evtatt_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
