@@ -55,7 +55,8 @@ enum class ForType {
     To,
     EachArray,
     EachCollection,
-    EachXEnumeration
+    EachXEnumeration,
+    Error,
 };
 
 struct SbiForStack {                // for/next stack:
