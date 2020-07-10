@@ -1440,7 +1440,32 @@ struct ConventionXL_OOX : public ConventionXL_A1
             return;
         }
 
+<<<<<<< HEAD   (a194b7 rhbz#1875377 if sort order is equivalent keep order fontconf)
         ConventionXL_A1::makeRefStr( pDoc, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
+=======
+        {
+            ScAddress aAbs1 = rRef.Ref1.toAbs(rLimits, rPos);
+            if (!rLimits.ValidAddress(aAbs1)
+                || o3tl::make_unsigned(aAbs1.Tab()) >= rTabNames.size())
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
+        if (!bSingleRef)
+        {
+            ScAddress aAbs2 = rRef.Ref2.toAbs(rLimits, rPos);
+            if (!rLimits.ValidAddress(aAbs2)
+                || o3tl::make_unsigned(aAbs2.Tab()) >= rTabNames.size())
+            {
+                rBuf.append(rErrRef);
+                return;
+            }
+        }
+
+        ConventionXL_A1::makeRefStr( rLimits, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
+>>>>>>> CHANGE (a3b483 tdf#108673 XLSX: Don't export invalid sheet references in ce)
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& /*rFile*/,
