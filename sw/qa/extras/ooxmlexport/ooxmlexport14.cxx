@@ -453,6 +453,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
 }
 
+DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
+    sal_Int16 nVRelPos = -1;
+    sal_Int16 nHRelPos = -1;
+    xOLEProps->getPropertyValue("VertOrientRelation") >>= nVRelPos;
+    xOLEProps->getPropertyValue("HoriOrientRelation") >>= nHRelPos;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The OLE is shifted vertically",
+        text::RelOrientation::PAGE_FRAME , nVRelPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The OLE is shifted horizontally",
+        text::RelOrientation::PAGE_FRAME , nHRelPos);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
