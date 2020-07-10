@@ -626,7 +626,6 @@ public:
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
-    bool IsLastParaEmpty();
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
@@ -1063,6 +1062,8 @@ public:
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
 
+    bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     // Start a new index section; if needed, finish current paragraph
@@ -1076,6 +1077,8 @@ private:
     /// Current paragraph in a table is first paragraph of a cell
     bool m_bFirstParagraphInCell;
     bool m_bSaveFirstParagraphInCell;
+    /// Current paragraph had at least one inline object in it.
+    bool m_bParaWithInlineObject;
 };
 
 } //namespace dmapper
