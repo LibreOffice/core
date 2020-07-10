@@ -2249,7 +2249,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 OUString("HoriOrient"),
                 OUString("HoriOrientPosition"),
                 OUString("VertOrient"),
-                OUString("VertOrientPosition")
+                OUString("VertOrientPosition"),
+                OUString("VertOrientRelation"),
+                OUString("HoriOrientRelation")
             };
             for (const OUString & s : pProperties)
                 xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
