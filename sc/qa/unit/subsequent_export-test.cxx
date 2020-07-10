@@ -74,7 +74,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <dbdata.hxx>
+#include <docfunc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -231,6 +234,9 @@ public:
     void testTdf114969XLSX();
     void testTdf115192XLSX();
     void testTdf91634XLSX();
+    void testTdf108673(const OUString& aOriginalValidation, const OUString& aExpectedSavedValidation);
+    void testTdf108673_ExistingWorksheet();
+    void testTdf108673_MissingWorksheet();
     void testTdf115159();
     void testTdf112567();
     void testTdf112567b();
@@ -379,6 +385,8 @@ public:
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
     CPPUNIT_TEST(testTdf91634XLSX);
+    CPPUNIT_TEST(testTdf108673_ExistingWorksheet);
+    CPPUNIT_TEST(testTdf108673_MissingWorksheet);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
     CPPUNIT_TEST(testTdf112567b);
@@ -4719,6 +4727,64 @@ void ScExportTest::testTdf91634XLSX()
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf108673(const OUString& aOriginalValidation,
+                                      const OUString& aExpectedSavedValidation)
+{
+    ScDocShell* pShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell->DoInitNew();
+
+    // add new validation field
+    {
+        ScDocument& rDoc = pShell->GetDocument();
+        rDoc.EnableUndo(false);
+
+        ScValidationMode eMode = SC_VALID_LIST;
+        ScConditionMode eOper = ScConditionMode::Equal;
+        OUString aExpr1 = aOriginalValidation;
+        OUString aExpr2 = "0";
+        sal_Int16 nListType = css::sheet::TableValidationVisibility::UNSORTED;
+
+        ScAddress aCursorPos(1, 1, 0);
+
+        ScValidationData aValidationData(eMode, eOper, aExpr1, aExpr2, &rDoc, aCursorPos);
+        aValidationData.SetIgnoreBlank(true);
+        aValidationData.SetListType(nListType);
+
+        sal_uLong nIndex = rDoc.AddValidationEntry(aValidationData);
+
+        ScPatternAttr aPattern(rDoc.GetPool());
+        aPattern.GetItemSet().Put(SfxUInt32Item(ATTR_VALIDDATA, nIndex));
+        ScRangeList aRanges;
+        aRanges.push_back(ScRange(1, 1, 0, 1, 1, 0));
+        ScMarkData* pMarkData = new ScMarkData(rDoc.GetSheetLimits(), aRanges);
+        pShell->GetDocFunc().ApplyAttributes(*pMarkData, aPattern, true);
+    }
+
+    // save as XLSX
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*pShell), FORMAT_XLSX);
+
+    // check validation
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1",
+                       aExpectedSavedValidation);
+}
+
+// FILESAVE XLSX: Copy-pasting cell validation may result in a sheet reference error saved as invalid xlsx content
+void ScExportTest::testTdf108673_ExistingWorksheet()
+{
+    testTdf108673("Sheet1.B1:B5", "Sheet1!B1:B5");
+}
+
+void ScExportTest::testTdf108673_MissingWorksheet()
+{
+    testTdf108673("'Sheet 5'.B1:B5", "'Sheet 5'!$B$1:$B$5");
 }
 
 void ScExportTest::testTdf115159()
