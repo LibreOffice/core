@@ -94,6 +94,7 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextForma
     m_nRightScanIdx = TextFrameIndex(0);
     m_pByEndIter.reset();
     m_pFirstOfBorderMerge = nullptr;
+    m_nMaxLineTextHeight = 0;
 
     if (m_nStart > TextFrameIndex(GetInfo().GetText().getLength()))
     {
@@ -1752,6 +1753,7 @@ void SwTextFormatter::RecalcRealHeight()
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
     sal_uInt16 nLineHeight = m_pCurr->Height();
+
     m_pCurr->SetClipping( false );
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
@@ -1866,16 +1868,43 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     case SvxInterLineSpaceRule::Prop:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
+
                         // 50% is the minimum, if 0% we switch to the
                         // default value 100% ...
-                        if( nTmp < 50 )
+                        if (nTmp < 50)
                             nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nLineHeight;
-                        nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
-                        nLineHeight = static_cast<sal_uInt16>(nTmp);
+                        // tdf#69647 actual line height can contain height of an inline image,
+                        // resulting bad calculation of proportional line spacing, that just
+                        // depends on the font size of the actual line. As a workaround, use
+                        // the max height of lines of the paragraph
+
+                        sal_uInt16 nLineAscent =  m_pCurr->GetAscent();
+
+                        if (nLineAscent != nLineHeight)
+                        { // tdf#69647 pictute or shape not inserted, only text
+                            if (m_nMaxLineTextHeight < nLineHeight)
+                            {
+                                m_nMaxLineTextHeight = nLineHeight;
+                            }
+                        }
+
+                        if (m_nMaxLineTextHeight > 0 && nLineAscent == nLineHeight)
+                        { // tdf#69647 pictute or shape inserted
+                            nTmp *= m_nMaxLineTextHeight;
+                            nTmp /= 100;
+                            if (!nTmp)
+                                ++nTmp;
+                            nLineHeight += static_cast<sal_uInt16>(nTmp - m_nMaxLineTextHeight);
+                        }
+                        else
+                        {
+                            nTmp *= nLineHeight;
+                            nTmp /= 100;
+                            if (!nTmp)
+                                ++nTmp;
+                            nLineHeight = static_cast<sal_uInt16>(nTmp);
+                        }
                         break;
                     }
                     case SvxInterLineSpaceRule::Fix:
