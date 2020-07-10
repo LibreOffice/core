@@ -68,6 +68,8 @@ public:
     implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
                         ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
                         ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+
+    bool GalleryBinaryEngine::readModel(const INetURLObject& rURL, SdrModel& rModel);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
