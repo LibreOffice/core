@@ -371,6 +371,27 @@ const tools::SvRef<SotStorage>& GalleryBinaryEngine::GetSvDrawStorage() const
     return aSvDrawStorageRef;
 }
 
+bool GalleryBinaryEngine::readModel(const GalleryObject* pObject, SdrModel& rModel)
+{
+    tools::SvRef<SotStorage> xStor(GetSvDrawStorage());
+    bool bRet = false;
+    const INetURLObject aURL(ImplGetURL(pObject));
+
+    if (xStor.is())
+    {
+        const OUString aStmName(GetSvDrawStreamNameFromURL(aURL));
+        tools::SvRef<SotStorageStream> xIStm(xStor->OpenSotStream(aStmName, StreamMode::READ));
+
+        if (xIStm.is() && !xIStm->GetError())
+        {
+            xIStm->SetBufferSize(STREAMBUF_SIZE);
+            bRet = GallerySvDrawImport(*xIStm, rModel);
+            xIStm->SetBufferSize(0);
+        }
+    }
+    return bRet;
+}
+
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
 {
     return rTheme.WriteData(rOut);

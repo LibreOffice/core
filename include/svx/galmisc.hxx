@@ -193,5 +193,9 @@ public:
     void*            GetData1() const { return mnData1; }
 };
 
+struct GalleryObject;
+
+INetURLObject ImplGetURL(const GalleryObject* pObject);
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

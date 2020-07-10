@@ -55,6 +55,8 @@ public:
 
     void callGalleryThemeInit();
 
+    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
+
     const OUString&         GetThemeName() const { return aName; }
 
     const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngine->GetThmURL(); }
