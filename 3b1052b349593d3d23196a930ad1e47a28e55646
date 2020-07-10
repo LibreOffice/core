@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf459548_2e5c6566",
+        "filename": "external/libffi/ExternalProject_libffi.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-10T08:41:52Z",
+      "side": 1,
+      "message": "please use libffi_ prefix not gb_ - what if some other module defines its own gb_* variable with different values",
+      "revId": "3b1052b349593d3d23196a930ad1e47a28e55646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
