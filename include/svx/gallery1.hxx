@@ -55,6 +55,11 @@ public:
 
     void callGalleryThemeInit();
 
+    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
+    bool insertModel(const FmFormModel& rModel, INetURLObject& aURL);
+
+    bool readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream);
+
     const OUString&         GetThemeName() const { return aName; }
 
     const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngine->GetThmURL(); }

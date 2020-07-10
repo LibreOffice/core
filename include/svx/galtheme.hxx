@@ -98,7 +98,6 @@ private:
                                             return i;
                                     return SAL_MAX_UINT32;
                                 }
-    SAL_DLLPRIVATE static INetURLObject ImplGetURL( const GalleryObject* pObject );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
@@ -201,7 +200,6 @@ public:
     SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
-SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
 SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif // INCLUDED_SVX_GALTHEME_HXX

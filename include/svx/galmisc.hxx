@@ -23,6 +23,7 @@
 #include <vcl/imap.hxx>
 #include <svl/hint.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/salctype.hxx>
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <svx/svxdllapi.h>
@@ -192,6 +193,14 @@ public:
     const OUString&  GetStringData() const { return maStringData; }
     void*            GetData1() const { return mnData1; }
 };
+
+struct GalleryObject;
+
+INetURLObject ImplGetURL(const GalleryObject* pObject);
+
+INetURLObject implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
+    ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+    ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
