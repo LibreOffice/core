@@ -160,6 +160,7 @@ public:
     void testTdf123206_customLabelText();
     void testCustomLabelText();
     void testDeletedLegendEntries();
+    void testTdf60316();
     void testTdf130225();
     void testTdf59857();
     void testTdf126076();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
+    CPPUNIT_TEST(testTdf60316);
     CPPUNIT_TEST(testTdf130225);
     CPPUNIT_TEST(testTdf59857);
     CPPUNIT_TEST(testTdf126076);
@@ -2633,6 +2635,17 @@ void Chart2ExportTest::testDeletedLegendEntries()
         CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
     }
+}
+
+void Chart2ExportTest::testTdf60316()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf60316.pptx");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, the shape would have had a solidFill background
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:noFill", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:solidFill", 0);
 }
 
 void Chart2ExportTest::testTdf130225()
