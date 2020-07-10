@@ -613,7 +613,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             }
             default:
                 OUString aCode = m_aFieldStack.back().GetBookmarkCode();
-                if ( !aCode.isEmpty() )
+                if (!aCode.isEmpty() && !aCode.trim().startsWith("SHAPE"))
                 {
                     // Unhandled field with stored code
                     SwPosition aEndPos = *m_pPaM->GetPoint();
