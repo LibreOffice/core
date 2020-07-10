@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "cairo_spritecanvas.hxx"
 
@@ -133,6 +134,21 @@ namespace cairocanvas
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
         return "com.sun.star.rendering.SpriteCanvas.Cairo";
+    }
+
+    //  XServiceInfo
+    sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
+    {
+        return cppu::supportsService(this, sServiceName);
+
+    }
+    OUString SpriteCanvas::getImplementationName()
+    {
+        return "com.sun.star.comp.rendering.Canvas.Cairo";
+    }
+    css::uno::Sequence< OUString > SpriteCanvas::getSupportedServiceNames()
+    {
+        return { getServiceName() };
     }
 
     SurfaceSharedPtr SpriteCanvas::getSurface()
