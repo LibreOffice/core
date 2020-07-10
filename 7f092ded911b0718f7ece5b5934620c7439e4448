@@ -45,6 +45,29 @@
       "revId": "7f092ded911b0718f7ece5b5934620c7439e4448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5220af44_cb8c04ba",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-10T18:26:11Z",
+      "side": 1,
+      "message": "This must not be \"cui\": this uses VCL translation. Please see the ImplGetResLocale.",
+      "range": {
+        "startLine": 1144,
+        "startChar": 54,
+        "endLine": 1144,
+        "endChar": 57
+      },
+      "revId": "7f092ded911b0718f7ece5b5934620c7439e4448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
