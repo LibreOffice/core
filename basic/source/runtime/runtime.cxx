@@ -1138,21 +1138,16 @@ void SbiRuntime::PushFor()
 void SbiRuntime::PushForEach()
 {
     SbiForStack* p = new SbiForStack;
+    // Set default value in case of error which is ignored in Resume Next
+    p->eForType = ForType::EachArray;
     p->pNext = pForStk;
     pForStk = p;
 
     SbxVariableRef xObjVar = PopVar();
-    SbxBase* pObj = xObjVar.is() ? xObjVar->GetObject() : nullptr;
-    if( pObj == nullptr )
-    {
-        Error( ERRCODE_BASIC_NO_OBJECT );
-        return;
-    }
+    SbxBase* pObj = xObjVar.is() && xObjVar->IsObject() ? xObjVar->GetObject() : nullptr;
 
-    bool bError_ = false;
     if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {
-        p->eForType = ForType::EachArray;
         p->refEnd = reinterpret_cast<SbxVariable*>(pArray);
 
         sal_Int32 nDims = pArray->GetDims32();
@@ -1196,25 +1191,7 @@ void SbiRuntime::PushForEach()
                 catch(const uno::Exception& )
                 {}
             }
-            if ( !p->xEnumeration.is() )
-            {
-                bError_ = true;
-            }
         }
-        else
-        {
-            bError_ = true;
-        }
-    }
-    else
-    {
-        bError_ = true;
-    }
-
-    if( bError_ )
-    {
-        Error( ERRCODE_BASIC_CONVERSION );
-        return;
     }
 
     // Container variable
@@ -3045,12 +3022,19 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
             SbxOperator eOp = ( pForStk->refInc->GetDouble() < 0 ) ? SbxLT : SbxGT;
             if( pForStk->refVar->Compare( eOp, *pForStk->refEnd ) )
                 bEndLoop = true;
+            if (SbxBase::IsError())
+                pForStk->eForType = ForType::Error; // terminate loop at the next iteration
             break;
         }
         case ForType::EachArray:
         {
             SbiForStack* p = pForStk;
-            if( p->pArrayCurIndices == nullptr )
+            if (!p->refEnd)
+            {
+                SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
+                pForStk->eForType = ForType::Error; // terminate loop at the next iteration
+            }
+            else if (p->pArrayCurIndices == nullptr)
             {
                 bEndLoop = true;
             }
@@ -3089,6 +3073,13 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         }
         case ForType::EachCollection:
         {
+            if (!pForStk->refEnd)
+            {
+                SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
+                pForStk->eForType = ForType::Error; // terminate loop at the next iteration
+                break;
+            }
+
             BasicCollection* pCollection = static_cast<BasicCollection*>(pForStk->refEnd.get());
             SbxArrayRef xItemArray = pCollection->xItemArray;
             sal_Int32 nCount = xItemArray->Count32();
@@ -3107,7 +3098,12 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         case ForType::EachXEnumeration:
         {
             SbiForStack* p = pForStk;
-            if( p->xEnumeration->hasMoreElements() )
+            if (!p->xEnumeration)
+            {
+                SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
+                pForStk->eForType = ForType::Error; // terminate loop at the next iteration
+            }
+            else if (p->xEnumeration->hasMoreElements())
             {
                 Any aElem = p->xEnumeration->nextElement();
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
@@ -3118,6 +3114,12 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
             {
                 bEndLoop = true;
             }
+            break;
+        }
+        case ForType::Error:
+        {
+            // We are in Resume Next mode, and we already had one iteration
+            bEndLoop = true;
             break;
         }
     }
