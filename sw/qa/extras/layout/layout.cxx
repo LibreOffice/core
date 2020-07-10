@@ -4128,6 +4128,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
     CPPUNIT_ASSERT_EQUAL(aOrigRect, aRelayoutRect);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
+{
+    createDoc("tdf134548.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Second paragraph has two non zero width tabs in beginning of line
+    {
+        OUString sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
+        CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+        sal_Int32 nWidth = parseDump("/root/page/body/txt[2]/Text[1]", "nWidth").toInt32();
+        CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
+    }
+    {
+        OUString sNodeType = parseDump("/root/page/body/txt[2]/Text[2]", "nType");
+        CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+        sal_Int32 nWidth = parseDump("/root/page/body/txt[2]/Text[2]", "nWidth").toInt32();
+        CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
