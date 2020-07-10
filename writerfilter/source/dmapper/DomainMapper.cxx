@@ -3477,6 +3477,22 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
                     }
+                    //else //jav
+                    //{
+                        //lcl_startParagraphGroup();
+                        //m_pImpl->GetTopContext()->Insert(
+                        //    PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+
+                        //lcl_startCharacterGroup();
+                        /*
+                        m_pImpl->m_bIsSplitPara = true;
+                        finishParagraph();
+                        lcl_startParagraphGroup();
+                        pContext->Insert(PROP_BREAK_TYPE,
+                                         uno::makeAny(style::BreakType_PAGE_BEFORE));
+                        //m_pImpl->clearDeferredBreaks();
+                        */
+                    //}
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
@@ -3514,10 +3530,20 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 static_cast<ParagraphPropertyMap*>(xContext.get())->SetListId(-1);;
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
+            //jav
+            if (m_pImpl->isBreakDeferred(PAGE_BREAK))
+            {
+                lcl_startParagraphGroup();
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE,
+                                                 uno::makeAny(style::BreakType_PAGE_AFTER));
+                //return;
+            }
+            //eo jav
             m_pImpl->SetParaSectpr(false);
             finishParagraph(bRemove);
             if (bRemove)
                 m_pImpl->RemoveLastParagraph();
+
         }
         else
         {
