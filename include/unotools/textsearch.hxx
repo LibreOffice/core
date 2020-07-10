@@ -31,16 +31,7 @@ class CharClass;
 
 namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::util { class XTextSearch2; }
-
-namespace com {
-    namespace sun {
-        namespace star {
-            namespace util {
-                struct SearchResult;
-            }
-        }
-    }
-}
+namespace com::sun::star::util { struct SearchResult; }
 namespace i18nutil {
     struct SearchOptions;
     struct SearchOptions2;

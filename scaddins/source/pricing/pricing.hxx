@@ -42,8 +42,7 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 #define RETURN_FINITE(d)    if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
 
 
-namespace sca {
-namespace pricing {
+namespace sca::pricing {
 
 enum class ScaCategory
 {
@@ -112,8 +111,7 @@ struct FindScaFuncData
     bool operator() ( ScaFuncData const & rCandidate ) const { return rCandidate.Is(m_rId); }
 };
 
-} // namespace pricing
-} // namespace sca
+} // namespace sca::pricing
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(

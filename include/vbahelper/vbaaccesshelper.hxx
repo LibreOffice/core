@@ -36,10 +36,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 
-namespace ooo
+namespace ooo::vba
 {
-    namespace vba
-    {
 
         inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell const * pShell )
         {
@@ -74,7 +72,6 @@ namespace ooo
         // word seems to return an erroneous mime type :-/ "application/msword"  not consistent with the excel one
         inline bool isAlienWordDoc( SfxObjectShell const & rDocShell ) { return isAlienDoc( rDocShell, "application/msword" ); }
 
-    }
 }
 
 #endif

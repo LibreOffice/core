@@ -30,11 +30,7 @@
 
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace beans
 {
@@ -55,8 +51,6 @@ class XGraphic;
 namespace uno
 {
 class XComponentContext;
-}
-}
 }
 }
 class PDFSignatureHelper;

@@ -25,10 +25,7 @@
 #include <com/sun/star/xforms/XFormsEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace xforms {
+namespace com::sun::star::xforms {
 
 class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
 
@@ -67,7 +64,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
         bool m_cancelable;
 };
 
-} } } }
+}
 
 #endif
 

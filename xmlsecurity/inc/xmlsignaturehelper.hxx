@@ -31,15 +31,13 @@
 class DateTime;
 class UriBindingHelper;
 
-namespace com {
-namespace sun {
-namespace star {
-namespace io {
-    class XOutputStream;
-    class XInputStream; }
-namespace embed {
-    class XStorage; }
-}}}
+namespace com::sun::star {
+    namespace io {
+        class XOutputStream;
+        class XInputStream;
+    }
+    namespace embed { class XStorage; }
+}
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::uno { class XComponentContext; }

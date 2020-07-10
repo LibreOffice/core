@@ -51,9 +51,7 @@ class SfxObjectShell;
 class SfxViewFrame;
 class SfxViewShell;
 
-namespace ooo
-{
-    namespace vba
+namespace ooo::vba
     {
         /// @throws css::lang::IllegalArgumentException
         template < class T >
@@ -273,8 +271,7 @@ public:
     static void runtimeexception( ErrCode err );
 };
 
-    } // vba
-} // ooo
+} // ooo::vba
 
 namespace ov = ooo::vba;
 

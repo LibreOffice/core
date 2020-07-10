@@ -25,12 +25,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace security {
-    class XCertificate; }
-}}}
+namespace com::sun::star::security { class XCertificate; }
+
 
 class MacroWarning : public weld::MessageDialogController
 {
