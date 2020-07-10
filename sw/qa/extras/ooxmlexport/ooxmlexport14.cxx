@@ -654,16 +654,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    OUString sNodeType;
+    // Important: bug case had 4 pages
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // First paragraph does not have tab before
-    sNodeType = parseDump("/root/page/body/txt[1]/Text[1]", "nType");
+    // (same applies to all paragraphs in doc, but lets assume they are
+    // behave same way)
+    OUString sNodeType = parseDump("/root/page[1]/body/txt[1]/Text[1]", "nType");
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
-
-    // Second paragraph starts with tab
-    sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
-    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
