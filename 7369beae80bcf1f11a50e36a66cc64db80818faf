@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d6373b3_fb08fc40",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-10T15:17:12Z",
+      "side": 1,
+      "message": "this is probably going to make animations stutter.\n\nsurely this is a bug in gtk? it should not be painting animations over\ncustom-drawn widgets?",
+      "revId": "7369beae80bcf1f11a50e36a66cc64db80818faf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
