@@ -58,40 +58,6 @@ void SetMessageFont(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFont(aFont);
 }
 
-bool IsDocEncrypted(const OUString& rURL)
-{
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    bool bIsEncrypted = false;
-
-    try
-    {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
-
-        uno::Sequence<uno::Any> aArgs (2);
-        aArgs[0] <<= rURL;
-        aArgs[1] <<= embed::ElementModes::READ;
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySet > xStorageProps( xDocStorage, uno::UNO_QUERY );
-        if ( xStorageProps.is() )
-        {
-            try
-            {
-                xStorageProps->getPropertyValue("HasEncryptedEntries")
-                    >>= bIsEncrypted;
-            } catch( uno::Exception& ) {}
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("sfx",
-            "caught exception trying to find out if doc is encrypted" << rURL);
-    }
-
-    return bIsEncrypted;
-}
-
 }
 
 namespace sfx2
@@ -105,17 +71,6 @@ static std::map<ApplicationType,OUString> BitmapForExtension =
     { ApplicationType::TYPE_DRAW, SFX_FILE_THUMBNAIL_DRAWING },
     { ApplicationType::TYPE_DATABASE, SFX_FILE_THUMBNAIL_DATABASE },
     { ApplicationType::TYPE_MATH, SFX_FILE_THUMBNAIL_MATH }
-};
-
-static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
-{
-    { ApplicationType::TYPE_WRITER, BMP_128X128_WRITER_DOC },
-    { ApplicationType::TYPE_CALC, BMP_128X128_CALC_DOC },
-    { ApplicationType::TYPE_IMPRESS, BMP_128X128_IMPRESS_DOC },
-    { ApplicationType::TYPE_DRAW, BMP_128X128_DRAW_DOC },
-    // FIXME: icon for encrypted db doc doesn't exist
-    { ApplicationType::TYPE_DATABASE, BMP_128X128_CALC_DOC },
-    { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
 };
 
 constexpr long gnTextHeight = 30;
@@ -202,8 +157,7 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    const std::map<ApplicationType,OUString>& rWhichMap = IsDocEncrypted( rURL) ?
-        EncryptedBitmapForExtension : BitmapForExtension;
+    const std::map<ApplicationType,OUString>& rWhichMap = BitmapForExtension;
 
     std::map<ApplicationType,OUString>::const_iterator mIt =
         std::find_if( rWhichMap.begin(), rWhichMap.end(),
