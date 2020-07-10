@@ -984,6 +984,39 @@ bool SfxObjectShell::DoSave()
 
         pImpl->bIsSaving = true;
 
+        if (IsOwnStorageFormat(*GetMedium()))
+        {
+            SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_012;
+            if (!utl::ConfigManager::IsFuzzing())
+            {
+                SvtSaveOptions aSaveOpt;
+                nDefVersion = aSaveOpt.GetODFSaneDefaultVersion();
+            }
+            uno::Reference<beans::XPropertySet> const xProps(GetMedium()->GetStorage(), uno::UNO_QUERY);
+            assert(xProps.is());
+            if (nDefVersion >= SvtSaveOptions::ODFSVER_012) // property exists only since ODF 1.2
+            {
+                try // tdf#134582 set Version on embedded objects as they
+                {   // could have been loaded with a different/old version
+#if 0
+// not on old branch
+                    if (SvtSaveOptions::ODFSVER_013 <= nDefVersion)
+                    {
+                        xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_013_TEXT));
+                    }
+                    else
+#endif
+                    {
+                        xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_012_TEXT));
+                    }
+                }
+                catch (uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::DoSave");
+                }
+            }
+        }
+
         uno::Sequence< beans::NamedValue > aEncryptionData;
         if ( IsPackageStorageFormat_Impl( *GetMedium() ) )
         {
