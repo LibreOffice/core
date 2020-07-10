@@ -78,6 +78,10 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
 public:
     using ImplToolItems = std::vector<ImplToolItem>;
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
+    void SetCurItemId( sal_uInt16 CurID )   { mnCurItemId=CurID; }
+
     static constexpr auto APPEND
         = std::numeric_limits<ImplToolItems::size_type>::max();
 
