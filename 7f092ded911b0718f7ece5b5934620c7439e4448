@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bf7d74b_e6248107",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-10T18:25:03Z",
+      "side": 1,
+      "message": "This won\u0027t work. The juxtaposition only works when they are string *literals*, not some objects or variables. This works:\n\n    OUString sObj1 \u003d \"a\" \"b\" \"c\";\n\nbut this does not:\n\n    OUString sObj2 \u003d \"d\" sObj1 \"e\";\n\nIn this case, you should omit the \"+\" between adjacent literals, like between \"\\n\" and \"Build ID: \", but not between \"Build ID: \" and GetBuildString().",
+      "range": {
+        "startLine": 267,
+        "startChar": 19,
+        "endLine": 271,
+        "endChar": 45
+      },
+      "revId": "7f092ded911b0718f7ece5b5934620c7439e4448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5813a75e_6b511f65",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-10T18:25:03Z",
+      "side": 1,
+      "message": "This const at a byval argument is useless in function declaration.",
+      "range": {
+        "startLine": 909,
+        "startChar": 74,
+        "endLine": 909,
+        "endChar": 79
+      },
+      "revId": "7f092ded911b0718f7ece5b5934620c7439e4448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
