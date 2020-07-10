@@ -16,6 +16,24 @@
       "revId": "7369beae80bcf1f11a50e36a66cc64db80818faf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "949acd00_961e776d",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-10T18:58:27Z",
+      "side": 1,
+      "message": "This is the fairly obscure case of rendering an image of a widget into an OutputDevice used in e.g. base where when a column is defined as a boolean it carts around a CheckButton and renders it on/off into a OutputDevice for the non-currently-active cell. Its not the case for implementing the output of a custom widget",
+      "parentUuid": "0d6373b3_fb08fc40",
+      "revId": "7369beae80bcf1f11a50e36a66cc64db80818faf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
