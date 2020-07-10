@@ -264,11 +264,11 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
       css::datatransfer::clipboard::SystemClipboard::create(
           comphelper::getProcessComponentContext());
 
-  OUString sInfo = "Version: " + m_pVersionLabel->get_label() // version
-                   + "\nBuild ID: " + GetBuildString() // build id
-                   + "\n" + m_pEnvLabel->get_label() + "; " + m_pUILabel->get_label() // env+UI
-                   + "\nLocale: " + m_pLocaleLabel->get_label() // locale
-                   + "\n" + m_pMiscLabel->get_label(); // misc
+  OUString sInfo = "Version: " m_pVersionLabel->get_label() "\n" // version
+                   "Build ID: " GetBuildString() "\n" // build id
+                   Application::GetHWOSConfInfo(1,false) "; " Application::GetHWOSConfInfo(2, false) "\n" // env+UI
+                   "Locale: " m_pLocaleLabel->get_label() "\n" // locale
+                   m_pMiscLabel->get_label(); // misc
 
   vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
 }
