@@ -115,12 +115,6 @@ void GenericEditImplementation< EDIT >::SaveValue()
 }
 
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetModifyHdl( const Link<LinkParamNone*,void>& _rLink )
-{
-    m_aModifyHdl = _rLink;
-}
-
-template <class EDIT>
 void GenericEditImplementation< EDIT >::Cut()
 {
     m_rEdit.Cut();

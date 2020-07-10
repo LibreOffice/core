@@ -139,7 +139,6 @@ namespace svt
 
         virtual bool                IsValueChangedFromSaved() const = 0;
         virtual void                SaveValue() = 0;
-        virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) = 0;
 
         virtual bool                CanUp() const = 0;
         virtual bool                CanDown() const = 0;
@@ -147,17 +146,36 @@ namespace svt
         virtual void                Cut() = 0;
         virtual void                Copy() = 0;
         virtual void                Paste() = 0;
+
+        // sets a link to call when the text is changed by the user
+        void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        {
+            m_aModify1Hdl = rLink;
+        }
+
+        // sets an additional link to call when the text is changed by the user
+        void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        {
+            m_aModify2Hdl = rLink;
+        }
+
+    private:
+        Link<LinkParamNone*,void> m_aModify1Hdl;
+        Link<LinkParamNone*,void> m_aModify2Hdl;
+
+    protected:
+        void CallModifyHdls()
+        {
+            m_aModify1Hdl.Call(nullptr);
+            m_aModify2Hdl.Call(nullptr);
+        }
     };
 
-
     //= GenericEditImplementation
-
     template <class EDIT>
     class GenericEditImplementation : public IEditImplementation
     {
         EDIT&   m_rEdit;
-    protected:
-        Link<LinkParamNone*,void> m_aModifyHdl;
     public:
         GenericEditImplementation( EDIT& _rEdit );
 
@@ -182,7 +200,6 @@ namespace svt
 
         virtual bool                IsValueChangedFromSaved() const override;
         virtual void                SaveValue() override;
-        virtual void                SetModifyHdl( const Link<LinkParamNone*,void>& _rLink ) override;
 
         virtual void                Cut() override;
         virtual void                Copy() override;
@@ -250,7 +267,6 @@ namespace svt
     {
         EditControlBase& m_rEdit;
         int m_nMaxTextLen;
-        Link<LinkParamNone*,void> m_aModifyHdl;
 
         DECL_LINK(ModifyHdl, weld::Entry&, void);
     public:
@@ -336,11 +352,6 @@ namespace svt
             m_rEdit.get_widget().save_value();
         }
 
-        virtual void SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) override
-        {
-            m_aModifyHdl = rLink;
-        }
-
         virtual bool CanUp() const override
         {
             return false;
@@ -422,7 +433,6 @@ namespace svt
     {
         MultiLineTextCell& m_rEdit;
         int m_nMaxTextLen;
-        Link<LinkParamNone*,void> m_aModifyHdl;
 
         DECL_LINK(ModifyHdl, weld::TextView&, void);
     public:
@@ -495,11 +505,6 @@ namespace svt
         virtual void SaveValue() override
         {
             m_rEdit.get_widget().save_value();
-        }
-
-        virtual void SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) override
-        {
-            m_aModifyHdl = rLink;
         }
 
         virtual bool CanUp() const override
