@@ -137,6 +137,7 @@ public:
     void testAxisTitlePositionDOCX();
     void testAxisCrossBetweenDOCX();
     void testPieChartDataPointExplosionXLSX();
+    void testTdf60316();
     void testCustomDataLabel();
     void testCustomPositionofDataLabel();
     void testCustomDataLabelMultipleSeries();
@@ -272,6 +273,7 @@ public:
     CPPUNIT_TEST(testAxisTitlePositionDOCX);
     CPPUNIT_TEST(testAxisCrossBetweenDOCX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
+    CPPUNIT_TEST(testTdf60316);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomPositionofDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
@@ -2171,6 +2173,17 @@ void Chart2ExportTest::testPieChartDataPointExplosionXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dPt/c:explosion", "val", "28");
+}
+
+void Chart2ExportTest::testTdf60316()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf60316.pptx");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, the shape would have had a solidFill background
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:noFill", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:solidFill", 0);
 }
 
 void Chart2ExportTest::testCustomDataLabel()
