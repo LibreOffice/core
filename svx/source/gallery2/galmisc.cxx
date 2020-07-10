@@ -550,4 +550,127 @@ bool GalleryTransferable::StartDrag()
     return true;
 }
 
+INetURLObject ImplGetURL(const GalleryObject* pObject)
+{
+    INetURLObject aURL;
+
+    if (pObject)
+        aURL = pObject->aURL;
+
+    return aURL;
+}
+
+INetURLObject implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
+    ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+    ConvertDataFormat nFormat)
+{
+    INetURLObject aDir(rUserURL);
+    INetURLObject aInfoFileURL(rUserURL);
+    INetURLObject aNewURL;
+    sal_uInt32 nNextNumber = 1999;
+    char const* pExt = nullptr;
+    bool bExists;
+
+    aDir.Append("dragdrop");
+    CreateDir(aDir);
+
+    aInfoFileURL.Append("sdddndx1");
+
+    // read next possible number
+    if (FileExists(aInfoFileURL))
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            pIStm->ReadUInt32(nNextNumber);
+        }
+    }
+
+    // create extension
+    if (nFormat != ConvertDataFormat::Unknown)
+    {
+        switch (nFormat)
+        {
+        case ConvertDataFormat::BMP:
+            pExt = ".bmp";
+            break;
+        case ConvertDataFormat::GIF:
+            pExt = ".gif";
+            break;
+        case ConvertDataFormat::JPG:
+            pExt = ".jpg";
+            break;
+        case ConvertDataFormat::MET:
+            pExt = ".met";
+            break;
+        case ConvertDataFormat::PCT:
+            pExt = ".pct";
+            break;
+        case ConvertDataFormat::PNG:
+            pExt = ".png";
+            break;
+        case ConvertDataFormat::SVM:
+            pExt = ".svm";
+            break;
+        case ConvertDataFormat::TIF:
+            pExt = ".tif";
+            break;
+        case ConvertDataFormat::WMF:
+            pExt = ".wmf";
+            break;
+        case ConvertDataFormat::EMF:
+            pExt = ".emf";
+            break;
+
+        default:
+            pExt = ".grf";
+            break;
+        }
+    }
+
+    do
+    {
+        // get URL
+        if (SgaObjKind::SvDraw == eObjKind)
+        {
+            OUString aFileName = "gallery/svdraw/dd" + OUString::number(++nNextNumber % 99999999);
+            aNewURL = INetURLObject(aFileName, INetProtocol::PrivSoffice);
+
+            bExists = false;
+
+            for (auto const& p : rObjectList)
+                if (p->aURL == aNewURL)
+                {
+                    bExists = true;
+                    break;
+                }
+        }
+        else
+        {
+            OUString aFileName = "dd" + OUString::number(++nNextNumber % 999999);
+
+            if (pExt)
+                aFileName += OUString(pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US);
+
+            aNewURL = aDir;
+            aNewURL.Append(aFileName);
+
+            bExists = FileExists(aNewURL);
+        }
+    } while (bExists);
+
+    // write updated number
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
+
+    if (pOStm)
+    {
+        pOStm->WriteUInt32(nNextNumber);
+    }
+
+    return aNewURL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

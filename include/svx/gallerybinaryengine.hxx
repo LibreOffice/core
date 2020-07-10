@@ -64,10 +64,13 @@ public:
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
-    SAL_DLLPRIVATE static INetURLObject
-    implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
-                        ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                        ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+
+    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
+
+    bool readModelStream(const GalleryObject* pObject,
+                         tools::SvRef<SotStorageStream> const& rxModelStream);
 };
+
+SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

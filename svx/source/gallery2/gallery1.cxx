@@ -174,6 +174,16 @@ void GalleryThemeEntry::callGalleryThemeInit()
     getGalleryBinaryEngine()->galleryThemeInit(IsReadOnly());
 }
 
+bool GalleryThemeEntry::readModel(const GalleryObject* pObject, SdrModel& rModel)
+{
+    return mpGalleryBinaryEngine->readModel(pObject, rModel);
+}
+
+bool GalleryThemeEntry::readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream)
+{
+    return mpGalleryBinaryEngine->readModelStream(pObject, rxModelStream);
+}
+
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
