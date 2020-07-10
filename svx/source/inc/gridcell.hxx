@@ -892,10 +892,10 @@ public:
 private:
     virtual ~FmXEditCell() override;
 
-    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
-
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent ) override;
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent ) override;
+
+    DECL_LINK(ModifyHdl, LinkParamNone*, void);
 
     void onTextChanged();
 

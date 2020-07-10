@@ -318,12 +318,12 @@ namespace svt
 
     IMPL_LINK_NOARG(MultiLineEditImplementation, ModifyHdl, weld::TextView&, void)
     {
-        m_aModifyHdl.Call(nullptr);
+        CallModifyHdls();
     }
 
     IMPL_LINK_NOARG(EditImplementation, ModifyHdl, Edit&, void)
     {
-        m_aModifyHdl.Call(nullptr);
+        CallModifyHdls();
     }
 
     //= EditCellController
@@ -345,7 +345,7 @@ namespace svt
 
     IMPL_LINK_NOARG(EntryImplementation, ModifyHdl, weld::Entry&, void)
     {
-        m_aModifyHdl.Call(nullptr);
+        CallModifyHdls();
     }
 
     ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID)
