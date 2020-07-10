@@ -43,6 +43,7 @@
 #include <scmod.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
+#include <clipparam.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
@@ -244,6 +245,7 @@ public:
     void testTdf126177XLSX();
     void testCommentTextVAlignment();
     void testCommentTextHAlignment();
+    void testValidationCopyPaste();
 
     void testXltxExport();
     void testRotatedImageODS();
@@ -402,6 +404,7 @@ public:
     CPPUNIT_TEST(testTdf126177XLSX);
     CPPUNIT_TEST(testCommentTextVAlignment);
     CPPUNIT_TEST(testCommentTextHAlignment);
+    CPPUNIT_TEST(testValidationCopyPaste);
 
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
@@ -4807,6 +4810,42 @@ void ScExportTest::testTdf91634XLSX()
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testValidationCopyPaste()
+{
+    ScDocShellRef xDocSh = loadDoc("validation-copypaste.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rSrcDoc = xDocSh->GetDocument();
+
+    // Copy B1 from src doc to clip
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(1, 0, 1);
+    ScClipParam aClipParam(aSrcRange, false);
+    ScMarkData aMark(rSrcDoc.GetSheetLimits());
+    aMark.SetMarkArea(aSrcRange);
+    rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Create second document, paste B1 from clip
+    ScDocShell* pShell2
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell2->DoInitNew();
+    ScDocument& rDestDoc = pShell2->GetDocument();
+    ScRange aDstRange(1, 0, 0);
+    ScMarkData aMark2(rDestDoc.GetSheetLimits());
+    aMark2.SetMarkArea(aDstRange);
+    rDestDoc.CopyFromClip(aDstRange, aMark2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // save as XLSX
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*pShell2), FORMAT_XLSX);
+
+    // check validation
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1", "#REF!");
 }
 
 void ScExportTest::testTdf115159()
