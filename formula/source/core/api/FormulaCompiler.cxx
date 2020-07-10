@@ -2324,7 +2324,12 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
             case svString:
                 if( eOp == ocBad || eOp == ocStringXML )
-                    rBuffer.append( t->GetString().getString());
+                {
+                    if (FormulaGrammar::isOOXML(meGrammar) && eOp == ocBad)
+                        rBuffer.append(mxSymbols->getSymbol(ocErrRef));
+                    else
+                        rBuffer.append(t->GetString().getString());
+                }
                 else
                     AppendString( rBuffer, t->GetString().getString() );
                 break;
