@@ -59,7 +59,6 @@
 
 using namespace ::com::sun::star;
 
-
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     : m_bDestDirRelative(false)
     , pParent(pGallery)
@@ -94,16 +93,6 @@ const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rU
         if ( i->aURL == rURL )
             return i.get();
     return nullptr;
-}
-
-INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject )
-{
-    INetURLObject aURL;
-
-    if( pObject )
-        aURL = pObject->aURL;
-
-    return aURL;
 }
 
 void GalleryTheme::ImplBroadcast(sal_uInt32 nUpdatePos)
@@ -671,21 +660,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
-
-        if( xStor.is() )
-        {
-            const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
-
-            if( xIStm.is() && !xIStm->GetError() )
-            {
-                xIStm->SetBufferSize( STREAMBUF_SIZE );
-                bRet = GallerySvDrawImport( *xIStm, rModel );
-                xIStm->SetBufferSize( 0 );
-            }
-        }
+        bRet = pThm->readModel(pObject, rModel);
     }
 
     return bRet;
@@ -1240,5 +1215,15 @@ bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
+
+INetURLObject ImplGetURL(const GalleryObject* pObject)
+{
+    INetURLObject aURL;
+
+    if (pObject)
+        aURL = pObject->aURL;
+
+    return aURL;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
