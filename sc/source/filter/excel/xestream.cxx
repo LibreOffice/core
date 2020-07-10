@@ -798,7 +798,7 @@ OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sa
 
 OUString XclXmlUtils::ToOUString(
     sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray,
-    FormulaError nErrCode )
+    FormulaError nErrCode, bool bAllowErrRef )
 {
     ScCompiler aCompiler( rCtx, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
 
@@ -821,7 +821,15 @@ OUString XclXmlUtils::ToOUString(
         }
     }
 
-    return aBuffer.makeStringAndClear();
+    const OUString aFormula = aBuffer.makeStringAndClear();
+
+    if (!bAllowErrRef) {
+        const OUString aErrRef = aCompiler.GetCurrentOpCodeMap()->getSymbol(ocErrRef);
+        if (aFormula.indexOf(aErrRef) >= 0)
+            return aErrRef;
+    }
+
+    return aFormula;
 }
 
 OUString XclXmlUtils::ToOUString( const XclExpString& s )
