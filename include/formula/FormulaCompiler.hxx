@@ -300,8 +300,8 @@ protected:
     virtual bool HandleTableRef();
 
     virtual void CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
-    virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
-    virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual bool CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
+    virtual bool CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name

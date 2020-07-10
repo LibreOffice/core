@@ -191,7 +191,7 @@ public:
         Convention( formula::FormulaGrammar::AddressConvention eConvP );
         virtual ~Convention();
 
-        virtual void makeRefStr(
+        virtual bool makeRefStr(
             ScSheetLimits& rLimits,
             OUStringBuffer& rBuffer,
             formula::FormulaGrammar::Grammar eGram,
@@ -497,8 +497,8 @@ private:
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2 ) override;
     virtual void CreateStringFromExternal( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
-    virtual void CreateStringFromSingleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
-    virtual void CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
+    virtual bool CreateStringFromSingleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
+    virtual bool CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void LocalizeString( OUString& rName ) const override;   // modify rName - input: exact name

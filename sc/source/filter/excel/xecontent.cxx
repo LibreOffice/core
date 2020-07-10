@@ -1777,7 +1777,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
                     else
                         msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                            xScTokArr.get());
+                            xScTokArr.get(), FormulaError::NONE);
                 }
             }
             else

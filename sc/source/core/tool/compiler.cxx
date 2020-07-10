@@ -864,7 +864,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return SINGLETON_NONE;
     }
 
-    virtual void makeRefStr(
+    virtual bool makeRefStr(
                      ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar /*eGram*/,
@@ -889,6 +889,8 @@ struct ConventionOOO_A1 : public Convention_A1
             MakeOneRefStrImpl(rLimits, rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false,
                     eSingleton);
         }
+
+        return true;
     }
 
     virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const override
@@ -1027,7 +1029,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
 
-    virtual void makeRefStr(
+    virtual bool makeRefStr(
                      ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar eGram,
@@ -1065,6 +1067,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
             }
         }
         rBuffer.append(']');
+        return true;
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 /*nFileId*/, const OUString& rFile,
@@ -1277,7 +1280,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         MakeRowStr(rLimits, rBuf, rAbs.Row());
     }
 
-    virtual void makeRefStr(
+    virtual bool makeRefStr(
                      ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
@@ -1286,6 +1289,19 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                      const ScComplexRefData& rRef,
                      bool bSingleRef,
                      bool /*bFromRangeName*/ ) const override
+    {
+        (void)makeRefStrImpl(rLimits, rBuf, rPos, rErrRef, rTabNames, rRef, bSingleRef);
+        return true;
+    }
+
+protected:
+    static bool makeRefStrImpl(
+                     ScSheetLimits& rLimits,
+                     OUStringBuffer& rBuf,
+                     const ScAddress& rPos,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
+                     const ScComplexRefData& rRef,
+                     bool bSingleRef)
     {
         ScComplexRefData aRef( rRef );
 
@@ -1298,7 +1314,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!rLimits.ValidAddress(aAbs1))
         {
             rBuf.append(rErrRef);
-            return;
+            return false;
         }
 
         if( !bSingleRef )
@@ -1307,7 +1323,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             if (!rLimits.ValidAddress(aAbs2))
             {
                 rBuf.append(rErrRef);
-                return;
+                return false;
             }
 
             if (aAbs1.Col() == 0 && aAbs2.Col() >= rLimits.mnMaxCol)
@@ -1319,7 +1335,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 if (!aRef.Ref2.IsRowRel())
                     rBuf.append( '$' );
                 MakeRowStr(rLimits, rBuf, aAbs2.Row());
-                return;
+                return true;
             }
 
             if (aAbs1.Row() == 0 && aAbs2.Row() >= rLimits.mnMaxRow)
@@ -1331,7 +1347,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 if (!aRef.Ref2.IsColRel())
                     rBuf.append( '$' );
                 MakeColStr(rLimits, rBuf, aAbs2.Col());
-                return;
+                return true;
             }
         }
 
@@ -1341,8 +1357,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             rBuf.append( ':' );
             makeSingleCellStr(rLimits, rBuf, aRef.Ref2, aAbs2);
         }
+
+        return true;
     }
 
+private:
     virtual ParseResult parseAnyToken( const OUString& rFormula,
                                        sal_Int32 nSrcPos,
                                        const CharClass* pCharClass,
@@ -1426,9 +1445,9 @@ struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
 
-    virtual void makeRefStr( ScSheetLimits& rLimits,
+    virtual bool makeRefStr( ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuf,
-                     formula::FormulaGrammar::Grammar eGram,
+                     formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
@@ -1454,11 +1473,17 @@ struct ConventionXL_OOX : public ConventionXL_A1
         {
             // For OOXML write plain "#REF!" instead of detailed sheet/col/row
             // information.
-            rBuf.append(rErrRef);
-            return;
+            rBuf = rErrRef;
+            return false;
         }
 
-        ConventionXL_A1::makeRefStr( rLimits, rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
+        if (!makeRefStrImpl(rLimits, rBuf, rPos, rErrRef, rTabNames, rRef, bSingleRef))
+        {
+            rBuf = rErrRef;
+            return false;
+        }
+
+        return true;
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& /*rFile*/,
@@ -1600,7 +1625,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
 
-    virtual void makeRefStr( ScSheetLimits& rLimits,
+    virtual bool makeRefStr( ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
@@ -1619,7 +1644,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!rLimits.ValidCol(aAbsRef.aStart.Col()) || !rLimits.ValidRow(aAbsRef.aStart.Row()))
         {
             rBuf.append(rErrRef);
-            return;
+            return true;
         }
 
         if( !bSingleRef )
@@ -1627,7 +1652,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             if (!rLimits.ValidCol(aAbsRef.aEnd.Col()) || !rLimits.ValidRow(aAbsRef.aEnd.Row()))
             {
                 rBuf.append(rErrRef);
-                return;
+                return true;
             }
 
             if (aAbsRef.aStart.Col() == 0 && aAbsRef.aEnd.Col() >= rLimits.mnMaxCol)
@@ -1639,7 +1664,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                     rBuf.append( ':' );
                     r1c1_add_row(rBuf,  rRef.Ref2, aAbsRef.aEnd);
                 }
-                return;
+                return true;
 
             }
 
@@ -1652,7 +1677,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                     rBuf.append( ':' );
                     r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
                 }
-                return;
+                return true;
             }
         }
 
@@ -1664,6 +1689,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             r1c1_add_row(rBuf, rRef.Ref2, aAbsRef.aEnd);
             r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
         }
+
+        return true;
     }
 
     ParseResult parseAnyToken( const OUString& rFormula,
@@ -5131,7 +5158,7 @@ void escapeTableRefColumnSpecifier( OUString& rStr )
 }
 }
 
-void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
+bool ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     const FormulaToken* p;
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
@@ -5147,12 +5174,13 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
             OUString aStr = pDoc->GetString(aAbs, mpInterpreterContext);
             EnQuote( aStr );
             rBuffer.append(aStr);
+            return true;
         }
         else
         {
             rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
-            pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef,
-                              GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
+            return pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef,
+                GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
         }
     }
     else if (pArr && (p = maArrIterator.PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
@@ -5181,16 +5209,19 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         }
         escapeTableRefColumnSpecifier( aStr);
         rBuffer.append(aStr);
+        return true;
     }
     else
-        pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef,
-                          GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
+    {
+        return pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef,
+            GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
+    }
 }
 
-void ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
+bool ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
-    pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
+    return pConv->makeRefStr(pDoc->GetSheetLimits(), rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
                       *_pTokenP->GetDoubleRef(), false, (pArr && pArr->IsFromRangeName()));
 }
 
