@@ -541,7 +541,7 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
 
         return mpFillControl.get();
     }
-    return VclPtr<vcl::Window>();
+    return mpFillControl;
 }
 
 FillControl::FillControl(vcl::Window* pParent)
@@ -551,6 +551,7 @@ FillControl::FillControl(vcl::Window* pParent)
     , mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this))
 {
     SetOptimalSize();
+    mpToolBoxColor->set_id("colortoolbox");
 }
 
 FillControl::~FillControl()
