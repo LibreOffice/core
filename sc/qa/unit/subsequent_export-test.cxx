@@ -43,6 +43,7 @@
 #include <scmod.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
+#include <clipparam.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
@@ -74,7 +75,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <dbdata.hxx>
+#include <docfunc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -233,6 +237,12 @@ public:
     void testTdf114969XLSX();
     void testTdf115192XLSX();
     void testTdf91634XLSX();
+    void testTdf108673(const OUString& aOriginalValidation, const OUString& aExpectedSavedValidation);
+    void testTdf108673_ExistingWorksheet();
+    void testTdf108673_MissingWorksheet();
+    void testTdf108673_MissingWorksheet_Offset();
+    void testTdf108673_Resave();
+    void testTdf108673_Offset();
     void testTdf115159();
     void testTdf112567();
     void testTdf112567b();
@@ -243,6 +253,7 @@ public:
     void testTdf126177XLSX();
     void testCommentTextVAlignment();
     void testCommentTextHAlignment();
+    void testValidationCopyPaste();
 
     void testXltxExport();
     void testRotatedImageODS();
@@ -389,6 +400,11 @@ public:
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
     CPPUNIT_TEST(testTdf91634XLSX);
+    CPPUNIT_TEST(testTdf108673_ExistingWorksheet);
+    CPPUNIT_TEST(testTdf108673_MissingWorksheet);
+    CPPUNIT_TEST(testTdf108673_MissingWorksheet_Offset);
+    CPPUNIT_TEST(testTdf108673_Resave);
+    CPPUNIT_TEST(testTdf108673_Offset);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
     CPPUNIT_TEST(testTdf112567b);
@@ -399,6 +415,7 @@ public:
     CPPUNIT_TEST(testTdf126177XLSX);
     CPPUNIT_TEST(testCommentTextVAlignment);
     CPPUNIT_TEST(testCommentTextHAlignment);
+    CPPUNIT_TEST(testValidationCopyPaste);
 
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
@@ -3478,7 +3495,6 @@ ScExportTest::ScExportTest()
 void ScExportTest::setUp()
 {
     test::BootstrapFixture::setUp();
-
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
@@ -4781,6 +4797,136 @@ void ScExportTest::testTdf91634XLSX()
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf108673(const OUString& aOriginalValidation,
+                                      const OUString& aExpectedSavedValidation)
+{
+    ScDocShell* pShell
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell->DoInitNew();
+
+    // add new validation field
+    {
+        ScDocument& rDoc = pShell->GetDocument();
+        rDoc.EnableUndo(false);
+
+        ScValidationMode eMode = SC_VALID_LIST;
+        ScConditionMode eOper = ScConditionMode::Equal;
+        OUString aExpr1 = aOriginalValidation;
+        sal_Int16 nListType = css::sheet::TableValidationVisibility::UNSORTED;
+
+        ScAddress aCursorPos(1, 1, 0);
+
+        ScValidationData aValidationData(eMode, eOper, aExpr1, "0", &rDoc, aCursorPos);
+        aValidationData.SetIgnoreBlank(true);
+        aValidationData.SetListType(nListType);
+
+        sal_uLong nIndex = rDoc.AddValidationEntry(aValidationData);
+
+        ScPatternAttr aPattern(rDoc.GetPool());
+        aPattern.GetItemSet().Put(SfxUInt32Item(ATTR_VALIDDATA, nIndex));
+        ScRangeList aRanges;
+        aRanges.push_back(ScRange(1, 1, 0, 1, 1, 0));
+        ScMarkData* pMarkData = new ScMarkData(rDoc.GetSheetLimits(), aRanges);
+        pShell->GetDocFunc().ApplyAttributes(*pMarkData, aPattern, true);
+    }
+
+    // save as XLSX
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*pShell), FORMAT_XLSX);
+
+    // check validation
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1",
+                       aExpectedSavedValidation);
+}
+
+// FILESAVE XLSX: Copy-pasting cell validation may result in a sheet reference error saved as invalid xlsx content
+void ScExportTest::testTdf108673_ExistingWorksheet()
+{
+    testTdf108673("Sheet1.B1:B5", "Sheet1!B1:B5");
+}
+
+void ScExportTest::testTdf108673_MissingWorksheet()
+{
+    testTdf108673("'Sheet 5'.B1:B5", "#REF!");
+}
+
+void ScExportTest::testTdf108673_MissingWorksheet_Offset()
+{
+    testTdf108673("OFFSET(sheet5.a1,5,0,10,1)", "OFFSET(#REF!,5,0,10,1)");
+}
+
+void ScExportTest::testTdf108673_Resave()
+{
+    ScDocShellRef xShell = loadDoc("tdf108673.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1", "#REF!");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf108673_Offset()
+{
+    ScDocShellRef xShell = loadDoc("tdf108673_offset_missing_worksheet.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1", "OFFSET(#REF!,5,0,10,1)");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testValidationCopyPaste()
+{
+    ScDocShellRef xDocSh = loadDoc("validation-copypaste.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rSrcDoc = xDocSh->GetDocument();
+
+    // Copy B1 from src doc to clip
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(1, 0, 1);
+    ScClipParam aClipParam(aSrcRange, false);
+    ScMarkData aMark(rSrcDoc.GetSheetLimits());
+    aMark.SetMarkArea(aSrcRange);
+    rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Create second document, paste B1 from clip
+    ScDocShell* pShell2
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell2->DoInitNew();
+    ScDocument& rDestDoc = pShell2->GetDocument();
+    ScRange aDstRange(1, 0, 0);
+    ScMarkData aMark2(rDestDoc.GetSheetLimits());
+    aMark2.SetMarkArea(aDstRange);
+    rDestDoc.CopyFromClip(aDstRange, aMark2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // save as XLSX
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*pShell2), FORMAT_XLSX);
+
+    // check validation
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1", "#REF!");
 }
 
 void ScExportTest::testTdf115159()

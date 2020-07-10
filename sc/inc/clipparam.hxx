@@ -27,7 +27,7 @@
  * This struct stores general clipboard parameters associated with a
  * ScDocument instance created in clipboard mode.
  */
-struct ScClipParam
+struct SC_DLLPUBLIC ScClipParam
 {
     enum Direction { Unspecified, Column, Row };
 

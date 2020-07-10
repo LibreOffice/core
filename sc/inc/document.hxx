@@ -1566,7 +1566,7 @@ public:
                                                SCTAB nTab, InsertDeleteFlags nDelFlag);
     void                         DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
-    void                         CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
+    SC_DLLPUBLIC void            CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                              const ScMarkData* pMarks, bool bKeepScenarioFlags,
                                              bool bIncludeObjects );
 
@@ -1617,7 +1617,7 @@ public:
 
     /** If pDestRanges is given it overrides rDestRange, rDestRange in this
         case is the overall encompassing range. */
-    void                CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
+    SC_DLLPUBLIC void   CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                         InsertDeleteFlags nInsFlag,
                                         ScDocument* pRefUndoDoc,
                                         ScDocument* pClipDoc,
