@@ -121,7 +121,7 @@ public:
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
     SC_DLLPUBLIC ScPostIt* ImportNote( const ScAddress& rPos, const OUString& rNoteText );
 
-    bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
+    SC_DLLPUBLIC bool ApplyAttributes(const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                            bool bApi );
     bool            ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                         bool bApi );
