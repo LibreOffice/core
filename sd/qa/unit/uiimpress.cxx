@@ -233,6 +233,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
     checkCurrentPageNumber(1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134647)
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf134647.pptx"));
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    //Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Presentation", {});
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
