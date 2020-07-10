@@ -1087,12 +1087,12 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
         if(  (m_bShowAllPages || pPage->GetPageKind() == PageKind::Standard)
              && (pPage->GetPageKind() != PageKind::Handout)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
-            bool bPageExluded = pPage->IsExcluded();
+            bool bPageExcluded = pPage->IsExcluded();
 
             bool bPageBelongsToShow = PageBelongsToCurrentShow (pPage);
-            bPageExluded |= !bPageBelongsToShow;
+            bPageExcluded |= !bPageBelongsToShow;
 
-            AddShapeList(*pPage, nullptr, pPage->GetName(), bPageExluded, nullptr);
+            AddShapeList(*pPage, nullptr, pPage->GetName(), bPageExcluded, nullptr);
         }
         nPage++;
     }
