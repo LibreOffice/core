@@ -103,8 +103,9 @@ static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const
 }
 
 static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
-        sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow, bool bMergedVertically )
+        sal_uInt32 nCell, sal_uInt32 nFirstCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow, bool bMergedVertically )
 {
+    const bool bIsStartCol = nCell == nFirstCell;
     std::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
     std::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
 
@@ -135,28 +136,19 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
         pCellProps->Erase( pHorizontalVal->first );
     }
 
-    if ( nCell == 0 )
-    {
+    if ( bIsStartCol )
         lcl_mergeBorder( PROP_LEFT_BORDER, pTableBorders, pCellProps );
-        // <w:insideV> counts if there are multiple cells in this row.
-        if (pVerticalVal && !bIsEndCol)
-            pCellProps->Insert( PROP_RIGHT_BORDER, aVertProp, false );
-    }
 
     if ( bIsEndCol )
-    {
         lcl_mergeBorder( PROP_RIGHT_BORDER, pTableBorders, pCellProps );
-        if ( pVerticalVal )
-            pCellProps->Insert( PROP_LEFT_BORDER, aVertProp, false );
-    }
 
-    if ( nCell > 0 && !bIsEndCol )
+    // <w:insideV> counts if there are multiple cells in this row.
+    if ( pVerticalVal )
     {
-        if ( pVerticalVal )
-        {
+        if ( !bIsEndCol && nCell >= nFirstCell )
             pCellProps->Insert( PROP_RIGHT_BORDER, aVertProp, false );
+        if ( !bIsStartCol )
             pCellProps->Insert( PROP_LEFT_BORDER, aVertProp, false );
-        }
     }
 
     if ( nRow == 0 )
@@ -937,7 +929,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     }
                 }
 
-                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, bMergedVertically );
+                const sal_uInt32 nFirstCell = m_rDMapper_Impl.getTableManager().getGridBefore(nRow);
+                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nFirstCell, nRow, bIsEndCol, bIsEndRow, bMergedVertically );
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,

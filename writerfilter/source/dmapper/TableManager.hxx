@@ -500,6 +500,7 @@ public:
      */
     bool isIgnore() const;
 
+    sal_uInt32 getGridBefore(sal_uInt32 nRow);
     sal_uInt32 getCurrentGridBefore();
     void setCurrentGridBefore( sal_uInt32 nSkipGrids );
     std::vector<sal_uInt32> getCurrentGridSpans();

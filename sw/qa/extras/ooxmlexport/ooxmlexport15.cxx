@@ -127,6 +127,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131561_necessaryBorder, "tdf131561_necessaryBord
     CPPUNIT_ASSERT_MESSAGE("Border between A3 and B3", (aBorderR.LineWidth + aBorderL.LineWidth) > 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Table borders (width 159) apply to edge cells, even in uneven cases caused by gridBefore/gridAfter,
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("A1"), "RightBorder");
+    //CPPUNIT_ASSERT_MESSAGE("Right border before gridAfter cells", aBorder.LineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Left edge border after gridBefore cells", aBorder.LineWidth > 100);
+    aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "TopBorder");
+    // but only for left/right borders, not top and bottom.
+    // So somewhat inconsistently, gridBefore/After affects outside edges of columns, but not of rows.
+    // insideH borders are width 53. (no insideV borders defined to emphasize missing edge borders)
+    CPPUNIT_ASSERT_MESSAGE("Top border on 'inside' cell", aBorder.LineWidth > 0);
+    CPPUNIT_ASSERT_MESSAGE("Top border is not an edge border", aBorder.LineWidth < 100);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
