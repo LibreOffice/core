@@ -2329,10 +2329,18 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                     AppendString( rBuffer, t->GetString().getString() );
                 break;
             case svSingleRef:
-                CreateStringFromSingleRef( rBuffer, t);
+                if (!CreateStringFromSingleRef(rBuffer, t))
+                    // Selected convention doesn't allow #REF! inside formula
+                    // => no need to construct forumla until the end
+                    // Result will be "#REF!"
+                    return nullptr;
                 break;
             case svDoubleRef:
-                CreateStringFromDoubleRef( rBuffer, t);
+                if (!CreateStringFromDoubleRef(rBuffer, t))
+                    // Selected convention doesn't allow #REF! inside formula
+                    // => no need to construct forumla until the end
+                    // Result will be "#REF!"
+                    return nullptr;
                 break;
             case svMatrix:
             case svMatrixCell:
@@ -2660,12 +2668,14 @@ bool FormulaCompiler::HandleTableRef()
     return true;
 }
 
-void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
+bool FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
+    return true;
 }
 
-void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
+bool FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
 {
+    return true;
 }
 
 void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, const FormulaToken* /*pToken*/) const
