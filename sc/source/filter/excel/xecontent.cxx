@@ -1807,6 +1807,12 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         OSL_FAIL( "XclExpDV::XclExpDV - missing core data" );
         mnScHandle = ULONG_MAX;
     }
+
+    if (msFormula1.startsWithIgnoreAsciiCase("#REF!"))
+        msFormula1 = "#REF!";
+
+    if (msFormula2.startsWithIgnoreAsciiCase("#REF!"))
+        msFormula2 = "#REF!";
 }
 
 XclExpDV::~XclExpDV()
