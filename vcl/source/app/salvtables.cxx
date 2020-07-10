@@ -6067,6 +6067,7 @@ void SalInstanceComboBoxWithEdit::set_entry_font(const vcl::Font& rFont)
     Edit* pEdit = m_xComboBox->GetSubEdit();
     assert(pEdit);
     pEdit->SetPointFont(*pEdit, rFont);
+    m_xComboBox->SetControlFont(rFont); // tdf#134601 set it as control font to take effect properly
     pEdit->Invalidate();
 }
 
