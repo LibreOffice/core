@@ -1009,7 +1009,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "DocumentRepair" ||
         aEvent.FeatureURL.Path == "ObjectAlignLeft" ||
         aEvent.FeatureURL.Path == "ObjectAlignRight" ||
-        aEvent.FeatureURL.Path == "AlignCenter")
+        aEvent.FeatureURL.Path == "AlignCenter" ||
+        aEvent.FeatureURL.Path == "FormatPaintbrush")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
@@ -1111,7 +1112,6 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "SplitTable" ||
              aEvent.FeatureURL.Path == "DeleteNote" ||
              aEvent.FeatureURL.Path == "AcceptChanges" ||
-             aEvent.FeatureURL.Path == "FormatPaintbrush" ||
              aEvent.FeatureURL.Path == "SetDefault" ||
              aEvent.FeatureURL.Path == "ParaLeftToRight" ||
              aEvent.FeatureURL.Path == "ParaRightToLeft" ||
