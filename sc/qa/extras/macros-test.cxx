@@ -16,6 +16,8 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
+#include <attrib.hxx>
+#include <scitems.hxx>
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
@@ -39,6 +41,7 @@ public:
     void testRowColumn();
     void testTdf131562();
     void testPasswordProtectedUnicodeString();
+    void testTdf107902();
     void testTdf131296_legacy();
     void testTdf131296_new();
 
@@ -51,6 +54,7 @@ public:
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
+    CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
 
@@ -527,6 +531,48 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf107902()
+{
+    OUString aFileName;
+    createFileURL("tdf107902.xlsm", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    //Check the autofilter was created
+    const ScPatternAttr* pPattern = rDoc.GetPattern(0, 0, 0);
+    CPPUNIT_ASSERT(pPattern);
+
+    const ScMergeFlagAttr& rAttr = pPattern->GetItem(ATTR_MERGE_FLAG);
+    CPPUNIT_ASSERT_MESSAGE("Autofilter was not created", rAttr.HasAutoFilter());
+
+    //Check the last row is hidden
+    CPPUNIT_ASSERT(!rDoc.RowHidden(0,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(1,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(2,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
+    CPPUNIT_ASSERT(rDoc.RowHidden(4,0));
+
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf131296_legacy()
