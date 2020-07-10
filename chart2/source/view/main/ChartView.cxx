@@ -2145,6 +2145,12 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         aTextMaxWidth.Width = static_cast<sal_Int32>(rPageSize.Width * 0.8);
         aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.5);
     }
+    else if (eType == TitleHelper::X_AXIS_TITLE || eType == TitleHelper::SECONDARY_X_AXIS_TITLE
+             || eType == TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION)
+    {
+        aTextMaxWidth.Width = static_cast<sal_Int32>(rPageSize.Width * 0.8);
+        aTextMaxWidth.Height = static_cast<sal_Int32>(rPageSize.Height * 0.2);
+    }
     else if (eType == TitleHelper::Y_AXIS_TITLE || eType == TitleHelper::SECONDARY_Y_AXIS_TITLE
              || eType == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION)
     {
