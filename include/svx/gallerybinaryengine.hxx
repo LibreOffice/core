@@ -24,6 +24,7 @@
 #include <svx/galtheme.hxx>
 #include <sot/storage.hxx>
 
+class SgaObjectSvDraw;
 class SotStorage;
 struct GalleryObject;
 
@@ -64,10 +65,23 @@ public:
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
-    SAL_DLLPRIVATE static INetURLObject
-    implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
-                        ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                        ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
+
+    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
+    bool insertModel(const FmFormModel& rModel, INetURLObject& rURL);
+
+    bool readModelStream(const GalleryObject* pObject,
+                         tools::SvRef<SotStorageStream> const& rxModelStream);
+    SgaObjectSvDraw insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
+                                      INetURLObject& rURL);
+
+    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
+                      ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                      sal_uInt32& rInsertPos);
+
+    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
+                                                              bool bReadOnly);
 };
+
+SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

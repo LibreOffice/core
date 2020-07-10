@@ -42,6 +42,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/gallerybinaryengine.hxx>
+#include <galobj.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -172,6 +173,34 @@ std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryBinaryEngin
 void GalleryThemeEntry::callGalleryThemeInit()
 {
     getGalleryBinaryEngine()->galleryThemeInit(IsReadOnly());
+}
+
+bool GalleryThemeEntry::readModel(const GalleryObject* pObject, SdrModel& rModel)
+{
+    return mpGalleryBinaryEngine->readModel(pObject, rModel);
+}
+
+bool GalleryThemeEntry::insertModel(const FmFormModel& rModel, INetURLObject& aURL)
+{
+    return mpGalleryBinaryEngine->insertModel(rModel, aURL);
+}
+
+bool GalleryThemeEntry::readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream)
+{
+    return mpGalleryBinaryEngine->readModelStream(pObject, rxModelStream);
+}
+
+SgaObjectSvDraw
+GalleryThemeEntry::insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
+    INetURLObject& rURL)
+{
+    return mpGalleryBinaryEngine->insertModelStream(rxModelStream, rURL);
+}
+
+void GalleryThemeEntry::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
+    ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList, sal_uInt32& rInsertPos)
+{
+    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, rDestDir, rObjectList, rInsertPos);
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
@@ -437,7 +466,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     }
                                 }
 
-                                GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+                                GalleryThemeEntry* pEntry = GalleryBinaryEngine::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
                                     aThemeList.emplace_back( pEntry );

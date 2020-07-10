@@ -59,7 +59,6 @@
 
 using namespace ::com::sun::star;
 
-
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     : m_bDestDirRelative(false)
     , pParent(pGallery)
@@ -96,14 +95,115 @@ const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rU
     return nullptr;
 }
 
-INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject )
+INetURLObject GalleryTheme::implCreateUniqueURL(SgaObjKind eObjKind, ConvertDataFormat nFormat)
 {
-    INetURLObject aURL;
+    INetURLObject aDir(GetParent()->GetUserURL());
+    INetURLObject aInfoFileURL(GetParent()->GetUserURL());
+    INetURLObject aNewURL;
+    sal_uInt32 nNextNumber = 1999;
+    char const* pExt = nullptr;
+    bool bExists;
 
-    if( pObject )
-        aURL = pObject->aURL;
+    aDir.Append("dragdrop");
+    CreateDir(aDir);
 
-    return aURL;
+    aInfoFileURL.Append("sdddndx1");
+
+    // read next possible number
+    if (FileExists(aInfoFileURL))
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            pIStm->ReadUInt32(nNextNumber);
+        }
+    }
+
+    // create extension
+    if (nFormat != ConvertDataFormat::Unknown)
+    {
+        switch (nFormat)
+        {
+        case ConvertDataFormat::BMP:
+            pExt = ".bmp";
+            break;
+        case ConvertDataFormat::GIF:
+            pExt = ".gif";
+            break;
+        case ConvertDataFormat::JPG:
+            pExt = ".jpg";
+            break;
+        case ConvertDataFormat::MET:
+            pExt = ".met";
+            break;
+        case ConvertDataFormat::PCT:
+            pExt = ".pct";
+            break;
+        case ConvertDataFormat::PNG:
+            pExt = ".png";
+            break;
+        case ConvertDataFormat::SVM:
+            pExt = ".svm";
+            break;
+        case ConvertDataFormat::TIF:
+            pExt = ".tif";
+            break;
+        case ConvertDataFormat::WMF:
+            pExt = ".wmf";
+            break;
+        case ConvertDataFormat::EMF:
+            pExt = ".emf";
+            break;
+
+        default:
+            pExt = ".grf";
+            break;
+        }
+    }
+
+    do
+    {
+        // get URL
+        if (SgaObjKind::SvDraw == eObjKind)
+        {
+            OUString aFileName = "gallery/svdraw/dd" + OUString::number(++nNextNumber % 99999999);
+            aNewURL = INetURLObject(aFileName, INetProtocol::PrivSoffice);
+
+            bExists = false;
+
+            for (auto const& p : aObjectList)
+                if (p->aURL == aNewURL)
+                {
+                    bExists = true;
+                    break;
+                }
+        }
+        else
+        {
+            OUString aFileName = "dd" + OUString::number(++nNextNumber % 999999);
+
+            if (pExt)
+                aFileName += OUString(pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US);
+
+            aNewURL = aDir;
+            aNewURL.Append(aFileName);
+
+            bExists = FileExists(aNewURL);
+        }
+    } while (bExists);
+
+    // write updated number
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
+
+    if (pOStm)
+    {
+        pOStm->WriteUInt32(nNextNumber);
+    }
+
+    return aNewURL;
 }
 
 void GalleryTheme::ImplBroadcast(sal_uInt32 nUpdatePos)
@@ -156,28 +256,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         }
     }
 
-    if (pFoundEntry)
-    {
-        GalleryObject aNewEntry;
-
-        // update title of new object if necessary
-        if (rObj.GetTitle().isEmpty())
-        {
-            std::unique_ptr<SgaObject> pOldObj(pThm->getGalleryBinaryEngine()->implReadSgaObject(pFoundEntry));
-
-            if (pOldObj)
-            {
-                const_cast<SgaObject&>(rObj).SetTitle( pOldObj->GetTitle() );
-            }
-        }
-        else if (rObj.GetTitle() == "__<empty>__")
-            const_cast<SgaObject&>(rObj).SetTitle("");
-
-        pThm->getGalleryBinaryEngine()->implWriteSgaObject(rObj, nInsertPos, &aNewEntry, m_aDestDir, aObjectList);
-        pFoundEntry->nOffset = aNewEntry.nOffset;
-    }
-    else
-        pThm->getGalleryBinaryEngine()->implWriteSgaObject(rObj, nInsertPos, nullptr, m_aDestDir, aObjectList);
+    pThm->insertObject(rObj, pFoundEntry, m_aDestDir, aObjectList, nInsertPos);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
@@ -427,75 +506,6 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     UnlockBroadcaster();
 }
 
-GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly )
-{
-    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-
-    GalleryThemeEntry*  pRet = nullptr;
-
-    if( FileExists( rURL ) )
-    {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-
-        if( pIStm )
-        {
-            OUString        aThemeName;
-            sal_uInt16      nVersion;
-
-            pIStm->ReadUInt16( nVersion );
-
-            if( nVersion <= 0x00ff )
-            {
-                bool bThemeNameFromResource = false;
-                sal_uInt32      nThemeId = 0;
-
-                OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
-
-                // execute a character conversion
-                if( nVersion >= 0x0004 )
-                {
-                    sal_uInt32  nCount;
-                    sal_uInt16  nTemp16;
-
-                    pIStm->ReadUInt32( nCount ).ReadUInt16( nTemp16 );
-                    pIStm->Seek( STREAM_SEEK_TO_END );
-
-                    // check whether there is a newer version;
-                    // therefore jump back by 520Bytes (8 bytes ID + 512Bytes reserve buffer)
-                    // if this is at all possible.
-                    if( pIStm->Tell() >= 520 )
-                    {
-                        sal_uInt32 nId1, nId2;
-
-                        pIStm->SeekRel( -520 );
-                        pIStm->ReadUInt32( nId1 ).ReadUInt32( nId2 );
-
-                        if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
-                            nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
-                        {
-                            VersionCompat aCompat( *pIStm, StreamMode::READ );
-
-                            pIStm->ReadUInt32( nThemeId );
-
-                            if( aCompat.GetVersion() >= 2 )
-                            {
-                                pIStm->ReadCharAsBool( bThemeNameFromResource );
-                            }
-                        }
-                    }
-                }
-
-                pRet = new GalleryThemeEntry( false, rURL, aThemeName,
-                                              bReadOnly, false, nThemeId,
-                                              bThemeNameFromResource );
-            }
-        }
-    }
-
-    return pRet;
-}
-
 bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
 {
     std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
@@ -626,7 +636,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
                 nExportFormat = ConvertDataFormat::SVM;
         }
 
-        const INetURLObject aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::Bitmap, GetParent()->GetUserURL(), aObjectList, nExportFormat ) );
+        const INetURLObject aURL( implCreateUniqueURL( SgaObjKind::Bitmap, nExportFormat ) );
         std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
 
         if( pOStm )
@@ -671,21 +681,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
-
-        if( xStor.is() )
-        {
-            const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
-
-            if( xIStm.is() && !xIStm->GetError() )
-            {
-                xIStm->SetBufferSize( STREAMBUF_SIZE );
-                bRet = GallerySvDrawImport( *xIStm, rModel );
-                xIStm->SetBufferSize( 0 );
-            }
-        }
+        bRet = pThm->readModel(pObject, rModel);
     }
 
     return bRet;
@@ -693,46 +689,14 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 
 bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
 {
-    INetURLObject   aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::SvDraw, GetParent()->GetUserURL(), aObjectList) );
-    tools::SvRef<SotStorage>    xStor(pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
-    bool            bRet = false;
+    INetURLObject   aURL( implCreateUniqueURL( SgaObjKind::SvDraw ) );
+    bool bRet = false;
 
-    if( xStor.is() )
+    if(pThm->insertModel(rModel, aURL))
     {
-        const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        tools::SvRef<SotStorageStream>  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
-
-        if( xOStm.is() && !xOStm->GetError() )
-        {
-            SvMemoryStream  aMemStm( 65535, 65535 );
-            FmFormModel*    pFormModel = const_cast<FmFormModel*>(&rModel);
-
-            pFormModel->BurnInStyleSheetAttributes();
-
-            {
-                uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
-
-                if (xDocOut.is())
-                    (void)SvxDrawingLayerExport( pFormModel, xDocOut );
-            }
-
-            aMemStm.Seek( 0 );
-
-            xOStm->SetBufferSize( 16348 );
-            GalleryCodec aCodec( *xOStm );
-            aCodec.Write( aMemStm );
-
-            if( !xOStm->GetError() )
-            {
-                SgaObjectSvDraw aObjSvDraw( rModel, aURL );
-                bRet = InsertObject( aObjSvDraw, nInsertPos );
-            }
-
-            xOStm->SetBufferSize( 0 );
-            xOStm->Commit();
-        }
+        SgaObjectSvDraw aObjSvDraw(rModel, aURL);
+        bRet = InsertObject( aObjSvDraw, nInsertPos );
     }
-
     return bRet;
 }
 
@@ -743,45 +707,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        const INetURLObject aURL( ImplGetURL( pObject ) );
-        tools::SvRef<SotStorage>        xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
-
-        if( xStor.is() )
-        {
-            const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
-
-            if( xIStm.is() && !xIStm->GetError() )
-            {
-                sal_uInt32 nVersion = 0;
-
-                xIStm->SetBufferSize( 16348 );
-
-                if( GalleryCodec::IsCoded( *xIStm, nVersion ) )
-                {
-                    SvxGalleryDrawModel aModel;
-
-                    if( aModel.GetModel() )
-                    {
-                        if( GallerySvDrawImport( *xIStm, *aModel.GetModel() ) )
-                        {
-                            aModel.GetModel()->BurnInStyleSheetAttributes();
-
-                            {
-                                uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
-
-                                if( SvxDrawingLayerExport( aModel.GetModel(), xDocOut ) )
-                                    rxModelStream->Commit();
-                            }
-                        }
-
-                        bRet = ( rxModelStream->GetError() == ERRCODE_NONE );
-                    }
-                }
-
-                xIStm->SetBufferSize( 0 );
-            }
-        }
+        bRet = pThm->readModelStream(pObject, rxModelStream);
     }
 
     return bRet;
@@ -789,33 +715,12 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
 
 bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream, sal_uInt32 nInsertPos)
 {
-    INetURLObject   aURL( GalleryBinaryEngine::implCreateUniqueURL( SgaObjKind::SvDraw, GetParent()->GetUserURL(), aObjectList ) );
-    tools::SvRef<SotStorage>    xStor( pThm->getGalleryBinaryEngine()->GetSvDrawStorage() );
+    INetURLObject   aURL( implCreateUniqueURL( SgaObjKind::SvDraw ) );
     bool            bRet = false;
 
-    if( xStor.is() )
-    {
-        const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        tools::SvRef<SotStorageStream>  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
-
-        if( xOStm.is() && !xOStm->GetError() )
-        {
-            GalleryCodec    aCodec( *xOStm );
-
-            xOStm->SetBufferSize( 16348 );
-            aCodec.Write( *rxModelStream );
-
-            if( !xOStm->GetError() )
-            {
-                xOStm->Seek( 0 );
-                SgaObjectSvDraw aObjSvDraw( *xOStm, aURL );
-                bRet = InsertObject( aObjSvDraw, nInsertPos );
-            }
-
-            xOStm->SetBufferSize( 0 );
-            xOStm->Commit();
-        }
-    }
+    const SgaObjectSvDraw aObjSvDraw = pThm->insertModelStream(rxModelStream, aURL);
+    if(aObjSvDraw.IsValid())
+        bRet = InsertObject( aObjSvDraw, nInsertPos );
 
     return bRet;
 }
