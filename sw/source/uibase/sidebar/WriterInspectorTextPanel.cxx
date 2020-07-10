@@ -35,8 +35,7 @@
 namespace sw::sidebar
 {
 VclPtr<vcl::Window> WriterInspectorTextPanel::Create(vcl::Window* pParent,
-                                                     const uno::Reference<frame::XFrame>& rxFrame,
-                                                     SfxBindings* pBindings)
+                                                     const uno::Reference<frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
@@ -44,20 +43,18 @@ VclPtr<vcl::Window> WriterInspectorTextPanel::Create(vcl::Window* pParent,
     if (!rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to WriterInspectorTextPanel::Create",
                                              nullptr, 1);
-    if (pBindings == nullptr)
-        throw lang::IllegalArgumentException(
-            "no SfxBindings given to WriterInspectorTextPanel::Create", nullptr, 2);
 
-    return VclPtr<WriterInspectorTextPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<WriterInspectorTextPanel>::Create(pParent, rxFrame);
 }
 
 WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
-                                                   const uno::Reference<frame::XFrame>& rxFrame,
-                                                   SfxBindings* pBindings)
+                                                   const uno::Reference<frame::XFrame>& rxFrame)
     : InspectorTextPanel(pParent, rxFrame)
-    , maCharStyle(SID_STYLE_FAMILY1, *pBindings, *this)
-    , maParaStyle(SID_STYLE_FAMILY2, *pBindings, *this)
 {
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwWrtShell* pShell = pDocSh->GetWrtShell();
+    if (pShell)
+        pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
 }
 
 static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& rAny,
@@ -229,44 +226,34 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     std::reverse(pParentNode.children.begin(), pParentNode.children.end());
 }
 
-void WriterInspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId,
-                                                const SfxItemState /*eState*/,
-                                                const SfxPoolItem* /*pState*/)
+IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, void)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     std::vector<svx::sidebar::TreeNode> aStore;
     std::unordered_map<OUString, bool> maIsDefined;
 
-    switch (nSId)
+    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
     {
-        case SID_STYLE_FAMILY1:
-        case SID_STYLE_FAMILY2:
-        {
-            if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
-            {
-                /*
-                First check in the property set of Character Styles
-                (as CS has higher priority over PS), then look into
-                property set of Paragraph Styles;
-                */
-                svx::sidebar::TreeNode pTempChar;
-                pTempChar.sNodeName = "CHARACTER STYLES";
-                UpdateTree(pDocSh, pTempChar, maIsDefined, CHARACTERSTYLES);
-                svx::sidebar::TreeNode pTempPara;
-                pTempPara.sNodeName = "PARAGRAPH STYLES";
-                UpdateTree(pDocSh, pTempPara, maIsDefined, PARAGRAPHSTYLES);
+        /*
+        First check in the property set of Character Styles
+        (as CS has higher priority over PS), then look into
+        property set of Paragraph Styles;
+        */
+        svx::sidebar::TreeNode pTempChar;
+        pTempChar.sNodeName = "CHARACTER STYLES";
+        UpdateTree(pDocSh, pTempChar, maIsDefined, CHARACTERSTYLES);
+        svx::sidebar::TreeNode pTempPara;
+        pTempPara.sNodeName = "PARAGRAPH STYLES";
+        UpdateTree(pDocSh, pTempPara, maIsDefined, PARAGRAPHSTYLES);
 
-                /*
-                Order:-
-                PARAGRAPH STYLES
-                CHARACTER STYLES
-                DEFAULT FORMATTING
-                */
-                aStore.push_back(pTempPara);
-                aStore.push_back(pTempChar);
-            }
-        }
-        break;
+        /*
+        Order:-
+        PARAGRAPH STYLES
+        CHARACTER STYLES
+        DEFAULT FORMATTING
+        */
+        aStore.push_back(pTempPara);
+        aStore.push_back(pTempChar);
     }
 
     updateEntries(aStore);
