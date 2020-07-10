@@ -22,9 +22,7 @@
 
 #include <file/FDatabaseMetaData.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
 
         //************ Class: java.sql.DatabaseMetaDataDate
@@ -41,7 +39,7 @@ namespace connectivity
             virtual OUString SAL_CALL getURL(  ) override;
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
         };
-    }
+
 }
 #endif // _CONNECTIVITY_FLAT_ODATABASEMETADATA_HXX_
 

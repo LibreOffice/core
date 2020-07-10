@@ -26,8 +26,7 @@ namespace com::sun::star {
         namespace sheet { class XSpreadsheetDocument; }
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Special implementation of the VBA project for the Excel filters. */
 class ExcelVbaProject : public ::oox::ole::VbaProject
@@ -46,8 +45,7 @@ private:
                         mxDocument;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -25,9 +25,7 @@
 #include <ado/ACatalog.hxx>
 
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
         class OViews : public sdbcx::OCollection

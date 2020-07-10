@@ -31,12 +31,7 @@
 #include <osl/module.h>
 #include "EApi.h"
 
-namespace connectivity
-{
-    namespace evoab
-    {
-
-        namespace SDBCAddress {
+namespace connectivity::evoab::SDBCAddress {
             typedef enum {
                 Unknown     = 0,
                 EVO_LOCAL       = 1,

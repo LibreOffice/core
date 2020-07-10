@@ -14,10 +14,8 @@
 
 #include <connectivity/TColumnsHelper.hxx>
 
-namespace connectivity
+namespace connectivity::firebird
 {
-    namespace firebird
-    {
         class Columns: public ::connectivity::OColumnsHelper
         {
         protected:
@@ -28,8 +26,7 @@ namespace connectivity
                     const ::std::vector< OUString> &_rVector);
         };
 
-    } // namespace firebird
-} // namespace connectivity
+} // namespace connectivity::firebird
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_COLUMNS_HXX

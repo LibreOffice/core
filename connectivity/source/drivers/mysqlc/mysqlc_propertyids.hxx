@@ -23,9 +23,7 @@
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 enum
 {
@@ -41,8 +39,8 @@ enum
     PROPERTY_ID_USEBOOKMARKS,
     PROPERTY_ID_ISBOOKMARKABLE
 };
-} /* mysqlc */
-} /* connectivity */
+
+} /* connectivity::mysqlc */
 
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_PROPERTYIDS_HXX
 

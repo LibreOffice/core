@@ -23,9 +23,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 
-namespace connectivity
-{
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
 
         class OHSQLTable;
@@ -108,7 +106,7 @@ namespace connectivity
             void dropDefaultValue(const OUString& _sNewDefault);
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTABLE_HXX
 

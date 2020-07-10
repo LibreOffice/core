@@ -21,9 +21,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
-{
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         class OTables final : public sdbcx::OCollection
         {
@@ -49,7 +47,7 @@ namespace connectivity
             // XDrop
             void appendNew(const OUString& _rsNewTable);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTABLES_HXX
 

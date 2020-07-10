@@ -25,9 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgUseNode final : public SvgNode
         {
@@ -70,8 +68,8 @@ namespace svgio
             const SvgNumber& getY() const { return maY; }
 
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGUSENODE_HXX
 

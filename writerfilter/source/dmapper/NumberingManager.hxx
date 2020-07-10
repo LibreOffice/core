@@ -31,8 +31,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class DomainMapper;
 class StyleSheetEntry;
@@ -253,7 +252,7 @@ public:
     void DisposeNumPicBullets( );
 };
 
-} }
+}
 
 #endif
 

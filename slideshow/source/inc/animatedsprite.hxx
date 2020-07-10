@@ -32,9 +32,7 @@
 
 /* Definition of AnimatedSprite class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class provides the sprite for animated shapes.
 
@@ -153,7 +151,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATEDSPRITE_HXX

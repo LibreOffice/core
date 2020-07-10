@@ -58,10 +58,8 @@ namespace com::sun::star::rendering
 
 namespace com::sun::star::rendering { class XColorSpace; }
 
-namespace vcl
+namespace vcl::unotools
 {
-    namespace unotools
-    {
         // Bitmap conversions
 
 
@@ -161,7 +159,7 @@ namespace vcl
         tools::Rectangle                   VCL_DLLPUBLIC rectangleFromB2IRectangle( const basegfx::B2IRange& );
         basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint(const Point&);
         basegfx::B2IRectangle       VCL_DLLPUBLIC b2IRectangleFromRectangle(const tools::Rectangle&);
-    }
+
 }
 
 #endif // INCLUDED_VCL_CANVASTOOLS_HXX

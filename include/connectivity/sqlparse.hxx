@@ -34,21 +34,15 @@
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XLocaleData4; }
 
-namespace com
+namespace com::sun::star
 {
-    namespace sun
+    namespace beans
     {
-        namespace star
-        {
-            namespace beans
-            {
-                class XPropertySet;
-            }
-            namespace util
-            {
-                class XNumberFormatter;
-            }
-        }
+        class XPropertySet;
+    }
+    namespace util
+    {
+        class XNumberFormatter;
     }
 }
 

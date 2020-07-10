@@ -16,9 +16,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <text:p>/<text:h>.
 class XMLParaContext : public XMLImportContext
@@ -57,8 +55,7 @@ void FillStyles(const OUString& rName,
                 std::map<OUString, librevenge::RVNGPropertyList>& rNamedStyles,
                 librevenge::RVNGPropertyList& rPropertyList);
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

@@ -24,9 +24,7 @@
 
 namespace oox::drawingml { class Shape; }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 template< typename ModelType >
 class ContextBase : public ::oox::core::ContextHandler2
@@ -74,9 +72,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

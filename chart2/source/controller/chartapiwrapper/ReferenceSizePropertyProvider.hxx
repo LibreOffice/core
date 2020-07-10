@@ -21,9 +21,7 @@
 
 #include <com/sun/star/awt/Size.hpp>
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 class ReferenceSizePropertyProvider
 {
@@ -36,8 +34,7 @@ protected:
     ~ReferenceSizePropertyProvider() {}
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_REFERENCESIZEPROPERTYPROVIDER_HXX
 #endif

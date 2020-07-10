@@ -22,9 +22,7 @@
 
 #include "parametricpolypolygon.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /* Definition of Transitionfactory class */
 
@@ -33,7 +31,7 @@ namespace slideshow
             ParametricPolyPolygonSharedPtr createClipPolyPolygon( sal_Int16 nTransitionType,
                                                                          sal_Int16 nTransitionSubType );
         }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGONFACTORY_HXX

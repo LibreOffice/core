@@ -26,10 +26,8 @@
 
 namespace com::sun::star::drawing { class XShape; }
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         struct SlideShowContext;
         class  Shape;
         typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
@@ -38,7 +36,7 @@ namespace slideshow
             const css::uno::Reference<css::drawing::XShape >& xShape,
             double                                     nPrio,
             const SlideShowContext&                    rContext);
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_MEDIASHAPE_HXX

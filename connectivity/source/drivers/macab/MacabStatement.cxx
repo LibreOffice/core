@@ -44,9 +44,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
     void impl_throwError(const char* pErrorId)
     {

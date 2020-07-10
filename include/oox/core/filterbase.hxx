@@ -69,8 +69,7 @@ namespace oox::ole {
     class VbaProject;
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 enum OoxmlVersion
 {
@@ -268,8 +267,7 @@ private:
     std::unique_ptr< FilterBaseImpl > mxImpl;
 };
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

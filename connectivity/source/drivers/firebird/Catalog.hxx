@@ -12,9 +12,7 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         class Catalog: public ::connectivity::sdbcx::OCatalog
         {
@@ -34,8 +32,8 @@ namespace connectivity
             // IRefreshableUsers
             virtual void refreshUsers() override;
         };
-    } // namespace firebird
-} // namespace connectivity
+
+} // namespace connectivity::firebird
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CATALOG_HXX
 

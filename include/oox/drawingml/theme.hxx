@@ -35,8 +35,7 @@ namespace com::sun::star {
     namespace xml::dom { class XDocument; }
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 struct EffectProperties;
 struct FillProperties;
@@ -115,8 +114,7 @@ private:
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

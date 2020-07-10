@@ -55,7 +55,6 @@ enum class ParentClipMode;
 enum class SalEvent;
 
 namespace com::sun::star {
-
     namespace accessibility {
         class XAccessible;
         class XAccessibleContext;

@@ -26,9 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgPathNode final : public SvgNode
         {
@@ -63,8 +61,8 @@ namespace svgio
             /// PathLength content
             const SvgNumber& getPathLength() const { return maPathLength; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGPATHNODE_HXX
 

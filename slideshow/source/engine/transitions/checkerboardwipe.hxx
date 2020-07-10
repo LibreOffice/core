@@ -26,8 +26,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate a check board wipe (across)
 class CheckerBoardWipe : public ParametricPolyPolygon
@@ -43,7 +42,7 @@ private:
     const ::basegfx::B2DPolyPolygon m_unitRect;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CHECKERBOARDWIPE_HXX

@@ -34,9 +34,7 @@ namespace com::sun::star{
     }
 }
 
-namespace writerfilter {
-namespace dmapper{
-namespace ConversionHelper{
+namespace writerfilter::dmapper::ConversionHelper{
 
     // create a border line and return the distance value
     void MakeBorderLine(sal_Int32 nLineThickness,
@@ -56,9 +54,7 @@ namespace ConversionHelper{
     sal_Int16 ConvertCustomNumberFormat(const OUString& rFormat);
 
     css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
-} // namespace ConversionHelper
-} //namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper::ConversionHelper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

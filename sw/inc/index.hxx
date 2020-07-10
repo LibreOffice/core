@@ -27,11 +27,7 @@
 class SwIndexReg;
 struct SwPosition;
 
-namespace sw {
-namespace mark {
-class IMark;
-}
-}
+namespace sw::mark { class IMark; }
 
 /// Marks a character position inside a document model node.
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwIndex

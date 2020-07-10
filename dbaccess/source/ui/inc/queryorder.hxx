@@ -23,25 +23,18 @@
 
 #define DOG_ROWS    3
 
-namespace com
-{
-    namespace sun
+namespace com::sun::star{
+    namespace sdb
     {
-        namespace star
-        {
-            namespace sdb
-            {
-                class XSingleSelectQueryComposer;
-            }
-            namespace sdbc
-            {
-                class XConnection;
-            }
-            namespace container
-            {
-                class XNameAccess;
-            }
-        }
+        class XSingleSelectQueryComposer;
+    }
+    namespace sdbc
+    {
+        class XConnection;
+    }
+    namespace container
+    {
+        class XNameAccess;
     }
 }
 

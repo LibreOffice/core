@@ -25,9 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbc/XBatchExecution.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
 
         typedef ::cppu::ImplHelper1< css::sdbc::XStatement >
@@ -80,9 +78,8 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 
-
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENT_HXX
 

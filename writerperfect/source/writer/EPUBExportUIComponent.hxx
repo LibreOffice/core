@@ -20,18 +20,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 class XComponentContext;
-}
-}
-}
 }
 
 namespace writerperfect

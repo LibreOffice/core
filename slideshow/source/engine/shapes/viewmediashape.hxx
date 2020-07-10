@@ -48,9 +48,7 @@ namespace com::sun::star {
     }
 }
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class is the viewable representation of a draw
             document's media object, associated to a specific View
@@ -163,7 +161,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWMEDIASHAPE_HXX

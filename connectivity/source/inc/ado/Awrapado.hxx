@@ -29,9 +29,7 @@
 #include <ado/Aolewrap.hxx>
 #include <ado/Aolevariant.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOConnection;
         class WpADOCommand;

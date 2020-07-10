@@ -25,8 +25,7 @@ namespace com::sun::star {
     namespace lang { struct Locale; }
 }
 
-namespace msfilter {
-namespace util {
+namespace msfilter::util {
 
 /// Returns the best-fit default 8bit encoding for a given locale
 /// i.e. useful when dealing with legacy formats which use legacy text encodings without recording
@@ -137,7 +136,7 @@ MSFILTER_DLLPUBLIC sal_uInt8 TransColToIco( const Color& rCol );
 
 }
 
-}
+
 
 #endif
 

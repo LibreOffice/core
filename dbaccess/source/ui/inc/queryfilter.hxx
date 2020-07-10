@@ -26,32 +26,26 @@
 #include <connectivity/predicateinput.hxx>
 #include <svx/ParseContext.hxx>
 
-namespace com
-{
-    namespace sun
+namespace com::sun::star {
+    namespace sdb
     {
-        namespace star
-        {
-            namespace sdb
-            {
-                class XSingleSelectQueryComposer;
-            }
-            namespace sdbc
-            {
-                class XConnection;
-                class XDatabaseMetaData;
-            }
-            namespace container
-            {
-                class XNameAccess;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
+        class XSingleSelectQueryComposer;
+    }
+    namespace sdbc
+    {
+        class XConnection;
+        class XDatabaseMetaData;
+    }
+    namespace container
+    {
+        class XNameAccess;
+    }
+    namespace beans
+    {
+        struct PropertyValue;
     }
 }
+
 // DlgFilterCrit
 namespace dbaui
 {

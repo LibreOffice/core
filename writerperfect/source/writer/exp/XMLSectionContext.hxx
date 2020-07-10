@@ -12,9 +12,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <text:section>.
 class XMLSectionContext : public XMLImportContext
@@ -31,8 +29,7 @@ public:
     void SAL_CALL endElement(const OUString& rName) override;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

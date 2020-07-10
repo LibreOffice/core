@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a centerTop (center=true) or double fan wipe:
 class FanWipe : public ParametricPolyPolygon
@@ -37,7 +36,7 @@ private:
     bool m_center, m_single, m_fanIn;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_FANWIPE_HXX

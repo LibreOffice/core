@@ -26,10 +26,7 @@
 
 #include <X11/X.h>
 
-namespace com::sun::star::datatransfer {
-    namespace clipboard { class XClipboard; }
-}
-
+namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 class SalXLib;
 class X11SalGraphics;
 class SalX11Display;

@@ -34,8 +34,7 @@ namespace com::sun::star {
 namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 class Drawing;
 
@@ -61,8 +60,7 @@ private:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

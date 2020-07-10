@@ -39,9 +39,7 @@ class ScCellRangesBase;
 class ScTabViewShell;
 class SfxViewFrame;
 
-namespace ooo {
-namespace vba {
-namespace excel {
+namespace ooo::vba::excel {
 
 // nTabs empty means apply zoom to all sheets
 void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
@@ -95,9 +93,7 @@ template < typename ImplObject >
         return pObj;
     }
 
-} // namespace excel
-} // namespace vba
-} // namespace ooo
+} // namespace ooo::vba::excel
 
 #endif
 

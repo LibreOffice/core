@@ -24,9 +24,7 @@
 #include <rtl/ustring.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Generic accumulation.
 
@@ -78,7 +76,7 @@ namespace slideshow
             // cumulative behaviour for bools.
             return bCurrValue;
         }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACCUMULATION_HXX

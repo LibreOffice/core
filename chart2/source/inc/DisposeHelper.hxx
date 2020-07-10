@@ -22,9 +22,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
 
-namespace chart
-{
-namespace DisposeHelper
+namespace chart::DisposeHelper
 {
 
 template<class T>
@@ -51,7 +49,7 @@ void DisposeAllElements(Container & rContainer)
     }
 }
 
-}} //  namespace chart::DisposeHelper
+} //  namespace chart::DisposeHelper
 
 #endif // INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
 

@@ -23,9 +23,7 @@
 #include <sdr/properties/textproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class ConnectorProperties final : public TextProperties
         {
@@ -51,8 +49,7 @@ namespace sdr
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_CONNECTORPROPERTIES_HXX

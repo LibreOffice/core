@@ -27,9 +27,7 @@
 #include <connectivity/FValue.hxx>
 #include <TResultSetHelper.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
@@ -100,7 +98,7 @@ namespace connectivity
             // (NULL or non-NULL is returned)
             static std::unique_ptr<SvStream> createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FTABLE_HXX
 

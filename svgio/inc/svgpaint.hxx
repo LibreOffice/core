@@ -22,9 +22,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgPaint
         {
@@ -49,8 +47,8 @@ namespace svgio
             bool isOn() const { return mbOn; }
             bool isCurrent() const { return mbCurrent; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGPAINT_HXX
 

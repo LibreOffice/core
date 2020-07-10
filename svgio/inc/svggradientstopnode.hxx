@@ -23,9 +23,7 @@
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgGradientStopNode final : public SvgNode
         {
@@ -48,8 +46,8 @@ namespace svgio
             /// offset content
             const SvgNumber& getOffset() const { return maOffset; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGGRADIENTSTOPNODE_HXX
 

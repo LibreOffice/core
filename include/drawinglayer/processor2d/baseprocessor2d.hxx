@@ -26,9 +26,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** BaseProcessor2D class
 
@@ -188,8 +186,8 @@ namespace drawinglayer
             /// data read access
             const geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX

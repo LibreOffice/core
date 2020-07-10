@@ -32,14 +32,11 @@ namespace basegfx {
 
 // helper methods
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         // create a 3x3 cross in given color as BitmapEx
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX

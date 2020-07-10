@@ -21,8 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace writerfilter {
-namespace dmapper{
+namespace writerfilter::dmapper{
 // Ensure that Character Properties are placed between PROP_CHARACTER_STYLES and PROP_CHARACTER_END
 enum PropertyIds
     {
@@ -367,8 +366,7 @@ bool isCharacterProperty(const PropertyIds eId);
 
 bool isParagraphProperty(const PropertyIds eId);
 
-} //namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

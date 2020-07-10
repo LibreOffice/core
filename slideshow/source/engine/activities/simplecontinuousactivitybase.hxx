@@ -23,9 +23,7 @@
 #include "activitybase.hxx"
 #include <canvas/elapsedtime.hxx>
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Simple, continuous animation.
 
@@ -73,7 +71,7 @@ namespace slideshow
             /// Actual number of frames shown until now.
             sal_uInt32                      mnCurrPerformCalls;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_SIMPLECONTINUOUSACTIVITYBASE_HXX

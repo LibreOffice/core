@@ -29,9 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class BaseTextStrikeoutPrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -58,13 +56,11 @@ namespace drawinglayer
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class TextCharacterStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
@@ -97,13 +93,11 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class TextGeometryStrikeoutPrimitive2D final : public BaseTextStrikeoutPrimitive2D
         {
@@ -136,8 +130,8 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

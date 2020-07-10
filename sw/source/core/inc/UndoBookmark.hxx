@@ -27,11 +27,9 @@ class SwHistoryBookmark;
 class SwHistoryNoTextFieldmark;
 class SwHistoryTextFieldmark;
 
-namespace sw {
-    namespace mark {
-        class IMark;
-        class IFieldmark;
-    }
+namespace sw::mark {
+    class IMark;
+    class IFieldmark;
 }
 
 class SwDoc;

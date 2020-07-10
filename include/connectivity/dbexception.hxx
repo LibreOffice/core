@@ -24,23 +24,17 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com
+namespace com::sun::star
 {
-    namespace sun
+    namespace sdb
     {
-        namespace star
-        {
-            namespace sdb
-            {
-                class SQLContext;
-                struct SQLErrorEvent;
-            }
-            namespace sdbc
-            {
-                class SQLWarning;
-                class SQLException;
-            }
-        }
+        class SQLContext;
+        struct SQLErrorEvent;
+    }
+    namespace sdbc
+    {
+        class SQLWarning;
+        class SQLException;
     }
 }
 

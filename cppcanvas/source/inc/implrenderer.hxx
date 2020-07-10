@@ -50,10 +50,7 @@ namespace basegfx {
     class B2DPolygon;
 }
 
-namespace cppcanvas
-{
-
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
         struct ActionFactoryParameters;
@@ -241,7 +238,7 @@ namespace cppcanvas
             const Renderer::Parameters& mrParms;
             sal_Int32&                  mrCurrActionIndex;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,9 +22,7 @@
 
 #include <file/FColumns.hxx>
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
         /// Columns implementation for Writer tables and Calc sheets.
         class OComponentColumns : public file::OColumns
@@ -39,7 +37,7 @@ namespace connectivity
             {}
 
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX

@@ -19,8 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 enum FieldId
 {
@@ -301,7 +300,7 @@ enum FieldId
     ,FIELD_CITATION
 };
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FIELDTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

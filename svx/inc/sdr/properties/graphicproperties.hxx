@@ -23,9 +23,7 @@
 #include <sdr/properties/rectangleproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class GraphicProperties final : public RectangleProperties
         {
@@ -58,8 +56,7 @@ namespace sdr
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
             virtual void ForceDefaultAttributes() override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX

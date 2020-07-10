@@ -26,9 +26,7 @@
 
 /* Definition of ScreenUpdater class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Screen updater
 
@@ -128,7 +126,7 @@ namespace slideshow
             std::unique_ptr<ImplScreenUpdater> mpImpl;
 
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SCREENUPDATER_HXX

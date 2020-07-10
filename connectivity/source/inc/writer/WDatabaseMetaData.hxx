@@ -22,9 +22,7 @@
 
 #include <component/CDatabaseMetaData.hxx>
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
 {
@@ -41,8 +39,7 @@ public:
     OWriterDatabaseMetaData(file::OConnection* pConnection);
 };
 
-} // namespace writer
-} // namespace connectivity
+} // namespace connectivity::writer
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDATABASEMETADATA_HXX
 

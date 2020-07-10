@@ -25,9 +25,7 @@ using namespace css::io;
 using namespace css::lang;
 using namespace css::uno;
 
-namespace oox
-{
-namespace crypto
+namespace oox::crypto
 {
 StrongEncryptionDataSpace::StrongEncryptionDataSpace(const Reference<XComponentContext>& rxContext)
     : mxContext(rxContext)
@@ -193,8 +191,7 @@ css::uno::Sequence<OUString> SAL_CALL StrongEncryptionDataSpace::getSupportedSer
     return aServices;
 }
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_crypto_StrongEncryptionDataSpace_get_implementation(

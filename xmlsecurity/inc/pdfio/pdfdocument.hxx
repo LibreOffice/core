@@ -13,19 +13,14 @@
 
 #include <xmlsecuritydllapi.h>
 
-namespace vcl
-{
-namespace filter
+namespace vcl::filter
 {
 class PDFObjectElement;
-}
 }
 struct SignatureInformation;
 class SvStream;
 
-namespace xmlsecurity
-{
-namespace pdfio
+namespace xmlsecurity::pdfio
 {
 /**
  * @param rInformation The actual result.
@@ -36,8 +31,7 @@ XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream,
                                              vcl::filter::PDFObjectElement* pSignature,
                                              SignatureInformation& rInformation, bool bLast);
 
-} // namespace pdfio
-} // namespace xmlsecurity
+} // namespace xmlsecurity::pdfio
 
 #endif // INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 

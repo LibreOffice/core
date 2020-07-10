@@ -22,9 +22,7 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         class OEvoabConnection;
         class OEvoabCatalog : public connectivity::sdbcx::OCatalog

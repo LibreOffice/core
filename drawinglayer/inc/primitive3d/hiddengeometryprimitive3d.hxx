@@ -24,9 +24,7 @@
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         // This primitive is used to represent geometry for non-visible objects,
         // e.g. a 3D cube without fill attributes. To still be able to use
@@ -54,8 +52,8 @@ namespace drawinglayer
             // provide unique ID
             DeclPrimitive3DIDBlock()
         };
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive3d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

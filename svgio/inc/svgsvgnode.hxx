@@ -23,9 +23,7 @@
 #include "svgstyleattributes.hxx"
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgSvgNode final : public SvgNode
         {
@@ -90,8 +88,8 @@ namespace svgio
             /// height content
             const SvgNumber& getHeight() const { return maHeight; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGSVGNODE_HXX
 

@@ -27,8 +27,7 @@ namespace oox { class PropertyMap; }
 namespace oox { class PropertySet; }
 namespace oox::core { class ModelObjectContainer; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 struct RotationProperties
@@ -81,8 +80,7 @@ struct Shape3DProperties
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

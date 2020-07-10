@@ -24,8 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate a vertical left waterfall wipe
 class WaterfallWipe : public ParametricPolyPolygon
@@ -38,7 +37,7 @@ private:
     ::basegfx::B2DPolygon m_waterfall;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_WATERFALLWIPE_HXX

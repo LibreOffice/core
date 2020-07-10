@@ -26,9 +26,7 @@
 
 #define dBASE_III_GROUP "dBase III"
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class OIndexIterator;
         class ONDXKey;
@@ -136,7 +134,6 @@ namespace connectivity
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
 
         void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX

@@ -12,11 +12,7 @@
 
 #include <dmapper/resourcemodel.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace embed
 {
@@ -27,12 +23,8 @@ namespace io
 class XInputStream;
 }
 }
-}
-}
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 class RTFSprms;
 class RTFShape;
@@ -88,8 +80,7 @@ private:
     tools::SvRef<RTFShape> m_pShape;
     tools::SvRef<RTFPicture> m_pPicture;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
 

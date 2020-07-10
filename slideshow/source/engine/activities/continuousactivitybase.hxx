@@ -22,9 +22,7 @@
 
 #include "simplecontinuousactivitybase.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Simple, continuous animation.
 
@@ -59,7 +57,7 @@ namespace slideshow
             virtual void simplePerform( double      nSimpleTime,
                                         sal_uInt32  nRepeatCount ) const override;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_CONTINUOUSACTIVITYBASE_HXX

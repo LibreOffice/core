@@ -13,19 +13,11 @@
 #include <sfx2/lnkbase.hxx>
 #include <svl/broadcast.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 class Any;
 }
-}
-}
-}
+
 class ScDocument;
 
 class ScWebServiceLink : public ::sfx2::SvBaseLink, public SvtBroadcaster

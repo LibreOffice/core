@@ -23,8 +23,7 @@
 #include "animationbasenode.hxx"
 #include <com/sun/star/animations/XAnimateColor.hpp>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class AnimationColorNode : public AnimationBaseNode
 {
@@ -46,8 +45,7 @@ private:
     css::uno::Reference<css::animations::XAnimateColor > mxColorNode;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
 

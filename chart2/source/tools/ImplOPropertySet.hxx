@@ -28,9 +28,7 @@
 
 namespace com::sun::star::style { class XStyle; }
 
-namespace property
-{
-namespace impl
+namespace property::impl
 {
 
 class ImplOPropertySet
@@ -80,8 +78,7 @@ private:
         m_xStyle;
 };
 
-} //  namespace impl
-} //  namespace chart
+} //  namespace chart::impl
 
 // INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
 #endif

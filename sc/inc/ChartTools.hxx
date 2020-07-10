@@ -22,8 +22,7 @@
 class ScDocShell;
 class SdrOle2Obj;
 
-namespace sc {
-namespace tools {
+namespace sc::tools {
 
 enum class ChartSourceType
 {
@@ -50,7 +49,7 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
 
 std::vector<SdrOle2Obj*> getAllPivotChartsConntectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell);
 
-}} // end sc::tools
+} // end sc::tools
 
 #endif
 

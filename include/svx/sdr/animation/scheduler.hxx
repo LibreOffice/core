@@ -26,9 +26,7 @@
 #include <vector>
 
 
-namespace sdr
-{
-    namespace animation
+namespace sdr::animation
     {
 
         class SVXCORE_DLLPUBLIC Event
@@ -93,8 +91,7 @@ namespace sdr
             SAL_DLLPRIVATE void SetPaused(bool bNew);
         };
 
-    } // end of namespace animation
-} // end of namespace sdr
+} // end of namespace sdr::animation
 
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_SCHEDULER_HXX

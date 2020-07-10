@@ -25,9 +25,7 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SdrLineEffectsTextAttribute : public SdrEffectsTextAttribute
         {
@@ -57,8 +55,8 @@ namespace drawinglayer
             const SdrLineAttribute& getLine() const { return maLine; }
             const SdrLineStartEndAttribute& getLineStartEnd() const { return maLineStartEnd; }
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

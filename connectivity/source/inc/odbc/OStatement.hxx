@@ -38,9 +38,7 @@
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
@@ -240,7 +238,7 @@ namespace connectivity
             virtual void SAL_CALL clearBatch(  ) override;
             virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OSTATEMENT_HXX
 

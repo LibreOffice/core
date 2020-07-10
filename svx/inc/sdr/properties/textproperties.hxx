@@ -24,9 +24,7 @@
 #include <sdr/properties/attributeproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class TextProperties : public AttributeProperties
         {
@@ -81,8 +79,7 @@ namespace sdr
             // #i101556# versioning support
             virtual sal_uInt32 getVersion() const override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_TEXTPROPERTIES_HXX

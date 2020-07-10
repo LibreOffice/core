@@ -22,9 +22,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <SQLStatementHelper.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
-{
-    namespace mysql
+namespace connectivity::mysql
     {
         class OTables final : public sdbcx::OCollection,
             public ::dbtools::ISQLStatementHelper
@@ -59,7 +57,7 @@ namespace connectivity
             // ISQLStatementHelper
             virtual void addComment(const css::uno::Reference< css::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLES_HXX
 

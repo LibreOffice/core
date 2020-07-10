@@ -20,9 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class ErrorDescriptor
         {
@@ -48,7 +46,7 @@ namespace connectivity
 
             bool is() const { return m_pErrorResourceId != nullptr; }
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX

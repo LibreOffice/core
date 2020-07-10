@@ -27,9 +27,7 @@
 namespace chart { class WrappedProperty; }
 namespace com::sun::star::beans { struct Property; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class WrappedAutomaticPositionProperties
@@ -39,8 +37,7 @@ public:
     static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

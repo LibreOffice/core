@@ -32,9 +32,7 @@
 namespace com::sun::star::uno { class XWeak; }
 namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
 
-namespace chart
-{
-namespace ModifyListenerHelper
+namespace chart::ModifyListenerHelper
 {
 
 css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
@@ -257,8 +255,7 @@ void removeListenerFromAllSequenceElements(
                          impl::removeListenerFunctor< T >( xListener ));
 }
 
-} //  namespace ModifyListenerHelper
-} //  namespace chart
+} //  namespace chart::ModifyListenerHelper
 
 // INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERHELPER_HXX
 #endif

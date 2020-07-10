@@ -25,9 +25,7 @@
 #include <FDatabaseMetaDataResultSet.hxx>
 
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
 
         //************ Class: OEvoabDatabaseMetaData

@@ -23,9 +23,7 @@
 #include <sdbcx/VUser.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-namespace connectivity
-{
-    namespace mysql
+namespace connectivity::mysql
     {
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
 
@@ -70,7 +68,7 @@ namespace connectivity
 
             virtual void construct() override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YUSER_HXX
 

@@ -20,9 +20,7 @@ namespace avmedia
 struct MediaTempFile;
 }
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
 class MediaFileManager
 {
@@ -30,7 +28,6 @@ public:
     virtual ~MediaFileManager(){};
     virtual std::shared_ptr<avmedia::MediaTempFile> getMediaTempFile(const OUString& aUrl) = 0;
 };
-}
 }
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
 

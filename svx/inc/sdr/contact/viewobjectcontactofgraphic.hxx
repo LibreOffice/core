@@ -24,9 +24,7 @@
 
 class SdrGrafObj;
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfGraphic final : public ViewObjectContactOfSdrObj
         {
@@ -37,8 +35,7 @@ namespace sdr
             ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfGraphic() override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFGRAPHIC_HXX
 

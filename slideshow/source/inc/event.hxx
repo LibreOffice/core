@@ -24,8 +24,7 @@
 #include <memory>
 #include <vector>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Definition of Event interface
  */
@@ -73,8 +72,7 @@ private:
 typedef ::std::shared_ptr< Event > EventSharedPtr;
 typedef ::std::vector< EventSharedPtr > VectorOfEvents;
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENT_HXX
 

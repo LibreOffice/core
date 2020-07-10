@@ -27,9 +27,7 @@ namespace sdr::contact {
     class ViewObjectContactOfE3dScene;
 }
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfE3d final : public ViewObjectContactOfSdrObj
         {
@@ -58,8 +56,8 @@ namespace sdr
             // This method will not handle included hierarchies or visibility.
             drawinglayer::primitive3d::Primitive3DContainer const & getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3D_HXX
 

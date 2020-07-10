@@ -20,9 +20,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTYPEDEFS_HXX
 
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOTable;
         class WpADOKey;

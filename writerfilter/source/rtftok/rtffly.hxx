@@ -17,9 +17,7 @@
 #include <ooxml/resourceids.hxx>
 #include <osl/endian.h>
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 /// Stores the vertical orientation properties of an RTF fly frame.
 class RTFVertOrient
@@ -136,8 +134,7 @@ public:
 private:
     sal_uInt16 m_nVal;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
 

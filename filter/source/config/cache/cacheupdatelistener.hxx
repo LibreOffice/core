@@ -24,8 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short      implements a listener, which will update the
@@ -108,8 +107,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
 

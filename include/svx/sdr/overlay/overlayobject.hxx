@@ -31,14 +31,10 @@
 
 class OutputDevice;
 
-namespace sdr
+namespace sdr::overlay
 {
-    namespace overlay
-    {
-        class OverlayManager;
-    } // end of namespace overlay
+    class OverlayManager;
 }
-
 namespace basegfx
 {
     class B2DPolygon;
@@ -46,9 +42,7 @@ namespace basegfx
     class B2DRange;
 }
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayObject : public sdr::animation::Event
         {
@@ -177,12 +171,9 @@ namespace sdr
         // typedefs for a vector of OverlayObjects
         typedef ::std::vector< OverlayObject* > OverlayObjectVector;
 
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayObjectWithBasePosition : public OverlayObject
         {
@@ -198,8 +189,8 @@ namespace sdr
             const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
             void setBasePosition(const basegfx::B2DPoint& rNew);
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+
+} // end of namespace sdr::overlay
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECT_HXX
 

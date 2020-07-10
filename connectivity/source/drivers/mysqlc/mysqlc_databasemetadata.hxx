@@ -25,9 +25,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using ::com::sun::star::uno::Any;
 
@@ -231,7 +229,6 @@ public:
                          const css::uno::Sequence<sal_Int32>& types) override;
     css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 };
-}
 }
 
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DATABASEMETADATA_HXX

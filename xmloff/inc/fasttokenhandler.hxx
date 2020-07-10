@@ -18,8 +18,7 @@
 #include <sal/log.hxx>
 #include <xmloff/dllapi.h>
 
-namespace xmloff {
-namespace token {
+namespace xmloff::token {
 
 class TokenMap
 {
@@ -89,8 +88,7 @@ private:
     TokenMap& mrTokenMap;
 };
 
-} // namespace token
-} // namespace xmloff
+} // namespace xmloff::token
 
 #endif
 

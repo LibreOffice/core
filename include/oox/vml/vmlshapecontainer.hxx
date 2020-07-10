@@ -35,8 +35,7 @@ namespace com::sun::star {
     namespace drawing { class XShapes; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 class Drawing;
 class ShapeType;
@@ -138,8 +137,7 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 }
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

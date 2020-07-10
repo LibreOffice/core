@@ -24,8 +24,7 @@
 #include <unordered_map>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short      It can be used to split any query string (which can be used at the
@@ -89,8 +88,7 @@ class QueryTokenizer : public std::unordered_map< OUString, OUString >
         bool valid() const;
 };
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 

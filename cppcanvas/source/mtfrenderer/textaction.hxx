@@ -31,9 +31,7 @@ class Color;
 
 /* Definition of internal::TextActionFactory */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
 
@@ -76,7 +74,6 @@ namespace cppcanvas
                                                      const Renderer::Parameters&    rParms,
                                                      bool                           bSubsettable );
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

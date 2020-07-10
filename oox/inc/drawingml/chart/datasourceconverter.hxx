@@ -26,9 +26,7 @@ namespace com::sun::star {
     namespace chart2::data { class XDataSequence; }
 }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct DataSequenceModel;
@@ -59,9 +57,7 @@ public:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

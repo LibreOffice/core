@@ -17,8 +17,7 @@
 #include <vector>
 #include <map>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 struct EffectGlowProperties
 {
@@ -82,8 +81,7 @@ struct EffectProperties
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

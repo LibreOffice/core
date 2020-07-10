@@ -28,9 +28,7 @@
 #include <svl/itemset.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class EmptyProperties : public BaseProperties
         {
@@ -85,8 +83,7 @@ namespace sdr
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_EMPTYPROPERTIES_HXX
 

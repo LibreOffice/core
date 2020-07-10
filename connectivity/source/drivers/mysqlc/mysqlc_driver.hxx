@@ -28,9 +28,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <osl/module.h>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using css::sdbc::SQLException;
 using css::uno::Exception;
@@ -86,8 +84,8 @@ public:
 
     static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
 };
-} /* mysqlc */
-} /* connectivity */
+
+} /* connectivity::mysqlc */
 
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_DRIVER_HXX
 

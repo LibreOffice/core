@@ -25,9 +25,7 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 enum class GraphicObjectType
@@ -62,8 +60,7 @@ private:
     css::uno::Reference< css::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_GRAPHICPROPERTYITEMCONVERTER_HXX
 #endif

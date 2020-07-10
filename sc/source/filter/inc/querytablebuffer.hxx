@@ -23,8 +23,7 @@
 #include "stylesbuffer.hxx"
 #include "worksheethelper.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 struct QueryTableModel : public AutoFormatModel
 {
@@ -80,8 +79,7 @@ private:
     QueryTableVector    maQueryTables;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

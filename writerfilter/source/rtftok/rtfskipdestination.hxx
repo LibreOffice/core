@@ -10,9 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 class RTFListener;
 
@@ -31,8 +29,7 @@ private:
     /// If false, the destructor is a noop, required by the \* symbol itself.
     bool m_bReset;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 

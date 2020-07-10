@@ -29,9 +29,7 @@
 
 class Point;
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayObjectList final
         {
@@ -63,8 +61,8 @@ namespace sdr
             // calculate BaseRange of all included OverlayObjects and return
             basegfx::B2DRange getBaseRange() const;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+
+} // end of namespace sdr::overlay
 
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYOBJECTLIST_HXX

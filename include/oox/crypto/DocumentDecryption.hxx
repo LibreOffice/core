@@ -29,8 +29,7 @@ namespace com::sun::star {
 
 namespace oox::ole { class OleStorage; }
 
-namespace oox {
-namespace crypto {
+namespace oox::crypto {
 
 class DocumentDecryption
 {
@@ -51,8 +50,7 @@ public:
 
 };
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

@@ -22,9 +22,7 @@
 
 #include <file/FStatement.hxx>
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
         class OConnection;
         /// Statement implementation for Writer tables and Calc sheets.
@@ -36,7 +34,7 @@ namespace connectivity
             OComponentStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX

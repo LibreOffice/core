@@ -30,9 +30,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <TConnection.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
 
         typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection,

@@ -24,9 +24,7 @@
 #include "MErrorResource.hxx"
 #include "MColumnAlias.hxx"
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class OConnection;
         class MQueryHelper;
@@ -176,7 +174,7 @@ namespace connectivity
 
             void                       setAddressbook( OUString const &);
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MQUERYHELPER_HXX

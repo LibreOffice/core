@@ -18,24 +18,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/ref.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace awt
+namespace com::sun::star::awt
 {
 struct Size;
 class XControlModel;
 }
-}
-}
-}
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class DomainMapper_Impl;
 
@@ -120,8 +109,7 @@ public:
     sal_Int32 getInteropGrabBagSize() const;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif
 

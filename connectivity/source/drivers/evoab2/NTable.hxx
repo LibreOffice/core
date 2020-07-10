@@ -23,9 +23,7 @@
 #include "NConnection.hxx"
 #include <connectivity/sdbcx/VTable.hxx>
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         typedef connectivity::sdbcx::OTable OEvoabTable_TYPEDEF;
 

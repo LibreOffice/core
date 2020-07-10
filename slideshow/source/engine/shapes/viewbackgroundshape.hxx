@@ -32,9 +32,7 @@
 #include <viewlayer.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class is the viewable representation of a draw
             document's background, associated to a specific View
@@ -91,7 +89,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX

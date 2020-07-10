@@ -22,8 +22,7 @@
 
 #include <oox/core/xmlfilterbase.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class WorkbookGlobals;
 
@@ -58,8 +57,7 @@ private:
     WorkbookGlobals*    mpBookGlob;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -36,9 +36,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 
-namespace connectivity
-{
-    namespace skeleton
+namespace connectivity::skeleton
     {
 
         /*

@@ -22,9 +22,7 @@
 
 #include <drawingml/chart/chartcontextbase.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct View3DModel;
@@ -84,9 +82,7 @@ public:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

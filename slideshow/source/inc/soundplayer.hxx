@@ -35,9 +35,7 @@
 
 /* Definition of SoundPlayer class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class MediaFileManager;
 
@@ -109,7 +107,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< SoundPlayer > SoundPlayerSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SOUNDPLAYER_HXX

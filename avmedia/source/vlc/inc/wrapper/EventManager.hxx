@@ -15,11 +15,7 @@
 struct libvlc_event_manager_t;
 struct libvlc_event_t;
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class EventHandler;
     class EventManager

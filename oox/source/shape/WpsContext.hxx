@@ -14,23 +14,12 @@
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace drawing
+namespace com::sun::star::drawing
 {
 class XShape;
 }
-}
-}
-}
 
-namespace oox
-{
-namespace shape
+namespace oox::shape
 {
 /// Wps is the drawingML equivalent of v:shape.
 class WpsContext final : public oox::drawingml::ShapeContext
@@ -48,7 +37,6 @@ public:
 private:
     css::uno::Reference<css::drawing::XShape> mxShape;
 };
-}
 }
 
 #endif

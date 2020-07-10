@@ -27,9 +27,7 @@
 #include <connectivity/dbexception.hxx>
 #include <rtl/ref.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         /*
         **  MacabResultSetMetaData

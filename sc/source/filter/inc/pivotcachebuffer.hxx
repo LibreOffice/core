@@ -38,8 +38,7 @@ class ScDPSaveDimension;
 class ScDPObject;
 class DateTime;
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class WorksheetHelper;
 
@@ -455,8 +454,7 @@ private:
     std::vector< sal_Int32 >  maCacheIds;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

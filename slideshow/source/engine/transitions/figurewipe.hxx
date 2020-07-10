@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class FigureWipe : public ParametricPolyPolygon
 {
@@ -41,7 +40,7 @@ private:
     const ::basegfx::B2DPolygon m_figure;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_FIGUREWIPE_HXX

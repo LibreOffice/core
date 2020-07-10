@@ -31,9 +31,7 @@
 
 /* Definition of ActivitiesQueue class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class handles the XSprite updates needed for
             animations, such as moves, scales etc. You can add
@@ -110,7 +108,6 @@ namespace slideshow
                                                           // current frame has been displayed.
         };
 
-    }
 }
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESQUEUE_HXX
 

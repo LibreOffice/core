@@ -67,14 +67,8 @@ enum class SdrAnimationMode
 
 
 class SdrPaintView;
+namespace sdr::contact { class ViewObjectContactRedirector; }
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewObjectContactRedirector;
-    }
-}
 
 
 class SvxViewChangedHint final : public SfxHint

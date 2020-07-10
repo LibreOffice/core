@@ -42,9 +42,7 @@
 #include <TSkipDeletedSet.hxx>
 #include <memory>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
 
         /*
@@ -350,7 +348,7 @@ namespace connectivity
         protected:
             using OPropertySetHelper::getFastPropertyValue;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSET_HXX
 

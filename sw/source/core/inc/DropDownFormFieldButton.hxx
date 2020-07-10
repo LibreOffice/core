@@ -14,12 +14,9 @@
 
 class SwEditWin;
 class FloatingWindow;
-namespace sw
-{
-namespace mark
+namespace sw::mark
 {
 class DropDownFieldmark;
-}
 }
 
 /**

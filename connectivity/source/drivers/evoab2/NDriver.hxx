@@ -28,9 +28,7 @@
 
 #define EVOAB_DRIVER_IMPL_NAME  "com.sun.star.comp.sdbc.evoab.OEvoabDriver"
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > OEvoabDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);

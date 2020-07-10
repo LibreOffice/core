@@ -26,8 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short      implements the service <type scope="com.sun.star.document">FilterFactory</type>.
@@ -173,8 +172,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERFACTORY_HXX
 

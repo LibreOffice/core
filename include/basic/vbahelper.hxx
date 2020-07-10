@@ -26,8 +26,7 @@
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace basic {
-namespace vba {
+namespace basic::vba {
 
 /*  This header contains public helper functions for VBA used from this module
     and from other VBA implementation modules such as vbahelper.
@@ -88,8 +87,7 @@ BASIC_DLLPUBLIC void registerCurrentDirectory(
     const OUString& rPath );
 
 
-} // namespace vba
-} // namespace basic
+} // namespace basic::vba
 
 #endif
 

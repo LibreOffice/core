@@ -29,9 +29,7 @@ namespace basegfx {
 
 /* Definition of internal::LineActionFactory */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
 
@@ -50,7 +48,7 @@ namespace cppcanvas
                                                      const CanvasSharedPtr&,
                                                      const OutDevState& );
         }
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

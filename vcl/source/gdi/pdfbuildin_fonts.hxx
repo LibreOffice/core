@@ -22,9 +22,7 @@
 #include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 
-namespace vcl
-{
-namespace pdf
+namespace vcl::pdf
 {
 struct BuildinFont
 {
@@ -73,8 +71,7 @@ public:
     static const BuildinFont& Get(int nId) { return m_aBuildinFonts[nId]; }
 };
 
-} // namespace pdf
-} // namespace vcl
+} // namespace vcl::pdf
 
 #endif // INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
 

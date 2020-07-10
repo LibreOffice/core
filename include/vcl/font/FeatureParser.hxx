@@ -17,9 +17,7 @@
 
 #include <vcl/font/Feature.hxx>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 // These must not conflict with font name lists which use ; and ,
 constexpr const char FeaturePrefix = ':';
@@ -43,8 +41,7 @@ public:
     std::unordered_map<uint32_t, uint32_t> getFeaturesMap() const;
 };
 
-} // end font namespace
-} // end vcl namespace
+} // namespace vcl::font
 
 #endif // INCLUDED_VCL_FONT_FEATUREPASER_HXX
 

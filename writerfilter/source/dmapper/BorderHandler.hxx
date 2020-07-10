@@ -26,8 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/enumarray.hxx>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class PropertyMap;
 class BorderHandler : public LoggedProperties
@@ -74,7 +73,7 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
 };
-}}
+}
 
 #endif
 

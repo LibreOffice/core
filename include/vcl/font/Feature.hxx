@@ -14,9 +14,7 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 constexpr uint32_t featureCode(const char sFeature[4])
 {
@@ -115,9 +113,7 @@ struct FeatureSetting
     unsigned int m_nEnd;
 };
 
-} // end font namespace
-
-} // end vcl namespace
+} // namespace vcl::font
 
 #endif // INCLUDED_VCL_FONT_FEATURE_HXX
 

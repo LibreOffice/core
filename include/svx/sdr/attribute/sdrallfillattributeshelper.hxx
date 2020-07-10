@@ -30,9 +30,7 @@
 
 class Color;
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SVXCORE_DLLPUBLIC SdrAllFillAttributesHelper
         {
@@ -73,18 +71,15 @@ namespace drawinglayer
             // oriented
             bool needCompleteRepaint() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::attribute
 
 //////////////////////////////////////////////////////////////////////////////
 

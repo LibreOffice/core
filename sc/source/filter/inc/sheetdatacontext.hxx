@@ -29,8 +29,7 @@
 
 #define MULTI_THREAD_SHEET_PARSING 1
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** This class implements importing the sheetData element.
 
@@ -121,8 +120,7 @@ private:
     sal_Int32 mnCol; /// column index (0-based)
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

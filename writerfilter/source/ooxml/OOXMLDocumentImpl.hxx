@@ -28,8 +28,7 @@
 #include <vector>
 #include <stack>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 class OOXMLDocumentImpl : public OOXMLDocument
@@ -136,7 +135,7 @@ public:
     OUString const& GetDocumentBaseURL() const { return m_rBaseURL; };
     const css::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
 };
-}}
+}
 #endif // OOXML_DOCUMENT_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

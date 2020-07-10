@@ -27,8 +27,7 @@
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 const sal_Int32 BIFF12_CONNECTION_UNKNOWN               = 0;
 const sal_Int32 BIFF12_CONNECTION_ODBC                  = 1;
@@ -157,8 +156,7 @@ private:
     sal_Int32           mnUnusedId;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

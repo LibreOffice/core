@@ -15,14 +15,10 @@
 
 class SvNumberFormatter;
 class SwDoc;
-
-namespace sw
-{
-namespace mark
+namespace sw::mark
 {
 class IDateFieldmark;
 }
-} // namespace sw
 
 /// Dialog to specify the properties of date form field
 namespace sw

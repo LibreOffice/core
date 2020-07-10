@@ -25,9 +25,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         typedef std::vector< std::unique_ptr<SvgNode> > SvgNodeVector;
 
@@ -76,8 +74,8 @@ namespace svgio
             const SvgNodeVector& getSvgNodeVector() const { return maNodes; }
             const OUString& getAbsolutePath() const { return maAbsolutePath; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
 

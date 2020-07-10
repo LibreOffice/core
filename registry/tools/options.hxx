@@ -23,9 +23,7 @@
 #include <string>
 #include <vector>
 
-namespace registry
-{
-namespace tools
+namespace registry::tools
 {
 class Options
 {
@@ -52,8 +50,7 @@ protected:
     virtual void printUsage_Impl() const = 0;
 };
 
-} // namespace tools
-} // namespace registry
+} // namespace registry::tools
 
 #endif /* INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX */
 

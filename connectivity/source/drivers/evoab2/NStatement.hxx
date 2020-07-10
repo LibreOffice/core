@@ -43,9 +43,7 @@
 
 #include <list>
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier
                                                ,   css::sdbc::XCloseable

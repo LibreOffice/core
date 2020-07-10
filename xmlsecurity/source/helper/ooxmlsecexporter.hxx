@@ -14,11 +14,7 @@
 
 #include <svl/sigstruct.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace embed
 {
@@ -28,14 +24,9 @@ namespace uno
 {
 class XComponentContext;
 }
-namespace xml
-{
-namespace sax
+namespace xml::sax
 {
 class XDocumentHandler;
-}
-}
-}
 }
 }
 

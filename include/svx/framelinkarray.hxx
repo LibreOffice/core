@@ -27,8 +27,7 @@
 
 class Color;
 
-namespace svx {
-namespace frame {
+namespace svx::frame {
 
 struct ArrayImpl;
 class Style;
@@ -317,7 +316,7 @@ private:
 };
 
 }
-}
+
 
 #endif
 

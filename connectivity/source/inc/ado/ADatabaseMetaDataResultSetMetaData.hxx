@@ -27,9 +27,7 @@
 #include <ado/ADatabaseMetaDataResultSet.hxx>
 #include <OColumn.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
         //************ Class: ResultSetMetaData

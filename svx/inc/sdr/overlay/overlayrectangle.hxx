@@ -23,9 +23,7 @@
 
 namespace tools { class PolyPolygon; }
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class OverlayRectangle final : public OverlayObjectWithBasePosition
         {
@@ -60,8 +58,7 @@ namespace sdr
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) override;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 #endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 

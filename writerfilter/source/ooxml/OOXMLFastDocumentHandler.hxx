@@ -27,8 +27,7 @@
 #include <ooxml/OOXMLDocumentImpl.hxx>
 #include <rtl/ref.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 class OOXMLFastContextHandler;
@@ -87,7 +86,7 @@ private:
     mutable rtl::Reference<OOXMLFastContextHandler> mxContextHandler;
     rtl::Reference<OOXMLFastContextHandler> const & getContextHandler() const;
 };
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
 

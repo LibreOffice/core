@@ -37,11 +37,10 @@ namespace com::sun::star {
     }
 }
 
-namespace oox {
-    namespace drawingml {
-        class DrawingML;
-    }
+namespace oox::drawingml {
+   class DrawingML;
 }
+
 
 namespace sax_fastparser {
     class FastAttributeList;
@@ -51,9 +50,7 @@ class Point;
 namespace tools { class Rectangle; }
 class SdrObject;
 
-namespace oox {
-
-namespace vml {
+namespace oox::vml {
 
 /// Interface to be implemented by the parent exporter that knows how to handle shape text.
 class OOX_DLLPUBLIC VMLTextExport
@@ -194,9 +191,8 @@ private:
     void AddRectangleDimensions( OStringBuffer& rBuffer, const tools::Rectangle& rRectangle, bool rbAbsolutePos = true );
 };
 
-} // namespace vml
 
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

@@ -32,9 +32,7 @@ namespace com::sun::star {
 }
 
 
-namespace dp_registry {
-namespace backend {
-namespace script {
+namespace dp_registry::backend::script {
 
 
 class LibraryContainer
@@ -46,8 +44,6 @@ public:
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 };
 
-}
-}
 }
 
 #endif

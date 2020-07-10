@@ -25,9 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
-namespace xmloff
-{
-namespace chart
+namespace xmloff::chart
 {
 
 class ColorPropertySet : public ::cppu::WeakImplHelper<
@@ -76,8 +74,7 @@ private:
     Color     m_nDefaultColor;
 };
 
-} //  namespace chart
-} //  namespace xmloff
+} //  namespace xmloff::chart
 
 // XMLOFF_COLORPROPERTYSET_HXX
 #endif

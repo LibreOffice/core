@@ -27,20 +27,17 @@ namespace basegfx {
     class BZPixelRaster;
 }
 
-namespace drawinglayer {
-    namespace attribute {
+namespace drawinglayer::attribute {
         class SdrSceneAttribute;
         class SdrLightingAttribute;
         class MaterialAttribute3D;
-    }
 }
+
 
 class ZBufferRasterConverter3D;
 class RasterPrimitive3D;
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /**
             This 3D renderer derived from DefaultProcessor3D renders all fed primitives to a 2D
@@ -90,7 +87,7 @@ namespace drawinglayer
 
             void finish();
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

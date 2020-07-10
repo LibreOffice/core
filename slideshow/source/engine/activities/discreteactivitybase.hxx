@@ -26,9 +26,7 @@
 #include <vector>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Specialization of ActivityBase for discrete time activities.
 
@@ -73,7 +71,7 @@ namespace slideshow
             const double                    mnSimpleDuration;
             sal_uInt32                      mnCurrPerformCalls;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_DISCRETEACTIVITYBASE_HXX

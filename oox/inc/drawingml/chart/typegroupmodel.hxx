@@ -22,9 +22,7 @@
 
 #include <drawingml/chart/seriesmodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 struct UpDownBarsModel
 {
@@ -82,9 +80,7 @@ struct TypeGroupModel
                         ~TypeGroupModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

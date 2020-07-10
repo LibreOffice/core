@@ -40,8 +40,7 @@ namespace oox {
     class SequenceInputStream;
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 const sal_Int32 XML_ROOT_CONTEXT    = SAL_MAX_INT32;
 
@@ -268,8 +267,7 @@ public:
     virtual void        onEndRecord() override;
 };
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

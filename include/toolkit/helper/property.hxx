@@ -25,13 +25,10 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace uno {
+namespace com::sun::star::uno {
     class Type;
     class Any;
-} } } }
+}
 
 
 #define BASEPROPERTY_NOTFOUND                        0

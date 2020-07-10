@@ -41,8 +41,7 @@ namespace basegfx
     class B2DRange;
 }
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 struct SlideShowContext;
 class EventMultiplexer;
@@ -135,8 +134,7 @@ private:
     bool                            mbDrawPressed;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 

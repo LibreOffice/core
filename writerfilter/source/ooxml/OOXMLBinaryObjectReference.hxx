@@ -23,8 +23,7 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include <vector>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 class OOXMLBinaryObjectReference :
         public writerfilter::Reference<BinaryObj>
@@ -41,7 +40,7 @@ public:
 
     virtual void resolve(BinaryObj & rHandler) override;
 };
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
 

@@ -31,9 +31,7 @@ namespace com::sun::star {
 
 namespace oox::drawingml { struct TextCharacterProperties; }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct TextModel;
@@ -96,9 +94,7 @@ private:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

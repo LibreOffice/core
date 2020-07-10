@@ -33,9 +33,7 @@
 #include <vcl/outdevstate.hxx>
 
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState
         {
@@ -120,7 +118,7 @@ namespace cppcanvas
             bool                                                                     isTextOverlineColorSet;
             bool                                                                     isTextLineColorSet;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

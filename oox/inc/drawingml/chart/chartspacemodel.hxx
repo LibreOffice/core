@@ -24,9 +24,7 @@
 #include <drawingml/chart/plotareamodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct ChartSpaceModel
@@ -62,9 +60,7 @@ struct ChartSpaceModel
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

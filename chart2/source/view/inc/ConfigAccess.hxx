@@ -20,9 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_CONFIGACCESS_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_CONFIGACCESS_HXX
 
-namespace chart
-{
-namespace ConfigAccess
+namespace chart::ConfigAccess
 {
 /** @descr Retrieve the setting for showing errors in charts from the registry
     settings of the Calc application.
@@ -32,9 +30,8 @@ namespace ConfigAccess
     @return boolean UseErrorRectangle.
     */
 bool getUseErrorRectangle();
-}
 
-} //namespace chart
+} //namespace chart::ConfigAccess
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

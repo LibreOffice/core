@@ -26,9 +26,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class ShapeManager;
         class EventQueue;
@@ -106,7 +104,7 @@ namespace slideshow
             const UnoViewContainer&                         mrViewContainer;
             css::uno::Reference< css::uno::XComponentContext>   mxComponentContext;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDESHOWCONTEXT_HXX

@@ -35,8 +35,7 @@ namespace com::sun::star {
 
 namespace oox { class PropertyMap; }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** Contains generic information about an OLE object. */
@@ -80,8 +79,7 @@ OOX_DLLPUBLIC void SaveInteropProperties(
        OUString const& rProgId, OUString const& rDrawAspect);
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

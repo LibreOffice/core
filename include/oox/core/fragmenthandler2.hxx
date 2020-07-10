@@ -41,8 +41,7 @@ namespace oox {
     class SequenceInputStream;
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 class XmlFilterBase;
 
@@ -122,8 +121,7 @@ public:
 typedef ::rtl::Reference< FragmentHandler2 > FragmentHandler2Ref;
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

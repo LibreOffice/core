@@ -38,8 +38,7 @@ namespace com::sun::star {
     namespace graphic { class XGraphic; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 class Drawing;
 struct ShapeParentAnchor;
@@ -448,8 +447,7 @@ private:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

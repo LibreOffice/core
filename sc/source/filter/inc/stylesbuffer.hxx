@@ -42,8 +42,7 @@ namespace oox { class PropertySet;
                 class PropertyMap;
                 class AttributeList; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 const sal_Int32 OOX_COLOR_WINDOWTEXT3       = 24;       /// System window text color (BIFF3-BIFF4).
 const sal_Int32 OOX_COLOR_WINDOWBACK3       = 25;       /// System window background color (BIFF3-BIFF4).
@@ -886,8 +885,7 @@ private:
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

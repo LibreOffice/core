@@ -17,12 +17,9 @@ namespace weld
 class Window;
 }
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 Graphic VCL_DLLPUBLIC loadFromURL(OUString const& rURL, weld::Window* pParentWin = nullptr);
-}
 } // end vcl::graphic
 
 #endif // INCLUDED_VCL_GRAPHIC_TOOLS_HXX

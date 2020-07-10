@@ -33,25 +33,12 @@
 #include <memory>
 #include <vector>
 
-namespace com
+namespace com::sun::star::ui::dialogs
 {
-    namespace sun
-    {
-        namespace star
-        {
-            namespace ui
-            {
-                namespace dialogs
-                {
-                    class XFilePicker3;
-                    struct FilePickerEvent;
-                    struct DialogClosedEvent;
-                }
-            }
-        }
-    }
+    class XFilePicker3;
+    struct FilePickerEvent;
+    struct DialogClosedEvent;
 }
-
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace weld { class Window; }

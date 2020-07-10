@@ -24,9 +24,7 @@
 
 namespace drawinglayer::primitive2d { class ObjectInfoPrimitive2D; }
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** ObjectInfoPrimitiveExtractor2D class
 
@@ -48,8 +46,8 @@ namespace drawinglayer
 
             const primitive2d::ObjectInfoPrimitive2D* getResult() const { return mpFound; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_OBJECTINFOEXTRACTOR2D_HXX
 

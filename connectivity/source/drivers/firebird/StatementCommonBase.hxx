@@ -32,9 +32,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
@@ -128,7 +126,7 @@ namespace connectivity
             virtual void SAL_CALL close(  ) override;
 
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENTCOMMONBASE_HXX

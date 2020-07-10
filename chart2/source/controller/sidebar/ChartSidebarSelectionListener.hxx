@@ -17,8 +17,7 @@
 
 #include <vector>
 
-namespace chart {
-namespace sidebar {
+namespace chart::sidebar {
 
 class ChartSidebarSelectionListenerParent
 {
@@ -50,7 +49,7 @@ private:
     std::vector<ObjectType> maTypes;
 };
 
-} }
+}
 
 #endif
 

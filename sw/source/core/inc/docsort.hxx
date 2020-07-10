@@ -34,16 +34,7 @@ class FndBox_;
 class FndLine_;
 class CollatorWrapper;
 class LocaleDataWrapper;
-
-namespace com {
-    namespace sun {
-        namespace star {
-            namespace lang {
-                struct Locale;
-            }
-        }
-    }
-}
+namespace com::sun::star::lang { struct Locale; }
 
 class SwMovedBoxes
 {

@@ -21,9 +21,7 @@
 
 #include <ado/WrapTypeDefs.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOCatalog;
 

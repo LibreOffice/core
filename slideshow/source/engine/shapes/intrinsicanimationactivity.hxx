@@ -27,9 +27,7 @@
 
 /* Definition of IntrinsicAnimationActivity class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Create an IntrinsicAnimationActivity.
 
@@ -60,7 +58,7 @@ namespace slideshow
             const WakeupEventSharedPtr&     rWakeupEvent,
             const ::std::vector<double>&    rTimeouts,
             sal_uInt32                      nNumLoops);
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_INTRINSICANIMATIONACTIVITY_HXX

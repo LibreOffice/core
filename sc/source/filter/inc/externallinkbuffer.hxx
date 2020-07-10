@@ -38,8 +38,7 @@ namespace oox::core {
     class Relations;
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 struct ExternalNameModel
 {
@@ -349,8 +348,7 @@ private:
     bool                mbUseRefSheets;     /// True = use maRefSheets list (BIFF12 only).
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -25,11 +25,8 @@
 #include "fmdocumentclassification.hxx"
 
 
-namespace svxform
+namespace svxform::ControlLayouter
 {
-
-    namespace ControlLayouter
-    {
         /** initializes the layout of a newly created form control (model)
         */
         void initializeControlLayout(
@@ -56,8 +53,6 @@ namespace svxform
         */
         css::uno::Reference< css::beans::XPropertySet >
                     getDefaultDocumentTextStyle( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
-    }
-
 
 }
 

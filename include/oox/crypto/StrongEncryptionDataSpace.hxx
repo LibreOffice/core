@@ -23,9 +23,7 @@ namespace com::sun::star::uno
 class XComponentContext;
 }
 
-namespace oox
-{
-namespace crypto
+namespace oox::crypto
 {
 class StrongEncryptionDataSpace final
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::packages::XPackageEncryption>
@@ -68,8 +66,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

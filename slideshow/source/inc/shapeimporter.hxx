@@ -33,8 +33,7 @@
 
 #include <stack>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 struct SlideShowContext;
 
@@ -135,8 +134,7 @@ private:
     bool                                      mbConvertingMasterPage;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif
 

@@ -40,10 +40,7 @@
 
 /* Definition of ActivitiesFactory class */
 
-namespace slideshow {
-namespace internal {
-
-namespace ActivitiesFactory
+namespace slideshow::internal::ActivitiesFactory
 {
     /// Collection of common factory parameters
     struct CommonParameters
@@ -303,10 +300,8 @@ namespace ActivitiesFactory
         const CommonParameters&         rParms,
         const NumberAnimationSharedPtr& rAnimator,
         bool                            bDirectionForward );
-}
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESFACTORY_HXX
 

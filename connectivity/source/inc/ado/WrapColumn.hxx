@@ -23,9 +23,7 @@
 
 #include <adoint.h>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOColumn : public WpOLEBase<_ADOColumn>
         {

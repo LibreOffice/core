@@ -29,9 +29,7 @@
 #include <vector>
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /// helper data structure for returning the result
         struct DRAWINGLAYER_DLLPUBLIC TextAsPolygonDataNode
@@ -87,8 +85,8 @@ namespace drawinglayer
             // data read access
             const TextAsPolygonDataNodeVector& getTarget() const { return maTarget; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX

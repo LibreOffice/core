@@ -24,8 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a left to right zigZag wipe:
 class ZigZagWipe : public ParametricPolyPolygon
@@ -46,7 +45,7 @@ public:
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_ZIGZAGWIPE_HXX

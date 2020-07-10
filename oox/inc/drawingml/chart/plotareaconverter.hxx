@@ -26,9 +26,7 @@ namespace com::sun::star {
     namespace chart2 { class XDiagram; }
 }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct View3DModel;
@@ -102,9 +100,7 @@ private:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

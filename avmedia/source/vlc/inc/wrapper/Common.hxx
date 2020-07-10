@@ -9,11 +9,7 @@
 
 #pragma once
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class Common
     {

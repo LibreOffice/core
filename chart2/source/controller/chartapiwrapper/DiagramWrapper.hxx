@@ -41,9 +41,7 @@
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::lang { class XEventListener; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -215,8 +213,7 @@ private:
         css::beans::XPropertySet > m_xDownBarWrapper;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DIAGRAMWRAPPER_HXX
 #endif

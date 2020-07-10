@@ -46,9 +46,7 @@ namespace basegfx
 
 /* Definition of Slide interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class RGBColor;
         class ScreenUpdater;
@@ -205,7 +203,6 @@ namespace slideshow
                                     bool                                                bUserPaintEnabled,
                                     bool                                                bIntrinsicAnimationsAllowed,
                                     bool                                                bDisableAnimationZOrder );
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDE_HXX

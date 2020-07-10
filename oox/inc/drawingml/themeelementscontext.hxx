@@ -22,8 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class Theme;
 
@@ -38,8 +37,7 @@ private:
     Theme& mrTheme;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

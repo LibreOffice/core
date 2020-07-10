@@ -25,11 +25,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace sfwk
+namespace dp_registry::backend::sfwk
 {
 
 class ParcelDescDocHandler : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
@@ -63,8 +59,8 @@ public:
         const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 }
-}
-}
+
+
 
 #endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
 

@@ -26,9 +26,7 @@
 
 /* Definition of ParametricPolyPolygon interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a parametric poly-polygon.
 
@@ -84,7 +82,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ParametricPolyPolygon > ParametricPolyPolygonSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGON_HXX

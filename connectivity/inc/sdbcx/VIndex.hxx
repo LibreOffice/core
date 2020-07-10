@@ -29,9 +29,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
         class OCollection;
         class OIndex;
@@ -94,7 +92,7 @@ namespace connectivity
             // XDataDescriptorFactory
             virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

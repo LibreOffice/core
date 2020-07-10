@@ -25,8 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "FieldTypes.hxx"
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class FormControlHelper : public virtual SvRefBase
 {
@@ -50,7 +49,7 @@ private:
 };
 
 }
-}
+
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
 

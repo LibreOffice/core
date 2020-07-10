@@ -24,8 +24,7 @@ namespace oox { class AttributeList; }
 namespace oox::xls { class WorkbookFragment; }
 namespace oox::xls { class WorksheetFragment; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class ExtCfRuleContext : public WorksheetContextBase
 {
@@ -134,8 +133,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
-} //namespace xls
-} //namespace oox
+} //namespace oox::xls
 
 #endif
 

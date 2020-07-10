@@ -41,8 +41,7 @@ namespace oox {
     namespace drawingml { class ShapePropertyMap; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 
 typedef ::std::pair< sal_Int32, sal_Int32 > Int32Pair;
@@ -263,8 +262,7 @@ struct TextpathModel
                        const GraphicHelper& rGraphicHelper) const;
 };
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

@@ -34,9 +34,7 @@
 
 #include <map>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         class ODBCDriver;
 
@@ -122,7 +120,7 @@ namespace connectivity
             // close and free the handle and set it to SQL_NULLHANDLE
             void            freeStatementHandle(SQLHANDLE& _pHandle);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OCONNECTION_HXX
 

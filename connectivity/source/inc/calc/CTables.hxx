@@ -21,9 +21,7 @@
 
 #include <file/FTables.hxx>
 
-namespace connectivity
-{
-    namespace calc
+namespace connectivity::calc
     {
         typedef file::OTables OCalcTables_BASE;
 
@@ -36,7 +34,7 @@ namespace connectivity
                 const ::std::vector< OUString> &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,11 +11,7 @@
 
 struct libvlc_instance_t;
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class Instance
     {

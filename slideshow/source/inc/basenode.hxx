@@ -30,8 +30,7 @@
 
 #include <vector>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Context for every node.
 
@@ -205,8 +204,7 @@ private:
     const bool                                         mbIsMainSequenceRootNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif
 

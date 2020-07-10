@@ -32,10 +32,7 @@
 
 namespace com::sun::star::chart2 { class XDataSeries; }
 
-namespace chart
-{
-
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -122,8 +119,7 @@ private:
     css::uno::Reference< css::chart2::XDataSeries >     m_xDataSeries;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DATASERIESPOINTWRAPPER_HXX
 #endif

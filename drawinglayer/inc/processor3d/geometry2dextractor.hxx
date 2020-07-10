@@ -27,9 +27,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /** Geometry2DExtractingProcessor class
 
@@ -63,8 +61,8 @@ namespace drawinglayer
             const primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor3d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

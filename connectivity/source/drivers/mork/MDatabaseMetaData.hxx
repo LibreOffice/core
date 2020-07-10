@@ -14,9 +14,7 @@
 #include <TDatabaseMetaDataBase.hxx>
 #include "MConnection.hxx"
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class MDatabaseMetaDataHelper;
 
@@ -183,7 +181,7 @@ namespace connectivity
 
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATA_HXX

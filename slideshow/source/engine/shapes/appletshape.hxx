@@ -25,10 +25,8 @@
 
 namespace com::sun::star::drawing { class XShape; }
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         struct SlideShowContext;
         class Shape;
 
@@ -39,7 +37,6 @@ namespace slideshow
             const char**                            pPropCopyTable,
             std::size_t                             nNumPropEntries,
             const SlideShowContext&                 rContext );
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_APPLETSHAPE_HXX

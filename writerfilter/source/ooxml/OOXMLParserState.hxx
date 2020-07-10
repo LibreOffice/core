@@ -23,8 +23,7 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLPropertySet.hxx"
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 /**
@@ -117,7 +116,7 @@ public:
 
 };
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPARSERSTATE_HXX
 

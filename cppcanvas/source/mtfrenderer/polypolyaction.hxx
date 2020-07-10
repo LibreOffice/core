@@ -35,9 +35,7 @@ namespace com::sun::star::rendering
 
 /* Definition of internal::PolyPolyActionFactory */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
 
@@ -78,7 +76,7 @@ namespace cppcanvas
                                                   const OutDevState&,
                                                   int nTransparency );
         }
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

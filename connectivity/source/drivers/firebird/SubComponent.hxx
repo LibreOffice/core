@@ -24,27 +24,10 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-namespace cppu {
-    class IPropertyArrayHelper;
-}
+namespace cppu { class IPropertyArrayHelper; }
+namespace com::sun::star::lang { class XComponent; }
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace lang
-            {
-                class XComponent;
-            }
-        }
-    }
-}
-namespace connectivity
-{
-
-    namespace firebird
+namespace connectivity::firebird
     {
         /// @throws css::lang::DisposedException
         void checkDisposed(bool _bThrow);
@@ -124,7 +107,6 @@ namespace connectivity
             return s_pProps;
         }
 
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_SUBCOMPONENT_HXX
 

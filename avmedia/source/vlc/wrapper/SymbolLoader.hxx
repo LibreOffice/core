@@ -21,11 +21,7 @@
 
 #define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 typedef void (*SymbolFunc) (void);
 

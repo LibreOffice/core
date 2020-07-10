@@ -22,9 +22,7 @@
 
 #include "MacabRecord.hxx"
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabHeader: public MacabRecord{
             protected:

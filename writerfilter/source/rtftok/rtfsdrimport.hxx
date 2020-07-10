@@ -16,11 +16,7 @@
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <tools/ref.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace beans
 {
@@ -37,12 +33,8 @@ namespace lang
 class XComponent;
 }
 }
-}
-}
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 class RTFDocumentImpl;
 class RTFShape;
@@ -107,8 +99,7 @@ private:
     bool m_bFakePict;
     std::stack<writerfilter::dmapper::GraphicZOrderHelper> m_aGraphicZOrderHelpers;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 

@@ -23,9 +23,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <dbase/DTable.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class ODbaseTable;
 
@@ -47,7 +45,7 @@ namespace connectivity
             {}
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
 

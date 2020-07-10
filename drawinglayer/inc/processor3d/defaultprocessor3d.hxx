@@ -52,9 +52,7 @@ namespace drawinglayer::texture {
 }
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /** DefaultProcessor3D class
 
@@ -139,8 +137,8 @@ namespace drawinglayer
             /// access to Drawinglayer configuration options
             const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor3d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,9 +31,7 @@ namespace com::sun::star::animations { class XAnimationNode; }
 
 /* Definition of SlideAnimations class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class generates and manages all animations of a slide.
 
@@ -101,7 +99,7 @@ namespace slideshow
             const basegfx::B2DVector maSlideSize;
             AnimationNodeSharedPtr   mpRootNode;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SLIDEANIMATIONS_HXX

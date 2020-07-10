@@ -22,9 +22,7 @@
 
 #include "delayevent.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Event, which delays calling passed Event's fire() method
             the given amount of time.
@@ -134,7 +132,7 @@ namespace slideshow
 
             return aRes;
         }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_INTERRUPTABLEDELAYEVENT_HXX

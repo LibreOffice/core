@@ -13,8 +13,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace chart {
-namespace sidebar {
+namespace chart::sidebar {
 
 class ChartSidebarModifyListenerParent
 {
@@ -41,7 +40,7 @@ private:
     ChartSidebarModifyListenerParent* mpParent;
 };
 
-} }
+}
 
 #endif
 

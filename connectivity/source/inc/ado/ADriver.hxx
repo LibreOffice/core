@@ -28,9 +28,7 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);

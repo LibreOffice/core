@@ -25,14 +25,8 @@
 #include <memory>
 
 class SdrPageProperties;
+namespace sdr::contact { class ViewContact; }
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewContact;
-    } // end of namespace contact
-}
 
 namespace sdr
 {

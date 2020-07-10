@@ -48,10 +48,7 @@ namespace oox {
     class BinaryOutputStream;
 }
 
-namespace oox {
-
-
-namespace ole {
+namespace oox::ole {
     class ControlModelBase;
     class EmbeddedControl;
 
@@ -194,8 +191,7 @@ public:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

@@ -23,9 +23,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 
-namespace connectivity
-{
-    namespace mysql
+namespace connectivity::mysql
     {
 
         class OMySQLTable;
@@ -108,7 +106,7 @@ namespace connectivity
 
             virtual OUString getTypeCreatePattern() const override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
 

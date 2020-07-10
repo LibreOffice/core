@@ -25,10 +25,8 @@
 #include "implsprite.hxx"
 #include "implspritecanvas.hxx"
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-    namespace internal
-    {
         // share Sprite implementation of ImplSprite
         class ImplCustomSprite : public virtual CustomSprite, protected virtual ImplSprite
         {
@@ -49,7 +47,6 @@ namespace cppcanvas
             mutable CanvasSharedPtr                                    mpLastCanvas;
             const css::uno::Reference< css::rendering::XCustomSprite > mxCustomSprite;
         };
-    }
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX

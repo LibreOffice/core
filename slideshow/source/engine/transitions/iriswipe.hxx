@@ -25,8 +25,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate an iris wipe
 class IrisWipe : public ParametricPolyPolygon
@@ -38,7 +37,7 @@ private:
     const ::basegfx::B2DPolyPolygon m_unitRect;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_IRISWIPE_HXX

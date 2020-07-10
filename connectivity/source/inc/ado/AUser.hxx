@@ -23,9 +23,7 @@
 #include <sdbcx/VUser.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OCatalog;
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;

@@ -31,34 +31,20 @@
 #include <memory>
 #include <vector>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace awt
+namespace com::sun::star::awt
 {
 class XWindow;
 }
-namespace datatransfer
-{
-namespace dnd
+namespace com::sun::star::datatransfer::dnd
 {
 class XDropTarget;
 }
-}
-namespace graphic
+namespace com::sun::star::graphic
 {
 class XGraphic;
 }
-}
-}
-}
-
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
-
 enum class PointerStyle;
 class CommandEvent;
 class KeyEvent;

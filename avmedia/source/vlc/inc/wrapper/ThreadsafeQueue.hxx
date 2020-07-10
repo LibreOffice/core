@@ -22,11 +22,7 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 template<class T>
 class ThreadsafeQueue

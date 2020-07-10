@@ -26,8 +26,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class EventMultiplexer;
 typedef std::shared_ptr<class PointerSymbol> PointerSymbolSharedPtr;
@@ -71,8 +70,7 @@ private:
     bool                                          mbVisible;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif
 

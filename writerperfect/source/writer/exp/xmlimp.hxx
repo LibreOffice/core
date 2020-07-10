@@ -24,11 +24,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace beans
 {
@@ -43,12 +39,8 @@ namespace uri
 class XUriReferenceFactory;
 }
 }
-}
-}
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 class XMLImportContext;
 
@@ -153,8 +145,7 @@ public:
     setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

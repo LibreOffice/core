@@ -71,15 +71,9 @@ class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
 namespace vcl { class Window; }
 class SvxNumberFormat;
-
-
-namespace com {
-namespace sun {
-namespace star {
-namespace datatransfer {
-namespace clipboard {
+namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
-}}}}}
+}
 
 namespace editeng {
     struct MisspellRanges;

@@ -21,9 +21,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class OTables : public sdbcx::OCollection
         {
@@ -40,7 +38,7 @@ namespace connectivity
             // only the name is identical to ::cppu::OComponentHelper
             virtual void disposing() override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLES_HXX
 

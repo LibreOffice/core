@@ -30,8 +30,7 @@ namespace com::sun::star{
     }
 }
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class PropertyMap;
 class TablePropertyMap;
@@ -69,7 +68,7 @@ public:
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
 };
-}}
+}
 
 #endif
 

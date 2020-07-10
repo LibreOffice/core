@@ -28,9 +28,7 @@
 #include <TConnection.hxx>
 #include <file/filedllapi.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class ODatabaseMetaData;
         class OFileDriver;
@@ -128,7 +126,7 @@ namespace connectivity
 
             void    setCaseSensitiveExtension( bool _bIsCS, GrantAccess ) { m_bCaseSensitiveExtension = _bIsCS; }
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCONNECTION_HXX
 

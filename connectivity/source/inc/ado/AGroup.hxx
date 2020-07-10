@@ -23,9 +23,7 @@
 #include <sdbcx/VGroup.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         typedef sdbcx::OGroup OGroup_ADO;
         class OCatalog;

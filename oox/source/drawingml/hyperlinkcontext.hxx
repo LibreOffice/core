@@ -24,8 +24,7 @@
 
 namespace oox { class PropertyMap; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class HyperLinkContext final : public ::oox::core::ContextHandler2
 {
@@ -42,8 +41,7 @@ private:
     PropertyMap&        maProperties;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

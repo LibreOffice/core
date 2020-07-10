@@ -27,9 +27,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <vcl/vclptr.hxx>
 
-namespace avmedia
-{
-    namespace priv
+namespace avmedia::priv
     {
 
         // - MediaEventListenersImpl -
@@ -72,7 +70,7 @@ namespace avmedia
             VclPtr<vcl::Window>     mpNotifyWindow;
             mutable ::osl::Mutex    maMutex;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

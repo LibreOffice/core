@@ -23,9 +23,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         // overlay type definition
         enum class OverlayType
@@ -71,8 +69,7 @@ namespace sdr
             // data write access
             void setRanges(const std::vector< basegfx::B2DRange >& rNew);
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYSELECTION_HXX

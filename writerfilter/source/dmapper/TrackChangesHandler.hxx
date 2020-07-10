@@ -13,8 +13,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <dmapper/PropertyMap.hxx>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 /** Handler for sprms that contain 'track changes' attributes
     - Author
@@ -37,7 +36,7 @@ public:
     /// Compute the UNO properties for the track changes object based on the received tokens.
     css::uno::Sequence<css::beans::PropertyValue> getRedlineProperties() const;
 };
-}}
+}
 
 #endif
 

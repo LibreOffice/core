@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class TableColumn;
 class TableColumns;
@@ -60,8 +59,7 @@ private:
     TableColumns&       mrTableColumns;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

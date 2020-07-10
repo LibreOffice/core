@@ -22,9 +22,7 @@
 
 #include <file/FColumns.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         class OFlatColumns : public file::OColumns
         {
@@ -38,7 +36,7 @@ namespace connectivity
             {}
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ECOLUMNS_HXX
 

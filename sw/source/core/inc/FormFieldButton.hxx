@@ -15,13 +15,10 @@
 
 class SwEditWin;
 class FloatingWindow;
-namespace sw
-{
-namespace mark
+namespace sw::mark
 {
 class Fieldmark;
 }
-} // namespace sw
 
 /**
  * This button is shown when the cursor is on a form field with drop-down capability.

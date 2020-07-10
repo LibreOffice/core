@@ -25,8 +25,7 @@
 
 #include <utility>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 class PositionHandler: public LoggedProperties
@@ -76,7 +75,7 @@ public:
     OUString NameGraphic(const OUString& rTemplate);
 };
 
-} }
+}
 
 #endif
 

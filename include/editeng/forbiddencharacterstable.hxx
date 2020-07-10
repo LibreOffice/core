@@ -27,12 +27,7 @@
 #include <map>
 #include <memory>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace uno {
-    class XComponentContext;
-}}}}
+namespace com::sun::star::uno { class XComponentContext; }
 
 class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable
 {

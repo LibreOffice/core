@@ -30,9 +30,7 @@
 
 #include <memory>
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -116,8 +114,7 @@ private:
     ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHARTDATAWRAPPER_HXX
 #endif

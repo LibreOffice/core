@@ -30,9 +30,7 @@
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabAddressBook
         {

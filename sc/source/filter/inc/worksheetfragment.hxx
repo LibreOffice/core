@@ -23,8 +23,7 @@
 #include <memory>
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class DataValidationsContextBase
 {
@@ -179,8 +178,7 @@ private:
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId );
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

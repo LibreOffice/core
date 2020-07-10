@@ -29,8 +29,7 @@
 namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 class ControlModelBase;
 class EmbeddedControl;
@@ -70,8 +69,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

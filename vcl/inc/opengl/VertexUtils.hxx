@@ -17,9 +17,7 @@
 #include <tools/color.hxx>
 #include <vector>
 
-namespace vcl
-{
-namespace vertex
+namespace vcl::vertex
 {
 
 template<GLenum TYPE>
@@ -113,7 +111,7 @@ inline float lineVectorAngle(const glm::vec2& previous, const glm::vec2& next)
     return F_PI - std::fabs(angle);
 }
 
-}} // end vcl::vertex
+} // end vcl::vertex
 
 #endif // INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
 

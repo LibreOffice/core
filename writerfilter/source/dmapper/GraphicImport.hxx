@@ -50,9 +50,7 @@ namespace com::sun::star {
     }
 }
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class GraphicImport_Impl;
 class DomainMapper;
@@ -131,7 +129,7 @@ public:
 
 typedef tools::SvRef<GraphicImport> GraphicImportPtr;
 
-}}
+}
 
 #endif
 

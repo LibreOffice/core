@@ -23,9 +23,7 @@
 #include <drawingml/table/tablestylelist.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace table {
+namespace oox::drawingml::table {
 
 class TableStyleListFragmentHandler final : public ::oox::core::FragmentHandler2
 {
@@ -43,9 +41,7 @@ private:
     TableStyleList&              mrTableStyleList;
 };
 
-} // namespace table
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::table
 
 #endif
 

@@ -35,13 +35,9 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <memory>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace awt {
+namespace com::sun::star::awt {
     class XWindow;
 }
-} } }
 namespace comphelper { class SolarMutex; }
 namespace vcl { class Window; }
 namespace weld {

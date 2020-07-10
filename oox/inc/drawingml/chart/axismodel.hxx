@@ -23,9 +23,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 struct AxisDispUnitsModel
 {
@@ -90,9 +88,7 @@ struct AxisModel
                         ~AxisModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

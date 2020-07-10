@@ -32,8 +32,7 @@ namespace com::sun::star {
     namespace util { struct DateTime; }
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Stores basic data about cell values and formatting. */
 struct CellModel
@@ -234,8 +233,7 @@ private:
     std::map< sal_Int32, std::vector< ValueRange > > maXfIdRowRangeList; /// Cached XF identifiers for a ranges of rows, we try and process rowranges with the same XF id together
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

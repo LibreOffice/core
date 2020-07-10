@@ -33,19 +33,10 @@
 #include <vector>
 
 
-namespace com
+namespace com::sun::star::frame
 {
-    namespace sun
-    {
-        namespace star
-        {
-            namespace frame
-            {
-                class XFrame;
-                class XController;
-            }
-        }
-    }
+    class XFrame;
+    class XController;
 }
 
 class SvBorder;

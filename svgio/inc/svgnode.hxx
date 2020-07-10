@@ -29,20 +29,16 @@
 #include <optional>
 
 // predefines
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
-        class SvgNode;
-        class SvgDocument;
-        class SvgStyleAttributes;
-    }
+    class SvgNode;
+    class SvgDocument;
+    class SvgStyleAttributes;
 }
 
 
-namespace svgio
-{
-    namespace svgreader
+
+namespace svgio::svgreader
     {
         enum XmlSpace
         {
@@ -193,8 +189,7 @@ namespace svgio
             virtual void visit(SvgNode const & pNode) = 0;
       };
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGNODE_HXX
 

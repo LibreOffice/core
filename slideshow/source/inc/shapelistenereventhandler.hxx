@@ -34,9 +34,7 @@ namespace com::sun::star {
 
 /* Definition of ShapeListenerEventHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling view events.
@@ -57,7 +55,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ShapeListenerEventHandler > ShapeListenerEventHandlerSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPELISTENEREVENTHANDLER_HXX

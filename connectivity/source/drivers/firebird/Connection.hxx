@@ -41,9 +41,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
 
         typedef ::cppu::WeakComponentImplHelper< css::document::XDocumentEventListener,
@@ -239,7 +237,7 @@ namespace connectivity
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CONNECTION_HXX
 

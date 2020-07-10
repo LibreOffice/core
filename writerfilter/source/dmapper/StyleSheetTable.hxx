@@ -31,8 +31,7 @@
 namespace com::sun::star::text { class XTextDocument; }
 
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 
@@ -144,7 +143,7 @@ private:
 };
 
 
-}}
+}
 
 #endif
 

@@ -26,28 +26,16 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <unotools/closeveto.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace text
+namespace com::sun::star::text
 {
 class XTextDocument;
 }
-}
-}
-}
-
 namespace utl
 {
 class CloseVeto;
 }
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 class ODriver;
 class OWriterConnection : public file::OConnection
@@ -161,7 +149,6 @@ public:
         const css::uno::Reference<css::text::XTextDocument>& getDoc() const { return m_xDoc; }
     };
 };
-}
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WCONNECTION_HXX

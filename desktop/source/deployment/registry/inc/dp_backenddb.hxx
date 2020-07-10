@@ -38,8 +38,7 @@ namespace com::sun::star {
         }
 }
 
-namespace dp_registry {
-namespace backend {
+namespace dp_registry::backend {
 
 class BackendDb
 {
@@ -162,7 +161,7 @@ public:
 };
 
 }
-}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,9 +23,7 @@
 #include "attributableshape.hxx"
 #include "shapeattributelayer.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Holds a ShapeAttributeLayer, together with the associated
             Shape
@@ -97,7 +95,6 @@ namespace slideshow
             ShapeAttributeLayerSharedPtr    mpAttributeLayer;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEATTRIBUTELAYERHOLDER_HXX

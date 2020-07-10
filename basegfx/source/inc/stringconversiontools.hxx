@@ -22,9 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace basegfx
-{
-    namespace internal
+namespace basegfx::internal
     {
         void skipSpaces(sal_Int32&      io_rPos,
                         const OUString& rStr,
@@ -57,8 +55,7 @@ namespace basegfx
                                  const OUString& rStr,
                                  const sal_Int32 nLen);
 
-    } // namespace internal
-} // namespace basegfx
+} // namespace basegfx::internal
 
 #endif // INCLUDED_BASEGFX_SOURCE_INC_STRINGCONVERSIONTOOLS_HXX
 

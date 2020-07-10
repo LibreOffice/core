@@ -26,8 +26,7 @@
 
 namespace oox { class BinaryInputStream; }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 // Directory stream record identifiers ========================================
 
@@ -85,8 +84,7 @@ namespace VbaHelper
 }
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

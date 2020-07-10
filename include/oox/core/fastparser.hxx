@@ -44,8 +44,7 @@ namespace sax_fastparser {
     class FastSaxParser;
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 
 /** Wrapper for a fast SAX parser that works on automatically generated OOXML
@@ -112,8 +111,7 @@ private:
 };
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

@@ -21,9 +21,7 @@ namespace utl
 class MediaDescriptor;
 }
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 enum class SourceDocumentType
 {
@@ -46,8 +44,7 @@ public:
 SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUString>>
 splitFieldCommand(const OUString& rCommand);
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif // INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 

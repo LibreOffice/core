@@ -21,10 +21,8 @@
 
 #include <file/FCatalog.hxx>
 
-namespace connectivity
+namespace connectivity::calc
 {
-    namespace calc
-    {
         class OCalcConnection;
         class OCalcCatalog : public file::OFileCatalog
         {
@@ -34,7 +32,7 @@ namespace connectivity
         public:
             OCalcCatalog(OCalcConnection* _pCon);
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

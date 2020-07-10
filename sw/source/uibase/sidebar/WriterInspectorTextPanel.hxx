@@ -32,9 +32,7 @@ enum StyleType
     CHARACTERSTYLES,
     PARAGRAPHSTYLES
 };
-namespace sw
-{
-namespace sidebar
+namespace sw::sidebar
 {
 class WriterInspectorTextPanel final
     : public svx::sidebar::InspectorTextPanel,
@@ -60,7 +58,7 @@ private:
     sfx2::sidebar::ControllerItem maCharStyle;
     sfx2::sidebar::ControllerItem maParaStyle;
 };
-}
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,8 +25,7 @@
 #include "workbookhelper.hxx"
 #include "stylesbuffer.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {
@@ -47,8 +46,7 @@ private:
     FontModelPtr        mxDefFontModel;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

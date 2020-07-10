@@ -24,9 +24,7 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
         class OComponentResultSet;
         // these typedef's are only necessary for the compiler
@@ -76,7 +74,7 @@ namespace connectivity
             virtual bool isRowDeleted() const override { return false; }
 
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CRESULTSET_HXX

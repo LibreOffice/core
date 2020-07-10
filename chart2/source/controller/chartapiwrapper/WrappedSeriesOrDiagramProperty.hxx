@@ -28,9 +28,7 @@
 
 namespace com::sun::star::chart2 { class XDataSeries; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 enum tSeriesOrDiagramPropertyType
@@ -164,8 +162,7 @@ protected:
     tSeriesOrDiagramPropertyType               m_ePropertyType;
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSERIESORDIAGRAMPROPERTY_HXX
 #endif

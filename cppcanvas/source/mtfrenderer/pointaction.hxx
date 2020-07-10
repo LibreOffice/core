@@ -29,9 +29,7 @@ namespace basegfx {
 
 /* Definition of internal::PointActionFactory */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
 
@@ -55,7 +53,7 @@ namespace cppcanvas
                                                       const OutDevState&,
                                                       const ::Color&        );
         }
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

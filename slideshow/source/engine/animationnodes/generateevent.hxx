@@ -24,8 +24,7 @@
 #include <delayevent.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Create an event for the given description, calling the given functor.
 
@@ -47,8 +46,7 @@ EventSharedPtr generateEvent(
     SlideShowContext const& rContext,
     double nAdditionalDelay );
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_GENERATEEVENT_HXX
 

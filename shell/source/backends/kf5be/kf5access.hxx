@@ -24,18 +24,9 @@
 
 #include <com/sun/star/beans/Optional.hpp>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 class Any;
-}
-}
-}
 }
 
 namespace kf5access

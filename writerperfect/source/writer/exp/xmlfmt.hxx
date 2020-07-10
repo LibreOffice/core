@@ -19,9 +19,7 @@ namespace librevenge
 class RVNGPropertyList;
 }
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <office:automatic-styles>/<office:styles>.
 class XMLStylesContext : public XMLImportContext
@@ -71,8 +69,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

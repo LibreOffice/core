@@ -33,10 +33,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XRefreshable; }
 
-namespace chart
-{
-
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -167,8 +164,7 @@ private: //member
     bool                                          m_bIsDisposed;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // CHART_CHARTDOCUMENT_HXX
 #endif

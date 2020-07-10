@@ -26,9 +26,7 @@
 
 /* Definition of StringAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a string animation.
 
@@ -63,7 +61,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< StringAnimation > StringAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_STRINGANIMATION_HXX

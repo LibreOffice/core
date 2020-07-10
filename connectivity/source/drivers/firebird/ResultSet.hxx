@@ -36,9 +36,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         /*
         **  OResultSet
@@ -213,7 +211,7 @@ namespace connectivity
              OResultSet::retrieveValue(
                  const sal_Int32 nColumnIndex,
                  const ISC_SHORT nType);
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSET_HXX
 

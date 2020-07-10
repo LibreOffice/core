@@ -24,9 +24,7 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SdrLineFillEffectsTextAttribute : public SdrLineEffectsTextAttribute
         {
@@ -58,8 +56,8 @@ namespace drawinglayer
             const SdrFillAttribute& getFill() const { return maFill; }
             const FillGradientAttribute& getFillFloatTransGradient() const { return maFillFloatTransGradient; }
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

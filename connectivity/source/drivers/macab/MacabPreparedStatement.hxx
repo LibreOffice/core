@@ -27,9 +27,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         typedef ::cppu::ImplInheritanceHelper< MacabCommonStatement,
                                                css::sdbc::XPreparedStatement,

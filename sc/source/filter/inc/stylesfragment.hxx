@@ -23,8 +23,7 @@
 #include "excelhandlers.hxx"
 #include "stylesbuffer.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class IndexedColorsContext : public WorkbookContextBase
 {
@@ -126,8 +125,7 @@ protected:
     virtual void        finalizeImport() override;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

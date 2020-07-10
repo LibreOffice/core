@@ -12,9 +12,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <map>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class GraphicZOrderHelper
 {
@@ -28,8 +26,7 @@ private:
     Items items;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif // INCLUDED_WRITERFILTER_INC_DMAPPER_GRAPHICZORDERHELPER_HXX
 

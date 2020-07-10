@@ -31,9 +31,7 @@
 #include <unordered_map>
 #include <strings.hrc>
 
-namespace dp_registry
-{
-namespace backend
+namespace dp_registry::backend
 {
 
 class PackageRegistryBackend;
@@ -282,7 +280,7 @@ public:
 };
 
 }
-}
+
 
 #endif
 

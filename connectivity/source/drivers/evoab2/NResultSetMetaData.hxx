@@ -25,9 +25,7 @@
 #include "NConnection.hxx"
 #include <rtl/ref.hxx>
 #include <com/sun/star/connection/XConnection.hpp>
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
 
         //************ Class: ResultSetMetaData

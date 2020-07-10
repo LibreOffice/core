@@ -24,9 +24,7 @@
 
 /* Definition of AttributeMap helper function */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Type of to-be-animated attribute.
 
@@ -65,7 +63,7 @@ namespace slideshow
             mapping table.
          */
         AttributeType mapAttributeName( const OUString& rAttrName );
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ATTRIBUTEMAP_HXX

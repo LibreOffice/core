@@ -35,9 +35,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         enum class GradientStyle
         {
@@ -48,13 +46,11 @@ namespace drawinglayer
             Square,
             Rect
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
         {
@@ -98,8 +94,8 @@ namespace drawinglayer
             const basegfx::BColor& getEndColor() const;
             sal_uInt16 getSteps() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX

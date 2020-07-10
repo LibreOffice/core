@@ -25,9 +25,7 @@
 #include <tools/urlobj.hxx>
 
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         typedef file::OFileTable ODbaseTable_BASE;
         class ODbaseConnection;
@@ -191,7 +189,7 @@ namespace connectivity
 
             virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLE_HXX
 

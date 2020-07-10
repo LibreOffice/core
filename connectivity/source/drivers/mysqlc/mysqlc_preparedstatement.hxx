@@ -29,9 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/compbase4.hxx>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::XResultSetMetaData;
@@ -154,8 +152,8 @@ public:
     // XResultSetMetaDataSupplier
     Reference<css::sdbc::XResultSetMetaData> SAL_CALL getMetaData() override;
 };
-} /* mysqlc */
-} /* connectivity */
+
+} /* connectivity::mysqlc */
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_PREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,7 @@ typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
 
 }
 
-namespace oox {
-namespace shape {
+namespace oox::shape {
 
 class OOX_DLLPUBLIC ShapeFilterBase final : public core::XmlFilterBase
 {
@@ -76,8 +75,7 @@ private:
     ::oox::drawingml::ThemePtr mpTheme;
 };
 
-} // namespace shape
-} // namespace oox
+} // namespace oox::shape
 
 #endif
 

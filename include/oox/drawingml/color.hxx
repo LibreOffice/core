@@ -32,8 +32,7 @@
 
 namespace oox { class GraphicHelper; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 class OOX_DLLPUBLIC Color
@@ -156,8 +155,7 @@ private:
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

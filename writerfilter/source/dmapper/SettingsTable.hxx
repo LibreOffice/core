@@ -29,8 +29,7 @@ namespace com::sun::star::lang {
     struct Locale;
 }
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class DomainMapper;
 
@@ -102,7 +101,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
 };
 typedef tools::SvRef< SettingsTable >          SettingsTablePtr;
-}}
+}
 
 #endif
 

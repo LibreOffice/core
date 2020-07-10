@@ -31,11 +31,7 @@
 #include <connectivity/CommonTools.hxx>
 
 
-namespace connectivity
-{
-
-
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
@@ -129,10 +125,9 @@ namespace connectivity
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
         };
-    }
 
 
-}   // namespace connectivity
+}   // namespace connectivity::hsqldb
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HDRIVER_HXX
 

@@ -23,8 +23,7 @@
 #include "commentsbuffer.hxx"
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class CommentsFragment : public WorksheetFragmentBase
 {
@@ -52,8 +51,7 @@ private:
     CommentRef          mxComment;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

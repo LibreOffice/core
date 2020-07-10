@@ -24,8 +24,7 @@ namespace oox {
     class BinaryXOutputStream;
 }
 
-namespace oox {
-namespace crypto {
+namespace oox::crypto {
 
 struct OOX_DLLPUBLIC AgileEncryptionInfo
 {
@@ -141,8 +140,7 @@ public:
     bool setupEncryptionKey(OUString const & rPassword);
 };
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

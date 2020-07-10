@@ -30,9 +30,7 @@
 
 #define MOZAB_MozillaBootstrap_IMPL_NAME "com.sun.star.comp.mozilla.MozillaBootstrap"
 
-namespace connectivity
-{
-    namespace mozab
+namespace connectivity::mozab
     {
         typedef ::cppu::WeakComponentImplHelper<   css::mozilla::XMozillaBootstrap,
                                                    css::lang::XServiceInfo > OMozillaBootstrap_BASE;
@@ -78,7 +76,6 @@ namespace connectivity
             // XProxyRunner
             virtual ::sal_Int32 SAL_CALL Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
         };
-    }
 
 }
 

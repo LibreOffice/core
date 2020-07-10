@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class ChartsheetFragment : public WorksheetFragmentBase
 {
@@ -49,8 +48,7 @@ private:
     void                importDrawing( SequenceInputStream& rStrm );
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

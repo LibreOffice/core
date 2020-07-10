@@ -26,20 +26,11 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace io
+namespace com::sun::star::io
             {
                 class XStream;
                 class XInputStream;
             }
-        }
-    }
-}
 
 namespace com::sun::star::awt { class XWindow; }
 

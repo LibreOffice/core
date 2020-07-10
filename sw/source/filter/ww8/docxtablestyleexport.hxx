@@ -14,18 +14,9 @@
 
 #include <sax/fshelper.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace beans
+namespace com::sun::star::beans
 {
 struct PropertyValue;
-}
-}
-}
 }
 class SwDoc;
 

@@ -24,9 +24,7 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
         typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;

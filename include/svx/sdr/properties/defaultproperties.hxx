@@ -30,9 +30,7 @@
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class SVXCORE_DLLPUBLIC DefaultProperties : public BaseProperties
         {
@@ -103,8 +101,8 @@ namespace sdr
             // Default implementation does nothing.
             virtual void ForceDefaultAttributes();
         };
-    } // end of namespace properties
-} // end of namespace sdr
+
+} // end of namespace sdr::properties
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_DEFAULTPROPERTIES_HXX
 

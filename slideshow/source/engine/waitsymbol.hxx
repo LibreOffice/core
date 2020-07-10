@@ -31,8 +31,7 @@
 #include <memory>
 #include <vector>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class EventMultiplexer;
 typedef std::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
@@ -82,8 +81,7 @@ private:
     bool                                       mbVisible;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif
 

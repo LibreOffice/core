@@ -28,20 +28,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
-    }
-}
-
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { struct DispatchDescriptor; }
 
 class SdUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >

@@ -42,9 +42,7 @@
 #include "NStatement.hxx"
 #include "NResultSetMetaData.hxx"
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         struct ComparisonData;
 

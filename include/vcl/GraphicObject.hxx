@@ -285,9 +285,7 @@ public:
         double fBottomCrop) const;
 };
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 
 // Will search an object ( e.g. a control ) for any 'ImageURL' or 'Graphic'
@@ -300,7 +298,7 @@ namespace graphic
 VCL_DLLPUBLIC void SearchForGraphics(css::uno::Reference<css::uno::XInterface> const & rxInterface,
                                      std::vector<css::uno::Reference<css::graphic::XGraphic>> & raGraphicList);
 
-}
+
 } // end namespace vcl::graphic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

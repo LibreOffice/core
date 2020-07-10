@@ -27,9 +27,7 @@
 #include "svgpaint.hxx"
 #include <vector>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
 
 // recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
@@ -220,8 +218,7 @@ namespace svgio
         // an adapted string or the original if no comments included
         OUString removeBlockComments(const OUString& rCandidate);
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGTOOLS_HXX
 

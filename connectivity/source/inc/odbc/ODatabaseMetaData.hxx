@@ -24,9 +24,7 @@
 #include <odbc/odbcbasedllapi.hxx>
 #include <TDatabaseMetaDataBase.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
 
         //************ Class: ODatabaseMetaData
@@ -200,7 +198,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL supportsBatchUpdates(  ) override;
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
 

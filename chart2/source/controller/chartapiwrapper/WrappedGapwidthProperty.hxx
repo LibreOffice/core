@@ -25,9 +25,7 @@
 
 namespace chart::wrapper { class Chart2ModelContact; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class WrappedBarPositionProperty_Base : public WrappedDefaultProperty
@@ -71,8 +69,7 @@ public:
     virtual ~WrappedBarOverlapProperty() override;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDGAPWIDTHPROPERTY_HXX
 #endif

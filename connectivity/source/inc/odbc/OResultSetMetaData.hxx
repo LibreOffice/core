@@ -27,9 +27,7 @@
 #include <vector>
 #include <odbc/OConnection.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
 
         //************ Class: ResultSetMetaData
@@ -113,7 +111,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
             virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
 

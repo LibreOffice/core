@@ -31,10 +31,7 @@ namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
-namespace chart
-{
-
-namespace StatisticsHelper
+namespace chart::StatisticsHelper
 {
     /** Calculates 1/n * sum (x_i - x_mean)^2.
 
@@ -97,7 +94,6 @@ namespace StatisticsHelper
     OOO_DLLPUBLIC_CHARTTOOLS bool usesErrorBarRanges(
         const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
         bool bYError = true );
-}
 
 } //  namespace chart
 

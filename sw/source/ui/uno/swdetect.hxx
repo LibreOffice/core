@@ -25,19 +25,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
-    }
-}
+namespace com::sun::star::beans { struct PropertyValue; }
 
 class SfxMedium;
 class SfxFilter;

@@ -33,9 +33,7 @@
 #include <postmac.h>
 #include <com/sun/star/util/DateTime.hpp>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         /* This struct is for converting CF types to AB types (Core Foundation
          * types to Address Book types).

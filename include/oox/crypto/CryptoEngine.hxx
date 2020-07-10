@@ -24,8 +24,7 @@ namespace oox {
     class BinaryXOutputStream;
 }
 
-namespace oox {
-namespace crypto {
+namespace oox::crypto {
 
 class CryptoEngine
 {
@@ -60,8 +59,7 @@ public:
     virtual bool checkDataIntegrity() = 0;
 };
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

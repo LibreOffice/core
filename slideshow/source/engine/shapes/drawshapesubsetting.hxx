@@ -27,9 +27,7 @@
 class GDIMetaFile;
 typedef ::std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class encapsulates the subsetting aspects of a
             DrawShape.
@@ -239,7 +237,6 @@ namespace slideshow
             mutable bool                        mbNodeTreeInitialized;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX

@@ -63,9 +63,7 @@ public:
 // at the given logic position with the Bitmap's pixel size, unscaled and
 // unrotated (like a marker). The discrete pixel on the bitmap assocciated
 // with the target position is given in discrete X,Y coordinates
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class OverlayBitmapExPrimitive final : public DiscreteMetricDependentPrimitive2D
         {
@@ -109,14 +107,11 @@ namespace drawinglayer
 
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 // Overlay helper class for a crosshair
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class OverlayCrosshairPrimitive final : public ViewportDependentPrimitive2D
         {
@@ -149,15 +144,12 @@ namespace drawinglayer
 
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 // Overlay helper class for a hatch rectangle as used e.g. for text object
 // selection highlighting
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class OverlayRectanglePrimitive final : public DiscreteMetricDependentPrimitive2D
         {
@@ -200,15 +192,12 @@ namespace drawinglayer
 
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 // Overlay helper class for a striped helpline
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         enum HelplineStyle
         {
@@ -253,16 +242,13 @@ namespace drawinglayer
 
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 // Overlay helper class for rolling rectangle helplines. This primitive is
 // only for the extended lines to the ends of the view
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class OverlayRollingRectanglePrimitive final : public ViewportDependentPrimitive2D
         {
@@ -295,8 +281,7 @@ namespace drawinglayer
 
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 #endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX

@@ -33,9 +33,7 @@
 namespace chart::wrapper { class Chart2ModelContact; }
 namespace com::sun::star::chart2 { class XTitle; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class TitleWrapper final : public ::cppu::ImplInheritanceHelper<
@@ -108,8 +106,7 @@ private:
     ::chart::TitleHelper::eTitleType        m_eTitleType;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_TITLEWRAPPER_HXX
 #endif

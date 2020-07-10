@@ -33,9 +33,7 @@
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         /* a MacabRecord is at root a list of macabfields (which is just
          * something to hold both a CFTypeRef (a CoreFoundation object) and

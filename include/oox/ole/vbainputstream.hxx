@@ -27,8 +27,7 @@
 #include <oox/helper/binarystreambase.hxx>
 #include <sal/types.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** A non-seekable input stream that implements run-length decompression. */
@@ -68,8 +67,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

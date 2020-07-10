@@ -32,9 +32,7 @@
 // predefines
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC SdrLineFillShadowAttribute3D
         {
@@ -64,8 +62,8 @@ namespace drawinglayer
             const SdrShadowAttribute& getShadow() const { return maShadow; }
             const FillGradientAttribute& getFillFloatTransGradient() const { return maFillFloatTransGradient; }
         };
-    } // end of namespace overlay
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::overlay
 
 
 #endif // INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX

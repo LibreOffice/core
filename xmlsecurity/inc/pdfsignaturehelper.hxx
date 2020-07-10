@@ -15,11 +15,7 @@
 
 #include <svl/sigstruct.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace frame
 {
@@ -37,14 +33,9 @@ namespace security
 {
 struct DocumentSignatureInformation;
 }
-namespace xml
-{
-namespace crypto
+namespace xml::crypto
 {
 class XSecurityEnvironment;
-}
-}
-}
 }
 }
 

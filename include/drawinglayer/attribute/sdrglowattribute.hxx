@@ -17,9 +17,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <tools/color.hxx>
 
-namespace drawinglayer
-{
-namespace attribute
+namespace drawinglayer::attribute
 {
 class DRAWINGLAYER_DLLPUBLIC SdrGlowAttribute
 {
@@ -43,8 +41,8 @@ public:
     sal_Int32 getRadius() const { return m_nRadius; }
     bool isDefault() const { return m_nRadius == 0; }
 };
-} // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRGLOWATTRIBUTE_HXX
 

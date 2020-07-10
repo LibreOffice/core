@@ -32,24 +32,15 @@
 namespace vcl { class Window; }
 class OutputDevice;
 class Menu;
-
-namespace com {
-namespace sun {
-namespace star {
-namespace awt {
+namespace com::sun::star::awt {
     class XGraphics;
     class XToolkit;
     class XWindow;
     class XWindowPeer;
 }
-} } }
-
-namespace com {
-namespace sun {
-namespace star {
-namespace accessibility {
+namespace com::sun::star::accessibility {
     class XAccessible;
-}}}}
+}
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) UnoWrapperBase
 {

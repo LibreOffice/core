@@ -22,9 +22,7 @@
 
 #include <file/FPreparedStatement.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         class OConnection;
         class OFlatPreparedStatement : public file::OPreparedStatement
@@ -35,7 +33,7 @@ namespace connectivity
             OFlatPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EPREPAREDSTATEMENT_HXX

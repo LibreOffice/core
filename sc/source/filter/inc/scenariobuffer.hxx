@@ -27,8 +27,7 @@
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 struct ScenarioCellModel
 {
@@ -123,8 +122,7 @@ private:
     SheetScenariosMap   maSheetScenarios;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

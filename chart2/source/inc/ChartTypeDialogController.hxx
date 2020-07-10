@@ -30,57 +30,21 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <vcl/weld.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace beans
+namespace com::sun::star::beans
 {
 class XPropertySet;
 }
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace chart2
+namespace com::sun::star::chart2
 {
 class XChartDocument;
 }
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace chart2
+namespace com::sun::star::chart2
 {
 class XChartTypeTemplate;
 }
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace lang
+namespace com::sun::star::lang
 {
 class XMultiServiceFactory;
-}
-}
-}
 }
 
 class ValueSet;

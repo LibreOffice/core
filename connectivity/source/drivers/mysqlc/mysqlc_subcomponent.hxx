@@ -28,24 +28,12 @@ namespace cppu
 {
 class IPropertyArrayHelper;
 }
-
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace lang
+namespace com::sun::star::lang
 {
 class XComponent;
 }
-}
-}
-}
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 /// @throws css::lang::DisposedException
 void checkDisposed(bool _bThrow);
@@ -151,7 +139,6 @@ css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft,
     internal::implCopySequence(pRight, pReturn, nRight);
 
     return aReturn;
-}
 }
 }
 

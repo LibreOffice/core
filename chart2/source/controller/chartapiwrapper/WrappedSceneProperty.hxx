@@ -26,9 +26,7 @@
 
 namespace chart::wrapper { class Chart2ModelContact; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class WrappedSceneProperty
@@ -53,8 +51,7 @@ private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSCENEPROPERTY_HXX
 #endif

@@ -22,9 +22,7 @@
 
 #include <file/fcode.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         /** DAYOFWEEK(date)
             Returns the weekday index for date (1 = Sunday, 2 = Monday, ... 7 = Saturday). These index values correspond to the ODBC standard.
@@ -225,7 +223,7 @@ namespace connectivity
         protected:
             virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FDATEFUNCTIONS_HXX

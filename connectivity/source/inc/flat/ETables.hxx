@@ -22,9 +22,7 @@
 
 #include <file/FTables.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         typedef file::OTables OFlatTables_BASE;
 
@@ -37,7 +35,7 @@ namespace connectivity
                 const ::std::vector< OUString> &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
 

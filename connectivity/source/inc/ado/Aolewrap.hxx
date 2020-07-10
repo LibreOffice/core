@@ -28,9 +28,7 @@ namespace rtl
 {
     class OUString;
 }
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OLEVariant;
         class WpBase

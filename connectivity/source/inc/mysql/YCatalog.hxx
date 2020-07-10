@@ -21,9 +21,7 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
-{
-    namespace mysql
+namespace connectivity::mysql
     {
         // please don't name the class the same name as in another namespaces
         // some compilers have problems with this task as I noticed on windows
@@ -57,7 +55,7 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YCATALOG_HXX
 

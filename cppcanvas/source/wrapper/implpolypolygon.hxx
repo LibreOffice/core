@@ -33,10 +33,8 @@ namespace com::sun::star::rendering
 }
 
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-    namespace internal
-    {
 
         class ImplPolyPolygon : public virtual ::cppcanvas::PolyPolygon, protected CanvasGraphicHelper
         {
@@ -73,7 +71,6 @@ namespace cppcanvas
             bool                                                        mbStrokeColorSet;
         };
 
-    }
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLPOLYPOLYGON_HXX

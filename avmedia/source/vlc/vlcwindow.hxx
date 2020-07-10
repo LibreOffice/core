@@ -21,8 +21,7 @@
 #include "vlccommon.hxx"
 #include <cppuhelper/implbase.hxx>
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 class VLCPlayer;
 
 class VLCWindow : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,

@@ -28,8 +28,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 class Drawing;
 
@@ -183,8 +182,7 @@ public:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

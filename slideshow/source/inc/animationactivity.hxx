@@ -27,9 +27,7 @@
 
 /* Definition of AnimationActivity interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Extends the Activity interface with animation-specific functions
@@ -61,7 +59,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONACTIVITY_HXX

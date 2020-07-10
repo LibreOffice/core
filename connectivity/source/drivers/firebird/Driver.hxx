@@ -29,9 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <unotools/tempfile.hxx>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         // The SQL dialect in use
         // Has to be used in various isc_* calls.
@@ -93,7 +91,6 @@ namespace connectivity
                     const OUString& rsURL,
                     const css::uno::Sequence< css::beans::PropertyValue >& rInfo) override;
         };
-    }
 
 }
 

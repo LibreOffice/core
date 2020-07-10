@@ -25,8 +25,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class TablePropertyMap;
 class CellColorHandler : public LoggedProperties
@@ -63,7 +62,7 @@ public:
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled() const;
 };
-}}
+}
 
 #endif
 

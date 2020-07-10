@@ -27,9 +27,7 @@
 #include <ado/AResultSet.hxx>
 #include <OColumn.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
 

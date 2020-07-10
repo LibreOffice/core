@@ -24,9 +24,7 @@
 #include "svgstyleattributes.hxx"
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgMarkerNode : public SvgNode
         {
@@ -103,8 +101,8 @@ namespace svgio
             bool getOrientAuto() const { return mbOrientAuto; }
 
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGMARKERNODE_HXX
 

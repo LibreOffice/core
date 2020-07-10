@@ -18,9 +18,7 @@
 #include <tools/ref.hxx>
 #include "rtfvalue.hxx"
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 using RTFSprmsImplBase = std::vector<std::pair<Id, RTFValue::Pointer_t>>;
 
@@ -98,8 +96,7 @@ private:
     Id m_nKeyword;
     RTFValue::Pointer_t& m_pValue;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
 

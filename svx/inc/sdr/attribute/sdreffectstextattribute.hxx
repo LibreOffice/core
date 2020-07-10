@@ -24,9 +24,7 @@
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SdrEffectsTextAttribute
         {
@@ -62,8 +60,8 @@ namespace drawinglayer
             const SdrGlowAttribute& getGlow() const { return maGlow; }
             sal_Int32 getSoftEdgeRadius() const { return mnSoftEdgeRadius; }
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

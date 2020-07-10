@@ -22,8 +22,7 @@
 #include <memory>
 #include <optional>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 /// Class to process all text effects like glow, textOutline, ...
@@ -69,7 +68,7 @@ public:
 
 };
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
 

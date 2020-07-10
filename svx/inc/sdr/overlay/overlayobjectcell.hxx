@@ -24,9 +24,7 @@
 #include <vector>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
 
@@ -46,8 +44,7 @@ namespace sdr
             virtual ~OverlayObjectCell() override;
         };
 
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

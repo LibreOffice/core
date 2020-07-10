@@ -31,9 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
 
         typedef ::cppu::ImplHelper5< css::sdbc::XPreparedStatement,

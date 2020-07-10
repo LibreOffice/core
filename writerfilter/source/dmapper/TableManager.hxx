@@ -28,9 +28,7 @@
 
 #include <dmapper/resourcemodel.hxx>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 class DomainMapperTableHandler;
@@ -512,7 +510,7 @@ public:
 
 }
 
-}
+
 
 #endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEMANAGER_HXX
 

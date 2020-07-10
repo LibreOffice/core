@@ -31,9 +31,7 @@ namespace com::sun::star::util {
 }
 
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
         typedef file::OFileTable OComponentTable_BASE;
 
@@ -63,7 +61,7 @@ namespace connectivity
             //XTypeProvider
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX

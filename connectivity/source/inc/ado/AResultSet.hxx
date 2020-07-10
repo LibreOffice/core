@@ -37,9 +37,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         /*
         **  java_sql_ResultSet

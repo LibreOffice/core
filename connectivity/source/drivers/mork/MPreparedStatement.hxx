@@ -25,9 +25,7 @@
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
 
         typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
@@ -126,7 +124,7 @@ namespace connectivity
         private:
             using OPropertySetHelper::getFastPropertyValue;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MPREPAREDSTATEMENT_HXX

@@ -24,9 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
         {
@@ -47,8 +45,8 @@ namespace sdr
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged() override;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+
+} // end of namespace sdr::overlay
 
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX

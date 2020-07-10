@@ -31,14 +31,12 @@ namespace rtl { template <class reference_type> class Reference; }
 namespace sdr::overlay { class OverlayManager; }
 namespace vcl { class Region; }
 
-namespace sdr
+namespace sdr::contact
 {
-    namespace contact
-    {
-        class ObjectContact;
-        class ViewObjectContactRedirector;
-    }
+    class ObjectContact;
+    class ViewObjectContactRedirector;
 }
+
 
 namespace basegfx { class B2DRange; }
 

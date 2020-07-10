@@ -25,20 +25,14 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal::TargetPropertiesCreator
 {
-    namespace internal
-    {
-        namespace TargetPropertiesCreator
-        {
             /// Generate shape property list - set bInitial to true for initial slide state
             uno::Sequence< animations::TargetProperties > createTargetProperties(
                 const uno::Reference< animations::XAnimationNode >& rootNode,
                 bool bInitial );
-        }
 
-    } // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal::TargetPropertiesCreator
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
 

@@ -34,9 +34,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <ado/AStatement.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         /*
         **  java_sql_ResultSet

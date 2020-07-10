@@ -32,9 +32,7 @@
 
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         typedef ::cppu::WeakImplHelper< css::lang::XServiceInfo,
@@ -87,7 +85,7 @@ namespace connectivity
             virtual OUString SAL_CALL getName(  ) override;
             virtual void SAL_CALL setName( const OUString& ) override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SDBCX_VVIEW_HXX

@@ -23,9 +23,7 @@
 #include "unoview.hxx"
 
 /* Definition of SlideView factory method */
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class EventQueue;
         class EventMultiplexer;
@@ -46,7 +44,6 @@ namespace slideshow
             css::uno::Reference< css::presentation::XSlideShowView> const& xView,
             EventQueue&                                                rEventQueue,
             EventMultiplexer&                                          rEventMultiplexer );
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDEVIEW_HXX

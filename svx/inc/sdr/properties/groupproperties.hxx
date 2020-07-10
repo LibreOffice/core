@@ -23,9 +23,7 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class GroupProperties final : public DefaultProperties
         {
@@ -106,8 +104,7 @@ namespace sdr
             // to be able to live without the style.
             virtual void ForceStyleToHardAttributes() override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_GROUPPROPERTIES_HXX

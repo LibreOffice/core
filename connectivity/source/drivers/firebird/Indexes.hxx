@@ -14,9 +14,7 @@
 
 #include <connectivity/TIndexes.hxx>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
 
         /**
@@ -37,8 +35,7 @@ namespace connectivity
                     const std::vector< OUString>& rVector);
         };
 
-    } // namespace firebird
-} // namespace connectivity
+} // namespace connectivity::firebord
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_INDEXES_HXX
 

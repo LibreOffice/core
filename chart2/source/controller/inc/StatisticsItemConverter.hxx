@@ -23,9 +23,7 @@
 
 namespace com::sun::star::frame { class XModel; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class StatisticsItemConverter : public ItemConverter
@@ -48,8 +46,7 @@ private:
     css::uno::Reference< css::frame::XModel >  m_xModel;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_STATISTICSITEMCONVERTER_HXX
 #endif

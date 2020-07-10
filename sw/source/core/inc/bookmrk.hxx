@@ -31,23 +31,14 @@
 #include <swrect.hxx>
 #include "FormFieldButton.hxx"
 
-namespace com {
-    namespace sun {
-        namespace star {
-            namespace text {
-                class XTextContent;
-            }
-        }
-    }
-}
+namespace com::sun::star::text { class XTextContent; }
 
 class SwDoc;
 class SwEditWin;
 class SwServerObject;
 class SvNumberFormatter;
 
-namespace sw {
-    namespace mark {
+namespace sw::mark {
         class MarkBase
             : virtual public IMark
         {
@@ -349,8 +340,8 @@ namespace sw {
 
         /// check if rPaM is valid range of new fieldmark
         bool IsFieldmarkOverlap(SwPaM const& rPaM);
-    }
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

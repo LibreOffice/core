@@ -15,9 +15,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 class XMLImport;
 
@@ -49,8 +47,7 @@ private:
     XMLImport& mrImport;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

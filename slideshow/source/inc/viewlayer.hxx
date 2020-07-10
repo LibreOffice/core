@@ -44,9 +44,7 @@ namespace cppcanvas
 
 /* Definition of ViewLayer interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class View;
         typedef std::shared_ptr< View > ViewSharedPtr;
@@ -168,7 +166,6 @@ namespace slideshow
         };
 
         typedef std::shared_ptr< ViewLayer > ViewLayerSharedPtr;
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX

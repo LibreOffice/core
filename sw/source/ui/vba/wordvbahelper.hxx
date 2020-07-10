@@ -27,11 +27,7 @@
 
 class SwDocShell;
 class SwView;
-namespace ooo
-{
-    namespace vba
-    {
-    namespace word
+namespace ooo::vba::word
     {
         //css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
         SwDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel );
@@ -61,9 +57,7 @@ namespace ooo
         MOVE_DOWN
     };
 
-} // word
-} // vba
-} // ooo
+} // ooo::vba::word
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

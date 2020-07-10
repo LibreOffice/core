@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a n-blade pinWheel wipe:
 class PinWheelWipe : public ParametricPolyPolygon
@@ -36,7 +35,7 @@ private:
     sal_Int32 m_blades;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PINWHEELWIPE_HXX

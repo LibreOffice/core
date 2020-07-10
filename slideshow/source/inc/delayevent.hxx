@@ -23,8 +23,7 @@
 
 #include <functional>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Event, which delays the functor call the given amount of time
  */
@@ -134,8 +133,7 @@ inline EventSharedPtr makeDelay_(
 
 #endif // OSL_DEBUG_LEVEL <= 1
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 

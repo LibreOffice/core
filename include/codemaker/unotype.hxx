@@ -26,9 +26,7 @@
 
 namespace rtl { class OString; }
 
-namespace codemaker {
-
-namespace UnoType {
+namespace codemaker::UnoType {
     /**
        An enumeration of all the sorts of relevant UNOIDL entities.
      */
@@ -82,7 +80,6 @@ namespace UnoType {
     rtl::OString decompose(
         rtl::OString const & type, sal_Int32 * rank = nullptr,
         std::vector< rtl::OString > * arguments = nullptr);
-}
 
 }
 

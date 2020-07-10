@@ -39,9 +39,7 @@ namespace basegfx {
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
-namespace drawinglayer
-{
-    namespace geometry
+namespace drawinglayer::geometry
     {
         /** ViewInformation3D class
 
@@ -164,8 +162,8 @@ namespace drawinglayer
             */
             const css::uno::Sequence< css::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
-    } // end of namespace geometry
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::geometry
 
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX

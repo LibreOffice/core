@@ -14,9 +14,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 class XMLStylesContext;
 
@@ -58,8 +56,7 @@ private:
     XMLStylesContext& m_rStyles;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

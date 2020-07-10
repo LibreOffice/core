@@ -24,9 +24,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         typedef sdbcx::OKey OKey_ADO;
 

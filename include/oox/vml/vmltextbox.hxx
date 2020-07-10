@@ -33,8 +33,7 @@ namespace com::sun::star {
     namespace drawing { class XShape; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 struct ShapeTypeModel;
 
@@ -107,8 +106,7 @@ private:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

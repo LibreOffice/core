@@ -50,9 +50,7 @@ namespace basegfx {
 }
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         // SdrAttribute creators
         attribute::SdrLineAttribute SVXCORE_DLLPUBLIC createNewSdrLineAttribute(
@@ -123,8 +121,8 @@ namespace drawinglayer
             double& rfCornerRadiusX,
             double& rfCornerRadiusY);
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,9 +26,7 @@
 
 #include <vector>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 /**
@@ -378,7 +376,7 @@ public:
 };
 
 }
-}
+
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
 

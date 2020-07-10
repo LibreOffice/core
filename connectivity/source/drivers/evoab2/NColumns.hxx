@@ -23,9 +23,7 @@
 #include "NTable.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         class OEvoabColumns final : public sdbcx::OCollection
         {

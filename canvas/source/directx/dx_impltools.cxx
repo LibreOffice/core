@@ -52,9 +52,7 @@
 using namespace ::com::sun::star;
 
 
-namespace dxcanvas
-{
-    namespace tools
+namespace dxcanvas::tools
     {
         ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {

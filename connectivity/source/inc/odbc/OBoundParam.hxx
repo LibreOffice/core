@@ -23,9 +23,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <odbc/odbcbasedllapi.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         class OOO_DLLPUBLIC_ODBCBASE OBoundParam
         {
@@ -124,7 +122,7 @@ namespace connectivity
 
             sal_Int32 paramInputStreamLen;                // Length of input stream
        };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OBOUNDPARAM_HXX
 

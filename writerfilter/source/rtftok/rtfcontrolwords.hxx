@@ -10,9 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 /**
  * An RTF destination state is the last open destination control word.
@@ -2048,8 +2046,7 @@ public:
 extern RTFMathSymbol const aRTFMathControlWords[];
 extern int nRTFMathControlWords;
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 

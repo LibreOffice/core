@@ -23,9 +23,7 @@
 #include <sdr/properties/e3dproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class E3dCompoundProperties : public E3dProperties
         {
@@ -56,8 +54,8 @@ namespace sdr
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
             virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_E3DCOMPOUNDPROPERTIES_HXX

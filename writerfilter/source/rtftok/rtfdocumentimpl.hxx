@@ -32,11 +32,7 @@ namespace oox
 {
 class GraphicHelper;
 }
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace beans
 {
@@ -51,12 +47,8 @@ namespace lang
 class XMultiServiceFactory;
 }
 }
-}
-}
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 class RTFParserState;
 class RTFDocumentImpl;
@@ -980,8 +972,7 @@ private:
     /// Are we after a \cell, but before a \row?
     bool m_bAfterCellBeforeRow;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFDOCUMENTIMPL_HXX
 

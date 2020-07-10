@@ -26,14 +26,10 @@
 
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace io {
-    class XInputStream; }
-namespace embed {
-    class XStorage; }
-}}}
+namespace com::sun::star {
+    namespace io { class XInputStream; }
+    namespace embed { class XStorage; }
+}
 
 // XUriBinding
 

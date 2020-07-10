@@ -21,9 +21,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         class OEvoabTables : public sdbcx::OCollection
         {

@@ -24,8 +24,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a default topleft to right bottom box wipe
 class BoxWipe : public ParametricPolyPolygon
@@ -40,7 +39,7 @@ private:
     const ::basegfx::B2DPolyPolygon m_unitRect;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BOXWIPE_HXX

@@ -32,9 +32,7 @@ namespace com::sun::star {
 }
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 class ChartConverter;
 struct ChartSpaceModel;
@@ -143,9 +141,7 @@ public:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 
