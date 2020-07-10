@@ -2597,10 +2597,14 @@ void SbiRuntime::StepNEXT()
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return;
     }
-    if( pForStk->eForType == ForType::To )
+    if (pForStk->eForType != ForType::To)
+        return;
+    if (!pForStk->refVar)
     {
-        pForStk->refVar->Compute( SbxPLUS, *pForStk->refInc );
+        StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
+        return;
     }
+    pForStk->refVar->Compute( SbxPLUS, *pForStk->refInc );
 }
 
 // beginning CASE: TOS in CASE-stack
