@@ -4633,6 +4633,28 @@
               </constraints>
               <value>1</value>
             </prop>
+            <prop oor:name="Translucent" oor:type="xs:int" oor:nillable="false">
+              <!-- OldPath: PNG-EXPORT-TRANSLUCENT -->
+              <!-- OldLocation: fltopt.ini -->
+              <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
+              <info>
+                <desc>Specifies if the graphic background is stored as
+                transparent.</desc>
+              </info>
+              <constraints>
+                <enumeration oor:value="0">
+                  <info>
+                    <desc>No transparency</desc>
+                  </info>
+                </enumeration>
+                <enumeration oor:value="1">
+                  <info>
+                    <desc>Transparency</desc>
+                  </info>
+                </enumeration>
+              </constraints>
+              <value>1</value>
+            </prop>
           </group>
           <group oor:name="SVG">
             <info>
