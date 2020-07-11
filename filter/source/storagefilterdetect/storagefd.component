@@ -8,8 +8,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="storagefd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.filters.StorageFilterDetect">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.filters.StorageFilterDetect"
+    constructor="filter_StorageFilterDetect_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
 </component>
