@@ -1698,8 +1698,16 @@ void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rR
                           const Reference< css::sdb::XColumn >& _rxField,
                           const Reference< XNumberFormatter >& xFormatter)
 {
-    lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pPainter.get()) );
-    DbCellControl::PaintFieldToCell( rDev, rRect, _rxField, xFormatter );
+    CheckBoxControl* pControl = static_cast<CheckBoxControl*>(m_pPainter.get());
+    lcl_setCheckBoxState( _rxField, pControl );
+
+    auto nWidth = pControl->GetBox().get_preferred_size().Width();
+    auto nHeight = pControl->GetBox().get_preferred_size().Height();
+    tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - nWidth) / 2),
+                                 rRect.Top() + ((rRect.GetHeight() - nHeight) / 2)),
+                           Size(nWidth, nHeight));
+
+    DbCellControl::PaintFieldToCell(rDev, aRect, _rxField, xFormatter);
 }
 
 
