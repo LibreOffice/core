@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -124,7 +125,7 @@ class T602ImportFilter : public cppu::WeakImplHelper <
 {
 private:
     css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
+    css::uno::Reference< css::uno::XComponentContext >   mxContext;
     css::uno::Reference< css::lang::XComponent >         mxDoc;
     css::uno::Reference < css::io::XInputStream >        mxInputStream;
 
@@ -223,7 +224,7 @@ private:
     bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
-        explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
+        explicit T602ImportFilter(const css::uno::Reference<css::uno::XComponentContext > &r );
         explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream);
         virtual ~T602ImportFilter() override;
 
@@ -248,26 +249,6 @@ private:
 
         void test();
 };
-
-/// @throws css::uno::RuntimeException
-OUString T602ImportFilter_getImplementationName();
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > T602ImportFilter_getSupportedServiceNames(  );
-
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-T602ImportFilter_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-
-/// @throws css::uno::RuntimeException
-OUString T602ImportFilterDialog_getImplementationName();
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > T602ImportFilterDialog_getSupportedServiceNames(  );
-
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-T602ImportFilterDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 }
 

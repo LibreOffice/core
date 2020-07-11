@@ -18,12 +18,14 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="t602filter" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Writer.T602ImportFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Writer.T602ImportFilter"
+    constructor="filter_T602ImportFilter_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.T602ImportFilterDialog">
+  <implementation name="com.sun.star.comp.Writer.T602ImportFilterDialog"
+    constructor="filter_T602ImportFilterDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
 </component>
