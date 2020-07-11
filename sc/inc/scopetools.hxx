@@ -83,7 +83,7 @@ public:
     DelayStartListeningFormulaCells(ScColumn& column, bool delay);
     DelayStartListeningFormulaCells(ScColumn& column);
     DelayStartListeningFormulaCells(const DelayStartListeningFormulaCells&) = delete;
-    ~DelayStartListeningFormulaCells() COVERITY_NOEXCEPT_FALSE;
+    ~DelayStartListeningFormulaCells();
     void set();
 };
 

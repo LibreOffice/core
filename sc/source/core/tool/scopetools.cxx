@@ -85,9 +85,20 @@ DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& colum
 {
 }
 
-DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells() COVERITY_NOEXCEPT_FALSE
+DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
 {
+#if defined(__COVERITY__)
+    try
+    {
+        mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+    }
+    catch (...)
+    {
+        std::abort();
+    }
+#else
     mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+#endif
 }
 
 void DelayStartListeningFormulaCells::set()
