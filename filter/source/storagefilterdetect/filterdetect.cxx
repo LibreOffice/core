@@ -164,26 +164,10 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
 // XInitialization
 void SAL_CALL StorageFilterDetect::initialize(const uno::Sequence<uno::Any>& /*aArguments*/) {}
 
-OUString StorageFilterDetect_getImplementationName()
-{
-    return "com.sun.star.comp.filters.StorageFilterDetect";
-}
-
-uno::Sequence<OUString> StorageFilterDetect_getSupportedServiceNames()
-{
-    return { "com.sun.star.document.ExtendedTypeDetection", "com.sun.star.comp.filters.StorageFilterDetect" };
-}
-
-uno::Reference<uno::XInterface> StorageFilterDetect_createInstance(
-    const uno::Reference<uno::XComponentContext> & rCxt)
-{
-    return static_cast<cppu::OWeakObject*>(new StorageFilterDetect(rCxt));
-}
-
 // XServiceInfo
 OUString SAL_CALL StorageFilterDetect::getImplementationName()
 {
-    return StorageFilterDetect_getImplementationName();
+    return "com.sun.star.comp.filters.StorageFilterDetect";
 }
 
 sal_Bool SAL_CALL StorageFilterDetect::supportsService(const OUString& rServiceName)
@@ -193,7 +177,15 @@ sal_Bool SAL_CALL StorageFilterDetect::supportsService(const OUString& rServiceN
 
 uno::Sequence<OUString> SAL_CALL StorageFilterDetect::getSupportedServiceNames()
 {
-    return StorageFilterDetect_getSupportedServiceNames();
+    return { "com.sun.star.document.ExtendedTypeDetection", "com.sun.star.comp.filters.StorageFilterDetect" };
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_StorageFilterDetect_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new StorageFilterDetect(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
