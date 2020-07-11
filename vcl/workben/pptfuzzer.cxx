@@ -31,7 +31,6 @@ void * com_sun_star_i18n_Transliteration_get_implementation( void *, void * );
 void * com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation( void *, void * );
 void * com_sun_star_drawing_SvxShapeCollection_get_implementation( void *, void * );
 void * SfxDocumentMetaData_get_implementation( void *, void * );
-void * unoxml_component_getFactory( const char* , void* , void* );
 void * com_sun_star_animations_AnimateColor_get_implementation( void *, void * );
 void * com_sun_star_animations_AnimateMotion_get_implementation( void *, void * );
 void * com_sun_star_animations_AnimateSet_get_implementation( void *, void * );
@@ -46,6 +45,13 @@ void * com_sun_star_animations_TransitionFilter_get_implementation( void *, void
 void * com_sun_star_comp_comphelper_OPropertyBag( void *, void * );
 void * com_sun_star_comp_uui_UUIInteractionHandler_get_implementation( void *, void * );
 void * emfio_emfreader_XEmfParser_get_implementation( void *, void * );
+void * unoxml_rdfRepository_get_implementation( void *, void * );
+void * unoxml_CURI_get_implementation( void *, void * );
+void * unoxml_CLiteral_get_implementation( void *, void * );
+void * unoxml_CBlankNode_get_implementation( void *, void * );
+void * unoxml_CXPathAPI_get_implementation( void *, void * );
+void * unoxml_CSAXDocumentBuilder_get_implementation( void *, void * );
+void * unoxml_CDocumentBuilder_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -53,7 +59,6 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         { "libsdlo.a", sd_component_getFactory },
-        { "libunoxmllo.a", unoxml_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { 0, 0 }
@@ -92,6 +97,13 @@ lo_get_constructor_map(void)
         { "com_sun_star_comp_comphelper_OPropertyBag", com_sun_star_comp_comphelper_OPropertyBag },
         { "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation", com_sun_star_comp_uui_UUIInteractionHandler_get_implementation },
         { "emfio_emfreader_XEmfParser_get_implementation", emfio_emfreader_XEmfParser_get_implementation},
+        { "unoxml_rdfRepository_get_implementation", unoxml_rdfRepository_get_implementation },
+        { "unoxml_CURI_get_implementation", unoxml_CURI_get_implementation },
+        { "unoxml_CLiteral_get_implementation", unoxml_CLiteral_get_implementation },
+        { "unoxml_CBlankNode_get_implementation", unoxml_CBlankNode_get_implementation },
+        { "unoxml_CXPathAPI_get_implementation", unoxml_CXPathAPI_get_implementation },
+        { "unoxml_CSAXDocumentBuilder_get_implementation", unoxml_CSAXDocumentBuilder_get_implementation },
+        { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation }
         { 0, 0 }
     };
 
