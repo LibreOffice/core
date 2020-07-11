@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -106,7 +106,7 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                                 <property name="resizable">True</property>
                                 <property name="spacing">6</property>
-                                <property name="alignment">0.5</property>
+                                <property name="alignment">0,50000000000000000000</property>
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
@@ -128,6 +128,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="lingumodules-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="lingumodules">Contains the installed language modules.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -147,6 +152,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingumodulesedit-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingumodulesedit-atkobject">Edit Available language modules</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lingumodulesedit">To edit a language module, select it and click Edit.</property>
                           </object>
                         </child>
                       </object>
@@ -227,7 +233,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn44">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0.5</property>
+                            <property name="alignment">0,50000000000000000000</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer55"/>
                               <attributes>
@@ -247,6 +253,11 @@
                                 <attribute name="text">1</attribute>
                               </attributes>
                             </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lingudicts-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lingudicts">Lists the available user dictionaries.</property>
                           </object>
                         </child>
                       </object>
@@ -271,6 +282,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lingudictsnew-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lingudictsnew">Opens the New Dictionary dialog, in which you can name a new user-defined dictionary or dictionary of exceptions and specify the language.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -288,6 +304,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingudictsedit-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingudictsedit-atkobject">Edit User-defined dictionaries</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lingudictsedit">Opens the Edit custom dictionary dialog, in which you can add to your custom dictionary or edit existing entries.</property>
                           </object>
                         </child>
                       </object>
@@ -304,6 +321,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lingudictsdelete-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lingudictsdelete">Deletes the selected dictionary after a confirmation, provided it is not write-protected.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -401,7 +423,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn444">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0.5</property>
+                            <property name="alignment">0,50000000000000000000</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer555"/>
                               <attributes>
@@ -423,6 +445,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="linguoptions-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="linguoptions">Defines the options for the spellcheck and hyphenation.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -442,6 +469,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="linguoptionsedit-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|linguoptionsedit-atkobject">Edit Options</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="linguoptionsedit">If you want to change a value, select the entry and then click Edit.</property>
                       </object>
                     </child>
                   </object>
@@ -472,6 +500,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptLinguPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="OptLinguPage">Specifies the properties of the spelling, thesaurus and hyphenation.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

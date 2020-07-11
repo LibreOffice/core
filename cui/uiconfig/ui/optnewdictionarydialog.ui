@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="OptNewDictionaryDialog">
@@ -99,6 +99,11 @@
                         <property name="max_length">32</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">32</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="nameedit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="nameedit">Specifies the name of the new custom dictionary.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -142,6 +147,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="except-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="except">Specifies whether you wish to avoid certain words in your documents.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -158,6 +168,11 @@
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="language-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="language">By selecting a certain language you can limit the use of the custom dictionary.</property>
                           </object>
                         </child>
                       </object>
@@ -194,8 +209,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptNewDictionaryDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="OptNewDictionaryDialog">In the Dictionary section you can name a new user-defined dictionary or dictionary of exceptions and specify the language.</property>
+      </object>
     </child>
   </object>
 </interface>
