@@ -15176,9 +15176,18 @@ public:
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip)
     {
         const ImplSVHelpData& aHelpData = ImplGetSVHelpData();
-        if (aHelpData.mbBalloonHelp)
+        if (aHelpData.mbBalloonHelp) // extended tips
         {
-            /*Current mechanism which needs help installed*/
+            // by default use accessible description
+            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
+            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+            if (pDesc && pDesc[0])
+            {
+                gtk_tooltip_set_text(tooltip, pDesc);
+                return true;
+            }
+
+            // fallback to the mechanism which needs help installed
             OString sHelpId = ::get_help_id(pWidget);
             Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
             if (pHelp)
@@ -15189,15 +15198,6 @@ public:
                     gtk_tooltip_set_text(tooltip, OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr());
                     return true;
                 }
-            }
-
-            /*This is how I would prefer things to be, only a few like this though*/
-            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
-            if (pDesc && pDesc[0])
-            {
-                gtk_tooltip_set_text(tooltip, pDesc);
-                return true;
             }
         }
 
