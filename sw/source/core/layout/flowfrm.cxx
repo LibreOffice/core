@@ -1424,24 +1424,25 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
             const bool bContextualSpacingThis = pAttrs->GetULSpace().GetContext();
             const bool bContextualSpacingPrev = lcl_getContextualSpacing(pPrevFrame);
+            bool bIdenticalStyles = lcl_IdenticalStyles(pPrevFrame, &m_rThis);
 
             const bool bContextualSpacing = bContextualSpacingThis
                                          && bContextualSpacingPrev
-                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+                                         && bIdenticalStyles;
 
             // tdf#125893 always ignore own top margin setting of the actual paragraph
             // with contextual spacing, if the previous paragraph is identical
             const bool bHalfContextualSpacing = !bContextualSpacing
                                          && bContextualSpacingThis
                                          && !bContextualSpacingPrev
-                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+                                         && bIdenticalStyles;
 
             // tdf#134463 always ignore own bottom margin setting of the previous paragraph
             // with contextual spacing, if the actual paragraph is identical
             const bool bHalfContextualSpacingPrev = !bContextualSpacing
                                          && !bContextualSpacingThis
                                          && bContextualSpacingPrev
-                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+                                         && bIdenticalStyles;
 
             // i#11860 - use new method to determine needed spacing
             // values of found previous frame and use these values.
@@ -1451,7 +1452,8 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             bool bPrevLineSpacingPorportional = false;
             GetSpacingValuesOfFrame( (*pPrevFrame),
                                    nPrevLowerSpace, nPrevLineSpacing,
-                                   bPrevLineSpacingPorportional );
+                                   bPrevLineSpacingPorportional,
+                                   bIdenticalStyles);
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
                 // FIXME: apply bHalfContextualSpacing for better portability?
@@ -1639,7 +1641,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame() const
         SwTwips nPrevLineSpacing = 0;
         // #i102458#
         bool bDummy = false;
-        GetSpacingValuesOfFrame( (*pPrevFrame), nPrevLowerSpace, nPrevLineSpacing, bDummy );
+        GetSpacingValuesOfFrame( (*pPrevFrame), nPrevLowerSpace, nPrevLineSpacing, bDummy, lcl_IdenticalStyles(pPrevFrame, &m_rThis));
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
             const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
