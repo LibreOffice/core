@@ -439,7 +439,7 @@ def factoryChooseAction(actionNode):
     elif actionNode.getAttribute("action") in ("startRow", "endRow"):
         ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") == "handleGridBefore" or actionNode.getAttribute("action") == "handleGridAfter":
+    elif actionNode.getAttribute("action") == "handleGridAfter":
         ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
     # tdf#111550
