@@ -563,11 +563,14 @@ inline bool SwBorderAttrs::IsLine() const
     output parameter - line spacing of the frame in SwTwips
 
     @param obIsLineSpacingProportional
+
+    @param bIdenticalStyles true if the styles of the actual and the next paragraphs (text-frames) are the same
 */
 void GetSpacingValuesOfFrame( const SwFrame& rFrame,
                             SwTwips& onLowerSpacing,
                             SwTwips& onLineSpacing,
-                            bool& obIsLineSpacingProportional );
+                            bool& obIsLineSpacingProportional,
+                            bool bIdenticalStyles );
 
 /** method to get the content of the table cell
 
