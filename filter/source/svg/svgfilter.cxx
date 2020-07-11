@@ -21,7 +21,7 @@
 #include <cstdio>
 
 #include <comphelper/lok.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -825,37 +825,29 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
     return aRetval;
 }
 
-#define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"
-#define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"
-
-namespace sdecl = comphelper::service_decl;
- sdecl::class_<SVGFilter> const serviceFilterImpl;
- const sdecl::ServiceDecl svgFilter(
-     serviceFilterImpl,
-     SVG_FILTER_IMPL_NAME,
-     "com.sun.star.document.ImportFilter;"
-     "com.sun.star.document.ExportFilter;"
-     "com.sun.star.document.ExtendedTypeDetection" );
-
- sdecl::class_<SVGWriter, sdecl::with_args<true> > const serviceWriterImpl;
- const sdecl::ServiceDecl svgWriter(
-     serviceWriterImpl,
-     SVG_WRITER_IMPL_NAME,
-     "com.sun.star.svg.SVGWriter" );
-
-// The C shared lib entry points
-extern "C" SAL_DLLPUBLIC_EXPORT void* svgfilter_component_getFactory(
-    char const* pImplName, void*, void*)
+//  XServiceInfo
+sal_Bool SVGFilter::supportsService(const OUString& sServiceName)
 {
-    if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )
-    {
-        return sdecl::component_getFactoryHelper( pImplName, {&svgFilter} );
-    }
-    else if ( rtl_str_compare (pImplName, SVG_WRITER_IMPL_NAME) == 0 )
-    {
-        return sdecl::component_getFactoryHelper( pImplName, {&svgWriter} );
-    }
-    return nullptr;
+    return cppu::supportsService(this, sServiceName);
 }
+OUString SVGFilter::getImplementationName()
+{
+    return "com.sun.star.comp.Draw.SVGFilter";
+}
+css::uno::Sequence< OUString > SVGFilter::getSupportedServiceNames()
+{
+    return { "com.sun.star.document.ImportFilter",
+            "com.sun.star.document.ExportFilter",
+            "com.sun.star.document.ExtendedTypeDetection" };
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_SVGFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new SVGFilter(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
