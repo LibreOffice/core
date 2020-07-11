@@ -416,12 +416,20 @@ void SearchAndParseThread::execute()
 
 AdditionsDialog::AdditionsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
+    , m_aSearchDataTimer("SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
     , m_xMenuButtonSettings(m_xBuilder->weld_menu_button("buttonGear"))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
     , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
 {
+    m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
+    m_aSearchDataTimer.SetDebugName("AdditionsDialog SearchDataTimer");
+    m_aSearchDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+
+    m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));
+    m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
+
     // TODO - Temporary URL
     OString rURL = "https://yusufketen.com/extensionTest.json";
 
@@ -453,6 +461,58 @@ void AdditionsDialog::SetProgress(const OUString& rProgress)
         m_xLabelProgress->show();
         m_xLabelProgress->set_label(rProgress);
         m_xDialog->resize_to_request(); //TODO
+    }
+}
+
+void AdditionsDialog::ClearList()
+{
+    // for VCL to be able to destroy bitmaps
+    SolarMutexGuard aGuard;
+
+    for (auto& item : this->m_aAdditionsItems)
+    {
+        item.m_xContainer->hide();
+    }
+    this->m_aAdditionsItems.clear();
+}
+
+IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
+{
+    this->ClearList();
+    OUString aSearchTerm(m_xEntrySearch->get_text());
+    /* OPTIONAL
+    if (aSearchTerm.isEmpty())
+        return;
+    */
+    if (m_pSearchThread.is())
+        m_pSearchThread->StopExecution();
+
+    OString rURL = "https://yusufketen.com/extensionTest.json"; // + q=aSearchTerm
+    OUString finalURL = OStringToOUString(rURL + "?q=", RTL_TEXTENCODING_UTF8) + aSearchTerm;
+
+    // Search Test
+    if (aSearchTerm == "2")
+    {
+        rURL = "https://yusufketen.com/extensionTest2.json";
+    }
+
+    this->SetProgress(finalURL);
+    m_pSearchThread
+        = new SearchAndParseThread(this, OStringToOUString(rURL, RTL_TEXTENCODING_UTF8), false);
+    m_pSearchThread->launch();
+}
+
+IMPL_LINK_NOARG(AdditionsDialog, SearchUpdateHdl, weld::Entry&, void)
+{
+    m_aSearchDataTimer.Start();
+}
+
+IMPL_LINK_NOARG(AdditionsDialog, FocusOut_Impl, weld::Widget&, void)
+{
+    if (m_aSearchDataTimer.IsActive())
+    {
+        m_aSearchDataTimer.Stop();
+        m_aSearchDataTimer.Invoke();
     }
 }
 
