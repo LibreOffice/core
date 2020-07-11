@@ -25,12 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
-enum StyleType
-{
-    DEFAULTFORMATTING,
-    CHARACTERSTYLES,
-    PARAGRAPHSTYLES
-};
 namespace sw
 {
 namespace sidebar
