@@ -338,25 +338,11 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
             "TemplateName", OUString());
     }
 }
-OUString XmlFilterAdaptor_getImplementationName ()
-{
-    return "com.sun.star.comp.Writer.XmlFilterAdaptor";
-}
-
-Sequence< OUString > XmlFilterAdaptor_getSupportedServiceNames(  )
-{
-    return { "com.sun.star.document.ExportFilter", "com.sun.star.document.ImportFilter" };
-}
-
-Reference< XInterface > XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) ));
-}
 
 // XServiceInfo
 OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
 {
-    return XmlFilterAdaptor_getImplementationName();
+    return "com.sun.star.comp.Writer.XmlFilterAdaptor";
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
@@ -366,7 +352,14 @@ sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
 {
-    return XmlFilterAdaptor_getSupportedServiceNames();
+    return { "com.sun.star.document.ExportFilter", "com.sun.star.document.ImportFilter" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_XmlFilterAdaptor_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new XmlFilterAdaptor(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

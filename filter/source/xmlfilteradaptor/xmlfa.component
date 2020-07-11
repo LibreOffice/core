@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xmlfa" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Writer.XmlFilterAdaptor">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Writer.XmlFilterAdaptor"
+    constructor="filter_XmlFilterAdaptor_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
