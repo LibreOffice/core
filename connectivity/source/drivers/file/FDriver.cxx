@@ -57,22 +57,11 @@ void OFileDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-// static ServiceInfo
-
-OUString OFileDriver::getImplementationName_Static(  )
-{
-    return "com.sun.star.sdbc.driver.file.Driver";
-}
-
-Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  )
-{
-    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
-}
-
+// XServiceInfo
 
 OUString SAL_CALL OFileDriver::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.sdbc.driver.file.Driver";
 }
 
 sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName )
@@ -83,7 +72,7 @@ sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
 

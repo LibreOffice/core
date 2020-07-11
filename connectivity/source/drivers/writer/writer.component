@@ -8,9 +8,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="connectivity_writer"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.writer.ODriver">
+  <implementation name="com.sun.star.comp.sdbc.writer.ODriver"
+    constructor="connectivity_writer_ODriver">
     <service name="com.sun.star.sdbc.Driver"/>
     <service name="com.sun.star.sdbcx.Driver"/>
   </implementation>

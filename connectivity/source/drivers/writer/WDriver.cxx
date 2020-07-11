@@ -30,14 +30,26 @@ using namespace ::com::sun::star;
 
 namespace connectivity::writer
 {
-OUString ODriver::getImplementationName_Static() { return "com.sun.star.comp.sdbc.writer.ODriver"; }
-
-OUString SAL_CALL ODriver::getImplementationName() { return getImplementationName_Static(); }
-
-uno::Reference<css::uno::XInterface>
-ODriver_CreateInstance(const uno::Reference<lang::XMultiServiceFactory>& _rxFactory)
+OUString SAL_CALL ODriver::getImplementationName()
 {
-    return *(new ODriver(comphelper::getComponentContext(_rxFactory)));
+    return "com.sun.star.comp.sdbc.writer.ODriver";
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_writer_ODriver(css::uno::XComponentContext* context,
+                            css::uno::Sequence<css::uno::Any> const&)
+{
+    rtl::Reference<ODriver> ret;
+    try
+    {
+        ret = new ODriver(context);
+    }
+    catch (...)
+    {
+    }
+    if (ret)
+        ret->acquire();
+    return static_cast<cppu::OWeakObject*>(ret.get());
 }
 
 uno::Reference<sdbc::XConnection>

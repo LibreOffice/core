@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_exception_objects,calc,\
 	connectivity/source/drivers/calc/CTable \
 	connectivity/source/drivers/calc/CTables \
 	connectivity/source/drivers/calc/CConnection \
-	connectivity/source/drivers/calc/Cservices \
 	connectivity/source/drivers/calc/CDriver \
 ))
 

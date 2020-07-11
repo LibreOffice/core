@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,dbase,\
 	connectivity/source/drivers/dbase/DIndexes \
 	connectivity/source/drivers/dbase/DTables \
 	connectivity/source/drivers/dbase/DConnection \
-	connectivity/source/drivers/dbase/Dservices \
 	connectivity/source/drivers/dbase/DDriver \
 	connectivity/source/drivers/dbase/DTable \
 ))

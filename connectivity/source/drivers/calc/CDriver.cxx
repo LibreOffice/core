@@ -34,27 +34,30 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 
-// static ServiceInfo
+// ServiceInfo
 
-OUString ODriver::getImplementationName_Static(  )
+OUString SAL_CALL ODriver::getImplementationName(  )
 {
     return "com.sun.star.comp.sdbc.calc.ODriver";
 }
 
-OUString SAL_CALL ODriver::getImplementationName(  )
-{
-    return getImplementationName_Static();
-}
-
 // service names from file::OFileDriver
 
-
-css::uno::Reference< css::uno::XInterface >
-    connectivity::calc::ODriver_CreateInstance(const css::uno::Reference<
-        css::lang::XMultiServiceFactory >& _rxFactory)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_calc_ODriver(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
+    rtl::Reference<ODriver> ret;
+    try {
+        ret = new ODriver(context);
+    } catch (...) {
+    }
+    if (ret)
+        ret->acquire();
+    return static_cast<cppu::OWeakObject*>(ret.get());
 }
+
+
 
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
     const Sequence< PropertyValue >& info )
