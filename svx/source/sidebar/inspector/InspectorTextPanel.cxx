@@ -76,8 +76,10 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
     });
 
     std::unique_ptr<weld::TreeIter> xEntry = mxListBoxStyles->make_iterator();
-    mxListBoxStyles->get_iter_first(*xEntry);
-    mxListBoxStyles->iter_next(*xEntry);
+    if (!mxListBoxStyles->get_iter_first(*xEntry))
+        return;
+    if (!mxListBoxStyles->iter_next(*xEntry))
+        return;
     mxListBoxStyles->collapse_row(*xEntry); // Collapse "Default Paragraph Style"
 }
 
