@@ -3787,7 +3787,8 @@ SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
 void GetSpacingValuesOfFrame( const SwFrame& rFrame,
                             SwTwips& onLowerSpacing,
                             SwTwips& onLineSpacing,
-                            bool& obIsLineSpacingProportional )
+                            bool& obIsLineSpacingProportional,
+                            bool bIdenticalStyles )
 {
     if ( !rFrame.IsFlowFrame() )
     {
@@ -3797,7 +3798,11 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
     else
     {
         const SvxULSpaceItem& rULSpace = rFrame.GetAttrSet()->GetULSpace();
-        onLowerSpacing = rULSpace.GetLower();
+        // check contextual spacing if the style of actual and next paragraphs are identical
+        if (bIdenticalStyles)
+            onLowerSpacing = (rULSpace.GetContext() ? 0 : rULSpace.GetLower());
+        else
+            onLowerSpacing = rULSpace.GetLower();
 
         onLineSpacing = 0;
         obIsLineSpacingProportional = false;
