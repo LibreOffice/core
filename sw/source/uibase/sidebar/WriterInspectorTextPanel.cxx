@@ -27,6 +27,8 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -109,152 +111,153 @@ static bool GetPropertyValues(const beans::Property rProperty, const uno::Any& r
     return true;
 }
 
-static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
-                       std::unordered_map<OUString, bool>& maIsDefined, StyleType sType)
+static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
 {
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    svx::sidebar::TreeNode pDFNode;
+    svx::sidebar::TreeNode pCharNode;
+    svx::sidebar::TreeNode pParaNode;
+
+    pDFNode.sNodeName = "DEFAULT FORMATTING";
+    pCharNode.sNodeName = "CHARACTER STYLES";
+    pParaNode.sNodeName = "PARAGRAPH STYLES";
+
+    uno::Reference<text::XTextRange> xRange(
+        SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
+    uno::Reference<beans::XPropertySet> properties(xRange, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertyState> propertiesState(xRange, uno::UNO_QUERY_THROW);
+    const uno::Sequence<beans::Property> aProperties
+        = properties->getPropertySetInfo()->getProperties();
+
+    std::unordered_map<OUString, bool> aIsDefined;
+    for (const beans::Property& rProperty : aProperties)
+    {
+        if (propertiesState->getPropertyState(rProperty.Name) == beans::PropertyState_DIRECT_VALUE)
+        {
+            OUString aPropertyValuePair;
+            const uno::Any aAny = properties->getPropertyValue(rProperty.Name);
+            if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+            {
+                aIsDefined[rProperty.Name] = true;
+                svx::sidebar::TreeNode pTemp;
+                pTemp.sNodeName = aPropertyValuePair;
+                pDFNode.children.push_back(pTemp);
+            }
+        }
+    }
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily;
-
-    if (sType == CHARACTERSTYLES)
-        xStyleFamilies->getByName("CharacterStyles") >>= xStyleFamily;
-    else
-        xStyleFamilies->getByName("ParagraphStyles") >>= xStyleFamily;
-
-    uno::Reference<text::XTextCursor> xCursor = dynamic_cast<text::XTextCursor*>(pCursor);
-    uno::Reference<text::XTextRange> xRange(
-        SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-    uno::Reference<beans::XPropertySet> properties(xRange, uno::UNO_QUERY_THROW);
-
     OUString sCurrentStyleName, sDisplayName;
-    if (sType == CHARACTERSTYLES)
-        properties->getPropertyValue("CharStyleName") >>= sCurrentStyleName;
-    else
-        properties->getPropertyValue("ParaStyleName") >>= sCurrentStyleName;
 
-    if (sCurrentStyleName.isEmpty())
-        return; // In case of Default Character Styles;
+    xStyleFamilies->getByName("CharacterStyles") >>= xStyleFamily;
+    properties->getPropertyValue("CharStyleName") >>= sCurrentStyleName;
 
-    while (true)
+    if (!sCurrentStyleName.isEmpty())
     {
-        uno::Reference<style::XStyle> xProp1;
-        uno::Reference<beans::XPropertySet> xProp1Set;
-        xStyleFamily->getByName(sCurrentStyleName) >>= xProp1;
-        xStyleFamily->getByName(sCurrentStyleName) >>= xProp1Set;
-        OUString aParentCharStyle = xProp1->getParentStyle();
-        xProp1Set->getPropertyValue("DisplayName") >>= sDisplayName;
+        uno::Reference<beans::XPropertySet> aCharSet;
+        uno::Reference<beans::XPropertyState> aCharState;
+        xStyleFamily->getByName(sCurrentStyleName) >>= aCharSet;
+        xStyleFamily->getByName(sCurrentStyleName) >>= aCharState;
+        aCharSet->getPropertyValue("DisplayName") >>= sDisplayName;
         svx::sidebar::TreeNode pCurrentChild;
         pCurrentChild.sNodeName = sDisplayName;
 
-        if (aParentCharStyle.isEmpty())
-        {
-            break; // when current style is "Standard" there is no parent
-        }
+        uno::Reference<beans::XPropertySetInfo> aCharSetInfo = aCharSet->getPropertySetInfo();
 
-        const uno::Sequence<beans::Property> aProperties
-            = xProp1Set->getPropertySetInfo()->getProperties();
-        const uno::Reference<beans::XPropertySet> xProp2Set(
-            xStyleFamily->getByName(aParentCharStyle), uno::UNO_QUERY);
-
-        try
+        for (const beans::Property& rProperty : aProperties)
         {
-            for (const beans::Property& rProperty : aProperties)
+            OUString sPropName = rProperty.Name;
+            if (aCharSetInfo->hasPropertyByName(sPropName)
+                && aCharState->getPropertyState(sPropName) == beans::PropertyState_DIRECT_VALUE)
             {
-                OUString sPropName = rProperty.Name;
-
-                if (maIsDefined[sPropName])
-                    continue;
-
-                if (xProp1Set->getPropertyValue(sPropName)
-                    != xProp2Set->getPropertyValue(sPropName))
+                OUString aPropertyValuePair;
+                const uno::Any aAny = aCharSet->getPropertyValue(sPropName);
+                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
                 {
-                    maIsDefined[sPropName] = true;
-                    OUString aPropertyValuePair;
-                    const uno::Any aAny = xProp1Set->getPropertyValue(sPropName);
-                    GetPropertyValues(rProperty, aAny, aPropertyValuePair);
-                    if (!aPropertyValuePair.isEmpty())
-                    {
-                        svx::sidebar::TreeNode pTemp;
-                        pTemp.sNodeName = aPropertyValuePair;
-                        pCurrentChild.children.push_back(pTemp);
-                    }
+                    if (aIsDefined[sPropName]) // Already defined in "Direct Formatting" ?
+                        aPropertyValuePair = aPropertyValuePair + "  !!<GREY>!!";
+                    else
+                        aIsDefined[sPropName] = true;
+                    svx::sidebar::TreeNode pTemp;
+                    pTemp.sNodeName = aPropertyValuePair;
+                    pCurrentChild.children.push_back(pTemp);
                 }
             }
         }
-        catch (const uno::Exception&)
-        {
-            //do nothing
-        }
 
-        pParentNode.children.emplace_back(pCurrentChild);
-        sCurrentStyleName = aParentCharStyle;
+        pCharNode.children.push_back(pCurrentChild);
     }
 
-    uno::Reference<beans::XPropertySet> aProp1Set;
-    xStyleFamily->getByName(sCurrentStyleName) >>= aProp1Set;
+    xStyleFamilies->getByName("ParagraphStyles") >>= xStyleFamily;
+    properties->getPropertyValue("ParaStyleName") >>= sCurrentStyleName;
 
-    const uno::Sequence<beans::Property> aProperties
-        = aProp1Set->getPropertySetInfo()->getProperties();
-    svx::sidebar::TreeNode pCurrentChild;
-    pCurrentChild.sNodeName = sDisplayName;
-
-    for (const beans::Property& rProperty : aProperties)
+    while (!sCurrentStyleName.isEmpty())
     {
-        OUString aPropertyValuePair, sPropName = rProperty.Name;
-        if (maIsDefined[sPropName])
-            continue;
-        maIsDefined[sPropName] = true;
+        uno::Reference<style::XStyle> aChar;
+        uno::Reference<beans::XPropertySet> aCharSet;
+        uno::Reference<beans::XPropertyState> aCharState;
+        xStyleFamily->getByName(sCurrentStyleName) >>= aChar;
+        xStyleFamily->getByName(sCurrentStyleName) >>= aCharSet;
+        xStyleFamily->getByName(sCurrentStyleName) >>= aCharState;
+        aCharSet->getPropertyValue("DisplayName") >>= sDisplayName;
+        OUString aParentParaStyle = aChar->getParentStyle();
+        svx::sidebar::TreeNode pCurrentChild;
+        pCurrentChild.sNodeName = sDisplayName;
 
-        const uno::Any aAny = aProp1Set->getPropertyValue(sPropName);
-        if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+        uno::Reference<beans::XPropertySetInfo> aCharSetInfo = aCharSet->getPropertySetInfo();
+
+        for (const beans::Property& rProperty : aProperties)
         {
-            if (!aPropertyValuePair.isEmpty())
+            OUString sPropName = rProperty.Name;
+            if (aCharSetInfo->hasPropertyByName(sPropName)
+                && aCharState->getPropertyState(sPropName) == beans::PropertyState_DIRECT_VALUE)
             {
-                svx::sidebar::TreeNode pTemp;
-                pTemp.sNodeName = aPropertyValuePair;
-                pCurrentChild.children.push_back(pTemp);
+                OUString aPropertyValuePair;
+                const uno::Any aAny = aCharSet->getPropertyValue(sPropName);
+                if (GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+                {
+                    // Already defined in "Default Formatting" or "Character Styles" or any child Paragraph Style ?
+                    if (aIsDefined[sPropName])
+                        aPropertyValuePair = aPropertyValuePair + "    !!<GREY>!! ";
+                    else
+                        aIsDefined[sPropName] = true;
+                    svx::sidebar::TreeNode pTemp;
+                    pTemp.sNodeName = aPropertyValuePair;
+                    pCurrentChild.children.push_back(pTemp);
+                }
             }
         }
+
+        pParaNode.children.push_back(pCurrentChild);
+        sCurrentStyleName = aParentParaStyle;
     }
 
-    pParentNode.children.emplace_back(pCurrentChild);
-    std::reverse(pParentNode.children.begin(), pParentNode.children.end());
+    std::reverse(pParaNode.children.begin(),
+                 pParaNode.children.end()); // Parent style should be first then children
+
+    /*
+    Display Order :-
+    PARAGRAPH STYLE
+    CHARACTER STYLE
+    DEFAULT FORMATTING
+    */
+    aStore.push_back(pParaNode);
+    aStore.push_back(pCharNode);
+    aStore.push_back(pDFNode);
 }
 
 IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, void)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     std::vector<svx::sidebar::TreeNode> aStore;
-    std::unordered_map<OUString, bool> maIsDefined;
 
     if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
-    {
-        /*
-        First check in the property set of Character Styles
-        (as CS has higher priority over PS), then look into
-        property set of Paragraph Styles;
-        */
-        svx::sidebar::TreeNode pTempChar;
-        pTempChar.sNodeName = "CHARACTER STYLES";
-        UpdateTree(pDocSh, pTempChar, maIsDefined, CHARACTERSTYLES);
-        svx::sidebar::TreeNode pTempPara;
-        pTempPara.sNodeName = "PARAGRAPH STYLES";
-        UpdateTree(pDocSh, pTempPara, maIsDefined, PARAGRAPHSTYLES);
-
-        /*
-        Order:-
-        PARAGRAPH STYLES
-        CHARACTER STYLES
-        DEFAULT FORMATTING
-        */
-        aStore.push_back(pTempPara);
-        aStore.push_back(pTempChar);
-    }
+        UpdateTree(pDocSh, aStore);
 
     updateEntries(aStore);
 }
