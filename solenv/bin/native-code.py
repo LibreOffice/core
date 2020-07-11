@@ -33,7 +33,6 @@ core_factory_list = [
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
-    ("libstoragefdlo.a", "storagefd_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
@@ -160,7 +159,9 @@ core_constructor_list = [
 # filter/source/xmlfilterdetect/xmlfd.component
     "filter_XMLFilterDetect_get_implementation",
 # filter/source/xmlfilteradaptor/xmlfa.component
-    "filter_XmlFilterAdaptor_get_implementation
+    "filter_XmlFilterAdaptor_get_implementation",
+# filter/source/storagefilterdetect/storagefd.component
+    "filter_StorageFilterDetect_get_implementation",
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),

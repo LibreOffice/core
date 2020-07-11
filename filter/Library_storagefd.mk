@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,storagefd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,storagefd,\
-    filter/source/storagefilterdetect/fdcomp \
     filter/source/storagefilterdetect/filterdetect \
 ))
 
