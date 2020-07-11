@@ -43,7 +43,6 @@ core_factory_list = [
     ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
-    ("libmcnttype.a", "mcnttype_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
@@ -148,6 +147,8 @@ core_constructor_list = [
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # drawinglayer/drawinglayer.component
     "drawinglayer_XPrimitive2DRenderer",
+# dtrans/util/mcnttype.component
+    "dtrans_CMimeContentTypeFactory_get_implementation",
 # emfio/emfio.component
     "emfio_emfreader_XEmfParser_get_implementation",
 # eventattacher/source/evtatt.component
