@@ -14485,11 +14485,6 @@
           </element>
         </choice>
       </define>
-      <define name="CT_TrPrBaseGridBefore">
-        <attribute name="val">
-          <ref name="ST_DecimalNumber"/>
-        </attribute>
-      </define>
       <define name="CT_TrPrBaseGridAfter">
         <attribute name="val">
           <ref name="ST_DecimalNumber"/>
@@ -18429,9 +18424,6 @@
       <element name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>
       <element name="jc" tokenid="ooxml:CT_TrPrBase_jc"/>
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
-    </resource>
-    <resource name="CT_TrPrBaseGridBefore" resource="TextTableRow">
-      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
     </resource>
     <resource name="CT_TrPrBaseGridAfter" resource="TextTableRow">
       <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridAfter" action="handleGridAfter"/>
