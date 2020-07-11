@@ -3797,7 +3797,7 @@ void GetSpacingValuesOfFrame( const SwFrame& rFrame,
     else
     {
         const SvxULSpaceItem& rULSpace = rFrame.GetAttrSet()->GetULSpace();
-        onLowerSpacing = rULSpace.GetLower();
+        onLowerSpacing = (rULSpace.GetContext() ? 0 : rULSpace.GetLower());
 
         onLineSpacing = 0;
         obIsLineSpacingProportional = false;
