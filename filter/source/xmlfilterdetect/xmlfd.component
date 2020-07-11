@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xmlfd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.filters.XMLFilterDetect">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.filters.XMLFilterDetect"
+    constructor="filter_XMLFilterDetect_get_implementation">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
 </component>

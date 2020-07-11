@@ -40,7 +40,6 @@ core_factory_list = [
     ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libxmlfdlo.a", "xmlfd_component_getFactory"),
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
@@ -158,6 +157,8 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
+# filter/source/xmlfilterdetect/xmlfd.component
+    "filter_XMLFilterDetect_get_implementation",
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),

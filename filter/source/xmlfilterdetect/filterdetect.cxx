@@ -218,26 +218,10 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
 {
 }
 
-OUString FilterDetect_getImplementationName ()
-{
-    return "com.sun.star.comp.filters.XMLFilterDetect";
-}
-
-Sequence< OUString > FilterDetect_getSupportedServiceNames()
-{
-    Sequence < OUString > aRet { "com.sun.star.document.ExtendedTypeDetection" };
-    return aRet;
-}
-
-Reference< XInterface > FilterDetect_createInstance( const Reference< XComponentContext > & context)
-{
-    return static_cast< cppu::OWeakObject * >( new FilterDetect( context ) );
-}
-
 // XServiceInfo
 OUString SAL_CALL FilterDetect::getImplementationName(  )
 {
-    return FilterDetect_getImplementationName();
+    return "com.sun.star.comp.filters.XMLFilterDetect";
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
@@ -247,7 +231,15 @@ sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
 {
-    return FilterDetect_getSupportedServiceNames();
+    return { "com.sun.star.document.ExtendedTypeDetection" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_XMLFilterDetect_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new FilterDetect(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
