@@ -74,13 +74,6 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
         pTreeDiagram->expand_row(rEntry);
         return false;
     });
-
-    std::unique_ptr<weld::TreeIter> xEntry = mxListBoxStyles->make_iterator();
-    if (!mxListBoxStyles->get_iter_first(*xEntry))
-        return;
-    if (!mxListBoxStyles->iter_next(*xEntry))
-        return;
-    mxListBoxStyles->collapse_row(*xEntry); // Collapse "Default Paragraph Style"
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
