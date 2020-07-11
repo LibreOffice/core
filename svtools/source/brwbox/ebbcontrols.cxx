@@ -387,6 +387,7 @@ namespace svt
 
     EditControlBase::EditControlBase(BrowserDataWin* pParent)
         : ControlBase(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
+        , m_pEntry(nullptr) // inheritors are expected to call InitEditControlBase
     {
     }
 
