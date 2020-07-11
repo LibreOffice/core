@@ -130,8 +130,8 @@ namespace T602ImportFilter {
 
 static inistruct ini;
 
-T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r )
-    : mxMSF(r)
+T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::uno::XComponentContext > &r )
+    : mxContext(r)
     , mpAttrList(nullptr)
     , node(tnode::START)
 {
@@ -244,7 +244,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
     }
 
     // An XML import service: what we push sax messages to...
-    mxHandler.set( mxMSF->createInstance( "com.sun.star.comp.Writer.XMLImporter" ), UNO_QUERY );
+    mxHandler.set( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.Writer.XMLImporter", mxContext ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to...
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);
@@ -847,7 +847,7 @@ void T602ImportFilter::Read602()
 // XServiceInfo
 OUString SAL_CALL T602ImportFilter::getImplementationName(  )
 {
-    return T602ImportFilter_getImplementationName();
+    return "com.sun.star.comp.Writer.T602ImportFilter";
 }
 
 sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceName )
@@ -857,22 +857,7 @@ sal_Bool SAL_CALL T602ImportFilter::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > SAL_CALL T602ImportFilter::getSupportedServiceNames(  )
 {
-    return T602ImportFilter_getSupportedServiceNames();
-}
-
-OUString T602ImportFilter_getImplementationName ()
-{
-    return "com.sun.star.comp.Writer.T602ImportFilter";
-}
-
-Sequence< OUString > T602ImportFilter_getSupportedServiceNames(  )
-{
     return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
-}
-
-Reference< XInterface > T602ImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog()
@@ -1113,7 +1098,7 @@ void SAL_CALL T602ImportFilterDialog::setPropertyValues( const uno::Sequence<bea
 // XServiceInfo
 OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
 {
-    return T602ImportFilterDialog_getImplementationName();
+    return "com.sun.star.comp.Writer.T602ImportFilterDialog";
 }
 
 sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServiceName )
@@ -1123,24 +1108,23 @@ sal_Bool SAL_CALL T602ImportFilterDialog::supportsService( const OUString& rServ
 
 Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames(  )
 {
-    return T602ImportFilterDialog_getSupportedServiceNames();
-}
-
-OUString T602ImportFilterDialog_getImplementationName ()
-{
-    return "com.sun.star.comp.Writer.T602ImportFilterDialog";
-}
-
-Sequence< OUString > T602ImportFilterDialog_getSupportedServiceNames(  )
-{
     return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
 }
 
-Reference< XInterface > T602ImportFilterDialog_createInstance( const Reference< XMultiServiceFactory > & )
-{
-    return static_cast<cppu::OWeakObject*>(new T602ImportFilterDialog);
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_T602ImportFilterDialog_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new T602ImportFilter::T602ImportFilterDialog());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_T602ImportFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new T602ImportFilter::T602ImportFilter(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImport602(SvStream &rStream)
