@@ -159,6 +159,8 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
 # filter/source/xmlfilterdetect/xmlfd.component
     "filter_XMLFilterDetect_get_implementation",
+# filter/source/xmlfilteradaptor/xmlfa.component
+    "filter_XmlFilterAdaptor_get_implementation
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
