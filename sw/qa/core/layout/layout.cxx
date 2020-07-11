@@ -149,6 +149,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
 }
 
+<<<<<<< HEAD   (1167c4 tdf#134111 Chart OOXML Import: set text break to true)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 {
     load(DATA_DIRECTORY, "textbox-autogrow-vertical.docx");
@@ -169,6 +170,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
     // so it was not inside aShapeRect anymore.
     CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
+=======
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
+{
+    // tdf#134783 check weather position of shape is good if it is achored to paragraph and
+    // the "Don't add space between paragraphs of the same style" option is set
+    load(DATA_DIRECTORY, "tdf134783_testAnchorPositionBasedOnParagraph.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "top", "1671");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "bottom", "1732");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "top", "1947");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "top", "3783");
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "bottom", "3844");
+>>>>>>> CHANGE (713c6b tdf#134783 sw: fix contextual spacing position of shape)
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
