@@ -83,7 +83,9 @@ StringMap ScGridWinUIObject::get_state()
     ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
     if ( pDoc->HasNote( aPos ) )
     {
-        aMap["CurrentCellCommentText"] = pDoc->GetNote( aPos )->GetText();
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        assert(pNote);
+        aMap["CurrentCellCommentText"] = pNote->GetText();
     }
 
     ScAppOptions aOpt = SC_MOD()->GetAppOptions();
