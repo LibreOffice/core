@@ -43,7 +43,6 @@ $(eval $(call gb_Library_add_exception_objects,writer,\
 	connectivity/source/drivers/writer/WDriver \
 	connectivity/source/drivers/writer/WTable \
 	connectivity/source/drivers/writer/WTables \
-	connectivity/source/drivers/writer/Wservices \
 ))
 
 # vim: set noet sw=4 ts=4:

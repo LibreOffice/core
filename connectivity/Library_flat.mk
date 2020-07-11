@@ -49,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,flat,\
 	connectivity/source/drivers/flat/EColumns \
 	connectivity/source/drivers/flat/ETables \
 	connectivity/source/drivers/flat/EConnection \
-	connectivity/source/drivers/flat/Eservices \
 	connectivity/source/drivers/flat/EDriver \
 ))
 

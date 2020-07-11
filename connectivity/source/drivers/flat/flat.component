@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="flat" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.flat.ODriver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sdbc.flat.ODriver"
+    constructor="connectivity_flat_ODriver">
     <service name="com.sun.star.sdbc.Driver"/>
     <service name="com.sun.star.sdbcx.Driver"/>
   </implementation>
