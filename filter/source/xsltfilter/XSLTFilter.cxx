@@ -20,6 +20,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
@@ -31,10 +32,9 @@
 #include <sal/log.hxx>
 
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -98,7 +98,7 @@ namespace XSLT
      * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
     class XSLTFilter : public WeakImplHelper<XImportFilter, XExportFilter,
-            XStreamListener, ExtendedDocumentHandlerAdapter>
+            XStreamListener, ExtendedDocumentHandlerAdapter, XServiceInfo>
     {
     private:
 
@@ -127,6 +127,11 @@ namespace XSLT
 
         // ctor...
         explicit XSLTFilter(const css::uno::Reference<XComponentContext> &r);
+
+        //  XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XStreamListener
         virtual void SAL_CALL
@@ -167,6 +172,20 @@ namespace XSLT
     void
     XSLTFilter::disposing(const EventObject&)
     {
+    }
+
+    //  XServiceInfo
+    sal_Bool XSLTFilter::supportsService(const OUString& sServiceName)
+    {
+        return cppu::supportsService(this, sServiceName);
+    }
+    OUString XSLTFilter::getImplementationName()
+    {
+        return "com.sun.star.comp.documentconversion.XSLTFilter";
+    }
+    css::uno::Sequence< OUString > XSLTFilter::getSupportedServiceNames()
+    {
+        return { "com.sun.star.documentconversion.XSLTFilter" };
     }
 
     OUString
@@ -517,80 +536,15 @@ namespace XSLT
     }
 
 
-    // Component management
-
-#define FILTER_SERVICE_NAME "com.sun.star.documentconversion.XSLTFilter"
-#define FILTER_IMPL_NAME "com.sun.star.comp.documentconversion.XSLTFilter"
-#define TRANSFORMER_SERVICE_NAME "com.sun.star.xml.xslt.XSLTTransformer"
-#define TRANSFORMER_IMPL_NAME "com.sun.star.comp.documentconversion.LibXSLTTransformer"
-
-    static css::uno::Reference<XInterface>
-    CreateTransformerInstance(const css::uno::Reference<XMultiServiceFactory> &r)
-    {
-        return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new LibXSLTTransformer( comphelper::getComponentContext(r) )));
-    }
-
-    static css::uno::Reference<XInterface>
-    CreateFilterInstance(const css::uno::Reference<XMultiServiceFactory> &r)
-    {
-        return css::uno::Reference<XInterface> (static_cast<OWeakObject *>(new XSLTFilter( comphelper::getComponentContext(r) )));
-    }
-
 }
 
-using namespace XSLT;
+// Component management
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_XSLTFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    SAL_DLLPUBLIC_EXPORT void * xsltfilter_component_getFactory(const char * pImplName,
-            void * pServiceManager, void * /* pRegistryKey */)
-    {
-        void * pRet = nullptr;
-
-        if (pServiceManager)
-            {
-                if (rtl_str_compare(pImplName, FILTER_IMPL_NAME) == 0)
-                    {
-                        Sequence<OUString> serviceNames { FILTER_SERVICE_NAME };
-
-                        css::uno::Reference<XSingleServiceFactory>
-                                xFactory(
-                                        createSingleFactory(
-                                                static_cast<XMultiServiceFactory *> (pServiceManager),
-                                                OUString::createFromAscii(
-                                                        pImplName),
-                                                CreateFilterInstance,
-                                                serviceNames));
-
-                        if (xFactory.is())
-                            {
-                                xFactory->acquire();
-                                pRet = xFactory.get();
-                            }
-                    }
-                else if (rtl_str_compare(pImplName, TRANSFORMER_IMPL_NAME) == 0)
-                    {
-                        Sequence<OUString> serviceNames { TRANSFORMER_SERVICE_NAME };
-                        css::uno::Reference<XSingleServiceFactory>
-                                xFactory(
-                                        createSingleFactory(
-                                                static_cast<XMultiServiceFactory *> (pServiceManager),
-                                                OUString::createFromAscii(
-                                                        pImplName),
-                                                CreateTransformerInstance,
-                                                serviceNames));
-
-                        if (xFactory.is())
-                            {
-                                xFactory->acquire();
-                                pRet = xFactory.get();
-                            }
-
-                    }
-            }
-        return pRet;
-    }
-
-} // extern "C"
+    return cppu::acquire(new XSLT::XSLTFilter(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

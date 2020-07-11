@@ -27,7 +27,7 @@
 
 #include <salhelper/thread.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
@@ -93,7 +93,7 @@ namespace XSLT
      *
      * See Reader below.
      */
-    class LibXSLTTransformer : public WeakImplHelper<css::xml::xslt::XXSLTTransformer>
+    class LibXSLTTransformer : public WeakImplHelper<css::xml::xslt::XXSLTTransformer, css::lang::XServiceInfo>
     {
     private:
         static const char* const PARAM_SOURCE_URL;
@@ -132,6 +132,11 @@ namespace XSLT
 
         // ctor...
         LibXSLTTransformer(const css::uno::Reference<css::uno::XComponentContext> &r);
+
+        //  XServiceInfo
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XActiveDataSink
         virtual void SAL_CALL

@@ -25,6 +25,7 @@
 #include <libexslt/exslt.h>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/file.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -373,6 +374,20 @@ namespace XSLT
     {
     }
 
+    //  XServiceInfo
+    sal_Bool LibXSLTTransformer::supportsService(const OUString& sServiceName)
+    {
+        return cppu::supportsService(this, sServiceName);
+    }
+    OUString LibXSLTTransformer::getImplementationName()
+    {
+        return "com.sun.star.comp.documentconversion.XSLTFilter";
+    }
+    css::uno::Sequence< OUString > LibXSLTTransformer::getSupportedServiceNames()
+    {
+        return { "com.sun.star.documentconversion.XSLTFilter" };
+    }
+
     void
     LibXSLTTransformer::setInputStream(
             const css::uno::Reference<XInputStream>& inputStream)
@@ -523,5 +538,13 @@ namespace XSLT
         }
     }
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_LibXSLTTransformer_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new XSLT::LibXSLTTransformer(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
