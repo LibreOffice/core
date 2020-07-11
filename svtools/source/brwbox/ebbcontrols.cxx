@@ -350,6 +350,7 @@ namespace svt
 
     ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID)
         : InterimItemWindow(pParent, rUIXMLDescription, rID)
+        , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
     {
     }
 
