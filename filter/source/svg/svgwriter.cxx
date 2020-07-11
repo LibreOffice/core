@@ -22,6 +22,7 @@
 #include "svgwriter.hxx"
 
 #include <comphelper/base64.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -3837,6 +3838,27 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
 
     rtl::Reference<SVGExport> pWriter(new SVGExport( mxContext, rxDocHandler, maFilterData ));
     pWriter->writeMtf( aMtf );
+}
+
+//  XServiceInfo
+sal_Bool SVGWriter::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString SVGWriter::getImplementationName()
+{
+    return "com.sun.star.comp.Draw.SVGWriter";
+}
+css::uno::Sequence< OUString > SVGWriter::getSupportedServiceNames()
+{
+    return { "com.sun.star.svg.SVGWriter" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_SVGWriter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new SVGWriter(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,6 +28,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -158,7 +159,7 @@ class EditFieldInfo;
 class SVGFilter : public cppu::WeakImplHelper < XFilter,
                                                  XImporter,
                                                  XExporter,
-                                                 XExtendedFilterDetection >
+                                                 XExtendedFilterDetection, XServiceInfo >
 {
 public:
     typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation >    ObjectMap;
@@ -287,6 +288,11 @@ public:
 
     explicit SVGFilter( const Reference< XComponentContext >& rxCtx );
     virtual    ~SVGFilter() override;
+
+    //  XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX

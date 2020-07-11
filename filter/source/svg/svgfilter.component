@@ -18,13 +18,15 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="svgfilter" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.SVGFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.SVGFilter"
+    constructor="filter_SVGFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.SVGWriter">
+  <implementation name="com.sun.star.comp.Draw.SVGWriter"
+    constructor="filter_SVGWriter_get_implementation">
     <service name="com.sun.star.svg.SVGWriter"/>
   </implementation>
 </component>
