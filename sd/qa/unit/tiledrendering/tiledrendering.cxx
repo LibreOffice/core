@@ -111,7 +111,8 @@ public:
     void testTdf81754();
     void testTdf105502();
     void testCommentCallbacks();
-    void testCommentChange();
+    void testCommentChangeImpress();
+    void testCommentChangeDraw();
     void testMultiViewInsertDeletePage();
     void testDisableUndoRepair();
     void testDocumentRepair();
@@ -162,7 +163,8 @@ public:
     CPPUNIT_TEST(testTdf81754);
     CPPUNIT_TEST(testTdf105502);
     CPPUNIT_TEST(testCommentCallbacks);
-    CPPUNIT_TEST(testCommentChange);
+    CPPUNIT_TEST(testCommentChangeImpress);
+    CPPUNIT_TEST(testCommentChangeDraw);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testDocumentRepair);
@@ -1809,7 +1811,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
-void SdTiledRenderingTest::testCommentChange()
+void SdTiledRenderingTest::testCommentChangeImpress()
 {
     uno::Sequence<beans::PropertyValue> aArgs;
 
@@ -1818,6 +1820,54 @@ void SdTiledRenderingTest::testCommentChange()
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
     createDoc("dummy.odp", comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::makeAny(OUString("LOK User1"))},
+    }));
+
+    ViewCallback aView1;
+
+    // Add a new comment
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("Comment"))},
+    });
+    comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+
+    int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
+
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 0, 0"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    // Edit this annotation now
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nComment1))},
+        {"PositionX", uno::makeAny(sal_Int32(10))},
+        {"PositionY", uno::makeAny(sal_Int32(20))}
+    });
+    comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 0, 0"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+}
+
+void SdTiledRenderingTest::testCommentChangeDraw()
+{
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    // Load the document.
+    // Set the tiled annotations off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
         {".uno:Author", uno::makeAny(OUString("LOK User1"))},
     }));

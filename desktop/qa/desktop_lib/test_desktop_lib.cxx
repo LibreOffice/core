@@ -50,6 +50,7 @@
 #include <cairo.h>
 #include <config_features.h>
 #include <config_mpl.h>
+#include <tools/json_writer.hxx>
 
 #include <lib/init.hxx>
 #include <svx/svxids.hrc>
@@ -159,6 +160,7 @@ public:
     void testCommentsCalc();
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
+    void testCommentsAddEditDeleteDraw();
     void testRunMacro();
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
@@ -218,6 +220,7 @@ public:
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
+    CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
@@ -2284,6 +2287,71 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT(!aStream.str().empty());
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
+}
+
+namespace
+{
+
+void addParameter(tools::JsonWriter& rJson, const char* sName, OString const & type, OString const & value)
+{
+    auto testNode = rJson.startNode(sName);
+    rJson.put("type", type);
+    rJson.put("value", value);
+}
+
+}
+
+void DesktopLOKTest::testCommentsAddEditDeleteDraw()
+{
+    // Comments callback are emitted only if tiled annotations are off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    LibLODocument_Impl* pDocument = loadDoc("BlankDrawDocument.odg");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1(pDocument);
+
+    // Add a new comment
+    OString aCommandArgs;
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Text", "string", "Comment");
+        addParameter(aJson, "Author", "string", "LOK User1");
+        aCommandArgs = aJson.extractAsOString();
+    }
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
+
+    // Edit the previously added comment
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Id", "string", OString::number(nCommentId1));
+        addParameter(aJson, "Text", "string", "Edited comment");
+        aCommandArgs = aJson.extractAsOString();
+    }
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
+
+    // Delete Comment
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Id", "string", OString::number(nCommentId1));
+        aCommandArgs = aJson.extractAsOString();
+    }
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
 }
 
 void DesktopLOKTest::testRunMacro()
