@@ -13,6 +13,7 @@
 #include <vcl/svapp.hxx>
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 struct AdditionsItem
@@ -57,7 +58,11 @@ class SearchAndParseThread;
 class AdditionsDialog : public weld::GenericDialogController
 {
 private:
-    // void fillGrid();
+    Timer m_aSearchDataTimer;
+
+    DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
+    DECL_LINK(ImplUpdateDataHdl, Timer*, void);
+    DECL_LINK(FocusOut_Impl, weld::Widget&, void);
 
 public:
     std::unique_ptr<weld::Entry> m_xEntrySearch;
@@ -74,6 +79,7 @@ public:
     ~AdditionsDialog() override;
 
     void SetProgress(const OUString& rProgress);
+    void ClearList();
 };
 
 class SearchAndParseThread : public salhelper::Thread
