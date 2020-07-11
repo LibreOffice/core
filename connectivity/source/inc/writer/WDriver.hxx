@@ -40,10 +40,6 @@ namespace connectivity
 {
 namespace writer
 {
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface>
-ODriver_CreateInstance(const css::uno::Reference<css::lang::XMultiServiceFactory>& _rxFactory);
-
 class ODriver : public file::OFileDriver
 {
 public:
@@ -53,7 +49,6 @@ public:
     }
 
     /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static();
     OUString SAL_CALL getImplementationName() override;
 
     // XDriver
