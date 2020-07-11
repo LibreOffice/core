@@ -259,7 +259,8 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         }
         else if ( rParameters.find("CLOSE") != rParameters.end() )
         {
-            FuDraw* pDraw = dynamic_cast<FuDraw*> (getViewFunc()->GetDrawFuncPtr());
+            FuDraw* pDraw = dynamic_cast<FuDraw*>(getViewFunc()->GetDrawFuncPtr());
+            assert(pDraw);
             ScViewData* pViewData = mxGridWindow->getViewData();
             pViewData->GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
         }
