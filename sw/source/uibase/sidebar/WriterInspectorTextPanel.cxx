@@ -226,6 +226,74 @@ static void UpdateTree(SwDocShell* pDocSh, svx::sidebar::TreeNode& pParentNode,
     std::reverse(pParentNode.children.begin(), pParentNode.children.end());
 }
 
+static void UpdateTreeforDF(SwDocShell* pDocSh, svx::sidebar::TreeNode& rParentNode)
+{
+    SwDoc* pDoc = pDocSh->GetDoc();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+
+    uno::Reference<text::XTextRange> xRange(
+        SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
+    uno::Reference<beans::XPropertySet> properties(xRange, uno::UNO_QUERY_THROW);
+    const uno::Sequence<beans::Property> aProperties
+        = properties->getPropertySetInfo()->getProperties();
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> aStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> aCharStyleFamily;
+    uno::Reference<container::XNameAccess> aParaStyleFamily;
+
+    aStyleFamilies->getByName("CharacterStyles") >>= aCharStyleFamily;
+    aStyleFamilies->getByName("ParagraphStyles") >>= aParaStyleFamily;
+
+    OUString sCurrentPSName, sCurrentCSName;
+    properties->getPropertyValue("CharStyleName") >>= sCurrentCSName;
+    properties->getPropertyValue("ParaStyleName") >>= sCurrentPSName;
+    if (sCurrentCSName.isEmpty())
+        sCurrentCSName = "Standard";
+
+    uno::Reference<beans::XPropertySet> aPropParaSet;
+    uno::Reference<beans::XPropertySet> aPropCharSet;
+    aParaStyleFamily->getByName(sCurrentPSName) >>= aPropParaSet;
+    aCharStyleFamily->getByName(sCurrentCSName) >>= aPropCharSet;
+    uno::Reference<beans::XPropertySetInfo> aPropSetInfoPara = aPropParaSet->getPropertySetInfo();
+    uno::Reference<beans::XPropertySetInfo> aPropSetInfoChar = aPropCharSet->getPropertySetInfo();
+
+    for (const beans::Property& rProperty : aProperties)
+    {
+        uno::Any aAny = properties->getPropertyValue(rProperty.Name);
+        svx::sidebar::TreeNode aTemp;
+
+        OUString aPropertyValuePair;
+        if (aPropSetInfoPara->hasPropertyByName(rProperty.Name)
+            && aPropSetInfoChar->hasPropertyByName(rProperty.Name)
+            && aAny != aPropParaSet->getPropertyValue(rProperty.Name)
+            && aAny != aPropCharSet->getPropertyValue(rProperty.Name)
+            && GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+        {
+            aTemp.sNodeName = aPropertyValuePair;
+            rParentNode.children.push_back(aTemp);
+        }
+        else if (!aPropSetInfoPara->hasPropertyByName(rProperty.Name)
+                 && aPropSetInfoChar->hasPropertyByName(rProperty.Name)
+                 && aAny != aPropCharSet->getPropertyValue(rProperty.Name)
+                 && GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+        {
+            aTemp.sNodeName = aPropertyValuePair;
+            rParentNode.children.push_back(aTemp);
+        }
+        else if (aPropSetInfoPara->hasPropertyByName(rProperty.Name)
+                 && !aPropSetInfoChar->hasPropertyByName(rProperty.Name)
+                 && aAny != aPropParaSet->getPropertyValue(rProperty.Name)
+                 && GetPropertyValues(rProperty, aAny, aPropertyValuePair))
+        {
+            aTemp.sNodeName = aPropertyValuePair;
+            rParentNode.children.push_back(aTemp);
+        }
+    }
+}
+
 IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, void)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
@@ -245,6 +313,9 @@ IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, voi
         svx::sidebar::TreeNode pTempPara;
         pTempPara.sNodeName = "PARAGRAPH STYLES";
         UpdateTree(pDocSh, pTempPara, maIsDefined, PARAGRAPHSTYLES);
+        svx::sidebar::TreeNode pTempDF;
+        pTempDF.sNodeName = "DEFAULT FORMATTING";
+        UpdateTreeforDF(pDocSh, pTempDF);
 
         /*
         Order:-
@@ -254,6 +325,7 @@ IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, voi
         */
         aStore.push_back(pTempPara);
         aStore.push_back(pTempChar);
+        aStore.push_back(pTempDF);
     }
 
     updateEntries(aStore);
