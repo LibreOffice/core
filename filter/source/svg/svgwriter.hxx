@@ -369,7 +369,7 @@ public:
 };
 
 
-class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
+class SVGWriter : public cppu::WeakImplHelper< XSVGWriter, XServiceInfo >
 {
 private:
     Reference< XComponentContext >                      mxContext;
@@ -383,6 +383,11 @@ public:
     // XSVGWriter
     virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,
                                  const Sequence<sal_Int8>& rMtfSeq ) override;
+
+    //  XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX

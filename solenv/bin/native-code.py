@@ -504,7 +504,6 @@ calc_constructor_list = [
 
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
-    ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
     ]
@@ -522,6 +521,9 @@ draw_constructor_list = [
     "com_sun_star_animations_ParallelTimeContainer_get_implementation",
     "com_sun_star_animations_SequenceTimeContainer_get_implementation",
     "com_sun_star_animations_TransitionFilter_get_implementation",
+# filter/source/svg/svgfilter.component
+    "filter_SVGFilter_get_implementation",
+    "filter_SVGWriter_get_implementation",
 # sd/util/sd.component
     "RandomAnimationNode_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation",
