@@ -73,46 +73,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
 
-    // static uno helper!
-
     public:
-
-
-        /** @short  return the uno implementation name of this class.
-
-            @descr  Because this information is used at several places
-                    (and mostly an object instance of this class is not possible)
-                    it's implemented as a static function!
-
-            @return The fix uno implementation name of this class.
-         */
-        static OUString impl_getImplementationName();
-
-
-        /** @short  return the list of supported uno services of this class.
-
-            @descr  Because this information is used at several places
-                    (and mostly an object instance of this class is not possible)
-                    it's implemented as a static function!
-
-            @return The fix list of uno services supported by this class.
-         */
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
-
-
-        /** @short  return a new intsnace of this class.
-
-            @descr  This method is used by the uno service manager, to create
-                    a new instance of this service if needed.
-
-            @param  xSMGR
-                    reference to the uno service manager, which require
-                    this new instance. It should be passed to the new object
-                    so it can be used internally to create own needed uno resources.
-
-            @return The new instance of this service as a uno reference.
-         */
-        static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
       // Overrides to resolve ambiguity
       virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override

@@ -56,8 +56,8 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
 {
     css::frame::Desktop::create(m_xContext)->addTerminateListener(m_xTerminateListener.get());
     BaseContainer::init(rxContext                                     ,
-                        TypeDetection::impl_getImplementationName()   ,
-                        TypeDetection::impl_getSupportedServiceNames(),
+                        "com.sun.star.comp.filter.config.TypeDetection"   ,
+                        { "com.sun.star.document.TypeDetection" },
                         FilterCache::E_TYPE                           );
 }
 
@@ -1197,25 +1197,13 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
     return false;
 }
 
-
-OUString TypeDetection::impl_getImplementationName()
-{
-    return "com.sun.star.comp.filter.config.TypeDetection";
-}
-
-
-css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.document.TypeDetection" };
-}
-
-
-css::uno::Reference< css::uno::XInterface > TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    TypeDetection* pNew = new TypeDetection( comphelper::getComponentContext(xSMGR) );
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::document::XTypeDetection* >(pNew), css::uno::UNO_QUERY);
-}
-
 } // namespace filter
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_TypeDetection_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new filter::config::TypeDetection(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

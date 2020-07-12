@@ -31,8 +31,8 @@ FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XCom
     : m_xContext(rxContext)
 {
     BaseContainer::init(rxContext                                              ,
-                        FrameLoaderFactory::impl_getImplementationName()   ,
-                        FrameLoaderFactory::impl_getSupportedServiceNames(),
+                        "com.sun.star.comp.filter.config.FrameLoaderFactory"  ,
+                        { "com.sun.star.frame.FrameLoaderFactory" },
                         FilterCache::E_FRAMELOADER                         );
 }
 
@@ -90,25 +90,15 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
     return BaseContainer::getElementNames();
 }
 
-
-OUString FrameLoaderFactory::impl_getImplementationName()
-{
-    return "com.sun.star.comp.filter.config.FrameLoaderFactory";
-}
-
-
-css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.frame.FrameLoaderFactory" };
-}
-
-
-css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    FrameLoaderFactory* pNew = new FrameLoaderFactory( comphelper::getComponentContext(xSMGR) );
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
-}
-
 } // namespace filter::config
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_FrameLoaderFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new filter::config::FrameLoaderFactory(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
