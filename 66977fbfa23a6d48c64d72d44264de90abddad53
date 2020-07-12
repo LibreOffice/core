@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02ecf905_eb41f966",
+        "filename": "cui/uiconfig/ui/optlingupage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-12T16:31:56Z",
+      "side": 1,
+      "message": "Are you sure about this kind of change?",
+      "range": {
+        "startLine": 109,
+        "startChar": 61,
+        "endLine": 109,
+        "endChar": 81
+      },
+      "revId": "66977fbfa23a6d48c64d72d44264de90abddad53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
