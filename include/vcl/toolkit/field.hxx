@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_TOOLKIT_FIELD_HXX
-#define INCLUDED_VCL_TOOLKIT_FIELD_HXX
+#pragma once
 
 #if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
 #error "don't use this in new code"
@@ -26,8 +25,7 @@
 
 #include <config_options.h>
 #include <vcl/toolkit/combobox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/longcurr.hxx>
+#include <vcl/toolkit/longcurr.hxx>
 
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
@@ -249,7 +247,5 @@ public:
     void            Modify() override;
     void            ReformatAll() override;
 };
-
-#endif // INCLUDED_VCL_FIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
