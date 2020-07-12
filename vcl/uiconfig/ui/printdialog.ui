@@ -577,9 +577,9 @@
                                                 <property name="hexpand">True</property>
                                                 <property name="active">0</property>
                                                 <items>
-                                                  <item translatable="yes" context="printdialog|liststore3">Even and Odd Pages</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
                                                   <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
+                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
                                                 </items>
                                               </object>
                                               <packing>

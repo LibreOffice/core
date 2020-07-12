@@ -1695,8 +1695,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         return pDocShell->GetDocument().GetTableCount();
     }
 
-    bool bIsPrintEvenPages = (nEOContent != 2 && nContent == 0) || nContent != 0;
-    bool bIsPrintOddPages = (nEOContent != 1 && nContent == 0) || nContent != 0;
+    bool bIsPrintEvenPages = (nEOContent != 1 && nContent == 0) || nContent != 0;
+    bool bIsPrintOddPages = (nEOContent != 2 && nContent == 0) || nContent != 0;
 
     for ( sal_Int32 nPage = 1; nPage <= nPages; nPage++ )
     {
