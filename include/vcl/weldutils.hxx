@@ -219,6 +219,24 @@ private:
     std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
 
+class VCL_DLLPUBLIC LongCurrencyEntry final : public EntryFormatter
+{
+public:
+    LongCurrencyEntry(weld::Entry& rEntry);
+    LongCurrencyEntry(weld::FormattedSpinButton& rSpinButton);
+
+    void SetUseThousandSep(bool b);
+    void SetCurrencySymbol(const OUString& rStr);
+
+    virtual ~LongCurrencyEntry() override;
+
+private:
+    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
+
+    OUString m_aCurrencySymbol;
+    bool m_bThousandSep;
+};
+
 // get the row the iterator is on
 VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 

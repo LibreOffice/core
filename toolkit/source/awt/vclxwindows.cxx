@@ -49,7 +49,6 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
-#include <vcl/longcurr.hxx>
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/prgsbar.hxx>

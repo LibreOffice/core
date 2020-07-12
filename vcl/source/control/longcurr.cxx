@@ -26,7 +26,9 @@
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolkit/field.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -212,6 +214,18 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
 }
 
 } // namespace
+
+namespace weld
+{
+    IMPL_LINK_NOARG(LongCurrencyEntry, FormatOutputHdl, LinkParamNone*, bool)
+    {
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        const OUString& rCurrencySymbol = !m_aCurrencySymbol.isEmpty() ? m_aCurrencySymbol : rLocaleDataWrapper.getCurrSymbol();
+        OUString aText = ImplGetCurr(rLocaleDataWrapper, GetValue(), GetDecimalDigits(), rCurrencySymbol, m_bThousandSep);
+        ImplSetTextImpl(aText, nullptr);
+        return true;
+    }
+}
 
 static bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
