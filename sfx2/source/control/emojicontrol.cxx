@@ -22,7 +22,6 @@
 #include <emojiview.hxx>
 #include <thumbnailviewitem.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/tabpage.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
