@@ -39,7 +39,7 @@
       <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
       <LongDateDaySeparator> </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
-      <LongDateYearSeparator>ж.</LongDateYearSeparator>
+      <LongDateYearSeparator> ж.</LongDateYearSeparator>
     </Separators>
     <Markers>
       <QuotationStart>„</QuotationStart>
@@ -47,11 +47,11 @@
       <DoubleQuotationStart>«</DoubleQuotationStart>
       <DoubleQuotationEnd>»</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>күндіз</TimeAM>
-    <TimePM>кешкі</TimePM>
+    <TimeAM>AM</TimeAM>
+    <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$тңг-43F]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₸-43F]">
     <DateAcceptancePattern>D.M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
@@ -168,16 +168,16 @@
     <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
+    <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
       <FormatCode>HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
       <FormatCode>HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
+    <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
       <FormatCode>HH:MM AM/PM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
       <FormatCode>HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
@@ -193,7 +193,7 @@
       <FormatCode>DD.MM.YY HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD.MM.YYYY HH:MM:SS AM/PM</FormatCode>
+      <FormatCode>DD.MM.YYYY HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
       <FormatCode>DD.MM.YYYY HH:MM</FormatCode>
@@ -226,7 +226,7 @@
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Дб</DefaultAbbrvName>
+          <DefaultAbbrvName>Дс</DefaultAbbrvName>
           <DefaultFullName>Дүйсенбі</DefaultFullName>
         </Day>
         <Day>
@@ -247,7 +247,7 @@
         <Day>
           <DayID>fri</DayID>
           <DefaultAbbrvName>Жм</DefaultAbbrvName>
-          <DefaultFullName>Жума</DefaultFullName>
+          <DefaultFullName>Жұма</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
@@ -258,8 +258,8 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Қан</DefaultAbbrvName>
-          <DefaultFullName>Қантар</DefaultFullName>
+          <DefaultAbbrvName>Қаң</DefaultAbbrvName>
+          <DefaultFullName>Қаңтар</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
@@ -299,7 +299,7 @@
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>Қыр</DefaultAbbrvName>
-          <DefaultFullName>Қырқүйек</DefaultFullName>
+          <DefaultFullName>Қыркүйек</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
@@ -338,6 +338,13 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>KZT</CurrencyID>
+      <CurrencySymbol>₸</CurrencySymbol>
+      <BankSymbol>KZT</BankSymbol>
+      <CurrencyName>Қазақстан теңгесі</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>KZT</CurrencyID>
       <CurrencySymbol>тңг</CurrencySymbol>
       <BankSymbol>KZT</BankSymbol>
       <CurrencyName>Теңге</CurrencyName>
@@ -354,8 +361,8 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>Ақиқат</trueWord>
-      <falseWord>Жалған</falseWord>
+      <trueWord>ақиқат</trueWord>
+      <falseWord>жалған</falseWord>
       <quarter1Word>бірінші тоқсан</quarter1Word>
       <quarter2Word>екінші тоқсан</quarter2Word>
       <quarter3Word>үшінші тоқсан</quarter3Word>
