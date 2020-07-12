@@ -287,6 +287,33 @@ void DoubleNumericEntry::ResetConformanceTester()
     m_pNumberValidator.reset(
         new validation::NumberValidator(cSeparatorThousand, cSeparatorDecimal));
 }
+
+LongCurrencyEntry::LongCurrencyEntry(weld::Entry& rEntry)
+    : EntryFormatter(rEntry)
+{
+}
+
+LongCurrencyEntry::LongCurrencyEntry(weld::FormattedSpinButton& rSpinButton)
+    : EntryFormatter(rSpinButton)
+    , m_bThousandSep(true)
+{
+    SetOutputHdl(LINK(this, LongCurrencyEntry, FormatOutputHdl));
+    SetInputHdl(LINK(this, LongCurrencyEntry, ParseInputHdl));
+}
+
+void LongCurrencyEntry::SetUseThousandSep(bool b)
+{
+    m_bThousandSep = b;
+    ReFormat();
+}
+
+void LongCurrencyEntry::SetCurrencySymbol(const OUString& rStr)
+{
+    m_aCurrencySymbol = rStr;
+    ReFormat();
+}
+
+LongCurrencyEntry::~LongCurrencyEntry() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
