@@ -388,7 +388,7 @@ bool SwPrintUIOptions::IsPrintLeftPages() const
     // 1: left pages only
     // 2: right pages only
     sal_Int64 nEOPages = getIntValue( "EvenOdd", 0 /* default: all */ );
-    bool bRes = nEOPages != 2;
+    bool bRes = nEOPages != 1;
     bRes = getBoolValue( "EvenOdd", bRes /* <- default value if property is not found */ );
     return bRes;
 }
@@ -399,7 +399,7 @@ bool SwPrintUIOptions::IsPrintRightPages() const
     // for compatibility the old name should win (may still be used for PDF export or via Uno API)
 
     sal_Int64 nEOPages = getIntValue( "EvenOdd", 0 /* default: all */ );
-    bool bRes = nEOPages != 1;
+    bool bRes = nEOPages != 2;
     bRes = getBoolValue( "EvenOdd", bRes /* <- default value if property is not found */ );
     return bRes;
 }
