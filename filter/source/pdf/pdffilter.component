@@ -18,17 +18,21 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="pdffilter" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.PDF.PDFDialog">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.PDF.PDFDialog"
+    constructor="filter_PDFDialog_get_implementation">
     <service name="com.sun.star.document.PDFDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.PDF.PDFFilter">
+  <implementation name="com.sun.star.comp.PDF.PDFFilter"
+    constructor="filter_PDFFilter_get_implementation">
     <service name="com.sun.star.document.PDFFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.PDF.PDFExportInteractionHandler">
+  <implementation name="com.sun.star.comp.PDF.PDFExportInteractionHandler"
+    constructor="filter_PDFExportInteractionHandler_get_implementation">
     <service name="com.sun.star.filter.pdfexport.PDFExportInteractionHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.PDF.PDFDecomposer">
+  <implementation name="com.sun.star.comp.PDF.PDFDecomposer"
+    constructor="filter_PdfDecomposer_get_implementation">
     <service name="com.sun.star.graphic.PdfTools"/>
   </implementation>
 </component>

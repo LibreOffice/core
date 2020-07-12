@@ -243,27 +243,9 @@ void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& 
 }
 
 
-OUString PDFFilter_getImplementationName ()
-{
-    return "com.sun.star.comp.PDF.PDFFilter";
-}
-
-
-Sequence< OUString > PDFFilter_getSupportedServiceNames(  )
-{
-    return { "com.sun.star.document.PDFFilter" };
-}
-
-
-Reference< XInterface > PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new PDFFilter( comphelper::getComponentContext(rSMgr) ));
-}
-
-
 OUString SAL_CALL PDFFilter::getImplementationName()
 {
-    return PDFFilter_getImplementationName();
+    return "com.sun.star.comp.PDF.PDFFilter";
 }
 
 
@@ -275,7 +257,15 @@ sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 {
-    return PDFFilter_getSupportedServiceNames();
+    return { "com.sun.star.document.PDFFilter" };
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_PDFFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new PDFFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

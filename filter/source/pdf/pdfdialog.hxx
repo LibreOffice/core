@@ -73,13 +73,6 @@ public:
     virtual     ~PDFDialog() override;
 };
 
-/// @throws RuntimeException
-OUString PDFDialog_getImplementationName ();
-/// @throws RuntimeException
-Sequence< OUString > PDFDialog_getSupportedServiceNames();
-/// @throws Exception
-Reference< XInterface > PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
-
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

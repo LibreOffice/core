@@ -60,16 +60,6 @@ public:
     virtual     ~PDFInteractionHandler() override;
 };
 
-/// @throws RuntimeException
-OUString PDFInteractionHandler_getImplementationName ();
-
-/// @throws RuntimeException
-Sequence< OUString > PDFInteractionHandler_getSupportedServiceNames(  );
-
-/// @throws Exception
-Reference< XInterface >
-PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
-
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

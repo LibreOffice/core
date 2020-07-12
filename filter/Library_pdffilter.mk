@@ -59,7 +59,6 @@ $(eval $(call gb_Library_add_exception_objects,pdffilter,\
 	filter/source/pdf/pdfexport \
 	filter/source/pdf/pdffilter \
 	filter/source/pdf/pdfinteract \
-	filter/source/pdf/pdfuno \
 ))
 
 # vim: set noet sw=4 ts=4:
