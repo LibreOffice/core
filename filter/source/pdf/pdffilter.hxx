@@ -68,16 +68,6 @@ public:
     virtual     ~PDFFilter() override;
 };
 
-/// @throws RuntimeException
-OUString PDFFilter_getImplementationName ();
-
-/// @throws RuntimeException
-Sequence< OUString > PDFFilter_getSupportedServiceNames(  );
-
-/// @throws Exception
-Reference< XInterface >
-PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
-
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 
 

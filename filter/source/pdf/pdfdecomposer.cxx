@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "pdfdecomposer.hxx"
-
 #include <vector>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -92,7 +90,7 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
 
 OUString SAL_CALL XPdfDecomposer::getImplementationName()
 {
-    return PDFDecomposer_getImplementationName();
+    return "com.sun.star.comp.PDF.PDFDecomposer";
 }
 
 sal_Bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
@@ -102,22 +100,15 @@ sal_Bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
 {
-    return PDFDecomposer_getSupportedServiceNames();
+    return { "com.sun.star.graphic.PdfTools" };
 }
 }
 
-OUString PDFDecomposer_getImplementationName() { return "com.sun.star.comp.PDF.PDFDecomposer"; }
-
-uno::Sequence<OUString> PDFDecomposer_getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_PdfDecomposer_get_implementation(css::uno::XComponentContext* context,
+                                        css::uno::Sequence<css::uno::Any> const&)
 {
-    return uno::Sequence<OUString>{ "com.sun.star.graphic.PdfTools" };
-}
-
-uno::Reference<uno::XInterface>
-PDFDecomposer_createInstance(const uno::Reference<lang::XMultiServiceFactory>& rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(
-        new XPdfDecomposer(comphelper::getComponentContext(rSMgr)));
+    return cppu::acquire(new XPdfDecomposer(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

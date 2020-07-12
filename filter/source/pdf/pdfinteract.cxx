@@ -68,28 +68,10 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
 }
 
 
-OUString PDFInteractionHandler_getImplementationName ()
-{
-    return "com.sun.star.comp.PDF.PDFExportInteractionHandler";
-}
-
-
-Sequence< OUString > PDFInteractionHandler_getSupportedServiceNames(  )
-{
-    Sequence<OUString> aRet { "com.sun.star.filter.pdfexport.PDFExportInteractionHandler" };
-    return aRet;
-}
-
-
-Reference< XInterface > PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & )
-{
-    return static_cast<cppu::OWeakObject*>(new PDFInteractionHandler);
-}
-
 
 OUString SAL_CALL PDFInteractionHandler::getImplementationName()
 {
-    return PDFInteractionHandler_getImplementationName();
+    return "com.sun.star.comp.PDF.PDFExportInteractionHandler";
 }
 
 
@@ -101,7 +83,15 @@ sal_Bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServi
 
 css::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServiceNames(  )
 {
-    return PDFInteractionHandler_getSupportedServiceNames();
+    return { "com.sun.star.filter.pdfexport.PDFExportInteractionHandler" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_PDFExportInteractionHandler_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new PDFInteractionHandler());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
