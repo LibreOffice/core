@@ -127,7 +127,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="paths-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="paths">To modify an entry in this list, click the entry and click &lt;b&gt;Edit&lt;/b&gt;. You can also double click the entry.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="paths">To modify an entry in this list, click the entry and click Edit. You can also double click the entry.</property>
                           </object>
                         </child>
                       </object>
@@ -175,7 +175,7 @@
             <property name="use_underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="default-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="default">The&lt;b&gt; Default &lt;/b&gt;button resets the predefined paths for all selected entries.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="default">The Default button resets the predefined paths for all selected entries.</property>
               </object>
             </child>
           </object>
@@ -194,7 +194,7 @@
             <property name="use_underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="edit-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="edit">Click to display the &lt;b&gt;Select Path&lt;/b&gt; or &lt;b&gt;Edit Paths&lt;/b&gt; dialog.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="edit">Click to display the Select Path or Edit Paths dialog.</property>
               </object>
             </child>
           </object>
