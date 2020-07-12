@@ -53,7 +53,6 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         void SetAdditionalModifyHdl(const Link<DbaMouseDownListBoxController&,void>& _rHdl);
 
     protected:
-        virtual bool WantMouseEvent() const override { return true; }
         virtual void callModifyHdl() override;
     };
 
