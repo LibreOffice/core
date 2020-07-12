@@ -740,6 +740,12 @@ namespace svt
         DoubleNumericControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
+    class SVT_DLLPUBLIC LongCurrencyControl : public FormattedControlBase
+    {
+    public:
+        LongCurrencyControl(BrowserDataWin* pParent, bool bSpinVariant);
+    };
+
     //= FormattedFieldCellController
     class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
