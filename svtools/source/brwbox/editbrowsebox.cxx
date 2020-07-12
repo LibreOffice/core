@@ -518,6 +518,8 @@ namespace svt
                  pWin = pWin->GetWindow(GetWindowType::Next))
             {
             }
+            if (!pWin)
+                pWin = pRealHandler;
         }
         if (pWin && pWin->IsTracking())
             pWin->EndTracking();
