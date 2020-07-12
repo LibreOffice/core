@@ -187,13 +187,13 @@ namespace {
         bool IsPrintFrontPage() const
         {
             sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "EvenOdd", 0 ));
-            return nInclude != 1;
+            return nInclude != 2;
         }
 
         bool IsPrintBackPage() const
         {
             sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "EvenOdd", 0 ));
-            return nInclude != 2;
+            return nInclude != 1;
         }
 
         bool IsPaperBin() const
