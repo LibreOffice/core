@@ -718,6 +718,9 @@ void PresenterToolBar::Layout (
         nGapCount += maElementContainer.size()-1;
     }
 
+    // Done to introduce gap between the end of the toolbar and the last button
+    aTotalSize.Width += gnGapSize/2;
+
     // Calculate the minimal size so that the window size of the tool bar
     // can be adapted accordingly.
     maMinimalSize = aTotalSize;
