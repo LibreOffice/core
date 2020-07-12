@@ -1107,4 +1107,44 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132637_protectTrackChanges)
     CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsReadOnly());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
+{
+    load(DATA_DIRECTORY, "tdf127652.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwCursorShell* pShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+
+    // go to the start of page 4
+    xCursor->jumpToPage(4);
+    xCursor->jumpToStartOfPage();
+
+    // mark a section that overlaps multiple pages
+    pWrtShell->Down(false, 2);
+    pWrtShell->Up(true, 5);
+
+    // delete the marked section
+    pWrtShell->DelRight();
+
+    // go to the start of page 4
+    xCursor->jumpToPage(4);
+    xCursor->jumpToStartOfPage();
+
+    // move up to page 3
+    pWrtShell->Up(false, 5);
+
+    // check that we are on the third page
+    // in the bug one issue was that the cursor was placed incorrectly, so
+    // moving up to the previous page would not work any more
+    sal_uInt16 assertPage = 3;
+    sal_uInt16 currentPage = pShell->GetPageNumSeqNonEmpty();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
