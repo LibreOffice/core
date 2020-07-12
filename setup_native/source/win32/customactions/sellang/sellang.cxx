@@ -97,6 +97,7 @@ langid_to_string( LANGID langid )
     case LANG_ITALIAN: return "it";
     case LANG_JAPANESE: return "ja";
     case LANG_GEORGIAN: return "ka";
+    case LANG_KAZAK: return "kk";
     case LANG_KHMER: return "km";
     case LANG_KANNADA: return "kn";
     case LANG_KOREAN: return "ko";
