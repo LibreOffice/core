@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02143471_f5be1638",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-12T17:53:42Z",
+      "side": 1,
+      "message": "This is against the clang-format rules we use. Please make lines no longer than 100 characters, - in this case, just revert the format to the original shape.",
+      "range": {
+        "startLine": 139,
+        "startChar": 54,
+        "endLine": 139,
+        "endChar": 112
+      },
+      "revId": "aac1ac75fd8b89bd71d55778de5a77d3fbb6e750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "771c32d6_050ffb58",
+        "filename": "starmath/inc/node.hxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-12T17:53:42Z",
+      "side": 1,
+      "message": "Why this verbosity? All member functions defined in place are implicitly inline - please remove the unnecessary changes.",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 10
+      },
+      "revId": "aac1ac75fd8b89bd71d55778de5a77d3fbb6e750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
