@@ -24,6 +24,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>

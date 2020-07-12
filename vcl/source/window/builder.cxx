@@ -66,6 +66,7 @@
 #include <strings.hrc>
 #include <treeglue.hxx>
 #include <tools/diagnose_ex.h>
+#include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
 #include <jsdialog/jsdialogbuilder.hxx>

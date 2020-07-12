@@ -28,6 +28,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <verticaltabctrl.hxx>
 
 using namespace ::com::sun::star::accessibility;
 
