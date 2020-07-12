@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/window.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 
 class Edit;
 

@@ -29,7 +29,7 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 MenuButton::MenuButton (vcl::Window* pParentWindow)
-    : CheckBox(pParentWindow),
+    : RadioButton(pParentWindow),
       mbIsLeftButtonDown(false)
 {
 #ifdef DEBUG
@@ -63,7 +63,7 @@ void MenuButton::MouseMove (const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
-    CheckBox::MouseMove(rEvent);
+    RadioButton::MouseMove(rEvent);
 }
 
 void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)

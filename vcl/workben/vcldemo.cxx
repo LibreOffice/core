@@ -43,7 +43,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/pngwrite.hxx>

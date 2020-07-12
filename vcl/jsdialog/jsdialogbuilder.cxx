@@ -11,6 +11,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/toolkit/combobox.hxx>

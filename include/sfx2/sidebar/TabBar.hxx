@@ -91,7 +91,7 @@ public:
 
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<CheckBox> mpMenuButton;
+    VclPtr<RadioButton> mpMenuButton;
     class Item
     {
     public:
