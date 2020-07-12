@@ -71,6 +71,7 @@
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <calendar.hxx>
+#include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 #include <salvtables.hxx>
 

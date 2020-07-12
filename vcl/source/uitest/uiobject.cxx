@@ -29,6 +29,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
+#include <verticaltabctrl.hxx>
 
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
