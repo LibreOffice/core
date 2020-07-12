@@ -14549,7 +14549,9 @@ public:
 
     virtual bool has_focus() const override
     {
-        return gtk_widget_has_focus(m_pToggleButton) || gtk_widget_has_focus(m_pEntry) ||
+        if (m_pEntry && gtk_widget_has_focus(m_pEntry))
+            return true;
+        return gtk_widget_has_focus(m_pToggleButton) ||
                gtk_widget_has_focus(GTK_WIDGET(m_pOverlayButton)) ||
                gtk_widget_has_focus(GTK_WIDGET(m_pTreeView)) || GtkInstanceWidget::has_focus();
     }
