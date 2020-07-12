@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
@@ -39,6 +40,20 @@ GraphicExportFilter::GraphicExportFilter( const uno::Reference< uno::XComponentC
 
 GraphicExportFilter::~GraphicExportFilter()
 {}
+
+//  XServiceInfo
+sal_Bool GraphicExportFilter::supportsService(const OUString& sServiceName)
+{
+    return cppu::supportsService(this, sServiceName);
+}
+OUString GraphicExportFilter::getImplementationName()
+{
+    return "com.sun.star.comp.GraphicExportFilter";
+}
+css::uno::Sequence< OUString > GraphicExportFilter::getSupportedServiceNames()
+{
+    return { "com.sun.star.document.ExportFilter" };
+}
 
 void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::PropertyValue > & rProperties )
 {
@@ -210,4 +225,10 @@ void SAL_CALL GraphicExportFilter::initialize( const uno::Sequence< uno::Any > &
 {
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_GraphicExportFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new GraphicExportFilter(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

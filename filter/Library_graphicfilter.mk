@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_libraries,graphicfilter,\
 
 $(eval $(call gb_Library_add_exception_objects,graphicfilter,\
 	filter/source/graphic/GraphicExportFilter \
-	filter/source/graphic/Services \
 ))
 
 # vim: set noet sw=4 ts=4:
