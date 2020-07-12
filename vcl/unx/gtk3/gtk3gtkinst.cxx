@@ -12409,7 +12409,7 @@ private:
     gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
-    gulong m_nHasSelectionSignalId; // we don't disable/enable this one, its to implement auto-scroll to cursor on losing selection
+    gulong m_nHasSelectionSignalId; // we don't disable/enable this one, it's to implement auto-scroll to cursor on losing selection
     gulong m_nVAdjustChangedSignalId;
 
     static void signalChanged(GtkTextBuffer*, gpointer widget)
