@@ -22,16 +22,20 @@
   <implementation name="com.sun.star.comp.filter.config.ConfigFlush">
     <service name="com.sun.star.document.FilterConfigRefresh"/>
   </implementation>
-  <implementation name="com.sun.star.comp.filter.config.ContentHandlerFactory">
+  <implementation name="com.sun.star.comp.filter.config.ContentHandlerFactory"
+    constructor="filter_ContentHandlerFactory_get_implementation">
     <service name="com.sun.star.frame.ContentHandlerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.filter.config.FilterFactory">
+  <implementation name="com.sun.star.comp.filter.config.FilterFactory"
+    constructor="filter_FilterFactory_get_implementation">
     <service name="com.sun.star.document.FilterFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.filter.config.FrameLoaderFactory">
+  <implementation name="com.sun.star.comp.filter.config.FrameLoaderFactory"
+    constructor="filter_FrameLoaderFactory_get_implementation">
     <service name="com.sun.star.frame.FrameLoaderFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.filter.config.TypeDetection">
+  <implementation name="com.sun.star.comp.filter.config.TypeDetection"
+    constructor="filter_TypeDetection_get_implementation">
     <service name="com.sun.star.document.TypeDetection"/>
   </implementation>
 </component>

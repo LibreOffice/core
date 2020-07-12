@@ -45,30 +45,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*
     css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
     OUString sImplName = OUString::createFromAscii(pImplementationName);
 
-    if (TypeDetection::impl_getImplementationName() == sImplName)
-        xFactory = cppu::createSingleFactory( xSMGR,
-                                              TypeDetection::impl_getImplementationName(),
-                                              TypeDetection::impl_createInstance,
-                                              TypeDetection::impl_getSupportedServiceNames() );
-
-    if (FilterFactory::impl_getImplementationName() == sImplName)
-        xFactory = cppu::createSingleFactory( xSMGR,
-                                              FilterFactory::impl_getImplementationName(),
-                                              FilterFactory::impl_createInstance,
-                                              FilterFactory::impl_getSupportedServiceNames() );
-
-    if (ContentHandlerFactory::impl_getImplementationName() == sImplName)
-        xFactory = cppu::createSingleFactory( xSMGR,
-                                              ContentHandlerFactory::impl_getImplementationName(),
-                                              ContentHandlerFactory::impl_createInstance,
-                                              ContentHandlerFactory::impl_getSupportedServiceNames() );
-
-    if (FrameLoaderFactory::impl_getImplementationName() == sImplName)
-        xFactory = cppu::createSingleFactory( xSMGR,
-                                              FrameLoaderFactory::impl_getImplementationName(),
-                                              FrameLoaderFactory::impl_createInstance,
-                                              FrameLoaderFactory::impl_getSupportedServiceNames() );
-
     if (ConfigFlush::impl_getImplementationName() == sImplName)
         xFactory = cppu::createOneInstanceFactory( xSMGR,
                                                    ConfigFlush::impl_getImplementationName(),

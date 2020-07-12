@@ -154,6 +154,11 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
+# filter/source/config/cache/filterconfig1.component
+    "filter_TypeDetection_get_implementation",
+    "filter_FrameLoaderFactory_get_implementation",
+    "filter_FilterFactory_get_implementation",
+    "filter_ContentHandlerFactory_get_implementation",
 # filter/source/pdf/pdffilter.component
     "filter_PdfDecomposer_get_implementation",
     "filter_PDFExportInteractionHandler_get_implementation",

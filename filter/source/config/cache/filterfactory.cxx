@@ -51,8 +51,8 @@ FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentCont
     : m_xContext(rxContext)
 {
     BaseContainer::init(rxContext                                         ,
-                        FilterFactory::impl_getImplementationName()   ,
-                        FilterFactory::impl_getSupportedServiceNames(),
+                        "com.sun.star.comp.filter.config.FilterFactory"   ,
+                         { "com.sun.star.document.FilterFactory" },
                         FilterCache::E_FILTER                         );
 }
 
@@ -498,25 +498,13 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
     return std::vector<OUString>();
 }
 
-
-OUString FilterFactory::impl_getImplementationName()
-{
-    return "com.sun.star.comp.filter.config.FilterFactory";
-}
-
-
-css::uno::Sequence< OUString > FilterFactory::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.document.FilterFactory" };
-}
-
-
-css::uno::Reference< css::uno::XInterface > FilterFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    FilterFactory* pNew = new FilterFactory( comphelper::getComponentContext(xSMGR) );
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
-}
-
 } // namespace filter
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_FilterFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new filter::config::FilterFactory(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

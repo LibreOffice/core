@@ -31,8 +31,8 @@ ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno
  : m_xContext(rxContext)
 {
     BaseContainer::init(rxContext                                             ,
-                        ContentHandlerFactory::impl_getImplementationName()   ,
-                        ContentHandlerFactory::impl_getSupportedServiceNames(),
+                        "com.sun.star.comp.filter.config.ContentHandlerFactory"   ,
+                        { "com.sun.star.frame.ContentHandlerFactory" },
                         FilterCache::E_CONTENTHANDLER                         );
 }
 
@@ -92,25 +92,14 @@ css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServi
     return BaseContainer::getElementNames();
 }
 
-
-OUString ContentHandlerFactory::impl_getImplementationName()
-{
-    return "com.sun.star.comp.filter.config.ContentHandlerFactory";
-}
-
-
-css::uno::Sequence< OUString > ContentHandlerFactory::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.frame.ContentHandlerFactory" };
-}
-
-
-css::uno::Reference< css::uno::XInterface > ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    ContentHandlerFactory* pNew = new ContentHandlerFactory( comphelper::getComponentContext(xSMGR) );
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
-}
-
 } // namespace filter::config
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_ContentHandlerFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new filter::config::ContentHandlerFactory(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
