@@ -23,7 +23,7 @@
 
 namespace sfx2::sidebar {
 
-VclPtr<CheckBox> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
+VclPtr<RadioButton> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
 {
     return VclPtr<MenuButton>::Create(pParentWindow);
 }

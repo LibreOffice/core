@@ -16,7 +16,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 
 class ToolBox;

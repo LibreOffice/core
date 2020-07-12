@@ -22,7 +22,6 @@
 #include <sfx2/dllapi.h>
 #include <vcl/vclptr.hxx>
 
-class CheckBox;
 class RadioButton;
 namespace vcl { class Window; }
 
@@ -38,7 +37,7 @@ class ControlFactory
 public:
     /** Create the menu button for the task bar.
     */
-    static VclPtr<CheckBox> CreateMenuButton (vcl::Window* pParentWindow);
+    static VclPtr<RadioButton> CreateMenuButton (vcl::Window* pParentWindow);
 
     static VclPtr<RadioButton> CreateTabItem (vcl::Window* pParentWindow);
 };

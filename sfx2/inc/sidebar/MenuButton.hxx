@@ -23,7 +23,7 @@
 namespace sfx2::sidebar {
 
 class MenuButton final
-    : public CheckBox
+    : public RadioButton
 {
 public:
     MenuButton (vcl::Window* pParentWindow);
@@ -34,7 +34,7 @@ public:
     virtual void MouseButtonUp (const MouseEvent& rMouseEvent) override;
 
 protected:
-    using CheckBox::FillLayoutData;
+    using RadioButton::FillLayoutData;
 
 private:
     bool mbIsLeftButtonDown;
