@@ -69,6 +69,7 @@
   <block-list:block block-list:abbreviated-name="andteh" block-list:name="and the"/>
   <block-list:block block-list:abbreviated-name="andthe" block-list:name="and the"/>
   <block-list:block block-list:abbreviated-name="anothe" block-list:name="another"/>
+  <block-list:block block-list:abbreviated-name="ansewer" block-list:name="answer"/>
   <block-list:block block-list:abbreviated-name="anual" block-list:name="annual"/>
   <block-list:block block-list:abbreviated-name="anythnig" block-list:name="anything"/>
   <block-list:block block-list:abbreviated-name="apparnetly" block-list:name="apparently"/>
@@ -98,6 +99,7 @@
   <block-list:block block-list:abbreviated-name="atthe" block-list:name="at the"/>
   <block-list:block block-list:abbreviated-name="audeince" block-list:name="audience"/>
   <block-list:block block-list:abbreviated-name="audiance" block-list:name="audience"/>
+  <block-list:block block-list:abbreviated-name="avaiable" block-list:name="available"/>
   <block-list:block block-list:abbreviated-name="availalbe" block-list:name="available"/>
   <block-list:block block-list:abbreviated-name="awya" block-list:name="away"/>
   <block-list:block block-list:abbreviated-name="aywa" block-list:name="away"/>
@@ -223,6 +225,7 @@
   <block-list:block block-list:abbreviated-name="couldthe" block-list:name="could the"/>
   <block-list:block block-list:abbreviated-name="cpoy" block-list:name="copy"/>
   <block-list:block block-list:abbreviated-name="creme" block-list:name="crème"/>
+  <block-list:block block-list:abbreviated-name="crysys" block-list:name="crisis"/>
   <block-list:block block-list:abbreviated-name="ctaegory" block-list:name="category"/>
   <block-list:block block-list:abbreviated-name="cummulative" block-list:name="cumulative"/>
   <block-list:block block-list:abbreviated-name="cusotmer" block-list:name="customer"/>
@@ -280,6 +283,7 @@
   <block-list:block block-list:abbreviated-name="discoverd" block-list:name="discovered"/>
   <block-list:block block-list:abbreviated-name="disign" block-list:name="design"/>
   <block-list:block block-list:abbreviated-name="dispaly" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="disperation" block-list:name="desperation"/>
   <block-list:block block-list:abbreviated-name="dissonent" block-list:name="dissonant"/>
   <block-list:block block-list:abbreviated-name="distribusion" block-list:name="distribution"/>
   <block-list:block block-list:abbreviated-name="divsion" block-list:name="division"/>
@@ -299,6 +303,7 @@
   <block-list:block block-list:abbreviated-name="dont" block-list:name="don’t"/>
   <block-list:block block-list:abbreviated-name="driveing" block-list:name="driving"/>
   <block-list:block block-list:abbreviated-name="drnik" block-list:name="drink"/>
+  <block-list:block block-list:abbreviated-name="eacch" block-list:name="each"/>
   <block-list:block block-list:abbreviated-name="editting" block-list:name="editing"/>
   <block-list:block block-list:abbreviated-name="efel" block-list:name="feel"/>
   <block-list:block block-list:abbreviated-name="effecient" block-list:name="efficient"/>
@@ -406,6 +411,7 @@
   <block-list:block block-list:abbreviated-name="hvae" block-list:name="have"/>
   <block-list:block block-list:abbreviated-name="hvaing" block-list:name="having"/>
   <block-list:block block-list:abbreviated-name="hwich" block-list:name="which"/>
+  <block-list:block block-list:abbreviated-name="hystory" block-list:name="history"/>
   <block-list:block block-list:abbreviated-name="i" block-list:name="I"/>
   <block-list:block block-list:abbreviated-name="i snot" block-list:name="is not"/>
   <block-list:block block-list:abbreviated-name="I.e." block-list:name="i.e."/>
@@ -454,6 +460,7 @@
   <block-list:block block-list:abbreviated-name="iwth" block-list:name="with"/>
   <block-list:block block-list:abbreviated-name="jsut" block-list:name="just"/>
   <block-list:block block-list:abbreviated-name="jugment" block-list:name="judgment"/>
+  <block-list:block block-list:abbreviated-name="knoew" block-list:name="know"/>
   <block-list:block block-list:abbreviated-name="knowldge" block-list:name="knowledge"/>
   <block-list:block block-list:abbreviated-name="knowlege" block-list:name="knowledge"/>
   <block-list:block block-list:abbreviated-name="knwo" block-list:name="know"/>
@@ -598,6 +605,7 @@
   <block-list:block block-list:abbreviated-name="probelms" block-list:name="problems"/>
   <block-list:block block-list:abbreviated-name="problim" block-list:name="problem"/>
   <block-list:block block-list:abbreviated-name="problims" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="proggress" block-list:name="progress"/>
   <block-list:block block-list:abbreviated-name="prominant" block-list:name="prominent"/>
   <block-list:block block-list:abbreviated-name="psoition" block-list:name="position"/>
   <block-list:block block-list:abbreviated-name="ptogress" block-list:name="progress"/>
@@ -696,6 +704,7 @@
   <block-list:block block-list:abbreviated-name="somtheing" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="somthing" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="somtimes" block-list:name="sometimes"/>
+  <block-list:block block-list:abbreviated-name="somtin" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="sot hat" block-list:name="so that"/>
   <block-list:block block-list:abbreviated-name="soudn" block-list:name="sound"/>
   <block-list:block block-list:abbreviated-name="soudns" block-list:name="sounds"/>
@@ -736,6 +745,7 @@
   <block-list:block block-list:abbreviated-name="tehy" block-list:name="they"/>
   <block-list:block block-list:abbreviated-name="tellt he" block-list:name="tell the"/>
   <block-list:block block-list:abbreviated-name="termoil" block-list:name="turmoil"/>
+  <block-list:block block-list:abbreviated-name="testiing" block-list:name="testing"/>
   <block-list:block block-list:abbreviated-name="tets" block-list:name="test"/>
   <block-list:block block-list:abbreviated-name="tghe" block-list:name="the"/>
   <block-list:block block-list:abbreviated-name="tghis" block-list:name="this"/>
@@ -807,6 +817,7 @@
   <block-list:block block-list:abbreviated-name="unpleasently" block-list:name="unpleasantly"/>
   <block-list:block block-list:abbreviated-name="untill" block-list:name="until"/>
   <block-list:block block-list:abbreviated-name="untilll" block-list:name="until"/>
+  <block-list:block block-list:abbreviated-name="upcomming" block-list:name="upcoming"/>
   <block-list:block block-list:abbreviated-name="useing" block-list:name="using"/>
   <block-list:block block-list:abbreviated-name="usualyl" block-list:name="usually"/>
   <block-list:block block-list:abbreviated-name="uszed" block-list:name="used"/>
@@ -819,6 +830,7 @@
   <block-list:block block-list:abbreviated-name="warrent" block-list:name="warrant"/>
   <block-list:block block-list:abbreviated-name="watn" block-list:name="want"/>
   <block-list:block block-list:abbreviated-name="wehn" block-list:name="when"/>
+  <block-list:block block-list:abbreviated-name="werent" block-list:name="weren’t"/>
   <block-list:block block-list:abbreviated-name="werre" block-list:name="were"/>
   <block-list:block block-list:abbreviated-name="whcih" block-list:name="which"/>
   <block-list:block block-list:abbreviated-name="whent he" block-list:name="when the"/>
@@ -865,6 +877,7 @@
   <block-list:block block-list:abbreviated-name="yeserday" block-list:name="yesterday"/>
   <block-list:block block-list:abbreviated-name="yoiu" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="youare" block-list:name="you are"/>
+  <block-list:block block-list:abbreviated-name="youreself" block-list:name="yourself"/>
   <block-list:block block-list:abbreviated-name="ytou" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="yuo" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="yuor" block-list:name="your"/>
