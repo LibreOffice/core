@@ -28,31 +28,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-#define SERVICE_NAME "com.sun.star.document.PDFDialog"
-
-
-OUString PDFDialog_getImplementationName ()
-{
-    return "com.sun.star.comp.PDF.PDFDialog";
-}
-
-
-Sequence< OUString > PDFDialog_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { SERVICE_NAME };
-    return aRet;
-}
-
-
-Reference< XInterface > PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new PDFDialog( comphelper::getComponentContext(rSMgr) ));
-}
-
-
-#undef SERVICE_NAME
-
-
 PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
 : PDFDialog_Base( rxContext )
 {
@@ -72,13 +47,13 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 
 OUString SAL_CALL PDFDialog::getImplementationName()
 {
-    return PDFDialog_getImplementationName();
+    return "com.sun.star.comp.PDF.PDFDialog";
 }
 
 
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 {
-    return PDFDialog_getSupportedServiceNames();
+    return { "com.sun.star.document.PDFDialog" };
 }
 
 std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
@@ -152,6 +127,13 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     mxSrcDoc = xDoc;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_PDFDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new PDFDialog(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

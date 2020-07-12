@@ -43,7 +43,6 @@ core_factory_list = [
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
-    ("libpdffilterlo.a", "pdffilter_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
@@ -156,6 +155,11 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
+# filter/source/pdf/pdffilter.component
+    "filter_PdfDecomposer_get_implementation",
+    "filter_PDFExportInteractionHandler_get_implementation",
+    "filter_PDFFilter_get_implementation",
+    "filter_PDFDialog_get_implementation",
 # filter/source/xmlfilterdetect/xmlfd.component
     "filter_XMLFilterDetect_get_implementation",
 # filter/source/xmlfilteradaptor/xmlfa.component
