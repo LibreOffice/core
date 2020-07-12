@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffa153bc_10c0e5af",
+        "filename": "i18npool/source/localedata/data/kk_KZ.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-12T20:23:04Z",
+      "side": 1,
+      "message": "It\u0027s unexpected that a time formatted in Kazakh as HH:MM AM/PM would actually look like \"11:20 PM\". In Russian, I would expect it to show \"11:20 после полудня\" or similar; in fact, I see that Russian also has it AM/PM. Just mention :-)",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 14
+      },
+      "revId": "2e3e9a9b29dd4e6a8cbba75ed7b5a861837b70a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "937d5166_90c7f8d8",
+        "filename": "i18npool/source/localedata/data/kk_KZ.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-12T20:23:04Z",
+      "side": 1,
+      "message": "Please restore the newline after this line. We have the general convention to have the \"newline character after the last line\", so it\u0027s strange to have this unrelated change here. Thanks!",
+      "revId": "2e3e9a9b29dd4e6a8cbba75ed7b5a861837b70a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
