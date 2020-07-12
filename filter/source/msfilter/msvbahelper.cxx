@@ -501,21 +501,6 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
 }
 
 
-uno::Sequence< OUString > VBAMacroResolver_getSupportedServiceNames()
-{
-    return { "com.sun.star.script.vba.VBAMacroResolver" };
-}
-
-OUString VBAMacroResolver_getImplementationName()
-{
-    return "com.sun.star.comp.vba.VBAMacroResolver";
-}
-
-uno::Reference< uno::XInterface > VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& )
-{
-    return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
-}
-
 
 VBAMacroResolver::VBAMacroResolver() :
     mpObjShell( nullptr )
@@ -530,7 +515,7 @@ VBAMacroResolver::~VBAMacroResolver()
 
 OUString SAL_CALL VBAMacroResolver::getImplementationName()
 {
-    return VBAMacroResolver_getImplementationName();
+    return "com.sun.star.comp.vba.VBAMacroResolver";
 }
 
 sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
@@ -540,7 +525,7 @@ sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
 
 uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
 {
-    return VBAMacroResolver_getSupportedServiceNames();
+    return { "com.sun.star.script.vba.VBAMacroResolver" };
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
@@ -775,5 +760,13 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 
 
 } // namespace ooo
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_VBAMacroResolver_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ooo::vba::VBAMacroResolver());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
