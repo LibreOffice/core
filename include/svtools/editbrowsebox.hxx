@@ -105,7 +105,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         void SetModifyHdl(const Link<LinkParamNone*,void>& rLink) { maModifyHdl = rLink; }
-        virtual bool WantMouseEvent() const;
+        virtual void ActivatingMouseEvent(const BrowserMouseEvent& rEvt, bool bUp);
         virtual void callModifyHdl() { maModifyHdl.Call(nullptr); }
     };
 
@@ -581,10 +581,10 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxControl final : public ControlBase
     {
         std::unique_ptr<weld::CheckButton> m_xBox;
+        weld::TriStateEnabled m_aModeState;
         Link<weld::Button&,void> m_aClickLink;
         Link<LinkParamNone*,void> m_aModify1Hdl;
         Link<LinkParamNone*,void> m_aModify2Hdl;
-        bool m_bTriState;
 
     public:
         CheckBoxControl(BrowserDataWin* pParent);
@@ -612,8 +612,13 @@ namespace svt
 
         weld::CheckButton&   GetBox() {return *m_xBox;};
 
+        // for pseudo-click when initially clicking in a cell activates
+        // the cell and performs a state change on the button as if
+        // it was clicked on
+        void Clicked();
+
     private:
-        DECL_LINK(OnClick, weld::Button&, void);
+        DECL_LINK(OnToggle, weld::ToggleButton&, void);
 
         void CallModifyHdls()
         {
@@ -634,7 +639,7 @@ namespace svt
         virtual void SaveValue() override;
 
     private:
-        virtual bool WantMouseEvent() const override;
+        virtual void ActivatingMouseEvent(const BrowserMouseEvent& rEvt, bool bUp) override;
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
