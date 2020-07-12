@@ -62,7 +62,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/longcurr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <connectivity/dbtools.hxx>
@@ -1943,7 +1942,6 @@ VclPtr<Control> DbNumericField::createField(BrowserDataWin* pParent, bool bSpinB
 
 namespace
 {
-
     OUString lcl_setFormattedNumeric_nothrow( FormattedControlBase& _rField, const DbCellControl& _rControl,
         const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
@@ -2012,7 +2010,6 @@ bool DbNumericField::commitControl()
 
 DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
     :DbSpinField( _rColumn )
-    ,m_nScale( 0 )
 {
     doPropertyListening( FM_PROP_DECIMAL_ACCURACY );
     doPropertyListening( FM_PROP_VALUEMIN );
@@ -2023,6 +2020,10 @@ DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
     doPropertyListening( FM_PROP_CURRENCYSYMBOL );
 }
 
+CellControllerRef DbCurrencyField::CreateController() const
+{
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
+}
 
 void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
@@ -2031,7 +2032,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     if ( !m_pWindow || !_rxModel.is() )
         return;
 
-    m_nScale                = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
+    sal_Int16 nScale        = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
     double  nMin            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
     double  nMax            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
     double  nStep           = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
@@ -2039,55 +2040,39 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
     OUString aStr( getString( _rxModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL ) ) );
 
-    //fdo#42747 the min/max/first/last of vcl NumericFormatters needs to be
-    //multiplied by the no of decimal places. See also
-    //VclBuilder::mungeAdjustment
-    int nMul = rtl_math_pow10Exp(1, m_nScale);
-    nMin *= nMul;
-    nMax *= nMul;
+    Formatter& rEditFormatter = static_cast<FormattedControlBase*>(m_pWindow.get())->get_formatter();
+    rEditFormatter.SetDecimalDigits(nScale);
+    rEditFormatter.SetMinValue(nMin);
+    rEditFormatter.SetMaxValue(nMax);
+    rEditFormatter.SetSpinSize(nStep);
+    rEditFormatter.SetStrictFormat(bStrict);
+    weld::LongCurrencyEntry& rCurrencyEditFormatter = static_cast<weld::LongCurrencyEntry&>(rEditFormatter);
+    rCurrencyEditFormatter.SetUseThousandSep(bThousand);
+    rCurrencyEditFormatter.SetCurrencySymbol(aStr);
 
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetUseThousandSep( bThousand );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetDecimalDigits( m_nScale );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetCurrencySymbol( aStr );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetFirst( nMin );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetLast( nMax );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMin( nMin );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetMax( nMax );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetSpinSize( nStep );
-    static_cast< LongCurrencyField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetUseThousandSep( bThousand );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetDecimalDigits( m_nScale );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetCurrencySymbol( aStr );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetFirst( nMin );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetLast( nMax );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMin( nMin );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetMax( nMax );
-    static_cast< LongCurrencyField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
+    Formatter& rPaintFormatter = static_cast<FormattedControlBase*>(m_pPainter.get())->get_formatter();
+    rPaintFormatter.SetDecimalDigits(nScale);
+    rPaintFormatter.SetMinValue(nMin);
+    rPaintFormatter.SetMaxValue(nMax);
+    rPaintFormatter.SetStrictFormat(bStrict);
+    weld::LongCurrencyEntry& rPaintCurrencyFormatter = static_cast<weld::LongCurrencyEntry&>(rPaintFormatter);
+    rPaintCurrencyFormatter.SetUseThousandSep(bThousand);
+    rPaintCurrencyFormatter.SetCurrencySymbol(aStr);
 }
 
-VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/  )
+VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/)
 {
-    WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
-    return VclPtr<LongCurrencyField>::Create( _pParent, _nFieldStyle );
+    return VclPtr<LongCurrencyControl>::Create(pParent, bSpinButton);
 }
 
 double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
-    double fValue = GetValue(_rxField, xFormatter);
-    if (m_nScale)
-    {
-        // SAL_INFO("svx",("double = %.64f ",fValue);
-        fValue = ::rtl::math::pow10Exp(fValue, m_nScale);
-        fValue = ::rtl::math::round(fValue);
-    }
-    return fValue;
+    return GetValue(_rxField, xFormatter);
 }
 
 namespace
 {
-
-    OUString lcl_setFormattedCurrency_nothrow( LongCurrencyField& _rField, const DbCurrencyField& _rControl,
+    OUString lcl_setFormattedCurrency_nothrow( FormattedControlBase& _rField, const DbCurrencyField& _rControl,
         const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
     {
         OUString sValue;
@@ -2095,11 +2080,11 @@ namespace
         {
             try
             {
-                double fValue = _rControl.GetCurrency( _rxField, _rxFormatter );
+                double fValue = _rControl.GetValue( _rxField, _rxFormatter );
                 if ( !_rxField->wasNull() )
                 {
-                    _rField.SetValue( fValue );
-                    sValue = _rField.GetText();
+                    _rField.get_formatter().SetValue(fValue);
+                    sValue = _rField.get_widget().get_text();
                 }
             }
             catch( const Exception& )
@@ -2113,45 +2098,40 @@ namespace
 
 OUString DbCurrencyField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
-    return lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pPainter ), *this, _rxField, _rxFormatter );
+    return lcl_setFormattedCurrency_nothrow(dynamic_cast<FormattedControlBase&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
 
 void DbCurrencyField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
-    lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pWindow ), *this, _rxField, _rxFormatter );
+    lcl_setFormattedCurrency_nothrow(dynamic_cast<FormattedControlBase&>(*m_pWindow), *this, _rxField, _rxFormatter);
 }
 
 void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbCurrencyField::updateFromModel: invalid call!" );
 
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+
     double dValue = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
     {
-        if ( m_nScale )
-        {
-            dValue = ::rtl::math::pow10Exp( dValue, m_nScale );
-            dValue = ::rtl::math::round(dValue);
-        }
-
-        static_cast< LongCurrencyField* >( m_pWindow.get() )->SetValue( dValue );
+        Formatter& rFormatter = pControl->get_formatter();
+        rFormatter.SetValue(dValue);
     }
     else
-        m_pWindow->SetText( OUString() );
+        pControl->get_widget().set_text(OUString());
 }
-
 
 bool DbCurrencyField::commitControl()
 {
-    OUString aText(m_pWindow->GetText());
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    OUString aText(pControl->get_widget().get_text());
     Any aVal;
+
     if (!aText.isEmpty())   // not empty
     {
-        double fValue = static_cast<LongCurrencyField*>(m_pWindow.get())->GetValue();
-        if (m_nScale)
-        {
-            fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);
-        }
+        Formatter& rFormatter = pControl->get_formatter();
+        double fValue = rFormatter.GetValue();
         aVal <<= fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);

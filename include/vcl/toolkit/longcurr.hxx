@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_LONGCURR_HXX
-#define INCLUDED_VCL_LONGCURR_HXX
+#pragma once
+
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
@@ -68,7 +71,6 @@ private:
 
 };
 
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyField final : public SpinField, public LongCurrencyFormatter
 {
     friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
@@ -96,7 +98,5 @@ public:
     void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
     const BigInt&   GetSpinSize() const { return mnSpinSize; }
 };
-
-#endif // INCLUDED_VCL_LONGCURR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
