@@ -1696,11 +1696,10 @@ void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rR
     CheckBoxControl* pControl = static_cast<CheckBoxControl*>(m_pPainter.get());
     lcl_setCheckBoxState( _rxField, pControl );
 
-    auto nWidth = pControl->GetBox().get_preferred_size().Width();
-    auto nHeight = pControl->GetBox().get_preferred_size().Height();
-    tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - nWidth) / 2),
-                                 rRect.Top() + ((rRect.GetHeight() - nHeight) / 2)),
-                           Size(nWidth, nHeight));
+    Size aBoxSize = pControl->GetBox().get_preferred_size();
+    tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - aBoxSize.Width()) / 2),
+                                 rRect.Top() + ((rRect.GetHeight() - aBoxSize.Height()) / 2)),
+                           aBoxSize);
 
     DbCellControl::PaintFieldToCell(rDev, aRect, _rxField, xFormatter);
 }

@@ -481,49 +481,12 @@ namespace svt
         else if (IsEditing() && !ControlHasFocus())
             AsynchGetFocus();
 
-        if (!(IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent()))
+        if (!IsEditing() || !aController->GetWindow().IsEnabled())
             return;
 
-// forwards the event to the control
-
-        // If the field has been moved previously, we have to adjust the position
-
-        aController->GetWindow().GrabFocus();
-
-        // the position of the event relative to the controller's window
-        Point aPos = _rEvt.GetPosPixel() - _rEvt.GetRect().TopLeft();
-        // the (child) window which should really get the event
-        vcl::Window* pRealHandler = aController->GetWindow().FindWindow(aPos);
-        if (pRealHandler)
-            // the coords relative to this real handler
-            aPos -= pRealHandler->GetPosPixel();
-        else
-            pRealHandler = &aController->GetWindow();
-
-        // the faked event
-        MouseEvent aEvent(aPos, _rEvt.GetClicks(), _rEvt.GetMode(),
-                          _rEvt.GetButtons(),
-                          _rEvt.GetModifier());
-
-        pRealHandler->MouseButtonDown(aEvent);
-        if (_bUp)
-            pRealHandler->MouseButtonUp(aEvent);
-
-        vcl::Window *pWin = &aController->GetWindow();
-        if (!pWin->IsTracking())
-        {
-            for (pWin = pWin->GetWindow(GetWindowType::FirstChild);
-                 pWin && !pWin->IsTracking();
-                 pWin = pWin->GetWindow(GetWindowType::Next))
-            {
-            }
-            if (!pWin)
-                pWin = pRealHandler;
-        }
-        if (pWin && pWin->IsTracking())
-            pWin->EndTracking();
+        // forwards the event to the control
+        aController->ActivatingMouseEvent(_rEvt, _bUp);
     }
-
 
     void EditBrowseBox::Dispatch( sal_uInt16 _nId )
     {
@@ -1222,11 +1185,10 @@ namespace svt
 
         pCheckBoxPaint->GetBox().set_sensitive(_bEnabled);
 
-        auto nWidth = pCheckBoxPaint->GetBox().get_preferred_size().Width();
-        auto nHeight = pCheckBoxPaint->GetBox().get_preferred_size().Height();
-        tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - nWidth) / 2),
-                                     rRect.Top() + ((rRect.GetHeight() - nHeight) / 2)),
-                               Size(nWidth, nHeight));
+        Size aBoxSize = pCheckBoxPaint->GetBox().get_preferred_size();
+        tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - aBoxSize.Width()) / 2),
+                                     rRect.Top() + ((rRect.GetHeight() - aBoxSize.Height()) / 2)),
+                               aBoxSize);
         pCheckBoxPaint->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
 
         pCheckBoxPaint->Draw(&GetDataWindow(), aRect.TopLeft(), DrawFlags::NONE);
@@ -1305,9 +1267,9 @@ namespace svt
         // nothing to do in this base class
     }
 
-    bool CellController::WantMouseEvent() const
+    void CellController::ActivatingMouseEvent(const BrowserMouseEvent& /*rEvt*/, bool /*bUp*/)
     {
-        return false;
+        // nothing to do in this base class
     }
 
     bool CellController::MoveAllowed(const KeyEvent&) const

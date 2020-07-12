@@ -168,28 +168,29 @@ namespace svt
     CheckBoxControl::CheckBoxControl(BrowserDataWin* pParent)
         : ControlBase(pParent, "svt/ui/checkboxcontrol.ui", "CheckBoxControl")
         , m_xBox(m_xBuilder->weld_check_button("checkbox"))
-        , m_bTriState(true)
     {
+        m_aModeState.bTriStateEnabled = true;
         InitControlBase(m_xBox.get());
         m_xBox->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
-        m_xBox->connect_clicked(LINK(this, CheckBoxControl, OnClick));
+        m_xBox->connect_toggled(LINK(this, CheckBoxControl, OnToggle));
     }
 
     void CheckBoxControl::EnableTriState( bool bTriState )
     {
-        if (m_bTriState != bTriState)
+        if (m_aModeState.bTriStateEnabled != bTriState)
         {
-            m_bTriState = bTriState;
+            m_aModeState.bTriStateEnabled = bTriState;
 
-            if (!m_bTriState && GetState() == TRISTATE_INDET)
+            if (!m_aModeState.bTriStateEnabled && GetState() == TRISTATE_INDET)
                 SetState(TRISTATE_FALSE);
         }
     }
 
     void CheckBoxControl::SetState(TriState eState)
     {
-        if (!m_bTriState && (eState == TRISTATE_INDET))
+        if (!m_aModeState.bTriStateEnabled && (eState == TRISTATE_INDET))
             eState = TRISTATE_FALSE;
+        m_aModeState.eState = eState;
         m_xBox->set_state(eState);
     }
 
@@ -204,8 +205,18 @@ namespace svt
         ControlBase::dispose();
     }
 
-    IMPL_LINK_NOARG(CheckBoxControl, OnClick, weld::Button&, void)
+    void CheckBoxControl::Clicked()
     {
+        // if tristate is enabled, m_aModeState will take care of setting the
+        // next state in the sequence via TriStateEnabled::ButtonToggled
+        if (!m_aModeState.bTriStateEnabled)
+            m_xBox->set_active(!m_xBox->get_active());
+        OnToggle(*m_xBox);
+    }
+
+    IMPL_LINK_NOARG(CheckBoxControl, OnToggle, weld::ToggleButton&, void)
+    {
+        m_aModeState.ButtonToggled(*m_xBox);
         m_aClickLink.Call(*m_xBox);
         CallModifyHdls();
     }
@@ -217,9 +228,23 @@ namespace svt
         static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl( LINK(this, CheckBoxCellController, ModifyHdl) );
     }
 
-    bool CheckBoxCellController::WantMouseEvent() const
+    void CheckBoxCellController::ActivatingMouseEvent(const BrowserMouseEvent& rEvt, bool /*bUp*/)
     {
-        return true;
+        CheckBoxControl& rControl = static_cast<CheckBoxControl&>(GetWindow());
+        rControl.GrabFocus();
+
+        // we have to adjust the position of the event relative to the controller's window
+        Point aPos = rEvt.GetPosPixel() - rEvt.GetRect().TopLeft();
+
+        Size aControlSize = rControl.GetSizePixel();
+        Size aBoxSize = rControl.GetBox().get_preferred_size();
+        tools::Rectangle aHotRect(Point((aControlSize.Width() - aBoxSize.Width()) / 2,
+                                        (aControlSize.Height() - aBoxSize.Height()) / 2),
+                                  aBoxSize);
+
+        // we want the initial mouse event to act as if it was performed on the checkbox
+        if (aHotRect.IsInside(aPos))
+            rControl.Clicked();
     }
 
     weld::CheckButton& CheckBoxCellController::GetCheckBox() const
