@@ -600,13 +600,11 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
-
 class DbCurrencyField : public DbSpinField
 {
-    sal_Int16  m_nScale;
-
 public:
     DbCurrencyField(DbGridColumn& _rColumn);
+    virtual ::svt::CellControllerRef CreateController() const override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 

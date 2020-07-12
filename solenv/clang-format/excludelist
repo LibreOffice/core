@@ -7380,7 +7380,6 @@ include/vcl/keycodes.hxx
 include/vcl/layout.hxx
 include/vcl/lazydelete.hxx
 include/vcl/lineinfo.hxx
-include/vcl/longcurr.hxx
 include/vcl/mapmod.hxx
 include/vcl/menu.hxx
 include/vcl/menubtn.hxx
@@ -7449,6 +7448,7 @@ include/vcl/toolkit/fixedhyper.hxx
 include/vcl/toolkit/fmtfield.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx
+include/vcl/toolkit/longcurr.hxx
 include/vcl/toolkit/lstbox.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/prgsbar.hxx

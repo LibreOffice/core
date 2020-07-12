@@ -26,7 +26,9 @@
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolkit/field.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -217,6 +219,32 @@ static bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     return ImplCurrencyGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper );
+}
+
+namespace weld
+{
+    IMPL_LINK_NOARG(LongCurrencyEntry, FormatOutputHdl, LinkParamNone*, bool)
+    {
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        const OUString& rCurrencySymbol = !m_aCurrencySymbol.isEmpty() ? m_aCurrencySymbol : rLocaleDataWrapper.getCurrSymbol();
+        double fValue = GetValue() * weld::SpinButton::Power10(GetDecimalDigits());
+        OUString aText = ImplGetCurr(rLocaleDataWrapper, fValue, GetDecimalDigits(), rCurrencySymbol, m_bThousandSep);
+        ImplSetTextImpl(aText, nullptr);
+        return true;
+    }
+
+    IMPL_LINK(LongCurrencyEntry, ParseInputHdl, sal_Int64*, result, TriState)
+    {
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+
+        BigInt value;
+        bool bRet = ImplLongCurrencyGetValue(GetEntryText(), value, GetDecimalDigits(), rLocaleDataWrapper);
+
+        if (bRet)
+            *result = double(value);
+
+        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+    }
 }
 
 bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt const & nMax,
