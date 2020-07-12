@@ -83,7 +83,7 @@ lo_get_constructor_map(void)
         { "unoxml_CBlankNode_get_implementation", unoxml_CBlankNode_get_implementation },
         { "unoxml_CXPathAPI_get_implementation", unoxml_CXPathAPI_get_implementation },
         { "unoxml_CSAXDocumentBuilder_get_implementation", unoxml_CSAXDocumentBuilder_get_implementation },
-        { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation }
+        { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation },
         { 0, 0 }
     };
 
