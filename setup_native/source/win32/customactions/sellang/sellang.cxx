@@ -330,6 +330,15 @@ extern "C" __declspec(dllexport) UINT __stdcall SelectLanguage( MSIHANDLE handle
             //TODO: are the above two explicit additions necessary, or will
             // those values always be included in the below EnumUILanguages
             // anyway?
+        if (GetMsiPropA(handle, "ProductLanguage", &pVal))
+        {
+            // This addition might refer to a language without an installed system language pack
+            // If the installer is run in this language, then this language is likely needed
+            long langid = strtol(pVal, nullptr, 10);
+            if (langid > 0xFFFF)
+                return TRUE;
+            add_ui_lang(langid_to_string(static_cast<LANGID>(langid)));
+        }
         EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
     }
 
