@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="msfilter" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.vba.VBAMacroResolver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.vba.VBAMacroResolver"
+    constructor="filter_VBAMacroResolver_get_implementation">
     <service name="com.sun.star.script.vba.VBAMacroResolver"/>
   </implementation>
 </component>

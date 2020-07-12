@@ -63,7 +63,6 @@ $(eval $(call gb_Library_add_exception_objects,msfilter,\
 	filter/source/msfilter/msoleexp \
 	filter/source/msfilter/mstoolbar \
 	filter/source/msfilter/msvbahelper \
-	filter/source/msfilter/services \
 	filter/source/msfilter/svdfppt \
 	filter/source/msfilter/svxmsbas2 \
 	filter/source/msfilter/rtfutil \
