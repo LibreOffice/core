@@ -42,7 +42,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="load_docprinter-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="load_docprinter">If enabled, the printer settings will be loaded with the document. This can cause a document to be printed on a distant printer, if you do not change the printer manually in the &lt;b&gt;Print&lt;/b&gt; dialog. If disabled, your standard printer will be used to print this document. The current printer settings will be stored with the document whether or not this option is checked.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="load_docprinter">If enabled, the printer settings will be loaded with the document. This can cause a document to be printed on a distant printer, if you do not change the printer manually in the Print dialog. If disabled, your standard printer will be used to print this document. The current printer settings will be stored with the document whether or not this option is checked.</property>
                       </object>
                     </child>
                   </object>
@@ -200,7 +200,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relative_fsys-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_fsys">Select this box for &lt;b&gt;relative saving&lt;/b&gt; of URLs in the file system.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_fsys">Select this box for relative saving of URLs in the file system.</property>
                       </object>
                     </child>
                   </object>
@@ -220,7 +220,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="docinfo-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="docinfo">Specifies that the &lt;b&gt;Properties&lt;/b&gt; dialog will appear every time you select the &lt;b&gt;Save As&lt;/b&gt; command.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docinfo">Specifies that the Properties dialog will appear every time you select the Save As command.</property>
                       </object>
                     </child>
                   </object>
@@ -240,7 +240,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="relative_inet-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_inet">Select this box for &lt;b&gt;relative saving&lt;/b&gt; of URLs to the Internet.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="relative_inet">Select this box for relative saving of URLs to the Internet.</property>
                       </object>
                     </child>
                   </object>
@@ -260,7 +260,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="backup-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="backup">Saves the previous version of a document as a backup copy whenever you save a document. Every time %PRODUCTNAME creates a backup copy, the previous backup copy is replaced. The backup copy gets the extension &lt;b&gt;.BAK&lt;/b&gt;.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="backup">Saves the previous version of a document as a backup copy whenever you save a document. Every time %PRODUCTNAME creates a backup copy, the previous backup copy is replaced. The backup copy gets the extension .BAK.</property>
                       </object>
                     </child>
                   </object>
@@ -318,7 +318,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="warnalienformat-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="warnalienformat">You can choose to get a warning message when you save a document in a format that is not OpenDocument or which you did not set as default format in &lt;b&gt;Load/Save - General&lt;/b&gt; in the Options dialog box.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="warnalienformat">You can choose to get a warning message when you save a document in a format that is not OpenDocument or which you did not set as default format in Load/Save - General in the Options dialog box.</property>
                       </object>
                     </child>
                   </object>
@@ -444,7 +444,7 @@
                     <property name="can_focus">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="saveas-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="saveas">Specifies &lt;b&gt;how documents of the type selected&lt;/b&gt; on the left will&lt;br /&gt; always be saved as this file type. You may select &lt;i&gt;another file&lt;/i&gt; type for the current document in the &lt;b&gt;Save as&lt;/b&gt; dialog.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="saveas">Specifies how documents of the type selected on the left will always be saved as this file type. You may select another file type for the current document in the Save as dialog.</property>
                       </object>
                     </child>
                   </object>
