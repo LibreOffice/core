@@ -106,7 +106,7 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                                 <property name="resizable">True</property>
                                 <property name="spacing">6</property>
-                                <property name="alignment">0,50000000000000000000</property>
+                                <property name="alignment">0.50000000000000000000</property>
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
@@ -233,7 +233,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn44">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0,50000000000000000000</property>
+                            <property name="alignment">0.50000000000000000000</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer55"/>
                               <attributes>
@@ -423,7 +423,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn444">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0,50000000000000000000</property>
+                            <property name="alignment">0.50000000000000000000</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer555"/>
                               <attributes>
