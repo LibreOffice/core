@@ -39,7 +39,6 @@ core_factory_list = [
     ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
