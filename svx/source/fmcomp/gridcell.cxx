@@ -2046,7 +2046,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     rEditFormatter.SetMaxValue(nMax);
     rEditFormatter.SetSpinSize(nStep);
     rEditFormatter.SetStrictFormat(bStrict);
-    weld::LongCurrencyEntry& rCurrencyEditFormatter = static_cast<weld::LongCurrencyEntry&>(rEditFormatter);
+    weld::LongCurrencyFormatter& rCurrencyEditFormatter = static_cast<weld::LongCurrencyFormatter&>(rEditFormatter);
     rCurrencyEditFormatter.SetUseThousandSep(bThousand);
     rCurrencyEditFormatter.SetCurrencySymbol(aStr);
 
@@ -2055,7 +2055,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     rPaintFormatter.SetMinValue(nMin);
     rPaintFormatter.SetMaxValue(nMax);
     rPaintFormatter.SetStrictFormat(bStrict);
-    weld::LongCurrencyEntry& rPaintCurrencyFormatter = static_cast<weld::LongCurrencyEntry&>(rPaintFormatter);
+    weld::LongCurrencyFormatter& rPaintCurrencyFormatter = static_cast<weld::LongCurrencyFormatter&>(rPaintFormatter);
     rPaintCurrencyFormatter.SetUseThousandSep(bThousand);
     rPaintCurrencyFormatter.SetCurrencySymbol(aStr);
 }
