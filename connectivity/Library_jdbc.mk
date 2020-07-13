@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,jdbc,\
 	connectivity/source/drivers/jdbc/String \
 	connectivity/source/drivers/jdbc/Throwable \
 	connectivity/source/drivers/jdbc/Timestamp \
-	connectivity/source/drivers/jdbc/jservices \
 	connectivity/source/drivers/jdbc/JBigDecimal \
 	connectivity/source/drivers/jdbc/tools \
 	connectivity/source/drivers/jdbc/ContextClassLoader \

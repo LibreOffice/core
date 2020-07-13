@@ -28,9 +28,10 @@
 -->
 
 <component loader="com.sun.star.loader.SharedLibrary"
-    environment="@CPPU_ENV@:affine" prefix="jdbc"
+    environment="@CPPU_ENV@:affine"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.JDBCDriver">
+  <implementation name="com.sun.star.comp.sdbc.JDBCDriver"
+    constructor="connectivity_java_sql_Driver_get_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>
 </component>
