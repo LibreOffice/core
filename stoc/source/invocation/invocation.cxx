@@ -21,8 +21,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -49,31 +47,18 @@
 #include <memory>
 #include <vector>
 
-#define SERVICENAME "com.sun.star.script.Invocation"
-#define IMPLNAME     "com.sun.star.comp.stoc.Invocation"
-
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace css::reflection;
 using namespace css::beans;
-using namespace css::registry;
 using namespace css::container;
 using namespace cppu;
 using namespace osl;
 
 namespace stoc_inv
 {
-static Sequence< OUString > inv_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { SERVICENAME };
-    return seqNames;
-}
 
-static OUString inv_getImplementationName()
-{
-    return IMPLNAME;
-}
 
 // TODO: Implement centrally
 static Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
@@ -1051,7 +1036,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
 // XServiceInfo
 OUString InvocationService::getImplementationName()
 {
-    return inv_getImplementationName();
+    return "com.sun.star.comp.stoc.Invocation";
 }
 
 // XServiceInfo
@@ -1063,7 +1048,7 @@ sal_Bool InvocationService::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > InvocationService::getSupportedServiceNames()
 {
-    return inv_getSupportedServiceNames();
+    return { "com.sun.star.script.Invocation" };
 }
 
 
@@ -1099,30 +1084,14 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
     return Reference<XInterface>();
 }
 
-/// @throws RuntimeException
-static Reference<XInterface> InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stoc_InvocationService_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Reference<XInterface> xService( *new InvocationService( xCtx ) );
-    return xService;
+    return cppu::acquire(new InvocationService(context));
 }
 
 }
 
-using namespace stoc_inv;
-const struct ImplementationEntry g_entries[] =
-{
-    {
-        InvocationService_CreateInstance, inv_getImplementationName,
-        inv_getSupportedServiceNames, createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * invocation_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
