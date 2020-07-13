@@ -962,6 +962,21 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode)
     return xPeer.is() && xPeer->supportsMode(Mode);
 }
 
+void SAL_CALL FmXGridControl::setFocus()
+{
+    FmXGridPeer* pPeer = comphelper::getUnoTunnelImplementation<FmXGridPeer>(getPeer());
+    if (pPeer)
+    {
+        VclPtr<FmGridControl> xGrid = pPeer->GetAs<FmGridControl>();
+        bool bAlreadyHasFocus = xGrid->HasChildPathFocus() || xGrid->ControlHasFocus();
+        // if the focus is already in the control don't grab focus again which
+        // would grab focus away from any native widgets hosted in the control
+        if (bAlreadyHasFocus)
+            return;
+    }
+    UnoControl::setFocus();
+}
+
 // helper class which prevents that in the peer's header the FmGridListener must be known
 class FmXGridPeer::GridListenerDelegator : public FmGridListener
 {
@@ -1054,7 +1069,6 @@ void FmXGridPeer::Create(vcl::Window* pParent, WinBits nStyle)
 
     getSupportedURLs();
 }
-
 
 FmXGridPeer::~FmXGridPeer()
 {

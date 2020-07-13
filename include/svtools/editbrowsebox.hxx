@@ -967,6 +967,7 @@ namespace svt
         virtual bool ProcessKey(const KeyEvent& rEvt) override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        bool ControlHasFocus() const;
     protected:
         // creates the accessible which wraps the active cell
         void    implCreateActiveAccessible( );
@@ -980,8 +981,6 @@ namespace svt
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
-
-        bool ControlHasFocus() const;
 
         DECL_DLLPRIVATE_LINK( ModifyHdl, LinkParamNone*, void );
         DECL_DLLPRIVATE_LINK( StartEditHdl, void*, void );

@@ -306,15 +306,15 @@ public:
     virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
+// css::awt::XWindow
+    virtual void SAL_CALL setFocus() override;
+
 protected:
     virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent);
         // ImplCreatePeer would be better, but doesn't work because it's not exported
-
 };
 
-
 // FmXGridPeer -> Peer for the Gridcontrol
-
 class FmGridControl;
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmXGridPeer:
     public cppu::ImplInheritanceHelper<
