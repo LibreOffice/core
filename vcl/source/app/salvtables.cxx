@@ -3026,7 +3026,7 @@ SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, b
 void SalInstanceEntry::set_text(const OUString& rText)
 {
     disable_notify_events();
-    m_xEntry->SetText(rText);
+    m_xEntry->Edit::SetText(rText);
     enable_notify_events();
 }
 
