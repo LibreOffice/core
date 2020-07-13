@@ -30,7 +30,7 @@
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop3.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTask.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -89,7 +90,7 @@ enum ELoadState
 *//*-*************************************************************************************************************/
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
-           css::frame::XDesktop2                ,
+           css::frame::XDesktop3                ,
            css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
@@ -222,9 +223,9 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const css::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
 
-        // XDispatchProviderInterception
-        virtual void                                                                SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
-        virtual void                                                                SAL_CALL releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        // XDispatchProviderInterception2
+        virtual void                                                                SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
+        virtual void                                                                SAL_CALL releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
 
         //  XFramesSupplier
         virtual css::uno::Reference< css::frame::XFrames >                          SAL_CALL getFrames                  (                                                                                 ) override;

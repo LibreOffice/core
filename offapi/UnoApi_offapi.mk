@@ -2608,13 +2608,16 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XControllerBorder \
 	XDesktop \
 	XDesktop2 \
+	XDesktop3 \
 	XDesktopTask \
 	XDispatch \
 	XDispatchHelper \
 	XDispatchInformationProvider \
 	XDispatchProvider \
 	XDispatchProviderInterception \
+	XDispatchProviderInterception2 \
 	XDispatchProviderInterceptor \
+	XDispatchProviderInterceptor2 \
 	XDispatchRecorder \
 	XDispatchRecorderSupplier \
 	XDispatchResultListener \

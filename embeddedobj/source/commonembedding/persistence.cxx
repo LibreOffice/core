@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -996,6 +997,12 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
         }
+        else if ( prop.Name == "OutplaceDispatchInterceptor2" )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor2 > xDispatchInterceptor;
+            if ( prop.Value >>= xDispatchInterceptor )
+                m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+        }
         else if ( prop.Name == "DefaultParentBaseURL" )
         {
             prop.Value >>= m_aDefaultParentBaseURL;
@@ -1703,6 +1710,14 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+            if ( prop.Value >>= xDispatchInterceptor )
+                m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+
+            break;
+        }
+        else if ( prop.Name == "OutplaceDispatchInterceptor2" )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor2 > xDispatchInterceptor;
             if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 

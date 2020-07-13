@@ -702,19 +702,19 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
 
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XDispatchProviderInterception2 > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XDispatchProviderInterception2 > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
 }
 

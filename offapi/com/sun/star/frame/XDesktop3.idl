@@ -1,0 +1,93 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_frame_XDesktop3_idl__
+#define __com_sun_star_frame_XDesktop3_idl__
+
+#include <com/sun/star/frame/XComponentLoader.idl>
+#include <com/sun/star/frame/XDesktop.idl>
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/frame/XDispatchProviderInterception2.idl>
+#include <com/sun/star/frame/XFrame.idl>
+#include <com/sun/star/frame/XFramesSupplier.idl>
+#include <com/sun/star/task/XStatusIndicatorFactory.idl>
+
+
+module com {  module sun {  module star {  module frame {
+
+/**
+  @since LibreOffice 7.2
+*/
+published interface XDesktop3
+{
+    /** provides access to dispatchers for the frame.
+
+        <p>
+        What kind of URLs a frame accepts in the calls to XDispatchProvider::queryDispatch(),
+        and how the returned dispatcher handles dispatches is completely implementation dependent
+        (though of course the restrictions of XDispatchProvider must be met).
+        Frame implementations may (optionally) support special targets in the call to
+        XDispatchProvider::queryDispatch().
+        Such special targets are passed as target frame name. They may, in addition,
+        require special frame search flags (see FrameSearchFlag), or,
+        in opposite, limit the set of allowed flags.<br>
+        Common special targets include:
+        <ul>
+                        <li><b>_blank</b><br> is used to create a new frame when dispatching the URL.</li>
+            <li><b>_default</b><br> is used to recycle empty or create a new frame when dispatching the URL.</li>
+            <li><b>_self</b><br> forces the frame to dispatch the URL into itself. ("" means the same)</li>
+                        <li><b>_parent</b><br> dispatches the URL into the parent frame.</li>
+                        <li><b>_top</b><br> dispatches the URL into the top level frame, the frame where this is invoked belongs to.</li>
+        </ul>
+        </p>
+
+        @see XDispatch
+        @see XFrame::findFrame()
+    */
+    interface XDispatchProvider;
+
+    /** supports interception mechanism for dispatched URLs
+
+        <p>
+        Registered objects can intercept, suppress or reroute dispatched URLs.
+        If they support another interface too (XInterceptorInfo)
+        it's possible to perform it by directly calling of right interceptor without
+        using list of all registered ones.
+        </p>
+     */
+    interface XDispatchProviderInterception2;
+
+    /** provides access to sub frames within this frame
+     */
+    interface XFramesSupplier;
+
+    /** regulate life time of desktop environment and support high level
+        access to components of sub frame tree
+     */
+    interface XDesktop;
+
+    /** supports simple API for loading components into the frame environment
+     */
+    interface XComponentLoader;
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

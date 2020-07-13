@@ -31,6 +31,7 @@ class StatusChangeListenerContainer;
 class DocumentHolder;
 
 class Interceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor,
+                                                   css::frame::XDispatchProviderInterceptor2,
                                                    css::frame::XInterceptorInfo,
                                                    css::frame::XDispatch>
 {
@@ -81,6 +82,25 @@ public:
 
 
     //XDispatchProviderInterceptor
+    virtual css::uno::Reference<
+    css::frame::XDispatchProvider > SAL_CALL
+    getSlaveDispatchProvider(  ) override;
+
+    virtual void SAL_CALL
+    setSlaveDispatchProvider(
+        const css::uno::Reference<
+        css::frame::XDispatchProvider >& NewDispatchProvider ) override;
+
+    virtual css::uno::Reference<
+    css::frame::XDispatchProvider > SAL_CALL
+    getMasterDispatchProvider(  ) override;
+
+    virtual void SAL_CALL
+    setMasterDispatchProvider(
+        const css::uno::Reference<
+        css::frame::XDispatchProvider >& NewSupplier ) override;
+
+    //XDispatchProviderInterceptor2
     virtual css::uno::Reference<
     css::frame::XDispatchProvider > SAL_CALL
     getSlaveDispatchProvider(  ) override;

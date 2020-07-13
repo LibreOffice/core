@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -216,10 +217,16 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+    uno::Reference< frame::XDispatchProviderInterceptor2 > xDispatchInterceptor2;
     for ( beans::PropertyValue const & prop : aObjectDescr )
         if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
             prop.Value >>= xDispatchInterceptor;
+            break;
+        }
+        else if ( prop.Name == "OutplaceDispatchInterceptor2" )
+        {
+            prop.Value >>= xDispatchInterceptor2;
             break;
         }
         else if ( prop.Name == "Parent" )
@@ -231,6 +238,8 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
     if ( xDispatchInterceptor.is() )
         m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+    if ( xDispatchInterceptor2.is() )
+        m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor2 );
 }
 
 

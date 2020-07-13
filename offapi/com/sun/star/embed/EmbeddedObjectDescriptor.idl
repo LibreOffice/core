@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 #include <com/sun/star/task/XStatusIndicator.idl>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.idl>
 #include <com/sun/star/embed/XStorage.idl>
 
 
@@ -74,6 +75,11 @@ published service EmbeddedObjectDescriptor
         at loading time only, and then discarded.</p>
     */
     [optional, property] XStorage RecoveryStorage;
+
+    /** allows to provide a dispatch interceptor for outplace activation (new version)
+    */
+    [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor2
+                                                OutplaceDispatchInterceptor2;
 };
 
 
