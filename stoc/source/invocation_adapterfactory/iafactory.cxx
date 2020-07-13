@@ -23,6 +23,7 @@
 #include <osl/mutex.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <uno/dispatcher.h>
 #include <uno/data.h>
@@ -30,9 +31,7 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -48,8 +47,6 @@
 #include <unordered_set>
 #include <vector>
 
-#define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
-
 using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -58,16 +55,6 @@ using namespace css::uno;
 namespace stoc_invadp
 {
 
-static Sequence< OUString > invadp_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { "com.sun.star.script.InvocationAdapterFactory" };
-    return seqNames;
-}
-
-static OUString invadp_getImplementationName()
-{
-    return IMPLNAME;
-}
 
 namespace {
 
@@ -869,7 +856,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
 
 OUString FactoryImpl::getImplementationName()
 {
-    return invadp_getImplementationName();
+    return "com.sun.star.comp.stoc.InvocationAdapterFactory";
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -879,36 +866,22 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 {
-    return invadp_getSupportedServiceNames();
+    return { "com.sun.star.script.InvocationAdapterFactory" };
 }
 
-/// @throws Exception
-static Reference< XInterface > FactoryImpl_create(
-    const Reference< XComponentContext > & xContext )
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stoc_invocation_adapter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<cppu::OWeakObject *>(new FactoryImpl( xContext ));
+    static rtl::Reference<stoc_invadp::FactoryImpl> g_Instance(new stoc_invadp::FactoryImpl(context));
+
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-}
 
-
-const struct ::cppu::ImplementationEntry g_entries[] =
-{
-    {
-        ::stoc_invadp::FactoryImpl_create,
-        ::stoc_invadp::invadp_getImplementationName,
-        ::stoc_invadp::invadp_getSupportedServiceNames,
-        ::cppu::createOneInstanceComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * invocadapt_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey , g_entries );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
