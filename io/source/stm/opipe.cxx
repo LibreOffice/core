@@ -42,7 +42,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-#include <services.hxx>
 #include "streamhelper.hxx"
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -334,7 +333,7 @@ Reference < XConnectable > OPipeImpl::getPredecessor()
 // XServiceInfo
 OUString OPipeImpl::getImplementationName()
 {
-    return OPipeImpl_getImplementationName();
+    return IMPLEMENTATION_NAME;
 }
 
 // XServiceInfo
@@ -346,35 +345,16 @@ sal_Bool OPipeImpl::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OPipeImpl::getSupportedServiceNames()
 {
-    return OPipeImpl_getSupportedServiceNames();
+    return { "com.sun.star.io.Pipe" };
 }
 
-/* implementation functions
-*
-*
-*/
+}
 
-
-Reference < XInterface > OPipeImpl_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OPipeImpl_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    OPipeImpl *p = new OPipeImpl;
-
-    return Reference < XInterface > ( static_cast< OWeakObject * >(p) );
+    return cppu::acquire(new io_stm::OPipeImpl());
 }
-
-
-OUString    OPipeImpl_getImplementationName()
-{
-    return IMPLEMENTATION_NAME;
-}
-
-Sequence<OUString> OPipeImpl_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.Pipe" };
-    return aRet;
-}
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

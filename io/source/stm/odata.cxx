@@ -45,8 +45,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-#include <services.hxx>
-
 namespace io_stm {
 
 namespace {
@@ -392,7 +390,7 @@ Reference < XConnectable > ODataInputStream::getPredecessor()
 // XServiceInfo
 OUString ODataInputStream::getImplementationName()
 {
-    return ODataInputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.DataInputStream";
 }
 
 // XServiceInfo
@@ -404,32 +402,14 @@ sal_Bool ODataInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > ODataInputStream::getSupportedServiceNames()
 {
-    return ODataInputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.DataInputStream" };
 }
 
-/***
-*
-* registration information
-*
-*
-****/
-
-Reference< XInterface > ODataInputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_ODataInputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    ODataInputStream *p = new ODataInputStream;
-    return Reference< XInterface > ( static_cast<OWeakObject *>(p) );
-}
-
-OUString ODataInputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.DataInputStream";
-}
-
-Sequence<OUString> ODataInputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.DataInputStream" };
-    return aRet;
+    return cppu::acquire(new ODataInputStream());
 }
 
 namespace {
@@ -704,7 +684,7 @@ Reference < XConnectable > ODataOutputStream::getPredecessor()
 // XServiceInfo
 OUString ODataOutputStream::getImplementationName()
 {
-    return ODataOutputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.DataOutputStream";
 }
 
 // XServiceInfo
@@ -716,27 +696,14 @@ sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > ODataOutputStream::getSupportedServiceNames()
 {
-    return ODataOutputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.DataOutputStream" };
 }
 
-Reference< XInterface > ODataOutputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_ODataOutputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    ODataOutputStream *p = new ODataOutputStream;
-    Reference< XInterface > xService = *p;
-    return xService;
-}
-
-
-OUString ODataOutputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.DataOutputStream";
-}
-
-Sequence<OUString> ODataOutputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.DataOutputStream" };
-    return aRet;
+    return cppu::acquire(new ODataOutputStream());
 }
 
 namespace {
@@ -974,29 +941,10 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
     return m_rMarkable->offsetToMark( nMark );
 }
 
-
-Reference< XInterface > OObjectOutputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
-{
-    OObjectOutputStream *p = new OObjectOutputStream;
-    return  Reference< XInterface > ( static_cast< OWeakObject *  >(p) );
-}
-
-OUString OObjectOutputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.ObjectOutputStream";
-}
-
-Sequence<OUString> OObjectOutputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.ObjectOutputStream" };
-    return aRet;
-}
-
 // XServiceInfo
 OUString OObjectOutputStream::getImplementationName()
 {
-    return OObjectOutputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.ObjectOutputStream";
 }
 
 // XServiceInfo
@@ -1008,7 +956,14 @@ sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OObjectOutputStream::getSupportedServiceNames()
 {
-    return OObjectOutputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.ObjectOutputStream" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OObjectOutputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OObjectOutputStream());
 }
 
 namespace {
@@ -1247,7 +1202,7 @@ sal_Int32 OObjectInputStream::offsetToMark(sal_Int32 nMark)
 // XServiceInfo
 OUString OObjectInputStream::getImplementationName()
 {
-    return OObjectInputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.ObjectInputStream";
 }
 
 // XServiceInfo
@@ -1259,26 +1214,17 @@ sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OObjectInputStream::getSupportedServiceNames()
 {
-    return OObjectInputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.ObjectInputStream" };
 }
 
-Reference< XInterface > OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OObjectInputStream_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    OObjectInputStream *p = new OObjectInputStream( rCtx );
-    return Reference< XInterface> ( static_cast< OWeakObject * >(p) );
-}
-
-OUString OObjectInputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.ObjectInputStream";
-}
-
-Sequence<OUString> OObjectInputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.ObjectInputStream" };
-    return aRet;
+    return cppu::acquire(new OObjectInputStream(context));
 }
 
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

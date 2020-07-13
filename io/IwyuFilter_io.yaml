@@ -1,9 +1,6 @@
 ---
 assumeFilename: io/source/services.cxx
 excludelist:
-    io/source/acceptor/acceptor.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
     io/source/connector/connector.hxx:
     # Base class needs full type
     - com/sun/star/connection/XConnection.hpp
@@ -11,26 +8,6 @@ excludelist:
     # Don't replace with impl. detail
     - osl/socket.hxx
     - osl/pipe.hxx
-    io/source/connector/connector.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
-    io/source/TextInputStream/TextInputStream.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
-    io/source/TextOutputStream/TextOutputStream.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
-    io/source/stm/odata.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
-    io/source/stm/opipe.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
     io/source/stm/opump.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx
     # Don't replace with URE API impl. detail
     - cppuhelper/interfacecontainer.hxx
-    io/source/stm/omark.cxx:
-    # Avoid loplugin:unreffun error
-    - services.hxx

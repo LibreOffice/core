@@ -27,6 +27,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -41,8 +42,6 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
-
-#include <services.hxx>
 
 namespace io_stm {
 
@@ -421,7 +420,7 @@ Reference< XOutputStream > Pump::getOutputStream()
 // XServiceInfo
 OUString Pump::getImplementationName()
 {
-    return OPumpImpl_getImplementationName();
+    return "com.sun.star.comp.io.Pump";
 }
 
 // XServiceInfo
@@ -433,26 +432,17 @@ sal_Bool Pump::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > Pump::getSupportedServiceNames()
 {
-    return OPumpImpl_getSupportedServiceNames();
+    return { "com.sun.star.io.Pump" };
 }
 
+}
 
-Reference< XInterface > OPumpImpl_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_Pump_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return Reference< XInterface >( *new Pump );
+    return cppu::acquire(new io_stm::Pump());
 }
 
-OUString OPumpImpl_getImplementationName()
-{
-    return "com.sun.star.comp.io.Pump";
-}
-
-Sequence<OUString> OPumpImpl_getSupportedServiceNames()
-{
-    return Sequence< OUString > { "com.sun.star.io.Pump" };
-}
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
