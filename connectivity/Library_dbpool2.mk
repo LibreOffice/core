@@ -38,7 +38,6 @@ $(eval $(call gb_Library_add_exception_objects,dbpool2,\
 	connectivity/source/cpool/ZPooledConnection \
 	connectivity/source/cpool/ZConnectionPool \
 	connectivity/source/cpool/ZPoolCollection \
-	connectivity/source/cpool/Zregistration \
 ))
 
 # vim: set noet sw=4 ts=4:
