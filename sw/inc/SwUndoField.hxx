@@ -29,11 +29,11 @@ class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {
-    sal_uLong nNodeIndex;
-    sal_Int32 nOffset;
+    sal_uLong m_nNodeIndex;
+    sal_Int32 m_nOffset;
 
 protected:
-    SwDoc * pDoc;
+    SwDoc * m_pDoc;
     SwPosition GetPosition();
 
 public:
@@ -43,9 +43,9 @@ public:
 
 class SwUndoFieldFromDoc final : public SwUndoField
 {
-    std::unique_ptr<SwField> pOldField, pNewField;
-    SwMsgPoolItem * pHint;
-    bool bUpdate;
+    std::unique_ptr<SwField> m_pOldField, m_pNewField;
+    SwMsgPoolItem * m_pHint;
+    bool m_bUpdate;
 
     void DoImpl();
 
@@ -63,8 +63,8 @@ public:
 
 class SwUndoFieldFromAPI final : public SwUndoField
 {
-    css::uno::Any aOldVal, aNewVal;
-    sal_uInt16 nWhich;
+    css::uno::Any m_aOldVal, m_aNewVal;
+    sal_uInt16 m_nWhich;
 
     void DoImpl();
 
