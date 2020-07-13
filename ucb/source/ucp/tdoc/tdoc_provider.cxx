@@ -102,29 +102,31 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
 
 
 // XServiceInfo methods.
-
-XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          "com.sun.star.comp.ucb.TransientDocumentsContentProvider" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL ContentProvider::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new ContentProvider( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.TransientDocumentsContentProvider";
 }
 
-css::uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
 {
-    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.TransientDocumentsContentProvider" };
-    return aSNS;
+    return cppu::supportsService( this, ServiceName );
 }
+
+css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.TransientDocumentsContentProvider" };
+}
+
 
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_tdoc_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ContentProvider(context));
+}
 
 // XContentProvider methods.
 
