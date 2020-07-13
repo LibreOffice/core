@@ -30,6 +30,7 @@
 #include <vcl/toolkit/field.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <svdata.hxx>
 
@@ -2703,6 +2704,86 @@ void TimeBox::ReformatAll()
     }
     TimeFormatter::Reformat();
     SetUpdateMode( true );
+}
+
+namespace weld
+{
+    tools::Time TimeFormatter::ConvertValue(int nValue)
+    {
+        tools::Time aTime(0);
+        aTime.MakeTimeFromMS(nValue);
+        return aTime;
+    }
+
+    int TimeFormatter::ConvertValue(const tools::Time& rTime)
+    {
+        return rTime.GetMSFromTime();
+    }
+
+    void TimeFormatter::SetTime(const tools::Time& rTime)
+    {
+        SetValue(ConvertValue(rTime));
+    }
+
+    tools::Time TimeFormatter::GetTime()
+    {
+        return ConvertValue(GetValue());
+    }
+
+    void TimeFormatter::SetMin(const tools::Time& rNewMin)
+    {
+        SetMinValue(ConvertValue(rNewMin));
+    }
+
+    void TimeFormatter::SetMax(const tools::Time& rNewMax)
+    {
+        SetMaxValue(ConvertValue(rNewMax));
+    }
+
+    OUString TimeFormatter::FormatNumber(int nValue) const
+    {
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+        return ::TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, m_eTimeFormat, m_bDuration, rLocaleData);
+    }
+
+    IMPL_LINK_NOARG(TimeFormatter, FormatOutputHdl, LinkParamNone*, bool)
+    {
+        OUString sText = FormatNumber(GetValue());
+        ImplSetTextImpl(sText, nullptr);
+        return true;
+    }
+
+    IMPL_LINK(TimeFormatter, ParseInputHdl, sal_Int64*, result, TriState)
+    {
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+
+        tools::Time aResult(0);
+        bool bRet = ::TimeFormatter::TextToTime(GetEntryText(), aResult, m_eFormat, m_bDuration, rLocaleDataWrapper);
+        if (bRet)
+            *result = ConvertValue(aResult);
+
+        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+    }
+
+    IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::Entry&, rEntry, void)
+    {
+        int nStartPos, nEndPos;
+        rEntry.get_selection_bounds(nStartPos, nEndPos);
+
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+        const int nTimeArea = ::TimeFormatter::GetTimeArea(m_eFormat, GetEntryText(), nEndPos, rLocaleData);
+
+        int nIncrements = 1;
+
+        if (nTimeArea == 1)
+            nIncrements = 1000 * 60 * 60;
+        else if (nTimeArea == 2)
+            nIncrements = 1000 * 60;
+        else if (nTimeArea == 3)
+            nIncrements = 1000;
+
+        SetSpinSize(nIncrements);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
