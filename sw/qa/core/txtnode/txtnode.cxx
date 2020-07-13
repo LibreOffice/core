@@ -70,6 +70,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
     CPPUNIT_ASSERT_EQUAL(aFlyAnchor2.nNode, aDrawAnchor2.nNode);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
+{
+    load(DATA_DIRECTORY, "textbox-node-split.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    // Without the accompanying fix in place, this would have crashed in
+    // SwFlyAtContentFrame::Modify().
+    pWrtShell->SplitNode();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
