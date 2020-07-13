@@ -184,6 +184,7 @@ namespace dbaui
 
     typedef ::cppu::WeakComponentImplHelper<   css::frame::XDispatch
                                            ,   css::frame::XDispatchProviderInterceptor
+                                           ,   css::frame::XDispatchProviderInterceptor2
                                            ,   css::util::XModifyListener
                                            ,   css::frame::XFrameActionListener
                                            ,   css::lang::XInitialization

@@ -300,6 +300,10 @@ public:
     virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
     virtual void SAL_CALL releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
+// css::frame::XDispatchProviderInterception2
+    virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
+    virtual void SAL_CALL releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
+
 // css::view::XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
     virtual css::uno::Any SAL_CALL getSelection(  ) override;
@@ -356,6 +360,7 @@ private:
     sal_Int32               m_nCursorListening;
 
     css::uno::Reference< css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >   m_xFirstDispatchInterceptor;
 
     bool                                m_bInterceptingDispatch;
 
@@ -489,6 +494,10 @@ public:
 // css::frame::XDispatchProviderInterception
     virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
     virtual void SAL_CALL releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+
+// css::frame::XDispatchProviderInterception2
+    virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
+    virtual void SAL_CALL releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor2 >& xInterceptor) override;
 
 // css::frame::XStatusListener
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
