@@ -22,7 +22,6 @@ import xml.etree.ElementTree as ET
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
-    ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
@@ -271,6 +270,8 @@ core_constructor_list = [
     "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
+# svl/source/fsstor/fsstorage.component
+    "svl_FSStorageFactory_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
 # vcl/vcl.android.component
