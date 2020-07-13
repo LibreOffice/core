@@ -123,7 +123,7 @@ class BaseContainer : public BaseLock
         virtual ~BaseContainer() override;
 
 
-        /** @short  initialize this generic intsnace with some specialized values
+        /** @short  initialize this generic instance with some specialized values
                     from our derived object.
 
             @descr  Because an outside class must use ImplInheritanceHelper template to
