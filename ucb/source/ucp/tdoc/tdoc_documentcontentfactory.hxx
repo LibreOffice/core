@@ -20,9 +20,8 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DOCUMENTCONTENTFACTORY_HXX
 #define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DOCUMENTCONTENTFACTORY_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -35,7 +34,7 @@ class DocumentContentFactory :
             css::lang::XServiceInfo >
 {
 public:
-    explicit DocumentContentFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rXSMgr );
+    explicit DocumentContentFactory( const css::uno::Reference< css::uno::XComponentContext >& );
     virtual ~DocumentContentFactory() override;
 
     // XServiceInfo
@@ -51,16 +50,8 @@ public:
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     createDocumentContent( const css::uno::Reference< css::frame::XModel >& Model ) override;
 
-    // Non-UNO interfaces
-    static OUString
-    getImplementationName_Static();
-    static css::uno::Sequence< OUString >
-    getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMgr;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 } // namespace tdoc_ucp

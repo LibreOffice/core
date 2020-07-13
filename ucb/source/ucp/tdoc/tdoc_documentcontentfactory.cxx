@@ -24,8 +24,10 @@
 
  *************************************************************************/
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 
 #include "tdoc_documentcontentfactory.hxx"
 
@@ -37,8 +39,8 @@ using namespace tdoc_ucp;
 
 
 DocumentContentFactory::DocumentContentFactory(
-            const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: m_xSMgr( xSMgr )
+            const uno::Reference< uno::XComponentContext >& rxContext )
+: m_xContext( rxContext )
 {
 }
 
@@ -55,7 +57,7 @@ DocumentContentFactory::~DocumentContentFactory()
 // virtual
 OUString SAL_CALL DocumentContentFactory::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory";
 }
 
 // virtual
@@ -69,24 +71,7 @@ DocumentContentFactory::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 DocumentContentFactory::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-// static
-OUString DocumentContentFactory::getImplementationName_Static()
-{
-    return
-        "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory";
-}
-
-
-// static
-uno::Sequence< OUString >
-DocumentContentFactory::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aSNS { "com.sun.star.frame.TransientDocumentsDocumentContentFactory" };
-    return aSNS;
+    return { "com.sun.star.frame.TransientDocumentsDocumentContentFactory" };
 }
 
 
@@ -101,7 +86,7 @@ DocumentContentFactory::createDocumentContent(
     uno::Reference< frame::XTransientDocumentsDocumentContentFactory > xDocFac;
     try
     {
-        xDocFac.set( m_xSMgr->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"),
+        xDocFac.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.TransientDocumentsContentProvider", m_xContext),
                      uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -120,25 +105,14 @@ DocumentContentFactory::createDocumentContent(
 
 // Service factory implementation.
 
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface >
-DocumentContentFactory_CreateInstance(
-    const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_tdoc_DocumentContentFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<lang::XServiceInfo*>(new DocumentContentFactory(rSMgr));
+    static rtl::Reference<DocumentContentFactory> g_Instance(new DocumentContentFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-
-// static
-uno::Reference< lang::XSingleServiceFactory >
-DocumentContentFactory::createServiceFactory(
-    const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                DocumentContentFactory::getImplementationName_Static(),
-                DocumentContentFactory_CreateInstance,
-                DocumentContentFactory::getSupportedServiceNames_Static() );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

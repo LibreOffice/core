@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucptdoc1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ucb.TransientDocumentsContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ucb.TransientDocumentsContentProvider"
+    constructor="ucb_tdoc_ContentProvider_get_implementation">
     <service name="com.sun.star.ucb.TransientDocumentsContentProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory">
+  <implementation name="com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory"
+    constructor="ucb_tdoc_DocumentContentFactory_get_implementation">
     <service name="com.sun.star.frame.TransientDocumentsDocumentContentFactory"/>
   </implementation>
 </component>

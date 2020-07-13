@@ -37,7 +37,6 @@ core_factory_list = [
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
-    ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
@@ -317,6 +316,9 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# ucb/source/tdoc/ucptdoc1.component
+    "ucb_tdoc_ContentProvider_get_implementation",
+    "ucb_tdoc_DocumentContentFactory_get_implementation",
 # unotools/util/utl.component
     "unotools_ServiceDocument_get_implementation",
     "unotools_OTempFileService_get_implementation",

@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_exception_objects,ucptdoc1,\
 	ucb/source/ucp/tdoc/tdoc_passwordrequest \
 	ucb/source/ucp/tdoc/tdoc_provider \
 	ucb/source/ucp/tdoc/tdoc_resultset \
-	ucb/source/ucp/tdoc/tdoc_services \
 	ucb/source/ucp/tdoc/tdoc_stgelems \
 	ucb/source/ucp/tdoc/tdoc_storage \
 	ucb/source/ucp/tdoc/tdoc_uri \
