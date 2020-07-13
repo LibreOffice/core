@@ -23,7 +23,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
-    ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
@@ -262,6 +261,8 @@ core_constructor_list = [
     "com_sun_star_comp_embed_OLESimpleStorage",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
+# stoc/source/invocation_adapter/invocadapt.component
+    "stoc_invocation_adapter_get_implementation",
 # stoc/source/corereflection/reflection.component
     "com_sun_star_comp_stoc_CoreReflection_get_implementation",
 # stoc/util/stocservices.component
