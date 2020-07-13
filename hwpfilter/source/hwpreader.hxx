@@ -27,12 +27,11 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
@@ -66,9 +65,6 @@ using namespace ::com::sun::star::xml::sax;
 #include "drawdef.h"
 #include "attributes.hxx"
 
-#define IMPLEMENTATION_NAME "com.sun.comp.hwpimport.HwpImportFilter"
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
 #define WRITER_IMPORTER_NAME "com.sun.star.comp.Writer.XMLImporter"
 
 struct HwpReaderPrivate;
@@ -152,168 +148,6 @@ private:
     static char* getPStyleName(int, char *);
 };
 
-class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
-{
-public:
-    explicit HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
-    virtual ~HwpImportFilter() override;
-
-public:
-    static Sequence< OUString > getSupportedServiceNames_Static() throw();
-    static OUString getImplementationName_Static() throw();
-
-public:
-    // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel() override;
-
-    // XImporter
-    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc) override;
-
-    // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-
-    //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
-
-private:
-    Reference< XFilter > rFilter;
-    Reference< XImporter > rImporter;
-};
-
-/// @throws Exception
-Reference< XInterface > HwpImportFilter_CreateInstance(
-    const Reference< XMultiServiceFactory >& rSMgr )
-{
-    HwpImportFilter *p = new HwpImportFilter( rSMgr );
-
-    return Reference< XInterface > ( static_cast<OWeakObject*>(p) );
-}
-
-Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
-{
-    return { HwpImportFilter::getImplementationName_Static() };
-}
-
-HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
-{
-    try {
-        Reference< XDocumentHandler > xHandler( rFact->createInstance( WRITER_IMPORTER_NAME ), UNO_QUERY );
-
-        HwpReader *p = new HwpReader;
-        p->setDocumentHandler( xHandler );
-
-        Reference< XImporter > xImporter( xHandler, UNO_QUERY );
-        rImporter = xImporter;
-        Reference< XFilter > xFilter( p );
-        rFilter = xFilter;
-    }
-    catch( Exception & )
-    {
-        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME );
-        exit( 1 );
-    }
-}
-
-HwpImportFilter::~HwpImportFilter()
-{
-}
-
-sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
-{
-    // delegate to IchitaroImpoter
-    return rFilter->filter( aDescriptor );
-}
-
-void HwpImportFilter::cancel()
-{
-    rFilter->cancel();
-}
-
-void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-{
-        // delegate
-    rImporter->setTargetDocument( xDoc );
-}
-
-OUString HwpImportFilter::getImplementationName_Static() throw()
-{
-    return IMPLEMENTATION_NAME;
-}
-
-OUString HwpImportFilter::getImplementationName()
-{
-    return IMPLEMENTATION_NAME;
-}
-
-sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
-//XExtendedFilterDetection
-OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
-{
-    OUString sTypeName;
-
-    utl::MediaDescriptor aDescriptor(rDescriptor);
-    aDescriptor.addInputStream();
-
-    Reference< XInputStream > xInputStream(
-        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
-
-    if (xInputStream.is())
-    {
-        Sequence< sal_Int8 > aData;
-        sal_Int32 nLen = HWPIDLen;
-        if (
-             nLen == xInputStream->readBytes(aData, nLen) &&
-             detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
-           )
-        {
-            sTypeName = "writer_MIZI_Hwp_97";
-        }
-    }
-
-    return sTypeName;
-}
-
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
-{
-    return { SERVICE_NAME1, SERVICE_NAME2 };
-}
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void *  )
-    {
-        void * pRet = nullptr;
-
-        if (pServiceManager )
-        {
-            Reference< XSingleServiceFactory > xRet;
-            Reference< XMultiServiceFactory > xSMgr = static_cast< XMultiServiceFactory * > ( pServiceManager );
-
-            OUString aImplementationName = OUString::createFromAscii( pImplName );
-
-            if (aImplementationName == IMPLEMENTATION_NAME )
-            {
-                xRet = createSingleFactory( xSMgr, aImplementationName,
-                                            HwpImportFilter_CreateInstance,
-                                            HwpImportFilter::getSupportedServiceNames_Static() );
-            }
-            if (xRet.is())
-            {
-                xRet->acquire();
-                pRet = xRet.get();
-            }
-        }
-
-        return pRet;
-    }
-}
 
 #endif
 

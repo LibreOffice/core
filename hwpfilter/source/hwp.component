@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="hwp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.comp.hwpimport.HwpImportFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.comp.hwpimport.HwpImportFilter"
+    constructor="hwpfilter_HwpImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
