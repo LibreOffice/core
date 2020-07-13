@@ -38,9 +38,6 @@ namespace connectivity
         // 3: Is IB6 -- minimum required for delimited identifiers.
         const int FIREBIRD_SQL_DIALECT = 3;
 
-        /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > FirebirdDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
-
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
                                                    css::sdbcx::XDataDefinitionSupplier,
                                                    css::lang::XServiceInfo > ODriver_BASE;
@@ -66,11 +63,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName(  ) override;
