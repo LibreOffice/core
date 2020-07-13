@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="evoab2" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sdbc.evoab.OEvoabDriver"
+    constructor="connectivity_OEvoabDriver_get_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>
 </component>
