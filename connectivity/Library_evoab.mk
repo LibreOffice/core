@@ -50,7 +50,6 @@ $(eval $(call gb_Library_add_exception_objects,evoab,\
 	connectivity/source/drivers/evoab2/NDatabaseMetaData \
 	connectivity/source/drivers/evoab2/NStatement \
 	connectivity/source/drivers/evoab2/NPreparedStatement \
-	connectivity/source/drivers/evoab2/NServices \
 	connectivity/source/drivers/evoab2/NResultSet \
 	connectivity/source/drivers/evoab2/NResultSetMetaData \
 	connectivity/source/drivers/evoab2/EApi \

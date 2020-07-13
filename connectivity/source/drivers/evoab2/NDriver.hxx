@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 
@@ -32,10 +31,6 @@ namespace connectivity
 {
     namespace evoab
     {
-        /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > OEvoabDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
-
-
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver,
                                                  css::lang::XServiceInfo > ODriver_BASE;
 
@@ -44,20 +39,14 @@ namespace connectivity
         {
             ::osl::Mutex                                        m_aMutex;
             connectivity::OWeakRefArray                         m_xConnections;
-            css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+            css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
         public:
-            explicit OEvoabDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+            explicit OEvoabDriver(const css::uno::Reference< css::uno::XComponentContext >& );
             virtual ~OEvoabDriver() override;
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-
-            // XInterface
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -73,8 +62,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
         public:
-            css::uno::Reference< css::uno::XComponentContext >
-                        getComponentContext( ) const { return comphelper::getComponentContext( m_xFactory ); }
+            css::uno::Reference< css::uno::XComponentContext > getComponentContext( ) const { return m_xContext; }
 
             // static methods
             static bool acceptsURL_Stat( const OUString& url );
