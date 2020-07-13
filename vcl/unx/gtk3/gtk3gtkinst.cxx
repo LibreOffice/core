@@ -12306,8 +12306,8 @@ public:
     virtual void sync_range_from_formatter() override
     {
         disable_notify_events();
-        double fMin = m_xFormatter->HasMinValue() ? m_xFormatter->GetMinValue() : DBL_MIN;
-        double fMax = m_xFormatter->HasMaxValue() ? m_xFormatter->GetMaxValue() : DBL_MAX;
+        double fMin = m_xFormatter->HasMinValue() ? m_xFormatter->GetMinValue() : std::numeric_limits<double>::lowest();
+        double fMax = m_xFormatter->HasMaxValue() ? m_xFormatter->GetMaxValue() : std::numeric_limits<double>::max();
         gtk_spin_button_set_range(m_pButton, fMin, fMax);
         enable_notify_events();
     }
