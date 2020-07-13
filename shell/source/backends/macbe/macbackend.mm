@@ -29,6 +29,7 @@
 #include "macbackend.hxx"
 
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -148,11 +149,6 @@ MacOSXBackend::MacOSXBackend()
 
 MacOSXBackend::~MacOSXBackend(void)
 {
-}
-
-MacOSXBackend* MacOSXBackend::createInstance()
-{
-    return new MacOSXBackend;
 }
 
 static OUString CFStringToOUString(const CFStringRef sOrig) {
@@ -373,21 +369,9 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     }
 }
 
-OUString MacOSXBackend::getBackendName(void)
-{
-    return "com.sun.star.comp.configuration.backend.MacOSXBackend";
-}
-
 OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 {
-    return getBackendName();
-}
-
-uno::Sequence<OUString> MacOSXBackend::getBackendServiceNames(void)
-{
-    uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.MacOSXBackend" };
-
-    return aServiceNameList;
+    return "com.sun.star.comp.configuration.backend.MacOSXBackend";
 }
 
 sal_Bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
@@ -397,7 +381,15 @@ sal_Bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
 
 uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
 {
-    return getBackendServiceNames();
+    return { "com.sun.star.configuration.backend.MacOSXBackend" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_MacOSXBackend_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new MacOSXBackend());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
