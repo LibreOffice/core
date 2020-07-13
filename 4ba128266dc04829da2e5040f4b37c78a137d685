@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00d77b38_163b77d2",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4236,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-07-13T12:17:49Z",
+      "side": 1,
+      "message": "Need to modify to support $ in the cell reference and cell range",
+      "revId": "4ba128266dc04829da2e5040f4b37c78a137d685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
