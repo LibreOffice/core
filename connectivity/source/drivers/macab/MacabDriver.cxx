@@ -213,23 +213,10 @@ void MacabDriver::disposing()
 
     WeakComponentImplHelperBase::disposing();
 }
-// static ServiceInfo
-
-OUString MacabDriver::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.sdbc.macab.Driver";
-}
-
-Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  )
-{
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
-    return { "com.sun.star.sdbc.Driver" };
-}
 
 OUString SAL_CALL MacabDriver::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.sdbc.macab.Driver";
 }
 
 sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
@@ -239,7 +226,9 @@ sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
+    // which service is supported
+    // for more information @see com.sun.star.sdbc.Driver
+    return { "com.sun.star.sdbc.Driver" };
 }
 
 Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
@@ -312,9 +301,11 @@ OUString MacabDriver::impl_getConfigurationSettingsPath()
     return "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.macab.Driver";
 }
 
-Reference< XInterface > MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_MacabDriver_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return *(new MacabDriver(comphelper::getComponentContext(_rxFactory)));
+    return cppu::acquire(new MacabDriver(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

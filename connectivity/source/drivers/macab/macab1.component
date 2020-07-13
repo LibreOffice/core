@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="macab" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.macab.Driver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sdbc.macab.Driver"
+    constructor="connectivity_MacabDriver_get_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>
 </component>

@@ -118,15 +118,6 @@ namespace connectivity
             MacabImplModule             m_aImplModule;
 
         public:
-            /// @throws css::uno::Exception
-            static css::uno::Reference< css::uno::XInterface > Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
-
-            // XServiceInfo - static versions
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-
             css::uno::Reference< css::uno::XComponentContext > const &
             getComponentContext() const { return m_xContext; }
 
@@ -134,8 +125,8 @@ namespace connectivity
             */
             static OUString  impl_getConfigurationSettingsPath();
 
-        protected:
             explicit MacabDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        protected:
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
