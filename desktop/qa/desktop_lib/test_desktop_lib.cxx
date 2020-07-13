@@ -2411,6 +2411,12 @@ void DesktopLOKTest::testGetSignatureState_Signed()
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    if (nState == 1)
+    {
+        // Already SignatureState::OK, then can't test the effect of trusting new CAs.
+        return;
+    }
+
     CPPUNIT_ASSERT_EQUAL(int(4), nState);
 
     std::vector<unsigned char> aCertificate;
