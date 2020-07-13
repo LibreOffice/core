@@ -234,8 +234,43 @@ private:
     DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
     DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
 
+    void Init();
+
     OUString m_aCurrencySymbol;
     bool m_bThousandSep;
+};
+
+class VCL_DLLPUBLIC TimeFormatter final : public EntryFormatter
+{
+public:
+    TimeFormatter(weld::Entry& rEntry);
+    TimeFormatter(weld::FormattedSpinButton& rSpinButton);
+
+    void SetExtFormat(ExtTimeFieldFormat eFormat);
+
+    void SetMin(const tools::Time& rNewMin);
+    void SetMax(const tools::Time& rNewMax);
+
+    void SetTime(const tools::Time& rNewTime);
+    tools::Time GetTime();
+
+    virtual ~TimeFormatter() override;
+
+private:
+    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_LINK(CursorChangedHdl, weld::Entry&, void);
+
+    void Init();
+
+    static tools::Time ConvertValue(int nValue);
+    static int ConvertValue(const tools::Time& rTime);
+
+    OUString FormatNumber(int nValue) const;
+
+    TimeFieldFormat m_eFormat;
+    TimeFormat m_eTimeFormat;
+    bool m_bDuration;
 };
 
 // get the row the iterator is on

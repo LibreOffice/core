@@ -240,7 +240,8 @@ namespace weld
         bool bRet = ImplLongCurrencyGetValue(GetEntryText(), value,
                                             GetDecimalDigits(), rLocaleDataWrapper);
 
-        *result = double(value) * weld::SpinButton::Power10(GetDecimalDigits());
+        if (bRet)
+            *result = double(value) * weld::SpinButton::Power10(GetDecimalDigits());
 
         return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
