@@ -1285,7 +1285,7 @@ namespace
     public:
         ScLOKDrawView(OutputDevice* pOut, ScViewData* pData) :
             FmFormView(*pData->GetDocument()->GetDrawLayer(), pOut),
-            pScDrawView(pData ? pData->GetScDrawView() : nullptr)
+            pScDrawView(pData->GetScDrawView())
         {
         }
 
