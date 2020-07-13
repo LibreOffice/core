@@ -358,6 +358,7 @@ ZipOutputEntryParallel::ZipOutputEntryParallel(
 : ZipOutputEntryBase(rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
 , totalIn(0)
 , totalOut(0)
+, finished(false)
 {
 }
 
@@ -381,6 +382,7 @@ void ZipOutputEntryParallel::writeStream(const uno::Reference< io::XInputStream 
 void ZipOutputEntryParallel::finishDeflater()
 {
     // ThreadedDeflater is called synchronously in one call, so nothing to do here.
+    finished = true;
 }
 
 sal_Int64 ZipOutputEntryParallel::getDeflaterTotalIn() const
@@ -397,11 +399,12 @@ void ZipOutputEntryParallel::deflaterReset()
 {
     totalIn = 0;
     totalOut = 0;
+    finished = false;
 }
 
 bool ZipOutputEntryParallel::isDeflaterFinished() const
 {
-    return true;
+    return finished;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
