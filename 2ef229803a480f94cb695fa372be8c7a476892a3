@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f59a841f_6a1f7cf3",
+        "filename": "i18npool/source/localedata/data/kk_KZ.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-13T10:20:14Z",
+      "side": 1,
+      "message": "Adding a Currency element where only the CurrencySymbol differs (i.e. is corrected) but the (ISO) CurrencyID and BankSymbol are equal should have the legacyOnly\u003d\"true\" attribute on the old Currency element, otherwise confusingly both are offered in number formats.\n\nSee https://opengrok.libreoffice.org/xref/core/i18npool/source/localedata/data/locale.dtd?r\u003d8453f6e5#455",
+      "range": {
+        "startLine": 341,
+        "startChar": 22,
+        "endLine": 341,
+        "endChar": 23
+      },
+      "revId": "2ef229803a480f94cb695fa372be8c7a476892a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
