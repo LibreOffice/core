@@ -1283,9 +1283,9 @@ namespace
     class ScLOKDrawView : public FmFormView
     {
     public:
-        ScLOKDrawView(OutputDevice* pOut, ScViewData* pData) :
-            FmFormView(*pData->GetDocument()->GetDrawLayer(), pOut),
-            pScDrawView(pData ? pData->GetScDrawView() : nullptr)
+        ScLOKDrawView(OutputDevice* pOut, ScViewData& rData) :
+            FmFormView(*rData.GetDocument()->GetDrawLayer(), pOut),
+            pScDrawView(rData.GetScDrawView())
         {
         }
 
@@ -1440,7 +1440,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
         mpLOKDrawView.reset(bPrintTwipsMsgs ?
             new ScLOKDrawView(
                 &rDevice,
-                pViewData) :
+                *pViewData) :
             new FmFormView(
                 *pModel,
                 &rDevice));
