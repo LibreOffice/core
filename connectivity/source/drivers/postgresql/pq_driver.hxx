@@ -91,14 +91,14 @@ public: // XDriver
     virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
     virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-public: // XServiceInfo
+public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-public: // XDataDefinitionSupplier
+    // XDataDefinitionSupplier
     virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByConnection(
         const css::uno::Reference< css::sdbc::XConnection >& connection ) override;

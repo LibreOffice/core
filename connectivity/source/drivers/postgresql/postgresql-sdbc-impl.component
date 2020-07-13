@@ -9,9 +9,9 @@
 -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="postgresql_sdbc_impl"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.connectivity.pq.Connection.noext">
+  <implementation name="org.openoffice.comp.connectivity.pq.Connection.noext"
+    constructor="connectivity_postgresql_Connection_get_implementation">
     <service name="com.sun.star.sdbc.Connection"/>
   </implementation>
 </component>

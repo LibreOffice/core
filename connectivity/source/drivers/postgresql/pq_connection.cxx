@@ -116,15 +116,6 @@ public:
 
 }
 
-static OUString    ConnectionGetImplementationName()
-{
-    return "org.openoffice.comp.connectivity.pq.Connection.noext";
-}
-static css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
-{
-    return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
-}
-
 Connection::Connection(
     const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
     const css::uno::Reference< css::uno::XComponentContext > & ctx )
@@ -573,37 +564,14 @@ Reference< XNameAccess > Connection::getUsers()
     return m_settings.users;
 }
 
-/// @throws Exception
-static Reference< XInterface >  ConnectionCreateInstance(
-    const Reference< XComponentContext > & ctx )
-{
-    ::rtl::Reference< comphelper::RefCountedMutex > ref = new comphelper::RefCountedMutex;
-    return * new Connection( ref, ctx );
-}
-
 } // end namespace
 
-
-const struct cppu::ImplementationEntry g_entries[] =
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_postgresql_Connection_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    {
-        pq_sdbc_driver::ConnectionCreateInstance, pq_sdbc_driver::ConnectionGetImplementationName,
-        pq_sdbc_driver::ConnectionGetSupportedServiceNames, cppu::createSingleComponentFactory,
-        nullptr , 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * postgresql_sdbc_impl_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-
+    ::rtl::Reference< comphelper::RefCountedMutex > ref = new comphelper::RefCountedMutex;
+    return cppu::acquire(new pq_sdbc_driver::Connection( ref, context ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
