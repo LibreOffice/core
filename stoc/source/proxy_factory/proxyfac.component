@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="proxyfac" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.reflection.ProxyFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.reflection.ProxyFactory"
+    constructor="stoc_FactoryImpl_get_implementation">
     <service name="com.sun.star.reflection.ProxyFactory"/>
   </implementation>
 </component>

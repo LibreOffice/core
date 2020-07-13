@@ -30,16 +30,12 @@
 #include <typelib/typedescription.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-
-#define SERVICE_NAME "com.sun.star.reflection.ProxyFactory"
-#define IMPL_NAME "com.sun.star.comp.reflection.ProxyFactory"
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 using namespace ::com::sun::star;
@@ -48,17 +44,6 @@ using namespace css::uno;
 
 namespace
 {
-
-OUString proxyfac_getImplementationName()
-{
-    return IMPL_NAME;
-}
-
-Sequence< OUString > proxyfac_getSupportedServiceNames()
-{
-    return { SERVICE_NAME };
-}
-
 
 struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
                                                      reflection::XProxyFactory >
@@ -399,7 +384,7 @@ Reference< XAggregation > FactoryImpl::createProxy(
 
 OUString FactoryImpl::getImplementationName()
 {
-    return proxyfac_getImplementationName();
+    return "com.sun.star.comp.reflection.ProxyFactory";
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -409,12 +394,12 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 {
-    return proxyfac_getSupportedServiceNames();
+    return { "com.sun.star.reflection.ProxyFactory" };
 }
 
-/// @throws Exception
-Reference< XInterface > proxyfac_create(
-    SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stoc_FactoryImpl_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
     Reference< XInterface > xRet;
     static osl::Mutex s_mutex;
@@ -429,26 +414,11 @@ Reference< XInterface > proxyfac_create(
         xRet = static_cast< ::cppu::OWeakObject * >(new FactoryImpl);
         rwInstance = xRet;
     }
-    return xRet;
+    xRet->acquire();
+    return xRet.get();
 }
 
-const ::cppu::ImplementationEntry g_entries [] =
-{
-    {
-        proxyfac_create, proxyfac_getImplementationName,
-        proxyfac_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
 
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * proxyfac_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, g_entries );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

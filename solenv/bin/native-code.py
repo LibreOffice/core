@@ -35,7 +35,6 @@ core_factory_list = [
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
-    ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ("libbiblo.a", "bib_component_getFactory"),
     ]
 
@@ -265,6 +264,8 @@ core_constructor_list = [
     "stoc_invocation_adapter_get_implementation",
 # stoc/source/corereflection/reflection.component
     "com_sun_star_comp_stoc_CoreReflection_get_implementation",
+# stoc/source/proxy_factory/proxyfac.component
+    "stoc_FactoryImpl_get_implementation",
 # stoc/util/stocservices.component
     "com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation",
     "com_sun_star_comp_stoc_TypeConverter_get_implementation",
