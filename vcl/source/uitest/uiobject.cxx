@@ -1118,8 +1118,7 @@ void ComboBoxUIObject::execute(const OUString& rAction,
         }
         mxComboBox->Select();
     }
-    else if (rAction == "TYPE")
-    {
+    else if ( rAction == "TYPE" || rAction == "SET" || rAction == "CLEAR" ){
         if (mxComboBox->GetSubEdit())
         {
             Edit* pEdit = mxComboBox->GetSubEdit();
