@@ -42,14 +42,8 @@ namespace connectivity
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-        static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
-    private:
         ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
-        virtual ~ParameterSubstitution() override {}
+    private:
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
