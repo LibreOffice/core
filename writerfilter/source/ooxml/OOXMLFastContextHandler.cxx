@@ -1079,6 +1079,21 @@ void OOXMLFastContextHandlerProperties::handleComment()
     getPropertySet()->resolve(aCommentHandler);
 }
 
+void OOXMLFastContextHandler::handleGridAfter()
+{
+    if (!getValue())
+        return;
+
+    if (OOXMLFastContextHandler* pTableRowProperties = getParent())
+    {
+        if (OOXMLFastContextHandler* pTableRow = pTableRowProperties->getParent())
+            // Save the value into the table row context, so it can be handled
+            // right before the end of the row.
+            pTableRow->setGridAfter(getValue());
+    }
+}
+
+
 void OOXMLFastContextHandlerProperties::handlePicture()
 {
     OOXMLPictureHandler aPictureHandler(this);
@@ -1459,17 +1474,6 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
     endCharacterGroup();
     endParagraphGroup();
-}
-
-void OOXMLFastContextHandlerTextTableRow::handleGridAfter(const OOXMLValue::Pointer_t& rValue)
-{
-    if (OOXMLFastContextHandler* pTableRowProperties = getParent())
-    {
-        if (OOXMLFastContextHandler* pTableRow = pTableRowProperties->getParent())
-            // Save the value into the table row context, so it can be handled
-            // right before the end of the row.
-            pTableRow->setGridAfter(rValue);
-    }
 }
 
 namespace {

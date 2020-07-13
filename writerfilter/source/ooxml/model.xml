@@ -18416,6 +18416,7 @@
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
       <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
+      <element name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
       <element name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
       <element name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
       <element name="cantSplit" tokenid="ooxml:CT_TrPrBase_cantSplit"/>
@@ -18425,8 +18426,9 @@
       <element name="jc" tokenid="ooxml:CT_TrPrBase_jc"/>
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
     </resource>
-    <resource name="CT_TrPrBaseGridAfter" resource="TextTableRow">
-      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridAfter" action="handleGridAfter"/>
+    <resource name="CT_TrPrBaseGridAfter" resource="Value">
+      <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridAfter" action="setValue"/>
+      <action name="end" action="handleGridAfter"/>
     </resource>
     <resource name="CT_TrPr" resource="Properties">
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
