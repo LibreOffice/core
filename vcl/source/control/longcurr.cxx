@@ -223,7 +223,7 @@ static bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
 
 namespace weld
 {
-    IMPL_LINK_NOARG(LongCurrencyEntry, FormatOutputHdl, LinkParamNone*, bool)
+    IMPL_LINK_NOARG(LongCurrencyFormatter, FormatOutputHdl, LinkParamNone*, bool)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         const OUString& rCurrencySymbol = !m_aCurrencySymbol.isEmpty() ? m_aCurrencySymbol : rLocaleDataWrapper.getCurrSymbol();
@@ -233,7 +233,7 @@ namespace weld
         return true;
     }
 
-    IMPL_LINK(LongCurrencyEntry, ParseInputHdl, sal_Int64*, result, TriState)
+    IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, sal_Int64*, result, TriState)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
