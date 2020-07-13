@@ -21,6 +21,7 @@
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include "MMozillaBootstrap.hxx"
 #include "MNSProfileDiscover.hxx"
 
@@ -34,32 +35,15 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-static MozillaBootstrap *pMozillaBootstrap=nullptr;
-static Reference<XMozillaBootstrap> xMozillaBootstrap;
-extern "C" SAL_DLLPUBLIC_EXPORT void* OMozillaBootstrap_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
-{
-    if (!pMozillaBootstrap)
-    {
-        pMozillaBootstrap=new connectivity::mozab::MozillaBootstrap;
-        pMozillaBootstrap->Init();
-        xMozillaBootstrap = pMozillaBootstrap;
-    }
-    return  pMozillaBootstrap;
-}
-
 MozillaBootstrap::MozillaBootstrap()
     : OMozillaBootstrap_BASE(m_aMutex)
 {
+    m_ProfileAccess.reset(new ProfileAccess);
+    bootupProfile(css::mozilla::MozillaProductType_Mozilla,OUString());
 }
 
 MozillaBootstrap::~MozillaBootstrap()
 {
-}
-
-void MozillaBootstrap::Init()
-{
-    m_ProfileAccess.reset(new ProfileAccess);
-    bootupProfile(css::mozilla::MozillaProductType_Mozilla,OUString());
 }
 
 void MozillaBootstrap::disposing()
@@ -70,7 +54,7 @@ void MozillaBootstrap::disposing()
 
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
 {
-    return MOZAB_MozillaBootstrap_IMPL_NAME;
+    return "com.sun.star.comp.mozilla.MozillaBootstrap";
 }
 
 sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
@@ -144,40 +128,13 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProd
     return -1;
 }
 
-static Reference< XInterface > createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_moz_MozillaBootstrap_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-        MozillaBootstrap * pBootstrap = static_cast<MozillaBootstrap*>(OMozillaBootstrap_CreateInstance(rServiceManager));
-        return *pBootstrap;
+    static rtl::Reference<MozillaBootstrap> pMozillaBootstrap(new connectivity::mozab::MozillaBootstrap());
+    pMozillaBootstrap->acquire();
+    return static_cast<cppu::OWeakObject*>(pMozillaBootstrap.get());
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void* mozbootstrap_component_getFactory(
-                                        const char* pImplementationName,
-                                        void* pServiceManager,
-                                        void* /*pRegistryKey*/)
-{
-        void* pRet = nullptr;
-
-        if (pServiceManager)
-        {
-                OUString aImplName( OUString::createFromAscii( pImplementationName ) );
-                Reference< XSingleServiceFactory > xFactory;
-                if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
-                {
-                    Sequence<OUString> aSNS { "com.sun.star.mozilla.MozillaBootstrap" };
-
-                    xFactory = ::cppu::createSingleFactory(
-                        static_cast< XMultiServiceFactory* > ( pServiceManager),
-                        aImplName, createInstance, aSNS );
-                }
-                if ( xFactory.is() )
-                {
-                    xFactory->acquire();
-                    pRet = xFactory.get();
-                }
-        }
-
-        return pRet;
-};
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
