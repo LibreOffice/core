@@ -122,6 +122,38 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     CPPUNIT_ASSERT_EQUAL(30, nPercent);
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
+{
+    // Two shapes, one with transparent text and the other one with
+    // opaque text. We expect both to be exported to the SVG with the
+    // correct transparency factor applied for the first shape.
+
+    // Load draw document with transparent text in one box
+    load("TransparentText.odg");
+
+    // Export to SVG.
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+
+    // We expect 2 groups of class "com.sun.star.drawing.TextShape" that
+    // have some svg:text node inside.
+
+    // TODO: fix the bug
+
+    // assertXPath(pXmlDoc, "//svg:g[@class='com.sun.star.drawing.TextShape']//svg:text", 2);
+
+    // TODO: assert we the text has correctly transparent text (20%)
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
