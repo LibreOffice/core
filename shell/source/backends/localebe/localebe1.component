@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="localebe1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.backend.LocaleBackend">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.configuration.backend.LocaleBackend"
+    constructor="shell_LocaleBackend_get_implementation">
     <service name="com.sun.star.configuration.backend.LocaleBackend"/>
   </implementation>
 </component>
