@@ -208,7 +208,24 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         {
             SwFormatAnchor aTextBoxAnchor(pTextBox->GetAnchor());
             aTextBoxAnchor.SetAnchor(aAnchor.GetContentAnchor());
+
+            // SwFlyAtContentFrame::Modify() assumes the anchor has a matching layout frame, which
+            // may not be the case when we're in the process of a node split, so block
+            // notifications.
+            bool bIsInSplitNode = pNode->GetpSwpHints() && pNode->GetpSwpHints()->IsInSplitNode();
+            if (bIsInSplitNode)
+            {
+                pTextBox->LockModify();
+            }
+
             pTextBox->SetFormatAttr(aTextBoxAnchor);
+
+            if (bIsInSplitNode)
+            {
+                pOldNode->RemoveAnchoredFly(pTextBox);
+                aPos.nNode.GetNode().AddAnchoredFly(pTextBox);
+                pTextBox->UnlockModify();
+            }
         }
     }
 
