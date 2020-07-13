@@ -13,6 +13,7 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="MMResultEmailDialog">
+    <property name="height_request">320</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="mmresultemaildialog|MMResultEmailDialog">Email merged document</property>
@@ -248,7 +249,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="passwordcb">
-                            <property name="label" translatable="yes" context="mmresultemaildialog|passwordcb" >Save with password</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|passwordcb">Save with password</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
