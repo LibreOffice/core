@@ -139,6 +139,7 @@ class ZipOutputEntryParallel final : public ZipOutputEntryBase
 {
     sal_Int64 totalIn;
     sal_Int64 totalOut;
+    bool finished;
 public:
     ZipOutputEntryParallel(
         const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
