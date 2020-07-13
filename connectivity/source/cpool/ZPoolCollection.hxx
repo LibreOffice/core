@@ -73,13 +73,14 @@ namespace connectivity
         css::uno::Reference< css::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
         css::uno::Reference< css::frame::XDesktop2>               m_xDesktop;
 
-    private:
+    public:
         OPoolCollection(const OPoolCollection&) = delete;
         int operator= (const OPoolCollection&) = delete;
 
         explicit OPoolCollection(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
+    private:
         // some configuration helper methods
         css::uno::Reference< css::uno::XInterface > const & getConfigPoolRoot();
         static css::uno::Reference< css::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
@@ -118,13 +119,6 @@ namespace connectivity
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XServiceInfo - static methods
-        static css::uno::Reference< css::uno::XInterface > CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
