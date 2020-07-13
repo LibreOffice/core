@@ -32,8 +32,6 @@
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <services.hxx>
-
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -47,8 +45,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 
-namespace io_TextInputStream
-{
 
 // Implementation XTextInputStream
 
@@ -380,27 +376,9 @@ Reference< XInputStream > OTextInputStream::getInputStream()
     return mxStream;
 }
 
-
-Reference< XInterface > TextInputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XComponentContext > &)
-{
-    return Reference < XInterface >( static_cast<OWeakObject *>(new OTextInputStream()) );
-}
-
-OUString TextInputStream_getImplementationName()
-{
-    return IMPLEMENTATION_NAME;
-}
-
-Sequence< OUString > TextInputStream_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { SERVICE_NAME };
-    return seqNames;
-}
-
 OUString OTextInputStream::getImplementationName()
 {
-    return TextInputStream_getImplementationName();
+    return IMPLEMENTATION_NAME;
 }
 
 sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
@@ -410,9 +388,15 @@ sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextInputStream::getSupportedServiceNames()
 {
-    return TextInputStream_getSupportedServiceNames();
+    return { SERVICE_NAME };
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OTextInputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OTextInputStream());
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

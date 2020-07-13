@@ -18,41 +18,53 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="io" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.io.Pump">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.io.Pump"
+    constructor="io_Pump_get_implementation">
     <service name="com.sun.star.io.Pump"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.DataInputStream">
+  <implementation name="com.sun.star.comp.io.stm.DataInputStream"
+    constructor="io_ODataInputStream_get_implementation">
     <service name="com.sun.star.io.DataInputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.DataOutputStream">
+  <implementation name="com.sun.star.comp.io.stm.DataOutputStream"
+    constructor="io_ODataOutputStream_get_implementation">
     <service name="com.sun.star.io.DataOutputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.MarkableInputStream">
+  <implementation name="com.sun.star.comp.io.stm.MarkableInputStream"
+    constructor="io_OMarkableInputStream_get_implementation">
     <service name="com.sun.star.io.MarkableInputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.MarkableOutputStream">
+  <implementation name="com.sun.star.comp.io.stm.MarkableOutputStream"
+    constructor="io_OMarkableOutputStream_get_implementation">
     <service name="com.sun.star.io.MarkableOutputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.ObjectInputStream">
+  <implementation name="com.sun.star.comp.io.stm.ObjectInputStream"
+    constructor="io_OObjectInputStream_get_implementation">
     <service name="com.sun.star.io.ObjectInputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.ObjectOutputStream">
+  <implementation name="com.sun.star.comp.io.stm.ObjectOutputStream"
+    constructor="io_OObjectOutputStream_get_implementation">
     <service name="com.sun.star.io.ObjectOutputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.stm.Pipe">
+  <implementation name="com.sun.star.comp.io.stm.Pipe"
+    constructor="io_OPipeImpl_get_implementation">
     <service name="com.sun.star.io.Pipe"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.Acceptor">
+  <implementation name="com.sun.star.comp.io.Acceptor"
+    constructor="io_OAcceptor_get_implementation">
     <service name="com.sun.star.connection.Acceptor"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.Connector">
+  <implementation name="com.sun.star.comp.io.Connector"
+    constructor="io_OConnector_get_implementation">
     <service name="com.sun.star.connection.Connector"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.TextInputStream">
+  <implementation name="com.sun.star.comp.io.TextInputStream"
+    constructor="io_OTextInputStream_get_implementation">
     <service name="com.sun.star.io.TextInputStream"/>
   </implementation>
-  <implementation name="com.sun.star.comp.io.TextOutputStream">
+  <implementation name="com.sun.star.comp.io.TextOutputStream"
+    constructor="io_OTextOutputStream_get_implementation">
     <service name="com.sun.star.io.TextOutputStream"/>
   </implementation>
 </component>

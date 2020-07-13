@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -47,7 +48,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-#include <services.hxx>
 #include "streamhelper.hxx"
 
 namespace io_stm {
@@ -345,7 +345,7 @@ void OMarkableOutputStream::checkMarksAndFlush()
 // XServiceInfo
 OUString OMarkableOutputStream::getImplementationName()
 {
-    return OMarkableOutputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.MarkableOutputStream";
 }
 
 // XServiceInfo
@@ -357,32 +357,14 @@ sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames()
 {
-    return OMarkableOutputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.MarkableOutputStream" };
 }
 
-/*------------------------
-*
-* external binding
-*
-*------------------------*/
-Reference< XInterface > OMarkableOutputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OMarkableOutputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    OMarkableOutputStream *p = new OMarkableOutputStream( );
-
-    return Reference < XInterface > ( static_cast<OWeakObject *>(p) );
-}
-
-OUString    OMarkableOutputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.MarkableOutputStream";
-}
-
-Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.MarkableOutputStream" };
-
-    return aRet;
+    return cppu::acquire(new OMarkableOutputStream());
 }
 
 
@@ -758,7 +740,7 @@ void OMarkableInputStream::checkMarksAndFlush()
 // XServiceInfo
 OUString OMarkableInputStream::getImplementationName()
 {
-    return OMarkableInputStream_getImplementationName();
+    return "com.sun.star.comp.io.stm.MarkableInputStream";
 }
 
 // XServiceInfo
@@ -770,30 +752,14 @@ sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OMarkableInputStream::getSupportedServiceNames()
 {
-    return OMarkableInputStream_getSupportedServiceNames();
+    return { "com.sun.star.io.MarkableInputStream" };
 }
 
-/*------------------------
-*
-* external binding
-*
-*------------------------*/
-Reference < XInterface > OMarkableInputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OMarkableInputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    OMarkableInputStream *p = new OMarkableInputStream( );
-    return Reference< XInterface > ( static_cast<OWeakObject *>(p) );
-}
-
-OUString    OMarkableInputStream_getImplementationName()
-{
-    return "com.sun.star.comp.io.stm.MarkableInputStream";
-}
-
-Sequence<OUString> OMarkableInputStream_getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { "com.sun.star.io.MarkableInputStream" };
-    return aRet;
+    return cppu::acquire(new OMarkableInputStream());
 }
 
 }

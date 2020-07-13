@@ -31,7 +31,6 @@
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <services.hxx>
 #include "connector.hxx"
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Connector"
@@ -43,9 +42,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::connection;
 
-namespace stoc_connector
-{
-    namespace {
+namespace {
 
     class OConnector : public WeakImplHelper< XConnector, XServiceInfo >
     {
@@ -64,128 +61,119 @@ namespace stoc_connector
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
     };
 
-    }
+}
 
-    OConnector::OConnector(const Reference< XComponentContext > &xCtx)
-        : _xSMgr( xCtx->getServiceManager() )
-        , _xCtx( xCtx )
-    {}
+OConnector::OConnector(const Reference< XComponentContext > &xCtx)
+    : _xSMgr( xCtx->getServiceManager() )
+    , _xCtx( xCtx )
+{}
 
-    Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
+Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
+{
+    // split string into tokens
+    try
     {
-        // split string into tokens
-        try
+        cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
+
+        Reference< XConnection > r;
+        if ( aDesc.getName() == "pipe" )
         {
-            cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
+            OUString aName(aDesc.getParameter("name"));
 
-            Reference< XConnection > r;
-            if ( aDesc.getName() == "pipe" )
+            std::unique_ptr<stoc_connector::PipeConnection> pConn(new stoc_connector::PipeConnection( sConnectionDescription ));
+
+            if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
             {
-                OUString aName(aDesc.getParameter("name"));
-
-                std::unique_ptr<PipeConnection> pConn(new PipeConnection( sConnectionDescription ));
-
-                if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
-                {
-                    r.set( static_cast<XConnection *>(pConn.release()) );
-                }
-                else
-                {
-                    OUString const sMessage(
-                        "Connector : couldn't connect to pipe \"" + aName + "\": "
-                        + OUString::number(pConn->m_pipe.getError()));
-                    SAL_WARN("io.connector", sMessage);
-                    throw NoConnectException( sMessage );
-                }
-            }
-            else if ( aDesc.getName() == "socket" )
-            {
-                OUString aHost;
-                if (aDesc.hasParameter("host"))
-                    aHost = aDesc.getParameter("host");
-                else
-                    aHost = "localhost";
-                sal_uInt16 nPort = static_cast< sal_uInt16 >(
-                    aDesc.getParameter("port").
-                    toInt32());
-                bool bTcpNoDelay
-                    = aDesc.getParameter("tcpnodelay").toInt32() != 0;
-
-                std::unique_ptr<SocketConnection> pConn(new SocketConnection( sConnectionDescription));
-
-                SocketAddr AddrTarget( aHost.pData, nPort );
-                if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
-                {
-                    OUString sMessage("Connector : couldn't connect to socket (");
-                    OUString sError = pConn->m_socket.getErrorAsString();
-                    sMessage += sError + ")";
-                    throw NoConnectException( sMessage );
-                }
-                // we enable tcpNoDelay for loopback connections because
-                // it can make a significant speed difference on linux boxes.
-                if( bTcpNoDelay || aHost == "localhost" || aHost.startsWith("127.0.0.") )
-                {
-                    sal_Int32 nTcpNoDelay = sal_Int32(true);
-                    pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
-                                               sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
-                }
-                pConn->completeConnectionString();
                 r.set( static_cast<XConnection *>(pConn.release()) );
             }
             else
             {
-                OUString delegatee= "com.sun.star.connection.Connector." + aDesc.getName();
-
-                Reference<XConnector> xConnector(
-                    _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
-
-                if(!xConnector.is())
-                    throw ConnectionSetupException("Connector: unknown delegatee " + delegatee);
-
-                sal_Int32 index = sConnectionDescription.indexOf(',');
-
-                r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
+                OUString const sMessage(
+                    "Connector : couldn't connect to pipe \"" + aName + "\": "
+                    + OUString::number(pConn->m_pipe.getError()));
+                SAL_WARN("io.connector", sMessage);
+                throw NoConnectException( sMessage );
             }
-            return r;
         }
-        catch (const rtl::MalformedUriException & rEx)
+        else if ( aDesc.getName() == "socket" )
         {
-            throw ConnectionSetupException(rEx.getMessage());
+            OUString aHost;
+            if (aDesc.hasParameter("host"))
+                aHost = aDesc.getParameter("host");
+            else
+                aHost = "localhost";
+            sal_uInt16 nPort = static_cast< sal_uInt16 >(
+                aDesc.getParameter("port").
+                toInt32());
+            bool bTcpNoDelay
+                = aDesc.getParameter("tcpnodelay").toInt32() != 0;
+
+            std::unique_ptr<stoc_connector::SocketConnection> pConn(new stoc_connector::SocketConnection( sConnectionDescription));
+
+            SocketAddr AddrTarget( aHost.pData, nPort );
+            if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
+            {
+                OUString sMessage("Connector : couldn't connect to socket (");
+                OUString sError = pConn->m_socket.getErrorAsString();
+                sMessage += sError + ")";
+                throw NoConnectException( sMessage );
+            }
+            // we enable tcpNoDelay for loopback connections because
+            // it can make a significant speed difference on linux boxes.
+            if( bTcpNoDelay || aHost == "localhost" || aHost.startsWith("127.0.0.") )
+            {
+                sal_Int32 nTcpNoDelay = sal_Int32(true);
+                pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
+                                           sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
+            }
+            pConn->completeConnectionString();
+            r.set( static_cast<XConnection *>(pConn.release()) );
         }
-    }
+        else
+        {
+            OUString delegatee= "com.sun.star.connection.Connector." + aDesc.getName();
 
-    Sequence< OUString > connector_getSupportedServiceNames()
+            Reference<XConnector> xConnector(
+                _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
+
+            if(!xConnector.is())
+                throw ConnectionSetupException("Connector: unknown delegatee " + delegatee);
+
+            sal_Int32 index = sConnectionDescription.indexOf(',');
+
+            r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
+        }
+        return r;
+    }
+    catch (const rtl::MalformedUriException & rEx)
     {
-        Sequence< OUString > seqNames { SERVICE_NAME };
-        return seqNames;
+        throw ConnectionSetupException(rEx.getMessage());
     }
-
-    OUString connector_getImplementationName()
-    {
-        return IMPLEMENTATION_NAME;
-    }
-
-        OUString OConnector::getImplementationName()
-    {
-        return connector_getImplementationName();
-    }
-
-        sal_Bool OConnector::supportsService(const OUString& ServiceName)
-    {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-        Sequence< OUString > OConnector::getSupportedServiceNames()
-    {
-        return connector_getSupportedServiceNames();
-    }
-
-    Reference< XInterface > connector_CreateInstance( const Reference< XComponentContext > & xCtx)
-    {
-        return Reference < XInterface >( static_cast<OWeakObject *>(new OConnector(xCtx)) );
-    }
-
-
 }
+
+OUString OConnector::getImplementationName()
+{
+    return IMPLEMENTATION_NAME;
+}
+
+sal_Bool OConnector::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+Sequence< OUString > OConnector::getSupportedServiceNames()
+{
+    return { SERVICE_NAME };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OConnector_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OConnector(context));
+}
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

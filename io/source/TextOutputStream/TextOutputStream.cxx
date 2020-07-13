@@ -29,8 +29,6 @@
 #include <com/sun/star/io/XTextOutputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <services.hxx>
-
 namespace com::sun::star::uno { class XComponentContext; }
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextOutputStream"
@@ -41,9 +39,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-
-namespace io_TextOutputStream
-{
 
 // Implementation XTextOutputStream
 
@@ -220,28 +215,9 @@ Reference< XOutputStream > OTextOutputStream::getOutputStream()
     return mxStream;
 }
 
-
-Reference< XInterface > TextOutputStream_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XComponentContext > &)
-{
-    return Reference < XInterface >( static_cast<OWeakObject *>(new OTextOutputStream()) );
-}
-
-OUString TextOutputStream_getImplementationName()
-{
-    return IMPLEMENTATION_NAME;
-}
-
-
-Sequence< OUString > TextOutputStream_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { SERVICE_NAME };
-    return seqNames;
-}
-
 OUString OTextOutputStream::getImplementationName()
 {
-    return TextOutputStream_getImplementationName();
+    return IMPLEMENTATION_NAME;
 }
 
 sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
@@ -251,10 +227,16 @@ sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextOutputStream::getSupportedServiceNames()
 {
-    return TextOutputStream_getSupportedServiceNames();
+    return { SERVICE_NAME };
 }
 
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+io_OTextOutputStream_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OTextOutputStream());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
