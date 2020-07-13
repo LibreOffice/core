@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <deque>
 #include <memory>
 
 #include "hwpreader.hxx"
 #include <math.h>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
@@ -4815,5 +4818,123 @@ void HwpReader::parsePara(HWPPara * para)
         para = para->Next();
     }
 }
+
+
+namespace {
+
+class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
+{
+public:
+    explicit HwpImportFilter(const Reference< XComponentContext >& );
+
+public:
+    // XFilter
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+    virtual void SAL_CALL cancel() override;
+
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc) override;
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+
+    //XExtendedFilterDetection
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+
+private:
+    Reference< XFilter > rFilter;
+    Reference< XImporter > rImporter;
+};
+
+}
+
+HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rContext)
+{
+    try {
+        Reference< XDocumentHandler > xHandler( rContext->getServiceManager()->createInstanceWithContext( WRITER_IMPORTER_NAME, rContext ), UNO_QUERY );
+
+        HwpReader *p = new HwpReader;
+        p->setDocumentHandler( xHandler );
+
+        Reference< XImporter > xImporter( xHandler, UNO_QUERY );
+        rImporter = xImporter;
+        Reference< XFilter > xFilter( p );
+        rFilter = xFilter;
+    }
+    catch( Exception & )
+    {
+        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME );
+        exit( 1 );
+    }
+}
+
+sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
+{
+    // delegate to IchitaroImpoter
+    return rFilter->filter( aDescriptor );
+}
+
+void HwpImportFilter::cancel()
+{
+    rFilter->cancel();
+}
+
+void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
+{
+        // delegate
+    rImporter->setTargetDocument( xDoc );
+}
+
+OUString HwpImportFilter::getImplementationName()
+{
+    return "com.sun.comp.hwpimport.HwpImportFilter";
+}
+
+sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+//XExtendedFilterDetection
+OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
+{
+    OUString sTypeName;
+
+    utl::MediaDescriptor aDescriptor(rDescriptor);
+    aDescriptor.addInputStream();
+
+    Reference< XInputStream > xInputStream(
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+
+    if (xInputStream.is())
+    {
+        Sequence< sal_Int8 > aData;
+        sal_Int32 nLen = HWPIDLen;
+        if (
+             nLen == xInputStream->readBytes(aData, nLen) &&
+             detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
+           )
+        {
+            sTypeName = "writer_MIZI_Hwp_97";
+        }
+    }
+
+    return sTypeName;
+}
+
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
+{
+    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+hwpfilter_HwpImportFilter_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new HwpImportFilter(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
