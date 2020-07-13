@@ -294,12 +294,19 @@ void DoubleNumericFormatter::ResetConformanceTester()
 
 LongCurrencyFormatter::LongCurrencyFormatter(weld::Entry& rEntry)
     : EntryFormatter(rEntry)
+    , m_bThousandSep(true)
 {
+    Init();
 }
 
 LongCurrencyFormatter::LongCurrencyFormatter(weld::FormattedSpinButton& rSpinButton)
     : EntryFormatter(rSpinButton)
     , m_bThousandSep(true)
+{
+    Init();
+}
+
+void LongCurrencyFormatter::Init()
 {
     SetOutputHdl(LINK(this, LongCurrencyFormatter, FormatOutputHdl));
     SetInputHdl(LINK(this, LongCurrencyFormatter, ParseInputHdl));
@@ -318,6 +325,89 @@ void LongCurrencyFormatter::SetCurrencySymbol(const OUString& rStr)
 }
 
 LongCurrencyFormatter::~LongCurrencyFormatter() = default;
+
+TimeFormatter::TimeFormatter(weld::Entry& rEntry)
+    : EntryFormatter(rEntry)
+    , m_eFormat(TimeFieldFormat::F_NONE)
+    , m_eTimeFormat(TimeFormat::Hour24)
+    , m_bDuration(false)
+{
+    Init();
+}
+
+TimeFormatter::TimeFormatter(weld::FormattedSpinButton& rSpinButton)
+    : EntryFormatter(rSpinButton)
+    , m_eFormat(TimeFieldFormat::F_NONE)
+    , m_eTimeFormat(TimeFormat::Hour24)
+    , m_bDuration(false)
+{
+    Init();
+}
+
+void TimeFormatter::Init()
+{
+    SetOutputHdl(LINK(this, TimeFormatter, FormatOutputHdl));
+    SetInputHdl(LINK(this, TimeFormatter, ParseInputHdl));
+
+    SetMin(tools::Time(0, 0));
+    SetMax(tools::Time(23, 59, 59, 999999999));
+
+    // so the spin size can depend on which zone the cursor is in
+    get_widget().connect_cursor_position(LINK(this, TimeFormatter, CursorChangedHdl));
+    // and set the initial spin size
+    CursorChangedHdl(get_widget());
+}
+
+void TimeFormatter::SetExtFormat(ExtTimeFieldFormat eFormat)
+{
+    switch (eFormat)
+    {
+        case ExtTimeFieldFormat::Short24H:
+        {
+            m_eTimeFormat = TimeFormat::Hour24;
+            m_bDuration = false;
+            m_eFormat = TimeFieldFormat::F_NONE;
+        }
+        break;
+        case ExtTimeFieldFormat::Long24H:
+        {
+            m_eTimeFormat = TimeFormat::Hour24;
+            m_bDuration = false;
+            m_eFormat = TimeFieldFormat::F_SEC;
+        }
+        break;
+        case ExtTimeFieldFormat::Short12H:
+        {
+            m_eTimeFormat = TimeFormat::Hour12;
+            m_bDuration = false;
+            m_eFormat = TimeFieldFormat::F_NONE;
+        }
+        break;
+        case ExtTimeFieldFormat::Long12H:
+        {
+            m_eTimeFormat = TimeFormat::Hour12;
+            m_bDuration = false;
+            m_eFormat = TimeFieldFormat::F_SEC;
+        }
+        break;
+        case ExtTimeFieldFormat::ShortDuration:
+        {
+            m_bDuration = true;
+            m_eFormat = TimeFieldFormat::F_NONE;
+        }
+        break;
+        case ExtTimeFieldFormat::LongDuration:
+        {
+            m_bDuration = true;
+            m_eFormat = TimeFieldFormat::F_SEC;
+        }
+        break;
+    }
+
+    ReFormat();
+}
+
+TimeFormatter::~TimeFormatter() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
