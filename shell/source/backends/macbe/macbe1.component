@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="macbe1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.backend.MacOSXBackend">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.configuration.backend.MacOSXBackend"
+    constructor="shell_MacOSXBackend_get_implementation">
     <service name="com.sun.star.configuration.backend.MacOSXBackend"/>
   </implementation>
 </component>
