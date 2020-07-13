@@ -2421,7 +2421,8 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uInt8 nCount, NMode nMode )
     }
     const OString aScaleFactor(OString::number(nNumber));
     sal_uInt32 nLen = aScaleFactor.getLength();
-    long nStSize =  ( nCount + 1 ) - nLen;
+    sal_Int32 const nStSize = (nCount + 1) - nLen;
+    static_assert(sizeof(nStSize) == sizeof((nCount + 1) - nLen)); // tdf#134667
     if ( nStSize >= 1 )
     {
         mpPS->WriteUChar( '0' );
@@ -2430,7 +2431,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uInt8 nCount, NMode nMode )
     if ( nStSize >= 2 )
     {
         mpPS->WriteUChar( '.' );
-        for ( long i = 1; i < nStSize; i++ )
+        for (sal_Int32 i = 1; i < nStSize; ++i)
         {
             mpPS->WriteUChar( '0' );
             mnCursorPos++;
