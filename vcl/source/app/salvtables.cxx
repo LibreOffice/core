@@ -5352,6 +5352,13 @@ public:
     {
     }
 
+    virtual void set_text(const OUString& rText) override
+    {
+        disable_notify_events();
+        m_xButton->SpinField::SetText(rText);
+        enable_notify_events();
+    }
+
     virtual void SetFormatter(weld::EntryFormatter* pFormatter) override
     {
         m_xButton->SetFormatter(pFormatter);
