@@ -202,13 +202,13 @@ private:
     virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
-class VCL_DLLPUBLIC DoubleNumericEntry final : public EntryFormatter
+class VCL_DLLPUBLIC DoubleNumericFormatter final : public EntryFormatter
 {
 public:
-    DoubleNumericEntry(weld::Entry& rEntry);
-    DoubleNumericEntry(weld::FormattedSpinButton& rSpinButton);
+    DoubleNumericFormatter(weld::Entry& rEntry);
+    DoubleNumericFormatter(weld::FormattedSpinButton& rSpinButton);
 
-    virtual ~DoubleNumericEntry() override;
+    virtual ~DoubleNumericFormatter() override;
 
 private:
     virtual bool CheckText(const OUString& sText) const override;
@@ -219,16 +219,16 @@ private:
     std::unique_ptr<validation::NumberValidator> m_pNumberValidator;
 };
 
-class VCL_DLLPUBLIC LongCurrencyEntry final : public EntryFormatter
+class VCL_DLLPUBLIC LongCurrencyFormatter final : public EntryFormatter
 {
 public:
-    LongCurrencyEntry(weld::Entry& rEntry);
-    LongCurrencyEntry(weld::FormattedSpinButton& rSpinButton);
+    LongCurrencyFormatter(weld::Entry& rEntry);
+    LongCurrencyFormatter(weld::FormattedSpinButton& rSpinButton);
 
     void SetUseThousandSep(bool b);
     void SetCurrencySymbol(const OUString& rStr);
 
-    virtual ~LongCurrencyEntry() override;
+    virtual ~LongCurrencyFormatter() override;
 
 private:
     DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);

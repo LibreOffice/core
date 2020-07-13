@@ -449,9 +449,9 @@ namespace svt
         : FormattedControlBase(pParent, bSpinVariant)
     {
         if (bSpinVariant)
-            m_xEntryFormatter.reset(new weld::DoubleNumericEntry(*m_xSpinButton));
+            m_xEntryFormatter.reset(new weld::DoubleNumericFormatter(*m_xSpinButton));
         else
-            m_xEntryFormatter.reset(new weld::DoubleNumericEntry(*m_xEntry));
+            m_xEntryFormatter.reset(new weld::DoubleNumericFormatter(*m_xEntry));
         InitFormattedControlBase();
     }
 
@@ -459,9 +459,9 @@ namespace svt
         : FormattedControlBase(pParent, bSpinVariant)
     {
         if (bSpinVariant)
-            m_xEntryFormatter.reset(new weld::LongCurrencyEntry(*m_xSpinButton));
+            m_xEntryFormatter.reset(new weld::LongCurrencyFormatter(*m_xSpinButton));
         else
-            m_xEntryFormatter.reset(new weld::LongCurrencyEntry(*m_xEntry));
+            m_xEntryFormatter.reset(new weld::LongCurrencyFormatter(*m_xEntry));
         InitFormattedControlBase();
     }
 
