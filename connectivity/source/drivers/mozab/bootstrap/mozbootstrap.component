@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="mozbootstrap" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.mozilla.MozillaBootstrap">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.mozilla.MozillaBootstrap"
+    constructor="connectivity_moz_MozillaBootstrap_get_implementation">
     <service name="com.sun.star.mozilla.MozillaBootstrap"/>
   </implementation>
 </component>

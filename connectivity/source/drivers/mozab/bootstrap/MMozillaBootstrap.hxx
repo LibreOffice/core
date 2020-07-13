@@ -28,8 +28,6 @@
 #include <cppuhelper/compbase.hxx>
 
 
-#define MOZAB_MozillaBootstrap_IMPL_NAME "com.sun.star.comp.mozilla.MozillaBootstrap"
-
 namespace connectivity
 {
     namespace mozab
@@ -46,7 +44,6 @@ namespace connectivity
             std::unique_ptr<ProfileAccess> m_ProfileAccess;
         public:
 
-            void Init();
             MozillaBootstrap();
 
             // OComponentHelper
