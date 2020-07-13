@@ -236,27 +236,27 @@ IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void)
     m_aFocusOutHdl.Call(m_rEntry);
 }
 
-DoubleNumericEntry::DoubleNumericEntry(weld::Entry& rEntry)
+DoubleNumericFormatter::DoubleNumericFormatter(weld::Entry& rEntry)
     : EntryFormatter(rEntry)
 {
     ResetConformanceTester();
 }
 
-DoubleNumericEntry::DoubleNumericEntry(weld::FormattedSpinButton& rSpinButton)
+DoubleNumericFormatter::DoubleNumericFormatter(weld::FormattedSpinButton& rSpinButton)
     : EntryFormatter(rSpinButton)
 {
     ResetConformanceTester();
 }
 
-DoubleNumericEntry::~DoubleNumericEntry() = default;
+DoubleNumericFormatter::~DoubleNumericFormatter() = default;
 
-void DoubleNumericEntry::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
+void DoubleNumericFormatter::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 {
     ResetConformanceTester();
     EntryFormatter::FormatChanged(nWhat);
 }
 
-bool DoubleNumericEntry::CheckText(const OUString& sText) const
+bool DoubleNumericFormatter::CheckText(const OUString& sText) const
 {
     // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
     // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
@@ -264,7 +264,7 @@ bool DoubleNumericEntry::CheckText(const OUString& sText) const
     return m_pNumberValidator->isValidNumericFragment(sText);
 }
 
-void DoubleNumericEntry::ResetConformanceTester()
+void DoubleNumericFormatter::ResetConformanceTester()
 {
     // the thousands and the decimal separator are language dependent
     const SvNumberformat* pFormatEntry = GetOrCreateFormatter()->GetEntry(m_nFormatKey);
@@ -288,32 +288,32 @@ void DoubleNumericEntry::ResetConformanceTester()
         new validation::NumberValidator(cSeparatorThousand, cSeparatorDecimal));
 }
 
-LongCurrencyEntry::LongCurrencyEntry(weld::Entry& rEntry)
+LongCurrencyFormatter::LongCurrencyFormatter(weld::Entry& rEntry)
     : EntryFormatter(rEntry)
 {
 }
 
-LongCurrencyEntry::LongCurrencyEntry(weld::FormattedSpinButton& rSpinButton)
+LongCurrencyFormatter::LongCurrencyFormatter(weld::FormattedSpinButton& rSpinButton)
     : EntryFormatter(rSpinButton)
     , m_bThousandSep(true)
 {
-    SetOutputHdl(LINK(this, LongCurrencyEntry, FormatOutputHdl));
-    SetInputHdl(LINK(this, LongCurrencyEntry, ParseInputHdl));
+    SetOutputHdl(LINK(this, LongCurrencyFormatter, FormatOutputHdl));
+    SetInputHdl(LINK(this, LongCurrencyFormatter, ParseInputHdl));
 }
 
-void LongCurrencyEntry::SetUseThousandSep(bool b)
+void LongCurrencyFormatter::SetUseThousandSep(bool b)
 {
     m_bThousandSep = b;
     ReFormat();
 }
 
-void LongCurrencyEntry::SetCurrencySymbol(const OUString& rStr)
+void LongCurrencyFormatter::SetCurrencySymbol(const OUString& rStr)
 {
     m_aCurrencySymbol = rStr;
     ReFormat();
 }
 
-LongCurrencyEntry::~LongCurrencyEntry() = default;
+LongCurrencyFormatter::~LongCurrencyFormatter() = default;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
