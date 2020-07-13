@@ -212,7 +212,16 @@ HierarchyDataSource::getSupportedServiceNames_Static()
     return { "com.sun.star.ucb.DefaultHierarchyDataSource", "com.sun.star.ucb.HierarchyDataSource" };
 }
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyDataSource );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+HierarchyDataSource::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                HierarchyDataSource::getImplementationName_Static(),
+                HierarchyDataSource_CreateInstance,
+                HierarchyDataSource::getSupportedServiceNames_Static() );
+}
+
 
 
 // XComponent methods.

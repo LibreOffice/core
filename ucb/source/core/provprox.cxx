@@ -66,7 +66,15 @@ UcbContentProviderProxyFactory::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbContentProviderProxyFactory );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+UcbContentProviderProxyFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                UcbContentProviderProxyFactory::getImplementationName_Static(),
+                UcbContentProviderProxyFactory_CreateInstance,
+                UcbContentProviderProxyFactory::getSupportedServiceNames_Static() );
+}
 
 
 // XContentProviderFactory methods.

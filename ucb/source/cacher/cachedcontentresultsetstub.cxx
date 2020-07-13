@@ -526,7 +526,16 @@ CachedContentResultSetStubFactory::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+CachedContentResultSetStubFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                CachedContentResultSetStubFactory::getImplementationName_Static(),
+                CachedContentResultSetStubFactory_CreateInstance,
+                CachedContentResultSetStubFactory::getSupportedServiceNames_Static() );
+}
+
 
 
 // CachedContentResultSetStubFactory XCachedContentResultSetStubFactory methods.

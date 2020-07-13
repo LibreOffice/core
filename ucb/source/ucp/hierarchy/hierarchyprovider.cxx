@@ -117,7 +117,16 @@ HierarchyContentProvider::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+HierarchyContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                HierarchyContentProvider::getImplementationName_Static(),
+                HierarchyContentProvider_CreateInstance,
+                HierarchyContentProvider::getSupportedServiceNames_Static() );
+}
+
 
 
 // XContentProvider methods.

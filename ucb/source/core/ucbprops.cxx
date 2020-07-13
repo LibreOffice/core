@@ -212,7 +212,16 @@ UcbPropertiesManager::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbPropertiesManager );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+UcbPropertiesManager::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                UcbPropertiesManager::getImplementationName_Static(),
+                UcbPropertiesManager_CreateInstance,
+                UcbPropertiesManager::getSupportedServiceNames_Static() );
+}
+
 
 
 // XPropertySetInfo methods.

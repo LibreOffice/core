@@ -171,7 +171,16 @@ CachedDynamicResultSetStubFactory::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetStubFactory );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+CachedDynamicResultSetStubFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                CachedDynamicResultSetStubFactory::getImplementationName_Static(),
+                CachedDynamicResultSetStubFactory_CreateInstance,
+                CachedDynamicResultSetStubFactory::getSupportedServiceNames_Static() );
+}
+
 
 
 // CachedDynamicResultSetStubFactory XCachedDynamicResultSetStubFactory methods.

@@ -299,7 +299,16 @@ UniversalContentBroker::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( UniversalContentBroker );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+UniversalContentBroker::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                UniversalContentBroker::getImplementationName_Static(),
+                UniversalContentBroker_CreateInstance,
+                UniversalContentBroker::getSupportedServiceNames_Static() );
+}
+
 
 
 // XInitialization methods.
