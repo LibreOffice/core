@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="mysql_jdbc" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.drivers.MySQL.Driver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.openoffice.comp.drivers.MySQL.Driver"
+    constructor="connectivity_mysql_ODriverDelegator_get_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
     <service name="com.sun.star.sdbcx.Driver"/>
   </implementation>

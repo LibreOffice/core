@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_exception_objects,mysql_jdbc,\
 	connectivity/source/drivers/mysql_jdbc/YColumns \
 	connectivity/source/drivers/mysql_jdbc/YUser \
 	connectivity/source/drivers/mysql_jdbc/YUsers \
-	connectivity/source/drivers/mysql_jdbc/Yservices \
 ))
 
 # vim: set noet sw=4 ts=4:
