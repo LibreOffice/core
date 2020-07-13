@@ -26,7 +26,6 @@ core_factory_list = [
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
-    ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
     ("libpackage2.a", "package2_component_getFactory"),
@@ -255,6 +254,8 @@ core_constructor_list = [
     "com_sun_star_comp_embed_OLESimpleStorage",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
+# stoc/source/invocation_adapter/invocadapt.component
+    "stoc_invocation_adapter_get_implementation",
 # stoc/source/corereflection/reflection.component
     "com_sun_star_comp_stoc_CoreReflection_get_implementation",
 # stoc/source/proxy_factory/proxyfac.component

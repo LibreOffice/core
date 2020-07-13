@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="invocadapt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.stoc.InvocationAdapterFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.stoc.InvocationAdapterFactory"
+    constructor="stoc_invocation_adapter_get_implementation">
     <service name="com.sun.star.script.InvocationAdapterFactory"/>
   </implementation>
 </component>
