@@ -345,6 +345,8 @@ public:
     virtual void pushBiDiEmbedLevel() override;
     virtual void popBiDiEmbedLevel() override;
 
+    void handleGridAfter();
+
 private:
     OOXMLValue::Pointer_t mpValue;
 };
@@ -419,7 +421,6 @@ public:
     static void startRow();
     void endRow();
     void handleGridBefore( const OOXMLValue::Pointer_t& val );
-    void handleGridAfter(const OOXMLValue::Pointer_t& rValue);
 };
 
 class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler

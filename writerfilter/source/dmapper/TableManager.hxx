@@ -501,6 +501,8 @@ public:
     sal_uInt32 getGridBefore(sal_uInt32 nRow);
     sal_uInt32 getCurrentGridBefore();
     void setCurrentGridBefore( sal_uInt32 nSkipGrids );
+    sal_uInt32 getGridAfter(sal_uInt32 nRow);
+    void setCurrentGridAfter( sal_uInt32 nSkipGrids );
     std::vector<sal_uInt32> getCurrentGridSpans();
     void setCurrentGridSpan( sal_uInt32 nGridSpan, bool bFirstCell = false );
     /// Given a zero-based row/cell, return the zero-based grid it belongs to, or SAL_MAX_UINT16 for invalid.

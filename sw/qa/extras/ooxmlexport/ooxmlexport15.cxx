@@ -135,7 +135,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134609_gridAfter, "tdf134609_gridAfter.docx")
 
     // Table borders (width 159) apply to edge cells, even in uneven cases caused by gridBefore/gridAfter,
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("A1"), "RightBorder");
-    //CPPUNIT_ASSERT_MESSAGE("Right border before gridAfter cells", aBorder.LineWidth > 0);
+    CPPUNIT_ASSERT_MESSAGE("Right border before gridAfter cells", aBorder.LineWidth > 0);
     aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "LeftBorder");
     CPPUNIT_ASSERT_MESSAGE("Left edge border after gridBefore cells", aBorder.LineWidth > 100);
     aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("E2"), "TopBorder");

@@ -121,18 +121,21 @@ class RowData final : public virtual SvRefBase
     mutable TablePropertyMapPtr mpProperties;
 
     sal_uInt32 m_nGridBefore; ///< number of grid columns in the parent table's table grid which must be skipped before the contents of this table row are added to the parent table
+    sal_uInt32 m_nGridAfter; ///< number of grid columns in the parent table's table grid which shall be left after the last cell in the table row
 
 public:
     typedef tools::SvRef<RowData> Pointer_t;
 
     RowData()
         : m_nGridBefore(0)
+        , m_nGridAfter(0)
     {
     }
 
     RowData(const RowData& rRowData)
     : SvRefBase(), mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
         , m_nGridBefore(rRowData.m_nGridBefore)
+        , m_nGridAfter(rRowData.m_nGridAfter)
     {
     }
 
@@ -240,6 +243,8 @@ public:
 
     sal_uInt32 getGridBefore() { return m_nGridBefore; }
     void setGridBefore(sal_uInt32 nSkipGrids) { m_nGridBefore = nSkipGrids; }
+    sal_uInt32 getGridAfter() { return m_nGridAfter; }
+    void setGridAfter(sal_uInt32 nSkipGrids) { m_nGridAfter = nSkipGrids; }
     sal_uInt32 getGridSpan(sal_uInt32 i) { return mCells[i]->getGridSpan(); }
     std::vector< sal_uInt32 > getGridSpans()
     {

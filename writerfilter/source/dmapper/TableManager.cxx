@@ -67,6 +67,20 @@ void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
     mTableDataStack.top()->getCurrentRow()->setGridBefore(nSkipGrids);
 }
 
+sal_uInt32 TableManager::getGridAfter(sal_uInt32 nRow)
+{
+    assert(isInTable());
+    if (nRow >= mTableDataStack.top()->getRowCount())
+        return 0;
+    return mTableDataStack.top()->getRow(nRow)->getGridAfter();
+}
+
+void TableManager::setCurrentGridAfter(sal_uInt32 nSkipGrids)
+{
+    assert(isInTable());
+    mTableDataStack.top()->getCurrentRow()->setGridAfter(nSkipGrids);
+}
+
 std::vector<sal_uInt32> TableManager::getCurrentGridSpans()
 {
     return mTableDataStack.top()->getCurrentRow()->getGridSpans();
@@ -80,8 +94,11 @@ void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan, bool bFirstCell)
 sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCell)
 {
     RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
-    if (!pRow || nCell < pRow->getGridBefore() || nCell >= pRow->getCellCount())
+    if (!pRow || nCell < pRow->getGridBefore()
+        || nCell >= pRow->getCellCount() - pRow->getGridAfter())
+    {
         return SAL_MAX_UINT32;
+    }
 
     // The gridSpans provide a one-based index, so add up all the spans of the PREVIOUS columns,
     // and that result will provide the first possible zero-based number for the desired column.
@@ -100,6 +117,7 @@ sal_uInt32 TableManager::findColumnCell(const sal_uInt32 nRow, const sal_uInt32 
     sal_uInt32 nCell = 0;
     sal_uInt32 nGrids = 0;
     // The gridSpans give us a one-based index, but requested column is zero-based - so keep that in mind.
+    const sal_uInt32 nMaxCell = pRow->getCellCount() - pRow->getGridAfter() - 1;
     for (const auto& rSpan : pRow->getGridSpans())
     {
         nGrids += rSpan;
@@ -107,6 +125,8 @@ sal_uInt32 TableManager::findColumnCell(const sal_uInt32 nRow, const sal_uInt32 
             return nCell;
 
         ++nCell;
+        if (nCell > nMaxCell)
+            break;
     }
     return SAL_MAX_UINT32; // must be in gridAfter or invalid column request
 }
@@ -444,6 +464,7 @@ void TableManager::startLevel()
             pTableData2->getCurrentRow()->setCurrentGridSpan(mpUnfinishedRow->getGridSpan(i));
         }
         pTableData2->getCurrentRow()->setGridBefore(mpUnfinishedRow->getGridBefore());
+        pTableData2->getCurrentRow()->setGridAfter(mpUnfinishedRow->getGridAfter());
         mpUnfinishedRow.clear();
     }
 
