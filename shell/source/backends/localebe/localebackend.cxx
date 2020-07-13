@@ -25,6 +25,7 @@
 
 #include "localebackend.hxx"
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/character.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -245,11 +246,6 @@ LocaleBackend::~LocaleBackend()
 }
 
 
-LocaleBackend* LocaleBackend::createInstance()
-{
-    return new LocaleBackend;
-}
-
 
 css::beans::Optional<css::uno::Any> LocaleBackend::getLocale()
 {
@@ -312,19 +308,9 @@ css::uno::Any LocaleBackend::getPropertyValue(
 }
 
 
-OUString LocaleBackend::getBackendName() {
-    return "com.sun.star.comp.configuration.backend.LocaleBackend" ;
-}
-
 OUString SAL_CALL LocaleBackend::getImplementationName()
 {
-    return getBackendName() ;
-}
-
-uno::Sequence<OUString> LocaleBackend::getBackendServiceNames()
-{
-    uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.LocaleBackend" };
-    return aServiceNameList ;
+    return "com.sun.star.comp.configuration.backend.LocaleBackend" ;
 }
 
 sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
@@ -334,7 +320,14 @@ sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
 {
-    return getBackendServiceNames() ;
+    return { "com.sun.star.configuration.backend.LocaleBackend" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_LocaleBackend_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new LocaleBackend());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
