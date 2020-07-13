@@ -30,8 +30,4 @@ $(eval $(call gb_Library_add_objcxxobjects,macbe1,\
     shell/source/backends/macbe/macbackend \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,macbe1,\
-    shell/source/backends/macbe/macbecdef \
-))
-
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

@@ -36,28 +36,12 @@ class MacOSXBackend : public ::cppu::WeakImplHelper <css::beans::XPropertySet, l
 
 public:
 
-    static MacOSXBackend* createInstance();
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& aServiceName) override;
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    /**
-       Provides the implementation name.
-
-       @return   implementation name
-    */
-    static OUString getBackendName();
-
-    /**
-       Provides the supported services names
-
-       @return   service names
-    */
-    static uno::Sequence<OUString> getBackendServiceNames();
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -89,8 +73,6 @@ public:
         OUString const &,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
     {}
-
-protected:
 
     /**
        Service constructor from a service factory.
