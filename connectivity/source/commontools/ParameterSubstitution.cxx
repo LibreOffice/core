@@ -40,14 +40,9 @@ namespace connectivity
         m_xConnection = xConnection;
     }
 
-    OUString ParameterSubstitution::getImplementationName_Static(  )
-    {
-        return "org.openoffice.comp.helper.ParameterSubstitution";
-    }
-
     OUString SAL_CALL ParameterSubstitution::getImplementationName(  )
     {
-        return getImplementationName_Static();
+        return "org.openoffice.comp.helper.ParameterSubstitution";
     }
 
     sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
@@ -57,19 +52,9 @@ namespace connectivity
 
     Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_Static();
-    }
-
-    Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  )
-    {
         return { "com.sun.star.sdb.ParameterSubstitution" };
     }
 
-
-    Reference< XInterface >  ParameterSubstitution::create(const Reference< XComponentContext >& _xContext)
-    {
-        return *(new ParameterSubstitution(_xContext));
-    }
 
     OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, sal_Bool /*bSubstRequired*/ )
     {
@@ -110,5 +95,11 @@ namespace connectivity
 
 } // connectivity
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_dbtools_ParameterSubstitution_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new connectivity::ParameterSubstitution(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

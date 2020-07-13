@@ -833,19 +833,9 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 // XServiceInfo
 
 
-    OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  )
-    {
-        return "org.openoffice.comp.helper.DatabaseMetaDataResultSet";
-    }
-
-    Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  )
-    {
-        return Sequence<OUString>{ "com.sun.star.sdbc.ResultSet" };
-    }
-
     OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  )
     {
-        return getImplementationName_Static();
+        return "org.openoffice.comp.helper.DatabaseMetaDataResultSet";
     }
 
     sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName )
@@ -855,39 +845,14 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
     Sequence< OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_Static();
+        return Sequence<OUString>{ "com.sun.star.sdbc.ResultSet" };
     }
 
-    namespace connectivity
-    {
-        /// @throws Exception
-        static Reference< XInterface > ODatabaseMetaDataResultSet_CreateInstance(const Reference< XComponentContext >& )
-        {
-            return *(new ODatabaseMetaDataResultSet());
-        }
-    }
-
-
-namespace
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_dbtools_ODatabaseMetaDataResultSet_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    cppu::ImplementationEntry const entries[] = {
-        { &ODatabaseMetaDataResultSet_CreateInstance, &ODatabaseMetaDataResultSet::getImplementationName_Static, &ODatabaseMetaDataResultSet::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, nullptr, 0 },
-        { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, nullptr, 0 },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-    };
-}
-
-extern "C"
-{
-
-
-SAL_DLLPUBLIC_EXPORT void* dbtools_component_getFactory(const char* implName, void* serviceManager, void* registryKey)
-{
-    return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
-}
-
+    return cppu::acquire(new ODatabaseMetaDataResultSet());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

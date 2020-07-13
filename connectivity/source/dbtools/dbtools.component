@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dbtools" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.helper.DatabaseMetaDataResultSet">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.openoffice.comp.helper.DatabaseMetaDataResultSet"
+    constructor="connectivity_dbtools_ODatabaseMetaDataResultSet_get_implementation">
     <service name="com.sun.star.sdbc.ResultSet"/>
   </implementation>
-  <implementation name="org.openoffice.comp.helper.ParameterSubstitution">
+  <implementation name="org.openoffice.comp.helper.ParameterSubstitution"
+    constructor="connectivity_dbtools_ParameterSubstitution_get_implementation">
     <service name="com.sun.star.sdb.ParameterSubstitution"/>
   </implementation>
 </component>
