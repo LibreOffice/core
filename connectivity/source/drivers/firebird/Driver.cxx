@@ -44,16 +44,6 @@ using namespace ::osl;
 
 using namespace connectivity::firebird;
 
-namespace connectivity::firebird
-{
-        Reference< XInterface > FirebirdDriver_CreateInstance(
-            const Reference< XMultiServiceFactory >& _rxFactory)
-        {
-            SAL_INFO("connectivity.firebird", "FirebirdDriver_CreateInstance()" );
-            return *(new FirebirdDriver(comphelper::getComponentContext(_rxFactory)));
-        }
-}
-
 // Static const variables
 namespace {
 const char our_sFirebirdTmpVar[] = "FIREBIRD_TMP";
@@ -133,20 +123,9 @@ void FirebirdDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-//----- static ServiceInfo ---------------------------------------------------
-OUString FirebirdDriver::getImplementationName_Static()
-{
-    return "com.sun.star.comp.sdbc.firebird.Driver";
-}
-
-Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
-}
-
 OUString SAL_CALL FirebirdDriver::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.sdbc.firebird.Driver";
 }
 
 sal_Bool SAL_CALL FirebirdDriver::supportsService(const OUString& _rServiceName)
@@ -156,7 +135,7 @@ sal_Bool SAL_CALL FirebirdDriver::supportsService(const OUString& _rServiceName)
 
 Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
 // ----  XDriver -------------------------------------------------------------
@@ -237,6 +216,17 @@ namespace connectivity::firebird
         }
 
 } // namespace
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_FirebirdDriver_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    try {
+        return cppu::acquire(new FirebirdDriver(context));
+    } catch (...) {
+        return nullptr;
+    }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
