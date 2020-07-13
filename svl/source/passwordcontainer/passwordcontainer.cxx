@@ -366,12 +366,12 @@ void StorageItem::ImplCommit()
 }
 
 
-PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory )
+PasswordContainer::PasswordContainer( const Reference<XComponentContext>& rxContext )
 {
     // m_pStorageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );
 
-    mComponent.set( xServiceFactory, UNO_QUERY );
+    mComponent.set( rxContext->getServiceManager(), UNO_QUERY );
     mComponent->addEventListener( this );
 
     m_pStorageFile.reset( new StorageItem( this, "Office.Common/Passwords" ) );
@@ -1294,7 +1294,7 @@ void PasswordContainer::Notify()
 
 OUString SAL_CALL PasswordContainer::getImplementationName(  )
 {
-    return impl_getStaticImplementationName();
+    return "stardiv.svl.PasswordContainer";
 }
 
 sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceName )
@@ -1304,32 +1304,14 @@ sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  )
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-Sequence< OUString > PasswordContainer::impl_getStaticSupportedServiceNames(  )
-{
     return { "com.sun.star.task.PasswordContainer" };
 }
 
-OUString PasswordContainer::impl_getStaticImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+svl_PasswordContainer_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "stardiv.svl.PasswordContainer";
-}
-
-Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
-{
-    return Reference< XInterface >( *new PasswordContainer( xServiceManager ) );
-}
-
-Reference< XSingleServiceFactory > PasswordContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager )
-{
-    Reference< XSingleServiceFactory > xReturn( ::cppu::createOneInstanceFactory( ServiceManager,
-                                                        PasswordContainer::impl_getStaticImplementationName(),
-                                                        PasswordContainer::impl_createInstance,
-                                                        PasswordContainer::impl_getStaticSupportedServiceNames()));
-    return xReturn ;
-
+    return cppu::acquire(new PasswordContainer(context));
 }
 
 
@@ -1370,31 +1352,5 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
 }
 
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * passwordcontainer_component_getFactory (
-    const char * pImplementationName,
-    SAL_UNUSED_PARAMETER void * pServiceManager,
-    SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
-{
-    void * pResult = nullptr;
-    if (pServiceManager)
-    {
-        Reference< XSingleServiceFactory > xFactory;
-        if (PasswordContainer::impl_getStaticImplementationName().equalsAscii(pImplementationName))
-        {
-            xFactory = PasswordContainer::impl_createFactory (
-                static_cast< XMultiServiceFactory* >(pServiceManager));
-        }
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pResult = xFactory.get();
-        }
-    }
-    return pResult;
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

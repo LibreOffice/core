@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <unotools/configitem.hxx>
@@ -273,7 +274,7 @@ css::task::UrlRecord find(
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword );
 
 public:
-    PasswordContainer( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+    PasswordContainer( const css::uno::Reference< css::uno::XComponentContext >& );
     virtual ~PasswordContainer() override;
 
     virtual void SAL_CALL add( const OUString& aUrl,
@@ -305,20 +306,6 @@ public:
 
     virtual css::uno::Sequence< css::task::UrlRecord > SAL_CALL
                             getAllPersistent( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
-
-
-    // provide factory
-    /// @throws css::uno::RuntimeException
-    static OUString impl_getStaticImplementationName( );
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString >
-                    impl_getStaticSupportedServiceNames(  );
-    /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-                    impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& ServiceManager );
-    /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-                    impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XServiceInfo
     virtual OUString SAL_CALL    getImplementationName(  ) override;
