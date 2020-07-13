@@ -35,24 +35,6 @@
 
 using namespace ::com::sun::star;
 
-uno::Sequence< OUString > FSStorageFactory::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.FileSystemStorageFactory";
-    aRet[1] = "com.sun.star.comp.embed.FileSystemStorageFactory";
-    return aRet;
-}
-
-OUString FSStorageFactory::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.FileSystemStorageFactory";
-}
-
-uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new FSStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
-}
 
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 {
@@ -153,7 +135,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
 OUString SAL_CALL FSStorageFactory::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.FileSystemStorageFactory";
 }
 
 sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
@@ -163,37 +145,19 @@ sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName
 
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.embed.FileSystemStorageFactory",
+                "com.sun.star.comp.embed.FileSystemStorageFactory" };
 }
 
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * fsstorage_component_getFactory (
-    const char * pImplementationName, void * pServiceManager,
-    SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
-{
-    void * pResult = nullptr;
-    if (pServiceManager)
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
-        if (FSStorageFactory::impl_staticGetImplementationName().equalsAscii(pImplementationName))
-        {
-            xFactory = cppu::createOneInstanceFactory (
-                static_cast< lang::XMultiServiceFactory* >(pServiceManager),
-                FSStorageFactory::impl_staticGetImplementationName(),
-                FSStorageFactory::impl_staticCreateSelfInstance,
-                FSStorageFactory::impl_staticGetSupportedServiceNames() );
-        }
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pResult = xFactory.get();
-        }
-    }
-    return pResult;
-}
 
-} // extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+svl_FSStorageFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<FSStorageFactory> g_Instance(new FSStorageFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
