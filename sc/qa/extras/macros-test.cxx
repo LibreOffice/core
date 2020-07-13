@@ -388,14 +388,26 @@ void ScMacrosTest::testTdf107885()
     CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(4,0));
 
+    // Call auto filter macro using a string condition
     SfxObjectShell::CallXScript(
         xComponent,
-        "vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document",
+        "vnd.sun.Star.script:VBAProject.Module1.AFString?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     //Without the fix in place, all rows in autofilter would have been hidden
     CPPUNIT_ASSERT(rDoc.RowHidden(1,0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(2,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(4,0));
+
+    // Call auto filter macro using a numeric condition without any locale
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.AFNumeric?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT(rDoc.RowHidden(1,0));
+    CPPUNIT_ASSERT(rDoc.RowHidden(2,0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(3,0));
     CPPUNIT_ASSERT(!rDoc.RowHidden(4,0));
 
