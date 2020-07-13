@@ -40,7 +40,6 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
-    m_nGridAfter(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bIsInShape(false),
@@ -356,7 +355,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 setCurrentGridBefore( nIntValue );
                 break;
             case NS_ooxml::LN_CT_TrPrBase_gridAfter:
-                m_nGridAfter = nIntValue;
+                setCurrentGridAfter( nIntValue );
                 break;
             case NS_ooxml::LN_CT_TblPrBase_tblCaption:
                 // To-Do: Not yet preserved
@@ -811,7 +810,6 @@ void DomainMapperTableManager::endOfRowAction()
     getCurrentGrid()->clear();
     pCellWidths->clear();
 
-    m_nGridAfter = 0;
     m_bTableSizeTypeInserted = false;
 
 #ifdef DBG_UTIL

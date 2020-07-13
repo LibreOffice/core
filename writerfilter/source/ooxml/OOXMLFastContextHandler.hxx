@@ -188,6 +188,7 @@ public:
     void sendPropertyToParent();
     OOXMLFastContextHandler* getParent() const { return mpParent; }
     void setGridAfter(const OOXMLValue::Pointer_t& pGridAfter) { mpGridAfter = pGridAfter; }
+    void handleGridAfter();
 
 protected:
     OOXMLFastContextHandler * mpParent;
@@ -420,7 +421,6 @@ public:
     static void startRow();
     void endRow();
     void handleGridBefore( const OOXMLValue::Pointer_t& val );
-    void handleGridAfter(const OOXMLValue::Pointer_t& rValue);
 };
 
 class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler
