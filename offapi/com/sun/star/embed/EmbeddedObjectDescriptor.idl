@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 #include <com/sun/star/task/XStatusIndicator.idl>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.idl>
 #include <com/sun/star/embed/XStorage.idl>
 
 
@@ -60,6 +61,11 @@ published service EmbeddedObjectDescriptor
     */
     [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor
                                                 OutplaceDispatchInterceptor;
+
+    /** allows to provide a dispatch interceptor for outplace activation (new version)
+    */
+    [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor2
+                                                OutplaceDispatchInterceptor2;
 
     /** denotes the storage from which the embedded object is to be recovered.
 

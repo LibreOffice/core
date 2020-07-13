@@ -1,0 +1,74 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_frame_XDispatchProviderInterception2_idl__
+#define __com_sun_star_frame_XDispatchProviderInterception2_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XDispatchProviderInterceptor2.idl>
+
+
+
+ module com {  module sun {  module star {  module frame {
+
+/** makes it possible to register an XDispatchProvider which
+    intercepts all requests of XDispatch to this instance.
+
+    <p>
+    Note: Nobody can guarantee order of used interceptor objects if more than ones exist.
+    Later registered ones will be used at first. But it's possible to increase the chance
+    for that by providing the optional interface XInterceptorInfo.
+    </p>
+
+    @see XDispatchProvider
+    @see XDispatch
+    @see XInterceptorInfo
+ */
+published interface XDispatchProviderInterception2: com::sun::star::uno::XInterface
+{
+    /** registers an XDispatchProviderInterceptor2, which will become
+        the first interceptor in the chain of registered interceptors.
+
+        @param Interceptor
+            the interceptor which wishes to be registered
+
+        @see XDispatchProviderInterception::releaseDispatchProviderInterceptor()
+     */
+    void registerDispatchProviderInterceptor( [in] XDispatchProviderInterceptor2 Interceptor );
+
+    /** removes an XDispatchProviderInterceptor2 which was previously registered
+
+        <p>
+        The order of removals is arbitrary. It is not necessary to remove the last
+        registered interceptor first.
+        </p>
+
+        @param Interceptor
+            the interceptor which wishes to be unregistered
+
+        @see XDispatchProviderInterception::registerDispatchProviderInterceptor()
+     */
+    void releaseDispatchProviderInterceptor( [in] XDispatchProviderInterceptor2 Interceptor );
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
