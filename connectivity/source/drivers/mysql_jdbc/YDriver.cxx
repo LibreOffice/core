@@ -41,15 +41,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-namespace mysql
-{
-Reference<XInterface>
-ODriverDelegator_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFac)
-{
-    return *(new ODriverDelegator(comphelper::getComponentContext(_rxFac)));
-}
-}
-
 namespace
 {
 OUString getJavaDriverClass(css::uno::Sequence<css::beans::PropertyValue> const& info)
@@ -388,19 +379,9 @@ ODriverDelegator::getDataDefinitionByURL(const OUString& url, const Sequence<Pro
 
 // XServiceInfo
 
-OUString ODriverDelegator::getImplementationName_Static()
-{
-    return "org.openoffice.comp.drivers.MySQL.Driver";
-}
-
-Sequence<OUString> ODriverDelegator::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
-}
-
 OUString SAL_CALL ODriverDelegator::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.comp.drivers.MySQL.Driver";
 }
 
 sal_Bool SAL_CALL ODriverDelegator::supportsService(const OUString& _rServiceName)
@@ -410,9 +391,23 @@ sal_Bool SAL_CALL ODriverDelegator::supportsService(const OUString& _rServiceNam
 
 Sequence<OUString> SAL_CALL ODriverDelegator::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
 } // namespace connectivity
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_mysql_ODriverDelegator_get_implementation(css::uno::XComponentContext* context,
+                                                       css::uno::Sequence<css::uno::Any> const&)
+{
+    try
+    {
+        return cppu::acquire(new connectivity::ODriverDelegator(context));
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

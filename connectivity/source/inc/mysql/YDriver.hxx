@@ -41,9 +41,6 @@ namespace connectivity
 
     namespace mysql
     {
-        /// @throws css::uno::Exception
-        css::uno::Reference< css::uno::XInterface > ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxMSF);
-
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                ,   css::sdbcx::XDataDefinitionSupplier
                                                ,   css::lang::XServiceInfo
@@ -86,10 +83,6 @@ namespace connectivity
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
             // XDriver
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
