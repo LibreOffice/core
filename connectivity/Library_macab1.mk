@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,macab1,\
 
 $(eval $(call gb_Library_add_exception_objects,macab1,\
 	connectivity/source/drivers/macab/MacabDriver \
-	connectivity/source/drivers/macab/MacabServices \
 ))
 
 # vim: set noet sw=4 ts=4:
