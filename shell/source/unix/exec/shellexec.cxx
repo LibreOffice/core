@@ -49,12 +49,6 @@ using namespace cppu;
 
 namespace
 {
-    Sequence< OUString > ShellExec_getSupportedServiceNames()
-    {
-        Sequence< OUString > aRet { "com.sun.star.system.SystemShellExecute" };
-        return aRet;
-    }
-
     void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
     {
         sal_Int32 nmax = rURL.getLength();
@@ -246,7 +240,15 @@ sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
 {
-    return ShellExec_getSupportedServiceNames();
+    return { "com.sun.star.system.SystemShellExecute" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_ShellExec_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ShellExec(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

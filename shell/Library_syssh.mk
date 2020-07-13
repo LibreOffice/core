@@ -42,7 +42,6 @@ $(eval $(call gb_Library_set_componentfile,syssh,shell/source/unix/exec/syssh))
 
 $(eval $(call gb_Library_add_exception_objects,syssh,\
 	shell/source/unix/exec/shellexec \
-	shell/source/unix/exec/shellexecentry \
 ))
 
 endif # OS
