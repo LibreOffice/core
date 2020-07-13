@@ -360,8 +360,8 @@ namespace weld
         m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
 
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
-        const int nTimeArea = TimeFormatter::GetTimeArea(m_eFormat, m_xSpinButton->get_text(), nEndPos,
-                                                         rLocaleData);
+        const int nTimeArea = ::TimeFormatter::GetTimeArea(m_eFormat, m_xSpinButton->get_text(), nEndPos,
+                                                           rLocaleData);
 
         int nIncrements = 1;
 
@@ -390,12 +390,9 @@ namespace weld
 
     IMPL_LINK(TimeSpinButton, spin_button_input, int*, result, bool)
     {
-        int nStartPos, nEndPos;
-        m_xSpinButton->get_selection_bounds(nStartPos, nEndPos);
-
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
         tools::Time aResult(0);
-        bool bRet = TimeFormatter::TextToTime(m_xSpinButton->get_text(), aResult, m_eFormat, true, rLocaleData);
+        bool bRet = ::TimeFormatter::TextToTime(m_xSpinButton->get_text(), aResult, m_eFormat, true, rLocaleData);
         if (bRet)
             *result = ConvertValue(aResult);
         return bRet;
@@ -426,7 +423,7 @@ namespace weld
     OUString TimeSpinButton::format_number(int nValue) const
     {
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
-        return TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
+        return ::TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
     }
 
     EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)

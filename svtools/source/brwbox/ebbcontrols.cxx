@@ -457,6 +457,16 @@ namespace svt
         InitFormattedControlBase();
     }
 
+    TimeControl::TimeControl(BrowserDataWin* pParent, bool bSpinVariant)
+        : FormattedControlBase(pParent, bSpinVariant)
+    {
+        if (bSpinVariant)
+            m_xEntryFormatter.reset(new weld::TimeFormatter(*m_xSpinButton));
+        else
+            m_xEntryFormatter.reset(new weld::TimeFormatter(*m_xEntry));
+        InitFormattedControlBase();
+    }
+
     EditCellController::EditCellController(EditControlBase* pEdit)
         : CellController(pEdit)
         , m_pEditImplementation(new EntryImplementation(*pEdit))

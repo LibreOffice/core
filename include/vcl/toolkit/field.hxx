@@ -158,6 +158,108 @@ public:
     virtual void            dispose() override;
 };
 
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TimeFormatter : public FormatterBase
+{
+private:
+    tools::Time             maLastTime;
+    tools::Time             maMin;
+    tools::Time             maMax;
+    TimeFieldFormat         meFormat;
+    TimeFormat              mnTimeFormat;
+    bool                    mbDuration;
+    bool                    mbEnforceValidValue;
+
+protected:
+    tools::Time             maFieldTime;
+
+                            TimeFormatter(Edit* pEdit);
+
+    SAL_DLLPRIVATE void     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );
+    SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection const * pNewSelection = nullptr );
+    SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
+
+public:
+    static OUString         FormatTime(const tools::Time& rNewTime, TimeFieldFormat eFormat, TimeFormat eHourFormat, bool bDuration, const LocaleDataWrapper& rLocaleData);
+    static bool             TextToTime(const OUString& rStr, tools::Time& rTime, TimeFieldFormat eFormat, bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true);
+    static int              GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
+                                        const LocaleDataWrapper& rLocaleDataWrapper);
+    static tools::Time      SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,
+                                     bool bDuration, const OUString& rText, int nCursor,
+                                     const LocaleDataWrapper& rLocaleDataWrapper);
+
+    virtual                 ~TimeFormatter() override;
+
+    virtual void            Reformat() override;
+    virtual void            ReformatAll() override;
+
+    void                    SetMin( const tools::Time& rNewMin );
+    const tools::Time&             GetMin() const { return maMin; }
+    void                    SetMax( const tools::Time& rNewMax );
+    const tools::Time&             GetMax() const { return maMax; }
+
+    void                    SetTimeFormat( TimeFormat eNewFormat );
+    TimeFormat              GetTimeFormat() const { return mnTimeFormat;}
+
+    void                    SetFormat( TimeFieldFormat eNewFormat );
+    TimeFieldFormat         GetFormat() const { return meFormat; }
+
+    void                    SetDuration( bool mbDuration );
+    bool                    IsDuration() const { return mbDuration; }
+
+    void                    SetTime( const tools::Time& rNewTime );
+    void                    SetUserTime( const tools::Time& rNewTime );
+    tools::Time             GetTime() const;
+    void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
+    bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
+
+    /** enables or disables the enforcement of valid values
+
+        If this is set to true (which is the default), then GetTime will always return a valid
+        time, no matter whether the current text can really be interpreted as time. (Note: this
+        is the compatible behavior).
+
+        If this is set to false, the GetTime will return GetInvalidTime, in case the current text
+        cannot be interpreted as time.
+
+        In addition, if this is set to false, the text in the field will <em>not</em> be corrected
+        when the control loses the focus - instead, the invalid input will be preserved.
+    */
+    void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
+    bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
+};
+
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TimeField final : public SpinField, public TimeFormatter
+{
+private:
+    tools::Time                    maFirst;
+    tools::Time                    maLast;
+
+    SAL_DLLPRIVATE void     ImplTimeSpinArea( bool bUp );
+
+public:
+    explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
+
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
+
+    virtual void            Modify() override;
+
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
+
+    void                    SetFirst( const tools::Time& rNewFirst )   { maFirst = rNewFirst; }
+    const tools::Time&      GetFirst() const                    { return maFirst; }
+    void                    SetLast( const tools::Time& rNewLast )     { maLast = rNewLast; }
+    const tools::Time&      GetLast() const                     { return maLast; }
+
+    void                    SetExtFormat( ExtTimeFieldFormat eFormat );
+    virtual void            dispose() override;
+};
+
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox : public ComboBox, public NumericFormatter
 {
     SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
