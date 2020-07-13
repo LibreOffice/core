@@ -1195,8 +1195,8 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , m_pFrameFormat(nullptr)
     , m_pPropSet(pSet)
     , m_pDoc(pDoc)
-    , eType(eSet)
-    , bIsDescriptor(true)
+    , m_eType(eSet)
+    , m_bIsDescriptor(true)
     , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
     , m_nVisibleAreaWidth(0)
     , m_nVisibleAreaHeight(0)
@@ -1215,7 +1215,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
-    switch(eType)
+    switch(m_eType)
     {
         case FLYCNTTYPE_FRM:
         {
@@ -1250,8 +1250,8 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
     , m_pFrameFormat(&rFrameFormat)
     , m_pPropSet(pSet)
     , m_pDoc(nullptr)
-    , eType(eSet)
-    , bIsDescriptor(false)
+    , m_eType(eSet)
+    , m_bIsDescriptor(false)
     , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
     , m_nVisibleAreaWidth(0)
     , m_nVisibleAreaHeight(0)
@@ -1298,7 +1298,7 @@ OUString SwXFrame::getName()
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
         return pFormat->GetName();
-    if(!bIsDescriptor)
+    if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     return m_sName;
 }
@@ -1315,7 +1315,7 @@ void SwXFrame::setName(const OUString& rName)
             throw uno::RuntimeException();
         }
     }
-    else if(bIsDescriptor)
+    else if(m_bIsDescriptor)
         m_sName = rName;
     else
         throw uno::RuntimeException();
@@ -1327,7 +1327,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo()
     static uno::Reference< beans::XPropertySetInfo >  xFrameRef;
     static uno::Reference< beans::XPropertySetInfo >  xGrfRef;
     static uno::Reference< beans::XPropertySetInfo >  xOLERef;
-    switch(eType)
+    switch(m_eType)
     {
     case FLYCNTTYPE_FRM:
         if( !xFrameRef.is() )
@@ -1442,7 +1442,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFormat->GetDoc();
-        if ( ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
+        if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
             (FN_PARAM_CONTOUR_PP         == pEntry->nWID) ||
             (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
             (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )
@@ -1982,7 +1982,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(pFormat)
     {
-        if( ((eType == FLYCNTTYPE_GRF) || (eType == FLYCNTTYPE_OLE)) &&
+        if( ((m_eType == FLYCNTTYPE_GRF) || (m_eType == FLYCNTTYPE_OLE)) &&
                 (isGRFATR(pEntry->nWID) ||
                         pEntry->nWID == FN_PARAM_CONTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
@@ -2123,7 +2123,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             GetOrCreateSdrObject(rFlyFormat);
             aAny <<= rFlyFormat.GetObjDescription();
         }
-        else if(eType == FLYCNTTYPE_GRF &&
+        else if(m_eType == FLYCNTTYPE_GRF &&
                 (rPropertyName == UNO_NAME_ACTUAL_SIZE))
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
@@ -2413,7 +2413,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
             }
             else
             {
-                if ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID))
+                if ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID))
                 {
                     const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                     if(pIdx)
@@ -2473,7 +2473,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             pEntry->nWID != FN_UNO_ANCHOR_TYPES &&
             pEntry->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
-            if ( (eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID) )
+            if ( (m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID) )
             {
                 const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                 if(pIdx)
@@ -2649,7 +2649,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
 
 void SwXFrame::ResetDescriptor()
 {
-    bIsDescriptor = false;
+    m_bIsDescriptor = false;
     mxStyleData.clear();
     mxStyleFamily.clear();
     m_pProps.reset();
@@ -2745,7 +2745,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
         pParentFrameFormat = lcl_GetFrameFormat( *pStyle, pDoc );
 
     SwFlyFrameFormat* pFormat = nullptr;
-    if( eType == FLYCNTTYPE_FRM)
+    if( m_eType == FLYCNTTYPE_FRM)
     {
         UnoActionContext aCont(pDoc);
         if (pCopySource)
@@ -2787,9 +2787,9 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                 pDoc->SetFlyName(*pFormat, m_sName);
         }
         // wake up the SwXTextFrame
-        static_cast<SwXTextFrame*>(this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrameFormat()->GetDoc() );
+        static_cast<SwXTextFrame*>(this)->SetDoc( m_bIsDescriptor ? m_pDoc : GetFrameFormat()->GetDoc() );
     }
-    else if( eType == FLYCNTTYPE_GRF)
+    else if( m_eType == FLYCNTTYPE_GRF)
     {
         UnoActionContext aActionContext(pDoc);
         Graphic aGraphic;

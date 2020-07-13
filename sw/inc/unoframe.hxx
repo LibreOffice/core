@@ -64,11 +64,11 @@ private:
     const SfxItemPropertySet*       m_pPropSet;
     SwDoc*                          m_pDoc;
 
-    const FlyCntType                eType;
+    const FlyCntType                m_eType;
 
     // Descriptor-interface
     std::unique_ptr<BaseFrameProperties_Impl> m_pProps;
-    bool bIsDescriptor;
+    bool m_bIsDescriptor;
     OUString                        m_sName;
 
     sal_Int64                       m_nDrawAspect;
@@ -154,9 +154,9 @@ public:
     SwFrameFormat* GetFrameFormat()
         { return m_pFrameFormat; }
 
-    FlyCntType      GetFlyCntType()const {return eType;}
+    FlyCntType      GetFlyCntType()const {return m_eType;}
 
-    bool IsDescriptor() const {return bIsDescriptor;}
+    bool IsDescriptor() const {return m_bIsDescriptor;}
     void            ResetDescriptor();
     //copy text from a given source PaM
     static SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);

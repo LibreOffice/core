@@ -35,9 +35,9 @@ using namespace ::com::sun::star::uno;
 SwUndoField::SwUndoField(const SwPosition & rPos )
     : SwUndo(SwUndoId::FIELD, rPos.GetDoc())
 {
-    nNodeIndex = rPos.nNode.GetIndex();
-    nOffset = rPos.nContent.GetIndex();
-    pDoc = rPos.GetDoc();
+    m_nNodeIndex = rPos.nNode.GetIndex();
+    m_nOffset = rPos.nContent.GetIndex();
+    m_pDoc = rPos.GetDoc();
 }
 
 SwUndoField::~SwUndoField()
@@ -46,9 +46,9 @@ SwUndoField::~SwUndoField()
 
 SwPosition SwUndoField::GetPosition()
 {
-    SwNode * pNode = pDoc->GetNodes()[nNodeIndex];
+    SwNode * pNode = m_pDoc->GetNodes()[m_nNodeIndex];
     SwNodeIndex aNodeIndex(*pNode);
-    SwIndex aIndex(pNode->GetContentNode(), nOffset);
+    SwIndex aIndex(pNode->GetContentNode(), m_nOffset);
     SwPosition aResult(aNodeIndex, aIndex);
 
     return aResult;
@@ -59,14 +59,14 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rNewField,
                          SwMsgPoolItem * _pHint, bool _bUpdate)
     : SwUndoField(rPos)
-    , pOldField(rOldField.CopyField())
-    , pNewField(rNewField.CopyField())
-    , pHint(_pHint)
-    , bUpdate(_bUpdate)
+    , m_pOldField(rOldField.CopyField())
+    , m_pNewField(rNewField.CopyField())
+    , m_pHint(_pHint)
+    , m_bUpdate(_bUpdate)
 {
-    OSL_ENSURE(pOldField, "No old field!");
-    OSL_ENSURE(pNewField, "No new field!");
-    OSL_ENSURE(pDoc, "No document!");
+    OSL_ENSURE(m_pOldField, "No old field!");
+    OSL_ENSURE(m_pNewField, "No new field!");
+    OSL_ENSURE(m_pDoc, "No document!");
 }
 
 SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
@@ -80,7 +80,7 @@ void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 
     if (pField)
     {
-        pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *pOldField, pHint, bUpdate);
+        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pOldField, m_pHint, m_bUpdate);
     }
 }
 
@@ -91,11 +91,11 @@ void SwUndoFieldFromDoc::DoImpl()
 
     if (pField)
     {
-        pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *pNewField, pHint, bUpdate);
+        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pNewField, m_pHint, m_bUpdate);
         SwFormatField* pDstFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
 
-        if (pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false) == pDstFormatField->GetField()->GetTyp())
-            pDoc->GetDocShell()->Broadcast( SwFormatFieldHint( pDstFormatField, SwFormatFieldHintWhich::INSERTED ) );
+        if (m_pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false) == pDstFormatField->GetField()->GetTyp())
+            m_pDoc->GetDocShell()->Broadcast( SwFormatFieldHint( pDstFormatField, SwFormatFieldHintWhich::INSERTED ) );
     }
 }
 
@@ -106,14 +106,14 @@ void SwUndoFieldFromDoc::RedoImpl(::sw::UndoRedoContext &)
 
 void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(m_pDoc->GetIDocumentUndoRedo());
     DoImpl();
 }
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
                                        const Any & rOldVal, const Any & rNewVal,
                                        sal_uInt16 _nWhich)
-    : SwUndoField(rPos), aOldVal(rOldVal), aNewVal(rNewVal), nWhich(_nWhich)
+    : SwUndoField(rPos), m_aOldVal(rOldVal), m_aNewVal(rNewVal), m_nWhich(_nWhich)
 {
 }
 
@@ -126,7 +126,7 @@ void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
     SwField * pField = sw::DocumentFieldsManager::GetFieldAtPos(GetPosition());
 
     if (pField)
-        pField->PutValue(aOldVal, nWhich);
+        pField->PutValue(m_aOldVal, m_nWhich);
 }
 
 void SwUndoFieldFromAPI::DoImpl()
@@ -134,7 +134,7 @@ void SwUndoFieldFromAPI::DoImpl()
     SwField * pField = sw::DocumentFieldsManager::GetFieldAtPos(GetPosition());
 
     if (pField)
-        pField->PutValue(aNewVal, nWhich);
+        pField->PutValue(m_aNewVal, m_nWhich);
 }
 
 void SwUndoFieldFromAPI::RedoImpl(::sw::UndoRedoContext &)
