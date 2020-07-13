@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="hsqldb" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.sdbcx.comp.hsqldb.Driver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.sdbcx.comp.hsqldb.Driver"
+    constructor="connectivity_hsqldb_ODriverDelegator_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
     <service name="com.sun.star.sdbcx.Driver"/>
   </implementation>

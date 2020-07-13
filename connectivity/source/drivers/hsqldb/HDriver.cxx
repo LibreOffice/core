@@ -71,13 +71,8 @@ namespace connectivity
     using namespace css::util;
     using namespace css::reflection;
 
-    namespace hsqldb
-    {
-        Reference< XInterface > ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac)
-        {
-            return *(new ODriverDelegator(comphelper::getComponentContext(_rxFac)));
-        }
-    }
+    constexpr OUStringLiteral IMPL_NAME = "com.sun.star.sdbcx.comp.hsqldb.Driver";
+
 
 
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
@@ -140,7 +135,7 @@ namespace connectivity
         {
             OUString aConfigPath =
                 "/org.openoffice.Office.DataAccess/DriverSettings/" +
-                ODriverDelegator::getImplementationName_Static() +
+                IMPL_NAME +
                 "/PermittedJavaMethods";
             ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, aConfigPath ) );
@@ -475,20 +470,9 @@ namespace connectivity
 
     // XServiceInfo
 
-
-    OUString ODriverDelegator::getImplementationName_Static(  )
-    {
-        return "com.sun.star.sdbcx.comp.hsqldb.Driver";
-    }
-
-    Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  )
-    {
-        return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
-    }
-
     OUString SAL_CALL ODriverDelegator::getImplementationName(  )
     {
-        return getImplementationName_Static();
+        return IMPL_NAME;
     }
 
     sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName )
@@ -498,7 +482,7 @@ namespace connectivity
 
     Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_Static();
+        return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
     }
 
     void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ )
@@ -865,6 +849,14 @@ namespace connectivity
 
 
 }   // namespace connectivity
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_hsqldb_ODriverDelegator_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new connectivity::ODriverDelegator(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
