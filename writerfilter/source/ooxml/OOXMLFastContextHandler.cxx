@@ -1244,6 +1244,20 @@ void OOXMLFastContextHandlerValue::popBiDiEmbedLevel()
     OOXMLFactory::characters(this, u"\u202C"); // PDF (POP DIRECTIONAL FORMATTING)
 }
 
+void OOXMLFastContextHandlerValue::handleGridAfter()
+{
+    if (!getValue())
+        return;
+
+    if (OOXMLFastContextHandler* pTableRowProperties = getParent())
+    {
+        if (OOXMLFastContextHandler* pTableRow = pTableRowProperties->getParent())
+            // Save the value into the table row context, so it can be handled
+            // right before the end of the row.
+            pTableRow->setGridAfter(getValue());
+    }
+}
+
 /*
   class OOXMLFastContextHandlerTable
 */
@@ -1459,17 +1473,6 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
     endCharacterGroup();
     endParagraphGroup();
-}
-
-void OOXMLFastContextHandlerTextTableRow::handleGridAfter(const OOXMLValue::Pointer_t& rValue)
-{
-    if (OOXMLFastContextHandler* pTableRowProperties = getParent())
-    {
-        if (OOXMLFastContextHandler* pTableRow = pTableRowProperties->getParent())
-            // Save the value into the table row context, so it can be handled
-            // right before the end of the row.
-            pTableRow->setGridAfter(rValue);
-    }
 }
 
 namespace {
