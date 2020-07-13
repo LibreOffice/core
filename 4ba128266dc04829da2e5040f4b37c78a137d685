@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3eec9137_f365d5da",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-13T14:44:50Z",
+      "side": 1,
+      "message": "No, this assumption is wrong. E.g., it might be \"\u003ddefined(абв)\", which will assert in toUtf8(). You pass some user-defined input to that function.",
+      "range": {
+        "startLine": 4209,
+        "startChar": 7,
+        "endLine": 4209,
+        "endChar": 74
+      },
+      "revId": "4ba128266dc04829da2e5040f4b37c78a137d685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00d77b38_163b77d2",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 3
