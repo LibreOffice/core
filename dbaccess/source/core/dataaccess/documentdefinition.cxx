@@ -1475,6 +1475,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
+    aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor2", xInterceptor );
 
     ::comphelper::NamedValueCollection aMediaDesc;
     separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );

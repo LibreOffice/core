@@ -32,7 +32,7 @@
     Frame can call right interceptor directly without calling all of registered ones.
     Use it as an additional interface to XDispatchProviderInterceptor.
     If any interceptor in list doesn't support this interface - these mechanism will be broken
-    and normal list of master-slave interceptor objects will be used from top to the bottom.
+    and normal list of primary/secondary interceptor objects will be used from top to the bottom.
     </p>
 
     @see XDispatchProviderInterception

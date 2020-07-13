@@ -30,6 +30,7 @@ class ScTabViewShell;
 
 class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<
                                         css::frame::XDispatchProviderInterceptor,
+                                        css::frame::XDispatchProviderInterceptor2,
                                         css::lang::XEventListener>,
                                     public SfxListener
 {

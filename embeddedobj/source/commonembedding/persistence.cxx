@@ -996,6 +996,12 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
         }
+        else if ( prop.Name == "OutplaceDispatchInterceptor2" )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor2 > xDispatchInterceptor;
+            if ( prop.Value >>= xDispatchInterceptor )
+                m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+        }
         else if ( prop.Name == "DefaultParentBaseURL" )
         {
             prop.Value >>= m_aDefaultParentBaseURL;
@@ -1703,6 +1709,14 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+            if ( prop.Value >>= xDispatchInterceptor )
+                m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+
+            break;
+        }
+        else if ( prop.Name == "OutplaceDispatchInterceptor2" )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor2 > xDispatchInterceptor;
             if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 
