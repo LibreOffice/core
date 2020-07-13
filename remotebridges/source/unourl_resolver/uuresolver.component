@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="uuresolver" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.bridge.UnoUrlResolver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.bridge.UnoUrlResolver"
+    constructor="remotebridges_ResolverImpl_get_implementation">
     <service name="com.sun.star.bridge.UnoUrlResolver"/>
   </implementation>
 </component>
