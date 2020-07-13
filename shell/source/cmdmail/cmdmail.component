@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="cmdmail" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.system.SimpleCommandMail">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.system.SimpleCommandMail"
+    constructor="shell_CmdMailSuppl_get_implementation">
     <service name="com.sun.star.system.SimpleCommandMail"/>
   </implementation>
 </component>

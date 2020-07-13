@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_libraries,cmdmail,\
 $(eval $(call gb_Library_set_componentfile,cmdmail,shell/source/cmdmail/cmdmail))
 
 $(eval $(call gb_Library_add_exception_objects,cmdmail,\
-    shell/source/cmdmail/cmdmailentry \
     shell/source/cmdmail/cmdmailmsg \
     shell/source/cmdmail/cmdmailsuppl \
 ))
