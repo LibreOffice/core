@@ -28,7 +28,6 @@ $(eval $(call gb_Library_set_include,io,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,io,\
-	io/source/services \
     io/source/acceptor/acc_pipe \
     io/source/acceptor/acc_socket \
     io/source/acceptor/acceptor \
