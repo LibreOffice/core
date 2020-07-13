@@ -31,6 +31,8 @@ class VCL_DLLPUBLIC FormattedField : public SpinField
 public:
     FormattedField(vcl::Window* pParent, WinBits nStyle);
 
+    virtual void dispose() override;
+
     // Spin-Handling
     virtual void Up() override;
     virtual void Down() override;
