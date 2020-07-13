@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dbpool2" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.sdbc.OConnectionPool">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.sdbc.OConnectionPool"
+    constructor="connectivity_OPoolCollection_get_implementation">
     <service name="com.sun.star.sdbc.ConnectionPool"/>
   </implementation>
 </component>

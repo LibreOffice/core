@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  )
 
 OUString SAL_CALL OPoolCollection::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.sdbc.OConnectionPool";
 }
 
 sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName )
@@ -147,26 +147,7 @@ sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceNam
 
 Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
-}
-
-//---------------------------------------OPoolCollection----------------------------------
-Reference< XInterface > OPoolCollection::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return static_cast<XDriverManager*>(new OPoolCollection(comphelper::getComponentContext(_rxFactory)));
-}
-
-
-OUString OPoolCollection::getImplementationName_Static(  )
-{
-    return "com.sun.star.sdbc.OConnectionPool";
-}
-
-
-Sequence< OUString > OPoolCollection::getSupportedServiceNames_Static(  )
-{
-    Sequence< OUString > aSupported { "com.sun.star.sdbc.ConnectionPool" };
-    return aSupported;
+    return { "com.sun.star.sdbc.ConnectionPool" };
 }
 
 Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL )
@@ -476,6 +457,13 @@ void OPoolCollection::clearDesktop()
     if ( m_xDesktop.is() )
         m_xDesktop->removeTerminateListener(this);
     m_xDesktop.clear();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_OPoolCollection_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OPoolCollection(context));
 }
 
 
