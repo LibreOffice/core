@@ -29,7 +29,6 @@ core_factory_list = [
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
-    ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
@@ -251,6 +250,8 @@ core_constructor_list = [
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+# shell/source/backends/localebe/localebe1.component
+    "shell_LocaleBackend_get_implementation",
 # sot/util/sot.component
     "com_sun_star_comp_embed_OLESimpleStorage",
 # stoc/source/inspect/introspection.component
