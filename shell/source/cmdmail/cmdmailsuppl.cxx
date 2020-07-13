@@ -49,16 +49,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 
-namespace
-{
-    Sequence< OUString > Component_getSupportedServiceNames()
-    {
-        Sequence< OUString > aRet { "com.sun.star.system.SimpleCommandMail" };
-        return aRet;
-    }
-
-}
-
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
@@ -286,7 +276,14 @@ sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
 {
-    return Component_getSupportedServiceNames();
+    return { "com.sun.star.system.SimpleCommandMail" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_CmdMailSuppl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new CmdMailSuppl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
