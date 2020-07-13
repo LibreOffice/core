@@ -12298,6 +12298,8 @@ public:
 
     virtual void sync_value_from_formatter() override
     {
+        if (!m_xFormatter)
+            return;
         disable_notify_events();
         gtk_spin_button_set_value(m_pButton, m_xFormatter->GetValue());
         enable_notify_events();
@@ -12305,6 +12307,8 @@ public:
 
     virtual void sync_range_from_formatter() override
     {
+        if (!m_xFormatter)
+            return;
         disable_notify_events();
         double fMin = m_xFormatter->HasMinValue() ? m_xFormatter->GetMinValue() : std::numeric_limits<double>::lowest();
         double fMax = m_xFormatter->HasMaxValue() ? m_xFormatter->GetMaxValue() : std::numeric_limits<double>::max();
@@ -12314,6 +12318,8 @@ public:
 
     virtual void sync_increments_from_formatter() override
     {
+        if (!m_xFormatter)
+            return;
         disable_notify_events();
         double fSpinSize = m_xFormatter->GetSpinSize();
         gtk_spin_button_set_increments(m_pButton, fSpinSize, fSpinSize * 10);
