@@ -2272,10 +2272,14 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-VclPtr<Control> DbTimeField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& /*_rxModel*/ )
+VclPtr<Control> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
 {
-    WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
-    return VclPtr<TimeField>::Create( _pParent, _nFieldStyle );
+    return VclPtr<TimeControl>::Create(pParent, bSpinButton);
+}
+
+CellControllerRef DbTimeField::CreateController() const
+{
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
 }
 
 void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
@@ -2292,23 +2296,28 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
     bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
-    static_cast< TimeField* >( m_pWindow.get() )->SetExtFormat( static_cast<ExtTimeFieldFormat>(nFormat) );
-    static_cast< TimeField* >( m_pWindow.get() )->SetMin( aMin );
-    static_cast< TimeField* >( m_pWindow.get() )->SetMax( aMax );
-    static_cast< TimeField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-    static_cast< TimeField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    weld::TimeFormatter& rControlFormatter = static_cast<weld::TimeFormatter&>(pControl->get_formatter());
 
-    static_cast< TimeField* >( m_pPainter.get() )->SetExtFormat( static_cast<ExtTimeFieldFormat>(nFormat) );
-    static_cast< TimeField* >( m_pPainter.get() )->SetMin( aMin );
-    static_cast< TimeField* >( m_pPainter.get() )->SetMax( aMax );
-    static_cast< TimeField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-    static_cast< TimeField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
+    rControlFormatter.SetExtFormat(static_cast<ExtTimeFieldFormat>(nFormat));
+    rControlFormatter.SetMin(aMin);
+    rControlFormatter.SetMax(aMax);
+    rControlFormatter.SetStrictFormat( bStrict );
+//TODO    static_cast< TimeField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+
+    FormattedControlBase* pPainter = static_cast<FormattedControlBase*>(m_pPainter.get());
+    weld::TimeFormatter& rPainterFormatter = static_cast<weld::TimeFormatter&>(pPainter->get_formatter());
+
+    rPainterFormatter.SetExtFormat(static_cast<ExtTimeFieldFormat>(nFormat));
+    rPainterFormatter.SetMin(aMin);
+    rPainterFormatter.SetMax(aMax);
+    rPainterFormatter.SetStrictFormat( bStrict );
+//TODO    static_cast< TimeField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
 }
 
 namespace
 {
-
-    OUString lcl_setFormattedTime_nothrow( TimeField& _rField, const Reference< XColumn >& _rxField )
+    OUString lcl_setFormattedTime_nothrow(TimeControl& _rField, const Reference<XColumn>& _rxField)
     {
         OUString sTime;
         if ( _rxField.is() )
@@ -2317,11 +2326,11 @@ namespace
             {
                 css::util::Time aValue = _rxField->getTime();
                 if ( _rxField->wasNull() )
-                    _rField.SetText( sTime );
+                    _rField.get_widget().set_text(OUString());
                 else
                 {
-                    _rField.SetTime( ::tools::Time( aValue ) );
-                    sTime = _rField.GetText();
+                    static_cast<weld::TimeFormatter&>(_rField.get_formatter()).SetTime( ::tools::Time( aValue ) );
+                    sTime = _rField.get_widget().get_text();
                 }
             }
             catch( const Exception& )
@@ -2335,31 +2344,37 @@ namespace
 
 OUString DbTimeField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-    return lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pPainter.get() ), _rxField );
+    return lcl_setFormattedTime_nothrow(*static_cast<TimeControl*>(m_pPainter.get()), _rxField);
 }
 
 void DbTimeField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
-    lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pWindow.get() ), _rxField );
+    lcl_setFormattedTime_nothrow(*static_cast<TimeControl*>(m_pWindow.get()), _rxField);
 }
 
 void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbTimeField::updateFromModel: invalid call!" );
 
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    weld::TimeFormatter& rControlFormatter = static_cast<weld::TimeFormatter&>(pControl->get_formatter());
+
     util::Time aTime;
     if ( _rxModel->getPropertyValue( FM_PROP_TIME ) >>= aTime )
-        static_cast< TimeField* >( m_pWindow.get() )->SetTime( ::tools::Time( aTime ) );
+        rControlFormatter.SetTime(::tools::Time(aTime));
     else
-        static_cast< TimeField* >( m_pWindow.get() )->SetText( OUString() );
+        pControl->get_widget().set_text(OUString());
 }
 
 bool DbTimeField::commitControl()
 {
-    OUString aText(m_pWindow->GetText());
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    weld::TimeFormatter& rControlFormatter = static_cast<weld::TimeFormatter&>(pControl->get_formatter());
+
+    OUString aText(pControl->get_widget().get_text());
     Any aVal;
     if (!aText.isEmpty())
-        aVal <<= static_cast<TimeField*>(m_pWindow.get())->GetTime().GetUNOTime();
+        aVal <<= rControlFormatter.GetTime().GetUNOTime();
     else
         aVal.clear();
 
