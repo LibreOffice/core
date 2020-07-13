@@ -29,7 +29,6 @@ $(eval $(call gb_Library_set_componentfile,localebe1,shell/source/backends/local
 
 $(eval $(call gb_Library_add_exception_objects,localebe1,\
     shell/source/backends/localebe/localebackend \
-    shell/source/backends/localebe/localebecdef \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

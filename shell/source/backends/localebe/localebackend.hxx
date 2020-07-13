@@ -38,8 +38,6 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
 
     public:
 
-        static LocaleBackend* createInstance();
-
         // XServiceInfo
         virtual OUString SAL_CALL
             getImplementationName(  ) override ;
@@ -49,19 +47,6 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
 
         virtual uno::Sequence<OUString> SAL_CALL
             getSupportedServiceNames(  ) override ;
-
-        /**
-          Provides the implementation name.
-
-          @return   implementation name
-          */
-        static OUString getBackendName() ;
-        /**
-          Provides the supported services names
-
-          @return   service names
-          */
-        static uno::Sequence<OUString> getBackendServiceNames() ;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -94,7 +79,6 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
             css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
-    private:
         /**
           Service constructor from a service factory.
 
@@ -105,6 +89,7 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
         /** Destructor */
         virtual ~LocaleBackend() override ;
 
+    private:
         // Returns the user locale
         static css::beans::Optional<css::uno::Any> getLocale();
 
