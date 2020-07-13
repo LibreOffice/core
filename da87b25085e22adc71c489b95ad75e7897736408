@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff4490fd_7100fc9e",
+        "filename": "offapi/com/sun/star/chart2/DataSeries.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-13T13:31:16Z",
+      "side": 1,
+      "message": "Instead of copying a (custom, so not standardized) OOXML attribute, the suggested solution is to plan OpenDocument extension, and implement new features according to it. Planning is vital for the UNO API. For example, it\u0027s very likely, that we will want the labels in different fancy styles, for example, in a speech balloon etc., not only at the end of a thin leader line, so this name could be misleading. What about to define a \"LabelStyle\" enum type instead of this, now only with the NONE and SOLID values (see LineStyle.idl)?",
+      "range": {
+        "startLine": 196,
+        "startChar": 52,
+        "endLine": 196,
+        "endChar": 67
+      },
+      "revId": "da87b25085e22adc71c489b95ad75e7897736408",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
