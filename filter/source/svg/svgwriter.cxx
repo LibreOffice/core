@@ -3745,13 +3745,14 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case MetaActionType::MASKSCALEPART:
             case MetaActionType::WALLPAPER:
             case MetaActionType::TEXTLINE:
+            case MetaActionType::TEXTLANGUAGE:
             {
                 // !!! >>> we don't want to support these actions
             }
             break;
 
             default:
-                OSL_FAIL( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
+                SAL_WARN("filter.svg", "SVGActionWriter::ImplWriteActions: unsupported MetaAction # "  << sal_Int32(nType));
             break;
         }
     }
