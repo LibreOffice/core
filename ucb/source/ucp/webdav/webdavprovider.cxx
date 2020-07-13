@@ -103,8 +103,16 @@ ContentProvider::getSupportedServiceNames_Static()
 
 // Service factory implementation.
 
+css::uno::Reference< css::lang::XSingleServiceFactory >
+ContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                ContentProvider::getImplementationName_Static(),
+                ContentProvider_CreateInstance,
+                ContentProvider::getSupportedServiceNames_Static() );
+}
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 
 // XContentProvider methods.

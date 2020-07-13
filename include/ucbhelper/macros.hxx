@@ -167,20 +167,6 @@ Class::getSupportedServiceNames()                                           \
     return getSupportedServiceNames_Static();                               \
 }
 
-// XServiceInfo impl.
-
-
-#define ONE_INSTANCE_SERVICE_FACTORY_IMPL( Class )                          \
-css::uno::Reference< css::lang::XSingleServiceFactory >       \
-Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )    \
-{                                                                           \
-    return cppu::createOneInstanceFactory(                                  \
-                rxServiceMgr,                                               \
-                Class::getImplementationName_Static(),                      \
-                Class##_CreateInstance,                                     \
-                Class::getSupportedServiceNames_Static() );                 \
-}
-
 #endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
