@@ -1150,6 +1150,12 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
+void FormattedField::dispose()
+{
+    m_xFormatter.reset();
+    SpinField::dispose();
+}
+
 void FormattedField::SetText(const OUString& rStr)
 {
     GetFormatter().SetFieldText(rStr, Selection(0, 0));
@@ -1294,8 +1300,8 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
-        GetFormatter().EntryLostFocus();
+    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_xFormatter)
+        m_xFormatter->EntryLostFocus();
 
     return SpinField::EventNotify( rNEvt );
 }
