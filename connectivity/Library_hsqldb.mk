@@ -52,7 +52,6 @@ $(eval $(call gb_Library_add_exception_objects,hsqldb,\
 	connectivity/source/drivers/hsqldb/HUsers \
 	connectivity/source/drivers/hsqldb/HView \
 	connectivity/source/drivers/hsqldb/HViews \
-	connectivity/source/drivers/hsqldb/Hservices \
 	connectivity/source/drivers/hsqldb/StorageFileAccess \
 	connectivity/source/drivers/hsqldb/StorageNativeInputStream \
 	connectivity/source/drivers/hsqldb/StorageNativeOutputStream \
