@@ -63,21 +63,6 @@ using namespace ::osl;
 
 namespace stoc_javaloader {
 
-static Mutex & getInitMutex();
-
-static Sequence< OUString > loader_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = "com.sun.star.loader.Java";
-    seqNames.getArray()[1] = "com.sun.star.loader.Java2";
-    return seqNames;
-}
-
-static OUString loader_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.stoc.JavaComponentLoader" );
-}
-
 class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServiceInfo>
 {
     css::uno::Reference<XComponentContext> m_xComponentContext;
@@ -115,7 +100,8 @@ public:
 
 const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()
 {
-    MutexGuard aGuard(getInitMutex());
+    static Mutex ourMutex;
+    MutexGuard aGuard(ourMutex);
 
     if (m_javaLoader.is())
         return m_javaLoader;
@@ -288,7 +274,7 @@ JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentCon
 // XServiceInfo
 OUString SAL_CALL JavaComponentLoader::getImplementationName()
 {
-    return loader_getImplementationName();
+    return "com.sun.star.comp.stoc.JavaComponentLoader";
 }
 
 sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
@@ -298,7 +284,7 @@ sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceN
 
 Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 {
-    return loader_getSupportedServiceNames();
+    return { "com.sun.star.loader.Java", "com.sun.star.loader.Java2" };
 }
 
 
@@ -324,18 +310,12 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     return loader->activate(rImplName, blabla, rLibName, xKey);
 }
 
-static Mutex & getInitMutex()
-{
-    static Mutex ourMutex;
-
-    return ourMutex;
-}
-
-/// @throws Exception
-static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stoc_JavaComponentLoader_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     try {
-        return *new JavaComponentLoader(xCtx);
+        return cppu::acquire(new JavaComponentLoader(context));
     }
     catch(const RuntimeException & runtimeException) {
         SAL_INFO(
@@ -348,25 +328,5 @@ static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const 
 } //end namespace
 
 
-using namespace stoc_javaloader;
-
-static const struct ImplementationEntry g_entries[] =
-{
-    {
-        JavaComponentLoader_CreateInstance, loader_getImplementationName,
-        loader_getSupportedServiceNames, createOneInstanceComponentFactory,
-        nullptr , 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * javaloader_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
