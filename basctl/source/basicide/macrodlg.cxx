@@ -76,8 +76,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
-    // tdf#70813 The macros should be listed alphabetically
-    m_xMacroBox->make_sorted();
 
     m_aMacrosInTxtBaseStr = m_xMacrosInTxt->get_label();
 
