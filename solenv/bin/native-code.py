@@ -27,7 +27,6 @@ core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
-    ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
@@ -241,6 +240,12 @@ core_constructor_list = [
     "com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation",
     "com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation",
     "com_sun_star_text_DefaultNumberingProvider_get_implementation",
+# linguistc/source/lng.component
+    "linguistic_ConvDicList_get_implementation",
+    "linguistic_DicList_get_implementation",
+    "linguistic_LinguProps_get_implementation",
+    "linguistic_LngSvcMgr_get_implementation",
+    "linguistic_GrammarCheckingIterator_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",

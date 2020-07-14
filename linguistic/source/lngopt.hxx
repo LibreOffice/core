@@ -195,17 +195,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-
-    static inline OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
 };
-
-inline OUString LinguProps::getImplementationName_Static() throw()
-{
-    return "com.sun.star.lingu2.LinguProps";
-}
-
 
 #endif
 

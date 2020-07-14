@@ -44,7 +44,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "lngsvcmgr.hxx"
-#include "lngreg.hxx"
 #include <linguistic/misc.hxx>
 #include "spelldsp.hxx"
 #include "hyphdsp.hxx"
@@ -1818,7 +1817,7 @@ bool LngSvcMgr::AddLngSvcEvtBroadcaster(
 OUString SAL_CALL
     LngSvcMgr::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.lingu2.LngSvcMgr";
 }
 
 
@@ -1832,43 +1831,17 @@ sal_Bool SAL_CALL
 uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
-        throw()
-{
     return { "com.sun.star.linguistic2.LinguServiceManager" };
 }
 
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface > LngSvcMgr_CreateInstance(
-            const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+linguistic_LngSvcMgr_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    uno::Reference< uno::XInterface > xService = static_cast<cppu::OWeakObject*>(new LngSvcMgr);
-    return xService;
+    static rtl::Reference<LngSvcMgr> g_Instance(new LngSvcMgr());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-void * LngSvcMgr_getFactory(
-            const char * pImplName,
-            lang::XMultiServiceFactory * pServiceManager )
-{
-
-    void * pRet = nullptr;
-    if ( LngSvcMgr::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                pServiceManager,
-                LngSvcMgr::getImplementationName_Static(),
-                LngSvcMgr_CreateInstance,
-                LngSvcMgr::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

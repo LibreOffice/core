@@ -66,7 +66,6 @@ $(eval $(call gb_Library_add_exception_objects,lng,\
 	linguistic/source/iprcache \
 	linguistic/source/lngopt \
 	linguistic/source/lngprophelp \
-	linguistic/source/lngreg \
 	linguistic/source/lngsvcmgr \
 	linguistic/source/misc \
 	linguistic/source/misc2 \
