@@ -157,18 +157,9 @@ public:
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) override;
 
-    static inline OUString   getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
-
     bool    AddLngSvcEvtBroadcaster(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };
-
-
-inline OUString LngSvcMgr::getImplementationName_Static()
-{
-    return "com.sun.star.lingu2.LngSvcMgr";
-}
 
 
 #endif

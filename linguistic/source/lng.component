@@ -18,20 +18,25 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="lng" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.lingu2.ConvDicList">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.lingu2.ConvDicList"
+    constructor="linguistic_ConvDicList_get_implementation">
     <service name="com.sun.star.linguistic2.ConversionDictionaryList"/>
   </implementation>
-  <implementation name="com.sun.star.lingu2.DicList">
+  <implementation name="com.sun.star.lingu2.DicList"
+    constructor="linguistic_DicList_get_implementation">
     <service name="com.sun.star.linguistic2.DictionaryList"/>
   </implementation>
-  <implementation name="com.sun.star.lingu2.LinguProps">
+  <implementation name="com.sun.star.lingu2.LinguProps"
+    constructor="linguistic_LinguProps_get_implementation">
     <service name="com.sun.star.linguistic2.LinguProperties"/>
   </implementation>
-  <implementation name="com.sun.star.lingu2.LngSvcMgr">
+  <implementation name="com.sun.star.lingu2.LngSvcMgr"
+    constructor="linguistic_LngSvcMgr_get_implementation">
     <service name="com.sun.star.linguistic2.LinguServiceManager"/>
   </implementation>
-  <implementation name="com.sun.star.lingu2.ProofreadingIterator">
+  <implementation name="com.sun.star.lingu2.ProofreadingIterator"
+    constructor="linguistic_GrammarCheckingIterator_get_implementation">
     <service name="com.sun.star.linguistic2.ProofreadingIterator"/>
   </implementation>
 </component>
