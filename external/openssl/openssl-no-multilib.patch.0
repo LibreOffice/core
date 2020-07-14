@@ -1,0 +1,38 @@
+--- Configure.orig	2020-04-21 14:22:39.000000000 +0200
++++ Configure	2020-07-07 17:25:19.256297500 +0200
+@@ -24,7 +24,7 @@
+ my $orig_death_handler = $SIG{__DIE__};
+ $SIG{__DIE__} = \&death_handler;
+ 
+-my $usage="Usage: Configure [no-<cipher> ...] [enable-<cipher> ...] [-Dxxx] [-lxxx] [-Lxxx] [-fxxx] [-Kxxx] [no-hw-xxx|no-hw] [[no-]threads] [[no-]shared] [[no-]zlib|zlib-dynamic] [no-asm] [no-egd] [sctp] [386] [--prefix=DIR] [--openssldir=OPENSSLDIR] [--with-xxx[=vvv]] [--config=FILE] os/compiler[:flags]\n";
++my $usage="Usage: Configure [no-<cipher> ...] [enable-<cipher> ...] [-Dxxx] [-lxxx] [-Lxxx] [-fxxx] [-Kxxx] [no-hw-xxx|no-hw] [[no-]threads] [[no-]shared] [[no-]zlib|zlib-dynamic] [no-asm] [no-egd] [no-multilib] [sctp] [386] [--prefix=DIR] [--openssldir=OPENSSLDIR] [--with-xxx[=vvv]] [--config=FILE] os/compiler[:flags]\n";
+ 
+ # Options:
+ #
+@@ -59,6 +59,7 @@
+ #               If disabled, it also disables shared and dynamic-engine.
+ # no-asm        do not use assembler
+ # no-egd        do not compile support for the entropy-gathering daemon APIs
++# no-multilib   exclude multilib identifier from library name
+ # [no-]zlib     [don't] compile support for zlib compression.
+ # zlib-dynamic  Like "zlib", but the zlib library is expected to be a shared
+ #               library and will be loaded in run-time by the OpenSSL library.
+@@ -383,6 +384,7 @@
+     "mdc2",
+     "msan",
+     "multiblock",
++    "multilib",
+     "nextprotoneg",
+     "pinshared",
+     "ocb",
+@@ -1754,6 +1756,10 @@
+             if (-f catfile($srcdir, "test", $_, "build.info"));
+     }
+ 
++    if ($disabled{"multilib"}) {
++        $target{"multilib"} = "";
++    }
++
+     $config{build_infos} = [ ];
+ 
+     my %ordinals = ();

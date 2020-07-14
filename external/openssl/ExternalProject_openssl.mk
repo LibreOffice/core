@@ -42,7 +42,9 @@ OPENSSL_PLATFORM := \
         ios-armv7\
       ,\
         $(if $(filter WNT,$(OS)),\
-          $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
+          $(if $(filter INTEL,$(CPUNAME)),VC-WIN32)\
+          $(if $(filter X86_64,$(CPUNAME)),VC-WIN64A)\
+          $(if $(filter ARM64,$(CPUNAME)),VC-WIN64-ARM)\
         ,\
           $(if $(filter MACOSX,$(OS)),\
             $(if $(filter POWERPC,$(CPUNAME)),darwin-ppc-cc)\
@@ -57,14 +59,9 @@ OPENSSL_PLATFORM := \
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
-		export CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC)) $(if $(findstring 140_70,$(VCVER)_$(WINDOWS_SDK_VERSION)),-D_USING_V110_SDK71_)" \
+		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
 		&& export PERL="$(shell cygpath -w $(PERL))" \
-		&& export LIB="$(ILIB)" \
-		&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
-		&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
-		&& unset MAKEFLAGS \
-		&& nmake -f "ms\ntdll.mak" \
-		&& mv inc32/* include/ \
+		&& nmake -f makefile \
 	)
 
 else
@@ -76,9 +73,8 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		$(if $(filter WNT,$(OS)), \
 			$(PERL) Configure, \
 			./config)) \
-			$(OPENSSL_PLATFORM) no-dso no-shared \
-			$(if $(filter-out WNT,$(OS)),no-idea) \
-			$(if $(filter-out ANDROID IOS WNT,$(OS)), \
+			$(OPENSSL_PLATFORM) no-dso no-shared no-tests no-multilib threads \
+			$(if $(filter-out ANDROID iOS WNT,$(OS)), \
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) build_libs \

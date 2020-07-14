@@ -80,7 +80,7 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  	# Quote the .exe name in case it has spaces
  	my $opensslcmd =
 -	  qq("$self->{options}->{openssl}\\bin\\openssl.exe" version 2>&1);
-+	  qq("$self->{options}->{openssl}\\out32dll\\openssl.exe" version 2>&1);
++	  qq("$self->{options}->{openssl}\\apps\\openssl.exe" version 2>&1);
 + print "$opensslcmd";
  	my $sslout = `$opensslcmd`;
  
@@ -101,10 +101,10 @@ Also Cygwin perl has $Config{osname} different from MSWin32, and why even check 
  				# parameter.
  				$proj->AddLibrary(
 -					$self->{options}->{openssl} . '\lib\ssleay32.lib', 0);
-+					$self->{options}->{openssl} . '\out32dll\ssleay32.lib', 0);
++					$self->{options}->{openssl} . '\ssleay32.lib', 0);
  				$proj->AddLibrary(
 -					$self->{options}->{openssl} . '\lib\libeay32.lib', 0);
-+					$self->{options}->{openssl} . '\out32dll\libeay32.lib', 0);
++					$self->{options}->{openssl} . '\libeay32.lib', 0);
  			}
  		}
  	}

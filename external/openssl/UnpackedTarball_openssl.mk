@@ -12,16 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,openssl))
 $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	external/openssl/openssllnx.patch \
-	external/openssl/opensslwnt.patch \
-	external/openssl/openssl-1.0.1h-win64.patch.1 \
-	external/openssl/opensslsol.patch \
-	external/openssl/opensslios.patch \
-	external/openssl/opensslosxppc.patch \
-	external/openssl/openssl-3650-masm.patch.1 \
-	external/openssl/openssl-fixbuild.patch.1 \
-	external/openssl/openssl-1.0.2k-cve-2020-1971.patch.1 \
-	external/openssl/ccb0a11145ee72b042d10593a64eaf9e8a55ec12.patch.1 \
+	external/openssl/openssl-no-multilib.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
