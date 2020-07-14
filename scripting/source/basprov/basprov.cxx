@@ -60,28 +60,6 @@ using namespace ::sf_misc;
 namespace basprov
 {
 
-
-    // component operations
-
-
-    static OUString getImplementationName_BasicProviderImpl()
-    {
-        return "com.sun.star.comp.scripting.ScriptProviderForBasic";
-    }
-
-
-    static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
-    {
-        static Sequence< OUString > s_Names{
-            "com.sun.star.script.provider.ScriptProviderForBasic",
-            "com.sun.star.script.provider.LanguageScriptProvider",
-            "com.sun.star.script.provider.ScriptProvider",
-            "com.sun.star.script.browse.BrowseNode"};
-
-        return s_Names;
-    }
-
-
     // BasicProviderImpl
 
 
@@ -170,7 +148,7 @@ namespace basprov
     // XServiceInfo
     OUString BasicProviderImpl::getImplementationName(  )
     {
-        return getImplementationName_BasicProviderImpl();
+        return "com.sun.star.comp.scripting.ScriptProviderForBasic";
     }
 
     sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName )
@@ -180,7 +158,11 @@ namespace basprov
 
     Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_BasicProviderImpl();
+        return {
+            "com.sun.star.script.provider.ScriptProviderForBasic",
+            "com.sun.star.script.provider.LanguageScriptProvider",
+            "com.sun.star.script.provider.ScriptProvider",
+            "com.sun.star.script.browse.BrowseNode"};
     }
 
 
@@ -484,40 +466,14 @@ namespace basprov
 
     // component operations
 
-
-    static Reference< XInterface > create_BasicProviderImpl(
-        Reference< XComponentContext > const & xContext )
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    scripting_BasicProviderImpl_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return static_cast< lang::XTypeProvider * >( new BasicProviderImpl( xContext ) );
+        return cppu::acquire(new BasicProviderImpl(context));
     }
-
-
-    struct ::cppu::ImplementationEntry const s_component_entries [] =
-    {
-        {
-            create_BasicProviderImpl, getImplementationName_BasicProviderImpl,
-            getSupportedServiceNames_BasicProviderImpl, ::cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-    };
 
 
 }   // namespace basprov
-
-
-// component exports
-
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void * basprov_component_getFactory(
-        const char * pImplName, void * pServiceManager,
-        void * pRegistryKey )
-    {
-        return ::cppu::component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, ::basprov::s_component_entries );
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
