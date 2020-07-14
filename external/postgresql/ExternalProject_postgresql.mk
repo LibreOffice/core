@@ -42,7 +42,7 @@ endif
 ifeq ($(DISABLE_OPENSSL),)
 ifeq ($(SYSTEM_OPENSSL),)
 postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openssl)/include
-postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl)/
+postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl)/ $(if $(filter $(OS),LINUX),-pthread)
 endif
 endif
 
