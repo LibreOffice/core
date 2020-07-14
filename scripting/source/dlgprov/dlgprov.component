@@ -18,13 +18,15 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dlgprov" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.scripting.DialogProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.scripting.DialogProvider"
+    constructor="scripting_DialogProviderImpl_get_implementation">
     <service name="com.sun.star.awt.ContainerWindowProvider"/>
     <service name="com.sun.star.awt.DialogProvider"/>
     <service name="com.sun.star.awt.DialogProvider2"/>
   </implementation>
-  <implementation name="com.sun.star.comp.scripting.DialogModelProvider">
+  <implementation name="com.sun.star.comp.scripting.DialogModelProvider"
+    constructor="scripting_DialogModelProvider_get_implementation">
     <service name="com.sun.star.awt.UnoControlDialogModelProvider"/>
   </implementation>
 </component>
