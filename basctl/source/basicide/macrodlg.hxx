@@ -58,6 +58,7 @@ private:
     DECL_LINK(MacroDoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(BasicSelectHdl, weld::TreeView&, void);
     DECL_LINK(EditModifyHdl, weld::Entry&, void);
+    DECL_LINK(ContextMenuHdl, const CommandEvent&, bool);
     DECL_LINK(ButtonHdl, weld::Button&, void);
 
     void                CheckButtons();

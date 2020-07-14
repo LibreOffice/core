@@ -53,6 +53,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/modulepage \
 	basctl/uiconfig/basicide/ui/newlibdialog \
 	basctl/uiconfig/basicide/ui/organizedialog \
+	basctl/uiconfig/basicide/ui/sortmenu \
 ))
 
 # vim: set noet sw=4 ts=4:
