@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UITest_UITest,sfx2_doc))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libffi,libffi))
 
-$(eval $(call gb_UITest_add_modules,sfx2_doc,$(SRCDIR)/sfx2/qa/uitest,\
-	doc/ \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,libffi,libffi))
 
-$(eval $(call gb_UITest_set_defs,sfx2_doc, \
-    TDOC="$(SRCDIR)/sfx2/qa/uitest/doc/data" \
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_files,libffi,$(LIBO_LIB_FOLDER)/python-core-$(PYTHON_VERSION)/lib, \
+    $(HOST_PLATFORM)/.libs/libffi-7.dll \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
