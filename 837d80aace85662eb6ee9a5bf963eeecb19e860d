@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "19ee66a6_bea273c1",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T15:06:52Z",
+      "side": 1,
+      "message": "Please take new property list from the current property set each time for each processed entity (char style / para style).",
+      "range": {
+        "startLine": 172,
+        "startChar": 48,
+        "endLine": 172,
+        "endChar": 59
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8517840c_72740635",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
