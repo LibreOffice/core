@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7bc3bc5_2fa6f3ed",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T14:20:57Z",
+      "side": 1,
+      "message": "this *is* a reference to an UNO interface, so its \"x\" is fine",
+      "range": {
+        "startLine": 138,
+        "startChar": 38,
+        "endLine": 138,
+        "endChar": 39
+      },
+      "revId": "168c1d2eb0654466887c14166add1642fd602928",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c4a14e8_75513c8a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T14:20:57Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 139,
+        "startChar": 44,
+        "endLine": 139,
+        "endChar": 45
+      },
+      "revId": "168c1d2eb0654466887c14166add1642fd602928",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
