@@ -495,15 +495,27 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawOutDev()
+    {
+        vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
+        auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
+        exportImage("10-01_draw_out_dev_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testDashedLine()
     {
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDashedLine();
         auto eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
-        exportImage("10-01_dashed_line_test.png", aBitmap);
+        exportImage("11-01_dashed_line_test.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
+
+    // vcl::test::OutputDeviceTestGradient does not verify anything, cannot test here
 
     void testTdf124848()
     {
@@ -584,6 +596,8 @@ public:
     CPPUNIT_TEST(testClipPolygon);
     CPPUNIT_TEST(testClipPolyPolygon);
     CPPUNIT_TEST(testClipB2DPolyPolygon);
+
+    CPPUNIT_TEST(testDrawOutDev);
 
     CPPUNIT_TEST(testDashedLine);
 
