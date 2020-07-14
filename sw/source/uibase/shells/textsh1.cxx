@@ -365,7 +365,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(SwUndoId::REPLACE, &aRewriter);
                 rWrtSh.GetCursor()->Normalize(false);
+
                 rWrtSh.ClearMark();
+                if( rWrtSh.IsInSelect() )  // cancel any in-progress keyboard selection as well
+                    rWrtSh.EndSelect();
+
                 for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
                     rWrtSh.DelLeft();
                 rWrtSh.Insert2( sReplacement );
