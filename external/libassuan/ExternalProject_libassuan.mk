@@ -19,13 +19,13 @@ $(eval $(call gb_ExternalProject_use_externals,libassuan,\
        libgpg-error \
 ))
 
+
 ifeq ($(COM),MSC)
-gb_ExternalProject_libassuan_host := $(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32)
-gb_ExternalProject_libassuan_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
-$(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executable_get_target,cpp)
+$(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executable_get_target_for_build,cpp)
 	$(call gb_Trace_StartRange,libassuan,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-	  autoreconf \
+	  $(gb_WIN_GPG_cross_setup_exports) \
+	  && autoreconf \
 	  && ./configure \
 		--enable-static \
 		--disable-shared \
@@ -34,8 +34,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 		CXXFLAGS="$(CXXFLAGS)" \
 		GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
-        --host=$(gb_ExternalProject_libassuan_host) \
-		RC='windres -O COFF --target=$(gb_ExternalProject_libassuan_target) --preprocessor='\''$(call gb_Executable_get_target,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\' \
+		$(gb_WIN_GPG_platform_switches) \
 		MAKE=$(MAKE) \
 	  && $(MAKE) \
 	)

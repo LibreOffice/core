@@ -12573,8 +12573,6 @@ smoketest/libtest.cxx
 smoketest/smoketest.cxx
 solenv/bin/concat-deps.c
 solenv/gbuildtojson/gbuildtojson.cxx
-solenv/gcc-wrappers/g++.cxx
-solenv/gcc-wrappers/gcc.cxx
 solenv/gcc-wrappers/wrapper.cxx
 soltools/cpp/_cpp.c
 soltools/cpp/_eval.c
