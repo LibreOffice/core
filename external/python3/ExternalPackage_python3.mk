@@ -25,17 +25,14 @@ endif
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	PCbuild/$(python_arch_subdir)_asyncio$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_ctypes_test$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_elementtree$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_msi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_multiprocessing$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_overlapped$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_queue$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_socket$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ssl$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_testbuffer$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_testcapi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
-	PCbuild/$(python_arch_subdir)_testconsole$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)pyexpat$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)select$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)unicodedata$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -44,8 +41,8 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 else
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin,python))
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so.1.0,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so))
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so.1.0-gdb.py,Tools/gdb/libpython.py))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so.1.0,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python-gdb.py,Tools/gdb/libpython.py))
 
 # Unfortunately the python build system does not allow to explicitly enable or
 # disable these, it just tries to build them and then prints which did not
@@ -56,70 +53,68 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(
 
 ifneq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
-	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_asyncio.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/audioop.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/binascii.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_bisect.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_blake2.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/cmath.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_cn.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_hk.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_iso2022.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_jp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_kr.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_codecs_tw.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_contextvars.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_crypt.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_csv.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_ctypes.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_ctypes_test.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_datetime.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_decimal.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_elementtree.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/fcntl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/grp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_asyncio.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/audioop.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/binascii.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_bisect.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_blake2.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/cmath.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_cn.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_hk.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_iso2022.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_jp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_kr.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_codecs_tw.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_contextvars.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_crypt.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_csv.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_ctypes.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_datetime.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_decimal.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_elementtree.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/fcntl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/grp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	$(if $(DISABLE_OPENSSL),, \
-		LO_lib/_hashlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
+		LO_lib/_hashlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	) \
-	LO_lib/_heapq.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_json.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_lsprof.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/math.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_md5.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/mmap.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_multibytecodec.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_multiprocessing.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_opcode.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/ossaudiodev.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/parser.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_pickle.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_posixsubprocess.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/pyexpat.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_queue.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_random.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/resource.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/select.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_sha1.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_sha256.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_sha3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_sha512.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_heapq.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_json.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_lsprof.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/math.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_md5.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/mmap.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_multibytecodec.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_multiprocessing.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_opcode.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/ossaudiodev.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/parser.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_pickle.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_posixshmem.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_posixsubprocess.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/pyexpat.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_queue.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_random.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/resource.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/select.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_sha1.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_sha256.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_sha3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_sha512.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	$(if $(DISABLE_OPENSSL),, \
-		LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
+		LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 	) \
-	LO_lib/_struct.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/syslog.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/termios.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_testbuffer.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_testcapi.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_testimportmultiple.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_testmultiphase.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/unicodedata.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/xxlimited.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/_xxtestfuzz.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_statistics.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_struct.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/syslog.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/termios.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/unicodedata.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/xxlimited.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_xxsubinterpreters.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_xxtestfuzz.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
 ))
 endif
 endif
@@ -140,7 +135,7 @@ endif
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata_m_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
+	LO_lib/_sysconfigdata__$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
 endif
 
@@ -150,6 +145,10 @@ endif
 # idlelib, tkinter, turtledemo - need Tk to build the C module
 # test - probably unnecessary? was explicitly removed #i116738#
 # venv - why would we need virtual environments
+#
+# These lists are now sorted with "LC_COLLATE=C sort", by using
+#   find Lib/ -name "*.py" | sort | sed -e 's/^/\t/' -e 's/$/ \\/'
+#
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LICENSE \
@@ -162,6 +161,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/_dummy_thread.py \
 	Lib/_markupbase.py \
 	Lib/_osx_support.py \
+	Lib/_py_abc.py \
 	Lib/_pydecimal.py \
 	Lib/_pyio.py \
 	Lib/_sitebuiltins.py \
@@ -180,6 +180,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/binhex.py \
 	Lib/bisect.py \
 	Lib/bz2.py \
+	Lib/cProfile.py \
 	Lib/calendar.py \
 	Lib/cgi.py \
 	Lib/cgitb.py \
@@ -195,7 +196,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/contextvars.py \
 	Lib/copy.py \
 	Lib/copyreg.py \
-	Lib/cProfile.py \
 	Lib/crypt.py \
 	Lib/csv.py \
 	Lib/dataclasses.py \
@@ -232,7 +232,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/linecache.py \
 	Lib/locale.py \
 	Lib/lzma.py \
-	Lib/macpath.py \
 	Lib/mailbox.py \
 	Lib/mailcap.py \
 	Lib/mimetypes.py \
@@ -260,21 +259,20 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/profile.py \
 	Lib/pstats.py \
 	Lib/pty.py \
-	Lib/pyclbr.py \
-	Lib/_py_abc.py \
 	Lib/py_compile.py \
+	Lib/pyclbr.py \
 	Lib/pydoc.py \
 	Lib/queue.py \
 	Lib/quopri.py \
 	Lib/random.py \
-	Lib/reprlib.py \
 	Lib/re.py \
+	Lib/reprlib.py \
 	Lib/rlcompleter.py \
 	Lib/runpy.py \
 	Lib/sched.py \
 	Lib/secrets.py \
-	Lib/shelve.py \
 	Lib/selectors.py \
+	Lib/shelve.py \
 	Lib/shlex.py \
 	Lib/shutil.py \
 	Lib/signal.py \
@@ -288,10 +286,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/sre_constants.py \
 	Lib/sre_parse.py \
 	Lib/ssl.py \
-	Lib/statistics.py \
 	Lib/stat.py \
-	Lib/stringprep.py \
+	Lib/statistics.py \
 	Lib/string.py \
+	Lib/stringprep.py \
 	Lib/struct.py \
 	Lib/subprocess.py \
 	Lib/sunau.py \
@@ -306,10 +304,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/this.py \
 	Lib/threading.py \
 	Lib/timeit.py \
-	Lib/tokenize.py \
 	Lib/token.py \
-	Lib/traceback.py \
+	Lib/tokenize.py \
 	Lib/trace.py \
+	Lib/traceback.py \
+	Lib/tracemalloc.py \
 	Lib/tty.py \
 	Lib/turtle.py \
 	Lib/types.py \
@@ -321,14 +320,41 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/weakref.py \
 	Lib/webbrowser.py \
 	Lib/xdrlib.py \
+	Lib/zipapp.py \
 	Lib/zipfile.py \
+	Lib/zipimport.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/asyncio,\
+	Lib/asyncio/__init__.py \
+	Lib/asyncio/__main__.py \
+	Lib/asyncio/base_events.py \
 	Lib/asyncio/base_futures.py \
+	Lib/asyncio/base_subprocess.py \
 	Lib/asyncio/base_tasks.py \
+	Lib/asyncio/constants.py \
+	Lib/asyncio/coroutines.py \
+	Lib/asyncio/events.py \
+	Lib/asyncio/exceptions.py \
 	Lib/asyncio/format_helpers.py \
+	Lib/asyncio/futures.py \
+	Lib/asyncio/locks.py \
+	Lib/asyncio/log.py \
+	Lib/asyncio/proactor_events.py \
+	Lib/asyncio/protocols.py \
+	Lib/asyncio/queues.py \
 	Lib/asyncio/runners.py \
+	Lib/asyncio/selector_events.py \
+	Lib/asyncio/sslproto.py \
+	Lib/asyncio/staggered.py \
+	Lib/asyncio/streams.py \
+	Lib/asyncio/subprocess.py \
+	Lib/asyncio/tasks.py \
+	Lib/asyncio/transports.py \
+	Lib/asyncio/trsock.py \
+	Lib/asyncio/unix_events.py \
+	Lib/asyncio/windows_events.py \
+	Lib/asyncio/windows_utils.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/collections,\
@@ -383,8 +409,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/distutils/errors.py \
 	Lib/distutils/extension.py \
 	Lib/distutils/fancy_getopt.py \
-	Lib/distutils/filelist.py \
 	Lib/distutils/file_util.py \
+	Lib/distutils/filelist.py \
 	Lib/distutils/log.py \
 	Lib/distutils/msvc9compiler.py \
 	Lib/distutils/msvccompiler.py \
@@ -393,44 +419,44 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/distutils/text_file.py \
 	Lib/distutils/unixccompiler.py \
 	Lib/distutils/util.py \
-	Lib/distutils/versionpredicate.py \
 	Lib/distutils/version.py \
+	Lib/distutils/versionpredicate.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/distutils/command,\
 	Lib/distutils/command/__init__.py \
+	Lib/distutils/command/bdist.py \
 	Lib/distutils/command/bdist_dumb.py \
 	Lib/distutils/command/bdist_msi.py \
-	Lib/distutils/command/bdist.py \
 	Lib/distutils/command/bdist_rpm.py \
 	Lib/distutils/command/bdist_wininst.py \
+	Lib/distutils/command/build.py \
 	Lib/distutils/command/build_clib.py \
 	Lib/distutils/command/build_ext.py \
-	Lib/distutils/command/build.py \
 	Lib/distutils/command/build_py.py \
 	Lib/distutils/command/build_scripts.py \
 	Lib/distutils/command/check.py \
 	Lib/distutils/command/clean.py \
 	Lib/distutils/command/command_template \
 	Lib/distutils/command/config.py \
+	Lib/distutils/command/install.py \
 	Lib/distutils/command/install_data.py \
 	Lib/distutils/command/install_egg_info.py \
 	Lib/distutils/command/install_headers.py \
 	Lib/distutils/command/install_lib.py \
-	Lib/distutils/command/install.py \
 	Lib/distutils/command/install_scripts.py \
 	Lib/distutils/command/register.py \
 	Lib/distutils/command/sdist.py \
 	Lib/distutils/command/upload.py \
-	Lib/distutils/command/wininst-10.0-amd64.exe \
 	Lib/distutils/command/wininst-10.0.exe \
-	Lib/distutils/command/wininst-14.0-amd64.exe \
+	Lib/distutils/command/wininst-10.0-amd64.exe \
 	Lib/distutils/command/wininst-14.0.exe \
+	Lib/distutils/command/wininst-14.0-amd64.exe \
 	Lib/distutils/command/wininst-6.0.exe \
 	Lib/distutils/command/wininst-7.1.exe \
 	Lib/distutils/command/wininst-8.0.exe \
-	Lib/distutils/command/wininst-9.0-amd64.exe \
 	Lib/distutils/command/wininst-9.0.exe \
+	Lib/distutils/command/wininst-9.0-amd64.exe \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/email,\
@@ -474,8 +500,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/aliases.py \
 	Lib/encodings/ascii.py \
 	Lib/encodings/base64_codec.py \
-	Lib/encodings/big5hkscs.py \
 	Lib/encodings/big5.py \
+	Lib/encodings/big5hkscs.py \
 	Lib/encodings/bz2_codec.py \
 	Lib/encodings/charmap.py \
 	Lib/encodings/cp037.py \
@@ -492,10 +518,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/cp1256.py \
 	Lib/encodings/cp1257.py \
 	Lib/encodings/cp1258.py \
+	Lib/encodings/cp273.py \
 	Lib/encodings/cp424.py \
 	Lib/encodings/cp437.py \
 	Lib/encodings/cp500.py \
-	Lib/encodings/cp65001.py \
 	Lib/encodings/cp720.py \
 	Lib/encodings/cp737.py \
 	Lib/encodings/cp775.py \
@@ -529,20 +555,20 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/hp_roman8.py \
 	Lib/encodings/hz.py \
 	Lib/encodings/idna.py \
+	Lib/encodings/iso2022_jp.py \
 	Lib/encodings/iso2022_jp_1.py \
-	Lib/encodings/iso2022_jp_2004.py \
 	Lib/encodings/iso2022_jp_2.py \
+	Lib/encodings/iso2022_jp_2004.py \
 	Lib/encodings/iso2022_jp_3.py \
 	Lib/encodings/iso2022_jp_ext.py \
-	Lib/encodings/iso2022_jp.py \
 	Lib/encodings/iso2022_kr.py \
+	Lib/encodings/iso8859_1.py \
 	Lib/encodings/iso8859_10.py \
 	Lib/encodings/iso8859_11.py \
 	Lib/encodings/iso8859_13.py \
 	Lib/encodings/iso8859_14.py \
 	Lib/encodings/iso8859_15.py \
 	Lib/encodings/iso8859_16.py \
-	Lib/encodings/iso8859_1.py \
 	Lib/encodings/iso8859_2.py \
 	Lib/encodings/iso8859_3.py \
 	Lib/encodings/iso8859_4.py \
@@ -565,8 +591,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/mac_greek.py \
 	Lib/encodings/mac_iceland.py \
 	Lib/encodings/mac_latin2.py \
-	Lib/encodings/mac_romanian.py \
 	Lib/encodings/mac_roman.py \
+	Lib/encodings/mac_romanian.py \
 	Lib/encodings/mac_turkish.py \
 	Lib/encodings/mbcs.py \
 	Lib/encodings/oem.py \
@@ -576,19 +602,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/quopri_codec.py \
 	Lib/encodings/raw_unicode_escape.py \
 	Lib/encodings/rot_13.py \
-	Lib/encodings/shift_jis_2004.py \
 	Lib/encodings/shift_jis.py \
+	Lib/encodings/shift_jis_2004.py \
 	Lib/encodings/shift_jisx0213.py \
 	Lib/encodings/tis_620.py \
 	Lib/encodings/undefined.py \
 	Lib/encodings/unicode_escape.py \
-	Lib/encodings/unicode_internal.py \
+	Lib/encodings/utf_16.py \
 	Lib/encodings/utf_16_be.py \
 	Lib/encodings/utf_16_le.py \
-	Lib/encodings/utf_16.py \
+	Lib/encodings/utf_32.py \
 	Lib/encodings/utf_32_be.py \
 	Lib/encodings/utf_32_le.py \
-	Lib/encodings/utf_32.py \
 	Lib/encodings/utf_7.py \
 	Lib/encodings/utf_8.py \
 	Lib/encodings/utf_8_sig.py \
@@ -616,6 +641,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/importlib/_bootstrap_external.py \
 	Lib/importlib/abc.py \
 	Lib/importlib/machinery.py \
+	Lib/importlib/metadata.py \
 	Lib/importlib/resources.py \
 	Lib/importlib/util.py \
 ))
@@ -652,8 +678,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/lib2to3/fixes/fix_buffer.py \
 	Lib/lib2to3/fixes/fix_dict.py \
 	Lib/lib2to3/fixes/fix_except.py \
-	Lib/lib2to3/fixes/fix_execfile.py \
 	Lib/lib2to3/fixes/fix_exec.py \
+	Lib/lib2to3/fixes/fix_execfile.py \
 	Lib/lib2to3/fixes/fix_exitfunc.py \
 	Lib/lib2to3/fixes/fix_filter.py \
 	Lib/lib2to3/fixes/fix_funcattrs.py \
@@ -662,13 +688,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/lib2to3/fixes/fix_has_key.py \
 	Lib/lib2to3/fixes/fix_idioms.py \
 	Lib/lib2to3/fixes/fix_import.py \
-	Lib/lib2to3/fixes/fix_imports2.py \
 	Lib/lib2to3/fixes/fix_imports.py \
+	Lib/lib2to3/fixes/fix_imports2.py \
 	Lib/lib2to3/fixes/fix_input.py \
 	Lib/lib2to3/fixes/fix_intern.py \
 	Lib/lib2to3/fixes/fix_isinstance.py \
-	Lib/lib2to3/fixes/fix_itertools_imports.py \
 	Lib/lib2to3/fixes/fix_itertools.py \
+	Lib/lib2to3/fixes/fix_itertools_imports.py \
 	Lib/lib2to3/fixes/fix_long.py \
 	Lib/lib2to3/fixes/fix_map.py \
 	Lib/lib2to3/fixes/fix_metaclass.py \
@@ -708,8 +734,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/lib2to3/pgen2/literals.py \
 	Lib/lib2to3/pgen2/parse.py \
 	Lib/lib2to3/pgen2/pgen.py \
-	Lib/lib2to3/pgen2/tokenize.py \
 	Lib/lib2to3/pgen2/token.py \
+	Lib/lib2to3/pgen2/tokenize.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/logging,\
@@ -718,13 +744,25 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/logging/handlers.py \
 ))
 
+ifeq (WNT,$(OS))
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/msilib,\
+	Lib/msilib/__init__.py \
+	Lib/msilib/schema.py \
+	Lib/msilib/sequence.py \
+	Lib/msilib/text.py \
+))
+endif
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/multiprocessing,\
 	Lib/multiprocessing/__init__.py \
 	Lib/multiprocessing/connection.py \
 	Lib/multiprocessing/context.py \
+	Lib/multiprocessing/dummy/__init__.py \
+	Lib/multiprocessing/dummy/connection.py \
 	Lib/multiprocessing/forkserver.py \
 	Lib/multiprocessing/heap.py \
 	Lib/multiprocessing/managers.py \
+	Lib/multiprocessing/pool.py \
 	Lib/multiprocessing/popen_fork.py \
 	Lib/multiprocessing/popen_forkserver.py \
 	Lib/multiprocessing/popen_spawn_posix.py \
@@ -733,7 +771,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/multiprocessing/queues.py \
 	Lib/multiprocessing/reduction.py \
 	Lib/multiprocessing/resource_sharer.py \
-	Lib/multiprocessing/semaphore_tracker.py \
+	Lib/multiprocessing/resource_tracker.py \
+	Lib/multiprocessing/shared_memory.py \
 	Lib/multiprocessing/sharedctypes.py \
 	Lib/multiprocessing/spawn.py \
 	Lib/multiprocessing/synchronize.py \
@@ -754,6 +793,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest,\
 	Lib/unittest/__init__.py \
 	Lib/unittest/__main__.py \
+	Lib/unittest/async_case.py \
 	Lib/unittest/case.py \
 	Lib/unittest/loader.py \
 	Lib/unittest/main.py \
@@ -763,40 +803,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/unittest/signals.py \
 	Lib/unittest/suite.py \
 	Lib/unittest/util.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest/test,\
-	Lib/unittest/test/__init__.py \
-	Lib/unittest/test/__main__.py \
-	Lib/unittest/test/_test_warnings.py \
-	Lib/unittest/test/dummy.py \
-	Lib/unittest/test/support.py \
-	Lib/unittest/test/test_assertions.py \
-	Lib/unittest/test/test_break.py \
-	Lib/unittest/test/test_case.py \
-	Lib/unittest/test/test_discovery.py \
-	Lib/unittest/test/test_functiontestcase.py \
-	Lib/unittest/test/test_loader.py \
-	Lib/unittest/test/test_program.py \
-	Lib/unittest/test/test_result.py \
-	Lib/unittest/test/test_runner.py \
-	Lib/unittest/test/test_setups.py \
-	Lib/unittest/test/test_skipping.py \
-	Lib/unittest/test/test_suite.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest/test/testmock,\
-	Lib/unittest/test/testmock/__init__.py \
-	Lib/unittest/test/testmock/__main__.py \
-	Lib/unittest/test/testmock/support.py \
-	Lib/unittest/test/testmock/testcallable.py \
-	Lib/unittest/test/testmock/testhelpers.py \
-	Lib/unittest/test/testmock/testmagicmethods.py \
-	Lib/unittest/test/testmock/testmock.py \
-	Lib/unittest/test/testmock/testpatch.py \
-	Lib/unittest/test/testmock/testsealable.py \
-	Lib/unittest/test/testmock/testsentinel.py \
-	Lib/unittest/test/testmock/testwith.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/urllib,\
@@ -823,21 +829,21 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/dom,\
 	Lib/xml/dom/__init__.py \
-	Lib/xml/dom/NodeFilter.py \
 	Lib/xml/dom/domreg.py \
 	Lib/xml/dom/expatbuilder.py \
 	Lib/xml/dom/minicompat.py \
 	Lib/xml/dom/minidom.py \
+	Lib/xml/dom/NodeFilter.py \
 	Lib/xml/dom/pulldom.py \
 	Lib/xml/dom/xmlbuilder.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/etree,\
 	Lib/xml/etree/__init__.py \
+	Lib/xml/etree/cElementTree.py \
 	Lib/xml/etree/ElementInclude.py \
 	Lib/xml/etree/ElementPath.py \
 	Lib/xml/etree/ElementTree.py \
-	Lib/xml/etree/cElementTree.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/parsers,\
