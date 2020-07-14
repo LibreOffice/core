@@ -69,7 +69,7 @@ const SmElementDescr SmElementsControl::m_aUnaryBinaryOperatorsList[] =
     {RID_XODIVIDEY, RID_XODIVIDEY_HELP}, {RID_XCIRCY, RID_XCIRCY_HELP},
     {RID_XWIDESLASHY, RID_XWIDESLASHY_HELP}, {RID_XWIDEBSLASHY, RID_XWIDEBSLASHY_HELP},
     {nullptr, nullptr},
-    {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP},
+    {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aRelationsList[] =
@@ -120,7 +120,9 @@ const SmElementDescr SmElementsControl::m_aFunctionsList[] =
     {nullptr, nullptr},
     {RID_ARCSINX, RID_ARCSINX_HELP}, {RID_ARCCOSX, RID_ARCCOSX_HELP}, {RID_ARCTANX, RID_ARCTANX_HELP},
     {RID_ARCCOTX, RID_ARCCOTX_HELP}, {RID_ARSINHX, RID_ARSINHX_HELP}, {RID_ARCOSHX, RID_ARCOSHX_HELP},
-    {RID_ARTANHX, RID_ARTANHX_HELP}, {RID_ARCOTHX, RID_ARCOTHX_HELP}
+    {RID_ARTANHX, RID_ARTANHX_HELP}, {RID_ARCOTHX, RID_ARCOTHX_HELP},
+    {nullptr, nullptr},
+    {RID_FUNCX, RID_FUNCX_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aOperatorsList[] =
@@ -160,6 +162,9 @@ const SmElementDescr SmElementsControl::m_aOperatorsList[] =
     {nullptr, nullptr},
     {RID_LLLINTX, RID_LLLINTX_HELP}, {RID_LLLINT_FROMX, RID_LLLINT_FROMX_HELP},
     {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP}, {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP},
+    {nullptr, nullptr},
+    {RID_OPERX, RID_OPERX_HELP}, {RID_OPER_FROMX, RID_OPER_FROMX_HELP},
+    {RID_OPER_TOX, RID_OPER_TOX_HELP}, {RID_OPER_FROMTOX, RID_OPER_FROMTOX_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aAttributesList[] =
@@ -940,13 +945,21 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
                 addElement(aParser, "left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRFLOORX)
                 addElement(aParser, "left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(pElementHelp));
-
             else if (aElement == RID_SLRLINEX)
                 addElement(aParser, "left lline binom{<?>}{<?>} right rline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDLINEX)
                 addElement(aParser, "left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLMRANGLEXY)
                 addElement(aParser, "left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
+
+            else if (aElement == RID_OPERX)
+                addElement(aParser, u"oper \xE22B <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_FROMX)
+                addElement(aParser, u"oper \xE22B from <?> <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_TOX)
+                addElement(aParser, u"oper \xE22B to <?> <?>", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_OPER_FROMTOX)
+                addElement(aParser, u"oper \xE22B from <?> to <?> <?>", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_XOVERBRACEY)
                 addElement(aParser, "{<?><?><?>} overbrace {<?>} ", aElement, SmResId(pElementHelp));
