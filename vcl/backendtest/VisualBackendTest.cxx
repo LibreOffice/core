@@ -90,7 +90,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    static constexpr unsigned char gnNumberOfTests = 9;
+    static constexpr unsigned char gnNumberOfTests = 10;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -155,23 +155,23 @@ public:
                 long x2 = (x+1) * (nWidth  / nPartitionsX);
                 long y2 = (y+1) * (nHeight / nPartitionsY);
 
-                aRegions.emplace_back(x1 + 1, y1 + 1, x2 - 2, y2 - 2);
+                aRegions.emplace_back(x1 + 1, y1 + 1, x2 - 6, y2 - 2);
             }
         }
         return aRegions;
     }
 
-    static void testRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight, bool AA)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(4, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestRect aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -179,7 +179,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPixel aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -187,7 +187,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestLine aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -195,7 +195,7 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -203,7 +203,15 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyLine aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -211,7 +219,15 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupRectangle(false);
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupRectangle(AA);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
@@ -222,7 +238,7 @@ public:
         tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(4, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -250,6 +266,14 @@ public:
 
         aRectangle = aRegions[index++];
         {
+            vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
             vcl::test::OutputDeviceTestRect aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
@@ -267,18 +291,26 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
     }
 
-    static void testDiamonds(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testDiamondsAndBezier(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<tools::Rectangle> aRegions = setupRegions(3, 1, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -299,6 +331,28 @@ public:
             vcl::test::OutputDeviceTestPolyLine aOutDevTest;
             Bitmap aBitmap = aOutDevTest.setupDiamond();
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupDiamond();
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupBezier();
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupAABezier();
+            assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
     }
@@ -548,33 +602,37 @@ public:
 
         if (mnTest % gnNumberOfTests == 0)
         {
-            testRectangles(rRenderContext, nWidth, nHeight);
+            testRectangles(rRenderContext, nWidth, nHeight, false);
         }
         else if (mnTest % gnNumberOfTests == 1)
         {
-            testFilledRectangles(rRenderContext, nWidth, nHeight);
+            testRectangles(rRenderContext, nWidth, nHeight, true);
         }
         else if (mnTest % gnNumberOfTests == 2)
         {
-            testDiamonds(rRenderContext, nWidth, nHeight);
+            testFilledRectangles(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 3)
         {
-            testLines(rRenderContext, nWidth, nHeight);
+            testDiamondsAndBezier(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 4)
         {
-            testBitmaps(rRenderContext, nWidth, nHeight);
+            testLines(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 5)
         {
-            testInvert(rRenderContext, nWidth, nHeight);
+            testBitmaps(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 6)
         {
-            testClip(rRenderContext, nWidth, nHeight);
+            testInvert(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 7)
+        {
+            testClip(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 8)
         {
             std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
 
