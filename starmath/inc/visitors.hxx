@@ -444,7 +444,7 @@ private:
       * @param pNode
       * @return
       */
-    inline void LineToText( SmNode* pNode ) {
+    void LineToText( SmNode* pNode ) {
         Separate( );
         if( pNode ) pNode->Accept( this );
         Separate( );
@@ -455,7 +455,7 @@ private:
       * @param rText
       * @return
       */
-    inline void Append( const OUString &rText ) {
+    void Append( const OUString &rText ) {
         maCmdText.append( rText );
     }
 
@@ -464,8 +464,9 @@ private:
      * It is needed if last char is not ' '.
      * @return
      */
-    inline void Separate( ){
-        if( !maCmdText.isEmpty() && maCmdText[ maCmdText.getLength() - 1 ] != ' ' ) maCmdText.append(' ');
+    void Separate( ){
+        if( !maCmdText.isEmpty() && maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
+            maCmdText.append(' ');
     }
 
     /** Output text generated from the pNodes */

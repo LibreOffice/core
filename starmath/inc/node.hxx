@@ -136,7 +136,8 @@ public:
      * @return subnode of index nIndex
      */
     virtual SmNode * GetSubNode(size_t nIndex) = 0;
-    const   SmNode * GetSubNode(size_t nIndex) const  { return const_cast<SmNode *>(this)->GetSubNode(nIndex); }
+    const   SmNode * GetSubNode(size_t nIndex) const
+                     { return const_cast<SmNode *>(this)->GetSubNode(nIndex); }
 
     virtual const SmNode * GetLeftMost() const;
 
@@ -144,26 +145,26 @@ public:
      * Gets the FontChangeMask flags.
      * @return FontChangeMask flags
      */
-    inline FontChangeMask &Flags() { return mnFlags; }
+    FontChangeMask &Flags() { return mnFlags; }
 
     /**
      * Gets the font attributes.
      * @return font attributes
      */
-    inline FontAttribute &Attributes() { return mnAttributes; }
+    FontAttribute &Attributes() { return mnAttributes; }
 
     /**
      * Checks if it is a visible node rendered invisible.
      * @return rendered visibility
      */
-    inline bool IsPhantom() const { return mbIsPhantom; }
+    bool IsPhantom() const { return mbIsPhantom; }
 
     /**
      * Sets the render visibility of a visible node to bIsPhantom.
      * @param bIsPhantom
      * @return
      */
-    inline void SetPhantom(bool bIsPhantom);
+    void SetPhantom(bool bIsPhantom);
 
     /**
      * Sets the font color.
@@ -249,13 +250,13 @@ public:
      * Gets the alignment of the text.
      * @return alignment of the text
      */
-    inline RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
+    RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
 
     /**
      * Parses itself to SmRect.
      * @return this
      */
-    inline const SmRect & GetRect() const { return *this; }
+    const SmRect & GetRect() const { return *this; }
 
     /**
      * Moves the rectangle by rVector.
@@ -269,7 +270,7 @@ public:
      * @param rPoint
      * @return
      */
-    inline void MoveTo(const Point &rPoint) { Move(rPoint - GetTopLeft()); }
+    void MoveTo(const Point &rPoint) { Move(rPoint - GetTopLeft()); }
 
     /**
      * Prepares the SmRect to render.
@@ -291,7 +292,7 @@ public:
      * Used for visual editing.
      * @return node accessible index
      */
-    inline sal_Int32 GetAccessibleIndex() const { return mnAccIndex; }
+    sal_Int32 GetAccessibleIndex() const { return mnAccIndex; }
 
     /**
      * Sets the node accessible index to nAccIndex.
@@ -299,7 +300,7 @@ public:
      * @param nAccIndex
      * @return
      */
-    inline void SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
+    void SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
 
     /**
      * Finds the node with accessible index nAccIndex.
@@ -314,27 +315,27 @@ public:
      * It is used to do the visual <-> text correspondence.
      * @return line
      */
-    inline sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
+    sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
 
     /**
      * Gets the colum of the line in the text where the node is located.
      * It is used to do the visual <-> text correspondence.
      * @return colum
      */
-    inline sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
+    sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
 
     /**
      * Gets the scale mode.
      * @return scale mode
      */
-    inline SmScaleMode GetScaleMode() const { return meScaleMode; }
+    SmScaleMode GetScaleMode() const { return meScaleMode; }
 
     /**
      * Sets the scale mode to eMode.
      * @param eMode
      * @return
      */
-    inline void SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
+    void SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
 
     //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth);
@@ -344,7 +345,7 @@ public:
      * Gets the node type.
      * @return node type
      */
-    inline SmNodeType GetType() const  { return meType; }
+    SmNodeType GetType() const  { return meType; }
 
     /**
      * Gets the token.
@@ -383,14 +384,14 @@ public:
      * Checks if the node is selected.
      * @return the node is selected
      */
-    inline bool IsSelected() const {return mbIsSelected;}
+    bool IsSelected() const {return mbIsSelected;}
 
     /**
      * Sets the node to Selected.
      * @param Selected
      * @return
      */
-    inline void SetSelected(bool Selected) {mbIsSelected = Selected;}
+    void SetSelected(bool Selected) {mbIsSelected = Selected;}
 
     /**
      * Gets the parent node of this node.
@@ -404,14 +405,14 @@ public:
      * @param parent
      * @return
      */
-    inline void SetParent(SmStructureNode* parent){ mpParentNode = parent; }
+    void SetParent(SmStructureNode* parent){ mpParentNode = parent; }
 
     /**
      * Sets the token for this node.
      * @param token
      * @return
      */
-    inline void SetToken(SmToken const & token){ maNodeToken = token; }
+    void SetToken(SmToken const & token){ maNodeToken = token; }
 
 private:
     SmStructureNode* mpParentNode;
@@ -469,7 +470,8 @@ public:
      * @param pThird
      * @return
      */
-    void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird = nullptr);
+    void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
+                     std::unique_ptr<SmNode> pThird = nullptr);
 
     /**
      * Sets subnodes.
@@ -489,25 +491,25 @@ public:
      * Gets the first subnode.
      * @return first subnode
      */
-    inline SmNodeArray::iterator begin() {return maSubNodes.begin();}
+    SmNodeArray::iterator begin() {return maSubNodes.begin();}
 
     /**
      * Gets the last subnode.
      * @return last subnode
      */
-    inline SmNodeArray::iterator end() {return maSubNodes.end();}
+    SmNodeArray::iterator end() {return maSubNodes.end();}
 
     /**
      * Gets the last subnode.
      * @return last subnode
      */
-    inline SmNodeArray::reverse_iterator rbegin() {return maSubNodes.rbegin();}
+    SmNodeArray::reverse_iterator rbegin() {return maSubNodes.rbegin();}
 
     /**
      * Gets the first subnode.
      * @return first subnode
      */
-    inline SmNodeArray::reverse_iterator rend() {return maSubNodes.rend();}
+    SmNodeArray::reverse_iterator rend() {return maSubNodes.rend();}
 
     /**
      * Get the index of the child node pSubNode.
@@ -637,13 +639,13 @@ public:
      * Gets the width of the rect.
      * @return width
      */
-    inline long GetWidth() const { return mnWidth; }
+    long GetWidth() const { return mnWidth; }
 
     /**
      * Gets the polygon to draw the node.
      * @return polygon
      */
-    inline tools::Polygon &GetPolygon()  { return maPoly; }
+    tools::Polygon &GetPolygon()  { return maPoly; }
 
     //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
@@ -696,7 +698,7 @@ public:
      * Returns the font type being used (text, variabla, symbol, ...).
      * @retutn font type
      */
-    inline sal_uInt16 GetFontDesc() const { return mnFontDesc; }
+    sal_uInt16 GetFontDesc() const { return mnFontDesc; }
 
     /**
      * Sets the font type to fontdesc.
@@ -704,14 +706,14 @@ public:
      * @param fontdesc
      * @return
      */
-    inline void SetFontDesc(sal_uInt16 fontdesc) { mnFontDesc=fontdesc; }
+    void SetFontDesc(sal_uInt16 fontdesc) { mnFontDesc=fontdesc; }
 
     /**
      * Sets the node text to rText.
      * @param rText
      * @return
      */
-    inline void SetText(const OUString &rText) { maText = rText; }
+    void SetText(const OUString &rText) { maText = rText; }
 
     /**
      * Gets the node text.
@@ -738,7 +740,7 @@ public:
      * @remarks Only valid of SmNode::IsSelected() is true.
      * @return index.
      */
-    inline sal_Int32 GetSelectionStart() const { return mnSelectionStart; }
+    sal_Int32 GetSelectionStart() const { return mnSelectionStart; }
 
     /**
      * Index within GetText() where the selection ends.
@@ -752,14 +754,14 @@ public:
      * @param index
      * @return
      */
-    inline void SetSelectionStart(sal_Int32 index) {mnSelectionStart = index;}
+    void SetSelectionStart(sal_Int32 index) {mnSelectionStart = index;}
 
     /**
      * Sets the index within GetText() where the selection ends to index.
      * @param index
      * @return
      */
-    inline void SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
+    void SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
 
     /**
      * Prepare preliminary settings about font and text
@@ -769,7 +771,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -829,7 +832,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -912,7 +916,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -1003,7 +1008,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -1031,7 +1037,8 @@ public:
 class SmErrorNode final : public SmMathSymbolNode
 {
 public:
-    explicit SmErrorNode(const SmToken &rNodeToken) : SmMathSymbolNode(SmNodeType::Error, rNodeToken) { SetText(OUString(MS_ERROR)); }
+    explicit SmErrorNode(const SmToken &rNodeToken)
+                : SmMathSymbolNode(SmNodeType::Error, rNodeToken) { SetText(OUString(MS_ERROR)); }
 
     /**
      * Prepare preliminary settings about font and text
@@ -1041,7 +1048,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -1128,7 +1136,7 @@ public:
      * @param bVal
      * @return
      */
-    inline void  SetUseExtraSpaces(bool bVal) { mbUseExtraSpaces = bVal; }
+    void  SetUseExtraSpaces(bool bVal) { mbUseExtraSpaces = bVal; }
 
     /**
      * Checks if it is using extra spaces.
@@ -1136,7 +1144,7 @@ public:
      * By default it is true.
      * @return is using extra spaces
      */
-    inline bool  IsUseExtraSpaces() const { return mbUseExtraSpaces; };
+    bool  IsUseExtraSpaces() const { return mbUseExtraSpaces; };
 
     /**
      * Prepare preliminary settings about font and text
@@ -1146,7 +1154,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -1270,8 +1279,10 @@ public:
      */
     const SmRootSymbolNode* Symbol() const { return const_cast<SmRootNode *>(this)->Symbol(); }
           SmRootSymbolNode* Symbol()       { assert( GetNumSubNodes() == 3 );
-                                             assert( GetSubNode( 1 )->GetType() == SmNodeType::RootSymbol );
-                                             return static_cast< SmRootSymbolNode* >( GetSubNode( 1 )); }
+                                             assert( GetSubNode( 1 )->GetType()
+                                                        == SmNodeType::RootSymbol );
+                                             return static_cast< SmRootSymbolNode* >
+                                                ( GetSubNode( 1 )); }
 
     /**
      * Returns the node containing the data inside the root.
@@ -1506,14 +1517,14 @@ public:
      * Example lim from { x towar 0 } { {sin x}over x } = 1
      * @return is a limit
      */
-    inline bool  IsUseLimits() const { return mbUseLimits; };
+    bool  IsUseLimits() const { return mbUseLimits; };
 
     /**
      * Sets if it is going to be used for a limit to bVal.
      * @param bVal
      * @return
      */
-    inline void  SetUseLimits(bool bVal) { mbUseLimits = bVal; }
+    void  SetUseLimits(bool bVal) { mbUseLimits = bVal; }
 
     /**
      * Gets the node with the data of what has to be superindex or subindex.
@@ -1522,14 +1533,15 @@ public:
      * @param eSubSup
      * @return body data
      */
-     const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >( this )->GetSubSup( eSubSup ); }
+     const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >
+                                                            ( this )->GetSubSup( eSubSup ); }
            SmNode * GetSubSup(SmSubSup eSubSup)       { return GetSubNode(1 + eSubSup); };
 
     /**
      * Sets the node with the data of what has to be superindex or subindex.
      * @param pScript
      */
-    inline void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
+    void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
 
      /**
      * Sets the node with the data of what has to be superindex or subindex.
@@ -1537,7 +1549,7 @@ public:
      * @param eSubSup
      * @param pScript
      */
-    inline void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
+    void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
 
     /**
      * Prepares the SmRect to render.
@@ -1581,10 +1593,13 @@ public:
      * Returns the node containing the data of the opening brace.
      * @return opening brace data
      */
-    const SmMathSymbolNode* OpeningBrace() const { return const_cast<SmBraceNode *>(this)->OpeningBrace(); }
+    const SmMathSymbolNode* OpeningBrace() const { return const_cast<SmBraceNode *>
+                                                       (this)->OpeningBrace(); }
     SmMathSymbolNode* OpeningBrace()             { assert( GetNumSubNodes() == 3 );
-                                                   assert( GetSubNode( 0 )->GetType() == SmNodeType::Math );
-                                                   return static_cast< SmMathSymbolNode* >( GetSubNode( 0 )); }
+                                                   assert( GetSubNode( 0 )->GetType()
+                                                               == SmNodeType::Math );
+                                                   return static_cast< SmMathSymbolNode* >
+                                                       ( GetSubNode( 0 )); }
 
     /**
      * Returns the node containing the data of what is between braces.
@@ -1597,10 +1612,13 @@ public:
      * Returns the node containing the data of the closing brace.
      * @return closing brace data
      */
-    const SmMathSymbolNode* ClosingBrace() const { return const_cast<SmBraceNode *>(this)->ClosingBrace(); }
+    const SmMathSymbolNode* ClosingBrace() const { return const_cast<SmBraceNode *>
+                                                       (this)->ClosingBrace(); }
     SmMathSymbolNode* ClosingBrace()             { assert( GetNumSubNodes() == 3 );
-                                                   assert( GetSubNode( 2 )->GetType() == SmNodeType::Math );
-                                                   return static_cast< SmMathSymbolNode* >( GetSubNode( 2 )); }
+                                                   assert( GetSubNode( 2 )->GetType()
+                                                               == SmNodeType::Math );
+                                                   return static_cast< SmMathSymbolNode* >
+                                                       ( GetSubNode( 2 )); }
 
     /**
      * Prepares the SmRect to render.
@@ -1687,10 +1705,13 @@ public:
      * Returns the node containing the data of the brace.
      * @return brace data
      */
-    const SmMathSymbolNode* Brace() const { return const_cast<SmVerticalBraceNode *>(this)->Brace(); }
+    const SmMathSymbolNode* Brace() const { return const_cast<SmVerticalBraceNode *>
+                                                (this)->Brace(); }
           SmMathSymbolNode* Brace()       { assert( GetNumSubNodes() == 3 );
-                                            assert( GetSubNode( 1 )->GetType() == SmNodeType::Math );
-                                            return static_cast< SmMathSymbolNode* >( GetSubNode( 1 )); }
+                                            assert( GetSubNode( 1 )->GetType()
+                                                        == SmNodeType::Math );
+                                            return static_cast< SmMathSymbolNode* >
+                                                ( GetSubNode( 1 )); }
 
     /**
      * Returns the node containing the data of what is in the brace.
@@ -1866,20 +1887,21 @@ public:
      * @param nType
      * @return
      */
-    inline void SetSizeParameter(const Fraction &rValue, FontSizeType nType) { meSizeType = nType; maFontSize = rValue; }
+    void SetSizeParameter(const Fraction &rValue, FontSizeType nType)
+                            { meSizeType = nType; maFontSize = rValue; }
 
     /**
      * Returns the font size.
      * @return font size.
      */
-    inline const Fraction & GetSizeParameter() const {return maFontSize;}
+    const Fraction & GetSizeParameter() const {return maFontSize;}
 
     /**
      * Returns the font size type.
      * Check FontSizeType for details.
      * @return font size type.
      */
-    inline FontSizeType GetSizeType() const {return meSizeType;}
+    FontSizeType GetSizeType() const {return meSizeType;}
 
     /**
      * Prepare preliminary settings about font and text
@@ -1889,7 +1911,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
@@ -1929,13 +1952,13 @@ public:
      * Gets the number of rows of the matrix.
      * @return rows number
      */
-    inline sal_uInt16 GetNumRows() const {return mnNumRows;}
+    sal_uInt16 GetNumRows() const {return mnNumRows;}
 
     /**
      * Gets the number of columns of the matrix.
      * @return columns number
      */
-    inline sal_uInt16 GetNumCols() const {return mnNumCols;}
+    sal_uInt16 GetNumCols() const {return mnNumCols;}
 
     /**
      * Sets the dimensions of the matrix.
@@ -1943,7 +1966,8 @@ public:
      * @param nMatrixCols
      * @return
      */
-    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols) { mnNumRows = nMatrixRows; mnNumCols = nMatrixCols; }
+    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
+                     { mnNumRows = nMatrixRows; mnNumCols = nMatrixCols; }
 
     virtual const SmNode * GetLeftMost() const override;
 
@@ -1991,7 +2015,8 @@ public:
      * @param nDepth
      * @return
      */
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
 
     /**
      * Prepares the SmRect to render.
