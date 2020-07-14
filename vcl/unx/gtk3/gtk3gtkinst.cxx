@@ -12192,7 +12192,8 @@ class GtkInstanceFormattedSpinButton : public GtkInstanceEntry, public virtual w
 {
 private:
     GtkSpinButton* m_pButton;
-    std::unique_ptr<weld::EntryFormatter> m_xFormatter;
+    std::unique_ptr<weld::EntryFormatter> m_xOwnFormatter;
+    weld::EntryFormatter* m_pFormatter;
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
@@ -12252,6 +12253,7 @@ public:
     GtkInstanceFormattedSpinButton(GtkSpinButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceEntry(GTK_ENTRY(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
+        , m_pFormatter(nullptr)
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
@@ -12271,27 +12273,28 @@ public:
 
     virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
     {
-        if (!m_xFormatter) // once a formatter is set, it takes over "changed"
+        if (!m_pFormatter) // once a formatter is set, it takes over "changed"
         {
             GtkInstanceEntry::connect_changed(rLink);
             return;
         }
-        m_xFormatter->connect_changed(rLink);
+        m_pFormatter->connect_changed(rLink);
     }
 
     virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override
     {
-        if (!m_xFormatter) // once a formatter is set, it takes over "focus-out"
+        if (!m_pFormatter) // once a formatter is set, it takes over "focus-out"
         {
             GtkInstanceEntry::connect_focus_out(rLink);
             return;
         }
-        m_xFormatter->connect_focus_out(rLink);
+        m_pFormatter->connect_focus_out(rLink);
     }
 
     virtual void SetFormatter(weld::EntryFormatter* pFormatter) override
     {
-        m_xFormatter.reset(pFormatter);
+        m_xOwnFormatter.reset();
+        m_pFormatter = pFormatter;
         sync_range_from_formatter();
         sync_value_from_formatter();
         sync_increments_from_formatter();
@@ -12299,7 +12302,7 @@ public:
 
     virtual weld::EntryFormatter& GetFormatter() override
     {
-        if (!m_xFormatter)
+        if (!m_pFormatter)
         {
             auto aFocusOutHdl = m_aFocusOutHdl;
             m_aFocusOutHdl = Link<weld::Widget&, void>();
@@ -12311,38 +12314,46 @@ public:
             gtk_spin_button_get_range(m_pButton, &fMin, &fMax);
             double fStep;
             gtk_spin_button_get_increments(m_pButton, &fStep, nullptr);
-            m_xFormatter.reset(new weld::EntryFormatter(*this));
-            m_xFormatter->SetMinValue(fMin);
-            m_xFormatter->SetMaxValue(fMax);
-            m_xFormatter->SetSpinSize(fStep);
-            m_xFormatter->SetValue(fValue);
+            m_xOwnFormatter.reset(new weld::EntryFormatter(*this));
+            m_xOwnFormatter->SetMinValue(fMin);
+            m_xOwnFormatter->SetMaxValue(fMax);
+            m_xOwnFormatter->SetSpinSize(fStep);
+            m_xOwnFormatter->SetValue(fValue);
 
-            m_xFormatter->connect_focus_out(aFocusOutHdl);
-            m_xFormatter->connect_changed(aChangeHdl);
+            m_xOwnFormatter->connect_focus_out(aFocusOutHdl);
+            m_xOwnFormatter->connect_changed(aChangeHdl);
+
+            m_pFormatter = m_xOwnFormatter.get();
         }
-        return *m_xFormatter;
+        return *m_pFormatter;
     }
 
     virtual void sync_value_from_formatter() override
     {
+        if (!m_pFormatter)
+            return;
         disable_notify_events();
-        gtk_spin_button_set_value(m_pButton, m_xFormatter->GetValue());
+        gtk_spin_button_set_value(m_pButton, m_pFormatter->GetValue());
         enable_notify_events();
     }
 
     virtual void sync_range_from_formatter() override
     {
+        if (!m_pFormatter)
+            return;
         disable_notify_events();
-        double fMin = m_xFormatter->HasMinValue() ? m_xFormatter->GetMinValue() : std::numeric_limits<double>::lowest();
-        double fMax = m_xFormatter->HasMaxValue() ? m_xFormatter->GetMaxValue() : std::numeric_limits<double>::max();
+        double fMin = m_pFormatter->HasMinValue() ? m_pFormatter->GetMinValue() : std::numeric_limits<double>::lowest();
+        double fMax = m_pFormatter->HasMaxValue() ? m_pFormatter->GetMaxValue() : std::numeric_limits<double>::max();
         gtk_spin_button_set_range(m_pButton, fMin, fMax);
         enable_notify_events();
     }
 
     virtual void sync_increments_from_formatter() override
     {
+        if (!m_pFormatter)
+            return;
         disable_notify_events();
-        double fSpinSize = m_xFormatter->GetSpinSize();
+        double fSpinSize = m_pFormatter->GetSpinSize();
         gtk_spin_button_set_increments(m_pButton, fSpinSize, fSpinSize * 10);
         enable_notify_events();
     }

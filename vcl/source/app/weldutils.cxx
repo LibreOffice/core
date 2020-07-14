@@ -147,12 +147,16 @@ EntryFormatter::~EntryFormatter()
 {
     m_rEntry.connect_changed(Link<weld::Entry&, void>());
     m_rEntry.connect_focus_out(Link<weld::Widget&, void>());
+    if (m_pSpinButton)
+        m_pSpinButton->SetFormatter(nullptr);
 }
 
 void EntryFormatter::Init()
 {
     m_rEntry.connect_changed(LINK(this, EntryFormatter, ModifyHdl));
     m_rEntry.connect_focus_out(LINK(this, EntryFormatter, FocusOutHdl));
+    if (m_pSpinButton)
+        m_pSpinButton->SetFormatter(this);
 }
 
 Selection EntryFormatter::GetEntrySelection() const
