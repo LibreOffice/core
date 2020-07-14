@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f03e24fa_c1e3b855",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T12:16:39Z",
+      "side": 1,
+      "message": "No need in these additional variables. Just re-use existing properties/propertiesState.",
+      "range": {
+        "startLine": 162,
+        "startChar": 8,
+        "endLine": 163,
+        "endChar": 57
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "262440cb_2e4a278c",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T12:16:39Z",
+      "side": 1,
+      "message": "It\u0027s better to not call getByName twice for the same thing.\nAnd it\u0027s better to use Reference::set:\n\n    properties.set(xStyleFamily-\u003egetByName(sCurrentStyleName), css::uno::UNO_QUERY_THROW);\n    propertiesState.set(properties, css::uno::UNO_QUERY_THROW);\n\nThis will also correctly throw in case of an error, instead of segfaulting.",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 64
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8517840c_72740635",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T12:16:39Z",
+      "side": 1,
+      "message": "Also use Reference::set here",
+      "range": {
+        "startLine": 196,
+        "startChar": 53,
+        "endLine": 196,
+        "endChar": 65
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c29e48_ec1db484",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T12:16:39Z",
+      "side": 1,
+      "message": "Call sCurrentStyleName.clear() before this line, to make sure that in case of an error here, you don\u0027t get false positive in the next `if`.",
+      "range": {
+        "startLine": 197,
+        "startChar": 54,
+        "endLine": 197,
+        "endChar": 71
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bb6c7e3_3b85f910",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T12:16:39Z",
+      "side": 1,
+      "message": "See above.\n\n    uno::Reference\u003cstyle::XStyle\u003e aParaStyle(xStyleFamily-\u003egetByName(sCurrentStyleName), css::uno::UNO_QUERY_THROW);\n    properties.set(aParaStyle, css::uno::UNO_QUERY_THROW);\n    propertiesState.set(properties, css::uno::UNO_QUERY_THROW);",
+      "range": {
+        "startLine": 201,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 66
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
