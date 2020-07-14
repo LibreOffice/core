@@ -1592,13 +1592,14 @@ define gb_LinkTarget__use_openssl
 $(call gb_LinkTarget_use_package,$(1),openssl)
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,openssl)/out32dll/ssleay32.lib \
-	$(call gb_UnpackedTarball_get_dir,openssl)/out32dll/libeay32.lib \
+	$(call gb_UnpackedTarball_get_dir,openssl)/libcrypto.lib \
+	$(call gb_UnpackedTarball_get_dir,openssl)/libssl.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,openssl)/libssl.a \
 	$(call gb_UnpackedTarball_get_dir,openssl)/libcrypto.a \
+	$(if $(filter $(OS),LINUX),-pthread) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),openssl)
 ifeq ($(OS),SOLARIS)
