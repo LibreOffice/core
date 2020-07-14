@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:TargetName=lcms2 \
-	,Projects/VC2017/lcms2_DLL)
+	,Projects/VC2019/lcms2_DLL)
 	$(call gb_Trace_EndRange,lcms2,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
