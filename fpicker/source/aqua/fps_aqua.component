@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="fps_aqua" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.ui.dialogs.SalAquaFilePicker">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.ui.dialogs.SalAquaFilePicker"
+    constructor="fpicker_SalAquaFilePicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.AquaFilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.ui.dialogs.SalAquaFolderPicker">
+  <implementation name="com.sun.star.ui.dialogs.SalAquaFolderPicker"
+    constructor="fpicker_SalAquaFolderPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.AquaFolderPicker"/>
   </implementation>
 </component>

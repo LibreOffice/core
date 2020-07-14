@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
-#include "FPServiceInfo.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalAquaPicker.hxx"

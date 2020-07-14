@@ -26,7 +26,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include "FPServiceInfo.hxx"
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
@@ -48,17 +47,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-    // controlling event notifications
-    uno::Sequence<OUString> FolderPicker_getSupportedServiceNames()
-    {
-        return { "com.sun.star.ui.dialogs.SystemFolderPicker", "com.sun.star.ui.dialogs.AquaFolderPicker" };
-    }
-}
-
-SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    m_xServiceMgr( xServiceMgr )
+SalAquaFolderPicker::SalAquaFolderPicker()
 {
     m_nDialogType = NAVIGATIONSERVICES_DIRECTORY;
 }
@@ -152,7 +141,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const OUString& rDescription 
 
 OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
-    return FOLDER_PICKER_IMPL_NAME;
+    return "com.sun.star.ui.dialogs.SalAquaFolderPicker";
 }
 
 sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName )
@@ -162,7 +151,7 @@ sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sService
 
 uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
 {
-    return FolderPicker_getSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.SystemFolderPicker", "com.sun.star.ui.dialogs.AquaFolderPicker" };
 }
 
 // XCancellable
@@ -179,5 +168,13 @@ void SAL_CALL SalAquaFolderPicker::cancel()
 void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
 {
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_SalAquaFolderPicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new SalAquaFolderPicker());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

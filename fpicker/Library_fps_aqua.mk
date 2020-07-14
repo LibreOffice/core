@@ -40,7 +40,6 @@ $(eval $(call gb_Library_add_objcxxobjects,fps_aqua,\
 	fpicker/source/aqua/CFStringUtilities \
 	fpicker/source/aqua/ControlHelper \
 	fpicker/source/aqua/FilterHelper \
-	fpicker/source/aqua/FPentry \
 	fpicker/source/aqua/NSString_OOoAdditions \
 	fpicker/source/aqua/NSURL_OOoAdditions \
 	fpicker/source/aqua/resourceprovider \
