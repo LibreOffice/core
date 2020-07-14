@@ -1027,7 +1027,7 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
 /* XServiceInfo */
 OUString SAL_CALL SvtFilePicker::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return "com.sun.star.svtools.OfficeFilePicker";
 }
 
 /* XServiceInfo */
@@ -1039,28 +1039,16 @@ sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.OfficeFilePicker" };
 }
 
-/* Helper for XServiceInfo */
-Sequence< OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_SvtFilePicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence<OUString> seqServiceNames { "com.sun.star.ui.dialogs.OfficeFilePicker" };
-    return seqServiceNames ;
+    return cppu::acquire(new SvtFilePicker());
 }
 
-/* Helper for XServiceInfo */
-OUString SvtFilePicker::impl_getStaticImplementationName()
-{
-    return "com.sun.star.svtools.OfficeFilePicker";
-}
-
-/* Helper for registry */
-Reference< XInterface > SvtFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& )
-{
-    return Reference< XInterface >( *new SvtFilePicker );
-}
 
 // SvtRemoteFilePicker
 
@@ -1091,7 +1079,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::
 /* XServiceInfo */
 OUString SAL_CALL SvtRemoteFilePicker::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return "com.sun.star.svtools.RemoteFilePicker";
 }
 
 /* XServiceInfo */
@@ -1103,27 +1091,15 @@ sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sService
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.RemoteFilePicker" };
 }
 
-/* Helper for XServiceInfo */
-Sequence< OUString > SvtRemoteFilePicker::impl_getStaticSupportedServiceNames()
-{
-    Sequence<OUString> seqServiceNames { "com.sun.star.ui.dialogs.RemoteFilePicker" };
-    return seqServiceNames ;
-}
 
-/* Helper for XServiceInfo */
-OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_SvtRemoteFilePicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.svtools.RemoteFilePicker";
-}
-
-/* Helper for registry */
-Reference< XInterface > SvtRemoteFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& )
-{
-    return Reference< XInterface >( *new SvtRemoteFilePicker );
+    return cppu::acquire(new SvtRemoteFilePicker());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

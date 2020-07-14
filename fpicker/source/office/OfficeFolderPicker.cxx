@@ -150,7 +150,7 @@ void SvtFolderPicker::cancel()
 /* XServiceInfo */
 OUString SAL_CALL SvtFolderPicker::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return "com.sun.star.svtools.OfficeFolderPicker";
 }
 
 /* XServiceInfo */
@@ -162,26 +162,14 @@ sal_Bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.OfficeFolderPicker" };
 }
 
-/* Helper for XServiceInfo */
-Sequence< OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_SvtFolderPicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > seqServiceNames { "com.sun.star.ui.dialogs.OfficeFolderPicker" };
-    return seqServiceNames ;
-}
-
-/* Helper for XServiceInfo */
-OUString SvtFolderPicker::impl_getStaticImplementationName()
-{
-    return "com.sun.star.svtools.OfficeFolderPicker";
-}
-
-/* Helper for registry */
-Reference< XInterface > SvtFolderPicker::impl_createInstance( const Reference< XComponentContext >&  )
-{
-    return Reference< XInterface >( *new SvtFolderPicker );
+    return cppu::acquire(new SvtFolderPicker());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
