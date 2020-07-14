@@ -3,15 +3,15 @@
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="AdditionsDialog">
-    <property name="width_request">400</property>
-    <property name="height_request">500</property>
+    <property name="width_request">720</property>
+    <property name="height_request">600</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="additionsdialog|AdditionsDialog">Additions</property>
-    <property name="resizable">False</property>
+    <property name="resizable">True</property>
     <property name="modal">True</property>
     <property name="default_width">500</property>
-    <property name="default_height">1</property>
+    <property name="default_height">500</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
