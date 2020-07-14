@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
-			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl)/out32dll \
+			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
 			/maxcpucount \
 			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
