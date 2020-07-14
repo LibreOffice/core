@@ -7,39 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+system_galleries := arrows bpmn bullets diagrams flowchart fontwork icons network shapes symbolshapes
+
 $(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
 $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/gallery,\
-	arrows.sdg \
-	arrows.sdv \
-	arrows.thm \
-	bpmn.sdg \
-	bpmn.sdv \
-	bpmn.thm \
-	bullets.sdg \
-	bullets.sdv \
-	bullets.thm \
-	diagrams.sdg \
-	diagrams.sdv \
-	diagrams.thm \
-	flowchart.sdg \
-	flowchart.sdv \
-	flowchart.thm \
-	fontwork.sdg \
-	fontwork.sdv \
-	fontwork.thm \
-	icons.sdg \
-	icons.sdv \
-	icons.thm \
-	network.sdg \
-	network.sdv \
-	network.thm \
-	shapes.sdg \
-	shapes.sdv \
-	shapes.thm \
-	symbolshapes.sdg \
-	symbolshapes.sdv \
-	symbolshapes.thm \
+    $(addsuffix .sdg,$(system_galleries)) \
+    $(addsuffix .sdv,$(system_galleries)) \
+    $(addsuffix .thm,$(system_galleries)) \
 ))
 
 # vim: set noet sw=4 ts=4:
