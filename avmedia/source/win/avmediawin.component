@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="avmediawin" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.avmedia.Manager_DirectX"
     constructor="avmedia_Manager_DirectX_get_implementation">
     <service name="com.sun.star.media.Manager_DirectX"/>
