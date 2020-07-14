@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="stringresource" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.scripting.StringResource">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.scripting.StringResource"
+    constructor="scripting_StringResourcePersistenceImpl_implementation">
     <service name="com.sun.star.resource.StringResource"/>
   </implementation>
-  <implementation name="com.sun.star.comp.scripting.StringResourceWithLocation">
+  <implementation name="com.sun.star.comp.scripting.StringResourceWithLocation"
+    constructor="scripting_StringResourceWithLocationImpl_get_implementation">
     <service name="com.sun.star.resource.StringResourceWithLocation"/>
   </implementation>
-  <implementation name="com.sun.star.comp.scripting.StringResourceWithStorage">
+  <implementation name="com.sun.star.comp.scripting.StringResourceWithStorage"
+    constructor="scripting_StringResourceWithStorageImpl_get_implementation">
     <service name="com.sun.star.resource.StringResourceWithStorage"/>
   </implementation>
 </component>

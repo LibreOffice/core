@@ -65,23 +65,11 @@ namespace stringresource
 
 // StringResourceImpl
 
-
-// component operations
-static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_StringResourcePersistenceImpl_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > names { "com.sun.star.resource.StringResource" };
-    return names;
-}
-
-static OUString getImplementationName_StringResourceImpl()
-{
-    return "com.sun.star.comp.scripting.StringResource";
-}
-
-static Reference< XInterface > create_StringResourceImpl(
-    Reference< XComponentContext > const & xContext )
-{
-    return static_cast< ::cppu::OWeakObject * >( new StringResourcePersistenceImpl( xContext ) );
+    return cppu::acquire(new StringResourcePersistenceImpl(context));
 }
 
 
@@ -107,7 +95,7 @@ StringResourceImpl::~StringResourceImpl()
 
 OUString StringResourceImpl::getImplementationName(  )
 {
-    return getImplementationName_StringResourceImpl();
+    return "com.sun.star.comp.scripting.StringResource";
 }
 
 sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName )
@@ -117,7 +105,7 @@ sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_StringResourceImpl();
+    return { "com.sun.star.resource.StringResource" };
 }
 
 
@@ -2047,23 +2035,11 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
 
 // StringResourceWithStorageImpl
 
-
-// component operations
-static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_StringResourceWithStorageImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > names { "com.sun.star.resource.StringResourceWithStorage" };
-    return names;
-}
-
-static OUString getImplementationName_StringResourceWithStorageImpl()
-{
-    return "com.sun.star.comp.scripting.StringResourceWithStorage";
-}
-
-static Reference< XInterface > create_StringResourceWithStorageImpl(
-    Reference< XComponentContext > const & xContext )
-{
-    return static_cast< ::cppu::OWeakObject * >( new StringResourceWithStorageImpl( xContext ) );
+    return cppu::acquire(new StringResourceWithStorageImpl(context));
 }
 
 
@@ -2084,7 +2060,7 @@ StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
 
 OUString StringResourceWithStorageImpl::getImplementationName(  )
 {
-    return getImplementationName_StringResourceWithStorageImpl();
+    return "com.sun.star.comp.scripting.StringResourceWithStorage";
 }
 
 sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName )
@@ -2094,7 +2070,7 @@ sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServic
 
 Sequence< OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_StringResourceWithStorageImpl();
+    return { "com.sun.star.resource.StringResourceWithStorage" };
 }
 
 
@@ -2333,23 +2309,13 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 // StringResourceWithLocationImpl
 
 
-// component operations
-static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_StringResourceWithLocationImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > names { "com.sun.star.resource.StringResourceWithLocation" };
-    return names;
+    return cppu::acquire(new StringResourceWithLocationImpl(context));
 }
 
-static OUString getImplementationName_StringResourceWithLocationImpl()
-{
-    return "com.sun.star.comp.scripting.StringResourceWithLocation";
-}
-
-static Reference< XInterface > create_StringResourceWithLocationImpl(
-    Reference< XComponentContext > const & xContext )
-{
-    return static_cast< ::cppu::OWeakObject * >( new StringResourceWithLocationImpl( xContext ) );
-}
 
 
 StringResourceWithLocationImpl::StringResourceWithLocationImpl( const Reference< XComponentContext >& rxContext )
@@ -2369,7 +2335,7 @@ StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
 
 OUString StringResourceWithLocationImpl::getImplementationName(  )
 {
-    return getImplementationName_StringResourceWithLocationImpl();
+    return "com.sun.star.comp.scripting.StringResourceWithLocation";
 }
 
 sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName )
@@ -2379,7 +2345,7 @@ sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServi
 
 Sequence< OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_StringResourceWithLocationImpl();
+    return { "com.sun.star.resource.StringResourceWithLocation" };
 }
 
 
@@ -2652,49 +2618,7 @@ const Reference< ucb::XSimpleFileAccess3 > & StringResourceWithLocationImpl::get
     return m_xSFI;
 }
 
-
-// component export operations
-
-
-const struct ::cppu::ImplementationEntry s_component_entries [] =
-{
-    {
-        create_StringResourceImpl, getImplementationName_StringResourceImpl,
-        getSupportedServiceNames_StringResourceImpl,
-        ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    {
-        create_StringResourceWithLocationImpl, getImplementationName_StringResourceWithLocationImpl,
-        getSupportedServiceNames_StringResourceWithLocationImpl,
-        ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    {
-        create_StringResourceWithStorageImpl, getImplementationName_StringResourceWithStorageImpl,
-        getSupportedServiceNames_StringResourceWithStorageImpl,
-        ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-
 }   // namespace stringresource
 
-
-// component exports
-
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void * stringresource_component_getFactory(
-        const char * pImplName, void * pServiceManager,
-        void * pRegistryKey )
-    {
-        return ::cppu::component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, ::stringresource::s_component_entries );
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
