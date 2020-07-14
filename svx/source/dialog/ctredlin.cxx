@@ -22,6 +22,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
 
@@ -496,11 +497,13 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     , m_xCbDate(m_xBuilder->weld_check_button("date"))
     , m_xLbDate(m_xBuilder->weld_combo_box("datecond"))
     , m_xDfDate(new SvtCalendarBox(m_xBuilder->weld_menu_button("startdate")))
-    , m_xTfDate(m_xBuilder->weld_time_spin_button("starttime", TimeFieldFormat::F_NONE))
+    , m_xTfDate(m_xBuilder->weld_formatted_spin_button("starttime"))
+    , m_xTfDateFormatter(new weld::TimeFormatter(*m_xTfDate))
     , m_xIbClock(m_xBuilder->weld_button("startclock"))
     , m_xFtDate2(m_xBuilder->weld_label("and"))
     , m_xDfDate2(new SvtCalendarBox(m_xBuilder->weld_menu_button("enddate")))
-    , m_xTfDate2(m_xBuilder->weld_time_spin_button("endtime", TimeFieldFormat::F_NONE))
+    , m_xTfDate2(m_xBuilder->weld_formatted_spin_button("endtime"))
+    , m_xTfDate2Formatter(new weld::TimeFormatter(*m_xTfDate2))
     , m_xIbClock2(m_xBuilder->weld_button("endclock"))
     , m_xCbAuthor(m_xBuilder->weld_check_button("author"))
     , m_xLbAuthor(m_xBuilder->weld_combo_box("authorlist"))
@@ -512,6 +515,9 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     , m_xCbComment(m_xBuilder->weld_check_button("comment"))
     , m_xEdComment(m_xBuilder->weld_entry("commentedit"))
 {
+    m_xTfDateFormatter->EnableEmptyField(false);
+    m_xTfDate2Formatter->EnableEmptyField(false);
+
     m_xLbDate->set_active(0);
     m_xLbDate->connect_changed( LINK( this, SvxTPFilter, SelDateHdl ) );
     m_xIbClock->connect_clicked( LINK( this, SvxTPFilter, TimeHdl) );
@@ -529,7 +535,7 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     m_xDfDate->connect_activated(a2Link);
     m_xDfDate2->connect_activated(a2Link);
 
-    Link<weld::TimeSpinButton&,void> a3Link=LINK(this, SvxTPFilter, ModifyTime);
+    Link<weld::FormattedSpinButton&,void> a3Link=LINK(this, SvxTPFilter, ModifyTime);
     m_xTfDate->connect_value_changed(a3Link);
     m_xTfDate2->connect_value_changed(a3Link);
 
@@ -545,11 +551,11 @@ SvxTPFilter::SvxTPFilter(weld::Container* pParent)
     RowEnableHdl(*m_xCbAction);
     RowEnableHdl(*m_xCbComment);
 
-    DateTime aDateTime( DateTime::SYSTEM );
-    m_xDfDate->set_date(aDateTime);
-    m_xDfDate2->set_date(aDateTime);
-    m_xTfDate->set_value(aDateTime);
-    m_xTfDate2->set_value(aDateTime);
+    DateTime aDateTime(DateTime::SYSTEM);
+    SetFirstDate(aDateTime);
+    SetLastDate(aDateTime);
+    SetFirstTime(aDateTime);
+    SetLastTime(aDateTime);
     HideRange();
     ShowAction();
     bModified=false;
@@ -611,12 +617,12 @@ void SvxTPFilter::SetFirstDate(const Date &aDate)
 
 tools::Time SvxTPFilter::GetFirstTime() const
 {
-    return m_xTfDate->get_value();
+    return m_xTfDateFormatter->GetTime();
 }
 
 void SvxTPFilter::SetFirstTime(const tools::Time &aTime)
 {
-    m_xTfDate->set_value(aTime);
+    m_xTfDateFormatter->SetTime(aTime);
 }
 
 Date SvxTPFilter::GetLastDate() const
@@ -631,12 +637,12 @@ void SvxTPFilter::SetLastDate(const Date &aDate)
 
 tools::Time SvxTPFilter::GetLastTime() const
 {
-    return m_xTfDate2->get_value();
+    return m_xTfDate2Formatter->GetTime();
 }
 
 void SvxTPFilter::SetLastTime(const tools::Time &aTime)
 {
-    m_xTfDate2->set_value(aTime);
+    m_xTfDate2Formatter->SetTime(aTime);
 }
 
 void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
@@ -865,13 +871,13 @@ IMPL_LINK(SvxTPFilter, TimeHdl, weld::Button&, rIB, void)
     DateTime aDateTime( DateTime::SYSTEM );
     if (&rIB == m_xIbClock.get())
     {
-        m_xDfDate->set_date(aDateTime);
-        m_xTfDate->set_value(aDateTime);
+        SetFirstDate(aDateTime);
+        SetFirstTime(aDateTime);
     }
     else if (&rIB == m_xIbClock2.get())
     {
-        m_xDfDate2->set_date(aDateTime);
-        m_xTfDate2->set_value(aDateTime);
+        SetLastDate(aDateTime);
+        SetLastTime(aDateTime);
     }
     bModified=true;
 }
@@ -894,10 +900,10 @@ void SvxTPFilter::DeactivatePage()
         {
             m_pRedlinTable->SetFilterDate(IsDate());
             m_pRedlinTable->SetDateTimeMode(GetDateMode());
-            m_pRedlinTable->SetFirstDate(m_xDfDate->get_date());
-            m_pRedlinTable->SetLastDate(m_xDfDate2->get_date());
-            m_pRedlinTable->SetFirstTime(m_xTfDate->get_value());
-            m_pRedlinTable->SetLastTime(m_xTfDate2->get_value());
+            m_pRedlinTable->SetFirstDate(GetFirstDate());
+            m_pRedlinTable->SetLastDate(GetLastDate());
+            m_pRedlinTable->SetFirstTime(GetFirstTime());
+            m_pRedlinTable->SetLastTime(GetLastTime());
             m_pRedlinTable->SetFilterAuthor(IsAuthor());
             m_pRedlinTable->SetAuthor(GetSelectedAuthor());
 
@@ -950,24 +956,24 @@ IMPL_LINK(SvxTPFilter, ModifyDate, SvtCalendarBox&, rTF, void)
     bModified=true;
 }
 
-IMPL_LINK(SvxTPFilter, ModifyTime, weld::TimeSpinButton&, rTF, void)
+IMPL_LINK(SvxTPFilter, ModifyTime, weld::FormattedSpinButton&, rTF, void)
 {
     tools::Time aTime(0);
     if (m_xTfDate.get() == &rTF)
     {
         if (m_xTfDate->get_text().isEmpty())
-            m_xTfDate->set_value(aTime);
+            SetFirstTime(aTime);
 
-        if(m_pRedlinTable!=nullptr)
-            m_pRedlinTable->SetFirstTime(m_xTfDate->get_value());
+        if (m_pRedlinTable!=nullptr)
+            m_pRedlinTable->SetFirstTime(GetFirstTime());
     }
     else if (m_xTfDate2.get() == &rTF)
     {
         if (m_xTfDate2->get_text().isEmpty())
-           m_xTfDate2->set_value(aTime);
+            SetLastTime(aTime);
 
-        if(m_pRedlinTable!=nullptr)
-            m_pRedlinTable->SetLastTime(m_xTfDate2->get_value());
+        if (m_pRedlinTable!=nullptr)
+            m_pRedlinTable->SetLastTime(GetLastTime());
 
     }
     bModified=true;

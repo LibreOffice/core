@@ -407,6 +407,18 @@ void TimeFormatter::SetExtFormat(ExtTimeFieldFormat eFormat)
     ReFormat();
 }
 
+void TimeFormatter::SetDuration(bool bDuration)
+{
+    m_bDuration = bDuration;
+    ReFormat();
+}
+
+void TimeFormatter::SetTimeFormat(TimeFieldFormat eTimeFormat)
+{
+    m_eFormat = eTimeFormat;
+    ReFormat();
+}
+
 TimeFormatter::~TimeFormatter() = default;
 }
 
