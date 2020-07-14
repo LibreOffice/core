@@ -110,8 +110,6 @@ public:
 
     SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
-
     SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
 
     std::unique_ptr<SgaObject>  AcquireObject(sal_uInt32 nPos);

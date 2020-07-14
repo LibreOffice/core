@@ -25,6 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 #include <svx/gallerybinaryengine.hxx>
+#include <vcl/salctype.hxx>
 
 #include <cstdio>
 #include <memory>
@@ -65,6 +66,9 @@ public:
 
     void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
         ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList, sal_uInt32& rInsertPos);
+
+    bool insertGraphic(const Graphic& rGraphic, const INetURLObject& rURL, ConvertDataFormat& nExportFormat, const GfxLink& rGfxLink);
+
 
     const OUString&         GetThemeName() const { return aName; }
 
