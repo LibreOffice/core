@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,libffi,libffi))
 $(eval $(call gb_ExternalPackage_use_external_project,libffi,libffi))
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_files,libffi,$(LIBO_LIB_FOLDER),\
+$(eval $(call gb_ExternalPackage_add_files,libffi,$(LIBO_LIB_FOLDER)/python-core-$(PYTHON_VERSION)/lib, \
     $(HOST_PLATFORM)/.libs/libffi-7.dll \
 ))
 endif
