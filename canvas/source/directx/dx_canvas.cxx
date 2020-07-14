@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+// /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -33,9 +33,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/servicedecl.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
@@ -48,15 +46,7 @@
 #include "dx_graphicsprovider.hxx"
 #include "dx_winstuff.hxx"
 
-#define CANVAS_SERVICE_NAME              "com.sun.star.rendering.Canvas.GDI+"
-#define CANVAS_IMPLEMENTATION_NAME       "com.sun.star.comp.rendering.Canvas.GDI+"
-#define BITMAPCANVAS_SERVICE_NAME        "com.sun.star.rendering.BitmapCanvas.GDI+"
-#define BITMAPCANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.BitmapCanvas.GDI+"
-
-
 using namespace ::com::sun::star;
-
-namespace sdecl = comphelper::service_decl;
 
 namespace dxcanvas
 {
@@ -133,7 +123,21 @@ namespace dxcanvas
 
     OUString SAL_CALL Canvas::getServiceName(  )
     {
-        return CANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.Canvas.GDI+";
+    }
+
+    // XServiceInfo
+    css::uno::Sequence<OUString> Canvas::getSupportedServiceNames(  )
+    {
+        return { "com.sun.star.rendering.Canvas.GDI+" };
+    }
+    OUString Canvas::getImplementationName(  )
+    {
+        return "com.sun.star.comp.rendering.Canvas.GDI+";
+    }
+    sal_Bool Canvas::supportsService( const OUString& sServiceName )
+    {
+        return cppu::supportsService(this, sServiceName);
     }
 
     BitmapCanvas::BitmapCanvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -209,7 +213,21 @@ namespace dxcanvas
 
     OUString SAL_CALL BitmapCanvas::getServiceName(  )
     {
-        return BITMAPCANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.BitmapCanvas.GDI+";
+    }
+
+    // XServiceInfo
+    css::uno::Sequence<OUString> BitmapCanvas::getSupportedServiceNames(  )
+    {
+        return { "com.sun.star.rendering.BitmapCanvas.GDI+" };
+    }
+    OUString BitmapCanvas::getImplementationName(  )
+    {
+        return "com.sun.star.comp.rendering.BitmapCanvas.GDI+";
+    }
+    sal_Bool BitmapCanvas::supportsService( const OUString& sServiceName )
+    {
+        return cppu::supportsService(this, sServiceName);
     }
 
     IBitmapSharedPtr BitmapCanvas::getBitmap() const
@@ -217,40 +235,25 @@ namespace dxcanvas
         return mpTarget;
     }
 
-    static uno::Reference<uno::XInterface> initCanvas( Canvas* pCanvas )
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    canvas_gdiplus_Canvas_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
     {
-        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
-        pCanvas->initialize();
-        return xRet;
+        rtl::Reference<Canvas> xCanvas(new Canvas(args, context));
+        xCanvas->initialize();
+        xCanvas->acquire();
+        return static_cast<cppu::OWeakObject*>(xCanvas.get());
     }
 
-    sdecl::class_<Canvas, sdecl::with_args<true> > const serviceImpl1(&initCanvas);
-    const sdecl::ServiceDecl dxCanvasDecl(
-        serviceImpl1,
-        CANVAS_IMPLEMENTATION_NAME,
-        CANVAS_SERVICE_NAME );
-
-    static uno::Reference<uno::XInterface> initBitmapCanvas( BitmapCanvas* pCanvas )
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    canvas_gdiplus_BitmapCanvas_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
     {
-        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
-        pCanvas->initialize();
-        return xRet;
+        rtl::Reference<BitmapCanvas> xCanvas(new BitmapCanvas(args, context));
+        xCanvas->initialize();
+        xCanvas->acquire();
+        return static_cast<cppu::OWeakObject*>(xCanvas.get());
     }
-
-    namespace sdecl = comphelper::service_decl;
-    sdecl::class_<BitmapCanvas, sdecl::with_args<true> > const serviceImpl2(&initBitmapCanvas);
-    const sdecl::ServiceDecl dxBitmapCanvasDecl(
-        serviceImpl2,
-        BITMAPCANVAS_IMPLEMENTATION_NAME,
-        BITMAPCANVAS_SERVICE_NAME );
-}
-
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* gdipluscanvas_component_getFactory( char const* pImplName,
-                                         void*, void* )
-{
-    return sdecl::component_getFactoryHelper( pImplName, {&dxcanvas::dxCanvasDecl, &dxcanvas::dxBitmapCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

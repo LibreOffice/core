@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="gdipluscanvas" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.BitmapCanvas.GDI+">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.rendering.BitmapCanvas.GDI+"
+    constructor="canvas_gdiplus_BitmapCanvas_get_implementation">
     <service name="com.sun.star.rendering.BitmapCanvas.GDI+"/>
   </implementation>
-  <implementation name="com.sun.star.comp.rendering.Canvas.GDI+">
+  <implementation name="com.sun.star.comp.rendering.Canvas.GDI+"
+    constructor="canvas_gdiplus_Canvas_get_implementation">
     <service name="com.sun.star.rendering.Canvas.GDI+"/>
   </implementation>
 </component>
