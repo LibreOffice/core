@@ -1254,7 +1254,17 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 ContentTypeId::INDEX == nContentType ||
                 ContentTypeId::DRAWOBJECT == nContentType);
 
-        if (!bReadonly && (bEditable || bDeletable))
+        if(ContentTypeId::OUTLINE == nContentType)
+        {
+            bOutline = true;
+            bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
+            if (!bReadonly)
+            {
+                bRemoveSelectEntry = false;
+                bRemoveChapterEntries = false;
+            }
+        }
+        else if (!bReadonly && (bEditable || bDeletable))
         {
             if(ContentTypeId::INDEX == nContentType)
             {
@@ -1278,13 +1288,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 xPop->set_sensitive(OString::number(403), !bFull);
                 xPop->set_sensitive(OString::number(404), bProt);
                 bRemoveDeleteEntry = false;
-            }
-            else if(ContentTypeId::OUTLINE == nContentType)
-            {
-                bOutline = true;
-                bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
-                bRemoveSelectEntry = false;
-                bRemoveChapterEntries = false;
             }
             else if(ContentTypeId::DRAWOBJECT == nContentType)
             {
