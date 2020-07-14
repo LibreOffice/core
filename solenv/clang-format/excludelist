@@ -3699,7 +3699,6 @@ drawinglayer/source/primitive2d/textenumsprimitive2d.cxx
 drawinglayer/source/primitive2d/texthierarchyprimitive2d.cxx
 drawinglayer/source/primitive2d/textlayoutdevice.cxx
 drawinglayer/source/primitive2d/textlineprimitive2d.cxx
-drawinglayer/source/primitive2d/textprimitive2d.cxx
 drawinglayer/source/primitive2d/textstrikeoutprimitive2d.cxx
 drawinglayer/source/primitive2d/transformprimitive2d.cxx
 drawinglayer/source/primitive2d/transparenceprimitive2d.cxx
