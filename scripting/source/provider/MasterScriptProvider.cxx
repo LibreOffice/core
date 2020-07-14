@@ -665,101 +665,14 @@ Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
         "com.sun.star.script.provider.ScriptProvider" };
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_MasterScriptProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new MasterScriptProvider(context));
+}
+
 } // namespace func_provider
 
-
-namespace scripting_runtimemgr
-{
-
-static Reference< XInterface > sp_create(
-    const Reference< XComponentContext > & xCompC )
-{
-    return static_cast<cppu::OWeakObject *>(new ::func_provider::MasterScriptProvider( xCompC ));
-}
-
-
-static Sequence< OUString > sp_getSupportedServiceNames( )
-{
-    return { "com.sun.star.script.provider.MasterScriptProvider",
-             "com.sun.star.script.browse.BrowseNode",
-             "com.sun.star.script.provider.ScriptProvider" };
-}
-
-
-static OUString sp_getImplementationName( )
-{
-    return "com.sun.star.script.provider.MasterScriptProvider";
-}
-
-// ***** registration or ScriptingFrameworkURIHelper
-static Reference< XInterface > urihelper_create(
-    const Reference< XComponentContext > & xCompC )
-{
-    return static_cast<cppu::OWeakObject *>(
-        new ::func_provider::ScriptingFrameworkURIHelper( xCompC ));
-}
-
-static Sequence< OUString > urihelper_getSupportedServiceNames( )
-{
-    return { "com.sun.star.script.provider.ScriptURIHelper" };
-}
-
-static OUString urihelper_getImplementationName( )
-{
-    return "com.sun.star.script.provider.ScriptURIHelper";
-}
-
-const struct cppu::ImplementationEntry s_entries [] =
-    {
-        {
-            sp_create, sp_getImplementationName,
-            sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
-        {
-            urihelper_create,
-            urihelper_getImplementationName,
-            urihelper_getSupportedServiceNames,
-            cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
-        {
-            func_provider::mspf_create, func_provider::mspf_getImplementationName,
-            func_provider::mspf_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
-        {
-            browsenodefactory::bnf_create, browsenodefactory::bnf_getImplementationName,
-            browsenodefactory::bnf_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            nullptr, 0
-        },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-    };
-}
-
-
-//#### EXPORTED ##############################################################
-
-
-extern "C"
-{
-    /**
-     * This function is called to get service factories for an implementation.
-     *
-     * @param pImplName       name of implementation
-     * @param pServiceManager a service manager, need for component creation
-     * @param pRegistryKey    the registry key for this component, need for persistent
-     *                        data
-     * @return a component factory
-     */
-    SAL_DLLPUBLIC_EXPORT void * scriptframe_component_getFactory(
-        const char * pImplName,
-        void * pServiceManager,
-        void * pRegistryKey )
-    {
-        return ::cppu::component_getFactoryHelper( pImplName, pServiceManager,
-            pRegistryKey, ::scripting_runtimemgr::s_entries );
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

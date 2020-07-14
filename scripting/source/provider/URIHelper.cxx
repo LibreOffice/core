@@ -253,6 +253,15 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
 {
     return { "com.sun.star.script.provider.ScriptURIHelper" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_ScriptingFrameworkURIHelper_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ScriptingFrameworkURIHelper(context));
 }
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,17 +126,6 @@ private:
     OUString m_sCtxString;
 };
 
-OUString mspf_getImplementationName() ;
-css::uno::Reference< css::uno::XInterface > mspf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
-css::uno::Sequence< OUString > mspf_getSupportedServiceNames();
-
-}
-
-namespace browsenodefactory
-{
-OUString bnf_getImplementationName() ;
-css::uno::Reference< css::uno::XInterface > bnf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
-css::uno::Sequence< OUString > bnf_getSupportedServiceNames();
 }
 
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDER_HXX
