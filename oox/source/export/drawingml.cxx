@@ -398,8 +398,38 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
     }
 
+    // OOXML has no separate transparence gradient but uses transparency in the gradient stops.
+    // So we merge transparency and color and use gradient fill in such case.
+    awt::Gradient aTransparenceGradient;
+    bool bNeedGradientFill(false);
+    if (GetProperty(rXPropSet, "FillTransparenceGradient"))
+    {
+        mAny >>= aTransparenceGradient;
+        if (aTransparenceGradient.StartColor != aTransparenceGradient.EndColor)
+            bNeedGradientFill = true;
+        else if (aTransparenceGradient.StartColor != 0)
+            nAlpha = GetAlphaFromTransparenceGradient(aTransparenceGradient, true);
+    }
+
     // write XML
-    if ( nFillColor != nOriginalColor )
+    if (bNeedGradientFill)
+    {
+        awt::Gradient aPseudoColorGradient;
+        aPseudoColorGradient.XOffset = aTransparenceGradient.XOffset;
+        aPseudoColorGradient.YOffset = aTransparenceGradient.YOffset;
+        aPseudoColorGradient.StartIntensity = 100;
+        aPseudoColorGradient.EndIntensity = 100;
+        aPseudoColorGradient.Angle = aTransparenceGradient.Angle;
+        aPseudoColorGradient.Border = aTransparenceGradient.Border;
+        aPseudoColorGradient.Style = aTransparenceGradient.Style;
+        aPseudoColorGradient.StartColor = nFillColor;
+        aPseudoColorGradient.EndColor = nFillColor;
+        aPseudoColorGradient.StepCount = aTransparenceGradient.StepCount;
+        mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
+        WriteGradientFill(aPseudoColorGradient, aTransparenceGradient);
+        mpFS->endElementNS( XML_a, XML_gradFill );
+    }
+    else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
         WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
@@ -579,25 +609,25 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
 void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransparenceGradient,
                                   const uno::Reference<beans::XPropertySet>& rXPropSet)
 {
+    sal_Int32 nStartAlpha;
+    sal_Int32 nEndAlpha;
+    if( rXPropSet.is() && GetProperty(rXPropSet, "FillTransparence") )
+    {
+        sal_Int32 nTransparency = 0;
+        mAny >>= nTransparency;
+        nStartAlpha = nEndAlpha = (MAX_PERCENT - (PER_PERCENT * nTransparency));
+    }
+    else
+    {
+        nStartAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, true);
+        nEndAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, false);
+    }
     switch( rGradient.Style )
     {
         default:
         case awt::GradientStyle_LINEAR:
         {
             mpFS->startElementNS(XML_a, XML_gsLst);
-            sal_Int32 nStartAlpha;
-            sal_Int32 nEndAlpha;
-            if( rXPropSet.is() && GetProperty(rXPropSet, "FillTransparence") )
-            {
-                sal_Int32 nTransparency = 0;
-                mAny >>= nTransparency;
-                nStartAlpha = nEndAlpha = (MAX_PERCENT - (PER_PERCENT * nTransparency));
-            }
-            else
-            {
-                nStartAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, true);
-                nEndAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, false);
-            }
             WriteGradientStop(rGradient.Border, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
                               nStartAlpha);
             WriteGradientStop(100, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
@@ -612,23 +642,22 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
         case awt::GradientStyle_AXIAL:
         {
             mpFS->startElementNS(XML_a, XML_gsLst);
-            sal_Int32 nStartAlpha;
-            sal_Int32 nEndAlpha;
-            if (rXPropSet.is() && GetProperty(rXPropSet, "FillTransparence"))
-            {
-                sal_Int32 nTransparency = 0;
-                mAny >>= nTransparency;
-                nStartAlpha = nEndAlpha = (MAX_PERCENT - (PER_PERCENT * nTransparency));
-            }
-            else
-            {
-                nStartAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, true);
-                nEndAlpha = GetAlphaFromTransparenceGradient(rTransparenceGradient, false);
-            }
             WriteGradientStop(0, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
                               nEndAlpha);
+            if (rGradient.Border > 0 && rGradient.Border < 100)
+            {
+                WriteGradientStop(rGradient.Border/2,
+                                  ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
+                                  nEndAlpha);
+            }
             WriteGradientStop(50, ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
                               nStartAlpha);
+            if (rGradient.Border > 0 && rGradient.Border < 100)
+            {
+                WriteGradientStop(100 - rGradient.Border/2,
+                                  ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
+                                  nEndAlpha);
+            }
             WriteGradientStop(100, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
                               nEndAlpha);
             mpFS->endElementNS(XML_a, XML_gsLst);
@@ -644,15 +673,19 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
         case awt::GradientStyle_SQUARE:
         {
             mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop(0, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity));
+            WriteGradientStop(0, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity),
+                              nEndAlpha);
             if (rGradient.Border > 0 && rGradient.Border < 100)
+            {
                 // Map border to an additional gradient stop, which has the
                 // same color as the final stop.
-                WriteGradientStop(
-                    100 - rGradient.Border,
-                    ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity));
+                WriteGradientStop(100 - rGradient.Border,
+                                  ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
+                                  nStartAlpha);
+            }
             WriteGradientStop(100,
-                              ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity));
+                              ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity),
+                              nStartAlpha);
             mpFS->endElementNS(XML_a, XML_gsLst);
 
             WriteGradientPath(rGradient, mpFS, rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL);
@@ -3564,12 +3597,19 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
 
+    // map full transparent background to no fill
     if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ) )
     {
-        // map full transparent background to no fill
         sal_Int16 nVal = 0;
         xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
         if ( nVal == 100 )
+            aFillStyle = FillStyle_NONE;
+    }
+    if (aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparenceGradient"))
+    {
+        awt::Gradient aTransparenceGradient;
+        mAny >>= aTransparenceGradient;
+        if (aTransparenceGradient.StartColor == 0xffffff && aTransparenceGradient.EndColor == 0xffffff)
             aFillStyle = FillStyle_NONE;
     }
 
