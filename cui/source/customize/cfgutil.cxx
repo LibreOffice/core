@@ -49,6 +49,7 @@
 #include <osl/diagnose.h>
 #include <dialmgr.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
@@ -279,6 +280,7 @@ CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeVie
     m_xTreeView->make_sorted();
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
     m_xTreeView->connect_query_tooltip(LINK(this, CuiConfigFunctionListBox, QueryTooltip));
+    m_xTreeView->connect_popup_menu(LINK(this, CuiConfigFunctionListBox, ContextMenuHdl));
 }
 
 CuiConfigFunctionListBox::~CuiConfigFunctionListBox()
@@ -295,6 +297,35 @@ IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, 
     OUString aName = CuiResId(RID_SVXSTR_COMMANDNAME) + ": ";
     OUString aTip = CuiResId(RID_SVXSTR_COMMANDTIP) + ": ";
     return  aLabel + pData->sLabel + "\n" + aName + pData->sCommand+ "\n" + aTip + pData->sTooltip;
+}
+
+IMPL_LINK(CuiConfigFunctionListBox, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !m_xTreeView->n_children())
+         return false;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/BasicIDE/ui/sortmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("sortmenu"));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("sortsubmenu"));
+    xDropMenu->set_active("alphabetically", m_xTreeView->get_sort_order());
+    xDropMenu->set_active("properorder", !m_xTreeView->get_sort_order());
+
+    OString sCommand(xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    if (sCommand == "alphabetically")
+    {
+        m_xTreeView->make_sorted();
+    }
+    else if (sCommand == "properorder")
+    {
+        m_xTreeView->make_unsorted();
+        m_pGroupListBox->GroupSelected();
+    }
+    else if (!sCommand.isEmpty())
+    {
+         SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    }
+
+    return true;
 }
 
 void CuiConfigFunctionListBox::ClearAll()
@@ -1089,6 +1120,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
+    m_xCommands->SetGroupListBox(m_xCategories.get());
     m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, /*bShowSlots*/false);
 
     m_xCategories->connect_changed(
