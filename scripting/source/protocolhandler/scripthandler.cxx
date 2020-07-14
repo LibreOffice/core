@@ -413,7 +413,7 @@ ScriptProtocolHandler::~ScriptProtocolHandler()
 /* XServiceInfo */
 OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
 {
-    return impl_getStaticImplementationName();
+    return "com.sun.star.comp.ScriptProtocolHandler";
 }
 
 /* XServiceInfo */
@@ -425,80 +425,17 @@ sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServic
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-/* Helper for XServiceInfo */
-Sequence< OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames()
-{
     return {"com.sun.star.frame.ProtocolHandler"};
 }
 
-/* Helper for XServiceInfo */
-OUString ScriptProtocolHandler::impl_getStaticImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_ScriptProtocolHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.comp.ScriptProtocolHandler";
-}
-
-/* Helper for registry */
-Reference< XInterface > SAL_CALL ScriptProtocolHandler::impl_createInstance(
-const Reference< css::lang::XMultiServiceFactory >& xServiceManager )
-{
-    return Reference< XInterface > ( *new ScriptProtocolHandler( comphelper::getComponentContext(xServiceManager) ) );
-}
-
-/* Factory for registration */
-Reference< XSingleServiceFactory > ScriptProtocolHandler::impl_createFactory(
-const Reference< XMultiServiceFactory >& xServiceManager )
-{
-    Reference< XSingleServiceFactory > xReturn (
-        cppu::createSingleFactory( xServiceManager,
-            ScriptProtocolHandler::impl_getStaticImplementationName(),
-            ScriptProtocolHandler::impl_createInstance,
-            ScriptProtocolHandler::impl_getStaticSupportedServiceNames() )
-    );
-    return xReturn;
+    return cppu::acquire(new ScriptProtocolHandler(context));
 }
 
 } // namespace scripting_protocolhandler
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void* protocolhandler_component_getFactory( const char * pImplementationName ,
-                                         void * pServiceManager ,
-                                         void * )
-    {
-        // Set default return value for this operation - if it failed.
-        void * pReturn = nullptr ;
-
-        if (
-            ( pImplementationName != nullptr ) &&
-            ( pServiceManager != nullptr )
-        )
-        {
-            // Define variables which are used in following macros.
-            css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
-            css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
-                static_cast< css::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
-
-            if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equalsAscii(
-                    pImplementationName ) )
-            {
-                xFactory = ::scripting_protocolhandler::ScriptProtocolHandler::impl_createFactory( xServiceManager );
-            }
-
-            // Factory is valid - service was found.
-            if ( xFactory.is() )
-            {
-                xFactory->acquire();
-                pReturn = xFactory.get();
-            }
-        }
-
-        // Return with result of this operation.
-        return pReturn ;
-    }
-} // extern "C"
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

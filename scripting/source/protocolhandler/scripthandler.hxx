@@ -82,18 +82,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
 
-    /* Helper for XServiceInfo */
-    static css::uno::Sequence < OUString > impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
-
-    /* Helper for registry */
-    /// @throws css::uno::RuntimeException
-    static css::uno::Reference < css::uno::XInterface > SAL_CALL
-    impl_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-    static css::uno::Reference < css::lang::XSingleServiceFactory > impl_createFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-
     /* Implementation for XDispatchProvider */
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL
     queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName,
