@@ -426,7 +426,10 @@ namespace svt
 
     void FormattedControlBase::dispose()
     {
-        m_xEntryFormatter.reset();
+        if (m_bSpinVariant)
+            m_xSpinButton->SetFormatter(nullptr);
+        else
+            m_xEntryFormatter.reset();
         m_xSpinButton.reset();
         m_xEntry.reset();
         EditControlBase::dispose();
