@@ -30,6 +30,12 @@ ifeq ($(OS),WNT)
 
 # TODO: using Debug configuration and related mangling of pyconfig.h
 
+python3_WIN_PLATFORM_MSBUILD := $(strip \
+	$(if $(filter INTEL,$(CPUNAME)),Win32) \
+	$(if $(filter X86_64,$(CPUNAME)),x64) \
+	$(if $(filter ARM64,$(CPUNAME)),arm64) \
+	)
+
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
@@ -37,10 +43,12 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/p:Platform=$(python3_WIN_PLATFORM_MSBUILD) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
 			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
+			/p:libffiOutDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs \
+			/p:libffiIncludeDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
 			/maxcpucount \
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
@@ -135,14 +143,14 @@ python3_fw_prefix=$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@______
 $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
 	$(COMMAND_ECHO)for file in \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/2to3 \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/easy_install-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pip$(PYTHON_VERSION_MAJOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pydoc$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m-config \
-			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pyvenv-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) ; do \
-	{ rm "$$file" && $(gb_AWK) '\
+	; do { rm "$$file" && $(gb_AWK) '\
 		BEGIN {print "#!/bin/bash\n\
 origpath=$$(pwd)\n\
 bindir=$$(cd $$(dirname \"$$0\") ; pwd)\n\
@@ -164,16 +172,14 @@ $(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_
 		@loader_path/../../../LibreOfficePython $$file ; done
 	touch $@
 
-# also delete binaries that are symlinked in scp2
 $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_ExternalProject_get_state_target,python3,build)
 	cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin ; \
-	for file in python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-	            python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m ; do \
 	$(INSTALL_NAME_TOOL) -change \
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
-		@executable_path/../LibreOfficePython $$file ; done
+		@executable_path/../LibreOfficePython python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 	touch $@
 
+# also delete binaries that are symlinked in scp2
 $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
 	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
