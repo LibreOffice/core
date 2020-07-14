@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
-	$(if $(filter LINUX,$(OS)),libffi) \
+	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
 	zlib \
 ))

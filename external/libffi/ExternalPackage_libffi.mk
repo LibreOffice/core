@@ -7,12 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,libffi))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libffi,libffi))
 
-$(eval $(call gb_Module_add_targets,libffi,\
-	UnpackedTarball_libffi \
-	ExternalProject_libffi \
-	ExternalPackage_libffi \
+$(eval $(call gb_ExternalPackage_use_external_project,libffi,libffi))
+
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_files,libffi,$(LIBO_LIB_FOLDER),\
+    $(HOST_PLATFORM)/.libs/libffi-7.dll \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
