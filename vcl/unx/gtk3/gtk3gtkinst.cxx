@@ -12196,10 +12196,15 @@ private:
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
+    bool m_bEmptyField;
+    double m_dValueWhenEmpty;
 
     bool signal_output()
     {
-        GetFormatter().SetValue(gtk_spin_button_get_value(m_pButton));
+        double fValue = gtk_spin_button_get_value(m_pButton);
+        m_bEmptyField &= fValue == m_dValueWhenEmpty;
+        if (!m_bEmptyField)
+            GetFormatter().SetValue(fValue);
         return true;
     }
 
@@ -12214,7 +12219,18 @@ private:
     {
         Formatter& rFormatter = GetFormatter();
         rFormatter.Modify();
-        *value = rFormatter.GetValue();
+        // if the blank-mode is enabled then if the input is empty don't parse
+        // the input but keep the value as it is. store what the value the
+        // blank is associated with and until the value is changed, or the text
+        // is updated from the outside, don't output that value
+        m_bEmptyField = rFormatter.IsEmptyFieldEnabled() && get_text().isEmpty();
+        if (m_bEmptyField)
+        {
+            m_dValueWhenEmpty = gtk_spin_button_get_value(m_pButton);
+            *value = m_dValueWhenEmpty;
+        }
+        else
+            *value = rFormatter.GetValue();
         return 1;
     }
 
@@ -12239,7 +12255,18 @@ public:
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
+        , m_bEmptyField(false)
+        , m_dValueWhenEmpty(0.0)
     {
+    }
+
+    virtual void set_text(const OUString& rText) override
+    {
+        GtkInstanceEntry::set_text(rText);
+        Formatter& rFormatter = GetFormatter();
+        m_bEmptyField = rFormatter.IsEmptyFieldEnabled() && rText.isEmpty();
+        if (m_bEmptyField)
+            m_dValueWhenEmpty = gtk_spin_button_get_value(m_pButton);
     }
 
     virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
