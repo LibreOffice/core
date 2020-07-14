@@ -537,10 +537,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.StartColor = sal_Int32(aStartColor.getColor( rGraphicHelper, nPhClr ));
                     aGradient.EndColor = sal_Int32(aEndColor.getColor( rGraphicHelper, nPhClr ));
 
-                    if( aStartColor.hasTransparency() )
-                        nStartTrans = aStartColor.getTransparency()*255/100;
-                    if( aEndColor.hasTransparency() )
-                        nEndTrans = aEndColor.getTransparency()*255/100;
+                    nStartTrans = aStartColor.hasTransparency() ? aStartColor.getTransparency()*255/100 : 0;
+                    nEndTrans = aEndColor.hasTransparency() ? aEndColor.getTransparency()*255/100 : 0;
 
                     aGradient.Border = rtl::math::round(100*nBorder);
                 }
