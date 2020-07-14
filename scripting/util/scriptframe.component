@@ -18,23 +18,25 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="scriptframe" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.script.browse.BrowseNodeFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.script.browse.BrowseNodeFactory"
+    constructor="scripting_BrowseNodeFactoryImpl_get_implementation">
     <service name="com.sun.star.script.browse.BrowseNodeFactory"/>
     <singleton name="com.sun.star.script.browse.theBrowseNodeFactory"/>
   </implementation>
-  <implementation name="com.sun.star.script.provider.MasterScriptProvider">
+  <implementation name="com.sun.star.script.provider.MasterScriptProvider"
+    constructor="scripting_MasterScriptProvider_get_implementation">
     <service name="com.sun.star.script.browse.BrowseNode"/>
     <service name="com.sun.star.script.provider.MasterScriptProvider"/>
     <service name="com.sun.star.script.provider.ScriptProvider"/>
   </implementation>
-  <implementation
-      name="com.sun.star.script.provider.MasterScriptProviderFactory">
+  <implementation name="com.sun.star.script.provider.MasterScriptProviderFactory"
+    constructor="scripting_MasterScriptProviderFactory_get_implementation">
     <service name="com.sun.star.script.provider.MasterScriptProviderFactory"/>
-    <singleton
-        name="com.sun.star.script.provider.theMasterScriptProviderFactory"/>
+    <singleton name="com.sun.star.script.provider.theMasterScriptProviderFactory"/>
   </implementation>
-  <implementation name="com.sun.star.script.provider.ScriptURIHelper">
+  <implementation name="com.sun.star.script.provider.ScriptURIHelper"
+    constructor="scripting_ScriptingFrameworkURIHelper_get_implementation">
     <service name="com.sun.star.script.provider.ScriptURIHelper"/>
   </implementation>
 </component>

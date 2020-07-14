@@ -58,31 +58,14 @@ MasterScriptProviderFactory::getActiveMSPList() const
     return m_MSPList;
 }
 
-Sequence< OUString > mspf_getSupportedServiceNames( )
-{
-    return { "com.sun.star.script.provider.MasterScriptProviderFactory" };
-}
-
-OUString mspf_getImplementationName( )
+OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
 {
     return "com.sun.star.script.provider.MasterScriptProviderFactory";
 }
 
-Reference< XInterface >
-mspf_create( Reference< XComponentContext > const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new MasterScriptProviderFactory( xComponentContext ) );
-}
-
-OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
-{
-    return mspf_getImplementationName();
-}
-
 Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNames()
 {
-    return mspf_getSupportedServiceNames();
+    return { "com.sun.star.script.provider.MasterScriptProviderFactory" };
 }
 
 sal_Bool MasterScriptProviderFactory::supportsService(
@@ -92,5 +75,12 @@ sal_Bool MasterScriptProviderFactory::supportsService(
 }
 
 } // namespace func_provider
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_MasterScriptProviderFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new func_provider::MasterScriptProviderFactory(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

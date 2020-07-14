@@ -612,51 +612,31 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy() const
     return xRet;
 }
 
-// Helper methods
-
-
-// Namespace global methods for setting up BrowseNodeFactory service
-
-
-Sequence< OUString >
-bnf_getSupportedServiceNames( )
-{
-    return { "com.sun.star.script.browse.BrowseNodeFactory" };
-}
-
-OUString
-bnf_getImplementationName( )
-{
-    return
-        "com.sun.star.script.browse.BrowseNodeFactory";
-}
-
-Reference< XInterface >
-bnf_create( Reference< XComponentContext > const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new BrowseNodeFactoryImpl( xComponentContext ) );
-}
-
-
 // Implementation of XServiceInfo
 
 
 OUString SAL_CALL
 BrowseNodeFactoryImpl::getImplementationName()
 {
-    return bnf_getImplementationName();
+    return "com.sun.star.script.browse.BrowseNodeFactory";
 }
 
 Sequence< OUString > SAL_CALL
 BrowseNodeFactoryImpl::getSupportedServiceNames()
 {
-    return bnf_getSupportedServiceNames();
+    return { "com.sun.star.script.browse.BrowseNodeFactory" };
 }
 
 sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_BrowseNodeFactoryImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new BrowseNodeFactoryImpl(context));
 }
 
 } // namespace browsenodefactory
