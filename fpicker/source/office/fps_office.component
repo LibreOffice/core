@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="fps_office" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.svtools.OfficeFilePicker">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.svtools.OfficeFilePicker"
+    constructor="fpicker_SvtFilePicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.OfficeFilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.svtools.RemoteFilePicker">
+  <implementation name="com.sun.star.svtools.RemoteFilePicker"
+    constructor="fpicker_SvtRemoteFilePicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.RemoteFilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.svtools.OfficeFolderPicker">
+  <implementation name="com.sun.star.svtools.OfficeFolderPicker"
+    constructor="fpicker_SvtFolderPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.OfficeFolderPicker"/>
   </implementation>
 </component>

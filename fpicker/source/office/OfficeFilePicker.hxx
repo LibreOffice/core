@@ -189,16 +189,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
 
-    /* Helper for XServiceInfo */
-    static css::uno::Sequence< OUString >
-                                    impl_getStaticSupportedServiceNames();
-    static OUString                 impl_getStaticImplementationName();
-
-    /* Helper for registry */
-    /// @throws css::uno::Exception
-    static css::uno::Reference< css::uno::XInterface > impl_createInstance (
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
 protected:
 
     // OCommonPicker overridables
@@ -246,15 +236,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
-
-    /* Helper for XServiceInfo */
-    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
-
-    /* Helper for registry */
-    /// @throws css::uno::Exception
-    static css::uno::Reference< css::uno::XInterface > impl_createInstance (
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX

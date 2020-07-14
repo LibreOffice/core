@@ -51,7 +51,6 @@ $(eval $(call gb_Library_add_exception_objects,fps_office,\
     fpicker/source/office/foldertree \
 	fpicker/source/office/fpinteraction \
 	fpicker/source/office/fpsmartcontent \
-	fpicker/source/office/fps_office \
 	fpicker/source/office/iodlg \
 	fpicker/source/office/iodlgimp \
 	fpicker/source/office/OfficeControlAccess \
