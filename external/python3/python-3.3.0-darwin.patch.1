@@ -49,7 +49,7 @@ diff -ru python3.orig/Mac/Resources/app/Info.plist.in python3/Mac/Resources/app/
 -	<string>Python</string>
 +	<string>LibreOfficePython</string>
  	<key>CFBundleGetInfoString</key>
- 	<string>%version%, (c) 2001-2016 Python Software Foundation.</string>
+ 	<string>%version%, (c) 2001-2020 Python Software Foundation.</string>
  	<key>CFBundleHelpBookFolder</key>
 diff -ru python3.orig/Mac/Resources/framework/Info.plist.in python3/Mac/Resources/framework/Info.plist.in
 --- python3.orig/Mac/Resources/framework/Info.plist.in	2015-07-05 18:50:07.000000000 +0200
@@ -63,19 +63,3 @@ diff -ru python3.orig/Mac/Resources/framework/Info.plist.in python3/Mac/Resource
  	<key>CFBundleGetInfoString</key>
  	<string>Python Runtime and Library</string>
  	<key>CFBundleIdentifier</key>
-diff -ru python3.orig/setup.py python3/setup.py
---- python3.orig/setup.py	2015-07-26 17:36:11.804497783 +0200
-+++ python3/setup.py	2015-07-26 17:39:48.599512337 +0200
-@@ -468,11 +468,11 @@
-         # Ensure that /usr/local is always used, but the local build
-         # directories (i.e. '.' and 'Include') must be first.  See issue
-         # 10520.
--        if not cross_compiling:
-+        if not cross_compiling and host_platform != 'darwin':
-             add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
-             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
-         # only change this for cross builds for 3.3, issues on Mageia
--        if cross_compiling:
-+        if cross_compiling or host_platform == 'darwin':
-             self.add_gcc_paths()
-         self.add_multiarch_paths()
