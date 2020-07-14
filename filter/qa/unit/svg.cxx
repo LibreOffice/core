@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 
     // assertXPath(pXmlDoc, "//svg:g[@class='com.sun.star.drawing.TextShape']//svg:text", 2);
 
-    // TODO: assert we the text has correctly transparent text (20%)
+    // TODO: assert the text has correctly transparent text (20%)
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
