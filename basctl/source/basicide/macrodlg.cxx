@@ -39,6 +39,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/debug.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
@@ -76,8 +77,9 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
-    // tdf#70813 The macros should be listed alphabetically
-    m_xMacroBox->make_sorted();
+    // tdf#134331
+    // TODO - How to get the stored decision of the user?
+    m_xMacroBox->connect_popup_menu( LINK( this, MacroChooser, CommandHdl ) );
 
     m_aMacrosInTxtBaseStr = m_xMacrosInTxt->get_label();
 
@@ -753,6 +755,35 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             m_xBasicBox->UpdateEntries();
         });
     }
+}
+
+IMPL_LINK(MacroChooser, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+         return false;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xMacroBox.get(), "modules/BasicIDE/ui/sortmenu.ui"));
+    auto xContextMenu = xBuilder->weld_menu("menu");
+    xContextMenu->set_active("alphabetically", m_xMacroBox->get_sort_order());
+    xContextMenu->set_active("documentorder", !m_xMacroBox->get_sort_order());
+    OString sCommand(xContextMenu->popup_at_rect(m_xMacroBox.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+
+    // TODO - How to store the decision of the user?
+    if (sCommand == "alphabetically")
+    {
+        m_xMacroBox->make_sorted();
+    }
+    else if (sCommand == "documentorder")
+    {
+        m_xMacroBox->make_unsorted();
+        BasicSelectHdl(m_xBasicBox->get_widget());
+    }
+    else if (!sCommand.isEmpty())
+    {
+         SAL_WARN("basctl.sortmenu", "Unknown context menu action: " << sCommand );
+    }
+
+    return true;
 }
 
 void MacroChooser::UpdateFields()
