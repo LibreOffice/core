@@ -1540,25 +1540,10 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
 }
 
 
-const char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
-
-static uno::Sequence< OUString > getServiceName_Static()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.util.TextSearch";
-    aRet[1] = "com.sun.star.util.TextSearch2";
-    return aRet;
-}
-
-static OUString getImplementationName_Static()
-{
-    return cSearchImpl;
-}
-
 OUString SAL_CALL
 TextSearch::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.util.TextSearch_i18n";
 }
 
 sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
@@ -1569,53 +1554,14 @@ sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TextSearch::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { getServiceName_Static() };
-    return aRet;
+    return { "com.sun.star.util.TextSearch", "com.sun.star.util.TextSearch2" };
 }
 
-static css::uno::Reference< css::uno::XInterface >
-TextSearch_CreateInstance(
-        const css::uno::Reference<
-        css::lang::XMultiServiceFactory >& rxMSF )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+i18npool_TextSearch_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return css::uno::Reference<
-        css::uno::XInterface >(
-                static_cast<cppu::OWeakObject*>(new TextSearch(
-                        comphelper::getComponentContext( rxMSF ) )) );
+    return cppu::acquire(new TextSearch(context));
 }
-
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void*
-i18nsearch_component_getFactory( const char* sImplementationName,
-                                 void* _pServiceManager,
-                                 SAL_UNUSED_PARAMETER void* )
-{
-    void* pRet = nullptr;
-
-    css::lang::XMultiServiceFactory* pServiceManager =
-        static_cast< css::lang::XMultiServiceFactory* >
-            ( _pServiceManager );
-    css::uno::Reference<
-            css::lang::XSingleServiceFactory > xFactory;
-
-    if ( 0 == rtl_str_compare( sImplementationName, cSearchImpl) )
-    {
-        css::uno::Sequence< OUString > aServiceNames { getServiceName_Static() };
-        xFactory = ::cppu::createSingleFactory(
-                pServiceManager, getImplementationName_Static(),
-                &TextSearch_CreateInstance, aServiceNames );
-    }
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

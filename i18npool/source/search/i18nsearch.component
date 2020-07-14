@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="i18nsearch" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.util.TextSearch_i18n">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.util.TextSearch_i18n"
+    constructor="i18npool_TextSearch_get_implementation">
     <service name="com.sun.star.util.TextSearch"/>
     <service name="com.sun.star.util.TextSearch2"/>
   </implementation>

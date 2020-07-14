@@ -25,7 +25,6 @@ core_factory_list = [
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
-    ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
@@ -240,6 +239,8 @@ core_constructor_list = [
     "com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation",
     "com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation",
     "com_sun_star_text_DefaultNumberingProvider_get_implementation",
+# i18nsearch/sourceh/search/i18nsearch.component
+    "i18npool_TextSearch_get_implementation",
 # linguistc/source/lng.component
     "linguistic_ConvDicList_get_implementation",
     "linguistic_DicList_get_implementation",
