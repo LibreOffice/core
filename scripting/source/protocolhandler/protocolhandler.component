@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="protocolhandler" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ScriptProtocolHandler">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ScriptProtocolHandler"
+    constructor="scripting_ScriptProtocolHandler_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
 </component>
