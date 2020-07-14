@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a97da98_150fe2e5",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T16:30:40Z",
+      "side": 1,
+      "message": "I forgot about this one:\n\n    uno::Reference\u003ccontainer::XNameAccess\u003e xStyleFamily(xStyleFamilies-\u003egetByName(\"CharacterStyles\"), uno::UNO_QUERY_THROW);\n\n... to drop line 158.\n\nPlease see how I try to remove all the operator\u003e\u003e\u003d that fill UNO references with ctors and set().",
+      "range": {
+        "startLine": 155,
+        "startChar": 4,
+        "endLine": 155,
+        "endChar": 56
+      },
+      "revId": "bb11cfce1867645d1ada869f7f67341b43bc62e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9b907ee_52849d70",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T16:30:40Z",
+      "side": 1,
+      "message": "You call getByName twice again! Just re-use xPropertiesSet that you already initialized in the previous line:\n\n    xPropertiesState.set(xPropertiesSet, css::uno::UNO_QUERY_THROW);",
+      "range": {
+        "startLine": 165,
+        "startChar": 29,
+        "endLine": 165,
+        "endChar": 71
+      },
+      "revId": "bb11cfce1867645d1ada869f7f67341b43bc62e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf73b03_2f02c8a6",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T16:30:40Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 201,
+        "startChar": 29,
+        "endLine": 201,
+        "endChar": 71
+      },
+      "revId": "bb11cfce1867645d1ada869f7f67341b43bc62e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
