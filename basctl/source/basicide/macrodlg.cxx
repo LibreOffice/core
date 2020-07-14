@@ -39,6 +39,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/debug.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
@@ -76,8 +77,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
-    // tdf#70813 The macros should be listed alphabetically
-    m_xMacroBox->make_sorted();
 
     m_aMacrosInTxtBaseStr = m_xMacrosInTxt->get_label();
 
@@ -102,6 +101,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
 
     m_xMacroBox->connect_row_activated( LINK( this, MacroChooser, MacroDoubleClickHdl ) );
     m_xMacroBox->connect_changed( LINK( this, MacroChooser, MacroSelectHdl ) );
+    m_xMacroBox->connect_popup_menu( LINK( this, MacroChooser, ContextMenuHdl ) );
 
     m_xBasicBox->SetMode( BrowseMode::Modules );
 
@@ -753,6 +753,35 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             m_xBasicBox->UpdateEntries();
         });
     }
+}
+
+IMPL_LINK(MacroChooser, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !m_xMacroBox->n_children())
+         return false;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xMacroBox.get(), "modules/BasicIDE/ui/sortmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("sortmenu"));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("sortsubmenu"));
+    xDropMenu->set_active("alphabetically", m_xMacroBox->get_sort_order());
+    xDropMenu->set_active("properorder", !m_xMacroBox->get_sort_order());
+
+    OString sCommand(xPopup->popup_at_rect(m_xMacroBox.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    if (sCommand == "alphabetically")
+    {
+        m_xMacroBox->make_sorted();
+    }
+    else if (sCommand == "properorder")
+    {
+        m_xMacroBox->make_unsorted();
+        BasicSelectHdl(m_xBasicBox->get_widget());
+    }
+    else if (!sCommand.isEmpty())
+    {
+         SAL_WARN("basctl.basicide", "Unknown context menu action: " << sCommand );
+    }
+
+    return true;
 }
 
 void MacroChooser::UpdateFields()
