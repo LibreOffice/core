@@ -49,6 +49,7 @@
 #include <osl/diagnose.h>
 #include <dialmgr.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
@@ -1089,12 +1090,14 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
+    m_xCommands->SetGroupListBox(m_xCategories.get());
     m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, /*bShowSlots*/false);
 
     m_xCategories->connect_changed(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_changed( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     m_xCommands->connect_row_activated( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
+    m_xCommands->connect_popup_menu( LINK( this, SvxScriptSelectorDialog, ContextMenuHdl ) );
 
     m_xOKButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
     m_xCancelButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
@@ -1132,6 +1135,36 @@ IMPL_LINK_NOARG(SvxScriptSelectorDialog, FunctionDoubleClickHdl, weld::TreeView&
 {
     if (m_xOKButton->get_sensitive())
         ClickHdl(*m_xOKButton);
+    return true;
+}
+
+IMPL_LINK(SvxScriptSelectorDialog, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    weld::TreeView& m_xTreeView = m_xCommands->get_widget();
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !m_xTreeView.n_children())
+         return false;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_xTreeView, "modules/BasicIDE/ui/sortmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("sortmenu"));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("sortsubmenu"));
+    xDropMenu->set_active("alphabetically", m_xTreeView.get_sort_order());
+    xDropMenu->set_active("properorder", !m_xTreeView.get_sort_order());
+
+    OString sCommand(xPopup->popup_at_rect(&m_xTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    if (sCommand == "alphabetically")
+    {
+        m_xTreeView.make_sorted();
+    }
+    else if (sCommand == "properorder")
+    {
+        m_xTreeView.make_unsorted();
+        m_xCommands->GetGroupListBox().GroupSelected();
+    }
+    else if (!sCommand.isEmpty())
+    {
+         SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    }
+
     return true;
 }
 
