@@ -34,7 +34,7 @@ diff -ru python3.orig/PCbuild/_ssl.vcxproj python3/PCbuild/_ssl.vcxproj
      </ClCompile>
      <Link>
 -      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(OutDir)libeay$(PyDebugExt).lib;$(OutDir)ssleay$(PyDebugExt).lib;%(AdditionalDependencies)</AdditionalDependencies>
-+      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(WORKDIR)\UnpackedTarball\openssl\out32dll\libeay32.lib;$(WORKDIR)\UnpackedTarball\openssl\out32dll\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(WORKDIR)\UnpackedTarball\openssl\libcrypto.lib;$(WORKDIR)\UnpackedTarball\openssl\libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
      </Link>
    </ItemDefinitionGroup>
    <ItemGroup>
