@@ -94,6 +94,7 @@ public:
     void test();
     void testTdf111876();
     void testPasswordExportODS();
+    void testTdf134332();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testCondFormatExportCellIs();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
+    CPPUNIT_TEST(testTdf134332);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testCondFormatExportCellIs);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
@@ -540,6 +542,33 @@ void ScExportTest::testPasswordExportODS()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf134332()
+{
+    ScDocShellRef xShell = loadDoc("tdf134332.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+
+    ASSERT_DOUBLES_EQUAL(190.0, rDoc.GetValue(ScAddress(0,0,0)));
+
+    ASSERT_DOUBLES_EQUAL(238.0, rDoc.GetValue(ScAddress(0,10144,0)));
+
+    sal_Int32 nFormat = FORMAT_ODS;
+    OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(getFileFormats()[nFormat].pTypeName, strlen(getFileFormats()[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    ScDocShellRef xDocSh = saveAndReloadPassword(static_cast<ScDocShell*>(rDoc.GetDocumentShell()), aFilterName, OUString(),
+            aFilterType, getFileFormats()[nFormat].nFormatType);
+
+    // Without the fixes in place, it would have failed here
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    ASSERT_DOUBLES_EQUAL(190.0, rLoadedDoc.GetValue(ScAddress(0,0,0)));
+
+    ASSERT_DOUBLES_EQUAL(238.0, rLoadedDoc.GetValue(ScAddress(0,10144,0)));
 
     xDocSh->DoClose();
 }
