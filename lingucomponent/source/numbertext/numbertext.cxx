@@ -47,17 +47,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-#define SERVICENAME "com.sun.star.linguistic2.NumberText"
-#define IMPLNAME "com.sun.star.lingu2.NumberText"
-
-static Sequence<OUString> getSupportedServiceNames_NumberText_Impl()
-{
-    Sequence<OUString> names{ SERVICENAME };
-    return names;
-}
-
-static OUString getImplementationName_NumberText_Impl() { return IMPLNAME; }
-
 static osl::Mutex& GetNumberTextMutex()
 {
     static osl::Mutex aMutex;
@@ -156,38 +145,26 @@ uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
     return aRes;
 }
 
-OUString SAL_CALL NumberText_Impl::getImplementationName() { return IMPLNAME; }
+OUString SAL_CALL NumberText_Impl::getImplementationName()
+{
+    return "com.sun.star.lingu2.NumberText";
+}
 
 sal_Bool SAL_CALL NumberText_Impl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames() { return { SERVICENAME }; }
-
-/**
- * Function to create a new component instance; is needed by factory helper implementation.
- * @param xMgr service manager to if the components needs other component instances
- */
-static Reference<XInterface> NumberText_Impl_create(Reference<XComponentContext> const&)
+Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
 {
-    return static_cast<::cppu::OWeakObject*>(new NumberText_Impl);
+    return { "com.sun.star.linguistic2.NumberText" };
 }
 
-//#### EXPORTED ### functions to allow for registration and creation of the UNO component
-const struct ::cppu::ImplementationEntry s_component_entries[]
-    = { { NumberText_Impl_create, getImplementationName_NumberText_Impl,
-          getSupportedServiceNames_NumberText_Impl, ::cppu::createSingleComponentFactory, nullptr,
-          0 },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
-
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void* numbertext_component_getFactory(char const* implName, void* xMgr,
-                                                           void* xRegistry)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_NumberText_get_implementation(css::uno::XComponentContext*,
+                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries);
-}
+    return cppu::acquire(new NumberText_Impl());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,20 +52,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-#define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
-#define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
-
-static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
-{
-    Sequence<OUString> names { SERVICENAME };
-    return names;
-}
-
-static OUString getImplementationName_LangGuess_Impl()
-{
-    return IMPLNAME;
-}
-
 static osl::Mutex &  GetLangGuessMutex()
 {
     static osl::Mutex aMutex;
@@ -309,7 +295,7 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 
 OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
 {
-    return IMPLNAME;
+    return "com.sun.star.lingu2.LanguageGuessing";
 }
 
 sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
@@ -319,42 +305,15 @@ sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
 
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
 {
-    return { SERVICENAME };
+    return { "com.sun.star.linguistic2.LanguageGuessing" };
 }
 
-/**
- * Function to create a new component instance; is needed by factory helper implementation.
- * @param xMgr service manager to if the components needs other component instances
- */
-static Reference< XInterface > LangGuess_Impl_create(
-    Reference< XComponentContext > const & )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_LangGuess_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl );
+    return cppu::acquire(new LangGuess_Impl());
 }
 
-//#### EXPORTED ### functions to allow for registration and creation of the UNO component
-const struct ::cppu::ImplementationEntry s_component_entries [] =
-{
-    {
-        LangGuess_Impl_create, getImplementationName_LangGuess_Impl,
-        getSupportedServiceNames_LangGuess_Impl,
-        ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * guesslang_component_getFactory(
-    char const * implName, void * xMgr,
-    void * xRegistry )
-{
-    return ::cppu::component_getFactoryHelper(
-        implName, xMgr, xRegistry, s_component_entries );
-}
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

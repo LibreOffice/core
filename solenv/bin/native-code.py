@@ -23,10 +23,8 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
-    ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
-    ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
@@ -38,11 +36,9 @@ core_factory_list = [
     ("libxstor.a", "xstor_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
-    ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
-    ("libguesslanglo.a", "guesslang_component_getFactory"),
     ("libbiblo.a", "bib_component_getFactory"),
     ]
 
@@ -241,12 +237,17 @@ core_constructor_list = [
     "com_sun_star_text_DefaultNumberingProvider_get_implementation",
 # i18nsearch/sourceh/search/i18nsearch.component
     "i18npool_TextSearch_get_implementation",
-# linguistc/source/lng.component
+# linguistic/source/lng.component
     "linguistic_ConvDicList_get_implementation",
     "linguistic_DicList_get_implementation",
     "linguistic_LinguProps_get_implementation",
     "linguistic_LngSvcMgr_get_implementation",
     "linguistic_GrammarCheckingIterator_get_implementation",
+# lingucomponent/source/thesaurus/libnth/lnth.component
+    ("lingucomponent_Thesaurus_get_implementation", "#ifndef IOS"),
+    ("lingucomponent_SpellChecker_get_implementation", "#ifndef IOS"),
+    "lingucomponent_LangGuess_get_implementation",
+    "lingucomponent_Hyphenator_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",

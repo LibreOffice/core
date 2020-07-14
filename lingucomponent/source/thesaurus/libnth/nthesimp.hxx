@@ -117,21 +117,11 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static inline OUString
-        getImplementationName_Static() throw();
-        static Sequence< OUString >
-        getSupportedServiceNames_Static() throw();
-
 private:
     static OUString makeLowerCase(const OUString&, CharClass const *);
     static OUString makeUpperCase(const OUString&, CharClass const *);
     static OUString makeInitCap(const OUString&, CharClass const *);
 };
-
-inline OUString Thesaurus::getImplementationName_Static() throw()
-{
-    return "org.openoffice.lingu.new.Thesaurus";
-}
 
 #endif
 
