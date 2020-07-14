@@ -23,7 +23,7 @@
          #
          # You can upgrade zlib to version 1.1.4 yourself by going to
          # http://www.gzip.org/zlib/
--        zlib_inc = find_file('zlib.h', [], inc_dirs)
+-        zlib_inc = find_file('zlib.h', [], self.inc_dirs)
 +        zlib_inc = [os.environ.get('ZLIB_INCDIR')]
          have_zlib = False
          if zlib_inc is not None:
@@ -32,16 +32,16 @@
                          version = line.split()[2]
                          break
              if version >= version_req:
--                if (self.compiler.find_library_file(lib_dirs, 'z')):
-+                if (self.compiler.find_library_file(lib_dirs, 'zlib')):
-                     if host_platform == "darwin":
+-                if (self.compiler.find_library_file(self.lib_dirs, 'z')):
++                if (self.compiler.find_library_file(self.lib_dirs, 'zlib')):
+                     if MACOS:
                          zlib_extra_link_args = ('-Wl,-search_paths_first',)
                      else:
                          zlib_extra_link_args = ()
-                     exts.append( Extension('zlib', ['zlibmodule.c'],
--                                           libraries = ['z'],
-+                                           libraries = ['zlib'],
-                                            extra_link_args = zlib_extra_link_args))
+                     self.add(Extension('zlib', ['zlibmodule.c'],
+-                                       libraries=['z'],
++                                       libraries=['zlib'],
+                                        extra_link_args=zlib_extra_link_args))
                      have_zlib = True
                  else:
 @@ -1399,7 +1399,7 @@
