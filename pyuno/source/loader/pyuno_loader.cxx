@@ -106,16 +106,6 @@ static PyRef getObjectFromLoaderModule( const char * func )
     return object;
 }
 
-static OUString getImplementationName()
-{
-    return "org.openoffice.comp.pyuno.Loader";
-}
-
-static Sequence< OUString > getSupportedServiceNames()
-{
-    return { "com.sun.star.loader.Python" };
-}
-
 static void setPythonHome ( const OUString & pythonHome )
 {
     OUString systemPythonHome;
@@ -242,7 +232,9 @@ PythonInit() {
 
 }
 
-static Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+pyuno_Loader_get_implementation(
+    css::uno::XComponentContext* ctx , css::uno::Sequence<css::uno::Any> const&)
 {
     // tdf#114815 thread-safe static to init python only once
     static PythonInit s_Init;
@@ -262,7 +254,7 @@ static Reference<XInterface> CreateInstance(const Reference<XComponentContext> &
         Runtime runtime;
 
         PyRef pyCtx = runtime.any2PyObject(
-            css::uno::makeAny( ctx ) );
+            css::uno::makeAny( css::uno::Reference(ctx) ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
         PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
@@ -270,29 +262,8 @@ static Reference<XInterface> CreateInstance(const Reference<XComponentContext> &
         PyRef pyInstance( PyObject_CallObject( clazz.get() , args.get() ), SAL_NO_ACQUIRE );
         runtime.pyObject2Any( pyInstance ) >>= ret;
     }
-    return ret;
-}
-
-}
-
-
-const struct cppu::ImplementationEntry g_entries[] =
-{
-    {
-        pyuno_loader::CreateInstance, pyuno_loader::getImplementationName,
-        pyuno_loader::getSupportedServiceNames, cppu::createSingleComponentFactory,
-        nullptr , 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * pythonloader_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+    ret->acquire();
+    return ret.get();
 }
 
 }
