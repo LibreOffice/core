@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="basprov" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.scripting.ScriptProviderForBasic">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.scripting.ScriptProviderForBasic"
+    constructor="scripting_BasicProviderImpl_get_implementation">
     <service name="com.sun.star.script.browse.BrowseNode"/>
     <service name="com.sun.star.script.provider.LanguageScriptProvider"/>
     <service name="com.sun.star.script.provider.ScriptProvider"/>
