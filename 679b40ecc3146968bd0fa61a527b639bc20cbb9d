@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a962a1f9_f8d3807f",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T08:12:58Z",
+      "side": 1,
+      "message": "Why not simply use Application::GetHWOSConfInfo(0,false), where 0 is \"all\"?",
+      "range": {
+        "startLine": 270,
+        "startChar": 19,
+        "endLine": 270,
+        "endChar": 121
+      },
+      "revId": "679b40ecc3146968bd0fa61a527b639bc20cbb9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da0e359b_729887a7",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T08:12:58Z",
+      "side": 1,
+      "message": "So why not use VclResId directly in this case?",
+      "range": {
+        "startLine": 1141,
+        "startChar": 58,
+        "endLine": 1141,
+        "endChar": 66
+      },
+      "revId": "679b40ecc3146968bd0fa61a527b639bc20cbb9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6916cd9c_265cb31c",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T08:12:58Z",
+      "side": 1,
+      "message": "You use braces inconsistently, no braces above for a single-line block, and braces here in identical situation for a similar single-line block.",
+      "range": {
+        "startLine": 1143,
+        "startChar": 4,
+        "endLine": 1145,
+        "endChar": 5
+      },
+      "revId": "679b40ecc3146968bd0fa61a527b639bc20cbb9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
