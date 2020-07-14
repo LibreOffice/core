@@ -158,7 +158,9 @@ namespace pcr
     OFormattedNumericControl::OFormattedNumericControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OFormattedNumericControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->treat_as_number(true);
+        weld::FormattedSpinButton* pSpinButton = getTypedControlWindow();
+        pSpinButton->treat_as_number(true);
+        pSpinButton->set_range(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
     }
 
     OFormattedNumericControl::~OFormattedNumericControl()
