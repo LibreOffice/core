@@ -44,7 +44,6 @@
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
 #include "lngopt.hxx"
-#include "lngreg.hxx"
 
 using namespace osl;
 using namespace com::sun::star;
@@ -343,14 +342,6 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
             return i;
     }
     return -1;
-}
-
-/// @throws Exception
-static uno::Reference< XInterface >
-    DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-    uno::Reference< XInterface > xService = static_cast<cppu::OWeakObject *>(new DicList);
-    return xService;
 }
 
 sal_Int16 SAL_CALL DicList::getCount()
@@ -668,7 +659,7 @@ void DicList::SaveDics()
 
 OUString SAL_CALL DicList::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.lingu2.DicList";
 }
 
 
@@ -679,33 +670,9 @@ sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
-{
     return { "com.sun.star.linguistic2.DictionaryList" };
 }
 
-void * DicList_getFactory( const char * pImplName,
-        XMultiServiceFactory * pServiceManager  )
-{
-    void * pRet = nullptr;
-    if ( DicList::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        uno::Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                pServiceManager,
-                DicList::getImplementationName_Static(),
-                DicList_CreateInstance,
-                DicList::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
 
 
 static sal_Int32 lcl_GetToken( OUString &rToken,
@@ -815,5 +782,13 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
     return 2 == nDicVersion || nDicVersion >= 5;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+linguistic_DicList_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<DicList> g_Instance(new DicList());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -111,19 +111,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-
-    static inline OUString getImplementationName_Static() throw();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
-
     // non UNO-specific
     void    SaveDics();
 };
-
-inline OUString DicList::getImplementationName_Static() throw()
-{
-    return "com.sun.star.lingu2.DicList";
-}
-
 
 #endif
 

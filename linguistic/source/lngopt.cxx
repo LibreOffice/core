@@ -20,10 +20,10 @@
 
 #include <sal/macros.h>
 #include "lngopt.hxx"
-#include "lngreg.hxx"
 #include <linguistic/misc.hxx>
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
+#include <rtl/ref.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
@@ -207,14 +207,6 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
     }
 }
 
-/// @throws Exception
-static Reference< XInterface > LinguProps_CreateInstance(
-            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new LinguProps);
-    return xService;
-}
-
 Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -392,7 +384,7 @@ void SAL_CALL
 // XServiceInfo
 OUString SAL_CALL LinguProps::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.lingu2.LinguProps";
 }
 
 // XServiceInfo
@@ -403,13 +395,6 @@ sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
-        throw()
 {
     return { "com.sun.star.linguistic2.LinguProperties" };
 }
@@ -438,23 +423,13 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
    return b;
 }
 
-void * LinguProps_getFactory( const char * pImplName,
-            XMultiServiceFactory *pServiceManager )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+linguistic_LinguProps_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    void * pRet = nullptr;
-    if ( LinguProps::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                pServiceManager,
-                LinguProps::getImplementationName_Static(),
-                LinguProps_CreateInstance,
-                LinguProps::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
+    static rtl::Reference<LinguProps> g_Instance(new LinguProps());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 

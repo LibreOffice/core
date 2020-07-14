@@ -43,7 +43,6 @@
 #include "convdic.hxx"
 #include "convdiclist.hxx"
 #include "hhconvdic.hxx"
-#include "lngreg.hxx"
 #include <linguistic/misc.hxx>
 
 using namespace osl;
@@ -53,8 +52,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-
-#define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
 static OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
 {
@@ -315,9 +312,9 @@ void ConvDicNameContainer::AddConvDics(
 namespace
 {
     struct StaticConvDicList : public rtl::StaticWithInit<
-        uno::Reference<XInterface>, StaticConvDicList> {
-        uno::Reference<XInterface> operator () () {
-            return static_cast<cppu::OWeakObject *>(new ConvDicList);
+        rtl::Reference<ConvDicList>, StaticConvDicList> {
+        rtl::Reference<ConvDicList> operator () () {
+            return new ConvDicList;
         }
     };
 }
@@ -520,7 +517,7 @@ void SAL_CALL ConvDicList::removeEventListener(
 
 OUString SAL_CALL ConvDicList::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.lingu2.ConvDicList";
 }
 
 sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
@@ -530,41 +527,15 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL ConvDicList::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.linguistic2.ConversionDictionaryList" };
 }
 
-uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
-    throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+linguistic_ConvDicList_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    uno::Sequence<OUString> aSNS { SN_CONV_DICTIONARY_LIST };
-    return aSNS;
+    return cppu::acquire(StaticConvDicList::get().get());
 }
 
-/// @throws css::uno::Exception
-static uno::Reference< uno::XInterface > ConvDicList_CreateInstance(
-        const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-    return StaticConvDicList::get();
-}
-
-void * ConvDicList_getFactory(
-        const char * pImplName,
-        XMultiServiceFactory * pServiceManager  )
-{
-    void * pRet = nullptr;
-    if ( ConvDicList::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        uno::Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                pServiceManager,
-                ConvDicList::getImplementationName_Static(),
-                ConvDicList_CreateInstance,
-                ConvDicList::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

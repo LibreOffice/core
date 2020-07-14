@@ -53,19 +53,16 @@
 #include <comphelper/propertysequence.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 #include <map>
 
 #include <linguistic/misc.hxx>
-#include "lngreg.hxx"
 
 #include "gciterator.hxx"
 
 using namespace linguistic;
 using namespace ::com::sun::star;
-
-static OUString GrammarCheckingIterator_getImplementationName() throw();
-static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw();
 
 // white space list: obtained from the fonts.config.txt of a Linux system.
 const sal_Unicode aWhiteSpaces[] =
@@ -1120,13 +1117,13 @@ sal_Bool SAL_CALL GrammarCheckingIterator::supportsService(
 
 OUString SAL_CALL GrammarCheckingIterator::getImplementationName(  )
 {
-    return GrammarCheckingIterator_getImplementationName();
+    return "com.sun.star.lingu2.ProofreadingIterator";
 }
 
 
 uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceNames(  )
 {
-    return GrammarCheckingIterator_getSupportedServiceNames();
+    return  { "com.sun.star.linguistic2.ProofreadingIterator" };
 }
 
 
@@ -1173,43 +1170,15 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 }
 
 
-static OUString GrammarCheckingIterator_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+linguistic_GrammarCheckingIterator_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.lingu2.ProofreadingIterator";
+    static rtl::Reference<GrammarCheckingIterator> g_Instance(new GrammarCheckingIterator());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 
-static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw()
-{
-    return { "com.sun.star.linguistic2.ProofreadingIterator" };
-}
-
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface > GrammarCheckingIterator_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & /*rxSMgr*/ )
-{
-    return static_cast< ::cppu::OWeakObject * >(new GrammarCheckingIterator());
-}
-
-
-void * GrammarCheckingIterator_getFactory(
-    const char *pImplName,
-    lang::XMultiServiceFactory *pServiceManager )
-{
-    void * pRet = nullptr;
-    if ( GrammarCheckingIterator_getImplementationName().equalsAscii( pImplName ) )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                pServiceManager,
-                GrammarCheckingIterator_getImplementationName(),
-                GrammarCheckingIterator_createInstance,
-                GrammarCheckingIterator_getSupportedServiceNames());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
