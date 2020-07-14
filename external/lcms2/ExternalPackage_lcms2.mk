@@ -21,7 +21,7 @@ else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2.dll))
 endif # $(COM)
 else  # $(OS) != WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.8))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.10))
 endif # $(OS)
 endif # $(DISABLE_DYNLOADING)
 
