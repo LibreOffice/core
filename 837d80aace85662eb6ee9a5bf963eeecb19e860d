@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9cccbf2c_375b9353",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done !\nTo make strings available for l10n, we need to use translator somehow, no idea how to do that now",
+      "parentUuid": "6dc682dc_78f3c264",
+      "range": {
+        "startLine": 122,
+        "startChar": 25,
+        "endLine": 122,
+        "endChar": 32
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f03e24fa_c1e3b855",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7bcdd2fa_fa95b3b0",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f03e24fa_c1e3b855",
+      "range": {
+        "startLine": 162,
+        "startChar": 8,
+        "endLine": 163,
+        "endChar": 57
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "262440cb_2e4a278c",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2020-07-14T12:16:39Z",
       "side": 1,
       "message": "It\u0027s better to not call getByName twice for the same thing.\nAnd it\u0027s better to use Reference::set:\n\n    properties.set(xStyleFamily-\u003egetByName(sCurrentStyleName), css::uno::UNO_QUERY_THROW);\n    propertiesState.set(properties, css::uno::UNO_QUERY_THROW);\n\nThis will also correctly throw in case of an error, instead of segfaulting.",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 64
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56ecdaf2_0f01c6b8",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Understood !",
+      "parentUuid": "262440cb_2e4a278c",
       "range": {
         "startLine": 164,
         "startChar": 8,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "84deff87_5b1eeef5",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19ee66a6_bea273c1",
+      "range": {
+        "startLine": 172,
+        "startChar": 48,
+        "endLine": 172,
+        "endChar": 59
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8517840c_72740635",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a35de17b_9c74c499",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8517840c_72740635",
+      "range": {
+        "startLine": 196,
+        "startChar": 53,
+        "endLine": 196,
+        "endChar": 65
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "1df76cc8_4a7eaf65",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79c29e48_ec1db484",
+      "range": {
+        "startLine": 197,
+        "startChar": 54,
+        "endLine": 197,
+        "endChar": 71
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bb6c7e3_3b85f910",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd2efa9b_48ad6751",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T16:24:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bb6c7e3_3b85f910",
+      "range": {
+        "startLine": 201,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 66
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
