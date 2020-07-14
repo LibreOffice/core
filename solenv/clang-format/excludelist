@@ -3614,7 +3614,6 @@ drawinglayer/inc/converters.hxx
 drawinglayer/inc/emfplushelper.hxx
 drawinglayer/inc/primitive2d/cropprimitive2d.hxx
 drawinglayer/inc/primitive2d/graphicprimitivehelper2d.hxx
-drawinglayer/inc/primitive2d/texteffectprimitive2d.hxx
 drawinglayer/inc/primitive2d/textlineprimitive2d.hxx
 drawinglayer/inc/primitive2d/textstrikeoutprimitive2d.hxx
 drawinglayer/inc/primitive2d/wallpaperprimitive2d.hxx
@@ -3694,7 +3693,6 @@ drawinglayer/source/primitive2d/structuretagprimitive2d.cxx
 drawinglayer/source/primitive2d/svggradientprimitive2d.cxx
 drawinglayer/source/primitive2d/textbreakuphelper.cxx
 drawinglayer/source/primitive2d/textdecoratedprimitive2d.cxx
-drawinglayer/source/primitive2d/texteffectprimitive2d.cxx
 drawinglayer/source/primitive2d/textenumsprimitive2d.cxx
 drawinglayer/source/primitive2d/texthierarchyprimitive2d.cxx
 drawinglayer/source/primitive2d/textlayoutdevice.cxx
