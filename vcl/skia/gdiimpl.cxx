@@ -597,11 +597,7 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
-    // Raster has better results if shifted by 0.25 (unlike the 0.5 done by toSkX/toSkY).
-    if (!isGPU())
-        getDrawCanvas()->drawLine(nX1 + 0.25, nY1 + 0.25, nX2 + 0.25, nY2 + 0.25, paint);
-    else
-        getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
+    getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
     addXorRegion(SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1));
     postDraw();
 }
@@ -708,19 +704,21 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
     SkPaint aPaint;
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+    // We normally use pixel at their center positions, but slightly off (see toSkX/Y()).
+    // With AA lines that "slightly off" causes tiny changes of color, making some tests
+    // fail. Since moving AA-ed line slightly to a side doesn't cause any real visual
+    // difference, just place exactly at the center. tdf#134346
+    const SkScalar posFix = mParent.getAntiAliasB2DDraw() ? toSkXYFix : 0;
     if (mFillColor != SALCOLOR_NONE)
     {
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         aPaint.setStyle(SkPaint::kFill_Style);
+        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         getDrawCanvas()->drawPath(aPath, aPaint);
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        // Raster has better results if shifted by 0.25 (unlike the 0.5 done by toSkX/toSkY).
-        if (!isGPU())
-            aPath.offset(0.25, 0.25, nullptr);
-        else // Apply the same adjustment as toSkX()/toSkY() do.
-            aPath.offset(0.5, 0.5, nullptr);
+        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         aPaint.setStyle(SkPaint::kStroke_Style);
         getDrawCanvas()->drawPath(aPath, aPaint);
@@ -811,6 +809,8 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeMiter(fMiterLimit);
     aPaint.setStrokeWidth(fLineWidth);
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+    // See the tdf#134346 comment above.
+    const SkScalar posFix = mParent.getAntiAliasB2DDraw() ? toSkXYFix : 0;
 
     if (pStroke && std::accumulate(pStroke->begin(), pStroke->end(), 0.0) != 0)
     {
@@ -829,9 +829,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         aPath.setFillType(SkPathFillType::kEvenOdd);
         for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
             addPolygonToPath(aPolyPolygonLine.getB2DPolygon(a), aPath);
-        // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
-        // case as it seems to produce better results.
-        aPath.offset(0.5, 0.5, nullptr);
+        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         getDrawCanvas()->drawPath(aPath, aPaint);
         addXorRegion(aPath.getBounds());
     }
@@ -852,9 +850,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
                 aPath.lineTo(rPolygon.getB2DPoint(index2).getX(),
                              rPolygon.getB2DPoint(index2).getY());
 
-                // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
-                // case as it seems to produce better results.
-                aPath.offset(0.5, 0.5, nullptr);
+                aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
                 getDrawCanvas()->drawPath(aPath, aPaint);
                 addXorRegion(aPath.getBounds());
             }
