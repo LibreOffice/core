@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,libffi))
 $(eval $(call gb_Module_add_targets,libffi,\
 	UnpackedTarball_libffi \
 	ExternalProject_libffi \
+	ExternalPackage_libffi \
 ))
 
 # vim: set noet sw=4 ts=4:
