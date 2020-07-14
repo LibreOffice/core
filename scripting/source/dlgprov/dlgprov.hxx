@@ -145,14 +145,4 @@ namespace dlgprov
 
 }   // namespace dlgprov
 
-
-// component helper namespace
-namespace comp_DialogModelProvider {
-
-// component and service helper functions:
-OUString _getImplementationName();
-css::uno::Sequence< OUString > _getSupportedServiceNames();
-
-} // namespace comp_DialogModelProvider
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

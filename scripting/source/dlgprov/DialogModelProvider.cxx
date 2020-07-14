@@ -141,7 +141,7 @@ void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const OUString&
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL DialogModelProvider::getImplementationName()
 {
-    return comp_DialogModelProvider::_getImplementationName();
+    return "com.sun.star.comp.scripting.DialogModelProvider";
 }
 
 sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName)
@@ -151,9 +151,16 @@ sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceN
 
 css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames()
 {
-    return comp_DialogModelProvider::_getSupportedServiceNames();
+    return { "com.sun.star.awt.UnoControlDialogModelProvider" };
 }
 
 } // closing anonymous implementation namespace
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scripting_DialogModelProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new dlgprov::DialogModelProvider(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

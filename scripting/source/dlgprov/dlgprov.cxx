@@ -62,27 +62,6 @@ using namespace beans;
 using namespace document;
 using namespace ::sf_misc;
 
-// component helper namespace
-namespace comp_DialogModelProvider
-{
-
-    OUString _getImplementationName()
-    {
-        return "com.sun.star.comp.scripting.DialogModelProvider";
-    }
-
-    uno::Sequence< OUString > _getSupportedServiceNames()
-    {
-        uno::Sequence< OUString > s { "com.sun.star.awt.UnoControlDialogModelProvider" };
-        return s;
-    }
-
-    static uno::Reference< uno::XInterface > _create(const uno::Reference< uno::XComponentContext > & context)
-    {
-        return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
-    }
-} // closing component helper namespace
-
 namespace dlgprov
 {
 
@@ -153,23 +132,6 @@ namespace dlgprov
 
         return xDialogModel;
     }
-
-    // component operations
-
-
-    static OUString getImplementationName_DialogProviderImpl()
-    {
-        return "com.sun.star.comp.scripting.DialogProvider";
-    }
-
-
-    static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
-    {
-        return { "com.sun.star.awt.DialogProvider",
-                 "com.sun.star.awt.DialogProvider2",
-                 "com.sun.star.awt.ContainerWindowProvider" };
-    }
-
 
     // mutex
 
@@ -538,7 +500,7 @@ namespace dlgprov
 
     OUString DialogProviderImpl::getImplementationName(  )
     {
-        return getImplementationName_DialogProviderImpl();
+        return "com.sun.star.comp.scripting.DialogProvider";
     }
 
     sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName )
@@ -548,7 +510,9 @@ namespace dlgprov
 
     Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_DialogProviderImpl();
+        return { "com.sun.star.awt.DialogProvider",
+                 "com.sun.star.awt.DialogProvider2",
+                 "com.sun.star.awt.ContainerWindowProvider" };
     }
 
 
@@ -728,36 +692,14 @@ namespace dlgprov
     // component operations
 
 
-    static Reference< XInterface > create_DialogProviderImpl(
-        Reference< XComponentContext > const & xContext )
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    scripting_DialogProviderImpl_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
+        return cppu::acquire(new DialogProviderImpl(context));
     }
-
-
-    struct ::cppu::ImplementationEntry const s_component_entries [] =
-    {
-        {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,nullptr, 0},
-        { &comp_DialogModelProvider::_create,&comp_DialogModelProvider::_getImplementationName,&comp_DialogModelProvider::_getSupportedServiceNames,&::cppu::createSingleComponentFactory, nullptr, 0 },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-    };
-
 
 }   // namespace dlgprov
 
-
-// component exports
-
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void * dlgprov_component_getFactory(
-        const char * pImplName, void * pServiceManager,
-        void * pRegistryKey )
-    {
-        return ::cppu::component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, ::dlgprov::s_component_entries );
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
