@@ -936,7 +936,7 @@ sal_Bool SAL_CALL CachedContentResultSet::supportsService( const OUString& Servi
 
 css::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServiceNames()
 {
-    return { CACHED_CONTENT_RESULTSET_SERVICE_NAME };
+    return { "com.sun.star.ucb.CachedContentResultSet" };
 }
 
 
@@ -2055,36 +2055,29 @@ CachedContentResultSetFactory::~CachedContentResultSetFactory()
 
 // CachedContentResultSetFactory XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetFactory,
-                          "com.sun.star.comp.ucb.CachedContentResultSetFactory" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-CachedContentResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL CachedContentResultSetFactory::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new CachedContentResultSetFactory( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.CachedContentResultSetFactory";
 }
-
-css::uno::Sequence< OUString >
-CachedContentResultSetFactory::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL CachedContentResultSetFactory::supportsService( const OUString& ServiceName )
 {
-    css::uno::Sequence< OUString > aSNS { CACHED_CONTENT_RESULTSET_FACTORY_NAME };
-    return aSNS;
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.CachedContentResultSetFactory" };
 }
 
 // Service factory implementation.
 
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-CachedContentResultSetFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                CachedContentResultSetFactory::getImplementationName_Static(),
-                CachedContentResultSetFactory_CreateInstance,
-                CachedContentResultSetFactory::getSupportedServiceNames_Static() );
-}
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_CachedContentResultSetFactory_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new CachedContentResultSetFactory(context));
+}
 
 
 // CachedContentResultSetFactory XCachedContentResultSetFactory methods.

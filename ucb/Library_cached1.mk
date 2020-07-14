@@ -29,7 +29,6 @@ $(eval $(call gb_Library_add_exception_objects,cached1,\
 	ucb/source/cacher/cachedcontentresultsetstub \
 	ucb/source/cacher/cacheddynamicresultset \
 	ucb/source/cacher/cacheddynamicresultsetstub \
-	ucb/source/cacher/cacheserv \
 	ucb/source/cacher/contentresultsetwrapper \
 	ucb/source/cacher/dynamicresultsetwrapper \
 ))
