@@ -1619,6 +1619,8 @@ protected:
 
 public:
     virtual Formatter& GetFormatter() = 0;
+    // does not take ownership, and so must be deregistered if pFormatter
+    // is destroyed
     virtual void SetFormatter(weld::EntryFormatter* pFormatter) = 0;
 
     void connect_value_changed(const Link<FormattedSpinButton&, void>& rLink)

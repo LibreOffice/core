@@ -406,8 +406,6 @@ namespace svt
 
     void FormattedControlBase::InitFormattedControlBase()
     {
-        if (m_bSpinVariant)
-            m_xSpinButton->SetFormatter(m_xEntryFormatter.release());
         InitEditControlBase(m_bSpinVariant ? m_xSpinButton.get() : m_xEntry.get());
     }
 
@@ -418,18 +416,12 @@ namespace svt
 
     weld::EntryFormatter& FormattedControlBase::get_formatter()
     {
-        if (m_bSpinVariant)
-            return static_cast<weld::EntryFormatter&>(m_xSpinButton->GetFormatter());
-        else
-            return *m_xEntryFormatter;
+        return *m_xEntryFormatter;
     }
 
     void FormattedControlBase::dispose()
     {
-        if (m_bSpinVariant)
-            m_xSpinButton->SetFormatter(nullptr);
-        else
-            m_xEntryFormatter.reset();
+        m_xEntryFormatter.reset();
         m_xSpinButton.reset();
         m_xEntry.reset();
         EditControlBase::dispose();

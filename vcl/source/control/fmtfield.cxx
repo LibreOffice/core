@@ -1010,7 +1010,8 @@ namespace
 DoubleNumericField::DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
     : FormattedField(pParent, nStyle)
 {
-    m_xFormatter.reset(new DoubleNumericFormatter(*this));
+    m_xOwnFormatter.reset(new DoubleNumericFormatter(*this));
+    m_pFormatter = m_xOwnFormatter.get();
     ResetConformanceTester();
 }
 
@@ -1044,7 +1045,9 @@ void DoubleNumericField::ResetConformanceTester()
 DoubleCurrencyField::DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle)
     :FormattedField(pParent, nStyle)
 {
-    m_xFormatter.reset(new DoubleCurrencyFormatter(*this));
+    m_xOwnFormatter.reset(new DoubleCurrencyFormatter(*this));
+    m_pFormatter = m_xOwnFormatter.get();
+
     m_bPrependCurrSym = false;
 
     // initialize with a system currency format
@@ -1059,7 +1062,7 @@ void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
 
     m_sCurrencySymbol = rSymbol;
     UpdateCurrencyFormat();
-    m_xFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRENCY_SYMBOL);
+    m_pFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRENCY_SYMBOL);
 }
 
 void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
@@ -1069,16 +1072,16 @@ void DoubleCurrencyField::setPrependCurrSym(bool _bPrepend)
 
     m_bPrependCurrSym = _bPrepend;
     UpdateCurrencyFormat();
-    m_xFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRSYM_POSITION);
+    m_pFormatter->FormatChanged(FORMAT_CHANGE_TYPE::CURRSYM_POSITION);
 }
 
 void DoubleCurrencyField::UpdateCurrencyFormat()
 {
     // the old settings
     LanguageType eLanguage;
-    m_xFormatter->GetFormat(eLanguage);
-    bool bThSep = m_xFormatter->GetThousandsSep();
-    sal_uInt16 nDigits = m_xFormatter->GetDecimalDigits();
+    m_pFormatter->GetFormat(eLanguage);
+    bool bThSep = m_pFormatter->GetThousandsSep();
+    sal_uInt16 nDigits = m_pFormatter->GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
 
@@ -1142,17 +1145,19 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     }
 
     // set this new basic format
-    static_cast<DoubleCurrencyFormatter*>(m_xFormatter.get())->GuardSetFormat(sNewFormat.makeStringAndClear(), eLanguage);
+    static_cast<DoubleCurrencyFormatter*>(m_pFormatter)->GuardSetFormat(sNewFormat.makeStringAndClear(), eLanguage);
 }
 
 FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
     : SpinField(pParent, nStyle, WindowType::FORMATTEDFIELD)
+    , m_pFormatter(nullptr)
 {
 }
 
 void FormattedField::dispose()
 {
-    m_xFormatter.reset();
+    m_pFormatter = nullptr;
+    m_xOwnFormatter.reset();
     SpinField::dispose();
 }
 
@@ -1300,22 +1305,26 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_xFormatter)
-        m_xFormatter->EntryLostFocus();
+    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_pFormatter)
+        m_pFormatter->EntryLostFocus();
 
     return SpinField::EventNotify( rNEvt );
 }
 
 Formatter& FormattedField::GetFormatter()
 {
-    if (!m_xFormatter)
-        m_xFormatter.reset(new FieldFormatter(*this));
-    return *m_xFormatter;
+    if (!m_pFormatter)
+    {
+        m_xOwnFormatter.reset(new FieldFormatter(*this));
+        m_pFormatter = m_xOwnFormatter.get();
+    }
+    return *m_pFormatter;
 }
 
 void FormattedField::SetFormatter(Formatter* pFormatter)
 {
-    m_xFormatter.reset(pFormatter);
+    m_xOwnFormatter.reset();
+    m_pFormatter = pFormatter;
 }
 
 // currently used by online

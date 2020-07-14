@@ -56,7 +56,8 @@ public:
     void SetFormatter(Formatter* pFormatter);
 
 protected:
-    std::unique_ptr<Formatter> m_xFormatter;
+    std::unique_ptr<Formatter> m_xOwnFormatter;
+    Formatter* m_pFormatter;
 
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
     virtual void Modify() override;
