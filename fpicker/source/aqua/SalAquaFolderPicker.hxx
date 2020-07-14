@@ -44,7 +44,7 @@ class SalAquaFolderPicker :
 public:
 
     // constructor
-    SalAquaFolderPicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceMgr );
+    SalAquaFolderPicker();
 
 
     // XExecutableDialog functions
@@ -91,10 +91,6 @@ public:
 private:
     SalAquaFolderPicker( const SalAquaFolderPicker& ) = delete;
     SalAquaFolderPicker& operator=( const SalAquaFolderPicker& ) = delete;
-
-    // to instantiate own services
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceMgr;
-
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFOLDERPICKER_HXX

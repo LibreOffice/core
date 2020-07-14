@@ -33,7 +33,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include "FPServiceInfo.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -477,7 +476,7 @@ void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 
 OUString SAL_CALL SalAquaFilePicker::getImplementationName()
 {
-    return FILE_PICKER_IMPL_NAME;
+    return "com.sun.star.ui.dialogs.SalAquaFilePicker";
 }
 
 sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
@@ -581,5 +580,13 @@ void SalAquaFilePicker::filterControlChanged()
     evt.ElementId = LISTBOX_FILTER;
     controlStateChanged( evt );
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_SalAquaFilePicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new SalAquaFilePicker());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
