@@ -22,6 +22,30 @@
       "revId": "81c3487b366aba12b5f07396aeba120ee7725939",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adce013e_d671e705",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-14T17:37:49Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "b1c91d73_1bda2752",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 228,
+        "endChar": 9
+      },
+      "revId": "81c3487b366aba12b5f07396aeba120ee7725939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
