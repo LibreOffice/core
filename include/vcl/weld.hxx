@@ -1924,74 +1924,6 @@ public:
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
-class VCL_DLLPUBLIC TimeSpinButton final
-{
-    TimeFieldFormat m_eFormat;
-    std::unique_ptr<weld::SpinButton> m_xSpinButton;
-    Link<TimeSpinButton&, void> m_aValueChangedHdl;
-
-    DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
-    DECL_LINK(spin_button_output, weld::SpinButton&, void);
-    DECL_LINK(spin_button_input, int* result, bool);
-    DECL_LINK(spin_button_cursor_position, weld::Entry&, void);
-
-    void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
-
-    static tools::Time ConvertValue(int nValue);
-    static int ConvertValue(const tools::Time& rTime);
-    OUString format_number(int nValue) const;
-    void update_width_chars();
-
-public:
-    TimeSpinButton(std::unique_ptr<SpinButton> pSpinButton, TimeFieldFormat eFormat)
-        : m_eFormat(eFormat)
-        , m_xSpinButton(std::move(pSpinButton))
-    {
-        update_width_chars();
-        m_xSpinButton->connect_output(LINK(this, TimeSpinButton, spin_button_output));
-        m_xSpinButton->connect_input(LINK(this, TimeSpinButton, spin_button_input));
-        m_xSpinButton->connect_value_changed(LINK(this, TimeSpinButton, spin_button_value_changed));
-        m_xSpinButton->connect_cursor_position(
-            LINK(this, TimeSpinButton, spin_button_cursor_position));
-        spin_button_output(*m_xSpinButton);
-    }
-
-    void set_value(const tools::Time& rTime) { m_xSpinButton->set_value(ConvertValue(rTime)); }
-
-    tools::Time get_value() const { return ConvertValue(m_xSpinButton->get_value()); }
-
-    void connect_value_changed(const Link<TimeSpinButton&, void>& rLink)
-    {
-        m_aValueChangedHdl = rLink;
-    }
-
-    void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
-    bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
-    void set_visible(bool bShow) { m_xSpinButton->set_visible(bShow); }
-    bool get_visible() const { return m_xSpinButton->get_visible(); }
-    void grab_focus() { m_xSpinButton->grab_focus(); }
-    bool has_focus() const { return m_xSpinButton->has_focus(); }
-    void show() { m_xSpinButton->show(); }
-    void hide() { m_xSpinButton->hide(); }
-    void save_value() { m_xSpinButton->save_value(); }
-    bool get_value_changed_from_saved() const
-    {
-        return m_xSpinButton->get_value_changed_from_saved();
-    }
-    void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
-    void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
-    OUString get_text() const { return m_xSpinButton->get_text(); }
-    void connect_focus_in(const Link<Widget&, void>& rLink)
-    {
-        m_xSpinButton->connect_focus_in(rLink);
-    }
-    void connect_focus_out(const Link<Widget&, void>& rLink)
-    {
-        m_xSpinButton->connect_focus_out(rLink);
-    }
-    weld::SpinButton& get_widget() { return *m_xSpinButton; }
-};
-
 class VCL_DLLPUBLIC Label : virtual public Widget
 {
 public:
@@ -2308,9 +2240,6 @@ public:
     weld_metric_spin_button(const OString& id, FieldUnit eUnit, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<FormattedSpinButton>
     weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual std::unique_ptr<TimeSpinButton>
-    weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
-        = 0;
     virtual std::unique_ptr<ComboBox> weld_combo_box(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<TreeView> weld_tree_view(const OString& id, bool bTakeOwnership = false)

@@ -287,6 +287,8 @@ public:
 
     void    EntryLostFocus();
 
+    void    ReFormat();
+
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
 
@@ -305,8 +307,6 @@ protected:
     SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
 
     virtual void UpdateCurrentValue(double dCurrentValue) { m_dCurrentValue = dCurrentValue; }
-
-    void ReFormat();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

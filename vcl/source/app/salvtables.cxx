@@ -5343,12 +5343,14 @@ class SalInstanceFormattedSpinButton : public SalInstanceEntry,
 {
 private:
     VclPtr<FormattedField> m_xButton;
+    weld::EntryFormatter* m_pFormatter;
 
 public:
     SalInstanceFormattedSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership)
         : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
         , m_xButton(pButton)
+        , m_pFormatter(nullptr)
     {
     }
 
@@ -5359,8 +5361,29 @@ public:
         enable_notify_events();
     }
 
+    virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
+    {
+        if (!m_pFormatter) // once a formatter is set, it takes over "changed"
+        {
+            SalInstanceEntry::connect_changed(rLink);
+            return;
+        }
+        m_pFormatter->connect_changed(rLink);
+    }
+
+    virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override
+    {
+        if (!m_pFormatter) // once a formatter is set, it takes over "focus-out"
+        {
+            SalInstanceEntry::connect_focus_out(rLink);
+            return;
+        }
+        m_pFormatter->connect_focus_out(rLink);
+    }
+
     virtual void SetFormatter(weld::EntryFormatter* pFormatter) override
     {
+        m_pFormatter = pFormatter;
         m_xButton->SetFormatter(pFormatter);
     }
 
@@ -6648,17 +6671,6 @@ SalInstanceBuilder::weld_formatted_spin_button(const OString& id, bool bTakeOwne
     return pSpinButton
                ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, bTakeOwnership)
                : nullptr;
-}
-
-std::unique_ptr<weld::TimeSpinButton>
-SalInstanceBuilder::weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                          bool bTakeOwnership)
-{
-    std::unique_ptr<weld::TimeSpinButton> pRet(
-        new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat));
-    SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
-    rButton.DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
-    return pRet;
 }
 
 std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id,

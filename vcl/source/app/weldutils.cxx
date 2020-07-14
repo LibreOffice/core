@@ -346,6 +346,8 @@ TimeFormatter::TimeFormatter(weld::FormattedSpinButton& rSpinButton)
 
 void TimeFormatter::Init()
 {
+    DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
+
     SetOutputHdl(LINK(this, TimeFormatter, FormatOutputHdl));
     SetInputHdl(LINK(this, TimeFormatter, ParseInputHdl));
 
@@ -404,6 +406,18 @@ void TimeFormatter::SetExtFormat(ExtTimeFieldFormat eFormat)
         break;
     }
 
+    ReFormat();
+}
+
+void TimeFormatter::SetDuration(bool bDuration)
+{
+    m_bDuration = bDuration;
+    ReFormat();
+}
+
+void TimeFormatter::SetTimeFormat(TimeFieldFormat eTimeFormat)
+{
+    m_eFormat = eTimeFormat;
     ReFormat();
 }
 
