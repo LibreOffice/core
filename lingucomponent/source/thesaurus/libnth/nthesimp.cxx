@@ -452,14 +452,6 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     return noMeanings;
 }
 
-/// @throws Exception
-static Reference< XInterface > Thesaurus_CreateInstance(
-            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Thesaurus);
-    return xService;
-}
-
 OUString SAL_CALL Thesaurus::getServiceDisplayName(const Locale& rLocale)
 {
     std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
@@ -558,7 +550,7 @@ void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >&
 // Service specific part
 OUString SAL_CALL Thesaurus::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.lingu.new.Thesaurus";
 }
 
 sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
@@ -568,37 +560,16 @@ sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { SN_THESAURUS };
 }
 
-Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_Thesaurus_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aSNS { SN_THESAURUS };
-    return aSNS;
-}
-
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * lnth_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = nullptr;
-    if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                Thesaurus::getImplementationName_Static(),
-                Thesaurus_CreateInstance,
-                Thesaurus::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
+    static rtl::Reference<Thesaurus> g_Instance(new Thesaurus());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

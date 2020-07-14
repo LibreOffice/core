@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="spell" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.lingu.MySpellSpellChecker">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.openoffice.lingu.MySpellSpellChecker"
+    constructor="lingucomponent_SpellChecker_get_implementation">
     <service name="com.sun.star.linguistic2.SpellChecker"/>
   </implementation>
 </component>

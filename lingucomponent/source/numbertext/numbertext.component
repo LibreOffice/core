@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="numbertext" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.lingu2.NumberText">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.lingu2.NumberText"
+    constructor="lingucomponent_NumberText_get_implementation">
     <service name="com.sun.star.linguistic2.NumberText"/>
   </implementation>
 </component>

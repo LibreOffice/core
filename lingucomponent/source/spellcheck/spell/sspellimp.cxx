@@ -524,15 +524,6 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
     return xAlt;
 }
 
-/// @throws Exception
-static Reference< XInterface > SpellChecker_CreateInstance(
-        const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-
-    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new SpellChecker);
-    return xService;
-}
-
 sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
 {
@@ -627,7 +618,7 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
 // Service specific part
 OUString SAL_CALL SpellChecker::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.lingu.MySpellSpellChecker";
 }
 
 sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
@@ -637,38 +628,17 @@ sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { SN_SPELLCHECKER };
 }
 
-Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_SpellChecker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aSNS { SN_SPELLCHECKER };
-    return aSNS;
+    static rtl::Reference<SpellChecker> g_Instance(new SpellChecker());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * spell_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = nullptr;
-    if ( SpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                SpellChecker::getImplementationName_Static(),
-                SpellChecker_CreateInstance,
-                SpellChecker::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

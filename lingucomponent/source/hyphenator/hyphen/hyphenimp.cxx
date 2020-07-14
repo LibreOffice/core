@@ -692,14 +692,6 @@ OUString Hyphenator::makeInitCap(const OUString& aTerm, CharClass const * pCC)
     return aTerm;
 }
 
-/// @throws Exception
-static Reference< XInterface > Hyphenator_CreateInstance(
-        const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Hyphenator);
-    return xService;
-}
-
 sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
         const Reference< XLinguServiceEventListener >& rxLstnr )
 {
@@ -794,7 +786,7 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
 // Service specific part
 OUString SAL_CALL Hyphenator::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.lingu.LibHnjHyphenator";
 }
 
 sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
@@ -804,37 +796,15 @@ sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { SN_HYPHENATOR };
 }
 
-Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_Hyphenator_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aSNS { SN_HYPHENATOR };
-    return aSNS;
+    return cppu::acquire(new Hyphenator());
 }
 
-extern "C"
-{
 
-SAL_DLLPUBLIC_EXPORT void * hyphen_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = nullptr;
-    if ( Hyphenator::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                Hyphenator::getImplementationName_Static(),
-                Hyphenator_CreateInstance,
-                Hyphenator::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
