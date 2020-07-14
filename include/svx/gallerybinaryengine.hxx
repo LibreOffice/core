@@ -23,6 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/galtheme.hxx>
 #include <sot/storage.hxx>
+#include <vcl/salctype.hxx>
 
 class SgaObjectSvDraw;
 class SotStorage;
@@ -77,6 +78,12 @@ public:
     void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
                       ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
                       sal_uInt32& rInsertPos);
+
+    static bool insertGraphic(const Graphic& rGraphic, const INetURLObject& rURL,
+                              ConvertDataFormat& nExportFormat, const GfxLink& rGfxLink);
+
+    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
+                                                              bool bReadOnly);
 };
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);

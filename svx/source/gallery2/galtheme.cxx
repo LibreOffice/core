@@ -395,75 +395,6 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     UnlockBroadcaster();
 }
 
-GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly )
-{
-    DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-
-    GalleryThemeEntry*  pRet = nullptr;
-
-    if( FileExists( rURL ) )
-    {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-
-        if( pIStm )
-        {
-            OUString        aThemeName;
-            sal_uInt16      nVersion;
-
-            pIStm->ReadUInt16( nVersion );
-
-            if( nVersion <= 0x00ff )
-            {
-                bool bThemeNameFromResource = false;
-                sal_uInt32      nThemeId = 0;
-
-                OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
-
-                // execute a character conversion
-                if( nVersion >= 0x0004 )
-                {
-                    sal_uInt32  nCount;
-                    sal_uInt16  nTemp16;
-
-                    pIStm->ReadUInt32( nCount ).ReadUInt16( nTemp16 );
-                    pIStm->Seek( STREAM_SEEK_TO_END );
-
-                    // check whether there is a newer version;
-                    // therefore jump back by 520Bytes (8 bytes ID + 512Bytes reserve buffer)
-                    // if this is at all possible.
-                    if( pIStm->Tell() >= 520 )
-                    {
-                        sal_uInt32 nId1, nId2;
-
-                        pIStm->SeekRel( -520 );
-                        pIStm->ReadUInt32( nId1 ).ReadUInt32( nId2 );
-
-                        if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
-                            nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
-                        {
-                            VersionCompat aCompat( *pIStm, StreamMode::READ );
-
-                            pIStm->ReadUInt32( nThemeId );
-
-                            if( aCompat.GetVersion() >= 2 )
-                            {
-                                pIStm->ReadCharAsBool( bThemeNameFromResource );
-                            }
-                        }
-                    }
-                }
-
-                pRet = new GalleryThemeEntry( false, rURL, aThemeName,
-                                              bReadOnly, false, nThemeId,
-                                              bThemeNameFromResource );
-            }
-        }
-    }
-
-    return pRet;
-}
-
 bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
 {
     std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
@@ -595,32 +526,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
         }
 
         const INetURLObject aURL( implCreateUniqueURL( SgaObjKind::Bitmap, GetParent()->GetUserURL(), aObjectList, nExportFormat ) );
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
-
-        if( pOStm )
-        {
-            pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-
-            if( ConvertDataFormat::SVM == nExportFormat )
-            {
-                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-
-                aMtf.Write( *pOStm );
-                bRet = ( pOStm->GetError() == ERRCODE_NONE );
-            }
-            else
-            {
-                if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
-                {
-                    pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                    bRet = ( pOStm->GetError() == ERRCODE_NONE );
-                }
-                else
-                    bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
-            }
-
-            pOStm.reset();
-        }
+        bRet = pThm->insertGraphic(rGraphic, aURL, nExportFormat, aGfxLink);
 
         if( bRet )
         {

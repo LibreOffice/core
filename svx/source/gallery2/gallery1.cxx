@@ -203,6 +203,11 @@ void GalleryThemeEntry::insertObject(const SgaObject& rObj, GalleryObject* pFoun
     mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, rDestDir, rObjectList, rInsertPos);
 }
 
+bool GalleryThemeEntry::insertGraphic(const Graphic& rGraphic, const INetURLObject& rURL, ConvertDataFormat& nExportFormat, const GfxLink& rGfxLink)
+{
+    return GalleryBinaryEngine::insertGraphic(rGraphic, rURL, nExportFormat, rGfxLink);
+}
+
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
@@ -466,7 +471,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     }
                                 }
 
-                                GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+                                GalleryThemeEntry* pEntry = GalleryBinaryEngine::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
                                     aThemeList.emplace_back( pEntry );
