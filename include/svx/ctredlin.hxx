@@ -144,6 +144,11 @@ public:
     void Show() { m_xContainer->show(); }
 };
 
+namespace weld
+{
+    class TimeFormatter;
+}
+
 /// Tabpage with the filter text entries etc.
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
 {
@@ -156,11 +161,13 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
     std::unique_ptr<weld::CheckButton> m_xCbDate;
     std::unique_ptr<weld::ComboBox> m_xLbDate;
     std::unique_ptr<SvtCalendarBox> m_xDfDate;
-    std::unique_ptr<weld::TimeSpinButton> m_xTfDate;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTfDate;
+    std::unique_ptr<weld::TimeFormatter> m_xTfDateFormatter;
     std::unique_ptr<weld::Button> m_xIbClock;
     std::unique_ptr<weld::Label> m_xFtDate2;
     std::unique_ptr<SvtCalendarBox> m_xDfDate2;
-    std::unique_ptr<weld::TimeSpinButton> m_xTfDate2;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTfDate2;
+    std::unique_ptr<weld::TimeFormatter> m_xTfDate2Formatter;
     std::unique_ptr<weld::Button> m_xIbClock2;
     std::unique_ptr<weld::CheckButton> m_xCbAuthor;
     std::unique_ptr<weld::ComboBox> m_xLbAuthor;
@@ -178,7 +185,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
     DECL_LINK( ModifyHdl, weld::Entry&, void );
     DECL_LINK( ModifyListBoxHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyDate, SvtCalendarBox&, void );
-    DECL_LINK( ModifyTime, weld::TimeSpinButton&, void );
+    DECL_LINK( ModifyTime, weld::FormattedSpinButton&, void );
     DECL_LINK( RefHandle, weld::Button&, void );
 
     void            EnableDateLine1(bool bFlag);

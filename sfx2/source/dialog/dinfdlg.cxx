@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -1265,7 +1266,7 @@ CustomPropertyLine::CustomPropertyLine(CustomPropertiesWindow* pParent, weld::Wi
     , m_xValueEdit(m_xBuilder->weld_entry("valueedit"))
     , m_xDateTimeBox(m_xBuilder->weld_widget("datetimebox"))
     , m_xDateField(new CustomPropertiesDateField(new SvtCalendarBox(m_xBuilder->weld_menu_button("date"))))
-    , m_xTimeField(new CustomPropertiesTimeField(m_xBuilder->weld_time_spin_button("time", TimeFieldFormat::F_SEC)))
+    , m_xTimeField(new CustomPropertiesTimeField(m_xBuilder->weld_formatted_spin_button("time")))
     , m_xDurationBox(m_xBuilder->weld_widget("durationbox"))
     , m_xDurationField(new CustomPropertiesDurationField(m_xBuilder->weld_entry("duration"),
                                                          m_xBuilder->weld_button("durationbutton")))
@@ -1523,10 +1524,23 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties()
     return aPropertiesSeq;
 }
 
-CustomPropertiesTimeField::CustomPropertiesTimeField(std::unique_ptr<weld::TimeSpinButton> xTimeField)
+CustomPropertiesTimeField::CustomPropertiesTimeField(std::unique_ptr<weld::FormattedSpinButton> xTimeField)
     : m_xTimeField(std::move(xTimeField))
+    , m_xFormatter(new weld::TimeFormatter(*m_xTimeField))
     , m_isUTC(false)
 {
+    m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
+    m_xFormatter->EnableEmptyField(false);
+}
+
+tools::Time CustomPropertiesTimeField::get_value() const
+{
+    return m_xFormatter->GetTime();
+}
+
+void CustomPropertiesTimeField::set_value(const tools::Time& rTime)
+{
+    m_xFormatter->SetTime(rTime);
 }
 
 CustomPropertiesTimeField::~CustomPropertiesTimeField()
@@ -1964,12 +1978,16 @@ CmisDateTime::CmisDateTime(weld::Widget* pParent, const util::DateTime& aDateTim
     : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/cmisline.ui"))
     , m_xFrame(m_xBuilder->weld_frame("CmisFrame"))
     , m_xDateField(new SvtCalendarBox(m_xBuilder->weld_menu_button("date")))
-    , m_xTimeField(m_xBuilder->weld_time_spin_button("time", TimeFieldFormat::F_SEC))
+    , m_xTimeField(m_xBuilder->weld_formatted_spin_button("time"))
+    , m_xFormatter(new weld::TimeFormatter(*m_xTimeField))
 {
+    m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
+    m_xFormatter->EnableEmptyField(false);
+
     m_xDateField->show();
     m_xTimeField->show();
     m_xDateField->set_date(Date(aDateTime));
-    m_xTimeField->set_value(tools::Time(aDateTime));
+    m_xFormatter->SetTime(tools::Time(aDateTime));
 }
 
 CmisYesNo::CmisYesNo(weld::Widget* pParent, bool bValue)
@@ -2185,7 +2203,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 for ( const auto& rxDateTime : pLine->m_aDateTimes )
                 {
                     Date aTmpDate = rxDateTime->m_xDateField->get_date();
-                    tools::Time aTmpTime = rxDateTime->m_xTimeField->get_value();
+                    tools::Time aTmpTime = rxDateTime->m_xFormatter->GetTime();
                     util::DateTime aDateTime( aTmpTime.GetNanoSec(), aTmpTime.GetSec(),
                                               aTmpTime.GetMin(), aTmpTime.GetHour(),
                                               aTmpDate.GetDay(), aTmpDate.GetMonth(),

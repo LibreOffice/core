@@ -22,6 +22,7 @@
 
 #include <svtools/valueset.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <pres.hxx>
 #include "assclass.hxx"
 
@@ -86,7 +87,8 @@ private:
     std::unique_ptr<weld::RadioButton> m_xPage2_ChgDefault;
     std::unique_ptr<weld::RadioButton> m_xPage2_ChgAuto;
     std::unique_ptr<weld::Label> m_xPage2_Duration_txt;
-    std::unique_ptr<weld::TimeSpinButton> m_xPage2_Duration;
+    std::unique_ptr<weld::FormattedSpinButton> m_xPage2_Duration;
+    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     std::unique_ptr<weld::CheckButton> m_xPage2_Endless;
 
     // page 3 controls

@@ -247,6 +247,8 @@ public:
     TimeFormatter(weld::FormattedSpinButton& rSpinButton);
 
     void SetExtFormat(ExtTimeFieldFormat eFormat);
+    void SetDuration(bool bDuration);
+    void SetTimeFormat(TimeFieldFormat eTimeFormat);
 
     void SetMin(const tools::Time& rNewMin);
     void SetMax(const tools::Time& rNewMax);

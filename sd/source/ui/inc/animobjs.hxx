@@ -27,6 +27,7 @@
 #include <misc/scopelock.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 class SdDrawDocument;
 
@@ -94,7 +95,8 @@ private:
     std::unique_ptr<weld::Button> m_xBtnPlay;
     std::unique_ptr<weld::Button> m_xBtnLast;
     std::unique_ptr<weld::SpinButton> m_xNumFldBitmap;
-    std::unique_ptr<weld::TimeSpinButton> m_xTimeField;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTimeField;
+    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     std::unique_ptr<weld::ComboBox> m_xLbLoopCount;
     std::unique_ptr<weld::Button> m_xBtnGetOneObject;
     std::unique_ptr<weld::Button> m_xBtnGetAllObjects;
@@ -131,7 +133,7 @@ private:
     DECL_LINK( ClickHelpHdl, weld::Button&, void );
     DECL_LINK( ClickCreateGroupHdl, weld::Button&, void );
     DECL_LINK( ModifyBitmapHdl, weld::SpinButton&, void );
-    DECL_LINK( ModifyTimeHdl, weld::TimeSpinButton&, void );
+    DECL_LINK( ModifyTimeHdl, weld::FormattedSpinButton&, void );
 
     void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();

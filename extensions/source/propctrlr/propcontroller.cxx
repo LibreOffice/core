@@ -790,7 +790,7 @@ namespace pcr
             case PropertyControlType::TimeField:
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/timefield.ui", m_xContext));
-                auto pTimeSpinButton = xBuilder->weld_time_spin_button("timefield", TimeFieldFormat::F_SEC);
+                auto pTimeSpinButton = xBuilder->weld_formatted_spin_button("timefield");
                 auto pControl = new OTimeControl(std::move(pTimeSpinButton), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
