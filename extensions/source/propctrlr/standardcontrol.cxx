@@ -53,9 +53,11 @@ namespace pcr
     using namespace ::com::sun::star::inspection;
 
     //= OTimeControl
-    OTimeControl::OTimeControl(std::unique_ptr<weld::TimeSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+    OTimeControl::OTimeControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OTimeControl_Base(PropertyControlType::TimeField, std::move(xBuilder), std::move(xWidget), bReadOnly)
+        , m_xFormatter(new weld::TimeFormatter(*getTypedControlWindow()))
     {
+        m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     }
 
     void SAL_CALL OTimeControl::setValue( const Any& _rValue )
@@ -64,11 +66,11 @@ namespace pcr
         if ( !( _rValue >>= aUNOTime ) )
         {
             getTypedControlWindow()->set_text("");
-            getTypedControlWindow()->set_value(tools::Time(tools::Time::EMPTY));
+            m_xFormatter->SetTime(tools::Time(tools::Time::EMPTY));
         }
         else
         {
-            getTypedControlWindow()->set_value(::tools::Time(aUNOTime));
+            m_xFormatter->SetTime(::tools::Time(aUNOTime));
         }
     }
 
@@ -77,7 +79,7 @@ namespace pcr
         Any aPropValue;
         if ( !getTypedControlWindow()->get_text().isEmpty() )
         {
-            aPropValue <<= getTypedControlWindow()->get_value().GetUNOTime();
+            aPropValue <<= m_xFormatter->GetTime().GetUNOTime();
         }
         return aPropValue;
     }
@@ -205,8 +207,10 @@ namespace pcr
     ODateTimeControl::ODateTimeControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : ODateTimeControl_Base(PropertyControlType::DateTimeField, std::move(xBuilder), std::move(xWidget), bReadOnly)
         , m_xDate(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button("datefield")))
-        , m_xTime(m_xBuilder->weld_time_spin_button("timefield", TimeFieldFormat::F_SEC))
+        , m_xTime(m_xBuilder->weld_formatted_spin_button("timefield"))
+        , m_xFormatter(new weld::TimeFormatter(*m_xTime))
     {
+        m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     }
 
     void SAL_CALL ODateTimeControl::setValue( const Any& _rValue )
@@ -215,7 +219,7 @@ namespace pcr
         {
             m_xDate->set_date(::Date(::Date::SYSTEM));
             m_xTime->set_text("");
-            m_xTime->set_value(tools::Time(tools::Time::EMPTY));
+            m_xFormatter->SetTime(tools::Time(tools::Time::EMPTY));
         }
         else
         {
@@ -226,7 +230,7 @@ namespace pcr
             ::utl::typeConvert( aUNODateTime, aDateTime );
 
             m_xDate->set_date(aDateTime);
-            m_xTime->set_value(aDateTime);
+            m_xFormatter->SetTime(aDateTime);
         }
     }
 
@@ -235,7 +239,7 @@ namespace pcr
         Any aPropValue;
         if (!m_xTime->get_text().isEmpty())
         {
-            ::DateTime aDateTime(m_xDate->get_date(), m_xTime->get_value());
+            ::DateTime aDateTime(m_xDate->get_date(), m_xFormatter->GetTime());
 
             util::DateTime aUNODateTime;
             ::utl::typeConvert( aDateTime, aUNODateTime );

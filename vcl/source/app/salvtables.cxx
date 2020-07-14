@@ -6650,17 +6650,6 @@ SalInstanceBuilder::weld_formatted_spin_button(const OString& id, bool bTakeOwne
                : nullptr;
 }
 
-std::unique_ptr<weld::TimeSpinButton>
-SalInstanceBuilder::weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                          bool bTakeOwnership)
-{
-    std::unique_ptr<weld::TimeSpinButton> pRet(
-        new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat));
-    SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
-    rButton.DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
-    return pRet;
-}
-
 std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id,
                                                                    bool bTakeOwnership)
 {

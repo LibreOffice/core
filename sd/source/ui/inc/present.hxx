@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
 
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 class SfxItemSet;
 class SdCustomShowList;
@@ -44,7 +45,8 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRbtStandard;
     std::unique_ptr<weld::RadioButton> m_xRbtWindow;
     std::unique_ptr<weld::RadioButton> m_xRbtAuto;
-    std::unique_ptr<weld::TimeSpinButton> m_xTmfPause;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTmfPause;
+    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     std::unique_ptr<weld::CheckButton> m_xCbxAutoLogo;
 
     std::unique_ptr<weld::CheckButton> m_xCbxManuel;
@@ -65,7 +67,7 @@ private:
     DECL_LINK(ChangeRangeHdl, weld::Button&, void);
     DECL_LINK(ClickWindowPresentationHdl, weld::Button&, void);
     void ChangePause();
-    DECL_LINK(ChangePauseHdl, weld::TimeSpinButton&, void);
+    DECL_LINK(ChangePauseHdl, weld::FormattedSpinButton&, void);
 
     void                InitMonitorSettings();
     enum DisplayType {

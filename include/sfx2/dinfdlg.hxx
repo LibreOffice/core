@@ -248,16 +248,23 @@ public:
     ~CustomPropertiesDateField();
 };
 
+namespace weld
+{
+    class TimeFormatter;
+}
+
 class CustomPropertiesTimeField
 {
 public:
-    std::unique_ptr<weld::TimeSpinButton> m_xTimeField;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTimeField;
+    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     bool m_isUTC;
 
-    CustomPropertiesTimeField(std::unique_ptr<weld::TimeSpinButton> xTimeField);
+    CustomPropertiesTimeField(std::unique_ptr<weld::FormattedSpinButton> xTimeField);
     void set_visible(bool bVisible) { m_xTimeField->set_visible(bVisible); }
-    tools::Time get_value() const { return m_xTimeField->get_value(); }
-    void set_value(const tools::Time& rTime) { m_xTimeField->set_value(rTime); }
+    tools::Time get_value() const;
+    void set_value(const tools::Time& rTime);
+
     ~CustomPropertiesTimeField();
 };
 
@@ -459,7 +466,8 @@ struct CmisDateTime
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Frame>  m_xFrame;
     std::unique_ptr<SvtCalendarBox>  m_xDateField;
-    std::unique_ptr<weld::TimeSpinButton> m_xTimeField;
+    std::unique_ptr<weld::FormattedSpinButton> m_xTimeField;
+    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
 
     CmisDateTime(weld::Widget* pParent, const css::util::DateTime& rDateTime);
 };

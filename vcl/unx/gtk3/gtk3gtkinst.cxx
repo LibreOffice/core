@@ -15856,12 +15856,6 @@ public:
         return std::make_unique<GtkInstanceFormattedSpinButton>(pSpinButton, this, bTakeOwnership);
     }
 
-    virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                                        bool bTakeOwnership) override
-    {
-        return std::make_unique<weld::TimeSpinButton>(weld_spin_button(id, bTakeOwnership), eFormat);
-    }
-
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership) override
     {
         GtkComboBox* pComboBox = GTK_COMBO_BOX(gtk_builder_get_object(m_pBuilder, id.getStr()));
