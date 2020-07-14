@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1c91d73_1bda2752",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T17:10:08Z",
+      "side": 1,
+      "message": "This duplicates the general paragraph style case, just doesn\u0027t exclude properties that aren\u0027t set directly.\n\nInstead, introduce a const bool variable to tell if this is the \"Standard\" style or not; and use it in the condition in line 233, like this:\n\n    const bool bStandardStyle \u003d sCurrentParaStyle \u003d\u003d \"Standard\"; // Last Parent Style\n    ...\n    if (bStandardStyle || xPropertiesState-\u003egetPropertyState(sPropName) \u003d\u003d beans::PropertyState_DIRECT_VALUE)\n    ...\n    if (bStandardStyle)\n        break;",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 228,
+        "endChar": 9
+      },
+      "revId": "81c3487b366aba12b5f07396aeba120ee7725939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
