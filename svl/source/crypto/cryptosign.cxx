@@ -2061,15 +2061,15 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     switch (eOidTag)
     {
     case SEC_OID_SHA1:
-        nMaxResultLen = msfilter::SHA1_HASH_LENGTH;
+        nMaxResultLen = comphelper::SHA1_HASH_LENGTH;
         rInformation.nDigestID = xml::crypto::DigestID::SHA1;
         break;
     case SEC_OID_SHA256:
-        nMaxResultLen = msfilter::SHA256_HASH_LENGTH;
+        nMaxResultLen = comphelper::SHA256_HASH_LENGTH;
         rInformation.nDigestID = xml::crypto::DigestID::SHA256;
         break;
     case SEC_OID_SHA512:
-        nMaxResultLen = msfilter::SHA512_HASH_LENGTH;
+        nMaxResultLen = comphelper::SHA512_HASH_LENGTH;
         rInformation.nDigestID = xml::crypto::DigestID::SHA512;
         break;
     default:

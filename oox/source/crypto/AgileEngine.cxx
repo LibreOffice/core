@@ -531,7 +531,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
         mInfo.cipherAlgorithm == "AES" &&
         mInfo.cipherChaining  == "ChainingModeCBC" &&
         mInfo.hashAlgorithm   == "SHA1" &&
-        mInfo.hashSize        == msfilter::SHA1_HASH_LENGTH)
+        mInfo.hashSize        == comphelper::SHA1_HASH_LENGTH)
     {
         return true;
     }
@@ -541,7 +541,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
         mInfo.cipherAlgorithm == "AES" &&
         mInfo.cipherChaining  == "ChainingModeCBC" &&
         mInfo.hashAlgorithm   == "SHA512" &&
-        mInfo.hashSize        == msfilter::SHA512_HASH_LENGTH)
+        mInfo.hashSize        == comphelper::SHA512_HASH_LENGTH)
     {
         return true;
     }

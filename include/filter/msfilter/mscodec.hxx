@@ -25,6 +25,7 @@
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <sal/types.h>
+#include <comphelper/hash.hxx>
 #include <vector>
 
 namespace com::sun::star {
@@ -442,9 +443,6 @@ const sal_uInt32 AGILE_ENCRYPTION_RESERVED  = 0x00000040;
 
 const sal_uInt32 SALT_LENGTH                    = 16;
 const sal_uInt32 ENCRYPTED_VERIFIER_LENGTH      = 16;
-const sal_uInt32 SHA1_HASH_LENGTH = RTL_DIGEST_LENGTH_SHA1; // 20
-const sal_uInt32 SHA256_HASH_LENGTH = 32;
-const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct MSFILTER_DLLPUBLIC EncryptionStandardHeader
 {
@@ -466,7 +464,7 @@ struct MSFILTER_DLLPUBLIC EncryptionVerifierAES
     sal_uInt8  salt[SALT_LENGTH] = {};                                  // random generated salt value
     sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH] = {};       // randomly generated verifier value
     sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
-    sal_uInt8  encryptedVerifierHash[SHA256_HASH_LENGTH] = {};          // verifier value hash - itself also encrypted
+    sal_uInt8  encryptedVerifierHash[comphelper::SHA256_HASH_LENGTH] = {};          // verifier value hash - itself also encrypted
 
     EncryptionVerifierAES();
 };
@@ -477,7 +475,7 @@ struct MSFILTER_DLLPUBLIC EncryptionVerifierRC4
     sal_uInt8  salt[SALT_LENGTH] = {};                                  // random generated salt value
     sal_uInt8  encryptedVerifier[ENCRYPTED_VERIFIER_LENGTH] = {};       // randomly generated verifier value
     sal_uInt32 encryptedVerifierHashSize;                               // actually written hash size - depends on algorithm
-    sal_uInt8  encryptedVerifierHash[SHA1_HASH_LENGTH] = {};            // verifier value hash - itself also encrypted
+    sal_uInt8  encryptedVerifierHash[comphelper::SHA1_HASH_LENGTH] = {};            // verifier value hash - itself also encrypted
 
     EncryptionVerifierRC4();
 };
