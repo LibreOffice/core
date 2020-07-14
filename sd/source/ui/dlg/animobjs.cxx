@@ -132,7 +132,8 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     , m_xBtnPlay(m_xBuilder->weld_button("next"))
     , m_xBtnLast(m_xBuilder->weld_button("last"))
     , m_xNumFldBitmap(m_xBuilder->weld_spin_button("numbitmap"))
-    , m_xTimeField(m_xBuilder->weld_time_spin_button("duration", TimeFieldFormat::F_SEC_CS))
+    , m_xTimeField(m_xBuilder->weld_formatted_spin_button("duration"))
+    , m_xFormatter(new weld::TimeFormatter(*m_xTimeField))
     , m_xLbLoopCount(m_xBuilder->weld_combo_box("loopcount"))
     , m_xBtnGetOneObject(m_xBuilder->weld_button("getone"))
     , m_xBtnGetAllObjects(m_xBuilder->weld_button("getall"))
@@ -150,6 +151,10 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     , bAllObjects(false)
 {
     SetText(SdResId(STR_ANIMATION_DIALOG_TITLE));
+
+    m_xFormatter->SetDuration(true);
+    m_xFormatter->SetTimeFormat(TimeFieldFormat::F_SEC_CS);
+    m_xFormatter->EnableEmptyField(false);
 
     // create new document with page
     pMyDoc.reset( new SdDrawDocument(DocumentType::Impress, nullptr) );
@@ -207,6 +212,7 @@ void AnimationWindow::dispose()
     m_xBtnPlay.reset();
     m_xBtnLast.reset();
     m_xNumFldBitmap.reset();
+    m_xFormatter.reset();
     m_xTimeField.reset();
     m_xLbLoopCount.reset();
     m_xBtnGetOneObject.reset();
@@ -293,7 +299,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
         {
             ::tools::Time const & rTime = m_FrameList[i].second;
 
-            m_xTimeField->set_value( rTime );
+            m_xFormatter->SetTime( rTime );
             sal_uLong nTime = rTime.GetMSFromTime();
 
             WaitInEffect( nTime, nTmpTime, pProgress.get() );
@@ -369,7 +375,8 @@ IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Button&, void)
         if( n > 0 )
         {
             ::tools::Time const & rTime = m_FrameList[n - 1].second;
-            m_xTimeField->set_value( rTime );
+            m_xFormatter->SetTime( rTime );
+            m_xFormatter->ReFormat();
         }
         m_xTimeField->set_sensitive(true);
         m_xLbLoopCount->set_sensitive(true);
@@ -486,13 +493,13 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, weld::SpinButton&, void)
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, weld::TimeSpinButton&, void)
+IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, weld::FormattedSpinButton&, void)
 {
     sal_uLong nPos = m_xNumFldBitmap->get_value() - 1;
 
     ::tools::Time & rTime = m_FrameList[nPos].second;
 
-    rTime = m_xTimeField->get_value();
+    rTime = m_xFormatter->GetTime();
 }
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
@@ -759,7 +766,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
-                        ::std::make_pair(aBitmapEx, m_xTimeField->get_value()));
+                        ::std::make_pair(aBitmapEx, m_xFormatter->GetTime()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;
@@ -777,7 +784,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     {
         BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
-        ::tools::Time aTime( m_xTimeField->get_value() );
+        ::tools::Time aTime( m_xFormatter->GetTime() );
 
         size_t nIndex = m_nCurrentFrame + 1;
         m_FrameList.insert(
@@ -808,7 +815,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                     m_FrameList.begin() + nIndex,
-                    ::std::make_pair(aBitmapEx, m_xTimeField->get_value()));
+                    ::std::make_pair(aBitmapEx, m_xFormatter->GetTime()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;

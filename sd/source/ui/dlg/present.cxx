@@ -45,7 +45,8 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xRbtStandard(m_xBuilder->weld_radio_button("default"))
     , m_xRbtWindow(m_xBuilder->weld_radio_button("window"))
     , m_xRbtAuto(m_xBuilder->weld_radio_button("auto"))
-    , m_xTmfPause(m_xBuilder->weld_time_spin_button("pauseduration", TimeFieldFormat::F_SEC))
+    , m_xTmfPause(m_xBuilder->weld_formatted_spin_button("pauseduration"))
+    , m_xFormatter(new weld::TimeFormatter(*m_xTmfPause))
     , m_xCbxAutoLogo(m_xBuilder->weld_check_button("showlogo"))
     , m_xCbxManuel(m_xBuilder->weld_check_button("manualslides"))
     , m_xCbxMousepointer(m_xBuilder->weld_check_button("pointervisible"))
@@ -60,6 +61,9 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xMonitorExternal(m_xBuilder->weld_label("externalmonitor_str"))
     , m_xExternal(m_xBuilder->weld_label("external_str"))
 {
+    m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
+    m_xFormatter->EnableEmptyField(false);
+
     Link<weld::Button&,void> aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
     m_xRbtAll->connect_clicked( aLink );
@@ -113,7 +117,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     const bool  bWindow = !static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
     const long  nPause = static_cast<const SfxUInt32Item&>( rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
-    m_xTmfPause->set_value( tools::Time( 0, 0, nPause ) );
+    m_xFormatter->SetTime( tools::Time( 0, 0, nPause ) );
     // set cursor in timefield to end
     m_xTmfPause->set_position(-1);
 
@@ -258,7 +262,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALWAYS_ON_TOP, m_xCbxAlwaysOnTop->get_active() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_FULLSCREEN, !m_xRbtWindow->get_active() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, m_xRbtAuto->get_active() ) );
-    rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, m_xTmfPause->get_value().GetMSFromTime() / 1000 ) );
+    rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, m_xFormatter->GetTime().GetMSFromTime() / 1000 ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, m_xCbxAutoLogo->get_active() ) );
 
     int nPos = m_xLBMonitor->get_active();
@@ -289,7 +293,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Button
 
     // m_xFtPause.set_sensitive( bAuto );
     m_xTmfPause->set_sensitive( bAuto );
-    m_xCbxAutoLogo->set_sensitive( bAuto && ( m_xTmfPause->get_value().GetMSFromTime() > 0 ) );
+    m_xCbxAutoLogo->set_sensitive( bAuto && ( m_xFormatter->GetTime().GetMSFromTime() > 0 ) );
 
     const bool bDisplay = !bWindow && ( mnMonitors > 1 );
     m_xFtMonitor->set_sensitive( bDisplay );
@@ -307,14 +311,14 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Button
 /**
  *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
  */
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl, weld::TimeSpinButton&, void)
+IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl, weld::FormattedSpinButton&, void)
 {
     ChangePause();
 }
 
 void SdStartPresentationDlg::ChangePause()
 {
-    m_xCbxAutoLogo->set_sensitive(m_xRbtAuto->get_active() && ( m_xTmfPause->get_value().GetMSFromTime() > 0 ));
+    m_xCbxAutoLogo->set_sensitive(m_xRbtAuto->get_active() && ( m_xFormatter->GetTime().GetMSFromTime() > 0 ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

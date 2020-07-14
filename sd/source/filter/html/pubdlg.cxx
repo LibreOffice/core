@@ -532,7 +532,9 @@ void SdPublishingDlg::CreatePages()
     m_xPage2_ChgDefault = m_xBuilder->weld_radio_button("chgDefaultRadiobutton");
     m_xPage2_ChgAuto = m_xBuilder->weld_radio_button("chgAutoRadiobutton");
     m_xPage2_Duration_txt = m_xBuilder->weld_label("durationTxtLabel");
-    m_xPage2_Duration = m_xBuilder->weld_time_spin_button("durationSpinbutton", TimeFieldFormat::F_SEC);
+    m_xPage2_Duration = m_xBuilder->weld_formatted_spin_button("durationSpinbutton");
+    m_xFormatter.reset(new weld::TimeFormatter(*m_xPage2_Duration));
+    m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
     m_xPage2_Endless = m_xBuilder->weld_check_button("endlessCheckbutton");
     aAssistentFunc.InsertControl(2, m_xPage2_Title_WebCast.get());
     aAssistentFunc.InsertControl(2, m_xPage2_Index_txt.get());
@@ -547,7 +549,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(2, m_xPage2_ChgDefault.get());
     aAssistentFunc.InsertControl(2, m_xPage2_ChgAuto.get());
     aAssistentFunc.InsertControl(2, m_xPage2_Duration_txt.get());
-    aAssistentFunc.InsertControl(2, &m_xPage2_Duration->get_widget());
+    aAssistentFunc.InsertControl(2, m_xPage2_Duration.get());
     aAssistentFunc.InsertControl(2, m_xPage2_Endless.get());
 
     // Page 3
@@ -712,7 +714,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( m_xPage2_Kiosk->get_active() && m_xPage2_ChgAuto->get_active() )
     {
         aValue.Name = "KioskSlideDuration";
-        aValue.Value <<= static_cast<sal_uInt32>(m_xPage2_Duration->get_value().GetMSFromTime()) / 1000;
+        aValue.Value <<= static_cast<sal_uInt32>(m_xFormatter->GetTime().GetMSFromTime()) / 1000;
         aProps.push_back( aValue );
 
         aValue.Name = "KioskEndless";
@@ -1281,7 +1283,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign const * pDesign )
 
     tools::Time aTime( tools::Time::EMPTY );
     aTime.MakeTimeFromMS( pDesign->m_nSlideDuration * 1000 );
-    m_xPage2_Duration->set_value(aTime);
+    m_xFormatter->SetTime(aTime);
 
     m_xPage2_Endless->set_sensitive( pDesign->m_bEndless );
 
@@ -1385,7 +1387,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aURL = m_xPage2_URL->get_text();
 
     pDesign->m_bAutoSlide = m_xPage2_ChgAuto->get_active();
-    pDesign->m_nSlideDuration = static_cast<sal_uInt32>(m_xPage2_Duration->get_value().GetMSFromTime()) / 1000;
+    pDesign->m_nSlideDuration = static_cast<sal_uInt32>(m_xFormatter->GetTime().GetMSFromTime()) / 1000;
     pDesign->m_bEndless = m_xPage2_Endless->get_active();
 }
 

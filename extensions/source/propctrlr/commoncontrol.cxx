@@ -93,7 +93,7 @@ namespace pcr
         setModified();
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, TimeModifiedHdl, weld::TimeSpinButton&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, TimeModifiedHdl, weld::FormattedSpinButton&, void )
     {
         setModified();
     }

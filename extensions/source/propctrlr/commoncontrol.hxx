@@ -91,7 +91,7 @@ namespace pcr
         DECL_LINK( EditModifiedHdl, weld::Entry&, void );
         DECL_LINK( MetricModifiedHdl, weld::MetricSpinButton&, void );
         DECL_LINK( FormattedModifiedHdl, weld::FormattedSpinButton&, void );
-        DECL_LINK( TimeModifiedHdl, weld::TimeSpinButton&, void );
+        DECL_LINK( TimeModifiedHdl, weld::FormattedSpinButton&, void );
         DECL_LINK( DateModifiedHdl, SvtCalendarBox&, void );
         DECL_LINK( GetFocusHdl, weld::Widget&, void );
         DECL_LINK( LoseFocusHdl, weld::Widget&, void );

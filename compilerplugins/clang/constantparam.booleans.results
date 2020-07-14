@@ -1842,10 +1842,6 @@ include/vcl/weld.hxx:2282
     class std::unique_ptr<class weld::FormattedSpinButton, struct std::default_delete<class weld::FormattedSpinButton> > weld::Builder::weld_formatted_spin_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2284
-    class std::unique_ptr<class weld::TimeSpinButton, struct std::default_delete<class weld::TimeSpinButton> > weld::Builder::weld_time_spin_button(const class rtl::OString &,enum TimeFieldFormat,_Bool)
-    _Bool bTakeOwnership
-    0
 include/vcl/weld.hxx:2286
     class std::unique_ptr<class weld::ComboBox, struct std::default_delete<class weld::ComboBox> > weld::Builder::weld_combo_box(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership

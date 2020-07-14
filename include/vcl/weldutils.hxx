@@ -160,12 +160,6 @@ public:
     EntryFormatter(weld::Entry& rEntry);
     EntryFormatter(weld::FormattedSpinButton& rSpinButton);
 
-    // EntryFormatter will set listeners to "changed" and "focus-out" of the
-    // entry so users that want to add their own listeners to those must set
-    // them through this formatter and not directly on the entry
-    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
-    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
-
     weld::Entry& get_widget() { return m_rEntry; }
 
     // public Formatter overrides, drives interactions with the Entry
@@ -185,6 +179,17 @@ public:
     virtual void SetSpinSize(double dStep) override;
 
     void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
+
+    /* EntryFormatter will set listeners to "changed" and "focus-out" of the
+       Entry so users that want to add their own listeners to those must set
+       them through this formatter and not directly on that entry.
+
+       If EntryFormatter is used with a weld::FormattedSpinButton this is
+       handled transparently by the FormattedSpinButton for the user and the
+       handlers can be set on the FormattedSpinButton
+    */
+    void connect_changed(const Link<weld::Entry&, void>& rLink) { m_aModifyHdl = rLink; }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
 
     virtual ~EntryFormatter() override;
 
@@ -247,6 +252,8 @@ public:
     TimeFormatter(weld::FormattedSpinButton& rSpinButton);
 
     void SetExtFormat(ExtTimeFieldFormat eFormat);
+    void SetDuration(bool bDuration);
+    void SetTimeFormat(TimeFieldFormat eTimeFormat);
 
     void SetMin(const tools::Time& rNewMin);
     void SetMax(const tools::Time& rNewMax);

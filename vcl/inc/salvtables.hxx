@@ -117,10 +117,6 @@ public:
     virtual std::unique_ptr<weld::FormattedSpinButton>
     weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::TimeSpinButton>
-    weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                          bool bTakeOwnership = false) override;
-
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
                                                            bool bTakeOwnership = false) override;
 

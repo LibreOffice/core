@@ -35,11 +35,12 @@ namespace pcr
 
 
     //= OTimeControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::TimeSpinButton> OTimeControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::FormattedSpinButton> OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
     {
+        std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     public:
-        OTimeControl(std::unique_ptr<weld::TimeSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
+        OTimeControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -52,7 +53,7 @@ namespace pcr
             getTypedControlWindow()->connect_value_changed( LINK( this, CommonBehaviourControlHelper, TimeModifiedHdl ) );
         }
 
-        virtual weld::Widget* getWidget() override { return &getTypedControlWindow()->get_widget(); }
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
 
     //= ODateControl
@@ -108,7 +109,8 @@ namespace pcr
     {
     private:
         std::unique_ptr<SvtCalendarBox> m_xDate;
-        std::unique_ptr<weld::TimeSpinButton> m_xTime;
+        std::unique_ptr<weld::FormattedSpinButton> m_xTime;
+        std::unique_ptr<weld::TimeFormatter> m_xFormatter;
 
     public:
         ODateTimeControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
@@ -126,6 +128,7 @@ namespace pcr
 
         virtual void SAL_CALL disposing() override
         {
+            m_xFormatter.reset();
             m_xTime.reset();
             m_xDate.reset();
             ODateTimeControl_Base::disposing();
