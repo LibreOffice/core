@@ -4954,7 +4954,7 @@ if test "$cross_compiling" = "yes"; then
     mv config_host/*.h ../config_build
 
     OLD_PATH=$PATH
-    . ./bin/get_config_variables CC CXX INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables CC CXX ILIB INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
     BUILD_PATH=$PATH
     PATH=$OLD_PATH
 
@@ -4970,7 +4970,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in INSTDIR INSTROOT WORKDIR; do
+    for V in ILIB INSTDIR INSTROOT WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e "s,/CONF-FOR-BUILD/\([[a-z]]*\),/\1_for_build,g"`
@@ -5013,6 +5013,9 @@ AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_URE_MISC_FOLDER_FOR_BUILD)
 AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
+AC_SUBST(CC_FOR_BUILD)
+AC_SUBST(CXX_FOR_BUILD)
+AC_SUBST(ILIB_FOR_BUILD)
 
 dnl ===================================================================
 dnl Check for syslog header
