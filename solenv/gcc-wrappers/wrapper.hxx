@@ -20,9 +20,9 @@ string getexe(string exename, bool maybeempty = false);
 
 void setupccenv();
 
-string processccargs(vector<string> rawargs);
+string processccargs(vector<string> rawargs, string& env_prefix, bool& verbose);
 
-int startprocess(string command, string args);
+int startprocess(string command, string args, bool verbose);
 
 #endif // INCLUDED_SOLENV_GCC_WRAPPERS_WRAPPER_HXX
 
