@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6dc682dc_78f3c264",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-14T14:20:33Z",
+      "side": 1,
+      "message": "It\u0027s \"Direct\" formatting. \nNo reason for all upper-case, please use sentence style capitalization.\nAnd please make all strings available for l10n.",
+      "range": {
+        "startLine": 122,
+        "startChar": 25,
+        "endLine": 122,
+        "endChar": 32
+      },
+      "revId": "837d80aace85662eb6ee9a5bf963eeecb19e860d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f03e24fa_c1e3b855",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
