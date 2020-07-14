@@ -104,6 +104,7 @@ class CuiConfigFunctionListBox
 {
     friend class CuiConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
+    CuiConfigGroupListBox* m_pGroupListBox;
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
@@ -112,6 +113,7 @@ public:
     CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink) { m_xTreeView->connect_popup_menu(rLink); }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     void freeze() { m_xTreeView->freeze(); }
     void thaw() { m_xTreeView->thaw(); }
@@ -178,7 +180,10 @@ public:
     OUString      GetCurCommand() const;
     OUString      GetCurLabel() const;
 
+    void          SetGroupListBox( CuiConfigGroupListBox *pBox ) { m_pGroupListBox = pBox; }
+
     DECL_LINK(QueryTooltip, const weld::TreeIter& rIter, OUString);
+    DECL_LINK(ContextMenuHdl, const CommandEvent&, bool);
 };
 
 struct SvxConfigGroupBoxResource_Impl;
