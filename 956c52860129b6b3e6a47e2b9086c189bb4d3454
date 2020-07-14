@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cf25fe5_9d83b418",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T16:06:43Z",
+      "side": 1,
+      "message": "No need to declare/initialize it here, just to set a few lines below. Make it construct in line 158, just like you do in line 128.",
+      "range": {
+        "startLine": 155,
+        "startChar": 4,
+        "endLine": 155,
+        "endChar": 56
+      },
+      "revId": "956c52860129b6b3e6a47e2b9086c189bb4d3454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "263a8b02_00d470fb",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-14T16:06:43Z",
+      "side": 1,
+      "message": "and here, too, you declare it, then set immediately in the following line. Please look at what I posted before.",
+      "range": {
+        "startLine": 198,
+        "startChar": 38,
+        "endLine": 198,
+        "endChar": 54
+      },
+      "revId": "956c52860129b6b3e6a47e2b9086c189bb4d3454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
