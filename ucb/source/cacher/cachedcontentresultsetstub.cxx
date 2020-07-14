@@ -172,7 +172,7 @@ sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& S
 
 css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
 {
-    return { CACHED_CRS_STUB_SERVICE_NAME };
+    return { "com.sun.star.ucb.CachedContentResultSetStub" };
 }
 
 
@@ -508,33 +508,29 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 
 // CachedContentResultSetStubFactory XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
-                          "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & )
+OUString SAL_CALL CachedContentResultSetStubFactory::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new CachedContentResultSetStubFactory;
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.CachedContentResultSetStubFactory";
 }
-css::uno::Sequence< OUString >
-CachedContentResultSetStubFactory::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
 {
-    return { CACHED_CRS_STUB_FACTORY_NAME };
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.CachedContentResultSetStubFactory" };
 }
 
 // Service factory implementation.
 
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-CachedContentResultSetStubFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_CachedContentResultSetStubFactory_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                CachedContentResultSetStubFactory::getImplementationName_Static(),
-                CachedContentResultSetStubFactory_CreateInstance,
-                CachedContentResultSetStubFactory::getSupportedServiceNames_Static() );
+    return cppu::acquire(new CachedContentResultSetStubFactory());
 }
+
 
 
 

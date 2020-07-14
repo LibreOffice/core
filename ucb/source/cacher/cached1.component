@@ -18,17 +18,21 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="cached1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ucb.CachedContentResultSetFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ucb.CachedContentResultSetFactory"
+    constructor="ucb_CachedContentResultSetFactory_get_implementation">
     <service name="com.sun.star.ucb.CachedContentResultSetFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.ucb.CachedContentResultSetStubFactory">
+  <implementation name="com.sun.star.comp.ucb.CachedContentResultSetStubFactory"
+    constructor="ucb_CachedContentResultSetStubFactory_get_implementation">
     <service name="com.sun.star.ucb.CachedContentResultSetStubFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.ucb.CachedDynamicResultSetFactory">
+  <implementation name="com.sun.star.comp.ucb.CachedDynamicResultSetFactory"
+    constructor="ucb_CachedDynamicResultSetFactory_get_implementation">
     <service name="com.sun.star.ucb.CachedDynamicResultSetFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory">
+  <implementation name="com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory"
+    constructor="ucb_CachedDynamicResultSetStubFactory_get_implementation">
     <service name="com.sun.star.ucb.CachedDynamicResultSetStubFactory"/>
   </implementation>
 </component>

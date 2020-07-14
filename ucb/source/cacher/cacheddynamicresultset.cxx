@@ -130,7 +130,7 @@ sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& Servi
 
 css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSet::getSupportedServiceNames()
 {
-    return { CACHED_DRS_SERVICE_NAME };
+    return { "com.sun.star.ucb.CachedDynamicResultSet" };
 }
 
 
@@ -160,37 +160,29 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 
 // CachedDynamicResultSetFactory XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
-                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL CachedDynamicResultSetFactory::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new CachedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.CachedDynamicResultSetFactory";
 }
-
-css::uno::Sequence< OUString >
-CachedDynamicResultSetFactory::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL CachedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
 {
-    css::uno::Sequence< OUString > aSNS { CACHED_DRS_FACTORY_NAME };
-    return aSNS;
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetFactory::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.CachedDynamicResultSetFactory" };
 }
 
 // Service factory implementation.
 
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-CachedDynamicResultSetFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_CachedDynamicResultSetFactory_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                CachedDynamicResultSetFactory::getImplementationName_Static(),
-                CachedDynamicResultSetFactory_CreateInstance,
-                CachedDynamicResultSetFactory::getSupportedServiceNames_Static() );
+    return cppu::acquire(new CachedDynamicResultSetFactory(context));
 }
-
-
 
 // CachedDynamicResultSetFactory XCachedDynamicResultSetFactory methods.
 

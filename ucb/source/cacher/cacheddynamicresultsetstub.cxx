@@ -132,7 +132,7 @@ sal_Bool SAL_CALL CachedDynamicResultSetStub::supportsService( const OUString& S
 
 css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStub::getSupportedServiceNames()
 {
-    return { CACHED_DRS_STUB_SERVICE_NAME };
+    return { "com.sun.star.ucb.CachedDynamicResultSetStub" };
 }
 
 
@@ -151,36 +151,29 @@ CachedDynamicResultSetStubFactory::~CachedDynamicResultSetStubFactory()
 
 // CachedDynamicResultSetStubFactory XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetStubFactory,
-                          "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-CachedDynamicResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL CachedDynamicResultSetStubFactory::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new CachedDynamicResultSetStubFactory( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory";
 }
-
-css::uno::Sequence< OUString >
-CachedDynamicResultSetStubFactory::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL CachedDynamicResultSetStubFactory::supportsService( const OUString& ServiceName )
 {
-    css::uno::Sequence< OUString > aSNS { CACHED_DRS_STUB_FACTORY_NAME };
-    return aSNS;
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStubFactory::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.CachedDynamicResultSetStubFactory" };
 }
 
 // Service factory implementation.
 
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-CachedDynamicResultSetStubFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                CachedDynamicResultSetStubFactory::getImplementationName_Static(),
-                CachedDynamicResultSetStubFactory_CreateInstance,
-                CachedDynamicResultSetStubFactory::getSupportedServiceNames_Static() );
-}
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_CachedDynamicResultSetStubFactory_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new CachedDynamicResultSetStubFactory(context));
+}
 
 
 // CachedDynamicResultSetStubFactory XCachedDynamicResultSetStubFactory methods.
