@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="iacc2" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.accessibility.my_sc_implementation.MSAAService">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.accessibility.my_sc_implementation.MSAAService"
+    constructor="winaccessibility_MSAAServiceImpl_get_implementation">
     <service name="com.sun.star.accessibility.MSAAService"/>
   </implementation>
 </component>
