@@ -598,10 +598,10 @@ endef
 gb_AUTOCONF_WRAPPERS = \
 	REAL_CC="$(shell cygpath -w $(filter-out -%,$(CC)))" \
 	REAL_CC_FLAGS="$(filter -%,$(CC))" \
-	CC="$(call gb_Executable_get_target_for_build,gcc-wrapper)" \
+	CC="$(call gb_Executable_get_target_for_build,gcc-wrapper) $(if $(verbose),--wrapper-print-cmdline)" \
 	REAL_CXX="$(shell cygpath -w $(filter-out -%,$(CXX)))" \
 	REAL_CXX_FLAGS="$(filter -%,$(CXX))" \
-	CXX="$(call gb_Executable_get_target_for_build,g++-wrapper)" \
+	CXX="$(call gb_Executable_get_target_for_build,g++-wrapper) $(if $(verbose),--wrapper-print-cmdline)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
 
 gb_ExternalProject_INCLUDE := \

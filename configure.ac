@@ -4976,14 +4976,14 @@ if test "$cross_compiling" = "yes"; then
     mv config_host/*.h ../config_build
 
     OLD_PATH=$PATH
-    . ./bin/get_config_variables CC CXX INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables CC CXX ILIB INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT WORKDIR
     BUILD_PATH=$PATH
     PATH=$OLD_PATH
 
     line=`echo "LO_PATH_FOR_BUILD='${BUILD_PATH}'" | sed -e 's,/CONF-FOR-BUILD,,g'`
     echo "$line" >>build-config
 
-    for V in CC CXX LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT; do
+    for V in CC CXX ILIB LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER LIBO_URE_MISC_FOLDER OS SDKDIRNAME SYSTEM_LIBXML SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -5035,6 +5035,8 @@ AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_URE_MISC_FOLDER_FOR_BUILD)
 AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
+AC_SUBST(CC_FOR_BUILD)
+AC_SUBST(CXX_FOR_BUILD)
 
 dnl ===================================================================
 dnl Check for syslog header
@@ -13305,8 +13307,12 @@ if test "$build_os" = "cygwin"; then
         ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_HOST_ARCH"
     fi
 
-    AC_SUBST(ILIB)
+    if test "$cross_compiling" != "yes"; then
+        ILIB_FOR_BUILD="$ILIB"
+    fi
 fi
+AC_SUBST(ILIB)
+AC_SUBST(ILIB_FOR_BUILD)
 
 # ===================================================================
 # Creating bigger shared library to link against

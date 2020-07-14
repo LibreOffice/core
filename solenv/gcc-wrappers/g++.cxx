@@ -9,19 +9,21 @@
 
 #include "wrapper.hxx"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
     vector<string> rawargs(argv + 1, argv + argc);
 
-    string command=getexe("REAL_CXX");
-    string flags=getexe("REAL_CXX_FLAGS", true);
+    string env_prefix; // defaults to REAL_
+    bool verbose = false;
+    string args = processccargs(rawargs, env_prefix, verbose);
 
-    string args=flags.empty() ? string() : flags + " ";
-    args += processccargs(rawargs);
+    string command = getexe(env_prefix + "CXX");
+    string flags = getexe(env_prefix + "CXX_FLAGS", true);
+    args.insert(0, flags.empty() ? string() : flags + " ");
 
     setupccenv();
 
-    return startprocess(command,args);
-
+    return startprocess(command, args, verbose);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
