@@ -91,6 +91,10 @@ public:
     void testRoundtripPrstDash();
     void testDashOnHairline();
     void testCustomshapeBitmapfillSrcrect();
+    void testTdf128345FullTransparentGradient();
+    void testTdf128345GradientLinear();
+    void testTdf128345GradientRadial();
+    void testTdf128345GradientAxial();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -131,6 +135,10 @@ public:
     CPPUNIT_TEST(testRoundtripPrstDash);
     CPPUNIT_TEST(testDashOnHairline);
     CPPUNIT_TEST(testCustomshapeBitmapfillSrcrect);
+    CPPUNIT_TEST(testTdf128345FullTransparentGradient);
+    CPPUNIT_TEST(testTdf128345GradientLinear);
+    CPPUNIT_TEST(testTdf128345GradientRadial);
+    CPPUNIT_TEST(testTdf128345GradientAxial);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1094,6 +1102,78 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
     double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
     CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+}
+
+void SdOOXMLExportTest1::testTdf128345FullTransparentGradient()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_FullTransparentGradient.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the shape has no fill. Without the patch, fill was solid red.
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr");
+    assertXPath(pXmlDoc, sPathStart + "/a:noFill");
+}
+
+void SdOOXMLExportTest1::testTdf128345GradientLinear()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_GradientLinear.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the shape has a lin fill. Without the patch, fill was solid red.
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:lin", "ang", "3600000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]", "pos", "25000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "20000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]", "pos", "100000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "80000");
+}
+
+void SdOOXMLExportTest1::testTdf128345GradientRadial()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_GradientRadial.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the shape has transparency. In OOXML alpha means 'opacity' with default
+    // 100000 for full opak, so only the full transparency with val 0 should be written.
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr", "val", "ffffff");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0");
+}
+
+void SdOOXMLExportTest1::testTdf128345GradientAxial()
+{
+    // Without the patch, symmtetric linear gradient with full transparence outside and
+    // full opak in the middle were imported as full transparent.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_GradientAxial.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    uno::Reference<beans::XPropertySet> xShapePropSet(getShapeFromPage(0, 0, xDocShRef));
+
+    awt::Gradient aTransparenceGradient;
+    xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
