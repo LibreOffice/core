@@ -48,11 +48,10 @@
 #include "dx_graphicsprovider.hxx"
 #include "dx_winstuff.hxx"
 
-#define CANVAS_TECH "GDI+"
-#define CANVAS_SERVICE_NAME              "com.sun.star.rendering.Canvas."            CANVAS_TECH
-#define CANVAS_IMPLEMENTATION_NAME       "com.sun.star.comp.rendering.Canvas."       CANVAS_TECH
-#define BITMAPCANVAS_SERVICE_NAME        "com.sun.star.rendering.BitmapCanvas."      CANVAS_TECH
-#define BITMAPCANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.BitmapCanvas." CANVAS_TECH
+#define CANVAS_SERVICE_NAME              "com.sun.star.rendering.Canvas.GDI+"
+#define CANVAS_IMPLEMENTATION_NAME       "com.sun.star.comp.rendering.Canvas.GDI+"
+#define BITMAPCANVAS_SERVICE_NAME        "com.sun.star.rendering.BitmapCanvas.GDI+"
+#define BITMAPCANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.BitmapCanvas.GDI+"
 
 
 using namespace ::com::sun::star;

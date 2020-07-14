@@ -28,9 +28,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/servicedecl.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -41,15 +39,8 @@
 #include "dx_spritecanvas.hxx"
 #include "dx_winstuff.hxx"
 
-#define CANVAS_TECH "DX9"
-
-#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas."      CANVAS_TECH
-#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas." CANVAS_TECH
-
 
 using namespace ::com::sun::star;
-
-namespace sdecl = comphelper::service_decl;
 
 namespace dxcanvas
 {
@@ -151,7 +142,21 @@ namespace dxcanvas
 
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
-        return SPRITECANVAS_SERVICE_NAME;
+        return "com.sun.star.rendering.SpriteCanvas.DX9";
+    }
+
+    // XServiceInfo
+    css::uno::Sequence<OUString> SpriteCanvas::getSupportedServiceNames(  )
+    {
+        return { "com.sun.star.rendering.SpriteCanvas.DX9" };
+    }
+    OUString SpriteCanvas::getImplementationName(  )
+    {
+        return "com.sun.star.comp.rendering.SpriteCanvas.DX9";
+    }
+    sal_Bool SpriteCanvas::supportsService( const OUString& sServiceName )
+    {
+        return cppu::supportsService(this, sServiceName);
     }
 
     const IDXRenderModuleSharedPtr& SpriteCanvas::getRenderModule() const
@@ -180,19 +185,17 @@ namespace dxcanvas
         return xRet;
     }
 
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > const serviceImpl(&initCanvas);
-    const sdecl::ServiceDecl dxSpriteCanvasDecl(
-        serviceImpl,
-        SPRITECANVAS_IMPLEMENTATION_NAME,
-        SPRITECANVAS_SERVICE_NAME );
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    canvas_directx9_SpriteCanvas_get_implementation(
+       css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    {
+        rtl::Reference<SpriteCanvas> xCanvas(new SpriteCanvas(args, context));
+        xCanvas->initialize();
+        xCanvas->acquire();
+        return static_cast<cppu::OWeakObject*>(xCanvas.get());
+    }
+
 }
 
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* directx9canvas_component_getFactory( char const* pImplName,
-                                         void*, void* )
-{
-    return sdecl::component_getFactoryHelper( pImplName, {&dxcanvas::dxSpriteCanvasDecl} );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
