@@ -296,8 +296,8 @@ LANGUAGETOOL_TARBALL := b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LCMS2_SHA256SUM := 48c6fdf98396fa245ed86e622028caf49b96fa22f3e5734f853f806fbc8e7d20
-LCMS2_TARBALL := lcms2-2.9.tar.gz
+LCMS2_SHA256SUM := dc49b9c8e4d7cdff376040571a722902b682a795bf92985a85b48854c270772e
+LCMS2_TARBALL := lcms2-2.11.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
