@@ -625,13 +625,13 @@ EncryptionStandardHeader::EncryptionStandardHeader()
 
 EncryptionVerifierAES::EncryptionVerifierAES()
     : saltSize(SALT_LENGTH)
-    , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
+    , encryptedVerifierHashSize(comphelper::SHA1_HASH_LENGTH)
 {
 }
 
 EncryptionVerifierRC4::EncryptionVerifierRC4()
     : saltSize(SALT_LENGTH)
-    , encryptedVerifierHashSize(SHA1_HASH_LENGTH)
+    , encryptedVerifierHashSize(comphelper::SHA1_HASH_LENGTH)
 {
 }
 

@@ -139,13 +139,13 @@ size_t Hash::getLength() const
     switch (mpImpl->meType)
     {
         case HashType::MD5:
-            return 16;
+            return MD5_HASH_LENGTH;
         case HashType::SHA1:
-            return 20;
+            return SHA1_HASH_LENGTH;
         case HashType::SHA256:
-            return 32;
+            return SHA256_HASH_LENGTH;
         case HashType::SHA512:
-            return 64;
+            return SHA512_HASH_LENGTH;
     }
 
     return 0;

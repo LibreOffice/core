@@ -54,11 +54,11 @@ bool Standard2007Engine::generateVerifier()
         return false;
     std::copy(encryptedVerifier.begin(), encryptedVerifier.end(), mInfo.verifier.encryptedVerifier);
 
-    mInfo.verifier.encryptedVerifierHashSize = msfilter::SHA1_HASH_LENGTH;
+    mInfo.verifier.encryptedVerifierHashSize = comphelper::SHA1_HASH_LENGTH;
     std::vector<sal_uInt8> hash = comphelper::Hash::calculateHash(verifier.data(), verifier.size(), comphelper::HashType::SHA1);
-    hash.resize(msfilter::SHA256_HASH_LENGTH, 0);
+    hash.resize(comphelper::SHA256_HASH_LENGTH, 0);
 
-    std::vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH, 0);
+    std::vector<sal_uInt8> encryptedHash(comphelper::SHA256_HASH_LENGTH, 0);
 
     Encrypt aEncryptorHash(mKey, iv, Crypto::AES_128_ECB);
     aEncryptorHash.update(encryptedHash, hash, hash.size());
@@ -89,7 +89,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     std::vector<sal_uInt8> hash = comphelper::Hash::calculateHash(initialData.data(), initialData.size(), comphelper::HashType::SHA1);
 
     // data = iterator (4bytes) + hash
-    std::vector<sal_uInt8> data(msfilter::SHA1_HASH_LENGTH + 4, 0);
+    std::vector<sal_uInt8> data(comphelper::SHA1_HASH_LENGTH + 4, 0);
 
     for (sal_Int32 i = 0; i < 50000; ++i)
     {
@@ -98,7 +98,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         hash = comphelper::Hash::calculateHash(data.data(), data.size(), comphelper::HashType::SHA1);
     }
     std::copy(hash.begin(), hash.end(), data.begin() );
-    std::fill(data.begin() + msfilter::SHA1_HASH_LENGTH, data.end(), 0 );
+    std::fill(data.begin() + comphelper::SHA1_HASH_LENGTH, data.end(), 0 );
 
     hash = comphelper::Hash::calculateHash(data.data(), data.size(), comphelper::HashType::SHA1);
 
@@ -140,10 +140,10 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
         mInfo.verifier.encryptedVerifier + msfilter::ENCRYPTED_VERIFIER_LENGTH,
         encryptedVerifier.begin());
 
-    std::vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH);
+    std::vector<sal_uInt8> encryptedHash(comphelper::SHA256_HASH_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifierHash,
-        mInfo.verifier.encryptedVerifierHash + msfilter::SHA256_HASH_LENGTH,
+        mInfo.verifier.encryptedVerifierHash + comphelper::SHA256_HASH_LENGTH,
         encryptedHash.begin());
 
     std::vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);

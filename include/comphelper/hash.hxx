@@ -11,6 +11,7 @@
 #define INCLUDED_COMPHELPER_HASH_HXX
 
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/digest.h>
 
 #include <memory>
 #include <vector>
@@ -28,6 +29,11 @@ enum class HashType
     SHA256,
     SHA512
 };
+
+const sal_uInt32 MD5_HASH_LENGTH = RTL_DIGEST_LENGTH_MD5;
+const sal_uInt32 SHA1_HASH_LENGTH = RTL_DIGEST_LENGTH_SHA1;
+const sal_uInt32 SHA256_HASH_LENGTH = 32;
+const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct HashImpl;
 
