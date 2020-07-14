@@ -666,6 +666,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_FILL_SHADOW:
         case SID_ATTR_SHADOW_COLOR:
         case SID_ATTR_SHADOW_TRANSPARENCE:
+        case SID_ATTR_SHADOW_BLUR:
         case SID_ATTR_SHADOW_XDISTANCE:
         case SID_ATTR_SHADOW_YDISTANCE:
         case SID_ATTR_FILL_TRANSPARENCE:
@@ -698,6 +699,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_ATTR_FILL_SHADOW:
                     case SID_ATTR_SHADOW_COLOR:
                     case SID_ATTR_SHADOW_TRANSPARENCE:
+                    case SID_ATTR_SHADOW_BLUR:
                     case SID_ATTR_SHADOW_XDISTANCE:
                     case SID_ATTR_SHADOW_YDISTANCE:
                     case SID_ATTR_FILL_STYLE:

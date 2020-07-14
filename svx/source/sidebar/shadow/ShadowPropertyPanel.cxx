@@ -34,6 +34,7 @@ ShadowPropertyPanel::ShadowPropertyPanel(
 :   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame),
     maShadowController(SID_ATTR_FILL_SHADOW, *pBindings, *this),
     maShadowTransController(SID_ATTR_SHADOW_TRANSPARENCE, *pBindings, *this),
+    maShadowBlurController(SID_ATTR_SHADOW_BLUR, *pBindings, *this),
     maShadowColorController(SID_ATTR_SHADOW_COLOR, *pBindings, *this),
     maShadowXDistanceController(SID_ATTR_SHADOW_XDISTANCE, *pBindings, *this),
     maShadowYDistanceController(SID_ATTR_SHADOW_YDISTANCE, *pBindings, *this),
@@ -48,9 +49,11 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     mxFTAngle(m_xBuilder->weld_label("angle")),
     mxFTDistance(m_xBuilder->weld_label("distance")),
     mxFTTransparency(m_xBuilder->weld_label("transparency_label")),
+    mxFTBlur(m_xBuilder->weld_label("blur_label")),
     mxFTColor(m_xBuilder->weld_label("color")),
     mxShadowTransSlider(m_xBuilder->weld_scale("transparency_slider")),
-    mxShadowTransMetric(m_xBuilder->weld_metric_spin_button("FIELD_TRANSPARENCY", FieldUnit::PERCENT))
+    mxShadowTransMetric(m_xBuilder->weld_metric_spin_button("FIELD_TRANSPARENCY", FieldUnit::PERCENT)),
+    mxShadowBlurMetric(m_xBuilder->weld_metric_spin_button("LB_SHADOW_BLUR", FieldUnit::POINT))
 {
     Initialize();
 }
@@ -70,11 +73,14 @@ void ShadowPropertyPanel::dispose()
     mxFTTransparency.reset();
     mxShadowTransSlider.reset();
     mxShadowTransMetric.reset();
+    mxShadowBlurMetric.reset();
+    mxFTBlur.reset();
     mxFTColor.reset();
     mxLBShadowColor.reset();
 
     maShadowController.dispose();
     maShadowTransController.dispose();
+    maShadowBlurController.dispose();
     maShadowColorController.dispose();
     maShadowXDistanceController.dispose();
     maShadowYDistanceController.dispose();
@@ -91,6 +97,8 @@ void ShadowPropertyPanel::Initialize()
     mxShadowDistance->connect_value_changed( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
     mxShadowTransSlider->set_range(0, 100);
     mxShadowTransSlider->connect_value_changed( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
+    mxShadowBlurMetric->set_range(0, 150, FieldUnit::POINT);
+    mxShadowBlurMetric->connect_value_changed(LINK(this, ShadowPropertyPanel, ModifyShadowBlurMetricHdl));
     InsertAngleValues();
 }
 
@@ -124,6 +132,13 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, weld::MetricSpi
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
             SfxCallMode::RECORD, { &aItem });
+}
+
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowBlurMetricHdl, weld::MetricSpinButton&, void)
+{
+    SdrMetricItem aItem(SDRATTR_SHADOWBLUR, mxShadowBlurMetric->get_value(FieldUnit::MM_100TH));
+
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_BLUR, SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, weld::Scale&, void)
@@ -178,9 +193,12 @@ void ShadowPropertyPanel::UpdateControls()
         mxFTAngle->set_sensitive(false);
         mxFTDistance->set_sensitive(false);
         mxFTTransparency->set_sensitive(false);
+        mxFTBlur->set_sensitive(false);
         mxFTColor->set_sensitive(false);
         mxShadowTransSlider->set_sensitive(false);
         mxShadowTransMetric->set_sensitive(false);
+        mxShadowBlurMetric->set_sensitive(false);
+
         return;
     }
     else
@@ -191,9 +209,11 @@ void ShadowPropertyPanel::UpdateControls()
         mxFTAngle->set_sensitive(true);
         mxFTDistance->set_sensitive(true);
         mxFTTransparency->set_sensitive(true);
+        mxFTBlur->set_sensitive(true);
         mxFTColor->set_sensitive(true);
         mxShadowTransSlider->set_sensitive(true);
         mxShadowTransMetric->set_sensitive(true);
+        mxShadowBlurMetric->set_sensitive(true);
     }
 
     if(nX > 0 && nY == 0) { mxShadowAngle->set_active(0); nXY = nX; }
@@ -274,7 +294,18 @@ void ShadowPropertyPanel::NotifyItemUpdate(
             }
         }
         break;
-
+        case SID_ATTR_SHADOW_BLUR:
+        {
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                const SdrMetricItem* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState);
+                if (pRadiusItem)
+                {
+                    mxShadowBlurMetric->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
+                }
+            }
+        }
+        break;
         case SID_ATTR_SHADOW_COLOR:
         {
             if(eState >= SfxItemState::DEFAULT)

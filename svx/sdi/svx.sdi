@@ -7708,6 +7708,23 @@ SdrPercentItem FillShadowTransparency SID_ATTR_SHADOW_TRANSPARENCE
     GroupId = SfxGroupId::Document;
 ]
 
+SdrMetricItem ShadowBlur SID_ATTR_SHADOW_BLUR
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
+
 SdrMetricItem FillShadowXDistance SID_ATTR_SHADOW_XDISTANCE
 
 [

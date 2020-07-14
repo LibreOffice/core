@@ -54,6 +54,7 @@ public:
 private:
     ::sfx2::sidebar::ControllerItem maShadowController;
     ::sfx2::sidebar::ControllerItem maShadowTransController;
+    ::sfx2::sidebar::ControllerItem maShadowBlurController;
     ::sfx2::sidebar::ControllerItem maShadowColorController;
     ::sfx2::sidebar::ControllerItem maShadowXDistanceController;
     ::sfx2::sidebar::ControllerItem maShadowYDistanceController;
@@ -68,9 +69,11 @@ private:
     std::unique_ptr<weld::Label> mxFTAngle;
     std::unique_ptr<weld::Label> mxFTDistance;
     std::unique_ptr<weld::Label> mxFTTransparency;
+    std::unique_ptr<weld::Label> mxFTBlur;
     std::unique_ptr<weld::Label> mxFTColor;
     std::unique_ptr<weld::Scale> mxShadowTransSlider;
     std::unique_ptr<weld::MetricSpinButton> mxShadowTransMetric;
+    std::unique_ptr<weld::MetricSpinButton> mxShadowBlurMetric;
 
     void InsertAngleValues();
     void SetTransparencyValue(long);
@@ -83,6 +86,7 @@ private:
     DECL_LINK(ModifyShadowAngleHdl, weld::ComboBox&, void);
     DECL_LINK(ModifyShadowDistanceHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyShadowTransSliderHdl, weld::Scale&, void);
+    DECL_LINK(ModifyShadowBlurMetricHdl, weld::MetricSpinButton&, void);
 };
 
 }

@@ -1829,6 +1829,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_SHADOW_BLUR
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_SHADOW_XDISTANCE
     [
         ExecMethod = FuTemporary;
