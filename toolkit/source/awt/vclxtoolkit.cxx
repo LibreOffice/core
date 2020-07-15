@@ -81,6 +81,7 @@
 #include <controls/filectrl.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
+#include <vcl/calendar.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>
@@ -1814,6 +1815,16 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<DoubleCurrencyField>::Create( pParent, nWinBits );
                     *ppNewComp = new SVTXCurrencyField;
+                }
+                else if (aServiceName == "datefield")
+                {
+                    pNewWindow = VclPtr<CalendarField>::Create(pParent, nWinBits);
+                    static_cast<CalendarField*>(pNewWindow.get())->EnableToday();
+                    static_cast<CalendarField*>(pNewWindow.get())->EnableNone();
+                    static_cast<CalendarField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
+                    SVTXDateField * newComp = new SVTXDateField;
+                    *ppNewComp = newComp;
+                    newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
                 }
             break;
             default:

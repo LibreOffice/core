@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_CALENDAR_HXX
-#define INCLUDED_SVTOOLS_CALENDAR_HXX
+#pragma once
 
 #include <config_options.h>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
@@ -65,7 +64,7 @@ method in CalendarField and create an own calendar there ourselves.
 *************************************************************************/
 
 
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) CalendarField final : public DateField
+class VCL_DLLPUBLIC CalendarField final : public DateField
 {
 private:
     VclPtr<ImplCFieldFloatWin> mpFloatWin;
@@ -91,7 +90,5 @@ public:
 private:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
 };
-
-#endif // INCLUDED_SVTOOLS_CALENDAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -98,18 +98,4 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class SVTXDateField : public VCLXDateField
-{
-public:
-                    SVTXDateField();
-                    virtual ~SVTXDateField() override;
-
-    // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

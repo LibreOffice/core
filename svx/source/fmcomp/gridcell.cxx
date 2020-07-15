@@ -55,7 +55,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <rtl/math.hxx>
-#include <svtools/calendar.hxx>
+#include <vcl/calendar.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>
