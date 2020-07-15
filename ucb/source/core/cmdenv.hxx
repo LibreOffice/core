@@ -60,13 +60,6 @@ public:
     getInteractionHandler() override;
     virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
     getProgressHandler() override;
-
-    // Non-UNO interfaces
-    static OUString  getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 };
 
 } // namespace ucb_cmdenv

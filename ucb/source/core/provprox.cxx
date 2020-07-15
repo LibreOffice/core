@@ -26,6 +26,7 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/macros.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -36,8 +37,8 @@ using namespace com::sun::star::uno;
 
 
 UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
-                        const Reference< XMultiServiceFactory >& rxSMgr )
-: m_xSMgr( rxSMgr )
+                        const Reference< XComponentContext >& rxContext )
+: m_xContext( rxContext )
 {
 }
 
@@ -49,16 +50,15 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( UcbContentProviderProxyFactory,
-                          "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-UcbContentProviderProxyFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL UcbContentProviderProxyFactory::getImplementationName()
 {
-    return static_cast<css::lang::XServiceInfo*>(new UcbContentProviderProxyFactory(rSMgr));
+    return "com.sun.star.comp.ucb.UcbContentProviderProxyFactory";
 }
-css::uno::Sequence< OUString >
-UcbContentProviderProxyFactory::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSupportedServiceNames()
 {
     return { "com.sun.star.ucb.ContentProviderProxyFactory" };
 }
@@ -66,14 +66,13 @@ UcbContentProviderProxyFactory::getSupportedServiceNames_Static()
 // Service factory implementation.
 
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-UcbContentProviderProxyFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_UcbContentProviderProxyFactory_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                UcbContentProviderProxyFactory::getImplementationName_Static(),
-                UcbContentProviderProxyFactory_CreateInstance,
-                UcbContentProviderProxyFactory::getSupportedServiceNames_Static() );
+    static rtl::Reference<UcbContentProviderProxyFactory> g_Instance(new UcbContentProviderProxyFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 
@@ -86,7 +85,7 @@ UcbContentProviderProxyFactory::createContentProvider(
                                                 const OUString& Service )
 {
     return Reference< XContentProvider >(
-                        new UcbContentProviderProxy( m_xSMgr, Service ) );
+                        new UcbContentProviderProxy( m_xContext, Service ) );
 }
 
 
@@ -94,12 +93,12 @@ UcbContentProviderProxyFactory::createContentProvider(
 
 
 UcbContentProviderProxy::UcbContentProviderProxy(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XComponentContext >& rxContext,
                         const OUString& Service )
 : m_aService( Service ),
   m_bReplace( false ),
   m_bRegister( false ),
-  m_xSMgr( rxSMgr )
+  m_xContext( rxContext )
 {
 }
 
@@ -305,7 +304,7 @@ UcbContentProviderProxy::getContentProvider()
     {
         try
         {
-            m_xProvider.set( m_xSMgr->createInstance( m_aService ), UNO_QUERY );
+            m_xProvider.set( m_xContext->getServiceManager()->createInstanceWithContext( m_aService,m_xContext ), UNO_QUERY );
             if ( m_aArguments == "NoConfig" )
             {
                 Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);
