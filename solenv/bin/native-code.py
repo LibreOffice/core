@@ -26,7 +26,6 @@ core_factory_list = [
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
-    ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
@@ -326,6 +325,13 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# ucb/source/core/ucb1.component
+    "ucb_UcbCommandEnvironment_get_implementation",
+    "ucb_UcbContentProviderProxyFactory_get_implementation",
+    "ucb_UcbPropertiesManager_get_implementation",
+    "ucb_UcbStore_get_implementation",
+    "ucb_UniversalContentBroker_get_implementation",
+    "ucb_OFileAccess_get_implementation",
 # ucb/source/tdoc/ucptdoc1.component
     "ucb_tdoc_ContentProvider_get_implementation",
     "ucb_tdoc_DocumentContentFactory_get_implementation",

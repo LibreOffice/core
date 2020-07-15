@@ -35,6 +35,7 @@
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
 #include <ucbhelper/macros.hxx>
+#include <rtl/ref.hxx>
 
 #include "ucbprops.hxx"
 
@@ -195,34 +196,31 @@ UcbPropertiesManager::~UcbPropertiesManager()
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
-                          "com.sun.star.comp.ucb.UcbPropertiesManager" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & /*rSMgr*/ )
+OUString SAL_CALL UcbPropertiesManager::getImplementationName()
 {
-    return static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager);
+    return "com.sun.star.comp.ucb.UcbPropertiesManager";
 }
-css::uno::Sequence< OUString >
-UcbPropertiesManager::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL UcbPropertiesManager::supportsService( const OUString& ServiceName )
 {
-    return { PROPERTIES_MANAGER_SERVICE_NAME };
+    return cppu::supportsService( this, ServiceName );
 }
+css::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.PropertiesManager" };
+}
+
+
 
 // Service factory implementation.
 
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-UcbPropertiesManager::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_UcbPropertiesManager_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                UcbPropertiesManager::getImplementationName_Static(),
-                UcbPropertiesManager_CreateInstance,
-                UcbPropertiesManager::getSupportedServiceNames_Static() );
+    static rtl::Reference<UcbPropertiesManager> g_Instance(new UcbPropertiesManager());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
-
 
 // XPropertySetInfo methods.
 
