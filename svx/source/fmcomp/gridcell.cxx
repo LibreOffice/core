@@ -55,7 +55,6 @@
 #include <i18nlangtag/lang.h>
 
 #include <rtl/math.hxx>
-#include <vcl/calendar.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>
@@ -2148,21 +2147,20 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-VclPtr<Control> DbDateField::createField(BrowserDataWin* _pParent, bool bSpinButton, const Reference< XPropertySet >& _rxModel  )
+VclPtr<Control> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& rxModel)
 {
-    WinBits _nFieldStyle = bSpinButton ? (WB_REPEAT | WB_SPIN) : 0;
     // check if there is a DropDown property set to TRUE
-    bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, _rxModel )
-                        ||  getBOOL( _rxModel->getPropertyValue( FM_PROP_DROPDOWN ) );
-    if ( bDropDown )
-        _nFieldStyle |= WB_DROPDOWN;
+    bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, rxModel )
+                        ||  getBOOL( rxModel->getPropertyValue( FM_PROP_DROPDOWN ) );
+    // given the apparent inability to set a custom up/down action for a gtk
+    // spinbutton to have different up/down dates depending on the zone the
+    // mouse is in, show the dropdown calender for both the spin or dropdown case
+    return VclPtr<DateControl>::Create(pParent, bSpinButton || bDropDown);
+}
 
-    VclPtr<CalendarField> pField = VclPtr<CalendarField>::Create( _pParent, _nFieldStyle );
-
-    pField->EnableToday();
-    pField->EnableNone();
-
-    return pField;
+CellControllerRef DbDateField::CreateController() const
+{
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
 }
 
 void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
@@ -2179,32 +2177,37 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) >>= aMax );
     bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    weld::DateFormatter& rControlFormatter = static_cast<weld::DateFormatter&>(pControl->get_formatter());
+
+    FormattedControlBase* pPainter = static_cast<FormattedControlBase*>(m_pPainter.get());
+    weld::DateFormatter& rPainterFormatter = static_cast<weld::DateFormatter&>(pPainter->get_formatter());
+
     Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
     if ( aCentury.getValueType().getTypeClass() != TypeClass_VOID )
     {
         bool bShowDateCentury = getBOOL( aCentury );
 
-        static_cast<DateField*>( m_pWindow.get() )->SetShowDateCentury( bShowDateCentury );
-        static_cast<DateField*>( m_pPainter.get() )->SetShowDateCentury( bShowDateCentury );
+        rControlFormatter.SetShowDateCentury(bShowDateCentury);
+        rPainterFormatter.SetShowDateCentury(bShowDateCentury);
     }
 
-    static_cast< DateField* >( m_pWindow.get() )->SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
-    static_cast< DateField* >( m_pWindow.get() )->SetMin( aMin );
-    static_cast< DateField* >( m_pWindow.get() )->SetMax( aMax );
-    static_cast< DateField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-    static_cast< DateField* >( m_pWindow.get() )->EnableEmptyFieldValue( true );
+    rControlFormatter.SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
+    rControlFormatter.SetMin( aMin );
+    rControlFormatter.SetMax( aMax );
+    rControlFormatter.SetStrictFormat( bStrict );
+    rControlFormatter.EnableEmptyField( true );
 
-    static_cast< DateField* >( m_pPainter.get() )->SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
-    static_cast< DateField* >( m_pPainter.get() )->SetMin( aMin );
-    static_cast< DateField* >( m_pPainter.get() )->SetMax( aMax );
-    static_cast< DateField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
-    static_cast< DateField* >( m_pPainter.get() )->EnableEmptyFieldValue( true );
+    rPainterFormatter.SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
+    rPainterFormatter.SetMin( aMin );
+    rPainterFormatter.SetMax( aMax );
+    rPainterFormatter.SetStrictFormat( bStrict );
+    rPainterFormatter.EnableEmptyField( true );
 }
 
 namespace
 {
-
-    OUString lcl_setFormattedDate_nothrow( DateField& _rField, const Reference< XColumn >& _rxField )
+    OUString lcl_setFormattedDate_nothrow(DateControl& _rField, const Reference<XColumn>& _rxField)
     {
         OUString sDate;
         if ( _rxField.is() )
@@ -2213,11 +2216,11 @@ namespace
             {
                 css::util::Date aValue = _rxField->getDate();
                 if ( _rxField->wasNull() )
-                    _rField.SetText( sDate );
+                    _rField.get_widget().set_text(sDate);
                 else
                 {
-                    _rField.SetDate( ::Date( aValue.Day, aValue.Month, aValue.Year ) );
-                    sDate = _rField.GetText();
+                    static_cast<weld::DateFormatter&>(_rField.get_formatter()).SetDate(::Date(aValue.Day, aValue.Month, aValue.Year));
+                    sDate = _rField.get_widget().get_text();
                 }
             }
             catch( const Exception& )
@@ -2231,23 +2234,26 @@ namespace
 
 OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-     return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter), _rxField);
+     return lcl_setFormattedDate_nothrow(dynamic_cast<DateControl&>(*m_pPainter), _rxField);
 }
 
 void DbDateField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
-    lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pWindow), _rxField);
+    lcl_setFormattedDate_nothrow(dynamic_cast<DateControl&>(*m_pWindow), _rxField);
 }
 
 void DbDateField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbDateField::updateFromModel: invalid call!" );
 
+    FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    weld::DateFormatter& rControlFormatter = static_cast<weld::DateFormatter&>(pControl->get_formatter());
+
     util::Date aDate;
     if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= aDate )
-        static_cast< DateField* >( m_pWindow.get() )->SetDate( ::Date( aDate ) );
+        rControlFormatter.SetDate(::Date(aDate));
     else
-        static_cast< DateField* >( m_pWindow.get() )->SetText( OUString() );
+        rControlFormatter.get_widget().set_text(OUString());
 }
 
 bool DbDateField::commitControl()
@@ -2255,7 +2261,11 @@ bool DbDateField::commitControl()
     OUString aText(m_pWindow->GetText());
     Any aVal;
     if (!aText.isEmpty())
-        aVal <<= static_cast<DateField*>(m_pWindow.get())->GetDate().GetUNODate();
+    {
+        FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+        weld::DateFormatter& rControlFormatter = static_cast<weld::DateFormatter&>(pControl->get_formatter());
+        aVal <<= rControlFormatter.GetDate().GetUNODate();
+    }
     else
         aVal.clear();
 

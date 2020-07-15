@@ -18,6 +18,7 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/virdev.hxx>
@@ -465,6 +466,29 @@ namespace svt
         else
             m_xEntryFormatter.reset(new weld::TimeFormatter(*m_xEntry));
         InitFormattedControlBase();
+    }
+
+    DateControl::DateControl(BrowserDataWin* pParent, bool bDropDown)
+        : FormattedControlBase(pParent, false)
+        , m_xMenuButton(m_xBuilder->weld_menu_button("button"))
+        , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), "svt/ui/datewindow.ui"))
+        , m_xTopLevel(m_xCalendarBuilder->weld_widget("date_popup_window"))
+        , m_xCalendar(m_xCalendarBuilder->weld_calendar("date"))
+    {
+        m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
+        InitFormattedControlBase();
+
+//TODO        m_xMenuButton->set_popover(m_xTopLevel.get());
+        m_xMenuButton->set_visible(bDropDown);
+    }
+
+    void DateControl::dispose()
+    {
+        m_xCalendar.reset();
+        m_xTopLevel.reset();
+        m_xCalendarBuilder.reset();
+        m_xMenuButton.reset();
+        FormattedControlBase::dispose();
     }
 
     EditCellController::EditCellController(EditControlBase* pEdit)
