@@ -5309,6 +5309,8 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
 
 #if defined(IOS)
 
+    // FIXME: Why don't we use kCGImageAlphaPremultipliedFirst here, too? But doing that doesn't
+    // seem to change anything. Anyway, it would be nice to actually understand why not.
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
     CGContextTranslateCTM(cgc, 0, nHeight);

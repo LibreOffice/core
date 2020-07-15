@@ -209,7 +209,16 @@ bool QuartzSalBitmap::CreateContext()
 
     // default to RGBA color space
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+
+#ifdef IOS
+    // tdf#134832: Unless we use kCGImageAlphaPremultipliedFirst on
+    // iOS here, icons in the sidebar and Calc's formula bar come out
+    // very strange in the iOS app. But I have no deeper understanding
+    // of this mess.
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Little;
+#else
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+#endif
 
     // convert data into something accepted by CGBitmapContextCreate()
     size_t bitsPerComponent = 8;

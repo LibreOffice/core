@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -277,6 +277,8 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #ifdef MACOSX
             const int nFlags = kCGImageAlphaNoneSkipFirst;
 #else
+            // FIXME: Why don't we need to use kCGImageAlphaPremultipliedFirst here? But doing that
+            // has no visible effect in the iOS app. I lack any deeper understanding.
             const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
 #endif
             maBitmapContext.set(CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
