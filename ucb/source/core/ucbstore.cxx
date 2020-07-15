@@ -60,6 +60,8 @@ using namespace com::sun::star::util;
 using namespace comphelper;
 using namespace cppu;
 
+static osl::Mutex g_InstanceGuard;
+static rtl::Reference<UcbStore> g_Instance;
 
 static OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
@@ -147,7 +149,8 @@ struct UcbStore_Impl
 
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
-: m_xContext( xContext ),
+: UcbStore_Base(m_aMutex),
+  m_xContext( xContext ),
   m_pImpl( new UcbStore_Impl )
 {
 }
@@ -158,36 +161,39 @@ UcbStore::~UcbStore()
 {
 }
 
-XSERVICEINFO_COMMOM_IMPL( UcbStore,
-                          "com.sun.star.comp.ucb.UcbStore" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-UcbStore_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+// XComponent
+void SAL_CALL UcbStore::dispose()
 {
-    return static_cast<css::lang::XServiceInfo*>(
-        new UcbStore(ucbhelper::getComponentContext(rSMgr)));
+    UcbStore_Base::dispose();
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    g_Instance.clear();
 }
 
-css::uno::Sequence< OUString >
-UcbStore::getSupportedServiceNames_Static()
+OUString SAL_CALL UcbStore::getImplementationName()
 {
-    css::uno::Sequence< OUString > aSNS { STORE_SERVICE_NAME };
-    return aSNS;
+    return "com.sun.star.comp.ucb.UcbStore";
+}
+sal_Bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.Store" };
 }
 
 // Service factory implementation.
 
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-UcbStore::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_UcbStore_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                UcbStore::getImplementationName_Static(),
-                UcbStore_CreateInstance,
-                UcbStore::getSupportedServiceNames_Static() );
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    if (!g_Instance)
+        g_Instance.set(new UcbStore(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
 
 
 // XPropertySetRegistryFactory methods.
@@ -278,7 +284,7 @@ sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceN
 
 css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedServiceNames()
 {
-    return { PROPSET_REG_SERVICE_NAME };
+    return {  "com.sun.star.ucb.PropertySetRegistry" };
 }
 
 
@@ -1111,10 +1117,9 @@ sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& Servic
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL
-PersistentPropertySet::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServiceNames()
 {
-    return { PERS_PROPSET_SERVICE_NAME };
+    return { "com.sun.star.ucb.PersistentPropertySet" };
 }
 
 

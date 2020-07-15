@@ -20,7 +20,8 @@
 #ifndef INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 #define INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,10 +31,11 @@
 
 namespace ucb_cmdenv {
 
-class UcbCommandEnvironment :
-        public cppu::WeakImplHelper< css::lang::XInitialization,
+using UcbCommandEnvironment_Base = cppu::WeakComponentImplHelper< css::lang::XInitialization,
                                       css::lang::XServiceInfo,
-                                      css::ucb::XCommandEnvironment >
+                                      css::ucb::XCommandEnvironment >;
+
+class UcbCommandEnvironment : public cppu::BaseMutex, public UcbCommandEnvironment_Base
 {
     css::uno::Reference< css::task::XInteractionHandler > m_xIH;
     css::uno::Reference< css::ucb::XProgressHandler >     m_xPH;
@@ -41,6 +43,9 @@ class UcbCommandEnvironment :
 public:
     explicit UcbCommandEnvironment();
     virtual ~UcbCommandEnvironment() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
 
     // XInitialization
     virtual void SAL_CALL
@@ -60,13 +65,6 @@ public:
     getInteractionHandler() override;
     virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
     getProgressHandler() override;
-
-    // Non-UNO interfaces
-    static OUString  getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 };
 
 } // namespace ucb_cmdenv
