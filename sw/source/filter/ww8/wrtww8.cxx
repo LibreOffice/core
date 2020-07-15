@@ -2683,18 +2683,49 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         m_rWW8Export.InsUInt16( aShd.GetValue() );
     }
 
+/*sprmTDefTableShdRaw:
+ * A DefTableShdOperand value that specifies the ... shading for cells 1 up to 22 in the row,
+ * ... Cells 23 to 44 are shaded by sprmTDefTableShdRaw2nd,
+ * and cells 45 to 63 are shaded by sprmTDefTableShdRaw3rd.
+ */
     sal_uInt32 const aSprmIds[] { NS_sprm::TDefTableShd::val,
-                                  NS_sprm::TDefTableShdRaw::val };
-    sal_uInt8 nBoxes0 = rTabBoxes.size();
-    if (nBoxes0 > 21)
-        nBoxes0 = 21;
-
+                                  NS_sprm::TDefTableShdRaw::val,
+                                  NS_sprm::TDefTableShdRaw::val,
+                                  NS_sprm::TDefTableShd2nd::val,
+                                  NS_sprm::TDefTableShdRaw2nd::val,
+                                  NS_sprm::TDefTableShd3rd::val,
+                                  NS_sprm::TDefTableShdRaw3rd::val };
     for (sal_uInt32 m : aSprmIds)
     {
-        m_rWW8Export.InsUInt16( m );
-        m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes0 * 10) );
+        sal_uInt8 nStart = 0;
+        sal_uInt8 nStop = rTabBoxes.size();
+        switch ( m )
+        {
+            case NS_sprm::TDefTableShd::val:
+            case NS_sprm::TDefTableShdRaw::val:
+                if ( nStop > 21 )
+                    nStop = 22;
+                break;
+            case NS_sprm::TDefTableShd2nd::val:
+            case NS_sprm::TDefTableShdRaw2nd::val:
+                nStart = 22;
+                if ( nStop > 43 )
+                    nStop = 44;
+                break;
+            case NS_sprm::TDefTableShd3rd::val:
+            case NS_sprm::TDefTableShdRaw3rd::val:
+                nStart = 44;
+                if ( nStop > 62 )
+                    nStop = 63;
+                break;
+        }
+        if ( nStart >= nStop )
+            break;
 
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        m_rWW8Export.InsUInt16( m );
+        m_rWW8Export.pO->push_back( static_cast<sal_uInt8>((nStop-nStart) * 10) );
+
+        for ( sal_uInt8 n = nStart; n < nStop; n++ )
         {
             const SwTableBox * pBox1 = rTabBoxes[n];
             const SwFrameFormat * pFrameFormat = pBox1->GetFrameFormat();
