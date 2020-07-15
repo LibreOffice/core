@@ -186,83 +186,6 @@ private:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateFormatter : public FormatterBase
-{
-private:
-    std::unique_ptr<CalendarWrapper> mxCalendarWrapper;
-    Date                    maFieldDate;
-    Date                    maLastDate;
-    Date                    maMin;
-    Date                    maMax;
-    bool                    mbLongFormat;
-    bool                    mbShowDateCentury;
-    ExtDateFieldFormat      mnExtDateFormat;
-    bool                    mbEnforceValidValue;
-
-protected:
-                            DateFormatter(Edit* pEdit);
-
-    SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE void     ImplDateReformat( const OUString& rStr, OUString& rOutStr );
-    SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
-                                             Selection const * pNewSelection = nullptr );
-    SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate ) const;
-    SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
-    CalendarWrapper&        GetCalendarWrapper() const;
-
-    SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
-
-public:
-    virtual                 ~DateFormatter() override;
-
-    virtual void            Reformat() override;
-    virtual void            ReformatAll() override;
-
-    void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
-    ExtDateFieldFormat      GetExtDateFormat( bool bResolveSystemFormat = false ) const;
-
-    void                    SetMin( const Date& rNewMin );
-    const Date&             GetMin() const { return maMin; }
-
-    void                    SetMax( const Date& rNewMax );
-    const Date&             GetMax() const { return maMax; }
-
-
-    // MT: Remove these methods too, ExtDateFormat should be enough!
-    //     What should happen if using DDMMYYYY, but ShowCentury=false?
-
-    void                    SetLongFormat( bool bLong );
-    bool                    IsLongFormat() const { return mbLongFormat; }
-    void                    SetShowDateCentury( bool bShowCentury );
-    bool                    IsShowDateCentury() const { return mbShowDateCentury; }
-
-
-    void                    SetDate( const Date& rNewDate );
-    Date                    GetDate() const;
-    void                    SetEmptyDate();
-    bool                    IsEmptyDate() const;
-
-    void                    ResetLastDate() { maLastDate = Date( Date::EMPTY ); }
-
-    static void             ExpandCentury( Date& rDate );
-    static void             ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart );
-
-    /** enables or disables the enforcement of valid values
-
-        If this is set to true (which is the default), then GetDate will always return a valid
-        date, no matter whether the current text can really be interpreted as date. (Note: this
-        is the compatible behavior).
-
-        If this is set to false, the GetDate will return GetInvalidDate, in case the current text
-        cannot be interpreted as date.
-
-        In addition, if this is set to false, the text in the field will \em not be corrected
-        when the control loses the focus - instead, the invalid input will be preserved.
-    */
-    void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
-    bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
-};
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternField final : public SpinField, public PatternFormatter
 {
 public:
@@ -296,36 +219,6 @@ public:
     virtual void            dispose() override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-};
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateField : public SpinField, public DateFormatter
-{
-private:
-    Date                    maFirst;
-    Date                    maLast;
-
-protected:
-    SAL_DLLPRIVATE void     ImplDateSpinArea( bool bUp );
-
-public:
-    explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            Up() override;
-    virtual void            Down() override;
-    virtual void            First() override;
-    virtual void            Last() override;
-
-    void                    SetFirst( const Date& rNewFirst )   { maFirst = rNewFirst; }
-    const Date&             GetFirst() const                    { return maFirst; }
-    void                    SetLast( const Date& rNewLast )     { maLast = rNewLast; }
-    const Date&             GetLast() const                     { return maLast; }
-    virtual void            dispose() override;
 };
 
 #endif // INCLUDED_VCL_FIELD_HXX

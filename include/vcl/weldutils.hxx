@@ -19,6 +19,8 @@
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 
+class CalendarWrapper;
+
 namespace weld
 {
 typedef cppu::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
@@ -278,6 +280,36 @@ private:
     TimeFieldFormat m_eFormat;
     TimeFormat m_eTimeFormat;
     bool m_bDuration;
+};
+
+class VCL_DLLPUBLIC DateFormatter final : public EntryFormatter
+{
+public:
+    DateFormatter(weld::Entry& rEntry);
+
+    void SetMin(const Date& rNewMin);
+    void SetMax(const Date& rNewMax);
+
+    void SetDate(const Date& rNewDate);
+    Date GetDate();
+
+    void SetExtDateFormat(ExtDateFieldFormat eFormat);
+    void SetShowDateCentury(bool bShowCentury);
+
+    virtual ~DateFormatter() override;
+
+private:
+    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_LINK(CursorChangedHdl, weld::Entry&, void);
+
+    void Init();
+    CalendarWrapper& GetCalendarWrapper() const;
+
+    OUString FormatNumber(int nValue) const;
+
+    ExtDateFieldFormat m_eFormat;
+    mutable std::unique_ptr<CalendarWrapper> m_xCalendarWrapper;
 };
 
 // get the row the iterator is on
