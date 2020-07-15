@@ -128,6 +128,7 @@ void X11SkiaSalGraphicsImpl::freeResources() {}
 void X11SkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
+    flushDrawing();
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
     mWindowContext->swapBuffers();
 }
