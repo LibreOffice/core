@@ -193,7 +193,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
 
-    while (true)
+    while (!sCurrentParaStyle.isEmpty())
     {
         uno::Reference<style::XStyle> xPropertiesStyle(xStyleFamily->getByName(sCurrentParaStyle),
                                                        uno::UNO_QUERY_THROW);
@@ -205,12 +205,10 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         svx::sidebar::TreeNode pCurrentChild;
         pCurrentChild.sNodeName = sDisplayName;
 
-        const bool bStandardStyle = sCurrentParaStyle == "Standard"; // Last Parent Style
-
         for (const beans::Property& rProperty : std::as_const(aProperties))
         {
             OUString sPropName = rProperty.Name;
-            if (bStandardStyle
+            if (aParentParaStyle.isEmpty() // root of style hierarchy
                 || xPropertiesState->getPropertyState(sPropName)
                        == beans::PropertyState_DIRECT_VALUE)
             {
@@ -232,8 +230,6 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
         pParaNode.children.push_back(pCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
-        if (bStandardStyle)
-            break;
     }
 
     std::reverse(pParaNode.children.begin(),
