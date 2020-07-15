@@ -6565,7 +6565,6 @@ include/svtools/borderhelper.hxx
 include/svtools/borderline.hxx
 include/svtools/brwbox.hxx
 include/svtools/brwhead.hxx
-include/svtools/calendar.hxx
 include/svtools/cliplistener.hxx
 include/svtools/collatorres.hxx
 include/svtools/colorcfg.hxx
@@ -7322,6 +7321,7 @@ include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/button.hxx
 include/vcl/cairo.hxx
+include/vcl/calendar.hxx
 include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
 include/vcl/commandevent.hxx
@@ -13019,7 +13019,6 @@ svtools/source/contnr/templwin.hxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/accessibleruler.hxx
 svtools/source/control/asynclink.cxx
-svtools/source/control/calendar.cxx
 svtools/source/control/collatorres.cxx
 svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx

@@ -29,7 +29,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <svl/numuno.hxx>
-#include <svtools/calendar.hxx>
 #include "svtxgridcontrol.hxx"
 #include <table/tablecontrol.hxx>
 
@@ -69,16 +68,6 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
             *ppNewComp = nullptr;
             return nullptr;
         }
-    }
-    else if (aServiceName.equalsIgnoreAsciiCase("datefield") )
-    {
-        pWindow = VclPtr<CalendarField>::Create( pParent, nWinBits);
-        static_cast<CalendarField*>(pWindow)->EnableToday();
-        static_cast<CalendarField*>(pWindow)->EnableNone();
-        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
-        SVTXDateField * newComp = new SVTXDateField;
-        *ppNewComp = newComp;
-        newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pWindow)) );
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "Grid" ) )
     {
@@ -465,48 +454,6 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
-}
-
-SVTXDateField::SVTXDateField()
-    :VCLXDateField()
-{
-}
-
-SVTXDateField::~SVTXDateField()
-{
-}
-
-void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
-{
-    VCLXDateField::setProperty( PropertyName, Value );
-
-    // some properties need to be forwarded to the sub edit, too
-    SolarMutexGuard g;
-    VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : nullptr;
-    if ( !pSubEdit )
-        return;
-
-    switch ( GetPropertyId( PropertyName ) )
-    {
-    case BASEPROPERTY_TEXTLINECOLOR:
-        if ( !Value.hasValue() )
-            pSubEdit->SetTextLineColor();
-        else
-        {
-            sal_Int32 nColor = 0;
-            if ( Value >>= nColor )
-                pSubEdit->SetTextLineColor( Color( nColor ) );
-        }
-        break;
-    }
-}
-
-void SVTXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
-{
-    PushPropertyIds( rIds,
-                     BASEPROPERTY_TEXTLINECOLOR,
-                     0);
-    VCLXDateField::ImplGetPropertyIds( rIds );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

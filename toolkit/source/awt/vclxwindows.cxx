@@ -8153,4 +8153,46 @@ void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
+SVTXDateField::SVTXDateField()
+    :VCLXDateField()
+{
+}
+
+SVTXDateField::~SVTXDateField()
+{
+}
+
+void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
+{
+    VCLXDateField::setProperty( PropertyName, Value );
+
+    // some properties need to be forwarded to the sub edit, too
+    SolarMutexGuard g;
+    VclPtr< Edit > pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow().get() )->GetSubEdit() : nullptr;
+    if ( !pSubEdit )
+        return;
+
+    switch ( GetPropertyId( PropertyName ) )
+    {
+    case BASEPROPERTY_TEXTLINECOLOR:
+        if ( !Value.hasValue() )
+            pSubEdit->SetTextLineColor();
+        else
+        {
+            sal_Int32 nColor = 0;
+            if ( Value >>= nColor )
+                pSubEdit->SetTextLineColor( Color( nColor ) );
+        }
+        break;
+    }
+}
+
+void SVTXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_TEXTLINECOLOR,
+                     0);
+    VCLXDateField::ImplGetPropertyIds( rIds );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

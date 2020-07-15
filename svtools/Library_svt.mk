@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/templwin \
     svtools/source/control/accessibleruler \
     svtools/source/control/asynclink \
-    svtools/source/control/calendar \
     svtools/source/control/collatorres \
     svtools/source/control/ctrlbox \
     svtools/source/control/ctrltool \
