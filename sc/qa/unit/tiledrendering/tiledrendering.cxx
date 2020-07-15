@@ -108,6 +108,7 @@ public:
     void testSheetGeometryDataInvariance();
     void testSheetGeometryDataCorrectness();
     void testDeleteCellMultilineContent();
+    void testFunctionDlg();
     void testSpellOnlineParameter();
     void testSpellOnlineRenderParameter();
     void testPasteIntoWrapTextCell();
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testSheetGeometryDataInvariance);
     CPPUNIT_TEST(testSheetGeometryDataCorrectness);
     CPPUNIT_TEST(testDeleteCellMultilineContent);
+    CPPUNIT_TEST(testFunctionDlg);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testPasteIntoWrapTextCell);
@@ -1619,6 +1621,43 @@ void ScTiledRenderingTest::testFilterDlg()
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testFunctionDlg()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("empty.ods");
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    int nView1 = SfxLokHelper::getView();
+    {
+        pView1->GetViewFrame()->GetDispatcher()->Execute(SID_OPENDLG_FUNCTION,
+            SfxCallMode::SLOT|SfxCallMode::RECORD);
+    }
+    Scheduler::ProcessEventsToIdle();
+    SfxChildWindow* pRefWindow = pView1->GetViewFrame()->GetChildWindow(SID_OPENDLG_FUNCTION);
+    CPPUNIT_ASSERT(pRefWindow);
+
+    // view #2
+    int nView2 = SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView1 != pView2);
+
+    // check loking
+    CPPUNIT_ASSERT_EQUAL(true, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+
+    SfxLokHelper::setView(nView1);
+    pRefWindow->GetController()->response(RET_CANCEL);
+
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    SfxLokHelper::setView(nView2);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
