@@ -911,6 +911,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
     CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134618, "tdf134618.doc")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    //Without the fix it in place, it would have failed with
+    //- Expected: 1
+    //- Actual  : 9
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 1);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 2);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
