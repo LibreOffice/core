@@ -66,6 +66,7 @@ void WinSkiaSalGraphicsImpl::freeResources() {}
 void WinSkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
+    flushDrawing();
     if (mWindowContext)
         mWindowContext->swapBuffers();
 }
