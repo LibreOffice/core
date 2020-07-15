@@ -28,5 +28,5 @@
   <menu:menuitem menu:id=".uno:FillSeries"/>
   <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:FreezePanesFirstColumn"/>
+  <menu:menuitem menu:id=".uno:FreezePanesColumn"/>
 </menu:menupopup>

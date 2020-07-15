@@ -20,6 +20,7 @@
 #include <drwlayer.hxx>
 #include <compressedarray.hxx>
 
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
@@ -581,6 +582,50 @@ OString ScTable::dumpColumnRowGroups(bool bColumns) const
         return pOutlineTable->GetColArray().dumpAsString();
 
     return pOutlineTable->GetRowArray().dumpAsString();
+}
+
+SCCOL ScTable::GetLOKFreezeCol() const
+{
+    return maLOKFreezeCell.Col();
+}
+
+SCROW ScTable::GetLOKFreezeRow() const
+{
+    return maLOKFreezeCell.Row();
+}
+
+bool ScTable::SetLOKFreezeCol(SCCOL nFreezeCol)
+{
+    if (!ValidCol(nFreezeCol))
+    {
+        SAL_WARN("sc.core", "ScTable::SetLOKFreezeCol : invalid nFreezeCol = " << nFreezeCol);
+        return false;
+    }
+
+    if (maLOKFreezeCell.Col() != nFreezeCol)
+    {
+        maLOKFreezeCell.SetCol(nFreezeCol);
+        return true;
+    }
+
+    return false;
+}
+
+bool ScTable::SetLOKFreezeRow(SCROW nFreezeRow)
+{
+    if (!ValidRow(nFreezeRow))
+    {
+        SAL_WARN("sc.core", "ScTable::SetLOKFreezeRow : invalid nFreezeRow = " << nFreezeRow);
+        return false;
+    }
+
+    if (maLOKFreezeCell.Row() != nFreezeRow)
+    {
+        maLOKFreezeCell.SetRow(nFreezeRow);
+        return true;
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

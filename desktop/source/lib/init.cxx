@@ -2767,7 +2767,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParaspaceDecrease"),
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
-        OUString(".uno:ShowResolvedAnnotations")
+        OUString(".uno:ShowResolvedAnnotations"),
+        OUString(".uno:FreezePanesColumn"),
+        OUString(".uno:FreezePanesRow")
     };
 
     util::URL aCommandURL;
