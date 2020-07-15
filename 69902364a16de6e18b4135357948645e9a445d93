@@ -93,6 +93,30 @@
       "revId": "69902364a16de6e18b4135357948645e9a445d93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f68b4dea_14e48914",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-07-15T06:45:26Z",
+      "side": 1,
+      "message": "Neither using the bool to test if the player was playing before the seek function or testing using isPlaying() function after the seek function seems to work when the player is paused and seek is made. In both cases, play starts after seek, which seems unexpected when seek is done while paused.",
+      "parentUuid": "1d343756_939284b5",
+      "range": {
+        "startLine": 691,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 61
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
