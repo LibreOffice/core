@@ -1593,20 +1593,20 @@ void WW8TabBandDesc::ReadShd(const sal_uInt8* pS )
         pSHDs[i].SetWWValue( *pShd );
 }
 
-void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
+void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67, sal_uInt8 nStart)
 {
     sal_uInt8 nLen = pS ? *(pS - 1) : 0;
-    if (!nLen)
+    if (!nLen || nStart >= nWwCols)
         return;
 
     if (!pNewSHDs)
         pNewSHDs = new Color[nWwCols];
 
-    short nCount = nLen / 10; //10 bytes each
+    short nCount = nLen / 10 + nStart; //10 bytes each
     if (nCount > nWwCols)
         nCount = nWwCols;
 
-    int i=0;
+    int i=nStart;
     while (i < nCount)
         pNewSHDs[i++] = SwWW8ImplReader::ExtractColour(pS, bVer67);
 
@@ -1637,7 +1637,8 @@ enum wwTableSprm
     sprmTDefTable, sprmTDyaRowHeight, sprmTDefTableShd, sprmTDxaLeft,
     sprmTSetBrc, sprmTSetBrc90, sprmTDxaCol, sprmTInsert, sprmTDelete,
     sprmTTableHeader, sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
-    sprmTDefTableNewShd, sprmTCellPadding, sprmTCellPaddingDefault
+    sprmTDefTableNewShd, sprmTDefTableNewShd2nd, sprmTDefTableNewShd3rd,
+    sprmTCellPadding, sprmTCellPaddingDefault
 };
 
 }
@@ -1681,6 +1682,10 @@ static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTDefTableShd;
                 case NS_sprm::TDefTableShd::val:
                     return sprmTDefTableNewShd;
+                case NS_sprm::TDefTableShd2nd::val:
+                    return sprmTDefTableNewShd2nd;
+                case NS_sprm::TDefTableShd3rd::val:
+                    return sprmTDefTableNewShd3rd;
                 case NS_sprm::TTableBorders::val:
                     return sprmTTableBorders90;
                 case NS_sprm::TSetBrc80::val:
@@ -1810,7 +1815,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         short nTabeDxaNew      = SHRT_MAX;
         bool bTabRowJustRead   = false;
         const sal_uInt8* pShadeSprm = nullptr;
-        const sal_uInt8* pNewShadeSprm = nullptr;
+        const sal_uInt8* pNewShadeSprm[3] = {nullptr, nullptr, nullptr};
         const sal_uInt8* pTableBorders = nullptr;
         sal_uInt16 nTableBordersLen = 0;
         const sal_uInt8* pTableBorders90 = nullptr;
@@ -1905,7 +1910,13 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         pShadeSprm = pParams;
                         break;
                     case sprmTDefTableNewShd:
-                        pNewShadeSprm = pParams;
+                        pNewShadeSprm[0] = pParams;
+                        break;
+                    case sprmTDefTableNewShd2nd:
+                        pNewShadeSprm[1] = pParams;
+                        break;
+                    case sprmTDefTableNewShd3rd:
+                        pNewShadeSprm[2] = pParams;
                         break;
                     case sprmTDxaLeft:
                         // our Writer cannot shift single table lines
@@ -1963,8 +1974,12 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             // so they were saved up until here
             if (pShadeSprm)
                 pNewBand->ReadShd(pShadeSprm);
-            if (pNewShadeSprm)
-                pNewBand->ReadNewShd(pNewShadeSprm, bOldVer);
+            if (pNewShadeSprm[0])
+                pNewBand->ReadNewShd(pNewShadeSprm[0], bOldVer, /*nStart=*/0);
+            if (pNewShadeSprm[1])
+                pNewBand->ReadNewShd(pNewShadeSprm[1], bOldVer, /*nStart=*/22);
+            if (pNewShadeSprm[2])
+                pNewBand->ReadNewShd(pNewShadeSprm[2], bOldVer, /*nStart=*/44);
             if (pTableBorders90)
                 pNewBand->ProcessSprmTTableBorders(9, pTableBorders90, nTableBorders90Len);
             else if (pTableBorders)
