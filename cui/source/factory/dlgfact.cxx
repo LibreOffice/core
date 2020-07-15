@@ -90,6 +90,7 @@
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
 #include <DiagramDialog.hxx>
+#include <toolbarmodedlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1438,6 +1439,11 @@ short AbstractDiagramDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractToolbarmodeDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
     weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
     const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
@@ -1713,6 +1719,12 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(weld::Window* pParent, std::shar
 {
     return VclPtr<AbstractDiagramDialog_Impl>::Create(
         std::make_unique<DiagramDialog>(pParent, pDiagramData));
+}
+
+VclPtr<AbstractToolbarmodeDialog>
+AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
+{
+    return VclPtr<AbstractToolbarmodeDialog_Impl>::Create(std::make_unique<ToolbarmodeDialog>(pParent));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -150,6 +150,12 @@ protected:
     virtual ~AbstractDiagramDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractToolbarmodeDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractToolbarmodeDialog() override = default;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -200,6 +206,11 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) = 0;
+
+    // UI selection dialog
+    virtual VclPtr<AbstractToolbarmodeDialog>
+    CreateToolbarmodeDialog(weld::Window* pParent) = 0;
+
 };
 
 #endif

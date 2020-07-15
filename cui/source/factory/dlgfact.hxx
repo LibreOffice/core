@@ -62,6 +62,7 @@
 #include <transfrm.hxx>
 #include <zoom.hxx>
 #include <AdditionsDialog.hxx>
+#include <toolbarmodedlg.hxx>
 
 class SfxSingleTabDialogController;
 class SfxItemPool;
@@ -797,6 +798,20 @@ public:
     virtual short Execute() override;
 };
 
+class ToolbarmodeDialog;
+class AbstractToolbarmodeDialog_Impl : public AbstractToolbarmodeDialog
+{
+protected:
+    std::unique_ptr<ToolbarmodeDialog> m_xDlg;
+
+public:
+    explicit AbstractToolbarmodeDialog_Impl(std::unique_ptr<ToolbarmodeDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -991,6 +1006,9 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) override;
+
+    virtual VclPtr<AbstractToolbarmodeDialog> CreateToolbarmodeDialog(weld::Window* pParent) override;
+
 };
 
 #endif
