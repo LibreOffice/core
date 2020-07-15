@@ -99,7 +99,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:FreezePanesFirstColumn" oor:op="replace">
+      <node oor:name=".uno:FreezePanesColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Freeze First Column</value>
         </prop>
@@ -107,7 +107,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:FreezePanesFirstRow" oor:op="replace">
+      <node oor:name=".uno:FreezePanesRow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Freeze First Row</value>
         </prop>

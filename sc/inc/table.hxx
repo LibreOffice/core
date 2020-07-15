@@ -224,6 +224,8 @@ private:
 
     std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
 
+    ScAddress       maLOKFreezeCell;
+
     bool            bScenario:1;
     bool            bLayoutRTL:1;
     bool            bLoadingRTL:1;
@@ -1256,6 +1258,11 @@ private:
     OString dumpHiddenFiltered(bool bColumns, bool bHidden);
     /// Returns list-of-spans representation of the column/row groupings encoded as an OString.
     OString dumpColumnRowGroups(bool bColumns) const;
+
+    SCCOL GetLOKFreezeCol() const;
+    SCROW GetLOKFreezeRow() const;
+    bool  SetLOKFreezeCol(SCCOL nFreezeCol);
+    bool  SetLOKFreezeRow(SCROW nFreezeRow);
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

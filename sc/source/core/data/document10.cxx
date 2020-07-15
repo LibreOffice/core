@@ -1034,4 +1034,39 @@ OString ScDocument::dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType e
     return pTab->dumpSheetGeomData(bColumns, eGeomType);
 }
 
+SCCOL ScDocument::GetLOKFreezeCol(SCTAB nTab) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return -1;
+
+    return pTab->GetLOKFreezeCol();
+}
+SCROW ScDocument::GetLOKFreezeRow(SCTAB nTab) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return -1;
+
+    return pTab->GetLOKFreezeRow();
+}
+
+bool ScDocument::SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab)
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->SetLOKFreezeCol(nFreezeCol);
+}
+
+bool ScDocument::SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab)
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->SetLOKFreezeRow(nFreezeRow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

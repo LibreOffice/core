@@ -1907,8 +1907,11 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
+void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLROW nFreezeIndex)
 {
+    if ((eSplitMethod == SC_SPLIT_METHOD_COL || eSplitMethod == SC_SPLIT_METHOD_ROW) && nFreezeIndex < 0)
+        nFreezeIndex = 0;
+
     ScSplitMode eOldH = aViewData.GetHSplitMode();
     ScSplitMode eOldV = aViewData.GetVSplitMode();
 
@@ -1929,10 +1932,10 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
         SCROW nPosY = 1;
         if (eOldV != SC_SPLIT_NONE || eOldH != SC_SPLIT_NONE)
         {
-            if ( eOldV != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
+            if ( eOldV != SC_SPLIT_NONE && (eSplitMethod == SC_SPLIT_METHOD_ROW || eSplitMethod == SC_SPLIT_METHOD_CURSOR))
                 aSplit.setY( aViewData.GetVSplitPos() - aWinStart.Y() );
 
-            if ( eOldH != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
+            if ( eOldH != SC_SPLIT_NONE && (eSplitMethod == SC_SPLIT_METHOD_COL || eSplitMethod == SC_SPLIT_METHOD_CURSOR))
             {
                 long nSplitPos = aViewData.GetHSplitPos();
                 if ( bLayoutRTL )
@@ -1944,28 +1947,28 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
             bool bLeft;
             bool bTop;
             aViewData.GetMouseQuadrant( aSplit, ePos, nPosX, nPosY, bLeft, bTop );
-            if (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL)
-                nPosX = 1;
+            if (eSplitMethod == SC_SPLIT_METHOD_COL)
+                nPosX = static_cast<SCCOL>(nFreezeIndex);
             else if (!bLeft)
                 ++nPosX;
-            if (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW)
-                nPosY = 1;
+            if (eSplitMethod == SC_SPLIT_METHOD_ROW)
+                nPosY = static_cast<SCROW>(nFreezeIndex);
             else if (!bTop)
                 ++nPosY;
         }
         else
         {
-            switch(eSplitMetod)
+            switch(eSplitMethod)
             {
-                case SC_SPLIT_METHOD_FIRST_ROW:
+                case SC_SPLIT_METHOD_ROW:
                 {
                     nPosX = 0;
-                    nPosY = 1;
+                    nPosY = static_cast<SCROW>(nFreezeIndex);
                 }
                 break;
-                case SC_SPLIT_METHOD_FIRST_COL:
+                case SC_SPLIT_METHOD_COL:
                 {
-                    nPosX = 1;
+                    nPosX = static_cast<SCCOL>(nFreezeIndex);
                     nPosY = 0;
                 }
                 break;
@@ -1983,7 +1986,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
         SCCOL nLeftPos = aViewData.GetPosX(SC_SPLIT_LEFT);
         SCCOL nRightPos = nPosX;
 
-        if (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR)
+        if (eSplitMethod == SC_SPLIT_METHOD_ROW || eSplitMethod == SC_SPLIT_METHOD_CURSOR)
         {
              if (eOldV != SC_SPLIT_NONE)
              {
@@ -2005,7 +2008,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
                  aViewData.SetVSplitMode( SC_SPLIT_NONE );
         }
 
-        if (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL || eSplitMetod == SC_SPLIT_METHOD_CURSOR)
+        if (eSplitMethod == SC_SPLIT_METHOD_COL || eSplitMethod == SC_SPLIT_METHOD_CURSOR)
         {
             if (eOldH != SC_SPLIT_NONE)
             {
