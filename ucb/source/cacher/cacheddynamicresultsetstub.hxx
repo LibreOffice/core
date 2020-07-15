@@ -86,10 +86,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-                          css::lang::XMultiServiceFactory >& rxServiceMgr );
-
     // XCachedDynamicResultSetStubFactory
 
     virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL

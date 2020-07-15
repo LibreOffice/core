@@ -74,13 +74,6 @@ namespace comphelper
         registerImplementation( aComponent );
     }
 
-    void* OModule::getComponentFactory( const char* _pImplementationName )
-    {
-        Reference< XInterface > xFactory( getComponentFactory(
-            OUString::createFromAscii( _pImplementationName ) ) );
-        return xFactory.get();
-    }
-
     Reference< XInterface > OModule::getComponentFactory( const OUString& _rImplementationName )
     {
         Reference< XInterface > xReturn;

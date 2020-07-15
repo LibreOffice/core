@@ -118,10 +118,6 @@ namespace comphelper
         css::uno::Reference< css::uno::XInterface > getComponentFactory(
             const OUString& _rImplementationName );
 
-        /** version of getComponentFactory which directly takes the char argument you got in your component_getFactory call
-        */
-        void* getComponentFactory( const char* _pImplementationName );
-
     private:
         OModule( const OModule& ) = delete;
         OModule& operator=( const OModule& ) = delete;

@@ -201,18 +201,6 @@ OUString ODBFilter::getImplementationName_Static()
 }
 
 
-css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
-{
-    return { "com.sun.star.document.ImportFilter" };
-}
-
-
-css::uno::Reference< css::uno::XInterface >
-    ODBFilter::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
-{
-    return static_cast< XServiceInfo* >(new ODBFilter( comphelper::getComponentContext(_rxORB)));
-}
-
 namespace {
 class FocusWindowWaitGuard
 {

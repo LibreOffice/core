@@ -66,7 +66,6 @@ public:
                 virtual ~ImpVclMEdit() override;
 
     void        SetModified( bool bMod );
-    bool        IsModified() const;
 
     void        SetReadOnly( bool bRdOnly );
     bool        IsReadOnly() const;
@@ -282,11 +281,6 @@ void ImpVclMEdit::SetAlign( WinBits nWinStyle )
 void ImpVclMEdit::SetModified( bool bMod )
 {
     mpTextWindow->GetTextEngine()->SetModified( bMod );
-}
-
-bool ImpVclMEdit::IsModified() const
-{
-    return mpTextWindow->GetTextEngine()->IsModified();
 }
 
 void ImpVclMEdit::SetReadOnly( bool bRdOnly )
@@ -1051,11 +1045,6 @@ void VclMultiLineEdit::SetModifyFlag()
 void VclMultiLineEdit::ClearModifyFlag()
 {
     pImpVclMEdit->SetModified( false );
-}
-
-bool VclMultiLineEdit::IsModified() const
-{
-    return pImpVclMEdit->IsModified();
 }
 
 void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )

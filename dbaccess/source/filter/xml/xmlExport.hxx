@@ -164,16 +164,6 @@ public:
 
     ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static();
-
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence<OUString>
-    getSupportedServiceNames_Static();
-
-    static css::uno::Reference<css::uno::XInterface> Create(
-        css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
-
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
 

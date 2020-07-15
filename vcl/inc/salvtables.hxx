@@ -648,9 +648,6 @@ public:
     // one thing for focus
     virtual bool has_focus() const override;
 
-    //so with hh::mm::ss, incrementing mm will not reset ss
-    void DisableRemainderFactor();
-
     //off by default for direct SpinButtons, MetricSpinButton enables it
     void SetUseThousandSep();
 

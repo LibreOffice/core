@@ -178,8 +178,6 @@ namespace svt
     public:
         GenericEditImplementation( EDIT& _rEdit );
 
-        EDIT& GetEditWindow() { return static_cast< EDIT& >( GetControl() ); }
-
         virtual Control&            GetControl() override;
 
         virtual OUString            GetText( LineEnd aSeparator ) const override;

@@ -39,19 +39,6 @@ namespace comphelper::module
         ComphelperModule();
     };
 
-    /* -------------------------------------------------------------------- */
-    template < class TYPE >
-    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
-    {
-    private:
-        typedef ::comphelper::OAutoRegistration< TYPE > BaseClass;
-
-    public:
-        OAutoRegistration() : BaseClass( ComphelperModule::getInstance() )
-        {
-        }
-    };
-
 } // namespace comphelper::module
 
 

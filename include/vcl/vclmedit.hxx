@@ -110,7 +110,6 @@ public:
 
     virtual void    SetModifyFlag() override;
     virtual void    ClearModifyFlag() override;
-    virtual bool    IsModified() const override;
 
     void            EnableUpdateData( sal_uLong nTimeout );
     virtual void    UpdateData();

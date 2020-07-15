@@ -2065,11 +2065,6 @@ VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpin
     return VclPtr<LongCurrencyControl>::Create(pParent, bSpinButton);
 }
 
-double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
-{
-    return GetValue(_rxField, xFormatter);
-}
-
 namespace
 {
     OUString lcl_setFormattedCurrency_nothrow( FormattedControlBase& _rField, const DbCurrencyField& _rControl,
