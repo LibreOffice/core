@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64d08e55_a916385c",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-15T15:37:55Z",
+      "side": 1,
+      "message": "please, add some description, for example\n\n// tdf#69647 actual line height can contain height of an inline image,\n// resulting bad calculation of proportional line spacing, that just\n// depends on the font size of the actual line. As a workaround, use\n// the line height of the previous line if it\u0027s smaller, than the\n// recent one.",
+      "revId": "7b1c1bf9a8da3ba997546b7d950538a9b0d63998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
