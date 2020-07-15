@@ -7321,7 +7321,6 @@ include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/button.hxx
 include/vcl/cairo.hxx
-include/vcl/calendar.hxx
 include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
 include/vcl/commandevent.hxx
@@ -7439,6 +7438,7 @@ include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
 include/vcl/toolkit/button.hxx
+include/vcl/toolkit/calendar.hxx
 include/vcl/toolkit/combobox.hxx
 include/vcl/toolkit/controllayout.hxx
 include/vcl/toolkit/dialog.hxx
