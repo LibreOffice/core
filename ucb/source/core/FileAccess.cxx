@@ -53,8 +53,6 @@
 
 #include <vector>
 
-#include "FileAccess.hxx"
-
 #define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
 
 using namespace ::com::sun::star::uno;
@@ -117,13 +115,13 @@ public:
     virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return IMPLEMENTATION_NAME; }
+    { return "com.sun.star.comp.ucb.SimpleFileAccess"; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return FileAccess_getSupportedServiceNames(); }
+    { return { SERVICE_NAME }; }
 };
 
 // Implementation XActiveDataSink
@@ -694,17 +692,15 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     aCnt.setPropertyValue("IsHidden", Any(bHidden) );
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_OFileAccess_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OFileAccess(context));
+}
+
 }; // namespace end
 
-Reference< XInterface > FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
-{
-    return Reference < XInterface >( static_cast<cppu::OWeakObject *>(new OFileAccess( comphelper::getComponentContext(xSMgr) )) );
-}
-
-Sequence< OUString > FileAccess_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { SERVICE_NAME };
-    return seqNames;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
