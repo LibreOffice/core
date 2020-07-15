@@ -23,7 +23,6 @@ core_factory_list = [
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
-    ("libucb1.a", "ucb_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
@@ -332,6 +331,13 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# ucb/source/core/ucb1.component
+    "ucb_UcbCommandEnvironment_get_implementation",
+    "ucb_UcbContentProviderProxyFactory_get_implementation",
+    "ucb_UcbPropertiesManager_get_implementation",
+    "ucb_UcbStore_get_implementation",
+    "ucb_UniversalContentBroker_get_implementation",
+    "ucb_OFileAccess_get_implementation",
 # ucb/source/ucp/file/ucpfile1.component
     "ucb_file_FileProvider_get_implementation",
 # ucb/source/ucp/expand/ucpexpand1.component
