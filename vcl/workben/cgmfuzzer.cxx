@@ -18,7 +18,6 @@ extern "C" {
 void * sd_component_getFactory( const char* , void* , void* );
 void * i18npool_component_getFactory( const char* , void* , void* );
 void * ucb_component_getFactory( const char* , void* , void* );
-void * lng_component_getFactory( const char* , void* , void* );
 
 void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
 void * com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void *, void * );
@@ -53,6 +52,11 @@ void * unoxml_CBlankNode_get_implementation( void *, void * );
 void * unoxml_CXPathAPI_get_implementation( void *, void * );
 void * unoxml_CSAXDocumentBuilder_get_implementation( void *, void * );
 void * unoxml_CDocumentBuilder_get_implementation( void *, void * );
+void * linguistic_ConvDicList_get_implementation( void *, void * );
+void * linguistic_DicList_get_implementation( void *, void * );
+void * linguistic_LinguProps_get_implementation( void *, void * );
+void * linguistic_LngSvcMgr_get_implementation( void *, void * );
+void * linguistic_GrammarCheckingIterator_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -62,7 +66,6 @@ lo_get_factory_map(void)
         { "libsdlo.a", sd_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
-        { "liblnglo.a", lng_component_getFactory },
         { 0, 0 }
     };
 
@@ -106,6 +109,11 @@ lo_get_constructor_map(void)
         { "unoxml_CXPathAPI_get_implementation", unoxml_CXPathAPI_get_implementation },
         { "unoxml_CSAXDocumentBuilder_get_implementation", unoxml_CSAXDocumentBuilder_get_implementation },
         { "unoxml_CDocumentBuilder_get_implementation", unoxml_CDocumentBuilder_get_implementation },
+        { "linguistic_ConvDicList_get_implementation", linguistic_ConvDicList_get_implementation },
+        { "linguistic_DicList_get_implementation", linguistic_DicList_get_implementation },
+        { "linguistic_LinguProps_get_implementation", linguistic_LinguProps_get_implementation },
+        { "linguistic_LngSvcMgr_get_implementation", linguistic_LngSvcMgr_get_implementation },
+        { "linguistic_GrammarCheckingIterator_get_implementation", linguistic_GrammarCheckingIterator_get_implementation },
         { 0, 0 }
     };
 
