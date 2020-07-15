@@ -1144,7 +1144,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
              aEvent.FeatureURL.Path == "Signature" ||
              aEvent.FeatureURL.Path == "SelectionMode" ||
-             aEvent.FeatureURL.Path == "StatusBarFunc")
+             aEvent.FeatureURL.Path == "StatusBarFunc" ||
+             aEvent.FeatureURL.Path == "FreezePanesColumn" ||
+             aEvent.FeatureURL.Path == "FreezePanesRow")
     {
         sal_Int32 aInt32;
 
