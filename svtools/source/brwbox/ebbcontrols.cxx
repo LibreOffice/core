@@ -18,6 +18,7 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/virdev.hxx>
@@ -465,6 +466,74 @@ namespace svt
         else
             m_xEntryFormatter.reset(new weld::TimeFormatter(*m_xEntry));
         InitFormattedControlBase();
+    }
+
+    DateControl::DateControl(BrowserDataWin* pParent, bool bDropDown)
+        : FormattedControlBase(pParent, false)
+        , m_xMenuButton(m_xBuilder->weld_menu_button("button"))
+        , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), "svt/ui/datewindow.ui"))
+        , m_xTopLevel(m_xCalendarBuilder->weld_widget("date_popup_window"))
+        , m_xCalendar(m_xCalendarBuilder->weld_calendar("date"))
+        , m_xTodayBtn(m_xCalendarBuilder->weld_button("today"))
+        , m_xNoneBtn(m_xCalendarBuilder->weld_button("none"))
+    {
+        m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
+        InitFormattedControlBase();
+
+        m_xMenuButton->set_popover(m_xTopLevel.get());
+        m_xMenuButton->set_visible(bDropDown);
+        m_xMenuButton->connect_toggled(LINK(this, DateControl, ToggleHdl));
+
+        m_xTodayBtn->connect_clicked(LINK(this, DateControl, ImplClickHdl));
+        m_xNoneBtn->connect_clicked(LINK(this, DateControl, ImplClickHdl));
+
+        m_xCalendar->connect_activated(LINK(this, DateControl, ActivateHdl));
+    }
+
+    IMPL_LINK(DateControl, ImplClickHdl, weld::Button&, rBtn, void)
+    {
+        m_xMenuButton->set_active(false);
+        get_widget().grab_focus();
+
+        if (&rBtn == m_xTodayBtn.get())
+        {
+            Date aToday(Date::SYSTEM);
+            SetDate(aToday);
+        }
+        else if (&rBtn == m_xNoneBtn.get())
+        {
+            get_widget().set_text(OUString());
+        }
+    }
+
+    IMPL_LINK(DateControl, ToggleHdl, weld::ToggleButton&, rButton, void)
+    {
+        if (rButton.get_active())
+            m_xCalendar->set_date(static_cast<weld::DateFormatter&>(get_formatter()).GetDate());
+    }
+
+    IMPL_LINK_NOARG(DateControl, ActivateHdl, weld::Calendar&, void)
+    {
+        if (m_xMenuButton->get_active())
+            m_xMenuButton->set_active(false);
+        static_cast<weld::DateFormatter&>(get_formatter()).SetDate(m_xCalendar->get_date());
+    }
+
+    void DateControl::SetDate(const Date& rDate)
+    {
+        static_cast<weld::DateFormatter&>(get_formatter()).SetDate(rDate);
+        m_xCalendar->set_date(rDate);
+    }
+
+    void DateControl::dispose()
+    {
+        m_xTodayBtn.reset();
+        m_xNoneBtn.reset();
+        m_xCalendar.reset();
+        m_xTopLevel.reset();
+        m_xCalendarBuilder.reset();
+        m_xMenuButton.reset();
+        FormattedControlBase::dispose();
     }
 
     EditCellController::EditCellController(EditControlBase* pEdit)
