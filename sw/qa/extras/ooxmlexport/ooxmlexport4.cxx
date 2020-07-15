@@ -1258,10 +1258,6 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineCo
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
 {
-    // TODO: Fix export.
-    if (mbExported)
-        return;
-
     // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     const sal_Int32 nAnchoredWidth

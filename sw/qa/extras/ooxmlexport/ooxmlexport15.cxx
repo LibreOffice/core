@@ -102,9 +102,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx")
 {
-    // TODO: fix export too
-    if (mbExported)
-        return;
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
@@ -131,9 +128,6 @@ DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx")
 {
-    // TODO: fix export too
-    if (mbExported)
-        return;
     // tdf#133070 The height was set relative to page print area bottom,
     // but this was handled relative to page height.
     // Note: page print area bottom = margin + footer height.
