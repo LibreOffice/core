@@ -141,6 +141,30 @@
       "revId": "69902364a16de6e18b4135357948645e9a445d93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e17707a8_32e92f71",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-07-15T16:47:45Z",
+      "side": 1,
+      "message": "Tested with day old master build. The build details are given in bug report comment. The version of gstreamer installed is 1.14.5-0ubuntu1~18.04.1",
+      "parentUuid": "515cd33e_f4afa900",
+      "range": {
+        "startLine": 691,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 61
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
