@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76da3fb3_f0775b68",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T11:38:38Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s reasonable to pass these as function arguments. Just use SvtLanguageOptions().IsCJKFontEnabled() right here in the function. I suppose that the call is fast enough, and would not impact the function performance negatively. This would simplify the logic.",
+      "range": {
+        "startLine": 63,
+        "startChar": 49,
+        "endLine": 64,
+        "endChar": 55
+      },
+      "revId": "a1a80dce6c96bd3b69075729532a610baf5dcd75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
