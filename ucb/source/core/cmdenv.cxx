@@ -21,6 +21,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <rtl/ref.hxx>
 
 #include "cmdenv.hxx"
 
@@ -32,11 +33,14 @@
 using namespace com::sun::star;
 using namespace ucb_cmdenv;
 
+static osl::Mutex g_InstanceGuard;
+static rtl::Reference<UcbCommandEnvironment> g_Instance;
+
 
 // UcbCommandEnvironment Implementation.
 
 
-UcbCommandEnvironment::UcbCommandEnvironment()
+UcbCommandEnvironment::UcbCommandEnvironment() : UcbCommandEnvironment_Base(m_aMutex)
 {
 }
 
@@ -44,6 +48,14 @@ UcbCommandEnvironment::UcbCommandEnvironment()
 // virtual
 UcbCommandEnvironment::~UcbCommandEnvironment()
 {
+}
+
+// XComponent
+void SAL_CALL UcbCommandEnvironment::dispose()
+{
+    UcbCommandEnvironment_Base::dispose();
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    g_Instance.clear();
 }
 
 
@@ -67,7 +79,7 @@ void SAL_CALL UcbCommandEnvironment::initialize(
 // virtual
 OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.ucb.CommandEnvironment";
 }
 
 
@@ -83,23 +95,7 @@ UcbCommandEnvironment::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 UcbCommandEnvironment::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-// static
-OUString UcbCommandEnvironment::getImplementationName_Static()
-{
-    return "com.sun.star.comp.ucb.CommandEnvironment";
-}
-
-
-// static
-uno::Sequence< OUString >
-UcbCommandEnvironment::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aSNS { "com.sun.star.ucb.CommandEnvironment" };
-    return aSNS;
+    return { "com.sun.star.ucb.CommandEnvironment" };
 }
 
 
@@ -124,26 +120,15 @@ UcbCommandEnvironment::getProgressHandler()
 
 // Service factory implementation.
 
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface >
-UcbCommandEnvironment_CreateInstance(
-    const uno::Reference< lang::XMultiServiceFactory> & /*rSMgr*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_UcbCommandEnvironment_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    lang::XServiceInfo* pX = new UcbCommandEnvironment;
-    return uno::Reference< uno::XInterface >::query( pX );
-}
-
-
-// static
-uno::Reference< lang::XSingleServiceFactory >
-UcbCommandEnvironment::createServiceFactory(
-    const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createSingleFactory(
-                rxServiceMgr,
-                UcbCommandEnvironment::getImplementationName_Static(),
-                UcbCommandEnvironment_CreateInstance,
-                UcbCommandEnvironment::getSupportedServiceNames_Static() );
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    if (!g_Instance)
+        g_Instance.set(new UcbCommandEnvironment());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,6 +42,7 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
+#include <rtl/ref.hxx>
 #include "identify.hxx"
 #include "ucbcmds.hxx"
 
@@ -55,6 +56,8 @@ using namespace ucb_impl;
 using namespace com::sun::star;
 using namespace ucbhelper;
 
+static osl::Mutex g_InstanceGuard;
+static rtl::Reference<UniversalContentBroker> g_Instance;
 
 namespace {
 
@@ -252,6 +255,9 @@ void SAL_CALL UniversalContentBroker::dispose()
 
     if ( m_xNotifier.is() )
         m_xNotifier->removeChangesListener( this );
+
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    g_Instance.clear();
 }
 
 
@@ -279,36 +285,30 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( UniversalContentBroker,
-                          "com.sun.star.comp.ucb.UniversalContentBroker" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-UniversalContentBroker_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL UniversalContentBroker::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new UniversalContentBroker( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.UniversalContentBroker";
+}
+sal_Bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.UniversalContentBroker" };
 }
 
-css::uno::Sequence< OUString >
-UniversalContentBroker::getSupportedServiceNames_Static()
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_UniversalContentBroker_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    css::uno::Sequence< OUString > aSNS { UCB_SERVICE_NAME };
-    return aSNS;
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    if (!g_Instance)
+        g_Instance.set(new UniversalContentBroker(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
-// Service factory implementation.
-
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-UniversalContentBroker::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                UniversalContentBroker::getImplementationName_Static(),
-                UniversalContentBroker_CreateInstance,
-                UniversalContentBroker::getSupportedServiceNames_Static() );
-}
-
 
 
 // XInitialization methods.

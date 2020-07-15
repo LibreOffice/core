@@ -34,21 +34,19 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <memory>
-
-
-#define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
-#define PROPSET_REG_SERVICE_NAME    "com.sun.star.ucb.PropertySetRegistry"
-#define PERS_PROPSET_SERVICE_NAME   "com.sun.star.ucb.PersistentPropertySet"
 
 
 struct UcbStore_Impl;
 
-class UcbStore : public cppu::WeakImplHelper <
-    css::lang::XServiceInfo,
-    css::ucb::XPropertySetRegistryFactory,
-    css::lang::XInitialization >
+using UcbStore_Base = cppu::WeakComponentImplHelper <
+                        css::lang::XServiceInfo,
+                        css::ucb::XPropertySetRegistryFactory,
+                        css::lang::XInitialization >;
+
+class UcbStore : public cppu::BaseMutex, public UcbStore_Base
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     std::unique_ptr<UcbStore_Impl> m_pImpl;
@@ -57,17 +55,13 @@ public:
     explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~UcbStore() override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-                          css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XPropertySetRegistryFactory
     virtual css::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
