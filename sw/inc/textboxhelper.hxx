@@ -78,6 +78,14 @@ public:
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
+    /*
+    Moves the anchor of the textflyframe (if exists) to the anchor
+    position of the parent shape, and moves that to the right position
+
+    @param rShape: the parent shape.
+    */
+    static void syncFlyAnchPos(const SwFrameFormat& rShape);
+
     /**
      * If we have an associated TextFrame, then return that.
      *
