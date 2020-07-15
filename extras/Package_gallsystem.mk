@@ -9,12 +9,24 @@
 
 system_galleries := arrows bpmn bullets diagrams flowchart fontwork icons network shapes symbolshapes
 
-$(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
+$(eval $(call gb_PackageSet_PackageSet,extras_set_gallsystem))
+
+$(eval $(call gb_Package_Package_internal,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
 $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/gallery,\
     $(addsuffix .sdg,$(system_galleries)) \
     $(addsuffix .sdv,$(system_galleries)) \
     $(addsuffix .thm,$(system_galleries)) \
 ))
+
+$(eval $(call gb_Package_Package_internal,extras_gallsystemstr,$(call gb_CustomTarget_get_workdir,extras/gallsysstr)))
+$(eval $(call gb_Package_use_customtarget,extras_gallsystemstr,extras/gallsysstr))
+
+$(eval $(call gb_Package_add_files,extras_gallsystemstr,$(LIBO_SHARE_FOLDER)/gallery,\
+    $(addsuffix .str,$(filter-out bullets fontwork symbolshapes,$(system_galleries))) \
+))
+
+$(eval $(call gb_PackageSet_add_package,extras_set_gallsystem,extras_gallsystem))
+$(eval $(call gb_PackageSet_add_package,extras_set_gallsystem,extras_gallsystemstr))
 
 # vim: set noet sw=4 ts=4:

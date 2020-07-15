@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallmytheme \
 	Package_gallroot \
 	Package_gallsystem \
-	Package_gallsystemstr \
 	Package_glade \
 	Package_labels \
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
