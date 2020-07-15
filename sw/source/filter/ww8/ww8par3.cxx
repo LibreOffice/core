@@ -891,7 +891,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         {
             sal_uInt32 nExtraOffset = 0;
             sal_uInt8 nLevelB = 0;
-            while (aLVL.aOfsNumsXCH[nLevelB] && nLevelB < nMaxLevel)
+            while (nLevelB < nMaxLevel && aLVL.aOfsNumsXCH[nLevelB])
             {
                 // Replacement symbol is read from source string from position taken from aOfsNumsXCH array
                 sal_uInt8 nOffset = aLVL.aOfsNumsXCH[nLevelB] + nExtraOffset - 1;
