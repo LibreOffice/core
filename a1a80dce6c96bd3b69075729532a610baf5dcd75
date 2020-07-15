@@ -22,6 +22,30 @@
       "revId": "a1a80dce6c96bd3b69075729532a610baf5dcd75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e47a190_6668803b",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-15T13:47:48Z",
+      "side": 1,
+      "message": "I thought repeated calling should be avoided. Done!",
+      "parentUuid": "76da3fb3_f0775b68",
+      "range": {
+        "startLine": 63,
+        "startChar": 49,
+        "endLine": 64,
+        "endChar": 55
+      },
+      "revId": "a1a80dce6c96bd3b69075729532a610baf5dcd75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
