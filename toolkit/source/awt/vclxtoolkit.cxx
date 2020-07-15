@@ -81,7 +81,7 @@
 #include <controls/filectrl.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/calendar.hxx>
+#include <vcl/toolkit/calendar.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>
