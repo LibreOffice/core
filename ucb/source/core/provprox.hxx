@@ -29,35 +29,32 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 
 
-
-class UcbContentProviderProxyFactory : public cppu::WeakImplHelper <
-    css::lang::XServiceInfo,
-    css::ucb::XContentProviderFactory >
+using UcbContentProviderProxyFactory_Base = cppu::WeakComponentImplHelper <
+                                                css::lang::XServiceInfo,
+                                                css::ucb::XContentProviderFactory >;
+class UcbContentProviderProxyFactory : public cppu::BaseMutex, public UcbContentProviderProxyFactory_Base
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory >
-                                m_xSMgr;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
     explicit UcbContentProviderProxyFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSMgr );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UcbContentProviderProxyFactory() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-                          css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProviderFactory
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
@@ -82,8 +79,8 @@ class UcbContentProviderProxy :
     bool        m_bReplace;
     bool        m_bRegister;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory >
-                                m_xSMgr;
+    css::uno::Reference< css::uno::XComponentContext >
+                                m_xContext;
     css::uno::Reference< css::ucb::XContentProvider >
                                 m_xProvider;
     css::uno::Reference< css::ucb::XContentProvider >
@@ -91,7 +88,7 @@ class UcbContentProviderProxy :
 
 public:
     UcbContentProviderProxy(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSMgr,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& Service );
     virtual ~UcbContentProviderProxy() override;
 

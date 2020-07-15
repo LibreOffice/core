@@ -265,7 +265,11 @@ void Desktop::RemoveTemporaryDirectory()
     OUString &rCurrentTempURL = CurrentTempURL::get();
     if ( !rCurrentTempURL.isEmpty() )
     {
-        ::utl::UCBContentHelper::Kill( rCurrentTempURL );
+        try {
+            ::utl::UCBContentHelper::Kill( rCurrentTempURL );
+        } catch (css::uno::Exception const &) {
+            TOOLS_INFO_EXCEPTION("unotools.ucbhelper", rCurrentTempURL);
+        }
     }
 }
 
