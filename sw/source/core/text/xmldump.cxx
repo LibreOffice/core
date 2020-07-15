@@ -427,9 +427,9 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
     getFrameArea().dumpAsXmlAttributes(writer);
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidPos"), BAD_CAST(OString::boolean(isFrameAreaPositionValid()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidSize"), BAD_CAST(OString::boolean(isFrameAreaSizeValid()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidPrtArea"), BAD_CAST(OString::boolean(isFramePrintAreaValid()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaPositionValid"), BAD_CAST(OString::boolean(isFrameAreaPositionValid()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaSizeValid"), BAD_CAST(OString::boolean(isFrameAreaSizeValid()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFramePrintAreaValid"), BAD_CAST(OString::boolean(isFramePrintAreaValid()).getStr()));
     xmlTextWriterEndElement( writer );
 
     // output the print area
