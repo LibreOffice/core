@@ -193,7 +193,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
 
-    while (true)
+    while (!sCurrentParaStyle.isEmpty())
     {
         uno::Reference<style::XStyle> xPropertiesStyle(xStyleFamily->getByName(sCurrentParaStyle),
                                                        uno::UNO_QUERY_THROW);
