@@ -46,6 +46,30 @@
       "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af3b6f30_4ffef1b1",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-07-15T09:45:08Z",
+      "side": 0,
+      "message": "But maybe we have to add the mapping of the function as it was before  https://github.com/LibreOffice/core/commit/aee3aa2610971936d6f402365ebf34c14847ab44. On my local machine view a few test cases it worked fine. Have to test it more in detail in the evening.",
+      "parentUuid": "4468f496_f2264c93",
+      "range": {
+        "startLine": 79,
+        "startChar": 7,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
