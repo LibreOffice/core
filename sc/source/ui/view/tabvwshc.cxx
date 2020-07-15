@@ -120,10 +120,13 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
     if ( nCurRefDlgId != nSlotId )
     {
-        //  the dialog has been opened in a different view
-        //  -> lock the dispatcher for this view (modal mode)
+        if (!(comphelper::LibreOfficeKit::isActive() && nSlotId == SID_OPENDLG_FUNCTION))
+        {
+            //  the dialog has been opened in a different view
+            //  -> lock the dispatcher for this view (modal mode)
 
-        GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
+            GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
+        }
         return nullptr;
     }
 
