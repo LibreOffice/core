@@ -46,6 +46,30 @@
       "revId": "a1a80dce6c96bd3b69075729532a610baf5dcd75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70716831_f1c8b9aa",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T13:51:12Z",
+      "side": 1,
+      "message": "\u003e I thought repeated calling should be avoided.\n\nAnd you are of course right. This is called in a loop, so natural to try to move repeated part out of the loop. That\u0027s why I explicitly mentioned that is this specific case, the performance penalty should be minimal. So please continue thinking about such optimizations, don\u0027t get discouraged by this review. Thanks!",
+      "parentUuid": "7e47a190_6668803b",
+      "range": {
+        "startLine": 63,
+        "startChar": 49,
+        "endLine": 64,
+        "endChar": 55
+      },
+      "revId": "a1a80dce6c96bd3b69075729532a610baf5dcd75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
