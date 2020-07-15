@@ -359,6 +359,42 @@ DataLabelsConverter::~DataLabelsConverter()
 {
 }
 
+namespace
+{
+/// Inherit <c:dLbl> text props (if not set) from <c:dLbls> text props (if set).
+void InheritFromDataLabelsTextProps(const DataLabelsModel& rLabels, const DataLabelModel& rLabel)
+{
+    // See if <c:dLbls> contains text properties to inherit.
+    if (!rLabels.mxTextProp.is() || rLabels.mxTextProp->getParagraphs().empty())
+    {
+        return;
+    }
+
+    const std::shared_ptr<TextParagraph>& rLabelsParagraph = rLabels.mxTextProp->getParagraphs()[0];
+
+    // See if <c:dLbl> lacks text properties.
+    if (rLabel.mxTextProp.is())
+    {
+        return;
+    }
+
+    if (!rLabel.mxText || !rLabel.mxText->mxTextBody
+        || rLabel.mxText->mxTextBody->getParagraphs().empty())
+    {
+        return;
+    }
+
+    const std::shared_ptr<TextParagraph>& rLabelParagraph
+        = rLabel.mxText->mxTextBody->getParagraphs()[0];
+
+    // Inherit rLabel.mxText's char props from rLabels.mxTextProp's char props.
+    TextCharacterProperties aCharProps;
+    aCharProps.assignUsed(rLabelsParagraph->getProperties().getTextCharacterProperties());
+    aCharProps.assignUsed(rLabelParagraph->getProperties().getTextCharacterProperties());
+    rLabelParagraph->getProperties().getTextCharacterProperties().assignUsed(aCharProps);
+}
+}
+
 void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
 {
     PropertySet aPropSet( rxDataSeries );
@@ -389,6 +425,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     {
         if (pointLabel->maNumberFormat.maFormatCode.isEmpty())
             pointLabel->maNumberFormat = mrModel.maNumberFormat;
+        InheritFromDataLabelsTextProps(mrModel, *pointLabel);
 
         DataLabelConverter aLabelConv(*this, *pointLabel);
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
