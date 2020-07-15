@@ -1121,6 +1121,26 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         xLabels[j] = xCustomLabel;
                         xCustomLabel->setString(seriesStyle.mCustomLabels[j]);
                         xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+
+                        // Restore character properties on the text span manually, till
+                        // SchXMLExportHelper_Impl::exportCustomLabel() does not write the style.
+                        uno::Reference<beans::XPropertySetInfo> xPointPropInfo
+                            = xPointProp->getPropertySetInfo();
+                        if (xPointPropInfo.is())
+                        {
+                            uno::Sequence<beans::Property> aProperties = xPointPropInfo->getProperties();
+                            for (const auto& rProperty : std::as_const(aProperties))
+                            {
+                                if (!rProperty.Name.startsWith("Char")
+                                    || rProperty.Name.startsWith("Chart"))
+                                {
+                                    continue;
+                                }
+
+                                xCustomLabel->setPropertyValue(
+                                    rProperty.Name, xPointProp->getPropertyValue(rProperty.Name));
+                            }
+                        }
                     }
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
                 }

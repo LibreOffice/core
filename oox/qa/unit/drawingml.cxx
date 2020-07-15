@@ -17,6 +17,11 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -154,6 +159,44 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
     // - Actual  : 10813
     // i.e. the adjust value was set from the placeholder, not from the shape.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11587), aAdjustmentSeq[0].Value.get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
+{
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-data-label-char-color.docx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<chart2::XChartDocument> xModel(xShape->getPropertyValue("Model"),
+                                                  uno::UNO_QUERY);
+    uno::Reference<chart2::XCoordinateSystemContainer> xDiagram(xModel->getFirstDiagram(),
+                                                                uno::UNO_QUERY);
+
+    uno::Reference<chart2::XChartTypeContainer> xCoordinateSystem(
+        xDiagram->getCoordinateSystems()[0], uno::UNO_QUERY);
+
+    uno::Reference<chart2::XDataSeriesContainer> xChartType(xCoordinateSystem->getChartTypes()[0],
+                                                            uno::UNO_QUERY);
+
+    uno::Reference<chart2::XDataSeries> xDataSeries = xChartType->getDataSeries()[0];
+
+    uno::Reference<beans::XPropertySet> xDataPoint = xDataSeries->getDataPointByIndex(0);
+
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aLabels;
+    xDataPoint->getPropertyValue("CustomLabelFields") >>= aLabels;
+    uno::Reference<beans::XPropertySet> xLabel = aLabels[0];
+
+    sal_Int32 nCharColor = 0;
+    xLabel->getPropertyValue("CharColor") >>= nCharColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 16777215
+    // - Actual  : -1
+    // i.e. the data label had no explicit (white) color.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
