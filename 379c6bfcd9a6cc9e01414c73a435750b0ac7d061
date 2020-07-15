@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6aa2b85e_3e675bbe",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-15T19:50:26Z",
+      "side": 1,
+      "message": "This is only a workaround for the cases where one explicit cell range was given and the sheet resulted in a #REF!, but not for formula expressions like OFFSET(#REF!.A2;-1;0)\n\nLooking at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d108673#c13 all together this looks more like producing the string from the reference tokens needs a handling of invalid sheet references.",
+      "revId": "379c6bfcd9a6cc9e01414c73a435750b0ac7d061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
