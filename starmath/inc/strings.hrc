@@ -242,6 +242,7 @@
 #define RID_PARTIAL_HELP                    NC_("RID_PARTIAL_HELP", "Partial" )
 #define RID_NABLA_HELP                      NC_("RID_NABLA_HELP", "Nabla" )
 #define RID_LAPLACE_HELP                    NC_("RID_LAPLACE_HELP", "Laplace transform" )
+#define RID_FOURRIER_HELP                   NC_("RID_FOURRIER_HELP", "Fourrier transform" )
 #define RID_WP_HELP                         NC_("RID_WP_HELP", "Weierstrass p" )
 #define RID_DOTSAXIS_HELP                   NC_("RID_DOTSAXIS_HELP", "Dots In Middle" )
 #define RID_DOTSUP_HELP                     NC_("RID_DOTSUP_HELP", "Dots To Top" )
