@@ -1258,15 +1258,12 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineCo
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
 {
-    // TODO: Fix export.
-    if (mbExported)
-        return;
-
     // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    const sal_Int32 nAnchoredWidth
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2408), nAnchoredWidth);
+    if (!pXmlDoc)
+        return;
+    auto nWidth = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2408, nWidth, 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAutoFitForLegacyShapes, "tdf112312_AutoFitForLegacyShapes.odt")
