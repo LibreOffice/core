@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f471c3ac_21fddfad",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T20:28:08Z",
+      "side": 1,
+      "message": "when adding the correct prefix, please change the name to rCamelCase. So -\u003e rCurrent.",
+      "range": {
+        "startLine": 50,
+        "startChar": 73,
+        "endLine": 50,
+        "endChar": 81
+      },
+      "revId": "73939947290852ddf56f3e563135bd79adb8b7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e04f22d_c1dc9c35",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T20:28:08Z",
+      "side": 1,
+      "message": "this is a smart *pointer* - unique_ptr - \"unique pointer\". It should be \"pResult\".",
+      "range": {
+        "startLine": 53,
+        "startChar": 36,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "73939947290852ddf56f3e563135bd79adb8b7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1a8d9d_9b918bc4",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T20:28:08Z",
+      "side": 1,
+      "message": "and this is also a smart pointer, not to a UNO interface -\u003e pEntry.",
+      "range": {
+        "startLine": 78,
+        "startChar": 36,
+        "endLine": 78,
+        "endChar": 37
+      },
+      "revId": "73939947290852ddf56f3e563135bd79adb8b7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23a6cfcd_cd71f8f7",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-15T20:28:08Z",
+      "side": 1,
+      "message": "This is a reference to an UNO reference -\u003e xRange",
+      "range": {
+        "startLine": 119,
+        "startChar": 37,
+        "endLine": 119,
+        "endChar": 38
+      },
+      "revId": "73939947290852ddf56f3e563135bd79adb8b7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
