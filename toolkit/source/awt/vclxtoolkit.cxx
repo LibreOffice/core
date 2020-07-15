@@ -1384,9 +1384,6 @@ void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-
-
-
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )
@@ -1764,8 +1761,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
             break;
             case WindowType::CONTROL:
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        "tabpagecontainer" ) )
+                if ( aServiceName == "tabpagecontainer" )
                 {
                     // TabControl has a special case for tabs without border: they are displayed
                     // in a different way, so we need to ensure that this style is not set, so
