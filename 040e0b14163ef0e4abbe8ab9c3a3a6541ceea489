@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "776b6a2a_37d5ef96",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-15T09:25:28Z",
+      "side": 0,
+      "message": "As commented on BZ I cannot reproduce the issue neither on master or still. So the patch has no effect for me. However, issue tdf#70813 is still relevant (C,B,A but u0001..u9999). Can we introduce a context menu on the module that provides the search?",
+      "range": {
+        "startLine": 79,
+        "startChar": 7,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
