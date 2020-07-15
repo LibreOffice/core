@@ -520,29 +520,43 @@ void ScViewDataTable::InitData(ScDocument *pDoc)
     aHeightHelper.setDocument(pDoc, false);
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData) const
+void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
+
+    ScSplitMode eExHSplitMode = eHSplitMode;
+    ScSplitMode eExVSplitMode = eVSplitMode;
+    SCCOL nExFixPosX = nFixPosX;
+    SCROW nExFixPosY = nFixPosY;
+    long nExHSplitPos = nHSplitPos;
+    long nExVSplitPos = nVSplitPos;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        rViewData.OverrideWithLOKFreeze(eExHSplitMode, eExVSplitMode,
+                                        nExFixPosX, nExFixPosY,
+                                        nExHSplitPos, nExVSplitPos, nTab);
+    }
 
     pSettings[SC_CURSOR_X].Name = SC_CURSORPOSITIONX;
     pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
     pSettings[SC_CURSOR_Y].Name = SC_CURSORPOSITIONY;
     pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
     pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
-    pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eHSplitMode);
+    pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eExHSplitMode);
     pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
-    pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eVSplitMode);
+    pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eExVSplitMode);
     pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = SC_HORIZONTALSPLITPOSITION;
-    if (eHSplitMode == SC_SPLIT_FIX)
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
+    if (eExHSplitMode == SC_SPLIT_FIX)
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosX);
     else
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nHSplitPos);
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExHSplitPos);
     pSettings[SC_VERTICAL_SPLIT_POSITION].Name = SC_VERTICALSPLITPOSITION;
-    if (eVSplitMode == SC_SPLIT_FIX)
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
+    if (eExVSplitMode == SC_SPLIT_FIX)
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosY);
     else
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nVSplitPos);
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExVSplitPos);
     // Prevent writing odd settings that would make crash versions that
     // don't apply SanitizeWhichActive() when reading the settings.
     // See tdf#117093
@@ -1327,14 +1341,32 @@ void ScViewData::ResetOldCursor()
     pThisTab->mbOldCursorValid = false;
 }
 
-SCCOL ScViewData::GetPosX( ScHSplitPos eWhich ) const
+SCCOL ScViewData::GetPosX( ScHSplitPos eWhich, SCTAB nForTab ) const
 {
-    return comphelper::LibreOfficeKit::isActive() ? 0 : pThisTab->nPosX[eWhich];
+    if (comphelper::LibreOfficeKit::isActive())
+        return 0;
+
+    if (nForTab == -1)
+        return pThisTab->nPosX[eWhich];
+
+    if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
+        return -1;
+
+    return maTabData[nForTab]->nPosX[eWhich];
 }
 
-SCROW ScViewData::GetPosY( ScVSplitPos eWhich ) const
+SCROW ScViewData::GetPosY( ScVSplitPos eWhich, SCTAB nForTab ) const
 {
-    return comphelper::LibreOfficeKit::isActive() ? 0 : pThisTab->nPosY[eWhich];
+    if (comphelper::LibreOfficeKit::isActive())
+        return 0;
+
+    if (nForTab == -1)
+        return pThisTab->nPosY[eWhich];
+
+    if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
+        return -1;
+
+    return maTabData[nForTab]->nPosY[eWhich];
 }
 
 SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
@@ -2285,7 +2317,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) 
 }
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
-                                bool bAllowNeg ) const
+                                bool bAllowNeg, SCTAB nForTab ) const
 {
     ScHSplitPos eWhichX = SC_SPLIT_LEFT;
     ScVSplitPos eWhichY = SC_SPLIT_BOTTOM;
@@ -2309,6 +2341,18 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             break;
     }
 
+    if (nForTab == -1)
+        nForTab = nTabNo;
+    bool bForCurTab = (nForTab == nTabNo);
+    if (!bForCurTab && (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size()))))
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::GetScrPos :  invalid nForTab = " << nForTab);
+        nForTab = nTabNo;
+        bForCurTab = true;
+    }
+
+    ScViewDataTable* pViewTable = bForCurTab ? pThisTab : maTabData[nForTab].get();
+
     if (pView)
     {
         const_cast<ScViewData*>(this)->aScrSize.setWidth( pView->GetGridWidth(eWhichX) );
@@ -2319,7 +2363,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
 
-    SCCOL nPosX = GetPosX(eWhichX);
+    SCCOL nPosX = GetPosX(eWhichX, nForTab);
     long nScrPosX = 0;
 
     if (bAllowNeg || nWhereX >= nPosX)
@@ -2328,7 +2372,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         if (bIsTiledRendering)
         {
             OSL_ENSURE(nPosX == 0, "Unsupported case.");
-            const auto& rNearest = pThisTab->aWidthHelper.getNearestByIndex(nWhereX - 1);
+            const auto& rNearest = pViewTable->aWidthHelper.getNearestByIndex(nWhereX - 1);
             nStartPosX = rNearest.first + 1;
             nScrPosX = rNearest.second;
         }
@@ -2341,7 +2385,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosX = 0x7FFFFFFF;
                 else
                 {
-                    nTSize = pDoc->GetColWidth( nX, nTabNo );
+                    nTSize = pDoc->GetColWidth( nX, nForTab );
                     if (nTSize)
                     {
                         long nSizeXPix = ToPixel( nTSize, nPPTX );
@@ -2355,7 +2399,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             for (SCCOL nX = nStartPosX; nX > nWhereX;)
             {
                 --nX;
-                nTSize = pDoc->GetColWidth( nX, nTabNo );
+                nTSize = pDoc->GetColWidth( nX, nForTab );
                 if (nTSize)
                 {
                     long nSizeXPix = ToPixel( nTSize, nPPTX );
@@ -2367,7 +2411,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
 
-    SCROW nPosY = GetPosY(eWhichY);
+    SCROW nPosY = GetPosY(eWhichY, nForTab);
     long nScrPosY = 0;
 
     if (bAllowNeg || nWhereY >= nPosY)
@@ -2376,7 +2420,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         if (bIsTiledRendering)
         {
             OSL_ENSURE(nPosY == 0, "Unsupported case.");
-            const auto& rNearest = pThisTab->aHeightHelper.getNearestByIndex(nWhereY - 1);
+            const auto& rNearest = pViewTable->aHeightHelper.getNearestByIndex(nWhereY - 1);
             nStartPosY = rNearest.first + 1;
             nScrPosY = rNearest.second;
         }
@@ -2389,13 +2433,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosY = 0x7FFFFFFF;
                 else if (bAllowNeg || bIsTiledRendering)
                 {
-                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nTabNo, nPPTY );
+                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nForTab, nPPTY );
                     nScrPosY += nSizeYPix;
                 }
                 else
                 {
                     sal_uLong nMaxHeight = aScrSize.getHeight() - nScrPosY;
-                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nTabNo, nPPTY, &nMaxHeight );
+                    sal_uLong nSizeYPix = pDoc->GetScaledRowHeight( nStartPosY, nWhereY-1, nForTab, nPPTY, &nMaxHeight );
                     nScrPosY += nSizeYPix;
                 }
             }
@@ -2405,7 +2449,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             for (SCROW nY = nStartPosY; nY > nWhereY;)
             {
                 --nY;
-                nTSize = pDoc->GetRowHeight( nY, nTabNo );
+                nTSize = pDoc->GetRowHeight( nY, nForTab );
                 if (nTSize)
                 {
                     long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -2415,7 +2459,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         }
     }
 
-    if ( pDoc->IsLayoutRTL( nTabNo ) )
+    if ( pDoc->IsLayoutRTL( nForTab ) )
     {
         //  mirror horizontal position
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
@@ -2655,14 +2699,24 @@ bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, long& rSizeXTwips, l
 
 void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCCOL& rPosX, SCROW& rPosY,
-                                        bool bTestMerge, bool bRepair )
+                                        bool bTestMerge, bool bRepair, SCTAB nForTab )
 {
     //  special handling of 0 is now in ScViewFunctionSet::SetCursorAtPoint
+
+    if (nForTab == -1)
+        nForTab = nTabNo;
+    bool bForCurTab = (nForTab == nTabNo);
+    if (!bForCurTab && (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size()))))
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::GetPosFromPixel :  invalid nForTab = " << nForTab);
+        nForTab = nTabNo;
+        bForCurTab = true;
+    }
 
     ScHSplitPos eHWhich = WhichH(eWhich);
     ScVSplitPos eVWhich = WhichV(eWhich);
 
-    if ( pDoc->IsLayoutRTL( nTabNo ) )
+    if ( pDoc->IsLayoutRTL( nForTab ) )
     {
         //  mirror horizontal position
         if (pView)
@@ -2670,8 +2724,8 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         nClickX = aScrSize.Width() - 1 - nClickX;
     }
 
-    SCCOL nStartPosX = GetPosX(eHWhich);
-    SCROW nStartPosY = GetPosY(eVWhich);
+    SCCOL nStartPosX = GetPosX(eHWhich, nForTab);
+    SCROW nStartPosY = GetPosY(eVWhich, nForTab);
     rPosX = nStartPosX;
     rPosY = nStartPosY;
     long nScrX = 0;
@@ -2681,7 +2735,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     {
         while ( rPosX<=pDoc->MaxCol() && nClickX >= nScrX )
         {
-            nScrX += ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
+            nScrX += ToPixel( pDoc->GetColWidth( rPosX, nForTab ), nPPTX );
             ++rPosX;
         }
         --rPosX;
@@ -2691,19 +2745,19 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         while ( rPosX>0 && nClickX < nScrX )
         {
             --rPosX;
-            nScrX -= ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
+            nScrX -= ToPixel( pDoc->GetColWidth( rPosX, nForTab ), nPPTX );
         }
     }
 
     if (nClickY > 0)
-        AddPixelsWhile( nScrY, nClickY, rPosY, pDoc->MaxRow(), nPPTY, pDoc, nTabNo );
+        AddPixelsWhile( nScrY, nClickY, rPosY, pDoc->MaxRow(), nPPTY, pDoc, nForTab );
     else
     {
         /* TODO: could need some "SubPixelsWhileBackward" method */
         while ( rPosY>0 && nClickY < nScrY )
         {
             --rPosY;
-            nScrY -= ToPixel( pDoc->GetRowHeight( rPosY, nTabNo ), nPPTY );
+            nScrY -= ToPixel( pDoc->GetRowHeight( rPosY, nForTab ), nPPTY );
         }
     }
 
@@ -2728,7 +2782,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     if (rPosY<0) rPosY=0;
     if (rPosY>pDoc->MaxRow()) rPosY=pDoc->MaxRow();
 
-    if (bTestMerge)
+    if (bTestMerge && bForCurTab)
     {
         // public method to adapt position
         SCCOL nOrigX = rPosX;
@@ -3285,6 +3339,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
     if( rDocSett.mfTabBarWidth < 0.0 )
         rDocSett.mfTabBarWidth = ScTabView::GetRelTabBarWidth();
 
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+
     // sheet settings
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
     {
@@ -3293,12 +3349,24 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             ScExtTabSettings& rTabSett = rDocOpt.GetOrCreateTabSettings( nTab );
 
             // split mode
-            ScSplitMode eHSplit = pViewTab->eHSplitMode;
-            ScSplitMode eVSplit = pViewTab->eVSplitMode;
-            bool bHSplit = eHSplit != SC_SPLIT_NONE;
-            bool bVSplit = eVSplit != SC_SPLIT_NONE;
-            bool bRealSplit = (eHSplit == SC_SPLIT_NORMAL) || (eVSplit == SC_SPLIT_NORMAL);
-            bool bFrozen    = (eHSplit == SC_SPLIT_FIX)    || (eVSplit == SC_SPLIT_FIX);
+            ScSplitMode eExHSplit = pViewTab->eHSplitMode;
+            ScSplitMode eExVSplit = pViewTab->eVSplitMode;
+            SCCOL nExFixPosX = pViewTab->nFixPosX;
+            SCROW nExFixPosY = pViewTab->nFixPosY;
+            long nExHSplitPos = pViewTab->nHSplitPos;
+            long nExVSplitPos = pViewTab->nVSplitPos;
+
+            if (bLOKActive)
+            {
+                OverrideWithLOKFreeze(eExHSplit, eExVSplit,
+                                      nExFixPosX, nExFixPosY,
+                                      nExHSplitPos, nExVSplitPos, nTab);
+            }
+
+            bool bHSplit = eExHSplit != SC_SPLIT_NONE;
+            bool bVSplit = eExVSplit != SC_SPLIT_NONE;
+            bool bRealSplit = (eExHSplit == SC_SPLIT_NORMAL) || (eExVSplit == SC_SPLIT_NORMAL);
+            bool bFrozen    = (eExHSplit == SC_SPLIT_FIX)    || (eExVSplit == SC_SPLIT_FIX);
             OSL_ENSURE( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
             rTabSett.mbFrozenPanes = !bRealSplit && bFrozen;
 
@@ -3308,15 +3376,15 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             if( bRealSplit )
             {
                 Point& rSplitPos = rTabSett.maSplitPos;
-                rSplitPos = Point( bHSplit ? pViewTab->nHSplitPos : 0, bVSplit ? pViewTab->nVSplitPos : 0 );
+                rSplitPos = Point( bHSplit ? nExHSplitPos : 0, bVSplit ? nExVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::MapTwip ) );
                 if( pDocShell )
                     rSplitPos.setX( static_cast<long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor()) );
             }
             else if( bFrozen )
             {
-                if( bHSplit ) rTabSett.maFreezePos.SetCol( pViewTab->nFixPosX );
-                if( bVSplit ) rTabSett.maFreezePos.SetRow( pViewTab->nFixPosY );
+                if( bHSplit ) rTabSett.maFreezePos.SetCol( nExFixPosX );
+                if( bVSplit ) rTabSett.maFreezePos.SetRow( nExFixPosY );
             }
 
             // first visible cell in top-left and additional panes
@@ -3535,6 +3603,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         }
     }
 
+    if (comphelper::LibreOfficeKit::isActive())
+        DeriveLOKFreezeAllSheets();
+
     // RecalcPixPos or so - also nMPos - also for ReadUserData ??!?!
 }
 
@@ -3555,7 +3626,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         if (maTabData[nTab])
         {
             uno::Sequence <beans::PropertyValue> aTableViewSettings;
-            maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this);
+            maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
             OUString sTabName;
             GetDocument()->GetName( nTab, sTabName );
             try
@@ -3807,6 +3878,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
 
     // #i47426# write view options to document, needed e.g. for Excel export
     pDoc->SetViewOptions( *pOptions );
+
+    if (comphelper::LibreOfficeKit::isActive())
+        DeriveLOKFreezeAllSheets();
 }
 
 void ScViewData::SetOptions( const ScViewOptions& rOpt )
@@ -4036,6 +4110,135 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
     if (nRow < rPosY)
         ++nRow;
     rPosY = nRow;
+}
+
+SCCOLROW ScViewData::GetLOKSheetFreezeIndex(bool bIsCol) const
+{
+    SCCOLROW nFreezeIndex = bIsCol ? pDoc->GetLOKFreezeCol(nTabNo) : pDoc->GetLOKFreezeRow(nTabNo);
+    return nFreezeIndex >= 0 ? nFreezeIndex : 0;
+}
+
+bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab)
+{
+    if (nForTab == -1)
+    {
+        nForTab = nTabNo;
+    }
+    else if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::SetLOKSheetFreezeIndex :  invalid nForTab = " << nForTab);
+        return false;
+    }
+
+    return bIsCol ?
+        pDoc->SetLOKFreezeCol(static_cast<SCCOL>(nFreezeIndex), nForTab) :
+        pDoc->SetLOKFreezeRow(static_cast<SCROW>(nFreezeIndex), nForTab);
+}
+
+void ScViewData::DeriveLOKFreezeAllSheets()
+{
+    SCTAB nMaxTab = static_cast<SCTAB>(maTabData.size()) - 1;
+    for (SCTAB nTab = 0; nTab <= nMaxTab; ++nTab)
+        DeriveLOKFreezeIfNeeded(nTab);
+}
+
+void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
+{
+    if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::DeriveLOKFreezeIfNeeded :  invalid nForTab = " << nForTab);
+        return;
+    }
+
+    ScViewDataTable* pViewTable = maTabData[nForTab].get();
+    assert(pViewTable);
+
+    bool bConvertToFreezeX = false;
+    bool bConvertToFreezeY = false;
+    SCCOL nFreezeCol = pDoc->GetLOKFreezeCol(nForTab);
+    SCROW nFreezeRow = pDoc->GetLOKFreezeRow(nForTab);
+
+    if (nFreezeCol == -1)
+    {
+        ScSplitMode eSplitMode = pViewTable->eHSplitMode;
+        if (eSplitMode == SC_SPLIT_FIX)
+            nFreezeCol = pViewTable->nFixPosX;
+        else if (eSplitMode == SC_SPLIT_NORMAL)
+            bConvertToFreezeX = true;
+        else
+            nFreezeCol = 0;
+    }
+
+    if (nFreezeRow == -1)
+    {
+        ScSplitMode eSplitMode = pViewTable->eVSplitMode;
+        if (eSplitMode == SC_SPLIT_FIX)
+            nFreezeRow = pViewTable->nFixPosY;
+        else if (eSplitMode == SC_SPLIT_NORMAL)
+            bConvertToFreezeY = true;
+        else
+            nFreezeRow = 0;
+    }
+
+    if (bConvertToFreezeX || bConvertToFreezeY)
+    {
+        SCCOL nCol;
+        SCROW nRow;
+        GetPosFromPixel(bConvertToFreezeX ? pViewTable->nHSplitPos : 0,
+                        bConvertToFreezeY ? pViewTable->nVSplitPos : 0,
+                        SC_SPLIT_BOTTOMLEFT, nCol, nRow,
+                        false /* bTestMerge */, false /* bRepair */,
+                        nForTab);
+        if (bConvertToFreezeX)
+            nFreezeCol = nCol;
+        if (bConvertToFreezeY)
+            nFreezeRow = nRow;
+    }
+
+    pDoc->SetLOKFreezeCol(nFreezeCol, nForTab);
+    pDoc->SetLOKFreezeRow(nFreezeRow, nForTab);
+}
+
+void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
+                                       SCCOL& nExFixPosX, SCROW& nExFixPosY,
+                                       long& nExHSplitPos, long& nExVSplitPos, SCTAB nForTab) const
+{
+    SCCOL nFreezeCol = pDoc->GetLOKFreezeCol(nForTab);
+    SCROW nFreezeRow = pDoc->GetLOKFreezeRow(nForTab);
+
+    bool bConvertToScrPosX = false;
+    bool bConvertToScrPosY = false;
+
+    if (nFreezeCol >= 0)
+    {
+        if (eExHSplitMode == SC_SPLIT_NONE)
+            eExHSplitMode = SC_SPLIT_FIX;
+
+        if (eExHSplitMode == SC_SPLIT_FIX)
+            nExFixPosX = nFreezeCol;
+        else
+            bConvertToScrPosX = true;
+    }
+
+    if (nFreezeRow >= 0)
+    {
+        if (eExVSplitMode == SC_SPLIT_NONE)
+            eExVSplitMode = SC_SPLIT_FIX;
+
+        if (eExVSplitMode == SC_SPLIT_FIX)
+            nExFixPosY = nFreezeRow;
+        else
+            bConvertToScrPosY = true;
+    }
+
+    if (bConvertToScrPosX || bConvertToScrPosY)
+    {
+        Point aExSplitPos = GetScrPos(nFreezeCol, nFreezeRow, SC_SPLIT_BOTTOMLEFT, true, nForTab);
+        if (bConvertToScrPosX)
+            nExHSplitPos = aExSplitPos.X();
+        if (bConvertToScrPosY)
+            nExVSplitPos = aExSplitPos.Y();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

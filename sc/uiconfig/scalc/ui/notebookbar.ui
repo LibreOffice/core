@@ -10002,10 +10002,10 @@
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="View-FreezePanesFirstColumn">
+                                      <object class="GtkToolButton" id="View-FreezePanesColumn">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:FreezePanesFirstColumn</property>
+                                        <property name="action_name">.uno:FreezePanesColumn</property>
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
@@ -10028,10 +10028,10 @@
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="View-FreezePanesFirstRow">
+                                      <object class="GtkToolButton" id="View-FreezePanesRow">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:FreezePanesFirstRow</property>
+                                        <property name="action_name">.uno:FreezePanesRow</property>
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>

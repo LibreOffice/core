@@ -417,6 +417,15 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                             rViewData.GetVSplitMode() == SC_SPLIT_FIX ));
                 break;
 
+            case SID_WINDOW_FIX_COL:
+            case SID_WINDOW_FIX_ROW:
+                {
+                    bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
+                    sal_Int32 nFreezeIndex = rViewData.GetLOKSheetFreezeIndex(bIsCol);
+                    rSet.Put(SfxInt32Item(nWhich, nFreezeIndex));
+                }
+                break;
+
             case FID_CHG_SHOW:
                 {
                     if ( pDoc->GetChangeTrack() == nullptr || ( pDocShell && pDocShell->IsDocShared() ) )
