@@ -27,10 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-#define PROPERTIES_MANAGER_SERVICE_NAME "com.sun.star.ucb.PropertiesManager"
-
-
-
 
 class UcbPropertiesManager : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
@@ -50,13 +46,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-                          css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XPropertySetInfo
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
