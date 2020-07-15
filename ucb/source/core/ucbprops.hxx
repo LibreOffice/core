@@ -24,17 +24,15 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 
-#define PROPERTIES_MANAGER_SERVICE_NAME "com.sun.star.ucb.PropertiesManager"
+using UcbPropertiesManager_Base = cppu::WeakComponentImplHelper <
+                                        css::lang::XServiceInfo,
+                                        css::beans::XPropertySetInfo >;
 
-
-
-
-class UcbPropertiesManager : public cppu::WeakImplHelper <
-    css::lang::XServiceInfo,
-    css::beans::XPropertySetInfo >
+class UcbPropertiesManager : public cppu::BaseMutex, public UcbPropertiesManager_Base
 {
     css::uno::Sequence< css::beans::Property > m_pProps;
 
@@ -46,17 +44,13 @@ public:
     explicit UcbPropertiesManager();
     virtual ~UcbPropertiesManager() override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference<
-                          css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XPropertySetInfo
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
