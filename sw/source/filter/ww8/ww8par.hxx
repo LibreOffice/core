@@ -1058,7 +1058,7 @@ struct WW8TabBandDesc
     void ProcessSpacing(const sal_uInt8* pParamsTInsert);
     void ProcessSpecificSpacing(const sal_uInt8* pParamsTInsert);
     void ReadShd(const sal_uInt8* pS );
-    void ReadNewShd(const sal_uInt8* pS, bool bVer67);
+    void ReadNewShd(const sal_uInt8* pS, bool bVer67, sal_uInt8 nStart);
 
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 
