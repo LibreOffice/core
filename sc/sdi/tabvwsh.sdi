@@ -145,8 +145,8 @@ interface TableEditView
         SID_CURRENTDOC      [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_WINDOW_SPLIT    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_WINDOW_FIX      [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_WINDOW_FIX_ROW  [ ExecMethod = Execute; ]
-    SID_WINDOW_FIX_COL  [ ExecMethod = Execute; ]
+    SID_WINDOW_FIX_ROW  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_FIX_COL  [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_SAVEDOC
     [
         ExecMethod = ExecuteSave ;

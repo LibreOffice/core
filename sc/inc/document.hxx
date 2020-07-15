@@ -2546,6 +2546,11 @@ public:
      */
     OString dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType eGeomType);
 
+    SCCOL GetLOKFreezeCol(SCTAB nTab) const;
+    SCROW GetLOKFreezeRow(SCTAB nTab) const;
+    bool  SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
+    bool  SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab);
+
 private:
 
     /**

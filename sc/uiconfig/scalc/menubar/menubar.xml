@@ -168,8 +168,8 @@
       <menu:menuitem menu:id=".uno:FreezePanes"/>
       <menu:menu menu:id=".uno:FreezeCellsMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:FreezePanesFirstColumn"/>
-          <menu:menuitem menu:id=".uno:FreezePanesFirstRow"/>
+          <menu:menuitem menu:id=".uno:FreezePanesColumn"/>
+          <menu:menuitem menu:id=".uno:FreezePanesRow"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

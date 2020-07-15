@@ -250,7 +250,7 @@ private:
     void            InitData(ScDocument *pDoc);
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
-                        const ScViewData& rViewData ) const;
+                        const ScViewData& rViewData, SCTAB nTab ) const;
 
     void            ReadUserDataSequence(
                         const css::uno::Sequence <css::beans::PropertyValue>& rSettings,
@@ -396,8 +396,8 @@ public:
     SCCOL           MaxCol() const                          { return pDoc->MaxCol(); }
     SCROW           MaxRow() const                          { return pDoc->MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
-    SCCOL           GetPosX( ScHSplitPos eWhich ) const;
-    SCROW           GetPosY( ScVSplitPos eWhich ) const;
+    SCCOL           GetPosX( ScHSplitPos eWhich, SCTAB nForTab = -1 ) const;
+    SCROW           GetPosY( ScVSplitPos eWhich, SCTAB nForTab = -1 ) const;
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
     SCCOL           GetCurXForTab( SCTAB nTabIndex ) const;
@@ -506,7 +506,7 @@ public:
     bool            GetMergeSizePrintTwips( SCCOL nX, SCROW nY, long& rSizeXTwips, long& rSizeYTwips ) const;
     void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCCOL& rPosX, SCROW& rPosY,
-                                        bool bTestMerge = true, bool bRepair = false );
+                                        bool bTestMerge = true, bool bRepair = false, SCTAB nForTab = -1 );
     void            GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
                                         SCCOL nPosX, SCROW nPosY, bool& rLeft, bool& rTop );
 
@@ -601,7 +601,7 @@ public:
     void            SetActivePart( ScSplitPos eNewActive );
 
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
-                                bool bAllowNeg = false ) const;
+                                bool bAllowNeg = false, SCTAB nForTab = -1 ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const;
     /// returns the position (top-left corner) of the requested cell in print twips coordinates.
@@ -653,6 +653,14 @@ public:
     void            SetScenButSize(const Size& rNew)    { aScenButSize = rNew; }
 
     bool            IsSelCtrlMouseClick() const { return bSelCtrlMouseClick; }
+
+    SCCOLROW        GetLOKSheetFreezeIndex(bool bIsCol) const;
+    bool            SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab = -1);
+    void            DeriveLOKFreezeAllSheets();
+    void            DeriveLOKFreezeIfNeeded(SCTAB nForTab);
+    void            OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
+                                          SCCOL& nExFixPosX, SCROW& nExFixPosY,
+                                          long& nExHSplitPos, long& nExVSplitPos, SCTAB nForTab) const;
 
     static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
 
