@@ -2068,7 +2068,14 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor()
             (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
+            if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+            {   // ensure that SwXTextRange has SwIndex
+                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(rPos.nNode), nullptr);
+            }
+            else
+            {
+                aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
+            }
         }
     }
     else
