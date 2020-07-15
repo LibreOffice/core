@@ -96,66 +96,66 @@ void Test::tearDown()
 void Test::testColor()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/color.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{{color black b}"
-                                  " {color white w}"
-                                  " {color red r}"
-                                  " {color green g}"
-                                  " {color blue b}"
-                                  " {color yellow y}"
-                                  " {color silver s}"
-                                  " {color gray g}"
-                                  " {color maroon m}"
-                                  " {color purple p}"
-                                  " {color lime l}"
-                                  " {color olive o}"
-                                  " {color navy n}"
-                                  " {color teal t}"
-                                  " {color aqua a}"
-                                  " {color fuchsia f}}"),
+    CPPUNIT_ASSERT_EQUAL(OUString("{ color black b"
+                                  " color white w"
+                                  " color red r"
+                                  " color green g"
+                                  " color blue b"
+                                  " color yellow y"
+                                  " color silver s"
+                                  " color gray g"
+                                  " color maroon m"
+                                  " color purple p"
+                                  " color lime l"
+                                  " color olive o"
+                                  " color navy n"
+                                  " color teal t"
+                                  " color aqua a"
+                                  " color fuchsia f }"),
                          mxDocShell->GetText());
 }
 
 void Test::testSimple()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/simple.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( {a + b} right )^2"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"), mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( {a + b} right )^2"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"), mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/maction.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix {1 ## 2 ## 3}"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"), mxDocShell->GetText());
 }
 
 void Test::testMspace()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/mspace.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{a b ~ c ~~``` d}"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ a b ~ c ~~``` d }"), mxDocShell->GetText());
 }
 
 void Test::testtdf99556()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { {} }"), mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { }"), mxDocShell->GetText());
 }
 
 void Test::testTdf103430()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103430.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{{nitalic d}^2 {nitalic {color blue y}}} over {{nitalic d} {font sans {bold {italic {color red x}}}}}"),
+    CPPUNIT_ASSERT_EQUAL(OUString("{ { nitalic d ^ 2 nitalic color blue y } over { nitalic d font sans bold italic color red x } }"),
                          mxDocShell->GetText());
 }
 
 void Test::testTdf103500()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf103500.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{{ int csub a csup b {1 over x ` {nitalic d} x}} = {intd csub a csup b {1 over y ` {nitalic d} y}}}"),
+    CPPUNIT_ASSERT_EQUAL(OUString("{ { int csup b csub a { { 1 over x } ` nitalic d x } } = { intd csup b csub a { { 1 over y } ` nitalic d y } } }"),
                          mxDocShell->GetText());
 }
 

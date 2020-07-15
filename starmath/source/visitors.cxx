@@ -15,6 +15,7 @@
 #include "tmpdevice.hxx"
 #include <cursor.hxx>
 #include <cassert>
+#include "mathtype.hxx"
 
 // SmDefaultingVisitor
 
@@ -1918,6 +1919,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
     pNode->Accept( this );
+    maCmdText.stripEnd(' ');
     rText = maCmdText.makeStringAndClear();
 }
 
@@ -2077,6 +2079,8 @@ void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
+    sal_Int32 nc;
+    sal_Int16 nr, ng, nb;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2119,7 +2123,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                             static_cast<double>( pNode->GetSizeParameter( ) ),
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true ) );
-                Append( " " );
+                Separate( );
             }
             break;
         case TBLACK:
@@ -2145,6 +2149,51 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             break;
         case TYELLOW:
             Append( "color yellow " );
+            break;
+        case TGRAY:
+            Append( "color gray " );
+            break;
+        case TLIME:
+            Append( "color lime " );
+            break;
+        case TMAROON:
+            Append( "color maroon " );
+            break;
+        case TNAVY:
+            Append( "color navy " );
+            break;
+        case TOLIVE:
+            Append( "color olive " );
+            break;
+        case TPURPLE:
+            Append( "color purple " );
+            break;
+        case TSILVER:
+            Append( "color silver " );
+            break;
+        case TTEAL:
+            Append( "color teal " );
+            break;
+        case TAQUA:
+            Append( "color aqua " );
+            break;
+        case TFUCHSIA:
+            Append("color fuchsia ");
+            break;
+        case TRGB:
+            Append( "color rgb " );
+            nc = pNode->GetToken().aText.toInt32();
+            nb = nc % 256;
+            nc /= 256;
+            ng = nc % 256;
+            nc /= 256;
+            nr = nc % 256;
+            Append(OUString::number(nr));
+            Separate();
+            Append(OUString::number(ng));
+            Separate();
+            Append(OUString::number(nb));
+            Separate();
             break;
         case TSANS:
             Append( "font sans " );
@@ -2305,17 +2354,76 @@ void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 {
-    //TODO: This method might need improvements, see SmTextNode::CreateTextFromNode
-    if( pNode->GetToken( ).eType == TTEXT )
-        Append( "\"" );
-    Append( pNode->GetText( ) );
-    if( pNode->GetToken( ).eType == TTEXT )
-        Append( "\"" );
+    SmTokenType type = pNode->GetToken( ).eType;
+    switch(type){
+        case TTEXT:
+            Append( "\"" );
+            Append( pNode->GetToken().aText );
+            Append( "\"" );
+            break;
+        case TNUMBER:
+            Append( pNode->GetToken().aText );
+            break;
+        case TIDENT:
+            Append( pNode->GetToken().aText );
+            break;
+        case TFUNC:
+            Append("func ");
+            Append( pNode->GetToken().aText );
+            break;
+        default:
+            Append( pNode->GetToken().aText );
+    }
+    Separate( );
 }
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
 {
-    Append( pNode->GetToken( ).aText );
+    SmTokenType type = pNode->GetToken().eType;
+    switch(type){
+        case TINTD:
+            Append("intd ");
+            break;
+        case TINT:
+            Append("int ");
+            break;
+        case TSUM:
+            Append("sum ");
+            break;
+        case TIINT:
+            Append("iint ");
+            break;
+        case TIIINT:
+            Append("iiint ");
+            break;
+        case TLINT:
+            Append("lint ");
+            break;
+        case TLLINT:
+            Append("llint ");
+            break;
+        case TLLLINT:
+            Append("lllint ");
+            break;
+        case TCOPROD:
+            Append("coprod ");
+            break;
+        case TPROD:
+            Append("prod ");
+            break;
+        case TLIM:
+            Append("lim ");
+            break;
+        case TLIMSUP:
+            Append("lim sup ");
+            break;
+        case TLIMINF:
+            Append("lim inf ");
+            break;
+        default:
+            Append( pNode->GetToken().aText );
+            break;
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
@@ -2327,9 +2435,392 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
     Append( pNode->GetToken( ).aText );
 }
 
+//TODO to improve this it is requiered to improve mathmlimport.
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
-    Append( pNode->GetToken( ).aText );
+    sal_Unicode cChar = pNode->GetToken().cMathChar;
+    Separate( );
+    switch(cChar){
+        case '(':
+            Append("(");
+            break;
+        case '[':
+            Append("[");
+            break;
+        case '{':
+            Append("lbrace");
+            break;
+        case ')':
+            Append(")");
+            break;
+        case ']':
+            Append("]");
+            break;
+        case '}':
+            Append("rbrace");
+            break;
+        case 0x0000:
+            Append("none");
+            break;
+        case MS_NEG:
+            Append("neg");
+            break;
+        case MS_PLUSMINUS:
+            Append("+-");
+            break;
+        case MS_FACT:
+            Append("fact");
+            break;
+        case MS_VERTLINE:
+            if( pNode->GetToken().eType == TLLINE ) Append("lline");
+            else if( pNode->GetToken().eType == TRLINE ) Append("rline");
+            else Append("mline");
+            break;
+        case MS_TILDE:
+            Append("\"~\"");
+            break;
+        case MS_SIM:
+            Append("sim");
+            break;
+        case MS_DVERTLINE:
+            if( pNode->GetToken().eType == TLDLINE ) Append("ldline");
+            else Append("rdline");
+            break;
+        case MS_RIGHTARROW:
+            if( pNode->GetToken().eType == TTOWARD ) Append("toward");
+            else Append("rightarrow");
+            break;
+        case MS_LEFTARROW:
+            Append("leftarrow");
+            break;
+        case MS_UPARROW:
+            Append("uparrow");
+            break;
+        case MS_DOWNARROW:
+            Append("downarrow");
+            break;
+        case MS_NDIVIDES:
+            Append("ndivides");
+            break;
+        case MS_DLINE:
+            Append("parallel");
+            break;
+        case MS_TIMES:
+            Append("times");
+            break;
+        case MS_DIV:
+            Append("div");
+            break;
+        case MS_LAMBDABAR:
+            Append("lambdabar");
+            break;
+        case MS_DOTSLOW:
+            Append("dotslow");
+            break;
+        case 0x2022:
+            Append("cdot");
+            break;
+        case MS_CDOT:
+            Append("cdot");
+            break;
+        case MS_SETC:
+            Append("setC");
+            break;
+        case MS_HBAR:
+            Append("hbar");
+            break;
+        case MS_IM:
+            Append("Im");
+            break;
+        case MS_SETN:
+            Append("setN");
+            break;
+        case MS_WP:
+            Append("wp");
+            break;
+        case MS_LAPLACE:
+            Append("laplace");
+            break;
+        case MS_SETQ:
+            Append("setQ");
+            break;
+        case MS_RE:
+            Append("Re");
+            break;
+        case MS_SETR:
+            Append("setR");
+            break;
+        case MS_SETZ:
+            Append("setZ");
+            break;
+        case MS_ALEPH:
+            Append("aleph");
+            break;
+        case 0x0362:
+            Append("widevec");
+            break;
+        case MS_DLARROW:
+            Append("dlarrow");
+            break;
+        case MS_DRARROW:
+            Append("drarrow");
+            break;
+        case MS_DLRARROW:
+            Append("dlrarrow");
+            break;
+        case MS_FORALL:
+            Append("forall");
+            break;
+        case MS_PARTIAL:
+            Append("partial");
+            break;
+        case MS_EXISTS:
+            Append("exists");
+            break;
+        case MS_NOTEXISTS:
+            Append("notexists");
+            break;
+        case MS_EMPTYSET:
+            Append("emptyset");
+            break;
+        case MS_NABLA:
+            Append("nabla");
+            break;
+        case MS_IN:
+            Append("in");
+            break;
+        case MS_NI:
+            Append("owns");
+            break;
+        case MS_NOTIN:
+            Append("notin");
+            break;
+        case MS_BACKEPSILON:
+            Append("backepsilon");
+            break;
+        case MS_PROD:
+            Append("prod");
+            break;
+        case MS_COPROD:
+            Append("coprod");
+            break;
+        case MS_SUM:
+            Append("sum");
+            break;
+        case MS_MINUS:
+            Append("-");
+            break;
+        case MS_MINUSPLUS:
+            Append("-+");
+            break;
+        case MS_MULTIPLY:
+            Append("*");
+            break;
+        case MS_CIRC:
+            Append("circ");
+            break;
+        case MS_PROP:
+            Append("prop");
+            break;
+        case MS_INFINITY:
+            Append("infinity");
+            break;
+        case MS_AND:
+            Append("and");
+            break;
+        case MS_OR:
+            Append("or");
+            break;
+        case MS_INTERSECT:
+            Append("intersection");
+            break;
+        case MS_UNION:
+            Append("union");
+            break;
+        case MS_LINE:
+            Append("divides");
+            break;
+        case MS_INT:
+            if (pNode->GetScaleMode() == SmScaleMode::Height) Append("intd");
+            else Append("int");
+            break;
+        case MS_IINT:
+            Append("iint");
+            break;
+        case MS_IIINT:
+            Append("iiint");
+            break;
+        case MS_LINT:
+            Append("lint");
+            break;
+        case MS_LLINT:
+            Append("llint");
+            break;
+        case MS_LLLINT:
+            Append("lllint");
+            break;
+        case 0x2245:
+            Append("simeq");
+            break;
+        case MS_SIMEQ:
+            Append("simeq");
+            break;
+        case MS_BACKSLASH:
+            Append("setminus");
+            break;
+        case MS_APPROX:
+            Append("approx");
+            break;
+        case MS_NEQ:
+            Append("<>");
+            break;
+        case MS_EQUIV:
+            Append("equiv");
+            break;
+        case MS_LE:
+            Append("<=");
+            break;
+        case MS_GE:
+            Append(">=");
+            break;
+        case MS_LESLANT:
+            Append("leslant");
+            break;
+        case MS_GESLANT:
+            Append("geslant");
+            break;
+        case MS_PRECEDES:
+            Append("prec");
+            break;
+        case MS_SUCCEEDS:
+            Append("succ");
+            break;
+        case MS_PRECEDESEQUAL:
+            Append("preccurlyeq");
+            break;
+        case MS_SUCCEEDSEQUAL:
+            Append("succcurlyeq");
+            break;
+        case MS_PRECEDESEQUIV:
+            Append("precsim");
+            break;
+        case MS_SUCCEEDSEQUIV:
+            Append("succsim");
+            break;
+        case MS_NOTPRECEDES:
+            Append("nprec");
+            break;
+        case MS_NOTSUCCEEDS:
+            Append("nsucc");
+            break;
+        case MS_SUBSET:
+            Append("subset");
+            break;
+        case MS_SUPSET:
+            Append("supset");
+            break;
+        case MS_NSUBSET:
+            Append("nsubset");
+            break;
+        case MS_NSUPSET:
+            Append("nsupset");
+            break;
+        case MS_SUBSETEQ:
+            Append("subseteq");
+            break;
+        case MS_SUPSETEQ:
+            Append("supseteq");
+            break;
+        case MS_NSUBSETEQ:
+            Append("nsubseteq");
+            break;
+        case MS_NSUPSETEQ:
+            Append("nsupseteq");
+            break;
+        case 0x22b2: // NORMAL SUBGROUP OF
+            Append(OUStringChar(cChar));
+            break;
+        case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
+            Append(OUStringChar(cChar));
+            break;
+        case MS_ORTHO:
+            Append("ortho");
+            break;
+        case MS_DOTSVERT:
+            Append("dotsvert");
+            break;
+        case MS_DOTSAXIS:
+            Append("dotsaxis");
+            break;
+        case MS_DOTSUP:
+            Append("dotsup");
+            break;
+        case MS_DOTSDOWN:
+            Append("dotsdown");
+            break;
+        case MS_LANGLE:
+        case MS_LMATHANGLE:
+            Append("langle");
+            break;
+        case MS_RANGLE:
+        case MS_RMATHANGLE:
+            Append("rangle");
+            break;
+        case 0x301a:
+            Append("ldbracket");
+            break;
+        case 0x301b:
+            Append("rdbracket");
+            break;
+        case MS_LDBRACKET:
+            Append("ldbracket");
+            break;
+        case MS_RDBRACKET:
+            Append("rdbracket");
+            break;
+        case 0xe083:
+            Append("+");
+            break;
+        case MS_PLUS:
+            Append("+");
+            break;
+        case '^':
+            Append("^");
+            break;
+        case 0xe091:
+            Append("widehat");
+            break;
+        case 0xe096:
+            Append("widetilde");
+            break;
+        case 0xe098:
+            Append("widevec");
+            break;
+        case 0xE421:
+            Append("geslant");
+            break;
+        case 0xE425:
+            Append("leslant");
+            break;
+        case 0xeb01:    //no space
+        case 0xeb08:    //normal space
+            break;
+        case 0xef04:    //tiny space
+        case 0xef05:    //tiny space
+        case 0xeb02:    //small space
+        case 0xeb04:    //medium space
+            Append("`");
+            break;
+        case 0xeb05:    //large space
+            Append("~");
+            break;
+        case 0x3a9:
+            Append("%OMEGA");
+            break;
+        default:
+            Append(OUStringChar(cChar));
+            break;
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
