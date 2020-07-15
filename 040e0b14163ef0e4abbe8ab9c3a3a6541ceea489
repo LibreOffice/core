@@ -22,6 +22,30 @@
       "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4468f496_f2264c93",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-07-15T09:35:05Z",
+      "side": 0,
+      "message": "Actually it was this patch which fixed the issue: https://github.com/LibreOffice/core/commit/aee3aa2610971936d6f402365ebf34c14847ab44.\nOn my local LO version everything seems fine. However, I did not check the macros provided in tdf#70813.",
+      "parentUuid": "776b6a2a_37d5ef96",
+      "range": {
+        "startLine": 79,
+        "startChar": 7,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "040e0b14163ef0e4abbe8ab9c3a3a6541ceea489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
