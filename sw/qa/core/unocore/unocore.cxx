@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextAppend.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 
 #include <wrtsh.hxx>
 #include <unotextrange.hxx>
@@ -56,6 +57,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
     pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false,
                     /*bVisual=*/true);
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pWrtShell->GetCurrentShellCursor().GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<lang::XMultiServiceFactory> const xMSF(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextDocument> const xTD(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextFrame> const xTextFrame(
+        xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> const xFrameProps(xTextFrame, uno::UNO_QUERY_THROW);
+    xFrameProps->setPropertyValue("AnchorType",
+                                  uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+    auto const xText = xTD->getText();
+    auto const xTextCursor = xText->createTextCursor();
+    CPPUNIT_ASSERT(xTextCursor.is());
+    xText->insertTextContent(xTextCursor, xTextFrame, false);
+    auto const xAnchor = xTextFrame->getAnchor();
+    uno::Reference<text::XTextContent> const xFieldmark(
+        xMSF->createInstance("com.sun.star.text.Fieldmark"), uno::UNO_QUERY_THROW);
+    // this crashed because the anchor didn't have SwIndex
+    xText->insertTextContent(xAnchor, xFieldmark, false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
