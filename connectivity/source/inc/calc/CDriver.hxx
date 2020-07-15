@@ -38,8 +38,6 @@ namespace connectivity
                                 css::uno::XComponentContext >& _rxContext) :
                 file::OFileDriver(_rxContext) {}
 
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
             OUString SAL_CALL getImplementationName(  ) override;
 
             // XDriver

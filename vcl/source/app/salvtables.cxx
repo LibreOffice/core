@@ -5284,12 +5284,6 @@ bool SalInstanceSpinButton::has_focus() const
     return m_xWidget->HasChildPathFocus();
 }
 
-//so with hh::mm::ss, incrementing mm will not reset ss
-void SalInstanceSpinButton::DisableRemainderFactor()
-{
-    m_rFormatter.DisableRemainderFactor();
-}
-
 //off by default for direct SpinButtons, MetricSpinButton enables it
 void SalInstanceSpinButton::SetUseThousandSep()
 {

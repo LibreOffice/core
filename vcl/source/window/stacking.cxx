@@ -629,13 +629,6 @@ bool Window::IsTopWindow() const
     return mpWindowImpl->mpWinData->mnIsTopWindow == 1;
 }
 
-vcl::Window* Window::FindWindow( const Point& rPos ) const
-{
-
-    Point aPos = OutputToScreenPixel( rPos );
-    return const_cast<vcl::Window*>(this)->ImplFindWindow( aPos );
-}
-
 vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
 {
     vcl::Window* pTempWindow;

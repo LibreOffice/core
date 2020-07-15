@@ -608,8 +608,6 @@ public:
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-    double GetCurrency(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
-
 protected:
     // DbCellControl
     virtual bool        commitControl( ) override;

@@ -36,11 +36,6 @@ namespace connectivity
         public:
             ODriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
 
-            // XInterface
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            //  static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
-
             OUString SAL_CALL getImplementationName(  ) override;
             // XDriver
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;

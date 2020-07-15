@@ -92,13 +92,6 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
 
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence<OUString>
-    getSupportedServiceNames_Static();
-
-    static css::uno::Reference<css::uno::XInterface> Create(
-        css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
-
     // helper class
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;

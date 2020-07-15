@@ -157,17 +157,12 @@ public:
     void            EnableTriState( bool bTriState = true );
     bool            IsTriStateEnabled() const { return mbTriState; }
 
-    void            SaveValue() { meSaveValue = GetState(); }
-    TriState        GetSavedValue() const { return meSaveValue; }
-    bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
-
     static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const override;
 
     void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }
-    void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual void ShowFocus(const tools::Rectangle& rRect) override;

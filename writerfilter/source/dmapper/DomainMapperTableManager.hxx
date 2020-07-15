@@ -90,7 +90,6 @@ public:
     virtual void endOfRowAction() override;
 
     IntVectorPtr const & getCurrentGrid( );
-    IntVectorPtr const & getCurrentSpans( );
     IntVectorPtr const & getCurrentCellWidths( );
     TableParagraphVectorPtr getCurrentParagraphs( );
 

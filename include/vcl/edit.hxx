@@ -171,7 +171,6 @@ public:
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
-    virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
