@@ -750,6 +750,19 @@ namespace svt
         TimeControl(BrowserDataWin* pParent, bool bSpinVariant);
     };
 
+    class SVT_DLLPUBLIC DateControl : public FormattedControlBase
+    {
+    public:
+        DateControl(BrowserDataWin* pParent, bool bDropDown);
+
+        virtual void dispose() override;
+    private:
+        std::unique_ptr<weld::MenuButton> m_xMenuButton;
+        std::unique_ptr<weld::Builder> m_xCalendarBuilder;
+        std::unique_ptr<weld::Widget> m_xTopLevel;
+        std::unique_ptr<weld::Calendar> m_xCalendar;
+    };
+
     //= FormattedFieldCellController
     class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
