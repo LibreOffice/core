@@ -133,6 +133,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "fixed", TFIXED, '\0', TG::Font, 0},
     { "font", TFONT, '\0', TG::FontAttr, 5},
     { "forall", TFORALL, MS_FORALL, TG::Standalone, 5},
+    { "fourier", TFOURIER, MS_FOURIER, TG::Standalone, 5},
     { "from", TFROM, '\0', TG::Limit, 0},
     { "fuchsia", TFUCHSIA, '\0', TG::Color, 0},
     { "func", TFUNC, '\0', TG::Function, 5},
@@ -1483,6 +1484,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TPARTIAL :
         case TNABLA :
         case TLAPLACE :
+        case TFOURIER :
         case TTOWARD :
         case TDOTSAXIS :
         case TDOTSDIAG :
