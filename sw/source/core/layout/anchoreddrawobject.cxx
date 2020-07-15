@@ -444,6 +444,13 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
         {
             bConsiderWrapInfluenceDueToOverlapPrevCol = true;
         }
+        if (SwFrameFormat* pShape = &GetFrameFormat())
+        {
+            if (SwFrameFormat* pTextFrame = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
+            {
+                SwTextBoxHelper::syncFlyFrameAttr(*pShape, pShape->GetAttrSet());
+            }
+        }
     } while ( !mbValidPos && !bOscillationDetected &&
               !bConsiderWrapInfluenceDueToOverlapPrevCol );
 
@@ -493,6 +500,14 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
     const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->getFrameArea()) );
     SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
+
+    if (SwFrameFormat* pShape = &GetFrameFormat())
+    {
+        if (SwFrameFormat* pTextFrame = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
+        {
+            SwTextBoxHelper::syncFlyFrameAttr(*pShape, pShape->GetAttrSet());
+        }
+    }
 }
 
 void SwAnchoredDrawObject::SetDrawObjAnchor()
