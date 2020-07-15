@@ -95,9 +95,9 @@ enum class SmNodeType
 
 class SmNode : public SmRect
 {
-    SmFace      maFace;
 
-    SmToken     maNodeToken;
+    SmFace          maFace;
+    SmToken         maNodeToken;
     SmNodeType      meType;
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;
@@ -115,96 +115,304 @@ public:
     SmNode(const SmNode&) = delete;
     SmNode& operator=(const SmNode&) = delete;
 
-    virtual             ~SmNode();
+    virtual ~SmNode();
 
     /**
+     * Checks node visibility.
      * Returns true if this is an instance of SmVisibleNode's subclass, false otherwise.
+     * @return node visibility
      */
-    virtual bool        IsVisible() const = 0;
+    virtual bool IsVisible() const = 0;
 
-    virtual size_t      GetNumSubNodes() const = 0;
-    virtual SmNode *    GetSubNode(size_t nIndex) = 0;
-            const SmNode * GetSubNode(size_t nIndex) const
-            {
-                return const_cast<SmNode *>(this)->GetSubNode(nIndex);
-            }
+    /**
+     * Gets the number of subnodes.
+     * @return number of subnodes
+     */
+    virtual size_t GetNumSubNodes() const = 0;
+
+    /**
+     * Gets the subnode of index nIndex.
+     * @param nIndex
+     * @return subnode of index nIndex
+     */
+    virtual SmNode * GetSubNode(size_t nIndex) = 0;
+    const   SmNode * GetSubNode(size_t nIndex) const
+                     { return const_cast<SmNode *>(this)->GetSubNode(nIndex); }
 
     virtual const SmNode * GetLeftMost() const;
 
-            FontChangeMask &Flags() { return mnFlags; }
-            FontAttribute  &Attributes() { return mnAttributes; }
+    /**
+     * Gets the FontChangeMask flags.
+     * @return FontChangeMask flags
+     */
+    FontChangeMask &Flags() { return mnFlags; }
 
-            bool IsPhantom() const { return mbIsPhantom; }
-            void SetPhantom(bool bIsPhantom);
-            void SetColor(const Color &rColor);
+    /**
+     * Gets the font attributes.
+     * @return font attributes
+     */
+    FontAttribute &Attributes() { return mnAttributes; }
 
-            void SetAttribut(FontAttribute nAttrib);
-            void ClearAttribut(FontAttribute nAttrib);
+    /**
+     * Checks if it is a visible node rendered invisible.
+     * @return rendered visibility
+     */
+    bool IsPhantom() const { return mbIsPhantom; }
 
-            const SmFace & GetFont() const { return maFace; };
-                  SmFace & GetFont()       { return maFace; };
+    /**
+     * Sets the render visibility of a visible node to bIsPhantom.
+     * @param bIsPhantom
+     * @return
+     */
+    void SetPhantom(bool bIsPhantom);
 
-            void SetFont(const SmFace &rFace);
-            void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
-            void SetSize(const Fraction &rScale);
+    /**
+     * Sets the font color.
+     * @param rColor
+     * @return
+     */
+    void SetColor(const Color &rColor);
 
-    /** Prepare preliminary settings about font and text
-     *  (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+    /**
+     * Sets the font attribute nAttrib.
+     * Check FontAttribute class.
+     * @param nAttrib
+     * @return
+     */
+    void SetAttribut(FontAttribute nAttrib);
+
+    /**
+     * Clears the font attribute nAttrib.
+     * Check FontAttribute class.
+     * @param nAttrib
+     * @return
+     */
+    void ClearAttribut(FontAttribute nAttrib);
+
+    /**
+     * Gets the font.
+     * @return font
+     */
+    const SmFace & GetFont() const { return maFace; };
+          SmFace & GetFont()       { return maFace; };
+
+    /**
+     * Sets the font to rFace.
+     * @param rFace
+     * @return
+     */
+    void SetFont(const SmFace &rFace);
+
+    /**
+     * Sets the font size to rRelSize with type nType.
+     * Check FontSizeType for details.
+     * @param rRelSize
+     * @param nType
+     * @return
+     */
+    void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
+
+    /**
+     * Sets the font size to rRelSize with type FontSizeType::ABSOLUT.
+     * @param rScale
+     * @return
+     */
+    void SetSize(const Fraction &rScale);
+
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
      */
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth);
+
+    /**
+     * Prepare preliminary font attributes
+     * Called on Prepare(...).
+     * @return
+     */
     void PrepareAttributes();
 
-    void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
+    /**
+     * Sets the alignment of the text.
+     * Check RectHorAlign class for details.
+     * The subtrees will be affected if bApplyToSubTree.
+     * @param eHorAlign
+     * @param bApplyToSubTree
+     * @return
+     */
+    void SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
+
+    /**
+     * Gets the alignment of the text.
+     * @return alignment of the text
+     */
     RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
 
+    /**
+     * Parses itself to SmRect.
+     * @return this
+     */
     const SmRect & GetRect() const { return *this; }
 
-    void Move(const Point &rPosition);
-    void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
+    /**
+     * Moves the rectangle by rVector.
+     * @param rVector
+     * @return
+     */
+    void Move(const Point &rVector);
+
+    /**
+     * Moves the rectangle to rPoint, being the top left corner the origin.
+     * @param rPoint
+     * @return
+     */
+    void MoveTo(const Point &rPoint) { Move(rPoint - GetTopLeft()); }
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) = 0;
-    virtual void CreateTextFromNode(OUStringBuffer &rText);
 
-    virtual void    GetAccessibleText( OUStringBuffer &rText ) const = 0;
-    sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
-    void            SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
-    const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
+    /**
+     * Appends to rText the node text.
+     * @param rText
+     * @return
+     */
+    virtual void GetAccessibleText( OUStringBuffer &rText ) const = 0;
 
-    sal_uInt16  GetRow() const    { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
-    sal_uInt16  GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
+    /**
+     * Gets the node accessible index.
+     * Used for visual editing.
+     * @return node accessible index
+     */
+    sal_Int32 GetAccessibleIndex() const { return mnAccIndex; }
 
-    SmScaleMode     GetScaleMode() const { return meScaleMode; }
-    void            SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
+    /**
+     * Sets the node accessible index to nAccIndex.
+     * Used for visual editing.
+     * @param nAccIndex
+     * @return
+     */
+    void SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
 
+    /**
+     * Finds the node with accessible index nAccIndex.
+     * Used for visual editing.
+     * @param nAccIndex
+     * @return node with accessible index nAccIndex
+     */
+    const SmNode * FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
+
+    /**
+     * Gets the line in the text where the node is located.
+     * It is used to do the visual <-> text correspondence.
+     * @return line
+     */
+    sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
+
+    /**
+     * Gets the colum of the line in the text where the node is located.
+     * It is used to do the visual <-> text correspondence.
+     * @return colum
+     */
+    sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
+
+    /**
+     * Gets the scale mode.
+     * @return scale mode
+     */
+    SmScaleMode GetScaleMode() const { return meScaleMode; }
+
+    /**
+     * Sets the scale mode to eMode.
+     * @param eMode
+     * @return
+     */
+    void SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
+
+    //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth);
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight);
 
-    SmNodeType      GetType() const  { return meType; }
-    const SmToken & GetToken() const { return maNodeToken; }
+    /**
+     * Gets the node type.
+     * @return node type
+     */
+    SmNodeType GetType() const  { return meType; }
 
+    /**
+     * Gets the token.
+     * The token contains the data extracted from the text mode.
+     * Ej: text, type (sub, sup, int,...), row and column,...
+     * @return node type
+     */
+    const SmToken & GetToken() const { return maNodeToken; }
+          SmToken & GetToken()       { return maNodeToken; }
+
+    /**
+     * Finds the node from the position in the text.
+     * It is used to do the visual <-> text correspondence.
+     * @param nRow
+     * @param nCol
+     * @return the given node
+     */
     const SmNode *  FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const;
+
+    /**
+     * Finds the closest rectangle in the screen.
+     * @param rPoint
+     * @return the given node
+     */
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
 
-    /** Accept a visitor
-     * Calls the method for this class on the visitor
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
      */
     virtual void Accept(SmVisitor* pVisitor) = 0;
 
-    /** True if this node is selected */
+    /**
+     * Checks if the node is selected.
+     * @return the node is selected
+     */
     bool IsSelected() const {return mbIsSelected;}
+
+    /**
+     * Sets the node to Selected.
+     * @param Selected
+     * @return
+     */
     void SetSelected(bool Selected) {mbIsSelected = Selected;}
 
-    /** Get the parent node of this node */
-    SmStructureNode* GetParent(){ return mpParentNode; }
+    /**
+     * Gets the parent node of this node.
+     * @return parent node
+     */
     const SmStructureNode* GetParent() const { return mpParentNode; }
-    /** Set the parent node */
-    void SetParent(SmStructureNode* parent){
-        mpParentNode = parent;
-    }
+          SmStructureNode* GetParent()       { return mpParentNode; }
 
-    /** Set the token for this node */
-    void SetToken(SmToken const & token){
-        maNodeToken = token;
-    }
+    /**
+     * Sets the parent node.
+     * @param parent
+     * @return
+     */
+    void SetParent(SmStructureNode* parent){ mpParentNode = parent; }
+
+    /**
+     * Sets the token for this node.
+     * @param token
+     * @return
+     */
+    void SetToken(SmToken const & token){ maNodeToken = token; }
 
 private:
     SmStructureNode* mpParentNode;
@@ -223,57 +431,102 @@ class SmStructureNode : public SmNode
 protected:
     SmStructureNode(SmNodeType eNodeType, const SmToken &rNodeToken, size_t nSize = 0)
         : SmNode(eNodeType, rNodeToken)
-        , maSubNodes(nSize)
-    {}
+        , maSubNodes(nSize) {}
 
 public:
     virtual ~SmStructureNode() override;
 
-    virtual bool        IsVisible() const override;
+    /**
+     * Checks node visibility.
+     * Returns true if this is an instance of SmVisibleNode's subclass, false otherwise.
+     * @return node visibility
+     */
+    virtual bool IsVisible() const override;
 
-    virtual size_t      GetNumSubNodes() const override;
+    /**
+     * Gets the number of subnodes.
+     * @return number of subnodes
+     */
+    virtual size_t GetNumSubNodes() const override;
 
+    /**
+     * Gets the subnode of index nIndex.
+     * @param nIndex
+     * @return subnode of index nIndex
+     */
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(size_t nIndex) override;
-    void ClearSubNodes();
-            void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond, std::unique_ptr<SmNode> pThird = nullptr);
-            void SetSubNodes(SmNodeArray&& rNodeArray);
+    virtual SmNode * GetSubNode(size_t nIndex) override;
 
+    /**
+     * Does the cleaning of the subnodes.
+     * @return
+     */
+    void ClearSubNodes();
+
+    /**
+     * Sets subnodes, used for opperators.
+     * @param pFirst
+     * @param pSecond
+     * @param pThird
+     * @return
+     */
+    void SetSubNodes(std::unique_ptr<SmNode> pFirst, std::unique_ptr<SmNode> pSecond,
+                     std::unique_ptr<SmNode> pThird = nullptr);
+
+    /**
+     * Sets subnodes.
+     * @param rNodeArray
+     * @return
+     */
+    void SetSubNodes(SmNodeArray&& rNodeArray);
+
+    /**
+     * Appends to rText the node text.
+     * @param rText
+     * @return
+     */
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 
+    /**
+     * Gets the first subnode.
+     * @return first subnode
+     */
     SmNodeArray::iterator begin() {return maSubNodes.begin();}
+
+    /**
+     * Gets the last subnode.
+     * @return last subnode
+     */
     SmNodeArray::iterator end() {return maSubNodes.end();}
+
+    /**
+     * Gets the last subnode.
+     * @return last subnode
+     */
     SmNodeArray::reverse_iterator rbegin() {return maSubNodes.rbegin();}
+
+    /**
+     * Gets the first subnode.
+     * @return first subnode
+     */
     SmNodeArray::reverse_iterator rend() {return maSubNodes.rend();}
 
-    /** Get the index of a child node
-     *
+    /**
+     * Get the index of the child node pSubNode.
      * Returns -1, if pSubNode isn't a subnode of this.
+     * @param pSubNode
+     * @return index of the child node
      */
-    int IndexOfSubNode(SmNode const * pSubNode)
-    {
-        size_t nSize = GetNumSubNodes();
-        for (size_t i = 0; i < nSize; i++)
-            if (pSubNode == GetSubNode(i))
-                return i;
-        return -1;
-    }
+    int IndexOfSubNode(SmNode const * pSubNode);
 
-    void SetSubNode(size_t nIndex, SmNode* pNode)
-    {
-        size_t size = maSubNodes.size();
-        if (size <= nIndex)
-        {
-            //Resize subnodes array
-            maSubNodes.resize(nIndex + 1);
-            //Set new slots to NULL except at nIndex
-            for (size_t i = size; i < nIndex; i++)
-                maSubNodes[i] = nullptr;
-        }
-        maSubNodes[nIndex] = pNode;
-        if (pNode)
-            pNode->SetParent(this);
-    }
+    /**
+     * Sets the subnode pNode at nIndex.
+     * If necessary increases the subnodes length.
+     * @param nIndex
+     * @param pNode
+     * @return
+     */
+    void SetSubNode(size_t nIndex, SmNode* pNode);
 
 private:
     /** Sets parent on children of this node */
@@ -290,13 +543,28 @@ class SmVisibleNode : public SmNode
 {
 protected:
     SmVisibleNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmNode(eNodeType, rNodeToken)
-    {}
+    :   SmNode(eNodeType, rNodeToken) {}
 
 public:
 
+    /**
+     * Checks node visibility.
+     * Returns true if this is an instance of SmVisibleNode's subclass, false otherwise.
+     * @return node visibility
+     */
     virtual bool        IsVisible() const override;
+
+    /**
+     * Gets the number of subnodes.
+     * @return number of subnodes
+     */
     virtual size_t      GetNumSubNodes() const override;
+
+    /**
+     * Gets the subnode of index nIndex.
+     * @param nIndex
+     * @return subnode of index nIndex
+     */
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(size_t nIndex) override;
 };
@@ -306,11 +574,15 @@ class SmGraphicNode : public SmVisibleNode
 {
 protected:
     SmGraphicNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmVisibleNode(eNodeType, rNodeToken)
-    {}
+    :   SmVisibleNode(eNodeType, rNodeToken) {}
 
 public:
 
+    /**
+     * Appends to rText the node text.
+     * @param rText
+     * @return
+     */
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 };
 
@@ -328,12 +600,24 @@ public:
         : SmGraphicNode(SmNodeType::Rectangle, rNodeToken)
     {}
 
+    //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
 
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -351,14 +635,36 @@ class SmPolyLineNode final : public SmGraphicNode
 public:
     explicit SmPolyLineNode(const SmToken &rNodeToken);
 
-    long         GetWidth() const { return mnWidth; }
-    tools::Polygon &GetPolygon() { return maPoly; }
+    /**
+     * Gets the width of the rect.
+     * @return width
+     */
+    long GetWidth() const { return mnWidth; }
 
+    /**
+     * Gets the polygon to draw the node.
+     * @return polygon
+     */
+    tools::Polygon &GetPolygon()  { return maPoly; }
+
+    //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
 
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -369,6 +675,8 @@ public:
  */
 class SmTextNode : public SmVisibleNode
 {
+
+protected:
     OUString   maText;
     sal_uInt16 mnFontDesc;
     /** Index within text where the selection starts
@@ -386,42 +694,115 @@ protected:
 public:
     SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
-    sal_uInt16              GetFontDesc() const { return mnFontDesc; }
-    void                SetText(const OUString &rText) { maText = rText; }
-    const OUString &    GetText() const { return maText; }
-    /** Change the text of this node, including the underlying token */
-    void                ChangeText(const OUString &rText) {
-        maText = rText;
-        SmToken token = GetToken();
-        token.aText = rText;
-        SetToken(token); //TODO: Merge this with AdjustFontDesc for better performance
-        AdjustFontDesc();
-    }
-    /** Try to guess the correct FontDesc, used during visual editing */
-    void                AdjustFontDesc();
-    /** Index within GetText() where the selection starts
-     * @remarks Only valid of SmNode::IsSelected() is true
-     */
-    sal_Int32           GetSelectionStart() const {return mnSelectionStart;}
-    /** Index within GetText() where the selection end
-     * @remarks Only valid of SmNode::IsSelected() is true
-     */
-    sal_Int32           GetSelectionEnd() const {return mnSelectionEnd;}
-    /** Set the index within GetText() where the selection starts */
-    void                SetSelectionStart(sal_Int32 index) {mnSelectionStart = index;}
-    /** Set the index within GetText() where the selection end */
-    void                SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
-
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
-    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    virtual void CreateTextFromNode(OUStringBuffer &rText) override;
-
-    virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
-    void Accept(SmVisitor* pVisitor) override;
     /**
-      Converts the character from StarMath's private area symbols to a matching Unicode
-      character, if necessary. To be used when converting GetText() to a normal text.
-    */
+     * Returns the font type being used (text, variabla, symbol, ...).
+     * @retutn font type
+     */
+    sal_uInt16 GetFontDesc() const { return mnFontDesc; }
+
+    /**
+     * Sets the font type to fontdesc.
+     * Definitions are on format.hxx.
+     * @param fontdesc
+     * @return
+     */
+    void SetFontDesc(sal_uInt16 fontdesc) { mnFontDesc=fontdesc; }
+
+    /**
+     * Sets the node text to rText.
+     * @param rText
+     * @return
+     */
+    void SetText(const OUString &rText) { maText = rText; }
+
+    /**
+     * Gets the node text.
+     * @return node text
+     */
+    const OUString & GetText() const { return maText; }
+          OUString & GetText()       { return maText; }
+
+    /**
+     * Change the text of this node, including the underlying token to rText.
+     * @param rText
+     * @return
+     */
+    void ChangeText(const OUString &rText);
+
+    /**
+     * Try to guess the correct FontDesc, used during visual editing
+     * @return
+     */
+    void AdjustFontDesc();
+
+    /**
+     * Index within GetText() where the selection starts.
+     * @remarks Only valid of SmNode::IsSelected() is true.
+     * @return index.
+     */
+    sal_Int32 GetSelectionStart() const { return mnSelectionStart; }
+
+    /**
+     * Index within GetText() where the selection ends.
+     * @remarks Only valid of SmNode::IsSelected() is true.
+     * @return index.
+     */
+    sal_Int32 GetSelectionEnd() const  {return mnSelectionEnd; }
+
+    /**
+     * Sets the index within GetText() where the selection starts to index.
+     * @param index
+     * @return
+     */
+    void SetSelectionStart(sal_Int32 index) {mnSelectionStart = index;}
+
+    /**
+     * Sets the index within GetText() where the selection ends to index.
+     * @param index
+     * @return
+     */
+    void SetSelectionEnd(sal_Int32 index) {mnSelectionEnd = index;}
+
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
+    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Appends to rText the node text.
+     * @param rText
+     * @return
+     */
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
+    void Accept(SmVisitor* pVisitor) override;
+
+    /**
+     * Converts the character from StarMath's private area symbols to a matching Unicode
+     * character, if necessary. To be used when converting GetText() to a normal text.
+     * @param nIn
+     * @return unicode char
+     */
     static sal_Unicode ConvertSymbolToUnicode(sal_Unicode nIn);
 };
 
@@ -443,9 +824,31 @@ protected:
 public:
     explicit SmSpecialNode(const SmToken &rNodeToken);
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
 
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -466,7 +869,20 @@ public:
         : SmSpecialNode(SmNodeType::GlyphSpecial, rNodeToken, FNT_MATH)
     {}
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -482,19 +898,41 @@ protected:
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
         sal_Unicode cChar = GetToken().cMathChar;
-        if (u'\0' != cChar)
-            SetText(OUString(cChar));
+        if (u'\0' != cChar) SetText(OUString(cChar));
     }
 
 public:
     explicit SmMathSymbolNode(const SmToken &rNodeToken);
 
+    //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -526,14 +964,25 @@ class SmRootSymbolNode final : public SmMathSymbolNode
 public:
     explicit SmRootSymbolNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(SmNodeType::RootSymbol, rNodeToken)
-        , mnBodyWidth(0)
-    {
-    }
+        , mnBodyWidth(0) { }
 
+    /**
+     * Gets the body width.
+     * Allows to know how long is the root and paint it.
+     * @return body width
+     */
     sal_uLong GetBodyWidth() const {return mnBodyWidth;};
+
+    //visual stuff TODO comment
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nHeight) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
 
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -548,13 +997,34 @@ class SmPlaceNode final : public SmMathSymbolNode
 {
 public:
     explicit SmPlaceNode(const SmToken &rNodeToken)
-        : SmMathSymbolNode(SmNodeType::Place, rNodeToken)
-    {
-    }
-    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) {};
+        : SmMathSymbolNode(SmNodeType::Place, rNodeToken) { }
+    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) { };
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -568,13 +1038,33 @@ class SmErrorNode final : public SmMathSymbolNode
 {
 public:
     explicit SmErrorNode(const SmToken &rNodeToken)
-        : SmMathSymbolNode(SmNodeType::Error, rNodeToken)
-    {
-        SetText(OUString(MS_ERROR));
-    }
+                : SmMathSymbolNode(SmNodeType::Error, rNodeToken) { SetText(OUString(MS_ERROR)); }
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -592,15 +1082,30 @@ class SmTableNode final : public SmStructureNode
 public:
     explicit SmTableNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Table, rNodeToken)
-        , mnFormulaBaseline(0)
-    {
-    }
+        , mnFormulaBaseline(0) { }
 
     virtual const SmNode * GetLeftMost() const override;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Gets the formula baseline.
+     * @return formula baseline
+     */
     long GetFormulaBaseline() const;
 
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -617,22 +1122,55 @@ class SmLineNode : public SmStructureNode
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
         : SmStructureNode(eNodeType, rNodeToken)
-        , mbUseExtraSpaces(true)
-    {
-    }
+        , mbUseExtraSpaces(true) { }
 
 public:
     explicit SmLineNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Line, rNodeToken)
-        , mbUseExtraSpaces(true)
-    {
-    }
+        , mbUseExtraSpaces(true) { }
 
+    /**
+     * Sets if it going to use extra spaces.
+     * It is used to set if there has to be space between node while rendering.
+     * By default it is true.
+     * @param bVal
+     * @return
+     */
     void  SetUseExtraSpaces(bool bVal) { mbUseExtraSpaces = bVal; }
+
+    /**
+     * Checks if it is using extra spaces.
+     * It is used for calculating space between nodes when rendering.
+     * By default it is true.
+     * @return is using extra spaces
+     */
     bool  IsUseExtraSpaces() const { return mbUseExtraSpaces; };
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -647,11 +1185,22 @@ class SmExpressionNode final : public SmLineNode
 {
 public:
     explicit SmExpressionNode(const SmToken &rNodeToken)
-        : SmLineNode(SmNodeType::Expression, rNodeToken)
-    {}
+        : SmLineNode(SmNodeType::Expression, rNodeToken) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -664,11 +1213,22 @@ class SmUnHorNode final : public SmStructureNode
 {
 public:
     explicit SmUnHorNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::UnHor, rNodeToken, 2)
-    {
-    }
+        : SmStructureNode(SmNodeType::UnHor, rNodeToken, 2) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -688,20 +1248,49 @@ class SmRootNode final : public SmStructureNode
 {
 public:
     explicit SmRootNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Root, rNodeToken, 3)
-    {
-    }
+        : SmStructureNode(SmNodeType::Root, rNodeToken, 3) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 
-    SmNode* Argument();
-    const SmNode* Argument() const;
-    SmRootSymbolNode* Symbol();
-    const SmRootSymbolNode* Symbol() const;
-    SmNode* Body();
-    const SmNode* Body() const;
+    /**
+     * Returns the node containing the data of the order of the root.
+     * @return order data
+     */
+    const SmNode* Argument() const { return const_cast<SmRootNode *>(this)->Argument(); }
+          SmNode* Argument()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 0 ); }
+
+    /**
+     * Returns the node containing the data of the character used for the root.
+     * @return symbol data
+     */
+    const SmRootSymbolNode* Symbol() const { return const_cast<SmRootNode *>(this)->Symbol(); }
+          SmRootSymbolNode* Symbol()       { assert( GetNumSubNodes() == 3 );
+                                             assert( GetSubNode( 1 )->GetType()
+                                                        == SmNodeType::RootSymbol );
+                                             return static_cast< SmRootSymbolNode* >
+                                                ( GetSubNode( 1 )); }
+
+    /**
+     * Returns the node containing the data inside the root.
+     * @return body data
+     */
+    const SmNode* Body() const { return const_cast<SmRootNode *>(this)->Body(); }
+          SmNode* Body()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 2 ); }
+
 };
 
 
@@ -720,19 +1309,44 @@ class SmBinHorNode final : public SmStructureNode
 {
 public:
     explicit SmBinHorNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::BinHor, rNodeToken, 3)
-    {
-    }
+        : SmStructureNode(SmNodeType::BinHor, rNodeToken, 3) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 
-    SmNode* Symbol();
-    const SmNode* Symbol() const;
-    SmNode* LeftOperand();
-    const SmNode* LeftOperand() const;
-    SmNode* RightOperand();
-    const SmNode* RightOperand() const;
+    /**
+     * Returns the node containing the data of the binary opperator.
+     * @return symbol data
+     */
+    const SmNode* Symbol() const { return const_cast<SmBinHorNode *>(this)->Symbol(); }
+          SmNode* Symbol()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 1 ); }
+
+    /**
+     * Returns the node containing the data of the left opperand.
+     * @return left opperand data
+     */
+    const SmNode* LeftOperand() const { return const_cast<SmBinHorNode *>(this)->LeftOperand(); }
+          SmNode* LeftOperand()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 0 ); }
+
+    /**
+     * Returns the node containing the data of the right opperand.
+     * @return right opperand data
+     */
+    const SmNode* RightOperand() const { return const_cast<SmBinHorNode *>(this)->RightOperand(); }
+          SmNode* RightOperand()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 2 ); }
 };
 
 
@@ -752,14 +1366,24 @@ class SmBinVerNode final : public SmStructureNode
 {
 public:
     explicit SmBinVerNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::BinVer, rNodeToken, 3)
-    {
-    }
+        : SmStructureNode(SmNodeType::BinVer, rNodeToken, 3) { }
 
     virtual const SmNode * GetLeftMost() const override;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -778,20 +1402,56 @@ class SmBinDiagonalNode final : public SmStructureNode
 {
     bool mbAscending;
 
-    void    GetOperPosSize(Point &rPos, Size &rSize,
-                           const Point &rDiagPoint, double fAngleDeg) const;
+    /**
+     * Returns the position and size of the diagonal line by reference.
+     * @param rPos
+     * @param rSize
+     * @param rDiagPoint
+     * @param fAngleDeg
+     * @return position and size of the diagonal line
+     */
+    void GetOperPosSize(Point &rPos, Size &rSize, const Point &rDiagPoint, double fAngleDeg) const;
 
 public:
     explicit SmBinDiagonalNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::BinDiagonal, rNodeToken, 3)
-        , mbAscending(false)
-    {
-    }
+        , mbAscending(false) { }
 
+    /**
+     * Checks if it is of ascending type.
+     * Ascending:
+     *     / b
+     *    /
+     * a /
+     * Descending:
+     * a \
+     *    \
+     *     \ b
+     * @return ascending.
+     */
     bool    IsAscending() const { return mbAscending; }
+
+    /**
+     * Sets if the wideslash is ascending to bVal.
+     * @param bVal
+     * @return
+     */
     void    SetAscending(bool bVal)  { mbAscending = bVal; }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -843,33 +1503,68 @@ class SmSubSupNode final : public SmStructureNode
 public:
     explicit SmSubSupNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::SubSup, rNodeToken, 1 + SUBSUP_NUM_ENTRIES)
-        , mbUseLimits(false)
-    {
-    }
+        , mbUseLimits(false) { }
 
-    /** Get body (Not NULL) */
-    SmNode *       GetBody()    { return GetSubNode(0); }
-    /** Get body (Not NULL) */
-    const SmNode * GetBody() const
-    {
-        return const_cast<SmSubSupNode *>(this)->GetBody();
-    }
+    /**
+     * Returns the node with the data of what has to be superindex or subindex.
+     * @return body data
+     */
+    const SmNode * GetBody() const { return const_cast<SmSubSupNode *>(this)->GetBody(); }
+          SmNode * GetBody()       { return GetSubNode(0); }
 
-    void  SetUseLimits(bool bVal) { mbUseLimits = bVal; }
+    /**
+     * Checks if it is going to be used for a limit.
+     * Example lim from { x towar 0 } { {sin x}over x } = 1
+     * @return is a limit
+     */
     bool  IsUseLimits() const { return mbUseLimits; };
 
-    /** Get super- or subscript
-     * @remarks this method may return NULL.
+    /**
+     * Sets if it is going to be used for a limit to bVal.
+     * @param bVal
+     * @return
      */
-    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode(1 + eSubSup); };
-    const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >( this )->GetSubSup( eSubSup ); }
+    void  SetUseLimits(bool bVal) { mbUseLimits = bVal; }
 
-    /** Set the body */
+    /**
+     * Gets the node with the data of what has to be superindex or subindex.
+     * The position to check is given by eSubSup.
+     * @remarks this method may return NULL.
+     * @param eSubSup
+     * @return body data
+     */
+     const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >
+                                                            ( this )->GetSubSup( eSubSup ); }
+           SmNode * GetSubSup(SmSubSup eSubSup)       { return GetSubNode(1 + eSubSup); };
+
+    /**
+     * Sets the node with the data of what has to be superindex or subindex.
+     * @param pScript
+     */
     void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
+
+     /**
+     * Sets the node with the data of what has to be superindex or subindex.
+     * The position to check is given by eSubSup.
+     * @param eSubSup
+     * @param pScript
+     */
     void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 
 };
@@ -892,19 +1587,53 @@ class SmBraceNode final : public SmStructureNode
 {
 public:
     explicit SmBraceNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Brace, rNodeToken, 3)
-    {
-    }
+        : SmStructureNode(SmNodeType::Brace, rNodeToken, 3) { }
 
-    SmMathSymbolNode* OpeningBrace();
-    const SmMathSymbolNode* OpeningBrace() const;
-    SmNode* Body();
-    const SmNode* Body() const;
-    SmMathSymbolNode* ClosingBrace();
-    const SmMathSymbolNode* ClosingBrace() const;
+    /**
+     * Returns the node containing the data of the opening brace.
+     * @return opening brace data
+     */
+    const SmMathSymbolNode* OpeningBrace() const { return const_cast<SmBraceNode *>
+                                                       (this)->OpeningBrace(); }
+    SmMathSymbolNode* OpeningBrace()             { assert( GetNumSubNodes() == 3 );
+                                                   assert( GetSubNode( 0 )->GetType()
+                                                               == SmNodeType::Math );
+                                                   return static_cast< SmMathSymbolNode* >
+                                                       ( GetSubNode( 0 )); }
 
+    /**
+     * Returns the node containing the data of what is between braces.
+     * @return body data
+     */
+    const SmNode* Body() const { return const_cast<SmBraceNode *>(this)->Body(); }
+    SmNode* Body()             { assert( GetNumSubNodes() == 3 ); return GetSubNode( 1 ); }
+
+    /**
+     * Returns the node containing the data of the closing brace.
+     * @return closing brace data
+     */
+    const SmMathSymbolNode* ClosingBrace() const { return const_cast<SmBraceNode *>
+                                                       (this)->ClosingBrace(); }
+    SmMathSymbolNode* ClosingBrace()             { assert( GetNumSubNodes() == 3 );
+                                                   assert( GetSubNode( 2 )->GetType()
+                                                               == SmNodeType::Math );
+                                                   return static_cast< SmMathSymbolNode* >
+                                                       ( GetSubNode( 2 )); }
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -925,12 +1654,23 @@ class SmBracebodyNode final : public SmStructureNode
 public:
     explicit SmBracebodyNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Bracebody, rNodeToken)
-        , mnBodyHeight(0)
-    {
-    }
+        , mnBodyHeight(0) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void    Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     long GetBodyHeight() const { return mnBodyHeight; }
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -950,25 +1690,53 @@ public:
 class SmVerticalBraceNode final : public SmStructureNode
 {
 public:
-    explicit inline SmVerticalBraceNode(const SmToken &rNodeToken);
+    explicit SmVerticalBraceNode(const SmToken &rNodeToken)
+    : SmStructureNode(SmNodeType::VerticalBrace, rNodeToken, 3) { }
 
-    SmNode* Body();
-    const SmNode* Body() const;
-    SmMathSymbolNode* Brace();
-    const SmMathSymbolNode* Brace() const;
-    SmNode* Script();
-    const SmNode* Script() const;
+    /**
+     * Returns the node containing the data of what the brace is pointing for.
+     * body { script }
+     * @return body data
+     */
+    const SmNode* Body() const { return const_cast<SmVerticalBraceNode *>(this)->Body(); }
+    SmNode* Body()             { assert( GetNumSubNodes() == 3 ); return GetSubNode( 0 ); }
 
-    virtual void    Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+    /**
+     * Returns the node containing the data of the brace.
+     * @return brace data
+     */
+    const SmMathSymbolNode* Brace() const { return const_cast<SmVerticalBraceNode *>
+                                                (this)->Brace(); }
+          SmMathSymbolNode* Brace()       { assert( GetNumSubNodes() == 3 );
+                                            assert( GetSubNode( 1 )->GetType()
+                                                        == SmNodeType::Math );
+                                            return static_cast< SmMathSymbolNode* >
+                                                ( GetSubNode( 1 )); }
+
+    /**
+     * Returns the node containing the data of what is in the brace.
+     * body { script }
+     * @return opening brace data
+     */
+    const SmNode* Script() const { return const_cast<SmVerticalBraceNode *>(this)->Script(); }
+          SmNode* Script()       { assert( GetNumSubNodes() == 3 ); return GetSubNode( 2 ); }
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
+    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
-inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken)
-    : SmStructureNode(SmNodeType::VerticalBrace, rNodeToken, 3)
-{
-}
-
 
 /** Operation Node
  *
@@ -984,19 +1752,39 @@ class SmOperNode final : public SmStructureNode
 {
 public:
     explicit SmOperNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Oper, rNodeToken, 2)
-    {
-    }
+        : SmStructureNode(SmNodeType::Oper, rNodeToken, 2) { }
 
-    SmNode *       GetSymbol();
-    const SmNode * GetSymbol() const
-    {
-        return const_cast<SmOperNode *>(this)->GetSymbol();
-    }
+    /**
+     * Returns the node with the opperator data
+     * @return opperator data
+     */
+    const SmNode * GetSymbol() const { return const_cast<SmOperNode *>(this)->GetSymbol(); }
+          SmNode * GetSymbol();
 
+    /**
+     * Returns the height of the node in base to the symbol
+     * ( rSymbol contains the opperator data )
+     * and the font format ( rFormat ).
+     * @param rSymbol
+     * @param rFormat
+     * @return node's height
+     */
     long CalcSymbolHeight(const SmNode &rSymbol, const SmFormat &rFormat) const;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1009,10 +1797,22 @@ class SmAlignNode final : public SmStructureNode
 {
 public:
     explicit SmAlignNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Align, rNodeToken)
-    {}
+        : SmStructureNode(SmNodeType::Align, rNodeToken) { }
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1031,17 +1831,37 @@ class SmAttributNode final : public SmStructureNode
 {
 public:
     explicit SmAttributNode(const SmToken &rNodeToken)
-        : SmStructureNode(SmNodeType::Attribut, rNodeToken, 2)
-    {}
+        : SmStructureNode(SmNodeType::Attribut, rNodeToken, 2) {}
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 
-    SmNode* Attribute();
-    const SmNode* Attribute() const;
-    SmNode* Body();
-    const SmNode* Body() const;
+    /**
+     * Gets the attribute data.
+     * @return attribute data
+     */
+    const SmNode* Attribute() const { return const_cast<SmAttributNode *>(this)->Attribute(); }
+          SmNode* Attribute()       { assert( GetNumSubNodes() == 2 ); return GetSubNode( 0 ); }
+
+    /**
+     * Gets the body data ( the nodes affected by the attribute ).
+     * @return body data
+     */
+    const SmNode* Body() const { return const_cast<SmAttributNode *>(this)->Body(); }
+          SmNode* Body()      { assert( GetNumSubNodes() == 2 ); return GetSubNode( 1 ); }
 };
 
 
@@ -1058,17 +1878,56 @@ public:
     explicit SmFontNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Font, rNodeToken)
         , meSizeType(FontSizeType::MULTIPLY)
-        , maFontSize(1)
-    {
-    }
+        , maFontSize(1) { }
 
-    void SetSizeParameter(const Fraction &rValue, FontSizeType nType);
+    /**
+     * Sets font size to rValue in nType mode.
+     * Check FontSizeType for details.
+     * @param rValue
+     * @param nType
+     * @return
+     */
+    void SetSizeParameter(const Fraction &rValue, FontSizeType nType)
+                            { meSizeType = nType; maFontSize = rValue; }
+
+    /**
+     * Returns the font size.
+     * @return font size.
+     */
     const Fraction & GetSizeParameter() const {return maFontSize;}
+
+    /**
+     * Returns the font size type.
+     * Check FontSizeType for details.
+     * @return font size type.
+     */
     FontSizeType GetSizeType() const {return meSizeType;}
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1087,18 +1946,45 @@ public:
     explicit SmMatrixNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Matrix, rNodeToken)
         , mnNumRows(0)
-        , mnNumCols(0)
-    {
-    }
+        , mnNumCols(0) { }
 
+    /**
+     * Gets the number of rows of the matrix.
+     * @return rows number
+     */
     sal_uInt16 GetNumRows() const {return mnNumRows;}
+
+    /**
+     * Gets the number of columns of the matrix.
+     * @return columns number
+     */
     sal_uInt16 GetNumCols() const {return mnNumCols;}
-    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols);
+
+    /**
+     * Sets the dimensions of the matrix.
+     * @param nMatrixRows
+     * @param nMatrixCols
+     * @return
+     */
+    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
+                     { mnNumRows = nMatrixRows; mnNumCols = nMatrixCols; }
 
     virtual const SmNode * GetLeftMost() const override;
 
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1114,157 +2000,41 @@ class SmBlankNode final : public SmGraphicNode
 public:
     explicit SmBlankNode(const SmToken &rNodeToken)
         : SmGraphicNode(SmNodeType::Blank, rNodeToken)
-        , mnNum(0)
-    {
-    }
+        , mnNum(0) { }
 
     void         IncreaseBy(const SmToken &rToken, sal_uInt32 nMultiplyBy = 1);
     void         Clear() { mnNum = 0; }
     sal_uInt16   GetBlankNum() const { return mnNum; }
     void         SetBlankNum(sal_uInt16 nNumber) { mnNum = nNumber; }
 
-    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
+    /**
+     * Prepare preliminary settings about font and text
+     * (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     * @param rFormat
+     * @param rDocShell
+     * @param nDepth
+     * @return
+     */
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell,
+                         int nDepth) override;
+
+    /**
+     * Prepares the SmRect to render.
+     * @param rDev
+     * @param rFormat
+     * @return
+     */
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
+
+    /**
+     * Accept a visitor.
+     * Calls the method for this class on the visitor.
+     * @param pVisitor
+     * @return
+     */
     void Accept(SmVisitor* pVisitor) override;
-    virtual void CreateTextFromNode(OUStringBuffer &rText) override;
+
 };
-
-
-inline SmNode* SmRootNode::Argument()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 0 );
-}
-inline const SmNode* SmRootNode::Argument() const
-{
-    return const_cast< SmRootNode* >( this )->Argument();
-}
-inline SmRootSymbolNode* SmRootNode::Symbol()
-{
-    assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 1 )->GetType() == SmNodeType::RootSymbol );
-    return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
-}
-inline const SmRootSymbolNode* SmRootNode::Symbol() const
-{
-    return const_cast< SmRootNode* >( this )->Symbol();
-}
-inline SmNode* SmRootNode::Body()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 2 );
-}
-inline const SmNode* SmRootNode::Body() const
-{
-    return const_cast< SmRootNode* >( this )->Body();
-}
-
-
-inline SmNode* SmBinHorNode::Symbol()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmBinHorNode::Symbol() const
-{
-    return const_cast< SmBinHorNode* >( this )->Symbol();
-}
-inline SmNode* SmBinHorNode::LeftOperand()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 0 );
-}
-inline const SmNode* SmBinHorNode::LeftOperand() const
-{
-    return const_cast< SmBinHorNode* >( this )->LeftOperand();
-}
-inline SmNode* SmBinHorNode::RightOperand()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 2 );
-}
-inline const SmNode* SmBinHorNode::RightOperand() const
-{
-    return const_cast< SmBinHorNode* >( this )->RightOperand();
-}
-
-inline SmNode* SmAttributNode::Attribute()
-{
-    assert( GetNumSubNodes() == 2 );
-    return GetSubNode( 0 );
-}
-inline const SmNode* SmAttributNode::Attribute() const
-{
-    return const_cast< SmAttributNode* >( this )->Attribute();
-}
-inline SmNode* SmAttributNode::Body()
-{
-    assert( GetNumSubNodes() == 2 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmAttributNode::Body() const
-{
-    return const_cast< SmAttributNode* >( this )->Body();
-}
-
-inline SmMathSymbolNode* SmBraceNode::OpeningBrace()
-{
-    assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 0 )->GetType() == SmNodeType::Math );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
-}
-inline const SmMathSymbolNode* SmBraceNode::OpeningBrace() const
-{
-    return const_cast< SmBraceNode* >( this )->OpeningBrace();
-}
-inline SmNode* SmBraceNode::Body()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmBraceNode::Body() const
-{
-    return const_cast< SmBraceNode* >( this )->Body();
-}
-inline SmMathSymbolNode* SmBraceNode::ClosingBrace()
-{
-    assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 2 )->GetType() == SmNodeType::Math );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 2 ));
-}
-inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
-{
-    return const_cast< SmBraceNode* >( this )->ClosingBrace();
-}
-
-inline SmNode* SmVerticalBraceNode::Body()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 0 );
-}
-inline const SmNode* SmVerticalBraceNode::Body() const
-{
-    return const_cast< SmVerticalBraceNode* >( this )->Body();
-}
-inline SmMathSymbolNode* SmVerticalBraceNode::Brace()
-{
-    assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 1 )->GetType() == SmNodeType::Math );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
-}
-inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const
-{
-    return const_cast< SmVerticalBraceNode* >( this )->Brace();
-}
-inline SmNode* SmVerticalBraceNode::Script()
-{
-    assert( GetNumSubNodes() == 3 );
-    return GetSubNode( 2 );
-}
-inline const SmNode* SmVerticalBraceNode::Script() const
-{
-    return const_cast< SmVerticalBraceNode* >( this )->Script();
-}
 
 #endif
 

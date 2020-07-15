@@ -140,7 +140,6 @@ void SmNode::SetFont(const SmFace &rFace)
 {
     if (!(Flags() & FontChangeMask::Face))
         GetFont() = rFace;
-
     ForEachNonNull(this, [&rFace](SmNode *pNode){pNode->SetFont(rFace);});
 }
 
@@ -244,27 +243,14 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int n
     ForEachNonNull(this, [&rFormat, &rDocShell, nDepth](SmNode *pNode){pNode->Prepare(rFormat, rDocShell, nDepth + 1);});
 }
 
-void SmNode::Move(const Point& rPosition)
+void SmNode::Move(const Point& rVector)
 {
-    if (rPosition.X() == 0  &&  rPosition.Y() == 0)
+    if (rVector.X() == 0  &&  rVector.Y() == 0)
         return;
 
-    SmRect::Move(rPosition);
+    SmRect::Move(rVector);
 
-    ForEachNonNull(this, [&rPosition](SmNode *pNode){pNode->Move(rPosition);});
-}
-
-void SmNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    auto nSize = GetNumSubNodes();
-    if (nSize > 1)
-        rText.append("{");
-    ForEachNonNull(this, [&rText](SmNode *pNode){pNode->CreateTextFromNode(rText);});
-    if (nSize > 1)
-    {
-        rText.stripEnd(' ');
-        rText.append("} ");
-    }
+    ForEachNonNull(this, [&rVector](SmNode *pNode){pNode->Move(rVector);});
 }
 
 void SmNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong /*nWidth*/)
@@ -441,6 +427,31 @@ void SmStructureNode::ClaimPaternity()
     ForEachNonNull(this, [this](SmNode *pNode){pNode->SetParent(this);});
 }
 
+int SmStructureNode::IndexOfSubNode(SmNode const * pSubNode)
+{
+    size_t nSize = GetNumSubNodes();
+    for (size_t i = 0; i < nSize; i++)
+        if (pSubNode == GetSubNode(i))
+            return i;
+    return -1;
+}
+
+void SmStructureNode::SetSubNode(size_t nIndex, SmNode* pNode)
+{
+    size_t size = maSubNodes.size();
+    if (size <= nIndex)
+    {
+        //Resize subnodes array
+        maSubNodes.resize(nIndex + 1);
+        //Set new slots to NULL except at nIndex
+        for (size_t i = size; i < nIndex; i++)
+            maSubNodes[i] = nullptr;
+    }
+    maSubNodes[nIndex] = pNode;
+    if (pNode)
+        pNode->SetParent(this);
+}
+
 bool SmVisibleNode::IsVisible() const
 {
     return true;
@@ -459,32 +470,6 @@ SmNode * SmVisibleNode::GetSubNode(size_t /*nIndex*/)
 void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
     rText.append(GetToken().aText);
-}
-
-void SmExpressionNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    size_t nSize = GetNumSubNodes();
-    if (nSize > 1)
-        rText.append("{");
-    for (size_t i = 0; i < nSize; ++i)
-    {
-        SmNode *pNode = GetSubNode(i);
-        if (pNode)
-        {
-            pNode->CreateTextFromNode(rText);
-            //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
-            if (pNode->GetType() == SmNodeType::Math)
-                if ((nSize != 2) || rText.isEmpty() ||
-                    (rText[rText.getLength() - 1] != '+' && rText[rText.getLength() - 1] != '-') )
-                    rText.append(" ");
-        }
-    }
-
-    if (nSize > 1)
-    {
-        rText.stripEnd(' ');
-        rText.append("} ");
-    }
 }
 
 void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -760,27 +745,6 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         ExtendBy(*pExtra, RectCopyMBL::This, true);
 }
 
-
-void SmRootNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    SmNode *pExtra = GetSubNode(0);
-    if (pExtra)
-    {
-        rText.append("nroot ");
-        pExtra->CreateTextFromNode(rText);
-    }
-    else
-        rText.append("sqrt ");
-
-    if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
-        rText.append("{ ");
-
-    GetSubNode(2)->CreateTextFromNode(rText);
-
-    if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
-        rText.append("} ");
-}
-
 /**************************************************************************/
 
 
@@ -878,15 +842,6 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     SmRect::operator = (*pNum);
     ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
-}
-
-void SmBinVerNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    SmNode *pNum   = GetSubNode(0),
-           *pDenom = GetSubNode(2);
-    pNum->CreateTextFromNode(rText);
-    rText.append("over ");
-    pDenom->CreateTextFromNode(rText);
 }
 
 const SmNode * SmBinVerNode::GetLeftMost() const
@@ -1256,99 +1211,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 }
 
-void SmSubSupNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    SmNode *pNode;
-    GetSubNode(0)->CreateTextFromNode(rText);
-
-    if (nullptr != (pNode = GetSubNode(LSUB+1)))
-    {
-        rText.append("lsub ");
-        pNode->CreateTextFromNode(rText);
-    }
-    if (nullptr != (pNode = GetSubNode(LSUP+1)))
-    {
-        rText.append("lsup ");
-        pNode->CreateTextFromNode(rText);
-    }
-    if (nullptr != (pNode = GetSubNode(CSUB+1)))
-    {
-        rText.append("csub ");
-        pNode->CreateTextFromNode(rText);
-    }
-    if (nullptr != (pNode = GetSubNode(CSUP+1)))
-    {
-        rText.append("csup ");
-        pNode->CreateTextFromNode(rText);
-    }
-    if (nullptr != (pNode = GetSubNode(RSUB+1)))
-    {
-        rText.stripEnd(' ');
-        rText.append("_");
-        pNode->CreateTextFromNode(rText);
-    }
-    if (nullptr != (pNode = GetSubNode(RSUP+1)))
-    {
-        rText.stripEnd(' ');
-        rText.append("^");
-        pNode->CreateTextFromNode(rText);
-    }
-}
-
-
 /**************************************************************************/
-
-void SmBraceNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    if (GetScaleMode() == SmScaleMode::Height)
-        rText.append("left ");
-    {
-        OUStringBuffer aStrBuf;
-        OpeningBrace()->CreateTextFromNode(aStrBuf);
-        OUString aStr = aStrBuf.makeStringAndClear();
-        aStr = comphelper::string::strip(aStr, ' ');
-        aStr = comphelper::string::stripStart(aStr, '\\');
-        if (!aStr.isEmpty())
-        {
-            if (aStr == "divides")
-                rText.append("lline");
-            else if (aStr == "parallel")
-                rText.append("ldline");
-            else if (aStr == "<")
-                rText.append("langle");
-            else
-                rText.append(aStr);
-            rText.append(" ");
-        }
-        else
-            rText.append("none ");
-    }
-    Body()->CreateTextFromNode(rText);
-    if (GetScaleMode() == SmScaleMode::Height)
-        rText.append("right ");
-    {
-        OUStringBuffer aStrBuf;
-        ClosingBrace()->CreateTextFromNode(aStrBuf);
-        OUString aStr = aStrBuf.makeStringAndClear();
-        aStr = comphelper::string::strip(aStr, ' ');
-        aStr = comphelper::string::stripStart(aStr, '\\');
-        if (!aStr.isEmpty())
-        {
-            if (aStr == "divides")
-                rText.append("rline");
-            else if (aStr == "parallel")
-                rText.append("rdline");
-            else if (aStr == ">")
-                rText.append("rangle");
-            else
-                rText.append(aStr);
-            rText.append(" ");
-        }
-        else
-            rText.append("none ");
-    }
-    rText.append(" ");
-}
 
 void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1716,144 +1579,6 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pAttr, RectCopyMBL::This, true);
 }
 
-void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    rText.append("{");
-    sal_Int32 nc,r,g,b;
-
-    switch (GetToken().eType)
-    {
-        case TBOLD:
-            rText.append("bold ");
-            break;
-        case TNBOLD:
-            rText.append("nbold ");
-            break;
-        case TITALIC:
-            rText.append("italic ");
-            break;
-        case TNITALIC:
-            rText.append("nitalic ");
-            break;
-        case TPHANTOM:
-            rText.append("phantom ");
-            break;
-        case TSIZE:
-            {
-                rText.append("size ");
-                switch (meSizeType)
-                {
-                    case FontSizeType::PLUS:
-                        rText.append("+");
-                        break;
-                    case FontSizeType::MINUS:
-                        rText.append("-");
-                        break;
-                    case FontSizeType::MULTIPLY:
-                        rText.append("*");
-                        break;
-                    case FontSizeType::DIVIDE:
-                        rText.append("/");
-                        break;
-                    case FontSizeType::ABSOLUT:
-                    default:
-                        break;
-                }
-                rText.append(::rtl::math::doubleToUString(
-                            static_cast<double>(maFontSize),
-                            rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', true));
-                rText.append(" ");
-            }
-            break;
-        case TBLACK:
-            rText.append("color black ");
-            break;
-        case TWHITE:
-            rText.append("color white ");
-            break;
-        case TRED:
-            rText.append("color red ");
-            break;
-        case TGREEN:
-            rText.append("color green ");
-            break;
-        case TBLUE:
-            rText.append("color blue ");
-            break;
-        case TCYAN:
-            rText.append("color cyan ");
-            break;
-        case TMAGENTA:
-            rText.append("color magenta ");
-            break;
-        case TYELLOW:
-            rText.append("color yellow ");
-            break;
-        case TTEAL:
-            rText.append("color teal ");
-            break;
-        case TSILVER:
-            rText.append("color silver ");
-            break;
-        case TGRAY:
-            rText.append("color gray ");
-            break;
-        case TMAROON:
-            rText.append("color maroon ");
-            break;
-        case TPURPLE:
-            rText.append("color purple ");
-            break;
-        case TLIME:
-            rText.append("color lime ");
-            break;
-        case TOLIVE:
-            rText.append("color olive ");
-            break;
-        case TNAVY:
-            rText.append("color navy ");
-            break;
-        case TAQUA:
-            rText.append("color aqua ");
-            break;
-        case TFUCHSIA:
-            rText.append("color fuchsia ");
-            break;
-        case TRGB:
-            rText.append("color rgb ");
-            nc = GetToken().aText.toInt32();
-            b = nc % 256;
-            nc /= 256;
-            g = nc % 256;
-            nc /= 256;
-            r = nc % 256;
-            rText.append(r);
-            rText.append(" ");
-            rText.append(g);
-            rText.append(" ");
-            rText.append(b);
-            rText.append(" ");
-            break;
-        case TSANS:
-            rText.append("font sans ");
-            break;
-        case TSERIF:
-            rText.append("font serif ");
-            break;
-        case TFIXED:
-            rText.append("font fixed ");
-            break;
-        default:
-            break;
-    }
-    if (GetNumSubNodes() > 1)
-        GetSubNode(1)->CreateTextFromNode(rText);
-
-    rText.stripEnd(' ');
-    rText.append("} ");
-}
-
 void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
     //! prepare subnodes first
@@ -1883,7 +1608,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pNode = GetSubNode(1);
     assert(pNode);
     sal_Int32 nc;
-    Color col_perso_rgb_color (0);
+    Color col_perso_rgb_color = COL_AUTO;
 
     switch (GetToken().eType)
     {   case TSIZE :
@@ -1902,23 +1627,23 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
         case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
 
-        case TBLACK :   SetColor(COL_BLACK);     break;
-        case TWHITE :   SetColor(COL_WHITE);     break;
+        case TBLACK :   SetColor(COL_BLACK);         break;
+        case TWHITE :   SetColor(COL_WHITE);         break;
         case TRED :     SetColor(COL_LIGHTRED);      break;
-        case TGREEN :   SetColor(COL_GREEN);     break;
+        case TGREEN :   SetColor(COL_GREEN);         break;
         case TBLUE :    SetColor(COL_LIGHTBLUE);     break;
         case TCYAN :    SetColor(COL_LIGHTCYAN);     break; // as in Calc
         case TMAGENTA : SetColor(COL_LIGHTMAGENTA);  break; // as in Calc
-        case TYELLOW :  SetColor(COL_YELLOW);    break;
-        case TTEAL :    SetColor(COL_CYAN);  break;
-        case TSILVER :  SetColor(COL_LIGHTGRAY);  break;
-        case TGRAY :    SetColor(COL_GRAY);  break;
-        case TMAROON :  SetColor(COL_RED);  break;
-        case TPURPLE :  SetColor(COL_MAGENTA);  break;
-        case TLIME :    SetColor(COL_LIGHTGREEN);  break;
-        case TOLIVE :   SetColor(COL_BROWN);  break;
-        case TNAVY :    SetColor(COL_BLUE);  break;
-        case TAQUA :    SetColor(COL_LIGHTCYAN);  break;
+        case TYELLOW :  SetColor(COL_YELLOW);        break;
+        case TTEAL :    SetColor(COL_CYAN);          break;
+        case TSILVER :  SetColor(COL_LIGHTGRAY);     break;
+        case TGRAY :    SetColor(COL_GRAY);          break;
+        case TMAROON :  SetColor(COL_RED);           break;
+        case TPURPLE :  SetColor(COL_MAGENTA);       break;
+        case TLIME :    SetColor(COL_LIGHTGREEN);    break;
+        case TOLIVE :   SetColor(COL_BROWN);         break;
+        case TNAVY :    SetColor(COL_BLUE);          break;
+        case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
             nc = GetToken().aText.toInt32();
@@ -1938,14 +1663,6 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     SmRect::operator = (pNode->GetRect());
 }
-
-
-void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType eType)
-{
-    meSizeType = eType;
-    maFontSize = rValue;
-}
-
 
 /**************************************************************************/
 
@@ -2085,6 +1802,12 @@ SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
 {
 }
 
+void SmTextNode::ChangeText(const OUString &rText) {
+    maText = rText;
+    GetToken().aText = rText;
+    AdjustFontDesc();
+}
+
 void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
 {
     SmNode::Prepare(rFormat, rDocShell, nDepth);
@@ -2125,52 +1848,6 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, maText, GetFont().GetBorderWidth()));
 }
 
-void SmTextNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    bool bQuoted=false;
-    if (GetToken().eType == TTEXT)
-    {
-        rText.append("\"");
-        bQuoted=true;
-    }
-    else
-    {
-        SmParser aParseTest;
-        auto pTable = aParseTest.Parse(GetToken().aText);
-        assert(pTable->GetType() == SmNodeType::Table);
-        bQuoted=true;
-        if (pTable->GetNumSubNodes() == 1)
-        {
-            SmNode *pResult = pTable->GetSubNode(0);
-            if ( (pResult->GetType() == SmNodeType::Line) &&
-                (pResult->GetNumSubNodes() == 1) )
-            {
-                pResult = pResult->GetSubNode(0);
-                if (pResult->GetType() == SmNodeType::Text)
-                    bQuoted=false;
-            }
-        }
-
-        if ((GetToken().eType == TIDENT) && (GetFontDesc() == FNT_FUNCTION))
-        {
-            //Search for existing functions and remove extraneous keyword
-            rText.append("func ");
-        }
-        else if (bQuoted)
-            rText.append("italic ");
-
-        if (bQuoted)
-            rText.append("\"");
-
-    }
-
-    rText.append(GetToken().aText);
-
-    if (bQuoted)
-        rText.append("\"");
-    rText.append(" ");
-}
-
 void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
     rText.append(maText);
@@ -2183,27 +1860,23 @@ void SmTextNode::AdjustFontDesc()
     else if(GetToken().eType == TFUNC)
         mnFontDesc = FNT_FUNCTION;
     else {
-        SmTokenType nTok;
         const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( maText );
         if (pEntry && pEntry->nGroup == TG::Function) {
-            nTok = pEntry->eType;
+            GetToken().eType = pEntry->eType;
             mnFontDesc = FNT_FUNCTION;
         } else {
             sal_Unicode firstChar = maText[0];
             if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',') {
                 mnFontDesc = FNT_NUMBER;
-                nTok = TNUMBER;
+                GetToken().eType = TNUMBER;
             } else if (maText.getLength() > 1) {
                 mnFontDesc = FNT_VARIABLE;
-                nTok = TIDENT;
+                GetToken().eType = TIDENT;
             } else {
                 mnFontDesc = FNT_VARIABLE;
-                nTok = TCHARACTER;
+                GetToken().eType = TCHARACTER;
             }
         }
-        SmToken tok = GetToken();
-        tok.eType = nTok;
-        SetToken(tok);
     }
 }
 
@@ -2241,26 +1914,6 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 }
 
 /**************************************************************************/
-
-void SmMatrixNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    rText.append("matrix {");
-    for (size_t i = 0;  i < mnNumRows; ++i)
-    {
-        for (size_t j = 0;  j < mnNumCols; ++j)
-        {
-            SmNode *pNode = GetSubNode(i * mnNumCols + j);
-            if (pNode)
-                pNode->CreateTextFromNode(rText);
-            if (j != mnNumCols - 1U)
-                rText.append("# ");
-        }
-        if (i != mnNumRows - 1U)
-            rText.append("## ");
-    }
-    rText.stripEnd(' ');
-    rText.append("} ");
-}
 
 void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -2359,14 +2012,6 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         ExtendBy(aLineRect, RectCopyMBL::None);
     }
 }
-
-
-void SmMatrixNode::SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
-{
-    mnNumRows = nMatrixRows;
-    mnNumCols = nMatrixCols;
-}
-
 
 const SmNode * SmMatrixNode::GetLeftMost() const
 {
@@ -2479,124 +2124,6 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
-}
-
-void SmMathSymbolNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    sal_Unicode cChar = GetToken().cMathChar;
-    if (cChar == MS_INT && GetScaleMode() == SmScaleMode::Height)
-        rText.append("intd ");
-    else
-        MathType::LookupChar(cChar, rText, 3);
-}
-
-void SmRectangleNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    switch (GetToken().eType)
-    {
-    case TUNDERLINE:
-        rText.append("underline ");
-        break;
-    case TOVERLINE:
-        rText.append("overline ");
-        break;
-    case TOVERSTRIKE:
-        rText.append("overstrike ");
-        break;
-    default:
-        break;
-    }
-}
-
-void SmAttributNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    SmNode *pNode;
-    assert(GetNumSubNodes() == 2);
-    rText.append("{");
-    sal_Unicode nLast=0;
-    if (nullptr != (pNode = Attribute()))
-    {
-        OUStringBuffer aStr;
-        pNode->CreateTextFromNode(aStr);
-        if (aStr.getLength() > 1)
-            rText.append(aStr);
-        else
-        {
-            nLast = aStr[0];
-            switch (nLast)
-            {
-            case MS_BAR: // MACRON
-                rText.append("overline ");
-                break;
-            case MS_DOT: // DOT ABOVE
-                rText.append("dot ");
-                break;
-            case 0x2dc: // SMALL TILDE
-                rText.append("widetilde ");
-                break;
-            case MS_DDOT: // DIAERESIS
-                rText.append("ddot ");
-                break;
-            case 0xE082:
-                break;
-            case 0xE09B:
-            case MS_DDDOT: // COMBINING THREE DOTS ABOVE
-                rText.append("dddot ");
-                break;
-            case MS_ACUTE: // ACUTE ACCENT
-            case MS_COMBACUTE: // COMBINING ACUTE ACCENT
-                rText.append("acute ");
-                break;
-            case MS_GRAVE: // GRAVE ACCENT
-            case MS_COMBGRAVE: // COMBINING GRAVE ACCENT
-                rText.append("grave ");
-                break;
-            case MS_CHECK: // CARON
-            case MS_COMBCHECK: // COMBINING CARON
-                rText.append("check ");
-                break;
-            case MS_BREVE: // BREVE
-            case MS_COMBBREVE: // COMBINING BREVE
-                rText.append("breve ");
-                break;
-            case MS_CIRCLE: // RING ABOVE
-            case MS_COMBCIRCLE: // COMBINING RING ABOVE
-                rText.append("circle ");
-                break;
-            case MS_RIGHTARROW: // RIGHTWARDS ARROW
-            case MS_VEC: // COMBINING RIGHT ARROW ABOVE
-                rText.append("vec ");
-                break;
-            case MS_HARPOON: // COMBINING RIGHT HARPOON ABOVE
-                rText.append("harpoon ");
-                break;
-            case MS_TILDE: // TILDE
-            case MS_COMBTILDE: // COMBINING TILDE
-                rText.append("tilde ");
-                break;
-            case MS_HAT: // CIRCUMFLEX ACCENT
-            case MS_COMBHAT: // COMBINING CIRCUMFLEX ACCENT
-                rText.append("hat ");
-                break;
-            case MS_COMBBAR: // COMBINING MACRON
-                rText.append("bar ");
-                break;
-            default:
-                rText.append(OUStringChar(nLast));
-                break;
-            }
-        }
-    }
-
-    if (nullptr != (pNode = Body()))
-        pNode->CreateTextFromNode(rText);
-
-    rText.stripEnd(' ');
-
-    if (nLast == 0xE082)
-        rText.append(" overbrace {}");
-
-    rText.append("} ");
 }
 
 /**************************************************************************/
@@ -2811,20 +2338,6 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetItalicSpaces(0, 0);
     SetWidth(nSpace);
 }
-
-void SmBlankNode::CreateTextFromNode(OUStringBuffer &rText)
-{
-    if (mnNum <= 0)
-        return;
-    sal_uInt16 nWide = mnNum / 4;
-    sal_uInt16 nNarrow = mnNum % 4;
-    for (sal_uInt16 i = 0; i < nWide; i++)
-        rText.append("~");
-    for (sal_uInt16 i = 0; i < nNarrow; i++)
-        rText.append("`");
-    rText.append(" ");
-}
-
 
 /**************************************************************************/
 //Implementation of all accept methods for SmVisitor

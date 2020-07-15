@@ -84,7 +84,7 @@ void Test::testCopyPaste()
     aCursor.Move(pOutputDevice, MoveRight);
     aCursor.Paste();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(" { a * b + c * b } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ a * b + c * b }"), xDocShRef->GetText());
 }
 
 void Test::testCopySelectPaste()
@@ -110,7 +110,7 @@ void Test::testCopySelectPaste()
     aCursor.Move(pOutputDevice, MoveRight, false);
     aCursor.Paste();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(" { b + c * b + c } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ b + c * b + c }"), xDocShRef->GetText());
 }
 
 void Test::testCutPaste()
@@ -132,7 +132,7 @@ void Test::testCutPaste()
     aCursor.Move(pOutputDevice, MoveRight);
     aCursor.Paste();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(" { a + c * b } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ a + c * b }"), xDocShRef->GetText());
 }
 
 void Test::testCutSelectPaste()
@@ -158,7 +158,7 @@ void Test::testCutSelectPaste()
     aCursor.Move(pOutputDevice, MoveRight, false);
     aCursor.Paste();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(" { b + c * } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ b + c * }"), xDocShRef->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

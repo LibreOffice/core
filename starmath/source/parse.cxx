@@ -1681,8 +1681,8 @@ std::unique_ptr<SmNode> SmParser::DoOper()
 
         case TOPER :
             NextToken();
-
             OSL_ENSURE(m_aCurToken.eType == TSPECIAL, "Sm: wrong token");
+            m_aCurToken.eType = TOPER;
             pNode.reset(new SmGlyphSpecialNode(m_aCurToken));
             break;
 
@@ -2176,6 +2176,7 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
     {
         case TFUNC:
             NextToken();    // skip "FUNC"-statement
+            m_aCurToken.eType = TFUNC;
             [[fallthrough]];
 
         case TSIN :
