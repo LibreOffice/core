@@ -1080,7 +1080,7 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
     SkiaZone zone;
     checkSurface();
     SAL_INFO("vcl.skia.trace", "getpixel(" << this << "): " << Point(nX, nY));
-    mSurface->getCanvas()->flush();
+    flushDrawing();
     // This is presumably slow, but getPixel() should be generally used only by unit tests.
     SkBitmap bitmap;
     if (!bitmap.tryAllocN32Pixels(GetWidth(), GetHeight()))
