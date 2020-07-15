@@ -41,6 +41,7 @@
 #include <pam.hxx>
 #include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <fmtornt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -471,7 +472,10 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
             boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
         }
         // presumably these anchors are supported though not sure
-        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId());
+        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() ||
+            RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId() ||
+            RndStdIds::FLY_AT_PAGE == boxAnchor.GetAnchorId());
+
         SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
                 boxAnchor, bSetTextFlyAtt, bMakeFrames);
         SwAttrSet aSet(pDest->GetAttrSet());
