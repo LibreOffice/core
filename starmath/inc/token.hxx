@@ -102,7 +102,7 @@ enum SmTokenType
     TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   TSILVER,
     TGRAY,          TMAROON,        TPURPLE,        TLIME,          TOLIVE,
     TNAVY,          TTEAL,          TAQUA,          TFUCHSIA,       TINTD,
-    TRGB,           TLAPLACE
+    TRGB,           TLAPLACE,       TFOURIER
 };
 
 struct SmToken
