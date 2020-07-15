@@ -1195,25 +1195,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
                          "tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx")
 {
-    // TODO: fix export too
-    if (mbExported)
-        return;
     // tdf#123324 The height was set relative to page print area top,
     // but this was handled relative to page height.
     // Note: page print area top = margin + header height.
     // In this case the header exists.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    const sal_Int32 nAnchoredHeight
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2551), nAnchoredHeight);
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
                          "tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx")
 {
-    // TODO: fix export too
-    if (mbExported)
-        return;
     // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
     // Note: the MSO Word margin = LO margin + LO header height.
     // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
@@ -1223,9 +1217,9 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
     // Note: page print area top = margin + header height.
     // In this case the header does not exist, so OpenDocument and OOXML margins are the same.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    const sal_Int32 nAnchoredHeight
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2551), nAnchoredHeight);
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

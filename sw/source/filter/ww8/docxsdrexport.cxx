@@ -32,6 +32,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
 #include <frmfmt.hxx>
+#include <fmtpdsc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -920,10 +921,30 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     if (pSdrObject->GetRelativeWidth())
     {
         // At the moment drawinglayer objects are always relative from page.
-        pFS->startElementNS(XML_wp14, XML_sizeRelH, XML_relativeFrom,
-                            (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME
-                                 ? "margin"
-                                 : "page"));
+        OUString sValue;
+        switch (pSdrObject->GetRelativeWidthRelation())
+        {
+            case text::RelOrientation::FRAME:
+                sValue = "margin";
+                break;
+            case text::RelOrientation::PAGE_LEFT:
+                if (pFrameFormat->GetDoc()->GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
+                    sValue = "outsideMargin";
+                else
+                    sValue = "leftMargin";
+                break;
+            case text::RelOrientation::PAGE_RIGHT:
+                if (pFrameFormat->GetDoc()->GetPageDesc(0).GetUseOn() == UseOnPage::Mirror)
+                    sValue = "insideMargin";
+                else
+                    sValue = "rightMargin";
+                break;
+            case text::RelOrientation::PAGE_FRAME:
+            default:
+                sValue = "page";
+                break;
+        }
+        pFS->startElementNS(XML_wp14, XML_sizeRelH, XML_relativeFrom, sValue);
         pFS->startElementNS(XML_wp14, XML_pctWidth);
         pFS->writeEscaped(
             OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
@@ -932,10 +953,24 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     }
     if (pSdrObject->GetRelativeHeight())
     {
-        pFS->startElementNS(XML_wp14, XML_sizeRelV, XML_relativeFrom,
-                            (pSdrObject->GetRelativeHeightRelation() == text::RelOrientation::FRAME
-                                 ? "margin"
-                                 : "page"));
+        OUString sValue;
+        switch (pSdrObject->GetRelativeHeightRelation())
+        {
+            case text::RelOrientation::FRAME:
+                sValue = "margin";
+                break;
+            case text::RelOrientation::PAGE_PRINT_AREA:
+                sValue = "topMargin";
+                break;
+            case text::RelOrientation::PAGE_PRINT_AREA_BOTTOM:
+                sValue = "bottomMargin";
+                break;
+            case text::RelOrientation::PAGE_FRAME:
+            default:
+                sValue = "page";
+                break;
+        }
+        pFS->startElementNS(XML_wp14, XML_sizeRelV, XML_relativeFrom, sValue);
         pFS->startElementNS(XML_wp14, XML_pctHeight);
         pFS->writeEscaped(
             OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));

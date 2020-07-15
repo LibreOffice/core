@@ -1160,39 +1160,29 @@ DECLARE_OOXMLEXPORT_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromLeftMargin, "tdf132976_testRelativeAnchorWidthFromLeftMargin.docx")
 {
-    // TODO: Fix export.
-    if (mbExported)
-        return;
-
     // tdf#132976 The size of the width of this shape should come from the size of the left margin.
     // It was set to the size of the width of the entire page before.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    const sal_Int32 nAnchoredWidth
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1133), nAnchoredWidth);
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "1133");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromInsideOutsideMargin, "tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx")
 {
-    // TODO: Fix export.
-    if (mbExported)
-        return;
-
     // tdf#133863 tdf#133864 The sizes of the width of these shapes depend on the sizes of the inside and outside margins.
     // The open book: outside --text-- inside | inside --text-- outside
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Outside
-    sal_Int32 nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
+    if (!pXmlDoc)
+        return;
     // Inside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
-    // Inside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width", "1440");
     // Outside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width", "2552");
+    // Outside
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width", "2552");
+    // Inside
+    assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width", "1440");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
