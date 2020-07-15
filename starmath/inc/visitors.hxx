@@ -438,21 +438,37 @@ public:
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
 private:
-    /** Extract text from a pNode that constitutes a line */
+
+    /**
+      * Extract text from a pNode that constitutes a line.
+      * @param pNode
+      * @return
+      */
     void LineToText( SmNode* pNode ) {
         Separate( );
-        if( pNode )
-            pNode->Accept( this );
+        if( pNode ) pNode->Accept( this );
         Separate( );
     }
+
+    /**
+      * Appends rText to the OUStringBuffer ( maCmdText ).
+      * @param rText
+      * @return
+      */
     void Append( const OUString &rText ) {
         maCmdText.append( rText );
     }
-    /** Append a blank for separation, if needed */
+
+    /**
+     * Append a blank for separation, if needed.
+     * It is needed if last char is not ' '.
+     * @return
+     */
     void Separate( ){
-        if( maCmdText.isEmpty() || maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
+        if( !maCmdText.isEmpty() && maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
             maCmdText.append(' ');
     }
+
     /** Output text generated from the pNodes */
     OUStringBuffer maCmdText;
 };

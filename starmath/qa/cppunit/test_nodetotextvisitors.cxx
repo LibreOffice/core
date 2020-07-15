@@ -114,16 +114,16 @@ void Test::SimpleUnaryOp()
     parseandparseagain("-+4", "Minus/plus");
     parseandparseagain("neg a", "Boolean 'not'");
     parseandparseagain("fact a", "Factorial");
-    parseandparseagain(" - { 1 over 2 } ", "BinVer in Unary 1");
-    ParseAndCheck(" - { 1 over 2 } ", " - { 1 over 2 } ", "BinVer in Unary 1");
-    parseandparseagain(" { - { 1 over 2 } } ", "BinVer in Unary 2");
-    parseandparseagain(" - 1 over 2 ", "Unary in BinVer as numerator 1");
-    parseandparseagain(" { - 1 } over 2 ", "Unary in BinVer as numerator 2");
-    parseandparseagain(" 1 over - 2 ", "Unary in BinVer as denominator 1");
-    parseandparseagain(" 1 over { - 2 } ", "Unary in BinVer as denominator 2");
-    parseandparseagain(" 2 { - 1 over 2 } ", "Mixed number with Unary in denominator 1");
-    parseandparseagain(" 2 { - 1 } over 2 ", "Mixed number with Unary in denominator 2");
-    parseandparseagain(" - 1 + 2 ", "Unary in BinHor");
+    parseandparseagain("- { 1 over 2 }", "BinVer in Unary 1");
+    ParseAndCheck("- { 1 over 2 }", "- { 1 over 2 }", "BinVer in Unary 1");
+    parseandparseagain("{- { 1 over 2 } }", "BinVer in Unary 2");
+    parseandparseagain("- 1 over 2", "Unary in BinVer as numerator 1");
+    parseandparseagain("{ - 1 } over 2", "Unary in BinVer as numerator 2");
+    parseandparseagain("1 over - 2", "Unary in BinVer as denominator 1");
+    parseandparseagain("1 over { - 2 }", "Unary in BinVer as denominator 2");
+    parseandparseagain("2 { - 1 over 2 }", "Mixed number with Unary in denominator 1");
+    parseandparseagain("2 { - 1 } over 2", "Mixed number with Unary in denominator 2");
+    parseandparseagain("- 1 + 2", "Unary in BinHor");
 }
 
 void Test::SimpleBinaryOp()
@@ -227,8 +227,8 @@ void Test::SimpleOperators()
     parseandparseagain("prod{a}", "Product");
     parseandparseagain("coprod{a}", "Coproduct");
     parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral (from & to)");
-    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r _ 0 } csub { r _ t } a ", "Upper and lower bounds shown with integral (csub & csup)");
-    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "Sum with sized upper and lower bounds");
+    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r _ 0 } csub { r _ t } a", "Upper and lower bounds shown with integral (csub & csup)");
+    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b", "sum csup { size 8 { x - 1 } } csub { size 8 a } b", "Sum with sized upper and lower bounds");
     parseandparseagain("int{a}", "Integral");
     parseandparseagain("intd_{1}^{2}{x dx}", "Dynamically-sized integral");
     parseandparseagain("iint{a}", "Double integral");
@@ -436,15 +436,14 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
 
     // parse 1
     OUString input = OUString::createFromAscii(formula);
+
     auto pNode1 = SmParser().ParseExpression(input);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode1.get(), output1);
-
     // parse 2
     auto pNode2 = SmParser().ParseExpression(output1);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode2.get(), output2);
-
     // compare
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         output1,
@@ -523,7 +522,7 @@ void Test::testBinomInBinHor()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected += " { { binom a b + c } + d } ";
+    sExpected += "{ { binom a b + c } + d }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
 }
 
@@ -551,7 +550,7 @@ void Test::testBinVerInUnary()
     aCursor.Move(pOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
-    sExpected += " - { 1 over 2 } ";
+    sExpected += "- { 1 over 2 }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
 }
 
@@ -576,7 +575,7 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString(" { a ^ { b + c } + d } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString("{ a ^ { b + c } + d }"), xDocShRef->GetText());
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
@@ -615,7 +614,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString(" { 2 { - 1 over 2 } + 4 } "), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
