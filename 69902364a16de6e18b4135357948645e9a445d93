@@ -117,6 +117,30 @@
       "revId": "69902364a16de6e18b4135357948645e9a445d93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "515cd33e_f4afa900",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-07-15T09:09:31Z",
+      "side": 1,
+      "message": "It sounds like you are experiencing the opposite of the original bug. Instead of being always paused after seek is made, for you it is always playing after seek is made.\n\nDoes this also happen for you also in the master branch?",
+      "parentUuid": "f68b4dea_14e48914",
+      "range": {
+        "startLine": 691,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 61
+      },
+      "revId": "69902364a16de6e18b4135357948645e9a445d93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
