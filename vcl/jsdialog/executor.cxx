@@ -11,9 +11,17 @@
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <sal/log.hxx>
+#include <svdata.hxx>
 
 namespace jsdialog
 {
+void LOKWakeupCallback()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData && pSVData->mpWakeCallback && pSVData->mpPollClosure)
+        pSVData->mpWakeCallback(pSVData->mpPollClosure);
+}
+
 bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);

@@ -16,6 +16,7 @@
 namespace jsdialog
 {
 VCL_DLLPUBLIC bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rData);
+VCL_DLLPUBLIC void LOKWakeupCallback();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

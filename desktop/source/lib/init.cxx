@@ -1979,6 +1979,10 @@ void CallbackFlushHandler::Invoke()
             }
 
             m_pCallback(type, payload.c_str(), m_pData);
+
+            // Process JSDIALOG as fast as possible
+            if (type == LOK_CALLBACK_JSDIALOG)
+                jsdialog::LOKWakeupCallback();
         }
 
         m_queue.clear();
