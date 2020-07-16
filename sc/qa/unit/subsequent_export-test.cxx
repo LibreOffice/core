@@ -257,7 +257,11 @@ public:
     void testTdf131372();
     void testTdf122331();
     void testTdf83779();
+<<<<<<< HEAD   (cfd028 tdf#134783 sw: fix contextual spacing position of shape)
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
+=======
+    void testTdf134459_HeaderFooterColorXLSX();
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -409,7 +413,11 @@ public:
     CPPUNIT_TEST(testTdf131372);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
+<<<<<<< HEAD   (cfd028 tdf#134783 sw: fix contextual spacing position of shape)
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
+=======
+    CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5185,6 +5193,7 @@ void ScExportTest::testTdf83779()
     xShell->DoClose();
 }
 
+<<<<<<< HEAD   (cfd028 tdf#134783 sw: fix contextual spacing position of shape)
 void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 {
     // Header/footer text with multiple selection should be exported, and imported properly
@@ -5199,6 +5208,22 @@ void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&\"Abadi,Regular\"&11aaa&\"Bembo,Regular\"&20bbb");
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
+=======
+void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
+{
+    // Colors in header and footer should be exported, and imported properly
+    ScDocShellRef xShell = loadDoc("tdf134459_HeaderFooterColor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 
     xDocSh->DoClose();
 }
