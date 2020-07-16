@@ -8,9 +8,11 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-        prefix="presenter" xmlns="http://openoffice.org/2010/uno-components">
-    <implementation name="org.libreoffice.comp.PresenterScreenJob"/>
-    <implementation name="org.libreoffice.comp.PresenterScreenProtocolHandler">
+        xmlns="http://openoffice.org/2010/uno-components">
+    <implementation name="org.libreoffice.comp.PresenterScreenJob"
+        constructor="sdext_PresenterScreenJob_get_implementation" />
+    <implementation name="org.libreoffice.comp.PresenterScreenProtocolHandler"
+        constructor="sdext_PresenterProtocolHandler_get_implementation">
         <service name="com.sun.star.frame.ProtocolHandler"/>
     </implementation>
 </component>
