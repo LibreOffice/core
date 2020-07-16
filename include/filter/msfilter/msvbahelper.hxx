@@ -39,8 +39,7 @@ namespace com::sun::star {
 
 class SfxObjectShell;
 
-namespace ooo {
-namespace vba {
+namespace ooo::vba {
 
 
 struct MSFILTER_DLLPUBLIC MacroResolvedInfo
@@ -106,8 +105,7 @@ private:
 };
 
 
-} // namespace vba
-} // namespace ooo
+} // namespace ooo::vba
 
 #endif
 

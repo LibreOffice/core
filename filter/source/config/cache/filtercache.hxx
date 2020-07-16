@@ -35,8 +35,7 @@
 #include <rtl/ustring.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 class CacheUpdateListener;
 
@@ -937,8 +936,7 @@ class FilterCache : public BaseLock
 
 struct TheFilterCache: public rtl::Static<FilterCache, TheFilterCache> {};
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 

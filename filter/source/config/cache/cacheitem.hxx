@@ -28,8 +28,7 @@
 #include <osl/mutex.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short  Must be used as first derived base class
@@ -188,8 +187,7 @@ struct FlatDetectionInfo
 
 typedef ::std::vector< FlatDetectionInfo > FlatDetection;
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 

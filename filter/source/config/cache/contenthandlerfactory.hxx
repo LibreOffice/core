@@ -25,8 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short      implements the service <type scope="com.sun.star.document">ContentHandlerFactory</type>.
@@ -96,8 +95,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
 };
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONTENTHANDLERFACTORY_HXX
 

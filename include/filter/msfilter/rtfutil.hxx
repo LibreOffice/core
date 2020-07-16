@@ -22,9 +22,7 @@
 
 class SvStream;
 
-namespace msfilter
-{
-namespace rtfutil
+namespace msfilter::rtfutil
 {
 /// Outputs a single character in hex form.
 MSFILTER_DLLPUBLIC OString OutHex(sal_uLong nHex, sal_uInt8 nLen);
@@ -73,7 +71,6 @@ MSFILTER_DLLPUBLIC bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream
 
 /// Strips the header of a WMF file.
 MSFILTER_DLLPUBLIC bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_uInt64& rSize);
-}
 }
 
 #endif

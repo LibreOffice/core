@@ -34,8 +34,7 @@
 #include <rtl/ustring.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config {
 
 
 /** @short      implements the interface css::container::XNameContainer
@@ -257,8 +256,7 @@ class BaseContainer : public BaseLock
         virtual void SAL_CALL removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
 };
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 
