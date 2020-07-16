@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_exception_objects,ucphier1,\
 	ucb/source/ucp/hierarchy/hierarchydatasource \
 	ucb/source/ucp/hierarchy/hierarchydatasupplier \
 	ucb/source/ucp/hierarchy/hierarchyprovider \
-	ucb/source/ucp/hierarchy/hierarchyservices \
 	ucb/source/ucp/hierarchy/hierarchyuri \
 ))
 

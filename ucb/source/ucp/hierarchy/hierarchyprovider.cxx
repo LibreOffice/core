@@ -97,37 +97,29 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( HierarchyContentProvider,
-                          "com.sun.star.comp.ucb.HierarchyContentProvider" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-HierarchyContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL HierarchyContentProvider::getImplementationName()                       \
 {
-    css::lang::XServiceInfo* pX = new HierarchyContentProvider( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.HierarchyContentProvider";
 }
-
-css::uno::Sequence< OUString >
-HierarchyContentProvider::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL HierarchyContentProvider::supportsService( const OUString& ServiceName )
 {
-    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.HierarchyContentProvider" };
-    return aSNS;
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > HierarchyContentProvider::getSupportedServiceNames()
+{
+    return { "com.sun.star.ucb.HierarchyContentProvider" };
 }
 
 // Service factory implementation.
 
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-HierarchyContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_HierarchyContentProvider_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                HierarchyContentProvider::getImplementationName_Static(),
-                HierarchyContentProvider_CreateInstance,
-                HierarchyContentProvider::getSupportedServiceNames_Static() );
+    static rtl::Reference<HierarchyContentProvider> g_Instance(new HierarchyContentProvider(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
-
 
 // XContentProvider methods.
 
