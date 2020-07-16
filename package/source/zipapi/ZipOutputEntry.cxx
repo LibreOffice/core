@@ -373,6 +373,8 @@ void ZipOutputEntryParallel::writeStream(const uno::Reference< io::XInputStream 
                 processDeflated(rBuffer, nLen);
             }
     );
+    finished = true;
+    processDeflated( uno::Sequence< sal_Int8 >(), 0 ); // finish encrypting, etc.
     totalIn = deflater.getTotalIn();
     totalOut = deflater.getTotalOut();
     closeEntry();
