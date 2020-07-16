@@ -142,6 +142,36 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+
+    const SwFormatAnchor& rAnch = pShape->GetAnchor();
+    if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && rAnch.GetPageNum() != 0)
+        || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA
+             || rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+            && rAnch.GetContentAnchor()))
+    {
+        SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
+        SwFormatAnchor aNewAnch = pFormat->GetAnchor();
+
+        if (pShape->GetAnchor().GetContentAnchor())
+            aNewAnch.SetAnchor(pShape->GetAnchor().GetContentAnchor());
+        if (pShape->GetAnchor().GetPageNum() > 0)
+            aNewAnch.SetPageNum(pShape->GetAnchor().GetPageNum());
+
+        aNewAnch.SetType(pShape->GetAnchor().GetAnchorId());
+        aTxFrmSet.Put(aNewAnch);
+
+        SwFormatVertOrient aVOri(pFormat->GetVertOrient());
+        SwFormatHoriOrient aHOri(pFormat->GetHoriOrient());
+        aVOri.SetVertOrient(pShape->GetVertOrient().GetVertOrient());
+        aHOri.SetHoriOrient(pShape->GetHoriOrient().GetHoriOrient());
+        aVOri.SetRelationOrient(pShape->GetVertOrient().GetRelationOrient());
+        aHOri.SetRelationOrient(pShape->GetHoriOrient().GetRelationOrient());
+        aTxFrmSet.Put(aVOri);
+        aTxFrmSet.Put(aHOri);
+
+        if (aTxFrmSet.Count())
+            pFormat->SetFormatAttr(aTxFrmSet);
+    }
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
@@ -682,14 +712,31 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
         SfxItemIter aIter(rSet);
         const SfxPoolItem* pItem = aIter.GetCurItem();
+
+        const RndStdIds aAnchId = rShape.GetAnchor().GetAnchorId();
+        if ((aAnchId == RndStdIds::FLY_AT_PAGE && rShape.GetAnchor().GetPageNum() != 0)
+            || ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
+                && rShape.GetAnchor().GetContentAnchor()))
+        {
+            SwFormatAnchor aNewAnch = pFormat->GetAnchor();
+            if (rShape.GetAnchor().GetContentAnchor())
+                aNewAnch.SetAnchor(rShape.GetAnchor().GetContentAnchor());
+            if (rShape.GetAnchor().GetPageNum() > 0)
+                aNewAnch.SetPageNum(rShape.GetAnchor().GetPageNum());
+            aNewAnch.SetType(rShape.GetAnchor().GetAnchorId());
+            aTextBoxSet.Put(aNewAnch);
+        }
         do
         {
+<<<<<<< HEAD   (7e0814 tdf#134685 DOCX table import: fix gridBefore + cell width)
             if (rShape.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 SwFormatAnchor pShapeAnch = rShape.GetAnchor();
                 aTextBoxSet.Put(pShapeAnch);
             }
 
+=======
+>>>>>>> CHANGE (fd88bb tdf#107225 tdf#122887 sw: fix reanchoring of textboxes)
             switch (pItem->Which())
             {
                 case RES_VERT_ORIENT:
@@ -701,10 +748,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     if (!aRect.IsEmpty())
                         aOrient.SetPos(aOrient.GetPos() + aRect.getY());
 
-                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                    {
+                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
+                        && rShape.GetAnchor().GetPageNum() != 0)
                         aOrient.SetRelationOrient(rShape.GetVertOrient().GetRelationOrient());
-                    }
                     aTextBoxSet.Put(aOrient);
 
                     // restore height (shrunk for extending beyond the page bottom - tdf#91260)
@@ -725,10 +771,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     if (!aRect.IsEmpty())
                         aOrient.SetPos(aOrient.GetPos() + aRect.getX());
 
-                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                    {
+                    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
+                        && rShape.GetAnchor().GetPageNum() != 0)
                         aOrient.SetRelationOrient(rShape.GetHoriOrient().GetRelationOrient());
-                    }
                     aTextBoxSet.Put(aOrient);
                 }
                 break;
