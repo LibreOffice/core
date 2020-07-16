@@ -179,7 +179,12 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
                             PaintPartFlags::Grid | PaintPartFlags::Left);
 
     if (comphelper::LibreOfficeKit::isActive())
+    {
         ScTabViewShell::notifyAllViewsHeaderInvalidation(pSomeViewForThisDoc, ROW_HEADER, nTab);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+            false /* bHidden */, false /* bFiltered */, false /* bGroups */, nTab);
+    }
 
     return bChanged;
 }
