@@ -32,8 +32,6 @@
 
 namespace pcr
 {
-
-
     //= OTimeControl
     typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::FormattedSpinButton> OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base
@@ -41,6 +39,12 @@ namespace pcr
         std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     public:
         OTimeControl(std::unique_ptr<weld::FormattedSpinButton> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
+
+        virtual void SAL_CALL disposing() override
+        {
+            m_xFormatter.reset();
+            OTimeControl_Base::disposing();
+        }
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
