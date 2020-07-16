@@ -61,13 +61,6 @@ public:
     static bool StringGoodForPattern_Impl( const OUString& aString,
                                         const css::uno::Sequence< OUString >& aPattern );
 
-    static css::uno::Sequence< OUString > impl_staticGetSupportedServiceNames();
-
-    static OUString impl_staticGetImplementationName();
-
-    static css::uno::Reference< css::uno::XInterface > impl_staticCreateSelfInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMSF );
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 

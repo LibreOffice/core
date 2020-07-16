@@ -1661,47 +1661,20 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
     return uno::Sequence < ElementChange > ();
 }
 
-/**
- * Function to create a new component instance; is needed by factory helper implementation.
- * @param xMgr service manager to if the components needs other component instances
- */
-static uno::Reference < XInterface > ZipPackage_createInstance(
-    const uno::Reference< XMultiServiceFactory > & xMgr )
-{
-    return uno::Reference< XInterface >( *new ZipPackage( comphelper::getComponentContext(xMgr) ) );
-}
 
-OUString ZipPackage::static_getImplementationName()
+OUString ZipPackage::getImplementationName()
 {
     return "com.sun.star.packages.comp.ZipPackage";
 }
 
-Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
-{
-    return { "com.sun.star.packages.Package" };
-}
-
-OUString ZipPackage::getImplementationName()
-{
-    return static_getImplementationName();
-}
-
 Sequence< OUString > ZipPackage::getSupportedServiceNames()
 {
-    return static_getSupportedServiceNames();
+    return { "com.sun.star.packages.Package" };
 }
 
 sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
-}
-
-uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::Reference < XMultiServiceFactory > const & rServiceFactory )
-{
-    return cppu::createSingleFactory ( rServiceFactory,
-                                           static_getImplementationName(),
-                                           ZipPackage_createInstance,
-                                           static_getSupportedServiceNames() );
 }
 
 Sequence< sal_Int8 > ZipPackage::getUnoTunnelId()
@@ -1870,6 +1843,13 @@ void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& /*PropertyN
 }
 void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+package_ZipPackage_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ZipPackage(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
