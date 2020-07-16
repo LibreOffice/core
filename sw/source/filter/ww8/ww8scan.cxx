@@ -549,7 +549,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x4A30, { 2, L_FIX} }, // "sprmCIstd" chp.istd;istd, see stylesheet def
         {0xCA31, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd;permutation vector
         {NS_sprm::LN_CDefault, { 0, L_VAR} }, // "sprmCDefault" whole CHP;none;variable length;
-        {0x2A33, { 0, L_FIX} }, // "sprmCPlain" whole CHP;none;0;
+        {0x2A33, { 1, L_FIX} }, // "sprmCPlain" whole CHP;none;0;
         {0x2A34, { 1, L_FIX} }, // "sprmCKcd" ;;;
         {0x0835, { 1, L_FIX} }, // "sprmCFBold" chp.fBold;0,1, 128, or 129
         {0x0836, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic;0,1, 128, or 129
@@ -707,8 +707,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x7621, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
         {0x5622, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
         {0x7623, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter;complex
-        {0x5624, { 0, L_VAR} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
-        {0x5625, { 0, L_VAR} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
+        {0x5624, { 2, L_VAR} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
+        {0x5625, { 2, L_VAR} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
         {NS_sprm::LN_TSetBrc10, { 0, L_VAR} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
         {NS_sprm::LN_TSetShd80, { 0, L_VAR} }, // "sprmTSetShd80" tap.rgshd;complex
         {NS_sprm::LN_TSetShdOdd80, { 0, L_VAR} }, // "sprmTSetShdOdd80" tap.rgshd;complex
