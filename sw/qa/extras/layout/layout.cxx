@@ -1173,6 +1173,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
+{
+    // Load a document that has a fly anchored in the footer.
+    // It also has a table which initially overlaps with the fly, but then moves to the next page.
+    load(DATA_DIRECTORY, "footer-fly-table.fodt");
+    xmlDocPtr pLayout = parseLayoutDump();
+    // no fly portions, was: 8
+    assertXPath(
+        pLayout,
+        "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/Special[@nType='PortionType::Fly']", 0);
+    // one line break, was: 5
+    assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/LineBreak", 1);
+    // one text portion, was: 1
+    assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/Text", 1);
+    assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/Text", "Portion",
+                "Abc def ghi jkl mno pqr stu vwx yz.");
+    // height was: 1517
+    assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/infos/bounds", "height",
+                "253");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     // currently need experimental mode
