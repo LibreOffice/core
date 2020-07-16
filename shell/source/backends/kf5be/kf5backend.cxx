@@ -50,17 +50,6 @@
 
 namespace
 {
-OUString getServiceImplementationName()
-{
-    return "com.sun.star.comp.configuration.backend.KF5Backend";
-}
-
-css::uno::Sequence<OUString> getServiceSupportedServiceNames()
-{
-    OUString name("com.sun.star.configuration.backend.KF5Backend");
-    return css::uno::Sequence<OUString>(&name, 1);
-}
-
 class Service : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::beans::XPropertySet>,
                 private boost::noncopyable
 {
@@ -72,7 +61,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return getServiceImplementationName();
+        return "com.sun.star.comp.configuration.backend.KF5Backend";
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
@@ -82,7 +71,7 @@ private:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return getServiceSupportedServiceNames();
+        return { "com.sun.star.configuration.backend.KF5Backend" };
     }
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
@@ -252,22 +241,11 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
     throw css::beans::UnknownPropertyException(PropertyName, static_cast<cppu::OWeakObject*>(this));
 }
 
-css::uno::Reference<css::uno::XInterface>
-createInstance(css::uno::Reference<css::uno::XComponentContext> const&)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_kf5desktop_get_implementation(css::uno::XComponentContext*,
+                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<cppu::OWeakObject*>(new Service);
+    return cppu::acquire(new Service());
 }
-
-cppu::ImplementationEntry const services[]
-    = { { &createInstance, &getServiceImplementationName, &getServiceSupportedServiceNames,
-          &cppu::createSingleComponentFactory, nullptr, 0 },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void*
-kf5be1_component_getFactory(char const* pImplName, void* pServiceManager, void* pRegistryKey)
-{
-    return cppu::component_getFactoryHelper(pImplName, pServiceManager, pRegistryKey, services);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
