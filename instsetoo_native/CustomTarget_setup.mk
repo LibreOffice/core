@@ -172,7 +172,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 define instsetoo_native_genversionini
 [Version]
 AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)
-BuildVersion=$(BUILD_VER_STRING)
 buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 ExtensionUpdateURL=https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update
 UpdateChannel=$(if $(ENABLE_ONLINE_UPDATE_MAR),$(shell cd $(SRCDIR) && bin/update/get_update_channel.py $(UPDATE_CONFIG)))
@@ -192,7 +191,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	printf '[Version]\n' > $@ && \
 	printf 'AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)\n' >> $@ && \
-	printf 'BuildVersion=$(BUILD_VER_STRING)\n' >> $@ && \
 	printf 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)\n' >> $@ && \
 	printf 'ExtensionUpdateURL=https://updateexte.libreoffice.org/ExtensionUpdateService/check.Update\n' >> $@ && \
 	printf 'UpdateChannel=$(if $(ENABLE_ONLINE_UPDATE_MAR),$(shell cd $(SRCDIR) && bin/update/get_update_channel.py $(UPDATE_CONFIG)))\n' >> $@ && \
