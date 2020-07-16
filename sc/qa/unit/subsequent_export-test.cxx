@@ -232,6 +232,7 @@ public:
     void testRotatedImageODS();
     void testTdf128976();
     void testTdf120502();
+    void testTdf134459_HeaderFooterColorXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -364,6 +365,7 @@ public:
     CPPUNIT_TEST(testRotatedImageODS);
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
+    CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4626,6 +4628,24 @@ void ScExportTest::testTdf120502()
 
     // This was 1025 when nMaxCol+1 was 1024
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
+}
+
+void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
+{
+    // Colors in header and footer should be exported, and imported properly
+    ScDocShellRef xShell = loadDoc("tdf134459_HeaderFooterColor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
