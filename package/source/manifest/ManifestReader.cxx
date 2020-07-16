@@ -81,24 +81,10 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
 }
 // Component functions
 
-static Reference < XInterface > ManifestReader_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
-{
-    return *new ManifestReader( comphelper::getComponentContext(rServiceFactory) );
-}
-OUString ManifestReader::static_getImplementationName()
-{
-    return "com.sun.star.packages.manifest.comp.ManifestReader";
-}
-
-Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
-{
-    Sequence < OUString > aNames { "com.sun.star.packages.manifest.ManifestReader" };
-    return aNames;
-}
 
 OUString ManifestReader::getImplementationName()
 {
-    return static_getImplementationName();
+    return "com.sun.star.packages.manifest.comp.ManifestReader";
 }
 
 sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
@@ -108,14 +94,16 @@ sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
 
 Sequence < OUString > ManifestReader::getSupportedServiceNames()
 {
-    return static_getSupportedServiceNames();
+    return { "com.sun.star.packages.manifest.ManifestReader" };
 }
-Reference < XSingleServiceFactory > ManifestReader::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+package_ManifestReader_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createSingleFactory (rServiceFactory,
-                                           static_getImplementationName(),
-                                           ManifestReader_createInstance,
-                                           static_getSupportedServiceNames());
+    return cppu::acquire(new ManifestReader(context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

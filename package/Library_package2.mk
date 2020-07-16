@@ -46,7 +46,6 @@ $(eval $(call gb_Library_add_exception_objects,package2,\
 	package/source/manifest/ManifestImport \
 	package/source/manifest/ManifestReader \
 	package/source/manifest/ManifestWriter \
-	package/source/manifest/UnoRegister \
 	package/source/zipapi/blowfishcontext \
 	package/source/zipapi/ByteChucker \
 	package/source/zipapi/ByteGrabber \

@@ -18,18 +18,22 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="package2" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.package.zip.ZipFileAccess">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.package.zip.ZipFileAccess"
+    constructor="package_OZipFileAccess_get_implementation">
     <service name="com.sun.star.comp.packages.zip.ZipFileAccess"/>
     <service name="com.sun.star.packages.zip.ZipFileAccess"/>
   </implementation>
-  <implementation name="com.sun.star.packages.comp.ZipPackage">
+  <implementation name="com.sun.star.packages.comp.ZipPackage"
+    constructor="package_ZipPackage_get_implementation">
     <service name="com.sun.star.packages.Package"/>
   </implementation>
-  <implementation name="com.sun.star.packages.manifest.comp.ManifestReader">
+  <implementation name="com.sun.star.packages.manifest.comp.ManifestReader"
+    constructor="package_ManifestReader_get_implementation">
     <service name="com.sun.star.packages.manifest.ManifestReader"/>
   </implementation>
-  <implementation name="com.sun.star.packages.manifest.comp.ManifestWriter">
+  <implementation name="com.sun.star.packages.manifest.comp.ManifestWriter"
+    constructor="package_ManifestWriter_get_implementation">
     <service name="com.sun.star.packages.manifest.ManifestWriter"/>
   </implementation>
 </component>

@@ -23,7 +23,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
-    ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
@@ -244,6 +243,11 @@ core_constructor_list = [
     ("lingucomponent_SpellChecker_get_implementation", "#ifndef IOS"),
     "lingucomponent_LangGuess_get_implementation",
     "lingucomponent_Hyphenator_get_implementation",
+# package/util/package2.component
+    "package_OZipFileAccess_get_implementation",
+    "package_ZipPackage_get_implementation",
+    "package_ManifestReader_get_implementation",
+    "package_ManifestWriter_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",

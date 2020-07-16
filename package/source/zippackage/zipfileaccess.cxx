@@ -449,28 +449,9 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
         m_pListenersContainer->removeInterface( xListener );
 }
 
-uno::Sequence< OUString > OZipFileAccess::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.packages.zip.ZipFileAccess";
-    aRet[1] = "com.sun.star.comp.packages.zip.ZipFileAccess";
-    return aRet;
-}
-
-OUString OZipFileAccess::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.package.zip.ZipFileAccess";
-}
-
-uno::Reference< uno::XInterface > OZipFileAccess::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& rxMSF )
-{
-    return uno::Reference< uno::XInterface >( *new OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );
-}
-
 OUString SAL_CALL OZipFileAccess::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.package.zip.ZipFileAccess";
 }
 
 sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
@@ -480,7 +461,17 @@ sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.packages.zip.ZipFileAccess",
+    "com.sun.star.comp.packages.zip.ZipFileAccess" };
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+package_OZipFileAccess_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OZipFileAccess(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
