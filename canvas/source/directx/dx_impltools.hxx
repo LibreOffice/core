@@ -54,9 +54,7 @@ namespace com::sun::star::rendering
 }
 
 
-namespace dxcanvas
-{
-    namespace tools
+namespace dxcanvas::tools
     {
         struct RawRGBABitmap;
 

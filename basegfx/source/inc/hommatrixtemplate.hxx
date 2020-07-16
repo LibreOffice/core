@@ -27,9 +27,7 @@
 
 #include <memory>
 
-namespace basegfx
-{
-    namespace internal
+namespace basegfx::internal
     {
 
         inline double implGetDefaultValue(sal_uInt16 nRow, sal_uInt16 nColumn)
@@ -523,8 +521,7 @@ namespace basegfx
             }
         };
 
-    } // namespace internal
-} // namespace basegfx
+} // namespace basegfx::internal
 
 #endif // INCLUDED_BASEGFX_SOURCE_INC_HOMMATRIXTEMPLATE_HXX
 

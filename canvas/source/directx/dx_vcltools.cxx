@@ -33,9 +33,7 @@
 
 using namespace ::com::sun::star;
 
-namespace dxcanvas
-{
-    namespace tools
+namespace dxcanvas::tools
     {
         namespace
         {

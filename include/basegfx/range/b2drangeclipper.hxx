@@ -23,10 +23,8 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
         /** Extract poly-polygon w/o self-intersections from poly-range
 
             Similar to the solveCrossovers(const B2DPolyPolygon&)
@@ -36,7 +34,6 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
                                        const std::vector<B2VectorOrientation>& rOrientations);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
