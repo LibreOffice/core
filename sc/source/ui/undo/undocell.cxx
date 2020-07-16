@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/app.hxx>
+#include <comphelper/lok.hxx>
 
 #include <document.hxx>
 #include <docpool.hxx>
@@ -177,12 +178,23 @@ OUString ScUndoEnterData::GetComment() const
 void ScUndoEnterData::DoChange() const
 {
     // only when needed (old or new Edit cell, or Attribute)?
+    bool bHeightChanged = false;
     for (const auto & i : maOldValues)
-        pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), i.mnTab);
+    {
+        if (pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), i.mnTab))
+            bHeightChanged = true;
+    }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
+        if (comphelper::LibreOfficeKit::isActive() && bHeightChanged)
+        {
+            ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, maPos.Tab());
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+                false /* bHidden */, false /* bFiltered */, false /* bGroups */, maPos.Tab());
+        }
         pViewShell->SetTabNo(maPos.Tab());
         pViewShell->MoveCursorAbs(maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false);
     }
