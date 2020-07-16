@@ -325,6 +325,11 @@ DECLARE_WW8EXPORT_TEST(testTdf133453_realFontSize, "tdf133453_realFontSize.doc")
     CPPUNIT_ASSERT_EQUAL( -95.f, getProperty<float>(getRun(getParagraph(1), 2, "2"), "CharEscapement") );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf116194, "tdf116194.doc")
+{
+    CPPUNIT_ASSERT_EQUAL( Color(192,0,0), Color(getProperty<sal_uInt32>(getRun(getParagraph(1), 1), "CharColor")) );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),

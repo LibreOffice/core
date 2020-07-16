@@ -603,7 +603,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x085D, { 1, L_FIX} }, // "sprmCFItalicBi" ;;;
         {0x4A5E, { 2, L_FIX} },
         {0x485F, { 2, L_FIX} }, // "sprmCLidBi" ;;;
-        {0x4A60, { 1, L_FIX} }, // "sprmCIcoBi" ;;;
+        {0x4A60, { 2, L_FIX} }, // "sprmCIcoBi" ;;;
         {0x4A61, { 2, L_FIX} }, // "sprmCHpsBi" ;;;
         {0xCA62, { 0, L_VAR} }, // "sprmCDispFieldRMark" chp.fDispFieldRMark,
                             // chp.ibstDispFieldRMark, chp.dttmDispFieldRMark ;
