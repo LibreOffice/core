@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_exception_objects,pdfimport,\
     sdext/source/pdfimport/pdfparse/pdfparse \
     sdext/source/pdfimport/sax/emitcontext \
     sdext/source/pdfimport/sax/saxattrlist \
-    sdext/source/pdfimport/services \
     sdext/source/pdfimport/tree/drawtreevisiting \
     sdext/source/pdfimport/tree/genericelements \
     sdext/source/pdfimport/tree/imagecontainer \
