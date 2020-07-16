@@ -12,16 +12,13 @@
 
 #include <rtl/ustring.hxx>
 
-namespace dbahsql
-{
-namespace utils
+namespace dbahsql::utils
 {
 OUString convertToUTF8(const OString& original);
 
 OUString getTableNameFromStmt(const OUString& sSql);
 
 void ensureFirebirdTableLength(const OUString& sName);
-}
 }
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_UTILS_HXX
