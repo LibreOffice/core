@@ -232,6 +232,14 @@ public:
     void testRotatedImageODS();
     void testTdf128976();
     void testTdf120502();
+<<<<<<< HEAD   (b83741 tdf#134606 DOCX table import: fix gridBefore + nesting)
+=======
+    void testTdf131372();
+    void testTdf81470();
+    void testTdf122331();
+    void testTdf83779();
+    void testTdf134459_HeaderFooterColorXLSX();
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -364,6 +372,14 @@ public:
     CPPUNIT_TEST(testRotatedImageODS);
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
+<<<<<<< HEAD   (b83741 tdf#134606 DOCX table import: fix gridBefore + nesting)
+=======
+    CPPUNIT_TEST(testTdf131372);
+    CPPUNIT_TEST(testTdf81470);
+    CPPUNIT_TEST(testTdf122331);
+    CPPUNIT_TEST(testTdf83779);
+    CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4628,6 +4644,100 @@ void ScExportTest::testTdf120502()
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
 }
 
+<<<<<<< HEAD   (b83741 tdf#134606 DOCX table import: fix gridBefore + nesting)
+=======
+void ScExportTest::testTdf131372()
+{
+    ScDocShellRef xShell = loadDoc("tdf131372.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[2]/x:f", "#N/A");
+
+    xShell->DoClose();
+
+}
+void ScExportTest::testTdf81470()
+{
+    ScDocShellRef xShell = loadDoc("tdf81470.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xShell);
+
+    //without the fix in place, it would have crashed at export time
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    //also check revisions are exported
+    xmlDocUniquePtr pHeaders = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/revisions/revisionHeaders.xml");
+    CPPUNIT_ASSERT(pHeaders);
+
+    assertXPath(pHeaders, "/x:headers/x:header[1]", "dateTime", "2014-07-11T13:46:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[1]", "userName", "Kohei Yoshida");
+    assertXPath(pHeaders, "/x:headers/x:header[2]", "dateTime", "2014-07-11T18:38:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[2]", "userName", "Kohei Yoshida");
+    assertXPath(pHeaders, "/x:headers/x:header[3]", "dateTime", "2014-07-11T18:43:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[3]", "userName", "Kohei Yoshida");
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testTdf122331()
+{
+    ScDocShellRef xShell = loadDoc("tdf122331.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr", "filterMode", "true");
+    assertXPath(pSheet, "/x:worksheet/x:autoFilter", "ref", "A1:B761");
+    assertXPath(pSheet, "/x:worksheet/x:autoFilter/x:filterColumn", "colId", "1");
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testTdf83779()
+{
+    // Roundtripping TRUE/FALSE constants (not functions) must convert them to functions
+    ScDocShellRef xShell = loadDoc("tdf83779.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pVmlDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f", "FALSE()");
+    assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
+{
+    // Colors in header and footer should be exported, and imported properly
+    ScDocShellRef xShell = loadDoc("tdf134459_HeaderFooterColor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
+
+    xDocSh->DoClose();
+}
+
+>>>>>>> CHANGE (2abaaf tdf#134459 XLSX export: fix missing font color in header/foo)
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
