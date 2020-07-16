@@ -26,9 +26,7 @@
 namespace chart { class WrappedProperty; }
 namespace chart::wrapper { class Chart2ModelContact; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class WrappedAxisAndGridExistenceProperties
@@ -52,8 +50,7 @@ public:
        , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAXISANDGRIDEXISTENCEPROPERTIES_HXX
 

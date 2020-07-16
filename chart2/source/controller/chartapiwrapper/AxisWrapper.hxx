@@ -33,9 +33,7 @@
 
 namespace com::sun::star::chart2 { class XAxis; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 class Chart2ModelContact;
 
@@ -121,8 +119,7 @@ private: //member
     css::uno::Reference< css::beans::XPropertySet >   m_xMinorGrid;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AXISWRAPPER_HXX
 #endif

@@ -26,9 +26,7 @@
 
 namespace chart::wrapper { class Chart2ModelContact; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class WrappedScaleProperty final : public WrappedProperty
@@ -81,8 +79,7 @@ private:
     mutable css::uno::Any m_aOuterValue;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSCALEPROPERTY_HXX
 #endif

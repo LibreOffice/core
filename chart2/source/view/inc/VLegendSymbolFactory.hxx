@@ -29,10 +29,7 @@ namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class Any; }
 
-namespace chart
-{
-
-namespace VLegendSymbolFactory
+namespace chart::VLegendSymbolFactory
 {
     enum class PropertyType
     {
@@ -50,7 +47,6 @@ namespace VLegendSymbolFactory
             const css::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
             PropertyType ePropertyType,
             const css::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
-}
 
 } //  namespace chart
 

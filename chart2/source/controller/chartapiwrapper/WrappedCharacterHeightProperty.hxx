@@ -23,9 +23,7 @@
 
 #include <vector>
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class ReferenceSizePropertyProvider;
@@ -75,8 +73,7 @@ public:
     virtual ~WrappedComplexCharacterHeightProperty() override;
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDCHARACTERHEIGHTPROPERTY_HXX
 #endif

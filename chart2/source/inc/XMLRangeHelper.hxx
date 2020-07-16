@@ -23,9 +23,7 @@
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
-namespace chart
-{
-namespace XMLRangeHelper
+namespace chart::XMLRangeHelper
 {
 
 struct OOO_DLLPUBLIC_CHARTTOOLS Cell
@@ -58,8 +56,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 
 OUString getXMLStringFromCellRange( const CellRange & rRange );
 
-} //  namespace XMLRangeHelper
-} //  namespace chart
+} //  namespace chart::XMLRangeHelper
 
 // INCLUDED_CHART2_SOURCE_INC_XMLRANGEHELPER_HXX
 #endif

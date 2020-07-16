@@ -37,10 +37,7 @@ namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
-namespace chart
-{
-
-namespace DataSeriesHelper
+namespace chart::DataSeriesHelper
 {
 
 OOO_DLLPUBLIC_CHARTTOOLS OUString
@@ -175,8 +172,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const css:
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
-} //  namespace DataSeriesHelper
-} //  namespace chart
+} //  namespace chart::DataSeriesHelper
 
 // INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
 #endif

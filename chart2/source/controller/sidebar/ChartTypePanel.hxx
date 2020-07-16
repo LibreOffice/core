@@ -28,18 +28,9 @@
 #include <ChartTypeTemplateProvider.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace util
+namespace com::sun::star::util
 {
 class XModifyListener;
-}
-}
-}
 }
 
 namespace weld

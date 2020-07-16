@@ -25,9 +25,7 @@
 #include <iterator>
 #include <vector>
 
-namespace chart
-{
-namespace CloneHelper
+namespace chart::CloneHelper
 {
 
 /// functor that clones a UNO-Reference
@@ -69,8 +67,7 @@ template< class Interface >
                       CreateRefClone< Interface >());
 }
 
-} //  namespace CloneHelper
-} //  namespace chart
+} //  namespace chart::CloneHelper
 
 // INCLUDED_CHART2_SOURCE_INC_CLONEHELPER_HXX
 #endif

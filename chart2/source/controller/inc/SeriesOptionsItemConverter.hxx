@@ -26,9 +26,7 @@ namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class SeriesOptionsItemConverter : public ItemConverter
@@ -78,8 +76,7 @@ private:
     bool m_bHideLegendEntry;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_SERIESOPTIONSITEMCONVERTER_HXX
 #endif

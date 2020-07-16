@@ -33,10 +33,7 @@ namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::frame { class XModel; }
 
-namespace chart
-{
-
-namespace RegressionCurveHelper
+namespace chart::RegressionCurveHelper
 {
     /// returns a model mean-value line
     css::uno::Reference<css::chart2::XRegressionCurve> createMeanValueLine();
@@ -175,7 +172,6 @@ namespace RegressionCurveHelper
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
-}
 
 } //  namespace chart
 
