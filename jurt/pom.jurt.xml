@@ -8,6 +8,16 @@
   <description>Java Uno Runtime</description>
   <url>https://www.libreoffice.org</url>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.libreoffice</groupId>
+        <artifactId>libreoffice</artifactId>
+        <version>@version@</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <licenses>
     <license>
       <name>Mozilla Public License, Version 2.0</name>
