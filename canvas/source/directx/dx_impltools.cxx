@@ -52,10 +52,8 @@
 using namespace ::com::sun::star;
 
 
-namespace dxcanvas
+namespace dxcanvas::tools
 {
-    namespace tools
-    {
         ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
             LinePolyPolygon* pPolyImpl = dynamic_cast< LinePolyPolygon* >( xPoly.get() );
@@ -627,7 +625,6 @@ namespace dxcanvas
             o_rAttr.SetColorMatrix( &aColorMatrix );
         }
 
-    } // namespace tools
-} // namespace dxcanvas
+} // namespace dxcanvas::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
