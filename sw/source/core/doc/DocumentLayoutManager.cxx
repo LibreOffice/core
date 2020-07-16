@@ -471,7 +471,8 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
             boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
         }
         // presumably these anchors are supported though not sure
-        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId());
+        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
+        || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
         SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
                 boxAnchor, bSetTextFlyAtt, bMakeFrames);
         SwAttrSet aSet(pDest->GetAttrSet());
