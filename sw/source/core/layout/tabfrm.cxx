@@ -1825,6 +1825,22 @@ void FriendHackInvalidateRowFrame(SwFrameAreaDefinition & rRowFrame)
     rRowFrame.setFrameAreaPositionValid(false);
 }
 
+static void InvalidateFramePositions(SwFrame * pFrame)
+{
+    while (pFrame)
+    {
+        if (pFrame->IsLayoutFrame())
+        {
+            InvalidateFramePositions(pFrame->GetLower());
+        }
+        else if (pFrame->IsTextFrame())
+        {
+            pFrame->Prepare(PrepareHint::FramePositionChanged);
+        }
+        pFrame = pFrame->GetNext();
+    }
+}
+
 void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
@@ -2023,6 +2039,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if (GetLower())
             {   // it's possible that the rows already have valid pos - but it is surely wrong if the table's pos changed!
                 FriendHackInvalidateRowFrame(*GetLower());
+                // invalidate text frames to get rid of their SwFlyPortions
+                InvalidateFramePositions(GetLower());
             }
         }
 
