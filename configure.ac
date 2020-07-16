@@ -2291,13 +2291,6 @@ AC_ARG_WITH(idlc-cpp,
         [Specify the C Preprocessor to use for idlc. Default is ucpp.]),
 ,)
 
-AC_ARG_WITH(build-version,
-    AS_HELP_STRING([--with-build-version="Built by Jim"],
-        [Allows the builder to add a custom version tag that will appear in the
-         Help/About box for QA purposes.]),
-with_build_version=$withval,
-)
-
 AC_ARG_WITH(parallelism,
     AS_HELP_STRING([--with-parallelism],
         [Number of jobs to run simultaneously during build. Parallel builds can
@@ -7434,20 +7427,6 @@ AC_SUBST(LD_PLUGIN)
 
 AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
 AC_SUBST(HAVE_POSIX_FALLOCATE)
-
-dnl ===================================================================
-dnl Custom build version
-dnl ===================================================================
-
-AC_MSG_CHECKING([whether to add custom build version])
-if test "$with_build_version" != ""; then
-    BUILD_VER_STRING=$with_build_version
-    AC_MSG_RESULT([yes, $BUILD_VER_STRING])
-else
-    BUILD_VER_STRING=
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(BUILD_VER_STRING)
 
 JITC_PROCESSOR_TYPE=""
 if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
@@ -12959,6 +12938,9 @@ AC_SUBST(PROGRESSTEXTCOLOR)
 AC_SUBST(PROGRESSTEXTBASELINE)
 
 
+dnl ===================================================================
+dnl Custom build version
+dnl ===================================================================
 AC_MSG_CHECKING([for extra build ID])
 if test -n "$with_extra_buildid" -a "$with_extra_buildid" != "yes" ; then
     EXTRA_BUILDID="$with_extra_buildid"
