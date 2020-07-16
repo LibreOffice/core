@@ -66,8 +66,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-static Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
-
 namespace {
 
 class BibliographyLoader : public cppu::WeakImplHelper
@@ -94,15 +92,8 @@ public:
 
     // XServiceInfo
     OUString               SAL_CALL getImplementationName() override;
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) override;
+    sal_Bool               SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >   SAL_CALL getSupportedServiceNames() override;
-    static OUString                getImplementationName_Static() throw(  )
-
-                            {
-                                //!
-                                return "com.sun.star.extensions.Bibliography";
-                                //!
-                            }
 
     //XNameAccess
     virtual Any SAL_CALL getByName(const OUString& aName) override;
@@ -121,11 +112,6 @@ public:
     virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
-
-    static Sequence<OUString> getSupportedServiceNames_Static() throw(  );
-
-    /// @throws Exception
-    friend  Reference< XInterface > (::BibliographyLoader_CreateInstance)( const Reference< XMultiServiceFactory > & rSMgr );
 
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
@@ -151,17 +137,10 @@ BibliographyLoader::~BibliographyLoader()
 }
 
 
-Reference< XInterface > BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ )
-{
-    return *(new BibliographyLoader);
-}
-
-
 // XServiceInfo
 OUString BibliographyLoader::getImplementationName()
-
 {
-    return getImplementationName_Static();
+    return "com.sun.star.extensions.Bibliography";
 }
 
 // XServiceInfo
@@ -173,37 +152,14 @@ sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > BibliographyLoader::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static() throw(  )
-{
     return { "com.sun.star.frame.FrameLoader", "com.sun.star.frame.Bibliography" };
 }
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_BibliographyLoader_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    SAL_DLLPUBLIC_EXPORT void * bib_component_getFactory(
-        const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-    {
-        void * pRet = nullptr;
-        if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            // create the factory
-            Reference< XSingleServiceFactory > xFactory =
-                cppu::createSingleFactory(
-                    static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
-                    BibliographyLoader::getImplementationName_Static(),
-                    BibliographyLoader_CreateInstance,
-                    BibliographyLoader::getSupportedServiceNames_Static() );
-            // acquire, because we return an interface pointer instead of a reference
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-        return pRet;
-    }
-
+    return cppu::acquire(new BibliographyLoader());
 }
 
 void BibliographyLoader::cancel()

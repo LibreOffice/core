@@ -35,7 +35,6 @@ core_factory_list = [
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
-    ("libbiblo.a", "bib_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -143,6 +142,8 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
+# extensions/source/bibliography/bib.component
+    "extensions_BibliographyLoader_get_implementation",
 # filter/source/config/cache/filterconfig1.component
     "filter_TypeDetection_get_implementation",
     "filter_FrameLoaderFactory_get_implementation",
