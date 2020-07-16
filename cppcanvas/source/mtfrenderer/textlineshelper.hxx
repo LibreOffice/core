@@ -15,18 +15,9 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <cppcanvas/canvas.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace rendering
+namespace com::sun::star::rendering
 {
 class XPolyPolygon2D;
-}
-}
-}
 }
 
 namespace cppcanvas

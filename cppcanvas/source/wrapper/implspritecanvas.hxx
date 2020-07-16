@@ -26,10 +26,8 @@
 #include <cppcanvas/spritecanvas.hxx>
 #include "implcanvas.hxx"
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-    namespace internal
-    {
         class ImplSpriteCanvas : public virtual SpriteCanvas, protected virtual ImplCanvas
         {
         public:
@@ -78,7 +76,6 @@ namespace cppcanvas
             const css::uno::Reference< css::rendering::XSpriteCanvas > mxSpriteCanvas;
             TransformationArbiterSharedPtr                             mpTransformArbiter;
         };
-    }
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLSPRITECANVAS_HXX

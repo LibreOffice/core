@@ -42,11 +42,8 @@ namespace com::sun::star::rendering
 
 /* Definition of ImplCanvas */
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-
-    namespace internal
-    {
 
         class ImplCanvas : public virtual Canvas
         {
@@ -81,7 +78,6 @@ namespace cppcanvas
             const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
         };
 
-    }
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCANVAS_HXX

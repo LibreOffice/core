@@ -32,9 +32,7 @@ namespace basegfx { class B2DHomMatrix; }
 
 /* Definition of internal::CachedPrimitiveBase class */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         /** Base class providing cached re-rendering, if XCanvas
             returns XCachedPrimitive
@@ -79,7 +77,7 @@ namespace cppcanvas
             mutable ::basegfx::B2DHomMatrix                                 maLastTransformation;
             const bool                                                      mbOnlyRedrawWithSameTransform;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
