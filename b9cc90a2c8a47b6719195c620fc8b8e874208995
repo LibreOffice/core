@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8dffe991_d43a5a7c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-16T08:10:56Z",
+      "side": 1,
+      "message": "And it was. Checked everything but this ;-)",
+      "parentUuid": "84d06e98_19ad5f28",
+      "range": {
+        "startLine": 15,
+        "startChar": 71,
+        "endLine": 15,
+        "endChar": 85
+      },
+      "revId": "b9cc90a2c8a47b6719195c620fc8b8e874208995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a323eebe_00bc0f1a",
         "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
         "patchSetId": 1
@@ -53,6 +77,24 @@
       "writtenOn": "2020-07-15T18:39:07Z",
       "side": 1,
       "message": "There seems to be a lot of this stuff accumulating in include/vcl/abstdlg.hxx and I suspect that ther shouldn\u0027t generally be the need to add something here. Especially not stuff that doesn\u0027t add anything to its base, e.g. where AbstractDiagramDialog and AbstractToolbarmodeDialog are used I imagine VclAbstractDialog could be used instead",
+      "revId": "b9cc90a2c8a47b6719195c620fc8b8e874208995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4365735e_24e5ee88",
+        "filename": "include/vcl/abstdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-16T08:10:56Z",
+      "side": 1,
+      "message": "Will see if I can do this.",
+      "parentUuid": "803934c9_62a24f32",
       "revId": "b9cc90a2c8a47b6719195c620fc8b8e874208995",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
