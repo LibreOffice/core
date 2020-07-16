@@ -22,20 +22,15 @@
 #include <sal/types.h>
 
 
-namespace pcr
+namespace pcr::ControlType
 {
-
-    namespace ControlType
-    {
         const sal_Int16 FIXEDLINE      = sal_Int16(100);
         const sal_Int16 FORMATTEDFIELD = sal_Int16(101);
         const sal_Int16 PROGRESSBAR    = sal_Int16(102);
 
         // need only those which are not already covered as FormComponentType
-    }
 
-
-} // namespacepcr
+} // namespace pcr::ControlType
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX
