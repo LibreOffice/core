@@ -32,10 +32,7 @@
 
 #include <memory>
 
-namespace chart
-{
-
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -104,8 +101,7 @@ private: //member
     OUString       m_aPropertySetName;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_UPDOWNBARWRAPPER_HXX
 #endif

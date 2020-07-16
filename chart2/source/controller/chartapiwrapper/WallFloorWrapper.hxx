@@ -27,10 +27,7 @@
 
 #include <memory>
 
-namespace chart
-{
-
-namespace wrapper
+namespace chart::wrapper
 {
 
 class Chart2ModelContact;
@@ -68,8 +65,7 @@ private:
     bool m_bWall;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WALLFLOORWRAPPER_HXX
 #endif

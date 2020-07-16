@@ -22,10 +22,7 @@
 
 #include <tools/fldunit.hxx>
 
-namespace chart
-{
-
-namespace ConfigurationAccess
+namespace chart::ConfigurationAccess
 {
     /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
     from the registry settings of the Calc application.
@@ -36,7 +33,6 @@ namespace ConfigurationAccess
     @return the FieldUnit enum.  See <vcl/fldunit.hxx> for definition
     */
     FieldUnit getFieldUnit();
-}
 
 } //namespace chart
 #endif

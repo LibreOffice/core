@@ -26,9 +26,7 @@
 #include <utility>
 #include <vector>
 
-namespace chart
-{
-namespace RegressionCalculationHelper
+namespace chart::RegressionCalculationHelper
 {
 
 typedef std::pair< std::vector< double >, std::vector< double > > tDoubleVectorPair;
@@ -133,8 +131,7 @@ public:
     }
 };
 
-} //  namespace RegressionCalculationHelper
-} //  namespace chart
+} //  namespace chart::RegressionCalculationHelper
 
 // INCLUDED_CHART2_SOURCE_INC_REGRESSIONCALCULATIONHELPER_HXX
 #endif

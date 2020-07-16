@@ -28,9 +28,7 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class LegendItemConverter : public ItemConverter
@@ -59,8 +57,7 @@ private:
     std::vector< std::unique_ptr<ItemConverter> >    m_aConverters;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_LEGENDITEMCONVERTER_HXX
 #endif

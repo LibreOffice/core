@@ -25,9 +25,7 @@
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
-namespace chart
-{
-namespace CommonFunctors
+namespace chart::CommonFunctors
 {
 
 /** unary function to convert any type T into a css::uno::Any.
@@ -124,8 +122,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
     }
 };
 
-} //  namespace CommonFunctors
-} //  namespace chart
+} //  namespace chart::CommonFunctors
 
 // INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 #endif

@@ -26,10 +26,7 @@
 
 namespace com::sun::star::beans { struct Property; }
 
-namespace chart
-{
-
-namespace DataSeriesProperties
+namespace chart::DataSeriesProperties
 {
     enum
     {
@@ -45,7 +42,6 @@ namespace DataSeriesProperties
         std::vector< css::beans::Property > & rOutProperties );
 
     void AddDefaultsToMap( tPropertyValueMap & rOutMap );
-}
 
 } //  namespace chart
 

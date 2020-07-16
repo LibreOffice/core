@@ -27,9 +27,7 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class ErrorBarItemConverter : public ItemConverter
@@ -58,8 +56,7 @@ private:
     css::uno::Reference< css::frame::XModel >  m_xModel;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} //  namespace chart::wrapper
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ERRORBARITEMCONVERTER_HXX
 

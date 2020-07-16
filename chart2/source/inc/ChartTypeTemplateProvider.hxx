@@ -22,18 +22,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace chart2
+namespace com::sun::star::chart2
 {
 class XChartTypeTemplate;
-}
-}
-}
 }
 
 namespace chart

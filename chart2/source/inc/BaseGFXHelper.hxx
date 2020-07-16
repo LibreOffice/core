@@ -34,9 +34,7 @@
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
-namespace chart
-{
-namespace BaseGFXHelper
+namespace chart::BaseGFXHelper
 {
 
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DRange getBoundVolume( const css::drawing::PolyPolygonShape3D& rPolyPoly );
@@ -80,8 +78,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DTuple GetScaleFromMatrix(
 
 void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix );
 
-} //  namespace BaseGFXHelper
-} //  namespace chart
+} //  namespace chart::BaseGFXHelper
 
 // INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
 #endif

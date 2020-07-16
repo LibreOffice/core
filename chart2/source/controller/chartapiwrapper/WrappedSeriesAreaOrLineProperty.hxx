@@ -21,9 +21,7 @@
 
 #include <WrappedProperty.hxx>
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 class DataSeriesPointWrapper;
@@ -43,8 +41,7 @@ private:
     OUString m_aInnerLineTypeName;
 };
 
-} //namespace wrapper
-} //namespace chart
+} //namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSERIESAREAORLINEPROPERTY_HXX
 #endif
