@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa379c31_e2a972d3",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-16T08:22:55Z",
+      "side": 1,
+      "message": "Ah - here it is, the thing I missed in my explanation: enums! We have a separate prefix for them, too: \"e\". So - \"eValue\" here. It\u0027s my fault, sorry.",
+      "range": {
+        "startLine": 78,
+        "startChar": 13,
+        "endLine": 78,
+        "endChar": 34
+      },
+      "revId": "f8e8c3621b8682ec4b5dc2e24ebd0a257b35f233",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
