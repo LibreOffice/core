@@ -28,10 +28,8 @@ namespace rtl
 {
     class OUString;
 }
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OLEVariant;
         class WpBase
         {
@@ -218,8 +216,8 @@ namespace connectivity
 
 
         };
-    }
 }
+
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AOLEWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

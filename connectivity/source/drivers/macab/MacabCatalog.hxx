@@ -22,11 +22,9 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
-            class MacabConnection;
+        class MacabConnection;
 
         class MacabCatalog : public connectivity::sdbcx::OCatalog
         {
@@ -49,7 +47,6 @@ namespace connectivity
             virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
                     ) override;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCATALOG_HXX

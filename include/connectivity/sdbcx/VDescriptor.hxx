@@ -25,9 +25,7 @@
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         // = ODescriptor
@@ -77,9 +75,9 @@ namespace connectivity
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
             static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
         };
-    }
 
 }
+
 #endif // INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

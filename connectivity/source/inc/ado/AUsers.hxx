@@ -24,10 +24,8 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
         class OUsers : public sdbcx::OCollection
         {
@@ -51,7 +49,6 @@ namespace connectivity
             {
             }
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSERS_HXX

@@ -39,9 +39,7 @@
 
 #include <cppuhelper/compbase12.hxx>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::uno::Any;
@@ -272,8 +270,8 @@ public:
 private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
-} /* mysqlc */
-} /* connectivity */
+
+} /* connectivity::mysqlc */
 #endif // CONNECTIVITY_SRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

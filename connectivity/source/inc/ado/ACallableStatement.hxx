@@ -25,10 +25,8 @@
 #include <com/sun/star/sdbc/XOutParameters.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
         //************ Class: java.sql.CallableStatement
 
@@ -73,7 +71,6 @@ namespace connectivity
             virtual void SAL_CALL registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
             virtual void SAL_CALL registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) override;
         };
-    }
 }
 #endif // _CONNECTIVITY_OCallableStatement_HXX_
 

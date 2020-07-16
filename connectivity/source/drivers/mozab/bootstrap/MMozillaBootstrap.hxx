@@ -28,10 +28,8 @@
 #include <cppuhelper/compbase.hxx>
 
 
-namespace connectivity
+namespace connectivity::mozab
 {
-    namespace mozab
-    {
         typedef ::cppu::WeakComponentImplHelper<   css::mozilla::XMozillaBootstrap,
                                                    css::lang::XServiceInfo > OMozillaBootstrap_BASE;
         class ProfileAccess;
@@ -75,7 +73,6 @@ namespace connectivity
             // XProxyRunner
             virtual ::sal_Int32 SAL_CALL Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
         };
-    }
 
 }
 

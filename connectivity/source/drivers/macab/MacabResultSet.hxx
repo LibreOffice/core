@@ -32,10 +32,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         /*
         **  MacabResultSet
         */
@@ -211,7 +209,6 @@ namespace connectivity
             // XDeleteRows
             virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRESULTSET_HXX

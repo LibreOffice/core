@@ -23,10 +23,8 @@
 #include "MacabConnection.hxx"
 #include <connectivity/sdbcx/VTable.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         typedef connectivity::sdbcx::OTable MacabTable_TYPEDEF;
 
         class MacabTable : public MacabTable_TYPEDEF
@@ -52,7 +50,6 @@ namespace connectivity
             OUString const & getTableName() const { return m_Name; }
             OUString const & getSchema() const { return m_SchemaName; }
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABTABLE_HXX

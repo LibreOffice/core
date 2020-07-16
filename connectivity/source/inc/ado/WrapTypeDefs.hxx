@@ -20,10 +20,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTYPEDEFS_HXX
 
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOTable;
         class WpADOKey;
         class WpADOIndex;
@@ -39,7 +37,6 @@ namespace connectivity
         typedef WpOLEAppendCollection<ADOGroups,    ADOGroup,   WpADOGroup>     WpADOGroups;
         typedef WpOLEAppendCollection<ADOViews,     ADOView,    WpADOView>      WpADOViews;
         typedef WpOLEAppendCollection<ADOUsers,     _ADOUser,   WpADOUser>      WpADOUsers;
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTYPEDEFS_HXX

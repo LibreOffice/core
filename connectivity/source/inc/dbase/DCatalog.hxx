@@ -22,9 +22,7 @@
 
 #include <file/FCatalog.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class ODbaseConnection;
         class ODbaseCatalog : public file::OFileCatalog
@@ -35,7 +33,7 @@ namespace connectivity
         public:
             ODbaseCatalog(ODbaseConnection* _pCon);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCATALOG_HXX
 

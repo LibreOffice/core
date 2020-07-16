@@ -27,10 +27,8 @@
 #include <ado/AResultSet.hxx>
 #include <OColumn.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
 
         //************ Class: ResultSetMetaData
@@ -77,7 +75,6 @@ namespace connectivity
             virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
             virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ARESULTSETMETADATA_HXX
 

@@ -28,15 +28,12 @@
 #include <postmac.h>
 
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         class MacabGroup: public MacabRecords {
             public:
                 MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *_allRecords, const ABGroupRef _xGroup);
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABGROUP_HXX

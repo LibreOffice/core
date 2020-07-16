@@ -33,9 +33,7 @@ namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 namespace com::sun::star::sdbc { class XResultSetMetaData; }
 
-namespace connectivity
-{
-    namespace parse
+namespace connectivity::parse
     {
         class OParseColumn;
 
@@ -144,7 +142,7 @@ namespace connectivity
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_PCOLUMN_HXX

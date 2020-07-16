@@ -28,9 +28,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <file/FResultSet.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
 
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OPreparedStatement : public  OStatement_BASE2,
@@ -117,7 +115,7 @@ namespace connectivity
             // XResultSetMetaDataSupplier
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
 

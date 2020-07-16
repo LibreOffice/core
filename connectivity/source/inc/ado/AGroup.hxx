@@ -23,10 +23,8 @@
 #include <sdbcx/VGroup.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         typedef sdbcx::OGroup OGroup_ADO;
         class OCatalog;
 
@@ -60,7 +58,6 @@ namespace connectivity
 
             WpADOGroup getImpl() const { return m_aGroup; }
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
 

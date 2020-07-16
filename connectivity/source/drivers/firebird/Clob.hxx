@@ -18,9 +18,7 @@
 #include <com/sun/star/sdbc/XClob.hpp>
 #include <rtl/ref.hxx>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XClob >
             Clob_BASE;
@@ -61,7 +59,6 @@ namespace connectivity
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing() override;
         };
-    }
 
 }
 
