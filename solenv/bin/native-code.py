@@ -32,7 +32,6 @@ core_factory_list = [
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
-    ("libMacOSXSpelllo.a", "MacOSXSpell_component_getFactory", "#ifdef IOS"),
     ]
 
 core_constructor_list = [
@@ -238,6 +237,8 @@ core_constructor_list = [
     "linguistic_LinguProps_get_implementation",
     "linguistic_LngSvcMgr_get_implementation",
     "linguistic_GrammarCheckingIterator_get_implementation",
+# linguistic/source/spellcheck/MacOSXSpellMacOSXSpell.component
+    ("lingucomponent_MacSpellChecker_get_implementation", "#ifdef IOS"),
 # lingucomponent/source/thesaurus/libnth/lnth.component
     ("lingucomponent_Thesaurus_get_implementation", "#ifndef IOS"),
     ("lingucomponent_SpellChecker_get_implementation", "#ifndef IOS"),
