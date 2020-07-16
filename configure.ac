@@ -2296,13 +2296,6 @@ AC_ARG_WITH(idlc-cpp,
         [Specify the C Preprocessor to use for idlc. Default is ucpp.]),
 ,)
 
-AC_ARG_WITH(build-version,
-    AS_HELP_STRING([--with-build-version="Built by Jim"],
-        [Allows the builder to add a custom version tag that will appear in the
-         Help/About box for QA purposes.]),
-with_build_version=$withval,
-)
-
 AC_ARG_WITH(parallelism,
     AS_HELP_STRING([--with-parallelism],
         [Number of jobs to run simultaneously during build. Parallel builds can
