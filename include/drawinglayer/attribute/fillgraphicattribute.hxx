@@ -36,9 +36,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC FillGraphicAttribute
         {
@@ -73,8 +71,8 @@ namespace drawinglayer
             double getOffsetX() const;
             double getOffsetY() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX

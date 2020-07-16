@@ -35,9 +35,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC SdrLineStartEndAttribute
         {
@@ -81,8 +79,8 @@ namespace drawinglayer
             bool isStartCentered() const;
             bool isEndCentered() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINESTARTENDATTRIBUTE_HXX

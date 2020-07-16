@@ -17,9 +17,7 @@
 
 #include <sal/log.hxx>
 
-namespace drawinglayer
-{
-namespace attribute
+namespace drawinglayer::attribute
 {
 SdrGlowAttribute::SdrGlowAttribute(sal_Int32 nRadius, const Color& rColor)
     : m_nRadius(nRadius)
@@ -44,7 +42,6 @@ bool SdrGlowAttribute::operator==(const SdrGlowAttribute& rCandidate) const
     return m_nRadius == rCandidate.m_nRadius && m_color == rCandidate.m_color;
 }
 
-} // end of namespace attribute
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::attribute
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

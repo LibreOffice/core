@@ -26,9 +26,7 @@
 #include <memory>
 
 
-namespace drawinglayer
-{
-    namespace animation
+namespace drawinglayer::animation
     {
 
 
@@ -126,8 +124,7 @@ namespace drawinglayer
         };
 
 
-    } // end of namespace animation
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::animation
 
 
 #endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX

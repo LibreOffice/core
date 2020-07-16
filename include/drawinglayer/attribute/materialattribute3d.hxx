@@ -35,9 +35,7 @@ namespace basegfx {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC MaterialAttribute3D
         {
@@ -71,8 +69,8 @@ namespace drawinglayer
             const basegfx::BColor& getEmission() const;
             sal_uInt16 getSpecularIntensity() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX

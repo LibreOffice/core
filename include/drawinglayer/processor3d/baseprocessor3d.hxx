@@ -26,9 +26,7 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /** BaseProcessor3D class
 
@@ -64,8 +62,8 @@ namespace drawinglayer
             // data access
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor3d
 
 
 #endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX

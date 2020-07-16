@@ -38,9 +38,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC SdrFillAttribute
         {
@@ -78,8 +76,8 @@ namespace drawinglayer
             const FillHatchAttribute& getHatch() const;
             const SdrFillGraphicAttribute& getFillGraphic() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX

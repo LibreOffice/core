@@ -34,9 +34,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC SdrSceneAttribute
         {
@@ -73,8 +71,8 @@ namespace drawinglayer
             css::drawing::ShadeMode getShadeMode() const;
             bool getTwoSidedLighting() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSCENEATTRIBUTE3D_HXX

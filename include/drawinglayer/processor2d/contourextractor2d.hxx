@@ -26,9 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** ContourExtractor2D class
 
@@ -55,8 +53,8 @@ namespace drawinglayer
 
             const basegfx::B2DPolyPolygonVector& getExtractedContour() const { return maExtractedContour; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_CONTOUREXTRACTOR2D_HXX

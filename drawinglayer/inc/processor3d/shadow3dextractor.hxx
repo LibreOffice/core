@@ -32,9 +32,7 @@ namespace basegfx { class B3DPolyPolygon; }
 namespace basegfx { class B3DPolygon; }
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /** Shadow3DExtractingProcessor class
 
@@ -93,7 +91,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor3d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@ namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
 class OutputDevice;
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** create the best available pixel based BaseProcessor2D
             (which may be system-dependent)
@@ -67,8 +65,8 @@ namespace drawinglayer
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 

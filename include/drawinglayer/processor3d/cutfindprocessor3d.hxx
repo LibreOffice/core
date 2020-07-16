@@ -25,9 +25,7 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         /** CutFindProcessor class
 
@@ -66,8 +64,8 @@ namespace drawinglayer
             /// data read access
             const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor3d
 
 
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR3D_CUTFINDPROCESSOR3D_HXX

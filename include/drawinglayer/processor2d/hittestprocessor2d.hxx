@@ -28,9 +28,7 @@ namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
 namespace drawinglayer::primitive2d { class ScenePrimitive2D; }
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** HitTestProcessor2D class
 
@@ -90,8 +88,8 @@ namespace drawinglayer
             bool getHit() const { return mbHit; }
             bool getHitTextOnly() const { return mbHitTextOnly; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 

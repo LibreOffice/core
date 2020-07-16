@@ -36,9 +36,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class DRAWINGLAYER_DLLPUBLIC SdrShadowAttribute
         {
@@ -76,8 +74,8 @@ namespace drawinglayer
             sal_Int32 getBlur() const;
             const basegfx::BColor& getColor() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX

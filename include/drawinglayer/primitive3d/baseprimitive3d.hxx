@@ -76,9 +76,7 @@ namespace drawinglayer::primitive3d {
 
 // basePrimitive3D class
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         /** BasePrimitive3D class
 
@@ -141,15 +139,13 @@ namespace drawinglayer
              */
             virtual css::geometry::RealRectangle3D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override;
         };
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
 // BufferedDecompositionPrimitive3D class
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         /** BufferedDecompositionPrimitive3D class
 
@@ -190,15 +186,13 @@ namespace drawinglayer
              */
             virtual Primitive3DContainer get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const override;
         };
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive3d
 
 
 // tooling
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         /// get B3DRange from a given Primitive3DReference
         basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
@@ -208,8 +202,7 @@ namespace drawinglayer
          */
         bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive3d
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX

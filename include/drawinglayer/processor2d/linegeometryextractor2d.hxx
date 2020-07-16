@@ -27,9 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         /** LineGeometryExtractor2D class
 
@@ -54,8 +52,8 @@ namespace drawinglayer
             const basegfx::B2DPolygonVector& getExtractedHairlines() const { return maExtractedHairlines; }
             const basegfx::B2DPolyPolygonVector& getExtractedLineFills() const { return maExtractedLineFills; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::processor2d
 
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_LINEGEOMETRYEXTRACTOR2D_HXX

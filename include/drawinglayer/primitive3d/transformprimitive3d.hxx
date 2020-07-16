@@ -26,9 +26,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         /** TransformPrimitive3D class
 
@@ -63,8 +61,8 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive3DIDBlock()
         };
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive3d
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
