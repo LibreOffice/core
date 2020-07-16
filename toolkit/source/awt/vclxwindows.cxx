@@ -7743,10 +7743,6 @@ void SVTXFormattedField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXSpinField::ImplGetPropertyIds( rIds );
 }
 
-
-
-
-
 SVTXCurrencyField::SVTXCurrencyField()
 {
 }
@@ -7977,10 +7973,39 @@ css::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName )
 void SVTXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_CURRENCYSYMBOL,
                      BASEPROPERTY_CURSYM_POSITION,
+                     BASEPROPERTY_DECIMALACCURACY,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_NUMSHOWTHOUSANDSEP,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VALUEMAX_DOUBLE,
+                     BASEPROPERTY_VALUEMIN_DOUBLE,
+                     BASEPROPERTY_VALUESTEP_DOUBLE,
+                     BASEPROPERTY_VALUE_DOUBLE,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_WRITING_MODE,
+                     BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
-    SVTXFormattedField::ImplGetPropertyIds( rIds );
+    VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
 SVTXNumericField::SVTXNumericField()
