@@ -22,11 +22,7 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 template<class T>
 class ThreadsafeQueue
@@ -75,7 +71,7 @@ void ThreadsafeQueue<T>::pop( T& data )
     mQueue.pop();
 }
 }
-}
-}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

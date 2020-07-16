@@ -13,11 +13,7 @@
 #include <salhelper/thread.hxx>
 #include <wrapper/ThreadsafeQueue.hxx>
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class EventHandler : public ::osl::Thread
     {
@@ -36,7 +32,7 @@ namespace wrapper
         ThreadsafeQueue< TCallback > mCallbackQueue;
     };
 }
-}
-}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,11 +19,7 @@ namespace rtl
     class OUString;
 }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class Media;
     class Player
@@ -67,7 +63,7 @@ namespace wrapper
         libvlc_media_player_t *mPlayer;
     };
 }
-}
-}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

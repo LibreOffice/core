@@ -15,11 +15,7 @@
 struct libvlc_event_manager_t;
 struct libvlc_event_t;
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class EventHandler;
     class EventManager
@@ -49,7 +45,7 @@ namespace wrapper
         static void Handler( const libvlc_event_t *event, void *pData );
     };
 }
-}
-}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

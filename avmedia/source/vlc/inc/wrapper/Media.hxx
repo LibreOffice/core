@@ -13,11 +13,7 @@ struct libvlc_media_t;
 
 namespace rtl { class OUString; }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     class Instance;
     class Media
@@ -41,7 +37,7 @@ namespace wrapper
         libvlc_media_t *mMedia;
     };
 }
-}
-}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,8 +24,7 @@
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
                                                css::lang::XServiceInfo >
@@ -49,6 +48,6 @@ private:
 };
 
 }
-}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

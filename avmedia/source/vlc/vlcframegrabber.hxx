@@ -24,8 +24,7 @@
 #include "vlccommon.hxx"
 #include <wrapper/Wrapper.hxx>
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                 css::lang::XServiceInfo > FrameGrabber_BASE;
@@ -47,6 +46,6 @@ public:
 };
 
 }
-}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
