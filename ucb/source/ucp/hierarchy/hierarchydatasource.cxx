@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
@@ -195,33 +196,27 @@ HierarchyDataSource::~HierarchyDataSource()
 }
 
 // XServiceInfo methods.
-
-XSERVICEINFO_COMMOM_IMPL( HierarchyDataSource,
-                          "com.sun.star.comp.ucb.HierarchyDataSource" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-HierarchyDataSource_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString SAL_CALL HierarchyDataSource::getImplementationName()                       \
 {
-    css::lang::XServiceInfo* pX = new HierarchyDataSource( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.HierarchyDataSource";
 }
-
-css::uno::Sequence< OUString >
-HierarchyDataSource::getSupportedServiceNames_Static()
+sal_Bool SAL_CALL HierarchyDataSource::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+css::uno::Sequence< OUString > HierarchyDataSource::getSupportedServiceNames()
 {
     return { "com.sun.star.ucb.DefaultHierarchyDataSource", "com.sun.star.ucb.HierarchyDataSource" };
 }
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-HierarchyDataSource::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_HierarchyDataSource_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                HierarchyDataSource::getImplementationName_Static(),
-                HierarchyDataSource_CreateInstance,
-                HierarchyDataSource::getSupportedServiceNames_Static() );
+    static rtl::Reference<HierarchyDataSource> g_Instance(new HierarchyDataSource(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
 
 
 // XComponent methods.
