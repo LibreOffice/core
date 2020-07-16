@@ -610,6 +610,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
+                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT))
+                        {
+                            SwTextBoxHelper::syncFlyFrameAttr(rFormat, rFormat.GetAttrSet());
+                        }
                     }
                     // #i28701# - no call of method
                     // <CheckCharRectAndTopOfLine()> for to-character anchored
