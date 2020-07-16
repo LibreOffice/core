@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <rtl/ref.hxx>
@@ -38,11 +39,8 @@ namespace sdext::presenter {
 class PresenterController;
 
 typedef ::cppu::WeakComponentImplHelper <
-    css::task::XJob
+    css::task::XJob, css::lang::XServiceInfo
     > PresenterScreenJobInterfaceBase;
-typedef ::cppu::WeakComponentImplHelper <
-    css::lang::XEventListener
-    > PresenterScreenInterfaceBase;
 
 /** The PresenterScreenJob service is instantiated every time a document is
     created or loaded.  In its execute() method it then filters out all
@@ -56,22 +54,22 @@ class PresenterScreenJob
 public:
     PresenterScreenJob(const PresenterScreenJob&) = delete;
     PresenterScreenJob& operator=(const PresenterScreenJob&) = delete;
-    static OUString getImplementationName_static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
     virtual void SAL_CALL disposing() override;
 
-    // XJob
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
+    // XJob
     virtual css::uno::Any SAL_CALL execute(
         const css::uno::Sequence<css::beans::NamedValue >& Arguments) override;
 
-private:
     explicit PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterScreenJob() override;
 
+private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
 
@@ -86,6 +84,9 @@ private:
     PresenterController is created and takes over the task of controlling
     the presenter screen.</p>
 */
+typedef ::cppu::WeakComponentImplHelper <
+    css::lang::XEventListener
+    > PresenterScreenInterfaceBase;
 class PresenterScreen
     : private ::cppu::BaseMutex,
       public PresenterScreenInterfaceBase

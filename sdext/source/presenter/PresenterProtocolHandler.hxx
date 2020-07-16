@@ -49,11 +49,6 @@ public:
 
     void SAL_CALL disposing() override;
 
-    static OUString getImplementationName_static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-
     // XInitialization
 
     virtual void SAL_CALL initialize(

@@ -234,23 +234,6 @@ private:
     virtual ~Dispatch() override;
 };
 
-//----- Service ---------------------------------------------------------------
-
-OUString PresenterProtocolHandler::getImplementationName_static()
-{
-    return "org.libreoffice.comp.PresenterScreenProtocolHandler";
-}
-
-Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static()
-{
-    return { "com.sun.star.frame.ProtocolHandler" };
-}
-
-Reference<XInterface> PresenterProtocolHandler::Create (
-    SAL_UNUSED_PARAMETER const Reference<uno::XComponentContext>&)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler));
-}
 
 //===== PresenterProtocolHandler =========================================================
 
@@ -291,7 +274,7 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
 
 OUString PresenterProtocolHandler::getImplementationName()
 {
-    return getImplementationName_static();
+    return "org.libreoffice.comp.PresenterScreenProtocolHandler";
 }
 
 sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
@@ -302,7 +285,14 @@ sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString>
 PresenterProtocolHandler::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.frame.ProtocolHandler" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+sdext_PresenterProtocolHandler_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new PresenterProtocolHandler());
 }
 
 //----- XDispatchProvider -----------------------------------------------------

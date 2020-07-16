@@ -35,6 +35,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -85,22 +86,31 @@ namespace {
     };
 }
 
-//----- Service ---------------------------------------------------------------
+//----- XServiceInfo ---------------------------------------------------------------
 
-OUString PresenterScreenJob::getImplementationName_static()
+Sequence< OUString > SAL_CALL PresenterScreenJob::getSupportedServiceNames()
+{
+    return {  };
+}
+
+OUString SAL_CALL PresenterScreenJob::getImplementationName()
 {
     return "org.libreoffice.comp.PresenterScreenJob";
 }
 
-Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static()
+sal_Bool SAL_CALL PresenterScreenJob::supportsService(const OUString& aServiceName)
 {
-    return Sequence<OUString>();
+    return cppu::supportsService(this, aServiceName);
 }
 
-Reference<XInterface> PresenterScreenJob::Create (const Reference<uno::XComponentContext>& rxContext)
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+sdext_PresenterScreenJob_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterScreenJob(rxContext)));
+    return cppu::acquire(new PresenterScreenJob(context));
 }
+
 
 //===== PresenterScreenJob ====================================================
 

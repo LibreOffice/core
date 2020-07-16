@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_exception_objects,PresenterScreen,\
     sdext/source/presenter/PresenterBitmapContainer \
     sdext/source/presenter/PresenterButton \
     sdext/source/presenter/PresenterCanvasHelper \
-    sdext/source/presenter/PresenterComponent \
     sdext/source/presenter/PresenterConfigurationAccess \
     sdext/source/presenter/PresenterController \
     sdext/source/presenter/PresenterCurrentSlideObserver \
