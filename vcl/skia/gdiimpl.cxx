@@ -39,6 +39,7 @@
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 namespace
 {
@@ -331,9 +332,16 @@ void SkiaSalGraphicsImpl::preDraw()
     assert(comphelper::SolarMutex::get()->IsCurrentThread());
     SkiaZone::enter(); // matched in postDraw()
     checkSurface();
+    checkPendingDrawing();
 }
 
 void SkiaSalGraphicsImpl::postDraw()
+{
+    scheduleFlush();
+    SkiaZone::leave(); // matched in preDraw()
+}
+
+void SkiaSalGraphicsImpl::scheduleFlush()
 {
     if (!isOffscreen())
     {
@@ -342,7 +350,6 @@ void SkiaSalGraphicsImpl::postDraw()
         else if (!mFlush->IsActive())
             mFlush->Start();
     }
-    SkiaZone::leave(); // matched in preDraw()
 }
 
 // VCL can sometimes resize us without telling us, update the surface if needed.
@@ -390,6 +397,7 @@ void SkiaSalGraphicsImpl::checkSurface()
 
 void SkiaSalGraphicsImpl::flushDrawing()
 {
+    checkPendingDrawing();
     if (mXorMode)
         applyXor();
     mSurface->flushAndSubmit();
@@ -400,6 +408,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     if (mClipRegion == region)
         return true;
     SkiaZone zone;
+    checkPendingDrawing();
     mClipRegion = region;
     checkSurface();
     SAL_INFO("vcl.skia.trace", "setclipregion(" << this << "): " << region);
@@ -443,18 +452,35 @@ sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 32; }
 
 long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
 
-void SkiaSalGraphicsImpl::SetLineColor() { mLineColor = SALCOLOR_NONE; }
+void SkiaSalGraphicsImpl::SetLineColor()
+{
+    checkPendingDrawing();
+    mLineColor = SALCOLOR_NONE;
+}
 
-void SkiaSalGraphicsImpl::SetLineColor(Color nColor) { mLineColor = nColor; }
+void SkiaSalGraphicsImpl::SetLineColor(Color nColor)
+{
+    checkPendingDrawing();
+    mLineColor = nColor;
+}
 
-void SkiaSalGraphicsImpl::SetFillColor() { mFillColor = SALCOLOR_NONE; }
+void SkiaSalGraphicsImpl::SetFillColor()
+{
+    checkPendingDrawing();
+    mFillColor = SALCOLOR_NONE;
+}
 
-void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { mFillColor = nColor; }
+void SkiaSalGraphicsImpl::SetFillColor(Color nColor)
+{
+    checkPendingDrawing();
+    mFillColor = nColor;
+}
 
 void SkiaSalGraphicsImpl::SetXORMode(bool set, bool)
 {
     if (mXorMode == set)
         return;
+    checkPendingDrawing();
     SAL_INFO("vcl.skia.trace", "setxormode(" << this << "): " << set);
     if (set)
         mXorRegion.setEmpty();
@@ -540,6 +566,7 @@ void SkiaSalGraphicsImpl::applyXor()
 
 void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
 {
+    checkPendingDrawing();
     switch (nROPColor)
     {
         case SalROPColor::N0:
@@ -556,6 +583,7 @@ void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
 
 void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
 {
+    checkPendingDrawing();
     switch (nROPColor)
     {
         case SalROPColor::N0:
@@ -692,23 +720,38 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         || fTransparency >= 1.0)
         return true;
 
+    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    aPolyPolygon.transform(rObjectToDevice);
+
+    SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
+                                                  << mLineColor << ":" << mFillColor);
+
+    if (mergePolyPolygonToPrevious(aPolyPolygon, fTransparency))
+    {
+        scheduleFlush();
+        return true;
+    }
+
+    performDrawPolyPolygon(aPolyPolygon, fTransparency, mParent.getAntiAliasB2DDraw());
+    return true;
+}
+
+void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& aPolyPolygon,
+                                                 double fTransparency, bool useAA)
+{
     preDraw();
 
     SkPath aPath;
-    basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
-    aPolyPolygon.transform(rObjectToDevice);
-    SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
-                                                  << mLineColor << ":" << mFillColor);
     addPolyPolygonToPath(aPolyPolygon, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
 
     SkPaint aPaint;
-    aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+    aPaint.setAntiAlias(useAA);
     // We normally use pixel at their center positions, but slightly off (see toSkX/Y()).
     // With AA lines that "slightly off" causes tiny changes of color, making some tests
     // fail. Since moving AA-ed line slightly to a side doesn't cause any real visual
     // difference, just place exactly at the center. tdf#134346
-    const SkScalar posFix = mParent.getAntiAliasB2DDraw() ? toSkXYFix : 0;
+    const SkScalar posFix = useAA ? toSkXYFix : 0;
     if (mFillColor != SALCOLOR_NONE)
     {
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
@@ -729,10 +772,74 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     // WORKAROUND: The logo in the about dialog has drawing errors. This seems to happen
     // only on Linux (not Windows on the same machine), with both AMDGPU and Mesa,
     // and only when antialiasing is enabled. Flushing seems to avoid the problem.
-    if (mParent.getAntiAliasB2DDraw() && SkiaHelper::getVendor() == DriverBlocklist::VendorAMD)
+    if (useAA && SkiaHelper::getVendor() == DriverBlocklist::VendorAMD)
         mSurface->flushAndSubmit();
 #endif
+}
+
+bool SkiaSalGraphicsImpl::mergePolyPolygonToPrevious(const basegfx::B2DPolyPolygon& aPolyPolygon,
+                                                     double fTransparency)
+{
+    // There is some code that needlessly subdivides areas into adjacent rectangles,
+    // but Skia doesn't line them up perfectly if AA is enabled (e.g. Cairo, Qt5 do,
+    // but Skia devs claim it's working as intended
+    // https://groups.google.com/d/msg/skia-discuss/NlKpD2X_5uc/Vuwd-kyYBwAJ).
+    // An example is tdf#133016, which triggers SvgStyleAttributes::add_stroke()
+    // implementing a line stroke as a bunch of polygons instead of just one, and
+    // SvgLinearAtomPrimitive2D::create2DDecomposition() creates a gradient
+    // as a series of polygons of gradually changing color. Those places should be
+    // changed, but try to merge those split polygons back into the original one,
+    // where the needlessly created edges causing problems will not exist.
+    // This means drawing of such polygons needs to be delayed, so that they can
+    // be possibly merged with the next one.
+    // Merge only polygons of the same properties (color, etc.), so the gradient problem
+    // actually isn't handled here.
+
+    // Only AA polygons need merging, because they do not line up well because of the AA of the edges.
+    if (!mParent.getAntiAliasB2DDraw())
+        return false;
+    // Only filled polygons without an outline are problematic.
+    if (mFillColor == SALCOLOR_NONE || mLineColor != SALCOLOR_NONE)
+        return false;
+    // Merge only simple polygons, real polypolygons most likely aren't needlessly split,
+    // so they do not need joining.
+    if (aPolyPolygon.count() != 1)
+        return false;
+
+    if (mLastPolyPolygonInfo.polygon.count() != 0
+        && (mLastPolyPolygonInfo.transparency != fTransparency
+            || !mLastPolyPolygonInfo.polygon.getB2DRange().overlaps(aPolyPolygon.getB2DRange())))
+    {
+        checkPendingDrawing(); // Cannot be parts of the same larger polygon, draw the last and reset.
+    }
+    if (mLastPolyPolygonInfo.polygon.count() == 0)
+    {
+        mLastPolyPolygonInfo.polygon = aPolyPolygon;
+        mLastPolyPolygonInfo.transparency = fTransparency;
+        return true;
+    }
+    basegfx::B2DPolyPolygon merged
+        = basegfx::utils::mergeToSinglePolyPolygon({ mLastPolyPolygonInfo.polygon, aPolyPolygon });
+    if (merged.count() == 0) // it wasn't actually merged
+    {
+        checkPendingDrawing();
+        mLastPolyPolygonInfo.polygon = aPolyPolygon;
+        mLastPolyPolygonInfo.transparency = fTransparency;
+        return true;
+    }
+    mLastPolyPolygonInfo.polygon = std::move(merged);
     return true;
+}
+
+void SkiaSalGraphicsImpl::checkPendingDrawing()
+{
+    if (mLastPolyPolygonInfo.polygon.count() != 0)
+    { // Flush any pending polygon drawing.
+        basegfx::B2DPolyPolygon polygon;
+        std::swap(polygon, mLastPolyPolygonInfo.polygon);
+        double transparency = mLastPolyPolygonInfo.transparency;
+        performDrawPolyPolygon(polygon, transparency, true);
+    }
 }
 
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,

@@ -251,6 +251,7 @@ protected:
 
     // Called by SkiaFlushIdle.
     virtual void performFlush() = 0;
+    void scheduleFlush();
     friend class SkiaFlushIdle;
 
     // get the width of the device
@@ -281,6 +282,14 @@ protected:
     // Value to add to be exactly in the middle of the pixel.
     static constexpr SkScalar toSkXYFix = SkScalar(0.005);
 
+    // Perform any pending drawing such as delayed merging of polygons. Called by preDraw()
+    // and anything that means the next operation cannot be another one in a series (e.g.
+    // changing colors).
+    void checkPendingDrawing();
+    bool mergePolyPolygonToPrevious(const basegfx::B2DPolyPolygon& polygon, double transparency);
+    void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
+                                bool useAA);
+
     template <typename charT, typename traits>
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalGraphicsImpl* graphics)
@@ -309,6 +318,13 @@ protected:
     std::unique_ptr<SkCanvas> mXorCanvas;
     SkRegion mXorRegion; // the area that needs updating for the xor operation
     std::unique_ptr<SkiaFlushIdle> mFlush;
+    // Info about pending polygons to draw (we try to merge adjacent polygons into one).
+    struct LastPolyPolygonInfo
+    {
+        basegfx::B2DPolyPolygon polygon;
+        double transparency;
+    };
+    LastPolyPolygonInfo mLastPolyPolygonInfo;
 };
 
 #endif
