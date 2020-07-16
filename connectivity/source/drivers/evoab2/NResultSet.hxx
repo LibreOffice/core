@@ -42,10 +42,8 @@
 #include "NStatement.hxx"
 #include "NResultSetMetaData.hxx"
 
-namespace connectivity
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
         struct ComparisonData;
 
         class OEvoabVersionHelper
@@ -179,8 +177,8 @@ namespace connectivity
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
         };
-    }
 }
+
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSET_HXX
 

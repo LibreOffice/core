@@ -31,9 +31,7 @@ namespace com::sun::star::util {
 }
 
 
-namespace connectivity
-{
-    namespace calc
+namespace connectivity::calc
     {
         typedef component::OComponentTable OCalcTable_BASE;
         class OCalcConnection;
@@ -72,7 +70,7 @@ namespace connectivity
 
             void construct() override;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

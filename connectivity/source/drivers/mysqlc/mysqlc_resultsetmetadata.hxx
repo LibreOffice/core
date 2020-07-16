@@ -29,9 +29,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <mysql.h>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::uno::RuntimeException;
@@ -101,7 +99,6 @@ public:
 
     OUString SAL_CALL getColumnServiceName(sal_Int32 column) override;
 };
-}
 }
 
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_RESULTSETMETADATA_HXX

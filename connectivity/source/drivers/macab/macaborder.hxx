@@ -27,10 +27,8 @@
 #include <memory>
 #include <vector>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         class MacabOrder
         {
         public:
@@ -61,7 +59,6 @@ namespace connectivity
             void addOrder(MacabOrder *pOrder);
             virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const override;
         };
-    }
 }
 
 #endif

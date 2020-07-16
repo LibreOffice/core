@@ -23,10 +23,8 @@
 #include <sdbcx/VUser.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OCatalog;
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
         typedef connectivity::sdbcx::OUser_BASE OUser_BASE_TYPEDEF;
@@ -84,7 +82,6 @@ namespace connectivity
             virtual void construct() override;
             OUString getPassword() const { return m_Password;}
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
 

@@ -30,9 +30,7 @@
 #include <osl/module.h>
 #include <odbc/OTools.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver, css::lang::XServiceInfo > ODriver_BASE;
 
@@ -78,7 +76,6 @@ namespace connectivity
 
             const css::uno::Reference< css::lang::XMultiServiceFactory >& getORB() const { return m_xORB; }
         };
-    }
 
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODRIVER_HXX

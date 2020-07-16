@@ -23,10 +23,8 @@
 
 #include <adoint.h>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOColumn : public WpOLEBase<_ADOColumn>
         {
         public:
@@ -56,7 +54,6 @@ namespace connectivity
             WpADOProperties get_Properties() const;
             void put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX

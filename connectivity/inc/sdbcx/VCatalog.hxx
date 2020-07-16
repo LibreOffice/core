@@ -35,9 +35,7 @@ namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 namespace com::sun::star::sdbc { class XResultSet; }
 namespace com::sun::star::sdbc { class XRow; }
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         class OCollection;
@@ -112,7 +110,7 @@ namespace connectivity
             virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) override;
 
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,9 +21,7 @@
 
 #include <component/CDatabaseMetaData.hxx>
 
-namespace connectivity
-{
-    namespace calc
+namespace connectivity::calc
     {
 
         //************ Class: java.sql.DatabaseMetaDataDate
@@ -38,7 +36,7 @@ namespace connectivity
         public:
             OCalcDatabaseMetaData(file::OConnection* _pCon);
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

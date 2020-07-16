@@ -22,9 +22,7 @@
 
 #include <file/FDatabaseMetaData.hxx>
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
 
         //************ Class: java.sql.DatabaseMetaDataDate
@@ -44,7 +42,7 @@ namespace connectivity
         public:
             OComponentDatabaseMetaData(file::OConnection* _pCon);
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CDATABASEMETADATA_HXX

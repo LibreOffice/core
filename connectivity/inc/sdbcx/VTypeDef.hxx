@@ -24,14 +24,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-namespace connectivity
+namespace connectivity::sdbcx
 {
-    namespace sdbcx
-    {
         typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
                                                   css::container::XNamed,
                                                   css::lang::XServiceInfo> ODescriptor_BASE;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

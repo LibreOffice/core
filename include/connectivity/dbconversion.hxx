@@ -25,44 +25,36 @@
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace com
+namespace com::sun::star
 {
-    namespace sun
+    namespace lang
     {
-        namespace star
-        {
-            namespace lang
-            {
-                struct Locale;
-            }
-            namespace sdb
-            {
-                class XColumn;
-                class XColumnUpdate;
-            }
-            namespace beans
-            {
-                class XPropertySet;
-            }
-            namespace util
-            {
-                class XNumberFormatter;
-                class XNumberFormatsSupplier;
-                struct Time;
-                struct DateTime;
-            }
-            namespace script
-            {
-                class XTypeConverter;
-            }
-        }
+        struct Locale;
+    }
+    namespace sdb
+    {
+        class XColumn;
+        class XColumnUpdate;
+    }
+    namespace beans
+    {
+        class XPropertySet;
+    }
+    namespace util
+    {
+        class XNumberFormatter;
+        class XNumberFormatsSupplier;
+        struct Time;
+        struct DateTime;
+    }
+    namespace script
+    {
+        class XTypeConverter;
     }
 }
 
-namespace dbtools
+namespace dbtools::DBTypeConversion
 {
-    namespace DBTypeConversion
-    {
         OOO_DLLPUBLIC_DBTOOLS css::util::Date const & getStandardDate();
         /// @throws css::lang::IllegalArgumentException
         OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
@@ -185,9 +177,8 @@ namespace dbtools
             sal_Int32 _nMaxLen,
             rtl_TextEncoding _eEncoding
        );
-    }
 
-} // namespace dbtools
+} // namespace dbtools::DBTypeConversion
 
 #endif // INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 

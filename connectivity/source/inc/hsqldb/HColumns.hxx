@@ -21,9 +21,7 @@
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 
-namespace connectivity
-{
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         class OHSQLColumns : public OColumnsHelper
         {
@@ -53,7 +51,7 @@ namespace connectivity
 
             virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 

@@ -31,9 +31,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
         typedef OCollection OUsers;
 
@@ -90,7 +88,7 @@ namespace connectivity
             virtual OUString SAL_CALL getName(  ) override;
             virtual void SAL_CALL setName( const OUString& aName ) override;
         };
-    }
+
 }
 
 

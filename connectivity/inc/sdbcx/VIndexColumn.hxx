@@ -22,9 +22,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
         class OIndexColumn;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
@@ -54,7 +52,7 @@ namespace connectivity
             virtual void construct() override;
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,16 +44,13 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
     void impl_throwError(const char* pErrorId)
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(pErrorId) );
         ::dbtools::throwGenericSQLException(sError,nullptr);
-    }
     }
 }
 

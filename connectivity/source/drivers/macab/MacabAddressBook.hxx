@@ -30,10 +30,8 @@
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         class MacabAddressBook
         {
             protected:
@@ -57,7 +55,6 @@ namespace connectivity
                 MacabRecords *getMacabRecordsMatch(const OUString& _tableName);
         };
 
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABADDRESSBOOK_HXX
