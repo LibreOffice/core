@@ -595,6 +595,14 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
     return xEmbed;
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+sdext_PDFDetector_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new PDFDetector(context));
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

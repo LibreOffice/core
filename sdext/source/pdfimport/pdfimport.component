@@ -8,20 +8,25 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-	prefix="pdfimport" xmlns="http://openoffice.org/2010/uno-components">
-    <implementation name="org.libreoffice.comp.documents.HybridPDFImport">
+	xmlns="http://openoffice.org/2010/uno-components">
+    <implementation name="org.libreoffice.comp.documents.HybridPDFImport"
+        constructor="sdext_PDFIHybridAdaptor_get_implementation">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="org.libreoffice.comp.documents.WriterPDFImport">
+    <implementation name="org.libreoffice.comp.documents.WriterPDFImport"
+        constructor="sdext_PDFIRawAdaptor_Writer_get_implementation">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="org.libreoffice.comp.documents.DrawPDFImport">
+    <implementation name="org.libreoffice.comp.documents.DrawPDFImport"
+        constructor="sdext_PDFIRawAdaptor_Draw_get_implementation">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="org.libreoffice.comp.documents.ImpressPDFImport">
+    <implementation name="org.libreoffice.comp.documents.ImpressPDFImport"
+        constructor="sdext_PDFIRawAdaptor_Impress_get_implementation">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
-    <implementation name="org.libreoffice.comp.documents.PDFDetector">
+    <implementation name="org.libreoffice.comp.documents.PDFDetector"
+        constructor="sdext_PDFDetector_get_implementation">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
 </component>
