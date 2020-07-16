@@ -4110,12 +4110,10 @@ stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
     return cppu::acquire(new UnoNumericFieldControl());
 }
 
-
-
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXCurrencyField>();
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES<SVTXCurrencyField>();
 }
 
 OUString UnoControlCurrencyFieldModel::getServiceName()
