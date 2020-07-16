@@ -35,9 +35,7 @@ class Gradient;
 
 /* Definition of internal::TransparencyGroupActionFactory */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         struct OutDevState;
 
@@ -84,7 +82,7 @@ namespace cppcanvas
                                                                   const CanvasSharedPtr&        rCanvas,
                                                                   const OutDevState&            rState );
         }
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

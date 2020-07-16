@@ -27,10 +27,8 @@
 #include "implcanvas.hxx"
 
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-    namespace internal
-    {
         // share Canvas implementation from ImplCanvas
         class ImplBitmapCanvas : public virtual BitmapCanvas, protected virtual ImplCanvas
         {
@@ -51,7 +49,6 @@ namespace cppcanvas
             const css::uno::Reference< css::rendering::XBitmapCanvas >    mxBitmapCanvas;
             const css::uno::Reference< css::rendering::XBitmap >          mxBitmap;
         };
-    }
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLBITMAPCANVAS_HXX

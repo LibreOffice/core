@@ -29,11 +29,8 @@
 
 /*Definition of ImplBitmap */
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-
-    namespace internal
-    {
         // share partial CanvasGraphic implementation from CanvasGraphicHelper
         class ImplBitmap : public virtual ::cppcanvas::Bitmap, protected CanvasGraphicHelper
         {
@@ -60,7 +57,7 @@ namespace cppcanvas
             const css::uno::Reference< css::rendering::XBitmap > mxBitmap;
             BitmapCanvasSharedPtr                                mpBitmapCanvas;
          };
-    }
+
 }
 
 #endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLBITMAP_HXX

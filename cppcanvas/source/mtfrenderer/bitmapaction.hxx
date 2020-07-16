@@ -30,10 +30,8 @@ class BitmapEx;
 
 /* Definition of internal::BitmapActionFactory */
 
-namespace cppcanvas
+namespace cppcanvas::internal
 {
-    namespace internal
-    {
         struct OutDevState;
 
         /** Creates encapsulated converters between GDIMetaFile and
@@ -58,7 +56,6 @@ namespace cppcanvas
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,10 +35,7 @@ namespace com::sun::star::rendering
 
 /* Definition of CanvasGraphicHelper class */
 
-namespace cppcanvas
-{
-
-    namespace internal
+namespace cppcanvas::internal
     {
 
         class CanvasGraphicHelper : public virtual CanvasGraphic
@@ -65,7 +62,6 @@ namespace cppcanvas
             CanvasSharedPtr                                                       mpCanvas;
         };
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

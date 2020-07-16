@@ -30,9 +30,7 @@ namespace basegfx
 
 /* Definition of Action interface */
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         /** Interface for internal render actions
 
@@ -142,7 +140,6 @@ namespace cppcanvas
              */
             virtual sal_Int32 getActionCount() const = 0;
         };
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
