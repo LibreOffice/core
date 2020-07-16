@@ -569,7 +569,9 @@ void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities()
 {
     auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
+#ifndef IOS
     pBackendCapabilities->mbSupportsBitmap32 = true;
+#endif
     return pBackendCapabilities;
 }
 
