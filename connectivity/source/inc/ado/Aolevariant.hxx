@@ -25,24 +25,14 @@
 
 #include <oaidl.h>
 
-namespace com
+namespace com::sun::star::util
 {
-    namespace sun
-    {
-        namespace star
-        {
-            namespace util
-            {
-                struct Date;
-                struct Time;
-                struct DateTime;
-            }
-        }
-    }
+    struct Date;
+    struct Time;
+    struct DateTime;
 }
-namespace connectivity
-{
-    namespace ado
+
+namespace connectivity::ado
     {
         class OLEString
         {

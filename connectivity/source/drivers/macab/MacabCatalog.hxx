@@ -22,9 +22,7 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
             class MacabConnection;
 

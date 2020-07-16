@@ -32,9 +32,7 @@
 
 #include <ibase.h>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
 
         class OBoundParam;
@@ -149,7 +147,7 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_PREPAREDSTATEMENT_HXX
 

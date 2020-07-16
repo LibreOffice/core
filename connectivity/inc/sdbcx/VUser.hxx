@@ -31,10 +31,8 @@
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-namespace connectivity
+namespace connectivity::sdbcx
 {
-    namespace sdbcx
-    {
         typedef OCollection OGroups;
 
         typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XUser,
@@ -91,7 +89,7 @@ namespace connectivity
             virtual OUString SAL_CALL getName(  ) override;
             virtual void SAL_CALL setName( const OUString& aName ) override;
         };
-    }
+
 }
 
 

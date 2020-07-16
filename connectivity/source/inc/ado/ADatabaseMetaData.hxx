@@ -23,9 +23,7 @@
 #include <TDatabaseMetaDataBase.hxx>
 #include <map>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOConnection;
         class OConnection;

@@ -25,10 +25,8 @@
 #include <FDatabaseMetaDataResultSet.hxx>
 
 
-namespace connectivity
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
 
         //************ Class: OEvoabDatabaseMetaData
 
@@ -213,8 +211,8 @@ namespace connectivity
             virtual sal_Bool SAL_CALL supportsBatchUpdates(  ) override;
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
         };
-    }
 }
+
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 

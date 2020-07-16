@@ -12,10 +12,7 @@
 
 #include <connectivity/TKeys.hxx>
 
-namespace connectivity
-{
-
-    namespace firebird
+namespace connectivity::firebird
     {
 
         class Table;
@@ -34,7 +31,7 @@ namespace connectivity
         void dropObject(sal_Int32 nPosition, const OUString& sName) override;
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_KEYS_HXX
 

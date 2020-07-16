@@ -22,37 +22,16 @@
 
 #include <component/CTable.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace text
+namespace com::sun::star::text
 {
 class XTextTable;
 }
-}
-}
-}
-
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace util
+namespace com::sun::star::util
 {
 class XNumberFormats;
 }
-}
-}
-}
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 using OWriterTable_BASE = component::OComponentTable;
 class OWriterConnection;
@@ -83,8 +62,7 @@ public:
     void construct() override;
 };
 
-} // namespace writer
-} // namespace connectivity
+} // namespace connectivity::writer
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLE_HXX
 

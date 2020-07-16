@@ -31,10 +31,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-namespace connectivity
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
 
         typedef ::cppu::ImplHelper5< css::sdbc::XPreparedStatement,
                                      css::sdbc::XParameters,
@@ -106,8 +104,8 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
             virtual sal_Bool SAL_CALL getMoreResults(  ) override;
         };
-    }
 }
+
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NPREPAREDSTATEMENT_HXX
 

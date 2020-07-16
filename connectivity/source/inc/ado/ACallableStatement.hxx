@@ -25,9 +25,7 @@
 #include <com/sun/star/sdbc/XOutParameters.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
         //************ Class: java.sql.CallableStatement

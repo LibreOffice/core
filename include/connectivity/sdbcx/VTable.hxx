@@ -40,9 +40,7 @@
 
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         class OTable;
@@ -136,7 +134,7 @@ namespace connectivity
             // helper method
             virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SDBCX_VTABLE_HXX

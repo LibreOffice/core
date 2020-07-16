@@ -24,9 +24,7 @@
 #include <adoctint.h>
 
 struct ADOConnection;
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
         class WpADOField;

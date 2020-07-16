@@ -35,9 +35,7 @@
 #include <ado/Awrapado.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
                                                    css::sdbc::XWarningsSupplier,

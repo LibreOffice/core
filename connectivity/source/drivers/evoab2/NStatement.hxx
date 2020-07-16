@@ -43,10 +43,8 @@
 
 #include <list>
 
-namespace connectivity
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier
                                                ,   css::sdbc::XCloseable
                                                >   OCommonStatement_IBase;
@@ -270,8 +268,8 @@ namespace connectivity
             virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
         };
-    }
 }
+
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NSTATEMENT_HXX
 

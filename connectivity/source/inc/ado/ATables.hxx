@@ -23,9 +23,7 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OCatalog;
         class OTables : public sdbcx::OCollection

@@ -30,9 +30,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
         class OColumn;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OColumn> OColumn_PROP;
@@ -110,7 +108,7 @@ namespace connectivity
             // XDataDescriptorFactory
             virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SDBCX_VCOLUMN_HXX

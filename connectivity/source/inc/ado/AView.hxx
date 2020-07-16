@@ -23,9 +23,7 @@
 #include <connectivity/sdbcx/VView.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
 
         typedef sdbcx::OView OView_ADO;

@@ -22,9 +22,7 @@
 #include <sdbcx/VCatalog.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OConnection;
 

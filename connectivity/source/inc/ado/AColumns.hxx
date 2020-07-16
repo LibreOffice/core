@@ -25,9 +25,7 @@
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OConnection;
         class OColumns : public sdbcx::OCollection

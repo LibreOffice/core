@@ -66,9 +66,7 @@ typedef struct _ADOTable Table;
 #include <ado/WrapTable.hxx>
 #include <ado/WrapCatalog.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class WpADOView : public WpOLEBase<ADOView>
         {

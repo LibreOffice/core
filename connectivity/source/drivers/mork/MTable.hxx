@@ -23,9 +23,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include "MConnection.hxx"
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         typedef ::connectivity::OTableHelper OTable_Base;
 
@@ -54,7 +52,7 @@ namespace connectivity
         private:
             using OTable_Base::getConnection;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLE_HXX
 

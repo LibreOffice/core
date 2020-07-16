@@ -22,23 +22,12 @@
 
 #include <file/FDriver.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace lang
+namespace com::sun::star::lang
 {
 class XMultiServiceFactory;
 }
-}
-}
-}
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 class ODriver : public file::OFileDriver
 {
@@ -59,7 +48,6 @@ public:
     css::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
         const OUString& url, const css::uno::Sequence<css::beans::PropertyValue>& info) override;
 };
-}
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDRIVER_HXX

@@ -22,9 +22,7 @@
 
 #include <file/FStatement.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class OConnection;
         class ODbaseStatement : public file::OStatement
@@ -35,7 +33,7 @@ namespace connectivity
             ODbaseStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DSTATEMENT_HXX

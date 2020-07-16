@@ -31,9 +31,7 @@
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <memory>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
@@ -104,8 +102,7 @@ namespace connectivity
             // XDataDescriptorFactory
             virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
         };
-    }
-}
 
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

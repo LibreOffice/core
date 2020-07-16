@@ -23,9 +23,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabTables : public sdbcx::OCollection
         {

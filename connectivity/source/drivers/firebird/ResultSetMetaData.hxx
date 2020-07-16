@@ -29,9 +29,7 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         typedef ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>
                 OResultSetMetaData_BASE;
@@ -77,7 +75,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column) override;
             virtual OUString SAL_CALL getColumnServiceName(sal_Int32 column) override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_RESULTSETMETADATA_HXX

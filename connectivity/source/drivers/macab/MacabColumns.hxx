@@ -23,9 +23,7 @@
 #include "MacabTable.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabColumns : public sdbcx::OCollection
         {

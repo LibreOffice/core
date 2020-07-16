@@ -28,9 +28,7 @@
 #include <TConnection.hxx>
 #include <ado/Awrapado.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         struct OExtendedTypeInfo
         {

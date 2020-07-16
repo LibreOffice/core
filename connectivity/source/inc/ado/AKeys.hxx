@@ -23,9 +23,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
-{
-    namespace ado
+namespace connectivity::ado
     {
         class OConnection;
         class OKeys : public sdbcx::OCollection

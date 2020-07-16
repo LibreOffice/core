@@ -28,9 +28,7 @@
 
 class SvStream;
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
 
         class ONDXNode;
@@ -302,8 +300,6 @@ namespace connectivity
             if (aChild.Is())
                 aChild->SetParent(pParent);
         }
-
-    }
 
 }
 
