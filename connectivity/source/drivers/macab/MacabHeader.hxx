@@ -22,10 +22,8 @@
 
 #include "MacabRecord.hxx"
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         class MacabHeader: public MacabRecord{
             protected:
                 macabfield **sortRecord(sal_Int32 _start, sal_Int32 _length);
@@ -56,7 +54,6 @@ namespace connectivity
                         macabfield *operator* () const;
                 };
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABHEADER_HXX

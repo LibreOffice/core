@@ -31,10 +31,7 @@
 #include <osl/module.h>
 #include "EApi.h"
 
-namespace connectivity
-{
-    namespace evoab
-    {
+namespace connectivity::evoab {
 
         namespace SDBCAddress {
             typedef enum {
@@ -105,8 +102,8 @@ namespace connectivity
             virtual css::uno::Any SAL_CALL getWarnings(  ) override;
             virtual void SAL_CALL clearWarnings(  ) override;
         };
-    }
 }
+
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

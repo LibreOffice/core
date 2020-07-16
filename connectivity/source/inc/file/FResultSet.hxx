@@ -42,9 +42,7 @@
 #include <TSkipDeletedSet.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         typedef ::cppu::WeakComponentImplHelper<  css::sdbc::XResultSet,
                                                   css::sdbc::XRow,
@@ -300,7 +298,7 @@ namespace connectivity
 
             return map;
         }
-    }
+
 }
 #endif // _CONNECTIVITY_FILE_ORESULTSET_HXX_
 

@@ -31,10 +31,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
                                                    css::sdbc::XWarningsSupplier,
                                                    css::util::XCancellable,
@@ -166,7 +164,6 @@ namespace connectivity
             explicit MacabStatement(MacabConnection* _pConnection);
             DECLARE_SERVICE_INFO();
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABSTATEMENT_HXX

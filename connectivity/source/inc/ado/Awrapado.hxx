@@ -29,10 +29,8 @@
 #include <ado/Aolewrap.hxx>
 #include <ado/Aolevariant.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOConnection;
         class WpADOCommand;
         class WpADORecordset;
@@ -369,8 +367,8 @@ namespace connectivity
             */
             static OLEVariant       getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition);
         };
-    }
 }
+
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AWRAPADO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,10 +35,8 @@
 #include <ado/Awrapado.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
                                                    css::sdbc::XWarningsSupplier,
                                                    css::util::XCancellable,
@@ -214,7 +212,6 @@ namespace connectivity
             virtual void SAL_CALL clearBatch(  ) override;
             virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ASTATEMENT_HXX
 

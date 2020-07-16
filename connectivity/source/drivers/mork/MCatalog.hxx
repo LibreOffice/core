@@ -21,9 +21,7 @@
 
 #include <sdbcx/VCatalog.hxx>
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         // please don't name the class the same name as in another namespaces
         // some compilers have problems with this task as I noticed on windows
@@ -45,7 +43,7 @@ namespace connectivity
             OConnection*            getConnection()     const { return m_pConnection; }
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCATALOG_HXX
 

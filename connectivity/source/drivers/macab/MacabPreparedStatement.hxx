@@ -27,10 +27,8 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
         typedef ::cppu::ImplInheritanceHelper< MacabCommonStatement,
                                                css::sdbc::XPreparedStatement,
                                                css::sdbc::XParameters,
@@ -109,7 +107,6 @@ namespace connectivity
             // XResultSetMetaDataSupplier
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABPREPAREDSTATEMENT_HXX

@@ -22,9 +22,7 @@
 
 #include <file/fcomp.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OConnection;
         class OSQLAnalyzer final
@@ -67,7 +65,7 @@ namespace connectivity
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const css::uno::Reference< css::beans::XPropertySet>& _xCol);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FANALYZER_HXX
 

@@ -17,9 +17,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XBlob,
                                                  css::io::XInputStream >
@@ -95,7 +93,6 @@ namespace connectivity
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing() override;
         };
-    }
 
 }
 

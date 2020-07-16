@@ -23,9 +23,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-namespace connectivity
-{
-    namespace calc
+namespace connectivity::calc
     {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface >
@@ -47,7 +45,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
             virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

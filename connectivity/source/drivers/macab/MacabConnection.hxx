@@ -30,10 +30,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <TConnection.hxx>
 
-namespace connectivity
+namespace connectivity::macab
 {
-    namespace macab
-    {
 
         typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection,
                                                 css::sdbc::XWarningsSupplier,
@@ -110,7 +108,6 @@ namespace connectivity
             MacabDriver*         getDriver()         const { return m_pDriver;}
                    MacabAddressBook* getAddressBook()   const;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCONNECTION_HXX

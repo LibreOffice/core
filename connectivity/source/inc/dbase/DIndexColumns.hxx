@@ -24,9 +24,7 @@
 #include <dbase/DIndex.hxx>
 #include <dbase/DTable.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class ODbaseIndexColumns : public sdbcx::OCollection
         {
@@ -45,7 +43,7 @@ namespace connectivity
             {}
 
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXCOLUMNS_HXX
 

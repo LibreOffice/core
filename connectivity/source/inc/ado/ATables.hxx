@@ -23,10 +23,8 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OCatalog;
         class OTables : public sdbcx::OCollection
         {
@@ -50,7 +48,6 @@ namespace connectivity
             }
             void appendNew(const OUString& _rsNewTable);
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ATABLES_HXX
 

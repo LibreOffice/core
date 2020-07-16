@@ -21,9 +21,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
-{
-    namespace mysql
+namespace connectivity::mysql
     {
         class OViews final : public sdbcx::OCollection
         {
@@ -48,7 +46,7 @@ namespace connectivity
 
             void dropByNameImpl(const OUString& elementName);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YVIEWS_HXX
 

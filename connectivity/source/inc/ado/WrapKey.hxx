@@ -21,10 +21,8 @@
 
 #include <ado/WrapTypeDefs.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOKey : public WpOLEBase<ADOKey>
         {
         public:
@@ -48,7 +46,6 @@ namespace connectivity
             void put_UpdateRule(const RuleEnum& _eNum) ;
             WpADOColumns get_Columns() const;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPKEY_HXX

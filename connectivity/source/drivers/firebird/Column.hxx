@@ -11,9 +11,7 @@
 
 #include <connectivity/sdbcx/VColumn.hxx>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         class Column;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<Column> Column_PROP;
@@ -29,7 +27,7 @@ namespace connectivity
             virtual void construct() override;
             virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 

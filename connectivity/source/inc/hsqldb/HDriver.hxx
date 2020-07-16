@@ -31,11 +31,7 @@
 #include <connectivity/CommonTools.hxx>
 
 
-namespace connectivity
-{
-
-
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                  , css::sdbcx::XDataDefinitionSupplier
@@ -122,10 +118,9 @@ namespace connectivity
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
         };
-    }
 
 
-}   // namespace connectivity
+}   // namespace connectivity::hsqldb
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HDRIVER_HXX
 

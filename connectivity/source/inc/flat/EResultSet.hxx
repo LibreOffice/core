@@ -24,9 +24,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         class OFlatResultSet;
         // these typedef's are only necessary for the compiler
@@ -67,7 +65,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
             virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
         };
-    }
+
 }
 #endif //_CONNECTIVITY_FLAT_DRESULTSET_HXX_
 
