@@ -514,16 +514,6 @@ Reference< XSpellAlternatives > SAL_CALL
     return xAlt;
 }
 
-/// @throws Exception
-static Reference< XInterface > MacSpellChecker_CreateInstance(
-            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
-{
-
-    Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new MacSpellChecker);
-    return xService;
-}
-
-
 sal_Bool SAL_CALL
     MacSpellChecker::addLinguServiceEventListener(
             const Reference< XLinguServiceEventListener >& rxLstnr )
@@ -627,7 +617,7 @@ void SAL_CALL
 // Service specific part
 OUString SAL_CALL MacSpellChecker::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "org.openoffice.lingu.MacOSXSpellChecker";
 }
 
 sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
@@ -637,40 +627,16 @@ sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName 
 
 Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { SN_SPELLCHECKER };
 }
 
-Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+lingucomponent_MacSpellChecker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aSNS { SN_SPELLCHECKER };
-    return aSNS;
+    static rtl::Reference<MacSpellChecker> g_Instance(new MacSpellChecker());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * MacOSXSpell_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = nullptr;
-    if ( MacSpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
-    {
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createOneInstanceFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                MacSpellChecker::getImplementationName_Static(),
-                MacSpellChecker_CreateInstance,
-                MacSpellChecker::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

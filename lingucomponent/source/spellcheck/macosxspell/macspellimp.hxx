@@ -116,15 +116,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    static inline OUString  getImplementationName_Static() throw();
-    static Sequence< OUString > getSupportedServiceNames_Static() throw();
 };
-
-inline OUString MacSpellChecker::getImplementationName_Static() throw()
-{
-    return "org.openoffice.lingu.MacOSXSpellChecker";
-}
 
 #endif
 
