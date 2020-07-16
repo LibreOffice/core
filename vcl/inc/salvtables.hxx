@@ -1243,4 +1243,61 @@ public:
     virtual ~SalInstanceToolbar() override;
 };
 
+class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
+{
+private:
+    VclPtr<VclMultiLineEdit> m_xTextView;
+    Link<ScrollBar*, void> m_aOrigVScrollHdl;
+
+    DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
+
+public:
+    SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
+                        bool bTakeOwnership);
+
+    virtual void set_text(const OUString& rText) override;
+
+    virtual void replace_selection(const OUString& rText) override;
+
+    virtual OUString get_text() const override;
+
+    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
+
+    virtual void select_region(int nStartPos, int nEndPos) override;
+
+    virtual void set_editable(bool bEditable) override;
+    virtual bool get_editable() const override;
+    virtual void set_max_length(int nChars) override;
+
+    virtual void set_monospace(bool bMonospace) override;
+
+    virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override;
+
+    virtual bool can_move_cursor_with_up() const override;
+
+    virtual bool can_move_cursor_with_down() const override;
+
+    virtual void cut_clipboard() override;
+
+    virtual void copy_clipboard() override;
+
+    virtual void paste_clipboard() override;
+
+    virtual void set_alignment(TxtAlign eXAlign) override;
+
+    virtual int vadjustment_get_value() const override;
+
+    virtual void vadjustment_set_value(int value) override;
+
+    virtual int vadjustment_get_upper() const override;
+
+    virtual int vadjustment_get_lower() const override;
+
+    virtual int vadjustment_get_page_size() const override;
+
+    virtual ~SalInstanceTextView() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
