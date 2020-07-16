@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6d2d323_33aea158",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2690,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-16T05:10:04Z",
+      "side": 0,
+      "message": "This was a logic error.  It should have been 22 (cells 0-21). Unit test specifically for this number.",
+      "range": {
+        "startLine": 2690,
+        "startChar": 18,
+        "endLine": 2690,
+        "endChar": 20
+      },
+      "revId": "d6e63eee51e81db5151b7e95c3ed97049191bd41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
