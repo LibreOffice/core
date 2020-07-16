@@ -780,6 +780,13 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     (nTmpUnderl == EXC_FONTUNDERL_SINGLE)? aParaText.append("&U") : aParaText.append("&E");
                 }
 
+                // font color
+                aNewData.maColor = aFont.GetColor();
+                if ( !aFontData.maColor.IsRGBEqual( aNewData.maColor ) )
+                {
+                    aParaText.append("&K").append(aNewData.maColor.AsRGBHexString());
+                }
+
                 // strikeout
                 aNewData.mbStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
                 if( aFontData.mbStrikeout != aNewData.mbStrikeout )
