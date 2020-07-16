@@ -23,9 +23,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/servicedecl.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppcanvas/polypolygon.hxx>
 
@@ -44,6 +44,7 @@
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
@@ -177,7 +178,7 @@ private:
 
  ******************************************************************************/
 
-typedef cppu::WeakComponentImplHelper<presentation::XSlideShow> SlideShowImplBase;
+typedef cppu::WeakComponentImplHelper<css::lang::XServiceInfo, presentation::XSlideShow> SlideShowImplBase;
 
 typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
 
@@ -255,6 +256,11 @@ public:
     virtual std::shared_ptr<avmedia::MediaTempFile> getMediaTempFile(const OUString& aUrl) override;
 
 private:
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
     // XSlideShow:
     virtual sal_Bool SAL_CALL nextEffect() override;
     virtual sal_Bool SAL_CALL previousEffect() override;
@@ -662,6 +668,21 @@ void SlideShowImpl::disposing()
     mpPrefetchSlide.reset();
     mpCurrentSlide.reset();
     mpPreviousSlide.reset();
+}
+
+uno::Sequence< OUString > SAL_CALL SlideShowImpl::getSupportedServiceNames()
+{
+    return { "com.sun.star.presentation.SlideShow" };
+}
+
+OUString SAL_CALL SlideShowImpl::getImplementationName()
+{
+    return "com.sun.star.comp.presentation.SlideShow";
+}
+
+sal_Bool SAL_CALL SlideShowImpl::supportsService(const OUString& aServiceName)
+{
+    return cppu::supportsService(this, aServiceName);
 }
 
 /// stops the current slide transition sound
@@ -2387,18 +2408,10 @@ void FrameSynchronization::Deactivate()
 
 } // anon namespace
 
-namespace sdecl = comphelper::service_decl;
-const sdecl::ServiceDecl slideShowDecl(
-     sdecl::class_<SlideShowImpl>(),
-    "com.sun.star.comp.presentation.SlideShow",
-    "com.sun.star.presentation.SlideShow" );
-
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* slideshow_component_getFactory( char const* pImplName,
-                                         void*, void* )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+slideshow_SlideShowImpl_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return sdecl::component_getFactoryHelper( pImplName, {&slideShowDecl} );
+    return cppu::acquire(new SlideShowImpl(context));
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

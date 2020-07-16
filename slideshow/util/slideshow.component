@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="slideshow" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.presentation.SlideShow">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.presentation.SlideShow"
+    constructor="slideshow_SlideShowImpl_get_implementation">
     <service name="com.sun.star.presentation.SlideShow"/>
   </implementation>
 </component>
