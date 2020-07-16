@@ -43,9 +43,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         // #i98295#
         basegfx::B3DRange getRangeFrom3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
@@ -85,8 +83,7 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute);
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive3d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

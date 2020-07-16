@@ -34,9 +34,7 @@ namespace drawinglayer::geometry {
 }
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         /** SliceType3D definition */
         enum SliceType3D
@@ -116,8 +114,7 @@ namespace drawinglayer
             const basegfx::B3DPolygon& rLoopB,
             basegfx::B3DPolyPolygon& rTarget);
 
-    } // end of namespace overlay
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::overlay
 
 
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX

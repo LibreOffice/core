@@ -28,9 +28,7 @@ namespace drawinglayer::primitive3d {
     class HatchTexturePrimitive3D;
 }
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         class GeoTexSvxMono final : public GeoTexSvx
         {
@@ -47,12 +45,10 @@ namespace drawinglayer
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace texture
+} // end of namespace drawinglayer::texture
+
+namespace drawinglayer::texture
     {
         class GeoTexSvxBitmapEx : public GeoTexSvx
         {
@@ -83,12 +79,10 @@ namespace drawinglayer
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace texture
+} // end of namespace drawinglayer::texture
+
+namespace drawinglayer::texture
     {
         class GeoTexSvxBitmapExTiled final : public GeoTexSvxBitmapEx
         {
@@ -111,12 +105,10 @@ namespace drawinglayer
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace texture
+} // end of namespace drawinglayer::texture
+
+namespace drawinglayer::texture
     {
         class GeoTexSvxMultiHatch final : public GeoTexSvx
         {
@@ -137,7 +129,7 @@ namespace drawinglayer
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::texture
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
