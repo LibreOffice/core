@@ -21,15 +21,13 @@
 #include "pppoptimizerdialog.hxx"
 #include "optimizerdialog.hxx"
 #include <sal/log.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-
-#define SERVICE_NAME "com.sun.star.comp.PresentationMinimizer"
-#include <cppuhelper/supportsservice.hxx>
 
 PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xContext ) :
     mxContext( xContext ),
@@ -53,7 +51,7 @@ void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments 
 
 OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
 {
-    return PPPOptimizerDialog_getImplementationName();
+    return "com.sun.star.comp.PresentationMinimizerImp";
 }
 
 sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
@@ -63,7 +61,7 @@ sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceNa
 
 Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
 {
-    return PPPOptimizerDialog_getSupportedServiceNames();
+    return { "com.sun.star.comp.PresentationMinimizer" };
 }
 
 Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
@@ -144,20 +142,12 @@ void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatus
     // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
 }
 
-OUString PPPOptimizerDialog_getImplementationName()
-{
-    return "com.sun.star.comp.PresentationMinimizerImp";
-}
 
-Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+sdext_PPPOptimizerDialog_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence<OUString> aRet { SERVICE_NAME };
-    return aRet;
-}
-
-Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XComponentContext > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new PPPOptimizerDialog( rSMgr ));
+    return cppu::acquire(new PPPOptimizerDialog(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
