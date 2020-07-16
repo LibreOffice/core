@@ -23,10 +23,8 @@
 #include <canvas/canvastoolsdllapi.h>
 #include <memory>
 
-namespace canvas
+namespace canvas::tools
 {
-    namespace tools
-    {
         /** Calculate elapsed time.
 
             This class provides several time-measurement and
@@ -158,7 +156,6 @@ namespace canvas
             bool                                    m_bInHoldMode;
         };
 
-    }
 }
 
 #endif /* INCLUDED_CANVAS_ELAPSEDTIME_HXX */

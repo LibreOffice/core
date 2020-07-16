@@ -33,10 +33,8 @@
 
 using namespace ::com::sun::star;
 
-namespace dxcanvas
+namespace dxcanvas::tools
 {
-    namespace tools
-    {
         namespace
         {
             /// Calc number of colors in given BitmapInfoHeader
@@ -462,7 +460,7 @@ namespace dxcanvas
 
             return drawVCLBitmapEx( rGraphics, aBmpEx );
         }
-    }
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

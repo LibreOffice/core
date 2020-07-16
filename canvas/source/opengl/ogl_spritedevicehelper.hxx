@@ -23,10 +23,9 @@
 namespace vcl { class Window; }
 class SystemChildWindow;
 namespace basegfx{ class B2IVector; class B2DHomMatrix; }
-namespace com::sun::star {
-    namespace awt { struct Rectangle; }
-    namespace geometry { struct AffineMatrix2D; }
-}
+namespace com::sun::star::awt { struct Rectangle; }
+namespace com::sun::star::geometry { struct AffineMatrix2D; }
+
 
 namespace oglcanvas
 {

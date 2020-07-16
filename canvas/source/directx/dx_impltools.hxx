@@ -54,10 +54,8 @@ namespace com::sun::star::rendering
 }
 
 
-namespace dxcanvas
+namespace dxcanvas::tools
 {
-    namespace tools
-    {
         struct RawRGBABitmap;
 
         ::basegfx::B2DPolyPolygon
@@ -121,8 +119,8 @@ namespace dxcanvas
                                          double                           nGreenModulation,
                                          double                           nBlueModulation,
                                          double                           nAlphaModulation );
-    }
 }
+
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
 
