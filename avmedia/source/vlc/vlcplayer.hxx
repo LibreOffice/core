@@ -29,8 +29,7 @@
 #include <wrapper/Player.hxx>
 #include <wrapper/EventManager.hxx>
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
                                          css::lang::XServiceInfo > VLC_Base;
@@ -81,6 +80,6 @@ private:
 };
 
 }
-}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
