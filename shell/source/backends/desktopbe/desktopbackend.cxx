@@ -51,15 +51,6 @@
 
 namespace {
 
-OUString getDefaultImplementationName() {
-    return
-            "com.sun.star.comp.configuration.backend.DesktopBackend";
-}
-
-css::uno::Sequence< OUString > getDefaultSupportedServiceNames() {
-    return { "com.sun.star.configuration.backend.DesktopBackend" };
-}
-
 class Default:
     public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::beans::XPropertySet >
@@ -73,14 +64,14 @@ private:
     virtual ~Default() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return getDefaultImplementationName(); }
+    { return "com.sun.star.comp.configuration.backend.DesktopBackend"; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return ServiceName == getSupportedServiceNames()[0]; }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return getDefaultSupportedServiceNames(); }
+    { return { "com.sun.star.configuration.backend.DesktopBackend" }; }
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override
@@ -284,8 +275,9 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     }
 }
 
-css::uno::Reference< css::uno::XInterface > createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_DesktopBackend_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     OUString desktop;
     css::uno::Reference< css::uno::XCurrentContext > current(
@@ -299,24 +291,13 @@ css::uno::Reference< css::uno::XInterface > createInstance(
     if (desktop == "PLASMA5")
         backend = createBackend(context,
             "com.sun.star.configuration.backend.KF5Backend");
-    return backend.is()
-        ? backend : static_cast< cppu::OWeakObject * >(new Default);
+    if (!backend)
+        backend = static_cast< cppu::OWeakObject * >(new Default);
+    backend->acquire();
+    return backend.get();
 }
-
-cppu::ImplementationEntry const services[] = {
-    { &createInstance, &getDefaultImplementationName,
-      &getDefaultSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
-      0 },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * desktopbe1_component_getFactory(
-    char const * pImplName, void * pServiceManager, void * pRegistryKey)
-{
-    return cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, services);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
