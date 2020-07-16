@@ -8,8 +8,9 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sessioninstall" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper"
+    constructor="shell_sessioninstall_get_implementation">
     <service name="org.freedesktop.PackageKit.SyncDbusSessionHelper"/>
   </implementation>
 </component>

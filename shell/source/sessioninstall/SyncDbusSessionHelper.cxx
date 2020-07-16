@@ -9,6 +9,7 @@
 
 #include "SyncDbusSessionHelper.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <gio/gio.h>
 #include <memory>
 #include <vector>
@@ -99,6 +100,21 @@ namespace shell::sessioninstall
 #endif
     }
 
+Sequence< OUString > SAL_CALL SyncDbusSessionHelper::getSupportedServiceNames()
+{
+    return { "org.freedesktop.PackageKit.SyncDbusSessionHelper" };
+}
+
+OUString SAL_CALL SyncDbusSessionHelper::getImplementationName()
+{
+    return "org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper";
+}
+
+sal_Bool SAL_CALL SyncDbusSessionHelper::supportsService(const OUString& aServiceName)
+{
+    return cppu::supportsService(this, aServiceName);
+}
+
 void SyncDbusSessionHelper::InstallPackageFiles(
     css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
@@ -179,6 +195,13 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
                      &error.getRef()),GVariantDeleter());
     if(result)
         o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_sessioninstall_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new SyncDbusSessionHelper(context));
 }
 
 }
