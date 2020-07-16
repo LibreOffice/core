@@ -29,7 +29,6 @@ core_factory_list = [
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
-    ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
@@ -331,6 +330,9 @@ core_constructor_list = [
 # ucb/source/tdoc/ucptdoc1.component
     "ucb_tdoc_ContentProvider_get_implementation",
     "ucb_tdoc_DocumentContentFactory_get_implementation",
+# ucb/source/ucp/ucphier1.component
+    "ucb_HierarchyContentProvider_get_implementation",
+    "ucb_HierarchyDataSource_get_implementation",
 # unotools/util/utl.component
     "unotools_ServiceDocument_get_implementation",
     "unotools_OTempFileService_get_implementation",

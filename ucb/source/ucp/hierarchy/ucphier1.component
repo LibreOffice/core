@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucphier1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ucb.HierarchyContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ucb.HierarchyContentProvider"
+    constructor="ucb_HierarchyContentProvider_get_implementation">
     <service name="com.sun.star.ucb.HierarchyContentProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.ucb.HierarchyDataSource">
+  <implementation name="com.sun.star.comp.ucb.HierarchyDataSource"
+    constructor="ucb_HierarchyDataSource_get_implementation">
     <service name="com.sun.star.ucb.DefaultHierarchyDataSource"/>
     <service name="com.sun.star.ucb.HierarchyDataSource"/>
   </implementation>
