@@ -455,6 +455,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
         SetTmpConsiderWrapInfluence( true );
         SetRestartLayoutProcess( true );
     }
+    SwTextBoxHelper::syncFlyFrameAttr(GetFrameFormat(), GetFrameFormat().GetAttrSet());
 }
 
 /** method for the intrinsic positioning of an at-page|at-frame anchored
@@ -493,6 +494,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
     const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->getFrameArea()) );
     SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
+    SwTextBoxHelper::syncFlyFrameAttr(GetFrameFormat(), GetFrameFormat().GetAttrSet());
 }
 
 void SwAnchoredDrawObject::SetDrawObjAnchor()
