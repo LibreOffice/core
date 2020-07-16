@@ -26,9 +26,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace dp_registry {
-namespace backend {
-namespace script {
+namespace dp_registry::backend::script {
 
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
@@ -53,8 +51,8 @@ public:
 
 
 }
-}
-}
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
