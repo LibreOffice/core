@@ -25,9 +25,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OFileTable;
 
@@ -73,7 +71,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
             virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FRESULTSETMETADATA_HXX
 

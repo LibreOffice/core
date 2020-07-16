@@ -41,9 +41,7 @@
 namespace com::sun::star::container { class XEnumeration; }
 
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
 
         // the class OCollection is base class for collections :-)
@@ -219,7 +217,7 @@ namespace connectivity
             void disposeElements();
             void dropImpl(sal_Int32 _nIndex, bool _bReallyDrop = true);
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 

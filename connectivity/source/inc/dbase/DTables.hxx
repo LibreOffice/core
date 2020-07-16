@@ -22,9 +22,7 @@
 
 #include <file/FTables.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         typedef file::OTables ODbaseTables_BASE;
 
@@ -43,7 +41,7 @@ namespace connectivity
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DTABLES_HXX
 

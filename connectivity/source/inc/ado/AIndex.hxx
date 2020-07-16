@@ -24,10 +24,8 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OConnection;
         class OAdoIndex : public sdbcx::OIndex
         {
@@ -47,7 +45,6 @@ namespace connectivity
 
             WpADOIndex      getImpl() const { return m_aIndex;}
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
 

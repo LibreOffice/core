@@ -24,10 +24,8 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
         typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;
 
@@ -70,7 +68,6 @@ namespace connectivity
             WpADOTable getImpl() const { return m_aTable;}
             OCatalog* getCatalog() const { return m_pCatalog; }
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ATABLE_HXX
 

@@ -31,9 +31,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XStatement,
                                                    css::sdbc::XWarningsSupplier,

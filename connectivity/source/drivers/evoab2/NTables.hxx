@@ -21,10 +21,9 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-namespace connectivity
+
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
         class OEvoabTables : public sdbcx::OCollection
         {
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
@@ -40,8 +39,8 @@ namespace connectivity
                         {}
             virtual void disposing() override;
         };
-    }
 }
+
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

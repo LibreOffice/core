@@ -42,9 +42,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <TSortIndex.hxx>
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
 
         /*
@@ -342,7 +340,6 @@ public:
             }
         };
 
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSET_HXX

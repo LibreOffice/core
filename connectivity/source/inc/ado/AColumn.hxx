@@ -23,10 +23,8 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OConnection;
         typedef sdbcx::OColumn OColumn_ADO;
         class OAdoColumn :  public OColumn_ADO
@@ -53,7 +51,6 @@ namespace connectivity
 
             WpADOColumn     getColumnImpl() const;
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
 

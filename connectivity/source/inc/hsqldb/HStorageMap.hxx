@@ -33,10 +33,7 @@
 #include <jni.h>
 #include <uno/environment.hxx>
 
-namespace connectivity
-{
-
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         class StreamHelper
         {
@@ -86,10 +83,7 @@ namespace connectivity
             static void throwJavaException(const css::uno::Exception& _aException,JNIEnv * env);
         };
 
-    }   // namespace hsqldb
-
-
-}   // namespace connectivity
+}   // namespace connectivity::hsqldb
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEMAP_HXX

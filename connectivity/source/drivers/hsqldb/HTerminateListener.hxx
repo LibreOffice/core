@@ -23,11 +23,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
 
-namespace connectivity
-{
-
-
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         class ODriverDelegator;
         class OConnectionController : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
@@ -45,9 +41,8 @@ namespace connectivity
                 virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
                 virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
         };
-    }
 
-}   // namespace connectivity
+}   // namespace connectivity::hsqldb
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
 

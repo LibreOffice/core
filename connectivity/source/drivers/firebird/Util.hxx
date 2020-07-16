@@ -16,9 +16,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-namespace connectivity
-{
-    namespace firebird
+namespace connectivity::firebird
     {
         // Type Blob has 2 subtypes values
         // 0 for BLOB, 1 for CLOB
@@ -123,7 +121,7 @@ public:
 
         OUString escapeWith( const OUString& sText, const char aKey, const char aEscapeChar);
         sal_Int64 pow10Integer( int nDecimalCount );
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX
 

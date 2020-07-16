@@ -24,10 +24,8 @@
 #include <ado/Awrapadox.hxx>
 #include <ado/ACatalog.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OGroups : public sdbcx::OCollection
         {
             WpADOGroups m_aCollection;
@@ -49,7 +47,6 @@ namespace connectivity
             {
             }
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUPS_HXX

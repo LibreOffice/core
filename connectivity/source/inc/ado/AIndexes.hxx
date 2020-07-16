@@ -23,10 +23,8 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OConnection;
         class OIndexes : public sdbcx::OCollection
         {
@@ -51,7 +49,6 @@ namespace connectivity
             {
             }
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEXES_HXX

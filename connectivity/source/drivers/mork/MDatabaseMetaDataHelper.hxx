@@ -13,9 +13,7 @@
 #include <FDatabaseMetaDataResultSet.hxx>
 #include "MConnection.hxx"
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class MDatabaseMetaDataHelper
         {
@@ -31,7 +29,7 @@ namespace connectivity
                                 const OUString& tableNamePattern,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX

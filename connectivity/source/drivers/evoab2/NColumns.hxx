@@ -23,10 +23,8 @@
 #include "NTable.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
 
-namespace connectivity
+namespace connectivity::evoab
 {
-    namespace evoab
-    {
         class OEvoabColumns final : public sdbcx::OCollection
         {
             OEvoabTable*    m_pTable;
@@ -42,7 +40,6 @@ namespace connectivity
                             m_pTable(_pTable)
             { }
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCOLUMNS_HXX

@@ -33,9 +33,7 @@
 #define MACAB_DRIVER_VERSION_MAJOR  0
 #define MACAB_DRIVER_VERSION_MINOR  1
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabConnection;
         class MacabDriver;

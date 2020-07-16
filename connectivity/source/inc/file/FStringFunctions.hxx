@@ -22,9 +22,7 @@
 
 #include <file/fcode.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         /** UCASE(str)
             UPPER(str)
@@ -266,7 +264,7 @@ namespace connectivity
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FSTRINGFUNCTIONS_HXX

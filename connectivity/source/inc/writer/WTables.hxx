@@ -22,9 +22,7 @@
 
 #include <file/FTables.hxx>
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 using OWriterTables_BASE = file::OTables;
 
@@ -41,7 +39,6 @@ public:
     {
     }
 };
-}
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX

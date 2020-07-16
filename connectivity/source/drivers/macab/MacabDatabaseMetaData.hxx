@@ -24,9 +24,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
 
         class MacabDatabaseMetaData : public ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData>

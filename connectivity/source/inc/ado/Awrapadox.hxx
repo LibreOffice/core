@@ -66,10 +66,8 @@ typedef struct _ADOTable Table;
 #include <ado/WrapTable.hxx>
 #include <ado/WrapCatalog.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOView : public WpOLEBase<ADOView>
         {
         public:
@@ -132,7 +130,6 @@ namespace connectivity
                 /* [in] */ ActionEnum Action,
                 /* [in] */ RightsEnum Rights);
         };
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

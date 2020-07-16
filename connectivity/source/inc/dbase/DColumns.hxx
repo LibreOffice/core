@@ -22,9 +22,7 @@
 
 #include <file/FColumns.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class ODbaseColumns : public file::OColumns
         {
@@ -41,7 +39,7 @@ namespace connectivity
                          ) : file::OColumns(_pTable,_rMutex,_rVector)
             {}
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCOLUMNS_HXX
 

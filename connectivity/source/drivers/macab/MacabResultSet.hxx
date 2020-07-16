@@ -32,9 +32,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         /*
         **  MacabResultSet

@@ -33,9 +33,7 @@ namespace com::sun::star {
 namespace utl { class CloseVeto; }
 
 
-namespace connectivity
-{
-    namespace calc
+namespace connectivity::calc
     {
         class ODriver;
         class OCalcConnection : public file::OConnection
@@ -145,7 +143,7 @@ namespace connectivity
                 const css::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
             };
         };
-    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

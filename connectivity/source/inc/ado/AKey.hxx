@@ -24,10 +24,8 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         typedef sdbcx::OKey OKey_ADO;
 
         class OConnection;
@@ -57,7 +55,6 @@ namespace connectivity
             static sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum);
             static KeyTypeEnum Map2KeyRule(sal_Int32 _eNum);
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
 
