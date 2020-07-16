@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_externals,losessioninstall,\
 
 $(eval $(call gb_Library_add_exception_objects,losessioninstall,\
 	shell/source/sessioninstall/SyncDbusSessionHelper \
-	shell/source/sessioninstall/services \
 ))
 
 # vim:set noet sw=4 ts=4:

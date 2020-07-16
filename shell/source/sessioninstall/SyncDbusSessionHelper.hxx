@@ -11,15 +11,21 @@
 #define INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace shell::sessioninstall
 {
-    class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper >
+    class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper, css::lang::XServiceInfo >
     {
         public:
             SyncDbusSessionHelper(css::uno::Reference< css::uno::XComponentContext> const&);
+
+            // XServiceInfo
+            virtual OUString SAL_CALL getImplementationName() override;
+            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
             // XModify Methods
             virtual void SAL_CALL InstallPackageFiles( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
