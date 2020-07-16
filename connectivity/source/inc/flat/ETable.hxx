@@ -27,9 +27,7 @@
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         typedef file::OFileTable OFlatTable_BASE;
         class OFlatConnection;
@@ -101,7 +99,7 @@ namespace connectivity
 
             OUString getEntry() const;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLE_HXX
 

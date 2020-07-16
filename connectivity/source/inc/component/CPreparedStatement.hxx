@@ -22,9 +22,7 @@
 
 #include <file/FPreparedStatement.hxx>
 
-namespace connectivity
-{
-    namespace component
+namespace connectivity::component
     {
         class OConnection;
         /// Prepared statement implementation for Writer tables and Calc sheets.
@@ -36,7 +34,7 @@ namespace connectivity
             OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX

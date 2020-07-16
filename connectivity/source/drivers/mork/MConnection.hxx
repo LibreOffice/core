@@ -20,9 +20,7 @@
 // do we want here namespace too?
 class MorkParser;
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class MorkDriver;
         class ErrorDescriptor;
@@ -93,7 +91,7 @@ namespace connectivity
             void throwSQLException( const ErrorDescriptor& _rError, const css::uno::Reference< css::uno::XInterface >& _rxContext );
             void throwSQLException( const char* pErrorResourceId, const css::uno::Reference< css::uno::XInterface >& _rxContext );
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 

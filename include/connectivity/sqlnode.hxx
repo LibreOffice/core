@@ -31,25 +31,19 @@ namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::sdbc { class SQLException; }
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 
-namespace com
+namespace com::sun::star
 {
-    namespace sun
+    namespace beans
     {
-        namespace star
-        {
-            namespace beans
-            {
-                class XPropertySet;
-            }
-            namespace util
-            {
-                class XNumberFormatter;
-            }
-            namespace container
-            {
-                class XNameAccess;
-            }
-        }
+        class XPropertySet;
+    }
+    namespace util
+    {
+        class XNumberFormatter;
+    }
+    namespace container
+    {
+        class XNameAccess;
     }
 }
 

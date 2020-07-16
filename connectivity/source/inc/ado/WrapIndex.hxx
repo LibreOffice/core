@@ -21,10 +21,8 @@
 
 #include <ado/WrapTypeDefs.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOIndex : public WpOLEBase<_ADOIndex>
         {
         public:
@@ -46,7 +44,6 @@ namespace connectivity
             void            put_PrimaryKey(bool _b);
             WpADOColumns    get_Columns() const;
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPINDEX_HXX

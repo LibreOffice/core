@@ -25,9 +25,7 @@
 #include <file/FTable.hxx>
 #include <file/filedllapi.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OOO_DLLPUBLIC_FILE OColumns : public sdbcx::OCollection
         {
@@ -44,7 +42,7 @@ namespace connectivity
                 ,m_pTable(_pTable)
             {}
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCOLUMNS_HXX
 

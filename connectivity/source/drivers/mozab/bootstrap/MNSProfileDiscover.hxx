@@ -29,17 +29,10 @@
 #include <map>
 
 using namespace com::sun::star::mozilla;
-namespace connectivity
-{
-    namespace mozab
-    {
-        class ProfileStruct;
-    }
-}
+namespace connectivity::mozab { class ProfileStruct; }
+
 typedef std::map<OUString, ::connectivity::mozab::ProfileStruct> ProfileList;
-namespace connectivity
-{
-    namespace mozab
+namespace connectivity::mozab
     {
         class ProfileStruct
         {
@@ -82,7 +75,6 @@ namespace connectivity
             void      LoadXPToolkitProfiles(MozillaProductType product);
         };
 
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX

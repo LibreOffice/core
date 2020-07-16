@@ -27,9 +27,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <file/filedllapi.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
                                                    css::lang::XServiceInfo,
@@ -68,7 +66,6 @@ namespace connectivity
 
             const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
         };
-    }
 
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FDRIVER_HXX

@@ -27,9 +27,7 @@
 
 #define EVOAB_DRIVER_IMPL_NAME  "com.sun.star.comp.sdbc.evoab.OEvoabDriver"
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver,
                                                  css::lang::XServiceInfo > ODriver_BASE;
@@ -67,9 +65,9 @@ namespace connectivity
             // static methods
             static bool acceptsURL_Stat( const OUString& url );
         };
-    }
-
 }
+
+
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

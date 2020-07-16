@@ -40,9 +40,7 @@
 #include <odbc/odbcbasedllapi.hxx>
 #include <memory>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         /*
         **  java_sql_ResultSet
@@ -255,7 +253,6 @@ namespace connectivity
         protected:
             using OPropertySetHelper::getFastPropertyValue;
         };
-    }
 
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATARESULTSET_HXX

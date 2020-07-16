@@ -25,10 +25,8 @@
 #include <ado/ACatalog.hxx>
 
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
         class OViews : public sdbcx::OCollection
         {
@@ -49,7 +47,6 @@ namespace connectivity
             {
             }
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEWS_HXX
 

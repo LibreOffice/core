@@ -40,9 +40,7 @@ namespace com::sun::star::sdbc { class XParameters; }
 namespace com::sun::star::sdb { class XSingleSelectQueryAnalyzer; }
 
 
-namespace dbtools
-{
-namespace param
+namespace dbtools::param
 {
 
 
@@ -190,7 +188,7 @@ namespace param
     typedef ::rtl::Reference< ParameterWrapperContainer >   ParametersContainerRef;
 
 
-} } // namespace dbtools::param
+} // namespace dbtools::param
 
 
 #endif // INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX

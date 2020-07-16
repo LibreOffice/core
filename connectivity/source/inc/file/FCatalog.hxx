@@ -24,9 +24,7 @@
 
 #include <file/filedllapi.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OConnection;
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileCatalog :
@@ -57,7 +55,7 @@ namespace connectivity
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             virtual void SAL_CALL disposing() override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCATALOG_HXX
 

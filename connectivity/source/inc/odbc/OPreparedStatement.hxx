@@ -29,9 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
 
         class OBoundParam;
@@ -146,7 +144,7 @@ namespace connectivity
             using OStatement_Base::executeUpdate;
             using OStatement_Base::execute;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OPREPAREDSTATEMENT_HXX
 

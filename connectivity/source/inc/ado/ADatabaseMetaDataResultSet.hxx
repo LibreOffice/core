@@ -34,10 +34,8 @@
 #include <comphelper/proparrhlp.hxx>
 #include <ado/AStatement.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         /*
         **  java_sql_ResultSet
         */
@@ -222,7 +220,6 @@ namespace connectivity
 
             return map;
         }
-    }
 
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATARESULTSET_HXX

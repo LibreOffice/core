@@ -23,9 +23,7 @@
 #include "MacabConnection.hxx"
 #include <connectivity/sdbcx/VTable.hxx>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         typedef connectivity::sdbcx::OTable MacabTable_TYPEDEF;
 

@@ -24,9 +24,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <file/FDriver.hxx>
 
-namespace connectivity
-{
-    namespace flat
+namespace connectivity::flat
     {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
@@ -42,7 +40,6 @@ namespace connectivity
             virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
             virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
         };
-    }
 
 }
 #endif //_CONNECTIVITY_FLAT_DDRIVER_HXX_

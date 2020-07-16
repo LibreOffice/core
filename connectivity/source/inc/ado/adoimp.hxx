@@ -24,10 +24,9 @@
 #include <adoctint.h>
 
 struct ADOConnection;
-namespace connectivity
+
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
         class WpADOField;
         class OLEString;
@@ -88,8 +87,8 @@ namespace connectivity
         };
 
 
-    }
 }
+
 
 #define ADO_PROP(ItemName)                                          \
         WpADOProperty aProp(aProps.GetItem(ItemName));              \

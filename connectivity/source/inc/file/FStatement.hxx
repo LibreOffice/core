@@ -38,9 +38,7 @@
 #include <file/fanalyzer.hxx>
 #include <TSortIndex.hxx>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OResultSet;
         class OFileTable;
@@ -193,7 +191,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FSTATEMENT_HXX
 

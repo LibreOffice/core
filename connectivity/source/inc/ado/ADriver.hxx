@@ -28,10 +28,8 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
@@ -83,7 +81,6 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
             virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
         };
-    }
 
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADRIVER_HXX

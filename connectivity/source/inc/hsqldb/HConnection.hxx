@@ -29,9 +29,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
-namespace connectivity
-{
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
         class SAL_NO_VTABLE IMethodGuardAccess
         {
@@ -142,7 +140,7 @@ namespace connectivity
                 _rComponent.checkDisposed();
             }
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
 

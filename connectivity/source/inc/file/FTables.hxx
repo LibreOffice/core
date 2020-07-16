@@ -24,9 +24,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OTables :
             public sdbcx::OCollection
@@ -41,7 +39,7 @@ namespace connectivity
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FTABLES_HXX
 

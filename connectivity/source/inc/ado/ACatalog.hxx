@@ -22,10 +22,8 @@
 #include <sdbcx/VCatalog.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class OConnection;
 
         class OCatalog : public connectivity::sdbcx::OCatalog
@@ -47,7 +45,6 @@ namespace connectivity
             sdbcx::OCollection* getPrivateTables()  const { return m_pTables.get(); }
             WpADOCatalog        getCatalog()        const { return m_aCatalog;      }
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACATALOG_HXX
 

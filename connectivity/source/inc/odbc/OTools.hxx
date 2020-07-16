@@ -88,9 +88,7 @@ enum class ODBC3SQLFunctionId
     NativeSql           = 54,
 };
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         class OConnection;
 
@@ -243,7 +241,6 @@ namespace connectivity
         }
 
 
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OTOOLS_HXX
 

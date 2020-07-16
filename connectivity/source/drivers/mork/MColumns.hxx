@@ -23,9 +23,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include "MTable.hxx"
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class OColumns final : public sdbcx::OCollection
         {
@@ -41,7 +39,7 @@ namespace connectivity
                 ,m_pTable(_pTable)
             {}
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNS_HXX
 

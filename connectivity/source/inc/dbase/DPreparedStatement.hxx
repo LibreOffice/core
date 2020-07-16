@@ -22,9 +22,7 @@
 
 #include <file/FPreparedStatement.hxx>
 
-namespace connectivity
-{
-    namespace dbase
+namespace connectivity::dbase
     {
         class OConnection;
         class ODbasePreparedStatement : public file::OPreparedStatement
@@ -35,7 +33,7 @@ namespace connectivity
             ODbasePreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DPREPAREDSTATEMENT_HXX

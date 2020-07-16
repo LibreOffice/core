@@ -21,10 +21,8 @@
 
 #include <ado/WrapTypeDefs.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         class WpADOCatalog;
 
         class WpADOTable : public WpOLEBase<_ADOTable>
@@ -51,7 +49,6 @@ namespace connectivity
 
 
         typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTABLE_HXX

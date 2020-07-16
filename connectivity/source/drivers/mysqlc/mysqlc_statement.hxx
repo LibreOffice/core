@@ -35,9 +35,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <rtl/ref.hxx>
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::SQLWarning;
@@ -173,7 +171,6 @@ public:
 
     // css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 };
-}
 }
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
 

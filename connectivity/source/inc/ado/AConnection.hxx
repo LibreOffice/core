@@ -28,10 +28,8 @@
 #include <TConnection.hxx>
 #include <ado/Awrapado.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
         struct OExtendedTypeInfo
         {
             ::connectivity::OTypeInfo       aSimpleType;    // the general type info
@@ -131,7 +129,6 @@ namespace connectivity
                                sal_Int32 _nScale,
                                bool& _brForceToType);
         };
-    }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACONNECTION_HXX
 

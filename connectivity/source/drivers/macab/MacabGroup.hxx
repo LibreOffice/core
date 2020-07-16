@@ -28,9 +28,7 @@
 #include <postmac.h>
 
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabGroup: public MacabRecords {
             public:

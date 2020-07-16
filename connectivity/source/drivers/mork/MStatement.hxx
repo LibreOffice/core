@@ -29,9 +29,7 @@
 
 #include <memory>
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class OResultSet;
 
@@ -176,7 +174,7 @@ namespace connectivity
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
         };
-    }
+
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX

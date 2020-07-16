@@ -27,9 +27,7 @@
 #include <memory>
 #include <vector>
 
-namespace connectivity
-{
-    namespace macab
+namespace connectivity::macab
     {
         class MacabOrder
         {

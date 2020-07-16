@@ -23,10 +23,8 @@
 #include <connectivity/sdbcx/VView.hxx>
 #include <ado/Awrapadox.hxx>
 
-namespace connectivity
+namespace connectivity::ado
 {
-    namespace ado
-    {
 
         typedef sdbcx::OView OView_ADO;
 
@@ -49,7 +47,6 @@ namespace connectivity
 
             WpADOView getImpl() const { return m_aView;}
         };
-    }
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEW_HXX

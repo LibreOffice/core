@@ -25,9 +25,7 @@
 
 #include <unordered_map>
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         class OColumnAlias
         {
@@ -65,7 +63,7 @@ namespace connectivity
         private:
             void initialize( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB );
         };
-    }
+
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCOLUMNALIAS_HXX
 
