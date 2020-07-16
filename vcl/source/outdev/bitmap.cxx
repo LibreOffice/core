@@ -1210,6 +1210,12 @@ void OutputDevice::DrawTransformedBitmapEx(
     if ( !mpGraphics && !AcquireGraphics() )
         return;
 
+    if ( mbInitClipRegion )
+        InitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
+
 #ifdef DO_TIME_TEST
     // MM02 start time test when some data (not for trivial stuff). Will
     // trigger and show data when leaving this method by destructing helper
