@@ -312,9 +312,12 @@ void DocumentHelper::AssignMasterPageToPageList (
     if (aCleanedList.empty() )
         return;
 
+    ViewShellId  nViewShellId(-1);
+    if (sd::ViewShell* pViewShell = rTargetDocument.GetDocSh()->GetViewShell())
+        nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
     SfxUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
     if( pUndoMgr )
-        pUndoMgr->EnterListAction(SdResId(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, rTargetDocument.GetDocSh()->GetViewShell()->GetViewShellBase().GetViewShellId());
+        pUndoMgr->EnterListAction(SdResId(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, nViewShellId);
 
     SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
     if (pMasterPageInDocument == nullptr)
