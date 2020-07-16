@@ -30,7 +30,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <sal/log.hxx>
 #include <cmath>
-
+#include <vcl/skia/SkiaHelper.hxx>
 
 using namespace com::sun::star;
 
@@ -868,6 +868,12 @@ namespace drawinglayer::primitive2d
             // use color distance and discrete lengths to calculate step count
             const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDelta, fDiscreteUnit));
 
+            // HACK: Splitting a gradient into adjacent polygons with gradually changing color is silly.
+            // If antialiasing is used to draw them, the AA-ed adjacent edges won't line up perfectly
+            // because of the AA (see SkiaSalGraphicsImpl::mergePolyPolygonToPrevious()).
+            // Make the polygons a bit wider, so they the partial overlap "fixes" this.
+            const double fixup = SkiaHelper::isVCLSkiaEnabled() ? fDiscreteUnit / 2 : 0;
+
             // tdf#117949 Use a small amount of discrete overlap at the edges. Usually this
             // should be exactly 0.0 and 1.0, but there were cases when this gets clipped
             // against the mask polygon which got numerically problematic.
@@ -881,7 +887,7 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DRange(
                         getOffsetA() - fDiscreteUnit,
                         -0.0001, // TTTT -> should be 0.0, see comment above
-                        getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
+                        getOffsetA() + (fDelta / nSteps) + fDiscreteUnit + fixup,
                         1.0001))); // TTTT -> should be 1.0, see comment above
 
             // prepare loop (inside to outside, [0.0 .. 1.0[)
