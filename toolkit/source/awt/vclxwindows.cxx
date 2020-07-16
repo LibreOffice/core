@@ -7738,14 +7738,15 @@ void SVTXFormattedField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_FORMATKEY,
                      BASEPROPERTY_TREATASNUMBER,
                      BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
     VCLXSpinField::ImplGetPropertyIds( rIds );
 }
-
-
-
-
 
 SVTXCurrencyField::SVTXCurrencyField()
 {
