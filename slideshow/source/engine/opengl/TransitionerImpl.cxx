@@ -46,14 +46,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
-
-#include <comphelper/servicedecl.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -1154,14 +1153,28 @@ OGLTransitionerImpl::OGLTransitionerImpl()
 {
 }
 
-typedef cppu::WeakComponentImplHelper<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
+typedef cppu::WeakComponentImplHelper<presentation::XTransitionFactory, lang::XServiceInfo> OGLTransitionFactoryImplBase;
 
 class OGLTransitionFactoryImpl : private cppu::BaseMutex, public OGLTransitionFactoryImplBase
 {
 public:
-    explicit OGLTransitionFactoryImpl( const uno::Reference< uno::XComponentContext >& ) :
+    explicit OGLTransitionFactoryImpl() :
         OGLTransitionFactoryImplBase(m_aMutex)
     {}
+
+    // XServiceInfo
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    {
+        return { "com.sun.star.presentation.TransitionFactory" };
+    }
+    virtual OUString SAL_CALL getImplementationName() override
+    {
+        return "com.sun.star.comp.presentation.OGLTransitionFactory";
+    }
+    virtual sal_Bool SAL_CALL supportsService(const OUString& aServiceName) override
+    {
+        return cppu::supportsService(this, aServiceName);
+    }
 
     // XTransitionFactory
     virtual sal_Bool SAL_CALL hasTransition( sal_Int16 transitionType, sal_Int16 transitionSubType ) override
@@ -1305,18 +1318,10 @@ public:
 
 }
 
-namespace sdecl = comphelper::service_decl;
- const sdecl::ServiceDecl OGLTransitionFactoryDecl(
-     sdecl::class_<OGLTransitionFactoryImpl>(),
-    "com.sun.star.comp.presentation.OGLTransitionFactory",
-    "com.sun.star.presentation.TransitionFactory" );
-
-// The C shared lib entry points
-extern "C"
-SAL_DLLPUBLIC_EXPORT void* ogltrans_component_getFactory( char const* pImplName,
-                                         void*, void* )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+slideshow_OGLTransitionFactoryImpl_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return sdecl::component_getFactoryHelper( pImplName, {&OGLTransitionFactoryDecl} );
+    return cppu::acquire(new OGLTransitionFactoryImpl());
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

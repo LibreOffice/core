@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ogltrans" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.presentation.OGLTransitionFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.presentation.OGLTransitionFactory"
+    constructor="slideshow_OGLTransitionFactoryImpl_get_implementation">
     <service name="com.sun.star.presentation.TransitionFactory"/>
   </implementation>
 </component>
