@@ -279,7 +279,7 @@ ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const vcl::Wi
 {
     for( const auto& xWrapper : mvDockingWindows )
     {
-        if( xWrapper->mpDockingWindow == pWindow )
+        if (xWrapper && xWrapper->mpDockingWindow == pWindow)
             return xWrapper.get();
     }
     return nullptr;
@@ -385,7 +385,8 @@ void DockingManager::RemoveWindow( const vcl::Window *pWindow )
 {
     for( auto it = mvDockingWindows.begin(); it != mvDockingWindows.end(); ++it )
     {
-        if( (*it)->mpDockingWindow == pWindow )
+        const auto& xWrapper = *it;
+        if (xWrapper && xWrapper->mpDockingWindow == pWindow)
         {
             mvDockingWindows.erase( it );
             break;
