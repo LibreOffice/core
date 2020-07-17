@@ -24,21 +24,23 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
+#include <svx/gallerybinaryengineentry.hxx>
 #include <svx/gallerybinaryengine.hxx>
 
 #include <cstdio>
 #include <memory>
 #include <vector>
 
-class SgaObjectSvDraw;
 struct GalleryObject;
-class GalleryBinaryEngine;
+class GalleryBinaryEngineEntry;
+class GalleryStorageLocations;
 
 class GalleryThemeEntry
 {
 private:
 
-    std::unique_ptr<GalleryBinaryEngine>     mpGalleryBinaryEngine;
+    std::unique_ptr<GalleryBinaryEngineEntry>     mpGalleryBinaryEngineEntry;
+    GalleryStorageLocations maGalleryStorageLocations;
     OUString                aName;
     sal_uInt32              nId;
     bool                    bReadOnly;
@@ -52,26 +54,17 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
-    static std::unique_ptr<GalleryBinaryEngine> createGalleryBinaryEngine();
-    const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
+    std::unique_ptr<GalleryBinaryEngineEntry> createGalleryBinaryEngineEntry();
+    const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryBinaryEngineEntry() const { return mpGalleryBinaryEngineEntry; }
 
-    void callGalleryThemeInit();
-
-    bool readModel(const GalleryObject* pObject, SdrModel& rModel);
-    bool insertModel(const FmFormModel& rModel, INetURLObject& aURL);
-
-    bool readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream);
-    SgaObjectSvDraw insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream, INetURLObject& rURL);
-
-    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
-        ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList, sal_uInt32& rInsertPos);
+    const GalleryStorageLocations& getGalleryStorageLocations() const { return maGalleryStorageLocations; }
 
     const OUString&         GetThemeName() const { return aName; }
 
-    const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngine->GetThmURL(); }
-    const INetURLObject&    GetSdgURL() const { return mpGalleryBinaryEngine->GetSdgURL(); }
-    const INetURLObject&    GetSdvURL() const { return mpGalleryBinaryEngine->GetSdvURL(); }
-    const INetURLObject&    GetStrURL() const { return mpGalleryBinaryEngine->GetStrURL(); }
+    const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngineEntry->GetThmURL(); }
+    const INetURLObject&    GetSdgURL() const { return mpGalleryBinaryEngineEntry->GetSdgURL(); }
+    const INetURLObject&    GetSdvURL() const { return mpGalleryBinaryEngineEntry->GetSdvURL(); }
+    const INetURLObject&    GetStrURL() const { return mpGalleryBinaryEngineEntry->GetStrURL(); }
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;

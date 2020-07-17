@@ -69,13 +69,14 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     , bDragging(false)
     , bAbortActualize(false)
 {
-    pThm->callGalleryThemeInit();
+    mpGalleryBinaryEngine = createGalleryBinaryEngine();
+    mpGalleryBinaryEngine->ImplCreateSvDrawStorage(IsReadOnly());
 }
 
 GalleryTheme::~GalleryTheme()
 {
     if(pThm->IsModified())
-        if(!pThm->getGalleryBinaryEngine()->implWrite(*this))
+        if(!mpGalleryBinaryEngine->implWrite(*this))
             ImplSetModified(false);
 
     for (auto & pEntry : aObjectList)
@@ -84,7 +85,13 @@ GalleryTheme::~GalleryTheme()
         pEntry.reset();
     }
     aObjectList.clear();
-    pThm->getGalleryBinaryEngine()->galleryThemeDestroy();
+    mpGalleryBinaryEngine->clearSotStorage();
+}
+
+std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryBinaryEngine()
+{
+    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>(pThm->getGalleryStorageLocations());
+    return pGalleryBinaryEngine;
 }
 
 const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rURL )
@@ -256,7 +263,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         }
     }
 
-    pThm->insertObject(rObj, pFoundEntry, m_aDestDir, aObjectList, nInsertPos);
+    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, m_aDestDir, aObjectList, nInsertPos);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
@@ -266,7 +273,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
 
 std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
 {
-    return pThm->getGalleryBinaryEngine()->implReadSgaObject(ImplGetGalleryObject(nPos));
+    return mpGalleryBinaryEngine->implReadSgaObject(ImplGetGalleryObject(nPos));
 }
 
 void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
@@ -299,7 +306,7 @@ void GalleryTheme::RemoveObject(sal_uInt32 nPos)
         KillFile( GetSdgURL() );
 
     if( SgaObjKind::SvDraw == pEntry->eObjKind )
-        pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        mpGalleryBinaryEngine->GetSvDrawStorage()->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
     pEntry.reset();
@@ -392,10 +399,10 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         }
         else
         {
-            if ( pThm->getGalleryBinaryEngine()->GetSvDrawStorage().is() )
+            if ( mpGalleryBinaryEngine->GetSvDrawStorage().is() )
             {
                 const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
-                tools::SvRef<SotStorageStream>  pIStm = pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->OpenSotStream( aStmName, StreamMode::READ );
+                tools::SvRef<SotStorageStream>  pIStm = mpGalleryBinaryEngine->GetSvDrawStorage()->OpenSotStream( aStmName, StreamMode::READ );
 
                 if( pIStm.is() && !pIStm->GetError() )
                 {
@@ -479,8 +486,8 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     try
     {
         tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::STD_READWRITE ) );
-        pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->CopyTo( aTempStorageRef.get() );
-        nStorErr = pThm->getGalleryBinaryEngine()->GetSvDrawStorage()->GetError();
+        mpGalleryBinaryEngine->GetSvDrawStorage()->CopyTo( aTempStorageRef.get() );
+        nStorErr = mpGalleryBinaryEngine->GetSvDrawStorage()->GetError();
     }
     catch (const css::ucb::ContentCreationException&)
     {
@@ -492,16 +499,15 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
     if( nStorErr == ERRCODE_NONE )
     {
-        auto aSvDrawStorage = pThm->getGalleryBinaryEngine()->GetSvDrawStorage();
-        aSvDrawStorage.clear();
+        mpGalleryBinaryEngine->clearSotStorage();
         CopyFile( aTmpURL, GetSdvURL() );
-        pThm->callGalleryThemeInit();
+        mpGalleryBinaryEngine->ImplCreateSvDrawStorage(IsReadOnly());
     }
 
     KillFile( aTmpURL );
     ImplSetModified( true );
     if (pThm->IsModified())
-        if (!pThm->getGalleryBinaryEngine()->implWrite(*this))
+        if (!mpGalleryBinaryEngine->implWrite(*this))
             ImplSetModified(false);
     UnlockBroadcaster();
 }
@@ -681,7 +687,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        bRet = pThm->readModel(pObject, rModel);
+        bRet = mpGalleryBinaryEngine->readModel(pObject, rModel);
     }
 
     return bRet;
@@ -692,7 +698,7 @@ bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
     INetURLObject   aURL( implCreateUniqueURL( SgaObjKind::SvDraw ) );
     bool bRet = false;
 
-    if(pThm->insertModel(rModel, aURL))
+    if(mpGalleryBinaryEngine->insertModel(rModel, aURL))
     {
         SgaObjectSvDraw aObjSvDraw(rModel, aURL);
         bRet = InsertObject( aObjSvDraw, nInsertPos );
@@ -707,7 +713,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        bRet = pThm->readModelStream(pObject, rxModelStream);
+        bRet = mpGalleryBinaryEngine->readModelStream(pObject, rxModelStream);
     }
 
     return bRet;
@@ -718,7 +724,7 @@ bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxMod
     INetURLObject   aURL( implCreateUniqueURL( SgaObjKind::SvDraw ) );
     bool            bRet = false;
 
-    const SgaObjectSvDraw aObjSvDraw = pThm->insertModelStream(rxModelStream, aURL);
+    const SgaObjectSvDraw aObjSvDraw = mpGalleryBinaryEngine->insertModelStream(rxModelStream, aURL);
     if(aObjSvDraw.IsValid())
         bRet = InsertObject( aObjSvDraw, nInsertPos );
 
