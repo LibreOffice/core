@@ -317,6 +317,11 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
             o_rVCLGradient.SetStyle(GradientStyle::Rect);
             break;
         }
+        case attribute::GradientStyle::RectBezier:
+        {
+            o_rVCLGradient.SetStyle(GradientStyle::RectBezier);
+            break;
+        }
     }
 }
 
@@ -1945,6 +1950,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
                 break;
             case GradientStyle::Square:
             case GradientStyle::Rect:
+            case GradientStyle::RectBezier:
                 eGrad = SvtGraphicFill::GradientType::Rectangular;
                 break;
         }

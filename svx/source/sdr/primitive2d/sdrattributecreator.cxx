@@ -114,6 +114,10 @@ namespace drawinglayer
                 {
                     return attribute::GradientStyle::Square;
                 }
+                case css::awt::GradientStyle_RECT_BEZIER :
+                {
+                    return attribute::GradientStyle::RectBezier;
+                }
                 default :
                 {
                     return attribute::GradientStyle::Rect; // css::awt::GradientStyle_RECT

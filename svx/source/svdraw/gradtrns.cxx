@@ -136,6 +136,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
         }
         case css::awt::GradientStyle_ELLIPTICAL :
         case css::awt::GradientStyle_RECT :
+        case css::awt::GradientStyle_RECT_BEZIER :
         {
             aStartPos = basegfx::B2DPoint(aRange.getMinX(), aCenter.getY());
             aEndPos = basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY());
@@ -426,6 +427,7 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
         }
         case css::awt::GradientStyle_ELLIPTICAL :
         case css::awt::GradientStyle_RECT :
+        case css::awt::GradientStyle_RECT_BEZIER :
         {
             if(!bMoveSingle || !bMoveFirst)
             {

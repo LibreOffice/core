@@ -670,6 +670,7 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
         case awt::GradientStyle_RADIAL:
         case awt::GradientStyle_ELLIPTICAL:
         case awt::GradientStyle_RECT:
+        case awt::GradientStyle_RECT_BEZIER:
         case awt::GradientStyle_SQUARE:
         {
             mpFS->startElementNS(XML_a, XML_gsLst);

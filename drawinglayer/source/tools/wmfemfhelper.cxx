@@ -741,11 +741,13 @@ namespace wmfemfhelper
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
                 break;
             }
-            default : // GradientStyle::Rect
+            case GradientStyle::RectBezier :
             {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Rect;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::RectBezier;
                 break;
             }
+            default :
+                break; // GradientStyle::Rect
         }
 
         return drawinglayer::attribute::FillGradientAttribute(
