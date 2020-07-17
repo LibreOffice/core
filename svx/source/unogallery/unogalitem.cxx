@@ -220,7 +220,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
             if( pGalTheme )
             {
-                std::unique_ptr<SgaObject> pObj(pGalTheme->pThm->getGalleryBinaryEngine()->implReadSgaObject( implGetObject() ));
+                std::unique_ptr<SgaObject> pObj(pGalTheme->getGalleryBinaryEngine()->implReadSgaObject( implGetObject() ));
 
                 if( pObj )
                 {

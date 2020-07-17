@@ -17,96 +17,119 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/gallerybinaryengine.hxx>
-#include <svx/galmisc.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/gallery1.hxx>
 #include <galobj.hxx>
+#include <svx/gallerybinaryengine.hxx>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
+#include <vcl/cvtgrf.hxx>
 
 #include <sal/log.hxx>
 
-#include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <tools/urlobj.hxx>
-#include <tools/vcompat.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+#include <tools/urlobj.hxx>
+#include <tools/vcompat.hxx>
 
 using namespace ::com::sun::star;
 
-static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
+GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations)
+    : maGalleryStorageLocations(rGalleryStorageLocations)
 {
-    INetURLObject aURL(rURL);
-    aURL.setExtension(rExt);
-    return FileExists(aURL);
 }
 
-void GalleryBinaryEngine::galleryThemeInit(bool bReadOnly)
+void GalleryBinaryEngine::clearSotStorage() { m_aSvDrawStorageRef.clear(); }
+
+void GalleryBinaryEngine::ImplCreateSvDrawStorage(bool bReadOnly)
 {
-    SAL_WARN_IF(aSvDrawStorageRef.is(), "svx", "SotStorage is already initialized");
-    ImplCreateSvDrawStorage(bReadOnly);
-}
-
-void GalleryBinaryEngine::galleryThemeDestroy() { aSvDrawStorageRef.clear(); }
-
-INetURLObject GalleryBinaryEngine::ImplGetURLIgnoreCase(const INetURLObject& rURL)
-{
-    INetURLObject aURL(rURL);
-
-    // check original file name
-    if (!FileExists(aURL))
+    try
     {
-        // check upper case file name
-        aURL.setName(aURL.getName().toAsciiUpperCase());
+        m_aSvDrawStorageRef
+            = new SotStorage(false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                             bReadOnly ? StreamMode::READ : StreamMode::STD_READWRITE);
+        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+        if ((m_aSvDrawStorageRef->GetError() != ERRCODE_NONE) && !bReadOnly)
+            m_aSvDrawStorageRef = new SotStorage(
+                false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                StreamMode::READ);
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
+        TOOLS_WARN_EXCEPTION("svx", "failed to open: " << GetSdvURL().GetMainURL(
+                                                              INetURLObject::DecodeMechanism::NONE)
+                                                       << "due to");
+    }
+}
 
-        if (!FileExists(aURL))
+const tools::SvRef<SotStorage>& GalleryBinaryEngine::GetSvDrawStorage() const
+{
+    return m_aSvDrawStorageRef;
+}
+
+bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
+{
+    INetURLObject aPathURL(GetThmURL());
+
+    aPathURL.removeSegment();
+    aPathURL.removeFinalSlash();
+
+    DBG_ASSERT(aPathURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
+
+    if (FileExists(aPathURL) || CreateDir(aPathURL))
+    {
+#ifdef UNX
+        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+            StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC));
+#else
+        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+            StreamMode::WRITE | StreamMode::TRUNC));
+#endif
+
+        if (pOStm)
         {
-            // check lower case file name
-            aURL.setName(aURL.getName().toAsciiLowerCase());
+            WriteGalleryTheme(*pOStm, rTheme);
+            pOStm.reset();
+            return true;
         }
+
+        return false;
     }
-
-    return aURL;
+    return true;
 }
 
-void GalleryBinaryEngine::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
+void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,
+                                       OUString& rDestDir,
+                                       ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                                       sal_uInt32& rInsertPos)
 {
-    INetURLObject aBaseNoCase(ImplGetURLIgnoreCase(rBaseURL));
-    aURL = aBaseNoCase;
-    static sal_Int32 nIdx = 0;
-    while (FileExists(aURL, "thm"))
-    { // create new URLs
-        nIdx++;
-        aURL = aBaseNoCase;
-        aURL.setName(aURL.getName() + OUString::number(nIdx));
+    if (pFoundEntry)
+    {
+        GalleryObject aNewEntry;
+
+        // update title of new object if necessary
+        if (rObj.GetTitle().isEmpty())
+        {
+            std::unique_ptr<SgaObject> pOldObj(implReadSgaObject(pFoundEntry));
+
+            if (pOldObj)
+            {
+                const_cast<SgaObject&>(rObj).SetTitle(pOldObj->GetTitle());
+            }
+        }
+        else if (rObj.GetTitle() == "__<empty>__")
+            const_cast<SgaObject&>(rObj).SetTitle("");
+
+        implWriteSgaObject(rObj, rInsertPos, &aNewEntry, rDestDir, rObjectList);
+        pFoundEntry->nOffset = aNewEntry.nOffset;
     }
-}
-
-void GalleryBinaryEngine::SetThmExtension(INetURLObject aURL)
-{
-    aURL.setExtension("thm");
-    aThmURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryBinaryEngine::SetSdgExtension(INetURLObject aURL)
-{
-    aURL.setExtension("sdg");
-    aSdgURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryBinaryEngine::SetSdvExtension(INetURLObject aURL)
-{
-    aURL.setExtension("sdv");
-    aSdvURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryBinaryEngine::SetStrExtension(INetURLObject aURL)
-{
-    aURL.setExtension("str");
-    aStrURL = ImplGetURLIgnoreCase(aURL);
+    else
+        implWriteSgaObject(rObj, rInsertPos, nullptr, rDestDir, rObjectList);
 }
 
 std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
@@ -205,65 +228,6 @@ bool GalleryBinaryEngine::implWriteSgaObject(
     return bRet;
 }
 
-bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
-{
-    INetURLObject aPathURL(GetThmURL());
-
-    aPathURL.removeSegment();
-    aPathURL.removeFinalSlash();
-
-    DBG_ASSERT(aPathURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
-
-    if (FileExists(aPathURL) || CreateDir(aPathURL))
-    {
-#ifdef UNX
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
-            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-            StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC));
-#else
-        std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
-            GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-            StreamMode::WRITE | StreamMode::TRUNC));
-#endif
-
-        if (pOStm)
-        {
-            WriteGalleryTheme(*pOStm, rTheme);
-            pOStm.reset();
-            return true;
-        }
-
-        return false;
-    }
-    return true;
-}
-
-void GalleryBinaryEngine::ImplCreateSvDrawStorage(bool bReadOnly)
-{
-    try
-    {
-        aSvDrawStorageRef
-            = new SotStorage(false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                             bReadOnly ? StreamMode::READ : StreamMode::STD_READWRITE);
-        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
-        if ((aSvDrawStorageRef->GetError() != ERRCODE_NONE) && !bReadOnly)
-            aSvDrawStorageRef = new SotStorage(
-                false, GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                StreamMode::READ);
-    }
-    catch (const css::ucb::ContentCreationException&)
-    {
-        TOOLS_WARN_EXCEPTION("svx", "failed to open: " << GetSdvURL().GetMainURL(
-                                                              INetURLObject::DecodeMechanism::NONE)
-                                                       << "due to");
-    }
-}
-
-const tools::SvRef<SotStorage>& GalleryBinaryEngine::GetSvDrawStorage() const
-{
-    return aSvDrawStorageRef;
-}
-
 bool GalleryBinaryEngine::readModel(const GalleryObject* pObject, SdrModel& rModel)
 {
     tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
@@ -285,7 +249,6 @@ bool GalleryBinaryEngine::readModel(const GalleryObject* pObject, SdrModel& rMod
     }
     return bRet;
 }
-
 bool GalleryBinaryEngine::insertModel(const FmFormModel& rModel, INetURLObject& rURL)
 {
     tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
@@ -404,105 +367,9 @@ GalleryBinaryEngine::insertModelStream(const tools::SvRef<SotStorageStream>& rxM
     return SgaObjectSvDraw();
 }
 
-void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,
-                                       OUString& rDestDir,
-                                       ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                                       sal_uInt32& rInsertPos)
-{
-    if (pFoundEntry)
-    {
-        GalleryObject aNewEntry;
-
-        // update title of new object if necessary
-        if (rObj.GetTitle().isEmpty())
-        {
-            std::unique_ptr<SgaObject> pOldObj(implReadSgaObject(pFoundEntry));
-
-            if (pOldObj)
-            {
-                const_cast<SgaObject&>(rObj).SetTitle(pOldObj->GetTitle());
-            }
-        }
-        else if (rObj.GetTitle() == "__<empty>__")
-            const_cast<SgaObject&>(rObj).SetTitle("");
-
-        implWriteSgaObject(rObj, rInsertPos, &aNewEntry, rDestDir, rObjectList);
-        pFoundEntry->nOffset = aNewEntry.nOffset;
-    }
-    else
-        implWriteSgaObject(rObj, rInsertPos, nullptr, rDestDir, rObjectList);
-}
-
-GalleryThemeEntry* GalleryBinaryEngine::CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly)
-{
-    DBG_ASSERT(rURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
-
-    GalleryThemeEntry* pRet = nullptr;
-
-    if (FileExists(rURL))
-    {
-        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
-            rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
-
-        if (pIStm)
-        {
-            OUString aThemeName;
-            sal_uInt16 nVersion;
-
-            pIStm->ReadUInt16(nVersion);
-
-            if (nVersion <= 0x00ff)
-            {
-                bool bThemeNameFromResource = false;
-                sal_uInt32 nThemeId = 0;
-
-                OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
-
-                // execute a character conversion
-                if (nVersion >= 0x0004)
-                {
-                    sal_uInt32 nCount;
-                    sal_uInt16 nTemp16;
-
-                    pIStm->ReadUInt32(nCount).ReadUInt16(nTemp16);
-                    pIStm->Seek(STREAM_SEEK_TO_END);
-
-                    // check whether there is a newer version;
-                    // therefore jump back by 520Bytes (8 bytes ID + 512Bytes reserve buffer)
-                    // if this is at all possible.
-                    if (pIStm->Tell() >= 520)
-                    {
-                        sal_uInt32 nId1, nId2;
-
-                        pIStm->SeekRel(-520);
-                        pIStm->ReadUInt32(nId1).ReadUInt32(nId2);
-
-                        if (nId1 == COMPAT_FORMAT('G', 'A', 'L', 'R')
-                            && nId2 == COMPAT_FORMAT('E', 'S', 'R', 'V'))
-                        {
-                            VersionCompat aCompat(*pIStm, StreamMode::READ);
-
-                            pIStm->ReadUInt32(nThemeId);
-
-                            if (aCompat.GetVersion() >= 2)
-                            {
-                                pIStm->ReadCharAsBool(bThemeNameFromResource);
-                            }
-                        }
-                    }
-                }
-
-                pRet = new GalleryThemeEntry(false, rURL, aThemeName, bReadOnly, false, nThemeId,
-                                             bThemeNameFromResource);
-            }
-        }
-    }
-
-    return pRet;
-}
-
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
 {
     return rTheme.WriteData(rOut);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
