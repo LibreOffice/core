@@ -1331,7 +1331,7 @@ void WW8AttributeOutput::SectFootnoteEndnotePr()
 {
     const SwFootnoteInfo& rInfo = m_rWW8Export.m_pDoc->GetFootnoteInfo();
     const SwEndNoteInfo& rEndNoteInfo = m_rWW8Export.m_pDoc->GetEndNoteInfo();
-    m_rWW8Export.InsUInt16( NS_sprm::sprmSRncFtn );
+    m_rWW8Export.InsUInt16( NS_sprm::SRncFtn::val );
     switch( rInfo.m_eNum )
     {
     case FTNNUM_PAGE:     m_rWW8Export.pO->push_back( sal_uInt8/*rncRstPage*/ (2) ); break;
@@ -1339,10 +1339,10 @@ void WW8AttributeOutput::SectFootnoteEndnotePr()
     default:              m_rWW8Export.pO->push_back( sal_uInt8/*rncCont*/ (0) ); break;
     }
 
-    m_rWW8Export.InsUInt16(NS_sprm::sprmSNfcFtnRef);
+    m_rWW8Export.InsUInt16(NS_sprm::SNfcFtnRef::val);
     sal_uInt8 nId = WW8Export::GetNumId(rInfo.m_aFormat.GetNumberingType());
     SwWW8Writer::InsUInt16(*m_rWW8Export.pO, nId);
-    m_rWW8Export.InsUInt16(NS_sprm::sprmSNfcEdnRef);
+    m_rWW8Export.InsUInt16(NS_sprm::SNfcEdnRef::val);
     nId = WW8Export::GetNumId(rEndNoteInfo.m_aFormat.GetNumberingType());
     SwWW8Writer::InsUInt16(*m_rWW8Export.pO, nId);
 }
@@ -1353,7 +1353,7 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
     //is not protected, set the unlocked flag
     if ( m_rWW8Export.pSepx->DocumentIsProtected() && !bProtected )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFProtected );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SFProtected::val );
         m_rWW8Export.pO->push_back( 1 );
     }
 }
@@ -1361,24 +1361,24 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
 void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     // sprmSNLnnMod - activate Line Numbering and define Modulo
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSNLnnMod );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SNLnnMod::val );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rLnNumInfo.GetCountBy() );
 
     // sprmSDxaLnn - xPosition of Line Number
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSDxaLnn );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SDxaLnn::val );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rLnNumInfo.GetPosFromLeft() );
 
     // sprmSLnc - restart number: 0 per page, 1 per section, 2 never restart
     if ( nRestartNo || !rLnNumInfo.IsRestartEachPage() )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSLnc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SLnc::val );
         m_rWW8Export.pO->push_back( nRestartNo ? 1 : 2 );
     }
 
     // sprmSLnnMin - Restart the Line Number with given value
     if ( nRestartNo )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSLnnMin );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SLnnMin::val );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, static_cast<sal_uInt16>(nRestartNo) - 1 );
     }
 }
@@ -1386,7 +1386,7 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
 void WW8AttributeOutput::SectionTitlePage()
 {
     // sprmSFTitlePage
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFTitlePage );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SFTitlePage::val );
     m_rWW8Export.pO->push_back( 1 );
 }
 
@@ -1417,14 +1417,14 @@ void WW8AttributeOutput::SectionPageBorders( const SwFrameFormat* pPdFormat, con
     if ( USHRT_MAX != nPgBorder )
     {
         // write the Flag and Border Attribute
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSPgbProp );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SPgbProp::val );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPgBorder );
     }
 }
 
 void WW8AttributeOutput::SectionBiDi( bool bBiDi )
 {
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFBiDi );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SFBiDi::val );
     m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
 }
 
@@ -1432,17 +1432,17 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::std:
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSNfcPgn );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SNfcPgn::val );
     m_rWW8Export.pO->push_back( nb );
 
     if ( oPageRestartNumber )
     {
         // sprmSFPgnRestart
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFPgnRestart );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SFPgnRestart::val );
         m_rWW8Export.pO->push_back( 1 );
 
         // sprmSPgnStart
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSPgnStart97 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SPgnStart97::val );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, *oPageRestartNumber );
     }
 }
@@ -1451,7 +1451,7 @@ void WW8AttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
     if ( 2 != nBreakCode ) // new page is the default
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSBkc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SBkc::val );
         m_rWW8Export.pO->push_back( nBreakCode );
     }
 }
@@ -1495,7 +1495,7 @@ void WW8AttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdju
             default:
                 break;
         }
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSVjc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::SVjc::val );
         m_rWW8Export.pO->push_back( nMSVA );
     }
 }
