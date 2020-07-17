@@ -2824,7 +2824,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122014)
-
 {
     SwDoc* pDoc = createDoc("tdf122014.docx");
     SwDocShell* pShell = pDoc->GetDocShell();
@@ -2842,7 +2841,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122014)
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134659)
-
 {
     SwDoc* pDoc = createDoc("tdf134659.docx");
     SwDocShell* pShell = pDoc->GetDocShell();
