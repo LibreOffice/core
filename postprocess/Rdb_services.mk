@@ -9,30 +9,76 @@
 
 $(eval $(call gb_Rdb_Rdb_install,services))
 
+#
+# "minimal" list of services for cross-compiling build tools
+#
 $(eval $(call gb_Rdb_add_components,services,\
-	animations/source/animcore/animcore \
 	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
-	chart2/source/controller/chartcontroller \
-	chart2/source/chartcore \
+	$(call gb_Helper_optional,SCRIPTING,basic/util/sb) \
 	canvas/source/factory/canvasfactory \
 	canvas/source/simplecanvas/simplecanvas \
 	canvas/source/vcl/vclcanvas \
+	$(if $(ENABLE_CAIRO_CANVAS),canvas/source/cairo/cairocanvas) \
+	$(if $(ENABLE_OPENGL_CANVAS),canvas/source/opengl/oglcanvas) \
+	$(if $(filter WNT,$(OS)), \
+		canvas/source/directx/directx9canvas \
+		canvas/source/directx/gdipluscanvas \
+	) \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
+	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)), \
+		connectivity/source/dbtools/dbtools \
+		connectivity/source/drivers/dbase/dbase \
+	) \
 	cppcanvas/source/uno/mtfrenderer \
+	drawinglayer/drawinglayer \
+	emfio/emfio \
+	filter/source/config/cache/filterconfig1 \
+	filter/source/graphic/graphicfilter \
+	filter/source/svg/svgfilter \
+	framework/util/fwk \
+	i18npool/source/search/i18nsearch \
+	i18npool/util/i18npool \
+	package/source/xstor/xstor \
+	package/util/package2 \
+	sax/source/expatwrap/expwrap \
+	sfx2/util/sfx \
+	sot/util/sot \
+	svgio/svgio \
+	svl/source/fsstor/fsstorage \
+	svl/source/passwordcontainer/passwordcontainer \
+	svl/util/svl \
+	svtools/util/svt \
+	svx/util/svxcore \
+	toolkit/util/tk \
+	ucb/source/core/ucb1 \
+	ucb/source/ucp/file/ucpfile1 \
+	unotools/util/utl \
+	unoxml/source/service/unoxml \
+	uui/util/uui \
+	vcl/vcl.common \
+	$(if $(filter ANDROID,$(OS)),vcl/vcl.android) \
+	$(if $(DISABLE_GUI),vcl/vcl.headless) \
+	$(if $(filter iOS,$(OS)),vcl/vcl.ios) \
+	$(if $(filter MACOSX,$(OS)),vcl/vcl.macosx) \
+	$(if $(filter WNT,$(OS)),vcl/vcl.windows) \
+))
+
+ifeq ($(gb_Side),host)
+
+$(eval $(call gb_Rdb_add_components,services,\
+	animations/source/animcore/animcore \
+	chart2/source/controller/chartcontroller \
+	chart2/source/chartcore \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
-	drawinglayer/drawinglayer \
 	dtrans/util/mcnttype \
 	embeddedobj/util/embobj \
 	eventattacher/source/evtatt \
-	filter/source/config/cache/filterconfig1 \
-	filter/source/graphic/graphicfilter \
 	filter/source/msfilter/msfilter \
 	filter/source/odfflatxml/odfflatxml \
 	filter/source/pdf/pdffilter \
 	filter/source/storagefilterdetect/storagefd \
-	filter/source/svg/svgfilter \
 	filter/source/t602/t602filter \
 	filter/source/textfilterdetect/textfd \
 	filter/source/xmlfilteradaptor/xmlfa \
@@ -41,10 +87,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	filter/source/xsltfilter/xsltfilter \
 	formula/util/for \
 	$(call gb_Helper_optional,DESKTOP,fpicker/source/office/fps_office) \
-	framework/util/fwk \
 	hwpfilter/source/hwp \
-	i18npool/source/search/i18nsearch \
-	i18npool/util/i18npool \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
 	$(if $(filter-out iOS,$(OS)), \
@@ -57,9 +100,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	    lotuswordpro/util/lwpfilter \
 	) \
 	oox/util/oox \
-	package/source/xstor/xstor \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
 	sc/util/sc \
 	sc/util/scd \
 	sc/util/scfilt \
@@ -71,42 +111,26 @@ $(eval $(call gb_Rdb_add_components,services,\
 	sd/util/sdfilt \
 	sdext/source/presenter/presenter \
 	sdext/source/minimizer/minimizer \
-	sfx2/util/sfx \
 	slideshow/util/slideshow \
-	sot/util/sot \
 	starmath/util/sm \
 	starmath/util/smd \
-	svl/source/fsstor/fsstorage \
-	svl/source/passwordcontainer/passwordcontainer \
-	svl/util/svl \
-	svtools/util/svt \
-	svgio/svgio \
-	emfio/emfio \
 	svx/util/svx \
-	svx/util/svxcore \
 	svx/util/textconversiondlgs \
 	sw/util/msword \
 	sw/util/sw \
 	sw/util/swd \
-	toolkit/util/tk \
 	ucb/source/sorter/srtrs1 \
-	ucb/source/core/ucb1 \
 	ucb/source/cacher/cached1 \
 	$(if $(ENABLE_LIBCMIS),ucb/source/ucp/cmis/ucpcmis1) \
 	ucb/source/ucp/expand/ucpexpand1 \
 	ucb/source/ucp/ext/ucpext \
-	ucb/source/ucp/file/ucpfile1 \
 	$(if $(ENABLE_CURL),ucb/source/ucp/ftp/ucpftp1) \
 	ucb/source/ucp/hierarchy/ucphier1 \
 	ucb/source/ucp/image/ucpimage \
 	ucb/source/ucp/package/ucppkg1 \
 	ucb/source/ucp/tdoc/ucptdoc1 \
 	UnoControls/util/ctl \
-	unotools/util/utl \
 	unoxml/source/rdf/unordf \
-	unoxml/source/service/unoxml \
-	uui/util/uui \
-	vcl/vcl.common \
 	xmloff/source/transform/xof \
 	xmloff/util/xo \
 	xmlscript/util/xmlscript \
@@ -127,15 +151,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
 		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
-		fpicker/source/aqua/fps_aqua \
 		shell/source/backends/macbe/macbe1 \
-		vcl/vcl.macosx \
 	) \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
-	) \
-	$(if $(filter iOS,$(OS)), \
-		vcl/vcl.ios \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		avmedia/source/win/avmediawin \
@@ -147,13 +166,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/backends/wininetbe/wininetbe1 \
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
-		vcl/vcl.windows \
-	) \
-	$(if $(DISABLE_GUI), \
-		vcl/vcl.headless \
-	) \
-	$(if $(filter ANDROID,$(OS)), \
-		vcl/vcl.android \
 	) \
 	$(if $(filter-out WNT,$(OS)), \
 		embeddedobj/source/msole/emboleobj \
@@ -169,7 +181,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl/util/basctl \
-		basic/util/sb \
 		sc/util/vbaobj \
 		scripting/source/basprov/basprov \
 		scripting/source/dlgprov/dlgprov \
@@ -185,16 +196,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 			wizards/com/sun/star/wizards/fax/fax \
 			wizards/com/sun/star/wizards/letter/letter \
 		) \
-	) \
-	$(if $(ENABLE_CAIRO_CANVAS), \
-		canvas/source/cairo/cairocanvas \
-	) \
-	$(if $(filter WNT,$(OS)), \
-		canvas/source/directx/directx9canvas \
-		canvas/source/directx/gdipluscanvas \
-	) \
-	$(if $(ENABLE_OPENGL_CANVAS), \
-        canvas/source/opengl/oglcanvas \
 	) \
 	$(if $(ENABLE_GIO), \
 		shell/source/sessioninstall/losessioninstall \
@@ -233,18 +234,16 @@ $(eval $(call gb_Rdb_add_components,services,\
 	dbaccess/util/dba \
 ))
 
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/dbpilots/dbp \
 	extensions/source/propctrlr/pcr \
 	connectivity/source/cpool/dbpool2 \
-	connectivity/source/dbtools/dbtools \
 	$(if $(filter WNT,$(OS)), \
 		connectivity/source/drivers/ado/ado \
 	) \
 	connectivity/source/drivers/calc/calc \
-	connectivity/source/drivers/dbase/dbase \
 	$(if $(ENABLE_EVOAB2), \
 		connectivity/source/drivers/evoab2/evoab \
 	) \
@@ -339,5 +338,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	reportbuilder/java/reportbuilder \
 ))
 endif
+
+endif # $(gb_Side),host
 
 # vim: set noet sw=4 ts=4:
