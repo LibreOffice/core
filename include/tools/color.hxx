@@ -25,18 +25,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <osl/endian.h>
 
-namespace color
-{
-
-constexpr sal_uInt32 extractRGB(sal_uInt32 nColorNumber)
-{
-    return nColorNumber & 0x00FFFFFF;
-}
-
-}
-
-// Color
-
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 {
     // data intentionally public; read the commit log!
@@ -47,15 +35,15 @@ public:
         struct
         {
 #ifdef OSL_BIGENDIAN
-                sal_uInt8 A;
-                sal_uInt8 R;
-                sal_uInt8 G;
-                sal_uInt8 B;
+            sal_uInt8 A;
+            sal_uInt8 R;
+            sal_uInt8 G;
+            sal_uInt8 B;
 #else
-                sal_uInt8 B;
-                sal_uInt8 G;
-                sal_uInt8 R;
-                sal_uInt8 A;
+            sal_uInt8 B;
+            sal_uInt8 G;
+            sal_uInt8 R;
+            sal_uInt8 A;
 #endif
         };
     };
@@ -74,66 +62,68 @@ public:
     {}
 
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : Color(0, nRed, nGreen, nBlue)
+        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(0) << 24))
     {}
 
     // constructor to create a tools-Color from ::basegfx::BColor
-    explicit Color(const basegfx::BColor& rBColor)
-        : Color(0,
-                sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
+    explicit Color(const basegfx::BColor& rBColor) : Color( 0,
+                sal_uInt8(std::lround(rBColor.getRed()   * 255.0)),
                 sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
-                sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
+                sal_uInt8(std::lround(rBColor.getBlue()  * 255.0)))
     {}
 
-    /** Primarily used when passing Color objects to UNO API */
-    constexpr explicit operator sal_uInt32() const
-    {
-        return mValue;
-    }
+    // get ::basegfx::BColor from this color
+    basegfx::BColor getBColor() const { return basegfx::BColor( R/255.0, G/255.0, B/255.0 ); }
 
-    constexpr explicit operator sal_Int32() const
-    {
-        return sal_Int32(mValue);
-    }
+    // Primarily used when passing Color objects to UNO API
+    constexpr explicit operator sal_uInt32() const { return mValue; }
+    constexpr explicit operator sal_Int32()  const { return sal_Int32(mValue); }
 
-    bool operator<(const Color& aCompareColor) const
-    {
-        return mValue < aCompareColor.mValue;
-    }
+    // Opperators
+    bool operator==(const Color& rColor) const { return mValue == rColor.mValue; }
+    bool operator!=(const Color& rColor) const { return mValue != rColor.mValue; }
+    bool operator< (const Color& rColor) const { return mValue <  rColor.mValue; }
+    bool operator> (const Color& rColor) const { return mValue >  rColor.mValue; }
+    bool operator<=(const Color& rColor) const { return mValue <= rColor.mValue; }
+    bool operator>=(const Color& rColor) const { return mValue >= rColor.mValue; }
 
-    void SetRed(sal_uInt8 nRed);
-    sal_uInt8 GetRed() const
-    {
-        return R;
-    }
-    void SetGreen(sal_uInt8 nGreen);
-    sal_uInt8 GetGreen() const
-    {
-        return G;
-    }
-    void SetBlue(sal_uInt8 nBlue);
-    sal_uInt8 GetBlue() const
-    {
-        return B;
-    }
-    void SetTransparency(sal_uInt8 nTransparency);
-    sal_uInt8 GetTransparency() const
-    {
-        return A;
-    }
+    // Set RGBA data
+    void SetRed(sal_uInt8 nRed)                   { R = nRed; }
+    void SetGreen(sal_uInt8 nGreen)               { G = nGreen; }
+    void SetBlue(sal_uInt8 nBlue)                 { B = nBlue; }
+    void SetTransparency(sal_uInt8 nTransparency) { A = nTransparency; }
 
-    Color GetRGBColor() const
-    {
-        return color::extractRGB(mValue);
-    }
+    // Get RGBA data
+    sal_uInt8 GetRed()          const { return R; }
+    sal_uInt8 GetGreen()        const { return G; }
+    sal_uInt8 GetBlue()         const { return B; }
+    sal_uInt8 GetTransparency() const { return A; }
+
+    // Return color as RGB hex string
+    OUString AsRGBHexString()  const;
+    OUString AsRGBAHexString() const;
+
+    // Tweak color
+    void Invert() { R = ~R; G = ~G; B = ~B; }
+    void IncreaseLuminance( sal_uInt8 cLumInc  );
+    void DecreaseLuminance( sal_uInt8 cLumDec  );
+    void DecreaseContrast(  sal_uInt8 cContDec );
+    sal_uInt8 GetLuminance() const { return sal_uInt8((B * 29UL + G * 151UL + R * 76UL) >> 8); }
+
+    // RGB color stuff
+    Color GetRGBColor() const { return mValue & 0x00FFFFFF; }
+    bool IsRGBEqual(const Color& rColor) const
+        { return (mValue & 0x00FFFFFF) == (rColor.mValue & 0x00FFFFFF); }
+
+    // comparison with luminance thresholds
+    bool IsDark()   const;
+    bool IsBright() const;
+
+
 
     sal_uInt16 GetColorError(const Color& rCompareColor) const;
 
-    sal_uInt8 GetLuminance() const;
-    void IncreaseLuminance(sal_uInt8 cLumInc);
-    void DecreaseLuminance(sal_uInt8 cLumDec);
 
-    void DecreaseContrast(sal_uInt8 cContDec);
 
     /**
      * Apply tint or shade to a color.
@@ -145,15 +135,11 @@ public:
      **/
     void ApplyTintOrShade(sal_Int16 n100thPercent);
 
-    void Invert();
+
 
     void Merge(const Color& rMergeColor, sal_uInt8 cTransparency);
 
-    bool IsRGBEqual(const Color& rColor) const;
 
-    // comparison with luminance thresholds
-    bool IsDark() const;
-    bool IsBright() const;
 
     // color space conversion tools
     // the range for h/s/b is:
@@ -163,74 +149,25 @@ public:
     static Color HSBtoRGB(sal_uInt16 nHue, sal_uInt16 nSaturation, sal_uInt16 nBrightness);
     void RGBtoHSB(sal_uInt16& nHue, sal_uInt16& nSaturation, sal_uInt16& nBrightness) const;
 
-    bool operator==(const Color& rColor) const
-    {
-        return mValue == rColor.mValue;
-    }
-    bool operator!=(const Color& rColor) const
-    {
-        return !(Color::operator==(rColor));
-    }
-
-    // Return color as RGB hex string
-    // for example "00ff00" for green color
-    OUString AsRGBHexString() const;
-
-    // get ::basegfx::BColor from this color
-    basegfx::BColor getBColor() const
-    {
-        return basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0);
-    }
 };
 
-inline void Color::SetRed( sal_uInt8 nRed )
-{
-    R = nRed;
-}
 
-inline void Color::SetGreen( sal_uInt8 nGreen )
-{
-    G = nGreen;
-}
 
-inline void Color::SetBlue( sal_uInt8 nBlue )
-{
-    B = nBlue;
-}
 
-inline void Color::SetTransparency( sal_uInt8 nTransparency )
-{
-    A = nTransparency;
-}
-
-inline bool Color::IsRGBEqual( const Color& rColor ) const
-{
-    return color::extractRGB(mValue) == color::extractRGB(rColor.mValue);
-}
-
-inline sal_uInt8 Color::GetLuminance() const
-{
-    return sal_uInt8((B * 29UL + G * 151UL + R * 76UL) >> 8);
-}
 
 constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 nSrcTrans)
 {
     return sal_uInt8(((sal_Int32(nDst) - nSrc) * nSrcTrans + ((nSrc << 8) | nDst)) >> 8);
 }
 
-inline void Color::Invert()
-{
-    R = ~R;
-    G = ~G;
-    B = ~B;
-}
+
 
 inline sal_uInt16 Color::GetColorError( const Color& rColor ) const
 {
-    return static_cast<sal_uInt16>(
-        abs(static_cast<int>(GetBlue()) - rColor.GetBlue()) +
-        abs(static_cast<int>(GetGreen()) - rColor.GetGreen()) +
-        abs(static_cast<int>(GetRed()) - rColor.GetRed()));
+    return  static_cast<sal_uInt16> (
+        abs(static_cast<sal_Int16>(R) - rColor.R) +
+        abs(static_cast<sal_Int16>(G) - rColor.G) +
+        abs(static_cast<sal_Int16>(B) - rColor.B) );
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
@@ -244,8 +181,7 @@ inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 inline bool operator >>=( const css::uno::Any & rAny, Color & value )
 {
   sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
-  if (!(rAny >>= nTmp))
-      return false;
+  if (!(rAny >>= nTmp)) return false;
   value = Color(nTmp);
   return true;
 }
@@ -267,29 +203,30 @@ namespace com::sun::star::uno {
 static_assert (sal_uInt32(Color(0x00, 0x12, 0x34, 0x56)) == 0x00123456);
 static_assert (sal_uInt32(Color(0x12, 0x34, 0x56)) == 0x00123456);
 
-// Color types
+// Colors for modules
+constexpr ::Color COL_BLACK                   ( 0x00000000 );
+constexpr ::Color COL_WHITE                   ( 0x00FFFFFF );
+constexpr ::Color COL_GRAY                    ( 0x00808080 );
+constexpr ::Color COL_RED                     ( 0x00800000 );
+constexpr ::Color COL_GREEN                   ( 0x00008000 );
+constexpr ::Color COL_BLUE                    ( 0x00000080 );
+constexpr ::Color COL_BROWN                   ( 0x00808000 );
+constexpr ::Color COL_CYAN                    ( 0x00008080 );
+constexpr ::Color COL_MAGENTA                 ( 0x00800080 );
+constexpr ::Color COL_LIGHTGRAY               ( 0x00C0C0C0 );
+constexpr ::Color COL_LIGHTRED                ( 0x00FF0000 );
+constexpr ::Color COL_LIGHTBLUE               ( 0x000000FF );
+constexpr ::Color COL_LIGHTGREEN              ( 0x0000FF00 );
+constexpr ::Color COL_YELLOW                  ( 0x00FFFF00 );
+constexpr ::Color COL_LIGHTCYAN               ( 0x0000FFFF );
+constexpr ::Color COL_LIGHTMAGENTA            ( 0x00FF00FF );
+constexpr ::Color COL_GRAY3                   ( 0x00CCCCCC );
+constexpr ::Color COL_GRAY7                   ( 0x00666666 );
+constexpr ::Color COL_LIGHTGRAYBLUE           ( 0x00E0E0FF );
+constexpr ::Color COL_TRANSPARENT             ( 0xFFFFFFFF );
+constexpr ::Color COL_AUTO                    ( 0xFFFFFFFF );
 
-constexpr ::Color COL_BLACK                   ( 0x00, 0x00, 0x00 );
-constexpr ::Color COL_BLUE                    ( 0x00, 0x00, 0x80 );
-constexpr ::Color COL_GREEN                   ( 0x00, 0x80, 0x00 );
-constexpr ::Color COL_CYAN                    ( 0x00, 0x80, 0x80 );
-constexpr ::Color COL_RED                     ( 0x80, 0x00, 0x00 );
-constexpr ::Color COL_MAGENTA                 ( 0x80, 0x00, 0x80 );
-constexpr ::Color COL_BROWN                   ( 0x80, 0x80, 0x00 );
-constexpr ::Color COL_GRAY                    ( 0x80, 0x80, 0x80 );
-constexpr ::Color COL_GRAY3                   ( 0xCC, 0xCC, 0xCC );
-constexpr ::Color COL_GRAY7                   ( 0x66, 0x66, 0x66 );
-constexpr ::Color COL_LIGHTGRAY               ( 0xC0, 0xC0, 0xC0 );
-constexpr ::Color COL_LIGHTBLUE               ( 0x00, 0x00, 0xFF );
-constexpr ::Color COL_LIGHTGREEN              ( 0x00, 0xFF, 0x00 );
-constexpr ::Color COL_LIGHTCYAN               ( 0x00, 0xFF, 0xFF );
-constexpr ::Color COL_LIGHTRED                ( 0xFF, 0x00, 0x00 );
-constexpr ::Color COL_LIGHTMAGENTA            ( 0xFF, 0x00, 0xFF );
-constexpr ::Color COL_LIGHTGRAYBLUE           ( 0xE0, 0xE0, 0xFF );
-constexpr ::Color COL_YELLOW                  ( 0xFF, 0xFF, 0x00 );
-constexpr ::Color COL_WHITE                   ( 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_TRANSPARENT             ( 0xFF, 0xFF, 0xFF, 0xFF );
-constexpr ::Color COL_AUTO                    ( 0xFF, 0xFF, 0xFF, 0xFF );
+// Author color
 constexpr ::Color COL_AUTHOR1_DARK            ( 198,  146,   0 );
 constexpr ::Color COL_AUTHOR1_NORMAL          ( 255,  255, 158 );
 constexpr ::Color COL_AUTHOR1_LIGHT           ( 255,  255, 195 );
@@ -323,10 +260,10 @@ inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, 
 {
     std::ios_base::fmtflags nOrigFlags = rStream.flags();
     rStream << "c[" << std::hex << std::setfill ('0')
-            << std::setw(2) << static_cast<int>(rColor.GetRed())
-            << std::setw(2) << static_cast<int>(rColor.GetGreen())
-            << std::setw(2) << static_cast<int>(rColor.GetBlue())
-            << std::setw(2) << static_cast<int>(rColor.GetTransparency()) << "]";
+            << std::setw(2) << static_cast<sal_Int16>(rColor.GetRed()  )
+            << std::setw(2) << static_cast<sal_Int16>(rColor.GetGreen())
+            << std::setw(2) << static_cast<sal_Int16>(rColor.GetBlue() )
+            << std::setw(2) << static_cast<sal_Int16>(rColor.GetTransparency()) << "]";
     rStream.setf(nOrigFlags);
     return rStream;
 }
