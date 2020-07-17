@@ -258,7 +258,11 @@ public:
     void testTdf122331();
     void testTdf83779();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
+<<<<<<< HEAD   (9497f4 tdf#134866 Chart OOXML import: fix percentage in custom pie )
     void testTdf134459_HeaderFooterColorXLSX();
+=======
+    void testHeaderFontStyleXLSX();
+>>>>>>> CHANGE (055735 tdf#134826 XLSX import: extend localized bold/italic footer/)
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -411,7 +415,11 @@ public:
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
+<<<<<<< HEAD   (9497f4 tdf#134866 Chart OOXML import: fix percentage in custom pie )
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
+=======
+    CPPUNIT_TEST(testHeaderFontStyleXLSX);
+>>>>>>> CHANGE (055735 tdf#134826 XLSX import: extend localized bold/italic footer/)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5205,6 +5213,7 @@ void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
     xDocSh->DoClose();
 }
 
+<<<<<<< HEAD   (9497f4 tdf#134866 Chart OOXML import: fix percentage in custom pie )
 void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
 {
     // Colors in header and footer should be exported, and imported properly
@@ -5220,6 +5229,36 @@ void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
 
+=======
+void ScExportTest::testHeaderFontStyleXLSX()
+{
+    ScDocShellRef xShell = loadDoc("tdf134826.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    SfxStyleSheetBase* pStyleSheet = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(0), SfxStyleFamily::Page);
+    const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+    const ScPageHFItem& rHFItem = rItemSet.Get(ATTR_PAGE_HEADERRIGHT);
+    const EditTextObject* pTextObj = rHFItem.GetLeftArea();
+
+    std::vector<EECharAttrib> rLst;
+
+    // first line is bold.
+    pTextObj->GetCharAttribs(0, rLst);
+    bool bHasBold = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT &&
+            static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD; });
+    CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
+
+    // second line is italic.
+    pTextObj->GetCharAttribs(1, rLst);
+    bool bHasItalic = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_ITALIC &&
+            static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL; });
+    CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
+
+    xShell->DoClose();
+>>>>>>> CHANGE (055735 tdf#134826 XLSX import: extend localized bold/italic footer/)
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
