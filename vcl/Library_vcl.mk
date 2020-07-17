@@ -725,8 +725,11 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
+ifeq ($(gb_Side),host)
 $(eval $(call gb_Library_use_package,vcl,postprocess_images))
 endif
+endif # $(OS) == WNT
+
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 ifeq ($(USING_X11),TRUE)

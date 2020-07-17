@@ -9,6 +9,14 @@
 
 $(eval $(call gb_Module_Module,shell))
 
+ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
+$(eval $(call gb_Module_add_targets,shell,\
+	Executable_lngconvex \
+))
+endif
+
+ifeq ($(gb_Side),host)
+
 $(eval $(call gb_Module_add_targets,shell,\
 	$(if $(filter-out MACOSX WNT,$(OS)),Library_desktopbe) \
 	Library_localebe \
@@ -99,7 +107,6 @@ endif
 ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 
 $(eval $(call gb_Module_add_targets,shell,\
-	Executable_lngconvex \
 	Library_syssh \
 ))
 
@@ -119,5 +126,7 @@ endif
 $(eval $(call gb_Module_add_l10n_targets,shell,\
     AllLangMoTarget_shell \
 ))
+
+endif # $(gb_Side) == host
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

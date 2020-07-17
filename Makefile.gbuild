@@ -18,12 +18,7 @@ include $(BUILDDIR)/config_$(gb_Side).mk
 
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
-# If cross-compiling to a DESKTOP platform, just use RepositoryModule_host.mk on the build platform, too
-ifeq ($(gb_Side)-$(filter DESKTOP,$(BUILD_TYPE_FOR_HOST)),build-DESKTOP)
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_host.mk))
-else
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side).mk))
-endif
 
 upload-symbols:
 	bin/upload_symbols.py $(WORKDIR)/symbols.zip $(BREAKPAD_SYMBOL_CONFIG) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)"

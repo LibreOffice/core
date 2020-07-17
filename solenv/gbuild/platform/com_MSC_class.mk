@@ -543,13 +543,13 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 # FIXME this is used before TargetLocations is read?
-gb_WinResTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
+gb_WinResTarget__command_target = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/makedepend.exe
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 	$(call gb_Trace_StartRange,RC:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(call gb_Executable_get_target,makedepend) \
+	$(call gb_Executable_get_target_for_build,makedepend) \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(RCFILE) \
@@ -598,10 +598,10 @@ endef
 gb_AUTOCONF_WRAPPERS = \
 	REAL_CC="$(shell cygpath -w $(filter-out -%,$(CC)))" \
 	REAL_CC_FLAGS="$(filter -%,$(CC))" \
-	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
+	CC="$(call gb_Executable_get_target_for_build,gcc-wrapper)" \
 	REAL_CXX="$(shell cygpath -w $(filter-out -%,$(CXX)))" \
 	REAL_CXX_FLAGS="$(filter -%,$(CXX))" \
-	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
+	CXX="$(call gb_Executable_get_target_for_build,g++-wrapper)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
 
 gb_ExternalProject_INCLUDE := \
@@ -677,8 +677,9 @@ endef
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
-gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$${PYPATH:+$$PYPATH:}$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
-gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT)/$(LIBO_BIN_FOLDER)/python.exe
+gb_Python_HOME := $(INSTDIR_FOR_BUILD)/program/python-core-$(PYTHON_VERSION)
+gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR_FOR_BUILD)/program)" PYTHONHOME="$(gb_Python_HOME)" PYTHONPATH="$${PYPATH:+$$PYPATH:}$(gb_Python_HOME)/lib;$(gb_Python_HOME)/lib/lib-dynload:$(INSTDIR_FOR_BUILD)/program"
+gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/python.exe
 
 gb_ICU_PRECOMMAND := PATH="$(shell cygpath -w $(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)"
 
