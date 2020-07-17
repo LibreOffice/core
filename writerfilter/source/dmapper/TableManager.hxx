@@ -503,7 +503,15 @@ public:
     sal_uInt32 getCurrentGridBefore();
     void setCurrentGridBefore( sal_uInt32 nSkipGrids );
     std::vector<sal_uInt32> getCurrentGridSpans();
+<<<<<<< HEAD   (2a4dc0 tdf#50879 PDF export: ensure only built-in fonts are used fo)
     void setCurrentGridSpan( sal_uInt32 nGridSpan );
+=======
+    void setCurrentGridSpan( sal_uInt32 nGridSpan, bool bFirstCell = false );
+    /// Given a zero-based row/cell, return the zero-based grid it belongs to, or SAL_MAX_UINT16 for invalid.
+    sal_uInt32 findColumn( const sal_uInt32 nRow, const sal_uInt32 nCell );
+    /// Given a zero-based row/col, return the zero-based cell describing that grid, or SAL_MAX_UINT16 for invalid.
+    sal_uInt32 findColumnCell( const sal_uInt32 nRow, const sal_uInt32 nCol );
+>>>>>>> CHANGE (abea0d tdf#134685 DOCX table import: fix gridBefore + cell width)
 
     void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
     void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);

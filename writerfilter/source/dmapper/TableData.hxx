@@ -250,10 +250,15 @@ public:
             nRet.push_back(aCell->getGridSpan());
         return nRet;
     }
-    void setCurrentGridSpan(sal_uInt32 nSpan)
+    void setCurrentGridSpan(sal_uInt32 nSpan, bool bFirstCell = false)
     {
         if ( mCells.size() )
-            mCells.back()->setGridSpan(nSpan);
+        {
+            if ( bFirstCell )
+                mCells.front()->setGridSpan(nSpan);
+            else
+                mCells.back()->setGridSpan(nSpan);
+        }
     }
 };
 
