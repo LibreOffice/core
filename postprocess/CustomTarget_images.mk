@@ -115,6 +115,7 @@ $(packimages_DIR)/sorted.lst : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,python) \
 			$(SRCDIR)/solenv/bin/image-sort.py \
+			$(if $(filter build,$(gb_Side)),--quiet) \
 			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
