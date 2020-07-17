@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5dbfb77_ec64ade2",
+        "filename": "sw/source/core/doc/DocumentSettingManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-17T13:11:49Z",
+      "side": 1,
+      "message": "New?  Mine is missing from here still.",
+      "revId": "a49136054959e0fcd4ebef11db0701bf70dd9304",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
