@@ -189,7 +189,7 @@ cat $${RESPONSEFILE} | sed 's/ /\n/g' | grep -v '^$$' > $${RESPONSEFILE}.1 && \
 mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
 endef
 
-MSC_SUBSYSTEM_VERSION=$(COMMA)6.01
+MSC_SUBSYSTEM_VERSION=$(COMMA)$(if $(filter ARM64,$(CPUNAME)),6.02,6.01)
 
 # the sort on the libraries is used to filter out duplicates to keep commandline
 # length in check - otherwise the dupes easily hit the limit when linking mergedlib
