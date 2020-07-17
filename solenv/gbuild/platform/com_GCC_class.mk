@@ -101,21 +101,24 @@ gb_PrecompiledHeader_get_enableflags = \
 gb_PrecompiledHeader_EXT := .gch
 endif
 
+gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_INSTANTIATE_TEMPLATES)
+
 # Clang supports building extra object file where it puts code that would be shared by all users of the PCH.
 # Unlike with MSVC it is built as a separate step. The relevant options are used only when generating the PCH
 # and when creating the PCH's object file, normal compilations using the PCH do not need extra options.
-gb_PrecompiledHeader_pch_with_obj = $(BUILDING_PCH_WITH_OBJ)
+gb_PrecompiledHeader_pch_with_obj += $(BUILDING_PCH_WITH_OBJ)
+gb_PrecompiledHeader_extra_pch_cxxflags += $(BUILDING_PCH_WITH_OBJ)
 ifneq ($(BUILDING_PCH_WITH_OBJ),)
 # If using Clang's PCH extra object, we may need to strip unused sections, otherwise inline and template functions
 # emitted in that object may in some cases cause unresolved references to private symbols in other libraries.
 gb_LinkTarget_LDFLAGS += $(LD_GC_SECTIONS)
 gb_PrecompiledHeader_pch_with_obj += -ffunction-sections -fdata-sections
 # Enable generating more shared code and debuginfo in the PCH object file.
-gb_PrecompiledHeader_pch_with_obj += $(PCH_MODULES_DEBUGINFO)
+gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_MODULES_DEBUGINFO)
 ifeq ($(ENABLE_OPTIMIZED),)
 # -fmodules-codegen appears to be worth it only if not optimizing, otherwise optimizing all the functions emitted
 # in the PCH object file may take way too long, especially given that many of those may get thrown away
-gb_PrecompiledHeader_pch_with_obj += $(PCH_MODULES_CODEGEN)
+gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_MODULES_CODEGEN)
 endif
 endif
 
@@ -138,7 +141,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		$(gb_NO_PCH_TIMESTAMP) \
-		$(gb_PrecompiledHeader_pch_with_obj) \
+		$(gb_PrecompiledHeader_extra_pch_cxxflags) \
 		$(6) \
 		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
