@@ -40,6 +40,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/Wdeprecated-copy-dtor.patch \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/strict_ansi.patch \
+	$(if $(CROSS_COMPILING),\
+		$(if $(filter WNT_ARM64,$(OS)_$(CPUNAME)),external/icu/icu4c-win-arm64.patch.1) \
+	)\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
