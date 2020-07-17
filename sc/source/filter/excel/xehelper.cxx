@@ -739,7 +739,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                                  (aFontData.mbItalic != aNewData.mbItalic);
                 if( bNewFont || (bNewStyle && pFontList) )
                 {
-                    aParaText = "&\"" + aNewData.maName;
+                    aParaText.append("&\"").append(aNewData.maName);
                     if( pFontList )
                     {
                         FontMetric aFontMetric( pFontList->Get(
