@@ -351,9 +351,9 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         {
             sal_uInt16 nFontID = m_rWW8Export.m_aFontHelper.GetId( *pFont );
 
-            m_rWW8Export.InsUInt16( NS_sprm::sprmCRgFtc0 );
+            m_rWW8Export.InsUInt16( NS_sprm::CRgFtc0::val );
             m_rWW8Export.InsUInt16( nFontID );
-            m_rWW8Export.InsUInt16( NS_sprm::sprmCRgFtc2 );
+            m_rWW8Export.InsUInt16( NS_sprm::CRgFtc2::val );
             m_rWW8Export.InsUInt16( nFontID );
         }
 
@@ -364,9 +364,9 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
             int nIndex = m_rWW8Export.GetGrfIndex(*pBrush);
             if ( nIndex != -1 )
             {
-                m_rWW8Export.InsUInt16(NS_sprm::sprmCPbiIBullet);
+                m_rWW8Export.InsUInt16(NS_sprm::CPbiIBullet::val);
                 m_rWW8Export.InsUInt32(nIndex);
-                m_rWW8Export.InsUInt16(NS_sprm::sprmCPbiGrf);
+                m_rWW8Export.InsUInt16(NS_sprm::CPbiGrf::val);
                 m_rWW8Export.InsUInt16(1);
             }
         }

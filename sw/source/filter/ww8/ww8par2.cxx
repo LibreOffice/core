@@ -389,7 +389,7 @@ bool SwWW8ImplReader::SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const
     while (pPap->HasFkp() && pPap->Where() != WW8_CP_MAX)
     {
         // See if the current pap is outside the table.
-        SprmResult aSprmRes = pPap->HasSprm(NS_sprm::sprmPFInTable);
+        SprmResult aSprmRes = pPap->HasSprm(NS_sprm::PFInTable::val);
         const sal_uInt8* pB = aSprmRes.pSprm;
         if (!pB || aSprmRes.nRemainingData < 1 || *pB != 1)
             // Yes, this is the position after the end of the table.
@@ -1649,47 +1649,47 @@ static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
         case ww::eWW8:
             switch (nId)
             {
-                case NS_sprm::sprmTTableWidth:
+                case NS_sprm::TTableWidth::val:
                     return sprmTTableWidth;
-                case NS_sprm::sprmTTextFlow:
+                case NS_sprm::TTextFlow::val:
                     return sprmTTextFlow;
-                case NS_sprm::sprmTTableHeader:
+                case NS_sprm::TTableHeader::val:
                     return sprmTTableHeader;
-                case NS_sprm::sprmTFCantSplit:
+                case NS_sprm::TFCantSplit::val:
                     return sprmTFCantSplit;
-                case NS_sprm::sprmTJc90:
+                case NS_sprm::TJc90::val:
                     return sprmTJc;
-                case NS_sprm::sprmTFBiDi:
+                case NS_sprm::TFBiDi::val:
                     return sprmTFBiDi;
-                case NS_sprm::sprmTDelete:
+                case NS_sprm::TDelete::val:
                     return sprmTDelete;
-                case NS_sprm::sprmTInsert:
+                case NS_sprm::TInsert::val:
                     return sprmTInsert;
-                case NS_sprm::sprmTDxaCol:
+                case NS_sprm::TDxaCol::val:
                     return sprmTDxaCol;
-                case NS_sprm::sprmTDyaRowHeight:
+                case NS_sprm::TDyaRowHeight::val:
                     return sprmTDyaRowHeight;
-                case NS_sprm::sprmTDxaLeft:
+                case NS_sprm::TDxaLeft::val:
                     return sprmTDxaLeft;
-                case NS_sprm::sprmTDxaGapHalf:
+                case NS_sprm::TDxaGapHalf::val:
                     return sprmTDxaGapHalf;
-                case NS_sprm::sprmTTableBorders80:
+                case NS_sprm::TTableBorders80::val:
                     return sprmTTableBorders;
-                case NS_sprm::sprmTDefTable:
+                case NS_sprm::TDefTable::val:
                     return sprmTDefTable;
-                case NS_sprm::sprmTDefTableShd80:
+                case NS_sprm::TDefTableShd80::val:
                     return sprmTDefTableShd;
-                case NS_sprm::sprmTDefTableShd:
+                case NS_sprm::TDefTableShd::val:
                     return sprmTDefTableNewShd;
-                case NS_sprm::sprmTTableBorders:
+                case NS_sprm::TTableBorders::val:
                     return sprmTTableBorders90;
-                case NS_sprm::sprmTSetBrc80:
+                case NS_sprm::TSetBrc80::val:
                     return sprmTSetBrc;
-                case NS_sprm::sprmTSetBrc:
+                case NS_sprm::TSetBrc::val:
                     return sprmTSetBrc90;
-                case NS_sprm::sprmTCellPadding:
+                case NS_sprm::TCellPadding::val:
                     return sprmTCellPadding;
-                case NS_sprm::sprmTCellPaddingDefault:
+                case NS_sprm::TCellPaddingDefault::val:
                     return sprmTCellPaddingDefault;
             }
             break;

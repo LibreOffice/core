@@ -2530,7 +2530,7 @@ sal_uInt16 SwWW8ImplReader::TabRowSprm(int nLevel) const
 {
     if (m_bVer67)
         return NS_sprm::v6::sprmPTtp;
-    return nLevel ? NS_sprm::sprmPFInnerTtp : NS_sprm::sprmPFTtp;
+    return nLevel ? NS_sprm::PFInnerTtp::val : NS_sprm::PFTtp::val;
 }
 
 void SwWW8ImplReader::EndSpecial()
@@ -2576,7 +2576,7 @@ bool SwWW8ImplReader::FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap)
 
     bool bResult = true;
 
-    SprmResult aRes = pPap->HasSprm(NS_sprm::sprmTDefTable);
+    SprmResult aRes = pPap->HasSprm(NS_sprm::TDefTable::val);
     if (nullptr != aRes.pSprm)
     {
         bResult = false;

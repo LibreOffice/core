@@ -1247,7 +1247,7 @@ void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*
     m_rWW8Export.GetCurrentItems( aItems );
 
     // sprmCFFieldVanish
-    SwWW8Writer::InsUInt16( aItems, NS_sprm::sprmCFFldVanish );
+    SwWW8Writer::InsUInt16( aItems, NS_sprm::CFFldVanish::val );
     aItems.push_back( 1 );
 
     sal_uInt16 nStt_sprmCFSpec = aItems.size();
@@ -1822,22 +1822,22 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
     ShortToSVBT16( nStyle, nSty );
     m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
 
-    m_rWW8Export.InsUInt16( NS_sprm::sprmPPc );            // Alignment (sprmPPc)
+    m_rWW8Export.InsUInt16( NS_sprm::PPc::val );            // Alignment (sprmPPc)
     m_rWW8Export.pO->push_back( 0x20 );
 
-    m_rWW8Export.InsUInt16( NS_sprm::sprmPWr );            // Wrapping (sprmPWr)
+    m_rWW8Export.InsUInt16( NS_sprm::PWr::val );            // Wrapping (sprmPWr)
     m_rWW8Export.pO->push_back( 0x02 );
 
-    m_rWW8Export.InsUInt16( NS_sprm::sprmPDcs );            // Dropcap (sprmPDcs)
+    m_rWW8Export.InsUInt16( NS_sprm::PDcs::val );            // Dropcap (sprmPDcs)
     int nDCS = ( nDropLines << 3 ) | 0x01;
     m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( nDCS ) );
 
-    m_rWW8Export.InsUInt16( NS_sprm::sprmPDxaFromText );            // Distance from text (sprmPDxaFromText)
+    m_rWW8Export.InsUInt16( NS_sprm::PDxaFromText::val );            // Distance from text (sprmPDxaFromText)
     m_rWW8Export.InsUInt16( nDistance );
 
     if ( rNode.GetDropSize( rFontHeight, rDropHeight, rDropDescent ) )
     {
-        m_rWW8Export.InsUInt16( NS_sprm::sprmPDyaLine );            // Line spacing
+        m_rWW8Export.InsUInt16( NS_sprm::PDyaLine::val );            // Line spacing
         m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( -rDropHeight ) );
         m_rWW8Export.InsUInt16( 0 );
     }
@@ -1860,14 +1860,14 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
         const SwCharFormat *pSwCharFormat = rSwFormatDrop.GetCharFormat();
         if ( pSwCharFormat )
         {
-            m_rWW8Export.InsUInt16( NS_sprm::sprmCIstd );
+            m_rWW8Export.InsUInt16( NS_sprm::CIstd::val );
             m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pSwCharFormat ) );
         }
 
-        m_rWW8Export.InsUInt16( NS_sprm::sprmCHpsPos );            // Lower the chars
+        m_rWW8Export.InsUInt16( NS_sprm::CHpsPos::val );            // Lower the chars
         m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( -((nDropLines - 1)*rDropDescent) / 10 ) );
 
-        m_rWW8Export.InsUInt16( NS_sprm::sprmCHps );            // Font Size
+        m_rWW8Export.InsUInt16( NS_sprm::CHps::val );            // Font Size
         m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( rFontHeight / 10 ) );
     }
 
@@ -3422,12 +3422,12 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     static const sal_uInt16 insSprmIds[ 3 ] =
     {
         // Ids for insert // for WW8
-        NS_sprm::sprmCFRMarkIns, NS_sprm::sprmCIbstRMark, NS_sprm::sprmCDttmRMark,
+        NS_sprm::CFRMarkIns::val, NS_sprm::CIbstRMark::val, NS_sprm::CDttmRMark::val,
     };
     static const sal_uInt16 delSprmIds[ 3 ] =
     {
         // Ids for delete // for WW8
-        NS_sprm::sprmCFRMarkDel, NS_sprm::sprmCIbstRMarkDel, NS_sprm::sprmCDttmRMarkDel,
+        NS_sprm::CFRMarkDel::val, NS_sprm::CIbstRMarkDel::val, NS_sprm::CDttmRMarkDel::val,
     };
 
     const sal_uInt16* pSprmIds = nullptr;
@@ -3442,7 +3442,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         break;
 
     case RedlineType::Format:
-        m_rWW8Export.InsUInt16( NS_sprm::sprmCPropRMark90 );
+        m_rWW8Export.InsUInt16( NS_sprm::CPropRMark90::val );
         m_rWW8Export.pO->push_back( 7 );       // len
         m_rWW8Export.pO->push_back( 1 );
         m_rWW8Export.InsUInt16( m_rWW8Export.AddRedlineAuthor( pRedline->GetAuthor() ) );

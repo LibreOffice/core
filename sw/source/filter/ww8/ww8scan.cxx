@@ -433,6 +433,12 @@ void wwSprmSearcher::patchCJKVariant()
     }
 }
 
+template <class Sprm> static constexpr SprmInfoRow InfoRow()
+{
+    return { Sprm::val,
+             { Sprm::len(), Sprm::varlen() ? wwSprmParser::L_VAR : wwSprmParser::L_FIX } };
+}
+
 const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 {
     //double lock me
@@ -440,333 +446,333 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
     static const SprmInfoRow aSprms[] =
     {
         {     0, { 0, L_FIX} }, // "Default-sprm"/ is skipped
-        {0x4600, { 2, L_FIX} }, // "sprmPIstd" pap.istd;istd (style code);short;
-        {0xC601, { 0, L_VAR} }, // "sprmPIstdPermute" pap.istd;permutation vector
-        {0x2602, { 1, L_FIX} }, // "sprmPIncLvl" pap.istd, pap.lvl;difference
+        InfoRow<NS_sprm::PIstd>(), // pap.istd;istd (style code);short;
+        InfoRow<NS_sprm::PIstdPermute>(), // pap.istd;permutation vector
+        InfoRow<NS_sprm::PIncLvl>(), // pap.istd, pap.lvl;difference
                             // between istd of base PAP and istd of PAP to be
                             // produced
-        {0x2403, { 1, L_FIX} }, // "sprmPJc" pap.jc;jc (justification);byte;
+        InfoRow<NS_sprm::PJc80>(), // pap.jc;jc (justification);byte;
         {NS_sprm::LN_PFSideBySide, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide;0 or 1;byte;
-        {0x2405, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep;0 or 1;byte;
-        {0x2406, { 1, L_FIX} }, // "sprmPFKeepFollow" pap.fKeepFollow;0 or 1;byte;
-        {0x2407, { 1, L_FIX} }, // "sprmPFPageBreakBefore" pap.fPageBreakBefore;
+        InfoRow<NS_sprm::PFKeep>(), // pap.fKeep;0 or 1;byte;
+        InfoRow<NS_sprm::PFKeepFollow>(), // pap.fKeepFollow;0 or 1;byte;
+        InfoRow<NS_sprm::PFPageBreakBefore>(), // pap.fPageBreakBefore;
                             // 0 or 1
         {NS_sprm::LN_PBrcl, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl;brcl;byte;
         {NS_sprm::LN_PBrcp, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp;brcp;byte;
-        {0x260A, { 1, L_FIX} }, // "sprmPIlvl" pap.ilvl;ilvl;byte;
-        {0x460B, { 2, L_FIX} }, // "sprmPIlfo" pap.ilfo;ilfo (list index) ;short;
-        {0x240C, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn;0 or 1;byte;
-        {0xC60D, { 0, L_VAR} }, // "sprmPChgTabsPapx" pap.itbdMac, pap.rgdxaTab,
+        InfoRow<NS_sprm::PIlvl>(), // pap.ilvl;ilvl;byte;
+        InfoRow<NS_sprm::PIlfo>(), // pap.ilfo;ilfo (list index) ;short;
+        InfoRow<NS_sprm::PFNoLineNumb>(), // pap.fNoLnn;0 or 1;byte;
+        InfoRow<NS_sprm::PChgTabsPapx>(), // pap.itbdMac, pap.rgdxaTab,
                             // pap.rgtbd;complex
-        {0x840E, { 2, L_FIX} }, // "sprmPDxaRight" pap.dxaRight;dxa;word;
-        {0x840F, { 2, L_FIX} }, // "sprmPDxaLeft" pap.dxaLeft;dxa;word;
-        {0x4610, { 2, L_FIX} }, // "sprmPNest" pap.dxaLeft;dxa
-        {0x8411, { 2, L_FIX} }, // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
-        {0x6412, { 4, L_FIX} }, // "sprmPDyaLine" pap.lspd;an LSPD, a long word
+        InfoRow<NS_sprm::PDxaRight80>(), // pap.dxaRight;dxa;word;
+        InfoRow<NS_sprm::PDxaLeft80>(), // pap.dxaLeft;dxa;word;
+        InfoRow<NS_sprm::PNest80>(), // pap.dxaLeft;dxa
+        InfoRow<NS_sprm::PDxaLeft180>(), // pap.dxaLeft1;dxa;word;
+        InfoRow<NS_sprm::PDyaLine>(), // pap.lspd;an LSPD, a long word
                             // structure consisting of a short of dyaLine
                             // followed by a short of fMultLinespace
-        {0xA413, { 2, L_FIX} }, // "sprmPDyaBefore" pap.dyaBefore;dya;word;
-        {0xA414, { 2, L_FIX} }, // "sprmPDyaAfter" pap.dyaAfter;dya;word;
-        {0xC615, { 0, L_VAR} }, // "sprmPChgTabs" pap.itbdMac, pap.rgdxaTab,
+        InfoRow<NS_sprm::PDyaBefore>(), // pap.dyaBefore;dya;word;
+        InfoRow<NS_sprm::PDyaAfter>(), // pap.dyaAfter;dya;word;
+        InfoRow<NS_sprm::PChgTabs>(), // pap.itbdMac, pap.rgdxaTab,
                             // pap.rgtbd;complex
-        {0x2416, { 1, L_FIX} }, // "sprmPFInTable" pap.fInTable;0 or 1;byte;
-        {0x2417, { 1, L_FIX} }, // "sprmPFTtp" pap.fTtp;0 or 1;byte;
-        {0x8418, { 2, L_FIX} }, // "sprmPDxaAbs" pap.dxaAbs;dxa;word;
-        {0x8419, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs;dya;word;
-        {0x841A, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth;dxa;word;
-        {0x261B, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert;complex
+        InfoRow<NS_sprm::PFInTable>(), // pap.fInTable;0 or 1;byte;
+        InfoRow<NS_sprm::PFTtp>(), // pap.fTtp;0 or 1;byte;
+        InfoRow<NS_sprm::PDxaAbs>(), // pap.dxaAbs;dxa;word;
+        InfoRow<NS_sprm::PDyaAbs>(), // pap.dyaAbs;dya;word;
+        InfoRow<NS_sprm::PDxaWidth>(), // pap.dxaWidth;dxa;word;
+        InfoRow<NS_sprm::PPc>(), // pap.pcHorz, pap.pcVert;complex
         {NS_sprm::LN_PBrcTop10, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop;BRC10;word;
         {NS_sprm::LN_PBrcLeft10, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft;BRC10;word;
         {NS_sprm::LN_PBrcBottom10, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom;BRC10;word;
         {NS_sprm::LN_PBrcRight10, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight;BRC10;word;
         {NS_sprm::LN_PBrcBetween10, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween;BRC10;word;
         {NS_sprm::LN_PBrcBar10, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
-        {0x4622, { 2, L_FIX} }, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
-        {0x2423, { 1, L_FIX} }, // "sprmPWr" pap.wr;wr
-        {0x6424, { 4, L_FIX} }, // "sprmPBrcTop80" pap.brcTop;BRC;long;
-        {0x6425, { 4, L_FIX} }, // "sprmPBrcLeft80" pap.brcLeft;BRC;long;
-        {0x6426, { 4, L_FIX} }, // "sprmPBrcBottom80" pap.brcBottom;BRC;long;
-        {0x6427, { 4, L_FIX} }, // "sprmPBrcRight80" pap.brcRight;BRC;long;
-        {0x6428, { 4, L_FIX} }, // "sprmPBrcBetween80" pap.brcBetween;BRC;long;
-        {0x6629, { 4, L_FIX} }, // "sprmPBrcBar80" pap.brcBar;BRC;long;
-        {0x242A, { 1, L_FIX} }, // "sprmPFNoAutoHyph" pap.fNoAutoHyph;0 or 1;byte;
-        {0x442B, { 2, L_FIX} }, // "sprmPWHeightAbs" pap.wHeightAbs;w;word;
-        {0x442C, { 2, L_FIX} }, // "sprmPDcs" pap.dcs;DCS;short;
-        {0x442D, { 2, L_FIX} }, // "sprmPShd" pap.shd;SHD;word;
-        {0x842E, { 2, L_FIX} }, // "sprmPDyaFromText" pap.dyaFromText;dya;word;
-        {0x842F, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText;dxa;word;
-        {0x2430, { 1, L_FIX} }, // "sprmPFLocked" pap.fLocked;0 or 1;byte;
-        {0x2431, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl;0 or 1
+        {NS_sprm::LN_PDxaFromText10, { 2, L_FIX} }, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
+        InfoRow<NS_sprm::PWr>(), // pap.wr;wr
+        InfoRow<NS_sprm::PBrcTop80>(), // pap.brcTop;BRC;long;
+        InfoRow<NS_sprm::PBrcLeft80>(), // pap.brcLeft;BRC;long;
+        InfoRow<NS_sprm::PBrcBottom80>(), // pap.brcBottom;BRC;long;
+        InfoRow<NS_sprm::PBrcRight80>(), // pap.brcRight;BRC;long;
+        InfoRow<NS_sprm::PBrcBetween80>(), // pap.brcBetween;BRC;long;
+        InfoRow<NS_sprm::PBrcBar80>(), // pap.brcBar;BRC;long;
+        InfoRow<NS_sprm::PFNoAutoHyph>(), // pap.fNoAutoHyph;0 or 1;byte;
+        InfoRow<NS_sprm::PWHeightAbs>(), // pap.wHeightAbs;w;word;
+        InfoRow<NS_sprm::PDcs>(), // pap.dcs;DCS;short;
+        InfoRow<NS_sprm::PShd80>(), // pap.shd;SHD;word;
+        InfoRow<NS_sprm::PDyaFromText>(), // pap.dyaFromText;dya;word;
+        InfoRow<NS_sprm::PDxaFromText>(), // pap.dxaFromText;dxa;word;
+        InfoRow<NS_sprm::PFLocked>(), // pap.fLocked;0 or 1;byte;
+        InfoRow<NS_sprm::PFWidowControl>(), // pap.fWidowControl;0 or 1
         {NS_sprm::LN_PRuler, { 0, L_VAR} }, // "sprmPRuler" ;;variable length;
-        {0x2433, { 1, L_FIX} }, // "sprmPFKinsoku" pap.fKinsoku;0 or 1;byte;
-        {0x2434, { 1, L_FIX} }, // "sprmPFWordWrap" pap.fWordWrap;0 or 1;byte;
-        {0x2435, { 1, L_FIX} }, // "sprmPFOverflowPunct" pap.fOverflowPunct;0 or 1
-        {0x2436, { 1, L_FIX} }, // "sprmPFTopLinePunct" pap.fTopLinePunct;0 or 1
-        {0x2437, { 1, L_FIX} }, // "sprmPFAutoSpaceDE" pap.fAutoSpaceDE;0 or 1
-        {0x2438, { 1, L_FIX} }, // "sprmPFAutoSpaceDN" pap.fAutoSpaceDN;0 or 1
-        {NS_sprm::sprmPWAlignFont, { 2, L_FIX} }, // "sprmPWAlignFont" pap.wAlignFont;iFa
-        {0x443A, { 2, L_FIX} }, // "sprmPFrameTextFlow" pap.fVertical pap.fBackward
+        InfoRow<NS_sprm::PFKinsoku>(), // pap.fKinsoku;0 or 1;byte;
+        InfoRow<NS_sprm::PFWordWrap>(), // pap.fWordWrap;0 or 1;byte;
+        InfoRow<NS_sprm::PFOverflowPunct>(), // pap.fOverflowPunct;0 or 1
+        InfoRow<NS_sprm::PFTopLinePunct>(), // pap.fTopLinePunct;0 or 1
+        InfoRow<NS_sprm::PFAutoSpaceDE>(), // pap.fAutoSpaceDE;0 or 1
+        InfoRow<NS_sprm::PFAutoSpaceDN>(), // pap.fAutoSpaceDN;0 or 1
+        InfoRow<NS_sprm::PWAlignFont>(), // pap.wAlignFont;iFa
+        InfoRow<NS_sprm::PFrameTextFlow>(), // pap.fVertical pap.fBackward
                             // pap.fRotateFont;complex
         {NS_sprm::LN_PISnapBaseLine, { 1, L_FIX} }, // "sprmPISnapBaseLine" obsolete: not applicable in
                             // Word97 and later versions;
         {NS_sprm::LN_PAnld, { 0, L_VAR} }, // "sprmPAnld" pap.anld;;variable length;
         {NS_sprm::LN_PPropRMark, { 0, L_VAR} }, // "sprmPPropRMark" pap.fPropRMark;complex
-        {0x2640, { 1, L_FIX} }, // "sprmPOutLvl" pap.lvl;has no effect if pap.istd
+        InfoRow<NS_sprm::POutLvl>(), // pap.lvl;has no effect if pap.istd
                             // is < 1 or is > 9
-        {0x2441, { 1, L_FIX} }, // "sprmPFBiDi" ;;byte;
-        {0x2443, { 1, L_FIX} }, // "sprmPFNumRMIns" pap.fNumRMIns;1 or 0;bit;
+        InfoRow<NS_sprm::PFBiDi>(), // ;;byte;
+        InfoRow<NS_sprm::PFNumRMIns>(), // pap.fNumRMIns;1 or 0;bit;
         {NS_sprm::LN_PCrLf, { 1, L_FIX} }, // "sprmPCrLf" ;;byte;
-        {0xC645, { 0, L_VAR} }, // "sprmPNumRM" pap.numrm;;variable length;
+        InfoRow<NS_sprm::PNumRM>(), // pap.numrm;;variable length;
         {NS_sprm::LN_PHugePapx, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
                             // the huge grpprl
-        {0x6646, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
+        InfoRow<NS_sprm::PHugePapx>(), // fc in the data stream to locate
                             // the huge grpprl
-        {0x2447, { 1, L_FIX} }, // "sprmPFUsePgsuSettings" pap.fUsePgsuSettings;
+        InfoRow<NS_sprm::PFUsePgsuSettings>(), // pap.fUsePgsuSettings;
                             // 1 or 0
-        {0x2448, { 1, L_FIX} }, // "sprmPFAdjustRight" pap.fAdjustRight;1 or 0;byte;
-        {0x0800, { 1, L_FIX} }, // "sprmCFRMarkDel" chp.fRMarkDel;1 or 0;bit;
-        {0x0801, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark;1 or 0;bit;
-        {0x0802, { 1, L_FIX} }, // "sprmCFFieldVanish" chp.fFieldVanish;1 or 0;bit;
-        {0x6A03, { 4, L_FIX} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec;
-        {0x4804, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark;index into
+        InfoRow<NS_sprm::PFAdjustRight>(), // pap.fAdjustRight;1 or 0;byte;
+        InfoRow<NS_sprm::CFRMarkDel>(), // chp.fRMarkDel;1 or 0;bit;
+        InfoRow<NS_sprm::CFRMarkIns>(), // chp.fRMark;1 or 0;bit;
+        InfoRow<NS_sprm::CFFldVanish>(), // chp.fFieldVanish;1 or 0;bit;
+        InfoRow<NS_sprm::CPicLocation>(), // chp.fcPic and chp.fSpec;
+        InfoRow<NS_sprm::CIbstRMark>(), // chp.ibstRMark;index into
                             // sttbRMark
-        {0x6805, { 4, L_FIX} }, // "sprmCDttmRMark" chp.dttmRMark;DTTM;long;
-        {0x0806, { 1, L_FIX} }, // "sprmCFData" chp.fData;1 or 0;bit;
-        {0x4807, { 2, L_FIX} }, // "sprmCIdslRMark" chp.idslRMReason;an index to a
+        InfoRow<NS_sprm::CDttmRMark>(), // chp.dttmRMark;DTTM;long;
+        InfoRow<NS_sprm::CFData>(), // chp.fData;1 or 0;bit;
+        InfoRow<NS_sprm::CIdslRMark>(), // chp.idslRMReason;an index to a
                             // table of strings defined in Word 6.0
                             // executables;short;
         {NS_sprm::LN_CChs, { 1, L_FIX} }, // "sprmCChs" chp.fChsDiff and chp.chse;
-        {0x6A09, { 4, L_FIX} }, // "sprmCSymbol" chp.fSpec, chp.xchSym and
+        InfoRow<NS_sprm::CSymbol>(), // chp.fSpec, chp.xchSym and
                             // chp.ftcSym
-        {0x080A, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2;1 or 0;bit;
+        InfoRow<NS_sprm::CFOle2>(), // chp.fOle2;1 or 0;bit;
         {NS_sprm::LN_CIdCharType, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
                             // Word97 and later versions;
-        {0x2A0C, { 1, L_FIX} }, // "sprmCHighlight" chp.fHighlight,
+        InfoRow<NS_sprm::CHighlight>(), // chp.fHighlight,
                             // chp.icoHighlight;ico (fHighlight is set to 1 iff
                             // ico is not 0)
         {NS_sprm::LN_CObjLocation, { 4, L_FIX} }, // "sprmCObjLocation" chp.fcObj;FC;long;
         {NS_sprm::LN_CFFtcAsciSymb, { 0, L_FIX} }, // "sprmCFFtcAsciSymb" ;;;
-        {0x4A30, { 2, L_FIX} }, // "sprmCIstd" chp.istd;istd, see stylesheet def
-        {0xCA31, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd;permutation vector
+        InfoRow<NS_sprm::CIstd>(), // chp.istd;istd, see stylesheet def
+        InfoRow<NS_sprm::CIstdPermute>(), // chp.istd;permutation vector
         {NS_sprm::LN_CDefault, { 0, L_VAR} }, // "sprmCDefault" whole CHP;none;variable length;
-        {0x2A33, { 0, L_FIX} }, // "sprmCPlain" whole CHP;none;0;
-        {0x2A34, { 1, L_FIX} }, // "sprmCKcd" ;;;
-        {0x0835, { 1, L_FIX} }, // "sprmCFBold" chp.fBold;0,1, 128, or 129
-        {0x0836, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic;0,1, 128, or 129
-        {0x0837, { 1, L_FIX} }, // "sprmCFStrike" chp.fStrike;0,1, 128, or 129
-        {0x0838, { 1, L_FIX} }, // "sprmCFOutline" chp.fOutline;0,1, 128, or 129
-        {0x0839, { 1, L_FIX} }, // "sprmCFShadow" chp.fShadow;0,1, 128, or 129
-        {0x083A, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps;0,1, 128, or 129
-        {0x083B, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps;0,1, 128, or 129
-        {0x083C, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish;0,1, 128, or 129
+        InfoRow<NS_sprm::CPlain>(), // whole CHP;none;0;
+        InfoRow<NS_sprm::CKcd>(), // ;;;
+        InfoRow<NS_sprm::CFBold>(), // chp.fBold;0,1, 128, or 129
+        InfoRow<NS_sprm::CFItalic>(), // chp.fItalic;0,1, 128, or 129
+        InfoRow<NS_sprm::CFStrike>(), // chp.fStrike;0,1, 128, or 129
+        InfoRow<NS_sprm::CFOutline>(), // chp.fOutline;0,1, 128, or 129
+        InfoRow<NS_sprm::CFShadow>(), // chp.fShadow;0,1, 128, or 129
+        InfoRow<NS_sprm::CFSmallCaps>(), // chp.fSmallCaps;0,1, 128, or 129
+        InfoRow<NS_sprm::CFCaps>(), // chp.fCaps;0,1, 128, or 129
+        InfoRow<NS_sprm::CFVanish>(), // chp.fVanish;0,1, 128, or 129
         {NS_sprm::LN_CFtcDefault, { 2, L_FIX} }, // "sprmCFtcDefault" ;ftc, only used internally
-        {0x2A3E, { 1, L_FIX} }, // "sprmCKul" chp.kul;kul;byte;
+        InfoRow<NS_sprm::CKul>(), // chp.kul;kul;byte;
         {NS_sprm::LN_CSizePos, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos;3 bytes;
-        {0x8840, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace;dxa;word;
+        InfoRow<NS_sprm::CDxaSpace>(), // chp.dxaSpace;dxa;word;
         {NS_sprm::LN_CLid, { 2, L_FIX} }, // "sprmCLid" ;only used internally never stored
-        {0x2A42, { 1, L_FIX} }, // "sprmCIco" chp.ico;ico;byte;
-        {0x4A43, { 2, L_FIX} }, // "sprmCHps" chp.hps;hps
+        InfoRow<NS_sprm::CIco>(), // chp.ico;ico;byte;
+        InfoRow<NS_sprm::CHps>(), // chp.hps;hps
         {NS_sprm::LN_CHpsInc, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps;
-        {0x4845, { 2, L_FIX} }, // "sprmCHpsPos" chp.hpsPos;hps;short; (doc wrong)
+        InfoRow<NS_sprm::CHpsPos>(), // chp.hpsPos;hps;short; (doc wrong)
         {NS_sprm::LN_CHpsPosAdj, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos;hps
-        {0xCA47, { 0, L_VAR} }, // "sprmCMajority" chp.fBold, chp.fItalic,
+        InfoRow<NS_sprm::CMajority>(), // chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.rgftc, chp.hps, chp.hpsPos,
                             // chp.kul, chp.dxaSpace, chp.ico,
                             // chp.rglid;complex;variable length, length byte
                             // plus size of following grpprl;
-        {0x2A48, { 1, L_FIX} }, // "sprmCIss" chp.iss;iss;byte;
+        InfoRow<NS_sprm::CIss>(), // chp.iss;iss;byte;
         {NS_sprm::LN_CHpsNew50, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps;hps;variable width
         {NS_sprm::LN_CHpsInc1, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps;complex
-        {0x484B, { 2, L_FIX} }, // "sprmCHpsKern" chp.hpsKern;hps;short;
+        InfoRow<NS_sprm::CHpsKern>(), // chp.hpsKern;hps;short;
         {NS_sprm::LN_CMajority50, { 2, L_FIX} }, // "sprmCMajority50" chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.ftc, chp.hps, chp.hpsPos, chp.kul,
                             // chp.dxaSpace, chp.ico,;complex
         {NS_sprm::LN_CHpsMul, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps;percentage to grow hps
-        {0x484E, { 2, L_FIX} }, // "sprmCYsri" chp.ysri;ysri;short;
-        {0x4A4F, { 2, L_FIX} }, // "sprmCRgFtc0" chp.rgftc[0];ftc for ASCII text
-        {0x4A50, { 2, L_FIX} }, // "sprmCRgFtc1" chp.rgftc[1];ftc for Far East text
-        {0x4A51, { 2, L_FIX} }, // "sprmCRgFtc2" chp.rgftc[2];ftc for non-FE text
-        {0x4852, { 2, L_FIX} }, // "sprmCCharScale"
-        {0x2A53, { 1, L_FIX} }, // "sprmCFDStrike" chp.fDStrike;;byte;
-        {0x0854, { 1, L_FIX} }, // "sprmCFImprint" chp.fImprint;1 or 0;bit;
-        {0x0855, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec ;1 or 0;bit;
-        {0x0856, { 1, L_FIX} }, // "sprmCFObj" chp.fObj;1 or 0;bit;
-        {0xCA57, { 0, L_VAR} }, // "sprmCPropRMark" chp.fPropRMark,
+        InfoRow<NS_sprm::CHresi>(), // chp.ysri;ysri;short;
+        InfoRow<NS_sprm::CRgFtc0>(), // chp.rgftc[0];ftc for ASCII text
+        InfoRow<NS_sprm::CRgFtc1>(), // chp.rgftc[1];ftc for Far East text
+        InfoRow<NS_sprm::CRgFtc2>(), // chp.rgftc[2];ftc for non-FE text
+        InfoRow<NS_sprm::CCharScale>(),
+        InfoRow<NS_sprm::CFDStrike>(), // chp.fDStrike;;byte;
+        InfoRow<NS_sprm::CFImprint>(), // chp.fImprint;1 or 0;bit;
+        InfoRow<NS_sprm::CFSpec>(), // chp.fSpec ;1 or 0;bit;
+        InfoRow<NS_sprm::CFObj>(), // chp.fObj;1 or 0;bit;
+        InfoRow<NS_sprm::CPropRMark90>(), // chp.fPropRMark,
                             // chp.ibstPropRMark, chp.dttmPropRMark;Complex
-        {0x0858, { 1, L_FIX} }, // "sprmCFEmboss" chp.fEmboss;1 or 0;bit;
-        {0x2859, { 1, L_FIX} }, // "sprmCSfxText" chp.sfxtText;text animation;byte;
-        {0x085A, { 1, L_FIX} }, // "sprmCFBiDi" ;;;
+        InfoRow<NS_sprm::CFEmboss>(), // chp.fEmboss;1 or 0;bit;
+        InfoRow<NS_sprm::CSfxText>(), // chp.sfxtText;text animation;byte;
+        InfoRow<NS_sprm::CFBiDi>(), // ;;;
         {NS_sprm::LN_CFDiacColor, { 1, L_FIX} }, // "sprmCFDiacColor" ;;;
-        {0x085C, { 1, L_FIX} }, // "sprmCFBoldBi" ;;;
-        {0x085D, { 1, L_FIX} }, // "sprmCFItalicBi" ;;;
-        {0x4A5E, { 2, L_FIX} },
-        {0x485F, { 2, L_FIX} }, // "sprmCLidBi" ;;;
-        {0x4A60, { 2, L_FIX} }, // "sprmCIcoBi" ;;;
-        {0x4A61, { 2, L_FIX} }, // "sprmCHpsBi" ;;;
-        {0xCA62, { 0, L_VAR} }, // "sprmCDispFieldRMark" chp.fDispFieldRMark,
+        InfoRow<NS_sprm::CFBoldBi>(), // ;;;
+        InfoRow<NS_sprm::CFItalicBi>(), // ;;;
+        InfoRow<NS_sprm::CFtcBi>(),
+        InfoRow<NS_sprm::CLidBi>(), // ;;;
+        InfoRow<NS_sprm::CIcoBi>(), // ;;;
+        InfoRow<NS_sprm::CHpsBi>(), // ;;;
+        InfoRow<NS_sprm::CDispFldRMark>(), // chp.fDispFieldRMark,
                             // chp.ibstDispFieldRMark, chp.dttmDispFieldRMark ;
-        {0x4863, { 2, L_FIX} }, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
+        InfoRow<NS_sprm::CIbstRMarkDel>(), // chp.ibstRMarkDel;index into
                             // sttbRMark;short;
-        {NS_sprm::sprmCDttmRMarkDel, { 4, L_FIX} }, // chp.dttmRMarkDel;DTTM;long;
-        {0x6865, { 4, L_FIX} }, // "sprmCBrc80" chp.brc;BRC;long;
-        {0x4866, { 2, L_FIX} }, // "sprmCShd80" chp.shd;SHD;short;
-        {0x4867, { 2, L_FIX} }, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
+        InfoRow<NS_sprm::CDttmRMarkDel>(), // chp.dttmRMarkDel;DTTM;long;
+        InfoRow<NS_sprm::CBrc80>(), // chp.brc;BRC;long;
+        InfoRow<NS_sprm::CShd80>(), // chp.shd;SHD;short;
+        InfoRow<NS_sprm::CIdslRMarkDel>(), // chp.idslRMReasonDel;an index
                             // to a table of strings defined in Word 6.0
                             // executables;short;
-        {0x0868, { 1, L_FIX} }, // "sprmCFUsePgsuSettings"
+        InfoRow<NS_sprm::CFUsePgsuSettings>(),
                             // chp.fUsePgsuSettings;1 or 0
         {NS_sprm::LN_CCpg, { 2, L_FIX} }, // "sprmCCpg" ;;word;
-        {0x486D, { 2, L_FIX} }, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
-        {0x486E, { 2, L_FIX} }, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
-        {0x286F, { 1, L_FIX} }, // "sprmCIdctHint" chp.idctHint;IDCT:
+        InfoRow<NS_sprm::CRgLid0_80>(), // chp.rglid[0];LID: for non-FE text
+        InfoRow<NS_sprm::CRgLid1_80>(), // chp.rglid[1];LID: for Far East text
+        InfoRow<NS_sprm::CIdctHint>(), // chp.idctHint;IDCT:
         {NS_sprm::LN_PicBrcl, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
         {NS_sprm::LN_PicScale, { 0, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
                             // pic.dyaCropTop pic.dxaCropRight,
                             // pic.dyaCropBottom;Complex
-        {0x6C02, { 4, L_FIX} }, // "sprmPicBrcTop80" pic.brcTop;BRC;long;
-        {0x6C03, { 4, L_FIX} }, // "sprmPicBrcLeft80" pic.brcLeft;BRC;long;
-        {0x6C04, { 4, L_FIX} }, // "sprmPicBrcBottom80" pic.brcBottom;BRC;long;
-        {0x6C05, { 4, L_FIX} }, // "sprmPicBrcRight80" pic.brcRight;BRC;long;
-        {0x3000, { 1, L_FIX} }, // "sprmScnsPgn" sep.cnsPgn;cns;byte;
-        {0x3001, { 1, L_FIX} }, // "sprmSiHeadingPgn" sep.iHeadingPgn;heading number
+        InfoRow<NS_sprm::PicBrcTop80>(), // pic.brcTop;BRC;long;
+        InfoRow<NS_sprm::PicBrcLeft80>(), // pic.brcLeft;BRC;long;
+        InfoRow<NS_sprm::PicBrcBottom80>(), // pic.brcBottom;BRC;long;
+        InfoRow<NS_sprm::PicBrcRight80>(), // pic.brcRight;BRC;long;
+        InfoRow<NS_sprm::ScnsPgn>(), // sep.cnsPgn;cns;byte;
+        InfoRow<NS_sprm::SiHeadingPgn>(), // sep.iHeadingPgn;heading number
                             // level;byte;
         {NS_sprm::LN_SOlstAnm, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm;OLST;variable length;
-        {0xF203, { 3, L_FIX} }, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing;
-        {0xF204, { 3, L_FIX} }, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing;
+        InfoRow<NS_sprm::SDxaColWidth>(), // sep.rgdxaColWidthSpacing;
+        InfoRow<NS_sprm::SDxaColSpacing>(), // sep.rgdxaColWidthSpacing;
                             // complex
-        {0x3005, { 1, L_FIX} }, // "sprmSFEvenlySpaced" sep.fEvenlySpaced;1 or 0
-        {0x3006, { 1, L_FIX} }, // "sprmSFProtected" sep.fUnlocked;1 or 0;byte;
-        {0x5007, { 2, L_FIX} }, // "sprmSDmBinFirst" sep.dmBinFirst;;word;
-        {0x5008, { 2, L_FIX} }, // "sprmSDmBinOther" sep.dmBinOther;;word;
-        {0x3009, { 1, L_FIX} }, // "sprmSBkc" sep.bkc;bkc;byte;
-        {0x300A, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage;0 or 1;byte;
-        {0x500B, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1;# of cols - 1;word;
-        {0x900C, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns;dxa;word;
+        InfoRow<NS_sprm::SFEvenlySpaced>(), // sep.fEvenlySpaced;1 or 0
+        InfoRow<NS_sprm::SFProtected>(), // sep.fUnlocked;1 or 0;byte;
+        InfoRow<NS_sprm::SDmBinFirst>(), // sep.dmBinFirst;;word;
+        InfoRow<NS_sprm::SDmBinOther>(), // sep.dmBinOther;;word;
+        InfoRow<NS_sprm::SBkc>(), // sep.bkc;bkc;byte;
+        InfoRow<NS_sprm::SFTitlePage>(), // sep.fTitlePage;0 or 1;byte;
+        InfoRow<NS_sprm::SCcolumns>(), // sep.ccolM1;# of cols - 1;word;
+        InfoRow<NS_sprm::SDxaColumns>(), // sep.dxaColumns;dxa;word;
         {NS_sprm::LN_SFAutoPgn, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn;obsolete;byte;
-        {0x300E, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn;nfc;byte;
+        InfoRow<NS_sprm::SNfcPgn>(), // sep.nfcPgn;nfc;byte;
         {NS_sprm::LN_SDyaPgn, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn;dya;short;
         {NS_sprm::LN_SDxaPgn, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn;dya;short;
-        {0x3011, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart;0 or 1;byte;
-        {0x3012, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote;0 or 1;byte;
-        {0x3013, { 1, L_FIX} }, // "sprmSLnc" sep.lnc;lnc;byte;
+        InfoRow<NS_sprm::SFPgnRestart>(), // sep.fPgnRestart;0 or 1;byte;
+        InfoRow<NS_sprm::SFEndnote>(), // sep.fEndnote;0 or 1;byte;
+        InfoRow<NS_sprm::SLnc>(), // sep.lnc;lnc;byte;
         {NS_sprm::LN_SGprfIhdt, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt;grpfihdt
-        {0x5015, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod;non-neg int.;word;
-        {0x9016, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn;dxa;word;
-        {0xB017, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop;dya;word;
-        {0xB018, { 2, L_FIX} }, // "sprmSDyaHdrBottom" sep.dyaHdrBottom;dya;word;
-        {0x3019, { 1, L_FIX} }, // "sprmSLBetween" sep.fLBetween;0 or 1;byte;
-        {0x301A, { 1, L_FIX} }, // "sprmSVjc" sep.vjc;vjc;byte;
-        {0x501B, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin;lnn;word;
-        {0x501C, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart;pgn;word;
-        {0x301D, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage;dm;byte;
+        InfoRow<NS_sprm::SNLnnMod>(), // sep.nLnnMod;non-neg int.;word;
+        InfoRow<NS_sprm::SDxaLnn>(), // sep.dxaLnn;dxa;word;
+        InfoRow<NS_sprm::SDyaHdrTop>(), // sep.dyaHdrTop;dya;word;
+        InfoRow<NS_sprm::SDyaHdrBottom>(), // sep.dyaHdrBottom;dya;word;
+        InfoRow<NS_sprm::SLBetween>(), // sep.fLBetween;0 or 1;byte;
+        InfoRow<NS_sprm::SVjc>(), // sep.vjc;vjc;byte;
+        InfoRow<NS_sprm::SLnnMin>(), // sep.lnnMin;lnn;word;
+        InfoRow<NS_sprm::SPgnStart97>(), // sep.pgnStart;pgn;word;
+        InfoRow<NS_sprm::SBOrientation>(), // sep.dmOrientPage;dm;byte;
         {NS_sprm::LN_SBCustomize, { 1, L_FIX} }, // "sprmSBCustomize" ;;;
-        {0xB01F, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage;xa;word;
-        {0xB020, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage;ya;word;
-        {0xB021, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft;dxa;word;
-        {0xB022, { 2, L_FIX} }, // "sprmSDxaRight" sep.dxaRight;dxa;word;
-        {0x9023, { 2, L_FIX} }, // "sprmSDyaTop" sep.dyaTop;dya;word;
-        {0x9024, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom;dya;word;
-        {0xB025, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter;dza;word;
-        {0x5026, { 2, L_FIX} }, // "sprmSDmPaperReq" sep.dmPaperReq;dm;word;
+        InfoRow<NS_sprm::SXaPage>(), // sep.xaPage;xa;word;
+        InfoRow<NS_sprm::SYaPage>(), // sep.yaPage;ya;word;
+        InfoRow<NS_sprm::SDxaLeft>(), // sep.dxaLeft;dxa;word;
+        InfoRow<NS_sprm::SDxaRight>(), // sep.dxaRight;dxa;word;
+        InfoRow<NS_sprm::SDyaTop>(), // sep.dyaTop;dya;word;
+        InfoRow<NS_sprm::SDyaBottom>(), // sep.dyaBottom;dya;word;
+        InfoRow<NS_sprm::SDzaGutter>(), // sep.dzaGutter;dza;word;
+        InfoRow<NS_sprm::SDmPaperReq>(), // sep.dmPaperReq;dm;word;
         {NS_sprm::LN_SPropRMark, { 0, L_VAR} }, // "sprmSPropRMark" sep.fPropRMark,
                             // sep.ibstPropRMark, sep.dttmPropRMark ;complex
-        {0x3228, { 1, L_FIX} }, // "sprmSFBiDi" ;;;
+        InfoRow<NS_sprm::SFBiDi>(), // ;;;
         {NS_sprm::LN_SFFacingCol, { 1, L_FIX} }, // "sprmSFFacingCol" ;;;
-        {0x322A, { 1, L_FIX} }, // "sprmSFRTLGutter", set to one if gutter is on
+        InfoRow<NS_sprm::SFRTLGutter>(), //, set to one if gutter is on
                             // right
-        {0x702B, { 4, L_FIX} }, // "sprmSBrcTop80" sep.brcTop;BRC;long;
-        {0x702C, { 4, L_FIX} }, // "sprmSBrcLeft80" sep.brcLeft;BRC;long;
-        {0x702D, { 4, L_FIX} }, // "sprmSBrcBottom80" sep.brcBottom;BRC;long;
-        {0x702E, { 4, L_FIX} }, // "sprmSBrcRight80" sep.brcRight;BRC;long;
-        {0x522F, { 2, L_FIX} }, // "sprmSPgbProp" sep.pgbProp;;word;
-        {0x7030, { 4, L_FIX} }, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
-        {0x9031, { 2, L_FIX} }, // "sprmSDyaLinePitch"
+        InfoRow<NS_sprm::SBrcTop80>(), // sep.brcTop;BRC;long;
+        InfoRow<NS_sprm::SBrcLeft80>(), // sep.brcLeft;BRC;long;
+        InfoRow<NS_sprm::SBrcBottom80>(), // sep.brcBottom;BRC;long;
+        InfoRow<NS_sprm::SBrcRight80>(), // sep.brcRight;BRC;long;
+        InfoRow<NS_sprm::SPgbProp>(), // sep.pgbProp;;word;
+        InfoRow<NS_sprm::SDxtCharSpace>(), // sep.dxtCharSpace;dxt;long;
+        InfoRow<NS_sprm::SDyaLinePitch>(),
                             // sep.dyaLinePitch;dya; WRONG:long; RIGHT:short; !
-        {0x5032, { 2, L_FIX} }, // "sprmSClm" ;;;
-        {0x5033, { 2, L_FIX} }, // "sprmSTextFlow" sep.wTextFlow;complex
-        {0x5400, { 2, L_FIX} }, // "sprmTJc90" tap.jc;jc;word (low order byte is
+        InfoRow<NS_sprm::SClm>(), // ;;;
+        InfoRow<NS_sprm::STextFlow>(), // sep.wTextFlow;complex
+        InfoRow<NS_sprm::TJc90>(), // tap.jc;jc;word (low order byte is
                             // significant);
-        {0x9601, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter
-        {0x9602, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf,
+        InfoRow<NS_sprm::TDxaLeft>(), // tap.rgdxaCenter
+        InfoRow<NS_sprm::TDxaGapHalf>(), // tap.dxaGapHalf,
                             // tap.rgdxaCenter
-        {0x3403, { 1, L_FIX} }, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
-        {0x3404, { 1, L_FIX} }, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
-        {0x3466, { 1, L_FIX} }, // "sprmTFCantSplit" tap.fCantSplit;1 or 0;byte;
-        {0xD605, { 0, L_VAR} }, // "sprmTTableBorders80" tap.rgbrcTable;complex
+        InfoRow<NS_sprm::TFCantSplit90>(), // tap.fCantSplit90;1 or 0;byte;
+        InfoRow<NS_sprm::TTableHeader>(), // tap.fTableHeader;1 or 0;byte;
+        InfoRow<NS_sprm::TFCantSplit>(), // tap.fCantSplit;1 or 0;byte;
+        InfoRow<NS_sprm::TTableBorders80>(), // tap.rgbrcTable;complex
         {NS_sprm::LN_TDefTable10, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
-        {0x9407, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
-        {0xD608, { 0, L_VAR} }, // "sprmTDefTable" tap.rgtc;complex
-        {0xD609, { 0, L_VAR} }, // "sprmTDefTableShd80" tap.rgshd;complex
-        {0x740A, { 4, L_FIX} }, // "sprmTTlp" tap.tlp;TLP;4 bytes;
-        {0x560B, { 2, L_FIX} }, // "sprmTFBiDi" ;;;
+        InfoRow<NS_sprm::TDyaRowHeight>(), // tap.dyaRowHeight;dya;word;
+        InfoRow<NS_sprm::TDefTable>(), // tap.rgtc;complex
+        InfoRow<NS_sprm::TDefTableShd80>(), // tap.rgshd;complex
+        InfoRow<NS_sprm::TTlp>(), // tap.tlp;TLP;4 bytes;
+        InfoRow<NS_sprm::TFBiDi>(), // ;;;
         {NS_sprm::LN_THTMLProps, { 1, L_FIX} }, // "sprmTHTMLProps" ;;;
-        {0xD620, { 0, L_VAR} }, // "sprmTSetBrc80" tap.rgtc[].rgbrc;complex
-        {0x7621, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
-        {0x5622, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
-        {0x7623, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter;complex
-        {0x5624, { 0, L_VAR} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
-        {0x5625, { 0, L_VAR} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
+        InfoRow<NS_sprm::TSetBrc80>(), // tap.rgtc[].rgbrc;complex
+        InfoRow<NS_sprm::TInsert>(), // tap.rgdxaCenter, tap.rgtc;complex
+        InfoRow<NS_sprm::TDelete>(), // tap.rgdxaCenter, tap.rgtc;complex
+        InfoRow<NS_sprm::TDxaCol>(), // tap.rgdxaCenter;complex
+        InfoRow<NS_sprm::TMerge>(), // tap.fFirstMerged, tap.fMerged;
+        InfoRow<NS_sprm::TSplit>(), // tap.fFirstMerged, tap.fMerged;
         {NS_sprm::LN_TSetBrc10, { 0, L_VAR} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
         {NS_sprm::LN_TSetShd80, { 0, L_VAR} }, // "sprmTSetShd80" tap.rgshd;complex
         {NS_sprm::LN_TSetShdOdd80, { 0, L_VAR} }, // "sprmTSetShdOdd80" tap.rgshd;complex
-        {0x7629, { 4, L_FIX} }, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
+        InfoRow<NS_sprm::TTextFlow>(), // tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
         {NS_sprm::LN_TDiagLine, { 1, L_FIX} }, // "sprmTDiagLine" ;;;
-        {0xD62B, { 0, L_VAR} }, // "sprmTVertMerge" tap.rgtc[].vertMerge
-        {0xD62C, { 0, L_VAR} }, // "sprmTVertAlign" tap.rgtc[].vertAlign
-        {NS_sprm::sprmCFELayout, { 0, L_VAR} },
-        {0x6649, { 4, L_FIX} }, // undocumented
-        {0xF614, { 3, L_FIX} }, // undocumented
-        {0xD612, { 0, L_VAR} }, // "sprmTDefTableShd"
-        {0xD613, { 0, L_VAR} }, // "sprmTTableBorders"
-        {0xD61A, { 0, L_VAR} }, // undocumented
-        {0xD61B, { 0, L_VAR} }, // undocumented
-        {0xD61C, { 0, L_VAR} }, // undocumented
-        {0xD61D, { 0, L_VAR} }, // undocumented
-        {0xD632, { 0, L_VAR} }, // undocumented
-        {0xD634, { 0, L_VAR} }, // undocumented
+        InfoRow<NS_sprm::TVertMerge>(), // tap.rgtc[].vertMerge
+        InfoRow<NS_sprm::TVertAlign>(), // tap.rgtc[].vertAlign
+        InfoRow<NS_sprm::CFELayout>(),
+        InfoRow<NS_sprm::PItap>(), // undocumented
+        InfoRow<NS_sprm::TTableWidth>(), // undocumented
+        InfoRow<NS_sprm::TDefTableShd>(),
+        InfoRow<NS_sprm::TTableBorders>(),
+        InfoRow<NS_sprm::TBrcTopCv>(), // undocumented
+        InfoRow<NS_sprm::TBrcLeftCv>(), // undocumented
+        InfoRow<NS_sprm::TBrcBottomCv>(), // undocumented
+        InfoRow<NS_sprm::TBrcRightCv>(), // undocumented
+        InfoRow<NS_sprm::TCellPadding>(), // undocumented
+        InfoRow<NS_sprm::TCellPaddingDefault>(), // undocumented
         {0xD238, { 0, L_VAR} }, // undocumented sep
-        {0xC64E, { 0, L_VAR} }, // "sprmPBrcTop"
-        {0xC64F, { 0, L_VAR} }, // "sprmPBrcLeft"
-        {0xC650, { 0, L_VAR} }, // "sprmPBrcBottom"
-        {0xC651, { 0, L_VAR} }, // "sprmPBrcRight"
-        {0xC652, { 0, L_VAR} }, // "sprmPBrcBetween"
-        {0xF661, { 3, L_FIX} }, // undocumented
-        {0x4873, { 2, L_FIX} }, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
-        {0x4874, { 2, L_FIX} }, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        InfoRow<NS_sprm::PBrcTop>(),
+        InfoRow<NS_sprm::PBrcLeft>(),
+        InfoRow<NS_sprm::PBrcBottom>(),
+        InfoRow<NS_sprm::PBrcRight>(),
+        InfoRow<NS_sprm::PBrcBetween>(),
+        InfoRow<NS_sprm::TWidthIndent>(), // undocumented
+        InfoRow<NS_sprm::CRgLid0>(), // chp.rglid[0];LID: for non-FE text
+        InfoRow<NS_sprm::CRgLid1>(), // chp.rglid[1];LID: for Far East text
         {0x6463, { 4, L_FIX} }, // undocumented
-        {0x2461, { 1, L_FIX} }, // undoc, must be asian version of "sprmPJc"
-        {0x845D, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaRight"
-        {0x845E, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaLeft"
-        {0x8460, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaLeft1"
-        {0x3615, { 1, L_FIX} }, // undocumented
-        {0x360D, { 1, L_FIX} }, // undocumented
-        {0x703A, { 4, L_FIX} }, // undocumented, sep, perhaps related to textgrids ?
-        {0x303B, { 1, L_FIX} }, // undocumented, sep
-        {0x244B, { 1, L_FIX} }, // undocumented, subtable "sprmPFInTable" equiv ?
-        {0x244C, { 1, L_FIX} }, // undocumented, subtable "sprmPFTtp" equiv ?
-        {0x940E, { 2, L_FIX} }, // undocumented
-        {0x940F, { 2, L_FIX} }, // undocumented
-        {0x9410, { 2, L_FIX} }, // undocumented
-        {0x6815, { 4, L_FIX} }, // undocumented
-        {0x6816, { 4, L_FIX} }, // undocumented
-        {NS_sprm::sprmCCv, { 4, L_FIX} }, // text colour
-        {0xC64D, { 0, L_VAR} }, // undocumented, para back colour
-        {0x6467, { 4, L_FIX} }, // undocumented
-        {0x646B, { 4, L_FIX} }, // undocumented
-        {0xF617, { 3, L_FIX} }, // undocumented
-        {0xD660, { 0, L_VAR} }, // undocumented, something to do with colour.
-        {0xD670, { 0, L_VAR} }, // undocumented, something to do with colour.
-        {0xCA71, { 0, L_VAR} }, // "sprmCShd", text backcolour
-        {0x303C, { 1, L_FIX} }, // undocumented, sep
-        {0x245B, { 1, L_FIX} }, // undocumented, para autobefore
-        {0x245C, { 1, L_FIX} }, // undocumented, para autoafter
+        InfoRow<NS_sprm::PJc>(), // undoc, must be asian version of "sprmPJc"
+        InfoRow<NS_sprm::PDxaRight>(), // undoc, must be asian version of "sprmPDxaRight"
+        InfoRow<NS_sprm::PDxaLeft>(), // undoc, must be asian version of "sprmPDxaLeft"
+        InfoRow<NS_sprm::PDxaLeft1>(), // undoc, must be asian version of "sprmPDxaLeft1"
+        InfoRow<NS_sprm::TFAutofit>(), // undocumented
+        InfoRow<NS_sprm::TPc>(), // undocumented
+        InfoRow<NS_sprm::SRsid>(), // undocumented, sep, perhaps related to textgrids ?
+        InfoRow<NS_sprm::SFpc>(), // undocumented, sep
+        InfoRow<NS_sprm::PFInnerTableCell>(), // undocumented, subtable "sprmPFInTable" equiv ?
+        InfoRow<NS_sprm::PFInnerTtp>(), // undocumented, subtable "sprmPFTtp" equiv ?
+        InfoRow<NS_sprm::TDxaAbs>(), // undocumented
+        InfoRow<NS_sprm::TDyaAbs>(), // undocumented
+        InfoRow<NS_sprm::TDxaFromText>(), // undocumented
+        InfoRow<NS_sprm::CRsidProp>(), // undocumented
+        InfoRow<NS_sprm::CRsidText>(), // undocumented
+        InfoRow<NS_sprm::CCv>(), // text colour
+        InfoRow<NS_sprm::PShd>(), // undocumented, para back colour
+        InfoRow<NS_sprm::PRsid>(), // undocumented
+        InfoRow<NS_sprm::PTableProps>(), // undocumented
+        InfoRow<NS_sprm::TWidthBefore>(), // undocumented
+        InfoRow<NS_sprm::TSetShdTable>(), // undocumented, something to do with colour.
+        InfoRow<NS_sprm::TDefTableShdRaw>(), // undocumented, something to do with colour.
+        InfoRow<NS_sprm::CShd>(), // text backcolour
+        InfoRow<NS_sprm::SRncFtn>(), // undocumented, sep
+        InfoRow<NS_sprm::PFDyaBeforeAuto>(), // undocumented, para autobefore
+        InfoRow<NS_sprm::PFDyaAfterAuto>(), // undocumented, para autoafter
         // "sprmPFContextualSpacing", don't add space between para of the same style
-        {0x246D, { 1, L_FIX} }
+        InfoRow<NS_sprm::PFContextualSpacing>(),
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));

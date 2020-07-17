@@ -914,12 +914,12 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     static const sal_uInt16 aVer8Ids0[] =
     {
-        NS_sprm::sprmSBkc,
-        NS_sprm::sprmSFTitlePage,
-        NS_sprm::sprmSNfcPgn,
-        NS_sprm::sprmSCcolumns,
-        NS_sprm::sprmSDxaColumns,
-        NS_sprm::sprmSLBetween
+        NS_sprm::SBkc::val,
+        NS_sprm::SFTitlePage::val,
+        NS_sprm::SNfcPgn::val,
+        NS_sprm::SCcolumns::val,
+        NS_sprm::SDxaColumns::val,
+        NS_sprm::SLBetween::val
     };
 
     const sal_uInt16* pIds = eVer <= ww::eWW2 ? aVer2Ids0 : eVer <= ww::eWW7 ? aVer67Ids0 : aVer8Ids0;
@@ -947,10 +947,10 @@ void wwSectionManager::CreateSep(const long nTextPos)
     if (aNewSection.maSep.nfcPgn > 4)
         aNewSection.maSep.nfcPgn = 0;
 
-    aNewSection.maSep.fUnlocked = eVer > ww::eWW2 ? ReadBSprm(pSep, (eVer <= ww::eWW7 ? NS_sprm::v6::sprmSFProtected : NS_sprm::sprmSFProtected), 0 ) : 0;
+    aNewSection.maSep.fUnlocked = eVer > ww::eWW2 ? ReadBSprm(pSep, (eVer <= ww::eWW7 ? NS_sprm::v6::sprmSFProtected : NS_sprm::SFProtected::val), 0 ) : 0;
 
     // sprmSFBiDi
-    aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, NS_sprm::sprmSFBiDi, 0) : 0;
+    aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, NS_sprm::SFBiDi::val, 0) : 0;
 
     // Reading section property sprmSCcolumns - one less than the number of columns in the section.
     // It must be less than MAX_NO_OF_SEP_COLUMNS according the WW8 specification.
@@ -971,15 +971,15 @@ void wwSectionManager::CreateSep(const long nTextPos)
     {
         // sprmSFEvenlySpaced
         aNewSection.maSep.fEvenlySpaced =
-            sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? NS_sprm::v6::sprmSFEvenlySpaced : NS_sprm::sprmSFEvenlySpaced), 1) != 0);
+            sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? NS_sprm::v6::sprmSFEvenlySpaced : NS_sprm::SFEvenlySpaced::val), 1) != 0);
 
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
             int nColumnDataIdx = 0;
             aNewSection.maSep.rgdxaColumnWidthSpacing[nColumnDataIdx] = 0;
 
-            const sal_uInt16 nColumnWidthSprmId = ( eVer <= ww::eWW7 ? NS_sprm::v6::sprmSDxaColWidth : NS_sprm::sprmSDxaColWidth);
-            const sal_uInt16 nColumnSpacingSprmId = ( eVer <= ww::eWW7 ? NS_sprm::v6::sprmSDxaColSpacing : NS_sprm::sprmSDxaColSpacing);
+            const sal_uInt16 nColumnWidthSprmId = ( eVer <= ww::eWW7 ? NS_sprm::v6::sprmSDxaColWidth : NS_sprm::SDxaColWidth::val);
+            const sal_uInt16 nColumnSpacingSprmId = ( eVer <= ww::eWW7 ? NS_sprm::v6::sprmSDxaColSpacing : NS_sprm::SDxaColSpacing::val);
             const sal_uInt8 nColumnCount = static_cast< sal_uInt8 >(aNewSection.maSep.ccolM1 + 1);
             for ( sal_uInt8 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
@@ -1039,16 +1039,16 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     static const sal_uInt16 aVer8Ids1[] =
     {
-        NS_sprm::sprmSBOrientation,
-        NS_sprm::sprmSXaPage,
-        NS_sprm::sprmSYaPage,
-        NS_sprm::sprmSDxaLeft,
-        NS_sprm::sprmSDxaRight,
-        NS_sprm::sprmSDzaGutter,
-        NS_sprm::sprmSFPgnRestart,
-        NS_sprm::sprmSPgnStart97,
-        NS_sprm::sprmSDmBinFirst,
-        NS_sprm::sprmSDmBinOther
+        NS_sprm::SBOrientation::val,
+        NS_sprm::SXaPage::val,
+        NS_sprm::SYaPage::val,
+        NS_sprm::SDxaLeft::val,
+        NS_sprm::SDxaRight::val,
+        NS_sprm::SDzaGutter::val,
+        NS_sprm::SFPgnRestart::val,
+        NS_sprm::SPgnStart97::val,
+        NS_sprm::SDmBinFirst::val,
+        NS_sprm::SDmBinOther::val
     };
 
     pIds = eVer <= ww::eWW2 ? aVer2Ids1 : eVer <= ww::eWW7 ? aVer67Ids1 : aVer8Ids1;
@@ -1079,7 +1079,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     aNewSection.maSep.dzaGutter = ReadUSprm( pSep, pIds[5], 0);
 
-    aNewSection.maSep.fRTLGutter = static_cast< sal_uInt8 >(eVer >= ww::eWW8 ? ReadUSprm( pSep, NS_sprm::sprmSFRTLGutter, 0 ) : 0);
+    aNewSection.maSep.fRTLGutter = static_cast< sal_uInt8 >(eVer >= ww::eWW8 ? ReadUSprm( pSep, NS_sprm::SFRTLGutter::val, 0 ) : 0);
 
     // Page Number Restarts - sprmSFPgnRestart
     aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, pIds[6], 0);
@@ -1096,11 +1096,11 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     if (eVer >= ww::eWW6)
     {
-        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? NS_sprm::v6::sprmSiHeadingPgn : NS_sprm::sprmSiHeadingPgn);
+        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? NS_sprm::v6::sprmSiHeadingPgn : NS_sprm::SiHeadingPgn::val);
         if (aRes.pSprm && aRes.nRemainingData >= 1)
             aNewSection.maSep.iHeadingPgn = *aRes.pSprm;
 
-        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? NS_sprm::v6::sprmSScnsPgn : NS_sprm::sprmScnsPgn);
+        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? NS_sprm::v6::sprmSScnsPgn : NS_sprm::ScnsPgn::val);
         if (aRes.pSprm && aRes.nRemainingData >= 1)
             aNewSection.maSep.cnsPgn = *aRes.pSprm;
     }
@@ -1143,14 +1143,14 @@ void wwSectionManager::CreateSep(const long nTextPos)
     };
     static const sal_uInt16 aVer8Ids2[] =
     {
-        NS_sprm::sprmSDyaTop,
-        NS_sprm::sprmSDyaBottom,
-        NS_sprm::sprmSDyaHdrTop,
-        NS_sprm::sprmSDyaHdrBottom,
-        NS_sprm::sprmSNLnnMod,
-        NS_sprm::sprmSLnc,
-        NS_sprm::sprmSDxaLnn,
-        NS_sprm::sprmSLnnMin
+        NS_sprm::SDyaTop::val,
+        NS_sprm::SDyaBottom::val,
+        NS_sprm::SDyaHdrTop::val,
+        NS_sprm::SDyaHdrBottom::val,
+        NS_sprm::SNLnnMod::val,
+        NS_sprm::SLnc::val,
+        NS_sprm::SDxaLnn::val,
+        NS_sprm::SLnnMin::val
     };
 
     pIds = eVer <= ww::eWW2 ? aVer2Ids2 : eVer <= ww::eWW7 ? aVer67Ids2 : aVer8Ids2;
@@ -1162,15 +1162,15 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     if (eVer >= ww::eWW8)
     {
-        aNewSection.maSep.wTextFlow = ReadUSprm(pSep, NS_sprm::sprmSTextFlow, 0);
-        aNewSection.maSep.clm = ReadUSprm( pSep, NS_sprm::sprmSClm, 0 );
-        aNewSection.maSep.dyaLinePitch = ReadUSprm(pSep, NS_sprm::sprmSDyaLinePitch, 360);
-        aRes = pSep->HasSprm(NS_sprm::sprmSDxtCharSpace);
+        aNewSection.maSep.wTextFlow = ReadUSprm(pSep, NS_sprm::STextFlow::val, 0);
+        aNewSection.maSep.clm = ReadUSprm( pSep, NS_sprm::SClm::val, 0 );
+        aNewSection.maSep.dyaLinePitch = ReadUSprm(pSep, NS_sprm::SDyaLinePitch::val, 360);
+        aRes = pSep->HasSprm(NS_sprm::SDxtCharSpace::val);
         if (aRes.pSprm && aRes.nRemainingData >= 4)
             aNewSection.maSep.dxtCharSpace = SVBT32ToUInt32(aRes.pSprm);
 
         //sprmSPgbProp
-        sal_uInt16 pgbProp = ReadSprm( pSep, NS_sprm::sprmSPgbProp, 0 );
+        sal_uInt16 pgbProp = ReadSprm( pSep, NS_sprm::SPgbProp::val, 0 );
         aNewSection.maSep.pgbApplyTo = pgbProp & 0x0007;
         aNewSection.maSep.pgbPageDepth = (pgbProp & 0x0018) >> 3;
         aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
@@ -1321,8 +1321,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
         {
             SprmResult a8Sprm[4];
             if (pSep->Find4Sprms(
-                    NS_sprm::sprmSBrcTop80, NS_sprm::sprmSBrcLeft80,
-                    NS_sprm::sprmSBrcBottom80, NS_sprm::sprmSBrcRight80,
+                    NS_sprm::SBrcTop80::val, NS_sprm::SBrcLeft80::val,
+                    NS_sprm::SBrcBottom80::val, NS_sprm::SBrcRight80::val,
                     a8Sprm[0], a8Sprm[1], a8Sprm[2], a8Sprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
@@ -1332,8 +1332,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             // Version 9 BRCs if present will override version 8
             SprmResult a9Sprm[4];
             if (pSep->Find4Sprms(
-                    NS_sprm::sprmSBrcTop, NS_sprm::sprmSBrcLeft,
-                    NS_sprm::sprmSBrcBottom, NS_sprm::sprmSBrcRight,
+                    NS_sprm::SBrcTop::val, NS_sprm::SBrcLeft::val,
+                    NS_sprm::SBrcBottom::val, NS_sprm::SBrcRight::val,
                     a9Sprm[0], a9Sprm[1], a9Sprm[2], a9Sprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
@@ -1353,19 +1353,19 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
         };
 
         static const sal_uInt16 aVer8Ids[5] = {
-            NS_sprm::sprmPBrcTop80,
-            NS_sprm::sprmPBrcLeft80,
-            NS_sprm::sprmPBrcBottom80,
-            NS_sprm::sprmPBrcRight80,
-            NS_sprm::sprmPBrcBetween80
+            NS_sprm::PBrcTop80::val,
+            NS_sprm::PBrcLeft80::val,
+            NS_sprm::PBrcBottom80::val,
+            NS_sprm::PBrcRight80::val,
+            NS_sprm::PBrcBetween80::val
         };
 
         static const sal_uInt16 aVer9Ids[5] = {
-            NS_sprm::sprmPBrcTop,
-            NS_sprm::sprmPBrcLeft,
-            NS_sprm::sprmPBrcBottom,
-            NS_sprm::sprmPBrcRight,
-            NS_sprm::sprmPBrcBetween
+            NS_sprm::PBrcTop::val,
+            NS_sprm::PBrcLeft::val,
+            NS_sprm::PBrcBottom::val,
+            NS_sprm::PBrcRight::val,
+            NS_sprm::PBrcBetween::val
         };
 
         if( pPap )
@@ -1692,17 +1692,17 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
     }
     else
     {
-        SetValSprm( &nSp26, pPap, NS_sprm::sprmPDxaAbs ); // X-position
+        SetValSprm( &nSp26, pPap, NS_sprm::PDxaAbs::val ); // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::sprmPDyaAbs );    // Y-position
-        SetValSprm( &nSp45, pPap, NS_sprm::sprmPWHeightAbs ); // height
-        SetValSprm( &nSp28, pPap, NS_sprm::sprmPDxaWidth ); // width
-        SetValSprm( &nLeMgn, pPap, NS_sprm::sprmPDxaFromText );    // L-border
-        SetValSprm( &nRiMgn, pPap, NS_sprm::sprmPDxaFromText );    // R-border
-        SetValSprm( &nUpMgn, pPap, NS_sprm::sprmPDyaFromText );    // U-border
-        SetValSprm( &nLoMgn, pPap, NS_sprm::sprmPDyaFromText );    // D-border
+        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::PDyaAbs::val );    // Y-position
+        SetValSprm( &nSp45, pPap, NS_sprm::PWHeightAbs::val ); // height
+        SetValSprm( &nSp28, pPap, NS_sprm::PDxaWidth::val ); // width
+        SetValSprm( &nLeMgn, pPap, NS_sprm::PDxaFromText::val );    // L-border
+        SetValSprm( &nRiMgn, pPap, NS_sprm::PDxaFromText::val );    // R-border
+        SetValSprm( &nUpMgn, pPap, NS_sprm::PDyaFromText::val );    // U-border
+        SetValSprm( &nLoMgn, pPap, NS_sprm::PDyaFromText::val );    // D-border
 
-        SprmResult aS = pPap->HasSprm(NS_sprm::sprmPWr);                               // wrapping
+        SprmResult aS = pPap->HasSprm(NS_sprm::PWr::val);                               // wrapping
         if (aS.pSprm && aS.nRemainingData >= 1)
             nSp37 = *aS.pSprm;
     }
@@ -1755,7 +1755,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 
             // in APO ?
             //sprmPPc
-            SprmResult aS = pPap->HasSprm( bVer67 ? NS_sprm::v6::sprmPPc : NS_sprm::sprmPPc);
+            SprmResult aS = pPap->HasSprm( bVer67 ? NS_sprm::v6::sprmPPc : NS_sprm::PPc::val);
 
             // no -> graphics Apo
             if (!aS.pSprm || aS.nRemainingData < 1)
@@ -1809,17 +1809,17 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle const * pStyle)
     }
     else
     {
-        SetValSprm( &nSp26, pStyle, NS_sprm::sprmPDxaAbs );            // X-position
+        SetValSprm( &nSp26, pStyle, NS_sprm::PDxaAbs::val );            // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm(&nSp27, pStyle, NS_sprm::sprmPDyaAbs); // Y-position
-        SetValSprm( &nSp45, pStyle, NS_sprm::sprmPWHeightAbs );        // height
-        SetValSprm( &nSp28, pStyle, NS_sprm::sprmPDxaWidth );          // width
-        SetValSprm( &nLeMgn, pStyle, NS_sprm::sprmPDxaFromText );      // L-border
-        SetValSprm( &nRiMgn, pStyle, NS_sprm::sprmPDxaFromText );      // R-border
-        SetValSprm( &nUpMgn, pStyle, NS_sprm::sprmPDyaFromText );      // U-border
-        SetValSprm( &nLoMgn, pStyle, NS_sprm::sprmPDyaFromText );      // D-border
+        mbVertSet |= SetValSprm(&nSp27, pStyle, NS_sprm::PDyaAbs::val); // Y-position
+        SetValSprm( &nSp45, pStyle, NS_sprm::PWHeightAbs::val );        // height
+        SetValSprm( &nSp28, pStyle, NS_sprm::PDxaWidth::val );          // width
+        SetValSprm( &nLeMgn, pStyle, NS_sprm::PDxaFromText::val );      // L-border
+        SetValSprm( &nRiMgn, pStyle, NS_sprm::PDxaFromText::val );      // R-border
+        SetValSprm( &nUpMgn, pStyle, NS_sprm::PDyaFromText::val );      // U-border
+        SetValSprm( &nLoMgn, pStyle, NS_sprm::PDyaFromText::val );      // D-border
 
-        SprmResult aS = pStyle->HasParaSprm( NS_sprm::sprmPWr );       // wrapping
+        SprmResult aS = pStyle->HasParaSprm( NS_sprm::PWr::val );       // wrapping
         if (aS.pSprm && aS.nRemainingData >= 1)
             nSp37 = *aS.pSprm;
     }
@@ -1886,7 +1886,7 @@ bAutoWidth(false),
 bToggelPos(false)
 {
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
-    const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(NS_sprm::sprmPFInTable).pSprm;
+    const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(NS_sprm::PFInTable::val).pSprm;
     if (bIsTable && rWW.nSp37 == 2)
         eSurround = css::text::WrapTextMode_PARALLEL;
 
@@ -2393,7 +2393,7 @@ bool SwWW8ImplReader::IsDropCap() const
         if (m_bVer67)
             aDCS = pPap->HasSprm(NS_sprm::v6::sprmPDcs);
         else
-            aDCS = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::sprmPDcs);
+            aDCS = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::PDcs::val);
         if (aDCS.pSprm && aDCS.nRemainingData >= 2)
         {
             /*
@@ -2980,7 +2980,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
 
     sal_uInt8 nI;
     // the attribute number for "double strike-through" breaks rank
-    if (NS_sprm::sprmCFDStrike == nId)
+    if (NS_sprm::CFDStrike::val == nId)
         nI = nContigiousWestern;               // The out of sequence western id
     else
     {
@@ -2990,7 +2990,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         else if (eVersion < ww::eWW8)
             nI = static_cast< sal_uInt8 >(nId - NS_sprm::v6::sprmCFBold);
         else
-            nI = static_cast< sal_uInt8 >(nId - NS_sprm::sprmCFBold);
+            nI = static_cast< sal_uInt8 >(nId - NS_sprm::CFBold::val);
     }
 
     sal_uInt16 nMask = 1 << nI;
@@ -3019,7 +3019,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     if (m_xPlcxMan && eVersion > ww::eWW2)
     {
         SprmResult aCharIstd =
-            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::sprmCIstd);
+            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::CIstd::val);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
             pSI = GetStyle(SVBT16ToUInt16(aCharIstd.pSprm));
     }
@@ -3170,7 +3170,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     else if (eVersion < ww::eWW8)
         nI = static_cast< sal_uInt8 >(nId - 111);
     else
-        nI = static_cast< sal_uInt8 >(nId - NS_sprm::sprmCFBoldBi);
+        nI = static_cast< sal_uInt8 >(nId - NS_sprm::CFBoldBi::val);
 
     OSL_ENSURE(nI <= 1, "not happening");
     if (nI > 1)
@@ -3189,7 +3189,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     if (m_xPlcxMan)
     {
         SprmResult aCharIstd =
-            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::sprmCIstd);
+            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? NS_sprm::v6::sprmCIstd : NS_sprm::CIstd::val);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
             pSI = GetStyle(SVBT16ToUInt16(aCharIstd.pSprm));
     }
@@ -3449,7 +3449,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     // if the fontsize for these characters is specified, make sure it is updated first
     if ( m_xPlcxMan )
     {
-        const sal_uInt16 nFontsizeID = m_bVer67 ? NS_sprm::v6::sprmCHps : NS_sprm::sprmCHps;
+        const sal_uInt16 nFontsizeID = m_bVer67 ? NS_sprm::v6::sprmCHps : NS_sprm::CHps::val;
         const SprmResult aFontsize = m_xPlcxMan->GetChpPLCF()->HasSprm( nFontsizeID, /*bFindFirst=*/false );
         if ( aFontsize.pSprm && aFontsize.nRemainingData )
             Read_FontSize(nFontsizeID, aFontsize.pSprm, aFontsize.nRemainingData);
@@ -3569,7 +3569,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::CCv::val).pSprm)
         return;
 
     if (nLen < 1)
@@ -3854,17 +3854,17 @@ void SwWW8ImplReader::Read_FontCode( sal_uInt16 nId, const sal_uInt8* pData, sho
         switch( nId )
         {
             case 113:                   //WW7
-            case NS_sprm::sprmCRgFtc2:  //"Other" font, override with BiDi if it exists
-            case NS_sprm::sprmCFtcBi:   //BiDi Font
+            case NS_sprm::CRgFtc2::val:  //"Other" font, override with BiDi if it exists
+            case NS_sprm::CFtcBi::val:   //BiDi Font
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case NS_sprm::v6::sprmCFtc: //WW6
             case 111:                   //WW7
-            case NS_sprm::sprmCRgFtc0:
+            case NS_sprm::CRgFtc0::val:
                 nId = RES_CHRATR_FONT;
                 break;
             case 112:                   //WW7
-            case NS_sprm::sprmCRgFtc1:
+            case NS_sprm::CRgFtc1::val:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
             default:
@@ -3901,12 +3901,12 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
     {
         case 74: // WW2
         case NS_sprm::v6::sprmCHps:
-        case NS_sprm::sprmCHps:
+        case NS_sprm::CHps::val:
             nId = RES_CHRATR_FONTSIZE;
             break;
         case 85:  //WW2
         case 116: //WW7
-        case NS_sprm::sprmCHpsBi:
+        case NS_sprm::CHpsBi::val:
             nId = RES_CHRATR_CTL_FONTSIZE;
             break;
         default:
@@ -3976,17 +3976,17 @@ void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, sho
     switch( nId )
     {
         case NS_sprm::v6::sprmCLid:
-        case NS_sprm::sprmCRgLid0_80:
-        case NS_sprm::sprmCRgLid0:
+        case NS_sprm::CRgLid0_80::val:
+        case NS_sprm::CRgLid0::val:
             nId = RES_CHRATR_LANGUAGE;
             break;
-        case NS_sprm::sprmCRgLid1_80:
-        case NS_sprm::sprmCRgLid1:
+        case NS_sprm::CRgLid1_80::val:
+        case NS_sprm::CRgLid1::val:
             nId = RES_CHRATR_CJK_LANGUAGE;
             break;
         case 83:  // WW2
         case 114: // WW7
-        case NS_sprm::sprmCLidBi:
+        case NS_sprm::CLidBi::val:
             nId = RES_CHRATR_CTL_LANGUAGE;
             break;
         default:
@@ -4060,7 +4060,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short n
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCShd).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::CShd::val).pSprm)
         return;
 
     if (nLen < 2)
@@ -4149,7 +4149,7 @@ static bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
         if (bVer67)
             return pPap->HasSprm(NS_sprm::v6::sprmPDxaLeft).pSprm;
         else
-            return (pPap->HasSprm(NS_sprm::sprmPDxaLeft80).pSprm || pPap->HasSprm(NS_sprm::sprmPDxaLeft).pSprm);
+            return (pPap->HasSprm(NS_sprm::PDxaLeft80::val).pSprm || pPap->HasSprm(NS_sprm::PDxaLeft::val).pSprm);
     }
     return false;
 }
@@ -4206,15 +4206,15 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             case NS_sprm::v6::sprmPDxaLeft:
                 nId = NS_sprm::v6::sprmPDxaRight;
                 break;
-            case NS_sprm::sprmPDxaLeft80:
-                nId = NS_sprm::sprmPDxaRight80;
+            case NS_sprm::PDxaLeft80::val:
+                nId = NS_sprm::PDxaRight80::val;
                 break;
             //Right becomes before;
             case NS_sprm::v6::sprmPDxaRight:
                 nId = NS_sprm::v6::sprmPDxaLeft;
                 break;
-            case NS_sprm::sprmPDxaRight80:
-                nId = NS_sprm::sprmPDxaLeft80;
+            case NS_sprm::PDxaRight80::val:
+                nId = NS_sprm::PDxaLeft80::val;
                 break;
         }
     }
@@ -4226,8 +4226,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     {
         //sprmPDxaLeft
         case NS_sprm::v6::sprmPDxaLeft:
-        case NS_sprm::sprmPDxaLeft80:
-        case NS_sprm::sprmPDxaLeft:
+        case NS_sprm::PDxaLeft80::val:
+        case NS_sprm::PDxaLeft::val:
             aLR->SetTextLeft( nPara );
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
@@ -4237,8 +4237,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             break;
         //sprmPDxaLeft1
         case NS_sprm::v6::sprmPDxaLeft1:
-        case NS_sprm::sprmPDxaLeft180:
-        case NS_sprm::sprmPDxaLeft1:
+        case NS_sprm::PDxaLeft180::val:
+        case NS_sprm::PDxaLeft1::val:
             /*
             As part of an attempt to break my spirit ww 8+ formats can contain
             ww 7- lists. If they do and the list is part of the style, then
@@ -4252,7 +4252,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             */
             if (m_xPlcxMan && m_nCurrentColl < m_vColl.size() && m_vColl[m_nCurrentColl].m_bHasBrokenWW6List)
             {
-                SprmResult aIsZeroed = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::sprmPIlfo);
+                SprmResult aIsZeroed = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::PIlfo::val);
                 if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
                     const SvxLRSpaceItem &rLR =
@@ -4290,8 +4290,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             break;
         //sprmPDxaRight
         case NS_sprm::v6::sprmPDxaRight:
-        case NS_sprm::sprmPDxaRight80:
-        case NS_sprm::sprmPDxaRight:
+        case NS_sprm::PDxaRight80::val:
+        case NS_sprm::PDxaRight::val:
             aLR->SetRight( nPara );
             break;
         default:
@@ -4459,12 +4459,12 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     {
         //sprmPDyaBefore
         case NS_sprm::v6::sprmPDyaBefore:
-        case NS_sprm::sprmPDyaBefore:
+        case NS_sprm::PDyaBefore::val:
             aUL.SetUpper( nPara );
             break;
         //sprmPDyaAfter
         case NS_sprm::v6::sprmPDyaAfter:
-        case NS_sprm::sprmPDyaAfter:
+        case NS_sprm::PDyaAfter::val:
             aUL.SetLower( nPara );
             break;
         default:
@@ -4538,7 +4538,7 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16 nId, const sal_uInt8* pData, shor
         aAdjust.SetLastBlock(SvxAdjust::Block);
 
     NewAttr(aAdjust);
-    SetRelativeJustify( nId != NS_sprm::sprmPJc80 );
+    SetRelativeJustify( nId != NS_sprm::PJc80::val );
 }
 
 bool SwWW8ImplReader::IsRightToLeft()
@@ -4546,7 +4546,7 @@ bool SwWW8ImplReader::IsRightToLeft()
     bool bRTL = false;
     SprmResult aDir;
     if (m_xPlcxMan)
-        aDir = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::sprmPFBiDi);
+        aDir = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::PFBiDi::val);
     if (aDir.pSprm && aDir.nRemainingData >= 1)
         bRTL = *aDir.pSprm != 0;
     else
@@ -4607,13 +4607,13 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
 {
     switch( nId )
     {
-        case NS_sprm::sprmPFKinsoku:
+        case NS_sprm::PFKinsoku::val:
             nId = RES_PARATR_FORBIDDEN_RULES;
             break;
-        case NS_sprm::sprmPFOverflowPunct:
+        case NS_sprm::PFOverflowPunct::val:
             nId = RES_PARATR_HANGINGPUNCTUATION;
             break;
-        case NS_sprm::sprmPFAutoSpaceDE:
+        case NS_sprm::PFAutoSpaceDE::val:
             nId = RES_PARATR_SCRIPTSPACE;
             break;
         default:
@@ -4644,7 +4644,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
         //one is ignored
         SprmResult aLang;
         if (m_xPlcxMan)
-            aLang = m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCRgLid1_80);
+            aLang = m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::CRgLid1_80::val);
 
         if (aLang.pSprm && aLang.nRemainingData >= 2)
             nLang = LanguageType(SVBT16ToUInt16(aLang.pSprm));
@@ -4717,8 +4717,8 @@ void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short
 
             const SvxCharReliefItem* pOld = static_cast<const SvxCharReliefItem*>(
                                             GetFormatAttr( RES_CHRATR_RELIEF ));
-            FontRelief nNewValue = NS_sprm::sprmCFImprint == nId ? FontRelief::Engraved
-                                        : ( NS_sprm::sprmCFEmboss == nId ? FontRelief::Embossed
+            FontRelief nNewValue = NS_sprm::CFImprint::val == nId ? FontRelief::Engraved
+                                        : ( NS_sprm::CFEmboss::val == nId ? FontRelief::Embossed
                                                          : FontRelief::NONE );
             if( pOld->GetValue() == nNewValue )
             {
@@ -4887,7 +4887,7 @@ void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
 
 void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::sprmPShd).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::PShd::val).pSprm)
         return;
 
     if (nLen < 2)
@@ -5049,7 +5049,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
 void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
     //Ignore this old border type
-    //if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCBrc))
+    //if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::CBrc::val))
     //    return;
 
     if (nLen < 0)
@@ -5065,7 +5065,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
         {
             std::unique_ptr<SvxBoxItem> aBoxItem(pBox->Clone());
             WW8_BRCVer9 aBrc;
-            int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
+            int nBrcVer = (nId == NS_sprm::CBrc::val) ? 9 : (m_bVer67 ? 6 : 8);
 
             SetWW8_BRC(nBrcVer, aBrc, pData, nLen);
 
@@ -5221,27 +5221,27 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     memset(pTabPos, 0, sizeof(WW8_TablePos));
     // sprmTPc contains a PositionCodeOperand structure that specifies the origin
     // that is used to calculate the table position when it is absolutely positioned
-    SprmResult aRes = pPap->HasSprm(NS_sprm::sprmTPc);
+    SprmResult aRes = pPap->HasSprm(NS_sprm::TPc::val);
     if (aRes.pSprm && aRes.nRemainingData >= 1)
     {
         pTabPos->nSp29 = *aRes.pSprm;
         pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
-        aRes = pPap->HasSprm(NS_sprm::sprmTDxaAbs);
+        aRes = pPap->HasSprm(NS_sprm::TDxaAbs::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nSp26 = SVBT16ToUInt16(aRes.pSprm);
-        aRes = pPap->HasSprm(NS_sprm::sprmTDyaAbs);
+        aRes = pPap->HasSprm(NS_sprm::TDyaAbs::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nSp27 = SVBT16ToUInt16(aRes.pSprm);
-        aRes = pPap->HasSprm(NS_sprm::sprmTDxaFromText);
+        aRes = pPap->HasSprm(NS_sprm::TDxaFromText::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nLeMgn = SVBT16ToUInt16(aRes.pSprm);
-        aRes = pPap->HasSprm(NS_sprm::sprmTDxaFromTextRight);
+        aRes = pPap->HasSprm(NS_sprm::TDxaFromTextRight::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nRiMgn = SVBT16ToUInt16(aRes.pSprm);
-        aRes = pPap->HasSprm(NS_sprm::sprmTDyaFromText);
+        aRes = pPap->HasSprm(NS_sprm::TDyaFromText::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nUpMgn = SVBT16ToUInt16(aRes.pSprm);
-        aRes = pPap->HasSprm(NS_sprm::sprmTDyaFromTextBottom);
+        aRes = pPap->HasSprm(NS_sprm::TDyaFromTextBottom::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nLoMgn = SVBT16ToUInt16(aRes.pSprm);
         pTabPos->bNoFly = !FloatingTableConversion(pPap);
@@ -5692,42 +5692,42 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
     {
         {0,                              nullptr},                                       // "0" default resp. error
 
-        {NS_sprm::sprmPIstd,             &SwWW8ImplReader::Read_StyleCode},              // pap.istd;istd (style code);short;
-        {NS_sprm::sprmPIstdPermute,      nullptr},                                       // pap.istd;permutation vector;
+        {NS_sprm::PIstd::val,             &SwWW8ImplReader::Read_StyleCode},              // pap.istd;istd (style code);short;
+        {NS_sprm::PIstdPermute::val,      nullptr},                                       // pap.istd;permutation vector;
                                                                                          // variable length;
-        {NS_sprm::sprmPIncLvl,           nullptr},                                       // pap.istd, pap.lvl;difference between
+        {NS_sprm::PIncLvl::val,           nullptr},                                       // pap.istd, pap.lvl;difference between
                                                                                          // istd of base PAP and istd of
                                                                                          // PAP to be produced;byte;
-        {NS_sprm::sprmPJc80,             &SwWW8ImplReader::Read_Justify},                // pap.jc;jc (justification);byte;
+        {NS_sprm::PJc80::val,             &SwWW8ImplReader::Read_Justify},                // pap.jc;jc (justification);byte;
         {NS_sprm::LN_PFSideBySide,       nullptr},                                       // pap.fSideBySide;0 or 1;byte;
-        {NS_sprm::sprmPFKeep,            &SwWW8ImplReader::Read_KeepLines},              // pap.fKeep;0 or 1;byte;
-        {NS_sprm::sprmPFKeepFollow,      &SwWW8ImplReader::Read_KeepParas},              // pap.fKeepFollow;0 or 1;byte;
-        {NS_sprm::sprmPFPageBreakBefore, &SwWW8ImplReader::Read_BreakBefore},            // pap.fPageBreakBefore;0 or 1;byte;
+        {NS_sprm::PFKeep::val,            &SwWW8ImplReader::Read_KeepLines},              // pap.fKeep;0 or 1;byte;
+        {NS_sprm::PFKeepFollow::val,      &SwWW8ImplReader::Read_KeepParas},              // pap.fKeepFollow;0 or 1;byte;
+        {NS_sprm::PFPageBreakBefore::val, &SwWW8ImplReader::Read_BreakBefore},            // pap.fPageBreakBefore;0 or 1;byte;
         {NS_sprm::LN_PBrcl,              nullptr},                                       // pap.brcl;brcl;byte;
         {NS_sprm::LN_PBrcp,              nullptr},                                       // pap.brcp;brcp;byte;
-        {NS_sprm::sprmPIlvl,             &SwWW8ImplReader::Read_ListLevel},              // pap.ilvl;ilvl;byte;
-        {NS_sprm::sprmPIlfo,             &SwWW8ImplReader::Read_LFOPosition},            // pap.ilfo;ilfo (list index);short;
-        {NS_sprm::sprmPFNoLineNumb,      &SwWW8ImplReader::Read_NoLineNumb},             // pap.fNoLnn;0 or 1;byte;
-        {NS_sprm::sprmPChgTabsPapx,      &SwWW8ImplReader::Read_Tab},                    // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
+        {NS_sprm::PIlvl::val,             &SwWW8ImplReader::Read_ListLevel},              // pap.ilvl;ilvl;byte;
+        {NS_sprm::PIlfo::val,             &SwWW8ImplReader::Read_LFOPosition},            // pap.ilfo;ilfo (list index);short;
+        {NS_sprm::PFNoLineNumb::val,      &SwWW8ImplReader::Read_NoLineNumb},             // pap.fNoLnn;0 or 1;byte;
+        {NS_sprm::PChgTabsPapx::val,      &SwWW8ImplReader::Read_Tab},                    // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
                                                                                          // complex;variable length
-        {NS_sprm::sprmPDxaRight80,       &SwWW8ImplReader::Read_LR},                     // pap.dxaRight;dxa;word;
-        {NS_sprm::sprmPDxaLeft80,        &SwWW8ImplReader::Read_LR},                     // pap.dxaLeft;dxa;word;
-        {NS_sprm::sprmPNest80,           nullptr},                                       // pap.dxaLeft;dxa;word;
-        {NS_sprm::sprmPDxaLeft180,       &SwWW8ImplReader::Read_LR},                     // pap.dxaLeft1;dxa;word;
-        {NS_sprm::sprmPDyaLine,          &SwWW8ImplReader::Read_LineSpace},              // pap.lspd;an LSPD, a long word
+        {NS_sprm::PDxaRight80::val,       &SwWW8ImplReader::Read_LR},                     // pap.dxaRight;dxa;word;
+        {NS_sprm::PDxaLeft80::val,        &SwWW8ImplReader::Read_LR},                     // pap.dxaLeft;dxa;word;
+        {NS_sprm::PNest80::val,           nullptr},                                       // pap.dxaLeft;dxa;word;
+        {NS_sprm::PDxaLeft180::val,       &SwWW8ImplReader::Read_LR},                     // pap.dxaLeft1;dxa;word;
+        {NS_sprm::PDyaLine::val,          &SwWW8ImplReader::Read_LineSpace},              // pap.lspd;an LSPD, a long word
                                                                                          // structure consisting of a short
                                                                                          // of dyaLine followed by a short
                                                                                          // of fMultLinespace;long;
-        {NS_sprm::sprmPDyaBefore,        &SwWW8ImplReader::Read_UL},                     // pap.dyaBefore;dya;word;
-        {NS_sprm::sprmPDyaAfter,         &SwWW8ImplReader::Read_UL},                     // pap.dyaAfter;dya;word;
-        {NS_sprm::sprmPChgTabs,          nullptr},                                       // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
+        {NS_sprm::PDyaBefore::val,        &SwWW8ImplReader::Read_UL},                     // pap.dyaBefore;dya;word;
+        {NS_sprm::PDyaAfter::val,         &SwWW8ImplReader::Read_UL},                     // pap.dyaAfter;dya;word;
+        {NS_sprm::PChgTabs::val,          nullptr},                                       // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
                                                                                          // complex;variable length;
-        {NS_sprm::sprmPFInTable,         nullptr},                                       // pap.fInTable;0 or 1;byte;
-        {NS_sprm::sprmPFTtp,             &SwWW8ImplReader::Read_TabRowEnd},              // pap.fTtp;0 or 1;byte;
-        {NS_sprm::sprmPDxaAbs,           nullptr},                                       // pap.dxaAbs;dxa;word;
-        {NS_sprm::sprmPDyaAbs,           nullptr},                                       // pap.dyaAbs;dya;word;
-        {NS_sprm::sprmPDxaWidth,         nullptr},                                       // pap.dxaWidth;dxa;word;
-        {NS_sprm::sprmPPc,               &SwWW8ImplReader::Read_ApoPPC},                 // pap.pcHorz, pap.pcVert;complex;byte;
+        {NS_sprm::PFInTable::val,         nullptr},                                       // pap.fInTable;0 or 1;byte;
+        {NS_sprm::PFTtp::val,             &SwWW8ImplReader::Read_TabRowEnd},              // pap.fTtp;0 or 1;byte;
+        {NS_sprm::PDxaAbs::val,           nullptr},                                       // pap.dxaAbs;dxa;word;
+        {NS_sprm::PDyaAbs::val,           nullptr},                                       // pap.dyaAbs;dya;word;
+        {NS_sprm::PDxaWidth::val,         nullptr},                                       // pap.dxaWidth;dxa;word;
+        {NS_sprm::PPc::val,               &SwWW8ImplReader::Read_ApoPPC},                 // pap.pcHorz, pap.pcVert;complex;byte;
         {NS_sprm::LN_PBrcTop10,          nullptr},                                       // pap.brcTop;BRC10;word;
         {NS_sprm::LN_PBrcLeft10,         nullptr},                                       // pap.brcLeft;BRC10;word;
         {NS_sprm::LN_PBrcBottom10,       nullptr},                                       // pap.brcBottom;BRC10;word;
@@ -5735,320 +5735,320 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
         {NS_sprm::LN_PBrcBetween10,      nullptr},                                       // pap.brcBetween;BRC10;word;
         {NS_sprm::LN_PBrcBar10,          nullptr},                                       // pap.brcBar;BRC10;word;
         {NS_sprm::LN_PDxaFromText10,     nullptr},                                       // pap.dxaFromText;dxa;word;
-        {NS_sprm::sprmPWr,               nullptr},                                       // pap.wr;wr;byte;
-        {NS_sprm::sprmPBrcTop80,         &SwWW8ImplReader::Read_Border},                 // pap.brcTop;BRC;long;
-        {NS_sprm::sprmPBrcLeft80,        &SwWW8ImplReader::Read_Border},                 // pap.brcLeft;BRC;long;
-        {NS_sprm::sprmPBrcBottom80,      &SwWW8ImplReader::Read_Border},                 // pap.brcBottom;BRC;long;
-        {NS_sprm::sprmPBrcRight80,       &SwWW8ImplReader::Read_Border},                 // pap.brcRight;BRC;long;
-        {NS_sprm::sprmPBrcBetween80,     &SwWW8ImplReader::Read_Border},                 // pap.brcBetween;BRC;long;
-        {NS_sprm::sprmPBrcBar80,         nullptr},                                       // pap.brcBar;BRC;long;
-        {NS_sprm::sprmPFNoAutoHyph,      &SwWW8ImplReader::Read_Hyphenation},            // pap.fNoAutoHyph;0 or 1;byte;
-        {NS_sprm::sprmPWHeightAbs,       nullptr},                                       // pap.wHeightAbs;w;word;
-        {NS_sprm::sprmPDcs,              nullptr},                                       // pap.dcs;DCS;short;
-        {NS_sprm::sprmPShd80,            &SwWW8ImplReader::Read_Shade},                  // pap.shd;SHD;word;
-        {NS_sprm::sprmPDyaFromText,      nullptr},                                       // pap.dyaFromText;dya;word;
-        {NS_sprm::sprmPDxaFromText,      nullptr},                                       // pap.dxaFromText;dxa;word;
-        {NS_sprm::sprmPFLocked,          nullptr},                                       // pap.fLocked;0 or 1;byte;
-        {NS_sprm::sprmPFWidowControl,    &SwWW8ImplReader::Read_WidowControl},           // pap.fWidowControl;0 or 1;byte
+        {NS_sprm::PWr::val,               nullptr},                                       // pap.wr;wr;byte;
+        {NS_sprm::PBrcTop80::val,         &SwWW8ImplReader::Read_Border},                 // pap.brcTop;BRC;long;
+        {NS_sprm::PBrcLeft80::val,        &SwWW8ImplReader::Read_Border},                 // pap.brcLeft;BRC;long;
+        {NS_sprm::PBrcBottom80::val,      &SwWW8ImplReader::Read_Border},                 // pap.brcBottom;BRC;long;
+        {NS_sprm::PBrcRight80::val,       &SwWW8ImplReader::Read_Border},                 // pap.brcRight;BRC;long;
+        {NS_sprm::PBrcBetween80::val,     &SwWW8ImplReader::Read_Border},                 // pap.brcBetween;BRC;long;
+        {NS_sprm::PBrcBar80::val,         nullptr},                                       // pap.brcBar;BRC;long;
+        {NS_sprm::PFNoAutoHyph::val,      &SwWW8ImplReader::Read_Hyphenation},            // pap.fNoAutoHyph;0 or 1;byte;
+        {NS_sprm::PWHeightAbs::val,       nullptr},                                       // pap.wHeightAbs;w;word;
+        {NS_sprm::PDcs::val,              nullptr},                                       // pap.dcs;DCS;short;
+        {NS_sprm::PShd80::val,            &SwWW8ImplReader::Read_Shade},                  // pap.shd;SHD;word;
+        {NS_sprm::PDyaFromText::val,      nullptr},                                       // pap.dyaFromText;dya;word;
+        {NS_sprm::PDxaFromText::val,      nullptr},                                       // pap.dxaFromText;dxa;word;
+        {NS_sprm::PFLocked::val,          nullptr},                                       // pap.fLocked;0 or 1;byte;
+        {NS_sprm::PFWidowControl::val,    &SwWW8ImplReader::Read_WidowControl},           // pap.fWidowControl;0 or 1;byte
         {NS_sprm::LN_PRuler,             nullptr},                                       // variable length;
-        {NS_sprm::sprmPFKinsoku,         &SwWW8ImplReader::Read_BoolItem},               // pap.fKinsoku;0 or 1;byte;
-        {NS_sprm::sprmPFWordWrap,        nullptr},                                       // pap.fWordWrap;0 or 1;byte;
-        {NS_sprm::sprmPFOverflowPunct,   &SwWW8ImplReader::Read_BoolItem},               // pap.fOverflowPunct; 0 or 1;byte;
-        {NS_sprm::sprmPFTopLinePunct,    nullptr},                                       // pap.fTopLinePunct;0 or 1;byte
-        {NS_sprm::sprmPFAutoSpaceDE,     &SwWW8ImplReader::Read_BoolItem},               // pap.fAutoSpaceDE;0 or 1;byte;
-        {NS_sprm::sprmPFAutoSpaceDN,     nullptr},                                       // pap.fAutoSpaceDN;0 or 1;byte;
-        {NS_sprm::sprmPWAlignFont,       &SwWW8ImplReader::Read_AlignFont},              // pap.wAlignFont;iFa;word;
-        {NS_sprm::sprmPFrameTextFlow,    nullptr},                                       // pap.fVertical pap.fBackward
+        {NS_sprm::PFKinsoku::val,         &SwWW8ImplReader::Read_BoolItem},               // pap.fKinsoku;0 or 1;byte;
+        {NS_sprm::PFWordWrap::val,        nullptr},                                       // pap.fWordWrap;0 or 1;byte;
+        {NS_sprm::PFOverflowPunct::val,   &SwWW8ImplReader::Read_BoolItem},               // pap.fOverflowPunct; 0 or 1;byte;
+        {NS_sprm::PFTopLinePunct::val,    nullptr},                                       // pap.fTopLinePunct;0 or 1;byte
+        {NS_sprm::PFAutoSpaceDE::val,     &SwWW8ImplReader::Read_BoolItem},               // pap.fAutoSpaceDE;0 or 1;byte;
+        {NS_sprm::PFAutoSpaceDN::val,     nullptr},                                       // pap.fAutoSpaceDN;0 or 1;byte;
+        {NS_sprm::PWAlignFont::val,       &SwWW8ImplReader::Read_AlignFont},              // pap.wAlignFont;iFa;word;
+        {NS_sprm::PFrameTextFlow::val,    nullptr},                                       // pap.fVertical pap.fBackward
                                                                                          // pap.fRotateFont;complex; word
         {NS_sprm::LN_PISnapBaseLine,     nullptr},                                       // obsolete, not applicable in
                                                                                          // Word97 and later versions;;byte;
         {NS_sprm::LN_PAnld,              &SwWW8ImplReader::Read_ANLevelDesc},            // pap.anld;;variable length;
         {NS_sprm::LN_PPropRMark,         nullptr},                                       // pap.fPropRMark;complex;
                                                                                          // variable length;
-        {NS_sprm::sprmPOutLvl,           &SwWW8ImplReader::Read_POutLvl},                // pap.lvl;has no effect if pap.istd
+        {NS_sprm::POutLvl::val,           &SwWW8ImplReader::Read_POutLvl},                // pap.lvl;has no effect if pap.istd
                                                                                          // is < 1 or is > 9;byte;
-        {NS_sprm::sprmPFBiDi,            &SwWW8ImplReader::Read_ParaBiDi},               // ;;byte;
-        {NS_sprm::sprmPFNumRMIns,        nullptr},                                       // pap.fNumRMIns;1 or 0;bit;
+        {NS_sprm::PFBiDi::val,            &SwWW8ImplReader::Read_ParaBiDi},               // ;;byte;
+        {NS_sprm::PFNumRMIns::val,        nullptr},                                       // pap.fNumRMIns;1 or 0;bit;
         {NS_sprm::LN_PCrLf,              nullptr},                                       // ;;byte;
-        {NS_sprm::sprmPNumRM,            nullptr},                                       // pap.numrm;;variable length;
+        {NS_sprm::PNumRM::val,            nullptr},                                       // pap.numrm;;variable length;
         {NS_sprm::LN_PHugePapx,          nullptr},                                       // ;fc in the data stream to locate
                                                                                          // the huge grpprl;long;
-        {NS_sprm::sprmPHugePapx,         nullptr},                                       // ;fc in the data stream to locate
+        {NS_sprm::PHugePapx::val,         nullptr},                                       // ;fc in the data stream to locate
                                                                                          // the huge grpprl;long;
-        {NS_sprm::sprmPFUsePgsuSettings, &SwWW8ImplReader::Read_UsePgsuSettings},        // pap.fUsePgsuSettings;1 or 0;byte;
-        {NS_sprm::sprmPFAdjustRight,     nullptr},                                       // pap.fAdjustRight;1 or 0;byte;
-        {NS_sprm::sprmCFRMarkDel,        &SwWW8ImplReader::Read_CFRMarkDel},             // chp.fRMarkDel;1 or 0;bit;
-        {NS_sprm::sprmCFRMarkIns,        &SwWW8ImplReader::Read_CFRMark},                // chp.fRMark;1 or 0;bit;
-        {NS_sprm::sprmCFFldVanish,       &SwWW8ImplReader::Read_FieldVanish},            // chp.fFieldVanish;1 or 0;bit;
-        {NS_sprm::sprmCPicLocation,      &SwWW8ImplReader::Read_PicLoc},                 // chp.fcPic and chp.fSpec;variable
+        {NS_sprm::PFUsePgsuSettings::val, &SwWW8ImplReader::Read_UsePgsuSettings},        // pap.fUsePgsuSettings;1 or 0;byte;
+        {NS_sprm::PFAdjustRight::val,     nullptr},                                       // pap.fAdjustRight;1 or 0;byte;
+        {NS_sprm::CFRMarkDel::val,        &SwWW8ImplReader::Read_CFRMarkDel},             // chp.fRMarkDel;1 or 0;bit;
+        {NS_sprm::CFRMarkIns::val,        &SwWW8ImplReader::Read_CFRMark},                // chp.fRMark;1 or 0;bit;
+        {NS_sprm::CFFldVanish::val,       &SwWW8ImplReader::Read_FieldVanish},            // chp.fFieldVanish;1 or 0;bit;
+        {NS_sprm::CPicLocation::val,      &SwWW8ImplReader::Read_PicLoc},                 // chp.fcPic and chp.fSpec;variable
                                                                                          // length, length recorded is always 4;
-        {NS_sprm::sprmCIbstRMark,        nullptr},                                       // chp.ibstRMark;index into
+        {NS_sprm::CIbstRMark::val,        nullptr},                                       // chp.ibstRMark;index into
                                                                                          // sttbRMark;short;
-        {NS_sprm::sprmCDttmRMark,        nullptr},                                       // chp.dttmRMark;DTTM;long;
-        {NS_sprm::sprmCFData,            nullptr},                                       // chp.fData;1 or 0;bit;
-        {NS_sprm::sprmCIdslRMark,        nullptr},                                       // chp.idslRMReason;an index to
+        {NS_sprm::CDttmRMark::val,        nullptr},                                       // chp.dttmRMark;DTTM;long;
+        {NS_sprm::CFData::val,            nullptr},                                       // chp.fData;1 or 0;bit;
+        {NS_sprm::CIdslRMark::val,        nullptr},                                       // chp.idslRMReason;an index to
                                                                                          // a table of strings defined in
                                                                                          // Word 6.0 executables;short;
         {NS_sprm::LN_CChs,               &SwWW8ImplReader::Read_CharSet},                // chp.fChsDiff and chp.chse;3 bytes;
-        {NS_sprm::sprmCSymbol,           &SwWW8ImplReader::Read_Symbol},                 // chp.fSpec, chp.xchSym and chp.ftcSym;
+        {NS_sprm::CSymbol::val,           &SwWW8ImplReader::Read_Symbol},                 // chp.fSpec, chp.xchSym and chp.ftcSym;
                                                                                          // variable length, length
                                                                                          // recorded is always 4;
-        {NS_sprm::sprmCFOle2,            &SwWW8ImplReader::Read_Obj},                    // chp.fOle2;1 or 0;bit;
+        {NS_sprm::CFOle2::val,            &SwWW8ImplReader::Read_Obj},                    // chp.fOle2;1 or 0;bit;
       //NS_sprm::LN_CIdCharType,                                                         // obsolete: not applicable in Word97
                                                                                          // and later versions
-        {NS_sprm::sprmCHighlight,        &SwWW8ImplReader::Read_CharHighlight},          // chp.fHighlight, chp.icoHighlight;ico
+        {NS_sprm::CHighlight::val,        &SwWW8ImplReader::Read_CharHighlight},          // chp.fHighlight, chp.icoHighlight;ico
                                                                                          // (fHighlight is set to 1 iff
                                                                                          // ico is not 0);byte;
         {NS_sprm::LN_CObjLocation,       &SwWW8ImplReader::Read_PicLoc},                 // chp.fcObj;FC;long;
       //NS_sprm::LN_CFFtcAsciSymb, ? ? ?,
-        {NS_sprm::sprmCIstd,             &SwWW8ImplReader::Read_CColl},                  // chp.istd;istd,short;
-        {NS_sprm::sprmCIstdPermute,      nullptr},                                       // chp.istd;permutation vector;
+        {NS_sprm::CIstd::val,             &SwWW8ImplReader::Read_CColl},                  // chp.istd;istd,short;
+        {NS_sprm::CIstdPermute::val,      nullptr},                                       // chp.istd;permutation vector;
                                                                                          // variable length;
         {NS_sprm::LN_CDefault,           nullptr},                                       // whole CHP;none;variable length;
-        {NS_sprm::sprmCPlain,            nullptr},                                       // whole CHP;none;length: 0;
-        {NS_sprm::sprmCKcd,              &SwWW8ImplReader::Read_Emphasis},
-        {NS_sprm::sprmCFBold,            &SwWW8ImplReader::Read_BoldUsw},                // chp.fBold;0,1, 128, or 129;byte;
-        {NS_sprm::sprmCFItalic,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fItalic;0,1, 128, or 129; byte;
-        {NS_sprm::sprmCFStrike,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fStrike;0,1, 128, or 129; byte;
-        {NS_sprm::sprmCFOutline,         &SwWW8ImplReader::Read_BoldUsw},                // chp.fOutline;0,1, 128, or 129; byte;
-        {NS_sprm::sprmCFShadow,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fShadow;0,1, 128, or 129; byte;
-        {NS_sprm::sprmCFSmallCaps,       &SwWW8ImplReader::Read_BoldUsw},                // chp.fSmallCaps;0,1, 128, or 129;byte;
-        {NS_sprm::sprmCFCaps,            &SwWW8ImplReader::Read_BoldUsw},                // chp.fCaps;0,1, 128, or 129; byte;
-        {NS_sprm::sprmCFVanish,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fVanish;0,1, 128, or 129; byte;
+        {NS_sprm::CPlain::val,            nullptr},                                       // whole CHP;none;length: 0;
+        {NS_sprm::CKcd::val,              &SwWW8ImplReader::Read_Emphasis},
+        {NS_sprm::CFBold::val,            &SwWW8ImplReader::Read_BoldUsw},                // chp.fBold;0,1, 128, or 129;byte;
+        {NS_sprm::CFItalic::val,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fItalic;0,1, 128, or 129; byte;
+        {NS_sprm::CFStrike::val,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fStrike;0,1, 128, or 129; byte;
+        {NS_sprm::CFOutline::val,         &SwWW8ImplReader::Read_BoldUsw},                // chp.fOutline;0,1, 128, or 129; byte;
+        {NS_sprm::CFShadow::val,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fShadow;0,1, 128, or 129; byte;
+        {NS_sprm::CFSmallCaps::val,       &SwWW8ImplReader::Read_BoldUsw},                // chp.fSmallCaps;0,1, 128, or 129;byte;
+        {NS_sprm::CFCaps::val,            &SwWW8ImplReader::Read_BoldUsw},                // chp.fCaps;0,1, 128, or 129; byte;
+        {NS_sprm::CFVanish::val,          &SwWW8ImplReader::Read_BoldUsw},                // chp.fVanish;0,1, 128, or 129; byte;
       //NS_sprm::LN_CFtcDefault, 0,                                                      // ftc, only used internally, never
                                                                                          // stored in file;word;
-        {NS_sprm::sprmCKul,              &SwWW8ImplReader::Read_Underline},              // chp.kul;kul;byte;
+        {NS_sprm::CKul::val,              &SwWW8ImplReader::Read_Underline},              // chp.kul;kul;byte;
         {NS_sprm::LN_CSizePos,           nullptr},                                       // chp.hps, chp.hpsPos;3 bytes;
-        {NS_sprm::sprmCDxaSpace,         &SwWW8ImplReader::Read_Kern},                   // chp.dxaSpace;dxa;word;
+        {NS_sprm::CDxaSpace::val,         &SwWW8ImplReader::Read_Kern},                   // chp.dxaSpace;dxa;word;
         {NS_sprm::LN_CLid,               &SwWW8ImplReader::Read_Language},               // ;only used internally, never stored;
                                                                                          // word;
-        {NS_sprm::sprmCIco,              &SwWW8ImplReader::Read_TextColor},              // chp.ico;ico;byte;
-        {NS_sprm::sprmCHps,              &SwWW8ImplReader::Read_FontSize},               // chp.hps;hps;byte;
+        {NS_sprm::CIco::val,              &SwWW8ImplReader::Read_TextColor},              // chp.ico;ico;byte;
+        {NS_sprm::CHps::val,              &SwWW8ImplReader::Read_FontSize},               // chp.hps;hps;byte;
         {NS_sprm::LN_CHpsInc,            nullptr},                                       // chp.hps;byte;
-        {NS_sprm::sprmCHpsPos,           &SwWW8ImplReader::Read_SubSuperProp},           // chp.hpsPos;hps;byte;
+        {NS_sprm::CHpsPos::val,           &SwWW8ImplReader::Read_SubSuperProp},           // chp.hpsPos;hps;byte;
         {NS_sprm::LN_CHpsPosAdj,         nullptr},                                       // chp.hpsPos;hps;byte;
-        {NS_sprm::sprmCMajority,         &SwWW8ImplReader::Read_Majority},               // chp.fBold, chp.fItalic, chp.fStrike,
+        {NS_sprm::CMajority::val,         &SwWW8ImplReader::Read_Majority},               // chp.fBold, chp.fItalic, chp.fStrike,
                                                                                          // chp.fSmallCaps, chp.fVanish, chp.fCaps,
                                                                                          // chp.hps, chp.hpsPos, chp.dxaSpace,
                                                                                          // chp.kul, chp.ico, chp.rgftc, chp.rglid;
                                                                                          // complex;variable length, length byte
                                                                                          // plus size of following grpprl;
-        {NS_sprm::sprmCIss,              &SwWW8ImplReader::Read_SubSuper},               // chp.iss;iss;byte;
+        {NS_sprm::CIss::val,              &SwWW8ImplReader::Read_SubSuper},               // chp.iss;iss;byte;
         {NS_sprm::LN_CHpsNew50,          nullptr},                                       // chp.hps;hps;variable width, length
                                                                                          // always recorded as 2;
         {NS_sprm::LN_CHpsInc1,           nullptr},                                       // chp.hps;complex; variable width,
                                                                                          // length always recorded as 2;
-        {NS_sprm::sprmCHpsKern,          &SwWW8ImplReader::Read_FontKern},               // chp.hpsKern;hps;short;
+        {NS_sprm::CHpsKern::val,          &SwWW8ImplReader::Read_FontKern},               // chp.hpsKern;hps;short;
         {NS_sprm::LN_CMajority50,        &SwWW8ImplReader::Read_Majority},               // chp.fBold, chp.fItalic, chp.fStrike,
                                                                                          // chp.fSmallCaps, chp.fVanish, chp.fCaps,
                                                                                          // chp.ftc, chp.hps, chp.hpsPos, chp.kul,
                                                                                          // chp.dxaSpace, chp.ico;complex;
                                                                                          // variable length;
         {NS_sprm::LN_CHpsMul,            nullptr},                                       // chp.hps;percentage to grow hps;short;
-        {NS_sprm::sprmCHresi,            nullptr},                                       // ???? "sprmCYsri" chp.ysri;ysri;short;
-        {NS_sprm::sprmCRgFtc0,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[0];ftc for ASCII text;short;
-        {NS_sprm::sprmCRgFtc1,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[1];ftc for Far East text;
+        {NS_sprm::CHresi::val,            nullptr},                                       // ???? "sprmCYsri" chp.ysri;ysri;short;
+        {NS_sprm::CRgFtc0::val,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[0];ftc for ASCII text;short;
+        {NS_sprm::CRgFtc1::val,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[1];ftc for Far East text;
                                                                                          // short;
-        {NS_sprm::sprmCRgFtc2,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[2];ftc for non-Far East text;
+        {NS_sprm::CRgFtc2::val,           &SwWW8ImplReader::Read_FontCode},               // chp.rgftc[2];ftc for non-Far East text;
                                                                                          // short;
-        {NS_sprm::sprmCCharScale,        &SwWW8ImplReader::Read_ScaleWidth},
-        {NS_sprm::sprmCFDStrike,         &SwWW8ImplReader::Read_BoldUsw},                // chp.fDStrike;;byte;
-        {NS_sprm::sprmCFImprint,         &SwWW8ImplReader::Read_Relief},                 // chp.fImprint;1 or 0;bit;
-        {NS_sprm::sprmCFSpec,            &SwWW8ImplReader::Read_Special},                // chp.fSpec;1 or 0;bit;
-        {NS_sprm::sprmCFObj,             &SwWW8ImplReader::Read_Obj},                    // chp.fObj;1 or 0;bit;
-        {NS_sprm::sprmCPropRMark90,      &SwWW8ImplReader::Read_CPropRMark},             // chp.fPropRMark, chp.ibstPropRMark,
+        {NS_sprm::CCharScale::val,        &SwWW8ImplReader::Read_ScaleWidth},
+        {NS_sprm::CFDStrike::val,         &SwWW8ImplReader::Read_BoldUsw},                // chp.fDStrike;;byte;
+        {NS_sprm::CFImprint::val,         &SwWW8ImplReader::Read_Relief},                 // chp.fImprint;1 or 0;bit;
+        {NS_sprm::CFSpec::val,            &SwWW8ImplReader::Read_Special},                // chp.fSpec;1 or 0;bit;
+        {NS_sprm::CFObj::val,             &SwWW8ImplReader::Read_Obj},                    // chp.fObj;1 or 0;bit;
+        {NS_sprm::CPropRMark90::val,      &SwWW8ImplReader::Read_CPropRMark},             // chp.fPropRMark, chp.ibstPropRMark,
                                                                                          // chp.dttmPropRMark;Complex;variable
                                                                                          // length always recorded as 7 bytes;
-        {NS_sprm::sprmCFEmboss,          &SwWW8ImplReader::Read_Relief},                 // chp.fEmboss;1 or 0;bit;
-        {NS_sprm::sprmCSfxText,          &SwWW8ImplReader::Read_TextAnim},               // chp.sfxtText;text animation;byte;
-        {NS_sprm::sprmCFBiDi,            &SwWW8ImplReader::Read_Bidi},
+        {NS_sprm::CFEmboss::val,          &SwWW8ImplReader::Read_Relief},                 // chp.fEmboss;1 or 0;bit;
+        {NS_sprm::CSfxText::val,          &SwWW8ImplReader::Read_TextAnim},               // chp.sfxtText;text animation;byte;
+        {NS_sprm::CFBiDi::val,            &SwWW8ImplReader::Read_Bidi},
         {NS_sprm::LN_CFDiacColor,        nullptr},
-        {NS_sprm::sprmCFBoldBi,          &SwWW8ImplReader::Read_BoldBiDiUsw},
-        {NS_sprm::sprmCFItalicBi,        &SwWW8ImplReader::Read_BoldBiDiUsw},
-        {NS_sprm::sprmCFtcBi,            &SwWW8ImplReader::Read_FontCode},
-        {NS_sprm::sprmCLidBi,            &SwWW8ImplReader::Read_Language},
-      //NS_sprm::sprmCIcoBi, ? ? ?,
-        {NS_sprm::sprmCHpsBi,            &SwWW8ImplReader::Read_FontSize},
-        {NS_sprm::sprmCDispFldRMark,     nullptr},                                       // chp.fDispFieldRMark,
+        {NS_sprm::CFBoldBi::val,          &SwWW8ImplReader::Read_BoldBiDiUsw},
+        {NS_sprm::CFItalicBi::val,        &SwWW8ImplReader::Read_BoldBiDiUsw},
+        {NS_sprm::CFtcBi::val,            &SwWW8ImplReader::Read_FontCode},
+        {NS_sprm::CLidBi::val,            &SwWW8ImplReader::Read_Language},
+      //NS_sprm::CIcoBi::val, ? ? ?,
+        {NS_sprm::CHpsBi::val,            &SwWW8ImplReader::Read_FontSize},
+        {NS_sprm::CDispFldRMark::val,     nullptr},                                       // chp.fDispFieldRMark,
                                                                                          // chp.ibstDispFieldRMark,
                                                                                          // chp.dttmDispFieldRMark;
                                                                                          // Complex;variable length
                                                                                          // always recorded as 39 bytes;
-        {NS_sprm::sprmCIbstRMarkDel,     nullptr},                                       // chp.ibstRMarkDel;index into
+        {NS_sprm::CIbstRMarkDel::val,     nullptr},                                       // chp.ibstRMarkDel;index into
                                                                                          // sttbRMark;short;
-        {NS_sprm::sprmCDttmRMarkDel,     nullptr},                                       // chp.dttmRMarkDel;DTTM;long;
-        {NS_sprm::sprmCBrc80,            &SwWW8ImplReader::Read_CharBorder},             // chp.brc;BRC;long;
-        {NS_sprm::sprmCBrc,              &SwWW8ImplReader::Read_CharBorder},             // chp.brc;BRC;long;
-        {NS_sprm::sprmCShd80,            &SwWW8ImplReader::Read_CharShadow},             // chp.shd;SHD;short;
-        {NS_sprm::sprmCIdslRMarkDel,     nullptr},                                       // chp.idslRMReasonDel;an index to
+        {NS_sprm::CDttmRMarkDel::val,     nullptr},                                       // chp.dttmRMarkDel;DTTM;long;
+        {NS_sprm::CBrc80::val,            &SwWW8ImplReader::Read_CharBorder},             // chp.brc;BRC;long;
+        {NS_sprm::CBrc::val,              &SwWW8ImplReader::Read_CharBorder},             // chp.brc;BRC;long;
+        {NS_sprm::CShd80::val,            &SwWW8ImplReader::Read_CharShadow},             // chp.shd;SHD;short;
+        {NS_sprm::CIdslRMarkDel::val,     nullptr},                                       // chp.idslRMReasonDel;an index to
                                                                                          // a table of strings defined in
                                                                                          // Word 6.0 executables;short;
-        {NS_sprm::sprmCFUsePgsuSettings, nullptr},                                       // chp.fUsePgsuSettings; 1 or 0;bit;
+        {NS_sprm::CFUsePgsuSettings::val, nullptr},                                       // chp.fUsePgsuSettings; 1 or 0;bit;
         {NS_sprm::LN_CCpg,               nullptr},                                       // ;;word;
-        {NS_sprm::sprmCRgLid0_80,        &SwWW8ImplReader::Read_Language},               // chp.rglid[0];
+        {NS_sprm::CRgLid0_80::val,        &SwWW8ImplReader::Read_Language},               // chp.rglid[0];
                                                                                          // LID: for non-Far East text;word;
-        {NS_sprm::sprmCRgLid1_80,        &SwWW8ImplReader::Read_Language},               // chp.rglid[1];
+        {NS_sprm::CRgLid1_80::val,        &SwWW8ImplReader::Read_Language},               // chp.rglid[1];
                                                                                          // LID: for Far East text;word;
-        {NS_sprm::sprmCIdctHint,         &SwWW8ImplReader::Read_IdctHint},               // chp.idctHint;IDCT: byte;
+        {NS_sprm::CIdctHint::val,         &SwWW8ImplReader::Read_IdctHint},               // chp.idctHint;IDCT: byte;
         {NS_sprm::LN_PicBrcl,            nullptr},                                       // pic.brcl;brcl (see PIC structure
                                                                                          // definition);byte;
         {NS_sprm::LN_PicScale,           nullptr},                                       // pic.mx, pic.my, pic.dxaCropleft,
                                                                                          // pic.dyaCropTop pic.dxaCropRight,
                                                                                          // pic.dyaCropBottom;Complex;
                                                                                          // length byte plus 12 bytes;
-        {NS_sprm::sprmPicBrcTop80,       nullptr},                                       // pic.brcTop;BRC;long;
-        {NS_sprm::sprmPicBrcLeft80,      nullptr},                                       // pic.brcLeft;BRC;long;
-        {NS_sprm::sprmPicBrcBottom80,    nullptr},                                       // pic.brcBottom;BRC;long;
-        {NS_sprm::sprmPicBrcRight80,     nullptr},                                       // pic.brcRight;BRC;long;
-        {NS_sprm::sprmScnsPgn,           nullptr},                                       // sep.cnsPgn;cns;byte;
-        {NS_sprm::sprmSiHeadingPgn,      nullptr},                                       // sep.iHeadingPgn;heading number level;
+        {NS_sprm::PicBrcTop80::val,       nullptr},                                       // pic.brcTop;BRC;long;
+        {NS_sprm::PicBrcLeft80::val,      nullptr},                                       // pic.brcLeft;BRC;long;
+        {NS_sprm::PicBrcBottom80::val,    nullptr},                                       // pic.brcBottom;BRC;long;
+        {NS_sprm::PicBrcRight80::val,     nullptr},                                       // pic.brcRight;BRC;long;
+        {NS_sprm::ScnsPgn::val,           nullptr},                                       // sep.cnsPgn;cns;byte;
+        {NS_sprm::SiHeadingPgn::val,      nullptr},                                       // sep.iHeadingPgn;heading number level;
                                                                                          // byte;
         {NS_sprm::LN_SOlstAnm,           &SwWW8ImplReader::Read_OLST},                   // sep.olstAnm;OLST;variable length;
-        {NS_sprm::sprmSDxaColWidth,      nullptr},                                       // sep.rgdxaColWidthSpacing;complex;
+        {NS_sprm::SDxaColWidth::val,      nullptr},                                       // sep.rgdxaColWidthSpacing;complex;
                                                                                          // 3 bytes;
-        {NS_sprm::sprmSDxaColSpacing,    nullptr},                                       // sep.rgdxaColWidthSpacing;complex;
+        {NS_sprm::SDxaColSpacing::val,    nullptr},                                       // sep.rgdxaColWidthSpacing;complex;
                                                                                          // 3 bytes;
-        {NS_sprm::sprmSFEvenlySpaced,    nullptr},                                       // sep.fEvenlySpaced; 1 or 0;byte;
-        {NS_sprm::sprmSFProtected,       nullptr},                                       // sep.fUnlocked;1 or 0;byte;
-        {NS_sprm::sprmSDmBinFirst,       nullptr},                                       // sep.dmBinFirst;;word;
-        {NS_sprm::sprmSDmBinOther,       nullptr},                                       // sep.dmBinOther;;word;
-        {NS_sprm::sprmSBkc,              nullptr},                                       // sep.bkc;bkc;byte;
-        {NS_sprm::sprmSFTitlePage,       nullptr},                                       // sep.fTitlePage;0 or 1;byte;
-        {NS_sprm::sprmSCcolumns,         nullptr},                                       // sep.ccolM1;# of cols - 1;word;
-        {NS_sprm::sprmSDxaColumns,       nullptr},                                       // sep.dxaColumns;dxa;word;
+        {NS_sprm::SFEvenlySpaced::val,    nullptr},                                       // sep.fEvenlySpaced; 1 or 0;byte;
+        {NS_sprm::SFProtected::val,       nullptr},                                       // sep.fUnlocked;1 or 0;byte;
+        {NS_sprm::SDmBinFirst::val,       nullptr},                                       // sep.dmBinFirst;;word;
+        {NS_sprm::SDmBinOther::val,       nullptr},                                       // sep.dmBinOther;;word;
+        {NS_sprm::SBkc::val,              nullptr},                                       // sep.bkc;bkc;byte;
+        {NS_sprm::SFTitlePage::val,       nullptr},                                       // sep.fTitlePage;0 or 1;byte;
+        {NS_sprm::SCcolumns::val,         nullptr},                                       // sep.ccolM1;# of cols - 1;word;
+        {NS_sprm::SDxaColumns::val,       nullptr},                                       // sep.dxaColumns;dxa;word;
         {NS_sprm::LN_SFAutoPgn,          nullptr},                                       // sep.fAutoPgn;obsolete;byte;
-        {NS_sprm::sprmSNfcPgn,           nullptr},                                       // sep.nfcPgn;nfc;byte;
+        {NS_sprm::SNfcPgn::val,           nullptr},                                       // sep.nfcPgn;nfc;byte;
         {NS_sprm::LN_SDyaPgn,            nullptr},                                       // sep.dyaPgn;dya;short;
         {NS_sprm::LN_SDxaPgn,            nullptr},                                       // sep.dxaPgn;dya;short;
-        {NS_sprm::sprmSFPgnRestart,      nullptr},                                       // sep.fPgnRestart;0 or 1;byte;
-        {NS_sprm::sprmSFEndnote,         nullptr},                                       // sep.fEndnote;0 or 1;byte;
-        {NS_sprm::sprmSLnc,              nullptr},                                       // sep.lnc;lnc;byte;
+        {NS_sprm::SFPgnRestart::val,      nullptr},                                       // sep.fPgnRestart;0 or 1;byte;
+        {NS_sprm::SFEndnote::val,         nullptr},                                       // sep.fEndnote;0 or 1;byte;
+        {NS_sprm::SLnc::val,              nullptr},                                       // sep.lnc;lnc;byte;
         {NS_sprm::LN_SGprfIhdt,          nullptr},                                       // sep.grpfIhdt;grpfihdt;byte;
-        {NS_sprm::sprmSNLnnMod,          nullptr},                                       // sep.nLnnMod;non-neg int.;word;
-        {NS_sprm::sprmSDxaLnn,           nullptr},                                       // sep.dxaLnn;dxa;word;
-        {NS_sprm::sprmSDyaHdrTop,        nullptr},                                       // sep.dyaHdrTop;dya;word;
-        {NS_sprm::sprmSDyaHdrBottom,     nullptr},                                       // sep.dyaHdrBottom;dya;word;
-        {NS_sprm::sprmSLBetween,         nullptr},                                       // sep.fLBetween;0 or 1;byte;
-        {NS_sprm::sprmSVjc,              &SwWW8ImplReader::Read_TextVerticalAdjustment}, // sep.vjc;vjc;byte;
-        {NS_sprm::sprmSLnnMin,           nullptr},                                       // sep.lnnMin;lnn;word;
-        {NS_sprm::sprmSPgnStart97,       nullptr},                                       // sep.pgnStart;pgn;word;
-        {NS_sprm::sprmSBOrientation,     nullptr},                                       // sep.dmOrientPage;dm;byte;
+        {NS_sprm::SNLnnMod::val,          nullptr},                                       // sep.nLnnMod;non-neg int.;word;
+        {NS_sprm::SDxaLnn::val,           nullptr},                                       // sep.dxaLnn;dxa;word;
+        {NS_sprm::SDyaHdrTop::val,        nullptr},                                       // sep.dyaHdrTop;dya;word;
+        {NS_sprm::SDyaHdrBottom::val,     nullptr},                                       // sep.dyaHdrBottom;dya;word;
+        {NS_sprm::SLBetween::val,         nullptr},                                       // sep.fLBetween;0 or 1;byte;
+        {NS_sprm::SVjc::val,              &SwWW8ImplReader::Read_TextVerticalAdjustment}, // sep.vjc;vjc;byte;
+        {NS_sprm::SLnnMin::val,           nullptr},                                       // sep.lnnMin;lnn;word;
+        {NS_sprm::SPgnStart97::val,       nullptr},                                       // sep.pgnStart;pgn;word;
+        {NS_sprm::SBOrientation::val,     nullptr},                                       // sep.dmOrientPage;dm;byte;
       //NS_sprm::LN_SBCustomize, ? ? ?,
-        {NS_sprm::sprmSXaPage,           nullptr},                                       // sep.xaPage;xa;word;
-        {NS_sprm::sprmSYaPage,           nullptr},                                       // sep.yaPage;ya;word;
+        {NS_sprm::SXaPage::val,           nullptr},                                       // sep.xaPage;xa;word;
+        {NS_sprm::SYaPage::val,           nullptr},                                       // sep.yaPage;ya;word;
         {0x2205,                         nullptr},                                       // ???? "sprmSDxaLeft" sep.dxaLeft;
                                                                                          // dxa;word;
-        {NS_sprm::sprmSDxaLeft,          nullptr},                                       // sep.dxaLeft;dxa;word;
-        {NS_sprm::sprmSDxaRight,         nullptr},                                       // sep.dxaRight;dxa;word;
-        {NS_sprm::sprmSDyaTop,           nullptr},                                       // sep.dyaTop;dya;word;
-        {NS_sprm::sprmSDyaBottom,        nullptr},                                       // sep.dyaBottom;dya;word;
-        {NS_sprm::sprmSDzaGutter,        nullptr},                                       // sep.dzaGutter;dza;word;
-        {NS_sprm::sprmSDmPaperReq,       nullptr},                                       // sep.dmPaperReq;dm;word;
+        {NS_sprm::SDxaLeft::val,          nullptr},                                       // sep.dxaLeft;dxa;word;
+        {NS_sprm::SDxaRight::val,         nullptr},                                       // sep.dxaRight;dxa;word;
+        {NS_sprm::SDyaTop::val,           nullptr},                                       // sep.dyaTop;dya;word;
+        {NS_sprm::SDyaBottom::val,        nullptr},                                       // sep.dyaBottom;dya;word;
+        {NS_sprm::SDzaGutter::val,        nullptr},                                       // sep.dzaGutter;dza;word;
+        {NS_sprm::SDmPaperReq::val,       nullptr},                                       // sep.dmPaperReq;dm;word;
         {NS_sprm::LN_SPropRMark,         nullptr},                                       // sep.fPropRMark, sep.ibstPropRMark,
                                                                                          // sep.dttmPropRMark;complex; variable
                                                                                          // length always recorded as 7 bytes;
-      //NS_sprm::sprmSFBiDi, ? ? ?,
+      //NS_sprm::SFBiDi::val, ? ? ?,
       //NS_sprm::LN_SFFacingCol, ? ? ?,
-        {NS_sprm::sprmSFRTLGutter,       nullptr},                                       // set to 1 if gutter is on the right.
-        {NS_sprm::sprmSBrcTop80,         nullptr},                                       // sep.brcTop;BRC;long;
-        {NS_sprm::sprmSBrcLeft80,        nullptr},                                       // sep.brcLeft;BRC;long;
-        {NS_sprm::sprmSBrcBottom80,      nullptr},                                       // sep.brcBottom;BRC;long;
-        {NS_sprm::sprmSBrcRight80,       nullptr},                                       // sep.brcRight;BRC;long;
-        {NS_sprm::sprmSPgbProp,          nullptr},                                       // sep.pgbProp;word;
-        {NS_sprm::sprmSDxtCharSpace,     nullptr},                                       // sep.dxtCharSpace;dxt;long;
-        {NS_sprm::sprmSDyaLinePitch,     nullptr},                                       // sep.dyaLinePitch;dya;
+        {NS_sprm::SFRTLGutter::val,       nullptr},                                       // set to 1 if gutter is on the right.
+        {NS_sprm::SBrcTop80::val,         nullptr},                                       // sep.brcTop;BRC;long;
+        {NS_sprm::SBrcLeft80::val,        nullptr},                                       // sep.brcLeft;BRC;long;
+        {NS_sprm::SBrcBottom80::val,      nullptr},                                       // sep.brcBottom;BRC;long;
+        {NS_sprm::SBrcRight80::val,       nullptr},                                       // sep.brcRight;BRC;long;
+        {NS_sprm::SPgbProp::val,          nullptr},                                       // sep.pgbProp;word;
+        {NS_sprm::SDxtCharSpace::val,     nullptr},                                       // sep.dxtCharSpace;dxt;long;
+        {NS_sprm::SDyaLinePitch::val,     nullptr},                                       // sep.dyaLinePitch;dya;
                                                                                          // WRONG:long; RIGHT:short; !
-      //NS_sprm::sprmSClm, ? ? ?,
-        {NS_sprm::sprmSTextFlow,         nullptr},                                       // sep.wTextFlow;complex;short
-        {NS_sprm::sprmTJc90,             nullptr},                                       // tap.jc;jc;word
+      //NS_sprm::SClm::val, ? ? ?,
+        {NS_sprm::STextFlow::val,         nullptr},                                       // sep.wTextFlow;complex;short
+        {NS_sprm::TJc90::val,             nullptr},                                       // tap.jc;jc;word
                                                                                          // (low order byte is significant);
-        {NS_sprm::sprmTDxaLeft,          nullptr},                                       // tap.rgdxaCenter;dxa;word;
-        {NS_sprm::sprmTDxaGapHalf,       nullptr},                                       // tap.dxaGapHalf,
+        {NS_sprm::TDxaLeft::val,          nullptr},                                       // tap.rgdxaCenter;dxa;word;
+        {NS_sprm::TDxaGapHalf::val,       nullptr},                                       // tap.dxaGapHalf,
                                                                                          // tap.rgdxaCenter;dxa;word;
-        {NS_sprm::sprmTFCantSplit90,     nullptr},                                       // tap.fCantSplit90;1 or 0;byte;
-        {NS_sprm::sprmTTableHeader,      nullptr},                                       // tap.fTableHeader;1 or 0;byte;
-        {NS_sprm::sprmTFCantSplit,       nullptr},                                       // tap.fCantSplit;1 or 0;byte;
-        {NS_sprm::sprmTTableBorders80,   nullptr},                                       // tap.rgbrcTable;complex;24 bytes;
+        {NS_sprm::TFCantSplit90::val,     nullptr},                                       // tap.fCantSplit90;1 or 0;byte;
+        {NS_sprm::TTableHeader::val,      nullptr},                                       // tap.fTableHeader;1 or 0;byte;
+        {NS_sprm::TFCantSplit::val,       nullptr},                                       // tap.fCantSplit;1 or 0;byte;
+        {NS_sprm::TTableBorders80::val,   nullptr},                                       // tap.rgbrcTable;complex;24 bytes;
         {NS_sprm::LN_TDefTable10,        nullptr},                                       // tap.rgdxaCenter, tap.rgtc;complex;
                                                                                          // variable length;
-        {NS_sprm::sprmTDyaRowHeight,     nullptr},                                       // tap.dyaRowHeight;dya;word;
-        {NS_sprm::sprmTDefTable,         nullptr},                                       // tap.rgtc;complex
-        {NS_sprm::sprmTDefTableShd80,    nullptr},                                       // tap.rgshd;complex
-        {NS_sprm::sprmTTlp,              nullptr},                                       // tap.tlp;TLP;4 bytes;
-      //NS_sprm::sprmTFBiDi, ? ? ?,
+        {NS_sprm::TDyaRowHeight::val,     nullptr},                                       // tap.dyaRowHeight;dya;word;
+        {NS_sprm::TDefTable::val,         nullptr},                                       // tap.rgtc;complex
+        {NS_sprm::TDefTableShd80::val,    nullptr},                                       // tap.rgshd;complex
+        {NS_sprm::TTlp::val,              nullptr},                                       // tap.tlp;TLP;4 bytes;
+      //NS_sprm::TFBiDi::val, ? ? ?,
       //NS_sprm::LN_THTMLProps, ? ? ?,
-        {NS_sprm::sprmTSetBrc80,         nullptr},                                       // tap.rgtc[].rgbrc;complex;5 bytes;
-        {NS_sprm::sprmTInsert,           nullptr},                                       // tap.rgdxaCenter, tap.rgtc;complex;
+        {NS_sprm::TSetBrc80::val,         nullptr},                                       // tap.rgtc[].rgbrc;complex;5 bytes;
+        {NS_sprm::TInsert::val,           nullptr},                                       // tap.rgdxaCenter, tap.rgtc;complex;
                                                                                          // 4 bytes;
-        {NS_sprm::sprmTDelete,           nullptr},                                       // tap.rgdxaCenter, tap.rgtc;complex;
+        {NS_sprm::TDelete::val,           nullptr},                                       // tap.rgdxaCenter, tap.rgtc;complex;
                                                                                          // word;
-        {NS_sprm::sprmTDxaCol,           nullptr},                                       // tap.rgdxaCenter;complex;4 bytes;
-        {NS_sprm::sprmTMerge,            nullptr},                                       // tap.fFirstMerged, tap.fMerged;
+        {NS_sprm::TDxaCol::val,           nullptr},                                       // tap.rgdxaCenter;complex;4 bytes;
+        {NS_sprm::TMerge::val,            nullptr},                                       // tap.fFirstMerged, tap.fMerged;
                                                                                          // complex; word;
-        {NS_sprm::sprmTSplit,            nullptr},                                       // tap.fFirstMerged, tap.fMerged;
+        {NS_sprm::TSplit::val,            nullptr},                                       // tap.fFirstMerged, tap.fMerged;
                                                                                          // complex;word;
         {NS_sprm::LN_TSetBrc10,          nullptr},                                       // tap.rgtc[].rgbrc;complex;5 bytes;
         {NS_sprm::LN_TSetShd80,          nullptr},                                       // tap.rgshd;complex;4 bytes;
         {NS_sprm::LN_TSetShdOdd80,       nullptr},                                       // tap.rgshd;complex;4 bytes;
-        {NS_sprm::sprmTTextFlow,         nullptr},                                       // tap.rgtc[].fVertical
+        {NS_sprm::TTextFlow::val,         nullptr},                                       // tap.rgtc[].fVertical
                                                                                          // tap.rgtc[].fBackward
                                                                                          // tap.rgtc[].fRotateFont
                                                                                          // 0 or 10 or 10 or 1;word;
       //NS_sprm::LN_TDiagLine, ? ? ?  ,
-        {NS_sprm::sprmTVertMerge,        nullptr},                                       // tap.rgtc[].vertMerge;complex;variable
+        {NS_sprm::TVertMerge::val,        nullptr},                                       // tap.rgtc[].vertMerge;complex;variable
                                                                                          // length always recorded as 2 bytes;
-        {NS_sprm::sprmTVertAlign,        nullptr},                                       // tap.rgtc[].vertAlign;complex;variable
+        {NS_sprm::TVertAlign::val,        nullptr},                                       // tap.rgtc[].vertAlign;complex;variable
                                                                                          // length always recorded as 3 bytes;
-        {NS_sprm::sprmCFELayout,         &SwWW8ImplReader::Read_DoubleLine_Rotate},
-        {NS_sprm::sprmPItap,             nullptr},
-        {NS_sprm::sprmTTableWidth,       nullptr},                                       // recorded as 3 bytes;
-        {NS_sprm::sprmTDefTableShd,      nullptr},
-        {NS_sprm::sprmTTableBorders,     nullptr},
-        {NS_sprm::sprmTBrcTopCv,         nullptr},
-        {NS_sprm::sprmTBrcLeftCv,        nullptr},
-        {NS_sprm::sprmTBrcBottomCv,      nullptr},
-        {NS_sprm::sprmTBrcRightCv,       nullptr},
-        {NS_sprm::sprmTCellPaddingDefault, nullptr},
-        {NS_sprm::sprmTCellPadding,      nullptr},
+        {NS_sprm::CFELayout::val,         &SwWW8ImplReader::Read_DoubleLine_Rotate},
+        {NS_sprm::PItap::val,             nullptr},
+        {NS_sprm::TTableWidth::val,       nullptr},                                       // recorded as 3 bytes;
+        {NS_sprm::TDefTableShd::val,      nullptr},
+        {NS_sprm::TTableBorders::val,     nullptr},
+        {NS_sprm::TBrcTopCv::val,         nullptr},
+        {NS_sprm::TBrcLeftCv::val,        nullptr},
+        {NS_sprm::TBrcBottomCv::val,      nullptr},
+        {NS_sprm::TBrcRightCv::val,       nullptr},
+        {NS_sprm::TCellPaddingDefault::val, nullptr},
+        {NS_sprm::TCellPadding::val,      nullptr},
         {0xD238,                         nullptr},                                       // undocumented sep
-        {NS_sprm::sprmPBrcTop,           &SwWW8ImplReader::Read_Border},
-        {NS_sprm::sprmPBrcLeft,          &SwWW8ImplReader::Read_Border},
-        {NS_sprm::sprmPBrcBottom,        &SwWW8ImplReader::Read_Border},
-        {NS_sprm::sprmPBrcRight,         &SwWW8ImplReader::Read_Border},
-        {NS_sprm::sprmPBrcBetween,       &SwWW8ImplReader::Read_Border},
-        {NS_sprm::sprmTWidthIndent,      nullptr},
-        {NS_sprm::sprmCRgLid0,           &SwWW8ImplReader::Read_Language},               // chp.rglid[0];
+        {NS_sprm::PBrcTop::val,           &SwWW8ImplReader::Read_Border},
+        {NS_sprm::PBrcLeft::val,          &SwWW8ImplReader::Read_Border},
+        {NS_sprm::PBrcBottom::val,        &SwWW8ImplReader::Read_Border},
+        {NS_sprm::PBrcRight::val,         &SwWW8ImplReader::Read_Border},
+        {NS_sprm::PBrcBetween::val,       &SwWW8ImplReader::Read_Border},
+        {NS_sprm::TWidthIndent::val,      nullptr},
+        {NS_sprm::CRgLid0::val,           &SwWW8ImplReader::Read_Language},               // chp.rglid[0];
                                                                                          // LID: for non-Far East text;
-        {NS_sprm::sprmCRgLid1,           nullptr},                                       // chp.rglid[1];
+        {NS_sprm::CRgLid1::val,           nullptr},                                       // chp.rglid[1];
                                                                                          // LID: for Far East text
         {0x6463,                         nullptr},                                       // undocumented
-        {NS_sprm::sprmPJc,               &SwWW8ImplReader::Read_RTLJustify},
-        {NS_sprm::sprmPDxaLeft,          &SwWW8ImplReader::Read_LR},
-        {NS_sprm::sprmPDxaLeft1,         &SwWW8ImplReader::Read_LR},
-        {NS_sprm::sprmPDxaRight,         &SwWW8ImplReader::Read_LR},
-        {NS_sprm::sprmTFAutofit,         nullptr},
-        {NS_sprm::sprmTPc,               nullptr},
-        {NS_sprm::sprmTDxaAbs,           nullptr},
-        {NS_sprm::sprmTDyaAbs,           nullptr},
-        {NS_sprm::sprmTDxaFromText,      nullptr},
-        {NS_sprm::sprmSRsid,             nullptr},
-        {NS_sprm::sprmSFpc,              nullptr},
-        {NS_sprm::sprmPFInnerTableCell,  &SwWW8ImplReader::Read_TabCellEnd},
-        {NS_sprm::sprmPFInnerTtp,        &SwWW8ImplReader::Read_TabRowEnd},
-        {NS_sprm::sprmCRsidProp,         nullptr},
-        {NS_sprm::sprmCRsidText,         nullptr},
-        {NS_sprm::sprmCCv,               &SwWW8ImplReader::Read_TextForeColor},
-        {NS_sprm::sprmCCvUl,             &SwWW8ImplReader::Read_UnderlineColor},
-        {NS_sprm::sprmPShd,              &SwWW8ImplReader::Read_ParaBackColor},
-        {NS_sprm::sprmPRsid,             nullptr},
-        {NS_sprm::sprmTWidthBefore,      nullptr},
-        {NS_sprm::sprmTSetShdTable,      nullptr},
-        {NS_sprm::sprmTDefTableShdRaw,   nullptr},
-        {NS_sprm::sprmCShd,              &SwWW8ImplReader::Read_TextBackColor},
-        {NS_sprm::sprmSRncFtn,           nullptr},
-        {NS_sprm::sprmPFDyaBeforeAuto,   &SwWW8ImplReader::Read_ParaAutoBefore},
-        {NS_sprm::sprmPFDyaAfterAuto,    &SwWW8ImplReader::Read_ParaAutoAfter},
-        {NS_sprm::sprmPFContextualSpacing, &SwWW8ImplReader::Read_ParaContextualSpacing},
+        {NS_sprm::PJc::val,               &SwWW8ImplReader::Read_RTLJustify},
+        {NS_sprm::PDxaLeft::val,          &SwWW8ImplReader::Read_LR},
+        {NS_sprm::PDxaLeft1::val,         &SwWW8ImplReader::Read_LR},
+        {NS_sprm::PDxaRight::val,         &SwWW8ImplReader::Read_LR},
+        {NS_sprm::TFAutofit::val,         nullptr},
+        {NS_sprm::TPc::val,               nullptr},
+        {NS_sprm::TDxaAbs::val,           nullptr},
+        {NS_sprm::TDyaAbs::val,           nullptr},
+        {NS_sprm::TDxaFromText::val,      nullptr},
+        {NS_sprm::SRsid::val,             nullptr},
+        {NS_sprm::SFpc::val,              nullptr},
+        {NS_sprm::PFInnerTableCell::val,  &SwWW8ImplReader::Read_TabCellEnd},
+        {NS_sprm::PFInnerTtp::val,        &SwWW8ImplReader::Read_TabRowEnd},
+        {NS_sprm::CRsidProp::val,         nullptr},
+        {NS_sprm::CRsidText::val,         nullptr},
+        {NS_sprm::CCv::val,               &SwWW8ImplReader::Read_TextForeColor},
+        {NS_sprm::CCvUl::val,             &SwWW8ImplReader::Read_UnderlineColor},
+        {NS_sprm::PShd::val,              &SwWW8ImplReader::Read_ParaBackColor},
+        {NS_sprm::PRsid::val,             nullptr},
+        {NS_sprm::TWidthBefore::val,      nullptr},
+        {NS_sprm::TSetShdTable::val,      nullptr},
+        {NS_sprm::TDefTableShdRaw::val,   nullptr},
+        {NS_sprm::CShd::val,              &SwWW8ImplReader::Read_TextBackColor},
+        {NS_sprm::SRncFtn::val,           nullptr},
+        {NS_sprm::PFDyaBeforeAuto::val,   &SwWW8ImplReader::Read_ParaAutoBefore},
+        {NS_sprm::PFDyaAfterAuto::val,    &SwWW8ImplReader::Read_ParaAutoAfter},
+        {NS_sprm::PFContextualSpacing::val, &SwWW8ImplReader::Read_ParaContextualSpacing},
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
