@@ -290,20 +290,6 @@ void SalGraphics::mirror( tools::Rectangle& rRect, const OutputDevice *pOutDev, 
     rRect.Move( x - x_org, 0 );
 }
 
-basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice* i_pOutDev ) const
-{
-    const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
-
-    if(rMirror.isIdentity())
-    {
-        return i_rPoint;
-    }
-    else
-    {
-        return rMirror * i_rPoint;
-    }
-}
-
 basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice* i_pOutDev ) const
 {
     const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
@@ -351,12 +337,12 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
                 // Original code was:
                 //      aRet.setX( w-1-i_rPoint.getX() );
                 // -mirror X -> scale(-1.0, 1.0)
-                // -translate X -> translate(w-1, 0); but already mirrored, so use translate(1-w, 0)
+                // -translate X -> translate(w-1, 0)
                 // Checked this one, works as expected.
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     -1.0,
                     1.0,
-                    1-w,
+                    w-1,
                     0.0);
             }
         }
@@ -367,16 +353,6 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
     }
 
     return m_aLastMirror;
-}
-
-basegfx::B2DHomMatrix SalGraphics::mirror( const basegfx::B2DHomMatrix& i_rMatrix, const OutputDevice *pOutDev ) const
-{
-    // add mirroring transformation to i_rMatrix
-    const basegfx::B2DHomMatrix& rMirror(getMirror(pOutDev));
-
-    // Apply mirror to given matrix by multiply from left ('after' i_rMatrix).
-    // Identity checks and fast-paths are in the operator
-    return rMirror * i_rMatrix;
 }
 
 bool SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice *pOutDev )
@@ -468,6 +444,16 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
         drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
+namespace
+{
+    basegfx::B2DHomMatrix createTranslateToMirroredBounds(const basegfx::B2DRange &rBoundingBox, const basegfx::B2DHomMatrix& rMirror)
+    {
+        basegfx::B2DRange aRTLBoundingBox(rBoundingBox);
+        aRTLBoundingBox *= rMirror;
+        return basegfx::utils::createTranslateB2DHomMatrix(aRTLBoundingBox.getMinX() - rBoundingBox.getMinX(), 0);
+    }
+}
+
 bool SalGraphics::DrawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& i_rPolyPolygon,
@@ -478,33 +464,16 @@ bool SalGraphics::DrawPolyPolygon(
     {
         // mirroring set
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
-
         if(!rMirror.isIdentity())
         {
-            if(rObjectToDevice.isIdentity())
-            {
-                // There is no ObjectToDevice transformation set. We can just
-                // use rMirror, that would be the result of the linear combination
-                return drawPolyPolygon(
-                    rMirror,
-                    i_rPolyPolygon,
-                    i_fTransparency);
-            }
-            else
-            {
-                // Create the linear combination
-                basegfx::B2DHomMatrix aLinearCombination(rObjectToDevice);
-                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            basegfx::B2DRange aBoundingBox(i_rPolyPolygon.getB2DRange());
+            aBoundingBox *= rObjectToDevice;
+            auto aTranslateToMirroredBounds = createTranslateToMirroredBounds(aBoundingBox, rMirror);
 
-                aLinearCombination = rMirror * aLinearCombination;
-                aObjectToDeviceInv.invert();
-                aLinearCombination = aObjectToDeviceInv * aLinearCombination;
-
-                return drawPolyPolygon(
-                    aLinearCombination,
-                    i_rPolyPolygon,
-                    i_fTransparency);
-            }
+            return drawPolyPolygon(
+                aTranslateToMirroredBounds * rObjectToDevice,
+                i_rPolyPolygon,
+                i_fTransparency);
         }
     }
 
@@ -584,58 +553,22 @@ bool SalGraphics::DrawPolyLine(
     {
         // mirroring set
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
-
         if(!rMirror.isIdentity())
         {
-            // If we really have a mirroring to apply, we *could*
-            // use the ::mirror call to modify the B2DPolygon (and
-            // prepare the LineWidth scaling), but we also
-            // can add that mirroring to rObjectToDevice transformation
-            // by using linear combination of transformations and stay
-            // on having the transformation
-            if(rObjectToDevice.isIdentity())
-            {
-                // There is no ObjectToDevice transformation set. We can just
-                // use rMirror, that would be the result of the linear combination
-                return drawPolyLine(
-                    rMirror,
-                    i_rPolygon,
-                    i_fTransparency,
-                    i_rLineWidth,
-                    i_pStroke, // MM01
-                    i_eLineJoin,
-                    i_eLineCap,
-                    i_fMiterMinimumAngle,
-                    bPixelSnapHairline);
-            }
-            else
-            {
-                // To create the linear combination, we need to
-                // - multiply with rObjectToDevice to get to device-coordinates
-                //   (what is a simple copy)
-                // - apply rMirror (multiply from left)
-                // - multiply with inverse of rObjectToDevice to get back from
-                //   device-coordinates to object-coordinates
-                // this only makes sense to do when we *have* an ObjectToDevice
-                // transformation, so optimize that
-                basegfx::B2DHomMatrix aLinearCombination(rObjectToDevice);
-                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            basegfx::B2DRange aBoundingBox(i_rPolygon.getB2DRange());
+            aBoundingBox *= rObjectToDevice;
+            auto aTranslateToMirroredBounds = createTranslateToMirroredBounds(aBoundingBox, rMirror);
 
-                aLinearCombination = rMirror * aLinearCombination;
-                aObjectToDeviceInv.invert();
-                aLinearCombination = aObjectToDeviceInv * aLinearCombination;
-
-                return drawPolyLine(
-                    aLinearCombination,
-                    i_rPolygon,
-                    i_fTransparency,
-                    i_rLineWidth,
-                    i_pStroke, // MM01
-                    i_eLineJoin,
-                    i_eLineCap,
-                    i_fMiterMinimumAngle,
-                    bPixelSnapHairline);
-            }
+            return drawPolyLine(
+                aTranslateToMirroredBounds * rObjectToDevice,
+                i_rPolygon,
+                i_fTransparency,
+                i_rLineWidth,
+                i_pStroke, // MM01
+                i_eLineJoin,
+                i_eLineCap,
+                i_fMiterMinimumAngle,
+                bPixelSnapHairline);
         }
     }
 
@@ -925,16 +858,23 @@ bool SalGraphics::DrawTransformedBitmap(
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        mirror(rNull, pOutDev);
-        mirror(rX, pOutDev);
-        mirror(rY, pOutDev);
+        // mirroring set
+        const basegfx::B2DHomMatrix& rMirror(getMirror(pOutDev));
+        if (!rMirror.isIdentity())
+        {
+            basegfx::B2DPolygon aPoints({rNull, rX, rY});
+            basegfx::B2DRange aBoundingBox(aPoints.getB2DRange());
+            auto aTranslateToMirroredBounds = createTranslateToMirroredBounds(aBoundingBox, rMirror);
 
-        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
+            basegfx::B2DPoint aNull = aTranslateToMirroredBounds * rNull;
+            basegfx::B2DPoint aX = aTranslateToMirroredBounds * rX;
+            basegfx::B2DPoint aY = aTranslateToMirroredBounds * rY;
+
+            return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
+        }
     }
-    else
-    {
-        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
-    }
+
+    return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
 }
 
 bool SalGraphics::DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
