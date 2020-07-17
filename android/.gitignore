@@ -6,9 +6,9 @@
 /source/build/
 /source/captures/
 /source/jni/Application.mk
-/source/jniLibs/
+/jniLibs/
 /source/liboSettings.gradle
 /source/local.properties
 /source/native-code.cxx
-/source/obj/
+/obj/
 /source/source.iml

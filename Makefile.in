@@ -183,8 +183,8 @@ ifneq ($(CROSS_COMPILING),)
 	rm -fr $(INSTDIR_FOR_BUILD)
 	rm -fr $(WORKDIR_FOR_BUILD)
 ifeq ($(OS),ANDROID)
-	rm -fr $(SRCDIR)/android/source/obj
-	rm -fr $(SRCDIR)/android/source/jniLibs
+	rm -fr $(BUILDDIR)/android/obj
+	rm -fr $(BUILDDIR)/android/jniLibs
 	rm -fr $(SRCDIR)/android/source/build
 	rm -fr $(SRCDIR)/android/source/assets
 	rm -fr $(SRCDIR)/android/source/assets_fullUI
