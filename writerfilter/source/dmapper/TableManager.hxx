@@ -503,7 +503,7 @@ public:
     sal_uInt32 getCurrentGridBefore();
     void setCurrentGridBefore( sal_uInt32 nSkipGrids );
     std::vector<sal_uInt32> getCurrentGridSpans();
-    void setCurrentGridSpan( sal_uInt32 nGridSpan );
+    void setCurrentGridSpan( sal_uInt32 nGridSpan, bool bFirstCell = false );
 
     void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
     void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);
