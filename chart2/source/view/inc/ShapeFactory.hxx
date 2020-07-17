@@ -198,42 +198,6 @@ public:
                     , const css::uno::Any& rATransformation
                      );
 
-    /** This method creates a text shape made up by a set of paragraphs.
-     *  For each paragraph the related text style is passed to the method.
-     *
-     *  @param xTarget
-     *      where to append the new created text shape.
-     *
-     *  @param rTextParagraphs
-     *      the set of paragraphs which made up the text shape.
-     *
-     *  @param rParaPropNames
-     *      a collection of lists of text property names:
-     *      there must be a list of text property names for each paragraph.
-     *
-     *  @param rParaPropValues
-     *      a collection of lists of text property values:
-     *      there must be a list of text property values for each paragraph.
-     *
-     *  @param rPropNames
-     *      a list of text property names to be applied to the whole text shape.
-     *
-     *  @param rPropValues
-     *      a list of text property values to be applied to the whole text shape.
-     *
-     *  @param rATransformation
-     *      a transformation to be applied to the text shape as final step.
-     *
-     */
-    css::uno::Reference< css::drawing::XShape >
-        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget
-                    , const css::uno::Sequence< OUString >& rTextParagraphs
-                    , const css::uno::Sequence< tNameSequence >& rParaPropNames
-                    , const css::uno::Sequence< tAnySequence >& rParaPropValues
-                    , const tNameSequence& rPropNames
-                    , const tAnySequence& rPropValues
-                    , const css::uno::Any& rATransformation );
-
     css::uno::Reference< css::drawing::XShape >
         createText(const css::uno::Reference< css::drawing::XShapes >& xTarget
             , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
