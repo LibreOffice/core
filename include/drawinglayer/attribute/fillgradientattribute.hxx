@@ -46,7 +46,8 @@ namespace drawinglayer
             Radial,
             Elliptical,
             Square,
-            Rect
+            Rect,
+            RectBezier
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

@@ -416,6 +416,7 @@ void EscherPropertyContainer::CreateGradientProperties(
         case awt::GradientStyle_ELLIPTICAL :
         case awt::GradientStyle_SQUARE :
         case awt::GradientStyle_RECT :
+        case awt::GradientStyle_RECT_BEZIER :
         {
             nFillLR = (rGradient.XOffset * 0x10000) / 100;
             nFillTB = (rGradient.YOffset * 0x10000) / 100;

@@ -172,6 +172,7 @@ enum class GradientStyle
     Elliptical = 3,
     Square = 4,
     Rect = 5,
+    RectBezier = 6,
     FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 

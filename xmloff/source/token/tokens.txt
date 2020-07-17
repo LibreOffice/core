@@ -855,6 +855,7 @@ gradient
 angle
 gradient-step-count
 gradient-style
+sub-style-bezier
 gradient-table
 axial
 ellipsoid
