@@ -1593,8 +1593,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
     assert(pNode);
-    sal_Int32 nc;
-    Color col_perso_rgb_color = COL_AUTO;
+    sal_uInt32 nc;
 
     switch (GetToken().eType)
     {   case TSIZE :
@@ -1632,13 +1631,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
-            nc = GetToken().aText.toInt32();
-            col_perso_rgb_color.SetBlue(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetGreen(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetRed(nc % 256);
-            SetColor(col_perso_rgb_color);
+        case TRGBA :
+        case THEX :
+            nc = GetToken().aText.toUInt32();
+            SetColor(Color(nc));
             break;
 
         default:
@@ -1841,29 +1837,15 @@ void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 
 void SmTextNode::AdjustFontDesc()
 {
-    switch(GetToken().eType){
-        case TTEXT:      mnFontDesc = FNT_TEXT;     break;
-        case TFUNC:      mnFontDesc = FNT_FUNCTION; break;
-        default:
-            const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( maText );
-            if (pEntry && pEntry->nGroup == TG::Function) {
-                GetToken().eType = pEntry->eType;
-                mnFontDesc = FNT_FUNCTION;
-            } else {
-                sal_Unicode firstChar = maText[0];
-                if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',') {
-                    mnFontDesc = FNT_NUMBER;
-                    GetToken().eType = TNUMBER;
-                } else if (maText.getLength() > 1) {
-                    mnFontDesc = FNT_VARIABLE;
-                    GetToken().eType = TIDENT;
-                } else {
-                    mnFontDesc = FNT_VARIABLE;
-                    GetToken().eType = TCHARACTER;
-                }
-            }
-            break;
-    }
+
+    if (GetToken().nGroup == TG::Function) mnFontDesc = FNT_FUNCTION;
+    else if (GetToken().eType == TTEXT) mnFontDesc = FNT_TEXT;
+    else {
+        sal_Unicode firstChar = maText[0];
+        if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',')
+            mnFontDesc = FNT_NUMBER;
+        else mnFontDesc = FNT_VARIABLE;
+   }
 }
 
 sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)

@@ -64,14 +64,12 @@ enum SmTokenType
     TDOTSDIAG,      TDOTSUP,        TDOTSDOWN,      TACUTE,         TBAR,
     TBREVE,         TCHECK,         TCIRCLE,        TDOT,           TDDOT,
     TDDDOT,         TGRAVE,         THAT,           TTILDE,         TVEC,
-    THARPOON,
     TUNDERLINE,     TOVERLINE,      TOVERSTRIKE,    TITALIC,        TNITALIC,
     TBOLD,          TNBOLD,         TPHANTOM,       TFONT,          TSIZE,
     TCOLOR,         TALIGNL,        TALIGNC,        TALIGNR,        TLEFT,
     TRIGHT,         TLANGLE,        TLBRACE,        TLLINE,         TLDLINE,
     TLCEIL,         TLFLOOR,        TNONE,          TMLINE,         TRANGLE,
     TRBRACE,        TRLINE,         TRDLINE,        TRCEIL,         TRFLOOR,
-    TSIN,           TCOS,           TTAN,           TCOT,           TFUNC,
     TSTACK,         TMATRIX,        TDPOUND,        TPLACE,
     TTEXT,          TNUMBER,        TCHARACTER,     TIDENT,         TNEQ,
     TEQUIV,         TDEF,           TPROP,          TSIM,           TSIMEQ,
@@ -81,12 +79,7 @@ enum SmTokenType
     TODIVIDE,       TTRANSL,        TTRANSR,        TIINT,          TIIINT,
     TLINT,          TLLINT,         TLLLINT,        TPROD,          TCOPROD,
     TFORALL,        TEXISTS,        TNOTEXISTS,     TLIM,           TNABLA,
-    TTOWARD,        TSINH,          TCOSH,          TTANH,          TCOTH,
-    TASIN,          TACOS,          TATAN,          TLN,            TLOG,
-    TUOPER,         TBOPER,         TBLACK,         TWHITE,         TRED,
-    TGREEN,         TBLUE,          TCYAN,          TMAGENTA,       TYELLOW,
-    TFIXED,         TSANS,          TSERIF,         TASINH,
-    TACOSH,         TATANH,         TACOTH,         TACOT,          TEXP,
+    TUOPER,         TBOPER,         TFIXED,         TSANS,          TSERIF,
     TCDOT,          TODOT,          TLESLANT,       TGESLANT,       TNSUBSET,
     TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     TPARTIAL,       TNEG,
     TNI,            TBACKEPSILON,   TALEPH,         TIM,            TRE,
@@ -96,13 +89,22 @@ enum SmTokenType
     TLAMBDABAR,     TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
     TDIVIDES,       TSETN,          TSETZ,          TSETQ,
     TSETR,          TSETC,          TWIDEVEC,       TWIDEHARPOON,   TWIDETILDE,
-    TWIDEHAT,
     TWIDESLASH,     TWIDEBACKSLASH, TLDBRACKET,     TRDBRACKET,     TNOSPACE,
     TUNKNOWN,       TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
-    TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   TSILVER,
-    TGRAY,          TMAROON,        TPURPLE,        TLIME,          TOLIVE,
-    TNAVY,          TTEAL,          TAQUA,          TFUCHSIA,       TINTD,
-    TRGB,           TLAPLACE,       TFOURIER
+    TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   THARPOON,
+    TINTD,          TLAPLACE,       TFOURIER,       TTOWARD,        TWIDEHAT,
+    // Function
+    TFUNC,          TLN,            TLOG,           TEXP,           // Exp - Log
+    TSIN,           TCOS,           TTAN,           TCOT,           // Trigo
+    TSINH,          TCOSH,          TTANH,          TCOTH,          // Trigo hyperbolic
+    TASIN,          TACOS,          TATAN,          TACOT,          // Arctrigo
+    TASINH,         TACOSH,         TATANH,         TACOTH,         // Arctrigo hyperbolic
+    // Color
+    TRGB,           TRGBA,          THEX,
+    TAQUA,          TBLACK,         TBLUE,          TCYAN,          TFUCHSIA,
+    TGRAY,          TGREEN,         TLIME,          TMAGENTA,       TMAROON,
+    TNAVY,          TOLIVE,         TPURPLE,        TRED,           TSILVER,
+    TTEAL,          TWHITE,         TYELLOW
 };
 
 struct SmToken
