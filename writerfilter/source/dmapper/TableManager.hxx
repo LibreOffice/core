@@ -502,7 +502,7 @@ public:
     sal_uInt32 getCurrentGridBefore();
     void setCurrentGridBefore( sal_uInt32 nSkipGrids );
     std::vector<sal_uInt32> getCurrentGridSpans();
-    void setCurrentGridSpan( sal_uInt32 nGridSpan );
+    void setCurrentGridSpan( sal_uInt32 nGridSpan, bool bFirstCell = false );
     /// Given a zero-based row/cell, return the zero-based grid it belongs to, or SAL_MAX_UINT16 for invalid.
     sal_uInt32 findColumn( const sal_uInt32 nRow, const sal_uInt32 nCell );
     /// Given a zero-based row/col, return the zero-based cell describing that grid, or SAL_MAX_UINT16 for invalid.

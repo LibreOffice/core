@@ -3121,6 +3121,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127606)
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134685)
+{
+    createDoc("tdf134685.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nWidth
+        = getXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/infos/bounds", "width").toInt32();
+    // This was 2223: the content was only partially visible according to the lost cell width
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(14000), nWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109077)
 {
     createDoc("tdf109077.docx");
