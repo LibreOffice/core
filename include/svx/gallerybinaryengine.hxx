@@ -19,52 +19,71 @@
 
 #pragma once
 
-#include <tools/urlobj.hxx>
-#include <svx/svxdllapi.h>
 #include <svx/galtheme.hxx>
+#include <svx/gallerybinaryengine.hxx>
+#include <galobj.hxx>
+#include <svx/svxdllapi.h>
+#include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 
-class SgaObjectSvDraw;
+#include <cstdio>
+#include <memory>
+#include <vector>
+
 class SotStorage;
 struct GalleryObject;
+class SgaObjectSvDraw;
 
-class SVXCORE_DLLPUBLIC GalleryBinaryEngine
+class SharedGalleryBinaryEngine
 {
 private:
-    INetURLObject aThmURL;
-    INetURLObject aSdgURL;
-    INetURLObject aSdvURL;
-    INetURLObject aStrURL;
-    tools::SvRef<SotStorage> aSvDrawStorageRef;
-
-    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+    INetURLObject maThmURL;
+    INetURLObject maSdgURL;
+    INetURLObject maSdvURL;
+    INetURLObject maStrURL;
 
 public:
-    void galleryThemeInit(bool bReadOnly);
-    void galleryThemeDestroy();
-
-    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
-
-    OUString ReadStrFromIni(const OUString& aKeyName);
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+    const INetURLObject& GetThmURL() const { return maThmURL; }
+    const INetURLObject& GetSdgURL() const { return maSdgURL; }
+    const INetURLObject& GetSdvURL() const { return maSdvURL; }
+    const INetURLObject& GetStrURL() const { return maStrURL; }
 
     void SetThmExtension(INetURLObject aURL);
     void SetSdgExtension(INetURLObject aURL);
     void SetSdvExtension(INetURLObject aURL);
     void SetStrExtension(INetURLObject aURL);
+};
 
-    const INetURLObject& GetThmURL() const { return aThmURL; }
-    const INetURLObject& GetSdgURL() const { return aSdgURL; }
-    const INetURLObject& GetSdvURL() const { return aSdvURL; }
-    const INetURLObject& GetStrURL() const { return aStrURL; }
+class SVXCORE_DLLPUBLIC GalleryBinaryEngine
+{
+private:
+    tools::SvRef<SotStorage> m_aSvDrawStorageRef;
+    SharedGalleryBinaryEngine maSharedGalleryBinaryEngine;
+
+public:
+    GalleryBinaryEngine(SharedGalleryBinaryEngine& maSharedGalleryBinaryEngine);
+    void galleryThemeInit(bool bReadOnly);
+    void galleryThemeDestroy();
 
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage(bool bReadOnly);
     SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
+
+    const INetURLObject& GetThmURL() const { return maSharedGalleryBinaryEngine.GetThmURL(); }
+    const INetURLObject& GetSdgURL() const { return maSharedGalleryBinaryEngine.GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return maSharedGalleryBinaryEngine.GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return maSharedGalleryBinaryEngine.GetStrURL(); }
+
+    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
+
+    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
+                      ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                      sal_uInt32& rInsertPos);
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
-    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
 
     bool readModel(const GalleryObject* pObject, SdrModel& rModel);
     bool insertModel(const FmFormModel& rModel, INetURLObject& rURL);
@@ -73,13 +92,6 @@ public:
                          tools::SvRef<SotStorageStream> const& rxModelStream);
     SgaObjectSvDraw insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
                                       INetURLObject& rURL);
-
-    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
-                      ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                      sal_uInt32& rInsertPos);
-
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
-                                                              bool bReadOnly);
 };
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
