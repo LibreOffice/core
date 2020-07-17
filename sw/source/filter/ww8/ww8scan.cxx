@@ -240,175 +240,175 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher(const WW8Fib& rFib)
     static const SprmInfoRow aSprms[] =
     {
         {  0, { 0, L_FIX} }, // "Default-sprm", is skipped
-        {  2, { 2, L_FIX} }, // "sprmPIstd",  pap.istd (style code)
-        {  3, { 3, L_VAR} }, // "sprmPIstdPermute pap.istd permutation
-        {  4, { 1, L_FIX} }, // "sprmPIncLv1" pap.istddifference
-        {  5, { 1, L_FIX} }, // "sprmPJc" pap.jc (justification)
-        {  6, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide
-        {  7, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep
-        {  8, { 1, L_FIX} }, // "sprmPFKeepFollow " pap.fKeepFollow
-        {  9, { 1, L_FIX} }, // "sprmPPageBreakBefore" pap.fPageBreakBefore
-        { 10, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl
-        { 11, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp
-        { 12, { 0, L_VAR} }, // "sprmPAnld" pap.anld (ANLD structure)
-        { 13, { 1, L_FIX} }, // "sprmPNLvlAnm" pap.nLvlAnm nn
-        { 14, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn
-        { 15, { 0, L_VAR} }, // "?sprmPChgTabsPapx" pap.itbdMac, ...
-        { 16, { 2, L_FIX} }, // "sprmPDxaRight" pap.dxaRight
-        { 17, { 2, L_FIX} }, // "sprmPDxaLeft" pap.dxaLeft
-        { 18, { 2, L_FIX} }, // "sprmPNest" pap.dxaLeft
-        { 19, { 2, L_FIX} }, // "sprmPDxaLeft1" pap.dxaLeft1
-        { 20, { 4, L_FIX} }, // "sprmPDyaLine" pap.lspd an LSPD
-        { 21, { 2, L_FIX} }, // "sprmPDyaBefore" pap.dyaBefore
-        { 22, { 2, L_FIX} }, // "sprmPDyaAfter" pap.dyaAfter
-        { 23, { 0, L_VAR} }, // "?sprmPChgTabs" pap.itbdMac, pap.rgdxaTab, ...
-        { 24, { 1, L_FIX} }, // "sprmPFInTable" pap.fInTable
-        { 25, { 1, L_FIX} }, // "sprmPTtp" pap.fTtp
-        { 26, { 2, L_FIX} }, // "sprmPDxaAbs" pap.dxaAbs
-        { 27, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs
-        { 28, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth
-        { 29, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert
-        { 30, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop BRC10
-        { 31, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft BRC10
-        { 32, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom BRC10
-        { 33, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight BRC10
-        { 34, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween BRC10
-        { 35, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar BRC10
-        { 36, { 2, L_FIX} }, // "sprmPFromText10" pap.dxaFromText dxa
-        { 37, { 1, L_FIX} }, // "sprmPWr" pap.wr wr
-        { 38, { 2, L_FIX} }, // "sprmPBrcTop" pap.brcTop BRC
-        { 39, { 2, L_FIX} }, // "sprmPBrcLeft" pap.brcLeft BRC
-        { 40, { 2, L_FIX} }, // "sprmPBrcBottom" pap.brcBottom BRC
-        { 41, { 2, L_FIX} }, // "sprmPBrcRight" pap.brcRight BRC
-        { 42, { 2, L_FIX} }, // "sprmPBrcBetween" pap.brcBetween BRC
-        { 43, { 2, L_FIX} }, // "sprmPBrcBar" pap.brcBar BRC word
-        { 44, { 1, L_FIX} }, // "sprmPFNoAutoHyph" pap.fNoAutoHyph
-        { 45, { 2, L_FIX} }, // "sprmPWHeightAbs" pap.wHeightAbs w
-        { 46, { 2, L_FIX} }, // "sprmPDcs" pap.dcs DCS
-        { 47, { 2, L_FIX} }, // "sprmPShd" pap.shd SHD
-        { 48, { 2, L_FIX} }, // "sprmPDyaFromText" pap.dyaFromText dya
-        { 49, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText dxa
-        { 50, { 1, L_FIX} }, // "sprmPFLocked" pap.fLocked 0 or 1 byte
-        { 51, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl 0 or 1 byte
-        { 52, { 0, L_FIX} }, // "?sprmPRuler 52"
+        {NS_sprm::v6::sprmPIstd, { 2, L_FIX} }, // pap.istd (style code)
+        {NS_sprm::v6::sprmPIstdPermute, { 3, L_VAR} }, // pap.istd permutation
+        {NS_sprm::v6::sprmPIncLv1, { 1, L_FIX} }, // pap.istddifference
+        {NS_sprm::v6::sprmPJc, { 1, L_FIX} }, // pap.jc (justification)
+        {NS_sprm::v6::sprmPFSideBySide, { 1, L_FIX} }, // pap.fSideBySide
+        {NS_sprm::v6::sprmPFKeep, { 1, L_FIX} }, // pap.fKeep
+        {NS_sprm::v6::sprmPFKeepFollow, { 1, L_FIX} }, // pap.fKeepFollow
+        {NS_sprm::v6::sprmPPageBreakBefore, { 1, L_FIX} }, // pap.fPageBreakBefore
+        {NS_sprm::v6::sprmPBrcl, { 1, L_FIX} }, // pap.brcl
+        {NS_sprm::v6::sprmPBrcp, { 1, L_FIX} }, // pap.brcp
+        {NS_sprm::v6::sprmPAnld, { 0, L_VAR} }, // pap.anld (ANLD structure)
+        {NS_sprm::v6::sprmPNLvlAnm, { 1, L_FIX} }, // pap.nLvlAnm nn
+        {NS_sprm::v6::sprmPFNoLineNumb, { 1, L_FIX} }, // pap.fNoLnn
+        {NS_sprm::v6::sprmPChgTabsPapx, { 0, L_VAR} }, // pap.itbdMac, ...
+        {NS_sprm::v6::sprmPDxaRight, { 2, L_FIX} }, // pap.dxaRight
+        {NS_sprm::v6::sprmPDxaLeft, { 2, L_FIX} }, // pap.dxaLeft
+        {NS_sprm::v6::sprmPNest, { 2, L_FIX} }, // pap.dxaLeft
+        {NS_sprm::v6::sprmPDxaLeft1, { 2, L_FIX} }, // pap.dxaLeft1
+        {NS_sprm::v6::sprmPDyaLine, { 4, L_FIX} }, // pap.lspd an LSPD
+        {NS_sprm::v6::sprmPDyaBefore, { 2, L_FIX} }, // pap.dyaBefore
+        {NS_sprm::v6::sprmPDyaAfter, { 2, L_FIX} }, // pap.dyaAfter
+        {NS_sprm::v6::sprmPChgTabs, { 0, L_VAR} }, // pap.itbdMac, pap.rgdxaTab, ...
+        {NS_sprm::v6::sprmPFInTable, { 1, L_FIX} }, // pap.fInTable
+        {NS_sprm::v6::sprmPTtp, { 1, L_FIX} }, // pap.fTtp
+        {NS_sprm::v6::sprmPDxaAbs, { 2, L_FIX} }, // pap.dxaAbs
+        {NS_sprm::v6::sprmPDyaAbs, { 2, L_FIX} }, // pap.dyaAbs
+        {NS_sprm::v6::sprmPDxaWidth, { 2, L_FIX} }, // pap.dxaWidth
+        {NS_sprm::v6::sprmPPc, { 1, L_FIX} }, // pap.pcHorz, pap.pcVert
+        {NS_sprm::v6::sprmPBrcTop10, { 2, L_FIX} }, // pap.brcTop BRC10
+        {NS_sprm::v6::sprmPBrcLeft10, { 2, L_FIX} }, // pap.brcLeft BRC10
+        {NS_sprm::v6::sprmPBrcBottom10, { 2, L_FIX} }, // pap.brcBottom BRC10
+        {NS_sprm::v6::sprmPBrcRight10, { 2, L_FIX} }, // pap.brcRight BRC10
+        {NS_sprm::v6::sprmPBrcBetween10, { 2, L_FIX} }, // pap.brcBetween BRC10
+        {NS_sprm::v6::sprmPBrcBar10, { 2, L_FIX} }, // pap.brcBar BRC10
+        {NS_sprm::v6::sprmPFromText10, { 2, L_FIX} }, // pap.dxaFromText dxa
+        {NS_sprm::v6::sprmPWr, { 1, L_FIX} }, // pap.wr wr
+        {NS_sprm::v6::sprmPBrcTop, { 2, L_FIX} }, // pap.brcTop BRC
+        {NS_sprm::v6::sprmPBrcLeft, { 2, L_FIX} }, // pap.brcLeft BRC
+        {NS_sprm::v6::sprmPBrcBottom, { 2, L_FIX} }, // pap.brcBottom BRC
+        {NS_sprm::v6::sprmPBrcRight, { 2, L_FIX} }, // pap.brcRight BRC
+        {NS_sprm::v6::sprmPBrcBetween, { 2, L_FIX} }, // pap.brcBetween BRC
+        {NS_sprm::v6::sprmPBrcBar, { 2, L_FIX} }, // pap.brcBar BRC word
+        {NS_sprm::v6::sprmPFNoAutoHyph, { 1, L_FIX} }, // pap.fNoAutoHyph
+        {NS_sprm::v6::sprmPWHeightAbs, { 2, L_FIX} }, // pap.wHeightAbs w
+        {NS_sprm::v6::sprmPDcs, { 2, L_FIX} }, // pap.dcs DCS
+        {NS_sprm::v6::sprmPShd, { 2, L_FIX} }, // pap.shd SHD
+        {NS_sprm::v6::sprmPDyaFromText, { 2, L_FIX} }, // pap.dyaFromText dya
+        {NS_sprm::v6::sprmPDxaFromText, { 2, L_FIX} }, // pap.dxaFromText dxa
+        {NS_sprm::v6::sprmPFLocked, { 1, L_FIX} }, // pap.fLocked 0 or 1 byte
+        {NS_sprm::v6::sprmPFWidowControl, { 1, L_FIX} }, // pap.fWidowControl 0 or 1 byte
+        {NS_sprm::v6::sprmPRuler, { 0, L_FIX} },
         { 64, { 0, L_VAR} }, // rtl property ?
-        { 65, { 1, L_FIX} }, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
-        { 66, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark 1 or 0 bit
-        { 67, { 1, L_FIX} }, // "sprmCFFieldVanish" chp.fFieldVanish 1 or 0 bit
-        { 68, { 0, L_VAR} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec
-        { 69, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark index into sttbRMark
-        { 70, { 4, L_FIX} }, // "sprmCDttmRMark" chp.dttm DTTM long
-        { 71, { 1, L_FIX} }, // "sprmCFData" chp.fData 1 or 0 bit
-        { 72, { 2, L_FIX} }, // "sprmCRMReason" chp.idslRMReason an index to a table
-        { 73, { 3, L_FIX} }, // "sprmCChse" chp.fChsDiff and chp.chse
-        { 74, { 0, L_VAR} }, // "sprmCSymbol" chp.fSpec, chp.chSym and chp.ftcSym
-        { 75, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2 1 or 0   bit
+        {NS_sprm::v6::sprmCFStrikeRM, { 1, L_FIX} }, // chp.fRMarkDel 1 or 0 bit
+        {NS_sprm::v6::sprmCFRMark, { 1, L_FIX} }, // chp.fRMark 1 or 0 bit
+        {NS_sprm::v6::sprmCFFldVanish, { 1, L_FIX} }, // chp.fFieldVanish 1 or 0 bit
+        {NS_sprm::v6::sprmCPicLocation, { 0, L_VAR} }, // chp.fcPic and chp.fSpec
+        {NS_sprm::v6::sprmCIbstRMark, { 2, L_FIX} }, // chp.ibstRMark index into sttbRMark
+        {NS_sprm::v6::sprmCDttmRMark, { 4, L_FIX} }, // chp.dttm DTTM long
+        {NS_sprm::v6::sprmCFData, { 1, L_FIX} }, // chp.fData 1 or 0 bit
+        {NS_sprm::v6::sprmCRMReason, { 2, L_FIX} }, // chp.idslRMReason an index to a table
+        {NS_sprm::v6::sprmCChse, { 3, L_FIX} }, // chp.fChsDiff and chp.chse
+        {NS_sprm::v6::sprmCSymbol, { 0, L_VAR} }, // chp.fSpec, chp.chSym and chp.ftcSym
+        {NS_sprm::v6::sprmCFOle2, { 1, L_FIX} }, // chp.fOle2 1 or 0   bit
         { 77, { 0, L_VAR} }, // unknown
         { 79, { 0, L_VAR} }, // unknown
-        { 80, { 2, L_FIX} }, // "sprmCIstd" chp.istd istd, see stylesheet definition
-        { 81, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd permutation vector
-        { 82, { 0, L_VAR} }, // "sprmCDefault" whole CHP
-        { 83, { 0, L_FIX} }, // "sprmCPlain" whole CHP
-        { 85, { 1, L_FIX} }, // "sprmCFBold" chp.fBold 0,1, 128, or 129
-        { 86, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic 0,1, 128, or 129
-        { 87, { 1, L_FIX} }, // "sprmCFStrike" chp.fStrike 0,1, 128, or 129
-        { 88, { 1, L_FIX} }, // "sprmCFOutline" chp.fOutline 0,1, 128, or 129
-        { 89, { 1, L_FIX} }, // "sprmCFShadow" chp.fShadow 0,1, 128, or 129
-        { 90, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps 0,1, 128, or 129
-        { 91, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps 0,1, 128, or 129
-        { 92, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish 0,1, 128, or 129
-        { 93, { 2, L_FIX} }, // "sprmCFtc" chp.ftc ftc word
-        { 94, { 1, L_FIX} }, // "sprmCKul" chp.kul kul byte
-        { 95, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos
-        { 96, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace dxa
-        { 97, { 2, L_FIX} }, // "sprmCLid" chp.lid LID
-        { 98, { 1, L_FIX} }, // "sprmCIco" chp.ico ico byte
-        { 99, { 2, L_FIX} }, // "sprmCHps" chp.hps hps !word!
-        {100, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps
-        {101, { 2, L_FIX} }, // "sprmCHpsPos" chp.hpsPos hps !word!
-        {102, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos hps
-        {103, { 0, L_VAR} }, // "?sprmCMajority" chp.fBold, chp.fItalic, ...
-        {104, { 1, L_FIX} }, // "sprmCIss" chp.iss iss
-        {105, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps hps variable width
-        {106, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps complex
-        {107, { 2, L_FIX} }, // "sprmCHpsKern" chp.hpsKern hps
-        {108, { 0, L_VAR} }, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
-        {109, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps percentage to grow hps
-        {110, { 2, L_FIX} }, // "sprmCCondHyhen" chp.ysri ysri
+        {NS_sprm::v6::sprmCIstd, { 2, L_FIX} }, // chp.istd istd, see stylesheet definition
+        {NS_sprm::v6::sprmCIstdPermute, { 0, L_VAR} }, // chp.istd permutation vector
+        {NS_sprm::v6::sprmCDefault, { 0, L_VAR} }, // whole CHP
+        {NS_sprm::v6::sprmCPlain, { 0, L_FIX} }, // whole CHP
+        {NS_sprm::v6::sprmCFBold, { 1, L_FIX} }, // chp.fBold 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFItalic, { 1, L_FIX} }, // chp.fItalic 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFStrike, { 1, L_FIX} }, // chp.fStrike 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFOutline, { 1, L_FIX} }, // chp.fOutline 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFShadow, { 1, L_FIX} }, // chp.fShadow 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFSmallCaps, { 1, L_FIX} }, // chp.fSmallCaps 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFCaps, { 1, L_FIX} }, // chp.fCaps 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFVanish, { 1, L_FIX} }, // chp.fVanish 0,1, 128, or 129
+        {NS_sprm::v6::sprmCFtc, { 2, L_FIX} }, // chp.ftc ftc word
+        {NS_sprm::v6::sprmCKul, { 1, L_FIX} }, // chp.kul kul byte
+        {NS_sprm::v6::sprmCSizePos, { 3, L_FIX} }, // chp.hps, chp.hpsPos
+        {NS_sprm::v6::sprmCDxaSpace, { 2, L_FIX} }, // chp.dxaSpace dxa
+        {NS_sprm::v6::sprmCLid, { 2, L_FIX} }, // chp.lid LID
+        {NS_sprm::v6::sprmCIco, { 1, L_FIX} }, // chp.ico ico byte
+        {NS_sprm::v6::sprmCHps, { 2, L_FIX} }, // chp.hps hps !word!
+        {NS_sprm::v6::sprmCHpsInc, { 1, L_FIX} }, // chp.hps
+        {NS_sprm::v6::sprmCHpsPos, { 2, L_FIX} }, // chp.hpsPos hps !word!
+        {NS_sprm::v6::sprmCHpsPosAdj, { 1, L_FIX} }, // chp.hpsPos hps
+        {NS_sprm::v6::sprmCMajority, { 0, L_VAR} }, // chp.fBold, chp.fItalic, ...
+        {NS_sprm::v6::sprmCIss, { 1, L_FIX} }, // chp.iss iss
+        {NS_sprm::v6::sprmCHpsNew50, { 0, L_VAR} }, // chp.hps hps variable width
+        {NS_sprm::v6::sprmCHpsInc1, { 0, L_VAR} }, // chp.hps complex
+        {NS_sprm::v6::sprmCHpsKern, { 2, L_FIX} }, // chp.hpsKern hps
+        {NS_sprm::v6::sprmCMajority50, { 0, L_VAR} }, // chp.fBold, chp.fItalic, ...
+        {NS_sprm::v6::sprmCHpsMul, { 2, L_FIX} }, // chp.hps percentage to grow hps
+        {NS_sprm::v6::sprmCCondHyhen, { 2, L_FIX} }, // chp.ysri ysri
         {111, { 0, L_VAR} }, // sprmCFBoldBi or font code
         {112, { 0, L_VAR} }, // sprmCFItalicBi or font code
         {113, { 0, L_VAR} }, // ww7 rtl font
         {114, { 0, L_VAR} }, // ww7 lid
         {115, { 0, L_VAR} }, // ww7 CJK font
         {116, { 0, L_VAR} }, // ww7 fontsize
-        {117, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec  1 or 0 bit
-        {118, { 1, L_FIX} }, // "sprmCFObj" chp.fObj 1 or 0 bit
-        {119, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
-        {120, {12, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
-        {121, { 2, L_FIX} }, // "sprmPicBrcTop" pic.brcTop BRC word
-        {122, { 2, L_FIX} }, // "sprmPicBrcLeft" pic.brcLeft BRC word
-        {123, { 2, L_FIX} }, // "sprmPicBrcBottom" pic.brcBottom BRC word
-        {124, { 2, L_FIX} }, // "sprmPicBrcRight" pic.brcRight BRC word
-        {131, { 1, L_FIX} }, // "sprmSScnsPgn" sep.cnsPgn cns byte
-        {132, { 1, L_FIX} }, // "sprmSiHeadingPgn" sep.iHeadingPgn
-        {133, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm OLST variable length
-        {136, { 3, L_FIX} }, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing complex
-        {137, { 3, L_FIX} }, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing
-        {138, { 1, L_FIX} }, // "sprmSFEvenlySpaced" sep.fEvenlySpaced 1 or 0
-        {139, { 1, L_FIX} }, // "sprmSFProtected" sep.fUnlocked 1 or 0 byte
-        {140, { 2, L_FIX} }, // "sprmSDmBinFirst" sep.dmBinFirst  word
-        {141, { 2, L_FIX} }, // "sprmSDmBinOther" sep.dmBinOther  word
-        {142, { 1, L_FIX} }, // "sprmSBkc" sep.bkc bkc byte
-        {143, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage 0 or 1 byte
-        {144, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1 # of cols - 1 word
-        {145, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns dxa word
-        {146, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn obsolete byte
-        {147, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn nfc byte
-        {148, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn dya short
-        {149, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn dya short
-        {150, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart 0 or 1 byte
-        {151, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote 0 or 1 byte
-        {152, { 1, L_FIX} }, // "sprmSLnc" sep.lnc lnc byte
-        {153, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt grpfihdt
-        {154, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod non-neg int. word
-        {155, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn dxa word
-        {156, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop dya word
-        {157, { 2, L_FIX} }, // "sprmSDyaHdrBottom" sep.dyaHdrBottom dya word
-        {158, { 1, L_FIX} }, // "sprmSLBetween" sep.fLBetween 0 or 1 byte
-        {159, { 1, L_FIX} }, // "sprmSVjc" sep.vjc vjc byte
-        {160, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin lnn word
-        {161, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart pgn word
-        {162, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage dm byte
-        {163, { 0, L_FIX} }, // "?SprmSBCustomize 163"
-        {164, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage xa word
-        {165, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage ya word
-        {166, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft dxa word
-        {167, { 2, L_FIX} }, // "sprmSDxaRight" sep.dxaRight dxa word
-        {168, { 2, L_FIX} }, // "sprmSDyaTop" sep.dyaTop dya word
-        {169, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom dya word
-        {170, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter dza word
-        {171, { 2, L_FIX} }, // "sprmSDMPaperReq" sep.dmPaperReq dm word
+        {NS_sprm::v6::sprmCFSpec, { 1, L_FIX} }, // chp.fSpec  1 or 0 bit
+        {NS_sprm::v6::sprmCFObj, { 1, L_FIX} }, // chp.fObj 1 or 0 bit
+        {NS_sprm::v6::sprmPicBrcl, { 1, L_FIX} }, // pic.brcl brcl (see PIC definition)
+        {NS_sprm::v6::sprmPicScale, {12, L_VAR} }, // pic.mx, pic.my, pic.dxaCropleft,
+        {NS_sprm::v6::sprmPicBrcTop, { 2, L_FIX} }, // pic.brcTop BRC word
+        {NS_sprm::v6::sprmPicBrcLeft, { 2, L_FIX} }, // pic.brcLeft BRC word
+        {NS_sprm::v6::sprmPicBrcBottom, { 2, L_FIX} }, // pic.brcBottom BRC word
+        {NS_sprm::v6::sprmPicBrcRight, { 2, L_FIX} }, // pic.brcRight BRC word
+        {NS_sprm::v6::sprmSScnsPgn, { 1, L_FIX} }, // sep.cnsPgn cns byte
+        {NS_sprm::v6::sprmSiHeadingPgn, { 1, L_FIX} }, // sep.iHeadingPgn
+        {NS_sprm::v6::sprmSOlstAnm, { 0, L_VAR} }, // sep.olstAnm OLST variable length
+        {NS_sprm::v6::sprmSDxaColWidth, { 3, L_FIX} }, // sep.rgdxaColWidthSpacing complex
+        {NS_sprm::v6::sprmSDxaColSpacing, { 3, L_FIX} }, // sep.rgdxaColWidthSpacing
+        {NS_sprm::v6::sprmSFEvenlySpaced, { 1, L_FIX} }, // sep.fEvenlySpaced 1 or 0
+        {NS_sprm::v6::sprmSFProtected, { 1, L_FIX} }, // sep.fUnlocked 1 or 0 byte
+        {NS_sprm::v6::sprmSDmBinFirst, { 2, L_FIX} }, // sep.dmBinFirst  word
+        {NS_sprm::v6::sprmSDmBinOther, { 2, L_FIX} }, // sep.dmBinOther  word
+        {NS_sprm::v6::sprmSBkc, { 1, L_FIX} }, // sep.bkc bkc byte
+        {NS_sprm::v6::sprmSFTitlePage, { 1, L_FIX} }, // sep.fTitlePage 0 or 1 byte
+        {NS_sprm::v6::sprmSCcolumns, { 2, L_FIX} }, // sep.ccolM1 # of cols - 1 word
+        {NS_sprm::v6::sprmSDxaColumns, { 2, L_FIX} }, // sep.dxaColumns dxa word
+        {NS_sprm::v6::sprmSFAutoPgn, { 1, L_FIX} }, // sep.fAutoPgn obsolete byte
+        {NS_sprm::v6::sprmSNfcPgn, { 1, L_FIX} }, // sep.nfcPgn nfc byte
+        {NS_sprm::v6::sprmSDyaPgn, { 2, L_FIX} }, // sep.dyaPgn dya short
+        {NS_sprm::v6::sprmSDxaPgn, { 2, L_FIX} }, // sep.dxaPgn dya short
+        {NS_sprm::v6::sprmSFPgnRestart, { 1, L_FIX} }, // sep.fPgnRestart 0 or 1 byte
+        {NS_sprm::v6::sprmSFEndnote, { 1, L_FIX} }, // sep.fEndnote 0 or 1 byte
+        {NS_sprm::v6::sprmSLnc, { 1, L_FIX} }, // sep.lnc lnc byte
+        {NS_sprm::v6::sprmSGprfIhdt, { 1, L_FIX} }, // sep.grpfIhdt grpfihdt
+        {NS_sprm::v6::sprmSNLnnMod, { 2, L_FIX} }, // sep.nLnnMod non-neg int. word
+        {NS_sprm::v6::sprmSDxaLnn, { 2, L_FIX} }, // sep.dxaLnn dxa word
+        {NS_sprm::v6::sprmSDyaHdrTop, { 2, L_FIX} }, // sep.dyaHdrTop dya word
+        {NS_sprm::v6::sprmSDyaHdrBottom, { 2, L_FIX} }, // sep.dyaHdrBottom dya word
+        {NS_sprm::v6::sprmSLBetween, { 1, L_FIX} }, // sep.fLBetween 0 or 1 byte
+        {NS_sprm::v6::sprmSVjc, { 1, L_FIX} }, // sep.vjc vjc byte
+        {NS_sprm::v6::sprmSLnnMin, { 2, L_FIX} }, // sep.lnnMin lnn word
+        {NS_sprm::v6::sprmSPgnStart, { 2, L_FIX} }, // sep.pgnStart pgn word
+        {NS_sprm::v6::sprmSBOrientation, { 1, L_FIX} }, // sep.dmOrientPage dm byte
+        {NS_sprm::v6::sprmSBCustomize, { 0, L_FIX} },
+        {NS_sprm::v6::sprmSXaPage, { 2, L_FIX} }, // sep.xaPage xa word
+        {NS_sprm::v6::sprmSYaPage, { 2, L_FIX} }, // sep.yaPage ya word
+        {NS_sprm::v6::sprmSDxaLeft, { 2, L_FIX} }, // sep.dxaLeft dxa word
+        {NS_sprm::v6::sprmSDxaRight, { 2, L_FIX} }, // sep.dxaRight dxa word
+        {NS_sprm::v6::sprmSDyaTop, { 2, L_FIX} }, // sep.dyaTop dya word
+        {NS_sprm::v6::sprmSDyaBottom, { 2, L_FIX} }, // sep.dyaBottom dya word
+        {NS_sprm::v6::sprmSDzaGutter, { 2, L_FIX} }, // sep.dzaGutter dza word
+        {NS_sprm::v6::sprmSDMPaperReq, { 2, L_FIX} }, // sep.dmPaperReq dm word
         {179, { 0, L_VAR} }, // rtl property ?
         {181, { 0, L_VAR} }, // rtl property ?
-        {182, { 2, L_FIX} }, // "sprmTJc" tap.jc jc (low order byte is significant)
-        {183, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
-        {184, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
-        {185, { 1, L_FIX} }, // "sprmTFCantSplit" tap.fCantSplit 1 or 0 byte
-        {186, { 1, L_FIX} }, // "sprmTTableHeader" tap.fTableHeader 1 or 0 byte
-        {187, {12, L_FIX} }, // "sprmTTableBorders" tap.rgbrcTable complex 12 bytes
-        {188, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
-        {189, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
-        {190, { 0, L_VAR2} },// "sprmTDefTable" tap.rgtc complex
-        {191, { 1, L_VAR} }, // "sprmTDefTableShd" tap.rgshd complex
-        {192, { 4, L_FIX} }, // "sprmTTlp" tap.tlp TLP 4 bytes
-        {193, { 5, L_FIX} }, // "sprmTSetBrc" tap.rgtc[].rgbrc complex 5 bytes
-        {194, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter,tap.rgtc complex
-        {195, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc complex
-        {196, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter complex
-        {197, { 2, L_FIX} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
-        {198, { 2, L_FIX} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
-        {199, { 5, L_FIX} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
-        {200, { 4, L_FIX} }, // "sprmTSetShd", tap.rgshd complex 4 bytes
+        {NS_sprm::v6::sprmTJc, { 2, L_FIX} }, // tap.jc jc (low order byte is significant)
+        {NS_sprm::v6::sprmTDxaLeft, { 2, L_FIX} }, // tap.rgdxaCenter dxa word
+        {NS_sprm::v6::sprmTDxaGapHalf, { 2, L_FIX} }, // tap.dxaGapHalf, tap.rgdxaCenter
+        {NS_sprm::v6::sprmTFCantSplit, { 1, L_FIX} }, // tap.fCantSplit 1 or 0 byte
+        {NS_sprm::v6::sprmTTableHeader, { 1, L_FIX} }, // tap.fTableHeader 1 or 0 byte
+        {NS_sprm::v6::sprmTTableBorders, {12, L_FIX} }, // tap.rgbrcTable complex 12 bytes
+        {NS_sprm::v6::sprmTDefTable10, { 0, L_VAR} }, // tap.rgdxaCenter, tap.rgtc complex
+        {NS_sprm::v6::sprmTDyaRowHeight, { 2, L_FIX} }, // tap.dyaRowHeight dya word
+        {NS_sprm::v6::sprmTDefTable, { 0, L_VAR2} }, // tap.rgtc complex
+        {NS_sprm::v6::sprmTDefTableShd, { 1, L_VAR} }, // tap.rgshd complex
+        {NS_sprm::v6::sprmTTlp, { 4, L_FIX} }, // tap.tlp TLP 4 bytes
+        {NS_sprm::v6::sprmTSetBrc, { 5, L_FIX} }, // tap.rgtc[].rgbrc complex 5 bytes
+        {NS_sprm::v6::sprmTInsert, { 4, L_FIX} }, // tap.rgdxaCenter,tap.rgtc complex
+        {NS_sprm::v6::sprmTDelete, { 2, L_FIX} }, // tap.rgdxaCenter, tap.rgtc complex
+        {NS_sprm::v6::sprmTDxaCol, { 4, L_FIX} }, // tap.rgdxaCenter complex
+        {NS_sprm::v6::sprmTMerge, { 2, L_FIX} }, // tap.fFirstMerged, tap.fMerged complex
+        {NS_sprm::v6::sprmTSplit, { 2, L_FIX} }, // tap.fFirstMerged, tap.fMerged complex
+        {NS_sprm::v6::sprmTSetBrc10, { 5, L_FIX} }, // tap.rgtc[].rgbrc complex 5 bytes
+        {NS_sprm::v6::sprmTSetShd, { 4, L_FIX} }, // tap.rgshd complex 4 bytes
         {207, { 0, L_VAR} }  // rtl property ?
     };
 
