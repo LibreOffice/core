@@ -82,11 +82,13 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(gb_Side),host)
 ifeq ($(ENABLE_MARIADBC),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mysql \
 	Library_mysqlc \
 ))
+endif
 endif
 
 ifneq ($(BUILD_POSTGRESQL_SDBC),)

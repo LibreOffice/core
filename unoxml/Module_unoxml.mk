@@ -21,8 +21,13 @@ $(eval $(call gb_Module_Module,unoxml))
 
 $(eval $(call gb_Module_add_targets,unoxml,\
     Library_unoxml \
+))
+
+ifeq ($(gb_Side),host)
+$(eval $(call gb_Module_add_targets,unoxml,\
     Library_unordf \
 ))
+endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,unoxml,\
     CppunitTest_unoxml_domtest \

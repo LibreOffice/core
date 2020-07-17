@@ -22,9 +22,14 @@ $(eval $(call gb_Module_Module,svx))
 $(eval $(call gb_Module_add_targets,svx,\
     Library_svx \
     Library_svxcore \
+))
+
+ifeq ($(gb_Side),host)
+$(eval $(call gb_Module_add_targets,svx,\
     Library_textconversiondlgs \
     UIConfig_svx \
 ))
+endif
 
 $(eval $(call gb_Module_add_l10n_targets,svx,\
     AllLangMoTarget_svx \

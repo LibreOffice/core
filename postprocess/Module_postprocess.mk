@@ -13,11 +13,16 @@ $(eval $(call gb_Module_Module,postprocess))
 # is reused in Package_registry!
 
 $(eval $(call gb_Module_add_targets,postprocess,\
-	CustomTarget_images \
 	CustomTarget_registry \
-	Package_images \
 	Rdb_services \
 ))
+ifeq ($(gb_Side),host)
+$(eval $(call gb_Module_add_targets,postprocess,\
+	CustomTarget_images \
+	Package_images \
+))
+endif
+
 $(eval $(call gb_Module_add_l10n_targets,postprocess,\
 	Package_registry \
 ))
