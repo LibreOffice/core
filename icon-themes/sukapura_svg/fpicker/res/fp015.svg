@@ -1,13 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><filter id="a" color-interpolation-filters="sRGB" height="1.094553" width="1.097492" x="-.048746" y="-.047277"><feGaussianBlur stdDeviation=".36559322"/></filter><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="4" y2="14"><stop offset="0" stop-color="#68caf8"/><stop offset=".5" stop-color="#70cef9"/><stop offset=".71428573" stop-color="#79d3fb"/><stop offset=".9285714" stop-color="#67c1ed"/><stop offset="1" stop-color="#67bfea"/></linearGradient>
-
-
-
-
-
-
-
-
-
-
-     /&amp;amp;amp;amp;amp;amp;amp;gt;
- <g fill-rule="evenodd" transform="translate(1)"><path d="m1 12.940678h12v2.559322h-12z" filter="url(#a)" opacity=".15" stroke-width="1.015418"/><path d="m3.5 2.5000002c.265199.0000511.519519.1054326.707031.2929688l3.207031 1.7070312 5.085938-.0000004c.552262.0000552.999945.4477381 1 1.0000002v9h-1-12v-8.5-2.5c.000055-.5522619.447738-.9999448 1-1z" fill="#94ddff" stroke="#2bbcff"/><path d="m.5 14.5h1 12v-7c.29761-.9920364-1.78201-.9921875-.742188-.9921875h-.002-1-1-8.9785156c-1.02113938 0-1.02076208-.0005516-1.27924988.9902344z" fill="url(#b)" stroke="#15b0f5"/><path d="m7 7.5-1 2h-2.5l2 2-.5 2 2-1.200019 2 1.200019-.5-2.5 2-1.5h-2.5z" fill="#f0f0f0" stroke="#0a84ff" stroke-linejoin="round"/></g></svg>
+<svg height="16" viewBox="0 0 4.2333332 4.2333335" width="16" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0 -292.76665)"><path d="m1 0c-.5539995 0-1 .44599687-1 1v4c0-.5540035.44600049-1 1-1v-2.5c0-.2770394.2230001-.5.5-.5h1.5.6992188l2.2910156 1.8847656c.0869582.0733683.1967779.1141189.3105468.1152344h.6992188.2050781 7.2949219c.277002 0 .5.2229984.5.5v.5c.554 0 1 .4459965 1 1v-2c0-.5540031-.446-1-1-1h-8-.5175781l-2.2910157-1.890625c-.0893153-.07254932-.2013539-.11127869-.3164062-.109375h-.875z" fill="#4b4b4f" transform="matrix(.26458333 0 0 .26458333 0 292.76665)"/><path d="m1 4c-.55399953 0-1 .4459965-1 1v8.5c0 .554003.44600047 1 1 1h14c.554 0 1-.445997 1-1v-8.5c0-.5540035-.446-1-1-1zm.5 1h13c.277 0 .5.2230051.5.5v7.5c0 .276995-.223.5-.5.5h-13c-.277 0-.5-.223005-.5-.5v-7.5c0-.2769949.223-.5.5-.5z" fill="#4b4b4f" transform="matrix(.26458333 0 0 .26458333 0 292.76665)"/><rect fill-opacity=".188235" height="2.248958" rx=".132292" ry=".132289" width="3.704167" x=".264583" y="294.08957"/><path d="m2.5 3c-.277 0-.5.223005-.5.5v1.5 4.5 2.5l1.5-1.5 1.5 1.5v-2.5-4.5-1.5c0-.276995-.223-.5-.5-.5z" fill="#4b4b4f" transform="matrix(.26458333 0 0 .26458333 0 292.76665)"/></g></svg>
