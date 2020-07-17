@@ -250,6 +250,7 @@ public:
     void testTdf81470();
     void testTdf122331();
     void testTdf83779();
+    void testHeaderFontStyleXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -398,6 +399,7 @@ public:
     CPPUNIT_TEST(testTdf81470);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
+    CPPUNIT_TEST(testHeaderFontStyleXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5088,6 +5090,36 @@ void ScExportTest::testTdf83779()
 
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f", "FALSE()");
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testHeaderFontStyleXLSX()
+{
+    ScDocShellRef xShell = loadDoc("tdf134826.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    SfxStyleSheetBase* pStyleSheet = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(0), SfxStyleFamily::Page);
+    const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+    const ScPageHFItem& rHFItem = rItemSet.Get(ATTR_PAGE_HEADERRIGHT);
+    const EditTextObject* pTextObj = rHFItem.GetLeftArea();
+
+    std::vector<EECharAttrib> rLst;
+
+    // first line is bold.
+    pTextObj->GetCharAttribs(0, rLst);
+    bool bHasBold = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT &&
+            static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD; });
+    CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
+
+    // second line is italic.
+    pTextObj->GetCharAttribs(1, rLst);
+    bool bHasItalic = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_ITALIC &&
+            static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL; });
+    CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
 
     xShell->DoClose();
 }
