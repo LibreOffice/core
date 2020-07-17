@@ -448,7 +448,8 @@ static const sal_Char* const sppcBoldNames[] =
     "demibold",
     "halbfett",         // German 'demibold'
     "black",
-    "heavy"
+    "heavy",
+    "f\303\251lk\303\266v\303\251r"  // Hungarian 'bold'
 };
 
 // different names for italic font style (lowercase)
@@ -458,7 +459,8 @@ static const sal_Char* const sppcItalicNames[] =
     "kursiv",           // German 'italic'
     "oblique",
     "schr\303\204g",    // German 'oblique' with uppercase A umlaut
-    "schr\303\244g"     // German 'oblique' with lowercase A umlaut
+    "schr\303\244g",    // German 'oblique' with lowercase A umlaut
+    "d\305\221lt"       // Hungarian 'italic'
 };
 
 } // namespace
