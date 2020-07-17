@@ -440,9 +440,11 @@ void SVGAttributeWriter::setFontFamily()
     }
 }
 
-SVGTextWriter::SVGTextWriter( SVGExport& rExport,  SVGAttributeWriter& rAttributeWriter  )
+SVGTextWriter::SVGTextWriter(SVGExport& rExport, SVGAttributeWriter& rAttributeWriter,
+                             SVGActionWriter& rActionWriter)
 : mrExport( rExport ),
   mrAttributeWriter( rAttributeWriter ),
+  mrActionWriter(rActionWriter),
   mpVDev( nullptr ),
   mbIsTextShapeStarted( false ),
   mrTextShape(),
@@ -581,7 +583,8 @@ bool SVGTextWriter::implGetTextPositionFromBitmap( const MetaAction* pAction, Po
  *     0 if no text found and end of text shape is reached
  *     1 if text found!
  */
-sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction )
+sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCurAction,
+                                         sal_uInt32 nWriteFlags)
 {
     Point aPos;
     sal_uLong nCount = rMtf.GetActionSize();
@@ -614,6 +617,22 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             case( MetaActionType::TEXTARRAY ):
             {
                 bConfigured = implGetTextPosition<MetaTextArrayAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
+            case MetaActionType::FLOATTRANSPARENT:
+            {
+                const MetaFloatTransparentAction* pA
+                    = static_cast<const MetaFloatTransparentAction*>(pAction);
+                GDIMetaFile aTmpMtf(pA->GetGDIMetaFile());
+                sal_uLong nTmpAction = 0;
+                if (setTextPosition(aTmpMtf, nTmpAction, nWriteFlags) == 1)
+                {
+                    // Text is found in the inner metafile.
+                    bConfigured = true;
+                    mrActionWriter.StartMask(pA->GetPoint(), pA->GetSize(), pA->GetGradient(),
+                                             nWriteFlags, &maTextOpacity);
+                }
             }
             break;
 
@@ -1258,6 +1277,7 @@ void SVGTextWriter::endTextShape()
         delete mpTextShapeElem;
         mpTextShapeElem = nullptr;
     }
+    maTextOpacity.clear();
     mbIsTextShapeStarted = false;
     // these need to be invoked after the <text> element has been closed
     implExportHyperlinkIds();
@@ -1344,6 +1364,7 @@ void SVGTextWriter::endTextPosition()
     }
 }
 
+bool SVGTextWriter::hasTextOpacity() { return !maTextOpacity.isEmpty(); }
 
 void SVGTextWriter::implExportHyperlinkIds()
 {
@@ -1692,6 +1713,11 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
 
     addFontAttributes( /* isTexTContainer: */ false );
 
+    if (!maTextOpacity.isEmpty())
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_NONE, "fill-opacity", maTextOpacity);
+    }
+
     mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     // <a> tag for link should be the innermost tag, inside <tspan>
@@ -1727,7 +1753,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     maContextHandler(),
     mrCurrentState( maContextHandler.getCurrentState() ),
     maAttributeWriter( rExport, rFontExport, mrCurrentState ),
-    maTextWriter( rExport, maAttributeWriter ),
+    maTextWriter( rExport, maAttributeWriter, *this ),
     mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false )
 {
@@ -2382,39 +2408,26 @@ Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
     return Color( (sal_uInt8)nNewRed, (sal_uInt8)nNewGreen, (sal_uInt8)nNewBlue );
 }
 
-
-void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
-                                     const Point& rDestPt,
-                                     const Size& rDestSize,
-                                     const Gradient& rGradient,
-                                     sal_uInt32 nWriteFlags )
+void SVGActionWriter::StartMask(const Point& rDestPt, const Size& rDestSize,
+                                const Gradient& rGradient, sal_uInt32 nWriteFlags,
+                                OUString* pTextFillOpacity)
 {
-    Point          aSrcPt( rMtf.GetPrefMapMode().GetOrigin() );
-    const Size     aSrcSize( rMtf.GetPrefSize() );
-    const double   fScaleX = aSrcSize.Width() ? (double) rDestSize.Width() / aSrcSize.Width() : 1.0;
-    const double   fScaleY = aSrcSize.Height() ? (double) rDestSize.Height() / aSrcSize.Height() : 1.0;
-    long           nMoveX, nMoveY;
-
-    if( fScaleX != 1.0 || fScaleY != 1.0 )
-    {
-        rMtf.Scale( fScaleX, fScaleY );
-        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-        aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
-    }
-
-    nMoveX = rDestPt.X() - aSrcPt.X();
-    nMoveY = rDestPt.Y() - aSrcPt.Y();
-
-    if( nMoveX || nMoveY )
-        rMtf.Move( nMoveX, nMoveY );
-
     OUString aStyle;
     if (rGradient.GetStartColor() == rGradient.GetEndColor())
     {
         // Special case: constant alpha value.
         const Color& rColor = rGradient.GetStartColor();
         const double fOpacity = 1.0 - static_cast<double>(rColor.GetLuminance()) / 255;
-        aStyle = "opacity: " + OUString::number(fOpacity);
+        if (pTextFillOpacity)
+        {
+            // Don't write anything, return what is a value suitable for <tspan fill-opacity="...">.
+            *pTextFillOpacity = OUString::number(fOpacity);
+            return;
+        }
+        else
+        {
+            aStyle = "opacity: " + OUString::number(fOpacity);
+        }
     }
     else
     {
@@ -2445,9 +2458,40 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
         aStyle = "mask:url(#" + aMaskId + ")";
     }
     mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle);
+}
+
+void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize,
+                                    const Gradient& rGradient, sal_uInt32 nWriteFlags)
+{
+    Point aSrcPt(rMtf.GetPrefMapMode().GetOrigin());
+    const Size aSrcSize(rMtf.GetPrefSize());
+    const double fScaleX
+        = aSrcSize.Width() ? static_cast<double>(rDestSize.Width()) / aSrcSize.Width() : 1.0;
+    const double fScaleY
+        = aSrcSize.Height() ? static_cast<double>(rDestSize.Height()) / aSrcSize.Height() : 1.0;
+    long nMoveX, nMoveY;
+
+    if (fScaleX != 1.0 || fScaleY != 1.0)
+    {
+        rMtf.Scale(fScaleX, fScaleY);
+        aSrcPt.setX(FRound(aSrcPt.X() * fScaleX));
+        aSrcPt.setY(FRound(aSrcPt.Y() * fScaleY));
+    }
+
+    nMoveX = rDestPt.X() - aSrcPt.X();
+    nMoveY = rDestPt.Y() - aSrcPt.Y();
+
+    if (nMoveX || nMoveY)
+        rMtf.Move(nMoveX, nMoveY);
 
     {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+        std::unique_ptr<SvXMLElementExport> pElemG;
+        if (!maTextWriter.hasTextOpacity())
+        {
+            StartMask(rDestPt, rDestSize, rGradient, nWriteFlags);
+            pElemG.reset(
+                new SvXMLElementExport(mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true));
+        }
 
         mpVDev->Push();
         ImplWriteActions( rMtf, nWriteFlags, nullptr );
@@ -3372,7 +3416,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             sal_Int32 nTextFound = -1;
                             while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
                             {
-                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                                nTextFound
+                                    = maTextWriter.setTextPosition(rMtf, nCurAction, nWriteFlags);
                             }
                             // We found some text in the current text shape.
                             if( nTextFound > 0 )
@@ -3407,7 +3452,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             sal_Int32 nTextFound = -1;
                             while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
                             {
-                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                                nTextFound
+                                    = maTextWriter.setTextPosition(rMtf, nCurAction, nWriteFlags);
                             }
                             // We found a paragraph with some text in the
                             // current text shape.
@@ -3440,7 +3486,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             sal_Int32 nTextFound = -2;
                             while( ( nTextFound < -1 ) && ( nCurAction < nCount ) )
                             {
-                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                                nTextFound
+                                    = maTextWriter.setTextPosition(rMtf, nCurAction, nWriteFlags);
                             }
                             // We found a line with some text in the current
                             // paragraph.

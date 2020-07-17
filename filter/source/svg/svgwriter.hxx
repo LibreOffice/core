@@ -222,6 +222,7 @@ class SVGTextWriter final
   private:
     SVGExport&                                  mrExport;
     SVGAttributeWriter&                         mrAttributeWriter;
+    SVGActionWriter& mrActionWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     bool                                        mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
@@ -235,6 +236,7 @@ class SVGTextWriter final
     SvXMLElementExport*                         mpTextShapeElem;
     SvXMLElementExport*                         mpTextParagraphElem;
     SvXMLElementExport*                         mpTextPositionElem;
+    OUString maTextOpacity;
     sal_Int32                                   mnLeftTextPortionLength;
     Point                                       maTextPos;
     long int                                    mnTextWidth;
@@ -254,10 +256,12 @@ class SVGTextWriter final
     vcl::Font                                   maParentFont;
 
   public:
-    explicit SVGTextWriter( SVGExport& rExport, SVGAttributeWriter& rAttributeWriter );
+    explicit SVGTextWriter(SVGExport& rExport, SVGAttributeWriter& rAttributeWriter,
+            SVGActionWriter& mrActionWriter);
     ~SVGTextWriter();
 
-    sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );
+    sal_Int32 setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCurAction,
+                              sal_uInt32 nWriteFlags);
     void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
     void addFontAttributes( bool bIsTextContainer );
 
@@ -272,6 +276,7 @@ class SVGTextWriter final
     void endTextParagraph();
     void startTextPosition( bool bExportX = true, bool bExportY = true);
     void endTextPosition();
+    bool hasTextOpacity();
     void implExportHyperlinkIds();
     void implWriteBulletChars();
     template< typename MetaBitmapActionType >
@@ -386,6 +391,8 @@ public:
                                            const OUString* pElementId = nullptr,
                                            const Reference< XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
+    void StartMask(const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient,
+                   sal_uInt32 nWriteFlags, OUString* pTextStyle = nullptr);
 };
 
 
