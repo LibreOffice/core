@@ -435,8 +435,7 @@ void wwSprmSearcher::patchCJKVariant()
 
 template <class Sprm> static constexpr SprmInfoRow InfoRow()
 {
-    return { Sprm::val,
-             { Sprm::len(), Sprm::varlen() ? wwSprmParser::L_VAR : wwSprmParser::L_FIX } };
+    return { Sprm::val, { Sprm::len, Sprm::varlen ? wwSprmParser::L_VAR : wwSprmParser::L_FIX } };
 }
 
 const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
