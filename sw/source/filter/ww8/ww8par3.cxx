@@ -772,8 +772,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             return false;
 
         //For i120928,parse the graphic info of bullets
-        SprmResult aSprmWhichPis = GrpprlHasSprm(NS_sprm::sprmCPbiIBullet, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-        SprmResult aSprmIsPicBullet = GrpprlHasSprm(NS_sprm::sprmCPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        SprmResult aSprmWhichPis = GrpprlHasSprm(NS_sprm::CPbiIBullet::val, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        SprmResult aSprmIsPicBullet = GrpprlHasSprm(NS_sprm::CPbiGrf::val, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
         if (aSprmWhichPis.pSprm && aSprmWhichPis.nRemainingData >= 1)
         {
             nWitchPicIsBullet = *aSprmWhichPis.pSprm;
