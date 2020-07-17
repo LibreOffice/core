@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_GALTHEME_HXX
 
 #include <svx/svxdllapi.h>
+#include <svx/gallerybinaryengine.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -33,7 +34,6 @@
 namespace weld { class ComboBox; }
 
 class SotStorageStream;
-
 
 struct GalleryObject
 {
@@ -62,6 +62,7 @@ namespace unogallery
     class GalleryItem;
 }
 
+class GalleryBinaryEngine;
 
 class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 {
@@ -72,6 +73,7 @@ class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 
 private:
 
+    std::unique_ptr<GalleryBinaryEngine>     mpGalleryBinaryEngine;
     ::std::vector< std::unique_ptr<GalleryObject> > aObjectList;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
@@ -82,6 +84,9 @@ private:
     sal_uInt32                  nDragPos;
     bool                        bDragging;
     bool                        bAbortActualize;
+
+    std::unique_ptr<GalleryBinaryEngine> createGalleryBinaryEngine();
+    const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
 
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
