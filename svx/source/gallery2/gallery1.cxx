@@ -41,7 +41,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
-#include <svx/gallerybinaryengine.hxx>
+#include <svx/gallerybinaryengineentry.hxx>
 #include <galobj.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -120,17 +120,14 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if (bCreateUniqueURL)
     {
-        GalleryBinaryEngine::CreateUniqueURL(rBaseURL,aURL);
+        GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
     }
-    mpGalleryBinaryEngine = createGalleryBinaryEngine();
-    mpGalleryBinaryEngine->SetThmExtension(aURL);
-    mpGalleryBinaryEngine->SetSdgExtension(aURL);
-    mpGalleryBinaryEngine->SetSdvExtension(aURL);
-    mpGalleryBinaryEngine->SetStrExtension(aURL);
+    mpGalleryBinaryEngineEntry = createGalleryBinaryEngineEntry();
+    maGalleryStorageLocations.SetStorageLocations(aURL);
 
     SetModified( _bNewFile );
 
-    aName = mpGalleryBinaryEngine->ReadStrFromIni( "name" );
+    aName = mpGalleryBinaryEngineEntry->ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -164,43 +161,10 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryBinaryEngine()
+std::unique_ptr<GalleryBinaryEngineEntry> GalleryThemeEntry::createGalleryBinaryEngineEntry()
 {
-    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>();
-    return pGalleryBinaryEngine;
-}
-
-void GalleryThemeEntry::callGalleryThemeInit()
-{
-    getGalleryBinaryEngine()->galleryThemeInit(IsReadOnly());
-}
-
-bool GalleryThemeEntry::readModel(const GalleryObject* pObject, SdrModel& rModel)
-{
-    return mpGalleryBinaryEngine->readModel(pObject, rModel);
-}
-
-bool GalleryThemeEntry::insertModel(const FmFormModel& rModel, INetURLObject& aURL)
-{
-    return mpGalleryBinaryEngine->insertModel(rModel, aURL);
-}
-
-bool GalleryThemeEntry::readModelStream(const GalleryObject* pObject, tools::SvRef<SotStorageStream> const& rxModelStream)
-{
-    return mpGalleryBinaryEngine->readModelStream(pObject, rxModelStream);
-}
-
-SgaObjectSvDraw
-GalleryThemeEntry::insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
-    INetURLObject& rURL)
-{
-    return mpGalleryBinaryEngine->insertModelStream(rxModelStream, rURL);
-}
-
-void GalleryThemeEntry::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
-    ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList, sal_uInt32& rInsertPos)
-{
-    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, rDestDir, rObjectList, rInsertPos);
+    std::unique_ptr<GalleryBinaryEngineEntry> pGalleryBinaryEngineEntry = std::make_unique<GalleryBinaryEngineEntry>(maGalleryStorageLocations);
+    return pGalleryBinaryEngineEntry;
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
@@ -466,7 +430,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     }
                                 }
 
-                                GalleryThemeEntry* pEntry = GalleryBinaryEngine::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
+                                GalleryThemeEntry* pEntry = GalleryBinaryEngineEntry::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
                                     aThemeList.emplace_back( pEntry );
@@ -628,7 +592,7 @@ void Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
         {
             pThemeEntry->SetName( rNewName );
             if (pThm->pThm->IsModified())
-                if (!pThm->pThm->getGalleryBinaryEngine()->implWrite(*pThm))
+                if (!pThm->mpGalleryBinaryEngine->implWrite(*pThm))
                     pThm->ImplSetModified(false);
 
             Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, rOldName, pThm->GetName() ) );
