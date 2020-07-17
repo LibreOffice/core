@@ -1632,7 +1632,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
-            nc = GetToken().aText.toInt32();
+            nc = GetToken().aText.toInt32() + 0;
             col_perso_rgb_color.SetBlue(nc % 256);
             nc /= 256;
             col_perso_rgb_color.SetGreen(nc % 256);
