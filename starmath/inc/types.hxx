@@ -79,6 +79,7 @@ sal_Unicode const MS_EQUIV = 0x2261;
 sal_Unicode const MS_PROP = 0x221D;
 sal_Unicode const MS_PARTIAL = 0x2202;
 sal_Unicode const MS_LAPLACE = 0x2112;
+sal_Unicode const MS_FOURIER = 0x2131;
 
 sal_Unicode const MS_SUBSET = 0x2282;
 sal_Unicode const MS_SUPSET = 0x2283;
