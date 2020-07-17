@@ -18,17 +18,19 @@
 #
 
 import sys, os, re
+import argparse
 
 global_list = []
 global_hash = {}
-base_path = None
+args = None
 
 def read_icons(fname):
-    global base_path
+    global args
     images = []
-    full_path = os.path.join(base_path, fname)
+    full_path = os.path.join(args.base_path, fname)
     if not os.path.exists(full_path):
-        print("Skipping non-existent {}\n".format(full_path))
+        if not args.quiet:
+            print("Skipping non-existent {}\n".format(full_path), file=sys.stderr)
         return images
     with open(full_path) as fp:
         for line in fp:
@@ -116,34 +118,37 @@ def chew_controlfile(ifile):
         else:
             filelist.append(line)
 
-if len(sys.argv) == 1:
-    print("image-sort <image-sort.lst> /path/to/OOOo/source/root\n")
-    sys.exit(1)
-
+parser = argparse.ArgumentParser()
 # where the control file lives
-control = sys.argv[1]
+parser.add_argument('control_file', metavar='image-sort.lst', type=open,
+                    help='the sort control file')
 # where the uiconfigs live
-base_path = sys.argv[2]
-# output
-if len(sys.argv) > 3:
-    output = open(sys.argv[3], 'w')
+parser.add_argument('base_path', metavar='directory',
+                    help='path to the UIConfigs directory')
+parser.add_argument('output', metavar='output file', type=argparse.FileType('w'),
+                    nargs='?', default=None, help='optionally write to this output file')
+parser.add_argument("-q", "--quiet", action="store_true",
+                    help="don't print status messages to stdout")
+
+args = parser.parse_args()
+
+if args.output is not None:
     close_output = True
 else:
-    output = sys.stdout
+    args.output = sys.stdout
     close_output = False
 
-with open(control) as controlfile:
-    chew_controlfile(controlfile)
+chew_controlfile(args.control_file)
 
 for icon in global_list:
     if not icon.startswith('sc_'):
-        output.write(icon + "\n")
+        args.output.write(icon + "\n")
 
 for icon in global_list:
     if icon.startswith('sc_'):
-        output.write(icon + "\n")
+        args.output.write(icon + "\n")
 
 if close_output:
-    output.close()
+    args.output.close()
 
 # dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
