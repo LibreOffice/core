@@ -104,6 +104,8 @@ $(eval $(call gb_Library_add_nativeres,vclplug_win,vcl/salsrc))
 
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
+ifeq ($(gb_Side),host)
 $(eval $(call gb_Library_use_package,vclplug_win,postprocess_images))
+endif
 
 # vim: set noet sw=4 ts=4:

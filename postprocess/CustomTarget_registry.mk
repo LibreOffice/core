@@ -312,14 +312,17 @@ postprocess_FILES_main += \
 		# VCL-unixdesktop.xcu must come after VCL.xcu
 else ifeq (WNT,$(OS))
 postprocess_FILES_main += \
-	$(call gb_XcuModuleTarget_get_target,connectivity/registry/ado)/org/openoffice/Office/DataAccess/Drivers-ado.xcu \
 	$(postprocess_MOD)/org/openoffice/Inet-wnt.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Common-wnt.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-unxwnt.xcu \
 	$(postprocess_MOD)/org/openoffice/ucb/Configuration-win.xcu
 		# Inet-wnt.xcu must come after Inet.xcu
+ifeq ($(gb_Side),host)
+postprocess_FILES_main += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/ado)/org/openoffice/Office/DataAccess/Drivers-ado.xcu
 postprocess_DRIVERS += ado
+endif
 endif
 ifneq ($(WITH_WEBDAV),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-webdav.xcu
