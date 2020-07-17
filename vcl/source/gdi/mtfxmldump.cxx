@@ -384,6 +384,7 @@ OUString convertGradientStyle(GradientStyle eStyle)
         case GradientStyle::Elliptical: return "Elliptical";
         case GradientStyle::Square:     return "Square";
         case GradientStyle::Rect:       return "Rect";
+        case GradientStyle::RectBezier: return "RectBezier";
         case GradientStyle::FORCE_EQUAL_SIZE: return "ForceEqualSize";
     }
     return OUString();

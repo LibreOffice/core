@@ -940,6 +940,7 @@ namespace xmloff::token {
         TOKEN( "angle",                           XML_GRADIENT_ANGLE ),
         TOKEN( "gradient-step-count",             XML_GRADIENT_STEP_COUNT ),
         TOKEN( "gradient-style",                  XML_GRADIENT_STYLE ),
+        TOKEN( "sub-style-bezier",                XML_GRADIENT_SUB_STYLE_BEZIER ),
         TOKEN( "gradient-table",                  XML_GRADIENT_TABLE ),
         TOKEN( "axial",                           XML_GRADIENTSTYLE_AXIAL ),
         TOKEN( "ellipsoid",                       XML_GRADIENTSTYLE_ELLIPSOID ),

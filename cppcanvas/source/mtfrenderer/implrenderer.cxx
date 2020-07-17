@@ -669,6 +669,16 @@ namespace cppcanvas::internal
                             aGradientService = "RectangularGradient";
                             break;
 
+                        case GradientStyle::RectBezier:
+                            aGradInfo = basegfx::utils::createRectangularBezierODFGradientInfo(
+                                                                             aBounds,
+                                                                             aOffset,
+                                                                             nSteps,
+                                                                             fBorder,
+                                                                             fRotation);
+                            aGradientService = "RectangularGradient";
+                            break;
+
                         default:
                             ENSURE_OR_THROW( false,
                                              "ImplRenderer::createGradientAction(): Unexpected gradient type" );

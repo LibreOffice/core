@@ -223,6 +223,7 @@
                           <item translatable="yes" context="gradientpage|gradienttypelb">Ellipsoid</item>
                           <item translatable="yes" context="gradientpage|gradienttypelb">Quadratic</item>
                           <item translatable="yes" context="gradientpage|gradienttypelb">Square</item>
+                          <item translatable="yes" context="gradientpage|gradienttypelb">Rectangular</item>
                         </items>
                       </object>
                       <packing>

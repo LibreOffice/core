@@ -286,7 +286,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 sal_Int32 nEndTrans     = 0;
                 sal_Int32 nStartTrans   = 0;
                 awt::Gradient aGradient;
-                aGradient.Angle = 900;
+                aGradient.Angle = 0;
                 aGradient.StartIntensity = 100;
                 aGradient.EndIntensity = 100;
 
@@ -333,7 +333,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
                     else
                     {
-                        aGradient.Style = awt::GradientStyle_RECT;
+                        aGradient.Style = awt::GradientStyle_RECT_BEZIER;
                     }
 
                     ::std::swap( aGradient.StartColor, aGradient.EndColor );

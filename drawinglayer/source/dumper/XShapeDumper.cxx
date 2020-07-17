@@ -258,6 +258,9 @@ void dumpGradientProperty(const awt::Gradient& rGradient, xmlTextWriterPtr xmlWr
         case awt::GradientStyle_RECT:
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
             break;
+        case awt::GradientStyle_RECT_BEZIER:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT_BEZIER");
+            break;
         default:
             break;
     }
