@@ -295,6 +295,9 @@ template <int ispmd, int fSpec, SPRA spra> using sprmPic = sprm<ispmd, fSpec, SG
 template <int ispmd, int fSpec, SPRA spra> using sprmSec = sprm<ispmd, fSpec, SGC::section, spra>;
 template <int ispmd, int fSpec, SPRA spra> using sprmTbl = sprm<ispmd, fSpec, SGC::table, spra>;
 
+// Each of the following NS_sprm::Foo corresponds to a sprmFoo in [MS-DOC].
+// E.g., NS_sprm::CFRMarkDel is for sprmCFRMarkDel.
+
 // [MS-DOC] - v20170112 Section 2.6.1
 using CFRMarkDel = sprmChr<0x00, 0, SPRA::operand_toggle_1b_0>; // 0x0800
 using CFRMarkIns = sprmChr<0x01, 0, SPRA::operand_toggle_1b_0>; // 0x0801
