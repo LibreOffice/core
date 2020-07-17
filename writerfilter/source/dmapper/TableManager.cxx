@@ -72,9 +72,9 @@ std::vector<sal_uInt32> TableManager::getCurrentGridSpans()
     return mTableDataStack.top()->getCurrentRow()->getGridSpans();
 }
 
-void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan)
+void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan, bool bFirstCell)
 {
-    mTableDataStack.top()->getCurrentRow()->setCurrentGridSpan(nGridSpan);
+    mTableDataStack.top()->getCurrentRow()->setCurrentGridSpan(nGridSpan, bFirstCell);
 }
 
 sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCell)
@@ -514,6 +514,8 @@ void TableManager::endRow()
             {
                 // don't add gridBefore cells in not valid TextRange
                 setCurrentGridBefore(0);
+                setCurrentGridSpan(getCurrentGridSpans().front() + nGridBefore,
+                                   /*bFirstCell=*/true);
             }
         }
     }
