@@ -19,52 +19,42 @@
 
 #pragma once
 
-#include <tools/urlobj.hxx>
-#include <svx/svxdllapi.h>
 #include <svx/galtheme.hxx>
+#include <galobj.hxx>
+#include <svx/svxdllapi.h>
+#include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 
-class SgaObjectSvDraw;
+#include <cstdio>
+#include <memory>
+#include <vector>
+
 class SotStorage;
 struct GalleryObject;
+class SgaObjectSvDraw;
 
 class SVXCORE_DLLPUBLIC GalleryBinaryEngine
 {
 private:
-    INetURLObject aThmURL;
-    INetURLObject aSdgURL;
-    INetURLObject aSdvURL;
-    INetURLObject aStrURL;
     tools::SvRef<SotStorage> aSvDrawStorageRef;
-
-    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
 
 public:
     void galleryThemeInit(bool bReadOnly);
     void galleryThemeDestroy();
 
-    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
-
-    OUString ReadStrFromIni(const OUString& aKeyName);
-
-    void SetThmExtension(INetURLObject aURL);
-    void SetSdgExtension(INetURLObject aURL);
-    void SetSdvExtension(INetURLObject aURL);
-    void SetStrExtension(INetURLObject aURL);
-
-    const INetURLObject& GetThmURL() const { return aThmURL; }
-    const INetURLObject& GetSdgURL() const { return aSdgURL; }
-    const INetURLObject& GetSdvURL() const { return aSdvURL; }
-    const INetURLObject& GetStrURL() const { return aStrURL; }
-
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage(bool bReadOnly);
     SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
+
+    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
+
+    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
+                      ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
+                      sal_uInt32& rInsertPos);
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry,
                             OUString& aDestDir,
                             ::std::vector<std::unique_ptr<GalleryObject>>& aObjectList);
-    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme);
 
     bool readModel(const GalleryObject* pObject, SdrModel& rModel);
     bool insertModel(const FmFormModel& rModel, INetURLObject& rURL);
@@ -73,13 +63,6 @@ public:
                          tools::SvRef<SotStorageStream> const& rxModelStream);
     SgaObjectSvDraw insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
                                       INetURLObject& rURL);
-
-    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, OUString& rDestDir,
-                      ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                      sal_uInt32& rInsertPos);
-
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
-                                                              bool bReadOnly);
 };
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
