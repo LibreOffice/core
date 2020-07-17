@@ -284,6 +284,9 @@ template <int ispmd, int fSpec, SGC sgc, SPRA spra> struct sprm
                 return 0; // variable
             case SPRA::operand_3b_7:
                 return 3;
+            default:
+                assert(false);
+                return 0;
         }
     }
     static constexpr bool varlen() { return (spra == SPRA::operand_varlen_6); }
