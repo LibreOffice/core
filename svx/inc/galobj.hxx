@@ -67,6 +67,8 @@ protected:
 
 public:
                             SgaObject();
+    SgaObject(const SgaObject& aObject);
+
     virtual                 ~SgaObject() {};
 
     virtual SgaObjKind      GetObjKind() const = 0;
