@@ -15,7 +15,7 @@ namespace cpuid {
 
 namespace {
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64))
 #include <intrin.h>
 void getCpuId(uint32_t array[4], uint32_t nInfoType)
 {
@@ -38,7 +38,7 @@ void getCpuId(uint32_t array[4], uint32_t /*nInfoType*/)
 bool checkAVXSupportInOS()
 {
     uint32_t xcr0 = 0;
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64))
     xcr0 = uint32_t(_xgetbv(0));
 #elif (defined(__i386__) || defined(__x86_64__))
     __asm__("xgetbv" : "=a" (xcr0) : "c" (0) : "%edx");

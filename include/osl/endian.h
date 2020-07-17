@@ -31,7 +31,7 @@ extern "C" {
 
 #if defined _WIN32
 #   if defined _M_ALPHA || defined _M_AMD64 || defined _M_IX86 \
-            || defined _M_MRX000 || defined _M_PPC
+            || defined _M_MRX000 || defined _M_PPC || defined _M_ARM64
 #       define OSL_LITENDIAN
 #   endif
 #elif defined ANDROID || defined LINUX || defined HAIKU
