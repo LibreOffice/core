@@ -5317,6 +5317,22 @@ if test -n "$ENABLE_PCH" -a -n "$CCACHE_DEPEND_MODE" -a "$GCC" = "yes" -a "$COM_
     fi
 fi
 
+PCH_INSTANTIATE_TEMPLATES=
+if test -n "$ENABLE_PCH"; then
+    AC_MSG_CHECKING([whether $CC supports -fpch-instantiate-templates])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fpch-instantiate-templates"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ PCH_INSTANTIATE_TEMPLATES="-fpch-instantiate-templates" ],[])
+    CFLAGS=$save_CFLAGS
+    if test -n "$PCH_INSTANTIATE_TEMPLATES"; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+    CFLAGS=$save_CFLAGS
+fi
+AC_SUBST(PCH_INSTANTIATE_TEMPLATES)
+
 BUILDING_PCH_WITH_OBJ=
 if test -n "$ENABLE_PCH"; then
     AC_MSG_CHECKING([whether $CC supports -Xclang -building-pch-with-obj])
