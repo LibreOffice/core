@@ -252,6 +252,7 @@ public:
     void testTdf122331();
     void testTdf83779();
     void testTdf134459_HeaderFooterColorXLSX();
+    void testTdf134817_HeaderFooterTextWith2SectionXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -402,6 +403,7 @@ public:
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
+    CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5137,6 +5139,24 @@ void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
 
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
+{
+    // Header/footer text with multiple selection should be exported, and imported properly
+    ScDocShellRef xShell = loadDoc("tdf134817_HeaderFooterTextWith2Section.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&\"Abadi,Regular\"&11aaa&\"Bembo,Regular\"&20bbb");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
 
     xDocSh->DoClose();
 }
