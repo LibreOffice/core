@@ -358,7 +358,7 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
 }
 
 //Structure node
-/*********************************************************************************************************************/
+/*************************************************************************************************/
 
 SmStructureNode::~SmStructureNode() { ForEachNonNull(this, std::default_delete<SmNode>()); }
 
@@ -410,6 +410,23 @@ int SmStructureNode::IndexOfSubNode(SmNode const * pSubNode)
         if (pSubNode == GetSubNode(i))
             return i;
     return -1;
+<<<<<<< HEAD
+}
+
+void SmStructureNode::SetSubNode(size_t nIndex, SmNode* pNode)
+{
+    size_t size = maSubNodes.size();
+    if (size <= nIndex)
+    {
+        //Resize subnodes array
+        maSubNodes.resize(nIndex + 1);
+        //Set new slots to NULL except at nIndex
+        for (size_t i = size; i < nIndex; i++) maSubNodes[i] = nullptr;
+    }
+    maSubNodes[nIndex] = pNode;
+    if (pNode) pNode->SetParent(this);
+}
+
 }
 
 void SmStructureNode::SetSubNode(size_t nIndex, SmNode* pNode)
@@ -427,7 +444,7 @@ void SmStructureNode::SetSubNode(size_t nIndex, SmNode* pNode)
 }
 
 // Visible node
-/******************************************************************************************************************************/
+/*************************************************************************************************/
 
 bool SmVisibleNode::IsVisible() const
 {
@@ -445,7 +462,7 @@ SmNode * SmVisibleNode::GetSubNode(size_t /*nIndex*/)
 }
 
 // Graphic node
-/*****************************************************************************************/
+/*************************************************************************************************/
 
 void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 {
@@ -453,7 +470,7 @@ void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
 }
 
 // Table node
-/*********************************************************************************************************************/
+/*************************************************************************************************/
 
 void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column
@@ -525,7 +542,7 @@ long SmTableNode::GetFormulaBaseline() const
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
@@ -539,7 +556,7 @@ void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -597,7 +614,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmExpressionNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -612,7 +629,7 @@ void SmExpressionNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -641,7 +658,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 namespace {
 
@@ -682,7 +699,7 @@ Point lcl_GetExtraPos(const SmRect &rRootSymbol,
 }
 
 // Root node
-/********************************************************************************/
+/*************************************************************************************************/
 
 void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -730,7 +747,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         ExtendBy(*pExtra, RectCopyMBL::This, true);
 }
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -769,7 +786,7 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -1082,8 +1099,7 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
-
+/*************************************************************************************************/
 
 void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1197,7 +1213,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 // Brace node
-/**************************************************************************/
+/*************************************************************************************************/
 
 void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1289,7 +1305,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -1353,8 +1369,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
-
+/*************************************************************************************************/
 
 void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1414,7 +1429,7 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 SmNode * SmOperNode::GetSymbol()
@@ -1497,7 +1512,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmAlignNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -1525,7 +1540,7 @@ void SmAlignNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -1593,8 +1608,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
     assert(pNode);
-    sal_Int32 nc;
-    Color col_perso_rgb_color = COL_AUTO;
+    sal_uInt32 nc;
 
     switch (GetToken().eType)
     {   case TSIZE :
@@ -1632,13 +1646,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
-            nc = GetToken().aText.toInt32();
-            col_perso_rgb_color.SetBlue(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetGreen(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetRed(nc % 256);
-            SetColor(col_perso_rgb_color);
+        case TRGBA :
+        case THEX :
+            nc = GetToken().aText.toUInt32();
+            SetColor(Color(nc));
             break;
 
         default:
@@ -1650,7 +1661,8 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (pNode->GetRect());
 }
 
-/**************************************************************************/
+// Polyline node
+/*************************************************************************************************/
 
 
 SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
@@ -1715,7 +1727,7 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 
 // Root node
-/**************************************************************************/
+/*************************************************************************************************/
 
 void SmRootSymbolNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
@@ -1729,8 +1741,8 @@ void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
     SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10);
 }
 
-
-/**************************************************************************/
+// Rectangle node
+/*************************************************************************************************/
 
 
 void SmRectangleNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
@@ -1769,7 +1781,7 @@ void SmRectangleNode::Arrange(OutputDevice &rDev, const SmFormat &/*rFormat*/)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP )
@@ -1841,7 +1853,8 @@ void SmTextNode::GetAccessibleText( OUStringBuffer &rText ) const
 
 void SmTextNode::AdjustFontDesc()
 {
-    switch(GetToken().eType){
+    switch(GetToken().eType)
+    {
         case TTEXT:      mnFontDesc = FNT_TEXT;     break;
         case TFUNC:      mnFontDesc = FNT_FUNCTION; break;
         default:
@@ -1861,8 +1874,8 @@ void SmTextNode::AdjustFontDesc()
                     mnFontDesc = FNT_VARIABLE;
                     GetToken().eType = TCHARACTER;
                 }
-            }
-            break;
+           }
+           break;
     }
 }
 
@@ -1899,7 +1912,7 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
     return nIn;
 }
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -2005,7 +2018,7 @@ const SmNode * SmMatrixNode::GetLeftMost() const
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
@@ -2112,7 +2125,7 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
 {
@@ -2219,7 +2232,7 @@ void SmSpecialNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
 }
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmGlyphSpecialNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -2234,7 +2247,7 @@ void SmGlyphSpecialNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmPlaceNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
@@ -2257,7 +2270,7 @@ void SmPlaceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 
 void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth)
@@ -2280,7 +2293,7 @@ void SmErrorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-/**************************************************************************/
+/*************************************************************************************************/
 
 void SmBlankNode::IncreaseBy(const SmToken &rToken, sal_uInt32 nMultiplyBy)
 {
@@ -2324,8 +2337,8 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
-/**************************************************************************/
 //Implementation of all accept methods for SmVisitor
+/*************************************************************************************************/
 
 void SmTableNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
@@ -2434,7 +2447,5 @@ void SmRectangleNode::Accept(SmVisitor* pVisitor) {
 void SmVerticalBraceNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
-
-/*******************************************************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

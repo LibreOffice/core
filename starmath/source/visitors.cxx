@@ -2072,8 +2072,7 @@ void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 {
-    sal_Int32 nc;
-    sal_Int16 nr, ng, nb;
+    sal_uInt32 nc, nr, ng, nb;
     switch ( pNode->GetToken( ).eType )
     {
         case TBOLD:
@@ -2186,6 +2185,30 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
             Append(OUString::number(ng));
             Separate();
             Append(OUString::number(nb));
+            Separate();
+            break;
+        case TRGBA:
+            Append( "color rgba " );
+            nc = pNode->GetToken().aText.toUInt32();
+            nb = nc % 256;
+            nc /= 256;
+            ng = nc % 256;
+            nc /= 256;
+            nr = nc % 256;
+            nc /= 256;
+            Append(OUString::number(nr));
+            Separate();
+            Append(OUString::number(ng));
+            Separate();
+            Append(OUString::number(nb));
+            Separate();
+            Append(OUString::number(nc));
+            Separate();
+            break;
+        case THEX:
+            Append( "color hex " );
+            nc = pNode->GetToken().aText.toUInt32();
+            Append(OUString::number(nc,16));
             Separate();
             break;
         case TSANS:
@@ -2352,6 +2375,10 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
             break;
         case TFUNC:
             Append("func ");
+            Append( pNode->GetToken().aText );
+            break;
+        case THEX:
+            Append("hex ");
             Append( pNode->GetToken().aText );
             break;
         default:
