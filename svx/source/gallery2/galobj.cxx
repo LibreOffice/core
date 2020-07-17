@@ -43,6 +43,16 @@ SgaObject::SgaObject()
 {
 }
 
+SgaObject::SgaObject(const SgaObject& aObject)
+    : aThumbBmp(aObject.aThumbBmp)
+    , aThumbMtf(aObject.aThumbMtf)
+    , aURL(aObject.aURL)
+    , aTitle(aObject.aTitle)
+    , bIsValid(aObject.bIsValid)
+    , bIsThumbBmp(aObject.bIsThumbBmp)
+{
+}
+
 BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
 {
     BitmapEx aRetval;
