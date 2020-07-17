@@ -170,7 +170,7 @@ Color Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
 OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
-    ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
+    ss << std::hex << std::setfill ('0') << std::setw(6) << (mValue & 0x00FFFFFF);
     return OUString::createFromAscii(ss.str().c_str());
 }
 
