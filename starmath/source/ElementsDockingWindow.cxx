@@ -189,7 +189,8 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_COLORX_LIME, RID_COLORX_LIME_HELP}, {RID_COLORX_MAROON, RID_COLORX_MAROON_HELP},
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
     {RID_COLORX_PURPLE, RID_COLORX_PURPLE_HELP}, {RID_COLORX_SILVER, RID_COLORX_SILVER_HELP},
-    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP},{RID_COLORX_RGB, RID_COLORX_RGB_HELP}
+    {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP}, {RID_COLORX_RGB, RID_COLORX_RGB_HELP},
+    {RID_COLORX_HEX, RID_COLORX_HEX_HELP}
 };
 
 const SmElementDescr SmElementsControl::m_aBracketsList[] =
@@ -924,7 +925,11 @@ void SmElementsControl::addElements(const SmElementDescr aElementsArray[], sal_u
             else if (aElement == RID_COLORX_TEAL)
                 addElement(aParser, "color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RGB)
-                addElement(aParser, "color rgb 0 0 0 { \"" + SmResId(STR_RGB) + "\" }", aElement, SmResId(pElementHelp));
+                addElement(aParser, "\"rgb\"", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_RGBA)
+                addElement(aParser, "\"rgba\"", aElement, SmResId(pElementHelp));
+            else if (aElement == RID_COLORX_HEX)
+                addElement(aParser, "\"hex\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNLX)
                 addElement(aParser, "\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNCX)
