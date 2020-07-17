@@ -14,7 +14,8 @@
 # configurability on platforms like Android and iOS where apps based on LO
 # code are very much self-contained pre-packaged thingies.
 
-SODEST=$(BUILDDIR)/android/jniLibs/$(ANDROID_APP_ABI)
+JNILIBSDIR=$(BUILDDIR)/android/jniLibs
+SODEST=$(JNILIBSDIR)/$(ANDROID_APP_ABI)
 OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 #
@@ -90,6 +91,7 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
 		echo "// created by Makefile.shared - your changes will be overridden" \
 		&& echo "ext {" \
 		&& echo "    liboSrcRoot         = '$(SRC_ROOT)'" \
+		&& echo "    liboJniLibsdir      = '$(JNILIBSDIR)'" \
 		&& echo "    liboWorkdir         = '$(WORKDIR)'" \
 		&& echo "    liboInstdir         = '$(INSTDIR)'" \
 		&& echo "    liboEtcFolder       = '$(LIBO_ETC_FOLDER)'" \
