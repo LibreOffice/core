@@ -39,7 +39,8 @@ enum class SmParseError
     FontExpected,
     SizeExpected,
     DoubleAlign,
-    DoubleSubsupscript
+    DoubleSubsupscript,
+    NumberExpected
 };
 
 
