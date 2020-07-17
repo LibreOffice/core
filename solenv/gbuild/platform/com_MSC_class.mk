@@ -543,13 +543,13 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 # FIXME this is used before TargetLocations is read?
-gb_WinResTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
+gb_WinResTarget__command_target = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/makedepend.exe
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 	$(call gb_Trace_StartRange,RC:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(call gb_Executable_get_target,makedepend) \
+	$(call gb_Executable_get_target_for_build,makedepend) \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(RCFILE) \

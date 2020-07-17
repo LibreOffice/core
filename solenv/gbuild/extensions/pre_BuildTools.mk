@@ -13,6 +13,7 @@ gb_BUILD_TOOLS = \
 	$(foreach executable, \
 		bestreversemap \
 		cfgex \
+		climaker \
 		cpp \
 		cppumaker \
 		gencoll_rule \
@@ -35,6 +36,7 @@ gb_BUILD_TOOLS = \
 			gengal \
 			HelpIndexer \
 			HelpLinker \
+			lngconvex \
 		) \
 	,$(call gb_Executable_get_runtime_dependencies,$(executable))) \
 	$(foreach executable, \
