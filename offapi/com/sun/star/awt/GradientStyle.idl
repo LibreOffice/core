@@ -56,7 +56,12 @@ published enum GradientStyle
 
     /** specifies a gradient in the shape of a rectangle.
      */
-    RECT
+    RECT,
+
+    /** specifies a gradient in the shape of a rectangle.
+        use a quadratic Bézier curve for the calculation of the gradient blend value.
+     */
+    RECT_BEZIER
 
 };
 

@@ -47,6 +47,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_GRADIENT_NAME,
     XML_TOK_GRADIENT_DISPLAY_NAME,
     XML_TOK_GRADIENT_STYLE,
+    XML_TOK_GRADIENT_SUB_STYLE_BEZIER,
     XML_TOK_GRADIENT_CX,
     XML_TOK_GRADIENT_CY,
     XML_TOK_GRADIENT_START,
@@ -99,6 +100,7 @@ void XMLTransGradientStyleImport::importXML(
         { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
         { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
         { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
+        { XML_NAMESPACE_LO_EXT, XML_GRADIENT_SUB_STYLE_BEZIER, XML_TOK_GRADIENT_SUB_STYLE_BEZIER },
         { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
         { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
         { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START },
@@ -118,6 +120,7 @@ void XMLTransGradientStyleImport::importXML(
         OUString aStrAttrName;
         sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
+        bool bBezier = false;
 
         sal_Int32 nTmpValue;
 
@@ -137,6 +140,11 @@ void XMLTransGradientStyleImport::importXML(
             {
                 SvXMLUnitConverter::convertEnum( aGradient.Style, rStrValue, pXML_GradientStyle_Enum );
             }
+            break;
+        case XML_TOK_GRADIENT_SUB_STYLE_BEZIER:
+            bBezier = rStrValue.toBoolean();
+            if(bBezier && aGradient.Style == awt::GradientStyle_RECT)
+                aGradient.Style = awt::GradientStyle_RECT_BEZIER;
             break;
         case XML_TOK_GRADIENT_CX:
             ::sax::Converter::convertPercent( nTmpValue, rStrValue );
@@ -226,6 +234,14 @@ void XMLTransGradientStyleExport::exportXML(
         {
             OUString aStrValue;
             OUStringBuffer aOut;
+            bool bBezier = false;
+            const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFDefaultVersion());
+
+            if (aGradient.Style == awt::GradientStyle_RECT_BEZIER)
+            {
+                aGradient.Style = awt::GradientStyle_RECT;
+                bBezier = true;
+            }
 
             // Style
             if( SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
@@ -241,6 +257,9 @@ void XMLTransGradientStyleExport::exportXML(
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+
+                if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012 && bBezier)
+                    rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_GRADIENT_SUB_STYLE_BEZIER, OUString::boolean(true));
 
                 // Center x/y
                 if( aGradient.Style != awt::GradientStyle_LINEAR &&

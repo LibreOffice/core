@@ -203,6 +203,26 @@ namespace drawinglayer::texture
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
 
+        class GeoTexSvxGradientRectBezier final : public GeoTexSvxGradient
+        {
+        public:
+            GeoTexSvxGradientRectBezier(
+                const basegfx::B2DRange& rDefinitionRange,
+                const basegfx::BColor& rStart,
+                const basegfx::BColor& rEnd,
+                sal_uInt32 nSteps,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                double fAngle);
+            virtual ~GeoTexSvxGradientRectBezier() override;
+
+            virtual void appendTransformationsAndColors(
+                std::vector< B2DHomMatrixAndBColor >& rEntries,
+                basegfx::BColor& rOuterColor) override;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
+        };
+
         class GeoTexSvxHatch final : public GeoTexSvx
         {
             basegfx::B2DRange                   maOutputRange;

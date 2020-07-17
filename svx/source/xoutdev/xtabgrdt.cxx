@@ -146,11 +146,13 @@ BitmapEx XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
                 break;
             }
-            default :
+            case css::awt::GradientStyle_RECT_BEZIER :
             {
-                aGradientStyle = drawinglayer::attribute::GradientStyle::Rect; // css::awt::GradientStyle_RECT
+                aGradientStyle = drawinglayer::attribute::GradientStyle::RectBezier;
                 break;
             }
+            default :
+                break; // css::awt::GradientStyle_RECT
         }
 
         const sal_uInt16 nSteps((rSize.Width() + rSize.Height()) / 3);

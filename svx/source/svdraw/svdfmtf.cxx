@@ -1420,6 +1420,7 @@ namespace
             case GradientStyle::Elliptical: aXGradientStyle = css::awt::GradientStyle_ELLIPTICAL; break;
             case GradientStyle::Square: aXGradientStyle = css::awt::GradientStyle_SQUARE; break;
             case GradientStyle::Rect: aXGradientStyle = css::awt::GradientStyle_RECT; break;
+            case GradientStyle::RectBezier: aXGradientStyle = css::awt::GradientStyle_RECT_BEZIER; break;
 
             // Needed due to GradientStyle::FORCE_EQUAL_SIZE; this again is needed
             // to force the enum defines in VCL to a defined size for the compilers,

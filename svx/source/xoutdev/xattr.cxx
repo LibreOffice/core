@@ -1972,6 +1972,9 @@ std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
         case css::awt::GradientStyle::GradientStyle_RECT:
             return "RECT";
 
+        case css::awt::GradientStyle::GradientStyle_RECT_BEZIER:
+            return "RECT_BEZIER";
+
         case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE:
             return "MAKE_FIXED_SIZE";
     }
@@ -1995,6 +1998,8 @@ namespace
             return css::awt::GradientStyle_SQUARE;
         else if (rStyle == "RECT")
             return css::awt::GradientStyle_RECT;
+        else if (rStyle == "RECT_BEZIER")
+            return css::awt::GradientStyle_RECT_BEZIER;
 
         return css::awt::GradientStyle_LINEAR;
     }

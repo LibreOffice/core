@@ -11,6 +11,8 @@
 
 #include <test/xmltesttools.hxx>
 
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
@@ -173,6 +175,7 @@ public:
     void testTdf133191();
     void testTdf132594();
     void testTdf134255();
+    void testTdf128795();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -309,6 +312,7 @@ public:
     CPPUNIT_TEST(testTdf133191);
     CPPUNIT_TEST(testTdf132594);
     CPPUNIT_TEST(testTdf134255);
+    CPPUNIT_TEST(testTdf128795);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2835,6 +2839,28 @@ void Chart2ExportTest::testTdf134255()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "wrap", "square");
+}
+
+void Chart2ExportTest::testTdf128795()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf128795.docx");
+    reload("Office Open XML Text");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<lang::XMultiServiceFactory> xFact(xChartDoc, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFact.is());
+
+    Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+    Reference<beans::XPropertySet> xPropertySet = xDiagram->getWall();
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    OUString sFillGradientName;
+    css::awt::Gradient aGradient;
+    Reference<container::XNameAccess> xGradient(xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("FillGradientName") >>= sFillGradientName);
+    CPPUNIT_ASSERT(xGradient->getByName(sFillGradientName) >>= aGradient);
+    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_RECT_BEZIER, aGradient.Style);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

@@ -351,6 +351,22 @@ namespace basegfx
                 false);
         }
 
+        ODFGradientInfo createRectangularBezierODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
+        {
+            return initRectGradientInfo(
+                rTargetArea,
+                rOffset,
+                2 * nSteps,
+                fBorder - abs(rOffset.getX() - 0.5) - abs(rOffset.getY() - 0.5),
+                fAngle,
+                false);
+        }
+
         double getLinearGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
@@ -462,6 +478,11 @@ namespace basegfx
         }
 
         double getRectangularGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+        }
+
+        double getRectangularBezierGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
             return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
         }

@@ -379,7 +379,6 @@ namespace basegfx
             double fBorder,
             double fAngle);
 
-
         /** Calculate rectangular gradient blend value
 
             This method generates you the lerp alpha value for
@@ -394,6 +393,52 @@ namespace basegfx
             Gradient info, for transformation and number of steps
          */
         BASEGFX_DLLPUBLIC double getRectangularGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
+
+        /** Create matrix for ODF's rectangular_bezier gradient definition
+
+            @param o_rGradientInfo
+            Receives the calculated texture transformation matrix (for
+            use with standard [0,1]x[0,1] texture coordinates)
+
+            @param rTargetArea
+            Output area, needed for aspect ratio calculations and
+            texture transformation
+
+            @param rOffset
+            Gradient offset value (from ODF)
+
+            @param nSteps
+            Number of gradient steps (from ODF)
+
+            @param fBorder
+            Width of gradient border (from ODF)
+
+            @param fAngle
+            Gradient angle (from ODF)
+         */
+        BASEGFX_DLLPUBLIC ODFGradientInfo createRectangularBezierODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
+        /** Calculate rectangular_bezier gradient blend value
+
+            This method generates you the lerp alpha value for
+            blending quadratically between gradient start and end color,
+            according to the formula
+            (startCol*(1.0-alpha)*(1.0-alpha) + controlCol*2*(1.0-alpha)*alpha + endCol*alpha*alpha)
+
+            @param rUV
+            Current uv coordinate. Values outside [0,1] will be
+            clamped.
+
+            @param rGradInfo
+            Gradient info, for transformation and number of steps
+         */
+        BASEGFX_DLLPUBLIC double getRectangularBezierGradientAlpha(const B2DPoint& rUV,
             const ODFGradientInfo& rGradInfo);
     }
 }

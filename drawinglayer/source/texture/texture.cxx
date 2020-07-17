@@ -505,6 +505,76 @@ namespace drawinglayer::texture
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
 
+        GeoTexSvxGradientRectBezier::GeoTexSvxGradientRectBezier(
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::BColor& rStart,
+            const basegfx::BColor& rEnd,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fOffsetX,
+            double fOffsetY,
+            double fAngle)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
+        {
+            maGradientInfo = basegfx::utils::createRectangularBezierODFGradientInfo(
+                rDefinitionRange,
+                basegfx::B2DVector(fOffsetX,fOffsetY),
+                nSteps,
+                fBorder,
+                fAngle);
+        }
+
+        GeoTexSvxGradientRectBezier::~GeoTexSvxGradientRectBezier()
+        {
+        }
+
+        void GeoTexSvxGradientRectBezier::appendTransformationsAndColors(
+            std::vector< B2DHomMatrixAndBColor >& rEntries,
+            basegfx::BColor& rOuterColor)
+        {
+            rOuterColor = maStart;
+
+            if(!maGradientInfo.getSteps())
+                return;
+
+            const sal_uInt32 nSteps(maGradientInfo.getSteps());
+            const double fStepSize(1.0 / nSteps);
+            const double fStartRed(maStart.getRed());
+            const double fStartGreen(maStart.getGreen());
+            const double fStartBlue(maStart.getBlue());
+            const double fEndRed(maEnd.getRed());
+            const double fEndGreen(maEnd.getGreen());
+            const double fEndBlue(maEnd.getBlue());
+            const double fControlRed = std::max(fStartRed, fEndRed);
+            const double fControlGreen = std::max(fStartGreen, fEndGreen);
+            const double fControlBlue = std::max(fStartBlue, fEndBlue);
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+
+            for(sal_uInt32 a(1); a < nSteps; a++)
+            {
+                const double fSize(1.0 - (fStepSize * a));
+                const double t = double(a) / double(nSteps - 1);
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
+                aB2DHomMatrixAndBColor.maBColor = basegfx::BColor((1.0 - t) * (1.0 - t) * fStartRed + 2 * (1.0 - t) * t * fControlRed + t * t * fEndRed,
+                    (1.0 - t) * (1.0 - t) * fStartGreen + 2 * (1.0 - t) * t * fControlGreen + t * t * fEndGreen,
+                    (1.0 - t) * (1.0 - t) * fStartBlue + 2 * (1.0 - t) * t * fControlBlue + t * t * fEndBlue);
+                rEntries.push_back(aB2DHomMatrixAndBColor);
+            }
+        }
+
+        void GeoTexSvxGradientRectBezier::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        {
+            const double fScaler(basegfx::utils::getRectangularGradientAlpha(rUV, maGradientInfo));
+
+            const double fControlRed = std::max(maStart.getRed(), maEnd.getRed());
+            const double fControlGreen = std::max(maStart.getGreen(), maEnd.getGreen());
+            const double fControlBlue = std::max(maStart.getBlue(), maEnd.getBlue());
+
+            rBColor = basegfx::BColor((1.0 - fScaler) * (1.0 - fScaler) * maStart.getRed() + 2 * (1.0 - fScaler) * fScaler * fControlRed + fScaler * fScaler * maEnd.getRed(),
+                    (1.0 - fScaler) * (1.0 - fScaler) * maStart.getGreen() + 2 * (1.0 - fScaler) * fScaler * fControlGreen + fScaler * fScaler * maEnd.getGreen(),
+                    (1.0 - fScaler) * (1.0 - fScaler) * maStart.getBlue() + 2 * (1.0 - fScaler) * fScaler * fControlBlue + fScaler * fScaler * maEnd.getBlue());
+        }
+
 
         GeoTexSvxHatch::GeoTexSvxHatch(
             const basegfx::B2DRange& rDefinitionRange,
