@@ -339,6 +339,7 @@
 #define RID_ERR_SIZEEXPECTED                NC_("RID_ERR_SIZEEXPECTED", "'size' followed by an unexpected token" )
 #define RID_ERR_DOUBLEALIGN                 NC_("RID_ERR_DOUBLEALIGN", "Double aligning is not allowed" )
 #define RID_ERR_DOUBLESUBSUPSCRIPT          NC_("RID_ERR_DOUBLESUBSUPSCRIPT", "Double sub/superscripts is not allowed" )
+#define RID_ERR_NUMBEREXPECTED              NC_("RID_ERR_NUMBEREXPECTED", "Expected number" )
 #define RID_ERR_POUNDEXPECTED               NC_("RID_ERR_POUNDEXPECTED", "'#' expected" )
 #define RID_ERR_COLOREXPECTED               NC_("RID_ERR_COLOREXPECTED", "Color required" )
 #define RID_ERR_RIGHTEXPECTED               NC_("RID_ERR_RIGHTEXPECTED", "'RIGHT' expected" )
