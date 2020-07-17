@@ -38,14 +38,12 @@ constexpr DWORD MSVC_EH_MAGIC_PARAM = 0x19930520;
 // The NT Exception code that msvcrt uses ('msc' | 0xE0000000)
 constexpr DWORD MSVC_EH_MAGIC_CODE = 0xE06D7363;
 
-#ifdef _M_IX86
+#if defined(_M_IX86)
 #define MSVC_EH_PARAMETERS 3 // Number of parameters in exception record for x86
-#else
-#ifdef _M_AMD64
+#elif defined(_M_AMD64) || defined(_M_ARM64)
 #define MSVC_EH_PARAMETERS 4 // Number of parameters in exception record for AMD64
 #else
 #error "Unsupported machine type"
-#endif
 #endif
 
 class type_info;

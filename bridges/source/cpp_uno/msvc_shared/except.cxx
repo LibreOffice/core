@@ -41,6 +41,8 @@
 #include <msvc/x86.hxx>
 #elif defined(_M_AMD64)
 #include <msvc/amd64.hxx>
+#elif defined(_M_ARM64)
+#include <msvc/arm64.hxx>
 #else
 #error "Unsupported machine type"
 #endif
@@ -137,7 +139,7 @@ ExceptionInfos::~ExceptionInfos() throw()
 RaiseInfo* ExceptionInfos::getRaiseInfo(typelib_TypeDescription* pTD) throw()
 {
     static ExceptionInfos* s_pInfos = []() {
-#ifdef _M_AMD64
+#if defined _M_AMD64 || defined _M_ARM64
         SYSTEM_INFO systemInfo;
         GetSystemInfo(&systemInfo);
         allocationGranularity = systemInfo.dwAllocationGranularity;

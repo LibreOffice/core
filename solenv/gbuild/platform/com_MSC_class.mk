@@ -134,6 +134,21 @@ fi
 endef
 
 # AsmObject class
+ifeq ($(CPUNAME),ARM64)
+gb_AsmObject_get_source = $(1)/$(2).S
+
+# Code needs a preprozessor step .S -> .asm -> .o
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs,\
+    mkdir -p $(dir $(1)) $(dir $(4)) && \
+    "$(CC)" -nologo -EP -D_M_ARM64 $(SOLARINC) $(3) > $(subst .o,.asm,$(1)) && \
+    "$(ML_EXE)" $(gb_AFLAGS) -g -errorReport:prompt -o $(1) $(subst .o,.asm,$(1)), \
+    ) && \
+    echo "$(1) : $(3)" > $(4)
+endef
+
+else # !ARM64
 gb_AsmObject_get_source = $(1)/$(2).asm
 
 define gb_AsmObject__command
@@ -146,6 +161,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	echo "$(1) : $(3)" > $(4)
 endef
 
+endif
 
 # LinkTarget class
 
