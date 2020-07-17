@@ -17,17 +17,21 @@ icu_CPPFLAGS:="-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC))
 
 ifeq ($(OS),WNT)
 
-# Note: runConfigureICU ignores everything following the platform name!
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export LIB="$(ILIB)" PYTHONWARNINGS="default" \
-		&& CFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" \
-			INSTALL=`cygpath -m /usr/bin/install` \
-			./runConfigureICU \
-			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
-			Cygwin/MSVC --disable-extras \
-		&& $(MAKE) $(if $(verbose),VERBOSE=1) \
+		autoconf \
+		&& export LIB="$(ILIB)" PYTHONWARNINGS="default" \
+			gb_ICU_XFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD -Gy)" \
+		&& CFLAGS="$${gb_ICU_XFLAGS}" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$${gb_ICU_XFLAGS}" \
+			INSTALL=`cygpath -m /usr/bin/install` $(if $(MSVC_USE_DEBUG_RUNTIME),LDFLAGS="-DEBUG") \
+			./configure \
+				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
+				$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
+				    $(if $(GNUMAKE_WIN_NATIVE),--enable-native-make)) \
+				--disable-extras \
+		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 	,source)
 	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
