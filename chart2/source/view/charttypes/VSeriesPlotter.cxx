@@ -613,39 +613,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 aFormattedLabels[i] = aCustomLabels[i];
             }
 
-            // center the text
-            sal_uInt32 nProperties = pPropNames->getLength();
-            pPropNames->realloc( nProperties + 1 );
-            pPropValues->realloc( nProperties + 1 );
-            (*pPropNames)[ nProperties ] = UNO_NAME_EDIT_PARA_ADJUST;
-            (*pPropValues)[ nProperties ] <<= style::ParagraphAdjust_CENTER;
-
             // create text shape
             xTextShape = ShapeFactory::getOrCreateShapeFactory( m_xShapeFactory )->
                 createText( xTarget_, aFormattedLabels, *pPropNames, *pPropValues,
                     ShapeFactory::makeTransformation( aScreenPosition2D ) );
-        }
-        else if( bMultiLineLabel )
-        {
-            // prepare properties for each paragraph
-            // we want to have the value and percent value centered respect
-            // with the category name
-            Sequence< tNameSequence > aParaPropNames(3);
-            aParaPropNames[1].realloc(1);
-            aParaPropNames[1][0] = "ParaAdjust";
-            aParaPropNames[2].realloc(1);
-            aParaPropNames[2][0] = "ParaAdjust";
-
-            Sequence< tAnySequence > aParaPropValues(3);
-            aParaPropValues[1].realloc(1);
-            aParaPropValues[1][0] <<= style::ParagraphAdjust_CENTER;
-            aParaPropValues[2].realloc(1);
-            aParaPropValues[2][0] <<= style::ParagraphAdjust_CENTER;
-
-            //create text shape
-            xTextShape = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
-                createText( xTarget_, aTextList, aParaPropNames, aParaPropValues
-                            , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
         }
         else
         {
@@ -665,8 +636,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
             //create text shape
             xTextShape = ShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
-                createText( xTarget_, aText.makeStringAndClear()
-                            , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
+                createText( xTarget_, aText.makeStringAndClear(), *pPropNames, *pPropValues,
+                    ShapeFactory::makeTransformation( aScreenPosition2D ) );
         }
 
         if( !xTextShape.is() )
