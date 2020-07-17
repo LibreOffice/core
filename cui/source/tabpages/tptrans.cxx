@@ -179,6 +179,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
         case css::awt::GradientStyle_ELLIPTICAL:
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
+        case css::awt::GradientStyle_RECT_BEZIER:
             m_xFtTrgrCenterX->set_sensitive(true);
             m_xMtrTrgrCenterX->set_sensitive(true);
             m_xFtTrgrCenterY->set_sensitive(true);

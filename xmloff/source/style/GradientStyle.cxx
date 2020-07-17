@@ -68,6 +68,7 @@ SvXMLEnumMapEntry<awt::GradientStyle> const pXML_GradientStyle_Enum[] =
     { XML_GRADIENTSTYLE_ELLIPSOID,      awt::GradientStyle_ELLIPTICAL },
     { XML_GRADIENTSTYLE_SQUARE,         awt::GradientStyle_SQUARE },
     { XML_GRADIENTSTYLE_RECTANGULAR,    awt::GradientStyle_RECT },
+    { XML_GRADIENTSTYLE_RECT_BEZIER,    awt::GradientStyle_RECT_BEZIER },
     { XML_TOKEN_INVALID, awt::GradientStyle(0) }
 };
 

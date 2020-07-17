@@ -18,7 +18,7 @@
 
 <!ENTITY % points "CDATA" >
 <!ENTITY % pathData "CDATA" >
-<!ENTITY % gradient-style "(linear|axial|radial|ellipsoid|square|rectangular)" >
+<!ENTITY % gradient-style "(linear|axial|radial|ellipsoid|square|rectangular|rectangular-bezier)" >
 <!ENTITY % draw-position "svg:x %coordinate; #IMPLIED svg:y %coordinate; #IMPLIED">
 <!ENTITY % draw-end-position "table:end-cell-address %cell-address; #IMPLIED table:end-x %coordinate; #IMPLIED table:end-y %coordinate; #IMPLIED">
 <!ENTITY % draw-size "svg:width %coordinate; #IMPLIED svg:height %coordinate; #IMPLIED">

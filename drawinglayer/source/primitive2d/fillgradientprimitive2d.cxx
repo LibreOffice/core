@@ -142,6 +142,20 @@ namespace drawinglayer::primitive2d
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
+                case attribute::GradientStyle::RectBezier:
+                {
+                    texture::GeoTexSvxGradientRectBezier aGradient(
+                        getDefinitionRange(),
+                        aStart,
+                        aEnd,
+                        nSteps,
+                        getFillGradient().getBorder(),
+                        getFillGradient().getOffsetX(),
+                        getFillGradient().getOffsetY(),
+                        getFillGradient().getAngle());
+                    aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
+                    break;
+                }
             }
         }
 

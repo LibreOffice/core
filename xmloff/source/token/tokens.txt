@@ -860,6 +860,7 @@ axial
 ellipsoid
 radial
 rectangular
+rectangular-bezier
 square
 gradientTransform
 grand-total

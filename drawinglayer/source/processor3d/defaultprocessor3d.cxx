@@ -165,6 +165,20 @@ namespace drawinglayer::processor3d
                                 rFillGradient.getAngle());
                         break;
                     }
+                    case attribute::GradientStyle::RectBezier:
+                    {
+                        pNewTex =
+                            std::make_shared<texture::GeoTexSvxGradientRectBezier>(
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getOffsetX(),
+                                rFillGradient.getOffsetY(),
+                                rFillGradient.getAngle());
+                        break;
+                    }
                 }
 
                 mbSimpleTextureActive = false;

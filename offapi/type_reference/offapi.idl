@@ -381,7 +381,8 @@ module com {
      RADIAL = 2,
      ELLIPTICAL = 3,
      SQUARE = 4,
-     RECT = 5
+     RECT = 5,
+     RECT_BEZIER = 6
     };
     published struct Gradient {
      ::com::sun::star::awt::GradientStyle Style;

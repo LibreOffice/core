@@ -221,7 +221,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     }
     else
     {
-        if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect )
+        if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect || GetStyle() == GradientStyle::RectBezier )
         {
             const double    fAngle = nAngle * F_PI1800;
             const double    fWidth = aRect.GetWidth();

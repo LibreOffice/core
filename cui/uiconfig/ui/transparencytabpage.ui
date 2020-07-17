@@ -240,6 +240,7 @@
                           <item translatable="yes" context="transparencytabpage|liststoreTYPE">Ellipsoid</item>
                           <item translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</item>
                           <item translatable="yes" context="transparencytabpage|liststoreTYPE">Square</item>
+                          <item translatable="yes" context="transparencytabpage|liststoreTYPE">Rectangular</item>
                         </items>
                       </object>
                       <packing>

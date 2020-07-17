@@ -2359,4 +2359,17 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="gradient-style">
+    <rng:choice>
+	  <rng:value>linear</rng:value>
+	  <rng:value>axial</rng:value>
+	  <rng:value>radial</rng:value>
+	  <rng:value>ellipsoid</rng:value>
+	  <rng:value>square</rng:value>
+	  <rng:value>rectangular</rng:value>
+	  <rng:value>rectangular-bezier</rng:value>
+	</rng:choice>
+  </rng:define>
+
 </rng:grammar>

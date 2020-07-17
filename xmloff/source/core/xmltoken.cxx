@@ -945,6 +945,7 @@ namespace xmloff::token {
         TOKEN( "ellipsoid",                       XML_GRADIENTSTYLE_ELLIPSOID ),
         TOKEN( "radial",                          XML_GRADIENTSTYLE_RADIAL ),
         TOKEN( "rectangular",                     XML_GRADIENTSTYLE_RECTANGULAR ),
+        TOKEN( "rectangular-bezier",              XML_GRADIENTSTYLE_RECT_BEZIER ),
         TOKEN( "square",                          XML_GRADIENTSTYLE_SQUARE ),
         TOKEN( "gradientTransform",               XML_GRADIENTTRANSFORM ),
         TOKEN( "grand-total",                     XML_GRAND_TOTAL ),

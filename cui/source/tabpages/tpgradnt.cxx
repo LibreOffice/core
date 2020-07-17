@@ -598,6 +598,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
 
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
+        case css::awt::GradientStyle_RECT_BEZIER:
             m_xFtCenter->set_sensitive(true);
             m_xMtrCenterX->set_sensitive(true);
             m_xMtrCenterY->set_sensitive(true);
