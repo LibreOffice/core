@@ -292,16 +292,7 @@ void SalGraphics::mirror( tools::Rectangle& rRect, const OutputDevice *pOutDev, 
 
 basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice* i_pOutDev ) const
 {
-    const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
-
-    if(rMirror.isIdentity())
-    {
-        return i_rPoint;
-    }
-    else
-    {
-        return rMirror * i_rPoint;
-    }
+    return basegfx::B2DPoint(mirror2(i_rPoint.getX(), i_pOutDev), i_rPoint.getY());
 }
 
 basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice* i_pOutDev ) const
@@ -925,11 +916,10 @@ bool SalGraphics::DrawTransformedBitmap(
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        mirror(rNull, pOutDev);
-        mirror(rX, pOutDev);
-        mirror(rY, pOutDev);
-
-        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
+        basegfx::B2DPoint aNull(mirror(rNull, pOutDev));
+        basegfx::B2DPoint aX(mirror(rX, pOutDev));
+        basegfx::B2DPoint aY(mirror(rY, pOutDev));
+        return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
     }
     else
     {
