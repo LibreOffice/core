@@ -17,16 +17,16 @@
 #include <sal/log.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <svx/gallerybinaryengine.hxx>
+#include <svx/gallerybinaryengineentry.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
 
-OUString GalleryBinaryEngine::ReadStrFromIni(const OUString &aKeyName )
+OUString GalleryBinaryEngineEntry::ReadStrFromIni(const OUString &aKeyName )
 {
     std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
-                                GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+        GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                 StreamMode::READ ));
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
