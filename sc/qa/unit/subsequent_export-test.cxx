@@ -254,6 +254,7 @@ public:
     void testTdf83779();
     void testTdf134459_HeaderFooterColorXLSX();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
+    void testHeaderFontStyleXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -406,6 +407,7 @@ public:
     CPPUNIT_TEST(testTdf83779);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
+    CPPUNIT_TEST(testHeaderFontStyleXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5180,6 +5182,36 @@ void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testHeaderFontStyleXLSX()
+{
+    ScDocShellRef xShell = loadDoc("tdf134826.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    SfxStyleSheetBase* pStyleSheet = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(0), SfxStyleFamily::Page);
+    const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+    const ScPageHFItem& rHFItem = rItemSet.Get(ATTR_PAGE_HEADERRIGHT);
+    const EditTextObject* pTextObj = rHFItem.GetLeftArea();
+
+    std::vector<EECharAttrib> rLst;
+
+    // first line is bold.
+    pTextObj->GetCharAttribs(0, rLst);
+    bool bHasBold = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT &&
+            static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD; });
+    CPPUNIT_ASSERT_MESSAGE("First line should be bold.", bHasBold);
+
+    // second line is italic.
+    pTextObj->GetCharAttribs(1, rLst);
+    bool bHasItalic = std::any_of(rLst.begin(), rLst.end(), [](const EECharAttrib& rAttrib) {
+        return rAttrib.pAttr->Which() == EE_CHAR_ITALIC &&
+            static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL; });
+    CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
+
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
