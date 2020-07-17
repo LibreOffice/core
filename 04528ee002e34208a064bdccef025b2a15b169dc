@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "598c72a7_b25478ac",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-17T08:52:10Z",
+      "side": 1,
+      "message": "These actually should also change L_VAR into L_FIX :-)",
+      "range": {
+        "startLine": 710,
+        "startChar": 19,
+        "endLine": 710,
+        "endChar": 27
+      },
+      "revId": "04528ee002e34208a064bdccef025b2a15b169dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
