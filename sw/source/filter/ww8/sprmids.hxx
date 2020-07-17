@@ -258,38 +258,26 @@ enum class SPRA
     operand_varlen_6 = 6,
     operand_3b_7 = 7
 };
-
-#define SPRM_PART(num, mask, shift) ((static_cast<sal_uInt16>(num) & mask) << shift)
-#define SPRM(ispmd, fSpec, sgc, spra)                                                              \
-    SPRM_PART(ispmd, 0x01FF, 0) + SPRM_PART(fSpec, 0x0001, 9) + SPRM_PART(sgc, 0x0007, 10)         \
-        + SPRM_PART(spra, 0x0007, 13)
+template <SPRA spra> constexpr int spraLen(); // no definition
+template <> constexpr int spraLen<SPRA::operand_toggle_1b_0>() { return 1; }
+template <> constexpr int spraLen<SPRA::operand_1b_1>() { return 1; }
+template <> constexpr int spraLen<SPRA::operand_2b_2>() { return 2; }
+template <> constexpr int spraLen<SPRA::operand_4b_3>() { return 4; }
+template <> constexpr int spraLen<SPRA::operand_2b_4>() { return 2; }
+template <> constexpr int spraLen<SPRA::operand_2b_5>() { return 2; }
+template <> constexpr int spraLen<SPRA::operand_varlen_6>() { return 0; } // variable
+template <> constexpr int spraLen<SPRA::operand_3b_7>() { return 3; }
 
 template <int ispmd, int fSpec, SGC sgc, SPRA spra> struct sprm
 {
-    static constexpr sal_uInt16 val = SPRM(ispmd, fSpec, sgc, spra);
-    static constexpr int len()
-    {
-        switch (spra)
-        {
-            case SPRA::operand_toggle_1b_0:
-            case SPRA::operand_1b_1:
-                return 1;
-            case SPRA::operand_2b_2:
-            case SPRA::operand_2b_4:
-            case SPRA::operand_2b_5:
-                return 2;
-            case SPRA::operand_4b_3:
-                return 4;
-            case SPRA::operand_varlen_6:
-                return 0; // variable
-            case SPRA::operand_3b_7:
-                return 3;
-            default:
-                assert(false);
-                return 0;
-        }
-    }
-    static constexpr bool varlen() { return (spra == SPRA::operand_varlen_6); }
+    static_assert((ispmd & 0x01FF) == ispmd);
+    static_assert((fSpec & 0x0001) == fSpec);
+    static_assert((static_cast<sal_uInt16>(sgc) & 0x0007) == static_cast<sal_uInt16>(sgc));
+    static_assert((static_cast<sal_uInt16>(spra) & 0x0007) == static_cast<sal_uInt16>(spra));
+    static constexpr sal_uInt16 val = ispmd + (fSpec << 9) + (static_cast<sal_uInt16>(sgc) << 10)
+                                      + (static_cast<sal_uInt16>(spra) << 13);
+    static constexpr int len = spraLen<spra>();
+    static constexpr bool varlen = spra == SPRA::operand_varlen_6;
 };
 
 template <int ispmd, int fSpec, SPRA spra> using sprmPar = sprm<ispmd, fSpec, SGC::paragraph, spra>;
