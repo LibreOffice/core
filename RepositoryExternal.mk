@@ -3878,7 +3878,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(if $(filter MACOSX,$(OS)),$(call gb_Library_get_target,vclplug_osx)) \
 	$(if $(filter WNT,$(OS)),$(call gb_Library_get_target,vclplug_win)) \
-	$(call gb_Package_get_target_for_build,postprocess_images) \
+	$(if $(filter host,$(gb_Side)),$(call gb_Package_get_target,postprocess_images)) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,fundamental) \

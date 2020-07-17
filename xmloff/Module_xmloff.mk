@@ -22,9 +22,14 @@ $(eval $(call gb_Module_Module,xmloff))
 $(eval $(call gb_Module_add_targets,xmloff,\
 	CustomTarget_generated \
     Library_xo \
+))
+
+ifeq ($(gb_Side),host)
+$(eval $(call gb_Module_add_targets,xmloff,\
     Library_xof \
     Package_dtd \
 ))
+endif
 
 $(eval $(call gb_Module_add_check_targets,xmloff,\
 	$(if $(MERGELIBS),, \
