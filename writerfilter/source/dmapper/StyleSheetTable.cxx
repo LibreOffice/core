@@ -947,6 +947,9 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
             std::vector<beans::PropertyValue> aTableStylesVec;
             for( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
             {
+                if( pEntry->nStyleTypeCode == STYLE_TYPE_UNKNOWN )
+                    pEntry->nStyleTypeCode = STYLE_TYPE_PARA; // unspecified style types are considered paragraph styles
+
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
