@@ -188,6 +188,8 @@
 #define RID_COLORX_TEAL     "color teal {<?>} "
 #define RID_COLORX_YELLOW   "color yellow {<?>} "
 #define RID_COLORX_RGB      "color rgb 0 0 0 {<?>} "
+#define RID_COLORX_RGBA     "color rgba 0 0 0 0 {<?>} "
+#define RID_COLORX_HEX      "color hex 000000 {<?>} "
 #define RID_LRGROUPX        "{<?>} "
 #define RID_LRPARENTX       "(<?>) "
 #define RID_LRBRACKETX      "[<?>] "

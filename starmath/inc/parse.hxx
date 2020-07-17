@@ -83,6 +83,8 @@ class SmParser
     SmParser& operator=(const SmParser&) = delete;
 
     void            NextToken();
+    void            NextTokenColor();
+    void            NextTokenFontSize();
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
@@ -140,7 +142,6 @@ public:
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError();
-    static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
