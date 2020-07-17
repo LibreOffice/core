@@ -9718,6 +9718,7 @@ if test -n "$with_tls"; then
     openssl)
         AC_DEFINE(USE_TLS_OPENSSL)
         TLS=OPENSSL
+        AC_MSG_RESULT([$TLS])
 
         if test "$enable_openssl" != "yes"; then
             AC_MSG_ERROR(["Disabling OpenSSL was requested, but the requested TLS to use is actually OpenSSL."])
@@ -9730,11 +9731,14 @@ if test -n "$with_tls"; then
     nss)
         AC_DEFINE(USE_TLS_NSS)
         TLS=NSS
+        AC_MSG_RESULT([$TLS])
         ;;
     no)
+        AC_MSG_RESULT([none])
         AC_MSG_WARN([Skipping TLS/SSL])
         ;;
     *)
+        AC_MSG_RESULT([])
         AC_MSG_ERROR([unsupported implementation $with_tls. Supported are:
 openssl - OpenSSL
 nss - Mozilla's Network Security Services (NSS)
@@ -9745,8 +9749,8 @@ else
     # default to using NSS, it results in smaller oox lib
     AC_DEFINE(USE_TLS_NSS)
     TLS=NSS
+    AC_MSG_RESULT([$TLS])
 fi
-AC_MSG_RESULT([$TLS])
 AC_SUBST(TLS)
 
 dnl ===================================================================
