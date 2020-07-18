@@ -29,45 +29,47 @@ SmFormat::SmFormat()
 
     vSize[SIZ_TEXT]     = 100;
     vSize[SIZ_INDEX]    = 60;
-    vSize[SIZ_FUNCTION] =
+    vSize[SIZ_FUNCTION] = 100;
     vSize[SIZ_OPERATOR] = 100;
     vSize[SIZ_LIMITS]   = 60;
 
     vDist[DIS_HORIZONTAL]           = 10;
     vDist[DIS_VERTICAL]             = 5;
     vDist[DIS_ROOT]                 = 0;
-    vDist[DIS_SUPERSCRIPT]          =
+    vDist[DIS_SUPERSCRIPT]          = 20;
     vDist[DIS_SUBSCRIPT]            = 20;
-    vDist[DIS_NUMERATOR]            =
+    vDist[DIS_NUMERATOR]            = 0;
     vDist[DIS_DENOMINATOR]          = 0;
     vDist[DIS_FRACTION]             = 10;
     vDist[DIS_STROKEWIDTH]          = 5;
-    vDist[DIS_UPPERLIMIT]           =
+    vDist[DIS_UPPERLIMIT]           = 0;
     vDist[DIS_LOWERLIMIT]           = 0;
-    vDist[DIS_BRACKETSIZE]          =
+    vDist[DIS_BRACKETSIZE]          = 5;
     vDist[DIS_BRACKETSPACE]         = 5;
     vDist[DIS_MATRIXROW]            = 3;
     vDist[DIS_MATRIXCOL]            = 30;
-    vDist[DIS_ORNAMENTSIZE]         =
+    vDist[DIS_ORNAMENTSIZE]         = 0;
     vDist[DIS_ORNAMENTSPACE]        = 0;
     vDist[DIS_OPERATORSIZE]         = 50;
     vDist[DIS_OPERATORSPACE]        = 20;
-    vDist[DIS_LEFTSPACE]            =
+    vDist[DIS_LEFTSPACE]            = 100;
     vDist[DIS_RIGHTSPACE]           = 100;
-    vDist[DIS_TOPSPACE]             =
-    vDist[DIS_BOTTOMSPACE]          =
+    vDist[DIS_TOPSPACE]             = 0;
+    vDist[DIS_BOTTOMSPACE]          = 0;
     vDist[DIS_NORMALBRACKETSIZE]    = 0;
 
-    vFont[FNT_VARIABLE] =
-    vFont[FNT_FUNCTION] =
-    vFont[FNT_NUMBER]   =
-    vFont[FNT_TEXT]     =
-    vFont[FNT_SERIF]    = SmFace(FNTNAME_TIMES, aBaseSize);
-    vFont[FNT_SANS]     = SmFace(FNTNAME_HELV,  aBaseSize);
-    vFont[FNT_FIXED]    = SmFace(FNTNAME_COUR,  aBaseSize);
-    vFont[FNT_MATH]     = SmFace(FNTNAME_MATH,  aBaseSize);
+    vFont[FNT_VARIABLE]         = SmFace(FNTNAME_TIMES,         aBaseSize);
+    vFont[FNT_FUNCTION]         = SmFace(FNTNAME_TIMES,         aBaseSize);
+    vFont[FNT_NUMBER]           = SmFace(FNTNAME_TIMES,         aBaseSize);
+    vFont[FNT_TEXT]             = SmFace(FNTNAME_TIMES,         aBaseSize);
+    vFont[FNT_SERIF]            = SmFace(FNTNAME_TIMES,         aBaseSize);
+    vFont[FNT_SANS]             = SmFace(FNTNAME_HELV,          aBaseSize);
+    vFont[FNT_FIXED]            = SmFace(FNTNAME_COUR,          aBaseSize);
+    vFont[FNT_MATH]             = SmFace(FNTNAME_MATH,          aBaseSize);
+    vFont[FNT_DEFAULT_MATH]     = SmFace(FNTNAME_DEFAULT_MATH,  aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
+    vFont[FNT_DEFAULT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 
     vFont[FNT_VARIABLE].SetItalic(ITALIC_NORMAL);
     vFont[FNT_FUNCTION].SetItalic(ITALIC_NONE);
@@ -93,7 +95,6 @@ void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
     vFont[nIdent] = rFont;
     vFont[nIdent].SetTransparent( true );
     vFont[nIdent].SetAlignment( ALIGN_BASELINE );
-
     bDefaultFont[nIdent] = bDefault;
 }
 
