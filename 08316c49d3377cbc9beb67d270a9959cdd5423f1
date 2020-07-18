@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d577a14_627754b9",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-18T07:16:34Z",
+      "side": 1,
+      "message": "In a follow up patch I intend to do this, but this shows no change in the colour of the text.\nAm i missing something or do we need to do some changes in .ui file too for set_font_color() to work ?",
+      "range": {
+        "startLine": 111,
+        "startChar": 5,
+        "endLine": 113,
+        "endChar": 61
+      },
+      "revId": "08316c49d3377cbc9beb67d270a9959cdd5423f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
