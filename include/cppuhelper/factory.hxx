@@ -54,7 +54,7 @@ typedef struct _uno_Environment uno_Environment;
                  i.e. has special context
 */
 typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv );
+    const char ** ppEnvTypeName, uno_Environment ** ppEnv );
 
 /** Function pointer declaration.
     Function determines the environment of the component implementation, i.e. the compiler.
@@ -67,9 +67,9 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
     @param pImplName
 */
 typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
-    sal_Char        const ** ppEnvTypeName,
+    char        const ** ppEnvTypeName,
     uno_Environment       ** ppEnv,
-    sal_Char        const  * pImplName,
+    char        const  * pImplName,
     uno_Environment        * pTargetEnv
 );
 
@@ -79,7 +79,7 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
     @return an XML formatted string containing a short component description
     @deprecated
 */
-typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
+typedef const char * (SAL_CALL * component_getDescriptionFunc)(void);
 
 /** Function pointer declaration.
 
@@ -114,7 +114,7 @@ typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
    environment returned by component_getImplementationEnvironment)
 */
 typedef void * (SAL_CALL * component_getFactoryFunc)(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    const char * pImplName, void * pServiceManager, void * pRegistryKey );
 
 
 namespace cppu

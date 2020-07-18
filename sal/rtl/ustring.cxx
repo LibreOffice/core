@@ -522,15 +522,8 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
     assert(ppThis);
     sal_Int32 nLen;
 
-    if ( pCharStr )
-    {
-        const char* pTempStr = pCharStr;
-        while( *pTempStr )
-            pTempStr++;
-        nLen = pTempStr-pCharStr;
-    }
-    else
-        nLen = 0;
+    if ( pCharStr ) for( nLen = 0; pCharStr[nLen]; ++nLen );
+    else nLen = 0;
 
     if ( !nLen )
     {
@@ -572,15 +565,11 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         rtl_uString_new(newString);
         return;
     }
-    if (*newString != nullptr) {
-        rtl_uString_release(*newString);
-    }
+    if (*newString != nullptr) rtl_uString_release(*newString);
     n = codePointCount;
     for (i = 0; i < codePointCount; ++i) {
         OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
-        if (codePoints[i] >= 0x10000) {
-            ++n;
-        }
+        if (codePoints[i] > 0x0000FFFF) ++n;
     }
     /* Builds on the assumption that sal_Int32 uses 32 bit two's complement
        representation with wrap around (the necessary number of UTF-16 code
@@ -592,9 +581,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         return;
     }
     *newString = rtl_uString_ImplAlloc(n);
-    if (*newString == nullptr) {
-        return;
-    }
+    if (*newString == nullptr) return;
     p = (*newString)->buffer;
     for (i = 0; i < codePointCount; ++i) {
         p += rtl::splitSurrogates(codePoints[i], p);

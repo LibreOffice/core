@@ -365,7 +365,7 @@ bool parseParameters(ParameterList const & rInput,
                     else
                     {
                         for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
-                            aValue.append( static_cast<char>(itNext->m_aValue[i]) );
+                            aValue.append( itNext->m_aValue[i] );
                     }
                     ++itNext;
                 }
