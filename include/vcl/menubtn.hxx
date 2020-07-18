@@ -84,6 +84,11 @@ public:
 
     void            SetActivateHdl( const Link<MenuButton *, void>& rLink ) { maActivateHdl = rLink; }
     void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }
+
+    virtual FactoryFunction GetUITestFactory() const override;
+
+    void SetCurItemId();
+
 };
 
 
