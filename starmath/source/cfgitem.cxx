@@ -155,7 +155,7 @@ SmCfgOther::SmCfgOther()
 
 
 SmFontFormat::SmFontFormat()
-    : aName(FONTNAME_MATH)
+    : aName(FNTNAME_MATH)
     , nCharSet(RTL_TEXTENCODING_UNICODE)
     , nFamily(FAMILY_DONTKNOW)
     , nPitch(PITCH_DONTKNOW)

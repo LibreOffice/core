@@ -308,7 +308,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     @param pFilter      if not null, filters output
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
-    void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
+    void * stream, uno_Environment * pEnv, const char * pFilter )
     SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
 
@@ -317,7 +317,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     @param pFilter      if not null, filters output
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
-    void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
+    void * stream, rtl_uString * pEnvDcp, const char * pFilter )
     SAL_THROW_EXTERN_C();
 
 

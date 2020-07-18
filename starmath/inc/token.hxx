@@ -71,7 +71,7 @@ enum SmTokenType
     TLCEIL,         TLFLOOR,        TNONE,          TMLINE,         TRANGLE,
     TRBRACE,        TRLINE,         TRDLINE,        TRCEIL,         TRFLOOR,
     TSTACK,         TMATRIX,        TDPOUND,        TPLACE,
-    TTEXT,          TNUMBER,        TCHARACTER,     TIDENT,         TNEQ,
+    TTEXT,          TNUMBER,        TIDENT,         TNEQ,
     TEQUIV,         TDEF,           TPROP,          TSIM,           TSIMEQ,
     TAPPROX,        TPARALLEL,      TORTHO,         TIN,            TNOTIN,
     TSUBSET,        TSUBSETEQ,      TSUPSET,        TSUPSETEQ,      TPLUSMINUS,
@@ -83,16 +83,22 @@ enum SmTokenType
     TCDOT,          TODOT,          TLESLANT,       TGESLANT,       TNSUBSET,
     TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     TPARTIAL,       TNEG,
     TNI,            TBACKEPSILON,   TALEPH,         TIM,            TRE,
-    TWP,            TEMPTYSET,      TINFINITY,      TESCAPE,        TLIMSUP,
+    TEMPTYSET,      TESCAPE,        TLIMSUP,
     TLIMINF,        TNDIVIDES,      TDRARROW,       TDLARROW,       TDLRARROW,
-    TUNDERBRACE,    TOVERBRACE,     TCIRC,          THBAR,
-    TLAMBDABAR,     TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
+    TUNDERBRACE,    TOVERBRACE,     TCIRC,          TSETP,
+    TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
     TDIVIDES,       TSETN,          TSETZ,          TSETQ,          TERROR,
     TSETR,          TSETC,          TWIDEVEC,       TWIDEHARPOON,   TWIDETILDE,
     TWIDESLASH,     TWIDEBACKSLASH, TLDBRACKET,     TRDBRACKET,     TNOSPACE,
     TUNKNOWN,       TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
     TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   THARPOON,
     TINTD,          TLAPLACE,       TFOURIER,       TTOWARD,        TWIDEHAT,
+
+    // Spetial characters
+    TCHAR,          TCHARACTER,     TGREEK,         TSET,           TCURRENCY,
+    TINFINITY,      THBAR,          TLAMBDABAR,     TEULER,         TICOMPLEX,
+    TJCOMPLEX,      TWP,
+
     // Function
     TFUNC,          TLN,            TLOG,           TEXP,           // Exp - Log
     TSIN,           TCOS,           TTAN,           TCOT,           // Trigo
@@ -124,7 +130,7 @@ struct SmToken
 
     SmToken();
     SmToken(SmTokenType eTokenType,
-            sal_Unicode cMath,
+            sal_Unicode32 cMath,
             const char* pText,
             TG nTokenGroup = TG::NONE,
             sal_uInt16 nTokenLevel = 0);
@@ -132,9 +138,9 @@ struct SmToken
 
 struct SmTokenTableEntry
 {
-    const char* pIdent;
+    const char*      pIdent;
     SmTokenType      eType;
-    sal_Unicode      cMathChar;
+    sal_Unicode32    cMathChar;
     TG               nGroup;
     sal_uInt16       nLevel;
 };

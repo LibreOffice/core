@@ -50,7 +50,7 @@ inline Type::Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName )
     ::typelib_typedescriptionreference_new( &_pType, static_cast<typelib_TypeClass>(eTypeClass), rTypeName.pData );
 }
 
-inline Type::Type( TypeClass eTypeClass, const sal_Char * pTypeName )
+inline Type::Type( TypeClass eTypeClass, const char * pTypeName )
     : _pType( NULL )
 {
     ::typelib_typedescriptionreference_newByAsciiName( &_pType, static_cast<typelib_TypeClass>(eTypeClass), pTypeName );
