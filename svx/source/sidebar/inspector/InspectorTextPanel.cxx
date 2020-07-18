@@ -19,6 +19,9 @@
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
+#include <svl/languageoptions.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
@@ -45,6 +48,56 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
     mpListBoxStyles->set_size_request(-1, mpListBoxStyles->get_height_rows(25));
+    float fWidth = mpListBoxStyles->get_approximate_digit_width();
+    std::vector<int> aWidths;
+    aWidths.push_back(fWidth * 34);
+    aWidths.push_back(fWidth * 15);
+    mpListBoxStyles->set_column_fixed_widths(aWidths);
+}
+
+static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)
+{
+    // Hide Asian and Complex properties
+    if (SvtLanguageOptions().IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
+        return false;
+    if (SvtLanguageOptions().IsCTLFontEnabled() && rPropName.indexOf("Complex") != -1)
+        return false;
+
+    if (bool bValue; rAny >>= bValue)
+    {
+        rString = OUString::boolean(bValue);
+    }
+    else if (OUString aValue; (rAny >>= aValue) && !(aValue.isEmpty()))
+    {
+        rString = aValue;
+    }
+    else if (awt::FontSlant eValue; rAny >>= eValue)
+    {
+        rString = (eValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
+                                                    : OUStringLiteral("normal");
+    }
+    else if (long nValueLong; rAny >>= nValueLong)
+    {
+        if (rPropName.indexOf("Color") != -1)
+            rString = "0x" + OUString::number(nValueLong, 16);
+        else
+            rString = OUString::number(nValueLong);
+    }
+    else if (double fValue; rAny >>= fValue)
+    {
+        if (rPropName.indexOf("Weight") != -1)
+            rString = (fValue > 100) ? OUStringLiteral("bold") : OUStringLiteral("normal");
+        else
+            rString = OUString::number((round(fValue * 100)) / 100.00);
+    }
+    else if (short nValueShort; rAny >>= nValueShort)
+    {
+        rString = OUString::number(nValueShort);
+    }
+    else
+        return false;
+
+    return true;
 }
 
 static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurrent,
@@ -52,10 +105,25 @@ static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurren
 {
     std::unique_ptr<weld::TreeIter> pResult = rListBoxStyles.make_iterator();
     const OUString& rName = rCurrent.sNodeName;
-    rListBoxStyles.insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, pResult.get());
+    OUString sPairValue;
 
-    for (const TreeNode& rChildNode : rCurrent.children)
-        FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
+    if (rCurrent.NodeType != TreeNode::SimpleProperty
+        || GetPropertyValues(rName, rCurrent.aValue, sPairValue))
+    {
+        rListBoxStyles.insert(pParent, -1, &rName, nullptr, nullptr, nullptr, false, pResult.get());
+        rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 0);
+        rListBoxStyles.set_text_emphasis(*pResult, rCurrent.NodeType == TreeNode::Category, 0);
+
+        if (rCurrent.NodeType == TreeNode::SimpleProperty)
+        {
+            rListBoxStyles.set_text(*pResult, sPairValue, 1);
+            rListBoxStyles.set_sensitive(*pResult, !rCurrent.isGrey, 1);
+            rListBoxStyles.set_text_emphasis(*pResult, false, 1);
+        }
+
+        for (const TreeNode& rChildNode : rCurrent.children)
+            FillBox_Impl(rListBoxStyles, rChildNode, pResult.get());
+    }
 }
 
 void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
