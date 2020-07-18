@@ -1081,6 +1081,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
         }
         break;
+
     }
 
     rReq.Done();
