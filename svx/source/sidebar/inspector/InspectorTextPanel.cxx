@@ -76,8 +76,10 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
     });
 
     std::unique_ptr<weld::TreeIter> pEntry = mpListBoxStyles->make_iterator();
-    mpListBoxStyles->get_iter_first(*pEntry);
-    mpListBoxStyles->iter_next(*pEntry);
+    if (!mpListBoxStyles->get_iter_first(*pEntry))
+        return;
+    if (!mpListBoxStyles->iter_next(*pEntry))
+        return;
     mpListBoxStyles->collapse_row(*pEntry); // Collapse "Default Paragraph Style"
 }
 
