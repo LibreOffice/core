@@ -93,6 +93,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     VclPtr<Printer>     mpTmpPrinter;    //ditto
     sal_uInt16          mnModifyCount;
     bool                mbFormulaArranged;
+    bool                mbUseClassicError;
     std::unique_ptr<SmCursor> mpCursor;
     std::set< OUString >    maUsedSymbols;   // to export used symbols only when saving
 
@@ -121,6 +122,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     OutputDevice*       GetRefDev();
 
     void                SetFormulaArranged(bool bVal) { mbFormulaArranged = bVal; }
+    void                SetUseClassicError(bool bVal) { mbUseClassicError = bVal; }
 
     virtual bool        ConvertFrom(SfxMedium &rMedium) override;
 
