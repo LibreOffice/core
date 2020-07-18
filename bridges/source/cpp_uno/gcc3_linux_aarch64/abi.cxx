@@ -128,7 +128,7 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
             if (ptr != nullptr)
                 rtti = *ptr;
             else
-                SAL_WARN("bridges.osx", dlerror());
+                SAL_WARN("bridges", dlerror());
         }
 #endif
 
