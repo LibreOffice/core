@@ -2561,8 +2561,7 @@ std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
 std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
     auto pNode = std::make_unique<SmGlyphSpecialNode>(m_aCurToken);
     NextToken();
@@ -2572,17 +2571,53 @@ std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
 std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
-    if (aDepthGuard.TooDeep())
-        throw std::range_error("parser depth limit");
+    if (aDepthGuard.TooDeep()) throw std::range_error("parser depth limit");
 
-    auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
+    // Create error description
+    std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
+    pErrDesc->m_eType  =  eError;
+    pErrDesc->m_aText  =  SmResId(RID_ERR_IDENT);
+
+    // Update token information
+    m_aCurToken.aText     =  SmResId("¡¡¡ ");
+    m_aCurToken.aText    +=  SmResId(RID_ERR_IDENT);
+    m_aCurToken.eType     =  TERROR;
+    m_aCurToken.nGroup    =  TG::NONE;
+    m_aCurToken.cMathChar =  '\0';
+
+    // Find error description
+    const char* pRID;
+    switch (eError)
+    {
+        case SmParseError::UnexpectedChar:     pRID = RID_ERR_UNEXPECTEDCHARACTER; break;
+        case SmParseError::UnexpectedToken:    pRID = RID_ERR_UNEXPECTEDTOKEN;     break;
+        case SmParseError::PoundExpected:      pRID = RID_ERR_POUNDEXPECTED;       break;
+        case SmParseError::ColorExpected:      pRID = RID_ERR_COLOREXPECTED;       break;
+        case SmParseError::LgroupExpected:     pRID = RID_ERR_LGROUPEXPECTED;      break;
+        case SmParseError::RgroupExpected:     pRID = RID_ERR_RGROUPEXPECTED;      break;
+        case SmParseError::LbraceExpected:     pRID = RID_ERR_LBRACEEXPECTED;      break;
+        case SmParseError::RbraceExpected:     pRID = RID_ERR_RBRACEEXPECTED;      break;
+        case SmParseError::ParentMismatch:     pRID = RID_ERR_PARENTMISMATCH;      break;
+        case SmParseError::RightExpected:      pRID = RID_ERR_RIGHTEXPECTED;       break;
+        case SmParseError::FontExpected:       pRID = RID_ERR_FONTEXPECTED;        break;
+        case SmParseError::SizeExpected:       pRID = RID_ERR_SIZEEXPECTED;        break;
+        case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
+        case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
+        case SmParseError::NumberExpected:     pRID = RID_ERR_NUMBEREXPECTED;      break;
+        default:                               pRID = RID_ERR_UNKNOWN;             break;
+    }
+    pErrDesc->m_aText += SmResId(pRID);
+    m_aCurToken.aText += SmResId(pRID);
+    m_aCurToken.aText += SmResId(" !!!");
+
+    // List error
+    std::unique_ptr<SmExpressionNode> xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
     std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
     xSNode->SetSubNodes(std::move(pErr), nullptr);
-
-    AddError(eError, xSNode.get());
+    pErrDesc->m_pNode =  xSNode.get();
+    m_aErrDescList.push_back(std::move(pErrDesc));
 
     NextToken();
-
     return xSNode;
 }
 
@@ -2615,7 +2650,6 @@ std::unique_ptr<SmTableNode> SmParser::Parse(const OUString &rBuffer)
     m_nCurError     = -1;
 
     m_aErrDescList.clear();
-
     NextToken();
     return DoTable();
 }
