@@ -351,21 +351,19 @@ public:
 #endif
 
     /**
-        Release the string data.
-     */
+      * Release the string data.
+      */
     ~OUStringBuffer()
     {
         rtl_uString_release( pData );
     }
 
     /**
-        Fill the string data in the new string and clear the buffer.
-
-        This method is more efficient than the constructor of the string. It does
-        not copy the buffer.
-
-        @return the string previously contained in the buffer.
-     */
+      * Fill the string data in the new string and clear the buffer.
+      * This method is more efficient than the constructor of the string. It does
+      * not copy the buffer.
+      * @return the string previously contained in the buffer.
+      */
     SAL_WARN_UNUSED_RESULT OUString makeStringAndClear()
     {
         return OUString(
@@ -374,77 +372,60 @@ public:
     }
 
     /**
-        Returns the length (character count) of this string buffer.
-
-        @return  the number of characters in this string buffer.
-     */
-    sal_Int32 getLength() const
-    {
-        return pData->length;
-    }
+      * Returns the length (character count) of this string buffer.
+      * @return  the number of characters in this string buffer.
+      */
+    sal_Int32 getLength() const { return pData->length; }
 
     /**
-      Checks if a string buffer is empty.
-
-      @return   true if the string buffer is empty;
-                false, otherwise.
-
-      @since LibreOffice 4.1
-    */
-    bool isEmpty() const
-    {
-        return pData->length == 0;
-    }
+      * Checks if a string buffer is empty.
+      * @return   true if the string buffer is empty; false, otherwise.
+      * @since LibreOffice 4.1
+      */
+    bool isEmpty() const { return pData->length == 0; }
 
     /**
-        Returns the current capacity of the String buffer.
-
-        The capacity
-        is the amount of storage available for newly inserted
-        characters. The real buffer size is 2 bytes longer, because
-        all strings are 0 terminated.
-
-        @return  the current capacity of this string buffer.
-     */
-    sal_Int32 getCapacity() const
-    {
-        return nCapacity;
-    }
+      *  Returns the current capacity of the String buffer.
+      * The capacity
+      * is the amount of storage available for newly inserted
+      * characters. The real buffer size is 2 bytes longer, because
+      * all strings are 0 terminated.
+      * @return  the current capacity of this string buffer.
+      */
+    sal_Int32 getCapacity() const { return nCapacity; }
 
     /**
-        Ensures that the capacity of the buffer is at least equal to the
-        specified minimum.
-
-        The new capacity will be at least as large as the maximum of the current
-        length (so that no contents of the buffer is destroyed) and the given
-        minimumCapacity.  If the given minimumCapacity is negative, nothing is
-        changed.
-
-        @param   minimumCapacity   the minimum desired capacity.
-     */
+      * Ensures that the capacity of the buffer is at least equal to the
+      * specified minimum.
+      * The new capacity will be at least as large as the maximum of the current
+      * length (so that no contents of the buffer is destroyed) and the given
+      * minimumCapacity.  If the given minimumCapacity is negative, nothing is
+      * changed.
+      * @param   minimumCapacity   the minimum desired capacity.
+      */
     void ensureCapacity(sal_Int32 minimumCapacity)
     {
         rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, minimumCapacity );
     }
 
     /**
-        Sets the length of this String buffer.
-
-        If the <code>newLength</code> argument is less than the current
-        length of the string buffer, the string buffer is truncated to
-        contain exactly the number of characters given by the
-        <code>newLength</code> argument.
-        <p>
-        If the <code>newLength</code> argument is greater than or equal
-        to the current length, sufficient null characters
-        (<code>'&#92;u0000'</code>) are appended to the string buffer so that
-        length becomes the <code>newLength</code> argument.
-        <p>
-        The <code>newLength</code> argument must be greater than or equal
-        to <code>0</code>.
-
-        @param      newLength   the new length of the buffer.
-     */
+      * Sets the length of this String buffer.
+      *
+      * If the <code>newLength</code> argument is less than the current
+      * length of the string buffer, the string buffer is truncated to
+      * contain exactly the number of characters given by the
+      * <code>newLength</code> argument.
+      * <p>
+      * If the <code>newLength</code> argument is greater than or equal
+      * to the current length, sufficient null characters
+      * (<code>'&#92;u0000'</code>) are appended to the string buffer so that
+      * length becomes the <code>newLength</code> argument.
+      * <p>
+      * The <code>newLength</code> argument must be greater than or equal
+      * to <code>0</code>.
+      *
+      * @param      newLength   the new length of the buffer.
+      */
     void setLength(sal_Int32 newLength)
     {
         assert(newLength >= 0);
@@ -453,64 +434,104 @@ public:
         {
             if( newLength > nCapacity )
                 rtl_uStringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
-            else
-                pData->buffer[newLength] = 0;
+            else pData->buffer[newLength] = 0;
             pData->length = newLength;
         }
     }
 
     /**
-        Returns the character at a specific index in this string buffer.
-
-        The first character of a string buffer is at index
-        <code>0</code>, the next at index <code>1</code>, and so on, for
-        array indexing.
-        <p>
-        The index argument must be greater than or equal to
-        <code>0</code>, and less than the length of this string buffer.
-
-        @param      index   the index of the desired character.
-        @return     the character at the specified index of this string buffer.
-     */
-    SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
-    sal_Unicode charAt( sal_Int32 index ) const
+      * Access to individual characters.
+      * @param index must be non-negative and less than length.
+      * @return a reference to the character at the given index.
+      * @since LibreOffice 7.1
+      */
+    sal_Unicode32 char32At( sal_Int32 index ) const
     {
-        assert(index >= 0 && index < pData->length);
-        return pData->buffer[ index ];
+        assert( index >= 0 && index < pData->length );
+        if( rtl::isSurrogate(pData->buffer[index]) )
+        {
+            assert( index + 1 < pData->length );
+            return combineSurrogates( pData->buffer[index], pData->buffer[index+1] );
+        }
+        else return pData->buffer[ index ];
     }
 
     /**
-        The character at the specified index of this string buffer is set
-        to <code>ch</code>.
-
-        The index argument must be greater than or equal to
-        <code>0</code>, and less than the length of this string buffer.
-
-        @param      index   the index of the character to modify.
-        @param      ch      the new character.
-     */
-    SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
-    OUStringBuffer & setCharAt(sal_Int32 index, sal_Unicode ch)
+      * Access to individual characters.
+      * Note that this will replace surrogates as single chars.
+      * @param index must be non-negative and less than length.
+      * @return a reference to the character at the given index.
+      * @since LibreOffice 7.1
+      */
+    OUStringBuffer & setChar32At(sal_Int32 index, sal_Unicode32 ch)
     {
         assert(index >= 0 && index < pData->length);
-        pData->buffer[ index ] = ch;
+        if ( ch > 0x0000FFFF )
+        {
+            if( rtl::isSurrogate(pData->buffer[ index ]) )
+            {
+                assert(index + 1 < pData->length);
+                pData->buffer[  index  ] = getHighSurrogate(ch);
+                pData->buffer[ index+1 ] = getLowSurrogate(ch);
+            }
+            else
+            {
+                // Prepare sal_Unicode[] to replace
+                const sal_Unicode ctmp[] = { getHighSurrogate(ch), getLowSurrogate(ch) };
+                // Convert new char to rtl_uString
+                rtl_uString* pTmp = NULL;
+                rtl_uString_newFromStr_WithLength( &pTmp, ctmp, 2 );
+                // Make the replace
+                rtl_uString* pNewBuffer = NULL;
+                rtl_uString_newReplaceStrAt( &pNewBuffer, pData, index, 1, pTmp );
+                // Recast result
+                rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, pNewBuffer->length + 16 );
+                // Free memory
+                if( pTmp  != NULL ) free( pTmp );
+                if( pData != NULL ) free( pData );
+                // Update OUStringStream
+                pData = pNewBuffer;
+            }
+        }
+        else
+        {
+            if( rtl::isSurrogate(pData->buffer[ index ]) )
+            {
+                // Prepare sal_Unicode[] to replace
+                const sal_Unicode ctmp[] = { getHighSurrogate(ch), getLowSurrogate(ch) };
+                // Convert new char to rtl_uString
+                rtl_uString* pTmp = NULL;
+                rtl_uString_newFromStr_WithLength( &pTmp, ctmp, 1 );
+                // Make the replace
+                rtl_uString* pNewBuffer = NULL;
+                rtl_uString_newReplaceStrAt( &pNewBuffer, pData, index, 2, pTmp );
+                // Recast result
+                rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, pNewBuffer->length + 16 );
+                // Free memory
+                if( pTmp  != NULL ) free( pTmp );
+                if( pData != NULL ) free( pData );
+                // Update OUStringStream
+                pData = pNewBuffer;
+            }
+            else
+            {
+                pData->buffer[ index ] = ch;
+            }
+        }
         return *this;
     }
 
     /**
-        Return a null terminated unicode character array.
-     */
+      * Return a null terminated unicode character array.
+      */
     const sal_Unicode*  getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
-      Access to individual characters.
-
-      @param index must be non-negative and less than length.
-
-      @return a reference to the character at the given index.
-
-      @since LibreOffice 3.5
-    */
+      * Access to individual characters.
+      * @param index must be non-negative and less than length.
+      * @return a reference to the character at the given index.
+      * @since LibreOffice 3.5
+      */
     sal_Unicode & operator [](sal_Int32 index)
     {
         assert(index >= 0 && index < pData->length);
@@ -533,9 +554,9 @@ public:
     }
 
     /**
-        Return an OUString instance reflecting the current content
-        of this OUStringBuffer.
-     */
+      * Return an OUString instance reflecting the current content
+      * of this OUStringBuffer.
+      */
     const OUString toString() const
     {
         return OUString(pData->buffer, pData->length);
@@ -710,7 +731,7 @@ public:
         @param   str   the 8-Bit ASCII characters to be appended.
         @return  this string buffer.
      */
-    OUStringBuffer & appendAscii( const sal_Char * str )
+    OUStringBuffer & appendAscii( const char * str )
     {
         return appendAscii( str, rtl_str_getLength( str ) );
     }
@@ -733,7 +754,7 @@ public:
         @param len the number of characters to append; must be non-negative
         @return  this string buffer.
      */
-    OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
+    OUStringBuffer & appendAscii( const char * str, sal_Int32 len)
     {
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
         return *this;
