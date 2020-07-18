@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "4daf2fd0_bdd9c496",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:19:26Z",
+      "side": 1,
+      "message": "this can be in its own file....",
+      "range": {
+        "startLine": 37,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 2
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4f35c3a_4ceef8d6",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:19:26Z",
+      "side": 1,
+      "message": "This will make a copy in the constructor, because it\u0027s not declared a reference.",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 53
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60eb80e5_6e007a96",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:19:26Z",
+      "side": 1,
+      "message": "Could be one method on GalleryStorageLocations - not?",
+      "range": {
+        "startLine": 126,
+        "startChar": 3,
+        "endLine": 129,
+        "endChar": 52
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "168714af_5a90f07d",
+        "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:19:26Z",
+      "side": 1,
+      "message": "You probably don\u0027t need this anymore. You needed this previously because the life-cycle GalleryThemeEntry was longer than GalleryTheme, but now GalleryBinaryEngine is crated when GalleryTheme is created",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 42
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c70e651f_d5c9e3d2",
+        "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:19:26Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 50,
+        "startChar": 26,
+        "endLine": 50,
+        "endChar": 45
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf2a0d0e_732fe8d4",
         "filename": "svx/source/unogallery/unogalitem.cxx",
         "patchSetId": 4
