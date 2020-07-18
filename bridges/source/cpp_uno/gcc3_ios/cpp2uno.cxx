@@ -451,7 +451,7 @@ namespace
         int index = functionIndex*nVtableOffsets + vtableOffset;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
-        SAL_INFO( "bridges.ios", "codeSnippet(" << OUString(type->aBase.pTypeName) << "::" << OUString(member->pTypeName) << "): [" << functionIndex << "," << vtableOffset << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
+        SAL_INFO( "bridges", "codeSnippet(" << OUString(type->aBase.pTypeName) << "::" << OUString(member->pTypeName) << "): [" << functionIndex << "," << vtableOffset << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
 
         return result;
     }
