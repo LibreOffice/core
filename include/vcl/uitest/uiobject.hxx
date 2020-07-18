@@ -35,6 +35,7 @@ class SpinButton;
 class SpinField;
 class VerticalTabControl;
 class VclMultiLineEdit;
+class MenuButton;
 class ToolBox;
 
 typedef std::map<const OUString, OUString> StringMap;
@@ -503,6 +504,28 @@ private:
 
     virtual OUString get_name() const override;
 };
+
+class MenuButtonUIObject final : public WindowUIObject
+{
+    VclPtr<MenuButton> mxMenuButton;
+
+public:
+
+    MenuButtonUIObject(const VclPtr<MenuButton>& xMenuButton);
+    virtual ~MenuButtonUIObject() override;
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+private:
+
+    virtual OUString get_name() const override;
+};
+
 
 #endif
 
