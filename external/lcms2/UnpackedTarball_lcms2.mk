@@ -18,6 +18,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
 	external/lcms2/lcms2-2.4-windows.patch \
 	external/lcms2/c++17.patch.1 \
+	external/lcms2/lcms2-win-arm64.patch.1 \
 ))
+
+# Can't include in ARM64 patch, as diff fails to detect text in it
+$(eval $(call gb_UnpackedTarball_add_file,lcms2,Projects/VC2019/lcms2.sln,external/lcms2/lcms2_sln))
 
 # vim: set noet sw=4 ts=4:
