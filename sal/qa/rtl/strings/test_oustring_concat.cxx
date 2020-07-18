@@ -164,22 +164,22 @@ void test::oustring::StringConcat::checkAppend()
 void test::oustring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OUStringBuffer( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<const char*>("b") ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += OUStringBuffer( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += OString( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += OStringBuffer( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += static_cast<const char*>("b") ));
     char d[] = "b";
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + d ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + static_cast<char*>(d) ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringLiteral( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + rtl::OStringView( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + 1 ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += d ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += static_cast<char*>(d) ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += OStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += rtl::OStringView( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString::number( 10 )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OUString::number( 0 ) + OString::number( 10 )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) += rs ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) += rus ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) += OString::number( 10 )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString::number( 0 ) += OString::number( 10 )));
 
 #if 0
     // Should fail to compile, to avoid use of OUStringConcat lvalues that

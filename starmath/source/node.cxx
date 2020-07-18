@@ -1252,7 +1252,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         aTmpSize.setWidth( aTmpSize.Width() * 182 );
         aTmpSize.setWidth( aTmpSize.Width() / 267 );
 
-        sal_Unicode cChar = pLeft->GetToken().cMathChar;
+        sal_Unicode32 cChar = pLeft->GetToken().cMathChar;
         if (cChar != MS_LINE  &&  cChar != MS_DLINE &&
             cChar != MS_VERTLINE  &&  cChar != MS_DVERTLINE)
             pLeft ->GetFont().SetSize(aTmpSize);
@@ -1838,17 +1838,17 @@ void SmTextNode::AdjustFontDesc()
     if (GetToken().nGroup == TG::Function) mnFontDesc = FNT_FUNCTION;
     else if (GetToken().eType == TTEXT) mnFontDesc = FNT_TEXT;
     else {
-        sal_Unicode firstChar = maText[0];
+        sal_Unicode32 firstChar = maText[0];
         if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',')
             mnFontDesc = FNT_NUMBER;
         else mnFontDesc = FNT_VARIABLE;
    }
 }
 
-sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
+sal_Unicode32 SmTextNode::ConvertSymbolToUnicode(sal_Unicode32 nIn)
 {
     //Find the best match in accepted unicode for our private area symbols
-    static const sal_Unicode aStarMathPrivateToUnicode[] =
+    static const sal_Unicode32 aStarMathPrivateToUnicode[] =
     {
         0x2030, 0xF613, 0xF612, 0x002B, 0x003C, 0x003E, 0xE425, 0xE421, 0xE088, 0x2208,
         0x0192, 0x2026, 0x2192, 0x221A, 0x221A, 0x221A, 0xE090, 0x005E, 0x02C7, 0x02D8,
@@ -1990,9 +1990,8 @@ const SmNode * SmMatrixNode::GetLeftMost() const
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(SmNodeType::Math, rNodeToken, FNT_MATH)
 {
-    sal_Unicode cChar = GetToken().cMathChar;
-    if (u'\0' != cChar)
-        SetText(OUString(cChar));
+    sal_Unicode32 cChar = GetToken().cMathChar;
+    if ( MS_NONE != cChar) SetText(OUString(cChar));
 }
 
 void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)
@@ -2173,28 +2172,27 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         const OUString& rTmp(GetText());
         if (!rTmp.isEmpty())
         {
-            static const sal_Unicode cUppercaseAlpha = 0x0391;
-            static const sal_Unicode cUppercaseOmega = 0x03A9;
-            sal_Unicode cChar = rTmp[0];
+            sal_Unicode32 cChar;
+            static const sal_Unicode32 cUppercaseAlpha = 0x00000391;
+            static const sal_Unicode32 cUppercaseOmega = 0x000003A9;
+            if( rtl::isSurrogate( rTmp[0] ) && rTmp.getLength() > 1 )
+                cChar = rtl::combineSurrogates( rTmp[0], rTmp[1] );
+            else cChar = rTmp[0];
             // uppercase letters should be straight and lowercase letters italic
-            bItalic = cUppercaseAlpha > cChar || cChar > cUppercaseOmega;
+            bItalic = cUppercaseAlpha < cChar || cChar > cUppercaseOmega;
         }
     }
 
-    if (bItalic)
-        Attributes() |= FontAttribute::Italic;
-    else
-        Attributes() &= ~FontAttribute::Italic;
+    if (bItalic) Attributes() |= FontAttribute::Italic;
+    else Attributes() &= ~FontAttribute::Italic;
 };
 
 
 void SmSpecialNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
-
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());
-
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
 }
 
