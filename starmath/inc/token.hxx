@@ -25,24 +25,25 @@
 
 // TokenGroups
 enum class TG {
-    NONE          = 0x000000,
-    Oper          = 0x000001,
-    Relation      = 0x000002,
-    Sum           = 0x000004,
-    Product       = 0x000008,
-    UnOper        = 0x000010,
-    Power         = 0x000020,
-    Attribute     = 0x000040,
-    Align         = 0x000080,
-    Function      = 0x000100,
-    Blank         = 0x000200,
-    LBrace        = 0x000400,
-    RBrace        = 0x000800,
-    Color         = 0x001000,
-    Font          = 0x002000,
-    Standalone    = 0x004000,
-    Limit         = 0x010000,
-    FontAttr      = 0x020000
+    NONE          = 0x00000000,
+    Oper          = 0x00000001,
+    Relation      = 0x00000002,
+    Sum           = 0x00000004,
+    Product       = 0x00000008,
+    UnOper        = 0x00000010,
+    Power         = 0x00000020,
+    Attribute     = 0x00000040,
+    Align         = 0x00000080,
+    Function      = 0x00000100,
+    Blank         = 0x00000200,
+    LBrace        = 0x00000400,
+    RBrace        = 0x00000800,
+    Color         = 0x00001000,
+    Font          = 0x00002000,
+    Standalone    = 0x00004000,
+    Limit         = 0x00008000,
+    FontAttr      = 0x00010000,
+    Character     = 0x00020000,
 };
 
 namespace o3tl {
@@ -51,60 +52,125 @@ namespace o3tl {
 
 enum SmTokenType
 {
-    TEND,           TLGROUP,        TRGROUP,        TLPARENT,       TRPARENT,
-    TLBRACKET,      TRBRACKET,      TPLUS,          TMINUS,         TMULTIPLY,
-    TDIVIDEBY,      TASSIGN,        TPOUND,         TSPECIAL,       TSLASH,
-    TBACKSLASH,     TBLANK,         TSBLANK,        TRSUB,          TRSUP,
-    TCSUB,          TCSUP,          TLSUB,          TLSUP,          TGT,
-    TLT,            TAND,           TOR,            TINTERSECT,     TUNION,
-    TNEWLINE,       TBINOM,         TFROM,          TTO,            TINT,
-    TSUM,           TOPER,          TABS,           TSQRT,          TFACT,
-    TNROOT,         TOVER,          TTIMES,         TGE,            TLE,
-    TGG,            TLL,            TDOTSAXIS,      TDOTSLOW,       TDOTSVERT,
-    TDOTSDIAG,      TDOTSUP,        TDOTSDOWN,      TACUTE,         TBAR,
-    TBREVE,         TCHECK,         TCIRCLE,        TDOT,           TDDOT,
-    TDDDOT,         TGRAVE,         THAT,           TTILDE,         TVEC,
-    TUNDERLINE,     TOVERLINE,      TOVERSTRIKE,    TITALIC,        TNITALIC,
-    TBOLD,          TNBOLD,         TPHANTOM,       TFONT,          TSIZE,
-    TCOLOR,         TALIGNL,        TALIGNC,        TALIGNR,        TLEFT,
-    TRIGHT,         TLANGLE,        TLBRACE,        TLLINE,         TLDLINE,
-    TLCEIL,         TLFLOOR,        TNONE,          TMLINE,         TRANGLE,
-    TRBRACE,        TRLINE,         TRDLINE,        TRCEIL,         TRFLOOR,
-    TSTACK,         TMATRIX,        TDPOUND,        TPLACE,
-    TTEXT,          TNUMBER,        TCHARACTER,     TIDENT,         TNEQ,
-    TEQUIV,         TDEF,           TPROP,          TSIM,           TSIMEQ,
-    TAPPROX,        TPARALLEL,      TORTHO,         TIN,            TNOTIN,
-    TSUBSET,        TSUBSETEQ,      TSUPSET,        TSUPSETEQ,      TPLUSMINUS,
-    TMINUSPLUS,     TOPLUS,         TOMINUS,        TDIV,           TOTIMES,
-    TODIVIDE,       TTRANSL,        TTRANSR,        TIINT,          TIIINT,
-    TLINT,          TLLINT,         TLLLINT,        TPROD,          TCOPROD,
-    TFORALL,        TEXISTS,        TNOTEXISTS,     TLIM,           TNABLA,
-    TUOPER,         TBOPER,         TFIXED,         TSANS,          TSERIF,
-    TCDOT,          TODOT,          TLESLANT,       TGESLANT,       TNSUBSET,
-    TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     TPARTIAL,       TNEG,
-    TNI,            TBACKEPSILON,   TALEPH,         TIM,            TRE,
-    TWP,            TEMPTYSET,      TINFINITY,      TESCAPE,        TLIMSUP,
-    TLIMINF,        TNDIVIDES,      TDRARROW,       TDLARROW,       TDLRARROW,
-    TUNDERBRACE,    TOVERBRACE,     TCIRC,          THBAR,
-    TLAMBDABAR,     TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
-    TDIVIDES,       TSETN,          TSETZ,          TSETQ,          TERROR,
-    TSETR,          TSETC,          TWIDEVEC,       TWIDEHARPOON,   TWIDETILDE,
-    TWIDESLASH,     TWIDEBACKSLASH, TLDBRACKET,     TRDBRACKET,     TNOSPACE,
-    TUNKNOWN,       TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
-    TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,   THARPOON,
-    TINTD,          TLAPLACE,       TFOURIER,       TTOWARD,        TWIDEHAT,
+    TDIVIDEBY,      TASSIGN,        TSPECIAL,       TLIMSUP,        TNDIVIDESWITH,
+    TBACKSLASH,     TLIMINF,        TNDIVIDES,      TNOSPACE,       TEXESS,
+    TTRANSL,        TDIVIDES,       TBAR,           TNEWLINE,       TWIDEBACKSLASH,
+    TUNDERLINE,     TOVERLINE,      TOVERSTRIKE,    TWIDESLASH,     TTRANSR,
+    TCIRC,
+    // Logic
+    TAND,           TOR,            TNEG,           TNEQ,
+    TKNOW,          TADJOINT,       TTOPTEE,        TASSERTION,     TNOTPROOVE,
+    TMODELS,        TTRUE,          TNOTTRUE,       TFORCES,        TNOTFORCES,
+    TTHEREFORE,     TRATIO,         TPROPORTION,
+    // Font
+    TFONT,          TTEXT,          TNUMBER,        TIDENT,
+    TALIGNL,        TALIGNC,        TALIGNR,        TSANS,          TSERIF,
+    TBOLD,          TNBOLD,         TPHANTOM,       TSIZE,          TFIXED,
+    TITALIC,        TNITALIC,
+    // Font Attributtes
+    // Control
+    TEND,           TRGROUP,        TLGROUP,        TESCAPE,        TLSUP,
+    TRSUB,          TRSUP,          TCSUB,          TCSUP,          TLSUB,
+    TUNKNOWN,       TERROR,         TBLANK,         TSBLANK,        TPLACE,
+    TNONE,          TUOPER,         TBOPER,         TTOMBSTONE,
+    // Tensors
+    TOPLUS,         TOMINUS,        TODIVIDE,       TOTIMES,        TODOT,
+    TODASH,         TGVECTORPROD,   THERMITANCONJ,  TMONUS,         THOMOTHETY,
+    TSQPLUS,        TSQMINUS,       TSQTIMES,       TSQDOT,         TOEQUALS,
+    TOMULTIPLY,     TOEQUAL,
+    // SimpleOper
+    TCOMPOSITION,   TDIV,           TMINUSPLUS,     TPLUS,          TMINUS,
+    TMULTIPLY,      TSLASH,         TPLUSDOT,       TOVER,          TTIMES,
+    TFACT,          TABS,           TPLUSMINUS,     TCDOT,          TOCOMPOSE,
+    // Arrows and dots
+    TDOTSDIAG,      TDOTSUP,        TDOTSDOWN,      TDOTSAXIS,      TDOTSLOW,
+    TDOTSVERT,      TLEFTARROW,     TRIGHTARROW,    TUPARROW,       TDOWNARROW,
+    TDRARROW,       TDLARROW,       TDLRARROW,
+    // Order
+    TPRECEDES,      TSUCCEEDS,      TPRECEDESEQUAL, TSUCCEEDSEQUAL,
+    TPRECEDESEQUIV, TSUCCEEDSEQUIV, TNOTPRECEDES,   TNOTSUCCEEDS,
+    // Compare
+    TLL,            TGG,            TLLL,           TGGG,           TEQUAL,
+    TLT,            TGT,            TGE,            TLE,            TSIM,
+    TLESLANT,       TGESLANT,       TSIMEQ,         TAPPROX,        TEQUIV,
+    TDEF,           TPROP,
+    // Brackets
+    TRIGHT,         TLEFT,
+    TRDANGLE,       TLDANGLE,       TRANGLE,        TLANGLE,        TMLINE,
+    TRCEIL,         TLCEIL,         TRFLOOR,        TLFLOOR,        TUNDERBRACE,
+    TRLINE,         TLLINE,         TRDLINE,        TLDLINE,        TOVERBRACE,
+    TRBRACE,        TLBRACE,        TLDBRACKET,     TRDBRACKET,
+    TRBRACKET,      TLBRACKET,      TRPARENT,       TLPARENT,
+    // Sets
+    TSETN,          TSETZ,          TSETQ,          TSETR,          TSETC,
+    TEMPTYSET,      TCOMPLEMENT,    TFORALL,        TEXISTS,        TNOTEXISTS,
+    TNI,            TIN,            TNOTIN,         TOWNS,          TNOTOWNS,
+    TELEMENTOF,     TCONTASMEMBER,
+    TUNION,         TSQUNION,       TINTERSECT,     TSQINTERSECT,
+    TSUBSET,        TSUBSETEQ,      TNSUBSET,       TNSUBSETEQ,
+    TSUPSET,        TSUPSETEQ,      TNSUPSET,       TNSUPSETEQ,
+    TSQSUBSET,      TSQSUBSETEQ,    TSQSUPSET,      TSQSUPSETEQ,
+    // Operators
+    TOPER,          TSUM,           TFROM,          TTO,            TTOWARD,
+    TINTD,          TINT,           TIINT,          TIIINT,         TIIIINT,
+    TLINT,          TLLINT,         TLLLINT,        TFILINT,        TDBINT,
+    TAVERAGE,       TINTERSECTINT,  TOBINT,         TUBINT,         TSUMINT,
+    TCLINT,         TACLINT,        TSQPINT,        TCIPINT,        TWPINT,
+    TAPLINT,        TQUAINT,        TLARROWINT,     TTIMESINT,      TUNIONINT,
+    TOINTERSECT,    TOUNION,        TOOPLUS,        TOODOT,         TOOTIMES,
+    TPROD,          TCOPROD,        TOAND,          TOOR,           TLIM,
+    // Attributes
+    TDOT,           TDDOT,          TDDDOT,         TDDDDOT,        // Derivative dot
+    TVEC,           TWIDEVEC,       THARPOON,       TWIDEHARPOON,   // Vec & arpoon
+    TTILDE,         TWIDETILDE,     THAT,           TWIDEHAT,       // Tilde & hat
+    TACUTE,         TGRAVE,         TBREVE,         TCHECK,         // Some accents
+    TCIRCLE,
+    // Spetial characters
+    TCHAR,          TCHARACTER,     TBACKEPSILON,   TEULERCTE,
+    TINFINITY,      THBAR,          TLAMBDABAR,     TEULER,         TPLANK,
+    TDIGAMMA,       TINODOT,        TJNODOT,        TAMPERSAND,     TBULLET,
+    TALEPH,         TBETH,          TGIMEL,         TETH,           TNATURALEXP,
+    // Units and extras
+    TLITRE,         TDEGREE,        TAMSTRONG,      TMICRO,         TOUNCE,
+    TSIEMENS,       TMORDINALI,     TFORDINALI,     TNUMSIGN,
+    TPERCENT,       TPERTHOUSAND,   TPERTENTHOUSAND,
+    // Character sets
+    TGREEK,         TDIGIT,         TROM,           TROMD,          TCURRENCY,
+    TSET,           THCROD,         TVCROD,         TPHOENICIAN,    TLATINCHAR,
+    TFRAK,          TSCRIPT,        THEBREW,        TGOTHIC,        TINTERNATIONAL,
+    TEASTEREGG,
     // Function
     TFUNC,          TLN,            TLOG,           TEXP,           // Exp - Log
     TSIN,           TCOS,           TTAN,           TCOT,           // Trigo
     TSINH,          TCOSH,          TTANH,          TCOTH,          // Trigo hyperbolic
     TASIN,          TACOS,          TATAN,          TACOT,          // Arctrigo
     TASINH,         TACOSH,         TATANH,         TACOTH,         // Arctrigo hyperbolic
+    TSQRT,          TNROOT,
     // Color
-    TRGB,           TRGBA,          THEX,
+    TCOLOR,         TRGB,           TRGBA,          THEX,
     TAQUA,          TBLACK,         TBLUE,          TCYAN,          TFUCHSIA,
     TGRAY,          TGREEN,         TLIME,          TMAGENTA,       TMAROON,
     TNAVY,          TOLIVE,         TPURPLE,        TRED,           TSILVER,
-    TTEAL,          TWHITE,         TYELLOW
+    TTEAL,          TWHITE,         TYELLOW,
+    // Geometry
+    TPARALLEL,      TORTHO,         TNOTPARALLEL,   TANGLE,         TGEOFIG,
+    TWAVE,          TSPHTRIGO,      TPROJECTIVE,    TPERSPECTIVE,   TTRANSVERSAL,
+    TPERPENDICULAR, TPERPENDICULARWITHS,
+    // Derivative and transforms and complex
+    TWP,            TIM,            TRE,            TICOMPLEX,      TJCOMPLEX,
+    TFOURIER,       TLAPLACE,       TPRIME,         TDPRIME,        TTPRIME,
+    TNABLA,         TPARTIAL,       TUDIFF,         TLDIFF,         TINCREMENT,
+    // Table structures //TODO tables of tdf i don't remember
+    TBINOM,         TSTACK,         TMATRIX,        TPOUND,         TDPOUND
+};
+
+struct SmTokenTableEntry
+{
+    const char*      pIdent;
+    SmTokenType      eType;
+    sal_Unicode32    cMathChar;
+    TG               nGroup;
+    sal_uInt16       nLevel;
 };
 
 struct SmToken
@@ -112,7 +178,7 @@ struct SmToken
 
     OUString        aText;      // token text
     SmTokenType     eType;      // token info
-    sal_Unicode cMathChar;
+    sal_Unicode32   cMathChar;  // token text
 
     // parse-help info
     TG              nGroup;
@@ -122,21 +188,37 @@ struct SmToken
     sal_Int32      nRow; // 1-based
     sal_Int32      nCol; // 1-based
 
-    SmToken();
-    SmToken(SmTokenType eTokenType,
-            sal_Unicode cMath,
-            const char* pText,
-            TG nTokenGroup = TG::NONE,
-            sal_uInt16 nTokenLevel = 0);
-};
+    inline SmToken()
+    : eType(TUNKNOWN)
+    , cMathChar('\0')
+    , nGroup(TG::NONE)
+    , nLevel(0)
+    , nRow(0)
+    , nCol(0)
+    { };
 
-struct SmTokenTableEntry
-{
-    const char* pIdent;
-    SmTokenType      eType;
-    sal_Unicode      cMathChar;
-    TG               nGroup;
-    sal_uInt16       nLevel;
+    inline SmToken( const SmTokenTableEntry &entry, sal_Int32 row = 0, sal_Int32 col = 0 )
+    : aText( OUString::createFromAscii(entry.pIdent) )
+    , eType( entry.eType )
+    , cMathChar( entry.cMathChar )
+    , nGroup( entry.nGroup )
+    , nLevel( entry.nLevel )
+    , nRow(row)
+    , nCol(col)
+    { };
+
+    inline SmToken( SmTokenType eTokenType, sal_Unicode32 cMath, const char* pText,
+                    TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0,
+                    sal_Int32 row = 0, sal_Int32 col = 0 )
+    : aText(OUString::createFromAscii(pText))
+    , eType(eTokenType)
+    , cMathChar(cMath)
+    , nGroup(nTokenGroup)
+    , nLevel(nTokenLevel)
+    , nRow(row)
+    , nCol(col)
+    { };
+
 };
 
 #endif
