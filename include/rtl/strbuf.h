@@ -42,7 +42,7 @@ extern "C" {
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_newFromStr_WithLength(
                                                       rtl_String ** newStr,
-                                                      const sal_Char * value,
+                                                      const char * value,
                                                       sal_Int32 count);
 
 /**
@@ -110,7 +110,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(
                                        rtl_String ** This,
                                        sal_Int32 * capacity,
                                        sal_Int32 offset,
-                                       const sal_Char * str,
+                                       const char * str,
                                        sal_Int32 len);
 
 /**
