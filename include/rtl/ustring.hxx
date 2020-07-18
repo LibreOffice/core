@@ -37,6 +37,7 @@
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 #include "rtl/textenc.h"
+#include "rtl/character.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "rtl/stringconcat.hxx"
@@ -188,15 +189,37 @@ public:
         { pData = str; }
 
     /**
-      New string from a single Unicode character.
-
-      @param    value       a Unicode character.
-    */
+     * New string from a single Unicode character.
+     * @param    value       a Unicode character.
+     */
     explicit OUString( sal_Unicode value )
         : pData (NULL)
     {
         rtl_uString_newFromStr_WithLength( &pData, &value, 1 );
     }
+
+    /**
+     * New string from a single Unicode character.
+     * @param    value       a Unicode character.
+     */
+     /*
+    explicit OUString( sal_Unicode32 value )
+        : pData (NULL)
+    {
+        if( value > 0xFFFF )
+        {
+            sal_Unicode cChar[2];
+            cChar[0] = rtl::getHighSurrogate(value);
+            cChar[1] = rtl::getHighSurrogate(value);
+            rtl_uString_newFromStr_WithLength( &pData, cChar, 2 );
+        }
+        else
+        {
+            sal_Unicode cChar[1];
+            cChar[0] = value;
+            rtl_uString_newFromStr_WithLength( &pData, cChar, 1 );
+        }
+    }*/
 
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
     /// @cond INTERNAL
@@ -352,7 +375,7 @@ public:
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
-    OUString( const sal_Char * value, sal_Int32 length,
+    OUString( const char * value, sal_Int32 length,
               rtl_TextEncoding encoding,
               sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
     {
@@ -1070,7 +1093,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 compareToAscii( const sal_Char* asciiStr ) const
+    sal_Int32 compareToAscii( const char* asciiStr ) const
     {
         return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length, asciiStr );
     }
@@ -1099,7 +1122,7 @@ public:
     */
     SAL_DEPRECATED(
         "replace s1.compareToAscii(s2, strlen(s2)) == 0 with s1.startsWith(s2)")
-    sal_Int32 compareToAscii( const sal_Char * asciiStr, sal_Int32 maxLength ) const
+    sal_Int32 compareToAscii( const char * asciiStr, sal_Int32 maxLength ) const
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
                                                            asciiStr, maxLength );
@@ -1124,7 +1147,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 reverseCompareToAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
+    sal_Int32 reverseCompareToAsciiL( const char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
                                                           asciiStr, asciiStrLength );
@@ -1145,7 +1168,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsAscii( const sal_Char* asciiStr ) const
+    bool equalsAscii( const char* asciiStr ) const
     {
         return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length,
                                                   asciiStr ) == 0;
@@ -1168,7 +1191,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength ) const
+    bool equalsAsciiL( const char* asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -1195,7 +1218,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const
+    bool equalsIgnoreAsciiCaseAscii( const char * asciiStr ) const
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
     }
@@ -1218,7 +1241,7 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Int32 compareToIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const
+    sal_Int32 compareToIgnoreAsciiCaseAscii( const char * asciiStr ) const
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr );
     }
@@ -1243,7 +1266,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
+    bool equalsIgnoreAsciiCaseAsciiL( const char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -1272,7 +1295,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool matchAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
+    bool matchAsciiL( const char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                            asciiStr, asciiStrLength ) == 0;
@@ -1310,7 +1333,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool matchIgnoreAsciiCaseAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
+    bool matchIgnoreAsciiCaseAsciiL( const char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                           asciiStr, asciiStrLength ) == 0;
@@ -3219,7 +3242,7 @@ public:
 
        @since UDK 3.2.7
     */
-    static OUString intern( const sal_Char * value, sal_Int32 length,
+    static OUString intern( const char * value, sal_Int32 length,
                             rtl_TextEncoding encoding,
                             sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS,
                             sal_uInt32 *pInfo = NULL )
@@ -3599,7 +3622,7 @@ public:
       @param    value       the 8-Bit ASCII character string
       @return   a string with the string representation of the argument.
      */
-    static OUString createFromAscii( const sal_Char * value )
+    static OUString createFromAscii( const char * value )
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newFromAscii( &pNew, value );
