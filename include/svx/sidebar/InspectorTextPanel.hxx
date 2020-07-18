@@ -26,7 +26,20 @@ namespace svx::sidebar
 struct TreeNode
 {
     OUString sNodeName;
+    css::uno::Any aValue;
+    bool isGrey;
+    enum
+    {
+        Category,
+        ComplexProperty,
+        SimpleProperty
+    } NodeType;
     std::vector<TreeNode> children;
+    TreeNode()
+        : isGrey(false)
+        , NodeType(SimpleProperty)
+    {
+    }
 };
 class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
 {
