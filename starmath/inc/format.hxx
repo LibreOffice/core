@@ -26,11 +26,11 @@
 #include "types.hxx"
 
 
-#define FNTNAME_TIMES   "Times New Roman"
-#define FNTNAME_HELV    "Helvetica"
-#define FNTNAME_COUR    "Courier"
-#define FNTNAME_MATH    FONTNAME_MATH
-
+#define FNTNAME_TIMES        "Times New Roman"
+#define FNTNAME_HELV         "Helvetica"
+#define FNTNAME_COUR         "Courier"
+#define FNTNAME_MATH         "OpenSymbol"
+#define FNTNAME_DEFAULT_MATH "OpenSymbol"
 
 // symbolic names used as array indices
 #define SIZ_BEGIN       0
@@ -42,16 +42,18 @@
 #define SIZ_END         4
 
 // symbolic names used as array indices
-#define FNT_BEGIN       0
-#define FNT_VARIABLE    0
-#define FNT_FUNCTION    1
-#define FNT_NUMBER      2
-#define FNT_TEXT        3
-#define FNT_SERIF       4
-#define FNT_SANS        5
-#define FNT_FIXED       6
-#define FNT_MATH        7
-#define FNT_END         7
+#define FNT_BEGIN        0
+#define FNT_VARIABLE     0
+#define FNT_FUNCTION     1
+#define FNT_NUMBER       2
+#define FNT_TEXT         3
+#define FNT_SERIF        4
+#define FNT_SANS         5
+#define FNT_FIXED        6
+#define FNT_MATH         7
+#define FNT_DEFAULT_MATH 8
+#define FNT_END          8
+#define FNT_CFGITEM      7
 
 // symbolic names used as array indices
 #define DIS_BEGIN                0
@@ -90,15 +92,15 @@ enum class SmHorAlign {
 
 class SmFormat final : public SfxBroadcaster
 {
-    SmFace      vFont[FNT_END + 1];
-    bool        bDefaultFont[FNT_END + 1];
-    Size        aBaseSize;
-    sal_uInt16      vSize[SIZ_END + 1];
-    sal_uInt16      vDist[DIS_END + 1];
-    SmHorAlign  eHorAlign;
-    sal_Int16       nGreekCharStyle;
-    bool        bIsTextmode,
-                bScaleNormalBrackets;
+    SmFace       vFont[FNT_END + 1];
+    bool         bDefaultFont[FNT_END + 1];
+    Size         aBaseSize;
+    sal_uInt16   vSize[SIZ_END + 1];
+    sal_uInt16   vDist[DIS_END + 1];
+    SmHorAlign   eHorAlign;
+    sal_Int16    nGreekCharStyle;
+    bool         bIsTextmode,
+                 bScaleNormalBrackets;
 
 public:
     SmFormat();
@@ -135,7 +137,8 @@ public:
     SmFormat &      operator = (const SmFormat &rFormat);
 
     bool            operator == (const SmFormat &rFormat) const;
-    inline bool     operator != (const SmFormat &rFormat) const;
+    inline bool     operator != (const SmFormat &rFormat) const { return !(*this == rFormat); }
+
 
     void RequestApplyChanges()
     {
@@ -143,11 +146,6 @@ public:
     }
 
 };
-
-inline bool    SmFormat::operator != (const SmFormat &rFormat) const
-{
-    return !(*this == rFormat);
-}
 
 #endif
 

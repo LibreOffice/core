@@ -777,7 +777,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
-    const sal_Char * pTypeName )
+    const char * pTypeName )
     SAL_THROW_EXTERN_C();
 
 /** Increments reference count of type description reference.
@@ -870,7 +870,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
+    typelib_TypeClass eTypeClass, const char * pTypeName )
     SAL_THROW_EXTERN_C();
 
 /** Inits static sequence type reference. Thread synchronizes on typelib init mutex.
@@ -898,7 +898,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
+    typelib_TypeClass eTypeClass, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C();
@@ -919,7 +919,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_compound_type_init(
     @since UDK 3.2.0
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
-    typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
     sal_Bool const * pParameterizedTypes )
@@ -933,7 +933,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C();
 
@@ -949,7 +949,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     sal_Int32 nBaseTypes,
     typelib_TypeDescriptionReference ** ppBaseTypes )
     SAL_THROW_EXTERN_C();
@@ -962,7 +962,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     sal_Int32 nDefaultValue )
     SAL_THROW_EXTERN_C();
 
