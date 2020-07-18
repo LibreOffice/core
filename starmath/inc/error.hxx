@@ -40,7 +40,8 @@ enum class SmParseError
     SizeExpected,
     DoubleAlign,
     DoubleSubsupscript,
-    NumberExpected
+    NumberExpected,
+    UnknownError
 };
 
 
