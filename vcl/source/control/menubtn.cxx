@@ -24,6 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -227,6 +228,17 @@ void MenuButton::SetPopover(Window* pWindow)
         return;
 
     mpFloatingWindow = pWindow;
+}
+
+
+FactoryFunction MenuButton::GetUITestFactory() const
+{
+    return MenuButtonUIObject::create;
+}
+
+void MenuButton::SetCurItemId(){
+    mnCurItemId = mpMenu->GetCurItemId();
+    msCurItemIdent = mpMenu->GetCurItemIdent();
 }
 
 //class MenuToggleButton ----------------------------------------------------
