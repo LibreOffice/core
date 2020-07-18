@@ -155,7 +155,7 @@ SmCfgOther::SmCfgOther()
 
 
 SmFontFormat::SmFontFormat()
-    : aName(FONTNAME_MATH)
+    : aName(FNTNAME_MATH)
     , nCharSet(RTL_TEXTENCODING_UNICODE)
     , nFamily(FAMILY_DONTKNOW)
     , nPitch(PITCH_DONTKNOW)
@@ -782,7 +782,7 @@ void SmMathConfig::SaveOther()
 namespace {
 
 // Latin default-fonts
-const DefaultFontType aLatinDefFnts[FNT_END] =
+const DefaultFontType aLatinDefFnts[FNT_CFGITEM] =
 {
     DefaultFontType::SERIF,  // FNT_VARIABLE
     DefaultFontType::SERIF,  // FNT_FUNCTION
@@ -798,7 +798,7 @@ const DefaultFontType aLatinDefFnts[FNT_END] =
 //! we use non-asian fonts for variables, functions and numbers since they
 //! look better and even in asia only latin letters will be used for those.
 //! At least that's what I was told...
-const DefaultFontType aCJKDefFnts[FNT_END] =
+const DefaultFontType aCJKDefFnts[FNT_CFGITEM] =
 {
     DefaultFontType::SERIF,          // FNT_VARIABLE
     DefaultFontType::SERIF,          // FNT_FUNCTION
@@ -811,7 +811,7 @@ const DefaultFontType aCJKDefFnts[FNT_END] =
 };
 
 // CTL default-fonts
-const DefaultFontType aCTLDefFnts[FNT_END] =
+const DefaultFontType aCTLDefFnts[FNT_CFGITEM] =
 {
     DefaultFontType::CTL_TEXT,    // FNT_VARIABLE
     DefaultFontType::CTL_TEXT,    // FNT_FUNCTION
@@ -826,13 +826,13 @@ const DefaultFontType aCTLDefFnts[FNT_END] =
 
 OUString lcl_GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 {
-    assert(nIdent < FNT_END);
+    assert(nIdent < FNT_CFGITEM);
     const DefaultFontType *pTable;
     switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
     {
         case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;
-        case SvtScriptType::ASIAN :     pTable = aCJKDefFnts; break;
-        case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts; break;
+        case SvtScriptType::ASIAN :     pTable = aCJKDefFnts;   break;
+        case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts;   break;
         default :
             pTable = aLatinDefFnts;
             SAL_WARN("starmath", "unknown script-type");
@@ -903,7 +903,7 @@ void SmMathConfig::LoadFormat()
     }
 
     LanguageType nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
-    for (i = FNT_BEGIN;  i < FNT_END;  ++i)
+    for (i = FNT_BEGIN;  i < FNT_CFGITEM;  ++i)
     {
         vcl::Font aFnt;
         bool bUseDefaultFont = true;
@@ -965,7 +965,7 @@ void SmMathConfig::SaveFormat()
     for (i = DIS_BEGIN;  i <= DIS_END;  ++i)
         *pValue++ <<= static_cast<sal_Int16>(pFormat->GetDistance( i ));
 
-    for (i = FNT_BEGIN;  i < FNT_END;  ++i)
+    for (i = FNT_BEGIN;  i < FNT_CFGITEM;  ++i)
     {
         OUString aFntFmtId;
 
