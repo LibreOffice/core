@@ -41,6 +41,7 @@ enum class SmParseError
     DoubleAlign,
     DoubleSubsupscript,
     NumberExpected,
+    SetExpected,
     UnknownError
 };
 

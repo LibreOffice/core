@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "mathtype2.hxx"
 
 #include <set>
 #include <vector>
