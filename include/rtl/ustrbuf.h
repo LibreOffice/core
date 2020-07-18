@@ -157,7 +157,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert_ascii(
                                                 /*inout*/rtl_uString ** This,
                                                 /*inout*/sal_Int32 * capacity,
                                                 sal_Int32 offset,
-                                                const sal_Char * str,
+                                                const char * str,
                                                 sal_Int32 len);
 
 /**

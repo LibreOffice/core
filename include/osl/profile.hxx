@@ -70,7 +70,7 @@ namespace osl {
         rtl::OString readString( const rtl::OString& rSection, const rtl::OString& rEntry,
                                  const rtl::OString& rDefault)
         {
-            sal_Char aBuf[1024];
+            char aBuf[1024];
             return osl_readProfileString( profile,
                                           rSection.getStr(),
                                           rEntry.getStr(),
@@ -90,7 +90,7 @@ namespace osl {
                              sal_uInt32 nDefault)
         {
             size_t nItems = rStrings.size();
-            const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
+            const char** pStrings = new const char*[ nItems+1 ];
             std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
             while( it != rStrings.end() )
@@ -120,7 +120,7 @@ namespace osl {
                             sal_uInt32 nValue)
         {
             size_t nItems = rStrings.size();
-            const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
+            const char** pStrings = new const char*[ nItems+1 ];
             std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
             while( it != rStrings.end() )
@@ -157,7 +157,7 @@ namespace osl {
             size_t n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
             if( n > 1 )
             {
-                sal_Char* pBuf = new sal_Char[ n+1 ];
+                char* pBuf = new char[ n+1 ];
                 osl_getProfileSectionEntries( profile, rSection.getStr(), pBuf, n+1 );
                 size_t nLen;
                 for( n = 0; ; n += nLen+1 )
@@ -184,7 +184,7 @@ namespace osl {
             size_t n = osl_getProfileSections( profile, NULL, 0 );
             if( n > 1 )
             {
-                sal_Char* pBuf = new sal_Char[ n+1 ];
+                char* pBuf = new char[ n+1 ];
                 osl_getProfileSections( profile, pBuf, n+1 );
                 size_t nLen;
                 for( n = 0; ; n += nLen+1 )

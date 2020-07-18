@@ -1879,7 +1879,7 @@ bool WriteDIBBitmapEx(
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( static_cast<sal_uChar>(rSource.meTransparent) );
+        rOStm.WriteUChar( static_cast<unsigned char>(rSource.meTransparent) );
 
         if(TransparentType::Bitmap == rSource.meTransparent)
         {

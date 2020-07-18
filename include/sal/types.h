@@ -109,32 +109,17 @@ typedef unsigned char       sal_uInt8;
     #error "Please define the 64-bit types for your architecture/compiler in include/sal/types.h"
 #endif
 
-/** A legacy synonym for `char`.
-
-    @deprecated use plain `char` instead.
-*/
-typedef char sal_Char;
-
-/** A legacy synonym for `signed char`.
-
-    @deprecated use plain `signed char` instead.
-*/
-typedef signed char sal_sChar;
-
-/** A legacy synonym for `unsigned char`.
-
-    @deprecated use plain `unsigned char` instead.
-*/
-typedef unsigned char sal_uChar;
-
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef char16_t sal_Unicode;
+    typedef char32_t sal_Unicode32;
 #elif defined(_WIN32)
-    typedef wchar_t sal_Unicode;
+    typedef char16_t sal_Unicode;
+    typedef char32_t sal_Unicode32;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef sal_uInt16 sal_Unicode;
+    typedef sal_uInt32 sal_Unicode32;
 #endif
 
 typedef void *                   sal_Handle;

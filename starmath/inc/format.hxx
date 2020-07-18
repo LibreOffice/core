@@ -29,7 +29,7 @@
 #define FNTNAME_TIMES   "Times New Roman"
 #define FNTNAME_HELV    "Helvetica"
 #define FNTNAME_COUR    "Courier"
-#define FNTNAME_MATH    FONTNAME_MATH
+#define FNTNAME_MATH    "STIX Two Math"
 
 
 // symbolic names used as array indices
