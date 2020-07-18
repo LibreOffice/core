@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf2a0d0e_732fe8d4",
+        "filename": "svx/source/unogallery/unogalitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-18T17:11:04Z",
+      "side": 1,
+      "message": "is this a function?",
+      "range": {
+        "startLine": 223,
+        "startChar": 59,
+        "endLine": 223,
+        "endChar": 82
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
