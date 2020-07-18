@@ -26,6 +26,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
@@ -1610,6 +1611,72 @@ std::unique_ptr<UIObject> ToolBoxUIObject::create(vcl::Window* pWindow)
     ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
     assert(pToolBox);
     return std::unique_ptr<UIObject>(new ToolBoxUIObject(pToolBox));
+}
+
+MenuButtonUIObject::MenuButtonUIObject(const VclPtr<MenuButton>& xMenuButton):
+    WindowUIObject(xMenuButton),
+    mxMenuButton(xMenuButton)
+{
+}
+
+MenuButtonUIObject::~MenuButtonUIObject()
+{
+}
+
+StringMap MenuButtonUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["Label"] = mxMenuButton->GetDisplayText();
+    aMap["Checked"] = OUString::boolean(mxMenuButton->IsChecked());
+    return aMap;
+}
+
+void MenuButtonUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "CLICK")
+    {
+        //Click doesn't call toggle when it's a pushbutton tweaked to be a toggle-button
+        if (PushButton *pPushButton = (mxMenuButton->GetStyle() & WB_TOGGLE) ? dynamic_cast<PushButton*>(mxMenuButton.get()) : nullptr)
+        {
+            pPushButton->Check(!pPushButton->IsChecked());
+            pPushButton->Toggle();
+            return;
+        }
+        mxMenuButton->Click();
+    }
+    else if (rAction == "OPENLIST")
+    {
+        mxMenuButton->ExecuteMenu();
+    }
+    else if (rAction == "SELECT")
+    {
+        auto itr = rParameters.find("POS");
+        sal_uInt32 nPos = itr->second.toUInt32();
+
+        sal_uInt32 nId = mxMenuButton->GetPopupMenu()->GetItemId(nPos);
+        mxMenuButton->GetPopupMenu()->SetSelectedEntry(nId);
+        mxMenuButton->SetCurItemId();
+        mxMenuButton->Select();
+    }
+    else if (rAction == "CLOSELIST")
+    {
+        mxMenuButton->GetPopupMenu()->EndExecute();
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+OUString MenuButtonUIObject::get_name() const
+{
+    return "MenuButtonUIObject";
+}
+
+std::unique_ptr<UIObject> MenuButtonUIObject::create(vcl::Window* pWindow)
+{
+    MenuButton* pMenuButton = dynamic_cast<MenuButton*>(pWindow);
+    assert(pMenuButton);
+    return std::unique_ptr<UIObject>(new MenuButtonUIObject(pMenuButton));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
