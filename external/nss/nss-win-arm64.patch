@@ -1,0 +1,66 @@
+--- a/a/nspr/configure
++++ a/a/nspr/configure
+@@ -821,6 +821,7 @@
+         linux*)       OS_ARCH=Linux ;;
+         solaris*)     OS_ARCH=SunOS OS_RELEASE=5 ;;
+         mingw*)       OS_ARCH=WINNT CPU_ARCH=x86 ;;
++        cygwin*)      OS_ARCH=WINNT ;;
+         darwin*)      OS_ARCH=Darwin ;;
+         riscos*)      OS_ARCH=RISCOS ;;
+     esac
+--- a/a/nss/lib/freebl/Makefile.orig
++++ a/a/nss/lib/freebl/Makefile
+@@ -119,8 +119,23 @@
+ endif
+ endif
+ ifeq ($(CPU_ARCH),aarch64)
+-    DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
+-    EXTRA_SRCS += aes-armv8.c gcm-aarch64.c sha256-armv8.c
++    ifdef CC_IS_CLANG
++        DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
++        EXTRA_SRCS += aes-armv8.c gcm-aarch64.c sha256-armv8.c
++    else ifeq (1,$(CC_IS_GCC))
++        # GCC versions older than 4.9 don't support ARM AES. The check
++        # is done in two parts, first allows "major.minor" == "4.9",
++        # and then rejects any major versions prior to 5. Note that
++        # there has been no GCC 4.10, as it is renamed to GCC 5.
++        ifneq (,$(filter 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
++            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
++            EXTRA_SRCS += aes-armv8.c gcm-aarch64.c sha256-armv8.c
++        endif
++        ifeq (,$(filter 0 1 2 3 4,$(word 1,$(GCC_VERSION))))
++            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
++            EXTRA_SRCS += aes-armv8.c gcm-aarch64.c sha256-armv8.c
++        endif
++    endif
+ endif
+ ifeq ($(CPU_ARCH),arm)
+ ifndef NSS_DISABLE_ARM32_NEON
+@@ -133,7 +146,10 @@
+         DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
+         EXTRA_SRCS += aes-armv8.c sha256-armv8.c
+     else ifeq (1,$(CC_IS_GCC))
+-        # Old compiler doesn't support ARM AES.
++        # GCC versions older than 4.9 don't support ARM AES. The check
++        # is done in two parts, first allows "major.minor" == "4.9",
++        # and then rejects any major versions prior to 5. Note that
++        # there has been no GCC 4.10, as it is renamed to GCC 5.
+         ifneq (,$(filter 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
+             DEFINES += -DUSE_HW_AES -DUSE_HW_SHA2
+             EXTRA_SRCS += aes-armv8.c sha256-armv8.c
+@@ -198,6 +200,7 @@
+     ifdef BUILD_OPT
+ 	OPTIMIZER += -Ox  # maximum optimization for freebl
+     endif
++ifeq ($(CPU_ARCH),x86_64)
+     ASFILES  = arcfour-amd64-masm.asm mpi_amd64_masm.asm mp_comba_amd64_masm.asm
+     DEFINES += -DNSS_BEVAND_ARCFOUR -DMPI_AMD64 -DMP_ASSEMBLY_MULTIPLY
+     DEFINES += -DNSS_USE_COMBA
+@@ -215,6 +218,7 @@
+ endif
+ endif
+ endif
++endif
+ 
+ ifeq ($(OS_TARGET),IRIX)
+ ifeq ($(USE_N32),1)
