@@ -868,7 +868,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             // This is done by preserving the exact positions that have been
             // set by the user.
             SwFormatHoriOrient aOri( pFormat->GetHoriOrient() );
-            if(text::HoriOrientation::NONE != aOri.GetHoriOrient())
+            if( text::HoriOrientation::NONE != aOri.GetHoriOrient() &&
+                text::HoriOrientation::CENTER != aOri.GetHoriOrient() )
             {
                 const bool bLeftDist = rNew.GetLeft() != nShLeft;
                 const bool bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
