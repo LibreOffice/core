@@ -431,7 +431,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUChar( static_cast<sal_uInt8>(rImplFont.meKerning) );
 
     // new in version 2
-    rOStm.WriteUChar( static_cast<sal_uChar>(rImplFont.meRelief) );
+    rOStm.WriteUChar( static_cast<unsigned char>(rImplFont.meRelief) );
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplFont.maCJKLanguageTag.getLanguageType( false)) );
     rOStm.WriteBool( rImplFont.mbVertical );
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplFont.meEmphasisMark) );
