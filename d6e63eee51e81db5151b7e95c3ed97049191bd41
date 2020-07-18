@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3a04cd2_f3afab04",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 18419,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-18T11:21:17Z",
+      "side": 1,
+      "message": "Seems to be only necessary to activate resource\u003dValue, not resources\u003dProperties/Stream/table. Not sure why, but I like it better anyway.",
+      "range": {
+        "startLine": 18419,
+        "startChar": 6,
+        "endLine": 18419,
+        "endChar": 71
+      },
+      "revId": "d6e63eee51e81db5151b7e95c3ed97049191bd41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a8f7221_d9d8776a",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 18429,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-18T11:21:17Z",
+      "side": 1,
+      "message": "This was the only one that I was successful in passing to dmapper. Anything else I failed to get any \"value\" other than 0 sent back to dmapper.",
+      "range": {
+        "startLine": 18429,
+        "startChar": 42,
+        "endLine": 18429,
+        "endChar": 58
+      },
+      "revId": "d6e63eee51e81db5151b7e95c3ed97049191bd41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

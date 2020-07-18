@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f575be56_7dd037b8",
+        "filename": "writerfilter/source/ooxml/factoryimpl_ns.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-18T11:21:17Z",
+      "side": 0,
+      "message": "This seems unnecessary even before my changes. If I remove it, handleGridAfter was still executed. In any case, it should now be unnecessary since it is just a normal value run action.",
+      "range": {
+        "startLine": 442,
+        "startChar": 47,
+        "endLine": 442,
+        "endChar": 62
+      },
+      "revId": "2f1506aaba37ccd4aa4f186bab36608b1cdbfd94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
