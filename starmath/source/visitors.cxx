@@ -368,7 +368,7 @@ void SmDrawingVisitor::Visit( SmBlankNode* )
 
 void SmDrawingVisitor::Visit( SmErrorNode* pNode )
 {
-    DrawSpecialNode( pNode );
+    DrawTextNode( pNode );
 }
 
 void SmDrawingVisitor::Visit( SmLineNode* pNode )

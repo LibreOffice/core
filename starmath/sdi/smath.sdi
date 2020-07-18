@@ -562,3 +562,4 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
