@@ -68,23 +68,23 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_flushProfile(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_readProfileString(
                               oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_Char* pszString, sal_uInt32 MaxLen,
-                              const sal_Char* pszDefault) SAL_COLD;
+                              const char* pszSection, const char* pszEntry,
+                              char* pszString, sal_uInt32 MaxLen,
+                              const char* pszDefault) SAL_COLD;
 /** Deprecated API.
     @deprecated
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_readProfileBool(
                             oslProfile Profile,
-                            const sal_Char* pszSection, const sal_Char* pszEntry,
+                            const char* pszSection, const char* pszEntry,
                             sal_Bool Default) SAL_COLD;
 /** Deprecated API.
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_readProfileIdent(
                               oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
+                              const char* pszSection, const char* pszEntry,
+                              sal_uInt32 FirstId, const char* Strings[],
                               sal_uInt32 Default) SAL_COLD;
 
 /** Deprecated API.
@@ -92,15 +92,15 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_readProfileIdent(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileString(
                                oslProfile Profile,
-                               const sal_Char* pszSection, const sal_Char* pszEntry,
-                               const sal_Char* pszString) SAL_COLD;
+                               const char* pszSection, const char* pszEntry,
+                               const char* pszString) SAL_COLD;
 
 /** Deprecated API.
     @deprecated
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileBool(
                              oslProfile Profile,
-                             const sal_Char* pszSection, const sal_Char* pszEntry,
+                             const char* pszSection, const char* pszEntry,
                              sal_Bool Value) SAL_COLD;
 
 /** Deprecated API.
@@ -108,8 +108,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileBool(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileIdent(
                               oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
+                              const char* pszSection, const char* pszEntry,
+                              sal_uInt32 FirstId, const char* Strings[],
                               sal_uInt32 Value) SAL_COLD;
 
 /** Deprecated API.
@@ -119,7 +119,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileIdent(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
                            oslProfile Profile,
-                           const sal_Char *pszSection, const sal_Char *pszEntry) SAL_COLD;
+                           const char *pszSection, const char *pszEntry) SAL_COLD;
 
 /** Deprecated API.
     Get all entries belonging to the specified section.
@@ -127,8 +127,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
-                            oslProfile Profile, const sal_Char *pszSection,
-                            sal_Char* pszBuffer, sal_uInt32 MaxLen) SAL_COLD;
+                            oslProfile Profile, const char *pszSection,
+                            char* pszBuffer, sal_uInt32 MaxLen) SAL_COLD;
 
 /** Deprecated API.
     Get all section entries
@@ -136,7 +136,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSections(
-        oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen) SAL_COLD;
+        oslProfile Profile, char* pszBuffer, sal_uInt32 MaxLen) SAL_COLD;
 
 #ifdef __cplusplus
 }
