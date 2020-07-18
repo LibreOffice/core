@@ -28,7 +28,20 @@ namespace sidebar
 struct TreeNode
 {
     OUString sNodeName;
-    std::vector<TreeNode> children;
+    css::uno::Any aValue;
+    bool isGrey;
+    enum
+    {
+        Category,
+        ComplexProperty,
+        SimpleProperty
+    } NodeType;
+    std::vector<TreeNode*> children;
+    TreeNode()
+        : isGrey(false)
+        , NodeType(SimpleProperty)
+    {
+    }
 };
 class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
 {
@@ -42,7 +55,7 @@ public:
     InspectorTextPanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    void updateEntries(const std::vector<TreeNode>& rStore);
+    void updateEntries(const std::vector<TreeNode*>& rStore);
 
 private:
     std::unique_ptr<weld::TreeView> mpListBoxStyles;
