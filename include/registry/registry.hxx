@@ -53,12 +53,12 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *closeKey)           (RegKeyHandle);
     RegError    (REGISTRY_CALLTYPE *setValue)           (RegKeyHandle, rtl_uString*, RegValueType, RegValue, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *setLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32 const *, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *setStringListValue) (RegKeyHandle, rtl_uString*, sal_Char**, sal_uInt32);
+    RegError    (REGISTRY_CALLTYPE *setStringListValue) (RegKeyHandle, rtl_uString*, char**, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *setUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode**, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *getValueInfo)       (RegKeyHandle, rtl_uString*, RegValueType*, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *getValue)           (RegKeyHandle, rtl_uString*, RegValue);
     RegError    (REGISTRY_CALLTYPE *getLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32**, sal_uInt32*);
-    RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, sal_Char***, sal_uInt32*);
+    RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, char***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeValueList)      (RegValueType, RegValue, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
@@ -455,12 +455,12 @@ public:
         @param  keyName specifies the name of the key which value will be set.
                         If keyName is an empty string, the value will be set for the key
                         specified by hKey.
-        @param  pValueList points to an array of sal_Char* containing the data for the value.
+        @param  pValueList points to an array of char* containing the data for the value.
         @param  len specifies the length of the list (the array referenced by pValueList).
         @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setStringListValue(const OUString& keyName,
-                                           sal_Char** pValueList,
+                                           char** pValueList,
                                            sal_uInt32 len);
 
     /** sets a unicode string list value of a key.
@@ -520,7 +520,7 @@ public:
         @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError getStringListValue(const OUString& keyName,
-                                           RegistryValueList<sal_Char*>& rValueList);
+                                           RegistryValueList<char*>& rValueList);
 
     /** gets a unicode value of a key.
 
@@ -834,7 +834,7 @@ inline RegError RegistryKey::setLongListValue(const OUString& keyName,
     }
 
 inline RegError RegistryKey::setStringListValue(const OUString& keyName,
-                                                   sal_Char** pValueList,
+                                                   char** pValueList,
                                                    sal_uInt32 len)
     {
         if (m_registry.isValid())
@@ -898,12 +898,12 @@ inline RegError RegistryKey::getLongListValue(const OUString& keyName,
     }
 
 inline RegError RegistryKey::getStringListValue(const OUString& keyName,
-                                                      RegistryValueList<sal_Char*>& rValueList)
+                                                      RegistryValueList<char*>& rValueList)
     {
         if (m_registry.isValid())
         {
             RegError    ret = RegError::NO_ERROR;
-            sal_Char**  pValueList;
+            char**  pValueList;
             sal_uInt32  length;
             ret = m_registry.m_pApi->getStringListValue(m_hImpl, keyName.pData,
                                                       &pValueList, &length);
