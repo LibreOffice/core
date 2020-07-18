@@ -14,9 +14,12 @@ $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 ifeq ($(OS),WNT)
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64/
+else ifeq ($(CPUNAME),ARM64)
+python_arch_subdir=arm64/
 else
 python_arch_subdir=win32/
 endif
+
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/bin/python.exe,PCbuild/$(python_arch_subdir)python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe))
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll,PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll))
 ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
