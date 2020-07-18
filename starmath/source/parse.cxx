@@ -2650,7 +2650,6 @@ std::unique_ptr<SmTableNode> SmParser::Parse(const OUString &rBuffer)
     m_nCurError     = -1;
 
     m_aErrDescList.clear();
-
     NextToken();
     return DoTable();
 }
