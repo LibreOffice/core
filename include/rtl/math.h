@@ -222,9 +222,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       sal_Int32 nResultOffset, double fValue,
                                       enum rtl_math_StringFormat eFormat,
                                       sal_Int32 nDecPlaces,
-                                      sal_Char cDecSeparator,
+                                      char cDecSeparator,
                                       sal_Int32 const * pGroups,
-                                      sal_Char cGroupSeparator,
+                                      char cGroupSeparator,
                                       sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C();
 
@@ -339,9 +339,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
     whitespace.
  */
 SAL_DLLPUBLIC double SAL_CALL rtl_math_stringToDouble(
-    sal_Char const * pBegin, sal_Char const * pEnd, sal_Char cDecSeparator,
-    sal_Char cGroupSeparator, enum rtl_math_ConversionStatus * pStatus,
-    sal_Char const ** pParsedEnd) SAL_THROW_EXTERN_C();
+    char const * pBegin, char const * pEnd, char cDecSeparator,
+    char cGroupSeparator, enum rtl_math_ConversionStatus * pStatus,
+    char const ** pParsedEnd) SAL_THROW_EXTERN_C();
 
 /** Conversion analogous to strtod(), convert a string representing a
     decimal number into a double value.

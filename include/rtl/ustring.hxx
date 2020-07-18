@@ -36,6 +36,7 @@
 #include "rtl/ustring.h"
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
+#include "rtl/character.hxx"
 #include "rtl/textenc.h"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -68,24 +69,21 @@ class OUStringBuffer;
 /// @cond INTERNAL
 
 /**
-A simple wrapper around string literal.
-
-This class is not part of public API and is meant to be used only in LibreOffice code.
-@since LibreOffice 4.0
-*/
+  * A simple wrapper around string literal.
+  * This class is not part of public API and is meant to be used only in LibreOffice code.
+  * @since LibreOffice 4.0
+  */
 struct SAL_WARN_UNUSED OUStringLiteral
 {
     template<typename T> constexpr OUStringLiteral(
         T & literal,
-        typename libreoffice_internal::ConstCharArrayDetector<
-                T, libreoffice_internal::Dummy>::Type
-            = libreoffice_internal::Dummy()):
-        size(libreoffice_internal::ConstCharArrayDetector<T>::length),
-        data(
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal))
+        typename libreoffice_internal::ConstCharArrayDetector
+                 <T, libreoffice_internal::Dummy>::Type
+                 = libreoffice_internal::Dummy())
+        : size( libreoffice_internal::ConstCharArrayDetector<T>::length )
+        , data( libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal) )
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert( libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal) );
     }
 
     int size;
@@ -131,8 +129,8 @@ public:
     /// @endcond
 
     /**
-      New string containing no characters.
-    */
+      * New string containing no characters.
+      */
     OUString()
     {
         pData = NULL;
@@ -140,10 +138,9 @@ public:
     }
 
     /**
-      New string from OUString.
-
-      @param    str         an OUString.
-    */
+      * New string from OUString.
+      * @param    str         an OUString.
+      */
     OUString( const OUString & str )
     {
         pData = str.pData;
@@ -152,11 +149,10 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /**
-      Move constructor.
-
-      @param    str         an OUString.
-      @since LibreOffice 5.2
-    */
+      * Move constructor.
+      * @param    str         an OUString.
+      * @since LibreOffice 5.2
+      */
     OUString( OUString && str ) noexcept
     {
         pData = str.pData;
@@ -166,36 +162,48 @@ public:
 #endif
 
     /**
-      New string from OUString data.
-
-      @param    str         an OUString data.
-    */
+      * New string from OUString data.
+      * @param     str         an OUString data.
+      */
     OUString( rtl_uString * str )
     {
         pData = str;
         rtl_uString_acquire( pData );
     }
 
-    /** New OUString from OUString data without acquiring it.  Takeover of ownership.
-
-        The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
-        from other constructors.
-
-        @param str
-               OUString data
-    */
-    OUString( rtl_uString * str, __sal_NoAcquire )
-        { pData = str; }
+    /**
+      * New OUString from OUString data without acquiring it.  Takeover of ownership.
+      * The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
+      * from other constructors.
+      * @param     str         an OUString data.
+      */
+    OUString( rtl_uString * str, __sal_NoAcquire ) { pData = str; }
 
     /**
-      New string from a single Unicode character.
-
-      @param    value       a Unicode character.
-    */
-    explicit OUString( sal_Unicode value )
-        : pData (NULL)
+      * New string from a single Unicode character.
+      * @param    value       a Unicode character.
+      */
+    explicit OUString( sal_Unicode value ) : pData (NULL)
     {
         rtl_uString_newFromStr_WithLength( &pData, &value, 1 );
+    }
+
+    /**
+      * New string from a single Unicode character.
+      * @param    value       a Unicode32 character.
+      */
+    explicit OUString( sal_Unicode32 value ) : pData (NULL)
+    {
+        if( value > 0x0000FFFF )
+        {
+            const sal_Unicode ctmp[] = { getHighSurrogate(value), getLowSurrogate(value) };
+            rtl_uString_newFromStr_WithLength( &pData, ctmp, 2 );
+        }
+        else
+        {
+            const sal_Unicode ctmp[] = { static_cast<sal_Unicode>(value) };
+            rtl_uString_newFromStr_WithLength( &pData, ctmp, 1 );
+        }
     }
 
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
@@ -210,10 +218,9 @@ public:
 #endif
 
     /**
-      New string from a Unicode character buffer array.
-
-      @param    value       a NULL-terminated Unicode character array.
-    */
+      * New string from a Unicode character buffer array.
+      * @param    value       a NULL-terminated Unicode character array.
+      */
     OUString( const sal_Unicode * value )
     {
         pData = NULL;
@@ -221,13 +228,12 @@ public:
     }
 
     /**
-      New string from a Unicode character buffer array.
-
-      @param    value       a Unicode character array.
-      @param    length      the number of character which should be copied.
-                            The character array length must be greater than
-                            or equal to this value.
-    */
+      * New string from a Unicode character buffer array.
+      * @param    value       a Unicode character array.
+      * @param    length      the number of character which should be copied.
+      *                       The character array length must be greater than
+      *                       or equal to this value.
+      */
     OUString( const sal_Unicode * value, sal_Int32 length )
     {
         pData = NULL;
@@ -235,33 +241,29 @@ public:
     }
 
     /**
-      New string from an 8-Bit string literal that is expected to contain only
-      characters in the ASCII set (i.e. first 128 characters). This constructor
-      allows an efficient and convenient way to create OUString
-      instances from ASCII literals. When creating strings from data that
-      is not pure ASCII, it needs to be converted to OUString by explicitly
-      providing the encoding to use for the conversion.
-
-      If there are any embedded \0's in the string literal, the result is undefined.
-      Use the overload that explicitly accepts length.
-
-      @param    literal         the 8-bit ASCII string literal
-
-      @since LibreOffice 3.6
-    */
+      * New string from an 8-Bit string literal that is expected to contain only
+      * characters in the ASCII set (i.e. first 128 characters). This constructor
+      * allows an efficient and convenient way to create OUString
+      * instances from ASCII literals. When creating strings from data that
+      * is not pure ASCII, it needs to be converted to OUString by explicitly
+      * providing the encoding to use for the conversion.
+      *
+      * If there are any embedded \0's in the string literal, the result is undefined.
+      * Use the overload that explicitly accepts length.
+      * @param    literal         the 8-bit ASCII string literal
+      * @since LibreOffice 3.6
+      */
     template< typename T >
     OUString( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert( libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal) );
         pData = NULL;
         if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {
             rtl_uString_newFromLiteral(
                 &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length, 0);
         }
 #ifdef RTL_STRING_UNITTEST
@@ -283,8 +285,7 @@ public:
         } else {
             rtl_uString_newFromStr_WithLength(
                 &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
         }
     }
@@ -292,9 +293,9 @@ public:
 
 #ifdef RTL_STRING_UNITTEST
     /**
-     * Only used by unittests to detect incorrect conversions.
-     * @internal
-     */
+      * Only used by unittests to detect incorrect conversions.
+      * @internal
+      */
     template< typename T >
     OUString( T&, typename libreoffice_internal::ExceptConstCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
@@ -303,9 +304,9 @@ public:
         rtl_string_unittest_invalid_conversion = true;
     }
     /**
-     * Only used by unittests to detect incorrect conversions.
-     * @internal
-     */
+      * Only used by unittests to detect incorrect conversions.
+      * @internal
+      */
     template< typename T >
     OUString( const T&, typename libreoffice_internal::ExceptCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
@@ -318,20 +319,19 @@ public:
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /// @cond INTERNAL
     /**
-      New string from an 8-Bit string literal that is expected to contain only
-      characters in the ASCII set (i.e. first 128 characters).
-
-      This constructor is similar to the "direct template" one, but can be
-      useful in cases where the latter does not work, like in
-
-        OUString(flag ? "a" : "bb")
-
-      written as
-
-        OUString(flag ? OUStringLiteral("a") : OUStringLiteral("bb"))
-
-      @since LibreOffice 5.0
-    */
+      * New string from an 8-Bit string literal that is expected to contain only
+      * characters in the ASCII set (i.e. first 128 characters).
+      * This constructor is similar to the "direct template" one, but can be
+      * useful in cases where the latter does not work, like in
+      *
+      *     OUString(flag ? "a" : "bb")
+      *
+      * written as
+      *
+      *     OUString(flag ? OUStringLiteral("a") : OUStringLiteral("bb"))
+      *
+      * @since LibreOffice 5.0
+      */
     OUString(OUStringLiteral literal): pData(NULL) {
         rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 0);
     }
@@ -339,61 +339,76 @@ public:
 #endif
 
     /**
-      New string from an 8-Bit character buffer array.
-
-      @param    value           An 8-Bit character array.
-      @param    length          The number of character which should be converted.
-                                The 8-Bit character array length must be
-                                greater than or equal to this value.
-      @param    encoding        The text encoding from which the 8-Bit character
-                                sequence should be converted.
-      @param    convertFlags    Flags which control the conversion.
-                                see RTL_TEXTTOUNICODE_FLAGS_...
-
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-    */
-    OUString( const sal_Char * value, sal_Int32 length,
+      * New string from an 8-Bit character buffer array.
+      *
+      * @param    value           An 8-Bit character array.
+      * @param    length          The number of character which should be converted.
+      *                           The 8-Bit character array length must be
+      *                           greater than or equal to this value.
+      * @param    encoding        The text encoding from which the 8-Bit character
+      *                           sequence should be converted.
+      * @param    convertFlags    Flags which control the conversion.
+      *                           see RTL_TEXTTOUNICODE_FLAGS_...
+      * @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      */
+    OUString( const char * value, sal_Int32 length,
               rtl_TextEncoding encoding,
               sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
     {
         pData = NULL;
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
-        if (pData == NULL) {
-            throw std::bad_alloc();
-        }
+        if (pData == NULL)  throw std::bad_alloc();
     }
 
-    /** Create a new string from an array of Unicode code points.
-
-        @param codePoints
-        an array of at least codePointCount code points, which each must be in
-        the range from 0 to 0x10FFFF, inclusive.  May be null if codePointCount
-        is zero.
-
-        @param codePointCount
-        the non-negative number of code points.
-
-        @exception std::bad_alloc
-        is thrown if either an out-of-memory condition occurs or the resulting
-        number of UTF-16 code units would have been larger than SAL_MAX_INT32.
-
-        @since UDK 3.2.7
-    */
+    /**
+      * Create a new string from an array of Unicode code points.
+      *
+      * @param codePoints
+      * an array of at least codePointCount code points, which each must be in
+      * the range from 0 to 0x10FFFF, inclusive.  May be null if codePointCount
+      * is zero.
+      * @param codePointCount
+      * the non-negative number of code points.
+      * @exception std::bad_alloc
+      * is thrown if either an out-of-memory condition occurs or the resulting
+      * number of UTF-16 code units would have been larger than SAL_MAX_INT32.
+      * @since UDK 3.2.7
+      */
     explicit OUString(
         sal_uInt32 const * codePoints, sal_Int32 codePointCount):
         pData(NULL)
     {
         rtl_uString_newFromCodePoints(&pData, codePoints, codePointCount);
-        if (pData == NULL) {
-            throw std::bad_alloc();
-        }
+        if (pData == NULL) throw std::bad_alloc();
+    }
+
+    /**
+      * Create a new string from an array of Unicode code points.
+      *
+      * @param codePoints
+      * an array of at least codePointCount code points, which each must be in
+      * the range from 0 to 0x10FFFF, inclusive.  May be null if codePointCount
+      * is zero.
+      * @param codePointCount
+      * the non-negative number of code points.
+      * @exception std::bad_alloc
+      * is thrown if either an out-of-memory condition occurs or the resulting
+      * number of UTF-16 code units would have been larger than SAL_MAX_INT32.
+      * @since UDK 3.2.7
+      */
+    explicit OUString(
+        sal_Unicode32 const * codePoints, sal_Int32 codePointCount)
+        : pData(NULL)
+    {
+        rtl_uString_newFromCodePoints32(&pData, codePoints, codePointCount);
+        if (pData == NULL) throw std::bad_alloc();
     }
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
-     @overload
-     @internal
-    */
+      * @overload
+      * @internal
+      */
     template< typename T1, typename T2 >
     OUString( OUStringConcat< T1, T2 >&& c )
     {
@@ -409,13 +424,11 @@ public:
     }
 
     /**
-     @overload
-     @internal
-    */
+      * @overload
+      * @internal
+      */
     template< typename T >
-    OUString( OUStringNumber< T >&& n )
-        : OUString( n.buf, n.length )
-    {}
+    OUString( OUStringNumber< T >&& n ) : OUString( n.buf, n.length ) {}
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
@@ -429,32 +442,30 @@ public:
 #endif
 
     /**
-      Release the string data.
-    */
+      * Release the string data.
+      */
     ~OUString()
     {
         rtl_uString_release( pData );
     }
 
     /** Provides an OUString const & passing a storage pointer of an
-        rtl_uString * handle.
-        It is more convenient to use C++ OUString member functions when dealing
-        with rtl_uString * handles.  Using this function avoids unnecessary
-        acquire()/release() calls for a temporary OUString object.
-
-        @param ppHandle
-               pointer to storage
-        @return
-               OUString const & based on given storage
-    */
+      * rtl_uString * handle.
+      * It is more convenient to use C++ OUString member functions when dealing
+      * with rtl_uString * handles.  Using this function avoids unnecessary
+      * acquire()/release() calls for a temporary OUString object.
+      * @param ppHandle    pointer to storage
+      * @return    OUString const & based on given storage
+      */
     static OUString const & unacquired( rtl_uString * const * ppHandle )
-        { return * reinterpret_cast< OUString const * >( ppHandle ); }
+    {
+        return * reinterpret_cast< OUString const * >( ppHandle );
+    }
 
     /**
-      Assign a new string.
-
-      @param    str         an OUString.
-    */
+      * Assign a new string.
+      * @param    str         an OUString.
+      */
     OUString & operator=( const OUString & str )
     {
         rtl_uString_assign( &pData, str.pData );
@@ -463,11 +474,10 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /**
-      Move assign a new string.
-
-      @param    str         an OUString.
-      @since LibreOffice 5.2
-    */
+      * Move assign a new string.
+      * @param    str         an OUString.
+      * @since LibreOffice 5.2
+      */
     OUString & operator=( OUString && str ) noexcept
     {
         rtl_uString_release( pData );
@@ -479,17 +489,16 @@ public:
 #endif
 
     /**
-      Assign a new string from an 8-Bit string literal that is expected to contain only
-      characters in the ASCII set (i.e. first 128 characters). This operator
-      allows an efficient and convenient way to assign OUString
-      instances from ASCII literals. When assigning strings from data that
-      is not pure ASCII, it needs to be converted to OUString by explicitly
-      providing the encoding to use for the conversion.
-
-      @param    literal         the 8-bit ASCII string literal
-
-      @since LibreOffice 3.6
-    */
+      * Assign a new string from an 8-Bit string literal that is expected to contain only
+      * characters in the ASCII set (i.e. first 128 characters). This operator
+      * allows an efficient and convenient way to assign OUString
+      * instances from ASCII literals. When assigning strings from data that
+      * is not pure ASCII, it needs to be converted to OUString by explicitly
+      * providing the encoding to use for the conversion.
+      *
+      * @param    literal         the 8-bit ASCII string literal
+      * @since LibreOffice 3.6
+      */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
     {
@@ -500,8 +509,7 @@ public:
         } else {
             rtl_uString_newFromLiteral(
                 &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length, 0);
         }
         return *this;
@@ -538,23 +546,19 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /**
-      Append the contents of an OUStringBuffer to this string.
-
-      @param    str         an OUStringBuffer.
-
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-      @since LibreOffice 6.2
-    */
+      * Append the contents of an OUStringBuffer to this string.
+      * @param    str         an OUStringBuffer.
+      * @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      * @since LibreOffice 6.2
+      */
     inline OUString & operator+=( const OUStringBuffer & str ) &;
 #endif
 
     /**
-      Append a string to this string.
-
-      @param    str         an OUString.
-
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-    */
+      * Append a string to this string.
+      * @param    str         an OUString.
+      * @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+      */
     OUString & operator+=( const OUString & str )
 #if defined LIBO_INTERNAL_ONLY
         &
@@ -566,12 +570,11 @@ public:
     void operator+=(OUString const &) && = delete;
 #endif
 
-    /** Append an ASCII string literal to this string.
-
-        @param literal  an 8-bit ASCII-only string literal
-
-        @since LibreOffice 5.1
-    */
+    /**
+      * Append an ASCII string literal to this string.
+      * @param literal  an 8-bit ASCII-only string literal
+      * @since LibreOffice 5.1
+      */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
     operator +=(T & literal)
@@ -620,9 +623,9 @@ public:
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
-     @overload
-     @internal
-    */
+      * @overload
+      * @internal
+      */
     template< typename T1, typename T2 >
     OUString& operator+=( OUStringConcat< T1, T2 >&& c ) & {
         sal_Int32 l = c.length();
@@ -639,9 +642,9 @@ public:
         OUStringConcat<T1, T2> &&) && = delete;
 
     /**
-     @overload
-     @internal
-    */
+      * @overload
+      * @internal
+      */
     template< typename T >
     OUString& operator+=( OUStringNumber< T >&& n ) & {
         sal_Int32 l = n.length;
@@ -659,55 +662,114 @@ public:
 #endif
 
     /**
-      Clears the string, i.e, makes a zero-character string
-      @since LibreOffice 4.4
-    */
+      * Clears the string, i.e, makes a zero-character string
+      * @since LibreOffice 4.4
+      */
     void clear()
     {
         rtl_uString_new( &pData );
     }
 
     /**
-      Returns the length of this string.
-
-      The length is equal to the number of Unicode characters in this string.
-
-      @return   the length of the sequence of characters represented by this
-                object.
-    */
+      * Returns the length of this string.
+      * The length is equal to the number of Unicode characters in this string.
+      * @return   the length of the sequence of characters represented by this object.
+      */
     sal_Int32 getLength() const { return pData->length; }
 
     /**
-      Checks if a string is empty.
-
-      @return   true if the string is empty;
-                false, otherwise.
-
-      @since LibreOffice 3.4
-    */
+      * Checks if a string is empty.
+      * @return   true if the string is empty; false, otherwise.
+      * @since LibreOffice 3.4
+      */
     bool isEmpty() const
     {
         return pData->length == 0;
     }
 
     /**
-      Returns a pointer to the Unicode character buffer for this string.
-
-      It isn't necessarily NULL terminated.
-
-      @return   a pointer to the Unicode characters buffer for this object.
-    */
+      * Returns a pointer to the Unicode character buffer for this string.
+      * It isn't necessarily NULL terminated.
+      * @return   a pointer to the Unicode characters buffer for this object.
+      */
     const sal_Unicode * getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
-      Access to individual characters.
+      * Access to individual characters.
+      * @param index must be non-negative and less than length.
+      * @return a reference to the character at the given index.
+      */
+    sal_Unicode32 char32At( sal_Int32 index ) const
+    {
+        assert( index >= 0 && index < pData->length );
+        if( rtl::isSurrogate(pData->buffer[index]) )
+        {
+            assert( index + 1 < pData->length );
+            return rtl::combineSurrogates( pData->buffer[index], pData->buffer[index+1] );
+        }
+        else return pData->buffer[ index ];
+        return pData->buffer[ index ];
+    }
 
-      @param index must be non-negative and less than length.
+    void setChar32At(sal_Int32 index, sal_Unicode32 ch)
+    {
+        assert(index >= 0 && index < pData->length);
+        if ( ch > 0x0000FFFF )
+        {
+            if( rtl::isSurrogate(pData->buffer[ index ]) )
+            {
+                assert(index + 1 < pData->length);
+                pData->buffer[  index  ] = getHighSurrogate(ch);
+                pData->buffer[ index+1 ] = getLowSurrogate(ch);
+            }
+            else
+            {
+                // Prepare sal_Unicode[] to replace
+                const sal_Unicode ctmp[] = { getHighSurrogate(ch), getLowSurrogate(ch) };
+                // Convert new char to rtl_uString
+                rtl_uString* pTmp = NULL;
+                rtl_uString_newFromStr_WithLength( &pTmp, ctmp, 2 );
+                // Make the replace
+                rtl_uString* pNewBuffer = NULL;
+                rtl_uString_newReplaceStrAt( &pNewBuffer, pData, index, 1, pTmp );
+                // Free memory
+                if( pTmp  != NULL ) free( pTmp );
+                if( pData != NULL ) free( pData );
+                // Update OUStringStream
+                pData = pNewBuffer;
+            }
+        }
+        else
+        {
+            if( rtl::isSurrogate(pData->buffer[ index ]) )
+            {
+                // Prepare sal_Unicode[] to replace
+                const sal_Unicode ctmp[] = { getHighSurrogate(ch), getLowSurrogate(ch) };
+                // Convert new char to rtl_uString
+                rtl_uString* pTmp = NULL;
+                rtl_uString_newFromStr_WithLength( &pTmp, ctmp, 1 );
+                // Make the replace
+                rtl_uString* pNewBuffer = NULL;
+                rtl_uString_newReplaceStrAt( &pNewBuffer, pData, index, 2, pTmp );
+                // Free memory
+                if( pTmp  != NULL ) free( pTmp );
+                if( pData != NULL ) free( pData );
+                // Update OUStringStream
+                pData = pNewBuffer;
+            }
+            else
+            {
+                pData->buffer[ index ] = ch;
+            }
+        }
+    }
 
-      @return the character at the given index.
-
-      @since LibreOffice 3.5
-    */
+    /**
+      * Access to individual characters.
+      * @param index must be non-negative and less than length.
+      * @return the character at the given index.
+      * @since LibreOffice 3.5
+      */
     sal_Unicode operator [](sal_Int32 index) const {
         // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
         assert(index >= 0 && static_cast<sal_uInt32>(index) < static_cast<sal_uInt32>(getLength()));
@@ -1070,7 +1132,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 compareToAscii( const sal_Char* asciiStr ) const
+    sal_Int32 compareToAscii( const char* asciiStr ) const
     {
         return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length, asciiStr );
     }
@@ -1099,7 +1161,7 @@ public:
     */
     SAL_DEPRECATED(
         "replace s1.compareToAscii(s2, strlen(s2)) == 0 with s1.startsWith(s2)")
-    sal_Int32 compareToAscii( const sal_Char * asciiStr, sal_Int32 maxLength ) const
+    sal_Int32 compareToAscii( const char * asciiStr, sal_Int32 maxLength ) const
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
                                                            asciiStr, maxLength );
@@ -1124,7 +1186,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 reverseCompareToAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
+    sal_Int32 reverseCompareToAsciiL( const char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
                                                           asciiStr, asciiStrLength );
@@ -1145,7 +1207,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsAscii( const sal_Char* asciiStr ) const
+    bool equalsAscii( const char* asciiStr ) const
     {
         return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length,
                                                   asciiStr ) == 0;
@@ -1168,7 +1230,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength ) const
+    bool equalsAsciiL( const char* asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -1195,7 +1257,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const
+    bool equalsIgnoreAsciiCaseAscii( const char * asciiStr ) const
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
     }
@@ -1218,7 +1280,7 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Int32 compareToIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const
+    sal_Int32 compareToIgnoreAsciiCaseAscii( const char * asciiStr ) const
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr );
     }
@@ -1243,7 +1305,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
+    bool equalsIgnoreAsciiCaseAsciiL( const char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -1272,7 +1334,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool matchAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
+    bool matchAsciiL( const char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                            asciiStr, asciiStrLength ) == 0;
@@ -1310,7 +1372,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool matchIgnoreAsciiCaseAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
+    bool matchIgnoreAsciiCaseAsciiL( const char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                           asciiStr, asciiStrLength ) == 0;
@@ -1341,9 +1403,7 @@ public:
     */
     bool startsWith(OUString const & str, OUString * rest = NULL) const {
         bool b = match(str);
-        if (b && rest != NULL) {
-            *rest = copy(str.getLength());
-        }
+        if (b && rest != NULL) *rest = copy(str.getLength());
         return b;
     }
 
@@ -1358,17 +1418,14 @@ public:
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+        bool b  = (libreoffice_internal::ConstCharArrayDetector<T>::length
                <= sal_uInt32(pData->length))
             && rtl_ustr_asciil_reverseEquals_WithLength(
                 pData->buffer,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
         if (b && rest != NULL) {
-            *rest = copy(
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
+            *rest = copy( libreoffice_internal::ConstCharArrayDetector<T>::length );
         }
         return b;
     }
@@ -1429,13 +1486,10 @@ public:
 
       @since LibreOffice 4.0
     */
-    bool startsWithIgnoreAsciiCase(OUString const & str, OUString * rest = NULL)
-        const
+    bool startsWithIgnoreAsciiCase(OUString const & str, OUString * rest = NULL) const
     {
         bool b = matchIgnoreAsciiCase(str);
-        if (b && rest != NULL) {
-            *rest = copy(str.getLength());
-        }
+        if (b && rest != NULL) *rest = copy(str.getLength());
         return b;
     }
 
@@ -1448,19 +1502,15 @@ public:
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
     startsWithIgnoreAsciiCase(T & literal, OUString * rest = NULL) const
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        bool b
-            = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+        assert( libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal) );
+        bool b = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                    pData->buffer,
                    libreoffice_internal::ConstCharArrayDetector<T>::length,
-                   libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                       literal),
+                   libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                    libreoffice_internal::ConstCharArrayDetector<T>::length)
                == 0);
         if (b && rest != NULL) {
-            *rest = copy(
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
+            *rest = copy( libreoffice_internal::ConstCharArrayDetector<T>::length );
         }
         return b;
     }
@@ -1470,19 +1520,16 @@ public:
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
     startsWithIgnoreAsciiCase(T & literal, OUString * rest = nullptr) const {
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+        bool b  = (libreoffice_internal::ConstCharArrayDetector<T>::length
                <= sal_uInt32(pData->length))
             && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                     pData->buffer,
                     libreoffice_internal::ConstCharArrayDetector<T>::length,
-                    libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                        literal),
+                    libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                     libreoffice_internal::ConstCharArrayDetector<T>::length)
                 == 0);
         if (b && rest != nullptr) {
-            *rest = copy(
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
+            *rest = copy( libreoffice_internal::ConstCharArrayDetector<T>::length );
         }
         return b;
     }
@@ -1491,65 +1538,52 @@ public:
     bool startsWithIgnoreAsciiCase(
         OUStringLiteral const & literal, OUString * rest = nullptr) const
     {
-        bool b
-            = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+        bool b = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                    pData->buffer, literal.size, literal.data, literal.size)
                == 0);
-        if (b && rest != nullptr) {
-            *rest = copy(literal.size);
-        }
+        if (b && rest != nullptr) *rest = copy(literal.size);
         return b;
     }
 #endif
 
     /**
-      Check whether this string ends with a given substring.
-
-      @param str the substring to be compared
-
-      @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest. Available since
-      LibreOffice 4.2
-
-      @return true if and only if the given str appears as a substring at the
-      end of this string
-
-      @since LibreOffice 3.6
-    */
+      * Check whether this string ends with a given substring.
+      *
+      * @param str the substring to be compared
+      * @param rest if non-null, and this function returns true, then assign a
+      * copy of the remainder of this string to *rest. Available since
+      * LibreOffice 4.2
+      * @return true if and only if the given str appears as a substring at the
+      * end of this string
+      * @since LibreOffice 3.6
+      */
     bool endsWith(OUString const & str, OUString * rest = NULL) const {
         bool b = str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
-        if (b && rest != NULL) {
-            *rest = copy(0, getLength() - str.getLength());
-        }
+        if (b && rest != NULL) *rest = copy(0, getLength() - str.getLength());
         return b;
     }
 
     /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 3.6
-    */
+      * @overload
+      * This function accepts an ASCII string literal as its argument.
+      * @since LibreOffice 3.6
+      */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
     endsWith(T & literal, OUString * rest = NULL) const
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+        assert( libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal) );
+        bool b  = (libreoffice_internal::ConstCharArrayDetector<T>::length
                <= sal_uInt32(pData->length))
             && rtl_ustr_asciil_reverseEquals_WithLength(
                 (pData->buffer + pData->length
                  - libreoffice_internal::ConstCharArrayDetector<T>::length),
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
         if (b && rest != NULL) {
-            *rest = copy(
-                0,
-                (getLength()
-                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+            *rest = copy( 0,
+                ( getLength() - libreoffice_internal::ConstCharArrayDetector<T>::length ));
         }
         return b;
     }
@@ -3055,118 +3089,80 @@ public:
     }
 
     /**
-      Returns the Boolean value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @return   true, if the string is 1 or "True" in any ASCII case.
-                false in any other case.
-    */
-    bool toBoolean() const
-    {
-        return rtl_ustr_toBoolean( pData->buffer );
-    }
+      * Returns the Boolean value from this string.
+      * This function can't be used for language specific conversion.
+      * @return   true, if the string is 1 or "True" in any ASCII case.
+      *           false in any other case.
+      */
+    bool toBoolean() const { return rtl_ustr_toBoolean( pData->buffer ); }
 
     /**
-      Returns the first character from this string.
-
-      @return   the first character from this string or 0, if this string
-                is empty.
-    */
-    sal_Unicode toChar() const
-    {
-        return pData->buffer[0];
-    }
+      * Returns the first character from this string.
+      * @return   the first character from this string or 0, if this string is empty.
+      */
+    sal_Unicode toChar() const { return pData->buffer[0]; }
 
     /**
-      Returns the int32 value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @param    radix       the radix (between 2 and 36)
-      @return   the int32 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
-    */
+      * Returns the int32 value from this string.
+      * This function can't be used for language specific conversion.
+      * @param    radix       the radix (between 2 and 36)
+      * @return   the int32 represented from this string.
+      *           0 if this string represents no number or one of too large
+      *           magnitude.
+      */
     sal_Int32 toInt32( sal_Int16 radix = 10 ) const
-    {
-        return rtl_ustr_toInt32( pData->buffer, radix );
-    }
+        { return rtl_ustr_toInt32( pData->buffer, radix ); }
 
     /**
-      Returns the uint32 value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @param    radix       the radix (between 2 and 36)
-      @return   the uint32 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
-
-      @since LibreOffice 4.2
-    */
+      * Returns the uint32 value from this string.
+      * This function can't be used for language specific conversion.
+      * @param    radix       the radix (between 2 and 36)
+      * @return   the uint32 represented from this string.
+      *           0 if this string represents no number or one of too large
+      *           magnitude.
+      * @since LibreOffice 4.2
+      */
     sal_uInt32 toUInt32( sal_Int16 radix = 10 ) const
-    {
-        return rtl_ustr_toUInt32( pData->buffer, radix );
-    }
+        { return rtl_ustr_toUInt32( pData->buffer, radix ); }
 
     /**
-      Returns the int64 value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @param    radix       the radix (between 2 and 36)
-      @return   the int64 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
-    */
+      * Returns the int64 value from this string.
+      * This function can't be used for language specific conversion.
+      * @param    radix       the radix (between 2 and 36)
+      * @return   the int64 represented from this string.
+      *           0 if this string represents no number or one of too large
+      *           magnitude.
+      */
     sal_Int64 toInt64( sal_Int16 radix = 10 ) const
-    {
-        return rtl_ustr_toInt64( pData->buffer, radix );
-    }
+        { return rtl_ustr_toInt64( pData->buffer, radix ); }
 
     /**
-      Returns the uint64 value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @param    radix       the radix (between 2 and 36)
-      @return   the uint64 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
-
-      @since LibreOffice 4.1
-    */
+      * Returns the uint64 value from this string.
+      * This function can't be used for language specific conversion.
+      * @param    radix       the radix (between 2 and 36)
+      * @return   the uint64 represented from this string.
+      *           0 if this string represents no number or one of too large
+      *           magnitude.
+      * @since LibreOffice 4.1
+      */
     sal_uInt64 toUInt64( sal_Int16 radix = 10 ) const
-    {
-        return rtl_ustr_toUInt64( pData->buffer, radix );
-    }
+        { return rtl_ustr_toUInt64( pData->buffer, radix ); }
 
     /**
-      Returns the float value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @return   the float represented from this string.
-                0.0 if this string represents no number.
-    */
-    float toFloat() const
-    {
-        return rtl_ustr_toFloat( pData->buffer );
-    }
+      * Returns the float value from this string.
+      * This function can't be used for language specific conversion.
+      * @return   the float represented from this string.
+      *           0.0 if this string represents no number.
+      */
+    float toFloat() const { return rtl_ustr_toFloat( pData->buffer ); }
 
     /**
-      Returns the double value from this string.
-
-      This function can't be used for language specific conversion.
-
-      @return   the double represented from this string.
-                0.0 if this string represents no number.
-    */
-    double toDouble() const
-    {
-        return rtl_ustr_toDouble( pData->buffer );
-    }
+      * Returns the double value from this string.
+      * This function can't be used for language specific conversion.
+      * @return   the double represented from this string.
+      *           0.0 if this string represents no number.
+      */
+    double toDouble() const { return rtl_ustr_toDouble( pData->buffer ); }
 
 
     /**
@@ -3188,9 +3184,7 @@ public:
     {
         rtl_uString * pNew = NULL;
         rtl_uString_intern( &pNew, pData );
-        if (pNew == NULL) {
-            throw std::bad_alloc();
-        }
+        if (pNew == NULL) throw std::bad_alloc();
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
@@ -3219,7 +3213,7 @@ public:
 
        @since UDK 3.2.7
     */
-    static OUString intern( const sal_Char * value, sal_Int32 length,
+    static OUString intern( const char * value, sal_Int32 length,
                             rtl_TextEncoding encoding,
                             sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS,
                             sal_uInt32 *pInfo = NULL )
@@ -3403,15 +3397,13 @@ public:
     }
 #else
     /**
-      Returns the string representation of the integer argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    i           an integer value
-      @param    radix       the radix (between 2 and 36)
-      @return   a string with the string representation of the argument.
-      @since LibreOffice 4.1
-    */
+      * Returns the string representation of the integer argument.
+      * This function can't be used for language specific conversion.
+      * @param    i           an integer value
+      * @param    radix       the radix (between 2 and 36)
+      * @return   a string with the string representation of the argument.
+      * @since LibreOffice 4.1
+      */
     static OUString number( int i, sal_Int16 radix = 10 )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
@@ -3451,14 +3443,12 @@ public:
     }
 
     /**
-      Returns the string representation of the float argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    f           a float.
-      @return   a string with the decimal representation of the argument.
-      @since LibreOffice 4.1
-    */
+      * Returns the string representation of the float argument.
+      * This function can't be used for language specific conversion.
+      * @param    f           a float.
+      * @return   a string with the decimal representation of the argument.
+      * @since LibreOffice 4.1
+      */
     static OUString number( float f )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
@@ -3466,14 +3456,12 @@ public:
     }
 
     /**
-      Returns the string representation of the double argument.
-
-      This function can't be used for language specific conversion.
-
-      @param    d           a double.
-      @return   a string with the decimal representation of the argument.
-      @since LibreOffice 4.1
-    */
+      * Returns the string representation of the double argument.
+      * This function can't be used for language specific conversion.
+      * @param    d           a double.
+      * @return   a string with the decimal representation of the argument.
+      * @since LibreOffice 4.1
+      */
     static OUString number( double d )
     {
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
@@ -3492,10 +3480,10 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use boolean()
     */
-    SAL_DEPRECATED("use boolean()") static OUString valueOf( sal_Bool b )
-    {
-        return boolean(b);
-    }
+    //SAL_DEPRECATED("use boolean()") static OUString valueOf( sal_Bool b )
+    //{
+    //    return boolean(b);
+    //}
 
     /**
       Returns the string representation of the boolean argument.
@@ -3536,10 +3524,10 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 )
-    {
-        return number( i, radix );
-    }
+    //SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 )
+    //{
+    //    return number( i, radix );
+    //}
 
     /**
       Returns the string representation of the long argument.
@@ -3551,10 +3539,10 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 )
-    {
-        return number( ll, radix );
-    }
+    //SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 )
+    //{
+    //    return number( ll, radix );
+    //}
 
     /**
       Returns the string representation of the float argument.
@@ -3565,10 +3553,10 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OUString valueOf( float f )
-    {
-        return number(f);
-    }
+    //SAL_DEPRECATED("use number()") static OUString valueOf( float f )
+    //{
+    //    return number(f);
+    //}
 
     /**
       Returns the string representation of the double argument.
@@ -3579,10 +3567,10 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OUString valueOf( double d )
-    {
-        return number(d);
-    }
+    //SAL_DEPRECATED("use number()") static OUString valueOf( double d )
+    //{
+    //    return number(d);
+    //}
 
     /**
       Returns an OUString copied without conversion from an ASCII
@@ -3599,7 +3587,7 @@ public:
       @param    value       the 8-Bit ASCII character string
       @return   a string with the string representation of the argument.
      */
-    static OUString createFromAscii( const sal_Char * value )
+    static OUString createFromAscii( const char * value )
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newFromAscii( &pNew, value );
@@ -3615,9 +3603,7 @@ private:
     {
         rtl_uString* pNewData = NULL;
         rtl_uString_newConcat( &pNewData, pData, pOtherData );
-        if (pNewData == NULL) {
-            throw std::bad_alloc();
-        }
+        if (pNewData == NULL) throw std::bad_alloc();
         rtl_uString_assign(&pData, pNewData);
         rtl_uString_release(pNewData);
         return *this;
@@ -3790,10 +3776,9 @@ using ::rtl::OUStringChar;
 
 /// @cond INTERNAL
 /**
-  Make OUString hashable by default for use in STL containers.
-
-  @since LibreOffice 6.0
-*/
+  * Make OUString hashable by default for use in STL containers.
+  * @since LibreOffice 6.0
+  */
 #if defined LIBO_INTERNAL_ONLY
 namespace std {
 

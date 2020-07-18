@@ -80,7 +80,7 @@ double const nCorrVal[] = {
 
 struct StringTraits
 {
-    typedef sal_Char Char;
+    typedef char Char;
 
     typedef rtl_String String;
 

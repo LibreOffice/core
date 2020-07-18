@@ -100,7 +100,7 @@ CPPUHELPER_DLLPUBLIC sal_Bool component_writeInfoHelper(
             to a factory.
  */
 CPPUHELPER_DLLPUBLIC void *component_getFactoryHelper(
-    const sal_Char * pImplName,
+    const char * pImplName,
     void * pServiceManager,
     void * pRegistryKey,
     const struct ImplementationEntry entries[] );

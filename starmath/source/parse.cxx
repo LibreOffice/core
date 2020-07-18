@@ -50,7 +50,7 @@ SmToken::SmToken()
 }
 
 SmToken::SmToken(SmTokenType eTokenType,
-                 sal_Unicode cMath,
+                 sal_Unicode32 cMath,
                  const char* pText,
                  TG nTokenGroup,
                  sal_uInt16 nTokenLevel)
@@ -67,44 +67,45 @@ SmToken::SmToken(SmTokenType eTokenType,
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[] =
 {
-    { "abs", TABS, '\0', TG::UnOper, 13 },
-    { "acute", TACUTE, MS_ACUTE, TG::Attribute, 5 },
-    { "aleph" , TALEPH, MS_ALEPH, TG::Standalone, 5 },
-    { "alignb", TALIGNC, '\0', TG::Align, 0},
-    { "alignc", TALIGNC, '\0', TG::Align, 0},
-    { "alignl", TALIGNL, '\0', TG::Align, 0},
-    { "alignm", TALIGNC, '\0', TG::Align, 0},
-    { "alignr", TALIGNR, '\0', TG::Align, 0},
-    { "alignt", TALIGNC, '\0', TG::Align, 0},
-    { "and", TAND, MS_AND, TG::Product, 0},
-    { "approx", TAPPROX, MS_APPROX, TG::Relation, 0},
-    { "arccos", TACOS, '\0', TG::Function, 5},
-    { "arccot", TACOT, '\0', TG::Function, 5},
-    { "arcosh", TACOSH, '\0', TG::Function, 5 },
-    { "arcoth", TACOTH, '\0', TG::Function, 5 },
-    { "arcsin", TASIN, '\0', TG::Function, 5},
-    { "arctan", TATAN, '\0', TG::Function, 5},
-    { "arsinh", TASINH, '\0', TG::Function, 5},
-    { "artanh", TATANH, '\0', TG::Function, 5},
-    { "backepsilon" , TBACKEPSILON, MS_BACKEPSILON, TG::Standalone, 5},
-    { "bar", TBAR, MS_BAR, TG::Attribute, 5},
-    { "binom", TBINOM, '\0', TG::NONE, 5 },
-    { "bold", TBOLD, '\0', TG::FontAttr, 5},
-    { "boper", TBOPER, '\0', TG::Product, 0},
-    { "breve", TBREVE, MS_BREVE, TG::Attribute, 5},
-    { "bslash", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
-    { "cdot", TCDOT, MS_CDOT, TG::Product, 0},
-    { "check", TCHECK, MS_CHECK, TG::Attribute, 5},
-    { "circ" , TCIRC, MS_CIRC, TG::Standalone, 5},
-    { "circle", TCIRCLE, MS_CIRCLE, TG::Attribute, 5},
-    { "color", TCOLOR, '\0', TG::FontAttr, 5},
-    { "coprod", TCOPROD, MS_COPROD, TG::Oper, 5},
-    { "cos", TCOS, '\0', TG::Function, 5},
-    { "cosh", TCOSH, '\0', TG::Function, 5},
-    { "cot", TCOT, '\0', TG::Function, 5},
-    { "coth", TCOTH, '\0', TG::Function, 5},
-    { "csub", TCSUB, '\0', TG::Power, 0},
-    { "csup", TCSUP, '\0', TG::Power, 0},
+    { "abs",         TABS,         MS_NONE,        TG::UnOper, 13 },
+    { "acute",       TACUTE,       MS_ACUTE,       TG::Attribute, 5 },
+    { "aleph" ,      TALEPH,       MS_ALEPH,       TG::Standalone, 5 },
+    { "alignb",      TALIGNC,      MS_NONE,        TG::Align, 0},
+    { "alignc",      TALIGNC,      MS_NONE,        TG::Align, 0},
+    { "alignl",      TALIGNL,      MS_NONE,        TG::Align, 0},
+    { "alignm",      TALIGNC,      MS_NONE,        TG::Align, 0},
+    { "alignr",      TALIGNR,      MS_NONE,        TG::Align, 0},
+    { "alignt",      TALIGNC,      MS_NONE,        TG::Align, 0},
+    { "and",         TAND,         MS_AND,         TG::Product, 0},
+    { "approx",      TAPPROX,      MS_APPROX,      TG::Relation, 0},
+    { "arccos",      TACOS,        MS_NONE,        TG::Function, 5},
+    { "arccot",      TACOT,        MS_NONE,        TG::Function, 5},
+    { "arcosh",      TACOSH,       MS_NONE,        TG::Function, 5 },
+    { "arcoth",      TACOTH,       MS_NONE,        TG::Function, 5 },
+    { "arcsin",      TASIN,        MS_NONE,        TG::Function, 5},
+    { "arctan",      TATAN,        MS_NONE,        TG::Function, 5},
+    { "arsinh",      TASINH,       MS_NONE,        TG::Function, 5},
+    { "artanh",      TATANH,       MS_NONE,        TG::Function, 5},
+    { "backepsilon", TBACKEPSILON, MS_UBEPSILON,   TG::Standalone, 5},
+    { "bar",         TBAR,         MS_BAR,         TG::Attribute, 5},
+    { "binom",       TBINOM,       MS_NONE,        TG::NONE, 5 },
+    { "bold",        TBOLD,        MS_NONE,        TG::FontAttr, 5},
+    { "boper",       TBOPER,       MS_NONE,        TG::Product, 0},
+    { "breve",       TBREVE,       MS_BREVE,       TG::Attribute, 5},
+    { "bslash",      TBACKSLASH,   MS_BACKSLASH,   TG::Product, 0 },
+    { "cdot",        TCDOT,        MS_CDOT,        TG::Product, 0},
+    { "char",        TCHAR,        MS_NONE,        TG::NONE, 5},
+    { "check",       TCHECK,       MS_CHECK,       TG::Attribute, 5},
+    { "circ" ,       TCIRC,        MS_CIRC,        TG::Standalone, 5},
+    { "circle",      TCIRCLE,      MS_CIRCLE,      TG::Attribute, 5},
+    { "color",       TCOLOR,       MS_NONE,        TG::FontAttr, 5},
+    { "coprod",      TCOPROD,      MS_COPROD,      TG::Oper, 5},
+    { "cos",         TCOS,         MS_NONE,        TG::Function, 5},
+    { "cosh",        TCOSH,        MS_NONE,        TG::Function, 5},
+    { "cot",         TCOT,         MS_NONE,        TG::Function, 5},
+    { "coth",        TCOTH,        MS_NONE,        TG::Function, 5},
+    { "csub",        TCSUB,        MS_NONE,        TG::Power, 0},
+    { "csup",        TCSUP,        MS_NONE,        TG::Power, 0},
     { "dddot", TDDDOT, MS_DDDOT, TG::Attribute, 5},
     { "ddot", TDDOT, MS_DDOT, TG::Attribute, 5},
     { "def", TDEF, MS_DEF, TG::Relation, 0},
@@ -235,12 +236,13 @@ const SmTokenTableEntry aTokenTable[] =
     { "rsup", TRSUP, '\0', TG::Power, 0},
     { "sans", TSANS, '\0', TG::Font, 0},
     { "serif", TSERIF, '\0', TG::Font, 0},
-    { "setC" , TSETC, MS_SETC, TG::Standalone, 5},
+    { "setC" , TSETC, MS_USETC, TG::Standalone, 5},
     { "setminus", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
-    { "setN" , TSETN, MS_SETN, TG::Standalone, 5},
-    { "setQ" , TSETQ, MS_SETQ, TG::Standalone, 5},
-    { "setR" , TSETR, MS_SETR, TG::Standalone, 5},
-    { "setZ" , TSETZ, MS_SETZ, TG::Standalone, 5},
+    { "setN" , TSETN, MS_USETN, TG::Standalone, 5},
+    { "setP" , TSETP, MS_USETP, TG::Standalone, 5},
+    { "setQ" , TSETQ, MS_USETQ, TG::Standalone, 5},
+    { "setR" , TSETR, MS_USETR, TG::Standalone, 5},
+    { "setZ" , TSETZ, MS_USETZ, TG::Standalone, 5},
     { "sim", TSIM, MS_SIM, TG::Relation, 0},
     { "simeq", TSIMEQ, MS_SIMEQ, TG::Relation, 0},
     { "sin", TSIN, '\0', TG::Function, 5},
@@ -285,27 +287,310 @@ const SmTokenTableEntry aTokenTable[] =
 //Definition of color keywords
 const SmTokenTableEntry aColorTokenTable[] =
 {
-    { "aqua", TAQUA, '\0', TG::Color, 0},
-    { "black", TBLACK, '\0', TG::Color, 0},
-    { "blue", TBLUE, '\0', TG::Color, 0},
-    { "cyan", TCYAN, '\0', TG::Color, 0},
-    { "fuchsia", TFUCHSIA, '\0', TG::Color, 0},
-    { "gray", TGRAY, '\0', TG::Color, 0},
-    { "green", TGREEN, '\0', TG::Color, 0},
-    { "hex" , THEX, '\0', TG::Color, 0},
-    { "lime", TLIME, '\0', TG::Color, 0},
-    { "magenta", TMAGENTA, '\0', TG::Color, 0},
-    { "maroon", TMAROON, '\0', TG::Color, 0},
-    { "navy", TNAVY, '\0', TG::Color, 0},
-    { "olive", TOLIVE, '\0', TG::Color, 0},
-    { "purple", TPURPLE, '\0', TG::Color, 0},
-    { "red", TRED, '\0', TG::Color, 0},
-    { "rgb", TRGB, '\0', TG::Color, 0},
-    //{ "rgba", TRGBA, '\0', TG::Color, 0},
-    { "silver", TSILVER, '\0', TG::Color, 0},
-    { "teal", TTEAL, '\0', TG::Color, 0},
-    { "white", TWHITE, '\0', TG::Color, 0},
-    { "yellow", TYELLOW, '\0', TG::Color, 0}
+    { "aqua",    TAQUA,    MS_NONE, TG::Color, 0},
+    { "black",   TBLACK,   MS_NONE, TG::Color, 0},
+    { "blue",    TBLUE,    MS_NONE, TG::Color, 0},
+    { "cyan",    TCYAN,    MS_NONE, TG::Color, 0},
+    { "fuchsia", TFUCHSIA, MS_NONE, TG::Color, 0},
+    { "gray",    TGRAY,    MS_NONE, TG::Color, 0},
+    { "green",   TGREEN,   MS_NONE, TG::Color, 0},
+    { "hex" ,    THEX,     MS_NONE, TG::Color, 0},
+    { "lime",    TLIME,    MS_NONE, TG::Color, 0},
+    { "magenta", TMAGENTA, MS_NONE, TG::Color, 0},
+    { "maroon",  TMAROON,  MS_NONE, TG::Color, 0},
+    { "navy",    TNAVY,    MS_NONE, TG::Color, 0},
+    { "olive",   TOLIVE,   MS_NONE, TG::Color, 0},
+    { "purple",  TPURPLE,  MS_NONE, TG::Color, 0},
+    { "red",     TRED,     MS_NONE, TG::Color, 0},
+    { "rgb",     TRGB,     MS_NONE, TG::Color, 0},
+  //{ "rgba",    TRGBA,    MS_NONE, TG::Color, 0},
+    { "silver",  TSILVER,  MS_NONE, TG::Color, 0},
+    { "teal",    TTEAL,    MS_NONE, TG::Color, 0},
+    { "white",   TWHITE,   MS_NONE, TG::Color, 0},
+    { "yellow",  TYELLOW,  MS_NONE, TG::Color, 0}
+};
+
+const SmTokenTableEntry aSetTokenTable[] =
+{
+    { "0",     TSET, MS_SET0,      TG::Standalone, 5},
+    { "1",     TSET, MS_SET1,      TG::Standalone, 5},
+    { "2",     TSET, MS_SET2,      TG::Standalone, 5},
+    { "3",     TSET, MS_SET3,      TG::Standalone, 5},
+    { "4",     TSET, MS_SET4,      TG::Standalone, 5},
+    { "5",     TSET, MS_SET5,      TG::Standalone, 5},
+    { "6",     TSET, MS_SET6,      TG::Standalone, 5},
+    { "7",     TSET, MS_SET7,      TG::Standalone, 5},
+    { "8",     TSET, MS_SET8,      TG::Standalone, 5},
+    { "9",     TSET, MS_SET9,      TG::Standalone, 5},
+    { "A",     TSET, MS_USETA,      TG::Standalone, 5},
+    { "B",     TSET, MS_USETB,      TG::Standalone, 5},
+    { "C",     TSET, MS_USETC,      TG::Standalone, 5},
+    { "D",     TSET, MS_USETD,      TG::Standalone, 5},
+    { "E",     TSET, MS_USETE,      TG::Standalone, 5},
+    { "F",     TSET, MS_USETF,      TG::Standalone, 5},
+    { "G",     TSET, MS_USETG,      TG::Standalone, 5},
+    { "Gamma", TSET, MS_USET_GAMMA, TG::Standalone, 5},
+    { "H",     TSET, MS_USETH,      TG::Standalone, 5},
+    { "I",     TSET, MS_USETI,      TG::Standalone, 5},
+    { "J",     TSET, MS_USETJ,      TG::Standalone, 5},
+    { "K",     TSET, MS_USETK,      TG::Standalone, 5},
+    { "L",     TSET, MS_USETL,      TG::Standalone, 5},
+    { "M",     TSET, MS_USETM,      TG::Standalone, 5},
+    { "N",     TSET, MS_USETN,      TG::Standalone, 5},
+    { "O",     TSET, MS_USETO,      TG::Standalone, 5},
+    { "P",     TSET, MS_USETP,      TG::Standalone, 5},
+    { "Pi",    TSET, MS_USET_PI,    TG::Standalone, 5},
+    { "Q",     TSET, MS_USETQ,      TG::Standalone, 5},
+    { "R",     TSET, MS_USETR,      TG::Standalone, 5},
+    { "S",     TSET, MS_USETS,      TG::Standalone, 5},
+    { "Sigma", TSET, MS_USET_SIGMA, TG::Standalone, 5},
+    { "T",     TSET, MS_USETT,      TG::Standalone, 5},
+    { "U",     TSET, MS_USETU,      TG::Standalone, 5},
+    { "V",     TSET, MS_USETV,      TG::Standalone, 5},
+    { "W",     TSET, MS_USETW,      TG::Standalone, 5},
+    { "X",     TSET, MS_USETX,      TG::Standalone, 5},
+    { "Y",     TSET, MS_USETY,      TG::Standalone, 5},
+    { "Z",     TSET, MS_USETZ,      TG::Standalone, 5},
+    { "a",     TSET, MS_LSETA,      TG::Standalone, 5},
+    { "aleph", TSET, MS_ALEPH,      TG::Standalone, 5},
+    { "b",     TSET, MS_LSETB,      TG::Standalone, 5},
+    { "c",     TSET, MS_LSETC,      TG::Standalone, 5},
+    { "d",     TSET, MS_LSETD,      TG::Standalone, 5},
+    { "e",     TSET, MS_LSETE,      TG::Standalone, 5},
+    { "empty", TSET, MS_EMPTYSET,   TG::Standalone, 5},
+    { "f",     TSET, MS_LSETF,      TG::Standalone, 5},
+    { "g",     TSET, MS_LSETG,      TG::Standalone, 5},
+    { "gamma", TSET, MS_LSET_GAMMA, TG::Standalone, 5},
+    { "h",     TSET, MS_LSETH,      TG::Standalone, 5},
+    { "i",     TSET, MS_LSETI,      TG::Standalone, 5},
+    { "j",     TSET, MS_LSETJ,      TG::Standalone, 5},
+    { "k",     TSET, MS_LSETK,      TG::Standalone, 5},
+    { "l",     TSET, MS_LSETL,      TG::Standalone, 5},
+    { "m",     TSET, MS_LSETM,      TG::Standalone, 5},
+    { "n",     TSET, MS_LSETN,      TG::Standalone, 5},
+    { "o",     TSET, MS_LSETO,      TG::Standalone, 5},
+    { "p",     TSET, MS_LSETP,      TG::Standalone, 5},
+    { "pi",    TSET, MS_LSET_PI,    TG::Standalone, 5},
+    { "q",     TSET, MS_LSETQ,      TG::Standalone, 5},
+    { "r",     TSET, MS_LSETR,      TG::Standalone, 5},
+    { "s",     TSET, MS_LSETS,      TG::Standalone, 5},
+    { "t",     TSET, MS_LSETT,      TG::Standalone, 5},
+    { "u",     TSET, MS_LSETU,      TG::Standalone, 5},
+    { "v",     TSET, MS_LSETV,      TG::Standalone, 5},
+    { "w",     TSET, MS_LSETW,      TG::Standalone, 5},
+    { "x",     TSET, MS_LSETX,      TG::Standalone, 5},
+    { "y",     TSET, MS_LSETY,      TG::Standalone, 5},
+    { "z",     TSET, MS_LSETZ,      TG::Standalone, 5}
+};
+
+const SmTokenTableEntry aCharTokenTable[] =
+{
+    { "0",         TCHARACTER, '0',                TG::Standalone, 5},
+    { "1",         TCHARACTER, '2',                TG::Standalone, 5},
+    { "2",         TCHARACTER, '3',                TG::Standalone, 5},
+    { "3",         TCHARACTER, '3',                TG::Standalone, 5},
+    { "4",         TCHARACTER, '4',                TG::Standalone, 5},
+    { "5",         TCHARACTER, '5',                TG::Standalone, 5},
+    { "6",         TCHARACTER, '6',                TG::Standalone, 5},
+    { "7",         TCHARACTER, '7',                TG::Standalone, 5},
+    { "8",         TCHARACTER, '8',                TG::Standalone, 5},
+    { "9",         TCHARACTER, '9',                TG::Standalone, 5},
+    // Upper case
+    { "A",         TCHARACTER, 'A',                TG::Standalone, 5},
+    { "AE",        TCHARACTER, MS_UAE,             TG::Standalone, 5},
+    { "Alpha",     TGREEK,     MS_UALPHA,          TG::Standalone, 5},
+    { "B",         TCHARACTER, 'B',                TG::Standalone, 5},
+    { "Beta",      TGREEK,     MS_UBETA,           TG::Standalone, 5},
+    { "C",         TCHARACTER, 'C',                TG::Standalone, 5},
+    { "Chi",       TGREEK,     MS_UCHI,            TG::Standalone, 5},
+    { "D",         TCHARACTER, 'D',                TG::Standalone, 5},
+    { "DIFF",      TCHARACTER, MS_UDIFF,           TG::Standalone, 5},
+    { "Delta",     TGREEK,     MS_UDELTA,          TG::Standalone, 5},
+    { "E",         TCHARACTER, 'E',                TG::Standalone, 5},
+    { "Epsilon",   TGREEK,     MS_UEPSILON,        TG::Standalone, 5},
+    { "Eta",       TGREEK,     MS_UETA,            TG::Standalone, 5},
+    { "F",         TCHARACTER, 'F',                TG::Standalone, 5},
+    { "G",         TCHARACTER, 'G',                TG::Standalone, 5},
+    { "Gamma",     TGREEK,     MS_UGAMMA,          TG::Standalone, 5},
+    { "H",         TCHARACTER, 'H',                TG::Standalone, 5},
+    { "I",         TCHARACTER, 'I',                TG::Standalone, 5},
+    { "Iota",      TGREEK,     MS_UIOTA,           TG::Standalone, 5},
+    { "J",         TCHARACTER, 'J',                TG::Standalone, 5},
+    { "K",         TCHARACTER, 'K',                TG::Standalone, 5},
+    { "Kappa",     TGREEK,     MS_UKAPPA,          TG::Standalone, 5},
+    { "L",         TCHARACTER, 'L',                TG::Standalone, 5},
+    { "Lambda",    TGREEK,     MS_ULAMBDA,         TG::Standalone, 5},
+    { "M",         TCHARACTER, 'M',                TG::Standalone, 5},
+    { "Mu",        TGREEK,     MS_UMU,             TG::Standalone, 5},
+    { "My",        TGREEK,     MS_UMU,             TG::Standalone, 5},
+    { "N",         TCHARACTER, 'N',                TG::Standalone, 5},
+    { "Nu",        TGREEK,     MS_UNU,             TG::Standalone, 5},
+    { "O",         TCHARACTER, 'O',                TG::Standalone, 5},
+    { "OE",        TCHARACTER, MS_UOE,             TG::Standalone, 5},
+    { "Omega",     TGREEK,     MS_UOMEGA,          TG::Standalone, 5},
+    { "Omicron",   TGREEK,     MS_UOMICRON,        TG::Standalone, 5},
+    { "P",         TCHARACTER, 'P',                TG::Standalone, 5},
+    { "Phi",       TGREEK,     MS_UPHI,            TG::Standalone, 5},
+    { "Pi",        TGREEK,     MS_UPI,             TG::Standalone, 5},
+    { "Psi",       TGREEK,     MS_UPSI,            TG::Standalone, 5},
+    { "Q",         TCHARACTER, 'Q',                TG::Standalone, 5},
+    { "R",         TCHARACTER, 'R',                TG::Standalone, 5},
+    { "Rho",       TGREEK,     MS_URHO,            TG::Standalone, 5},
+    { "S",         TCHARACTER, 'S',                TG::Standalone, 5},
+    { "Sigma",     TGREEK,     MS_USIGMA,          TG::Standalone, 5},
+    { "T",         TCHARACTER, 'T',                TG::Standalone, 5},
+    { "Tau",       TGREEK,     MS_UTAU,            TG::Standalone, 5},
+    { "Theta",     TGREEK,     MS_UTHETA,          TG::Standalone, 5},
+    { "U",         TCHARACTER, 'U',                TG::Standalone, 5},
+    { "Upsilon",   TGREEK,     MS_UUPSILON,        TG::Standalone, 5},
+    { "V",         TCHARACTER, 'V',                TG::Standalone, 5},
+    { "W",         TCHARACTER, 'W',                TG::Standalone, 5},
+    { "X",         TCHARACTER, 'X',                TG::Standalone, 5},
+    { "Xi",        TGREEK,     MS_UXI,             TG::Standalone, 5},
+    { "Y",         TCHARACTER, 'Y',                TG::Standalone, 5},
+    { "Ypsilon",   TGREEK,     MS_UUPSILON,        TG::Standalone, 5},
+    { "Z",         TCHARACTER, 'Z',                TG::Standalone, 5},
+    { "Zeta",      TGREEK,     MS_UZETA,           TG::Standalone, 5},
+    // Lower case
+    { "a",         TCHARACTER, 'a',                TG::Standalone, 5},
+    { "ae",        TCHARACTER, MS_LAE,             TG::Standalone, 5},
+    { "aleph",     TALEPH,     MS_ALEPH,           TG::Standalone, 5},
+    { "alpha",     TGREEK,     MS_LALPHA,          TG::Standalone, 5},
+    { "b",         TCHARACTER, 'b',                TG::Standalone, 5},
+    { "beta",      TGREEK,     MS_LBETA,           TG::Standalone, 5},
+    { "c",         TCHARACTER, 'c',                TG::Standalone, 5},
+    { "cent",      TCURRENCY,  MS_CENT,            TG::Standalone, 5},
+    { "chi",       TGREEK,     MS_LCHI,            TG::Standalone, 5},
+    { "colon",     TCURRENCY,  MS_COLON,           TG::Standalone, 5},
+    { "cruzeiro",  TCURRENCY,  MS_CRUZEIRO,        TG::Standalone, 5},
+    { "currency",  TCURRENCY,  MS_CURRENCY,        TG::Standalone, 5},
+    { "d",         TCHARACTER, 'd',                TG::Standalone, 5},
+    { "delta",     TGREEK,     MS_LDELTA,          TG::Standalone, 5},
+    { "diff",      TCHARACTER, MS_LDIFF,           TG::Standalone, 5},
+    { "dollar",    TCURRENCY,  MS_DOLLAR,          TG::Standalone, 5},
+    { "dong",      TCURRENCY,  MS_DONG,            TG::Standalone, 5},
+    { "e",         TCHARACTER, 'e',                TG::Standalone, 5},
+    { "emptyset",  TSET,       MS_EMPTYSET,        TG::Standalone, 5},
+    { "epsilon",   TGREEK,     MS_LEPSILON,        TG::Standalone, 5},
+    { "eta",       TGREEK,     MS_LETA,            TG::Standalone, 5},
+    { "euler",     TEULER,     MS_EULER,           TG::Standalone, 5},
+    { "euro",      TCURRENCY,  MS_EURO,            TG::Standalone, 5},
+    { "f",         TCHARACTER, 'f',                TG::Standalone, 5},
+    { "franc",     TCURRENCY,  MS_FRANC,           TG::Standalone, 5},
+    { "g",         TCHARACTER, 'g',                TG::Standalone, 5},
+    { "gamma",     TGREEK,     MS_LGAMMA,          TG::Standalone, 5},
+    { "h",         TCHARACTER, 'h',                TG::Standalone, 5},
+    { "hex",       THEX,       MS_NONE,            TG::Standalone, 5},
+    { "hbar",      THBAR,      MS_HBAR,            TG::Standalone, 5},
+    { "i",         TCHARACTER, 'i',                TG::Standalone, 5},
+    { "icomplex",  TICOMPLEX,  MS_ICOMPLEX,        TG::Standalone, 5},
+    { "infinity",  TINFINITY,  MS_INFINITY,        TG::Standalone, 5},
+    { "iota",      TGREEK,     MS_LIOTA,           TG::Standalone, 5},
+    { "j",         TCHARACTER, 'j',                TG::Standalone, 5},
+    { "jcomplex",  TJCOMPLEX,  MS_JCOMPLEX,        TG::Standalone, 5},
+    { "k",         TCHARACTER, 'k',                TG::Standalone, 5},
+    { "kappa",     TGREEK,     MS_LKAPPA,          TG::Standalone, 5},
+    { "l",         TCHARACTER, 'l',                TG::Standalone, 5},
+    { "lambda",    TGREEK,     MS_LLAMBDA,         TG::Standalone, 5},
+    { "lambdabar", TLAMBDABAR, MS_LAMBDABAR,       TG::Standalone, 5},
+    { "lira",      TCURRENCY,  MS_LIRA,            TG::Standalone, 5},
+    { "m",         TCHARACTER, 'm',                TG::Standalone, 5},
+    { "mu",        TGREEK,     MS_LMU,             TG::Standalone, 5},
+    { "my",        TGREEK,     MS_LMU,             TG::Standalone, 5},
+    { "n",         TCHARACTER, 'n',                TG::Standalone, 5},
+    { "nu",        TGREEK,     MS_LNU,             TG::Standalone, 5},
+    { "o",         TCHARACTER, 'o',                TG::Standalone, 5},
+    { "oe",        TCHARACTER, MS_LOE,             TG::Standalone, 5},
+    { "omega",     TGREEK,     MS_LOMEGA,          TG::Standalone, 5},
+    { "omicron",   TGREEK,     MS_LOMICRON,        TG::Standalone, 5},
+    { "osigma",    TGREEK,     MS_OSIGMA,          TG::Standalone, 5},
+    { "p",         TCHARACTER, 'p',                TG::Standalone, 5},
+    { "phi",       TGREEK,     MS_LPHI,            TG::Standalone, 5},
+    { "pi",        TGREEK,     MS_LPI,             TG::Standalone, 5},
+    { "psi",       TGREEK,     MS_LPSI,            TG::Standalone, 5},
+    { "q",         TCHARACTER, 'q',                TG::Standalone, 5},
+    { "r",         TCHARACTER, 'r',                TG::Standalone, 5},
+    { "rho",       TGREEK,     MS_LRHO,            TG::Standalone, 5},
+    { "rupee",     TCURRENCY,  MS_RUPEE,           TG::Standalone, 5},
+    { "s",         TCHARACTER, 's',                TG::Standalone, 5},
+    // Sets
+    { "set",       TSET,       MS_NONE,            TG::Standalone, 5},
+    { "setA",      TSET,       MS_USETA,           TG::Standalone, 5},
+    { "setB",      TSET,       MS_USETB,           TG::Standalone, 5},
+    { "setC",      TSET,       MS_USETC,           TG::Standalone, 5},
+    { "setD",      TSET,       MS_USETD,           TG::Standalone, 5},
+    { "setE",      TSET,       MS_USETE,           TG::Standalone, 5},
+    { "setF",      TSET,       MS_USETF,           TG::Standalone, 5},
+    { "setG",      TSET,       MS_USETG,           TG::Standalone, 5},
+    { "setGAMMA",  TSET,       MS_USET_GAMMA,      TG::Standalone, 5},
+    { "setH",      TSET,       MS_USETH,           TG::Standalone, 5},
+    { "setI",      TSET,       MS_USETI,           TG::Standalone, 5},
+    { "setJ",      TSET,       MS_USETJ,           TG::Standalone, 5},
+    { "setK",      TSET,       MS_USETK,           TG::Standalone, 5},
+    { "setL",      TSET,       MS_USETL,           TG::Standalone, 5},
+    { "setM",      TSET,       MS_USETM,           TG::Standalone, 5},
+    { "setN",      TSET,       MS_USETN,           TG::Standalone, 5},
+    { "setO",      TSET,       MS_USETO,           TG::Standalone, 5},
+    { "setP",      TSET,       MS_USETP,           TG::Standalone, 5},
+    { "setPI",     TSET,       MS_USET_PI,         TG::Standalone, 5},
+    { "setQ",      TSET,       MS_USETQ,           TG::Standalone, 5},
+    { "setR",      TSET,       MS_USETR,           TG::Standalone, 5},
+    { "setS",      TSET,       MS_USETS,           TG::Standalone, 5},
+    { "setSIGMA",  TSET,       MS_USET_SIGMA,      TG::Standalone, 5},
+    { "setT",      TSET,       MS_USETT,           TG::Standalone, 5},
+    { "setU",      TSET,       MS_USETU,           TG::Standalone, 5},
+    { "setV",      TSET,       MS_USETV,           TG::Standalone, 5},
+    { "setW",      TSET,       MS_USETW,           TG::Standalone, 5},
+    { "setX",      TSET,       MS_USETX,           TG::Standalone, 5},
+    { "setY",      TSET,       MS_USETY,           TG::Standalone, 5},
+    { "setZ",      TSET,       MS_USETZ,           TG::Standalone, 5},
+    { "seta",      TSET,       MS_LSETA,           TG::Standalone, 5},
+    { "setb",      TSET,       MS_LSETB,           TG::Standalone, 5},
+    { "setc",      TSET,       MS_LSETC,           TG::Standalone, 5},
+    { "setd",      TSET,       MS_LSETD,           TG::Standalone, 5},
+    { "sete",      TSET,       MS_LSETE,           TG::Standalone, 5},
+    { "setf",      TSET,       MS_LSETF,           TG::Standalone, 5},
+    { "setg",      TSET,       MS_LSETG,           TG::Standalone, 5},
+    { "setgamma",  TSET,       MS_LSET_GAMMA,      TG::Standalone, 5},
+    { "seth",      TSET,       MS_LSETH,           TG::Standalone, 5},
+    { "seti",      TSET,       MS_LSETI,           TG::Standalone, 5},
+    { "setj",      TSET,       MS_LSETJ,           TG::Standalone, 5},
+    { "setk",      TSET,       MS_LSETK,           TG::Standalone, 5},
+    { "setl",      TSET,       MS_LSETL,           TG::Standalone, 5},
+    { "setm",      TSET,       MS_LSETM,           TG::Standalone, 5},
+    { "setn",      TSET,       MS_LSETN,           TG::Standalone, 5},
+    { "seto",      TSET,       MS_LSETO,           TG::Standalone, 5},
+    { "setp",      TSET,       MS_LSETP,           TG::Standalone, 5},
+    { "setpi",     TSET,       MS_LSET_PI,         TG::Standalone, 5},
+    { "setq",      TSET,       MS_LSETQ,           TG::Standalone, 5},
+    { "setr",      TSET,       MS_LSETR,           TG::Standalone, 5},
+    { "sets",      TSET,       MS_LSETS,           TG::Standalone, 5},
+    { "sett",      TSET,       MS_LSETT,           TG::Standalone, 5},
+    { "setu",      TSET,       MS_LSETU,           TG::Standalone, 5},
+    { "setv",      TSET,       MS_LSETV,           TG::Standalone, 5},
+    { "setw",      TSET,       MS_LSETW,           TG::Standalone, 5},
+    { "setx",      TSET,       MS_LSETX,           TG::Standalone, 5},
+    { "sety",      TSET,       MS_LSETY,           TG::Standalone, 5},
+    { "setz",      TSET,       MS_LSETZ,           TG::Standalone, 5},
+    // Lower case
+    { "sigma",     TGREEK,     MS_LSIGMA,          TG::Standalone, 5},
+    { "t",         TCHARACTER, 't',                TG::Standalone, 5},
+    { "tau",       TGREEK,     MS_LTAU,            TG::Standalone, 5},
+    { "theta",     TGREEK,     MS_LTHETA,          TG::Standalone, 5},
+    { "u",         TCHARACTER, 'u',                TG::Standalone, 5},
+    { "unicode",   THEX,       MS_NONE,            TG::Standalone, 5},
+    { "upsilon",   TGREEK,     MS_LUPSILON,        TG::Standalone, 5},
+    { "v",         TCHARACTER, 'v',                TG::Standalone, 5},
+    { "w",         TCHARACTER, 'w',                TG::Standalone, 5},
+    { "won",       TCURRENCY,  MS_WON,             TG::Standalone, 5},
+    { "wp",        TWP,        MS_WP,              TG::Standalone, 5},
+    { "x",         TCHARACTER, 'x',                TG::Standalone, 5},
+    { "xi",        TGREEK,     MS_LXI,             TG::Standalone, 5},
+    { "y",         TCHARACTER, 'y',                TG::Standalone, 5},
+    { "yen",       TCURRENCY,  MS_YEN,             TG::Standalone, 5},
+    { "ypsilon",   TGREEK,     MS_LUPSILON,        TG::Standalone, 5},
+    { "z",         TCHARACTER, 'z',                TG::Standalone, 5},
+    { "zeta",      TGREEK,     MS_LZETA,           TG::Standalone, 5}
 };
 
 // First character may be any alphabetic
@@ -340,9 +625,15 @@ const sal_Int32 coUserDefinedCharContFlags = KParseTokens::ANY_LETTER_OR_NUMBER
                                              | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
 //Checks if keyword is in the list.
-static inline bool findCompare(const SmTokenTableEntry & lhs, const OUString & s)
+static inline bool findCompareToIgnoreAsciiCaseAscii(const SmTokenTableEntry & lhs, const OUString & s)
 {
     return s.compareToIgnoreAsciiCaseAscii(lhs.pIdent) > 0;
+}
+
+//Checks if keyword is in the list.
+static inline bool findCompareAscii(const SmTokenTableEntry & lhs, const OUString & s)
+{
+    return s.compareToAscii(lhs.pIdent) > 0;
 }
 
 //Returns the SmTokenTableEntry for a keyword
@@ -351,9 +642,10 @@ static const SmTokenTableEntry * GetTokenTableEntry( const OUString &rName )
     if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
     //Looks for the first keyword after or equal to rName in alphabetical order.
     auto findIter = std::lower_bound( std::begin(aTokenTable),
-                                      std::end(aTokenTable), rName, findCompare );
+                                      std::end(aTokenTable), rName,
+                                      findCompareToIgnoreAsciiCaseAscii );
     if ( findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))
-        return &*findIter; //check is equal
+        return findIter; //check is equal
     return nullptr; //not found
 }
 
@@ -363,10 +655,35 @@ static const SmTokenTableEntry * GetColorTokenTableEntry( const OUString &rName 
     if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
     //Looks for the first keyword after or equal to rName in alphabetical order.
     auto findIter = std::lower_bound( std::begin(aColorTokenTable),
-                                      std::end(aColorTokenTable), rName, findCompare );
+                                      std::end(aColorTokenTable), rName,
+                                      findCompareToIgnoreAsciiCaseAscii );
     if ( findIter != std::end(aColorTokenTable)
                      && rName.equalsIgnoreAsciiCaseAscii( findIter->pIdent ))
-        return &*findIter; //check is equal
+        return findIter; //check is equal
+    return nullptr; //not found
+}
+
+//Returns the SmTokenTableEntry for a keyword
+static const SmTokenTableEntry * GetCharTokenTableEntry( const OUString &rName )
+{
+    if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
+    //Looks for the first keyword after or equal to rName in alphabetical order.
+    auto findIter = std::lower_bound( std::begin(aCharTokenTable),
+                                      std::end(aCharTokenTable), rName, findCompareAscii );
+    if ( findIter != std::end(aCharTokenTable) && rName.equalsAscii( findIter->pIdent ))
+        return findIter; //check is equal
+    return nullptr; //not found
+}
+
+//Returns the SmTokenTableEntry for a keyword
+static const SmTokenTableEntry * GetSetTokenTableEntry( const OUString &rName )
+{
+    if (rName.isEmpty())return nullptr; //avoid null pointer exceptions
+    //Looks for the first keyword after or equal to rName in alphabetical order.
+    auto findIter = std::lower_bound( std::begin(aSetTokenTable),
+                                      std::end(aSetTokenTable), rName, findCompareAscii );
+    if ( findIter != std::end(aSetTokenTable) && rName.equalsAscii( findIter->pIdent ))
+        return findIter; //check is equal
     return nullptr; //not found
 }
 
@@ -462,15 +779,13 @@ void SmParser::NextToken() //Central part of the parser
         // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
         aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER,
                                         m_aBufferString, m_nBufferIndex,
-                                        coNumStartFlags, "",
-                                        coNumContFlags, "");
+                                        coNumStartFlags, "", coNumContFlags, "");
 
         if (aRes.TokenType == 0)
         {
             // Try again with the default token parsing.
             aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
-                                     coStartFlags, "",
-                                     coContFlags, "");
+                                     coStartFlags, "", coContFlags, "");
         }
 
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
@@ -992,20 +1307,27 @@ void SmParser::NextToken() //Central part of the parser
     }
     else nbHandled = true;
 
+    // tdf#129372: we may have to deal with surrogate pairs
+    // (see https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
     if (nbHandled)
     {
         m_aCurToken.eType      = TCHARACTER;
-        m_aCurToken.cMathChar  = '\0';
         m_aCurToken.nGroup     = TG::NONE;
         m_aCurToken.nLevel     = 5;
 
-        // tdf#129372: we may have to deal with surrogate pairs
-        // (see https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
-        // in this case, we must read 2 sal_Unicode instead of 1
-        int nOffset(rtl::isSurrogate(m_aBufferString[nRealStart])? 2 : 1);
-        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, nOffset );
-
-        aRes.EndPos = nRealStart + nOffset;
+        if( rtl::isSurrogate(m_aBufferString[nRealStart]) )
+        {
+            aRes.EndPos = nRealStart + 2;
+            m_aCurToken.aText = m_aBufferString.copy( nRealStart, 2 );
+            m_aCurToken.cMathChar = rtl::combineSurrogates( m_aBufferString[nRealStart],
+                                                            m_aBufferString[nRealStart+1] );
+        }
+        else
+        {
+             aRes.EndPos = nRealStart + 1;
+             m_aCurToken.cMathChar = m_aBufferString[nRealStart];
+             m_aCurToken.aText = m_aBufferString.copy( nRealStart, 1 );
+        }
     }
 
     if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
@@ -1085,6 +1407,162 @@ void SmParser::NextTokenColor()
     if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
 }
 
+void SmParser::NextTokenChar() //Central part of the parser
+{
+
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+    do
+    {
+        // skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==
+                        m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
+           ++m_nBufferIndex;
+
+        // Try to parse a number in a locale-independent manner using
+        // '.' as decimal separator.
+        // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
+        aRes = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER,
+                                        m_aBufferString, m_nBufferIndex,
+                                        coNumStartFlags, "", coNumContFlags, "");
+
+        if (aRes.TokenType == 0)
+        {
+            // Try again with the default token parsing.
+            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
+                                     coStartFlags, "", coContFlags, "");
+        }
+
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        if( aRes.TokenType == 0 && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
+        {
+            ++m_nRow;
+            m_nBufferIndex = m_nColOff = nRealStart + 1;
+            bCont = true;
+        }
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                //SkipComment
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ])
+                    ++m_nBufferIndex;
+                bCont = true;
+            }
+        }
+
+    } while (bCont);
+
+    // set index of current token
+    m_nTokenIndex      = m_nBufferIndex;
+    m_aCurToken.nRow   = m_nRow;
+    m_aCurToken.nCol   = nRealStart - m_nColOff + 1;
+
+    if (nRealStart >= nBufLen) m_aCurToken.eType = TEND;
+    else if (aRes.TokenType & KParseType::IDENTNAME)
+    {
+        sal_Int32 n = aRes.EndPos - nRealStart;
+        assert(n >= 0);
+        OUString aName( m_aBufferString.copy( nRealStart, n ) );
+        const SmTokenTableEntry *pEntry = GetCharTokenTableEntry( aName );
+
+        if (pEntry)
+        {
+            m_aCurToken.eType      = pEntry->eType;
+            m_aCurToken.cMathChar  = pEntry->cMathChar;
+            m_aCurToken.nGroup     = pEntry->nGroup;
+            m_aCurToken.nLevel     = pEntry->nLevel;
+            m_aCurToken.aText      = OUString::createFromAscii( pEntry->pIdent );
+        }
+        else
+        {
+            m_aCurToken.eType      = TPLACE;
+            m_aCurToken.cMathChar  = MS_PLACE;
+            m_aCurToken.nGroup     = TG::NONE;
+            m_aCurToken.nLevel     = 5;
+            m_aCurToken.aText      = aName;
+        }
+
+    }
+    if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
+}
+
+void SmParser::NextTokenSet()
+{
+
+    sal_Int32   nBufLen = m_aBufferString.getLength();
+    ParseResult aRes;
+    sal_Int32   nRealStart;
+    bool        bCont;
+    do
+    {
+        // skip white spaces
+        while (UnicodeType::SPACE_SEPARATOR ==
+                        m_pSysCC->getType( m_aBufferString, m_nBufferIndex ))
+           ++m_nBufferIndex;
+
+        // Try again with the default token parsing.
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex,
+                                 coStartFlags, "", coContFlags, "");
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
+        m_nBufferIndex = nRealStart;
+
+        bCont = false;
+        if ( aRes.TokenType == 0  &&
+                nRealStart < nBufLen &&
+                '\n' == m_aBufferString[ nRealStart ] )
+        {
+            ++m_nRow;
+            m_nBufferIndex = m_nColOff = nRealStart + 1;
+            bCont = true;
+        }
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
+            {
+                //SkipComment
+                m_nBufferIndex = nRealStart + 2;
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ])
+                    ++m_nBufferIndex;
+                bCont = true;
+            }
+        }
+
+    } while (bCont);
+
+    // set index of current token
+    m_nTokenIndex      = m_nBufferIndex;
+    m_aCurToken.nRow   = m_nRow;
+    m_aCurToken.nCol   = nRealStart - m_nColOff + 1;
+
+    if (nRealStart >= nBufLen) m_aCurToken.eType    = TEND;
+    else if (aRes.TokenType & KParseType::IDENTNAME)
+    {
+        sal_Int32 n = aRes.EndPos - nRealStart;
+        assert(n >= 0);
+        OUString aName( m_aBufferString.copy( nRealStart, n ) );
+        const SmTokenTableEntry *pEntry = GetSetTokenTableEntry( aName );
+
+        if (pEntry)
+        {
+            m_aCurToken.eType      = pEntry->eType;
+            m_aCurToken.cMathChar  = pEntry->cMathChar;
+            m_aCurToken.nGroup     = pEntry->nGroup;
+            m_aCurToken.nLevel     = pEntry->nLevel;
+            m_aCurToken.aText      = OUString::createFromAscii( pEntry->pIdent );
+        }
+        else m_aCurToken.eType     = TNONE;
+
+    }
+    if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
+}
+
 void SmParser::NextTokenFontSize()
 {
 
@@ -1115,11 +1593,8 @@ void SmParser::NextTokenFontSize()
 
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
         m_nBufferIndex = nRealStart;
-
         bCont = false;
-        if ( aRes.TokenType == 0  &&
-                nRealStart < nBufLen &&
-                '\n' == m_aBufferString[ nRealStart ] )
+        if( aRes.TokenType == 0  && nRealStart < nBufLen && '\n' == m_aBufferString[ nRealStart ] )
         {
             // keep data needed for tokens row and col entry up to date
             ++m_nRow;
@@ -1132,8 +1607,7 @@ void SmParser::NextTokenFontSize()
             {
                 //SkipComment
                 m_nBufferIndex = nRealStart + 2;
-                while (m_nBufferIndex < nBufLen  &&
-                    '\n' != m_aBufferString[ m_nBufferIndex ])
+                while (m_nBufferIndex < nBufLen  && '\n' != m_aBufferString[ m_nBufferIndex ])
                     ++m_nBufferIndex;
                 bCont = true;
             }
@@ -1151,6 +1625,7 @@ void SmParser::NextTokenFontSize()
     {
         if ( aRes.EndPos - nRealStart == 1 )
         {
+
             switch ( m_aBufferString[ nRealStart ] )
             {
                 case '*':
@@ -1187,6 +1662,7 @@ void SmParser::NextTokenFontSize()
             }
         }
         else m_aCurToken.eType = TNONE;
+
     }
     else if(hex)
     {
@@ -1198,8 +1674,7 @@ void SmParser::NextTokenFontSize()
         m_aCurToken.nGroup     = TG::NONE;
         m_aCurToken.nLevel     = 5;
         m_aCurToken.aText      = m_aBufferString.copy( nRealStart, n );
-    }
-    else m_aCurToken.eType     = TNONE;
+    } else m_aCurToken.eType   = TNONE;
 
     if (TEND != m_aCurToken.eType) m_nBufferIndex = aRes.EndPos;
 }
@@ -1276,7 +1751,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
             }
         case TCHARACTER :
             {
-                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
+                auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
             }
@@ -1368,6 +1843,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
         case TSETQ :
         case TSETR :
         case TSETC :
+        case TSETP :
         case THBAR :
         case TLAMBDABAR :
         case TBACKEPSILON :
@@ -1388,6 +1864,60 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
                 NextToken();
                 return std::unique_ptr<SmNode>(pNode.release());
+            }
+
+        case TCHAR:
+            {
+                NextTokenChar();
+                switch(m_aCurToken.eType)
+                {
+                    case TCHARACTER:
+                    {
+                        auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                    case TPLACE:
+                    {
+                        auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                    case TGREEK:
+                    {
+                        auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                    case TSET:
+                    {
+                        if ( m_aCurToken.cMathChar == MS_NONE )
+                        {
+                            NextTokenSet();
+                            if( m_aCurToken.eType!=TSET )return DoError(SmParseError::SetExpected);
+                        }
+                        auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                    case THEX:
+                    {
+                        NextTokenFontSize();
+                        if( lcl_IsNotWholeNumber16(m_aCurToken.aText) )
+                            return DoError(SmParseError::NumberExpected);
+                        m_aCurToken.eType = TCHAR;
+                        m_aCurToken.cMathChar = static_cast<sal_Unicode32>(m_aCurToken.aText.toUInt32(16));
+                        auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                    default:
+                    {
+                        auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+                        NextToken();
+                        return std::unique_ptr<SmNode>(pNode.release());
+                    }
+                }
             }
 
         case TSPECIAL:
@@ -1414,18 +1944,16 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
 
         default:
             if (TokenInGroup(TG::LBrace)) return DoBrace();
-            if (TokenInGroup(TG::Oper)) return DoOperator();
+            if (TokenInGroup(TG::Oper))   return DoOperator();
             if (TokenInGroup(TG::UnOper)) return DoUnOper();
-            if ( TokenInGroup(TG::Attribute) ||
-                 TokenInGroup(TG::FontAttr) )
+            if ( TokenInGroup(TG::Attribute) || TokenInGroup(TG::FontAttr) )
             {
                 std::stack<std::unique_ptr<SmStructureNode>> aStack;
                 bool    bIsAttr;
                 for (;;)
                 {
                     bIsAttr = TokenInGroup(TG::Attribute);
-                    if (!bIsAttr && !TokenInGroup(TG::FontAttr))
-                        break;
+                    if (!bIsAttr && !TokenInGroup(TG::FontAttr)) break;
                     aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
                 }
 
@@ -2604,6 +3132,7 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
         case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
         case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
         case SmParseError::NumberExpected:     pRID = RID_ERR_NUMBEREXPECTED;      break;
+        case SmParseError::SetExpected:        pRID = RID_ERR_SETEXPECTED;         break;
         default:                               pRID = RID_ERR_UNKNOWN;             break;
     }
     pErrDesc->m_aText += SmResId(pRID);
@@ -2650,7 +3179,6 @@ std::unique_ptr<SmTableNode> SmParser::Parse(const OUString &rBuffer)
     m_nCurError     = -1;
 
     m_aErrDescList.clear();
-
     NextToken();
     return DoTable();
 }
@@ -2697,9 +3225,8 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
         case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
         case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
         case SmParseError::NumberExpected:     pRID = RID_ERR_NUMBEREXPECTED;      break;
-        default:
-            assert(false);
-            return;
+        case SmParseError::SetExpected:        pRID = RID_ERR_SETEXPECTED;         break;
+        default:                               pRID = RID_ERR_UNKNOWN;             break;
     }
     pErrDesc->m_aText += SmResId(pRID);
 

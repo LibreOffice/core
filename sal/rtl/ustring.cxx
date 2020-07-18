@@ -572,15 +572,11 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         rtl_uString_new(newString);
         return;
     }
-    if (*newString != nullptr) {
-        rtl_uString_release(*newString);
-    }
+    if (*newString != nullptr) rtl_uString_release(*newString);
     n = codePointCount;
     for (i = 0; i < codePointCount; ++i) {
         OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
-        if (codePoints[i] >= 0x10000) {
-            ++n;
-        }
+        if (codePoints[i] > 0x0000FFFF) ++n;
     }
     /* Builds on the assumption that sal_Int32 uses 32 bit two's complement
        representation with wrap around (the necessary number of UTF-16 code
@@ -592,9 +588,44 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         return;
     }
     *newString = rtl_uString_ImplAlloc(n);
-    if (*newString == nullptr) {
+    if (*newString == nullptr) return;
+    p = (*newString)->buffer;
+    for (i = 0; i < codePointCount; ++i) {
+        p += rtl::splitSurrogates(codePoints[i], p);
+    }
+    RTL_LOG_STRING_NEW( *newString );
+}
+
+void SAL_CALL rtl_uString_newFromCodePoints32(
+    rtl_uString ** newString, sal_Unicode32 const * codePoints,
+    sal_Int32 codePointCount) SAL_THROW_EXTERN_C()
+{
+    sal_Int32 n;
+    sal_Int32 i;
+    sal_Unicode * p;
+    assert(newString != nullptr);
+    assert((codePoints != nullptr || codePointCount == 0) && codePointCount >= 0);
+    if (codePointCount == 0) {
+        rtl_uString_new(newString);
         return;
     }
+    if (*newString != nullptr) rtl_uString_release(*newString);
+    n = codePointCount;
+    for (i = 0; i < codePointCount; ++i) {
+        OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
+        if (codePoints[i] > 0x0000FFFF) ++n;
+    }
+    /* Builds on the assumption that sal_Int32 uses 32 bit two's complement
+       representation with wrap around (the necessary number of UTF-16 code
+       units will be no larger than 2 * SAL_MAX_INT32, represented as
+       sal_Int32 -2): */
+    if (n < 0) {
+        // coverity[dead_error_begin] - assumes wrap around
+        *newString = nullptr;
+        return;
+    }
+    *newString = rtl_uString_ImplAlloc(n);
+    if (*newString == nullptr) return;
     p = (*newString)->buffer;
     for (i = 0; i < codePointCount; ++i) {
         p += rtl::splitSurrogates(codePoints[i], p);

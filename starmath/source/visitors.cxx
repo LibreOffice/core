@@ -2534,7 +2534,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_CDOT:
             Append("cdot");
             break;
-        case MS_SETC:
+        case MS_USETC:
             Append("setC");
             break;
         case MS_HBAR:
@@ -2543,7 +2543,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_IM:
             Append("Im");
             break;
-        case MS_SETN:
+        case MS_USETN:
             Append("setN");
             break;
         case MS_WP:
@@ -2552,16 +2552,16 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_LAPLACE:
             Append("laplace");
             break;
-        case MS_SETQ:
+        case MS_USETQ:
             Append("setQ");
             break;
         case MS_RE:
             Append("Re");
             break;
-        case MS_SETR:
+        case MS_USETR:
             Append("setR");
             break;
-        case MS_SETZ:
+        case MS_USETZ:
             Append("setZ");
             break;
         case MS_ALEPH:
@@ -2606,7 +2606,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_NOTIN:
             Append("notin");
             break;
-        case MS_BACKEPSILON:
+        case MS_UBEPSILON:
             Append("backepsilon");
             break;
         case MS_PROD:

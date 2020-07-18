@@ -83,9 +83,11 @@ class SmParser
     SmParser& operator=(const SmParser&) = delete;
 
     void            NextToken();
+    void            NextTokenSet();
+    void            NextTokenChar();
     void            NextTokenColor();
     void            NextTokenFontSize();
-    sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
+    sal_Int32       GetTokenIndex() const { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
     inline bool     TokenInGroup( TG nGroup );
