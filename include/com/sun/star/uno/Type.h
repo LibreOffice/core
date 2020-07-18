@@ -86,7 +86,7 @@ public:
         @param eTypeClass type class of type
         @param pTypeName name of type
     */
-    inline Type( TypeClass eTypeClass, const sal_Char * pTypeName );
+    inline Type( TypeClass eTypeClass, const char * pTypeName );
 
     /** Constructor: Type is (copy) constructed by given C type description reference.
 
