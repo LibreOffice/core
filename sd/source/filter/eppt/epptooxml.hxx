@@ -27,9 +27,7 @@
 
 using ::sax_fastparser::FSHelperPtr;
 
-namespace oox {
-
-namespace core {
+namespace oox::core {
 
 struct LayoutInfo
 {
@@ -155,7 +153,7 @@ private:
 };
 
 }
-}
+
 
 #endif
 
