@@ -12,9 +12,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <office:text>.
 class XMLBodyContentContext : public XMLImportContext
@@ -32,8 +30,7 @@ public:
 rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName,
                                                         bool bTopLevel = false);
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

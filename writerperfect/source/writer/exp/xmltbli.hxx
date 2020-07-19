@@ -14,9 +14,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <table:table>.
 class XMLTableContext : public XMLImportContext
@@ -42,8 +40,7 @@ private:
     librevenge::RVNGPropertyListVector m_aColumns;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

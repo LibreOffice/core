@@ -15,19 +15,10 @@
 #include "writerperfectdllapi.h"
 #include <memory>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
+namespace com::sun::star::io
 {
 class XInputStream;
 class XSeekable;
-}
-}
-}
 }
 
 namespace writerperfect

@@ -12,9 +12,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <text:list-item>.
 class XMLTextListItemContext : public XMLImportContext
@@ -27,8 +25,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

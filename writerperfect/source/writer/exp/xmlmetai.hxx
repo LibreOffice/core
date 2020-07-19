@@ -14,9 +14,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <office:meta>.
 class XMLMetaDocumentContext : public XMLImportContext
@@ -81,8 +79,7 @@ private:
     OUString m_aDate;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 
