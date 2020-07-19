@@ -33,8 +33,7 @@
 
 namespace oox { class GraphicHelper; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class ShapePropertyMap;
 
@@ -82,8 +81,7 @@ struct LineProperties
     sal_Int32           getLineWidth() const;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

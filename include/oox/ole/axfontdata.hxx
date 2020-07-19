@@ -43,8 +43,7 @@ namespace o3tl {
     template<> struct typed_flags<AxFontFlags> : is_typed_flags<AxFontFlags, 0x4000200f> {};
 }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 enum class AxHorizontalAlign {
     Left = 1, Right = 2, Center = 3
@@ -80,8 +79,7 @@ struct OOX_DLLPUBLIC AxFontData
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

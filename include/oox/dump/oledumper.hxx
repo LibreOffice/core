@@ -38,8 +38,7 @@ namespace com::sun::star {
     namespace io { class XInputStream; }
 }
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 
 class OleInputObjectBase : public InputObjectBase
@@ -842,8 +841,7 @@ protected:
 };
 
 
-} // namespace dump
-} // namespace oox
+} // namespace oox::dump
 
 #endif
 #endif

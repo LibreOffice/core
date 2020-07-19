@@ -46,8 +46,7 @@ namespace utl { class MediaDescriptor; }
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 enum class OOXMLVariant {
     ECMA_Transitional,
@@ -166,8 +165,7 @@ private:
 };
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

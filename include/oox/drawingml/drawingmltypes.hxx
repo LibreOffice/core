@@ -40,8 +40,7 @@ namespace com::sun::star {
     namespace xml::sax { class XFastAttributeList; }
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 const sal_Int32 PER_PERCENT     = 1000;
@@ -233,8 +232,7 @@ struct EmuRectangle : public EmuPoint, public EmuSize
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

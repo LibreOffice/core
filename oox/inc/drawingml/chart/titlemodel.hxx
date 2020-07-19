@@ -23,9 +23,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 struct TextModel
 {
@@ -84,9 +82,7 @@ struct LegendModel
                         ~LegendModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

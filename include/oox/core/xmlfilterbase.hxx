@@ -64,8 +64,7 @@ namespace sax_fastparser {
 
 namespace utl { class MediaDescriptor; }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 class FragmentHandler;
 class FastParser;
@@ -273,8 +272,7 @@ protected:
     bool mbMissingExtDrawing;
 };
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

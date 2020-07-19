@@ -33,9 +33,7 @@ namespace com::sun::star {
 
 namespace oox::core { class FilterBase; }
 
-namespace oox {
-namespace dump {
-namespace pptx {
+namespace oox::dump::pptx {
 
 
 class RootStorageObject : public StorageObjectBase
@@ -67,9 +65,7 @@ protected:
 };
 
 
-} // namespace pptx
-} // namespace dump
-} // namespace oox
+} // namespace oox::dump::pptx
 
 #endif
 #endif

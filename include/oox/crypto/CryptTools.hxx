@@ -26,8 +26,7 @@
 #include <vector>
 #include <memory>
 
-namespace oox {
-namespace crypto {
+namespace oox::crypto {
 
 /** Rounds up the input to the nearest multiple
  *
@@ -114,8 +113,7 @@ public:
 };
 
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

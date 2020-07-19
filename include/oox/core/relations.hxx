@@ -27,8 +27,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 
 /** Expands to an OUString containing an 'officeDocument' transitional relation type created
@@ -113,8 +112,7 @@ private:
 };
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

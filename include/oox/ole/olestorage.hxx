@@ -36,8 +36,7 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
 }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** Implements stream access for binary OLE storages. */
@@ -109,8 +108,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

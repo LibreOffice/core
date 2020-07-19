@@ -31,19 +31,11 @@ namespace com::sun::star {
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace core {
-
-
-namespace CodecHelper
+namespace oox::core::CodecHelper
 {
     /** Returns the password hash if it is in the required 16-bit limit. */
     OOX_DLLPUBLIC sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
-}
-
-
-} // namespace core
-} // namespace oox
+} // namespace oox::core::CodecHelper
 
 #endif
 

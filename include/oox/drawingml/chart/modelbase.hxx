@@ -29,9 +29,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 template< typename ModelType >
 class ModelRef : public std::shared_ptr< ModelType >
@@ -121,9 +119,7 @@ struct LayoutModel
                         ~LayoutModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 
