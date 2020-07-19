@@ -27,8 +27,7 @@
 #include <functional>
 #include <initializer_list>
 
-namespace comphelper {
-namespace service_decl {
+namespace comphelper::service_decl {
 
 class ServiceDecl;
 
@@ -328,8 +327,7 @@ COMPHELPER_DLLPUBLIC
 void* component_getFactoryHelper( const char* pImplName,
                                   std::initializer_list<ServiceDecl const *> args );
 
-} // namespace service_decl
-} // namespace comphelper
+} // namespace comphelper::service_decl
 
 
 #endif //  ! defined( INCLUDED_COMPHELPER_SERVICEDECL_HXX)

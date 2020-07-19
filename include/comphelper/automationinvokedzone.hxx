@@ -15,9 +15,7 @@
 // Helpers for use when calling into LO from an Automation (OLE
 // Automation) client.
 
-namespace comphelper
-{
-namespace Automation
+namespace comphelper::Automation
 {
 // Create an object of this class at the start of a function directly invoked from an Automation
 // client.
@@ -31,7 +29,6 @@ public:
 
     static bool isActive();
 };
-}
 }
 
 #endif // INCLUDED_COMPHELPER_AUTOMATIONINVOKEDZONE_HXX

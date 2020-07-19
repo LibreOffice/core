@@ -13,14 +13,10 @@
 #include <rtl/string.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace comphelper
+namespace comphelper::xml
 {
-    namespace xml
-    {
         COMPHELPER_DLLPUBLIC OString makeXMLChaff();
         COMPHELPER_DLLPUBLIC OString generateGUIDString();
-
-    }
 }
 
 #endif

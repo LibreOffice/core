@@ -16,31 +16,13 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace graphic
+namespace com::sun::star::graphic
 {
 class XGraphic;
 }
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace io
+namespace com::sun::star::io
 {
 class XInputStream;
-}
-}
-}
 }
 
 namespace comphelper
