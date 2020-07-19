@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class AutoFilter;
 class FilterColumn;
@@ -77,8 +76,7 @@ private:
     AutoFilter&         mrAutoFilter;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

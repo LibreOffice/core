@@ -30,8 +30,7 @@ namespace com::sun::star {
 
 class ScDPObject;
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class PivotTable;
 
@@ -401,8 +400,7 @@ private:
     PivotTableVector    maTables;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

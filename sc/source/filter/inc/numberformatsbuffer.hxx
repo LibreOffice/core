@@ -32,8 +32,7 @@ class SfxItemSet;
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 struct NumFmtModel
 {
@@ -113,8 +112,7 @@ private:
     sal_uInt32          mnHighestId;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

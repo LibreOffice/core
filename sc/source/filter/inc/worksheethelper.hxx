@@ -39,8 +39,7 @@ namespace com::sun::star {
     namespace table { class XCellRange; }
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class AutoFilterBuffer;
 class CommentsBuffer;
@@ -302,8 +301,7 @@ private:
     WorksheetGlobals&   mrSheetGlob;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

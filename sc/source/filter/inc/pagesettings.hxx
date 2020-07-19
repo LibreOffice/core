@@ -27,8 +27,7 @@ namespace oox { class AttributeList; }
 namespace oox { class PropertySet; }
 namespace oox::core { class Relations; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class HeaderFooterParser;
 
@@ -176,8 +175,7 @@ private:
     HFHelperData        maFooterData;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

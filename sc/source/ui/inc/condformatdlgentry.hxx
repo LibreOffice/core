@@ -25,9 +25,7 @@ class ScDataBarFormat;
 class ScIconSetFormat;
 struct ScDataBarFormatData;
 
-namespace condformat {
-
-namespace entry {
+namespace condformat::entry {
 
 enum ScCondFrmtEntryType
 {
@@ -39,8 +37,6 @@ enum ScCondFrmtEntryType
     ICONSET,
     DATE
 };
-
-}
 
 }
 

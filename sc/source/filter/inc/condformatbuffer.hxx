@@ -36,8 +36,7 @@ struct ScIconSetFormatData;
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class CondFormat;
 
@@ -318,8 +317,7 @@ private:
     sal_Int32 mnNonPrioritizedRuleNextPriority = 1048576;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -25,8 +25,7 @@
 
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 // BIFF12 record identifiers ==================================================
 
@@ -618,8 +617,7 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, OUString& or
     return rStrm;
 }
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

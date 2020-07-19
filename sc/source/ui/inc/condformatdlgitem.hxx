@@ -14,9 +14,7 @@
 
 #include <memory>
 
-namespace condformat {
-
-namespace dialog {
+namespace condformat::dialog {
 
 enum ScCondFormatDialogType
 {
@@ -27,8 +25,6 @@ enum ScCondFormatDialogType
     ICONSET,
     DATE
 };
-
-}
 
 }
 

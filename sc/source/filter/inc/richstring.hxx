@@ -33,8 +33,7 @@ namespace com::sun::star {
 
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Contains text data and font attributes for a part of a rich formatted string. */
 class RichStringPortion : public WorkbookHelper
@@ -261,8 +260,7 @@ private:
 
 typedef std::shared_ptr< RichString > RichStringRef;
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

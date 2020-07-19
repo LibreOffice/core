@@ -24,8 +24,7 @@
 #include "worksheethelper.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 struct CommentModel
 {
@@ -88,8 +87,7 @@ private:
     CommentVector       maComments;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

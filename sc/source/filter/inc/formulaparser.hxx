@@ -23,8 +23,7 @@
 #include <memory>
 #include "formulabase.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 // formula finalizer ==========================================================
 
@@ -128,8 +127,7 @@ private:
     ::std::unique_ptr< FormulaParserImpl > mxImpl;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

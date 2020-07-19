@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class QueryTable;
 
@@ -44,8 +43,7 @@ private:
     QueryTable&         mrQueryTable;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -31,8 +31,7 @@ class ScTokenArray;
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 // codes for built-in names
 const sal_Unicode BIFF_DEFNAME_CONSOLIDATEAREA  = '\x00';
@@ -177,8 +176,7 @@ private:
     DefNameTokenIdMap   maTokenIdMap;       /// Maps all defined names by API token index.
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

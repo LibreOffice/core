@@ -28,8 +28,7 @@
 namespace oox { class SequenceInputStream; }
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Contains data from the 'sheet' element describing a sheet in the workbook. */
 struct SheetInfoModel
@@ -105,8 +104,7 @@ private:
     RefMap< OUString, SheetInfo, IgnoreCaseCompare >  maSheetInfosByName;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

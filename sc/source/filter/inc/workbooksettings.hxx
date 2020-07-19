@@ -27,8 +27,7 @@ namespace oox { class SequenceInputStream; }
 
 namespace com::sun::star::util { struct Date; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Settings for workbook write protection. */
 struct FileSharingModel
@@ -116,8 +115,7 @@ private:
     CalcSettingsModel   maCalcSettings;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

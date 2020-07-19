@@ -24,8 +24,7 @@
 #include "worksheethelper.hxx"
 #include <tabprotection.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Sheet and outline settings. */
 struct SheetSettingsModel
@@ -112,8 +111,7 @@ private:
     SheetProtectionModel maSheetProt;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -23,8 +23,7 @@
 #include "excelhandlers.hxx"
 #include "worksheethelper.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class PivotTable;
 class PivotTableField;
@@ -80,8 +79,7 @@ private:
     PivotTable&         mrPivotTable;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class SharedStringsFragment : public WorkbookFragmentBase
 {
@@ -40,8 +39,7 @@ protected:
     virtual void        finalizeImport() override;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -25,8 +25,7 @@
 #include "worksheethelper.hxx"
 #include "workbookhelper.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Contains all settings for a selection in a single pane of a sheet. */
 struct PaneSelectionModel
@@ -186,8 +185,7 @@ private:
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 
