@@ -398,7 +398,7 @@
 #define RID_SVXSTR_ADDITIONS_SEARCHING              NC_("RID_SVXSTR_ADDITIONS_SEARCHING", "Searching...")
 #define RID_SVXSTR_ADDITIONS_LOADING                NC_("RID_SVXSTR_ADDITIONS_LOADING", "Loading...")
 #define RID_SVXSTR_ADDITIONS_NORESULTS              NC_("ID_SVXSTR_ADDITIONS_NORESULTS", "No results found")
-
+#define RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX    NC_("RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX", "Extensions")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

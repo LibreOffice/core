@@ -1684,14 +1684,14 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
 }
 
 VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
-    weld::Window* pParent)
+    weld::Window* pParent, const OUString& sAdditionsTag)
 {
 #if HAVE_FEATURE_EXTENSIONS
     return VclPtr<AbstractAdditionsDialog_Impl>::Create(
-        std::make_unique<AdditionsDialog>(pParent));
+        std::make_unique<AdditionsDialog>(pParent, sAdditionsTag));
 #else
     (void) pParent;
-    return VclPtr<AbstractAdditionsDialog>(nullptr);
+    return VclPtr<AbstractAdditionsDialog>(nullptr, sAdditionsTag);
 #endif
 }
 

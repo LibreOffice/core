@@ -3492,9 +3492,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ADDITIONS_DIALOG:
         {
+            OUString sAdditionsTag = "";
+
+            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+            if (pStringArg)
+                sAdditionsTag = pStringArg->GetValue();
+
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractAdditionsDialog> pDlg(
-                pFact->CreateAdditionsDialog(GetFrameWeld()));
+                pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
             pDlg->Execute();
             Cancel();
             rReq.Ignore ();
