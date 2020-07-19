@@ -24,8 +24,7 @@
 #include "richstring.hxx"
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class RichStringContext : public WorkbookContextBase
 {
@@ -52,8 +51,7 @@ RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString
     OSL_ENSURE( mxString, "RichStringContext::RichStringContext - missing string object" );
 }
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

@@ -25,8 +25,7 @@
 #include "workbookhelper.hxx"
 #include "worksheethelper.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Context handler derived from the WorkbookHelper helper class.
 
@@ -77,8 +76,7 @@ public:
 };
 
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

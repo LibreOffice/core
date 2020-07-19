@@ -22,8 +22,7 @@
 
 #include "excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class Connection;
 
@@ -58,8 +57,7 @@ protected:
     virtual void        finalizeImport() override;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

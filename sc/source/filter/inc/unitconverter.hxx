@@ -29,8 +29,7 @@ namespace com::sun::star {
     namespace util { struct Date; struct DateTime; }
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Units supported by the UnitConverter class. */
 enum class Unit
@@ -100,8 +99,7 @@ private:
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

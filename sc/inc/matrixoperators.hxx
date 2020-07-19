@@ -13,9 +13,7 @@
 
 #include <functional>
 
-namespace sc {
-
-namespace op {
+namespace sc::op {
 
 
 template<typename T>
@@ -55,7 +53,7 @@ struct Product
 
 }
 
-}
+
 
 #endif
 

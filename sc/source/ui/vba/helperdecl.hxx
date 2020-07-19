@@ -22,8 +22,7 @@
 
 #include <comphelper/servicedecl.hxx>
 
-namespace comphelper {
-namespace service_decl {
+namespace comphelper::service_decl {
 template <typename ImplT_, typename WithArgsT = with_args<false> >
 struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<ImplT_>, WithArgsT >
 {

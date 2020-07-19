@@ -38,8 +38,7 @@ namespace oox { class SequenceInputStream; }
 namespace oox::xls { struct BinAddress; }
 class ScRangeList;
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 // Constants ==================================================================
 
@@ -777,8 +776,7 @@ public:
                             bool bTrimLeadingSpaces ) const;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

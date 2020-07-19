@@ -35,8 +35,7 @@ namespace oox::ole {
     struct AxFontData;
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 // DrawingML
 
@@ -202,8 +201,7 @@ protected:
     virtual void        finalizeImport() override;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

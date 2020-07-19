@@ -54,8 +54,7 @@ class ScEditEngineDefaulter;
 class ScDBData;
 class ScRangeData;
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class ExcelFilter;
 
@@ -267,8 +266,7 @@ private:
     WorkbookGlobals&    mrBookGlob;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

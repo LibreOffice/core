@@ -23,8 +23,7 @@
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include "workbookhelper.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class ExcelChartConverter : public ::oox::drawingml::chart::ChartConverter, public WorkbookHelper
 {
@@ -43,8 +42,7 @@ public:
             const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) override;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

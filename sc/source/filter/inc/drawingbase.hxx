@@ -25,8 +25,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Absolute position in a spreadsheet (in EMUs) independent from cells. */
 struct AnchorPointModel : public ::oox::drawingml::EmuPoint
@@ -130,8 +129,7 @@ private:
     AnchorType          meEditAs;           /// Anchor mode as shown in the UI.
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

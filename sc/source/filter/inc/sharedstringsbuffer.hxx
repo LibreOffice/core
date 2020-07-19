@@ -22,8 +22,7 @@
 
 #include "richstring.hxx"
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 /** Collects all strings from the shared strings substream. */
 class SharedStringsBuffer : public WorkbookHelper
@@ -45,8 +44,7 @@ private:
     StringVector        maStrings;
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

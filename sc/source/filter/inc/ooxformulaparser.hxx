@@ -28,8 +28,7 @@
 
 namespace com::sun::star::lang { class XComponent; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 class OOXMLFormulaParserImpl;
 
@@ -86,8 +85,7 @@ private:
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };
 
-} // namespace xls
-} // namespace oox
+} // namespace oox::xls
 
 #endif
 

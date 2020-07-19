@@ -151,13 +151,8 @@ public:
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
 };
 
-namespace ooo
-{
-    namespace vba {
-        namespace excel {
+namespace ooo::vba::excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
-    }
-    }
 }
 
 class SC_DLLPUBLIC ScCellRangesBase :
