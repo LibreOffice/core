@@ -21,8 +21,7 @@
 #include "LoggedResources.hxx"
 #include <rtl/ustring.hxx>
 #include <vector>
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 class FFDataHandler : public LoggedProperties
 {
 public:
@@ -97,7 +96,7 @@ private:
 };
 
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FFDATAHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

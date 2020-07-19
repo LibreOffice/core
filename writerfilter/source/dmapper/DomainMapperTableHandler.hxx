@@ -24,8 +24,7 @@
 
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 typedef css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
 typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
@@ -121,7 +120,7 @@ public:
     DomainMapper_Impl& getDomainMapperImpl();
 };
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEHANDLER_HXX
 

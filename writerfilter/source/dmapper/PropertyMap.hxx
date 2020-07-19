@@ -55,8 +55,7 @@ namespace com::sun::star {
     }
 }
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class  DomainMapper_Impl;
 struct FloatingTableInfo;
@@ -599,8 +598,7 @@ struct TableParagraph
 
 typedef std::shared_ptr< std::vector<TableParagraph> > TableParagraphVectorPtr;
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAP_HXX
 

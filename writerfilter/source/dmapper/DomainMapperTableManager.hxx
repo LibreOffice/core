@@ -28,8 +28,7 @@
 #include <memory>
 #include <comphelper/sequenceashashmap.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class DomainMapper;
 
@@ -133,7 +132,7 @@ public:
 
 };
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEMANAGER_HXX
 

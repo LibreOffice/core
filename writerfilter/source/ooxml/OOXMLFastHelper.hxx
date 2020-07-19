@@ -21,9 +21,7 @@
 
 #include "OOXMLFastContextHandler.hxx"
 
-namespace writerfilter {
-
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 template <class T>
@@ -59,7 +57,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     pHandler->newProperty(nId, pVal);
 }
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

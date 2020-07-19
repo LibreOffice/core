@@ -12,9 +12,7 @@
 
 #include "rtfsprm.hxx"
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 /// Sends RTFSprm instances to DomainMapper.
 class RTFReferenceProperties : public writerfilter::Reference<Properties>
@@ -31,8 +29,7 @@ private:
     RTFSprms m_aAttributes;
     RTFSprms m_aSprms;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 

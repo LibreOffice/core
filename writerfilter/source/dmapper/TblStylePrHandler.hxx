@@ -27,8 +27,7 @@
 #include <memory>
 #include <vector>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class DomainMapper;
 
@@ -79,7 +78,7 @@ private:
     void resolveSprmProps(Sprm & rSprm);
 };
 
-}}
+}
 
 #endif
 

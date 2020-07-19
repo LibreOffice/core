@@ -30,8 +30,7 @@ namespace com::sun::star::text
 struct GraphicCrop;
 }
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 /// Handles <wp:wrapPolygon> from DOCX and the pWrapPolygonVertices shape property from RTF.
 class WrapPolygon final : public virtual SvRefBase
@@ -81,7 +80,7 @@ private:
 
 };
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
 

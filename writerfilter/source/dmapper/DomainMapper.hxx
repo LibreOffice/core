@@ -54,8 +54,7 @@ class MediaDescriptor;
 
 typedef std::vector<css::beans::PropertyValue> PropertyValueVector_t;
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 class PropertyMap;
@@ -177,8 +176,7 @@ private:
     OUString m_sGlossaryEntryName;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

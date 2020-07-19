@@ -64,8 +64,7 @@ namespace com::sun::star{
         namespace beans{ class XPropertySet;}
 }
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class SdtHelper;
 
@@ -1081,8 +1080,7 @@ private:
     bool m_bParaWithInlineObject;
 };
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,8 +39,7 @@ namespace com::sun::star{
         class XComponentContext;
     }
 }
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class DomainMapper;
 /** Handler for OLE objects
@@ -95,7 +94,7 @@ public:
     const css::uno::Reference<css::graphic::XGraphic>& getReplacement() const { return m_xReplacement; }
 
 };
-}}
+}
 
 #endif
 

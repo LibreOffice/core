@@ -24,8 +24,7 @@
 
 #include "OOXMLFastContextHandler.hxx"
 
-namespace writerfilter {
-namespace ooxml {
+namespace writerfilter::ooxml {
 
 enum class ResourceType {
     NoResource,
@@ -102,7 +101,7 @@ private:
 };
 
 }
-}
+
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 

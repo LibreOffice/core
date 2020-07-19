@@ -16,9 +16,7 @@
 
 class SvStream;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 class RTFTokenizer;
 /**
@@ -55,8 +53,7 @@ private:
     bool m_bHasTable;
     bool m_bHasColumns;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 

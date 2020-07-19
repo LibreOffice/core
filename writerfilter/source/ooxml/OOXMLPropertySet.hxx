@@ -24,8 +24,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <dmapper/resourcemodel.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 class OOXMLValue : public Value
@@ -395,7 +394,7 @@ public:
 };
 
 
-}}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 

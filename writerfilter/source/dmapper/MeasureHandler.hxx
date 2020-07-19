@@ -23,8 +23,7 @@
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 /** Handler for sprms that contain a measure and a unit
     - Left indent of tables
@@ -58,7 +57,7 @@ public:
 };
 typedef tools::SvRef
     < MeasureHandler >  MeasureHandlerPtr;
-}}
+}
 
 #endif
 

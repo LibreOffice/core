@@ -66,8 +66,7 @@
    core API to insert the according elements to the core.
  */
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 class OOXMLStream : public virtual SvRefBase
@@ -252,7 +251,7 @@ public:
 
 std::string fastTokenToId(sal_uInt32 nToken);
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_INC_OOXML_OOXMLDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

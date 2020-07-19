@@ -22,8 +22,7 @@
 #include <dmapper/resourcemodel.hxx>
 #include "OOXMLFastContextHandler.hxx"
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 class OOXMLFootnoteHandler : public Properties
 {
@@ -157,7 +156,7 @@ public:
 };
 
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

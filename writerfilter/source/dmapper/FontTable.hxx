@@ -24,8 +24,7 @@
 #include "LoggedResources.hxx"
 #include <com/sun/star/io/XInputStream.hpp>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 struct FontTable_Impl;
@@ -96,7 +95,7 @@ private:
 };
 
 
-}}
+}
 
 #endif
 
