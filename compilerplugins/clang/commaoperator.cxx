@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 /**
@@ -66,8 +69,11 @@ public:
         return ret;
     }
 
-    bool TraverseBinComma(BinaryOperator * expr) {
-        if (!WalkUpFromBinComma(expr)) {
+    bool TraverseBinaryOperator(BinaryOperator * expr) {
+        if (expr->getOpcode() != BO_Comma) {
+            return RecursiveASTVisitor::TraverseBinaryOperator(expr);
+        }
+        if (!WalkUpFromBinaryOperator(expr)) {
             return false;
         }
         auto const saved1 = ignore1_;
@@ -78,15 +84,22 @@ public:
         return ret;
     }
 
-    bool VisitBinComma(const BinaryOperator* );
+#if CLANG_VERSION <= 110000
+    bool TraverseBinComma(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+#endif
+
+    bool VisitBinaryOperator(const BinaryOperator* );
 
 private:
     Stmt const * ignore1_ = nullptr;
     Stmt const * ignore2_ = nullptr;
 };
 
-bool CommaOperator::VisitBinComma(const BinaryOperator* binaryOp)
+bool CommaOperator::VisitBinaryOperator(const BinaryOperator* binaryOp)
 {
+    if (binaryOp->getOpcode() != BO_Comma) {
+        return true;
+    }
     if (binaryOp == ignore1_ || binaryOp == ignore2_) {
         return true;
     }

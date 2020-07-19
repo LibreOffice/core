@@ -95,7 +95,7 @@ public:
     bool VisitFieldDecl( const FieldDecl* );
     bool VisitCXXConstructorDecl( const CXXConstructorDecl* );
     bool VisitCXXDeleteExpr( const CXXDeleteExpr* );
-    bool VisitBinAssign( const BinaryOperator* );
+    bool VisitBinaryOperator( const BinaryOperator* );
 private:
     MyFieldInfo niceName(const FieldDecl*);
     void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
@@ -174,8 +174,11 @@ static bool isSameParent(const CXXMethodDecl* cxxMethodDecl, const FieldDecl* fi
     return cxxMethodDecl->getParent() == dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
 }
 
-bool InlineFields::VisitBinAssign(const BinaryOperator * binaryOp)
+bool InlineFields::VisitBinaryOperator(const BinaryOperator * binaryOp)
 {
+    if (binaryOp->getOpcode() != BO_Assign) {
+        return true;
+    }
     if( ignoreLocation( binaryOp ) )
         return true;
     auto memberExpr = dyn_cast<MemberExpr>(binaryOp->getLHS());

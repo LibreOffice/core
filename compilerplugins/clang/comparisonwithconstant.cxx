@@ -13,6 +13,8 @@
 #include <fstream>
 #include <set>
 
+#include "config_clang.h"
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -33,29 +35,26 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    // Deliberately drop RecursiveASTVisitor::TraverseBinEQ's DataRecursionQueue
-    // parameter; TraverseBinEQ must use stack instead of data recursion for any
+    // Deliberately drop RecursiveASTVisitor::TraverseBinaryOperator's DataRecursionQueue
+    // parameter; TraverseBinaryOperator must use stack instead of data recursion for any
     // children's VisitBinaryOperator to see changes to occurrence_ by a parent
     // VisitBinaryOperator:
-    bool TraverseBinEQ(BinaryOperator * S)
+    bool TraverseBinaryOperator(BinaryOperator * S)
     {
+        auto const op = S->getOpcode();
+        if (op != BO_EQ && op != BO_NE) {
+            return RecursiveASTVisitor::TraverseBinaryOperator(S);
+        }
         auto const saved = occurrence_;
-        auto const ret = RecursiveASTVisitor::TraverseBinEQ(S);
+        auto const ret = RecursiveASTVisitor::TraverseBinaryOperator(S);
         occurrence_ = saved;
         return ret;
     }
 
-    // Deliberately drop RecursiveASTVisitor::TraverseBinNE's DataRecursionQueue
-    // parameter; TraverseBinNE must use stack instead of data recursion for any
-    // children's VisitBinaryOperator to see changes to occurrence_ by a parent
-    // VisitBinaryOperator:
-    bool TraverseBinNE(BinaryOperator * S)
-    {
-        auto const saved = occurrence_;
-        auto const ret = RecursiveASTVisitor::TraverseBinNE(S);
-        occurrence_ = saved;
-        return ret;
-    }
+#if CLANG_VERSION <= 110000
+    bool TraverseBinEQ(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinNE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+#endif
 
     bool VisitBinaryOperator(const BinaryOperator *);
 private:

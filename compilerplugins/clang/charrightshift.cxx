@@ -24,7 +24,10 @@ public:
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitBinShr(BinaryOperator const * expr) {
+    bool VisitBinaryOperator(BinaryOperator const * expr) {
+        if (expr->getOpcode() != BO_Shr) {
+            return true;
+        }
         if (ignoreLocation(expr)) {
             return true;
         }

@@ -17,6 +17,8 @@
 
 #include "clang/Basic/Builtins.h"
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -249,25 +251,28 @@ public:
 
     bool TraverseConditionalOperator(ConditionalOperator * expr);
 
-    bool TraverseBinLT(BinaryOperator * expr);
+    bool TraverseBinaryOperator(BinaryOperator * expr);
 
-    bool TraverseBinLE(BinaryOperator * expr);
+#if CLANG_VERSION <= 110000
+    bool TraverseBinLT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinLE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinGT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinGE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinEQ(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinNE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+    bool TraverseBinAssign(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
+#endif
 
-    bool TraverseBinGT(BinaryOperator * expr);
+    bool TraverseCompoundAssignOperator(CompoundAssignOperator * expr);
 
-    bool TraverseBinGE(BinaryOperator * expr);
-
-    bool TraverseBinEQ(BinaryOperator * expr);
-
-    bool TraverseBinNE(BinaryOperator * expr);
-
-    bool TraverseBinAssign(BinaryOperator * expr);
-
-    bool TraverseBinAndAssign(CompoundAssignOperator * expr);
-
-    bool TraverseBinOrAssign(CompoundAssignOperator * expr);
-
-    bool TraverseBinXorAssign(CompoundAssignOperator * expr);
+#if CLANG_VERSION <= 110000
+    bool TraverseBinAndAssign(CompoundAssignOperator * expr)
+    { return TraverseCompoundAssignOperator(expr); }
+    bool TraverseBinOrAssign(CompoundAssignOperator * expr)
+    { return TraverseCompoundAssignOperator(expr); }
+    bool TraverseBinXorAssign(CompoundAssignOperator * expr)
+    { return TraverseCompoundAssignOperator(expr); }
+#endif
 
     bool TraverseCXXStdInitializerListExpr(CXXStdInitializerListExpr * expr);
 
@@ -521,235 +526,104 @@ bool ImplicitBoolConversion::TraverseConditionalOperator(
     return bRet;
 }
 
-bool ImplicitBoolConversion::TraverseBinLT(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinLT(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
+bool ImplicitBoolConversion::TraverseBinaryOperator(BinaryOperator * expr) {
+    switch (expr->getOpcode()) {
+    case BO_LT:
+    case BO_LE:
+    case BO_GT:
+    case BO_GE:
+    case BO_EQ:
+    case BO_NE:
         {
-            reportWarning(i);
+            nested.push(std::vector<ImplicitCastExpr const *>());
+            bool bRet = RecursiveASTVisitor::TraverseBinaryOperator(expr);
+            assert(!nested.empty());
+            for (auto i: nested.top()) {
+                if (!((i == expr->getLHS()->IgnoreParens()
+                       && isMatchingBool(
+                           expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
+                      || (i == expr->getRHS()->IgnoreParens()
+                          && isMatchingBool(
+                              expr->getLHS()->IgnoreImpCasts(),
+                              i->getSubExprAsWritten()))))
+                {
+                    reportWarning(i);
+                }
+            }
+            nested.pop();
+            return bRet;
         }
+    case BO_Assign:
+        {
+            nested.push(std::vector<ImplicitCastExpr const *>());
+            bool bRet = RecursiveASTVisitor::TraverseBinaryOperator(expr);
+            // gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
+            //  guint GSEAL (active) : 1;
+            // even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
+            //  "active"               gboolean              : Read / Write
+            // qt5/QtGui/qaccessible.h: struct State:
+            //  quint64 disabled : 1;
+            bool bExt = false;
+            MemberExpr const * me = dyn_cast<MemberExpr>(expr->getLHS());
+            if (me != nullptr) {
+                FieldDecl const * fd = dyn_cast<FieldDecl>(me->getMemberDecl());
+                if (fd != nullptr && fd->isBitField()
+                    && fd->getBitWidthValue(compiler.getASTContext()) == 1)
+                {
+                    auto const check = loplugin::TypeCheck(fd->getType());
+                    bExt = check.Typedef("guint").GlobalNamespace()
+                        || check.Typedef("quint64").GlobalNamespace();
+                }
+            }
+            assert(!nested.empty());
+            for (auto i: nested.top()) {
+                if (i != expr->getRHS()->IgnoreParens()
+                    || !(bExt || isBoolExpr(expr->getLHS())))
+                {
+                    reportWarning(i);
+                }
+            }
+            nested.pop();
+            return bRet;
+        }
+    default:
+        return RecursiveASTVisitor::TraverseBinaryOperator(expr);
     }
-    nested.pop();
-    return bRet;
 }
 
-bool ImplicitBoolConversion::TraverseBinLE(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinLE(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
+bool ImplicitBoolConversion::TraverseCompoundAssignOperator(CompoundAssignOperator * expr) {
+    switch (expr->getOpcode()) {
+    case BO_AndAssign:
+    case BO_OrAssign:
+    case BO_XorAssign:
         {
-            reportWarning(i);
+            nested.push(std::vector<ImplicitCastExpr const *>());
+            bool bRet = RecursiveASTVisitor::TraverseCompoundAssignOperator(expr);
+            assert(!nested.empty());
+            for (auto i: nested.top()) {
+                if (i != expr->getRHS()->IgnoreParens()
+                    || !isBool(expr->getLHS()->IgnoreParens(), false))
+                {
+                    reportWarning(i);
+                }
+            }
+            nested.pop();
+            if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
+                && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+            {
+                report(
+                    DiagnosticsEngine::Warning, "mix of %0 and %1 in operator %2",
+                    compat::getBeginLoc(expr->getRHS()))
+                    << expr->getLHS()->getType()
+                    << expr->getRHS()->IgnoreParenImpCasts()->getType()
+                    << expr->getOpcodeStr()
+                    << expr->getSourceRange();
+            }
+            return bRet;
         }
+    default:
+        return RecursiveASTVisitor::TraverseCompoundAssignOperator(expr);
     }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinGT(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinGT(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinGE(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinGE(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinEQ(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinEQ(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinNE(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (!((i == expr->getLHS()->IgnoreParens()
-               && isMatchingBool(
-                   expr->getRHS()->IgnoreImpCasts(), i->getSubExprAsWritten()))
-              || (i == expr->getRHS()->IgnoreParens()
-                  && isMatchingBool(
-                      expr->getLHS()->IgnoreImpCasts(),
-                      i->getSubExprAsWritten()))))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinAssign(expr);
-    // gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
-    //  guint GSEAL (active) : 1;
-    // even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
-    //  "active"               gboolean              : Read / Write
-    // qt5/QtGui/qaccessible.h: struct State:
-    //  quint64 disabled : 1;
-    bool bExt = false;
-    MemberExpr const * me = dyn_cast<MemberExpr>(expr->getLHS());
-    if (me != nullptr) {
-        FieldDecl const * fd = dyn_cast<FieldDecl>(me->getMemberDecl());
-        if (fd != nullptr && fd->isBitField()
-            && fd->getBitWidthValue(compiler.getASTContext()) == 1)
-        {
-            auto const check = loplugin::TypeCheck(fd->getType());
-            bExt = check.Typedef("guint").GlobalNamespace()
-                || check.Typedef("quint64").GlobalNamespace();
-        }
-    }
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (i != expr->getRHS()->IgnoreParens()
-            || !(bExt || isBoolExpr(expr->getLHS())))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
-{
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinAndAssign(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens(), false))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
-        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
-    {
-        report(
-            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator &=",
-            compat::getBeginLoc(expr->getRHS()))
-            << expr->getLHS()->getType()
-            << expr->getRHS()->IgnoreParenImpCasts()->getType()
-            << expr->getSourceRange();
-    }
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
-{
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinOrAssign(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens(), false))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
-        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
-    {
-        report(
-            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator |=",
-            compat::getBeginLoc(expr->getRHS()))
-            << expr->getLHS()->getType()
-            << expr->getRHS()->IgnoreParenImpCasts()->getType()
-            << expr->getSourceRange();
-    }
-    return bRet;
-}
-
-bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
-{
-    nested.push(std::vector<ImplicitCastExpr const *>());
-    bool bRet = RecursiveASTVisitor::TraverseBinXorAssign(expr);
-    assert(!nested.empty());
-    for (auto i: nested.top()) {
-        if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens(), false))
-        {
-            reportWarning(i);
-        }
-    }
-    nested.pop();
-    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
-        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
-    {
-        report(
-            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator ^=",
-            compat::getBeginLoc(expr->getRHS()))
-            << expr->getLHS()->getType()
-            << expr->getRHS()->IgnoreParenImpCasts()->getType()
-            << expr->getSourceRange();
-    }
-    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXStdInitializerListExpr(

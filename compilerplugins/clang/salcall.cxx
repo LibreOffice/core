@@ -68,10 +68,10 @@ public:
     }
 
     bool VisitFunctionDecl(FunctionDecl const*);
-    bool VisitUnaryAddrOf(UnaryOperator const*);
+    bool VisitUnaryOperator(UnaryOperator const*);
     bool VisitInitListExpr(InitListExpr const*);
     bool VisitCallExpr(CallExpr const*);
-    bool VisitBinAssign(BinaryOperator const*);
+    bool VisitBinaryOperator(BinaryOperator const*);
     bool VisitCXXConstructExpr(CXXConstructExpr const*);
 
 private:
@@ -88,16 +88,24 @@ private:
     PluginPhase m_phase;
 };
 
-bool SalCall::VisitUnaryAddrOf(UnaryOperator const* op)
+bool SalCall::VisitUnaryOperator(UnaryOperator const* op)
 {
+    if (op->getOpcode() != UO_AddrOf)
+    {
+        return true;
+    }
     if (m_phase != PluginPhase::FindAddressOf)
         return true;
     checkForFunctionDecl(op->getSubExpr());
     return true;
 }
 
-bool SalCall::VisitBinAssign(BinaryOperator const* binaryOperator)
+bool SalCall::VisitBinaryOperator(BinaryOperator const* binaryOperator)
 {
+    if (binaryOperator->getOpcode() != BO_Assign)
+    {
+        return true;
+    }
     if (m_phase != PluginPhase::FindAddressOf)
         return true;
     checkForFunctionDecl(binaryOperator->getRHS());

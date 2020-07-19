@@ -127,28 +127,21 @@ public:
 
     bool VisitCStyleCastExpr(CStyleCastExpr const * expr);
 
-    bool VisitBinSub(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
+    bool VisitBinaryOperator(BinaryOperator const * expr) {
+        auto const op = expr->getOpcode();
+        if (op == BO_Sub || expr->isRelationalOp() || expr->isEqualityOp()) {
+            return visitBinOp(expr);
+        }
+        if (op == BO_Assign) {
+            if (ignoreLocation(expr)) {
+                return true;
+            }
+            visitAssign(expr->getLHS()->getType(), expr->getRHS());
+            return true;
+        }
+        return true;
+    }
 
-    bool VisitBinLT(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinGT(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinLE(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinGE(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinEQ(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinNE(BinaryOperator const * expr)
-    { return visitBinOp(expr); }
-
-    bool VisitBinAssign(BinaryOperator const * binaryOperator);
     bool VisitVarDecl(VarDecl const * varDecl);
 
 private:
@@ -353,14 +346,6 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
         DiagnosticsEngine::Warning,
         "redundant cstyle cast from %0 to %1", expr->getExprLoc())
         << t1 << t2 << expr->getSourceRange();
-    return true;
-}
-
-bool RedundantCast::VisitBinAssign(BinaryOperator const * binaryOperator) {
-    if (ignoreLocation(binaryOperator)) {
-        return true;
-    }
-    visitAssign(binaryOperator->getLHS()->getType(), binaryOperator->getRHS());
     return true;
 }
 

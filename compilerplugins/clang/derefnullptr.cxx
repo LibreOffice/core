@@ -23,10 +23,13 @@ public:
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitUnaryDeref(UnaryOperator const * op);
+    bool VisitUnaryOperator(UnaryOperator const * op);
 };
 
-bool DerefNullPtr::VisitUnaryDeref(UnaryOperator const * op) {
+bool DerefNullPtr::VisitUnaryOperator(UnaryOperator const * op) {
+    if (op->getOpcode() != UO_Deref) {
+        return true;
+    }
     if (!ignoreLocation(op)
         && (op->getSubExpr()->IgnoreParenCasts()->isNullPointerConstant(
                 compiler.getASTContext(), Expr::NPC_ValueDependentIsNotNull/*TODO*/)

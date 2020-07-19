@@ -32,7 +32,7 @@ public:
     void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitVarDecl(VarDecl const*);
-    bool VisitBinEQ(BinaryOperator const*);
+    bool VisitBinaryOperator(BinaryOperator const*);
 
 private:
     llvm::Optional<double> getExprValue(Expr const* expr);
@@ -61,8 +61,12 @@ bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
     return true;
 }
 
-bool IntVsFloat::VisitBinEQ(BinaryOperator const* op)
+bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
 {
+    if (op->getOpcode() != BO_EQ)
+    {
+        return true;
+    }
     if (ignoreLocation(compat::getBeginLoc(op)))
         return true;
     auto lhs = op->getLHS()->IgnoreImpCasts();
