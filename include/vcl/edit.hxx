@@ -34,13 +34,10 @@
 #include <vcl/vclptr.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace i18n {
+namespace com::sun::star::i18n {
     class XBreakIterator;
     class XExtendedInputSequenceChecker;
-}}}}
+}
 namespace weld {
     class Widget;
 }

@@ -25,9 +25,7 @@
 
 class ImpGraphic;
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 class Manager final
 {
@@ -68,7 +66,7 @@ public:
     std::shared_ptr<ImpGraphic> newInstance(const GDIMetaFile& rMtf);
     std::shared_ptr<ImpGraphic> newInstance(const GraphicExternalLink& rGraphicLink);
 };
-}
+
 } // end namespace vcl::graphic
 
 #endif // INCLUDED_VCL_INC_GRAPHIC_MANAGER_HXX

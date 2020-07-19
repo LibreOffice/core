@@ -36,13 +36,7 @@ class SvLBoxButton;
 class SvTreeList;
 class SvImpLBox;
 class SvTreeListEntry;
-namespace comphelper
-{
-    namespace string
-    {
-        class NaturalStringSorter;
-    }
-}
+namespace comphelper::string { class NaturalStringSorter; }
 
 class ImpLBSelEng final : public FunctionSet
 {
