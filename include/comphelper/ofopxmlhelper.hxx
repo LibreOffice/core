@@ -30,10 +30,7 @@ namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
-namespace comphelper
-{
-
-namespace OFOPXMLHelper {
+namespace comphelper::OFOPXMLHelper {
 
     // returns sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
@@ -93,9 +90,7 @@ namespace OFOPXMLHelper {
         const css::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
-} // namespace OFOPXMLHelper
-
-} // namespace comphelper
+} // namespace comphelper::OFOPXMLHelper
 
 #endif
 

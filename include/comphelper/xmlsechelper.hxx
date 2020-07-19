@@ -27,9 +27,7 @@
 
 #include <vector>
 
-namespace comphelper
-{
-namespace xmlsec
+namespace comphelper::xmlsec
 {
 COMPHELPER_DLLPUBLIC OUString GetCertificateKind(const css::security::CertificateKind& rKind);
 
@@ -42,7 +40,6 @@ COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
 COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _rSeq,
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
 }
-}
-#endif
 
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

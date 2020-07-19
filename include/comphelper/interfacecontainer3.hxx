@@ -26,18 +26,9 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 class XInterface;
-}
-}
-}
 }
 namespace osl
 {

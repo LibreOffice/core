@@ -18,10 +18,7 @@ class LanguageTag;
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.
 
-namespace comphelper
-{
-
-namespace LibreOfficeKit
+namespace comphelper::LibreOfficeKit
 {
 
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
@@ -118,7 +115,6 @@ COMPHELPER_DLLPUBLIC void statusIndicatorStart();
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
-}
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX
