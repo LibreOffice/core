@@ -88,7 +88,10 @@ public:
         return true;
     }
 
-    bool VisitUnaryAddrOf(UnaryOperator const * expr) {
+    bool VisitUnaryOperator(UnaryOperator * expr) {
+        if (expr->getOpcode() != UO_AddrOf) {
+            return Base::VisitUnaryOperator(expr);
+        }
         if (this->ignoreLocation(expr)) {
             return true;
         }

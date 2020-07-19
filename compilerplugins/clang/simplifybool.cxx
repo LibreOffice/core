@@ -187,19 +187,9 @@ public:
 
     void run() override;
 
-    bool VisitUnaryLNot(UnaryOperator const * expr);
+    bool VisitUnaryOperator(UnaryOperator const * expr);
 
-    bool VisitBinLT(BinaryOperator const * expr);
-
-    bool VisitBinGT(BinaryOperator const * expr);
-
-    bool VisitBinLE(BinaryOperator const * expr);
-
-    bool VisitBinGE(BinaryOperator const * expr);
-
-    bool VisitBinEQ(BinaryOperator const * expr);
-
-    bool VisitBinNE(BinaryOperator const * expr);
+    bool VisitBinaryOperator(BinaryOperator const * expr);
 
     bool VisitConditionalOperator(ConditionalOperator const * expr);
 
@@ -208,6 +198,18 @@ public:
     bool TraverseCXXMethodDecl(CXXMethodDecl *);
 
 private:
+    bool visitBinLT(BinaryOperator const * expr);
+
+    bool visitBinGT(BinaryOperator const * expr);
+
+    bool visitBinLE(BinaryOperator const * expr);
+
+    bool visitBinGE(BinaryOperator const * expr);
+
+    bool visitBinEQ(BinaryOperator const * expr);
+
+    bool visitBinNE(BinaryOperator const * expr);
+
     FunctionDecl* m_insideFunctionDecl = nullptr;
 };
 
@@ -217,7 +219,10 @@ void SimplifyBool::run() {
     }
 }
 
-bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
+bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
+    if (expr->getOpcode() != UO_LNot) {
+        return true;
+    }
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -356,7 +361,26 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinLT(BinaryOperator const * expr) {
+bool SimplifyBool::VisitBinaryOperator(BinaryOperator const * expr) {
+    switch (expr->getOpcode()) {
+    case BO_LT:
+        return visitBinLT(expr);
+    case BO_GT:
+        return visitBinGT(expr);
+    case BO_LE:
+        return visitBinLE(expr);
+    case BO_GE:
+        return visitBinGE(expr);
+    case BO_EQ:
+        return visitBinEQ(expr);
+    case BO_NE:
+        return visitBinNE(expr);
+    default:
+        return true;
+    }
+}
+
+bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -473,7 +497,7 @@ bool SimplifyBool::VisitBinLT(BinaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinGT(BinaryOperator const * expr) {
+bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -591,7 +615,7 @@ bool SimplifyBool::VisitBinGT(BinaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinLE(BinaryOperator const * expr) {
+bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -710,7 +734,7 @@ bool SimplifyBool::VisitBinLE(BinaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinGE(BinaryOperator const * expr) {
+bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -829,7 +853,7 @@ bool SimplifyBool::VisitBinGE(BinaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinEQ(BinaryOperator const * expr) {
+bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -965,7 +989,7 @@ bool SimplifyBool::VisitBinEQ(BinaryOperator const * expr) {
     return true;
 }
 
-bool SimplifyBool::VisitBinNE(BinaryOperator const * expr) {
+bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }

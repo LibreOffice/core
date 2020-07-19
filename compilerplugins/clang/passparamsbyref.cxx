@@ -49,7 +49,7 @@ public:
     bool PreTraverseImplicitCastExpr(ImplicitCastExpr *);
     bool TraverseImplicitCastExpr(ImplicitCastExpr *);
 
-    bool VisitBinAssign(BinaryOperator const *);
+    bool VisitBinaryOperator(BinaryOperator const *);
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
 
 private:
@@ -166,8 +166,11 @@ bool PassParamsByRef::TraverseImplicitCastExpr(ImplicitCastExpr * expr)
     return ret;
 }
 
-bool PassParamsByRef::VisitBinAssign(const BinaryOperator * binaryOperator)
+bool PassParamsByRef::VisitBinaryOperator(const BinaryOperator * binaryOperator)
 {
+    if (binaryOperator->getOpcode() != BO_Assign) {
+        return true;
+    }
     if (!mbInsideFunctionDecl)
         return true;
     // if we are assigning to a parameter, it can be inconvenient to make the param pass-by-ref
