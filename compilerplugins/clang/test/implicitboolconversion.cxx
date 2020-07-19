@@ -11,10 +11,16 @@
 
 #include <atomic>
 
+#include <sal/types.h>
+
+bool g();
+
 void f()
 {
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'int' [loplugin:implicitboolconversion]}}
     int i = false;
+    // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'int' [loplugin:implicitboolconversion]}}
+    i = true;
     (void)i;
     std::atomic<bool> b = false;
     (void)b;
@@ -23,6 +29,8 @@ void f()
     // expected-error-re@+1 {{implicit conversion (IntegralCast) from 'bool' to {{.+}} [loplugin:implicitboolconversion]}}
     std::atomic<int> a = false;
     (void)a;
+    bool b2 = true;
+    b2 &= g();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

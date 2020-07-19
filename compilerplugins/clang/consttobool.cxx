@@ -55,50 +55,62 @@ public:
         return ret;
     }
 
-    bool PreTraverseUnaryLNot(UnaryOperator* expr)
+    bool PreTraverseUnaryOperator(UnaryOperator* expr)
     {
-        ignoredInAssert_.push(expr->getSubExpr());
+        if (expr->getOpcode() == UO_LNot)
+        {
+            ignoredInAssert_.push(expr->getSubExpr());
+        }
         return true;
     }
 
-    bool PostTraverseUnaryLNot(UnaryOperator*, bool)
+    bool PostTraverseUnaryOperator(UnaryOperator* expr, bool)
     {
-        assert(!ignoredInAssert_.empty());
-        ignoredInAssert_.pop();
+        if (expr->getOpcode() == UO_LNot)
+        {
+            assert(!ignoredInAssert_.empty());
+            ignoredInAssert_.pop();
+        }
         return true;
     }
 
-    bool TraverseUnaryLNot(UnaryOperator* expr)
+    bool TraverseUnaryOperator(UnaryOperator* expr)
     {
         bool ret = true;
-        if (PreTraverseUnaryLNot(expr))
+        if (PreTraverseUnaryOperator(expr))
         {
-            ret = FilteringPlugin::TraverseUnaryLNot(expr);
-            PostTraverseUnaryLNot(expr, ret);
+            ret = FilteringPlugin::TraverseUnaryOperator(expr);
+            PostTraverseUnaryOperator(expr, ret);
         }
         return ret;
     }
 
-    bool PreTraverseBinLAnd(BinaryOperator* expr)
+    bool PreTraverseBinaryOperator(BinaryOperator* expr)
     {
-        ignoredInAssert_.push(expr->getRHS());
+        if (expr->getOpcode() == BO_LAnd)
+        {
+            ignoredInAssert_.push(expr->getRHS());
+        }
         return true;
     }
 
-    bool PostTraverseBinLAnd(BinaryOperator*, bool)
+    bool PostTraverseBinaryOperator(BinaryOperator* expr, bool)
     {
-        assert(!ignoredInAssert_.empty());
-        ignoredInAssert_.pop();
+        if (expr->getOpcode() == BO_LAnd)
+        {
+            assert(!ignoredInAssert_.empty());
+            ignoredInAssert_.pop();
+        }
         return true;
     }
 
-    bool TraverseBinLAnd(BinaryOperator* expr)
+    bool TraverseBinaryOperator(BinaryOperator* expr)
     {
         bool ret = true;
-        if (PreTraverseBinLAnd(expr))
+        if (PreTraverseBinaryOperator(expr))
         {
-            ret = FilteringPlugin::TraverseBinLAnd(expr);
-            PostTraverseBinLAnd(expr, ret);
+            ret = FilteringPlugin::TraverseBinaryOperator(expr);
+            PostTraverseBinaryOperator(expr, ret);
         }
         return ret;
     }

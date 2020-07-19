@@ -184,7 +184,7 @@ public:
 
     virtual void run() override;
 
-    bool VisitUnaryAddrOf(UnaryOperator const * op);
+    bool VisitUnaryOperator(UnaryOperator * op);
 
     bool VisitCallExpr(CallExpr * expr);
 
@@ -446,8 +446,11 @@ void FakeBool::run() {
     }
 }
 
-bool FakeBool::VisitUnaryAddrOf(UnaryOperator const * op) {
-    FunctionAddress::VisitUnaryAddrOf(op);
+bool FakeBool::VisitUnaryOperator(UnaryOperator * op) {
+    if (op->getOpcode() != UO_AddrOf) {
+        return FunctionAddress::VisitUnaryOperator(op);
+    }
+    FunctionAddress::VisitUnaryOperator(op);
     Expr const * e1 = op->getSubExpr()->IgnoreParenCasts();
     if (isFakeBool(e1->getType()) != FBK_No) {
         if (DeclRefExpr const * e2 = dyn_cast<DeclRefExpr>(e1)) {

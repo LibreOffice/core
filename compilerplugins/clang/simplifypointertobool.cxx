@@ -47,73 +47,63 @@ public:
     bool VisitImplicitCastExpr(ImplicitCastExpr const*);
     bool VisitBinaryOperator(BinaryOperator const*);
 
-    bool PreTraverseUnaryLNot(UnaryOperator* expr)
+    bool PreTraverseUnaryOperator(UnaryOperator* expr)
     {
-        contextuallyConvertedExprs_.push_back(expr->getSubExpr()->IgnoreParenImpCasts());
+        if (expr->getOpcode() == UO_LNot)
+        {
+            contextuallyConvertedExprs_.push_back(expr->getSubExpr()->IgnoreParenImpCasts());
+        }
         return true;
     }
 
-    bool PostTraverseUnaryLNot(UnaryOperator*, bool)
+    bool PostTraverseUnaryOperator(UnaryOperator* expr, bool)
     {
-        assert(!contextuallyConvertedExprs_.empty());
-        contextuallyConvertedExprs_.pop_back();
+        if (expr->getOpcode() == UO_LNot)
+        {
+            assert(!contextuallyConvertedExprs_.empty());
+            contextuallyConvertedExprs_.pop_back();
+        }
         return true;
     }
 
-    bool TraverseUnaryLNot(UnaryOperator* expr)
+    bool TraverseUnaryOperator(UnaryOperator* expr)
     {
-        auto res = PreTraverseUnaryLNot(expr);
+        auto res = PreTraverseUnaryOperator(expr);
         assert(res);
-        res = FilteringRewritePlugin::TraverseUnaryLNot(expr);
-        PostTraverseUnaryLNot(expr, res);
+        res = FilteringRewritePlugin::TraverseUnaryOperator(expr);
+        PostTraverseUnaryOperator(expr, res);
         return res;
     }
 
-    bool PreTraverseBinLAnd(BinaryOperator* expr)
+    bool PreTraverseBinaryOperator(BinaryOperator* expr)
     {
-        contextuallyConvertedExprs_.push_back(expr->getLHS()->IgnoreParenImpCasts());
-        contextuallyConvertedExprs_.push_back(expr->getRHS()->IgnoreParenImpCasts());
+        auto const op = expr->getOpcode();
+        if (op == BO_LAnd || op == BO_LOr)
+        {
+            contextuallyConvertedExprs_.push_back(expr->getLHS()->IgnoreParenImpCasts());
+            contextuallyConvertedExprs_.push_back(expr->getRHS()->IgnoreParenImpCasts());
+        }
         return true;
     }
 
-    bool PostTraverseBinLAnd(BinaryOperator*, bool)
+    bool PostTraverseBinaryOperator(BinaryOperator* expr, bool)
     {
-        assert(contextuallyConvertedExprs_.size() >= 2);
-        contextuallyConvertedExprs_.pop_back();
-        contextuallyConvertedExprs_.pop_back();
+        auto const op = expr->getOpcode();
+        if (op == BO_LAnd || op == BO_LOr)
+        {
+            assert(contextuallyConvertedExprs_.size() >= 2);
+            contextuallyConvertedExprs_.pop_back();
+            contextuallyConvertedExprs_.pop_back();
+        }
         return true;
     }
 
-    bool TraverseBinLAnd(BinaryOperator* expr)
+    bool TraverseBinaryOperator(BinaryOperator* expr)
     {
-        auto res = PreTraverseBinLAnd(expr);
+        auto res = PreTraverseBinaryOperator(expr);
         assert(res);
-        res = FilteringRewritePlugin::TraverseBinLAnd(expr);
-        PostTraverseBinLAnd(expr, res);
-        return res;
-    }
-
-    bool PreTraverseBinLOr(BinaryOperator* expr)
-    {
-        contextuallyConvertedExprs_.push_back(expr->getLHS()->IgnoreParenImpCasts());
-        contextuallyConvertedExprs_.push_back(expr->getRHS()->IgnoreParenImpCasts());
-        return true;
-    }
-
-    bool PostTraverseBinLOr(BinaryOperator*, bool)
-    {
-        assert(contextuallyConvertedExprs_.size() >= 2);
-        contextuallyConvertedExprs_.pop_back();
-        contextuallyConvertedExprs_.pop_back();
-        return true;
-    }
-
-    bool TraverseBinLOr(BinaryOperator* expr)
-    {
-        auto res = PreTraverseBinLOr(expr);
-        assert(res);
-        res = FilteringRewritePlugin::TraverseBinLOr(expr);
-        PostTraverseBinLOr(expr, res);
+        res = FilteringRewritePlugin::TraverseBinaryOperator(expr);
+        PostTraverseBinaryOperator(expr, res);
         return res;
     }
 
