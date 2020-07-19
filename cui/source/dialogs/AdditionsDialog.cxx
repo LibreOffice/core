@@ -207,7 +207,7 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("author").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("URL").string_value().get()),
+                OStringToOUString(OString(arrayElement.child("url").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("screenshotURL").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
@@ -219,13 +219,13 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                     RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("releases")
                                               .child(0)
-                                              .child("compatibleVersion")
+                                              .child("compatibility")
                                               .string_value()
                                               .get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("releases")
                                               .child(0)
-                                              .child("releaseNumber")
+                                              .child("releaseName")
                                               .string_value()
                                               .get()),
                                   RTL_TEXTENCODING_UTF8),
@@ -235,15 +235,14 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                                               .string_value()
                                               .get()),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("commentNumber").string_value().get()),
+                OStringToOUString(OString(arrayElement.child("commentNumber").numeric_value()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("commentURL").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("rating").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    OString(arrayElement.child("downloadNumber").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(OString(arrayElement.child("downloadNumber").numeric_value()),
+                                  RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("releases")
                                               .child(0)
                                               .child("downloadURL")
@@ -414,7 +413,7 @@ void SearchAndParseThread::execute()
     m_pAdditionsDialog->SetProgress(sProgress);
 }
 
-AdditionsDialog::AdditionsDialog(weld::Window* pParent)
+AdditionsDialog::AdditionsDialog(weld::Window* pParent, OUString sAdditionsTag)
     : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
     , m_aSearchDataTimer("SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
@@ -430,8 +429,15 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent)
     m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));
     m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
 
+    m_sTag = OUStringToOString(sAdditionsTag, RTL_TEXTENCODING_UTF8);
+
+    if (m_sTag.isEmpty())
+        m_sTag = "allextensions";
+
     // TODO - Temporary URL
-    OString rURL = "https://yusufketen.com/extensionTest.json";
+    OString sPrefixURL = "https://yusufketen.com/api/";
+    OString sSuffixURL = ".json";
+    OString rURL = sPrefixURL + m_sTag + sSuffixURL;
 
     m_pSearchThread
         = new SearchAndParseThread(this, OStringToOUString(rURL, RTL_TEXTENCODING_UTF8), true);

@@ -5626,7 +5626,7 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 ]
 
 SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
-()
+(SfxStringItem AdditionsTag SID_ADDITIONS_TAG)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
