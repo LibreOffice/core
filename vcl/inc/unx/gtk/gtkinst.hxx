@@ -38,13 +38,7 @@
 #include <vcl/weldutils.hxx>
 #include <gtk/gtk.h>
 
-namespace vcl
-{
-namespace unx
-{
-class GtkPrintWrapper;
-}
-}
+namespace vcl::unx { class GtkPrintWrapper; }
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale);
 

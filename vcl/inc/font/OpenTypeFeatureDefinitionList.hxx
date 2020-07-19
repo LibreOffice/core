@@ -15,9 +15,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 class OpenTypeFeatureDefinitionListPrivate
 {
@@ -42,7 +40,6 @@ class VCL_DLLPUBLIC OpenTypeFeatureDefinitionList
 {
 };
 
-} // end font namespace
-} // end vcl namespace
+} // namespace vcl::font
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

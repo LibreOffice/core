@@ -57,13 +57,10 @@ class SfxUndoManager;
 class TextLine;
 struct TEIMEInfos;
 
-namespace com {
-namespace sun {
-namespace star {
-namespace i18n {
+namespace com::sun::star::i18n {
     class XBreakIterator;
     class XExtendedInputSequenceChecker;
-}}}}
+}
 
 class LocaleDataWrapper;
 

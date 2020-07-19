@@ -15,33 +15,14 @@
 #include <tools/stream.hxx>
 #include <vcl/vclevent.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace beans
+namespace com::sun::star::beans
 {
 struct PropertyValue;
 }
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 template <class E> class Sequence;
 }
-}
-}
-}
-
 struct EventDescription;
 class Control;
 class KeyEvent;

@@ -66,24 +66,18 @@ class GestureEvent;
 struct ImplSVEvent;
 struct ConvertData;
 
-namespace com {
-namespace sun {
-namespace star {
-namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
 }
-namespace ui {
-    namespace dialogs {
-        class XFilePicker2;
-        class XFolderPicker2;
-    }
+namespace com::sun::star::ui::dialogs {
+    class XFilePicker2;
+    class XFolderPicker2;
 }
-namespace awt {
+namespace com::sun::star::awt {
     class XToolkit;
     class XDisplayConnection;
     class XWindow;
 }
-} } }
 
 // helper needed by SalLayout implementations as well as svx/source/dialog/svxbmpnumbalueset.cxx
 VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );

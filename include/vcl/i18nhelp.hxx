@@ -27,18 +27,12 @@
 #include <vcl/dllapi.h>
 #include <memory>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
 }
-}}}
-
 namespace utl {
     class TransliterationWrapper;
 }
-
 class LocaleDataWrapper;
 
 namespace vcl
