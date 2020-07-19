@@ -25,9 +25,7 @@
 
 /* Definition of CursorManager interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling the view cursor.
@@ -55,7 +53,6 @@ namespace slideshow
             virtual void resetCursor() = 0;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_CURSORMANAGER_HXX

@@ -22,8 +22,7 @@
 
 #include "slidechangebase.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Comb transition class.
 
@@ -57,8 +56,7 @@ private:
     void renderComb( double t, const ViewEntry& rViewEntry ) const;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_COMBTRANSITION_HXX
 

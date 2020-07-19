@@ -26,8 +26,7 @@
 #include <shapeattributelayer.hxx>
 #include <activitiesfactory.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Templated setter for animation values
 
@@ -136,8 +135,7 @@ template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
     return std::make_shared<SetActivity<AnimationT>>(rParms,rAnimation,rToValue);
 }
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SETACTIVITY_HXX
 

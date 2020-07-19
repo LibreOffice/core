@@ -32,9 +32,7 @@
 #include "soundplayer.hxx"
 #include "shapemanager.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /* Definition of Transitionfactory class */
         namespace TransitionFactory
@@ -109,7 +107,7 @@ namespace slideshow
                 const RGBColor&                                rTransitionFadeColor,
                 const SoundPlayerSharedPtr&                    rSoundPlayer );
         }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONFACTORY_HXX

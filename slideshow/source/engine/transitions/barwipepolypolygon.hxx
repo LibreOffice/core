@@ -24,8 +24,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a horizontal, left-to-right bar wipe:
 class BarWipePolyPolygon : public ParametricPolyPolygon
@@ -41,7 +40,7 @@ private:
     const ::basegfx::B2DPolygon m_unitRect;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARWIPEPOLYPOLYGON_HXX

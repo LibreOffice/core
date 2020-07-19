@@ -25,9 +25,7 @@
 #include <basegfx/utils/keystoplerp.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interpolated, key-times animation.
 
@@ -68,7 +66,7 @@ namespace slideshow
         private:
             const ::basegfx::utils::KeyStopLerp maLerper;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_CONTINUOUSKEYTIMEACTIVITYBASE_HXX

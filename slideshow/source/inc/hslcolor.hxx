@@ -23,9 +23,7 @@
 
 /* Definition of HSLColor class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class RGBColor;
 
@@ -89,7 +87,7 @@ namespace slideshow
             When true, hue interpolation happens counter-clockwise
         */
         HSLColor interpolate( const HSLColor& rFrom, const HSLColor& rTo, double t, bool bCCW );
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_HSLCOLOR_HXX

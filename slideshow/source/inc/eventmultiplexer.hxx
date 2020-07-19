@@ -33,8 +33,7 @@
 
 namespace com::sun::star::drawing { class XShape; }
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class EventQueue;
 class UnoViewContainer;
@@ -653,8 +652,7 @@ private:
     std::unique_ptr<EventMultiplexerImpl> mpImpl;
 };
 
-} // namespace internal
-} // namespace Presentation
+} // namespace Presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENTMULTIPLEXER_HXX
 

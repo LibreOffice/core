@@ -21,8 +21,7 @@
 
 #include <basecontainernode.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** This class implements parallel node containers
 
@@ -47,8 +46,7 @@ private:
     virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode ) override;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_PARALLELTIMECONTAINER_HXX
 

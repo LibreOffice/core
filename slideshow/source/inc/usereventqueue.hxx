@@ -28,8 +28,7 @@
 
 /* Definition of UserEventQueue class */
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class AllAnimationEventHandler;
 class ShapeClickEventHandler;
@@ -263,8 +262,7 @@ private:
     bool                                            mbAdvanceOnClick;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_USEREVENTQUEUE_HXX
 

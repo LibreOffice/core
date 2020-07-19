@@ -25,9 +25,7 @@
 
 /* Definition of NumberAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a number animation.
 
@@ -65,7 +63,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< NumberAnimation > NumberAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_NUMBERANIMATION_HXX

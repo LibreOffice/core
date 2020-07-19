@@ -21,8 +21,7 @@
 
 #include "animationbasenode.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class AnimationSetNode : public AnimationBaseNode
 {
@@ -41,8 +40,7 @@ private:
     virtual AnimationActivitySharedPtr createActivity() const override;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONSETNODE_HXX
 

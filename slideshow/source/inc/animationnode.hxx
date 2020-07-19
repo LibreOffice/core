@@ -25,8 +25,7 @@
 #include <memory>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class AnimationNode;
 typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
@@ -152,8 +151,7 @@ public:
     virtual bool hasPendingAnimation() const = 0;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODE_HXX
 

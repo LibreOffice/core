@@ -23,8 +23,7 @@
 #include <sal/types.h>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 struct TransitionInfo
 {
@@ -136,8 +135,7 @@ struct TransitionInfo
     };
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONINFO_HXX
 

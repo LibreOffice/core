@@ -29,9 +29,7 @@ namespace com::sun::star::awt { struct MouseEvent; }
 
 /* Definition of MouseEventHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling mouse events.
@@ -108,7 +106,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< MouseEventHandler > MouseEventHandlerSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_MOUSEEVENTHANDLER_HXX

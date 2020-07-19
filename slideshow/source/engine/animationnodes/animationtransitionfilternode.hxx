@@ -23,8 +23,7 @@
 #include "animationbasenode.hxx"
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class AnimationTransitionFilterNode : public AnimationBaseNode
 {
@@ -51,8 +50,7 @@ private:
     css::uno::Reference<css::animations::XTransitionFilter> mxTransitionFilterNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONTRANSITIONFILTERNODE_HXX
 

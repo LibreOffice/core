@@ -34,9 +34,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** A hash map which maps the XShape to the corresponding Shape object.
 
@@ -357,7 +355,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX

@@ -29,9 +29,7 @@
 
 /* Definition of UserPaintOverlay class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class EventMultiplexer;
         struct SlideShowContext;
@@ -77,7 +75,7 @@ namespace slideshow
             ::std::shared_ptr<PaintOverlayHandler>    mpHandler;
             EventMultiplexer&                           mrMultiplexer;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX

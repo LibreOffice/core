@@ -31,9 +31,7 @@
 
 /* Definition of ActivitiesQueue class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class handles events in a presentation. Events are
             time instants where e.g. effects start.
@@ -144,7 +142,6 @@ namespace slideshow
             std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
         };
 
-    }
 }
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENTQUEUE_HXX
 

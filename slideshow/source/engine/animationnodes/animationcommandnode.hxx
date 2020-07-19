@@ -24,8 +24,7 @@
 #include <iexternalmediashapebase.hxx>
 #include <com/sun/star/animations/XCommand.hpp>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Command node.
 
@@ -52,8 +51,7 @@ private:
     css::uno::Reference<css::animations::XCommand > mxCommandNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
 

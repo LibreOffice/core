@@ -25,8 +25,7 @@
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Base class for animation activities.
 
@@ -137,8 +136,7 @@ private:
     bool                            mbIsActive;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 

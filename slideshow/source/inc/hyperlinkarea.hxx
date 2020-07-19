@@ -32,9 +32,7 @@ namespace basegfx {
 
 /* Definition of HyperlinkArea interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** HyperlinkArea interface
 
@@ -92,7 +90,7 @@ namespace slideshow
        };
 
         typedef std::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX

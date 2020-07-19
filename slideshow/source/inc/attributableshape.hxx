@@ -26,9 +26,7 @@
 #include "shapeattributelayer.hxx"
 #include "doctreenodesupplier.hxx"
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         // forward declaration necessary, because methods use AttributableShapeSharedPtr
         class AttributableShape;
@@ -214,7 +212,7 @@ namespace slideshow
              */
             virtual bool revokeSubset( const AttributableShapeSharedPtr& rShape ) = 0;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ATTRIBUTABLESHAPE_HXX

@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class SweepWipe : public ParametricPolyPolygon
 {
@@ -39,7 +38,7 @@ private:
     const bool m_center, m_single, m_oppositeVertical, m_flipOnYAxis;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SWEEPWIPE_HXX

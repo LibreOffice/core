@@ -25,9 +25,7 @@
 #include <slideshowcontext.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Base class for shapes rendered by external engines.
 
@@ -124,7 +122,6 @@ namespace slideshow
             const double                                                            mnPriority;
             ::basegfx::B2DRectangle                                                 maBounds;
         };
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX

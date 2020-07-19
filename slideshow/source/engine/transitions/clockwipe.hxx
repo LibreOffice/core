@@ -24,8 +24,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a clockWiseTwelve clock wipe:
 class ClockWipe : public ParametricPolyPolygon
@@ -36,7 +35,7 @@ public:
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLOCKWIPE_HXX

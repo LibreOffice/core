@@ -25,9 +25,7 @@
 
 /* Definition of EnumAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining an enum animation.
 
@@ -65,7 +63,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< EnumAnimation > EnumAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ENUMANIMATION_HXX

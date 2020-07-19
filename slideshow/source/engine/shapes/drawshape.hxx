@@ -35,9 +35,7 @@
 
 class Graphic;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class  Activity;
         struct SlideShowContext;
@@ -352,7 +350,7 @@ namespace slideshow
             bool                                                                    mbDrawingLayerAnim;
 
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPE_HXX

@@ -29,9 +29,7 @@
 
 /* Definition of SmilFunctionParser class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class SmilFunctionParser
         {
@@ -148,7 +146,7 @@ namespace slideshow
                                                               const ::basegfx::B2DRectangle&    rRelativeShapeBounds ); // throw ParseError
 
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SMILFUNCTIONPARSER_HXX

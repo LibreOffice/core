@@ -27,8 +27,7 @@
 #include <attributableshape.hxx>
 #include <shapesubset.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Common base class for all leaf animation nodes.
 
@@ -91,8 +90,7 @@ private:
     bool                                            mbIsIndependentSubset;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONBASENODE_HXX
 

@@ -36,9 +36,7 @@ class GDIMetaFile;
 class Graphic;
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /// meta file loading specialities:
         enum mtf_load_flags {
@@ -124,7 +122,6 @@ namespace slideshow
         bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                                          ::basegfx::B2DRectangle&       o_rPaintRect,
                                          const GDIMetaFileSharedPtr&    rMtf );
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_GDIMTFTOOLS_HXX

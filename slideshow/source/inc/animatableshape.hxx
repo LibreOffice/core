@@ -25,9 +25,7 @@
 #include "shape.hxx"
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Represents an animatable shape.
 
@@ -74,7 +72,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATABLESHAPE_HXX

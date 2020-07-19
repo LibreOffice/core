@@ -25,9 +25,7 @@
 
 /* Definition of RGBColor class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class HSLColor;
 
@@ -88,7 +86,6 @@ namespace slideshow
             As usual, t must be in the [0,1] range
         */
         RGBColor interpolate( const RGBColor& rFrom, const RGBColor& rTo, double t );
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_RGBCOLOR_HXX

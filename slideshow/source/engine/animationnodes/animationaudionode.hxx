@@ -24,8 +24,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Audio node.
 
@@ -62,8 +61,7 @@ private:
     void checkPlayingStatus();
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 

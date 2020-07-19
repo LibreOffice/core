@@ -25,9 +25,7 @@
 
 /* Definition of BoolAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a bool animation.
 
@@ -63,7 +61,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< BoolAnimation > BoolAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_BOOLANIMATION_HXX

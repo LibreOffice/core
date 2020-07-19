@@ -26,9 +26,7 @@
 
 namespace com::sun::star::drawing { class XDrawPage; }
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class  Shape;
         struct SlideShowContext;
@@ -45,7 +43,7 @@ namespace slideshow
             const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
             const css::uno::Reference< css::drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                       rContext ); // throw ShapeLoadFailedException;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_BACKGROUNDSHAPE_HXX

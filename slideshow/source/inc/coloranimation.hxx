@@ -26,9 +26,7 @@
 
 /* Definition of ColorAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a color animation.
 
@@ -63,7 +61,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ColorAnimation > ColorAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_COLORANIMATION_HXX
