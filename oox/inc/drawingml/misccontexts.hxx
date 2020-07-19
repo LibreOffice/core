@@ -24,8 +24,7 @@
 
 #include <drawingml/fillproperties.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 /** Context handler that imports the a:solidFill element. */
@@ -238,8 +237,7 @@ private:
     Color&              mrColor;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

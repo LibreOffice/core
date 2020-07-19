@@ -40,8 +40,7 @@ namespace oox {
     class GraphicHelper;
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class ShapePropertyMap;
 
@@ -150,8 +149,7 @@ struct FillProperties
                             bool bFlipV = false ) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

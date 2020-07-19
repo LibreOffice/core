@@ -19,8 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** A wrapper for a binary output stream that supports aligned write operations.
@@ -158,8 +157,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

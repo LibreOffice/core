@@ -24,9 +24,9 @@
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textliststyle.hxx>
 
-namespace com::sun::star {
-    namespace text { class XText; }
-    namespace text { class XTextCursor; }
+namespace com::sun::star::text {
+    class XText;
+    class XTextCursor;
 }
 
 namespace oox::core { class XmlFilterBase; }

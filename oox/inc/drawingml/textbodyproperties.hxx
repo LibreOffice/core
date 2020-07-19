@@ -25,8 +25,7 @@
 #include <oox/helper/propertymap.hxx>
 #include <optional>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 struct TextBodyProperties
@@ -54,8 +53,7 @@ struct TextBodyProperties
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

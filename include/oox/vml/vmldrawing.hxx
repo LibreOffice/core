@@ -44,8 +44,7 @@ namespace oox {
     namespace vml { class ShapeContainer; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 class ShapeBase;
 
@@ -200,8 +199,7 @@ private:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

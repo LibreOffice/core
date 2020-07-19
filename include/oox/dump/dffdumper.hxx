@@ -27,8 +27,7 @@
 
 namespace oox { class BinaryInputStream; }
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 
 class DffStreamObject final : public SequenceRecordObjectBase

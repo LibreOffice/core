@@ -23,9 +23,7 @@
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 struct DataLabelModelBase
 {
@@ -208,9 +206,7 @@ struct SeriesModel
                         ~SeriesModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

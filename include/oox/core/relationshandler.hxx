@@ -30,8 +30,7 @@ namespace com::sun::star {
     namespace xml::sax { class XFastContextHandler; }
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 class XmlFilterBase;
 
@@ -52,8 +51,7 @@ private:
 };
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

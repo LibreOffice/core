@@ -31,8 +31,7 @@ namespace oox {
     class PropertyMap;
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 struct GraphicProperties
 {
@@ -47,8 +46,7 @@ struct GraphicProperties
                             const GraphicHelper& rGraphicHelper) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

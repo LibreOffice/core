@@ -26,9 +26,7 @@ namespace com::sun::star {
     namespace drawing { class XShapes; }
 }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct ChartSpaceModel;
@@ -46,9 +44,7 @@ public:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

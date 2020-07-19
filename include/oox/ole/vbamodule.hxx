@@ -37,8 +37,7 @@ namespace oox {
     class StorageBase;
 }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 class VbaModule
@@ -101,8 +100,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

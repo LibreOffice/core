@@ -39,9 +39,7 @@ namespace oox {
 
 namespace oox::core { class FilterBase; }
 
-namespace oox {
-namespace dump {
-namespace xlsb {
+namespace oox::dump::xlsb {
 
 
 class RecordObjectBase final : public SequenceRecordObjectBase

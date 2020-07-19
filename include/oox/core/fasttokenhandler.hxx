@@ -31,8 +31,7 @@
 
 namespace oox { class TokenMap; }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
@@ -62,8 +61,7 @@ private:
 };
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

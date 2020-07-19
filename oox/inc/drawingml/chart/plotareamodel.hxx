@@ -25,9 +25,7 @@
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/typegroupmodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 struct View3DModel
 {
@@ -81,9 +79,7 @@ struct PlotAreaModel
                         ~PlotAreaModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

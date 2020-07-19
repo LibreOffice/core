@@ -29,8 +29,7 @@
 
 namespace oox { class PropertySet; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 
 struct TextCharacterProperties
@@ -82,8 +81,7 @@ struct TextCharacterProperties
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

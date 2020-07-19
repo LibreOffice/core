@@ -27,9 +27,7 @@ namespace com::sun::star {
     namespace chart2 { class XCoordinateSystem; }
 }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct AxisDispUnitsModel;
@@ -66,9 +64,7 @@ public:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

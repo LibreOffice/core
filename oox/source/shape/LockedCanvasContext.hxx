@@ -13,9 +13,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace oox
-{
-namespace shape
+namespace oox::shape
 {
 /// Locked canvas is kind of a container for drawingml shapes: it can even contain group shapes.
 class LockedCanvasContext final : public oox::core::FragmentHandler2
@@ -32,7 +30,6 @@ public:
 private:
     oox::drawingml::ShapePtr mpShape;
 };
-}
 }
 
 #endif

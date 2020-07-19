@@ -50,8 +50,7 @@ namespace oox {
     class PropertyMap;
 }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 #define COMCTL_GUID_SCROLLBAR_60   "{FE38753A-44A3-11D1-B5B7-0000C09000C4}"
@@ -987,8 +986,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 
