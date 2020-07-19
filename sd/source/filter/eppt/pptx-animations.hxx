@@ -16,14 +16,11 @@
 
 #include "epptooxml.hxx"
 
-namespace oox
-{
-namespace core
+namespace oox::core
 {
 void WriteAnimations(const ::sax_fastparser::FSHelperPtr& pFS,
                      const css::uno::Reference<css::drawing::XDrawPage>& rXDrawPage,
                      PowerPointExport& rExport);
-}
 }
 #endif
 

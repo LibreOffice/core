@@ -35,21 +35,7 @@
 namespace com::sun::star::xml::dom { class XNode; }
 namespace com::sun::star::uno { class XInterface; }
 namespace vcl { class Font; }
-
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace presentation
-            {
-                class XPresentation2;
-            }
-        }
-    }
-}
-
+namespace com::sun::star::presentation { class XPresentation2; }
 class SdOutliner;
 class Timer;
 class SfxObjectShell;
