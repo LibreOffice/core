@@ -22,9 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         // SVG token mapper with hashing
         enum SVGToken
@@ -186,8 +184,8 @@ namespace svgio
 
         OUString getStrTitle();
         OUString getStrDesc();
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGTOKEN_HXX
 

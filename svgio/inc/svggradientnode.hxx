@@ -25,9 +25,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgGradientNode : public SvgNode
         {
@@ -115,8 +113,8 @@ namespace svgio
             const basegfx::B2DHomMatrix* getGradientTransform() const;
             void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix);
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGGRADIENTNODE_HXX
 

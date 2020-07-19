@@ -15,9 +15,7 @@
 #include <memory>
 #include "svgnode.hxx"
 
-namespace svgio
-{
-namespace svgreader
+namespace svgio::svgreader
 {
 class SvgDrawVisitor final : public Visitor
 {
@@ -33,7 +31,6 @@ public:
 
     std::shared_ptr<gfx::DrawRoot> const& getDrawRoot() const { return mpDrawRoot; }
 };
-}
 }
 
 #endif // INCLUDED_SVGIO_INC_SVGVISITOR_HXX

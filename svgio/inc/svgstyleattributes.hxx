@@ -38,9 +38,7 @@ namespace svgio::svgreader {
 }
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         enum StrokeLinecap
         {
@@ -438,8 +436,8 @@ namespace svgio
             BaselineShift getBaselineShift() const { return maBaselineShift; }
             SvgNumber getBaselineShiftNumber() const;
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGSTYLEATTRIBUTES_HXX
 

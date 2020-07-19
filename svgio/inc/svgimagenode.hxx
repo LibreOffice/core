@@ -25,9 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgImageNode final : public SvgNode
         {
@@ -76,8 +74,8 @@ namespace svgio
             /// height content, set if found in current context
             const SvgNumber& getHeight() const { return maHeight; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGIMAGENODE_HXX
 
