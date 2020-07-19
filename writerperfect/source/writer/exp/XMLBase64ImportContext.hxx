@@ -16,9 +16,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <office:binary-data>.
 class XMLBase64ImportContext : public XMLImportContext
@@ -40,8 +38,7 @@ private:
     OUString m_aBase64CharsLeft;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 

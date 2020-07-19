@@ -15,18 +15,9 @@
 #include "writerperfectdllapi.h"
 #include <memory>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace ucb
+namespace com::sun::star::ucb
 {
 class XContent;
-}
-}
-}
 }
 
 namespace writerperfect

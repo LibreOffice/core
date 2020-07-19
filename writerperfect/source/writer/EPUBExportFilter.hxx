@@ -18,18 +18,9 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 class XComponentContext;
-}
-}
-}
 }
 
 namespace writerperfect

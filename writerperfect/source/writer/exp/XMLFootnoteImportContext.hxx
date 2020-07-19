@@ -16,9 +16,7 @@
 
 #include "xmlictxt.hxx"
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 /// Handler for <text:note>.
 class XMLFootnoteImportContext : public XMLImportContext
@@ -38,8 +36,7 @@ private:
     librevenge::RVNGPropertyList m_aProperties;
 };
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 #endif
 
