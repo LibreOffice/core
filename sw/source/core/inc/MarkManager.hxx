@@ -27,8 +27,7 @@
 
 class SwCursorShell;
 
-namespace sw {
-    namespace mark {
+namespace sw::mark {
     typedef std::unordered_map<OUString, sal_Int32> MarkBasenameMapUniqueOffset_t;
 
     class FieldmarkWithDropDownButton;
@@ -142,7 +141,7 @@ namespace sw {
 
             sw::mark::FieldmarkWithDropDownButton* m_pLastActiveFieldmark;
     };
-    } // namespace mark
+
 }
 
 #endif

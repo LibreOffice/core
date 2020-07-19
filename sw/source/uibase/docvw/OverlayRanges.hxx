@@ -27,9 +27,7 @@
 
 class SwView;
 
-namespace sw
-{
-    namespace overlay
+namespace sw::overlay
     {
         class OverlayRanges final : public sdr::overlay::OverlayObject
         {
@@ -67,8 +65,7 @@ namespace sw
             std::vector< basegfx::B2DRange > maRanges;
             bool mbShowSolidBorder;
         };
-    } // end of namespace overlay
-} // end of namespace sw
+} // end of namespace sw::overlay
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_DOCVW_OVERLAYRANGES_HXX
 

@@ -21,9 +21,7 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
-namespace sw
-{
-namespace sidebar
+namespace sw::sidebar
 {
 class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
 {
@@ -39,7 +37,7 @@ public:
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
 };
-}
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

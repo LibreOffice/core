@@ -48,13 +48,7 @@ class SwPaM;
 class SwTextBlocks;
 struct SwPosition;
 struct Writer_Impl;
-namespace sw
-{
-namespace mark
-{
-class IMark;
-}
-}
+namespace sw::mark { class IMark; }
 namespace com::sun::star::embed { class XStorage; }
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader

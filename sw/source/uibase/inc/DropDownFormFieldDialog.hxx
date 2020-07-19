@@ -12,13 +12,10 @@
 
 #include <vcl/weld.hxx>
 
-namespace sw
-{
-namespace mark
+namespace sw::mark
 {
 class IFieldmark;
 }
-} // namespace sw
 
 /// Dialog to specify the properties of drop-down form field
 namespace sw

@@ -17,9 +17,7 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/relfld.hxx>
 
-namespace sw
-{
-namespace sidebar
+namespace sw::sidebar
 {
 class TableEditPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
@@ -85,7 +83,7 @@ private:
     DECL_LINK(RowHeightMofiyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ColumnWidthMofiyHdl, weld::MetricSpinButton&, void);
 };
-}
+
 } // end of namespace sw::sidebar
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_TABLEEDITPANEL_HXX

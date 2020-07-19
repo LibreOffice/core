@@ -20,13 +20,7 @@ namespace rtl
 {
 template <typename> class Reference;
 }
-namespace oox
-{
-namespace drawingml
-{
-class DrawingML;
-}
-}
+namespace oox::drawingml { class DrawingML; }
 class Size;
 class SdrObject;
 class SvxBoxItem;
