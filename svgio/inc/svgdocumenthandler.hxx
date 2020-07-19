@@ -26,9 +26,7 @@
 
 namespace svgio::svgreader { class SvgCharacterNode; }
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgDocHdl final : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
         {
@@ -60,8 +58,8 @@ namespace svgio
 
             const SvgDocument& getSvgDocument() const { return maDocument; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGDOCUMENTHANDLER_HXX
 

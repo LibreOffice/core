@@ -23,9 +23,7 @@
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgStyleNode final : public SvgNode
         {
@@ -55,8 +53,8 @@ namespace svgio
             bool isTextCss() const { return mbTextCss; }
             void setTextCss(bool bNew) { mbTextCss = bNew; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGSTYLENODE_HXX
 

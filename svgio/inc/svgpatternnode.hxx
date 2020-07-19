@@ -25,9 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <memory>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgPatternNode : public SvgNode
         {
@@ -113,8 +111,8 @@ namespace svgio
             void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaPatternTransform.reset(); if(pMatrix) mpaPatternTransform.reset(new basegfx::B2DHomMatrix(*pMatrix)); }
 
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGPATTERNNODE_HXX
 

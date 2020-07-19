@@ -24,9 +24,7 @@
 #include "svgstyleattributes.hxx"
 #include "svgtextnode.hxx"
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgTrefNode final : public SvgNode
         {
@@ -50,8 +48,8 @@ namespace svgio
             /// access to referenced SvgTextNode
             const SvgTextNode* getReferencedSvgTextNode() const;
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGTREFNODE_HXX
 

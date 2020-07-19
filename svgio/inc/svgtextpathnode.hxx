@@ -23,9 +23,7 @@
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgTextPathNode final : public SvgNode
         {
@@ -57,8 +55,8 @@ namespace svgio
             /// StartOffset content
             const SvgNumber& getStartOffset() const { return maStartOffset; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 #endif // INCLUDED_SVGIO_INC_SVGTEXTPATHNODE_HXX
 

@@ -22,9 +22,7 @@
 #include "svgnode.hxx"
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         class SvgTitleDescNode final : public SvgNode
         {
@@ -45,8 +43,8 @@ namespace svgio
             /// x content, set if found in current context
             const OUString& getText() const { return maText; }
         };
-    } // end of namespace svgreader
-} // end of namespace svgio
+
+} // end of namespace svgio::svgreader
 
 
 #endif // INCLUDED_SVGIO_INC_SVGTITLEDESCNODE_HXX
