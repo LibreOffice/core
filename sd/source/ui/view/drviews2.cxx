@@ -3492,9 +3492,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ADDITIONS_DIALOG:
         {
+            OUString sAdditionsTag = "";
+
+            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+            if (!pStringArg)
+                SAL_WARN("sd.ui", "Additions UNO argument error!");
+            else
+                sAdditionsTag = pStringArg->GetValue();
+
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractAdditionsDialog> pDlg(
-                pFact->CreateAdditionsDialog(GetFrameWeld()));
+                pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
             pDlg->Execute();
             Cancel();
             rReq.Ignore ();

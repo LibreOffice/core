@@ -42,6 +42,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <svl/rectitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -61,6 +62,8 @@
 #include <svx/svdpagv.hxx>
 
 #include <comphelper/lok.hxx>
+
+
 
 using namespace com::sun::star;
 
@@ -413,16 +416,24 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 break;
             }
 
-        case SID_ADDITIONS_DIALOG:
+            case SID_ADDITIONS_DIALOG:
             {
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractAdditionsDialog> pDialog(
-                pFact->CreateAdditionsDialog(pWin->GetFrameWeld()));
-            pDialog->Execute();
-            break;
+                OUString sAdditionsTag = "";
+
+                const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+                if (!pStringArg)
+                    SAL_WARN("sc.ui", "Additions UNO argument error!");
+                else
+                    sAdditionsTag = pStringArg->GetValue();
+
+                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractAdditionsDialog> pDialog(
+                    pFact->CreateAdditionsDialog(pWin->GetFrameWeld(), sAdditionsTag));
+                pDialog->Execute();
+                break;
             }
 
-        case SID_OBJECTRESIZE:
+            case SID_OBJECTRESIZE:
             {
                 //         the server would like to change the client size
 
