@@ -27,9 +27,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-namespace vcl
-{
-namespace unotools
+namespace vcl::unotools
 {
     class VCL_DLLPUBLIC VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
@@ -113,7 +111,7 @@ namespace unotools
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
         const BitmapEx& getBitmapEx() const { return m_aBmpEx; }
    };
-}
+
 }
 
 #endif

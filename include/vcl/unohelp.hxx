@@ -25,25 +25,15 @@
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace i18n {
+namespace com::sun::star::i18n {
     class XBreakIterator;
     class XCharacterClassification;
-}}}}
-
-namespace com {
-namespace sun {
-namespace star {
-namespace accessibility {
+}
+namespace com::sun::star::accessibility {
     struct AccessibleEventObject;
 }
-}}}
 
-namespace vcl
-{
-namespace unohelper
+namespace vcl::unohelper
 {
 VCL_DLLPUBLIC css::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC css::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
@@ -54,7 +44,7 @@ VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );
 VCL_DLLPUBLIC FontWeight          ConvertFontWeight( float f );
 VCL_DLLPUBLIC css::awt::FontSlant ConvertFontSlant( FontItalic eWeight );
 VCL_DLLPUBLIC FontItalic          ConvertFontSlant( css::awt::FontSlant );
-}}  // namespace vcl::unohelper
+}  // namespace vcl::unohelper
 
 #endif // INCLUDED_VCL_UNOHELP_HXX
 

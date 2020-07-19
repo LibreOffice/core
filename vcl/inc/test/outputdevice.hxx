@@ -13,8 +13,7 @@
 
 #include <vcl/virdev.hxx>
 
-namespace vcl {
-namespace test {
+namespace vcl::test {
 
 /** Rendering test result.
  *
@@ -216,7 +215,7 @@ public:
 };
 
 
-}} // end namespace vcl::test
+} // end namespace vcl::test
 
 #endif
 

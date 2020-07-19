@@ -17,9 +17,7 @@
 #include <osl/module.hxx>
 #include <sal/types.h>
 
-namespace vcl
-{
-namespace unx
+namespace vcl::unx
 {
 
 class GtkPrintWrapper
@@ -61,7 +59,6 @@ public:
     void print_unix_dialog_set_has_selection(GtkPrintUnixDialog* dialog, gboolean has_selection) const;
 };
 
-}
 }
 
 #endif // INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX

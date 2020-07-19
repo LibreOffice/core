@@ -15,9 +15,7 @@
 #include <hb.h>
 #include <i18nlangtag/lang.h>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 class FeatureCollector
 {
@@ -47,8 +45,7 @@ public:
     bool collect();
 };
 
-} // end namespace font
-} // end namespace vcl
+} // namespace vcl::font
 
 #endif // INCLUDED_VCL_INC_FONT_FEATURECOLLECTOR_HXX
 
