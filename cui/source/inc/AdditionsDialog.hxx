@@ -75,7 +75,8 @@ public:
     std::unique_ptr<weld::Label> m_xLabelProgress;
     ::rtl::Reference<SearchAndParseThread> m_pSearchThread;
 
-    AdditionsDialog(weld::Window* pParent);
+    OString m_sTag;
+    AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
 
     void SetProgress(const OUString& rProgress);
