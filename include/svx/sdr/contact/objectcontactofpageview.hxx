@@ -26,9 +26,7 @@
 class SdrPageWindow;
 class SdrPage;
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class SVXCORE_DLLPUBLIC ObjectContactOfPageView : public ObjectContact, public Idle
         {
@@ -112,8 +110,7 @@ namespace sdr
             */
             void    SetUNOControlsDesignMode( bool _bDesignMode ) const;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 

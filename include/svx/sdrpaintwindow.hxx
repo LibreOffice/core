@@ -26,14 +26,8 @@
 #include <memory>
 
 class SdrPaintView;
+namespace sdr::overlay { class OverlayManager; }
 
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayManager;
-    }
-}
 
 #ifdef _MSC_VER // broken msvc template instantiation
 #include <svx/sdr/overlay/overlaymanager.hxx>

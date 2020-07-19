@@ -23,9 +23,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace svx
-{
-namespace sidebar
+namespace svx::sidebar
 {
 class ListsPropertyPanel : public PanelLayout
 {
@@ -45,7 +43,7 @@ private:
     std::unique_ptr<weld::Toolbar> mxTBxOutline;
     std::unique_ptr<ToolbarUnoDispatcher> mxOutlineDispatcher;
 };
-}
+
 } // end of namespace svx::sidebar
 
 #endif

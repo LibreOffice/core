@@ -42,9 +42,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         Primitive2DReference SVXCORE_DLLPUBLIC createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -83,8 +81,7 @@ namespace drawinglayer
             const Primitive2DContainer& rContent,
             sal_Int32 nRadius);
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

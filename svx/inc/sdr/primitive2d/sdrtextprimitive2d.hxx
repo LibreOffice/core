@@ -35,9 +35,7 @@
 class SdrText;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -97,13 +95,10 @@ namespace drawinglayer
             // transformed clone operator
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrContourTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -137,13 +132,10 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrPathTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -177,13 +169,10 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrBlockTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -233,13 +222,10 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrStretchTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -272,13 +258,10 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrAutoFitTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -310,12 +293,9 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrChainedTextPrimitive2D final : public SdrTextPrimitive2D
         {
@@ -346,8 +326,7 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX

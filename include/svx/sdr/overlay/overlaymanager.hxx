@@ -43,9 +43,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayManager
             : protected sdr::animation::Scheduler
@@ -131,8 +129,8 @@ namespace sdr
 
             void InsertEvent(sdr::animation::Event& rNew) { Scheduler::InsertEvent(rNew); }
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+
+} // end of namespace sdr::overlay
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 

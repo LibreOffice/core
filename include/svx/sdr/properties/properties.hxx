@@ -38,13 +38,11 @@ class Fraction;
 class SfxItemPool;
 class SdrModel;
 
-namespace sdr
+namespace sdr::properties
 {
-    namespace properties
-    {
-        class ItemChangeBroadcaster;
-    }
+    class ItemChangeBroadcaster;
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -72,9 +70,7 @@ namespace sdr
 //      EmptyProperties
 //          PageProperties
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class SVXCORE_DLLPUBLIC BaseProperties
         {
@@ -205,8 +201,7 @@ namespace sdr
         // checks the FillStyle item and removes unneeded Gradient, FillBitmap and Hatch items
         void SVXCORE_DLLPUBLIC CleanupFillProperties( SfxItemSet& rItemSet );
 
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 

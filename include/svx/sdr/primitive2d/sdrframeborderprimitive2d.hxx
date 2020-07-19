@@ -25,9 +25,7 @@
 
 // predefines
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SVXCORE_DLLPUBLIC SdrFrameBorderData
         {
@@ -83,12 +81,9 @@ namespace drawinglayer
 
         typedef std::vector<SdrFrameBorderData> SdrFrameBorderDataVector;
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SVXCORE_DLLPUBLIC SdrFrameBorderPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
@@ -123,8 +118,8 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRFRAMEBORDERPRIMITIVE2D_HXX

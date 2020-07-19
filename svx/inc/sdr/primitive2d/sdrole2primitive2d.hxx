@@ -28,9 +28,7 @@
 // predefines
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         class SdrOle2Primitive2D final : public BasePrimitive2D
         {
@@ -59,8 +57,7 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDROLE2PRIMITIVE2D_HXX

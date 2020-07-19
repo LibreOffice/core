@@ -29,9 +29,7 @@ namespace svx
 class ClassificationResult;
 }
 
-namespace svx
-{
-namespace classification
+namespace svx::classification
 {
 SVX_DLLPUBLIC OUString
 convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults);
@@ -59,7 +57,7 @@ SVX_DLLPUBLIC void
 insertCreationOrigin(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
                      sfx::ClassificationKeyCreator const& rKeyCreator,
                      sfx::ClassificationCreationOrigin eOrigin);
-}
+
 } // end svx::classification namespace
 
 #endif // INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX

@@ -24,14 +24,8 @@
 #include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com {
-    namespace sun {
-        namespace star {
-            namespace beans {
-                class SAL_NO_VTABLE XPropertySet;
-            }
-        }
-    }
+namespace com::sun::star::beans {
+    class SAL_NO_VTABLE XPropertySet;
 }
 
 

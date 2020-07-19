@@ -33,9 +33,7 @@ namespace drawinglayer::attribute { class SdrFormTextAttribute; }
 namespace drawinglayer::attribute { class ImpSdrTextAttribute; }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SdrTextAttribute
         {
@@ -111,8 +109,8 @@ namespace drawinglayer
                 double fFrameLength,
                 double fTextLength) const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

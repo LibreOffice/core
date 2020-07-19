@@ -34,9 +34,7 @@ class ListBox;
 class ToolBox;
 class FloatingWindow;
 
-namespace svx
-{
-namespace sidebar
+namespace svx::sidebar
 {
 
 class LinePropertyPanel : public LinePropertyPanelBase,
@@ -93,7 +91,7 @@ private:
     vcl::EnumContext maContext;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

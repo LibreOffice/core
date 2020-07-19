@@ -24,9 +24,7 @@
 #include <vcl/bitmapex.hxx>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class SVXCORE_DLLPUBLIC OverlayBitmapEx final : public OverlayObjectWithBasePosition
         {
@@ -55,8 +53,7 @@ namespace sdr
                 double fRotation = 0.0);
             virtual ~OverlayBitmapEx() override;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYBITMAPEX_HXX

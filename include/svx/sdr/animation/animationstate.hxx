@@ -24,17 +24,9 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewObjectContact;
-    } // end of namespace contact
-}
+namespace sdr::contact { class ViewObjectContact; }
 
-namespace sdr
-{
-    namespace animation
+namespace sdr::animation
     {
         class PrimitiveAnimation final : public Event
         {
@@ -58,8 +50,8 @@ namespace sdr
             // execute event, from base class Event
             virtual void Trigger(sal_uInt32 nTime) override;
         };
-    } // end of namespace animation
-} // end of namespace sdr
+
+} // end of namespace sdr::animation
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_ANIMATIONSTATE_HXX
 

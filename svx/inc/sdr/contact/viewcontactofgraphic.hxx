@@ -26,9 +26,7 @@
 namespace drawinglayer::attribute { class SdrLineFillEffectsTextAttribute; }
 class GraphicAttr;
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewContactOfGraphic final : public ViewContactOfTextObj
         {
@@ -69,8 +67,7 @@ namespace sdr
             // ONLY based on model data
             virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 

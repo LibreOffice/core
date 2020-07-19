@@ -21,9 +21,7 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class OverlayTriangle final : public OverlayObjectWithBasePosition
         {
@@ -42,7 +40,6 @@ namespace sdr
                 Color aTriangleColor);
             virtual ~OverlayTriangle() override;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
