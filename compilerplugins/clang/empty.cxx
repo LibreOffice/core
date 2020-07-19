@@ -47,39 +47,12 @@ public:
     {
     }
 
-    bool VisitBinLT(BinaryOperator const* expr)
+    bool VisitBinaryOperator(BinaryOperator const* expr)
     {
-        visitComparison(expr);
-        return true;
-    }
-
-    bool VisitBinGT(BinaryOperator const* expr)
-    {
-        visitComparison(expr);
-        return true;
-    }
-
-    bool VisitBinLE(BinaryOperator const* expr)
-    {
-        visitComparison(expr);
-        return true;
-    }
-
-    bool VisitBinGE(BinaryOperator const* expr)
-    {
-        visitComparison(expr);
-        return true;
-    }
-
-    bool VisitBinEQ(BinaryOperator const* expr)
-    {
-        visitComparison(expr);
-        return true;
-    }
-
-    bool VisitBinNE(BinaryOperator const* expr)
-    {
-        visitComparison(expr);
+        if (expr->isRelationalOp() || expr->isEqualityOp())
+        {
+            visitComparison(expr);
+        }
         return true;
     }
 

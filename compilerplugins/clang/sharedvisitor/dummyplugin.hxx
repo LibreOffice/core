@@ -12,6 +12,8 @@
 #ifndef DUMMYPLUGIN_H
 #define DUMMYPLUGIN_H
 
+#include "config_clang.h"
+
 #include "../plugin.hxx"
 
 using namespace clang;
@@ -42,9 +44,6 @@ public:
     bool TraverseDoStmt( DoStmt* ) { return complain(); }
     bool TraverseForStmt( ForStmt* ) { return complain(); }
     bool TraverseCXXForRangeStmt( CXXForRangeStmt* ) { return complain(); }
-    bool TraverseUnaryLNot( UnaryOperator* ) { return complain(); }
-    bool TraverseBinLAnd( BinaryOperator* ) { return complain(); }
-    bool TraverseBinLOr( BinaryOperator* ) { return complain(); }
     bool TraverseConditionalOperator( ConditionalOperator* ) { return complain(); }
     bool TraverseCXXCatchStmt( CXXCatchStmt* ) { return complain(); }
     bool TraverseCXXDestructorDecl( CXXDestructorDecl* ) { return complain(); }
