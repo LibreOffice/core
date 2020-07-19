@@ -24,8 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Create a unit rect.
 ::basegfx::B2DPolygon createUnitRect();
@@ -38,7 +37,6 @@ namespace internal {
 ::basegfx::B2DPolyPolygon flipOnYAxis(
     ::basegfx::B2DPolyPolygon const & polypoly );
 
-}
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX

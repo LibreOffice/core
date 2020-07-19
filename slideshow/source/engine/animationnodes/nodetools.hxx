@@ -33,9 +33,7 @@
 # define DEBUG_NODES_SHOWTREE(a)
 #endif
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         // Tools
@@ -63,7 +61,6 @@ namespace slideshow
         */
         bool isIndefiniteTiming( const css::uno::Any& rAny );
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX

@@ -32,9 +32,7 @@
 
 /* Definition of AnimationFactory class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Factory for Animation objects
@@ -127,7 +125,7 @@ namespace slideshow
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags);
         }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONFACTORY_HXX

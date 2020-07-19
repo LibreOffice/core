@@ -51,9 +51,7 @@ namespace o3tl {
 
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** This class is the viewable representation of a draw
             document's XShape, associated to a specific View
@@ -314,7 +312,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< ViewShape > ViewShapeSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX

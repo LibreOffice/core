@@ -25,8 +25,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate a vee wipe
 class VeeWipe : public ParametricPolyPolygon
@@ -36,7 +35,7 @@ public:
     virtual ::basegfx::B2DPolyPolygon operator()( double x ) override;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_VEEWIPE_HXX

@@ -26,9 +26,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Generates the final clipping polygon.
 
@@ -79,7 +77,7 @@ namespace slideshow
             bool                               mbFlip;
         };
 
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX

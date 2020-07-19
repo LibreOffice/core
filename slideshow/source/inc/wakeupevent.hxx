@@ -24,8 +24,7 @@
 #include "event.hxx"
 #include "activitiesqueue.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Little helper class, used to set Activities active again
     after some sleep period.
@@ -77,8 +76,7 @@ private:
 
 typedef ::std::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_WAKEUPEVENT_HXX
 

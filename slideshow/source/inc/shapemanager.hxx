@@ -30,9 +30,7 @@ namespace com::sun::star::drawing { class XShape; }
 
 /* Definition of ShapeManager interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class HyperlinkArea;
         class AnimatableShape;
@@ -117,7 +115,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< ShapeManager > ShapeManagerSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEMANAGER_HXX

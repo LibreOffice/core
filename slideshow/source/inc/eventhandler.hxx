@@ -25,9 +25,7 @@
 
 /* Definition of EventHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for event handling objects.
@@ -53,7 +51,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< EventHandler > EventHandlerSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENTHANDLER_HXX

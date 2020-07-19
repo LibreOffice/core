@@ -33,9 +33,7 @@
 #include <memory>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** This interface represents a stateful object.
@@ -538,7 +536,6 @@ namespace slideshow
             bool                                        mbVisibilityValid       : 1;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEATTRIBUTELAYER_HXX

@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generates a snake wipe:
 class SnakeWipe : public ParametricPolyPolygon
@@ -59,7 +58,7 @@ private:
     const bool m_opposite;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SNAKEWIPE_HXX

@@ -22,9 +22,7 @@
 
 /* Definition of ExpressionNode interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface describing an abstract animation function.
 
@@ -72,7 +70,7 @@ namespace slideshow
             */
             virtual bool isConstant() const = 0;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EXPRESSIONNODE_HXX

@@ -21,8 +21,7 @@
 
 #include "basenode.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class BaseContainerNode;
 typedef ::std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
@@ -94,8 +93,7 @@ private:
     const bool          mbDurationIndefinite;
 };
 
-} // namespace interface
-} // namespace presentation
+} // namespace presentation::interface
 
 #endif
 

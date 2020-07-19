@@ -26,9 +26,7 @@
 
 /* Definition of SubsettableShapeManager interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class DocTreeNode;
         class AttributableShape;
@@ -105,7 +103,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SUBSETTABLESHAPEMANAGER_HXX

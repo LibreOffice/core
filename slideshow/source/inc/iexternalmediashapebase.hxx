@@ -25,9 +25,7 @@
 #include "shape.hxx"
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Represents a shape containing playable content rendered by
             external engine (e.g. media or applet).
@@ -78,7 +76,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< IExternalMediaShapeBase > IExternalMediaShapeBaseSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_IEXTERNALMEDIASHAPEBASE_HXX

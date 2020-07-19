@@ -29,9 +29,7 @@ namespace com::sun::star::presentation { class XSlideShowView; }
 
 /* Definition of UnoViewContainer class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Contains UnoViews
          */
@@ -76,7 +74,6 @@ namespace slideshow
             UnoViewVector   maViews;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_UNOVIEWCONTAINER_HXX

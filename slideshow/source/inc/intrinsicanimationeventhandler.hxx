@@ -24,9 +24,7 @@
 
 /* Definition of IntrinsicAnimationEventHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling intrinsic animation display modes.
@@ -46,7 +44,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< IntrinsicAnimationEventHandler > IntrinsicAnimationEventHandlerSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_INTRINSICANIMATIONEVENTHANDLER_HXX

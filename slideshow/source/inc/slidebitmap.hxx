@@ -34,9 +34,7 @@ namespace com::sun::star::rendering { class XBitmap; }
 
 /* Definition of SlideBitmap class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Little wrapper encapsulating an XBitmap
@@ -76,7 +74,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< SlideBitmap > SlideBitmapSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SLIDEBITMAP_HXX

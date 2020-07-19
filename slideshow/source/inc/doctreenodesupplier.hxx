@@ -25,9 +25,7 @@
 
 /* Definition of DocTreeNodeSupplier interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface to retrieve DocTreeNodes from subsettable
             shapes.
@@ -140,7 +138,6 @@ namespace slideshow
             ~DocTreeNodeSupplier() {}
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_DOCTREENODESUPPLIER_HXX

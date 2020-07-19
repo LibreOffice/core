@@ -27,9 +27,7 @@
 
 /* Definition of Animation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a generic animation.
 
@@ -79,7 +77,6 @@ namespace slideshow
             virtual void end() = 0;
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATION_HXX

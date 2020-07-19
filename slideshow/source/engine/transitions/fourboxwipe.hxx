@@ -25,8 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate a 4-box wipe
 class FourBoxWipe : public ParametricPolyPolygon
@@ -41,7 +40,7 @@ private:
     const ::basegfx::B2DPolygon m_unitRect;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_FOURBOXWIPE_HXX

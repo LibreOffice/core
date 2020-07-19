@@ -29,9 +29,7 @@
 #include <memory>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class LayerEndUpdate;
         class Layer;
@@ -258,7 +256,6 @@ namespace slideshow
             bool                       mbClipSet; // true, if beginUpdate set a clip
         };
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYER_HXX

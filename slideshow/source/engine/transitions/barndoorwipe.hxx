@@ -26,8 +26,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate a barn door wipe or double barn door wipe:
 class BarnDoorWipe : public ParametricPolyPolygon
@@ -41,7 +40,7 @@ private:
     const bool m_doubled;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_BARNDOORWIPE_HXX

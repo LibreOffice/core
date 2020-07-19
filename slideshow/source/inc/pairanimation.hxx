@@ -26,9 +26,7 @@
 
 /* Definition of PairAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a pair of numbers animation.
 
@@ -64,7 +62,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< PairAnimation > PairAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_PAIRANIMATION_HXX

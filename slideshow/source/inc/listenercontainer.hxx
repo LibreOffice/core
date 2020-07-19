@@ -24,8 +24,7 @@
 #include <vector>
 #include <iterator>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 struct EmptyBase
 {
@@ -412,8 +411,7 @@ class ThreadUnsafeListenerContainer : public ListenerContainerBase<ListenerT,
 {
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 

@@ -26,9 +26,7 @@
 
 /* Definition of HSLColorAnimation interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         /** Interface defining a HSL color animation.
 
@@ -63,7 +61,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< HSLColorAnimation > HSLColorAnimationSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_HSLCOLORANIMATION_HXX

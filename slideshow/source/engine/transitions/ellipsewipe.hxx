@@ -23,8 +23,7 @@
 #include "parametricpolypolygon.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /// Generate an iris wipe
 class EllipseWipe : public ParametricPolyPolygon
@@ -36,7 +35,7 @@ private:
     sal_Int32 mnSubType;
 };
 
-}
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_ELLIPSEWIPE_HXX

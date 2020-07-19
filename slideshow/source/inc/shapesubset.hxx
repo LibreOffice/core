@@ -25,9 +25,7 @@
 
 #include <memory>
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class ShapeSubset;
         typedef ::std::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
@@ -139,7 +137,7 @@ namespace slideshow
             DocTreeNode                      maTreeNode;
             SubsettableShapeManagerSharedPtr mpShapeManager;
         };
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX

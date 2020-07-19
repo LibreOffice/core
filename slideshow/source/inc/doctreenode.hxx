@@ -26,9 +26,7 @@
 
 /* Definition of DocTreeNode class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** This class represents kind of a DOM tree node for shape
@@ -105,7 +103,7 @@ namespace slideshow
         };
 
         typedef ::std::vector< DocTreeNode > VectorOfDocTreeNodes;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_DOCTREENODE_HXX

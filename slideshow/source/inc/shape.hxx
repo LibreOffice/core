@@ -34,9 +34,7 @@ namespace basegfx {
     class B2DRange;
 }
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         // forward declaration necessary, because methods use ShapeSharedPtr
         class Shape;
@@ -278,7 +276,7 @@ namespace slideshow
         /** A set which contains all shapes in an ordered fashion.
          */
         typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_SHAPE_HXX

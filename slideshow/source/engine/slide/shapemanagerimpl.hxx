@@ -38,8 +38,7 @@
 #include <map>
 #include <memory>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Listener class for shape events
 
@@ -182,8 +181,7 @@ private:
     const css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 

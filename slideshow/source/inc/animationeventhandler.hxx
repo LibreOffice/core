@@ -26,9 +26,7 @@
 
 /* Definition of AnimationEventHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling animation events.
@@ -57,7 +55,6 @@ namespace slideshow
 
         typedef ::std::shared_ptr< AnimationEventHandler > AnimationEventHandlerSharedPtr;
 
-    }
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONEVENTHANDLER_HXX

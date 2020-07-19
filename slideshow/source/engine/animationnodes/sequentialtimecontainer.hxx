@@ -21,8 +21,7 @@
 
 #include <basecontainernode.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** This class implements sequential node containers
 
@@ -57,8 +56,7 @@ private:
     EventSharedPtr mpCurrentSkipEvent;
 };
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SEQUENTIALTIMECONTAINER_HXX
 

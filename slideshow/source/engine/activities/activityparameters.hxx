@@ -28,8 +28,7 @@
 #include <optional>
 #include <vector>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Parameter struct for animation activities
 
@@ -128,8 +127,7 @@ struct ActivityParameters
     const bool                                  mbAutoReverse;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYPARAMETERS_HXX
 

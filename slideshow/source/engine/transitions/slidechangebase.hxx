@@ -36,8 +36,7 @@ namespace cppcanvas
     class CustomSprite;
 }
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /** Base class for all slide change effects.
 
@@ -197,8 +196,7 @@ private:
     bool                                mbPrefetched;
 };
 
-} // namespace internal
-} // namespace presentation
+} // namespace presentation::internal
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 

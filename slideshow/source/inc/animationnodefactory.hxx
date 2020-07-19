@@ -29,14 +29,10 @@
 #include "slideshowcontext.hxx"
 
 
-namespace slideshow
+namespace slideshow::internal::AnimationNodeFactory
 {
-    namespace internal
-    {
-        /* Definition of AnimationNodeFactory class */
+            /* Definition of AnimationNodeFactory class */
 
-        namespace AnimationNodeFactory
-        {
             /** Create an AnimationNode for the given XAnimationNode
              */
             AnimationNodeSharedPtr createAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
@@ -50,8 +46,7 @@ namespace slideshow
 #else
 # define SHOW_NODE_TREE(a)
 #endif
-        }
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODEFACTORY_HXX

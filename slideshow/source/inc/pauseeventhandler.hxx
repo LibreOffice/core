@@ -25,9 +25,7 @@
 
 /* Definition of PauseHandler interface */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
         /** Interface for handling pause events.
@@ -57,7 +55,7 @@ namespace slideshow
         };
 
         typedef ::std::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;
-    }
+
 }
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
