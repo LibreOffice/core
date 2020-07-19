@@ -24,10 +24,8 @@
 #include <svx/sdr/animation/scheduler.hxx>
 
 
-namespace sdr
+namespace sdr::animation
 {
-    namespace animation
-    {
         class primitiveAnimator final : public Scheduler
         {
         public:
@@ -35,8 +33,7 @@ namespace sdr
             primitiveAnimator();
             UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) virtual ~primitiveAnimator() override;
         };
-    } // end of namespace animation
-} // end of namespace sdr
+} // end of namespace sdr::animation
 
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX

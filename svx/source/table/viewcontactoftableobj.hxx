@@ -23,9 +23,7 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdotable.hxx>
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewContactOfTableObj : public ViewContactOfSdrObj
         {
@@ -39,8 +37,7 @@ namespace sdr
             explicit ViewContactOfTableObj(sdr::table::SdrTableObj& rTextObj);
             virtual ~ViewContactOfTableObj() override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 #endif
 

@@ -29,9 +29,7 @@ class SfxItemSet;
 class Fraction;
 
 // class to remember broadcast start positions
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class ItemChangeBroadcaster
         {
@@ -49,16 +47,12 @@ namespace sdr
                 return maRectangles[nIndex];
             }
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale);
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 

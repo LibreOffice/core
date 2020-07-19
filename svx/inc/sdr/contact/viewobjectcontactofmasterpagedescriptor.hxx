@@ -26,9 +26,7 @@ namespace sdr {
     class MasterPageDescriptor;
 }
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfMasterPageDescriptor final : public ViewObjectContact
         {
@@ -39,8 +37,8 @@ namespace sdr
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFMASTERPAGEDESCRIPTOR_HXX
 

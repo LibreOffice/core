@@ -33,17 +33,14 @@ namespace basegfx {
 }
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         // SdrAttribute creators
         attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet);
 
         // helpers
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::attribute
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX

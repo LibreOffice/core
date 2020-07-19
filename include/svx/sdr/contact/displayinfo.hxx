@@ -25,9 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <basegfx/range/b2irectangle.hxx>
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class SVXCORE_DLLPUBLIC DisplayInfo final
         {
@@ -98,8 +96,8 @@ namespace sdr
             bool GetSubContentActive() const { return mbSubContentActive; }
             void SetSubContentActive(bool bNew);
         };
-    } // end of namespace contact
-} // end of namespace sdr
+
+} // end of namespace sdr::contact
 
 
 #endif // INCLUDED_SVX_SDR_CONTACT_DISPLAYINFO_HXX

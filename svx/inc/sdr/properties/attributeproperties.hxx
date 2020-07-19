@@ -25,9 +25,7 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
@@ -85,8 +83,8 @@ namespace sdr
 
             virtual bool isUsedByModel() const override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX

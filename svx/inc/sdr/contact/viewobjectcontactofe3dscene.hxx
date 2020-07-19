@@ -23,9 +23,7 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfE3dScene final : public ViewObjectContactOfSdrObj
         {
@@ -41,8 +39,7 @@ namespace sdr
             // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX

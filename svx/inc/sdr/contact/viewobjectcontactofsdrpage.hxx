@@ -24,9 +24,7 @@
 
 class SdrPage;
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageSubObject : public ViewObjectContact
         {
@@ -40,12 +38,10 @@ namespace sdr
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
             virtual bool isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
 
-namespace sdr
-{
-    namespace contact
+} // end of namespace sdr::contact
+
+namespace sdr::contact
     {
         class ViewObjectContactOfPageBackground final : public ViewObjectContactOfPageSubObject
         {
@@ -57,12 +53,10 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
 
-namespace sdr
-{
-    namespace contact
+} // end of namespace sdr::contact
+
+namespace sdr::contact
     {
         class ViewObjectContactOfMasterPage final : public ViewObjectContactOfPageSubObject
         {
@@ -73,12 +67,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageFill final : public ViewObjectContactOfPageSubObject
         {
@@ -90,12 +81,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageShadow final : public ViewObjectContactOfPageSubObject
         {
@@ -105,12 +93,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfOuterPageBorder final : public ViewObjectContactOfPageSubObject
         {
@@ -120,12 +105,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfInnerPageBorder final : public ViewObjectContactOfPageSubObject
         {
@@ -135,12 +117,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageHierarchy final : public ViewObjectContactOfPageSubObject
         {
@@ -150,12 +129,9 @@ namespace sdr
 
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageGrid final : public ViewObjectContactOfPageSubObject
         {
@@ -167,12 +143,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfPageHelplines final : public ViewObjectContactOfPageSubObject
         {
@@ -184,12 +157,9 @@ namespace sdr
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewObjectContactOfSdrPage final : public ViewObjectContact
         {
@@ -199,8 +169,7 @@ namespace sdr
 
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+} // end of namespace sdr::contact
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
 

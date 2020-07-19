@@ -23,9 +23,7 @@
 #include <sdr/properties/e3dcompoundproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class E3dSphereProperties final : public E3dCompoundProperties
         {
@@ -45,8 +43,8 @@ namespace sdr
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_E3DSPHEREPROPERTIES_HXX

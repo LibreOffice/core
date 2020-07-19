@@ -26,9 +26,7 @@
 #include <vcl/idle.hxx>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         class OverlayManagerBuffered final : public OverlayManager
         {
@@ -70,8 +68,7 @@ namespace sdr
             // invalidate the given range at local OutputDevice
             virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
         };
-    } // end of namespace overlay
-} // end of namespace sdr
+} // end of namespace sdr::overlay
 
 
 #endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYMANAGERBUFFERED_HXX

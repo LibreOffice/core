@@ -32,9 +32,7 @@ namespace drawinglayer::attribute {
 }
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class SdrFormTextOutlineAttribute
         {
@@ -67,8 +65,8 @@ namespace drawinglayer
             const StrokeAttribute& getStrokeAttribute() const;
             sal_uInt8 getTransparence() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::attribute
 
 
 #endif // INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX

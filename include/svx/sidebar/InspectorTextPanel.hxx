@@ -21,9 +21,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
-namespace svx
-{
-namespace sidebar
+namespace svx::sidebar
 {
 struct TreeNode
 {
@@ -47,7 +45,7 @@ public:
 private:
     std::unique_ptr<weld::TreeView> mpListBoxStyles;
 };
-}
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

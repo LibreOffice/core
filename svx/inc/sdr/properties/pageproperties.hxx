@@ -23,9 +23,7 @@
 #include <sdr/properties/emptyproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class PageProperties final : public EmptyProperties
         {
@@ -64,8 +62,7 @@ namespace sdr
             // clear single item
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_PAGEPROPERTIES_HXX

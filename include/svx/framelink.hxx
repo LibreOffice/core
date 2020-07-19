@@ -27,8 +27,7 @@
 
 #include <memory>
 
-namespace svx {
-namespace frame {
+namespace svx::frame {
 
 
 // Enums
@@ -199,7 +198,7 @@ public:
 inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }
 
 }
-}
+
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

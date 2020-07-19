@@ -40,9 +40,7 @@ class XLineCapItem;
 class XLineTransparenceItem;
 class XDashList;
 
-namespace svx
-{
-namespace sidebar
+namespace svx::sidebar
 {
 
 class DisableArrowsWrapper;
@@ -140,7 +138,7 @@ private:
     DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

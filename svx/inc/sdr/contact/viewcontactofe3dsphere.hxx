@@ -24,9 +24,7 @@
 #include <svx/sphere3d.hxx>
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         class ViewContactOfE3dSphere final : public ViewContactOfE3d
         {
@@ -46,8 +44,8 @@ namespace sdr
             // stored in the local primitive list. Default creates a yellow replacement rectangle.
             virtual drawinglayer::primitive3d::Primitive3DContainer createViewIndependentPrimitive3DContainer() const override;
         };
-    } // end of namespace contact
-} // end of namespace sdr
+
+} // end of namespace sdr::contact
 
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DSPHERE_HXX

@@ -23,9 +23,7 @@
 #include <sdr/properties/textproperties.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class RectangleProperties : public TextProperties
         {
@@ -49,8 +47,7 @@ namespace sdr
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
         };
-    } // end of namespace properties
-} // end of namespace sdr
+} // end of namespace sdr::properties
 
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
