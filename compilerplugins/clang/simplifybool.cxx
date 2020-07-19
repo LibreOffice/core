@@ -187,8 +187,17 @@ public:
 
     void run() override;
 
-    bool VisitUnaryLNot(UnaryOperator const * expr);
+    bool VisitUnaryOperator(UnaryOperator const * expr);
 
+    bool VisitBinaryOperator(BinaryOperator const * expr);
+
+    bool VisitConditionalOperator(ConditionalOperator const * expr);
+
+    bool TraverseFunctionDecl(FunctionDecl *);
+
+    bool TraverseCXXMethodDecl(CXXMethodDecl *);
+
+private:
     bool VisitBinLT(BinaryOperator const * expr);
 
     bool VisitBinGT(BinaryOperator const * expr);
@@ -201,13 +210,6 @@ public:
 
     bool VisitBinNE(BinaryOperator const * expr);
 
-    bool VisitConditionalOperator(ConditionalOperator const * expr);
-
-    bool TraverseFunctionDecl(FunctionDecl *);
-
-    bool TraverseCXXMethodDecl(CXXMethodDecl *);
-
-private:
     FunctionDecl* m_insideFunctionDecl = nullptr;
 };
 
@@ -217,7 +219,10 @@ void SimplifyBool::run() {
     }
 }
 
-bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
+bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
+    if (expr->getOpcode() != UO_LNot) {
+        return true;
+    }
     if (ignoreLocation(expr)) {
         return true;
     }
@@ -354,6 +359,25 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
                 << negOp->getSourceRange();
     }
     return true;
+}
+
+bool SimplifyBool::VisitBinaryOperator(BinaryOperator const * expr) {
+    switch (expr->getOpcode()) {
+    case BO_LT:
+        return VisitBinLT(expr);
+    case BO_GT:
+        return VisitBinGT(expr);
+    case BO_LE:
+        return VisitBinLE(expr);
+    case BO_GE:
+        return VisitBinGE(expr);
+    case BO_EQ:
+        return VisitBinEQ(expr);
+    case BO_NE:
+        return VisitBinNE(expr);
+    default:
+        return true;
+    }
 }
 
 bool SimplifyBool::VisitBinLT(BinaryOperator const * expr) {
