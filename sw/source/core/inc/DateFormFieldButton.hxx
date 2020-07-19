@@ -15,13 +15,10 @@
 class SwEditWin;
 class FloatingWindow;
 class SvNumberFormatter;
-namespace sw
-{
-namespace mark
+namespace sw::mark
 {
 class DateFieldmark;
 }
-} // namespace sw
 
 /**
  * This button is shown when the cursor is on a date form field.

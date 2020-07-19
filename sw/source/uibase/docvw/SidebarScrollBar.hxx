@@ -13,18 +13,12 @@
 #include <vcl/scrbar.hxx>
 
 class SwView;
-
-namespace sw
-{
-namespace annotation
+namespace sw::annotation
 {
 class SwAnnotationWin;
 }
-}
 
-namespace sw
-{
-namespace sidebarwindows
+namespace sw::sidebarwindows
 {
 /// Similar to the VCL scrollbar, but instrumented with Writer-specific details for LOK.
 class SidebarScrollBar : public ScrollBar
@@ -42,7 +36,6 @@ public:
     SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle, SwView& rView);
     ~SidebarScrollBar() override;
 };
-}
 }
 
 #endif

@@ -31,18 +31,9 @@ namespace tools
 class Rectangle;
 }
 class ZSortFly;
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace drawing
+namespace com::sun::star::drawing
 {
 class XShape;
-}
-}
-}
 }
 
 /**
