@@ -22,10 +22,7 @@ namespace com::sun::star {
     namespace xml::sax { class XFastAttributeList; }
 }
 
-namespace oox
-{
-
-namespace formulaimport
+namespace oox::formulaimport
 {
 
 // used to differentiate between tags that opening or closing
@@ -250,7 +247,6 @@ sal_Unicode XmlStream::Tag::attribute( int t, sal_Unicode def ) const
     return attributes.attribute( t, def );
 }
 
-} // namespace
 } // namespace
 
 #endif

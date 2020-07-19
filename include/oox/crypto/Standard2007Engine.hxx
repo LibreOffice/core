@@ -22,8 +22,7 @@ namespace oox {
     class BinaryXOutputStream;
 }
 
-namespace oox {
-namespace crypto {
+namespace oox::crypto {
 
 class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine
 {
@@ -55,8 +54,7 @@ public:
 
 };
 
-} // namespace crypto
-} // namespace oox
+} // namespace oox::crypto
 
 #endif
 

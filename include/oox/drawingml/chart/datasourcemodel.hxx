@@ -27,9 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 struct DataSequenceModel
@@ -58,9 +56,7 @@ struct DataSourceModel
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

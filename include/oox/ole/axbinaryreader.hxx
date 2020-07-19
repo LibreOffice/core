@@ -32,8 +32,7 @@
 
 namespace oox::ole { struct AxFontData; }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** A wrapper for a binary input stream that supports aligned read operations.
@@ -245,8 +244,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

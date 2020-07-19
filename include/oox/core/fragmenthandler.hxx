@@ -39,8 +39,7 @@ namespace com::sun::star {
     namespace xml::sax { class XLocator; }
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 class XmlFilterBase;
 
@@ -133,8 +132,7 @@ protected:
 typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
 
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

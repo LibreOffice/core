@@ -39,8 +39,7 @@ namespace com::sun::star {
 
 namespace oox { class SequenceInputStream; }
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 class XmlFilterBase;
 struct Relation;
@@ -108,8 +107,7 @@ private:
     FragmentBaseDataRef mxBaseData;         ///< Base data of the fragment.
 };
 
-} // namespace core
-} // namespace oox
+} // namespace oox::core
 
 #endif
 

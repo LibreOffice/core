@@ -33,8 +33,7 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
 }
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 
 /** An input stream class for VML streams, implementing the UNO interface
@@ -89,8 +88,7 @@ private:
 };
 
 
-} // namespace vml
-} // namespace oox
+} // namespace oox::vml
 
 #endif
 

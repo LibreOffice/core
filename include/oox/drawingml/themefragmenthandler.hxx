@@ -29,8 +29,7 @@
 namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class Theme;
 
@@ -51,8 +50,7 @@ private:
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

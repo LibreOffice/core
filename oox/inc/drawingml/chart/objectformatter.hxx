@@ -30,9 +30,7 @@ namespace com::sun::star {
 
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 /** Enumerates different object types for specific automatic formatting behaviour. */
 enum ObjectType
@@ -153,9 +151,7 @@ private:
     std::shared_ptr< ObjectFormatterData > mxData;
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

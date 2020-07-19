@@ -22,8 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class Shape;
 
@@ -40,8 +39,7 @@ private:
     bool                mbtxXfrm;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

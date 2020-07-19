@@ -30,8 +30,7 @@
 
 namespace oox { class ModelObjectHelper; }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 /** Enumeration for various properties related to drawing shape formatting.
 
@@ -161,8 +160,7 @@ private:
 };
 
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 

@@ -28,9 +28,7 @@ namespace com::sun::star {
     namespace chart2::data { class XLabeledDataSequence; }
 }
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 class TypeGroupConverter;
 
@@ -142,9 +140,7 @@ private:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

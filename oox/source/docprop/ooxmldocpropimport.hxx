@@ -25,8 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace oox {
-namespace docprop {
+namespace oox::docprop {
 
 class DocumentPropertiesImport :
     public ::cppu::WeakImplHelper<
@@ -51,8 +50,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
-} // namespace docprop
-} // namespace oox
+} // namespace oox::docprop
 
 #endif
 

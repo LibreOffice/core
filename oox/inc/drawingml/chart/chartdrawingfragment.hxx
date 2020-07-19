@@ -23,9 +23,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/shape.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 
 /** Relative shape position in a chart object. */
@@ -98,9 +96,7 @@ private:
 };
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 #endif
 

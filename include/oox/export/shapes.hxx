@@ -56,10 +56,9 @@ namespace uno {
 }
 }
 
-namespace oox {
-namespace core {
+namespace oox::core {
     class XmlFilterBase;
-}}
+}
 
 class Graphic;
 

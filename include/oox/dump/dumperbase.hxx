@@ -57,8 +57,7 @@ namespace oox::core {
     class FilterBase;
 }
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 
 #define OOX_DUMP_UNUSED                     "unused"
@@ -1720,8 +1719,7 @@ protected:
 };
 
 
-} // namespace dump
-} // namespace oox
+} // namespace oox::dump
 
 #define OOX_DUMP_FILE( DumperClassName )            \
 do {                                                \

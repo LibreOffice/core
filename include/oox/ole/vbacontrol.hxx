@@ -44,8 +44,7 @@ namespace oox {
     class StorageBase;
 }
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 
 /** Common properties for all controls that are part of a VBA user form or of
@@ -208,8 +207,7 @@ private:
 };
 
 
-} // namespace ole
-} // namespace oox
+} // namespace oox::ole
 
 #endif
 

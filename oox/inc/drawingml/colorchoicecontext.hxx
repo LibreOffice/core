@@ -24,8 +24,7 @@
 
 #include <vector>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 class Color;
 
@@ -81,8 +80,7 @@ private:
     std::vector<Color>& mrColors;
 };
 
-} // namespace drawingml
-} // namespace oox
+} // namespace oox::drawingml
 
 #endif
 
