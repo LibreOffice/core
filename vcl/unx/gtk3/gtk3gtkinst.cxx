@@ -12363,6 +12363,9 @@ public:
         g_signal_handler_disconnect(m_pButton, m_nInputSignalId);
         g_signal_handler_disconnect(m_pButton, m_nOutputSignalId);
         g_signal_handler_disconnect(m_pButton, m_nValueChangedSignalId);
+
+        m_pFormatter = nullptr;
+        m_xOwnFormatter.reset();
     }
 };
 
