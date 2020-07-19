@@ -35,7 +35,7 @@ namespace connectivity::firebird
                     const std::vector< OUString>& rVector);
         };
 
-} // namespace connectivity::firebord
+} // namespace connectivity::firebird
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_INDEXES_HXX
 
