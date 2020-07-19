@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ca84b589_f5ba39c0",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-19T12:08:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60eb80e5_6e007a96",
+      "range": {
+        "startLine": 126,
+        "startChar": 3,
+        "endLine": 129,
+        "endChar": 52
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "168714af_5a90f07d",
         "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
         "patchSetId": 4
@@ -142,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bd18aa34_1729164a",
+        "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-19T12:08:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "168714af_5a90f07d",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 42
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c70e651f_d5c9e3d2",
         "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
         "patchSetId": 4
@@ -162,6 +210,30 @@
       "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e19bce68_feea8975",
+        "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-19T12:08:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c70e651f_d5c9e3d2",
+      "range": {
+        "startLine": 50,
+        "startChar": 26,
+        "endLine": 50,
+        "endChar": 45
+      },
+      "revId": "7f57ad11c1d8ae8659db24b015146d8f7b3826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
