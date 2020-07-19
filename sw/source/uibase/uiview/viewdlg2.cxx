@@ -41,6 +41,8 @@
 
 #include <memory>
 
+#include <svl/stritem.hxx>
+
 using namespace css;
 
 void SwView::ExecDlgExt(SfxRequest const &rReq)
@@ -76,9 +78,15 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
         }
         case SID_ADDITIONS_DIALOG:
         {
+            OUString sAdditionsTag = "";
+
+            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+            if (pStringArg)
+                sAdditionsTag = pStringArg->GetValue();
+
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractAdditionsDialog> pDialog(
-                pFact->CreateAdditionsDialog(GetFrameWeld()));
+                pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
             pDialog->Execute();
             break;
         }

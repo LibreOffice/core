@@ -90,6 +90,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "NoEmbDataSet", SID_NO_EMBEDDED_DS },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "IsRedactMode", SID_IS_REDACT_MODE },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "RedactionStyle", SID_REDACTION_STYLE },
+    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "AdditionsTag", SID_ADDITIONS_TAG },
 };
 
 sal_uInt16 const nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);

@@ -271,6 +271,7 @@ class SvxSearchItem;
 #define SID_LOCK_EDITDOC                    (SID_SFX_START + 1738)
 #define SID_REPLACEABLE                     (SID_SFX_START + 1739)
 #define SID_ADDITIONS_DIALOG                (SID_SFX_START + 1740)
+#define SID_ADDITIONS_TAG                   (SID_SFX_START + 1741)
 
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
