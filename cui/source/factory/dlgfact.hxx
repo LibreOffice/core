@@ -982,7 +982,7 @@ public:
                               const css::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
 
     virtual VclPtr<AbstractAdditionsDialog>
-    CreateAdditionsDialog(weld::Window* pParent) override;
+    CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
 
     virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
 

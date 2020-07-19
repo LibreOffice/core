@@ -207,7 +207,7 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("author").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("URL").string_value().get()),
+                OStringToOUString(OString(arrayElement.child("url").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("screenshotURL").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
@@ -219,13 +219,13 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
                     RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("releases")
                                               .child(0)
-                                              .child("compatibleVersion")
+                                              .child("compatibility")
                                               .string_value()
                                               .get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(OString(arrayElement.child("releases")
                                               .child(0)
-                                              .child("releaseNumber")
+                                              .child("releaseName")
                                               .string_value()
                                               .get()),
                                   RTL_TEXTENCODING_UTF8),
@@ -414,7 +414,7 @@ void SearchAndParseThread::execute()
     m_pAdditionsDialog->SetProgress(sProgress);
 }
 
-AdditionsDialog::AdditionsDialog(weld::Window* pParent)
+AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag)
     : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
     , m_aSearchDataTimer("SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
@@ -430,8 +430,22 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent)
     m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));
     m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
 
-    // TODO - Temporary URL
-    OString rURL = "https://yusufketen.com/extensionTest.json";
+    m_sTag = OUStringToOString(sAdditionsTag, RTL_TEXTENCODING_UTF8);
+
+    OUString titlePrefix = CuiResId(RID_SVXSTR_ADDITIONS_DIALOG_TITLE_PREFIX);
+    if (!m_sTag.isEmpty())
+    {
+        this->set_title(titlePrefix + ": " + sAdditionsTag);
+    }
+    else
+    {
+        this->set_title(titlePrefix);
+        m_sTag = "allextensions"; // Means empty parameter
+    }
+    //FIXME: Temporary URL
+    OString sPrefixURL = "https://yusufketen.com/api/";
+    OString sSuffixURL = ".json";
+    OString rURL = sPrefixURL + m_sTag + sSuffixURL;
 
     m_pSearchThread
         = new SearchAndParseThread(this, OStringToOUString(rURL, RTL_TEXTENCODING_UTF8), true);
