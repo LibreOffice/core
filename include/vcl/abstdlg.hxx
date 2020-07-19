@@ -191,7 +191,7 @@ public:
 
     // create additions dialog
     virtual VclPtr<AbstractAdditionsDialog>
-        CreateAdditionsDialog(weld::Window* pParent) = 0;
+        CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) = 0;
 
     // create info dialog to show tip-of-the-day
     virtual VclPtr<AbstractTipOfTheDayDialog>
