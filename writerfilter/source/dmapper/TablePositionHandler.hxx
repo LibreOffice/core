@@ -11,23 +11,12 @@
 
 #include "LoggedResources.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace beans
+namespace com::sun::star::beans
 {
 struct PropertyValue;
 }
-}
-}
-}
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 /// Handler for floating table positioning
 class TablePositionHandler : public LoggedProperties
@@ -75,8 +64,7 @@ public:
 };
 
 using TablePositionHandlerPtr = tools::SvRef<TablePositionHandler>;
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif
 

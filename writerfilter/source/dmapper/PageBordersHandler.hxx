@@ -28,8 +28,7 @@
 #include <vector>
 
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class PgBorder
 {
@@ -62,7 +61,7 @@ public:
     void SetBorders( SectionPropertyMap* pSectContext );
 };
 
-} }
+}
 
 #endif
 

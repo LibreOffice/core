@@ -20,24 +20,13 @@
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace task
+namespace com::sun::star::task
 {
 class XStatusIndicator;
 }
-}
-}
-}
 class SvStream;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 /// RTF tokenizer that separates control words from text.
 class RTFTokenizer final : public virtual SvRefBase
@@ -79,8 +68,7 @@ private:
     std::size_t m_nLineStartPos;
     std::size_t m_nGroupStart;
 };
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 

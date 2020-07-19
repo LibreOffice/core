@@ -13,11 +13,7 @@
 
 #include "LoggedResources.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
+namespace com::sun::star
 {
 namespace rdf
 {
@@ -33,12 +29,8 @@ namespace uno
 class XComponentContext;
 }
 }
-}
-}
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 /// Handler for smart tags, i.e. <w:smartTag> and below.
 class SmartTagHandler : public LoggedProperties
@@ -64,8 +56,7 @@ public:
     void handle(const css::uno::Reference<css::text::XTextRange>& xParagraph);
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif
 

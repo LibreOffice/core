@@ -22,8 +22,7 @@
 #include "LoggedResources.hxx"
 #include <vector>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 struct Column_
 {
@@ -59,7 +58,7 @@ public:
 
 };
 
-}}
+}
 
 #endif
 

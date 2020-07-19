@@ -27,8 +27,7 @@
 
 #include <vector>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 class DomainMapper;
 
@@ -94,7 +93,7 @@ private:
     };
 };
 
-} }
+}
 
 #endif
 

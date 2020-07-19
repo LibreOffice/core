@@ -13,9 +13,7 @@
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 /// Handler for a latent style (w:lsdException element)
 class LatentStyleHandler : public LoggedProperties
@@ -33,8 +31,7 @@ public:
     const std::vector<css::beans::PropertyValue>& getAttributes() const;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 #endif
 

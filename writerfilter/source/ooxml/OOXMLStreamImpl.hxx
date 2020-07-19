@@ -27,8 +27,7 @@
 extern OUString customTarget;
 extern OUString embeddingsTarget;
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 class OOXMLStreamImpl : public OOXMLStream
@@ -80,7 +79,7 @@ public:
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
     const css::uno::Reference<css::io::XStream>& accessDocumentStream() { return mxDocumentStream;}
 };
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLSTREAMIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

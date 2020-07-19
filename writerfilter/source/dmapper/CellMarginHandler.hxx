@@ -23,8 +23,7 @@
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 class TablePropertyMap;
 class CellMarginHandler : public LoggedProperties
@@ -61,7 +60,7 @@ public:
     css::beans::PropertyValue getInteropGrabBag();
 
 };
-}}
+}
 
 #endif
 

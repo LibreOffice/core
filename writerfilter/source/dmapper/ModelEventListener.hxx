@@ -22,8 +22,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace writerfilter {
-namespace dmapper{
+namespace writerfilter::dmapper{
 
 
 class ModelEventListener : public cppu::WeakImplHelper<css::document::XEventListener>
@@ -38,8 +37,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 };
-}//namespace writerfilter
-}//namespace dmapper
+}//namespace writerfilter::dmapper
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

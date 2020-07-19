@@ -25,8 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <memory>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 struct ThemeTable_Impl;
@@ -56,7 +55,7 @@ public:
     static OUString fromLCIDToScriptTag(LanguageType lang);
 };
 typedef tools::SvRef< ThemeTable >          ThemeTablePtr;
-}}
+}
 
 #endif
 

@@ -30,8 +30,7 @@
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySet.hxx"
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 class OOXMLDocumentImpl;
 
@@ -599,7 +598,7 @@ protected:
     virtual void process() override;
 };
 
-}}
+}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
