@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "970bbddd_197fa614",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-20T09:18:39Z",
+      "side": 1,
+      "message": "No idea what\u0027s wrong with it...",
+      "parentUuid": "647bf25b_026ca76a",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 29
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4f6a5de_02c838c1",
         "filename": "include/svx/galtheme.hxx",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-20T08:51:45Z",
       "side": 1,
       "message": "Is this okay to add them as friend classes? I did it so that both the classes can use aObjectList.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f3a4a0_d25565b6",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-20T09:18:39Z",
+      "side": 1,
+      "message": "No, \"friend\" means you allow those classes to access private members. Why do you need that when you have a public getObjectList ?",
+      "parentUuid": "c4f6a5de_02c838c1",
       "range": {
         "startLine": 67,
         "startChar": 4,
