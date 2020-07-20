@@ -41,7 +41,7 @@ static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 
 GalleryBinaryEngineEntry::GalleryBinaryEngineEntry(
     GalleryStorageLocations& rGalleryStorageLocations)
-    : maGalleryStorageLocations(rGalleryStorageLocations)
+    : m_rGalleryStorageLocations(rGalleryStorageLocations)
 {
 }
 

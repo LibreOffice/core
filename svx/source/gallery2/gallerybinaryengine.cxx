@@ -24,10 +24,13 @@
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
+#include <sot/formats.hxx>
 
 #include <sal/log.hxx>
 
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <comphelper/fileformat.h>
+#include <comphelper/graphicmimetype.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
@@ -37,8 +40,10 @@
 
 using namespace ::com::sun::star;
 
-GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations)
+GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
+                                         GalleryObjectCollection& rGalleryObjectCollection)
     : maGalleryStorageLocations(rGalleryStorageLocations)
+    , mrGalleryObjectCollection(rGalleryObjectCollection)
 {
 }
 
@@ -104,9 +109,7 @@ bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme)
 }
 
 void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,
-                                       OUString& rDestDir,
-                                       ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList,
-                                       sal_uInt32& rInsertPos)
+                                       OUString& rDestDir, sal_uInt32& rInsertPos)
 {
     if (pFoundEntry)
     {
@@ -125,11 +128,11 @@ void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFo
         else if (rObj.GetTitle() == "__<empty>__")
             const_cast<SgaObject&>(rObj).SetTitle("");
 
-        implWriteSgaObject(rObj, rInsertPos, &aNewEntry, rDestDir, rObjectList);
+        implWriteSgaObject(rObj, rInsertPos, &aNewEntry, rDestDir);
         pFoundEntry->nOffset = aNewEntry.nOffset;
     }
     else
-        implWriteSgaObject(rObj, rInsertPos, nullptr, rDestDir, rObjectList);
+        implWriteSgaObject(rObj, rInsertPos, nullptr, rDestDir);
 }
 
 std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
@@ -187,9 +190,8 @@ std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject 
     return pSgaObj;
 }
 
-bool GalleryBinaryEngine::implWriteSgaObject(
-    const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry, OUString& aDestDir,
-    ::std::vector<std::unique_ptr<GalleryObject>>& rObjectList)
+bool GalleryBinaryEngine::implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos,
+                                             GalleryObject* pExistentEntry, OUString& aDestDir)
 {
     std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
         GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
@@ -208,12 +210,13 @@ bool GalleryBinaryEngine::implWriteSgaObject(
             if (!pExistentEntry)
             {
                 pEntry = new GalleryObject;
-                if (nPos < rObjectList.size())
+                if (nPos < mrGalleryObjectCollection.m_aObjectList.size())
                 {
-                    rObjectList.emplace(rObjectList.begin() + nPos, pEntry);
+                    mrGalleryObjectCollection.m_aObjectList.emplace(
+                        mrGalleryObjectCollection.m_aObjectList.begin() + nPos, pEntry);
                 }
                 else
-                    rObjectList.emplace_back(pEntry);
+                    mrGalleryObjectCollection.m_aObjectList.emplace_back(pEntry);
             }
             else
                 pEntry = pExistentEntry;
@@ -249,14 +252,16 @@ bool GalleryBinaryEngine::readModel(const GalleryObject* pObject, SdrModel& rMod
     }
     return bRet;
 }
-bool GalleryBinaryEngine::insertModel(const FmFormModel& rModel, INetURLObject& rURL)
+SgaObjectSvDraw GalleryBinaryEngine::insertModel(const FmFormModel& rModel,
+                                                 const INetURLObject& rUserURL)
 {
+    INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));
     tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
     bool bRet = false;
 
     if (xSotStorage.is())
     {
-        const OUString aStreamName(GetSvDrawStreamNameFromURL(rURL));
+        const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
         tools::SvRef<SotStorageStream> xOutputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::WRITE | StreamMode::TRUNC));
 
@@ -286,7 +291,12 @@ bool GalleryBinaryEngine::insertModel(const FmFormModel& rModel, INetURLObject& 
             bRet = !xOutputStream->GetError();
         }
     }
-    return bRet;
+    if (bRet)
+    {
+        SgaObjectSvDraw aObjSvDraw(rModel, aURL);
+        return aObjSvDraw;
+    }
+    return SgaObjectSvDraw();
 }
 
 bool GalleryBinaryEngine::readModelStream(const GalleryObject* pObject,
@@ -339,13 +349,14 @@ bool GalleryBinaryEngine::readModelStream(const GalleryObject* pObject,
 
 SgaObjectSvDraw
 GalleryBinaryEngine::insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
-                                       INetURLObject& rURL)
+                                       const INetURLObject& rUserURL)
 {
+    INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));
     tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
 
     if (xSotStorage.is())
     {
-        const OUString aStreamName(GetSvDrawStreamNameFromURL(rURL));
+        const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
         tools::SvRef<SotStorageStream> xOutputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::WRITE | StreamMode::TRUNC));
 
@@ -359,12 +370,127 @@ GalleryBinaryEngine::insertModelStream(const tools::SvRef<SotStorageStream>& rxM
             if (!xOutputStream->GetError())
             {
                 xOutputStream->Seek(0);
-                SgaObjectSvDraw aObjSvDraw(*xOutputStream, rURL);
+                SgaObjectSvDraw aObjSvDraw(*xOutputStream, aURL);
                 return aObjSvDraw;
             }
         }
     }
     return SgaObjectSvDraw();
+}
+
+INetURLObject GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind,
+                                                       const INetURLObject& rUserURL,
+                                                       ConvertDataFormat nFormat)
+{
+    INetURLObject aDir(rUserURL);
+    INetURLObject aInfoFileURL(rUserURL);
+    INetURLObject aNewURL;
+    sal_uInt32 nNextNumber = 1999;
+    char const* pExt = nullptr;
+    bool bExists;
+
+    aDir.Append("dragdrop");
+    CreateDir(aDir);
+
+    aInfoFileURL.Append("sdddndx1");
+
+    // read next possible number
+    if (FileExists(aInfoFileURL))
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            pIStm->ReadUInt32(nNextNumber);
+        }
+    }
+
+    pExt = comphelper::GraphicMimeTypeHelper::GetExtensionForConvertDataFormat(nFormat);
+
+    do
+    {
+        // get URL
+        if (SgaObjKind::SvDraw == eObjKind)
+        {
+            OUString aFileName = "gallery/svdraw/dd" + OUString::number(++nNextNumber % 99999999);
+            aNewURL = INetURLObject(aFileName, INetProtocol::PrivSoffice);
+
+            bExists = false;
+
+            for (auto const& p : mrGalleryObjectCollection.m_aObjectList)
+                if (p->aURL == aNewURL)
+                {
+                    bExists = true;
+                    break;
+                }
+        }
+        else
+        {
+            OUString aFileName = "dd" + OUString::number(++nNextNumber % 999999);
+
+            if (pExt)
+                aFileName += OUString(pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US);
+
+            aNewURL = aDir;
+            aNewURL.Append(aFileName);
+
+            bExists = FileExists(aNewURL);
+        }
+    } while (bExists);
+
+    // write updated number
+    std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream(
+        aInfoFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE));
+
+    if (pOStm)
+    {
+        pOStm->WriteUInt32(nNextNumber);
+    }
+
+    return aNewURL;
+}
+
+SgaObjectBmp GalleryBinaryEngine::insertGraphic(const Graphic& rGraphic, const GfxLink& aGfxLink,
+                                                ConvertDataFormat& nExportFormat,
+                                                const INetURLObject& rUserURL)
+{
+    const INetURLObject aURL(implCreateUniqueURL(SgaObjKind::Bitmap, rUserURL, nExportFormat));
+    std::unique_ptr<SvStream> pOStm(
+        ::utl::UcbStreamHelper::CreateStream(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                                             StreamMode::WRITE | StreamMode::TRUNC));
+    bool bRet = false;
+
+    if (pOStm)
+    {
+        pOStm->SetVersion(SOFFICE_FILEFORMAT_50);
+
+        if (ConvertDataFormat::SVM == nExportFormat)
+        {
+            GDIMetaFile aMtf(rGraphic.GetGDIMetaFile());
+
+            aMtf.Write(*pOStm);
+            bRet = (pOStm->GetError() == ERRCODE_NONE);
+        }
+        else
+        {
+            if (aGfxLink.GetDataSize() && aGfxLink.GetData())
+            {
+                pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                bRet = (pOStm->GetError() == ERRCODE_NONE);
+            }
+            else
+                bRet = (GraphicConverter::Export(*pOStm, rGraphic, nExportFormat) == ERRCODE_NONE);
+        }
+
+        pOStm.reset();
+    }
+    if (bRet)
+    {
+        const SgaObjectBmp aObjBmp(aURL);
+        return aObjBmp;
+    }
+    return SgaObjectBmp();
 }
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
