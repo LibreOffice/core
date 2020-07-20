@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0a825e2_bece22a4",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 18429,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-07-20T07:39:18Z",
+      "side": 1,
+      "message": "Fine, but then this is always called on a OOXMLFastContextHandlerValue, so you could add your handleGridAfter() to that subclass, and not pollute OOXMLFastContextHandler.",
+      "revId": "4d0565af65a6ec74fd87018ea331b78244e40370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
