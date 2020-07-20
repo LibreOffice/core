@@ -1733,7 +1733,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         else
             xWindow = VclPtr<Dialog>::Create(pParent, nBits, eInit);
 #if HAVE_FEATURE_DESKTOP
-        if (!m_bLegacy && !extractModal(rMap))
+        if (!extractModal(rMap))
             xWindow->SetType(WindowType::MODELESSDIALOG);
 #endif
     }
