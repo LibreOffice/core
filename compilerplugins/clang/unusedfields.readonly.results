@@ -58,15 +58,15 @@ codemaker/source/javamaker/classfile.cxx:508
      uint32Bytes sal_uInt32
 codemaker/source/javamaker/classfile.cxx:540
      uint64Bytes sal_uInt64
-connectivity/inc/sdbcx/VCatalog.hxx:67
+connectivity/inc/sdbcx/VCatalog.hxx:65
     connectivity::sdbcx::OCatalog m_pViews std::unique_ptr<OCollection>
-connectivity/inc/sdbcx/VCatalog.hxx:68
+connectivity/inc/sdbcx/VCatalog.hxx:66
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
-connectivity/inc/sdbcx/VGroup.hxx:54
+connectivity/inc/sdbcx/VGroup.hxx:52
     connectivity::sdbcx::OGroup m_pUsers std::unique_ptr<OUsers>
-connectivity/inc/sdbcx/VKey.hxx:71
+connectivity/inc/sdbcx/VKey.hxx:69
     connectivity::sdbcx::OKey m_pColumns std::unique_ptr<OCollection>
-connectivity/inc/sdbcx/VUser.hxx:54
+connectivity/inc/sdbcx/VUser.hxx:52
     connectivity::sdbcx::OUser m_pGroups std::unique_ptr<OGroups>
 connectivity/qa/connectivity/resource/sharedresources_test.cxx:53
     connectivity_test::SharedResourcesTest m_aResource ::connectivity::SharedResources
@@ -82,13 +82,13 @@ connectivity/source/drivers/evoab2/EApi.h:130
     (anonymous) code char *
 connectivity/source/drivers/evoab2/EApi.h:131
     (anonymous) country char *
-connectivity/source/drivers/firebird/Driver.hxx:52
+connectivity/source/drivers/firebird/Driver.hxx:47
     connectivity::firebird::FirebirdDriver m_firebirdTMPDirectory ::utl::TempFile
-connectivity/source/drivers/firebird/Driver.hxx:53
+connectivity/source/drivers/firebird/Driver.hxx:48
     connectivity::firebird::FirebirdDriver m_firebirdLockDirectory ::utl::TempFile
-connectivity/source/inc/dbase/DIndexIter.hxx:36
+connectivity/source/inc/dbase/DIndexIter.hxx:34
     connectivity::dbase::OIndexIterator m_pOperator file::OBoolOperator *
-connectivity/source/inc/dbase/DIndexIter.hxx:37
+connectivity/source/inc/dbase/DIndexIter.hxx:35
     connectivity::dbase::OIndexIterator m_pOperand const file::OOperand *
 connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:110
     connectivity::ODatabaseMetaDataResultSet m_aEmptyValue class connectivity::ORowSetValue
@@ -106,7 +106,7 @@ connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable _Bool
 connectivity/source/inc/TConnection.hxx:55
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
-connectivity/source/inc/writer/WTable.hxx:65
+connectivity/source/inc/writer/WTable.hxx:44
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
 cppcanvas/source/mtfrenderer/textaction.cxx:1649
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
@@ -186,11 +186,11 @@ dbaccess/source/ui/inc/directsql.hxx:69
     dbaui::DirectSQLDialog m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:259
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-drawinglayer/inc/processor3d/defaultprocessor3d.hxx:89
+drawinglayer/inc/processor3d/defaultprocessor3d.hxx:87
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 drawinglayer/source/processor2d/vclprocessor2d.hxx:77
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
-editeng/source/editeng/impedit.hxx:457
+editeng/source/editeng/impedit.hxx:504
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:104
     OCommonEmbeddedObject m_aClassName class rtl::OUString
@@ -244,7 +244,7 @@ framework/inc/dispatch/dispatchprovider.hxx:77
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
 framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
-framework/inc/xml/menudocumenthandler.hxx:188
+framework/inc/xml/menudocumenthandler.hxx:187
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
 framework/source/fwe/classes/addonsoptions.cxx:344
     framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
@@ -262,19 +262,19 @@ include/basic/sbstar.hxx:50
     StarBASIC aErrorHdl Link<class StarBASIC *, _Bool>
 include/basic/sbstar.hxx:51
     StarBASIC aBreakHdl Link<class StarBASIC *, enum BasicDebugFlags>
-include/comphelper/interfacecontainer3.hxx:232
+include/comphelper/interfacecontainer3.hxx:222
     comphelper::OInterfaceContainerHelper3::NotifySingleListener m_pMethod const comphelper::OInterfaceContainerHelper3::NotifySingleListener::NotificationMethod
-include/comphelper/parallelsort.hxx:164
+include/comphelper/parallelsort.hxx:163
     comphelper::(anonymous namespace)::Binner maLabels uint8_t [mnMaxStaticSize]
 include/connectivity/DriversConfig.hxx:75
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
-include/connectivity/sdbcx/VDescriptor.hxx:53
+include/connectivity/sdbcx/VDescriptor.hxx:51
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
-include/connectivity/sdbcx/VTable.hxx:78
+include/connectivity/sdbcx/VTable.hxx:77
     connectivity::sdbcx::OTable m_xColumns rtl::Reference<OCollection>
-include/connectivity/sdbcx/VTable.hxx:79
+include/connectivity/sdbcx/VTable.hxx:78
     connectivity::sdbcx::OTable m_xIndexes rtl::Reference<OCollection>
-include/connectivity/sqlparse.hxx:109
+include/connectivity/sqlparse.hxx:103
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
 include/editeng/brushitem.hxx:51
     SvxBrushItem maSecOptions class SvtSecurityOptions
@@ -286,9 +286,9 @@ include/filter/msfilter/svdfppt.hxx:878
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:879
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
-include/oox/core/contexthandler2.hxx:217
+include/oox/core/contexthandler2.hxx:216
     oox::core::ContextHandler2Helper mnRootStackSize size_t
-include/oox/ole/axbinarywriter.hxx:151
+include/oox/ole/axbinarywriter.hxx:150
     oox::ole::AxBinaryPropertyWriter maStreamProps oox::ole::AxBinaryPropertyWriter::ComplexPropVector
 include/registry/refltype.hxx:65
     RTUik m_Data1 sal_uInt32
@@ -322,9 +322,9 @@ include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
-include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
+include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
-include/svx/sdr/overlay/overlaymanager.hxx:72
+include/svx/sdr/overlay/overlaymanager.hxx:70
     sdr::overlay::OverlayManager maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/svx/svdmark.hxx:141
     SdrMarkList maPointName class rtl::OUString
@@ -332,7 +332,7 @@ include/svx/svdmark.hxx:142
     SdrMarkList maGluePointName class rtl::OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
-include/svx/svdpntv.hxx:160
+include/svx/svdpntv.hxx:154
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
     unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
@@ -362,10 +362,12 @@ include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
-io/source/stm/odata.cxx:578
-    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-io/source/stm/odata.cxx:578
+include/vcl/toolkit/button.hxx:96
+    CheckBox mbLegacyNoTextAlign _Bool
+io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
+io/source/stm/odata.cxx:558
+    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:46
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:86
@@ -428,7 +430,7 @@ sc/source/filter/excel/xltoolbar.cxx:28
     (anonymous namespace)::MSOExcelCommandConvertor msoToOOcmd IdToString
 sc/source/filter/excel/xltoolbar.cxx:29
     (anonymous namespace)::MSOExcelCommandConvertor tcidToOOcmd IdToString
-sc/source/filter/inc/commentsbuffer.hxx:42
+sc/source/filter/inc/commentsbuffer.hxx:41
     oox::xls::CommentModel maAnchor css::awt::Rectangle
 sc/source/filter/inc/htmlexp.hxx:118
     ScHTMLExport pFileNameMap ScHTMLExport::FileNameMapPtr
@@ -438,13 +440,13 @@ sc/source/filter/inc/namebuff.hxx:81
     RangeNameBufferWK3::Entry nAbsInd sal_uInt16
 sc/source/filter/inc/qproform.hxx:55
     QProToSc mnAddToken struct TokenId
-sc/source/filter/inc/stylesbuffer.hxx:676
+sc/source/filter/inc/stylesbuffer.hxx:675
     oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
-sc/source/filter/inc/stylesbuffer.hxx:678
+sc/source/filter/inc/stylesbuffer.hxx:677
     oox::xls::Dxf mxProtection std::shared_ptr<Protection>
-sc/source/filter/inc/stylesbuffer.hxx:767
+sc/source/filter/inc/stylesbuffer.hxx:766
     oox::xls::CellStyleBuffer maBuiltinStyles oox::xls::CellStyleBuffer::CellStyleVector
-sc/source/filter/inc/stylesbuffer.hxx:768
+sc/source/filter/inc/stylesbuffer.hxx:767
     oox::xls::CellStyleBuffer maUserStyles oox::xls::CellStyleBuffer::CellStyleVector
 sc/source/filter/inc/XclExpChangeTrack.hxx:348
     XclExpChTrAction pAddAction std::unique_ptr<XclExpChTrAction>
@@ -514,7 +516,7 @@ sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:99
     sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
-slideshow/source/engine/slideshowimpl.cxx:132
+slideshow/source/engine/slideshowimpl.cxx:133
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey class rtl::OString
@@ -554,7 +556,7 @@ svtools/source/table/gridtablerenderer.cxx:71
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending class BitmapEx
 svtools/source/table/gridtablerenderer.cxx:72
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
-svx/inc/sdr/overlay/overlayrectangle.hxx:43
+svx/inc/sdr/overlay/overlayrectangle.hxx:41
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
 svx/source/inc/datanavi.hxx:181
     svxform::XFormsPage m_aMethodString class svxform::MethodString
@@ -580,7 +582,7 @@ sw/inc/dpage.hxx:35
     SwDPage pGridLst std::unique_ptr<SdrPageGridFrameList>
 sw/inc/hints.hxx:230
     SwAttrSetChg m_bDelSet _Bool
-sw/inc/shellio.hxx:153
+sw/inc/shellio.hxx:147
     SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
@@ -712,13 +714,13 @@ vcl/inc/ppdparser.hxx:130
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
 vcl/inc/printerinfomanager.hxx:75
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
-vcl/inc/salwtype.hxx:157
+vcl/inc/salwtype.hxx:162
     SalWheelMouseEvent mbDeltaIsPixel _Bool
-vcl/inc/salwtype.hxx:204
+vcl/inc/salwtype.hxx:209
     SalSurroundingTextSelectionChangeEvent mnStart sal_uLong
-vcl/inc/salwtype.hxx:205
+vcl/inc/salwtype.hxx:210
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
-vcl/inc/salwtype.hxx:211
+vcl/inc/salwtype.hxx:216
     SalQueryCharPositionEvent mnCharPos sal_uLong
 vcl/inc/svdata.hxx:315
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
@@ -1002,11 +1004,11 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      out gpointer *
-writerfilter/source/ooxml/OOXMLFactory.hxx:58
+writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
-writerfilter/source/ooxml/OOXMLFactory.hxx:59
+writerfilter/source/ooxml/OOXMLFactory.hxx:58
     writerfilter::ooxml::AttributeInfo m_nResource enum writerfilter::ooxml::ResourceType
-writerfilter/source/ooxml/OOXMLFactory.hxx:60
+writerfilter/source/ooxml/OOXMLFactory.hxx:59
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
