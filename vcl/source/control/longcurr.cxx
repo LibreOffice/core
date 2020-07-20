@@ -289,12 +289,6 @@ LongCurrencyFormatter::~LongCurrencyFormatter()
 {
 }
 
-void LongCurrencyFormatter::SetCurrencySymbol( const OUString& rStr )
-{
-    maCurrencySymbol= rStr;
-    ReformatAll();
-}
-
 OUString const & LongCurrencyFormatter::GetCurrencySymbol() const
 {
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
@@ -376,24 +370,6 @@ void LongCurrencyFormatter::ReformatAll()
     Reformat();
 }
 
-void LongCurrencyFormatter::SetMin(const BigInt& rNewMin)
-{
-    mnMin = rNewMin;
-    ReformatAll();
-}
-
-void LongCurrencyFormatter::SetMax(const BigInt& rNewMax)
-{
-    mnMax = rNewMax;
-    ReformatAll();
-}
-
-void LongCurrencyFormatter::SetUseThousandSep( bool b )
-{
-    mbThousandSep = b;
-    ReformatAll();
-}
-
 void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 {
     if ( nDigits > 9 )
@@ -404,95 +380,6 @@ void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 }
 
 
-void ImplNewLongCurrencyFieldValue(LongCurrencyField* pField, const BigInt& rNewValue)
-{
-    Selection aSelect = pField->GetSelection();
-    aSelect.Justify();
-    OUString aText = pField->GetText();
-    bool bLastSelected = aSelect.Max() == aText.getLength();
-
-    BigInt nOldLastValue  = pField->mnLastValue;
-    pField->SetUserValue(rNewValue);
-    pField->mnLastValue  = nOldLastValue;
-
-    if ( bLastSelected )
-    {
-        if ( !aSelect.Len() )
-            aSelect.Min() = SELECTION_MAX;
-        aSelect.Max() = SELECTION_MAX;
-    }
-    pField->SetSelection( aSelect );
-    pField->SetModifyFlag();
-    pField->Modify();
-}
-
-LongCurrencyField::LongCurrencyField(vcl::Window* pParent, WinBits nWinStyle)
-    : SpinField( pParent, nWinStyle )
-    , LongCurrencyFormatter(this)
-{
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
-
-    Reformat();
-}
-
-bool LongCurrencyField::EventNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-    {
-        MarkToBeReformatted( false );
-    }
-    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-        if ( MustBeReformatted() )
-        {
-            Reformat();
-            SpinField::Modify();
-        }
-    }
-    return SpinField::EventNotify( rNEvt );
-}
-
-void LongCurrencyField::Modify()
-{
-    MarkToBeReformatted( true );
-    SpinField::Modify();
-}
-
-void LongCurrencyField::Up()
-{
-    BigInt nValue = GetValue();
-    nValue += mnSpinSize;
-    if ( nValue > mnMax )
-        nValue = mnMax;
-
-    ImplNewLongCurrencyFieldValue( this, nValue );
-    SpinField::Up();
-}
-
-void LongCurrencyField::Down()
-{
-    BigInt nValue = GetValue();
-    nValue -= mnSpinSize;
-    if ( nValue < mnMin )
-        nValue = mnMin;
-
-    ImplNewLongCurrencyFieldValue( this, nValue );
-    SpinField::Down();
-}
-
-void LongCurrencyField::First()
-{
-    ImplNewLongCurrencyFieldValue( this, mnFirst );
-    SpinField::First();
-}
-
-void LongCurrencyField::Last()
-{
-    ImplNewLongCurrencyFieldValue( this, mnLast );
-    SpinField::Last();
-}
 
 LongCurrencyBox::LongCurrencyBox(vcl::Window* pParent, WinBits nWinStyle)
     : ComboBox(pParent, nWinStyle)

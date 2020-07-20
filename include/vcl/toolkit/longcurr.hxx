@@ -38,16 +38,9 @@ public:
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
 
-    void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    void                    SetCurrencySymbol( const OUString& rStr );
     OUString const &        GetCurrencySymbol() const;
-
-    void                    SetMin(const BigInt& rNewMin);
-    const BigInt&           GetMin() const { return mnMin; }
-    void                    SetMax(const BigInt& rNewMax);
-    const BigInt&           GetMax() const { return mnMax; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
     sal_uInt16              GetDecimalDigits() const { return mnDecimalDigits;}
@@ -69,34 +62,6 @@ private:
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
 
-};
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyField final : public SpinField, public LongCurrencyFormatter
-{
-    friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
-
-private:
-    BigInt          mnSpinSize;
-    BigInt          mnFirst;
-    BigInt          mnLast;
-
-public:
-                    LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    void            Modify() override;
-    void            Up() override;
-    void            Down() override;
-    void            First() override;
-    void            Last() override;
-
-    void            SetFirst(const BigInt& rNewFirst ) { mnFirst = rNewFirst; }
-    const BigInt&   GetFirst() const { return mnFirst; }
-    void            SetLast(const BigInt& rNewLast ) { mnLast = rNewLast; }
-    const BigInt&   GetLast() const { return mnLast; }
-    void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
-    const BigInt&   GetSpinSize() const { return mnSpinSize; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

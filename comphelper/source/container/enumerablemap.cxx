@@ -18,7 +18,6 @@
  */
 
 
-#include <comphelper_module.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentbase.hxx>
@@ -30,6 +29,7 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase.hxx>

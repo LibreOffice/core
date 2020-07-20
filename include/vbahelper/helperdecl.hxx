@@ -31,15 +31,6 @@ struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<Impl
         component context as single argument.
     */
     vba_service_class_() : baseT() {}
-    template <typename PostProcessFuncT>
-    /** Ctor to pass a post processing function/functor.
-
-        @tpl PostProcessDefaultT let your compiler deduce this
-        @param postProcessFunc function/functor that gets the yet unacquired
-                               ImplT_ pointer returning a
-                               uno::Reference<uno::XInterface>
-    */
-    explicit vba_service_class_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
 };
 
 } // namespace comphelper::service_decl
