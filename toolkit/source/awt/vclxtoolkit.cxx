@@ -701,7 +701,7 @@ ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("currencybox"),        WindowType::CURRENCYBOX },
     { OUStringLiteral("currencyfield"),      WindowType::CURRENCYFIELD },
     { OUStringLiteral("datebox"),            WindowType::DATEBOX },
-    { OUStringLiteral("datefield"),          WindowType::DATEFIELD },
+    { OUStringLiteral("datefield"),          WindowType::CONTROL },
     { OUStringLiteral("dialog"),             WindowType::DIALOG },
     { OUStringLiteral("dockingarea"),        WindowType::DOCKINGAREA },
     { OUStringLiteral("dockingwindow"),      WindowType::DOCKINGWINDOW },
@@ -1459,12 +1459,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WindowType::DATEBOX:
                 pNewWindow = VclPtr<DateBox>::Create( pParent, nWinBits );
-            break;
-            case WindowType::DATEFIELD:
-                pNewWindow = VclPtr<DateField>::Create( pParent, nWinBits );
-                static_cast<DateField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
-                *ppNewComp = new VCLXDateField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
             break;
             case WindowType::DOCKINGAREA:
                 pNewWindow = VclPtr<DockingAreaWindow>::Create( pParent );
