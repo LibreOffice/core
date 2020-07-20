@@ -2513,7 +2513,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg(pMDI));
-            pDlg->Execute();
+            VclAbstractDialog::AsyncContext aContext;
+            aContext.maEndDialogFn = [](sal_Int32){};
+            pDlg->StartExecuteAsync(aContext);
         }
         break;
         case FN_FORMAT_PAGE_DLG:
