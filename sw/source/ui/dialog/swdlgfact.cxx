@@ -118,11 +118,6 @@ short AbstractSplitTableDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-short AbstractSwBreakDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -366,17 +361,29 @@ SplitTable_HeadlineOption AbstractSplitTableDialog_Impl::GetSplitMode()
 
 OUString AbstractSwBreakDlg_Impl::GetTemplateName()
 {
-    return m_xDlg->GetTemplateName();
+    SwBreakDlg* pDlg = dynamic_cast<SwBreakDlg*>(m_xDlg.get());
+    if (pDlg)
+        return pDlg->GetTemplateName();
+
+    return "";
 }
 
 sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
 {
-    return m_xDlg->GetKind();
+    SwBreakDlg* pDlg = dynamic_cast<SwBreakDlg*>(m_xDlg.get());
+    if (pDlg)
+        return pDlg->GetKind();
+
+    return 0;
 }
 
 ::boost::optional<sal_uInt16> AbstractSwBreakDlg_Impl:: GetPageNumber()
 {
-    return m_xDlg->GetPageNumber();
+    SwBreakDlg* pDlg = dynamic_cast<SwBreakDlg*>(m_xDlg.get());
+    if (pDlg)
+        return pDlg->GetPageNumber();
+
+    return 0;
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
@@ -819,9 +826,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDl
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwInsertBookmarkDlg>(pParent, rSh, rReq));
 }
 
-VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)
+std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSwBreakDlg_Impl>::Create(std::make_unique<SwBreakDlg>(pParent, rSh));
+    return std::make_shared<AbstractSwBreakDlg_Impl>(std::make_unique<SwBreakDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
