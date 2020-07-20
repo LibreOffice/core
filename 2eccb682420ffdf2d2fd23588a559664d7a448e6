@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "409db1b4_587eb9ff",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Let\u0027s change this to \"Extensions\", without \":\"",
+      "range": {
+        "startLine": 401,
+        "startChar": 101,
+        "endLine": 401,
+        "endChar": 111
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c82847_2c25e45b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Let\u0027s change this to titlePrefix + \": \" + sAdditionsTag",
+      "range": {
+        "startLine": 438,
+        "startChar": 24,
+        "endLine": 438,
+        "endChar": 51
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2cac4d3_5117ea97",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of this line. This is not an exceptional case.",
+      "range": {
+        "startLine": 444,
+        "startChar": 8,
+        "endLine": 444,
+        "endChar": 70
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf7b9ad8_dbb38fd2",
+        "filename": "cui/source/factory/dlgfact.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Try \"const OUString\u0026\" instead?",
+      "range": {
+        "startLine": 985,
+        "startChar": 49,
+        "endLine": 985,
+        "endChar": 57
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd440a04_4551180e",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "const ref?",
+      "range": {
+        "startLine": 79,
+        "startChar": 43,
+        "endLine": 79,
+        "endChar": 51
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c98741d_b1a9467a",
+        "filename": "include/vcl/abstdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "const ref?",
+      "range": {
+        "startLine": 194,
+        "startChar": 53,
+        "endLine": 194,
+        "endChar": 61
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7e6dbb2_57eb01ad",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Please get rid of extra empty lines. 1 empty line is enough here.",
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d213c6_2fb78679",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "It doesn\u0027t need to have an argument all the time. Let\u0027s change this to:\n\nif(pStringArg)\n    sAdditionsTag \u003d pStringArg-\u003eGetValue();",
+      "range": {
+        "startLine": 424,
+        "startChar": 16,
+        "endLine": 427,
+        "endChar": 59
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "372ec5a7_3346ba93",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3501,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Same as the other occurrence.",
+      "range": {
+        "startLine": 3498,
+        "startChar": 12,
+        "endLine": 3501,
+        "endChar": 55
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c5bece_c5ad1ecc",
+        "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T09:35:47Z",
+      "side": 1,
+      "message": "Same here...",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 87,
+        "endChar": 55
+      },
+      "revId": "2eccb682420ffdf2d2fd23588a559664d7a448e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
