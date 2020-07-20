@@ -62,6 +62,8 @@ namespace unogallery
     class GalleryItem;
 }
 
+class GalleryBinaryEngine;
+
 class GalleryObjectCollection
 {
     friend GalleryTheme;
