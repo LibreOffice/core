@@ -30,7 +30,7 @@ class GalleryStorageLocations;
 class SVXCORE_DLLPUBLIC GalleryBinaryEngineEntry
 {
 private:
-    GalleryStorageLocations& maGalleryStorageLocations;
+    GalleryStorageLocations& m_rGalleryStorageLocations;
 
 public:
     GalleryBinaryEngineEntry(GalleryStorageLocations& rGalleryStorageLocations);
@@ -38,10 +38,10 @@ public:
 
     OUString ReadStrFromIni(const OUString& aKeyName);
 
-    const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
+    const INetURLObject& GetThmURL() const { return m_rGalleryStorageLocations.GetThmURL(); }
+    const INetURLObject& GetSdgURL() const { return m_rGalleryStorageLocations.GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return m_rGalleryStorageLocations.GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return m_rGalleryStorageLocations.GetStrURL(); }
 
     SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
                                                               bool bReadOnly);
