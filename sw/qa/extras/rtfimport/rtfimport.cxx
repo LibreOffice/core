@@ -933,6 +933,22 @@ CPPUNIT_TEST_FIXTURE(Test, testOleInline)
                          getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
+{
+    load(mpTestDocumentPath, "picture-in-textframe.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
+    uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
+    xInnerShape->getPropertyValue("AnchorType") >>= eAnchorType;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 4
+    // i.e. the properties of the inner shape (including its anchor type and bitmap fill) were lost
+    // on import.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eAnchorType);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
 {
     load(mpTestDocumentPath, "tdf128611.rtf");
