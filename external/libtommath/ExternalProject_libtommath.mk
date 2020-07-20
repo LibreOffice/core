@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,libtommath,build) :
 		&& export CFLAGS=" \
 			-fPIC \
 		" \
-		&& $(MAKE) \
+		&& $(MAKE) $(if $(verbose),V=1) \
 	)
 	$(call gb_Trace_EndRange,libtommath,EXTERNAL)
 endif
