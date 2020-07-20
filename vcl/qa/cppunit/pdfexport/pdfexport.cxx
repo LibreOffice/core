@@ -130,6 +130,7 @@ public:
     void testVersion15();
     void testDefaultVersion();
     void testMultiPagePDF();
+    void testFormFontName();
 
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -175,6 +176,7 @@ public:
     CPPUNIT_TEST(testVersion15);
     CPPUNIT_TEST(testDefaultVersion);
     CPPUNIT_TEST(testMultiPagePDF);
+    CPPUNIT_TEST(testFormFontName);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2262,6 +2264,50 @@ void PdfExportTest::testMultiPagePDF()
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(193), rObjectStream.remainingSize());
     }
 #endif
+}
+
+void PdfExportTest::testFormFontName()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "form-font-name.odt";
+    mxComponent = loadFromDesktop(aURL);
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
+    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+
+    // Examine the default appearance.
+    CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "DA"));
+    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "DA"));
+    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot.get(), "DA", nullptr, 0);
+    std::vector<FPDF_WCHAR> aDABuf(nDALength);
+    FPDFAnnot_GetStringValue(pAnnot.get(), "DA", aDABuf.data(), nDALength);
+    OUString aDA(reinterpret_cast<sal_Unicode*>(aDABuf.data()));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 0 0 rg /TiRo 12 Tf
+    // - Actual  : 0 0 0 rg /F2 12 Tf
+    // i.e. Liberation Serif was exposed as a form font as-is, without picking the closest built-in
+    // font.
+    CPPUNIT_ASSERT_EQUAL(OUString("0 0 0 rg /TiRo 12 Tf"), aDA);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
