@@ -1,0 +1,369 @@
+--- CoinUtils/src/CoinHelperFunctions.hpp
++++ CoinUtils/src/CoinHelperFunctions.hpp
+@@ -41,7 +41,7 @@
+     handled correctly. */
+ 
+ template <class T> inline void
+-CoinCopyN(register const T* from, const int size, register T* to)
++CoinCopyN(const T* from, const int size, T* to)
+ {
+     if (size == 0 || from == to)
+ 	return;
+@@ -52,10 +52,10 @@
+ 			"CoinCopyN", "");
+ #endif
+ 
+-    register int n = (size + 7) / 8;
++    int n = (size + 7) / 8;
+     if (to > from) {
+-	register const T* downfrom = from + size;
+-	register T* downto = to + size;
++	const T* downfrom = from + size;
++	T* downto = to + size;
+ 	// Use Duff's device to copy
+ 	switch (size % 8) {
+ 	case 0: do{     *--downto = *--downfrom;
+@@ -99,7 +99,7 @@
+     the difference down to int.  -- lh, 100823 --
+ */
+ template <class T> inline void
+-CoinCopy(register const T* first, register const T* last, register T* to)
++CoinCopy(const T* first, const T* last, T* to)
+ {
+     CoinCopyN(first, static_cast<int>(last-first), to);
+ }
+@@ -114,7 +114,7 @@
+     Note JJF - the speed claim seems to be false on IA32 so I have added 
+     CoinMemcpyN which can be used for atomic data */
+ template <class T> inline void
+-CoinDisjointCopyN(register const T* from, const int size, register T* to)
++CoinDisjointCopyN(const T* from, const int size, T* to)
+ {
+ #ifndef _MSC_VER
+     if (size == 0 || from == to)
+@@ -135,7 +135,7 @@
+ 	throw CoinError("overlapping arrays", "CoinDisjointCopyN", "");
+ #endif
+ 
+-    for (register int n = size / 8; n > 0; --n, from += 8, to += 8) {
++    for (int n = size / 8; n > 0; --n, from += 8, to += 8) {
+ 	to[0] = from[0];
+ 	to[1] = from[1];
+ 	to[2] = from[2];
+@@ -167,8 +167,8 @@
+     are copied at a time. The source array is given by its first and "after
+     last" entry; the target array is given by its first entry. */
+ template <class T> inline void
+-CoinDisjointCopy(register const T* first, register const T* last,
+-		 register T* to)
++CoinDisjointCopy(const T* first, const T* last,
++		 T* to)
+ {
+     CoinDisjointCopyN(first, static_cast<int>(last - first), to);
+ }
+@@ -256,7 +256,7 @@
+     alternative coding if USE_MEMCPY defined*/
+ #ifndef COIN_USE_RESTRICT
+ template <class T> inline void
+-CoinMemcpyN(register const T* from, const int size, register T* to)
++CoinMemcpyN(const T* from, const int size, T* to)
+ {
+ #ifndef _MSC_VER
+ #ifdef USE_MEMCPY
+@@ -296,7 +296,7 @@
+ 	throw CoinError("overlapping arrays", "CoinMemcpyN", "");
+ #endif
+ 
+-    for (register int n = size / 8; n > 0; --n, from += 8, to += 8) {
++    for (int n = size / 8; n > 0; --n, from += 8, to += 8) {
+ 	to[0] = from[0];
+ 	to[1] = from[1];
+ 	to[2] = from[2];
+@@ -343,8 +343,8 @@
+     are copied at a time. The source array is given by its first and "after
+     last" entry; the target array is given by its first entry. */
+ template <class T> inline void
+-CoinMemcpy(register const T* first, register const T* last,
+-	   register T* to)
++CoinMemcpy(const T* first, const T* last,
++	   T* to)
+ {
+     CoinMemcpyN(first, static_cast<int>(last - first), to);
+ }
+@@ -358,7 +358,7 @@
+     Note JJF - the speed claim seems to be false on IA32 so I have added 
+     CoinZero to allow for memset. */
+ template <class T> inline void
+-CoinFillN(register T* to, const int size, register const T value)
++CoinFillN(T* to, const int size, const T value)
+ {
+     if (size == 0)
+ 	return;
+@@ -369,7 +369,7 @@
+ 			"CoinFillN", "");
+ #endif
+ #if 1
+-    for (register int n = size / 8; n > 0; --n, to += 8) {
++    for (int n = size / 8; n > 0; --n, to += 8) {
+ 	to[0] = value;
+ 	to[1] = value;
+ 	to[2] = value;
+@@ -413,7 +413,7 @@
+     entries are filled at a time. The array is given by its first and "after
+     last" entry. */
+ template <class T> inline void
+-CoinFill(register T* first, register T* last, const T value)
++CoinFill(T* first, T* last, const T value)
+ {
+     CoinFillN(first, last - first, value);
+ }
+@@ -427,7 +427,7 @@
+     Note JJF - the speed claim seems to be false on IA32 so I have allowed 
+     for memset as an alternative */
+ template <class T> inline void
+-CoinZeroN(register T* to, const int size)
++CoinZeroN(T* to, const int size)
+ {
+ #ifdef USE_MEMCPY
+     // Use memset - seems faster on Intel with gcc
+@@ -448,7 +448,7 @@
+ 			"CoinZeroN", "");
+ #endif
+ #if 1
+-    for (register int n = size / 8; n > 0; --n, to += 8) {
++    for (int n = size / 8; n > 0; --n, to += 8) {
+ 	to[0] = 0;
+ 	to[1] = 0;
+ 	to[2] = 0;
+@@ -519,7 +519,7 @@
+     entries are filled at a time. The array is given by its first and "after
+     last" entry. */
+ template <class T> inline void
+-CoinZero(register T* first, register T* last)
++CoinZero(T* first, T* last)
+ {
+     CoinZeroN(first, last - first);
+ }
+@@ -545,7 +545,7 @@
+     This function was introduced because for some reason compiler tend to
+     handle the <code>max()</code> function differently. */
+ template <class T> inline T
+-CoinMax(register const T x1, register const T x2)
++CoinMax(const T x1, const T x2)
+ {
+     return (x1 > x2) ? x1 : x2;
+ }
+@@ -556,7 +556,7 @@
+     This function was introduced because for some reason compiler tend to
+     handle the min() function differently. */
+ template <class T> inline T
+-CoinMin(register const T x1, register const T x2)
++CoinMin(const T x1, const T x2)
+ {
+     return (x1 < x2) ? x1 : x2;
+ }
+@@ -578,7 +578,7 @@
+     according to operator<. The array is given by a pointer to its first entry
+     and by its size. */
+ template <class T> inline bool
+-CoinIsSorted(register const T* first, const int size)
++CoinIsSorted(const T* first, const int size)
+ {
+     if (size == 0)
+ 	return true;
+@@ -590,7 +590,7 @@
+ #if 1
+     // size1 is the number of comparisons to be made
+     const int size1 = size  - 1;
+-    for (register int n = size1 / 8; n > 0; --n, first += 8) {
++    for (int n = size1 / 8; n > 0; --n, first += 8) {
+ 	if (first[8] < first[7]) return false;
+ 	if (first[7] < first[6]) return false;
+ 	if (first[6] < first[5]) return false;
+@@ -627,7 +627,7 @@
+     according to operator<. The array is given by its first and "after
+     last" entry. */
+ template <class T> inline bool
+-CoinIsSorted(register const T* first, register const T* last)
++CoinIsSorted(const T* first, const T* last)
+ {
+     return CoinIsSorted(first, static_cast<int>(last - first));
+ }
+@@ -638,7 +638,7 @@
+     etc. For speed 8 entries are filled at a time. The array is given by a
+     pointer to its first entry and its size. */
+ template <class T> inline void
+-CoinIotaN(register T* first, const int size, register T init)
++CoinIotaN(T* first, const int size, T init)
+ {
+     if (size == 0)
+ 	return;
+@@ -648,7 +648,7 @@
+ 	throw CoinError("negative number of entries", "CoinIotaN", "");
+ #endif
+ #if 1
+-    for (register int n = size / 8; n > 0; --n, first += 8, init += 8) {
++    for (int n = size / 8; n > 0; --n, first += 8, init += 8) {
+ 	first[0] = init;
+ 	first[1] = init + 1;
+ 	first[2] = init + 2;
+@@ -706,7 +706,7 @@
+     integer array specified by the last two arguments (again, first and "after
+     last" entry). */
+ template <class T> inline T *
+-CoinDeleteEntriesFromArray(register T * arrayFirst, register T * arrayLast,
++CoinDeleteEntriesFromArray(T * arrayFirst, T * arrayLast,
+ 			   const int * firstDelPos, const int * lastDelPos)
+ {
+     int delNum = static_cast<int>(lastDelPos - firstDelPos);
+--- CoinUtils/src/CoinModelUseful2.cpp
++++ CoinUtils/src/CoinModelUseful2.cpp
+@@ -917,8 +917,8 @@
+   
+   int position=0;
+   int nEof=0; // Number of time send of string
+-  register int yystate;
+-  register int yyn;
++  int yystate;
++  int yyn;
+   int yyresult;
+   /* Number of tokens to shift before error messages enabled.  */
+   int yyerrstatus;
+@@ -936,12 +936,12 @@
+   /* The state stack.  */
+   short	yyssa[YYINITDEPTH];
+   short *yyss = yyssa;
+-  register short *yyssp;
++  short *yyssp;
+ 
+   /* The semantic value stack.  */
+   YYSTYPE yyvsa[YYINITDEPTH];
+   YYSTYPE *yyvs = yyvsa;
+-  register YYSTYPE *yyvsp;
++  YYSTYPE *yyvsp;
+ 
+ 
+ 
+--- CoinUtils/src/CoinOslC.h
++++ CoinUtils/src/CoinOslC.h
+@@ -34,30 +34,30 @@
+ extern "C"{
+ #endif
+ 
+-int c_ekkbtrn( register const EKKfactinfo *fact,
++int c_ekkbtrn( const EKKfactinfo *fact,
+ 	    double *dwork1,
+ 	    int * mpt,int first_nonzero);
+-int c_ekkbtrn_ipivrw( register const EKKfactinfo *fact,
++int c_ekkbtrn_ipivrw( const EKKfactinfo *fact,
+ 		   double *dwork1,
+ 		   int * mpt, int ipivrw,int * spare);
+ 
+-int c_ekketsj( register /*const*/ EKKfactinfo *fact,
++int c_ekketsj( /*const*/ EKKfactinfo *fact,
+ 	    double *dwork1,
+ 	    int *mpt2, double dalpha, int orig_nincol,
+ 	    int npivot, int *nuspikp,
+ 	    const int ipivrw, int * spare);
+-int c_ekkftrn( register const EKKfactinfo *fact, 
++int c_ekkftrn( const EKKfactinfo *fact, 
+ 	    double *dwork1,
+ 	    double * dpermu,int * mpt, int numberNonZero);
+ 
+-int c_ekkftrn_ft( register EKKfactinfo *fact, 
++int c_ekkftrn_ft( EKKfactinfo *fact, 
+ 	       double *dwork1, int *mpt, int *nincolp);
+-void c_ekkftrn2( register EKKfactinfo *fact, double *dwork1,
++void c_ekkftrn2( EKKfactinfo *fact, double *dwork1,
+ 	      double * dpermu1,int * mpt1, int *nincolp,
+ 	     double *dwork1_ft, int *mpt_ft, int *nincolp_ft);
+ 
+-int c_ekklfct( register EKKfactinfo *fact);
+-int c_ekkslcf( register const EKKfactinfo *fact);
++int c_ekklfct( EKKfactinfo *fact);
++int c_ekkslcf( const EKKfactinfo *fact);
+ inline void c_ekkscpy(int n, const int *marr1,int *marr2)
+ { CoinMemcpyN(marr1,n,marr2);} 
+ inline void c_ekkdcpy(int n, const double *marr1,double *marr2)
+--- CoinUtils/src/CoinOslFactorization2.cpp
++++ CoinUtils/src/CoinOslFactorization2.cpp
+@@ -20,9 +20,9 @@
+ extern int ets_count;
+ extern int ets_check;
+ #endif
+-#define COIN_REGISTER register
++#define COIN_REGISTER
+ #define COIN_REGISTER2
+-#define COIN_REGISTER3 register
++#define COIN_REGISTER3
+ #ifdef COIN_USE_RESTRICT
+ # define COIN_RESTRICT2 __restrict
+ #else
+--- CoinUtils/src/CoinOslFactorization3.cpp
++++ CoinUtils/src/CoinOslFactorization3.cpp
+@@ -1378,7 +1378,7 @@
+     }
+   }
+ } /* c_ekkmltf */
+-int c_ekklfct( register EKKfactinfo *fact)
++int c_ekklfct( EKKfactinfo *fact)
+ {
+   const int nrow	= fact->nrow;
+   int ninbas = fact->xcsadr[nrow+1]-1;
+@@ -2607,7 +2607,7 @@
+     }
+   }
+ } /* c_ekkclcp */
+-int c_ekkslcf( register const EKKfactinfo *fact)
++int c_ekkslcf( const EKKfactinfo *fact)
+ {
+   int * hrow = fact->xeradr;
+   int * hcol = fact->xecadr;
+--- CoinUtils/src/CoinPackedVectorBase.cpp
++++ CoinUtils/src/CoinPackedVectorBase.cpp
+@@ -194,8 +194,8 @@
+ double
+ CoinPackedVectorBase::oneNorm() const
+ {
+-   register double norm = 0.0;
+-   register const double* elements = getElements();
++   double norm = 0.0;
++   const double* elements = getElements();
+    for (int i = getNumElements() - 1; i >= 0; --i) {
+       norm += fabs(elements[i]);
+    }
+@@ -224,8 +224,8 @@
+ double
+ CoinPackedVectorBase::infNorm() const
+ {
+-   register double norm = 0.0;
+-   register const double* elements = getElements();
++   double norm = 0.0;
++   const double* elements = getElements();
+    for (int i = getNumElements() - 1; i >= 0; --i) {
+       norm = CoinMax(norm, fabs(elements[i]));
+    }
+--- CoinUtils/src/CoinSearchTree.hpp
++++ CoinUtils/src/CoinSearchTree.hpp
+@@ -153,8 +153,8 @@
+   static inline const char* name() { return "CoinSearchTreeComparePreferred"; }
+   inline bool operator()(const CoinTreeSiblings* x,
+ 			 const CoinTreeSiblings* y) const {
+-    register const CoinTreeNode* xNode = x->currentNode();
+-    register const CoinTreeNode* yNode = y->currentNode();
++    const CoinTreeNode* xNode = x->currentNode();
++    const CoinTreeNode* yNode = y->currentNode();
+     const BitVector128 xPref = xNode->getPreferred();
+     const BitVector128 yPref = yNode->getPreferred();
+     bool retval = true;
+--- CoinUtils/src/CoinSimpFactorization.cpp
++++ CoinUtils/src/CoinSimpFactorization.cpp
+@@ -2440,7 +2440,7 @@
+ 	const int row=secRowOfU_[i];
+ 	const int column=colOfU_[i];
+ 	if ( denseVector_[column]==0.0 ) continue;
+-	register const double multiplier=denseVector_[column]*invOfPivots_[row];
++	const double multiplier=denseVector_[column]*invOfPivots_[row];
+ 	denseVector_[column]=0.0;
+ 	const int rowBeg=UrowStarts_[row];
+ 	const int rowEnd=rowBeg+UrowLengths_[row];
