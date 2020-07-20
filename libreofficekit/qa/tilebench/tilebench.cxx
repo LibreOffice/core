@@ -20,6 +20,10 @@
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
+#ifdef IOS
+#include <vcl/svapp.hxx>
+#endif
+
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace lok;
@@ -654,6 +658,9 @@ int main( int argc, char* argv[] )
             return help ("unknown parameter");
     }
 
+#ifdef IOS
+    Application::Quit();
+#endif
     aTimes.emplace_back("destroy document");
     pDocument.reset();
     aTimes.emplace_back();
