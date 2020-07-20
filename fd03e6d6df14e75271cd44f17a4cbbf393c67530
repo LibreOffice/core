@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52264adf_f4d7b7e7",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T11:34:39Z",
+      "side": 1,
+      "message": "This was plural in the review comment. ;)",
+      "range": {
+        "startLine": 401,
+        "startChar": 101,
+        "endLine": 401,
+        "endChar": 110
+      },
+      "revId": "fd03e6d6df14e75271cd44f17a4cbbf393c67530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c66e455_d9881a3b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T11:34:39Z",
+      "side": 1,
+      "message": "Where is the space after \":\" character?",
+      "range": {
+        "startLine": 438,
+        "startChar": 39,
+        "endLine": 438,
+        "endChar": 40
+      },
+      "revId": "fd03e6d6df14e75271cd44f17a4cbbf393c67530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1df73f08_5ea1a5ff",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-20T11:34:39Z",
+      "side": 1,
+      "message": "This is the usual way of TODO\u0027ing: \"//TODO: Do something to fix something\"\n\nFor this comment, this suits better: //FIXME: Temporary URL",
+      "range": {
+        "startLine": 445,
+        "startChar": 4,
+        "endLine": 445,
+        "endChar": 27
+      },
+      "revId": "fd03e6d6df14e75271cd44f17a4cbbf393c67530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
