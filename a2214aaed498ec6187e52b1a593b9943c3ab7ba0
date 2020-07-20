@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5340e1cf_36b9e20b",
+        "filename": "sw/qa/core/layout/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-07-20T03:09:09Z",
+      "side": 1,
+      "message": "Also: “weather” (LOL) → “whether”",
+      "revId": "a2214aaed498ec6187e52b1a593b9943c3ab7ba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
