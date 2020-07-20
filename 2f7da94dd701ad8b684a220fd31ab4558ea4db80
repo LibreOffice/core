@@ -22,6 +22,30 @@
       "revId": "2f7da94dd701ad8b684a220fd31ab4558ea4db80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d113e278_7ac286e5",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-20T12:41:24Z",
+      "side": 1,
+      "message": "and what if you try...\n\nrListBoxStyles.set_sensitive(*pResult, !pCurrent-\u003eisGrey);\n\ninstead of the if (...) set_sensitive(... false)\n\nonce the sensitivity boolean is hooked up the sensitivity is set to what a boolean defaults to, so it presumably starts off as always false.",
+      "parentUuid": "0d7823cd_e1fca067",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "2f7da94dd701ad8b684a220fd31ab4558ea4db80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
