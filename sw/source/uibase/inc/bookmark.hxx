@@ -65,7 +65,6 @@ public:
 class SwInsertBookmarkDlg : public SfxDialogController
 {
     SwWrtShell&                         rSh;
-    SfxRequest&                         rReq;
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
     sal_Int32                           m_nLastBookmarksCount;
     bool                                m_bSorted;
@@ -102,7 +101,7 @@ class SwInsertBookmarkDlg : public SfxDialogController
     void GotoSelectedBookmark();
 
 public:
-    SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rSh, SfxRequest& rReq);
+    SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rSh);
     virtual ~SwInsertBookmarkDlg() override;
 };
 
