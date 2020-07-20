@@ -821,7 +821,9 @@ void SvXMLStylesContext::CopyStylesToDoc( bool bOverwrite,
             continue;
 
         if (pStyle->IsDefaultStyle())
-            pStyle->SetDefaults();
+        {
+            if (bOverwrite) pStyle->SetDefaults();
+        }
         else if( InsertStyleFamily( pStyle->GetFamily() ) )
             pStyle->CreateAndInsert( bOverwrite );
     }
