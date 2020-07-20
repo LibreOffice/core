@@ -39,8 +39,8 @@ bool SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrameFormat& rFormat )
         const SvxBorderLine* pBrd = static_cast<const SvxBoxItem*>(pItem)->GetLeft();
         if( pBrd )
         {
-            if( *pBrdLn == *pBrd )
-                bAnyBorderFnd = true;
+            if( *m_pBorderLine == *pBrd )
+                m_bAnyBorderFind = true;
             return true;
         }
     }

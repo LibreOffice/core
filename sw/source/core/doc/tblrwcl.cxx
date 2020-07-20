@@ -3210,8 +3210,8 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
 SwFrameFormat* SwShareBoxFormat::GetFormat( long nWidth ) const
 {
     SwFrameFormat *pRet = nullptr, *pTmp;
-    for( auto n = aNewFormats.size(); n; )
-        if( ( pTmp = aNewFormats[ --n ])->GetFrameSize().GetWidth()
+    for( auto n = m_aNewFormats.size(); n; )
+        if( ( pTmp = m_aNewFormats[ --n ])->GetFrameSize().GetWidth()
                 == nWidth )
         {
             pRet = pTmp;
@@ -3225,9 +3225,9 @@ SwFrameFormat* SwShareBoxFormat::GetFormat( const SfxPoolItem& rItem ) const
     const SfxPoolItem* pItem;
     sal_uInt16 nWhich = rItem.Which();
     SwFrameFormat *pRet = nullptr, *pTmp;
-    const SfxPoolItem& rFrameSz = pOldFormat->GetFormatAttr( RES_FRM_SIZE, false );
-    for( auto n = aNewFormats.size(); n; )
-        if( SfxItemState::SET == ( pTmp = aNewFormats[ --n ])->
+    const SfxPoolItem& rFrameSz = m_pOldFormat->GetFormatAttr( RES_FRM_SIZE, false );
+    for( auto n = m_aNewFormats.size(); n; )
+        if( SfxItemState::SET == ( pTmp = m_aNewFormats[ --n ])->
             GetItemState( nWhich, false, &pItem ) && *pItem == rItem &&
             pTmp->GetFormatAttr( RES_FRM_SIZE, false ) == rFrameSz )
         {
@@ -3239,19 +3239,19 @@ SwFrameFormat* SwShareBoxFormat::GetFormat( const SfxPoolItem& rItem ) const
 
 void SwShareBoxFormat::AddFormat( SwFrameFormat& rNew )
 {
-    aNewFormats.push_back( &rNew );
+    m_aNewFormats.push_back( &rNew );
 }
 
 bool SwShareBoxFormat::RemoveFormat( const SwFrameFormat& rFormat )
 {
     // returns true, if we can delete
-    if( pOldFormat == &rFormat )
+    if( m_pOldFormat == &rFormat )
         return true;
 
-    std::vector<SwFrameFormat*>::iterator it = std::find( aNewFormats.begin(), aNewFormats.end(), &rFormat );
-    if( aNewFormats.end() != it )
-        aNewFormats.erase( it );
-    return aNewFormats.empty();
+    std::vector<SwFrameFormat*>::iterator it = std::find( m_aNewFormats.begin(), m_aNewFormats.end(), &rFormat );
+    if( m_aNewFormats.end() != it )
+        m_aNewFormats.erase( it );
+    return m_aNewFormats.empty();
 }
 
 SwShareBoxFormats::~SwShareBoxFormats()
