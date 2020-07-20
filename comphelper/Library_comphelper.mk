@@ -25,11 +25,6 @@ $(eval $(call gb_Library_use_custom_headers,comphelper,\
 
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
-$(eval $(call gb_Library_set_include,comphelper,\
-    -I$(SRCDIR)/comphelper/source/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_set_precompiled_header,comphelper,comphelper/inc/pch/precompiled_comphelper))
 
 $(eval $(call gb_Library_add_defs,comphelper,\
@@ -96,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/automationinvokedzone \
     comphelper/source/misc/backupfilehelper \
     comphelper/source/misc/base64 \
-    comphelper/source/misc/comphelper_module \
     comphelper/source/misc/componentbase \
     comphelper/source/misc/componentmodule \
     comphelper/source/misc/configuration \
