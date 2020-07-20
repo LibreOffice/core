@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9edb4d02_372b19bc",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T11:59:58Z",
+      "side": 1,
+      "message": "\u003e No, \"friend\" means you allow those classes to access private members. Why do you need that when you have a public getObjectList ?\n\nWell, that\u0027s because both the classes don\u0027t just \"read\" the aObectList. Instead, they perform some functions like emplace, push, etc. They modify it. What this function is inclined to return is \"const\" (read-only)",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "22d7a3718e17be919be7b004482c2b480a49ec1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
