@@ -744,9 +744,10 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
 
         uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aItems.getLength());
         CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
         CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+        CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), aItems[2]);
     }
     else
     {
@@ -770,7 +771,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx"
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "manolo");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "Manolo");
 
     // check imported control
     verifyComboBoxExport(getShapes() == 0);

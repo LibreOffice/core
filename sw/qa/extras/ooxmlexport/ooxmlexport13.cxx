@@ -1058,7 +1058,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
 
         uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aItems.getLength());
     }
 }
 
