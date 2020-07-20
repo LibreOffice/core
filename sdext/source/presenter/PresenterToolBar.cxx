@@ -305,8 +305,8 @@ namespace {
         virtual void restart() override;
         virtual bool isPaused() override;
         virtual void setPauseStatus(const bool pauseStatus) override;
-        virtual TimeValue getPauseTimeValue();
-        virtual void setPauseTimeValue(const TimeValue pauseTime);
+        TimeValue getPauseTimeValue();
+        void setPauseTimeValue(const TimeValue pauseTime);
     private:
         TimeValue maStartTimeValue;
         TimeValue pauseTimeValue;

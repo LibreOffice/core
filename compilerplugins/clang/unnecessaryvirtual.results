@@ -248,15 +248,15 @@ forms/source/xforms/namedcollection.hxx:106
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
 include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
-include/comphelper/interaction.hxx:54
+include/comphelper/interaction.hxx:53
     void comphelper::OInteraction::select()
 include/comphelper/proparrhlp.hxx:83
     class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
-include/comphelper/servicedecl.hxx:164
+include/comphelper/servicedecl.hxx:163
     class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
-include/comphelper/servicedecl.hxx:167
+include/comphelper/servicedecl.hxx:166
     unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
-include/comphelper/servicedecl.hxx:171
+include/comphelper/servicedecl.hxx:170
     class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
 include/comphelper/solarmutex.hxx:59
     _Bool comphelper::SolarMutex::tryToAcquire()
@@ -276,11 +276,11 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/vbahelper/vbacollectionimpl.hxx:290
+include/vbahelper/vbacollectionimpl.hxx:289
     int ScVbaCollectionBase::getCount()
-include/vbahelper/vbacollectionimpl.hxx:295
+include/vbahelper/vbacollectionimpl.hxx:294
     class com::sun::star::uno::Any ScVbaCollectionBase::Item(const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,)
-include/vbahelper/vbacollectionimpl.hxx:324
+include/vbahelper/vbacollectionimpl.hxx:323
     unsigned char ScVbaCollectionBase::hasElements()
 include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
@@ -294,29 +294,15 @@ include/vbahelper/vbahelperinterface.hxx:89
     unsigned char InheritedHelperInterfaceImpl::supportsService(const class rtl::OUString &,)
 include/vbahelper/vbahelperinterface.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> InheritedHelperInterfaceImpl::getSupportedServiceNames()
-include/vbahelper/vbareturntypes.hxx:40
+include/vbahelper/vbareturntypes.hxx:38
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
-include/vbahelper/vbareturntypes.hxx:41
+include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/combobox.hxx:63
-    void ComboBox::UserDraw(const class UserDrawEvent &,)
-include/vcl/combobox.hxx:64
-    void ComboBox::Select()
 include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/field.hxx:154
-    void NumericFormatter::SetValueFromString(const class rtl::OUString &,)
-include/vcl/tabpage.hxx:50
-    void TabPage::ActivatePage()
 include/vcl/toolkit/dialog.hxx:96
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/treelistbox.hxx:449
-    void SvTreeListBox::ExpandedHdl()
-include/vcl/treelistbox.hxx:450
-    _Bool SvTreeListBox::ExpandingHdl()
-include/vcl/treelistbox.hxx:472
-    enum TriState SvTreeListBox::NotifyMoving(class SvTreeListEntry *,class SvTreeListEntry *,class SvTreeListEntry *&,unsigned long &,)
-include/vcl/weld.hxx:105
+include/vcl/weld.hxx:96
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -392,6 +378,10 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
+sdext/source/presenter/PresenterToolBar.cxx:308
+    struct TimeValue sdext::presenter::(anonymous namespace)::PresentationTimeLabel::getPauseTimeValue()
+sdext/source/presenter/PresenterToolBar.cxx:309
+    void sdext::presenter::(anonymous namespace)::PresentationTimeLabel::setPauseTimeValue(const struct TimeValue,)
 shell/inc/i_xml_parser_event_handler.hxx:41
     void i_xml_parser_event_handler::~i_xml_parser_event_handler()
 slideshow/source/engine/activities/activitiesfactory.cxx:172
@@ -408,21 +398,31 @@ slideshow/source/engine/activities/activitiesfactory.cxx:536
     void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:581
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:437
+slideshow/source/engine/animationfactory.cxx:434
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-slideshow/source/engine/animationfactory.cxx:440
+slideshow/source/engine/animationfactory.cxx:437
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
+slideshow/source/inc/shape.hxx:221
+    void slideshow::internal::Shape::setIsForeground(const _Bool,)
+svx/source/inc/gridcell.hxx:784
+    void FmXGridCell::onWindowEvent(const enum VclEventId,const class vcl::Window &,const void *,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:182
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
+vcl/inc/jsdialog/jsdialogbuilder.hxx:119
+    void JSWidget::show()
+vcl/inc/jsdialog/jsdialogbuilder.hxx:125
+    void JSWidget::hide()
+vcl/inc/jsdialog/jsdialogbuilder.hxx:131
+    void JSWidget::set_sensitive(_Bool,)
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
     void SalFrame::Flush(const class tools::Rectangle &,)
-vcl/inc/salinst.hxx:93
+vcl/inc/salinst.hxx:89
     _Bool SalInstance::SVMainHook(int *,)
-vcl/inc/salinst.hxx:203
+vcl/inc/salinst.hxx:199
     void SalInstance::releaseMainThread()
 vcl/inc/salmenu.hxx:80
     _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
@@ -434,7 +434,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:223
+vcl/inc/skia/gdiimpl.hxx:230
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
@@ -462,7 +462,7 @@ vcl/inc/unx/saldisp.hxx:405
     void SalX11Display::Yield()
 vcl/inc/unx/salframe.h:207
     void X11SalFrame::updateGraphics(_Bool,)
-vcl/inc/unx/salinst.h:44
+vcl/inc/unx/salinst.h:41
     class SalX11Display * X11SalInstance::CreateDisplay()const
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:160
     void Qt5Frame::registerDragSource(class Qt5DragSource *,)
@@ -472,13 +472,15 @@ workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:67
+writerfilter/source/dmapper/TableManager.hxx:484
+    void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)
+writerfilter/source/ooxml/OOXMLFactory.hxx:66
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:68
+writerfilter/source/ooxml/OOXMLFactory.hxx:67
     void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:69
+writerfilter/source/ooxml/OOXMLFactory.hxx:68
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:70
+writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
 xmloff/source/forms/elementimport.hxx:573
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()

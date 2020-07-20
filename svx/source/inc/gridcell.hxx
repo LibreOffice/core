@@ -781,7 +781,7 @@ public:
         { m_pCellControl->AlignControl(nAlignment);}
 
 protected:
-    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
+    void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent );
