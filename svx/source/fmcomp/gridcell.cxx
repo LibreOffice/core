@@ -1854,7 +1854,7 @@ void DbSpinField::Init(BrowserDataWin& _rParent, const Reference< XRowSet >& _rx
 
 CellControllerRef DbSpinField::CreateController() const
 {
-    return new SpinCellController( static_cast< SpinField* >( m_pWindow.get() ) );
+    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
 }
 
 DbNumericField::DbNumericField( DbGridColumn& _rColumn )
@@ -1866,11 +1866,6 @@ DbNumericField::DbNumericField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_VALUESTEP );
     doPropertyListening( FM_PROP_STRICTFORMAT );
     doPropertyListening( FM_PROP_SHOWTHOUSANDSEP );
-}
-
-CellControllerRef DbNumericField::CreateController() const
-{
-    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
 }
 
 void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
@@ -2013,11 +2008,6 @@ DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
     doPropertyListening( FM_PROP_CURRENCYSYMBOL );
 }
 
-CellControllerRef DbCurrencyField::CreateController() const
-{
-    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
-}
-
 void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
     DBG_ASSERT( m_pWindow, "DbCurrencyField::implAdjustGenericFieldSetting: not to be called without window!" );
@@ -2147,11 +2137,6 @@ VclPtr<Control> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButt
     return VclPtr<DateControl>::Create(pParent, bSpinButton || bDropDown);
 }
 
-CellControllerRef DbDateField::CreateController() const
-{
-    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
-}
-
 void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
     DBG_ASSERT( m_pWindow, "DbDateField::implAdjustGenericFieldSetting: not to be called without window!" );
@@ -2270,11 +2255,6 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
 VclPtr<Control> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
 {
     return VclPtr<TimeControl>::Create(pParent, bSpinButton);
-}
-
-CellControllerRef DbTimeField::CreateController() const
-{
-    return new ::svt::FormattedFieldCellController(static_cast<FormattedControlBase*>(m_pWindow.get()));
 }
 
 void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
