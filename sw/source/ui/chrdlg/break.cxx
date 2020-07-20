@@ -31,32 +31,27 @@
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
-short SwBreakDlg::run()
+void SwBreakDlg::rememberResult()
 {
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
+    nKind = 0;
+    if (m_xLineBtn->get_active())
+        nKind = 1;
+    else if(m_xColumnBtn->get_active())
+        nKind = 2;
+    else if(m_xPageBtn->get_active())
     {
-        nKind = 0;
-        if (m_xLineBtn->get_active())
-            nKind = 1;
-        else if(m_xColumnBtn->get_active())
-            nKind = 2;
-        else if(m_xPageBtn->get_active())
+        nKind = 3;
+        const int nPos = m_xPageCollBox->get_active();
+        if (nPos != 0 && nPos != -1)
         {
-            nKind = 3;
-            const int nPos = m_xPageCollBox->get_active();
-            if (nPos != 0 && nPos != -1)
+            m_aTemplate = m_xPageCollBox->get_active_text();
+            oPgNum.reset();
+            if (m_xPageNumBox->get_active())
             {
-                m_aTemplate = m_xPageCollBox->get_active_text();
-                oPgNum.reset();
-                if (m_xPageNumBox->get_active())
-                {
-                    oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());
-                }
+                oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());
             }
         }
     }
-    return nRet;
 }
 
 IMPL_LINK_NOARG(SwBreakDlg, ToggleHdl, weld::ToggleButton&, void)
@@ -122,6 +117,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
             return;
         }
     }
+    rememberResult();
     m_xDialog->response(RET_OK);
 }
 

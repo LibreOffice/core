@@ -50,10 +50,10 @@ class SwBreakDlg : public weld::GenericDialogController
     DECL_LINK(OkHdl, weld::Button&, void);
 
     void CheckEnable();
+    void rememberResult();
 
 public:
     SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
-    virtual short run() override;
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::std::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
