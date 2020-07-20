@@ -62,6 +62,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <memory>
 #include <fmtfollowtextflow.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -487,6 +488,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
                         aHOrient.SetHoriOrient( nHorizOrient );
                         pFrameFormat->SetFormatAttr(aHOrient);
+                        if (auto pTxFrm = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_DRAWFRMFMT))
+                            pTxFrm->SetFormatAttr(aHOrient);
                         pSh->EndAction();
                     }
 
@@ -498,6 +501,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
                         aVOrient.SetVertOrient( nVertOrient );
                         pFrameFormat->SetFormatAttr(aVOrient);
+                        if (auto pTxFrm = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_DRAWFRMFMT))
+                            pTxFrm->SetFormatAttr(aVOrient);
                         pSh->EndAction();
                     }
 
