@@ -44,7 +44,7 @@ struct CryptoImpl
             return;
 
         if (iv.empty())
-            EVP_EncryptInit_ex(mpContext.get(), cipher, nullptr, key.data(), 0);
+            EVP_EncryptInit_ex(mpContext.get(), cipher, nullptr, key.data(), nullptr);
         else
             EVP_EncryptInit_ex(mpContext.get(), cipher, nullptr, key.data(), iv.data());
         EVP_CIPHER_CTX_set_padding(mpContext.get(), 0);
@@ -64,7 +64,7 @@ struct CryptoImpl
             key.resize(nMinKeySize, 0);
 
         if (iv.empty())
-            EVP_DecryptInit_ex(mpContext.get(), pCipher, nullptr, key.data(), 0);
+            EVP_DecryptInit_ex(mpContext.get(), pCipher, nullptr, key.data(), nullptr);
         else
         {
             const size_t nMinIVSize = EVP_CIPHER_iv_length(pCipher);
@@ -101,7 +101,7 @@ struct CryptoImpl
             HMAC_CTX_cleanup(mpHmacContext.get());
     }
 
-    const EVP_CIPHER* getCipher(Crypto::CryptoType type)
+    static const EVP_CIPHER* getCipher(Crypto::CryptoType type)
     {
         switch(type)
         {
