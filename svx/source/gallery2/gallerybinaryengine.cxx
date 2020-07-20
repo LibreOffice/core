@@ -37,8 +37,10 @@
 
 using namespace ::com::sun::star;
 
-GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations)
+GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
+                                         const GalleryObjectCollection& rGalleryObjectCollection)
     : maGalleryStorageLocations(rGalleryStorageLocations)
+    , mrGalleryObjectCollection(rGalleryObjectCollection)
 {
 }
 
