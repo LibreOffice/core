@@ -2899,39 +2899,39 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
 
 void SwCollectTableLineBoxes::AddToUndoHistory( const SwContentNode& rNd )
 {
-    if( pHst )
-        pHst->Add( rNd.GetFormatColl(), rNd.GetIndex(), SwNodeType::Text );
+    if( m_pHistory )
+        m_pHistory->Add( rNd.GetFormatColl(), rNd.GetIndex(), SwNodeType::Text );
 }
 
 void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
 {
-    aPosArr.push_back(nWidth);
+    m_aPositionArr.push_back(m_nWidth);
     SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
-    nWidth = nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+    m_nWidth = m_nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
 }
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 {
     const SwTableBox* pRet = nullptr;
 
-    if( !aPosArr.empty() )
+    if( !m_aPositionArr.empty() )
     {
         std::vector<sal_uInt16>::size_type n;
-        for( n = 0; n < aPosArr.size(); ++n )
-            if( aPosArr[ n ] == nWidth )
+        for( n = 0; n < m_aPositionArr.size(); ++n )
+            if( m_aPositionArr[ n ] == m_nWidth )
                 break;
-            else if( aPosArr[ n ] > nWidth )
+            else if( m_aPositionArr[ n ] > m_nWidth )
             {
                 if( n )
                     --n;
                 break;
             }
 
-        if( n >= aPosArr.size() )
+        if( n >= m_aPositionArr.size() )
             --n;
 
-        nWidth = nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+        m_nWidth = m_nWidth + static_cast<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
         pRet = m_Boxes[ n ];
     }
     return pRet;
@@ -2939,14 +2939,14 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 
 bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 {
-    if( !aPosArr.empty() )
+    if( !m_aPositionArr.empty() )
     {
         std::vector<sal_uInt16>::size_type n;
-        for( n = 0; n < aPosArr.size(); ++n )
+        for( n = 0; n < m_aPositionArr.size(); ++n )
         {
-            if( aPosArr[ n ] == nOffset )
+            if( m_aPositionArr[ n ] == nOffset )
                 break;
-            else if( aPosArr[ n ] > nOffset )
+            else if( m_aPositionArr[ n ] > nOffset )
             {
                 if( n )
                     --n;
@@ -2954,10 +2954,10 @@ bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
             }
         }
 
-        aPosArr.erase( aPosArr.begin(), aPosArr.begin() + n );
+        m_aPositionArr.erase( m_aPositionArr.begin(), m_aPositionArr.begin() + n );
         m_Boxes.erase(m_Boxes.begin(), m_Boxes.begin() + n);
 
-        size_t nArrSize = aPosArr.size();
+        size_t nArrSize = m_aPositionArr.size();
         if (nArrSize)
         {
             if (nOldWidth == 0)
@@ -2966,14 +2966,14 @@ bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
             // Adapt the positions to the new Size
             for( n = 0; n < nArrSize; ++n )
             {
-                sal_uLong nSize = nWidth;
-                nSize *= ( aPosArr[ n ] - nOffset );
+                sal_uLong nSize = m_nWidth;
+                nSize *= ( m_aPositionArr[ n ] - nOffset );
                 nSize /= nOldWidth;
-                aPosArr[ n ] = sal_uInt16( nSize );
+                m_aPositionArr[ n ] = sal_uInt16( nSize );
             }
         }
     }
-    return !aPosArr.empty();
+    return !m_aPositionArr.empty();
 }
 
 bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )

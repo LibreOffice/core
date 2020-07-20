@@ -25,12 +25,12 @@
 class SwUndoSplitNode: public SwUndo
 {
     std::unique_ptr<SwHistory> m_pHistory;
-    std::unique_ptr<SwRedlineData> pRedlData;
-    sal_uLong nNode;
-    sal_Int32 nContent;
-    bool bTableFlag : 1;
-    bool bChkTableStt : 1;
-    sal_uInt32 nParRsid;
+    std::unique_ptr<SwRedlineData> m_pRedlineData;
+    sal_uLong m_nNode;
+    sal_Int32 m_nContent;
+    bool m_bTableFlag : 1;
+    bool m_bCheckTableStart : 1;
+    sal_uInt32 m_nParRsid;
 
 public:
     SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTable );
@@ -41,7 +41,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetTableFlag()       { bTableFlag = true; }
+    void SetTableFlag()       { m_bTableFlag = true; }
 };
 
 class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
