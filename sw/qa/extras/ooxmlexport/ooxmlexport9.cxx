@@ -236,6 +236,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133052, "tdf133052.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[5]/w:pPr/w:spacing", "before", "0");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134648, "tdf134648.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // list item with direct top auto spacing
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", "240");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing", "1");
+
+    // This was spacing w:after=200, but bottom auto spacing of first list subitem is zero
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
