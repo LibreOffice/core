@@ -2858,7 +2858,6 @@ FactoryFunction RadioButton::GetUITestFactory() const
 void CheckBox::ImplInitCheckBoxData()
 {
     meState         = TRISTATE_FALSE;
-    meSaveValue     = TRISTATE_FALSE;
     mbTriState      = false;
 }
 
@@ -3022,12 +3021,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     }
     else
     {
-        if ( mbLegacyNoTextAlign && ( nWinStyle & WB_CENTER ) )
-            rStateRect.SetLeft( rPos.X()+((rSize.Width()-rImageSize.Width())/2) );
-        else if ( mbLegacyNoTextAlign && ( nWinStyle & WB_RIGHT ) )
-            rStateRect.SetLeft( rPos.X()+rSize.Width()-rImageSize.Width() );
-        else
-            rStateRect.SetLeft( rPos.X() );
+        rStateRect.SetLeft( rPos.X() );
         if ( nWinStyle & WB_VCENTER )
             rStateRect.SetTop( rPos.Y()+((rSize.Height()-rImageSize.Height())/2) );
         else if ( nWinStyle & WB_BOTTOM )
@@ -3087,7 +3081,7 @@ void CheckBox::ImplCheck()
 }
 
 CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WindowType::CHECKBOX ), mbLegacyNoTextAlign( false )
+    Button( WindowType::CHECKBOX )
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );

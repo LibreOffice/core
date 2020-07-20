@@ -86,14 +86,8 @@ private:
     tools::Rectangle       maStateRect;
     tools::Rectangle       maMouseRect;
     TriState        meState;
-    TriState        meSaveValue;
     bool            mbTriState;
     Link<CheckBox&,void> maToggleHdl;
-    // when mbLegacyNoTextAlign is set then the old behaviour where
-    // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
-    // occurs, otherwise the image ( checkbox box ) is placed
-    // to the left or right ( depending on RTL or LTR settings )
-    bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE static WinBits ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( bool bBackground );

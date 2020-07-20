@@ -259,7 +259,6 @@ void Edit::ImplInitEditData()
     mnMaxTextLen            = EDIT_NOLIMIT;
     mnWidthInChars          = -1;
     mnMaxWidthChars         = -1;
-    mbModified              = false;
     mbInternModified        = false;
     mbReadOnly              = false;
     mbInsertMode            = true;
@@ -353,12 +352,6 @@ bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
             !rKeyEvent.GetKeyCode().IsMod3() &&
             !rKeyEvent.GetKeyCode().IsMod2() &&
             !rKeyEvent.GetKeyCode().IsMod1() );
-}
-
-void Edit::ImplModified()
-{
-    mbModified = true;
-    Modify();
 }
 
 void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -1362,7 +1355,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     {
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
         ImplPaste( aSelection );
-        ImplModified();
+        Modify();
     }
 }
 
@@ -1408,7 +1401,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mbReadOnly && maSelection.Len() && !mbPassword )
                 {
                     Cut();
-                    ImplModified();
+                    Modify();
                     bDone = true;
                 }
             }
@@ -1466,7 +1459,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !aChars.isEmpty() )
                 {
                     ImplInsertText( aChars );
-                    ImplModified();
+                    Modify();
                 }
                 bDone = true;
             }
@@ -1651,7 +1644,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     sal_Int32 nOldLen = maText.getLength();
                     ImplDelete( maSelection, nDel, nMode );
                     if ( maText.getLength() != nOldLen )
-                        ImplModified();
+                        Modify();
                     bDone = true;
                 }
             }
@@ -1696,7 +1689,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
     }
 
     if ( mbInternModified )
-        ImplModified();
+        Modify();
 
     return bDone;
 }
@@ -1985,12 +1978,12 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (sCommand == "undo")
         {
             Undo();
-            ImplModified();
+            Modify();
         }
         else if (sCommand == "cut")
         {
             Cut();
-            ImplModified();
+            Modify();
         }
         else if (sCommand == "copy")
         {
@@ -1999,12 +1992,12 @@ void Edit::Command( const CommandEvent& rCEvt )
         else if (sCommand == "paste")
         {
             Paste();
-            ImplModified();
+            Modify();
         }
         else if (sCommand == "delete")
         {
             DeleteSelected();
-            ImplModified();
+            Modify();
         }
         else if (sCommand == "selectall")
         {
@@ -2017,7 +2010,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             if (!aChars.isEmpty())
             {
                 ImplInsertText( aChars );
-                ImplModified();
+                Modify();
             }
         }
         pPopup.clear();
@@ -2036,7 +2029,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         mpIMEInfos.reset();
 
         SetInsertMode(bInsertMode);
-        ImplModified();
+        Modify();
 
         Invalidate();
 
@@ -2585,18 +2578,10 @@ void Edit::SetPlaceholderText( const OUString& rStr )
 
 void Edit::SetModifyFlag()
 {
-    if ( mpSubEdit )
-        mpSubEdit->mbModified = true;
-    else
-        mbModified = true;
 }
 
 void Edit::ClearModifyFlag()
 {
-    if ( mpSubEdit )
-        mpSubEdit->mbModified = false;
-    else
-        mbModified = false;
 }
 
 void Edit::SetSubEdit(Edit* pEdit)
@@ -2792,7 +2777,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
             }
         }
         ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
-        ImplModified();
+        Modify();
     }
 
     ImplHideDDCursor();
@@ -2833,7 +2818,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
                 aData >>= aText;
                 ImplInsertText( aText );
                 bChanges = true;
-                ImplModified();
+                Modify();
             }
         }
 

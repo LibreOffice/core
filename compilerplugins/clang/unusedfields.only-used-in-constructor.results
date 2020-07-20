@@ -1,6 +1,6 @@
-avmedia/source/vlc/vlcframegrabber.hxx:35
+avmedia/source/vlc/vlcframegrabber.hxx:34
     avmedia::vlc::VLCFrameGrabber mInstance wrapper::Instance
-avmedia/source/vlc/vlcframegrabber.hxx:36
+avmedia/source/vlc/vlcframegrabber.hxx:35
     avmedia::vlc::VLCFrameGrabber mMedia wrapper::Media
 avmedia/source/vlc/wrapper/Types.hxx:38
     libvlc_event_t p_obj void *
@@ -52,31 +52,31 @@ connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
-connectivity/source/drivers/evoab2/NStatement.hxx:57
+connectivity/source/drivers/evoab2/NStatement.hxx:55
     connectivity::evoab::FieldSort bAscending _Bool
-connectivity/source/inc/component/CResultSet.hxx:44
+connectivity/source/inc/component/CResultSet.hxx:42
     connectivity::component::OComponentResultSet m_bBookmarkable _Bool
-connectivity/source/inc/dbase/DResultSet.hxx:43
+connectivity/source/inc/dbase/DResultSet.hxx:41
     connectivity::dbase::ODbaseResultSet m_bBookmarkable _Bool
-connectivity/source/inc/file/FStatement.hxx:87
+connectivity/source/inc/file/FStatement.hxx:85
     connectivity::file::OStatement_Base m_aCursorName class rtl::OUString
-connectivity/source/inc/file/FStatement.hxx:88
+connectivity/source/inc/file/FStatement.hxx:86
     connectivity::file::OStatement_Base m_nMaxFieldSize sal_Int32
-connectivity/source/inc/file/FStatement.hxx:89
+connectivity/source/inc/file/FStatement.hxx:87
     connectivity::file::OStatement_Base m_nMaxRows sal_Int32
-connectivity/source/inc/file/FStatement.hxx:90
+connectivity/source/inc/file/FStatement.hxx:88
     connectivity::file::OStatement_Base m_nQueryTimeOut sal_Int32
-connectivity/source/inc/file/FStatement.hxx:91
+connectivity/source/inc/file/FStatement.hxx:89
     connectivity::file::OStatement_Base m_nFetchSize sal_Int32
-connectivity/source/inc/file/FStatement.hxx:92
+connectivity/source/inc/file/FStatement.hxx:90
     connectivity::file::OStatement_Base m_nResultSetType sal_Int32
-connectivity/source/inc/file/FStatement.hxx:93
+connectivity/source/inc/file/FStatement.hxx:91
     connectivity::file::OStatement_Base m_nFetchDirection sal_Int32
-connectivity/source/inc/file/FStatement.hxx:94
+connectivity/source/inc/file/FStatement.hxx:92
     connectivity::file::OStatement_Base m_nResultSetConcurrency sal_Int32
-connectivity/source/inc/file/FStatement.hxx:95
+connectivity/source/inc/file/FStatement.hxx:93
     connectivity::file::OStatement_Base m_bEscapeProcessing _Bool
-connectivity/source/inc/flat/EResultSet.hxx:42
+connectivity/source/inc/flat/EResultSet.hxx:40
     connectivity::flat::OFlatResultSet m_bBookmarkable _Bool
 connectivity/source/inc/java/lang/Object.hxx:38
     connectivity::SDBThreadAttach m_aGuard jvmaccess::class VirtualMachine::AttachGuard
@@ -128,17 +128,17 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/dialogs/AdditionsDialog.cxx:53
+cui/source/dialogs/AdditionsDialog.cxx:82
     (anonymous namespace)::AdditionInfo sDescription class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:55
+cui/source/dialogs/AdditionsDialog.cxx:84
     (anonymous namespace)::AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:59
+cui/source/dialogs/AdditionsDialog.cxx:88
     (anonymous namespace)::AdditionInfo sRating class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:61
+cui/source/dialogs/AdditionsDialog.cxx:90
     (anonymous namespace)::AdditionInfo sDownloadURL class rtl::OUString
-cui/source/dialogs/colorpicker.cxx:737
+cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1408
+cui/source/factory/dlgfact.cxx:1410
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -178,15 +178,15 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-drawinglayer/inc/texture/texture3d.hxx:61
+drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
-drawinglayer/inc/texture/texture3d.hxx:63
+drawinglayer/inc/texture/texture3d.hxx:59
     drawinglayer::texture::GeoTexSvxBitmapEx maTransparence class Bitmap
 drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:199
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:468
+editeng/source/editeng/impedit.hxx:515
     ImpEditEngine aSelFuncSet class EditSelFunctionSet
 extensions/source/bibliography/datman.cxx:403
     (anonymous namespace)::DBChangeDialog_Impl aConfig class DBChangeDialogConfig_Impl
@@ -214,7 +214,7 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/export/shapes.hxx:101
+include/oox/export/shapes.hxx:102
     oox::drawingml::ShapeExport maShapeMap oox::drawingml::ShapeExport::ShapeHashMap
 include/registry/registry.hxx:34
     Registry_Api acquire void (*)(RegHandle)
@@ -331,9 +331,9 @@ include/sfx2/msg.hxx:145
 include/sfx2/msg.hxx:146
     SfxType17 pType const std::type_info *
 include/sfx2/msg.hxx:146
-    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:146
     SfxType17 aAttrib struct SfxTypeAttrib [17]
+include/sfx2/msg.hxx:146
+    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:146
     SfxType17 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
@@ -358,7 +358,7 @@ include/vcl/commandevent.hxx:311
     CommandGestureData mfY const double
 include/vcl/commandevent.hxx:315
     CommandGestureData meOrientation const enum PanningOrientation
-include/vcl/font/Feature.hxx:102
+include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:37
     NotebookBarAddonsItem aImage class Image
@@ -408,7 +408,7 @@ oox/source/drawingml/diagram/layoutnodecontext.cxx:92
     oox::drawingml::(anonymous namespace)::AlgorithmContext mnRevision sal_Int32
 oox/source/drawingml/diagram/layoutnodecontext.cxx:134
     oox::drawingml::(anonymous namespace)::ChooseContext msName class rtl::OUString
-oox/source/drawingml/hyperlinkcontext.hxx:42
+oox/source/drawingml/hyperlinkcontext.hxx:41
     oox::drawingml::HyperLinkContext maProperties class oox::PropertyMap &
 oox/source/ppt/timenodelistcontext.cxx:199
     oox::ppt::(anonymous namespace)::MediaNodeContext mbIsNarration _Bool
@@ -438,6 +438,8 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:236
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
+reportdesign/source/filter/xml/xmlExport.cxx:1230
+      sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:202
@@ -512,7 +514,7 @@ sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/htmlpars.hxx:613
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
-sc/source/filter/inc/sheetdatacontext.hxx:52
+sc/source/filter/inc/sheetdatacontext.hxx:51
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/filter/inc/XclImpChangeTrack.hxx:56
     XclImpChangeTrack xInStrm tools::SvRef<SotStorageStream>
@@ -536,8 +538,6 @@ sc/source/filter/xml/xmlexternaltabi.hxx:111
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
-sc/source/ui/docshell/docfunc.cxx:1550
-      const class ScDPCollection *&
 sc/source/ui/inc/acredlin.hxx:50
     ScAcceptChgDlg aReOpenIdle class Idle
 sc/source/ui/inc/msgpool.hxx:35
@@ -570,7 +570,7 @@ sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
-scripting/source/stringresource/stringresource.cxx:1291
+scripting/source/stringresource/stringresource.cxx:1279
     stringresource::(anonymous namespace)::BinaryInput m_aData Sequence<sal_Int8>
 sd/inc/anminfo.hxx:52
     SdAnimationInfo maSecondSoundFile class rtl::OUString
@@ -644,7 +644,7 @@ sfx2/source/dialog/basedlgs.cxx:47
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:102
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-slideshow/source/engine/animationnodes/animationbasenode.hxx:89
+slideshow/source/engine/animationnodes/animationbasenode.hxx:88
     slideshow::internal::AnimationBaseNode mpSubsetManager slideshow::internal::SubsettableShapeManagerSharedPtr
 slideshow/source/engine/opengl/TransitionImpl.cxx:1992
     (anonymous namespace)::ThreeFloats y GLfloat
@@ -672,7 +672,7 @@ starmath/inc/view.hxx:216
     SmViewShell maGraphicController class SmGraphicController
 starmath/source/accessibility.hxx:270
     SmEditSource rEditAcc class SmEditAccessible &
-svgio/inc/svgcharacternode.hxx:89
+svgio/inc/svgcharacternode.hxx:85
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
 svl/source/crypto/cryptosign.cxx:124
     (anonymous namespace)::Extension extnID SECItem
@@ -726,7 +726,7 @@ svx/source/stbctrls/zoomctrl.cxx:59
     (anonymous namespace)::ZoomPopup_Impl m_aBuilder class VclBuilder
 svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdmrkv.cxx:131
+svx/source/svdraw/svdmrkv.cxx:132
     MarkingSubSelectionOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image [9]
@@ -734,11 +734,13 @@ svx/source/xml/xmleohlp.cxx:68
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 svx/source/xml/xmlgrhlp.cxx:87
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
+sw/inc/tox.hxx:57
+    sw::FindContentFrameHint m_isReadOnlyAvailable const _Bool
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4222
+sw/qa/extras/uiwriter/uiwriter.cxx:4224
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -770,8 +772,6 @@ sw/source/uibase/inc/uivwimp.hxx:93
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:45
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx:51
-    sw::sidebar::WriterInspectorTextPanel maCharStyle sfx2::sidebar::ControllerItem
 toolkit/source/awt/stylesettings.cxx:94
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard class SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:74
@@ -786,9 +786,9 @@ ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 vcl/headless/svpgdi.cxx:397
     (anonymous namespace)::BitmapHelper aTmpBmp class SvpSalBitmap
-vcl/inc/canvasbitmap.hxx:42
+vcl/inc/canvasbitmap.hxx:40
     vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
-vcl/inc/graphic/Manager.hxx:41
+vcl/inc/graphic/Manager.hxx:39
     vcl::graphic::Manager maSwapOutTimer class Timer
 vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
@@ -804,11 +804,11 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salvtables.hxx:561
+vcl/inc/salvtables.hxx:559
     SalInstanceEntry m_aTextFilter class WeldTextFilter
 vcl/inc/salvtables.hxx:935
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
-vcl/inc/svimpbox.hxx:127
+vcl/inc/svimpbox.hxx:121
     SvImpLBox m_aFctSet class ImpLBSelEng
 vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditStartCallback XIMCallback
@@ -838,11 +838,11 @@ vcl/source/gdi/jobset.cxx:37
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:38
     (anonymous namespace)::ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfbuildin_fonts.hxx:34
+vcl/source/gdi/pdfbuildin_fonts.hxx:32
     vcl::pdf::BuildinFont m_nAscent const int
-vcl/source/gdi/pdfbuildin_fonts.hxx:35
+vcl/source/gdi/pdfbuildin_fonts.hxx:33
     vcl::pdf::BuildinFont m_nDescent const int
-vcl/source/gdi/pdfbuildin_fonts.hxx:42
+vcl/source/gdi/pdfbuildin_fonts.hxx:40
     vcl::pdf::BuildinFont m_aWidths const int [256]
 vcl/unx/gtk3/a11y/atkwrapper.hxx:47
     AtkObjectWrapper aParent AtkObject
@@ -854,19 +854,19 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4778
+vcl/unx/gtk3/gtk3gtkinst.cxx:4806
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5151
+vcl/unx/gtk3/gtk3gtkinst.cxx:5179
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5294
+vcl/unx/gtk3/gtk3gtkinst.cxx:5322
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5302
+vcl/unx/gtk3/gtk3gtkinst.cxx:5330
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:12866
+vcl/unx/gtk3/gtk3gtkinst.cxx:13056
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:12872
+vcl/unx/gtk3/gtk3gtkinst.cxx:13062
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
-writerfilter/source/dmapper/PropertyMap.hxx:220
+writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>

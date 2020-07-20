@@ -68,8 +68,7 @@ private:
     sal_Int32           mnWidthInChars;
     sal_Int32           mnMaxWidthChars;
     sal_Unicode         mcEchoChar;
-    bool                mbModified:1,
-                        mbInternModified:1,
+    bool                mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
                         mbClickedInSelection:1,
@@ -87,7 +86,6 @@ private:
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
-    SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
     SAL_DLLPRIVATE void        ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle);
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
