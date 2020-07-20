@@ -119,5 +119,53 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataForma
             return "";
     }
 }
+
+char const* GraphicMimeTypeHelper::GetExtensionForConvertDataFormat(ConvertDataFormat nFormat)
+{
+    char const* pExt = nullptr;
+    // create extension
+    if (nFormat != ConvertDataFormat::Unknown)
+    {
+        switch (nFormat)
+        {
+            case ConvertDataFormat::BMP:
+                pExt = ".bmp";
+                break;
+            case ConvertDataFormat::GIF:
+                pExt = ".gif";
+                break;
+            case ConvertDataFormat::JPG:
+                pExt = ".jpg";
+                break;
+            case ConvertDataFormat::MET:
+                pExt = ".met";
+                break;
+            case ConvertDataFormat::PCT:
+                pExt = ".pct";
+                break;
+            case ConvertDataFormat::PNG:
+                pExt = ".png";
+                break;
+            case ConvertDataFormat::SVM:
+                pExt = ".svm";
+                break;
+            case ConvertDataFormat::TIF:
+                pExt = ".tif";
+                break;
+            case ConvertDataFormat::WMF:
+                pExt = ".wmf";
+                break;
+            case ConvertDataFormat::EMF:
+                pExt = ".emf";
+                break;
+
+            default:
+                pExt = ".grf";
+                break;
+        }
+    }
+    return pExt;
 }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
