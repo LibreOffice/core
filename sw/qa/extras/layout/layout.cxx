@@ -1163,6 +1163,46 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
                                  xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
+{
+    load(DATA_DIRECTORY, "no-line-break-at-slash.fodt");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // the line break was between  "Foostrasse 13/c/" and "2"
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[2]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[3]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[4]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[5]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Special"), std::string(reinterpret_cast<char const*>(
+                                                     pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[6]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[7]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[8]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Finish"), std::string(reinterpret_cast<char const*>(
+                                                    pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "Blah blah bla bla bla ");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "Foostrasse");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[3]", "Portion", "13/c/2, etc.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     loadURL("private:factory/swriter", nullptr);
