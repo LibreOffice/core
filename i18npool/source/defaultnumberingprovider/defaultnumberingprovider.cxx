@@ -578,15 +578,13 @@ static OUString lcl_formatArabicZero(sal_Int32 nNumber, sal_Int32 nLimit)
 
 static
 Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
-                                                const char* name, bool bRequired )
+                                                const char* name )
 {
         auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
             [&name](const beans::PropertyValue& rProp) { return rProp.Name.equalsAscii(name); });
         if (pProp != aProperties.end())
             return pProp->Value;
-        if(bRequired)
-            throw IllegalArgumentException();
-        return Any();
+        throw IllegalArgumentException();
 }
 
 //XNumberingFormatter
@@ -700,7 +698,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                try {
                     const OUString &tmp = OUString::number( number );
                     OUString transliteration;
-                    getPropertyByName(aProperties, "Transliteration", true) >>= transliteration;
+                    getPropertyByName(aProperties, "Transliteration") >>= transliteration;
                     if ( !translit )
                         translit = new TransliterationImpl(m_xContext);
                     translit->loadModuleByImplName(transliteration, aLocale);

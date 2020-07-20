@@ -2437,11 +2437,8 @@ class ScRangeProvider
 {
 public:
     ScRangeProvider(const tools::Rectangle& rArea, bool bInPixels,
-                    ScViewData& rViewData, SCCOLROW nEnlargeX = 0,
-                    SCCOLROW nEnlargeY = 0):
-        mrViewData(rViewData),
-        mnEnlargeX(nEnlargeX),
-        mnEnlargeY(nEnlargeY)
+                    ScViewData& rViewData):
+        mrViewData(rViewData)
     {
         tools::Rectangle aAreaPx = bInPixels ? rArea :
             tools::Rectangle(rArea.Left() * mrViewData.GetPPTX(),
@@ -2529,8 +2526,8 @@ private:
     ScRange maRange;
     tools::Rectangle maBoundPositions;
     ScViewData& mrViewData;
-    SCCOLROW mnEnlargeX;
-    SCCOLROW mnEnlargeY;
+    static const SCCOLROW mnEnlargeX = 2;
+    static const SCCOLROW mnEnlargeY = 2;
 };
 
 void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW nExtra,
@@ -2621,8 +2618,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
             mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
             mnLOKEndHeaderCol, mnLOKEndHeaderRow);
 
-    ScRangeProvider aRangeProvider(rRectangle, /* bInPixels */ false, aViewData,
-                                   /* nEnlargeX */ 2, /* nEnlargeY */ 2);
+    ScRangeProvider aRangeProvider(rRectangle, /* bInPixels */ false, aViewData);
     const ScRange& rCellRange = aRangeProvider.getCellRange();
 
     /// *** start collecting ROWS ***
@@ -2923,8 +2919,7 @@ void ScTabView::extendTiledAreaIfNeeded()
     tools::Rectangle aOldVisCellRange(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
                                       mnLOKEndHeaderCol, mnLOKEndHeaderRow);
 
-    ScRangeProvider aRangeProvider(rVisArea, /* bInPixels */ false, aViewData,
-                                   /* nEnlargeX */ 2, /* nEnlargeY */ 2);
+    ScRangeProvider aRangeProvider(rVisArea, /* bInPixels */ false, aViewData);
     // Index bounds.
     const ScRange& rCellRange = aRangeProvider.getCellRange();
     const SCCOL nStartCol = rCellRange.aStart.Col();

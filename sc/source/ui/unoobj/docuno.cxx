@@ -503,9 +503,9 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
 static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
                                               const Fraction& rZoomY,
                                               const SCTAB nTab,
-                                              const ViewShellDocId& rDocId,
-                                              const size_t nMaxIter = 5)
+                                              const ViewShellDocId& rDocId)
 {
+    constexpr size_t nMaxIter = 5;
     size_t nIter = 0;
     for (SfxViewShell* pViewShell = SfxViewShell::GetFirst();
             pViewShell && nIter < nMaxIter;
