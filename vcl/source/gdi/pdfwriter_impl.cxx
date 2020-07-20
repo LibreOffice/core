@@ -3602,6 +3602,13 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
 sal_Int32 PDFWriterImpl::getBestBuildinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
+
+    if (rFont.GetFamilyType() == FAMILY_ROMAN)
+    {
+        // Serif: default to Times-Roman.
+        nBest = 8;
+    }
+
     OUString aFontName( rFont.GetFamilyName() );
     aFontName = aFontName.toAsciiLowerCase();
 
@@ -3748,14 +3755,14 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
-    sal_Int32 nBest = getSystemFont( aFont );
+    // Get the built-in font which is closest to aFont.
+    sal_Int32 nBest = getBestBuildinFont(aFont);
 
     // prepare DA string
     OStringBuffer aDA( 32 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
     aDA.append( ' ' );
-    aDA.append( "/F" );
-    aDA.append( nBest );
+    aDA.append(pdf::BuildinFontFace::Get(nBest).getNameObject());
 
     OStringBuffer aDR( 32 );
     aDR.append( "/Font " );
