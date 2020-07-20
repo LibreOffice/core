@@ -134,11 +134,7 @@ bool AquaSalGraphics::CheckContext()
 
             const int nBytesPerRow = (nBitmapDepth * nScaledWidth) / 8;
             void* pRawData = std::malloc(nBytesPerRow * nScaledHeight);
-#ifdef MACOSX
-        const int nFlags = kCGImageAlphaNoneSkipFirst;
-#else
-        const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
-#endif
+            const int nFlags = kCGImageAlphaNoneSkipFirst;
             CGContextHolder aContextHolder(CGBitmapContextCreate(
                 pRawData, nScaledWidth, nScaledHeight, 8, nBytesPerRow, GetSalData()->mxRGBSpace, nFlags));
 
