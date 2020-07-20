@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -383,7 +384,13 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml" );
 
     oox::drawingml::ChartExport aChartExport(XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DOCUMENT_DOCX);
+    css::uno::Reference<css::util::XModifiable> xModifiable(xModel, css::uno::UNO_QUERY);
+    const bool bOldModified = xModifiable && xModifiable->isModified();
     aChartExport.ExportContent();
+    if (!bOldModified && xModifiable && xModifiable->isModified())
+        // tdf#134973: the model could get modified: e.g., calling XChartDocument::getSubTitle(),
+        // which creates the object if absent, and sets the modified state.
+        xModifiable->setModified(bOldModified);
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
