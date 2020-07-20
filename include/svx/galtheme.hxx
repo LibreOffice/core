@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/gallerybinaryengine.hxx>
+#include <svx/galleryobjectcollection.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -63,6 +64,7 @@ namespace unogallery
 }
 
 class GalleryBinaryEngine;
+class GalleryObjectCollection;
 
 class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 {
@@ -74,7 +76,7 @@ class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 private:
 
     std::unique_ptr<GalleryBinaryEngine>     mpGalleryBinaryEngine;
-    ::std::vector< std::unique_ptr<GalleryObject> > aObjectList;
+    GalleryObjectCollection     maGalleryObjectCollection;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
     Gallery*                    pParent;
@@ -90,16 +92,16 @@ private:
 
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
     {
-        if (nPos < aObjectList.size())
-            return aObjectList[ nPos ].get();
+        if (nPos < maGalleryObjectCollection.m_aObjectList.size())
+            return maGalleryObjectCollection.m_aObjectList[nPos].get();
         return nullptr;
     }
-    const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
+    const GalleryObject* ImplGetGalleryObject(const INetURLObject& rURL);
 
     SAL_DLLPRIVATE sal_uInt32   ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
                                 {
-                                    for (sal_uInt32 i = 0, n = aObjectList.size(); i < n; ++i)
-                                        if ( pObj == aObjectList[ i ].get() )
+                                    for (sal_uInt32 i = 0, n = maGalleryObjectCollection.m_aObjectList.size(); i < n; ++i)
+                                        if ( pObj == maGalleryObjectCollection.m_aObjectList[ i ].get() )
                                             return i;
                                     return SAL_MAX_UINT32;
                                 }
@@ -115,7 +117,7 @@ public:
 
     SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
-    SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return aObjectList.size(); }
+    SAL_DLLPRIVATE sal_uInt32   GetObjectCount() const { return maGalleryObjectCollection.m_aObjectList.size(); }
 
     std::unique_ptr<SgaObject>  AcquireObject(sal_uInt32 nPos);
 
@@ -183,8 +185,6 @@ public:
 
     SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream> const & rModelStreamRef);
     SAL_DLLPRIVATE bool         InsertModelStream(const tools::SvRef<SotStorageStream>& rModelStream, sal_uInt32 nInsertPos);
-
-    INetURLObject implCreateUniqueURL(SgaObjKind eObjKind, ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
 
     SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL);
     bool                        InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos = SAL_MAX_UINT32);
