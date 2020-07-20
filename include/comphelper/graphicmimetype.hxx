@@ -36,6 +36,7 @@ public:
     static OUString
     GetMimeTypeForImageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     static OUString GetMimeTypeForConvertDataFormat(ConvertDataFormat convertDataFormat);
+    static char const* GetExtensionForConvertDataFormat(ConvertDataFormat nFormat);
 };
 }
 
