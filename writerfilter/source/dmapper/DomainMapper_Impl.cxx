@@ -1714,6 +1714,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             {
                                     return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
                             });
+                            // if style based spacing was set to auto in the previous paragraph, style of the actual paragraph must be the same
+                            if (bParaAutoBefore && !m_bParaAutoBefore && m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ParaStyleName"))
+                            {
+                               auto itParaStyle = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
+                               {
+                                   return rValue.Name == "ParaStyleName";
+                               });
+                               bParaAutoBefore = itParaStyle != aProperties.end() &&
+                                   m_xPreviousParagraph->getPropertyValue("ParaStyleName") == itParaStyle->Value;
+                            }
                             // There was a previous textnode and it had the same numbering.
                             if (bParaAutoBefore)
                             {
