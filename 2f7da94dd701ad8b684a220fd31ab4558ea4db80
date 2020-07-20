@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d7823cd_e1fca067",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-20T12:36:16Z",
+      "side": 1,
+      "message": "This does not change the sensitivity of TreeView,\nThe whole panel appears disabled, Please have a look",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "2f7da94dd701ad8b684a220fd31ab4558ea4db80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
