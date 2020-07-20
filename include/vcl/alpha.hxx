@@ -47,10 +47,6 @@ public:
     bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==(rAlphaMask); }
     bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=(rAlphaMask); }
 
-    void        SetPrefMapMode( const MapMode& rMapMode ) { Bitmap::SetPrefMapMode( rMapMode ); }
-
-    void        SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
-
     Bitmap const & GetBitmap() const;
 
     void        Erase( sal_uInt8 cTransparency );
