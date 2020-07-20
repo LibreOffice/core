@@ -41,6 +41,8 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
+#include <comphelper/propertysequence.hxx>
+
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1085,6 +1087,28 @@ DECLARE_ODFIMPORT_TEST(testTdf133459, "tdf133459.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("ru"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("RU"), aLocale.Country);
     CPPUNIT_ASSERT_EQUAL(OUString("QQ YYYY"), getProperty<OUString>(xFormat, "FormatString"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf134971, "tdf134971a.odt")
+{
+    // now insert 2nd file somewhere - insertDocumentFromURL should
+    // _not_ touch pool defaults
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Name", uno::makeAny(
+                m_directories.getURLFromSrc(mpTestDocumentPath) + "tdf134971b.odt")},
+        {"Filter", uno::makeAny(OUString("writer8"))},
+    });
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+
+    // tdf134971b re-defines default font as "Liberation Sans" - make sure this stays
+    // Arial in final doc:
+    OUString sString;
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
+            "Standard"), uno::UNO_QUERY);
+    xStyle1->getPropertyValue("CharFontName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), sString);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
