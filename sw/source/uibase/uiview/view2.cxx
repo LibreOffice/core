@@ -542,7 +542,9 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
-            pDlg->Execute();
+            VclAbstractDialog::AsyncContext aContext;
+            aContext.maEndDialogFn = [](sal_Int32){};
+            pDlg->StartExecuteAsync(aContext);
             break;
         }
         case FN_EDIT_LINK_DLG:
