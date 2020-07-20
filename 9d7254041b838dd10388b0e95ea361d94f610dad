@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e53da5a2_b27653be",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T10:00:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "970bbddd_197fa614",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 29
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4f6a5de_02c838c1",
         "filename": "include/svx/galtheme.hxx",
         "patchSetId": 7
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "No, \"friend\" means you allow those classes to access private members. Why do you need that when you have a public getObjectList ?",
       "parentUuid": "c4f6a5de_02c838c1",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf72a92_1b165eae",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T10:00:22Z",
+      "side": 1,
+      "message": "Well, that\u0027s because both the classes don\u0027t just \"read\" the aObectList. Instead, they perform some functions like emplace, push, etc. They modify it. What this function is inclined to return is \"const\" (read-only)",
+      "parentUuid": "97f3a4a0_d25565b6",
       "range": {
         "startLine": 67,
         "startChar": 4,
