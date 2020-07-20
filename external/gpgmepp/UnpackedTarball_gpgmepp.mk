@@ -28,5 +28,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
     external/gpgmepp/gcc9.patch \
     external/gpgmepp/ubsan.patch \
+    external/gpgmepp/c++20.patch \
 ))
 # vim: set noet sw=4 ts=4:
