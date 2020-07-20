@@ -210,10 +210,6 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
 {
     OUString sBookmark = m_xEditBox->get_text();
     rSh.SetBookmark2(vcl::KeyCode(), sBookmark, m_xHideCB->get_active(), m_xConditionED->get_text());
-    rReq.AppendItem(SfxStringItem(FN_INSERT_BOOKMARK, sBookmark));
-    rReq.Done();
-    if (!rReq.IsDone())
-        rReq.Ignore();
 
     m_xDialog->response(RET_OK);
 }
@@ -295,10 +291,9 @@ void SwInsertBookmarkDlg::PopulateTable()
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, SfxRequest& rRequest)
+SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     : SfxDialogController(pParent, "modules/swriter/ui/insertbookmark.ui", "InsertBookmarkDialog")
     , rSh(rS)
-    , rReq(rRequest)
     , m_nLastBookmarksCount(0)
     , m_bSorted(false)
     , m_xEditBox(m_xBuilder->weld_entry("name"))
