@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89d2e659_8b0b921c",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-07-20T13:36:44Z",
+      "side": 1,
+      "message": "It might make sense to create a GetExtensionForConvertDataFormat() function in comphelper::GraphicMimeTypeHelper and move this code in there.",
+      "range": {
+        "startLine": 124,
+        "startChar": 14,
+        "endLine": 124,
+        "endChar": 23
+      },
+      "revId": "457ffe960dfdbd0200292ad9c9835d947dd35c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77d032b_4bd55aef",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-07-20T13:36:44Z",
+      "side": 1,
+      "message": "Is the file that will be created with this URL meant to be permanent, or temporary? If it\u0027s only temporary you might be able to use or extend utl::TempFile.",
+      "revId": "457ffe960dfdbd0200292ad9c9835d947dd35c73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
