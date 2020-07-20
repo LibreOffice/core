@@ -40,6 +40,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/ubsan.patch.0 \
 	external/coinmp/rpath.patch \
 	external/coinmp/libtool.patch \
+	external/coinmp/register.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
