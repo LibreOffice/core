@@ -22,6 +22,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/gallerystoragelocations.hxx>
+#include <svx/galleryobjectcollection.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
 #include <tools/urlobj.hxx>
@@ -32,6 +33,7 @@
 #include <vector>
 
 class GalleryStorageLocations;
+class GalleryObjectCollection;
 class SgaObjectSvDraw;
 class SgaObject;
 class SotStorage;
@@ -44,9 +46,11 @@ class SVXCORE_DLLPUBLIC GalleryBinaryEngine
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;
     const GalleryStorageLocations& maGalleryStorageLocations;
+    const GalleryObjectCollection& mrGalleryObjectCollection;
 
 public:
-    GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations);
+    GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
+                        const GalleryObjectCollection& rGalleryObjectCollection);
     void clearSotStorage();
 
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage(bool bReadOnly);
