@@ -73,8 +73,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
     {
         std::set< LanguageType > aLanguages;
 
-        //! since we're going to create one-instance services we have to
-        //! supply their arguments even if we would not need them here...
+        // All of these services only use one arg, but need two args for compat reasons
         uno::Sequence< uno::Any > aArgs(2);
         aArgs.getArray()[0] <<= GetLinguProperties();
 
