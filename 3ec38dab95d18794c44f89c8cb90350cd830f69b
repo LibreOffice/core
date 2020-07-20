@@ -16,6 +16,24 @@
       "revId": "3ec38dab95d18794c44f89c8cb90350cd830f69b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7daa0e60_d3fc3a57",
+        "filename": "include/sax/fshelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-20T12:29:55Z",
+      "side": 1,
+      "message": "With a forwarding reference (what you called by its obsolete name, \"universal reference\"), you would use std::forward to pass it into the std::optional.\n\nBut note that you only use s if bUse is true, so it is not clear whether using something other than a const lvalue reference would actually be a benefit.",
+      "parentUuid": "d8517e97_1cca97a5",
+      "revId": "3ec38dab95d18794c44f89c8cb90350cd830f69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
