@@ -27,16 +27,46 @@
 namespace oox::crypto {
 
 #if USE_TLS_OPENSSL
+
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+
+static HMAC_CTX *HMAC_CTX_new(void)
+{
+   HMAC_CTX *pContext = new HMAC_CTX;
+   HMAC_CTX_init(pContext);
+   return pContext;
+}
+
+static void HMAC_CTX_free(HMAC_CTX *pContext)
+{
+    HMAC_CTX_cleanup(pContext);
+    delete pContext;
+}
+#endif
+
+namespace
+{
+    struct cipher_delete
+    {
+        void operator()(EVP_CIPHER_CTX* p) { EVP_CIPHER_CTX_free(p); }
+    };
+
+    struct hmac_delete
+    {
+        void operator()(HMAC_CTX* p) { HMAC_CTX_free(p); }
+    };
+}
+
 struct CryptoImpl
 {
-    std::unique_ptr<EVP_CIPHER_CTX> mpContext;
-    std::unique_ptr<HMAC_CTX> mpHmacContext;
+    std::unique_ptr<EVP_CIPHER_CTX, cipher_delete> mpContext;
+    std::unique_ptr<HMAC_CTX, hmac_delete> mpHmacContext;
 
     CryptoImpl() = default;
 
     void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
     {
-        mpContext.reset(new EVP_CIPHER_CTX);
+        mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
 
         const EVP_CIPHER* cipher = getCipher(eType);
@@ -52,7 +82,7 @@ struct CryptoImpl
 
     void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
     {
-        mpContext.reset(new EVP_CIPHER_CTX);
+        mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
 
         const EVP_CIPHER* pCipher = getCipher(eType);
@@ -78,8 +108,7 @@ struct CryptoImpl
 
     void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
     {
-        mpHmacContext.reset(new HMAC_CTX);
-        HMAC_CTX_init(mpHmacContext.get());
+        mpHmacContext.reset(HMAC_CTX_new());
         const EVP_MD* aEvpMd;
         switch (eType)
         {
@@ -90,15 +119,13 @@ struct CryptoImpl
             case CryptoHashType::SHA512:
                 aEvpMd = EVP_sha512(); break;
         }
-        HMAC_Init(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd);
+        HMAC_Init_ex(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd, nullptr);
     }
 
     ~CryptoImpl()
     {
         if (mpContext)
             EVP_CIPHER_CTX_cleanup(mpContext.get());
-        if (mpHmacContext)
-            HMAC_CTX_cleanup(mpHmacContext.get());
     }
 
     static const EVP_CIPHER* getCipher(Crypto::CryptoType type)
