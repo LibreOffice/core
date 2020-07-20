@@ -353,6 +353,33 @@ static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRe
     }
 }
 
+namespace {
+
+void InsertBreak(SwWrtShell& rWrtSh,
+                 sal_uInt16 nKind,
+                 ::boost::optional<sal_uInt16> oPageNumber,
+                 const OUString& rTemplateName)
+{
+    switch ( nKind )
+    {
+        case 1 :
+            rWrtSh.InsertLineBreak(); break;
+        case 2 :
+            rWrtSh.InsertColumnBreak(); break;
+        case 3 :
+        {
+            rWrtSh.StartAllAction();
+            if( !rTemplateName.isEmpty() )
+                rWrtSh.InsertPageBreak( &rTemplateName, oPageNumber );
+            else
+                rWrtSh.InsertPageBreak();
+            rWrtSh.EndAllAction();
+        }
+    }
+}
+
+}
+
 void SwTextShell::Execute(SfxRequest &rReq)
 {
     bool bUseDialog = true;
@@ -626,12 +653,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_INSERT_BREAK_DLG:
         {
-            sal_uInt16 nKind=0;
-            ::boost::optional<sal_uInt16> oPageNumber;
-            OUString aTemplateName;
             if ( pItem )
             {
-                nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+                ::boost::optional<sal_uInt16> oPageNumber;
+                OUString aTemplateName;
+                sal_uInt16 nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                 const SfxStringItem* pTemplate = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
                 const SfxUInt16Item* pNumber = rReq.GetArg<SfxUInt16Item>(FN_PARAM_2);
                 const SfxBoolItem* pIsNumberFilled = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
@@ -639,51 +665,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aTemplateName = pTemplate->GetValue();
                 if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )
                     oPageNumber = pNumber->GetValue();
+
+                InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName);
             }
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetFrameWeld(), rWrtSh));
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    nKind = pDlg->GetKind();
-                    aTemplateName = pDlg->GetTemplateName();
-                    oPageNumber = pDlg->GetPageNumber();
 
-                    bool bIsNumberFilled = false;
-                    sal_uInt16 nPageNumber = 0;
+                std::shared_ptr<AbstractSwBreakDlg> pAbstractDialog(pFact->CreateSwBreakDlg(GetView().GetFrameWeld(), rWrtSh));
+                std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
 
-                    if (oPageNumber)
-                    {
-                        bIsNumberFilled = true;
-                        nPageNumber = oPageNumber.get();
-                    }
+                weld::DialogController::runAsync(pDialogController,
+                    [pAbstractDialog, &rWrtSh] (sal_Int32 nResult) {
+                        if( RET_OK == nResult )
+                        {
+                            sal_uInt16 nKind = pAbstractDialog->GetKind();
+                            OUString aTemplateName = pAbstractDialog->GetTemplateName();
+                            ::boost::optional<sal_uInt16> oPageNumber = pAbstractDialog->GetPageNumber();
 
-                    rReq.AppendItem( SfxInt16Item ( FN_INSERT_BREAK_DLG, nKind ) );
-                    rReq.AppendItem( SfxStringItem( FN_PARAM_1, aTemplateName ) );
-                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_2, nPageNumber ) );
-                    rReq.AppendItem( SfxBoolItem  ( FN_PARAM_3, bIsNumberFilled ) );
-                    rReq.Done();
-                }
-                else
-                    rReq.Ignore();
-            }
-
-            switch ( nKind )
-            {
-                case 1 :
-                    rWrtSh.InsertLineBreak(); break;
-                case 2 :
-                    rWrtSh.InsertColumnBreak(); break;
-                case 3 :
-                {
-                    rWrtSh.StartAllAction();
-                    if( !aTemplateName.isEmpty() )
-                        rWrtSh.InsertPageBreak( &aTemplateName, oPageNumber );
-                    else
-                        rWrtSh.InsertPageBreak();
-                    rWrtSh.EndAllAction();
-                }
+                            InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName);
+                        }
+                    });
             }
 
             break;
