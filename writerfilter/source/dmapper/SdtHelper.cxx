@@ -90,6 +90,15 @@ void SdtHelper::createDropDownControl()
             m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.TextField.DropDown"),
             uno::UNO_QUERY);
 
+        const auto it = std::find_if(
+            m_aDropDownItems.begin(), m_aDropDownItems.end(),
+            [aDefaultText](const OUString& item) -> bool { return !item.compareTo(aDefaultText); });
+
+        if (m_aDropDownItems.end() == it)
+        {
+            m_aDropDownItems.push_back(aDefaultText);
+        }
+
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
         xPropertySet->setPropertyValue("SelectedItem", uno::makeAny(aDefaultText));
