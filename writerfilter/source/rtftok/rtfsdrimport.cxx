@@ -1126,6 +1126,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             m_rImport.Mapper().endShape();
         }
     }
+
+    // If the shape has an inner shape, the inner object's properties should not be influenced by
+    // the outer one.
+    rShape.getProperties().clear();
+
     m_xShape = xShape;
 }
 
