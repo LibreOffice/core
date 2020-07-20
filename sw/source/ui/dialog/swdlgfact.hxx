@@ -174,16 +174,17 @@ public:
 
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 {
-    std::unique_ptr<SwBreakDlg> m_xDlg;
+    std::shared_ptr<weld::DialogController> m_xDlg;
 public:
-    explicit AbstractSwBreakDlg_Impl(std::unique_ptr<SwBreakDlg> p)
+    explicit AbstractSwBreakDlg_Impl(std::shared_ptr<weld::DialogController> p)
         : m_xDlg(std::move(p))
     {
     }
-    virtual short Execute() override;
     virtual OUString                        GetTemplateName() override;
     virtual sal_uInt16                      GetKind() override;
     virtual ::std::optional<sal_uInt16>   GetPageNumber() override;
+
+    virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
 };
 
 class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
@@ -658,7 +659,7 @@ public:
     virtual VclPtr<AbstractSwAsciiFilterDlg>  CreateSwAsciiFilterDlg(weld::Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream) override;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg(weld::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq) override;
-    virtual VclPtr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
+    virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) override;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;

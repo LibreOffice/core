@@ -229,15 +229,16 @@ public:
 
 };
 
-class AbstractSwBreakDlg : public VclAbstractDialog
+class AbstractSwBreakDlg
 {
 protected:
-    virtual ~AbstractSwBreakDlg() override = default;
+    virtual ~AbstractSwBreakDlg() = default;
 public:
     virtual OUString                        GetTemplateName() = 0;
     virtual sal_uInt16                      GetKind() = 0;
     virtual ::std::optional<sal_uInt16>   GetPageNumber() = 0;
 
+    virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
 };
 
 class AbstractSplitTableDialog : public VclAbstractDialog // add for
@@ -379,7 +380,7 @@ public:
                                                                 SvStream* pStream) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg(weld::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq) = 0;
 
-    virtual VclPtr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
