@@ -141,6 +141,15 @@ public:
     void testTocLink();
     void testPdfImageResourceInlineXObjectRef();
     void testLinkWrongPage();
+<<<<<<< HEAD   (abd606 tdf#134783 sw: fix contextual spacing position of shape)
+=======
+    void testLargePage();
+    void testVersion15();
+    void testDefaultVersion();
+    void testMultiPagePDF();
+    void testFormFontName();
+
+>>>>>>> CHANGE (6294ec tdf#50879 PDF export: ensure only built-in fonts are used fo)
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -179,6 +188,14 @@ public:
     CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
     CPPUNIT_TEST(testLinkWrongPage);
+<<<<<<< HEAD   (abd606 tdf#134783 sw: fix contextual spacing position of shape)
+=======
+    CPPUNIT_TEST(testLargePage);
+    CPPUNIT_TEST(testVersion15);
+    CPPUNIT_TEST(testDefaultVersion);
+    CPPUNIT_TEST(testMultiPagePDF);
+    CPPUNIT_TEST(testFormFontName);
+>>>>>>> CHANGE (6294ec tdf#50879 PDF export: ensure only built-in fonts are used fo)
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1965,6 +1982,235 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     CPPUNIT_ASSERT_EQUAL(-90, nRotateDeg);
 }
 
+<<<<<<< HEAD   (abd606 tdf#134783 sw: fix contextual spacing position of shape)
+=======
+void PdfExportTest::testDefaultVersion()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
+}
+
+void PdfExportTest::testVersion15()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(15)) } }));
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
+}
+
+// Check round-trip of importing and exporting the PDF with PDFium filter,
+// which imports the PDF document as multiple PDFs as graphic object.
+// Each page in the document has one PDF graphic object which content is
+// the corresponding page in the PDF. When such a document is exported,
+// the PDF graphic gets embedded into the exported PDF document (as a
+// Form XObject).
+void PdfExportTest::testMultiPagePDF()
+{
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPages.size());
+
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pXObjects->GetItems().size()); // 3 PDFs as Form XObjects
+
+    std::vector<OString> rIDs;
+    for (auto const & rPair : pXObjects->GetItems()) {
+        rIDs.push_back(rPair.first);
+    }
+
+    // Let's check the embedded PDF pages - just make sure the size differs,
+    // which should indicate we don't have 3 times the same page.
+
+    {   // embedded PDF page 1
+        vcl::filter::PDFObjectElement* pXObject1 = pXObjects->LookupObject(rIDs[0]);
+        CPPUNIT_ASSERT(pXObject1);
+        CPPUNIT_ASSERT_EQUAL(OString("Im19"), rIDs[0]);
+
+        auto pSubtype1 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject1->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype1);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype1->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject1->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected.
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(230), rObjectStream.remainingSize());
+    }
+
+    {   // embedded PDF page 2
+        vcl::filter::PDFObjectElement* pXObject2 = pXObjects->LookupObject(rIDs[1]);
+        CPPUNIT_ASSERT(pXObject2);
+        CPPUNIT_ASSERT_EQUAL(OString("Im34"), rIDs[1]);
+
+        auto pSubtype2 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject2->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype2);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype2->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject2->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(309), rObjectStream.remainingSize());
+    }
+
+    {   // embedded PDF page 3
+        vcl::filter::PDFObjectElement* pXObject3 = pXObjects->LookupObject(rIDs[2]);
+        CPPUNIT_ASSERT(pXObject3);
+        CPPUNIT_ASSERT_EQUAL(OString("Im4"), rIDs[2]);
+
+        auto pSubtype3 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject3->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype3);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype3->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject3->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(193), rObjectStream.remainingSize());
+    }
+#endif
+}
+
+void PdfExportTest::testFormFontName()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "form-font-name.odt";
+    mxComponent = loadFromDesktop(aURL);
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
+    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+
+    // Examine the default appearance.
+    CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "DA"));
+    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "DA"));
+    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot.get(), "DA", nullptr, 0);
+    std::vector<FPDF_WCHAR> aDABuf(nDALength);
+    FPDFAnnot_GetStringValue(pAnnot.get(), "DA", aDABuf.data(), nDALength);
+    OUString aDA(reinterpret_cast<sal_Unicode*>(aDABuf.data()));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 0 0 rg /TiRo 12 Tf
+    // - Actual  : 0 0 0 rg /F2 12 Tf
+    // i.e. Liberation Serif was exposed as a form font as-is, without picking the closest built-in
+    // font.
+    CPPUNIT_ASSERT_EQUAL(OUString("0 0 0 rg /TiRo 12 Tf"), aDA);
+}
+
+>>>>>>> CHANGE (6294ec tdf#50879 PDF export: ensure only built-in fonts are used fo)
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
 
 }
