@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BE39ADD7215D5470000B0244 /* test.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADD6215D5470000B0244 /* test.odt */; };
-		BE39ADEF215D5AA4000B0244 /* icudt63l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE0215D5AA3000B0244 /* icudt63l.dat */; };
+		BE39ADEF215D5AA4000B0244 /* icudt65l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE0215D5AA3000B0244 /* icudt65l.dat */; };
 		BE39ADF0215D5AA4000B0244 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE1215D5AA3000B0244 /* fundamentalrc */; };
 		BE39ADF1215D5AA4000B0244 /* services in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE2215D5AA3000B0244 /* services */; };
 		BE39ADF2215D5AA4000B0244 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE3215D5AA3000B0244 /* share */; };
@@ -16,11 +16,9 @@
 		BE39ADF4215D5AA4000B0244 /* program in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE5215D5AA3000B0244 /* program */; };
 		BE39ADF5215D5AA4000B0244 /* config in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE6215D5AA3000B0244 /* config */; };
 		BE39ADF6215D5AA4000B0244 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE7215D5AA3000B0244 /* services.rdb */; };
-		BE39ADF7215D5AA4000B0244 /* registry in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE8215D5AA3000B0244 /* registry */; };
 		BE39ADF8215D5AA4000B0244 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADE9215D5AA3000B0244 /* offapi.rdb */; };
 		BE39ADF9215D5AA4000B0244 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADEA215D5AA3000B0244 /* udkapi.rdb */; };
 		BE39ADFA215D5AA4000B0244 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADEB215D5AA3000B0244 /* rc */; };
-		BE39ADFB215D5AA4000B0244 /* filter in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADEC215D5AA3000B0244 /* filter */; };
 		BE39ADFC215D5AA4000B0244 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADED215D5AA4000B0244 /* unorc */; };
 		BE39ADFD215D5AA4000B0244 /* welcome.odt in Resources */ = {isa = PBXBuildFile; fileRef = BE39ADEE215D5AA4000B0244 /* welcome.odt */; };
 		BE535616215D189A0068B3B7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BE535615215D189A0068B3B7 /* AppDelegate.m */; };
@@ -36,7 +34,7 @@
 
 /* Begin PBXFileReference section */
 		BE39ADD6215D5470000B0244 /* test.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.odt; path = ../../../../odk/examples/cpp/DocumentLoader/test.odt; sourceTree = "<group>"; };
-		BE39ADE0215D5AA3000B0244 /* icudt63l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt63l.dat; path = ../../../../workdir/CustomTarget/ios/resources/icudt63l.dat; sourceTree = "<group>"; };
+		BE39ADE0215D5AA3000B0244 /* icudt65l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt65l.dat; path = ../../../../workdir/CustomTarget/ios/resources/icudt65l.dat; sourceTree = "<group>"; };
 		BE39ADE1215D5AA3000B0244 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../../../../workdir/CustomTarget/ios/resources/fundamentalrc; sourceTree = "<group>"; };
 		BE39ADE2215D5AA3000B0244 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../../../workdir/CustomTarget/ios/resources/services; sourceTree = "<group>"; };
 		BE39ADE3215D5AA3000B0244 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../../../workdir/CustomTarget/ios/resources/share; sourceTree = "<group>"; };
@@ -44,11 +42,9 @@
 		BE39ADE5215D5AA3000B0244 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../../../../workdir/CustomTarget/ios/resources/program; sourceTree = "<group>"; };
 		BE39ADE6215D5AA3000B0244 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; name = config; path = ../../../../workdir/CustomTarget/ios/resources/config; sourceTree = "<group>"; };
 		BE39ADE7215D5AA3000B0244 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = ../../../../workdir/CustomTarget/ios/resources/services.rdb; sourceTree = "<group>"; };
-		BE39ADE8215D5AA3000B0244 /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = ../../../../workdir/CustomTarget/ios/resources/registry; sourceTree = "<group>"; };
 		BE39ADE9215D5AA3000B0244 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../../../../workdir/CustomTarget/ios/resources/offapi.rdb; sourceTree = "<group>"; };
 		BE39ADEA215D5AA3000B0244 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../../../../workdir/CustomTarget/ios/resources/udkapi.rdb; sourceTree = "<group>"; };
 		BE39ADEB215D5AA3000B0244 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = ../../../../workdir/CustomTarget/ios/resources/rc; sourceTree = "<group>"; };
-		BE39ADEC215D5AA3000B0244 /* filter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = filter; path = ../../../../workdir/CustomTarget/ios/resources/filter; sourceTree = "<group>"; };
 		BE39ADED215D5AA4000B0244 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../../../../workdir/CustomTarget/ios/resources/unorc; sourceTree = "<group>"; };
 		BE39ADEE215D5AA4000B0244 /* welcome.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = welcome.odt; path = ../../../../workdir/CustomTarget/ios/resources/welcome.odt; sourceTree = "<group>"; };
 		BE535611215D189A0068B3B7 /* UnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,14 +210,12 @@
 			isa = PBXGroup;
 			children = (
 				BE39ADE6215D5AA3000B0244 /* config */,
-				BE39ADEC215D5AA3000B0244 /* filter */,
 				BE39ADE1215D5AA3000B0244 /* fundamentalrc */,
-				BE39ADE0215D5AA3000B0244 /* icudt63l.dat */,
+				BE39ADE0215D5AA3000B0244 /* icudt65l.dat */,
 				BE39ADE9215D5AA3000B0244 /* offapi.rdb */,
 				BE39ADE4215D5AA3000B0244 /* oovbaapi.rdb */,
 				BE39ADE5215D5AA3000B0244 /* program */,
 				BE39ADEB215D5AA3000B0244 /* rc */,
-				BE39ADE8215D5AA3000B0244 /* registry */,
 				BE39ADE2215D5AA3000B0244 /* services */,
 				BE39ADE7215D5AA3000B0244 /* services.rdb */,
 				BE39ADE3215D5AA3000B0244 /* share */,
@@ -544,13 +538,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE39ADEF215D5AA4000B0244 /* icudt63l.dat in Resources */,
-				BE39ADF7215D5AA4000B0244 /* registry in Resources */,
+				BE39ADEF215D5AA4000B0244 /* icudt65l.dat in Resources */,
 				BE39ADF6215D5AA4000B0244 /* services.rdb in Resources */,
 				BE39ADF3215D5AA4000B0244 /* oovbaapi.rdb in Resources */,
 				BE39ADF8215D5AA4000B0244 /* offapi.rdb in Resources */,
 				BE535621215D189E0068B3B7 /* LaunchScreen.storyboard in Resources */,
-				BE39ADFB215D5AA4000B0244 /* filter in Resources */,
 				BE39ADF4215D5AA4000B0244 /* program in Resources */,
 				BE39ADF5215D5AA4000B0244 /* config in Resources */,
 				BE39ADD7215D5470000B0244 /* test.odt in Resources */,
