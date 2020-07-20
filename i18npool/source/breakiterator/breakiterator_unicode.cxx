@@ -499,7 +499,10 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
     icu::BreakIterator* pLineBI = line.mpValue->mpBreakIterator.get();
     bool GlueSpace=true;
     while (GlueSpace) {
-        if (pLineBI->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
+        // don't break with Slash U+002F SOLIDUS at end of line; see "else" below!
+        if (pLineBI->preceding(nStartPos + 1) == nStartPos
+                && (nStartPos == 0 || Text[nStartPos - 1] != '/'))
+        { //Line boundary break
             lbr.breakIndex = nStartPos;
             lbr.breakType = BreakType::WORDBOUNDARY;
         } else if (hOptions.rHyphenator.is()) { //Hyphenation break
