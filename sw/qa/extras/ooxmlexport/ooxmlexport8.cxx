@@ -958,9 +958,10 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
 
         uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aItems.getLength());
         CPPUNIT_ASSERT_EQUAL(OUString("Yes"), aItems[0]);
         CPPUNIT_ASSERT_EQUAL(OUString("No"), aItems[1]);
+        CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), aItems[2]);
     }
 }
 
