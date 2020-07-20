@@ -383,7 +383,7 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
     if (pDlg)
         return pDlg->GetPageNumber();
 
-    return 0;
+    return ::boost::optional<sal_uInt16>(0);
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
