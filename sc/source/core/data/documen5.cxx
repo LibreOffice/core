@@ -336,7 +336,7 @@ void ScDocument::UpdateChart( const OUString& rChartName )
     if (!mpDrawLayer || bInDtorClear)
         return;
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
-    if( xChartDoc.is() )
+    if (xChartDoc && (!mpShell || mpShell->IsEnableSetModified()))
     {
         try
         {
