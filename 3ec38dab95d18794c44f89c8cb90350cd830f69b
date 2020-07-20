@@ -34,6 +34,24 @@
       "revId": "3ec38dab95d18794c44f89c8cb90350cd830f69b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fffc554_5774493c",
+        "filename": "include/sax/fshelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-20T12:40:27Z",
+      "side": 1,
+      "message": "possibly having two methods\n\n    template\u003cclass TString\u003e\n    std::optional\u003cTString\u003e UseIf(const TString\u0026 s, bool bUse)\n    .......\n    template\u003cclass TString\u003e\n    std::optional\u003cTString\u003e UseIf(TString\u0026\u0026 s, bool bUse)",
+      "parentUuid": "7daa0e60_d3fc3a57",
+      "revId": "3ec38dab95d18794c44f89c8cb90350cd830f69b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
