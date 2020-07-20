@@ -28,6 +28,7 @@ namespace
         void testFixedVarAssign();
         void testFixedVarAssignAlt(); // result is uno-ised and tested
         void testUnoAccess(); // fdo#60117 specific test
+        void testTdf134576();
 
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(Nested_Struct);
@@ -42,6 +43,7 @@ namespace
         CPPUNIT_TEST(testFixedVarAssign);
         CPPUNIT_TEST(testFixedVarAssignAlt);
         CPPUNIT_TEST(testUnoAccess);
+        CPPUNIT_TEST(testTdf134576);
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -294,6 +296,24 @@ void Nested_Struct::testUnoAccess()
 
     int result = aWinDesc.Bounds.X;
     CPPUNIT_ASSERT_EQUAL(200, result );
+}
+
+void Nested_Struct::testTdf134576()
+{
+    MacroSnippet myMacro("Function doUnitTest()\n"
+                        "  On Error Resume Next\n"
+                        "  For Each a In b\n"
+                        "    c.d\n"
+                        "  Next\n"
+                        "  doUnitTest = 1\n"
+                        "End Function\n");
+
+    myMacro.Compile();
+    CPPUNIT_ASSERT(!myMacro.HasError());
+
+    // Without the fix in place, it would have crashed here
+    SbxVariableRef pNew = myMacro.Run();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
 }
 
   // Put the test suite in the registry
