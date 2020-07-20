@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "647bf25b_026ca76a",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T08:51:45Z",
+      "side": 1,
+      "message": "Will soon add this class in a different separate file of its own - once the structure of the class is clear. I\u0027m doubtful about the structure of the whole patch.. Can you confirm?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 29
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4f6a5de_02c838c1",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T08:51:45Z",
+      "side": 1,
+      "message": "Is this okay to add them as friend classes? I did it so that both the classes can use aObjectList.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c962b31_60c637af",
+        "filename": "include/svx/galtheme.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-20T08:51:45Z",
+      "side": 1,
+      "message": "Will remove this comment once GalleryObjectCollection structure is clear....",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 66
+      },
+      "revId": "9d7254041b838dd10388b0e95ea361d94f610dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
