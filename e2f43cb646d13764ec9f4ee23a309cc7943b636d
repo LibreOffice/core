@@ -86,6 +86,24 @@
       "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea48d477_6994f1ae",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-21T13:54:59Z",
+      "side": 1,
+      "message": "Not exactly, If isParent is true then children may or may not be empty. Its empty when all the properties are redefined in a higher priority style, Its not empty otherwise.\nHence -\n* If isParent is true children may or may not be empty\n* If isParent is false children is always empty\n\nIts more like if \"isParent\" is true aValue will be empty and otherwise",
+      "parentUuid": "011fa7af_d9c21ccb",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
