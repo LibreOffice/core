@@ -1489,6 +1489,9 @@ public:
     virtual void set_message_type(EntryMessageType eType) = 0;
     virtual void set_placeholder_text(const OUString& rText) = 0;
 
+    virtual void set_overwrite_mode(bool bOn) = 0;
+    virtual bool get_overwrite_mode() const = 0;
+
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 

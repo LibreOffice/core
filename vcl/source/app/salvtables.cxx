@@ -3097,6 +3097,16 @@ bool SalInstanceEntry::get_editable() const
     return !m_xEntry->IsReadOnly();
 }
 
+void SalInstanceEntry::set_overwrite_mode(bool bOn)
+{
+    m_xEntry->SetInsertMode(!bOn);
+}
+
+bool SalInstanceEntry::get_overwrite_mode() const
+{
+    return !m_xEntry->IsInsertMode();
+}
+
 void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 {
     if (eType == weld::EntryMessageType::Error)
