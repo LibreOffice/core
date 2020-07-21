@@ -94,7 +94,7 @@ struct slideshow::internal::ListenerOperations<ViewEventHandlerWeakPtrWrapper>
             std::shared_ptr<ViewEventHandler> pListener( rCurr.ptr.lock() );
 
             if( pListener.get() &&
-                FunctionApply<typename ::std::result_of<FuncT (std::shared_ptr<ViewEventHandler> const&)>::type,
+                FunctionApply<typename ::std::invoke_result<FuncT, std::shared_ptr<ViewEventHandler> const&>::type,
                                std::shared_ptr<ViewEventHandler> >::apply(func,pListener) )
             {
                 bRet = true;
