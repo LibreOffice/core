@@ -35,21 +35,6 @@
 
 using namespace ::com::sun::star;
 
-uno::Sequence< OUString > OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
-{
-    return { "com.sun.star.embed.OOoEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoEmbeddedObjectFactory" };
-}
-
-OUString OOoEmbeddedObjectFactory::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
-}
-
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OOoEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );
-}
 
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
@@ -367,7 +352,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
 OUString SAL_CALL OOoEmbeddedObjectFactory::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
 }
 
 sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -377,24 +362,18 @@ sal_Bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.embed.OOoEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoEmbeddedObjectFactory" };
 }
 
-uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return { "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory" };
+    static rtl::Reference<OOoEmbeddedObjectFactory> g_Instance(new OOoEmbeddedObjectFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-OUString OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
-}
-
-uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( comphelper::getComponentContext(xServiceManager) ) );
-}
 
 uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
             const uno::Sequence< sal_Int8 >& aClassID,
@@ -419,7 +398,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
 
 OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
 }
 
 sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -429,7 +408,15 @@ sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUStri
 
 uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory", "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory" };
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<OOoSpecialEmbeddedObjectFactory> g_Instance(new OOoSpecialEmbeddedObjectFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
