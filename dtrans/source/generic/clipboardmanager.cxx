@@ -22,8 +22,10 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::datatransfer;
@@ -48,7 +50,7 @@ ClipboardManager::~ClipboardManager()
 
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
 {
-    return CLIPBOARDMANAGER_IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.datatransfer.ClipboardManager";
 }
 
 sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
@@ -58,7 +60,7 @@ sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
 {
-    return ClipboardManager_getSupportedServiceNames();
+    return { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
 }
 
 Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
@@ -187,16 +189,14 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
         removeClipboard(xClipboard->getName());
 }
 
-Reference< XInterface > ClipboardManager_createInstance(
-    const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
-{
-    return Reference < XInterface >(static_cast<OWeakObject *>(new ClipboardManager()));
-}
 
-Sequence< OUString > ClipboardManager_getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_ClipboardManager_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence < OUString > SupportedServicesNames { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
-    return SupportedServicesNames;
+    static rtl::Reference<ClipboardManager> g_Instance(new ClipboardManager());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

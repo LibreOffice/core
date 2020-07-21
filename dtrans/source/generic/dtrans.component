@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dtrans" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.datatransfer.ClipboardManager">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.datatransfer.ClipboardManager"
+	constructor="dtrans_ClipboardManager_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.ClipboardManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.datatransfer.clipboard.GenericClipboard">
+  <implementation name="com.sun.star.comp.datatransfer.clipboard.GenericClipboard"
+	constructor="dtrans_GenericClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.GenericClipboard"/>
   </implementation>
 </component>
