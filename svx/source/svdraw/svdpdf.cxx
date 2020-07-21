@@ -218,7 +218,7 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         // Load the page text to extract it when we get text elements.
         FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
 
-        const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
+        const int nPageObjectCount = FPDFPage_CountObjects(pPdfPage);
         if (pProgrInfo)
             pProgrInfo->SetActionCount(nPageObjectCount);
 
@@ -767,9 +767,9 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
     const Matrix aOldMatrix = mCurMatrix;
 
-    double a, b, c, d, e, f;
-    FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    mCurMatrix = Matrix(a, b, c, d, e, f);
+    FS_MATRIX matrix;
+    FPDFFormObj_GetMatrix(pPageObject, &matrix);
+    mCurMatrix = Matrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
@@ -797,8 +797,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     if (left == right || top == bottom)
         return;
 
-    double a, b, c, d, e, f;
-    FPDFText_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    FS_MATRIX matrix;
+    FPDFTextObj_GetMatrix(pPageObject, &matrix);
     Matrix aTextMatrix(mCurMatrix);
 
     aTextMatrix.Transform(left, right, top, bottom);
@@ -816,8 +816,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     OUString sText(pText.get(), nActualChars);
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
-    double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
-    double dFontSizeV = fabs(sqrt2(b, d) * dFontSize);
+    double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
+    double dFontSizeV = fabs(sqrt2(matrix.b, matrix.d) * dFontSize);
     dFontSizeH = lcl_PointToPixel(dFontSizeH);
     dFontSizeV = lcl_PointToPixel(dFontSizeV);
     dFontSizeH = lcl_ToLogic(dFontSizeH);
@@ -850,7 +850,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     Color aTextColor(COL_TRANSPARENT);
     bool bFill = false;
     bool bUse = true;
-    switch (FPDFText_GetTextRenderMode(pPageObject))
+    switch (FPDFTextObj_GetTextRenderMode(pPageObject))
     {
         case FPDF_TEXTRENDERMODE_FILL:
         case FPDF_TEXTRENDERMODE_FILL_CLIP:
@@ -860,6 +860,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
             break;
         case FPDF_TEXTRENDERMODE_STROKE:
         case FPDF_TEXTRENDERMODE_STROKE_CLIP:
+        case FPDF_TEXTRENDERMODE_UNKNOWN:
             break;
         case FPDF_TEXTRENDERMODE_INVISIBLE:
         case FPDF_TEXTRENDERMODE_CLIP:
@@ -939,7 +940,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     if (nAngle)
     {
         nAngle *= 10;
-        double a = nAngle * nPi180;
+        double a = nAngle * F_PI18000;
         double nSin = sin(a);
         double nCos = cos(a);
         pText->NbcRotate(aPos, nAngle, nSin, nCos);
@@ -1032,9 +1033,9 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
 
 void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    double a, b, c, d, e, f;
-    FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    Matrix aPathMatrix(a, b, c, d, e, f);
+    FS_MATRIX matrix;
+    FPDFPath_GetMatrix(pPageObject, &matrix);
+    Matrix aPathMatrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
     aPathMatrix.Concatinate(mCurMatrix);
 
     basegfx::B2DPolyPolygon aPolyPoly;
@@ -1137,12 +1138,12 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     unsigned int nG;
     unsigned int nB;
     unsigned int nA;
-    FPDFPath_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
+    FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA);
     mpVD->SetFillColor(Color(nR, nG, nB));
 
     if (bStroke)
     {
-        FPDFPath_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
         mpVD->SetLineColor(Color(nR, nG, nB));
     }
     else
