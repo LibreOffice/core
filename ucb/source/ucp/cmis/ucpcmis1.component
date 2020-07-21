@@ -8,8 +8,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpcmis1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.CmisContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.CmisContentProvider"
+    constructor="ucb_cmis_ContentProvider_get_implementation">
     <service name="com.sun.star.ucb.CmisContentProvider"/>
   </implementation>
 </component>
