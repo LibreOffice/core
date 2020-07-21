@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22fcbf3b_2499b181",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T07:33:20Z",
+      "side": 1,
+      "message": "At this point, this check is redundant: all cases where (pCurrent-\u003eisParent) is true were handled in the first branch above, so any other cases are (!pCurrent-\u003eisParent).\n\nI\u0027d prefer to not duplicate the code: you do the same thing in both branches (I mean insertion); and only do set_text in the second branch. So I\u0027f change this like thiss:\n\n    if (pCurrent-\u003eisParent || GetPropertyValues(rName, pCurrent-\u003eaValue, sPairValue))\n    {\n        rListBoxStyles.insert(...);\n        if (!pCurrent-\u003eisParent)\n            rListBoxStyles.set_text(...);\n    }",
+      "range": {
+        "startLine": 107,
+        "startChar": 14,
+        "endLine": 107,
+        "endChar": 32
+      },
+      "revId": "c14cc28b5cc47c080237a9f08d5854af92ffb451",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
