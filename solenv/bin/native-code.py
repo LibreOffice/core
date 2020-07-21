@@ -24,7 +24,6 @@ core_factory_list = [
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
-    ("libsrtrs1.a", "srtrs1_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
@@ -332,6 +331,8 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# ucb/source/sorter/srtrs1.component
+    "ucb_SortedDynamicResultSetFactory_get_implementation",
 # ucb/source/tdoc/ucptdoc1.component
     "ucb_tdoc_ContentProvider_get_implementation",
     "ucb_tdoc_DocumentContentFactory_get_implementation",

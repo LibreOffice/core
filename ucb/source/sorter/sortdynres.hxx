@@ -35,8 +35,6 @@ namespace comphelper {
     class OInterfaceContainerHelper2;
 }
 
-#define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
-#define DYNAMIC_RESULTSET_FACTORY_NAME  "com.sun.star.ucb.SortedDynamicResultSetFactory"
 
 class SortedDynamicResultSetListener;
 
@@ -155,18 +153,11 @@ public:
 
 
     // XServiceInfo
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory > createServiceFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
-
-    // XSortedDynamicResultSetFactory
-
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    static OUString getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
+    // XSortedDynamicResultSetFactory
     virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createSortedDynamicResultSet(
                 const css::uno::Reference< css::ucb::XDynamicResultSet > & Source,
