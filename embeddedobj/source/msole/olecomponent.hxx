@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 namespace cppu {
@@ -65,7 +66,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
     css::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     bool m_bOleInitialized;
 
@@ -81,7 +82,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
 
 
 public:
-    OleComponent( const css::uno::Reference< css::lang::XMultiServiceFactory >& m_xFactory,
+    OleComponent( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                   OleEmbeddedObject* pOleObj );
 
     virtual ~OleComponent() override;

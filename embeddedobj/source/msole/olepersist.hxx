@@ -27,18 +27,18 @@
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 }
 
-OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
 /// @throws css::io::IOException
 /// @throws css::uno::RuntimeException
 OUString GetNewFilledTempFile_Impl(
     css::uno::Reference<css::io::XInputStream > const & xInStream,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory);
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
-bool KillFile_Impl( const OUString& aURL, const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+bool KillFile_Impl( const OUString& aURL, const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
 #endif
 
