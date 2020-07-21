@@ -31,35 +31,13 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <rtl/ref.hxx>
 
 #include <xcreator.hxx>
 #include <dummyobject.hxx>
 
 
 using namespace ::com::sun::star;
-
-
-uno::Sequence< OUString > UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.EmbeddedObjectCreator";
-    aRet[1] = "com.sun.star.comp.embed.EmbeddedObjectCreator";
-    return aRet;
-}
-
-
-OUString UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.EmbeddedObjectCreator";
-}
-
-
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new UNOEmbeddedObjectCreator( comphelper::getComponentContext(xServiceManager) ) );
-}
-
 
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
@@ -416,7 +394,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
 OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.EmbeddedObjectCreator";
 }
 
 sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
@@ -426,7 +404,16 @@ sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.embed.EmbeddedObjectCreator", "com.sun.star.comp.embed.EmbeddedObjectCreator" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embeddedobj_UNOEmbeddedObjectCreator_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<UNOEmbeddedObjectCreator> g_Instance(new UNOEmbeddedObjectCreator(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
