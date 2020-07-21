@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "118aa16a_0faad4b3",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T20:40:10Z",
+      "side": 1,
+      "message": "This must be the latest nitpick here - you surely know what I mean: this is reference now after you reverted this from pointers - so please also revert the rename: pChildNode -\u003e rChildNode.",
+      "range": {
+        "startLine": 128,
+        "startChar": 25,
+        "endLine": 128,
+        "endChar": 26
+      },
+      "revId": "4e30e3cee752cfa1e0aa2edecc1be944993fde54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
