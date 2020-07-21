@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpexpand1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ucb.ExpandContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ucb.ExpandContentProvider"
+    constructor="ucb_expand_ExpandContentProviderImpl_get_implementation">
     <service name="com.sun.star.ucb.ExpandContentProvider"/>
   </implementation>
 </component>

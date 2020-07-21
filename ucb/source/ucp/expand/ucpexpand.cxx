@@ -102,41 +102,22 @@ void ExpandContentProviderImpl::disposing()
 }
 
 
-uno::Reference< uno::XInterface > create(
-    uno::Reference< uno::XComponentContext > const & xComponentContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new ExpandContentProviderImpl( xComponentContext ) );
-}
-
-
-OUString implName()
-{
-    return "com.sun.star.comp.ucb.ExpandContentProvider";
-}
-
-
-uno::Sequence< OUString > supportedServices()
-{
-    return uno::Sequence< OUString > {
-        OUString("com.sun.star.ucb.ExpandContentProvider"),
-        OUString("com.sun.star.ucb.ContentProvider")
-    };
-}
-
 // XServiceInfo
 
 OUString ExpandContentProviderImpl::getImplementationName()
 {
     check();
-    return implName();
+    return "com.sun.star.comp.ucb.ExpandContentProvider";
 }
 
 
 uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
 {
     check();
-    return supportedServices();
+    return {
+        "com.sun.star.ucb.ExpandContentProvider",
+        "com.sun.star.ucb.ContentProvider"
+    };
 }
 
 sal_Bool ExpandContentProviderImpl::supportsService(OUString const & serviceName )
@@ -204,32 +185,14 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
 }
 
-const ::cppu::ImplementationEntry s_entries [] =
-{
-    {
-        create,
-        implName,
-        supportedServices,
-        ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
 
 }
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_expand_ExpandContentProviderImpl_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-
-SAL_DLLPUBLIC_EXPORT void * ucpexpand1_component_getFactory(
-    const char * pImplName,
-    void * pServiceManager,
-    void * pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, s_entries );
-}
-
+    return cppu::acquire(new ExpandContentProviderImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
