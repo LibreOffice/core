@@ -422,10 +422,7 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        // FIXME: What if SfxViewShell::Current() returned null?
-        // Should we then do this for all views of all open documents
-        // or not?
-        if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
+        if (pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
             SfxLokHelper::notifyDocumentSizeChanged(pViewShell, "", pDoc, bInvalidateAll);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
