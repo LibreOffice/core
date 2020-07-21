@@ -70,6 +70,30 @@
       "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07338e8c_0734f232",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-21T13:52:26Z",
+      "side": 1,
+      "message": "Or wait, I just notice that this commit doesn\u0027t actually contain any code to explicitly read/write this new prop.  So I assume there is generic code somewhere that reads/writes this prop if it is available with some sub-path, and that code requires the prop to be of type int?  (If yes, it would have been helpful it the commit message had explained that.)",
+      "parentUuid": "d3836707_3459b381",
+      "range": {
+        "startLine": 4644,
+        "startChar": 14,
+        "endLine": 4655,
+        "endChar": 28
+      },
+      "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
