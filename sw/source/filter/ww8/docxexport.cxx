@@ -33,6 +33,7 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -424,7 +425,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
 
     try
     {
-        ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     }
     catch (uno::Exception const&)
     {
@@ -1594,24 +1595,11 @@ void DocxExport::WriteEmbeddings()
                                     contentType);
             try
             {
-                sal_Int32 nBufferSize = 512;
-                uno::Sequence< sal_Int8 > aDataBuffer(nBufferSize);
-                sal_Int32 nRead;
-                do
-                {
-                    nRead = embeddingsStream->readBytes( aDataBuffer, nBufferSize );
-                    if( nRead )
-                    {
-                        if( nRead < nBufferSize )
-                        {
-                            nBufferSize = nRead;
-                            aDataBuffer.realloc(nRead);
-                        }
-                        xOutStream->writeBytes( aDataBuffer );
-                    }
-                }
-                while( nRead );
-                xOutStream->flush();
+                // tdf#131288: the stream must be seekable for direct access
+                uno::Reference< io::XSeekable > xSeekable(embeddingsStream, uno::UNO_QUERY);
+                if (xSeekable)
+                    xSeekable->seek(0); // tdf#131288: a previous save could position it elsewhere
+                comphelper::OStorageHelper::CopyInputToOutput(embeddingsStream, xOutStream);
             }
             catch(const uno::Exception&)
             {
