@@ -372,8 +372,7 @@ def filter_ignore(line, module):
             'LibreOfficeKit/LibreOfficeKitTypes.h', # Needs special directives
             'jerror.h',     # c++ unfriendly
             'jpeglib.h',    # c++ unfriendly
-            'boost/spirit/include/classic_core.hpp', # depends on BOOST_SPIRIT_DEBUG
-            'svtools/editimplementation.hxx' # no direct include
+            'boost/spirit/include/classic_core.hpp' # depends on BOOST_SPIRIT_DEBUG
         ]
 
     if module == 'accessibility':
