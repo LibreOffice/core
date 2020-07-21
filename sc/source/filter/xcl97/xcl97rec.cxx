@@ -365,8 +365,8 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     SaveDrawingMLObjects( *this, rStrm );
-    SaveFormControlObjects( *this, rStrm );
     SaveVmlObjects( *this, rStrm, mnVmlCount );
+    SaveFormControlObjects( *this, rStrm );
 }
 
 void XclExpObjList::ResetCounters()
