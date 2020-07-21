@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0764ba16_d5255d95",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-21T09:33:14Z",
+      "side": 1,
+      "message": "1) here pResult is created, and currently points to no row (which is normal)",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f70da52_7296c65d",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-21T09:33:14Z",
+      "side": 1,
+      "message": "2) after this line pResult points to the new row, but if this block is not entered pResult still points to no row",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "365ab949_77d4268e",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-21T09:33:14Z",
+      "side": 1,
+      "message": "3) if we get here without going through 2 then pResult is not pointing to any real row so the sub-call to FillBox_Impl will crash in some manner",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
