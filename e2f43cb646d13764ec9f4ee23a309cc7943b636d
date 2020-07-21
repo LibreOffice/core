@@ -104,6 +104,24 @@
       "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfc68db5_592e3d3a",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T14:02:22Z",
+      "side": 1,
+      "message": "Anyway, what\u0027s wrong with moving this into the \"if\" above? Why keep it visually separate?",
+      "parentUuid": "ea48d477_6994f1ae",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
