@@ -97,6 +97,7 @@ public:
     void testTdf128345GradientLinear();
     void testTdf128345GradientRadial();
     void testTdf128345GradientAxial();
+    void testTdf134969TransparencyOnColorGradient();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -143,6 +144,7 @@ public:
     CPPUNIT_TEST(testTdf128345GradientLinear);
     CPPUNIT_TEST(testTdf128345GradientRadial);
     CPPUNIT_TEST(testTdf128345GradientAxial);
+    CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1210,6 +1212,22 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf134969_TransparencyOnColorGradient.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Make sure the shape has a transparency in gradient stops.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);

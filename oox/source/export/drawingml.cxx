@@ -540,10 +540,27 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     else
     {
         mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
-        if( GetProperty(rXPropSet, "FillTransparenceGradient") )
-            aTransparenceGradient = *o3tl::doAccess<awt::Gradient>(mAny);
+        OUString sFillTransparenceGradientName;
+        if (GetProperty(rXPropSet, "FillTransparenceGradientName")
+            && (mAny >>= sFillTransparenceGradientName)
+            && !sFillTransparenceGradientName.isEmpty())
+        {
+            if (GetProperty(rXPropSet, "FillTransparenceGradient"))
+                aTransparenceGradient = *o3tl::doAccess<awt::Gradient>(mAny);
+        }
+        else if (GetProperty(rXPropSet, "FillTransparence"))
+        {
+            // currently only StartColor and EndColor are evaluated in WriteGradientFill()
+            sal_Int32 nTransparency = 0;
+            mAny >>= nTransparency;
+            // convert percent to gray color
+            nTransparency = nTransparency * 255/100;
+            const sal_Int32 aGrayColor = static_cast<sal_Int32>( nTransparency | nTransparency << 8 | nTransparency << 16 );
+            aTransparenceGradient.StartColor = aGrayColor;
+            aTransparenceGradient.EndColor = aGrayColor;
+        }
         WriteGradientFill(aGradient, aTransparenceGradient);
-        mpFS->endElementNS( XML_a, XML_gradFill );
+        mpFS->endElementNS(XML_a, XML_gradFill);
     }
 }
 
