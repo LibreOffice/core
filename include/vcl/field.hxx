@@ -96,8 +96,6 @@ private:
 protected:
                             PatternFormatter(Edit* pEdit);
 
-    SAL_DLLPRIVATE void ImplSetMask(const OString& rEditMask,
-        const OUString& rLiteralMask);
     SAL_DLLPRIVATE bool     ImplIsSameMask() const { return mbSameMask; }
     SAL_DLLPRIVATE bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 

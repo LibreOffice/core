@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/edit.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -1728,7 +1728,6 @@ DbPatternField::DbPatternField( DbGridColumn& _rColumn, const Reference<XCompone
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-
 void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
     DBG_ASSERT( m_pWindow, "DbPatternField::implAdjustGenericFieldSetting: not to be called without window!" );
@@ -1746,18 +1745,21 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 
     OString aAsciiEditMask(OUStringToOString(aEditMask, RTL_TEXTENCODING_ASCII_US));
 
-    static_cast< PatternField* >( m_pWindow.get() )->SetMask( aAsciiEditMask, aLitMask );
-    static_cast< PatternField* >( m_pPainter.get() )->SetMask( aAsciiEditMask, aLitMask );
-    static_cast< PatternField* >( m_pWindow.get() )->SetStrictFormat( bStrict );
-    static_cast< PatternField* >( m_pPainter.get() )->SetStrictFormat( bStrict );
+    weld::PatternFormatter& rEditFormatter = static_cast<PatternControl*>(m_pWindow.get())->get_formatter();
+    rEditFormatter.SetMask(aAsciiEditMask, aLitMask);
+    rEditFormatter.SetStrictFormat(bStrict);
+
+    weld::PatternFormatter& rPaintFormatter = static_cast<PatternControl*>(m_pPainter.get())->get_formatter();
+    rPaintFormatter.SetMask(aAsciiEditMask, aLitMask);
+    rPaintFormatter.SetStrictFormat(bStrict);
 }
 
 void DbPatternField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignmentFromModel(-1);
 
-    m_pWindow = VclPtr<PatternField>::Create( &rParent, 0 );
-    m_pPainter= VclPtr<PatternField>::Create( &rParent, 0 );
+    m_pWindow = VclPtr<PatternControl>::Create(&rParent);
+    m_pPainter= VclPtr<PatternControl>::Create(&rParent);
 
     Reference< XPropertySet >   xModel( m_rColumn.getModel() );
     implAdjustGenericFieldSetting( xModel );
@@ -1767,16 +1769,16 @@ void DbPatternField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& x
 
 CellControllerRef DbPatternField::CreateController() const
 {
-    return new SpinCellController( static_cast< PatternField* >( m_pWindow.get() ) );
+    return new EditCellController(static_cast<PatternControl*>(m_pWindow.get()));
 }
 
 OUString DbPatternField::impl_formatText( const OUString& _rText )
 {
-    m_pPainter->SetText( _rText );
-    static_cast< PatternField* >( m_pPainter.get() )->ReformatAll();
-    return m_pPainter->GetText();
+    weld::PatternFormatter& rPaintFormatter = static_cast<PatternControl*>(m_pPainter.get())->get_formatter();
+    rPaintFormatter.get_widget().set_text(_rText);
+    rPaintFormatter.ReformatAll();
+    return rPaintFormatter.get_widget().get_text();
 }
-
 
 OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
@@ -1800,11 +1802,11 @@ OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rx
     return impl_formatText( sText );
 }
 
-
 void DbPatternField::UpdateFromField( const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
-    static_cast< Edit* >( m_pWindow.get() )->SetText( GetFormatText( _rxField, _rxFormatter ) );
-    static_cast< Edit* >( m_pWindow.get() )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    weld::Entry& rEntry = static_cast<PatternControl*>(m_pWindow.get())->get_widget();
+    rEntry.set_text(GetFormatText(_rxField, _rxFormatter));
+    rEntry.select_region(-1, 0);
 }
 
 void DbPatternField::updateFromModel( Reference< XPropertySet > _rxModel )
@@ -1814,14 +1816,15 @@ void DbPatternField::updateFromModel( Reference< XPropertySet > _rxModel )
     OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
 
-    static_cast< Edit* >( m_pWindow.get() )->SetText( impl_formatText( sText ) );
-    static_cast< Edit* >( m_pWindow.get() )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    weld::Entry& rEntry = static_cast<PatternControl*>(m_pWindow.get())->get_widget();
+    rEntry.set_text(impl_formatText(sText));
+    rEntry.select_region(-1, 0);
 }
 
 bool DbPatternField::commitControl()
 {
-    OUString aText(m_pWindow->GetText());
-    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(aText));
+    weld::Entry& rEntry = static_cast<PatternControl*>(m_pWindow.get())->get_widget();
+    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(rEntry.get_text()));
     return true;
 }
 
@@ -2770,7 +2773,7 @@ CellControllerRef DbFilterField::CreateController() const
             if (m_bFilterList)
                 xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
             else
-                xController = new EditCellController(static_cast<Edit*>(m_pWindow.get()));
+                xController = new EditCellController(static_cast<EditControlBase*>(m_pWindow.get()));
     }
     return xController;
 }

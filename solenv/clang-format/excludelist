@@ -6573,7 +6573,6 @@ include/svtools/ctrlbox.hxx
 include/svtools/ctrltool.hxx
 include/svtools/dialogclosedlistener.hxx
 include/svtools/editbrowsebox.hxx
-include/svtools/editimplementation.hxx
 include/svtools/editsyntaxhighlighter.hxx
 include/svtools/ehdl.hxx
 include/svtools/embedhlp.hxx

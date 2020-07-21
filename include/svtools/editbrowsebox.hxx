@@ -25,22 +25,17 @@
 #include <memory>
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
-#include <vcl/window.hxx>
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class BrowserDataWin;
-class Button;
-class SpinField;
 
 // EditBrowseBoxFlags (EBBF)
-
 enum class EditBrowseBoxFlags
 {
     NONE                       = 0x0000,
@@ -170,39 +165,6 @@ namespace svt
         }
     };
 
-    //= GenericEditImplementation
-    template <class EDIT>
-    class GenericEditImplementation : public IEditImplementation
-    {
-        EDIT&   m_rEdit;
-    public:
-        GenericEditImplementation( EDIT& _rEdit );
-
-        virtual Control&            GetControl() override;
-
-        virtual OUString            GetText( LineEnd aSeparator ) const override;
-        virtual void                SetText( const OUString& _rStr ) override;
-
-        virtual bool                IsReadOnly() const override;
-        virtual void                SetReadOnly( bool bReadOnly ) override;
-
-        virtual sal_Int32           GetMaxTextLen() const override;
-        virtual void                SetMaxTextLen( sal_Int32 _nMaxLen ) override;
-
-        virtual Selection           GetSelection() const override;
-        virtual void                SetSelection( const Selection& _rSelection ) override;
-
-        virtual void                ReplaceSelected( const OUString& _rStr ) override;
-        virtual OUString            GetSelected( LineEnd aSeparator ) const override;
-
-        virtual bool                IsValueChangedFromSaved() const override;
-        virtual void                SaveValue() override;
-
-        virtual void                Cut() override;
-        virtual void                Copy() override;
-        virtual void                Paste() override;
-    };
-
     class SVT_DLLPUBLIC ControlBase : public InterimItemWindow
     {
     public:
@@ -268,7 +230,7 @@ namespace svt
     public:
         EntryImplementation(EditControlBase& rEdit)
             : m_rEdit(rEdit)
-            , m_nMaxTextLen(EDIT_NOLIMIT)
+            , m_nMaxTextLen(0)
         {
             m_rEdit.connect_changed(LINK(this, EntryImplementation, ModifyHdl));
         }
@@ -307,7 +269,7 @@ namespace svt
         virtual void SetMaxTextLen( sal_Int32 nMaxLen ) override
         {
             m_nMaxTextLen = nMaxLen;
-            m_rEdit.get_widget().set_max_length(nMaxLen == EDIT_NOLIMIT ? 0 : nMaxLen);
+            m_rEdit.get_widget().set_max_length(m_nMaxTextLen);
         }
 
         virtual Selection GetSelection() const override
@@ -374,9 +336,6 @@ namespace svt
         }
     };
 
-    #include <svtools/editimplementation.hxx>
-
-
     //= MultiLineTextCell
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
@@ -403,28 +362,6 @@ namespace svt
         virtual bool ProcessKey(const KeyEvent& rKEvt) override;
     };
 
-    //= concrete edit implementations
-    typedef GenericEditImplementation< Edit >             EditImplementation_Base;
-    class EditImplementation final : public EditImplementation_Base
-    {
-        DECL_LINK(ModifyHdl, Edit&, void);
-    public:
-        EditImplementation( Edit& _rEdit ) : EditImplementation_Base( _rEdit )
-        {
-            _rEdit.SetModifyHdl(LINK(this, EditImplementation, ModifyHdl));
-        }
-
-        virtual bool CanUp() const override
-        {
-            return false;
-        }
-
-        virtual bool CanDown() const override
-        {
-            return false;
-        }
-    };
-
     class SVT_DLLPUBLIC MultiLineEditImplementation : public IEditImplementation
     {
         MultiLineTextCell& m_rEdit;
@@ -434,7 +371,7 @@ namespace svt
     public:
         MultiLineEditImplementation(MultiLineTextCell& rEdit)
             : m_rEdit(rEdit)
-            , m_nMaxTextLen(EDIT_NOLIMIT)
+            , m_nMaxTextLen(0)
         {
             m_rEdit.connect_changed(LINK(this, MultiLineEditImplementation, ModifyHdl));
         }
@@ -469,7 +406,7 @@ namespace svt
         virtual void SetMaxTextLen( sal_Int32 nMaxLen ) override
         {
             m_nMaxTextLen = nMaxLen;
-            m_rEdit.get_widget().set_max_length(nMaxLen == EDIT_NOLIMIT ? 0 : nMaxLen);
+            m_rEdit.get_widget().set_max_length(m_nMaxTextLen);
         }
 
         virtual Selection GetSelection() const override
@@ -537,7 +474,6 @@ namespace svt
         bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
-        EditCellController( Edit* _pEdit );
         EditCellController( EditControlBase* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         virtual ~EditCellController( ) override;
@@ -557,22 +493,6 @@ namespace svt
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
-    };
-
-    //= SpinCellController
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SpinCellController final : public CellController
-    {
-    public:
-        SpinCellController(SpinField* pSpinField);
-        const SpinField& GetSpinWindow() const;
-        SpinField& GetSpinWindow();
-
-        virtual bool IsValueChangedFromSaved() const override;
-        virtual void SaveValue() override;
-
-    private:
-        virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        DECL_LINK(ModifyHdl, Edit&, void);
     };
 
     //= CheckBoxControl
@@ -769,6 +689,20 @@ namespace svt
         DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
         DECL_LINK(ActivateHdl, weld::Calendar&, void);
         DECL_LINK(ImplClickHdl, weld::Button&, void);
+    };
+
+    class SVT_DLLPUBLIC PatternControl final : public EditControl
+    {
+    public:
+        PatternControl(BrowserDataWin* pParent);
+
+        weld::PatternFormatter& get_formatter() { return *m_xEntryFormatter; }
+
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+
+        virtual void dispose() override;
+    private:
+        std::unique_ptr<weld::PatternFormatter> m_xEntryFormatter;
     };
 
     //= FormattedFieldCellController

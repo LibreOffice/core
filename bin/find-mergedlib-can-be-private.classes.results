@@ -386,7 +386,6 @@ svt::MultiLineEditImplementation
 svt::MultiLineTextCell
 svt::OStringTransferable
 svt::PopupMenuControllerBase
-svt::SpinCellController
 svt::TemplateFolderCache
 svtools::AsynchronLink
 svtools::ToolbarPopup

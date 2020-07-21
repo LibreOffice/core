@@ -13,7 +13,6 @@ with a.stdout as txt:
         header = line[8:].strip();
         if "README" in header: continue
         if header == "version.hrc": continue
-        if header == "svtools/editimplementation.hxx": continue
         # ignore URE headers
         if header.startswith("IwyuFilter_include.yaml"): continue
         if header.startswith("cppu/"): continue

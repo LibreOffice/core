@@ -361,12 +361,12 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
         rPos = nCursorPos;
 }
 
-static void ImplPatternProcessStrictModify( Edit* pEdit,
-                                            const OString& rEditMask,
-                                            const OUString& rLiteralMask,
-                                            bool bSameMask )
+static OUString ImplPatternProcessStrictModify(const OUString& rText,
+                                               const OString& rEditMask,
+                                               const OUString& rLiteralMask,
+                                               bool bSameMask)
 {
-    OUString aText = pEdit->GetText();
+    OUString aText(rText);
 
     // remove leading blanks
     if (bSameMask && !rEditMask.isEmpty())
@@ -387,7 +387,20 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         aText = aText.copy( i );
     }
 
-    OUString aNewText = ImplPatternReformat(aText, rEditMask, rLiteralMask, 0);
+    return ImplPatternReformat(aText, rEditMask, rLiteralMask, 0);
+}
+
+static void ImplPatternProcessStrictModify( Edit* pEdit,
+                                            const OString& rEditMask,
+                                            const OUString& rLiteralMask,
+                                            bool bSameMask )
+{
+    OUString aText = pEdit->GetText();
+    OUString aNewText = ImplPatternProcessStrictModify(aText,
+                                                       rEditMask,
+                                                       rLiteralMask,
+                                                       bSameMask);
+
     if ( aNewText != aText )
     {
         // adjust selection such that it remains at the end if it was there before
@@ -408,6 +421,43 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
                 aSel.Max() = nMaxPos;
         }
         pEdit->SetText( aNewText, aSel );
+    }
+}
+
+static void ImplPatternProcessStrictModify( weld::Entry& rEntry,
+                                            const OString& rEditMask,
+                                            const OUString& rLiteralMask,
+                                            bool bSameMask )
+{
+    OUString aText = rEntry.get_text();
+    OUString aNewText = ImplPatternProcessStrictModify(aText,
+                                                       rEditMask,
+                                                       rLiteralMask,
+                                                       bSameMask);
+
+    if (aNewText != aText)
+    {
+        // adjust selection such that it remains at the end if it was there before
+        int nStartPos, nEndPos;
+        rEntry.get_selection_bounds(nStartPos, nEndPos);
+
+        int nMaxSel = std::max(nStartPos, nEndPos);
+        if (nMaxSel >= aText.getLength())
+        {
+            sal_Int32 nMaxPos = aNewText.getLength();
+            ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
+            if (nStartPos == nEndPos)
+            {
+                nStartPos = nMaxPos;
+                nEndPos = nMaxPos;
+            }
+            else if (nStartPos > nMaxPos)
+                nStartPos = nMaxPos;
+            else
+                nEndPos = nMaxPos;
+        }
+        rEntry.set_text(aNewText);
+        rEntry.select_region(nStartPos, nEndPos);
     }
 }
 
@@ -447,7 +497,26 @@ static sal_Int32 ImplPatternRightPos( const OUString& rStr, const OString& rEdit
     return nNewPos;
 }
 
-static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+namespace
+{
+    class IEditImplementation
+    {
+    public:
+        virtual ~IEditImplementation() {}
+
+        virtual OUString GetText() const = 0;
+        virtual void SetText(const OUString& rStr, const Selection& rSelection) = 0;
+
+        virtual Selection GetSelection() const = 0;
+        virtual void SetSelection(const Selection& rSelection) = 0;
+
+        virtual bool IsInsertMode() const = 0;
+
+        virtual void SetModified() = 0;
+    };
+}
+
+static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEvent& rKEvt,
                                         const OString& rEditMask,
                                         const OUString& rLiteralMask,
                                         bool bStrictFormat,
@@ -458,7 +527,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         return false;
 
     sal_uInt16 nFormatFlags = 0;
-    Selection   aOldSel     = pEdit->GetSelection();
+    Selection   aOldSel     = rEdit.GetSelection();
     vcl::KeyCode aCode      = rKEvt.GetKeyCode();
     sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
@@ -474,7 +543,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             Selection aSel( ImplPatternLeftPos( rEditMask, nCursorPos ) );
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
-            pEdit->SetSelection( aSel );
+            rEdit.SetSelection( aSel );
             return true;
         }
         else if ( nKeyCode == KEY_RIGHT )
@@ -484,12 +553,12 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = aSel.Min();
-            aSel.Max() = ImplPatternRightPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos );
+            aSel.Max() = ImplPatternRightPos( rEdit.GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos );
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
             else
                 aSel.Min() = aSel.Max();
-            pEdit->SetSelection( aSel );
+            rEdit.SetSelection( aSel );
             return true;
         }
         else if ( nKeyCode == KEY_HOME )
@@ -506,7 +575,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             Selection aSel( nNewPos );
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
-            pEdit->SetSelection( aSel );
+            rEdit.SetSelection( aSel );
             return true;
         }
         else if ( nKeyCode == KEY_END )
@@ -521,18 +590,18 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = static_cast<sal_Int32>(aSel.Min());
-            ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
+            ImplPatternMaxPos( rEdit.GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
             aSel.Max() = nNewPos;
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
             else
                 aSel.Min() = aSel.Max();
-            pEdit->SetSelection( aSel );
+            rEdit.SetSelection( aSel );
             return true;
         }
         else if ( (nKeyCode == KEY_BACKSPACE) || (nKeyCode == KEY_DELETE) )
         {
-            OUString          aOldStr( pEdit->GetText() );
+            OUString          aOldStr( rEdit.GetText() );
             OUStringBuffer    aStr( aOldStr );
             Selection   aSel = aOldSel;
 
@@ -580,13 +649,12 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                 if ( bSameMask )
                     aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
                 rbInKeyInput = true;
-                pEdit->SetText( aStr.toString(), Selection( nNewPos ) );
-                pEdit->SetModifyFlag();
-                pEdit->Modify();
+                rEdit.SetText( aStr.toString(), Selection( nNewPos ) );
+                rEdit.SetModified();
                 rbInKeyInput = false;
             }
             else
-                pEdit->SetSelection( Selection( nNewPos ) );
+                rEdit.SetSelection( Selection( nNewPos ) );
 
             return true;
         }
@@ -633,10 +701,10 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                              ImplCommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
                         {
                             nTempPos++;
-                            ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nNewPos, nTempPos );
+                            ImplPatternMaxPos( rEdit.GetText(), rEditMask, nFormatFlags, bSameMask, nNewPos, nTempPos );
                             if ( nTempPos > nNewPos )
                             {
-                                pEdit->SetSelection( Selection( nTempPos ) );
+                                rEdit.SetSelection( Selection( nTempPos ) );
                                 return true;
                             }
                         }
@@ -653,9 +721,9 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         cChar = 0;
     if ( cChar )
     {
-        OUStringBuffer  aStr = pEdit->GetText();
+        OUStringBuffer  aStr = rEdit.GetText();
         bool        bError = false;
-        if ( bSameMask && pEdit->IsInsertMode() )
+        if ( bSameMask && rEdit.IsInsertMode() )
         {
             // crop spaces and literals at the end until current position
             sal_Int32 n = aStr.getLength();
@@ -706,9 +774,8 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         {
             rbInKeyInput = true;
             Selection aNewSel( ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos ) );
-            pEdit->SetText( aStr.toString(), aNewSel );
-            pEdit->SetModifyFlag();
-            pEdit->Modify();
+            rEdit.SetText( aStr.toString(), aNewSel );
+            rEdit.SetModified();
             rbInKeyInput = false;
         }
     }
@@ -716,55 +783,58 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     return true;
 }
 
-void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLiteralMask)
+namespace
 {
-    m_aEditMask     = rEditMask;
-    maLiteralMask   = rLiteralMask;
-    mbSameMask      = true;
-
-    if ( m_aEditMask.getLength() != maLiteralMask.getLength() )
+    bool ImplSetMask(OString& rEditMask, OUString& rLiteralMask)
     {
-        OUStringBuffer aBuf(maLiteralMask);
-        if (m_aEditMask.getLength() < aBuf.getLength())
-            aBuf.remove(m_aEditMask.getLength(), aBuf.getLength() - m_aEditMask.getLength());
-        else
-            comphelper::string::padToLength(aBuf, m_aEditMask.getLength(), ' ');
-        maLiteralMask = aBuf.makeStringAndClear();
-    }
+        bool bSameMask      = true;
 
-    // Strict mode allows only the input mode if only equal characters are allowed as mask and if
-    // only spaces are specified which are not allowed by the mask
-    sal_Int32   i = 0;
-    char    c = 0;
-    while ( i < rEditMask.getLength() )
-    {
-        char cTemp = rEditMask[i];
-        if ( cTemp != EDITMASK_LITERAL )
+        if (rEditMask.getLength() != rLiteralMask.getLength())
         {
-            if ( (cTemp == EDITMASK_ALLCHAR) ||
-                 (cTemp == EDITMASK_UPPERALLCHAR) ||
-                 (cTemp == EDITMASK_NUMSPACE) )
+            OUStringBuffer aBuf(rLiteralMask);
+            if (rEditMask.getLength() < aBuf.getLength())
+                aBuf.remove(rEditMask.getLength(), aBuf.getLength() - rEditMask.getLength());
+            else
+                comphelper::string::padToLength(aBuf, rEditMask.getLength(), ' ');
+            rLiteralMask = aBuf.makeStringAndClear();
+        }
+
+        // Strict mode allows only the input mode if only equal characters are allowed as mask and if
+        // only spaces are specified which are not allowed by the mask
+        sal_Int32   i = 0;
+        char    c = 0;
+        while ( i < rEditMask.getLength() )
+        {
+            char cTemp = rEditMask[i];
+            if ( cTemp != EDITMASK_LITERAL )
             {
-                mbSameMask = false;
-                break;
-            }
-            if ( i < rLiteralMask.getLength() )
-            {
-                if ( rLiteralMask[i] != ' ' )
+                if ( (cTemp == EDITMASK_ALLCHAR) ||
+                     (cTemp == EDITMASK_UPPERALLCHAR) ||
+                     (cTemp == EDITMASK_NUMSPACE) )
                 {
-                    mbSameMask = false;
+                    bSameMask = false;
+                    break;
+                }
+                if ( i < rLiteralMask.getLength() )
+                {
+                    if ( rLiteralMask[i] != ' ' )
+                    {
+                        bSameMask = false;
+                        break;
+                    }
+                }
+                if ( !c )
+                    c = cTemp;
+                if ( cTemp != c )
+                {
+                    bSameMask = false;
                     break;
                 }
             }
-            if ( !c )
-                c = cTemp;
-            if ( cTemp != c )
-            {
-                mbSameMask = false;
-                break;
-            }
+            i++;
         }
-        i++;
+
+        return bSameMask;
     }
 }
 
@@ -782,8 +852,126 @@ PatternFormatter::~PatternFormatter()
 void PatternFormatter::SetMask( const OString& rEditMask,
                                 const OUString& rLiteralMask )
 {
-    ImplSetMask( rEditMask, rLiteralMask );
+    m_aEditMask = rEditMask;
+    maLiteralMask = rLiteralMask;
+    mbSameMask = ImplSetMask(m_aEditMask, maLiteralMask);
     ReformatAll();
+}
+
+namespace
+{
+    class EntryImplementation : public IEditImplementation
+    {
+    public:
+        EntryImplementation(weld::PatternFormatter& rFormatter)
+            : m_rFormatter(rFormatter)
+            , m_rEntry(rFormatter.get_widget())
+        {
+        }
+
+        virtual OUString GetText() const override
+        {
+            return m_rEntry.get_text();
+        }
+
+        virtual void SetText(const OUString& rStr, const Selection& rSelection) override
+        {
+            m_rEntry.set_text(rStr);
+            SetSelection(rSelection);
+        }
+
+        virtual Selection GetSelection() const override
+        {
+            int nStartPos, nEndPos;
+            m_rEntry.get_selection_bounds(nStartPos, nEndPos);
+            return Selection(nStartPos, nEndPos);
+        }
+
+        virtual void SetSelection(const Selection& rSelection) override
+        {
+            auto nMin = rSelection.Min();
+            auto nMax = rSelection.Max();
+            m_rEntry.select_region(nMin < 0 ? 0 : nMin, nMax == SELECTION_MAX ? -1 : nMax);
+        }
+
+        virtual bool IsInsertMode() const override
+        {
+            return !m_rEntry.get_overwrite_mode();
+        }
+
+        virtual void SetModified() override
+        {
+            m_rFormatter.Modify();
+        }
+
+    private:
+        weld::PatternFormatter& m_rFormatter;
+        weld::Entry& m_rEntry;
+    };
+}
+
+namespace weld
+{
+    void PatternFormatter::SetStrictFormat(bool bStrict)
+    {
+        if (bStrict != m_bStrictFormat)
+        {
+            m_bStrictFormat = bStrict;
+            if (m_bStrictFormat)
+                ReformatAll();
+        }
+    }
+
+    void PatternFormatter::SetMask(const OString& rEditMask,
+                                   const OUString& rLiteralMask)
+    {
+        m_aEditMask = rEditMask;
+        m_aLiteralMask = rLiteralMask;
+        m_bSameMask = ImplSetMask(m_aEditMask, m_aLiteralMask);
+        ReformatAll();
+    }
+
+    void PatternFormatter::ReformatAll()
+    {
+        m_rEntry.set_text(ImplPatternReformat(m_rEntry.get_text(), m_aEditMask, m_aLiteralMask, 0/*nFormatFlags*/));
+        if (!m_bSameMask && m_bStrictFormat && m_rEntry.get_editable())
+            m_rEntry.set_overwrite_mode(true);
+    }
+
+    void PatternFormatter::EntryGainFocus()
+    {
+        m_bReformat = false;
+    }
+
+    void PatternFormatter::EntryLostFocus()
+    {
+        if (m_bReformat)
+            ReformatAll();
+    }
+
+    void PatternFormatter::Modify()
+    {
+        if (!m_bInPattKeyInput)
+        {
+            if (m_bStrictFormat)
+                ImplPatternProcessStrictModify(m_rEntry, m_aEditMask, m_aLiteralMask, m_bSameMask);
+            else
+                m_bReformat = true;
+        }
+        m_aModifyHdl.Call(m_rEntry);
+    }
+
+    IMPL_LINK(PatternFormatter, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+    {
+        if (m_aKeyPressHdl.Call(rKEvt))
+            return true;
+        if (rKEvt.GetKeyCode().IsMod2())
+            return false;
+        EntryImplementation aAdapt(*this);
+        return ImplPatternProcessKeyInput(aAdapt, rKEvt, m_aEditMask, m_aLiteralMask,
+                                          m_bStrictFormat,
+                                          m_bSameMask, m_bInPattKeyInput);
+    }
 }
 
 void PatternFormatter::SetString( const OUString& rStr )
@@ -826,11 +1014,58 @@ void PatternField::dispose()
     SpinField::dispose();
 }
 
+namespace
+{
+    class EditImplementation : public IEditImplementation
+    {
+    public:
+        EditImplementation(Edit& rEdit)
+            : m_rEdit(rEdit)
+        {
+        }
+
+        virtual OUString GetText() const override
+        {
+            return m_rEdit.GetText();
+        }
+
+        virtual void SetText(const OUString& rStr, const Selection& rSelection) override
+        {
+            m_rEdit.SetText(rStr, rSelection);
+        }
+
+        virtual Selection GetSelection() const override
+        {
+            return m_rEdit.GetSelection();
+        }
+
+        virtual void SetSelection(const Selection& rSelection) override
+        {
+            m_rEdit.SetSelection(rSelection);
+        }
+
+        virtual bool IsInsertMode() const override
+        {
+            return m_rEdit.IsInsertMode();
+        }
+
+        virtual void SetModified() override
+        {
+            m_rEdit.SetModifyFlag();
+            m_rEdit.Modify();
+        }
+
+    private:
+        Edit& m_rEdit;
+    };
+}
+
 bool PatternField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
+        EditImplementation aAdapt(*GetField());
+        if ( ImplPatternProcessKeyInput( aAdapt, *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(),
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
             return true;
@@ -882,7 +1117,8 @@ bool PatternBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
+        EditImplementation aAdapt(*GetField());
+        if ( ImplPatternProcessKeyInput( aAdapt, *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(),
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
             return true;
