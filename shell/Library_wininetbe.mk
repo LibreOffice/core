@@ -21,7 +21,6 @@ $(eval $(call gb_Library_set_componentfile,wininetbe1,shell/source/backends/wini
 
 $(eval $(call gb_Library_add_exception_objects,wininetbe1,\
     shell/source/backends/wininetbe/wininetbackend \
-    shell/source/backends/wininetbe/wininetbecdef \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
