@@ -156,10 +156,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
             "dir", "13500000");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf57155, "tdf57155.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    // Without the fix in place, the image in the header of page 2 wouldn't exist
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129582, "tdf129582.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    // Without the fix in place, the image on the second footer would be imported
+    // Without the fix in place, the image in the footer of page 2 wouldn't exist
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
