@@ -35,8 +35,6 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
 
     public:
 
-        static WinInetBackend* createInstance();
-
         // XServiceInfo
         virtual OUString SAL_CALL
             getImplementationName(  ) override;
@@ -46,19 +44,6 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
 
         virtual uno::Sequence<OUString> SAL_CALL
             getSupportedServiceNames(  ) override;
-
-        /**
-          Provides the implementation name.
-
-          @return   implementation name
-          */
-        static OUString getBackendName() ;
-        /**
-          Provides the supported services names
-
-          @return   service names
-          */
-        static uno::Sequence<OUString> getBackendServiceNames() ;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -91,7 +76,6 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
             css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
-    protected:
         /**
           Service constructor from a service factory.
 

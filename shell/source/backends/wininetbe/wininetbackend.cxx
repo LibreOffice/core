@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -289,11 +290,6 @@ WinInetBackend::~WinInetBackend()
 {
 }
 
-WinInetBackend* WinInetBackend::createInstance()
-{
-    return new WinInetBackend;
-}
-
 void WinInetBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
 {
@@ -335,20 +331,9 @@ css::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-OUString WinInetBackend::getBackendName() {
-    return "com.sun.star.comp.configuration.backend.WinInetBackend" ;
-}
-
 OUString SAL_CALL WinInetBackend::getImplementationName()
 {
-    return getBackendName() ;
-}
-
-uno::Sequence<OUString> WinInetBackend::getBackendServiceNames()
-{
-    uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.WinInetBackend" };
-
-    return aServiceNameList ;
+    return "com.sun.star.comp.configuration.backend.WinInetBackend" ;
 }
 
 sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
@@ -358,7 +343,15 @@ sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
 
 uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
 {
-    return getBackendServiceNames() ;
+    return { "com.sun.star.configuration.backend.WinInetBackend" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_WinInetBackend_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new WinInetBackend);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

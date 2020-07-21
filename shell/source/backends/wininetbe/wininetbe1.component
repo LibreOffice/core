@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="wininetbe1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.backend.WinInetBackend">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.configuration.backend.WinInetBackend"
+    constructor="shell_WinInetBackend_get_implementation">
     <service name="com.sun.star.configuration.backend.WinInetBackend"/>
   </implementation>
 </component>
