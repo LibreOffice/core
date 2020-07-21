@@ -503,13 +503,14 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
                             int nTilePosX, int nTilePosY,
                             long nTileWidth, long nTileHeight )
 {
-    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    // FIXME: "hope"? Are you kidding me?
+    ScViewData* pViewData = ScDocShell::GetViewData();
 
-    // FIXME: Can this happen? What should we do?
-    if (!pViewShell)
+    // FIXME
+    if (!pViewData)
         return;
-
-    ScViewData* pViewData = &pViewShell->GetViewData();
 
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
