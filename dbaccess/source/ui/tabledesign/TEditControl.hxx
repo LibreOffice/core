@@ -29,7 +29,7 @@ class Edit;
 class SfxUndoManager;
 namespace dbaui
 {
-    class OSQLNameEdit;
+    class OSQLNameEditControl;
 
     class OTableEditorCtrl : public OTableRowView
     {
@@ -44,7 +44,7 @@ namespace dbaui
 
         std::vector< std::shared_ptr<OTableRow> >*    m_pRowList;
 
-        VclPtr<OSQLNameEdit>               pNameCell;
+        VclPtr<OSQLNameEditControl>        pNameCell;
         VclPtr<::svt::ListBoxControl>      pTypeCell;
         VclPtr<::svt::EditControl>         pHelpTextCell;
         VclPtr<::svt::EditControl>         pDescrCell;

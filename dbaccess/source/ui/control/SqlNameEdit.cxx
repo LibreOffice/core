@@ -51,33 +51,34 @@ namespace dbaui
         }
         return bCorrected;
     }
-    void OSQLNameEdit::Modify()
-    {
-        OUString sCorrected;
-        if ( checkString( GetText(),sCorrected ) )
-        {
-            Selection aSel = GetSelection();
-            aSel.setMax( aSel.getMin() );
-            SetText( sCorrected, aSel );
 
-            SaveValue();
+    namespace
+    {
+        void checkName(OSQLNameChecker& rChecker, weld::Entry& rEntry)
+        {
+            OUString sCorrected;
+            if (rChecker.checkString(rEntry.get_text(), sCorrected))
+            {
+                int nStartPos, nEndPos;
+                rEntry.get_selection_bounds(nStartPos, nEndPos);
+                int nMin = std::min(nStartPos, nEndPos);
+                rEntry.set_text(sCorrected);
+                rEntry.select_region(nMin, nMin);
+
+                rEntry.save_value();
+            }
         }
-        Edit::Modify();
     }
 
-    IMPL_LINK_NOARG(OSQLNameEntry, ModifyHdl, weld::Entry&, void)
+    IMPL_LINK(OSQLNameEditControl, ModifyHdl, weld::Entry&, rEntry, void)
     {
-        OUString sCorrected;
-        if (checkString(m_xEntry->get_text(), sCorrected))
-        {
-            int nStartPos, nEndPos;
-            m_xEntry->get_selection_bounds(nStartPos, nEndPos);
-            int nMin = std::min(nStartPos, nEndPos);
-            m_xEntry->set_text(sCorrected);
-            m_xEntry->select_region(nMin, nMin);
+        checkName(*this, rEntry);
+        m_ChainChangedHdl.Call(rEntry);
+    }
 
-            m_xEntry->save_value();
-        }
+    IMPL_LINK(OSQLNameEntry, ModifyHdl, weld::Entry&, rEntry, void)
+    {
+        checkName(*this, rEntry);
     }
 }
 

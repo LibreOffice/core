@@ -183,7 +183,7 @@ void OTableEditorCtrl::SetReadOnly( bool bRead )
 void OTableEditorCtrl::InitCellController()
 {
     // Cell Field name
-    sal_Int32 nMaxTextLen = EDIT_NOLIMIT;
+    sal_Int32 nMaxTextLen = 0;
     OUString sExtraNameChars;
     Reference<XConnection> xCon;
     try
@@ -191,10 +191,9 @@ void OTableEditorCtrl::InitCellController()
         xCon = GetView()->getController().getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
+        // length 0 is treated by Entry::set_max_length as unlimited
         nMaxTextLen = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0;
 
-        if( nMaxTextLen == 0 )
-            nMaxTextLen = EDIT_NOLIMIT;
         sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : OUString();
 
     }
@@ -203,8 +202,8 @@ void OTableEditorCtrl::InitCellController()
         OSL_FAIL("getMaxColumnNameLength");
     }
 
-    pNameCell = VclPtr<OSQLNameEdit>::Create(&GetDataWindow(), WB_LEFT, sExtraNameChars);
-    pNameCell->SetMaxTextLen( nMaxTextLen );
+    pNameCell = VclPtr<OSQLNameEditControl>::Create(&GetDataWindow(), sExtraNameChars);
+    pNameCell->get_widget().set_max_length(nMaxTextLen);
     pNameCell->setCheck( isSQL92CheckEnabled(xCon) );
 
     // Cell type
@@ -237,7 +236,7 @@ void OTableEditorCtrl::InitCellController()
 
 void OTableEditorCtrl::ClearModified()
 {
-    pNameCell->ClearModifyFlag();
+    pNameCell->get_widget().save_value();
     pDescrCell->get_widget().save_value();
     pHelpTextCell->get_widget().save_value();
     pTypeCell->get_widget().save_value();
@@ -355,11 +354,15 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
     switch (nColumnId)
     {
         case FIELD_NAME:
+        {
             if( pActFieldDescr )
                 aInitString = pActFieldDescr->GetName();
-            pNameCell->SetText( aInitString );
-            pNameCell->SaveValue();
+
+            weld::Entry& rEntry = pNameCell->get_widget();
+            rEntry.set_text(aInitString);
+            rEntry.save_value();
             break;
+        }
         case FIELD_TYPE:
             {
                 if ( pActFieldDescr && pActFieldDescr->getTypeInfo() )
@@ -502,7 +505,8 @@ void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         case FIELD_NAME:
         {
             // If there is no name, do nothing
-            const OUString aName(pNameCell->GetText());
+            weld::Entry& rEntry = pNameCell->get_widget();
+            const OUString aName(rEntry.get_text());
 
             if( aName.isEmpty() )
             {
@@ -518,7 +522,7 @@ void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
             }
             if(pActFieldDescr)
                 pActFieldDescr->SetName( aName );
-            pNameCell->ClearModifyFlag();
+            rEntry.save_value();
 
             break;
         }
@@ -1097,8 +1101,11 @@ bool OTableEditorCtrl::IsCutAllowed()
                 break;
             }
             case NAME:
-                bIsCutAllowed = !pNameCell->GetSelected().isEmpty();
+            {
+                weld::Entry& rEntry = pNameCell->get_widget();
+                bIsCutAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
                 break;
+            }
             case ROW:
                 bIsCutAllowed = IsCopyAllowed();
                 break;
@@ -1126,7 +1133,10 @@ bool OTableEditorCtrl::IsCopyAllowed()
         bIsCopyAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
     }
     else if(m_eChildFocus == NAME)
-        bIsCopyAllowed = !pNameCell->GetSelected().isEmpty();
+    {
+        weld::Entry& rEntry = pNameCell->get_widget();
+        bIsCopyAllowed = rEntry.get_selection_bounds(nStartPos, nEndPos);
+    }
     else if(m_eChildFocus == ROW)
     {
         Reference<XPropertySet> xTable = GetView()->getController().getTable();
@@ -1174,7 +1184,7 @@ void OTableEditorCtrl::cut()
         if(GetView()->getController().isAlterAllowed())
         {
             SaveData(-1,FIELD_NAME);
-            pNameCell->Cut();
+            pNameCell->get_widget().cut_clipboard();
             CellModified(-1,FIELD_NAME);
         }
     }
@@ -1206,10 +1216,13 @@ void OTableEditorCtrl::cut()
 
 void OTableEditorCtrl::copy()
 {
-    if(GetSelectRowCount())
+    if (GetSelectRowCount())
         OTableRowView::copy();
     else if(m_eChildFocus == NAME)
-        pNameCell->Copy();
+    {
+        weld::Entry& rEntry = pNameCell->get_widget();
+        rEntry.copy_clipboard();
+    }
     else if(HELPTEXT == m_eChildFocus )
     {
         weld::Entry& rEntry = pHelpTextCell->get_widget();
@@ -1235,7 +1248,7 @@ void OTableEditorCtrl::paste()
     {
         if(GetView()->getController().isAlterAllowed())
         {
-            pNameCell->Paste();
+            pNameCell->get_widget().paste_clipboard();
             CellModified();
         }
     }

@@ -1728,7 +1728,7 @@ public:
     {
         m_xEntry->select_region(nStartPos, nEndPos);
     }
-    //if not text was selected, both rStartPos and rEndPos will be identical
+    //if no text was selected, both rStartPos and rEndPos will be identical
     //and false will be returned
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
     {
