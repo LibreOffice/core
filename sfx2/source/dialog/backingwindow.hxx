@@ -24,7 +24,6 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 
 #include <vcl/menubtn.hxx>
@@ -66,7 +65,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     VclPtr<PushButton> mpDBAllButton;
     VclPtr<PushButton> mpMathAllButton;
 
-    VclPtr<FixedImage> mpBrandImage;
     VclPtr<PushButton> mpHelpButton;
     VclPtr<PushButton> mpExtensionsButton;
 
