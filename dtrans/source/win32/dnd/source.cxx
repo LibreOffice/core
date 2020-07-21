@@ -278,7 +278,7 @@ dwEffect
 // XServiceInfo
 OUString SAL_CALL DragSource::getImplementationName(  )
 {
-    return DNDSOURCE_IMPL_NAME;
+    return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 }
 // XServiceInfo
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
@@ -288,7 +288,14 @@ sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  )
 {
-    return { DNDSOURCE_SERVICE_NAME };
+    return { "com.sun.star.datatransfer.dnd.OleDragSource" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_DragSource_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DragSource(context)));
 }
 
 /** This function is called as extra thread from
