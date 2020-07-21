@@ -1284,94 +1284,101 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
     const OUString* pEnd   = pIter + aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
-        SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
-        if ( xObj.is() )
+        try
         {
-            sal_Int32 nCurState = xObj->getCurrentState();
-            if ( _bOasisFormat && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+            SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
+            if ( xObj.is() )
             {
-                // means that the object is active
-                // the image must be regenerated
-                OUString aMediaType;
-
-                // TODO/LATER: another aspect could be used
-                uno::Reference < io::XInputStream > xStream =
-                            GetGraphicReplacementStream(
-                                                        embed::Aspects::MSOLE_CONTENT,
-                                                        xObj,
-                                                        &aMediaType );
-                if ( xStream.is() )
+                sal_Int32 nCurState = xObj->getCurrentState();
+                if ( _bOasisFormat && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
                 {
-                    if ( !InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
-                        InsertGraphicStream( xStream, *pIter, aMediaType );
-                }
-            }
+                    // means that the object is active
+                    // the image must be regenerated
+                    OUString aMediaType;
 
-            // TODO/LATER: currently the object by default does not cache replacement image
-            // that means that if somebody loads SO7 document and store its objects using
-            // this method the images might be lost.
-            // Currently this method is only used on storing to alien formats, that means
-            // that SO7 documents storing does not use it, and all other filters are
-            // based on OASIS format. But if it changes the method must be fixed. The fix
-            // must be done only on demand since it can affect performance.
-
-            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-            if ( xPersist.is() )
-            {
-                try
-                {
-                    //TODO/LATER: only storing if changed!
-                    //xPersist->storeOwn(); //commented, i120168
-
-            // begin:all charts will be persisted as xml format on disk when saving, which is time consuming.
-                    // '_bObjectsOnly' mean we are storing to alien formats.
-                    //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
-                    if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
-                        && (pImpl->mxStorage->isStorageElement( *pIter ) ))
+                    // TODO/LATER: another aspect could be used
+                    uno::Reference < io::XInputStream > xStream =
+                                GetGraphicReplacementStream(
+                                                            embed::Aspects::MSOLE_CONTENT,
+                                                            xObj,
+                                                            &aMediaType );
+                    if ( xStream.is() )
                     {
-                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                        if ( xModifiable.is() && xModifiable->isModified())
+                        if ( !InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
+                            InsertGraphicStream( xStream, *pIter, aMediaType );
+                    }
+                }
+
+                // TODO/LATER: currently the object by default does not cache replacement image
+                // that means that if somebody loads SO7 document and store its objects using
+                // this method the images might be lost.
+                // Currently this method is only used on storing to alien formats, that means
+                // that SO7 documents storing does not use it, and all other filters are
+                // based on OASIS format. But if it changes the method must be fixed. The fix
+                // must be done only on demand since it can affect performance.
+
+                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if ( xPersist.is() )
+                {
+                    try
+                    {
+                        //TODO/LATER: only storing if changed!
+                        //xPersist->storeOwn(); //commented, i120168
+
+                        // begin:all charts will be persisted as xml format on disk when saving, which is time consuming.
+                        // '_bObjectsOnly' mean we are storing to alien formats.
+                        //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
+                        if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
+                            && (pImpl->mxStorage->isStorageElement( *pIter ) ))
+                        {
+                            uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                            if ( xModifiable.is() && xModifiable->isModified())
+                            {
+                                xPersist->storeOwn();
+                            }
+                            else
+                            {
+                                //do nothing. Embedded model is not modified, no need to persist.
+                            }
+                        }
+                        else //the embedded object is in active status, always store back it.
                         {
                             xPersist->storeOwn();
                         }
-                        else
+                        //end i120168
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        // TODO/LATER: error handling
+                        bResult = false;
+                        break;
+                    }
+                }
+
+                if ( !_bOasisFormat && !_bObjectsOnly )
+                {
+                    // copy replacement images for linked objects
+                    try
+                    {
+                        uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                        if ( xLink.is() && xLink->isLink() )
                         {
-                            //do nothing. Embedded model is not modified, no need to persist.
+                            OUString aMediaType;
+                            uno::Reference < io::XInputStream > xInStream = GetGraphicStream( xObj, &aMediaType );
+                            if ( xInStream.is() )
+                                InsertStreamIntoPicturesStorage_Impl( pImpl->mxStorage, xInStream, *pIter );
                         }
                     }
-                    else //the embedded object is in active status, always store back it.
+                    catch (const uno::Exception&)
                     {
-                        xPersist->storeOwn();
-                    }
-                    //end i120168
-                }
-                catch (const uno::Exception&)
-                {
-                    // TODO/LATER: error handling
-                    bResult = false;
-                    break;
-                }
-            }
-
-            if ( !_bOasisFormat && !_bObjectsOnly )
-            {
-                // copy replacement images for linked objects
-                try
-                {
-                    uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
-                    if ( xLink.is() && xLink->isLink() )
-                    {
-                        OUString aMediaType;
-                        uno::Reference < io::XInputStream > xInStream = GetGraphicStream( xObj, &aMediaType );
-                        if ( xInStream.is() )
-                            InsertStreamIntoPicturesStorage_Impl( pImpl->mxStorage, xInStream, *pIter );
                     }
                 }
-                catch (const uno::Exception&)
-                {
-                }
             }
+        }
+        catch (const uno::Exception&)
+        {
+            // TODO/LATER: error handling
         }
     }
 
