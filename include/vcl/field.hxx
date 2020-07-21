@@ -83,36 +83,6 @@ public:
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
 };
 
-#define PATTERN_FORMAT_EMPTYLITERALS    (sal_uInt16(0x0001))
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternFormatter : public FormatterBase
-{
-private:
-    OString                m_aEditMask;
-    OUString               maLiteralMask;
-    bool                   mbSameMask;
-    bool                   mbInPattKeyInput;
-
-protected:
-                            PatternFormatter(Edit* pEdit);
-
-    SAL_DLLPRIVATE bool     ImplIsSameMask() const { return mbSameMask; }
-    SAL_DLLPRIVATE bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
-
-public:
-    virtual                 ~PatternFormatter() override;
-
-    virtual void            Reformat() override;
-
-    void SetMask(const OString& rEditMask, const OUString& rLiteralMask );
-    const OString& GetEditMask() const { return m_aEditMask; }
-    const OUString&        GetLiteralMask() const  { return maLiteralMask; }
-
-    void                    SetString( const OUString& rStr );
-    OUString                GetString() const;
-};
-
-
 class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
 {
 public:
@@ -183,18 +153,6 @@ private:
     bool                    mbThousandSep;
 
 };
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternField final : public SpinField, public PatternFormatter
-{
-public:
-    explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            Modify() override;
-    virtual void            dispose() override;
-};
-
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericField : public SpinField, public NumericFormatter
 {
