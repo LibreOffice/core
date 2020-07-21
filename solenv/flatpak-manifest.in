@@ -52,7 +52,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://gerrit.libreoffice.org/core",
+                    "url": "https://gerrit.libreoffice.org/core",
                     "branch": "@BRANCH@",
                     "disable-fsckobjects": true
                 },
