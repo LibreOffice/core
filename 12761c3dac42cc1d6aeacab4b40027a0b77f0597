@@ -46,6 +46,30 @@
       "revId": "12761c3dac42cc1d6aeacab4b40027a0b77f0597",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c9655ec_339767e2",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-21T11:54:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d514dc94_fc406e5d",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 9
+      },
+      "revId": "12761c3dac42cc1d6aeacab4b40027a0b77f0597",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
