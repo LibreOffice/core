@@ -109,7 +109,7 @@ namespace
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */
-  static const FlavorMap flavorMap[] =
+  const FlavorMap flavorMap[] =
     {
       { NSPasteboardTypeString, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
       { NSPasteboardTypeRTF, "text/rtf", "Rich Text Format", false },

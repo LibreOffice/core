@@ -650,7 +650,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
  * from the ISO language codes.
  */
 
-static const Pair full_locale_list[] = {
+const Pair full_locale_list[] = {
     { "ja_JP.eucJP",  RTL_TEXTENCODING_EUC_JP      },
     { "ja_JP.EUC",    RTL_TEXTENCODING_EUC_JP      },
     { "ko_KR.EUC",    RTL_TEXTENCODING_EUC_KR      },
@@ -658,7 +658,7 @@ static const Pair full_locale_list[] = {
     { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      }
 };
 
-static const Pair locale_extension_list[] = {
+const Pair locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "big5hk",       RTL_TEXTENCODING_BIG5_HKSCS  },
     { "gb18030",      RTL_TEXTENCODING_GB_18030    },
@@ -687,7 +687,7 @@ static const Pair locale_extension_list[] = {
     { "utf-8",        RTL_TEXTENCODING_UTF8        }
 };
 
-static const Pair iso_language_list[] = {
+const Pair iso_language_list[] = {
     { "af",  RTL_TEXTENCODING_ISO_8859_1 },
     { "ar",  RTL_TEXTENCODING_ISO_8859_6 },
     { "az",  RTL_TEXTENCODING_ISO_8859_9 },
