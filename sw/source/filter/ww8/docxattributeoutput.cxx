@@ -999,7 +999,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
         if (aNextIndex.GetNode().IsTextNode())
         {
             const SwTextNode* pTextNode = static_cast<SwTextNode*>(&aNextIndex.GetNode());
-            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen);
         }
         else if (aNextIndex.GetNode().IsTableNode())
         {
@@ -1016,7 +1016,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
             // Also handle section endings
             const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
             if (rNode.StartOfSectionNode()->IsTableNode() || rNode.StartOfSectionNode()->IsSectionNode())
-                m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+                m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen);
         }
     }
 }
