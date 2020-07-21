@@ -50,6 +50,24 @@
       "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dea87b5a_10e9af52",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-21T12:00:04Z",
+      "side": 1,
+      "message": "If pCurrent-\u003eisParent is false then pCurrent-\u003echildren will be empty hence the loop will not execute and FillBox_Impl should not be called.\n\nI cannot reproduce the crash anymore, Can you please check again ?",
+      "parentUuid": "365ab949_77d4268e",
+      "revId": "e2f43cb646d13764ec9f4ee23a309cc7943b636d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
