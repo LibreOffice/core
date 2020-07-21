@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bfbf4779_cea84248",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-21T11:32:25Z",
+      "side": 1,
+      "message": "I wonder if checking the aFilterName would be a bit better\ne.g. if aFilterName.endsWith(\"pdf_Export\")\nin case someone exports to pdf but doesn\u0027t give the target a .pdf suffix",
+      "revId": "2714ca3f18b4daa915850da7b32a9816f737bd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "819b9eea_f5953c5d",
         "filename": "sfx2/source/doc/guisaveas.cxx",
         "patchSetId": 6
