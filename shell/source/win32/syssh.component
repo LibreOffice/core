@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="syssh" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.sys.shell.SystemShellExecute">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.sys.shell.SystemShellExecute"
+    constructor="shell_CSysShExec_get_implementation">
     <service name="com.sun.star.system.SystemShellExecute"/>
   </implementation>
 </component>
