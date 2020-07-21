@@ -46,6 +46,30 @@
       "revId": "2f7da94dd701ad8b684a220fd31ab4558ea4db80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "535f9a5c_1e50a091",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-21T06:39:06Z",
+      "side": 1,
+      "message": "No difference. The whole Inspector is still disabled\n\nI get a warning \"../../../../gtk/gtktreestore.c:1046: Invalid column number 5 added to iter (remember to end your list of columns with a -1)\", \n\nIs this of any help ?",
+      "parentUuid": "d113e278_7ac286e5",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "2f7da94dd701ad8b684a220fd31ab4558ea4db80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
