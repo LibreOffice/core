@@ -677,12 +677,11 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     aInvalidRect.AdjustTop( -nBorderSize );
     aInvalidRect.AdjustBottom( nBorderSize );
 
-    SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell && pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
+        if (pTabViewShell)
         {
             for (auto& pWin: pTabViewShell->pGridWin)
             {

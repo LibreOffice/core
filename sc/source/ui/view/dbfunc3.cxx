@@ -105,7 +105,7 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.MakeOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -122,7 +122,7 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.RemoveOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -2253,12 +2253,11 @@ void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
-    SfxViewShell* pThisViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell && pTabViewShell->GetDocId() == pThisViewShell->GetDocId())
+        if (pTabViewShell)
         {
             if (bColumns)
                 pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStart);
