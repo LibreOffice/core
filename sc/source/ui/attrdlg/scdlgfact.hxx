@@ -652,6 +652,19 @@ public:
     virtual OString GetScreenshotId() const override;
 };
 
+class ScAsyncTabController_Impl : public ScAsyncTabController
+{
+    std::shared_ptr<SfxTabDialogController> m_xDlg;
+public:
+    explicit ScAsyncTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual bool  StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+    virtual void                SetCurPageId( const OString &rName ) override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
@@ -803,7 +816,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(weld::Window* pParent,
         const SfxItemSet* pAttr) override;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) override;
+    virtual std::shared_ptr<ScAsyncTabController> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) override;
 
     // For TabPage
     virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) override;
