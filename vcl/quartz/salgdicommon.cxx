@@ -46,7 +46,7 @@
 
 using namespace vcl;
 
-static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
+const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
 
 static void AddPolygonToPath( CGMutablePathRef xPath,
                               const basegfx::B2DPolygon& rPolygon,

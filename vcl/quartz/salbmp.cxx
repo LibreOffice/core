@@ -45,9 +45,9 @@
 #include "saldatabasic.hxx"
 #endif
 
-static const unsigned long k32BitRedColorMask   = 0x00ff0000;
-static const unsigned long k32BitGreenColorMask = 0x0000ff00;
-static const unsigned long k32BitBlueColorMask  = 0x000000ff;
+const unsigned long k32BitRedColorMask   = 0x00ff0000;
+const unsigned long k32BitGreenColorMask = 0x0000ff00;
+const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
@@ -610,7 +610,7 @@ struct pal_entry
 
 }
 
-static pal_entry const aImplSalSysPalEntryAry[ 16 ] =
+pal_entry const aImplSalSysPalEntryAry[ 16 ] =
 {
 {    0,    0,    0 },
 {    0,    0, 0x80 },
