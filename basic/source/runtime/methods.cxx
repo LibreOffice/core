@@ -367,9 +367,10 @@ extern "C" void invalidParameterHandler(
 {
     SAL_INFO(
         "basic",
-        "invalid parameter during _wgetdcwd; \"" << (expression ? o3tl::toU(expression) : u"???")
-            << "\" (" << (function ? o3tl::toU(function) : u"???") << ") at "
-            << (file ? o3tl::toU(file) : u"???") << ":" << line);
+        "invalid parameter during _wgetdcwd; \""
+            << (expression ? OUString(o3tl::toU(expression)) : OUString("???"))
+            << "\" (" << (function ? OUString(o3tl::toU(function)) : OUString("???")) << ") at "
+            << (file ? OUString(o3tl::toU(file)) : OUString("???")) << ":" << line);
 }
 
 }

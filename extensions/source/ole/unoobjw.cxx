@@ -1162,7 +1162,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
         // Initialise returned rgdispid values.
         rgdispid[i] = DISPID_UNKNOWN;
 
-        SAL_INFO("extensions.olebridge", " " << o3tl::toU(rgszNames[i]));
+        SAL_INFO("extensions.olebridge", " " << OUString(o3tl::toU(rgszNames[i])));
     }
 
     HRESULT ret = DISP_E_UNKNOWNNAME;
