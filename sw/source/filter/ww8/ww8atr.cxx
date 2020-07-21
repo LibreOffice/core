@@ -432,7 +432,7 @@ bool MSWordExportBase::SetCurrentPageDescFromNode(const SwNode &rNd)
  * because that one only exits once for CHP and PAP and therefore end up in
  * the wrong one.
  */
-void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen )
+void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd )
 {
     if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs )
         return;
@@ -453,51 +453,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (m_pCurrentPageDesc != pPageDesc)
     {
-        if (isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ))
-        {
-            /* Do not output a section break in the following scenarios.
-                1) Table cell is open and page header types are different
-                Converting a page break to section break would cause serious issues while importing
-                the RT files with different first page being set.
-            */
-
-            /*
-             * If Table cell is open and page header types are different
-             * set pSet to NULL as we don't want to add any section breaks.
-             */
-            if ( isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ) )
-                pSet = nullptr;
-
-            // tdf#118393: FILESAVE: DOCX Export loses header/footer
-            {
-                bool bPlausableSingleWordSection = sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster());
-
-                {
-                    const SwFrameFormat& rTitleFormat = m_pCurrentPageDesc->GetFirstMaster();
-                    const SwFrameFormat& rFollowFormat = pPageDesc->GetMaster();
-
-                    auto pHeaderFormat1 = rTitleFormat.GetHeader().GetHeaderFormat();
-                    auto pHeaderFormat2 = rFollowFormat.GetHeader().GetHeaderFormat();
-
-                    if (pHeaderFormat1 != pHeaderFormat2)
-                        bPlausableSingleWordSection = false;
-
-                    auto pFooterFormat1 = rTitleFormat.GetFooter().GetFooterFormat();
-                    auto pFooterFormat2 = rFollowFormat.GetFooter().GetFooterFormat();
-
-                    if (pFooterFormat1 != pFooterFormat2)
-                        bPlausableSingleWordSection = false;
-                }
-
-                if ( !bPlausableSingleWordSection && m_bFirstTOCNodeWithSection )
-                {
-                    bBreakSet = false;
-                    bNewPageDesc = true;
-                    m_pCurrentPageDesc = pPageDesc;
-                }
-            }
-        }
-        else if (!sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
+        if (!sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
             bBreakSet = true;
             bNewPageDesc = true;

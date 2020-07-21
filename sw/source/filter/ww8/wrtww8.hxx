@@ -750,7 +750,7 @@ public:
     static sal_uLong GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd );
 
     /// Start new section.
-    void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen = false );
+    void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd );
 
     /// Write section properties.
     ///
