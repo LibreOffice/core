@@ -50,6 +50,15 @@ enum class CellShiftDisabledFlags;
 
 namespace com::sun::star::sheet { struct DataPilotFieldReference; }
 
+class ScAsyncTabController
+{
+public:
+    virtual ~ScAsyncTabController() = default;
+    virtual bool  StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) = 0;
+    virtual const SfxItemSet*   GetOutputItemSet() const = 0;
+    virtual void                SetCurPageId( const OString &rName ) = 0;
+};
+
 class AbstractScImportAsciiDlg : public VclAbstractDialog
 {
 protected:
@@ -537,7 +546,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(weld::Window* pParent,
         const SfxItemSet* pAttr) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) = 0;
+    virtual std::shared_ptr<ScAsyncTabController> CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet) = 0;
 
     // for tabpage
     virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
