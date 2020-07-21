@@ -20,6 +20,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkDialog" id="TablesJoinDialog">
@@ -169,6 +171,7 @@
                           <object class="GtkCellRendererText" id="cellrenderertext6"/>
                           <attributes>
                             <attribute name="text">1</attribute>
+                            <attribute name="weight">3</attribute>
                           </attributes>
                         </child>
                       </object>
