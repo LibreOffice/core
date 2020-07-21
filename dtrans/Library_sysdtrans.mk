@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_static_libraries,sysdtrans,\
 $(eval $(call gb_Library_add_exception_objects,sysdtrans,\
 	dtrans/source/win32/clipb/WinClipbImpl \
 	dtrans/source/win32/clipb/WinClipboard \
-	dtrans/source/win32/clipb/wcbentry \
 	dtrans/source/win32/clipb/MtaOleClipb \
 ))
 
