@@ -24,13 +24,6 @@
 #include <string_view>
 #include <algorithm>
 #include <cassert>
-#ifdef MACOSX
-#include <premac.h>
-#include <Foundation/NSString.h>
-#include <CoreFoundation/CFURL.h>
-#include <CoreServices/CoreServices.h>
-#include <postmac.h>
-#endif
 
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -734,16 +727,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     try
     {
-#ifdef MACOSX
-        LSOpenCFURLRef(CFURLCreateWithString(kCFAllocatorDefault,
-                           CFStringCreateWithCString(kCFAllocatorDefault,
-                               aHelpLink.toUtf8().getStr(),
-                               kCFStringEncodingUTF8),
-                           nullptr),
-            nullptr);
-#else
         sfx2::openUriExternally(aHelpLink, false);
-#endif
         return true;
     }
     catch (const Exception&)
@@ -922,11 +906,10 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
 }
 
 #define SHTML1 "<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"
-#define SHTML2 "<meta http-equiv=\"refresh\" content=\"1; url='"
-#define SHTML3 "'\"><script type=\"text/javascript\"> window.location.href = \""
+#define SHTML2 "<meta http-equiv=\"refresh\" content=\"1\" url=\""
+#define SHTML3 "\"><script type=\"text/javascript\"> window.location.href = \""
 #define SHTML4 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
 
-// use a tempfile since e.g. xdg-open doesn't support URL-parameters with file:// URLs
 static bool impl_showOfflineHelp( const OUString& rURL )
 {
     OUString aBaseInstallPath = getHelpRootURL();
@@ -960,18 +943,10 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     pStream->WriteUnicodeOrByteText(aTempStr);
 
     aTempFile.CloseStream();
+
     try
     {
-#ifdef MACOSX
-        LSOpenCFURLRef(CFURLCreateWithString(kCFAllocatorDefault,
-                           CFStringCreateWithCString(kCFAllocatorDefault,
-                               aTempFile.GetURL().toUtf8().getStr(),
-                               kCFStringEncodingUTF8),
-                           nullptr),
-            nullptr);
-#else
         sfx2::openUriExternally(aTempFile.GetURL(), false);
-#endif
         return true;
     }
     catch (const Exception&)
@@ -1090,22 +1065,6 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         impl_showOnlineHelp( aHelpURL );
         return true;
     }
-#ifdef MACOSX
-    if (@available(macOS 10.14, *)) {
-        // Workaround: Safari sandboxing prevents it from accessing files in the LibreOffice.app folder
-        // force online-help instead if Safari is default browser.
-        CFURLRef pBrowser = LSCopyDefaultApplicationURLForURL(
-                                CFURLCreateWithString(
-                                    kCFAllocatorDefault,
-                                    static_cast<CFStringRef>(@"https://www.libreoffice.org"),
-                                    nullptr),
-                                kLSRolesAll, nullptr);
-        if([static_cast<NSString*>(CFURLGetString(pBrowser)) isEqualToString:@"file:///Applications/Safari.app/"]) {
-            impl_showOnlineHelp( aHelpURL );
-            return true;
-        }
-    }
-#endif
 
     // If the HTML or no help is installed, but aHelpURL nevertheless references valid help content,
     // that implies that this help content belongs to an extension (and thus would not be available
