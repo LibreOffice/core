@@ -33,7 +33,7 @@ void buildPath(
     wchar_t p[MAX_PATH];
     wchar_t * e = tools::buildPath(
         p, front, front + std::wcslen(front), back, std::wcslen(back));
-    CPPUNIT_ASSERT_EQUAL(p + std::wcslen(path), e);
+    CPPUNIT_ASSERT_EQUAL(static_cast<void *>(p + std::wcslen(path)), static_cast<void *>(e));
     CPPUNIT_ASSERT_EQUAL(0, std::wcscmp(path, p));
 #else
     (void) front;

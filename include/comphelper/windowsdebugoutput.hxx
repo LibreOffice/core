@@ -487,7 +487,8 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         case VT_SAFEARRAY:
             break; // FIXME
         case VT_LPSTR:
-            stream << rVariant.bstrVal;
+            stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                rVariant.bstrVal);
             break;
         case VT_LPWSTR:
             stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
