@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7048ddeb_f8ad1d3c",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T08:58:41Z",
+      "side": 1,
+      "message": "Have you forgot to remove this?",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 9
+      },
+      "revId": "12761c3dac42cc1d6aeacab4b40027a0b77f0597",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
