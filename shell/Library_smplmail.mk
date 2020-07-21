@@ -28,7 +28,6 @@ $(eval $(call gb_Library_set_componentfile,smplmail,shell/source/win32/simplemai
 
 $(eval $(call gb_Library_add_exception_objects,smplmail,\
     shell/source/win32/simplemail/smplmailclient \
-    shell/source/win32/simplemail/smplmailentry \
     shell/source/win32/simplemail/smplmailmsg \
     shell/source/win32/simplemail/smplmailsuppl \
 ))
