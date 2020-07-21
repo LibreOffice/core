@@ -73,8 +73,8 @@ namespace dbaui
             int nStartPos, nEndPos;
             m_xEntry->get_selection_bounds(nStartPos, nEndPos);
             int nMin = std::min(nStartPos, nEndPos);
+            m_xEntry->set_text(sCorrected);
             m_xEntry->select_region(nMin, nMin);
-            m_xEntry->replace_selection(sCorrected);
 
             m_xEntry->save_value();
         }
