@@ -22,8 +22,10 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::datatransfer;
@@ -35,6 +37,11 @@ using namespace osl;
 using namespace std;
 
 using ::dtrans::ClipboardManager;
+
+static osl::Mutex g_InstanceGuard;
+static rtl::Reference<ClipboardManager> g_Instance;
+static bool g_Disposed = false;
+
 
 ClipboardManager::ClipboardManager():
     WeakComponentImplHelper< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
@@ -48,7 +55,7 @@ ClipboardManager::~ClipboardManager()
 
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
 {
-    return OUString(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
+    return "com.sun.star.comp.datatransfer.ClipboardManager";
 }
 
 sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
@@ -58,7 +65,7 @@ sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
 {
-    return ClipboardManager_getSupportedServiceNames();
+    return { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
 }
 
 Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
@@ -139,46 +146,50 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
 
 void SAL_CALL ClipboardManager::dispose()
 {
-    ClearableMutexGuard aGuard( rBHelper.rMutex );
-    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
     {
-        rBHelper.bInDispose = true;
-        aGuard.clear();
-
-        // give everyone a chance to save his clipboard instance
-        EventObject aEvt(static_cast < XClipboardManager * > (this));
-        rBHelper.aLC.disposeAndClear( aEvt );
-
-        // removeClipboard is still allowed here,  so make a copy of the
-        // list (to ensure integrity) and clear the original.
-        ClearableMutexGuard aGuard2( rBHelper.rMutex );
-        ClipboardMap aCopy(m_aClipboardMap);
-        m_aClipboardMap.clear();
-        aGuard2.clear();
-
-        // dispose all clipboards still in list
-        ClipboardMap::iterator iter = aCopy.begin();
-        ClipboardMap::iterator imax = aCopy.end();
-
-        for (; iter != imax; ++iter)
+        osl::MutexGuard aGuard(g_InstanceGuard);
+        g_Instance.clear();
+        g_Disposed = true;
+    }
+    {
+        ClearableMutexGuard aGuard( rBHelper.rMutex );
+        if (!rBHelper.bDisposed && !rBHelper.bInDispose)
         {
-            Reference< XComponent > xComponent(iter->second, UNO_QUERY);
-            if (xComponent.is())
+            rBHelper.bInDispose = true;
+            aGuard.clear();
+
+            // give everyone a chance to save his clipboard instance
+            EventObject aEvt(static_cast < XClipboardManager * > (this));
+            rBHelper.aLC.disposeAndClear( aEvt );
+
+            // removeClipboard is still allowed here,  so make a copy of the
+            // list (to ensure integrity) and clear the original.
+            ClearableMutexGuard aGuard2( rBHelper.rMutex );
+            ClipboardMap aCopy(m_aClipboardMap);
+            m_aClipboardMap.clear();
+            aGuard2.clear();
+
+            // dispose all clipboards still in list
+            for (auto const& elem : aCopy)
             {
-                try
+                Reference< XComponent > xComponent(elem.second, UNO_QUERY);
+                if (xComponent.is())
                 {
-                    xComponent->removeEventListener(static_cast < XEventListener * > (this));
-                    xComponent->dispose();
-                }
-                catch (const Exception&)
-                {
-                    // exceptions can be safely ignored here.
+                    try
+                    {
+                        xComponent->removeEventListener(static_cast < XEventListener * > (this));
+                        xComponent->dispose();
+                    }
+                    catch (const Exception&)
+                    {
+                        // exceptions can be safely ignored here.
+                    }
                 }
             }
-        }
 
-        rBHelper.bDisposed = true;
-        rBHelper.bInDispose = false;
+            rBHelper.bDisposed = true;
+            rBHelper.bInDispose = false;
+        }
     }
 }
 
@@ -190,16 +201,17 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
         removeClipboard(xClipboard->getName());
 }
 
-Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
-    const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_ClipboardManager_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return Reference < XInterface >(static_cast<OWeakObject *>(new ClipboardManager()));
-}
-
-Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()
-{
-    Sequence < OUString > SupportedServicesNames { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
-    return SupportedServicesNames;
+    osl::MutexGuard aGuard(g_InstanceGuard);
+    if (g_Disposed)
+        return nullptr;
+    if (!g_Instance)
+        g_Instance.set(new ClipboardManager());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

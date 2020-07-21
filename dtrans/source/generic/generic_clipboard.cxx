@@ -20,6 +20,7 @@
 #include <generic_clipboard.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::datatransfer;
@@ -56,7 +57,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
 {
-    return OUString(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
+    return "com.sun.star.comp.datatransfer.clipboard.GenericClipboard";
 }
 
 sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
@@ -66,7 +67,7 @@ sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
 {
-    return GenericClipboard_getSupportedServiceNames();
+    return { "com.sun.star.datatransfer.clipboard.GenericClipboard" };
 }
 
 Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
@@ -137,16 +138,11 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
         rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener );
 }
 
-Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_GenericClipboard_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.GenericClipboard" };
-    return aRet;
-}
-
-Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
-    const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
-{
-    return Reference < XInterface >(static_cast<OWeakObject *>(new GenericClipboard()));
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new GenericClipboard()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
