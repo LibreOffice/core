@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "889a781b_7f93e324",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-07-21T10:48:12Z",
+      "side": 0,
+      "message": "uhm, dont you need to add the PackageSet here instead? or how does it get installed now",
+      "revId": "db9d871b2dc89ac1a09e17ec08a1570dae546025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
