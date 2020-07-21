@@ -159,7 +159,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
 DECLARE_OOXMLEXPORT_TEST(testTdf129582, "tdf129582.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    // Without the fix in place, the image on the second footer would be imported
+    // Without the fix in place, the image on the second footer wouldn't have been imported
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
