@@ -53,7 +53,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/app.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -87,8 +86,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpDrawAllButton, "draw_all");
     get(mpDBAllButton, "database_all");
     get(mpMathAllButton, "math_all");
-
-    get(mpBrandImage, "imBrand");
 
     get(mpHelpButton, "help");
     //set an alternative help label that doesn't hotkey the H of the Help menu
@@ -184,7 +181,6 @@ void BackingWindow::dispose()
     mpDrawAllButton.clear();
     mpDBAllButton.clear();
     mpMathAllButton.clear();
-    mpBrandImage.clear();
     mpHelpButton.clear();
     mpExtensionsButton.clear();
     mpAllButtonsBox.clear();
@@ -251,14 +247,6 @@ void BackingWindow::initControls()
     setupButton( mpDrawAllButton );
     setupButton( mpCalcAllButton );
     setupButton( mpDBAllButton );
-
-    BitmapEx aBitmap;
-    long nWidth = mpWriterAllButton->get_preferred_size().getWidth();
-    if (SfxApplication::loadBrandSvg("shell/logo_flavor", aBitmap, nWidth))
-    {
-        mpBrandImage->SetImage(Image(aBitmap));
-    }
-
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
 
