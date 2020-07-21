@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,6 +38,7 @@ public:
     void testVba();
     void testMSP();
     void testPasswordProtectedStarBasic();
+    void testTdf114427();
     void testTdf107885();
     void testRowColumn();
     void testTdf131562();
@@ -50,6 +52,7 @@ public:
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
+    CPPUNIT_TEST(testTdf114427);
     CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf131562);
@@ -543,6 +546,42 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf114427()
+{
+    OUString aFileName;
+    createFileURL("tdf114427.ods", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+
+    uno::Reference< frame::XModel > xModel = pDocSh->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDraws->getCount());
+
+    // Without the fix in place, it would have crashed here
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.DeletingFrame?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDraws->getCount());
+
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testTdf107902()
