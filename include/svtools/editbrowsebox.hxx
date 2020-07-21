@@ -243,7 +243,7 @@ namespace svt
         weld::Entry* m_pEntry;
     };
 
-    class SVT_DLLPUBLIC EditControl final : public EditControlBase
+    class SVT_DLLPUBLIC EditControl : public EditControlBase
     {
     public:
         EditControl(BrowserDataWin* pParent);
@@ -255,7 +255,7 @@ namespace svt
             m_xWidget->connect_changed(rLink);
         }
 
-    private:
+    protected:
         std::unique_ptr<weld::Entry> m_xWidget;
     };
 

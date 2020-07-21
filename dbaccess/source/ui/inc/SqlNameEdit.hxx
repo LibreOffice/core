@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
-#include <vcl/edit.hxx>
+#include <svtools/editbrowsebox.hxx>
 #include <vcl/weld.hxx>
 
 namespace dbaui
@@ -46,18 +46,26 @@ namespace dbaui
         bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
 
-    class OSQLNameEdit : public Edit
-                        ,public OSQLNameChecker
+    class OSQLNameEditControl : public svt::EditControl
+                              , public OSQLNameChecker
     {
     public:
-        OSQLNameEdit(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
-            : Edit(_pParent,nStyle)
-            , OSQLNameChecker(_rAllowedChars)
+        OSQLNameEditControl(BrowserDataWin* pParent, const OUString& rAllowedChars)
+            : svt::EditControl(pParent)
+            , OSQLNameChecker(rAllowedChars)
         {
+            m_xWidget->connect_changed(LINK(this, OSQLNameEditControl, ModifyHdl));
         }
 
-        // Edit overrides
-        virtual void Modify() override;
+        virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
+        {
+            m_ChainChangedHdl = rLink;
+        }
+
+    private:
+        DECL_LINK(ModifyHdl, weld::Entry&, void);
+
+        Link<weld::Entry&,void> m_ChainChangedHdl;
     };
 
     class OWidgetBase
