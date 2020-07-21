@@ -248,7 +248,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 // XServiceInfo
 OUString SAL_CALL DropTarget::getImplementationName(  )
 {
-    return DNDTARGET_IMPL_NAME;
+    return "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1";
 }
 // XServiceInfo
 sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
 {
-    return { DNDTARGET_SERVICE_NAME };
+    return { "com.sun.star.datatransfer.dnd.OleDropTarget" };
 }
 
 // XDropTarget
@@ -623,6 +623,13 @@ inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState, DWORD dwEffec
 {
     sal_Int8 actions= dndOleKeysToAction( grfKeyState, dndOleDropEffectsToActions( dwEffect));
     return actions &  m_nDefaultActions;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_DropTarget_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DropTarget(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
