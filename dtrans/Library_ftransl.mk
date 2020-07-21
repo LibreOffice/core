@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_static_libraries,ftransl,\
 
 $(eval $(call gb_Library_add_exception_objects,ftransl,\
 	dtrans/source/win32/ftransl/ftransl \
-	dtrans/source/win32/ftransl/ftranslentry \
 ))
 
 $(eval $(call gb_Library_set_include,ftransl,\
