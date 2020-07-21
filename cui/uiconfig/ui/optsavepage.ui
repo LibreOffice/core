@@ -489,7 +489,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptSavePage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="OptSavePage">In the &lt;b&gt;General&lt;/b&gt; section, you can select default settings for saving documents, and can select default file formats.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="OptSavePage">In the General section, you can select default settings for saving documents, and can select default file formats.</property>
       </object>
     </child>
   </object>
