@@ -69,28 +69,28 @@ void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractio
 // Object viewer
 
 
-OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+OwnView_Impl::OwnView_Impl( const uno::Reference< uno::XComponentContext >& xContext,
                             const uno::Reference< io::XInputStream >& xInputStream )
-: m_xFactory( xFactory )
+: m_xContext( xContext )
 , m_bBusy( false )
 , m_bUseNative( false )
 {
-    if ( !xFactory.is() || !xInputStream.is() )
+    if ( !xContext.is() || !xInputStream.is() )
         throw uno::RuntimeException();
 
-    m_aTempFileURL = GetNewFilledTempFile_Impl( xInputStream, m_xFactory );
+    m_aTempFileURL = GetNewFilledTempFile_Impl( xInputStream, m_xContext );
 }
 
 
 OwnView_Impl::~OwnView_Impl()
 {
     try {
-        KillFile_Impl( m_aTempFileURL, m_xFactory );
+        KillFile_Impl( m_aTempFileURL, m_xContext );
     } catch( uno::Exception& ) {}
 
     try {
         if ( !m_aNativeTempURL.isEmpty() )
-            KillFile_Impl( m_aNativeTempURL, m_xFactory );
+            KillFile_Impl( m_aNativeTempURL, m_xContext );
     } catch( uno::Exception& ) {}
 }
 
@@ -102,7 +102,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
     if ( !aFileURL.isEmpty() )
     {
         try {
-            uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+            uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(m_xContext);
 
             uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
 
@@ -179,7 +179,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
 
 
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
-                                                    const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+                                                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                                     const OUString& aNameWithExtention,
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {
@@ -187,7 +187,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         throw uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
-            xFactory->createInstance("com.sun.star.document.TypeDetection"),
+            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
             uno::UNO_QUERY_THROW );
 
     OUString aTypeName;
@@ -248,7 +248,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
     // create m_aNativeTempURL
     OUString aNativeTempURL;
     uno::Reference < beans::XPropertySet > xNativeTempFile(
-            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+            io::TempFile::create(m_xContext),
             uno::UNO_QUERY_THROW );
     uno::Reference < io::XStream > xNativeTempStream( xNativeTempFile, uno::UNO_QUERY_THROW );
     uno::Reference < io::XOutputStream > xNativeOutTemp = xNativeTempStream->getOutputStream();
@@ -379,7 +379,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
     // The temporary native file is created, now the filter must be detected
     if ( !bFailed )
     {
-        m_aFilterName = GetFilterNameFromExtentionAndInStream( m_xFactory, aFileSuffix, xNativeInTemp );
+        m_aFilterName = GetFilterNameFromExtentionAndInStream( m_xContext, aFileSuffix, xNativeInTemp );
         m_aNativeTempURL = aNativeTempURL;
     }
 
@@ -395,7 +395,7 @@ void OwnView_Impl::CreateNative()
     try
     {
         uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
-                ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
+                ucb::SimpleFileAccess::create( m_xContext ) );
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );
         if ( !xInStream.is() )
@@ -404,9 +404,9 @@ void OwnView_Impl::CreateNative()
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[0] <<= xInStream;
         uno::Reference< container::XNameAccess > xNameAccess(
-                m_xFactory->createInstanceWithArguments(
+                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.embed.OLESimpleStorage",
-                        aArgs ),
+                        aArgs, m_xContext ),
                 uno::UNO_QUERY_THROW );
 
         OUString aSubStreamName = "\1Ole10Native";
@@ -433,7 +433,7 @@ void OwnView_Impl::CreateNative()
 
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
-                        KillFile_Impl( m_aNativeTempURL, m_xFactory );
+                        KillFile_Impl( m_aNativeTempURL, m_xContext );
                         m_aNativeTempURL.clear();
                     }
                 }
@@ -444,7 +444,7 @@ void OwnView_Impl::CreateNative()
 
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
-                        KillFile_Impl( m_aNativeTempURL, m_xFactory );
+                        KillFile_Impl( m_aNativeTempURL, m_xContext );
                         m_aNativeTempURL.clear();
                     }
                 }

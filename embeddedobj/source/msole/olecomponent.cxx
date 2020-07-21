@@ -427,7 +427,7 @@ static OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 }
 
 
-OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& xFactory, OleEmbeddedObject* pUnoOleObject )
+OleComponent::OleComponent( const uno::Reference< uno::XComponentContext >& xContext, OleEmbeddedObject* pUnoOleObject )
 : m_pInterfaceContainer( nullptr )
 , m_bDisposed( false )
 , m_bModified( false )
@@ -437,7 +437,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 , m_pImplAdviseSink( nullptr )
 , m_nOLEMiscFlags( 0 )
 , m_nAdvConn( 0 )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_bOleInitialized( false )
 , m_bWorkaroundActive( false )
 {
@@ -545,7 +545,7 @@ void OleComponent::CreateNewIStorage_Impl()
     if ( m_pUnoOleObject )
         aTempURL = m_pUnoOleObject->CreateTempURLEmpty_Impl();
     else
-        aTempURL = GetNewTempFileURL_Impl( m_xFactory );
+        aTempURL = GetNewTempFileURL_Impl( m_xContext );
 
     if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO
@@ -1390,7 +1390,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xFactory->createInstance("com.sun.star.awt.AsyncCallback"),
+            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
     }
@@ -1410,7 +1410,7 @@ void OleComponent::OnClose_Impl()
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xFactory->createInstance("com.sun.star.awt.AsyncCallback"),
+            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
     }
@@ -1572,7 +1572,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         // allow to retrieve stream-representation of the object persistence
         bSupportedFlavor = true;
         uno::Reference < io::XStream > xTempFileStream(
-            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+            io::TempFile::create(m_xContext),
             uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XOutputStream > xTempOutStream = xTempFileStream->getOutputStream();

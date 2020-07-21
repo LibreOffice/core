@@ -260,14 +260,14 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
         // the stream must be seekable
         uno::Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY_THROW );
         xSeekable->seek( 0 );
-        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), xStream->getInputStream() );
+        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xContext, OUString(), xStream->getInputStream() );
 
         if ( !m_aFilterName.isEmpty()
           && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML"
               || m_aFilterName == "MS Excel 97 Vorlage/Template" || m_aFilterName == "MS Word 97 Vorlage" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xFactory->createInstance("com.sun.star.document.FilterFactory"),
+                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
                 uno::UNO_QUERY_THROW );
 
             OUString aDocServiceName;
@@ -286,7 +286,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 uno::Sequence< uno::Any > aArguments(1);
                 aArguments[0] <<= beans::NamedValue( "EmbeddedObject", uno::makeAny( true ));
 
-                uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstanceWithArguments( aDocServiceName, aArguments ), uno::UNO_QUERY_THROW );
+                uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
                 uno::Reference< document::XStorageBasedDocument > xStorDoc( xDocument, uno::UNO_QUERY_THROW );
 
@@ -323,7 +323,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 xTmpStorage->dispose();
 
                 // look for the related embedded object factory
-                ::comphelper::MimeConfigurationHelper aConfigHelper( comphelper::getComponentContext(m_xFactory) );
+                ::comphelper::MimeConfigurationHelper aConfigHelper( m_xContext );
                 OUString aEmbedFactory;
                 if ( !aMediaType.isEmpty() )
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );
@@ -331,7 +331,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 if ( aEmbedFactory.isEmpty() )
                     throw uno::RuntimeException();
 
-                uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
+                uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
 
                 uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY_THROW );
 
@@ -681,11 +681,11 @@ namespace
     }
 
     uno::Reference < io::XStream > lcl_GetExtractedStream( OUString& rUrl,
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::io::XStream >& xObjectStream )
     {
         uno::Reference <beans::XPropertySet> xNativeTempFile(
-            io::TempFile::create(comphelper::getComponentContext(xFactory)),
+            io::TempFile::create(xContext),
             uno::UNO_QUERY_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
 
@@ -693,9 +693,9 @@ namespace
         aArgs[0] <<= xObjectStream;
         aArgs[1] <<= true; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
-            xFactory->createInstanceWithArguments(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 "com.sun.star.embed.OLESimpleStorage",
-                aArgs ), uno::UNO_QUERY_THROW );
+                aArgs, xContext ), uno::UNO_QUERY_THROW );
 
         //various stream names that can contain the real document contents for
         //this object in a straightforward direct way
@@ -787,7 +787,7 @@ namespace
             xNativeTempFile.clear();
 
             uno::Reference < ucb::XSimpleFileAccess3 > xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
+                    ucb::SimpleFileAccess::create( xContext ) );
 
             xSimpleFileAccess->setReadOnly(rUrl, true);
         }
@@ -803,26 +803,26 @@ namespace
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
     //On success a file is returned which must be removed by the caller
-    OUString lcl_ExtractObject(const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+    OUString lcl_ExtractObject(const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::io::XStream >& xObjectStream)
     {
         OUString sUrl;
 
         // the solution is only active for Unix systems
 #ifndef _WIN32
-        lcl_GetExtractedStream(sUrl, xFactory, xObjectStream);
+        lcl_GetExtractedStream(sUrl, xContext, xObjectStream);
 #else
-        (void) xFactory;
+        (void) xContext;
         (void) xObjectStream;
 #endif
         return sUrl;
     }
 
-    uno::Reference < io::XStream > lcl_ExtractObjectStream( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+    uno::Reference < io::XStream > lcl_ExtractObjectStream( const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::io::XStream >& xObjectStream )
     {
         OUString sUrl;
-        return lcl_GetExtractedStream( sUrl, xFactory, xObjectStream );
+        return lcl_GetExtractedStream( sUrl, xContext, xObjectStream );
     }
 }
 
@@ -924,7 +924,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 if ( xSeekable.is() )
                     xSeekable->seek( 0 );
 
-                m_xOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
+                m_xOwnView = new OwnView_Impl( m_xContext, m_xObjectStream->getInputStream() );
             }
             catch( uno::RuntimeException& )
             {
@@ -939,7 +939,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         // it may be the OLE Storage, try to extract stream
         if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName == "Text" )
         {
-            uno::Reference< io::XStream > xStream = lcl_ExtractObjectStream( m_xFactory, m_xObjectStream );
+            uno::Reference< io::XStream > xStream = lcl_ExtractObjectStream( m_xContext, m_xObjectStream );
 
             if ( TryToConvertToOOo( xStream ) )
             {
@@ -953,13 +953,13 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             //Make a RO copy and see if the OS can find something to at
             //least display the content for us
             if (m_aTempDumpURL.isEmpty())
-                m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
+                m_aTempDumpURL = lcl_ExtractObject(m_xContext, m_xObjectStream);
 
             if (m_aTempDumpURL.isEmpty())
                 throw embed::UnreachableStateException();
 
             uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-                css::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
+                css::system::SystemShellExecute::create( m_xContext ) );
             xSystemShellExecute->execute(m_aTempDumpURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
 
         }

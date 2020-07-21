@@ -36,7 +36,6 @@ $(eval $(call gb_Library_add_exception_objects,emboleobj,\
 	embeddedobj/source/msole/oleembed \
 	embeddedobj/source/msole/olemisc \
 	embeddedobj/source/msole/olepersist \
-	embeddedobj/source/msole/oleregister \
 	embeddedobj/source/msole/olevisual \
 	embeddedobj/source/msole/ownview \
 	embeddedobj/source/msole/xolefactory \

@@ -536,7 +536,6 @@ calc_constructor_list = [
 
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
-    ("libemboleobj.a", "emboleobj_component_getFactory"),
     ]
 
 draw_constructor_list = [
@@ -563,6 +562,8 @@ draw_constructor_list = [
     "com_sun_star_comp_deployment_help_PackageRegistryBackend_get_implementation",
     "com_sun_star_comp_deployment_script_PackageRegistryBackend_get_implementation",
     "com_sun_star_comp_deployment_sfwk_PackageRegistryBackend_get_implementation",
+# embedded/source/msole/emboleobj.windows.component
+    "embeddedobj_OleEmbeddedObjectFactory_get_implementation",
 # filter/source/svg/svgfilter.component
     "filter_SVGFilter_get_implementation",
     "filter_SVGWriter_get_implementation",

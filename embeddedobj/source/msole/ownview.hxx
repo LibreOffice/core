@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
@@ -34,7 +35,7 @@ class OwnView_Impl : public ::cppu::WeakImplHelper < css::util::XCloseListener,
 {
     ::osl::Mutex m_aMutex;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XModel > m_xModel;
 
     OUString m_aTempFileURL;
@@ -57,11 +58,11 @@ private:
 
 public:
     static OUString GetFilterNameFromExtentionAndInStream(
-                                const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+                                const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                 const OUString& aNameWithExtention,
                                 const css::uno::Reference< css::io::XInputStream >& xInputStream );
 
-    OwnView_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+    OwnView_Impl( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                   const css::uno::Reference< css::io::XInputStream >& xStream );
     virtual ~OwnView_Impl() override;
 
