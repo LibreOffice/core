@@ -1609,7 +1609,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         {
             bDialogUsed = true;
             // check if the file is a pdf or not and change the storing mode at convenience
-            if ( aURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" ) )
+            if (aFilterName.endsWith("pdf_Export"))
                 nStoreMode = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
         }
     }
