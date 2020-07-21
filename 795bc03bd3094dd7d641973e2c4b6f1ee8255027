@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd60807_725a728b",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T13:57:01Z",
+      "side": 1,
+      "message": "or better introduce an enum, like \"NodeType\", with values like \"Category\" (for \"Main Headings\")/\"ComplexProperty\" (for \"Parents\")/\"SimpleProperty\" (for, well, simple properties)",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 34,
+        "endChar": 22
+      },
+      "revId": "795bc03bd3094dd7d641973e2c4b6f1ee8255027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
