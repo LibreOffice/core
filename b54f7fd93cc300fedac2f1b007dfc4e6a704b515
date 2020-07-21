@@ -46,6 +46,30 @@
       "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3836707_3459b381",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-21T13:45:27Z",
+      "side": 1,
+      "message": "The reason why that other prop was introduced as int instead of bool is probably lost to history, but I would suggest to change this newly introduced prop (and its -7-0 backport) to use bool instead.\n\n(Also, the OldPath etc. comments are meaningless cargo-cult noise at best, and harmfully misleading at worst.)",
+      "parentUuid": "529977f0_308d72f8",
+      "range": {
+        "startLine": 4644,
+        "startChar": 14,
+        "endLine": 4655,
+        "endChar": 28
+      },
+      "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
