@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_static_libraries,dnd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,dnd,\
-	dtrans/source/win32/dnd/dndentry \
 	dtrans/source/win32/dnd/globals \
 	dtrans/source/win32/dnd/idroptarget \
 	dtrans/source/win32/dnd/sourcecontext \
