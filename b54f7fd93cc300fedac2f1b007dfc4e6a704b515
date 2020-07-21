@@ -22,6 +22,30 @@
       "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "529977f0_308d72f8",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4655,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-07-21T13:35:06Z",
+      "side": 1,
+      "message": "I just copied pasted officecfg/registry/schema/org/openoffice/Office/Common.xcs GIF-EXPORT-TRANSLUCENT block (see https://opengrok.libreoffice.org/xref/core/officecfg/registry/schema/org/openoffice/Office/Common.xcs?r\u003db54f7fd9#4418)",
+      "parentUuid": "b168d1a5_82b0e26b",
+      "range": {
+        "startLine": 4644,
+        "startChar": 14,
+        "endLine": 4655,
+        "endChar": 28
+      },
+      "revId": "b54f7fd93cc300fedac2f1b007dfc4e6a704b515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
