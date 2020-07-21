@@ -5740,6 +5740,7 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
     if (mpOOCursors) // cf. getCellCursor above
     {
         auto pForTabView = dynamic_cast<const ScTabViewShell *>(pForShell);
+        assert(pForTabView);
         if (!pForTabView)
             return;
         aCursor = pForTabView->GetViewData().describeCellCursorAt(
@@ -5776,6 +5777,7 @@ void ScGridWindow::updateKitOtherCursors() const
          it = SfxViewShell::GetNext(*it))
     {
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
+        assert(pOther);
         if (!pOther)
             continue;
         const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
@@ -6000,6 +6002,7 @@ void ScGridWindow::updateOtherKitSelections() const
          it = SfxViewShell::GetNext(*it))
     {
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
+        assert(pOther);
         if (!pOther)
             return;
 
