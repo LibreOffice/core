@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ftransl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.datatransfer.DataFormatTranslator">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.datatransfer.DataFormatTranslator"
+	constructor="dtrans_CDataFormatTranslatorUNO_get_implementation">
     <service name="com.sun.star.datatransfer.DataFormatTranslator"/>
   </implementation>
 </component>

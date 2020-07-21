@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include "../misc/ImplHelper.hxx"
 
 #if defined _MSC_VER
@@ -37,12 +38,8 @@
 #pragma warning(pop)
 #endif
 
-#define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
-
 #define CPPUTYPE_SEQSALINT8       cppu::UnoType<Sequence< sal_Int8 >>::get()
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
-#define CPPUTYPE_OUSTR            cppu::UnoType<OUString>::get()
-#define CPPUTYPE_SALINT32         cppu::UnoType<sal_Int32>::get()
 #define EMPTY_OUSTR               OUString()
 
 const OUString Windows_FormatName ("windows_formatname");
@@ -59,12 +56,6 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
-    {
-        Sequence< OUString > aRet { "com.sun.star.datatransfer.DataFormatTranslator" };
-        return aRet;
-    }
-}
 
 struct FormatEntry
 {
@@ -80,6 +71,8 @@ struct FormatEntry
     OUString                      aNativeFormatName;
     sal_Int32                     aStandardFormatId;
 };
+
+}
 
 FormatEntry::FormatEntry(
     const char *mime_content_type,
@@ -530,14 +523,14 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 
     DataFlavor aFlavor = mkDataFlv( EMPTY_OUSTR, EMPTY_OUSTR, CPPUTYPE_SEQSALINT8 );
 
-    if ( aSysDataType.getValueType( ) == CPPUTYPE_SALINT32 )
+    if ( aSysDataType.getValueType( ) == cppu::UnoType<sal_Int32>::get() )
     {
         sal_Int32 clipformat = CF_INVALID;
         aSysDataType >>= clipformat;
         if ( CF_INVALID != clipformat )
             findDataFlavorForStandardFormatId( clipformat, aFlavor );
     }
-    else if ( aSysDataType.getValueType( ) == CPPUTYPE_OUSTR )
+    else if ( aSysDataType.getValueType( ) == cppu::UnoType<OUString>::get() )
     {
         OUString nativeFormatName;
         aSysDataType >>= nativeFormatName;
@@ -554,7 +547,7 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 
 OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
 {
-    return OUString( IMPL_NAME );
+    return "com.sun.star.datatransfer.DataFormatTranslator";
 }
 
 sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
@@ -564,7 +557,15 @@ sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& Ser
 
 Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames( )
 {
-    return DataFormatTranslator_getSupportedServiceNames( );
+    return { "com.sun.star.datatransfer.DataFormatTranslator" };
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+dtrans_CDataFormatTranslatorUNO_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<CDataFormatTranslatorUNO> g_Instance(new CDataFormatTranslatorUNO(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
