@@ -585,6 +585,10 @@ public:
 
     virtual bool get_editable() const override;
 
+    virtual void set_overwrite_mode(bool bOn) override;
+
+    virtual bool get_overwrite_mode() const override;
+
     virtual void set_message_type(weld::EntryMessageType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
