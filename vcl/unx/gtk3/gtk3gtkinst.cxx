@@ -8827,6 +8827,16 @@ public:
         return gtk_editable_get_editable(GTK_EDITABLE(m_pEntry));
     }
 
+    virtual void set_overwrite_mode(bool bOn) override
+    {
+        gtk_entry_set_overwrite_mode(m_pEntry, bOn);
+    }
+
+    virtual bool get_overwrite_mode() const override
+    {
+        return gtk_entry_get_overwrite_mode(m_pEntry);
+    }
+
     virtual void set_message_type(weld::EntryMessageType eType) override
     {
         ::set_entry_message_type(m_pEntry, eType);
