@@ -409,4 +409,10 @@ css::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
     return { "com.sun.star.system.SystemShellExecute" };
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_CSysShExec_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new CSysShExec(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
