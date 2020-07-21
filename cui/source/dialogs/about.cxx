@@ -32,8 +32,6 @@
 #include <dialmgr.hxx>      //CuiResId
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
 #include <strings.hrc>
 #include <svtools/langhelp.hxx>
 #include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildVersion
@@ -67,7 +65,6 @@ AboutDialog::AboutDialog(weld::Window *pParent)
       m_pUILabel(m_xBuilder->weld_label("lbUIString")),
       m_pLocaleLabel(m_xBuilder->weld_label("lbLocaleString")),
       m_pMiscLabel(m_xBuilder->weld_label("lbMiscString")),
-      m_pAboutLabel(m_xBuilder->weld_label("lbAbout")),
       m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright")) {
 
   // Labels
@@ -90,12 +87,6 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pUILabel->set_label(Application::GetHWOSConfInfo(2));
   m_pLocaleLabel->set_label(GetLocaleString());
   m_pMiscLabel->set_label(GetMiscString());
-
-  if (std::string_view(PRODUCTFLAVOR) == "Personal")
-  {
-      m_pAboutLabel->set_label(SfxResId(STR_PERSONALDESC));
-  }
-
   m_pCopyrightLabel->set_label(GetCopyrightString());
 
   // Images
