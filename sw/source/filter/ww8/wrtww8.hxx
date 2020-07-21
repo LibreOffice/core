@@ -491,7 +491,6 @@ public:
     std::vector<aBookmarkPair> m_aImplicitBookmarks;
     ww8::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pCurrentPageDesc;
-    bool m_bPrevTextNodeIsEmpty;
     bool m_bFirstTOCNodeWithSection;
     std::unique_ptr<WW8_WrPlcPn> m_pPapPlc;
     std::unique_ptr<WW8_WrPlcPn> m_pChpPlc;
@@ -751,7 +750,7 @@ public:
     static sal_uLong GetSectionLineNo( const SfxItemSet* pSet, const SwNode& rNd );
 
     /// Start new section.
-    void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen = false, bool isTextNodeEmpty = false);
+    void OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen = false );
 
     /// Write section properties.
     ///

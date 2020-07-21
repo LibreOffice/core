@@ -3831,7 +3831,6 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCurso
     , m_nOrigRedlineFlags(RedlineFlags::NONE)
     , m_bOrigShowChanges(true)
     , m_pCurrentPageDesc(nullptr)
-    , m_bPrevTextNodeIsEmpty(false)
     , m_bFirstTOCNodeWithSection(false)
     , m_pChpIter(nullptr)
     , m_pAtn(nullptr)
