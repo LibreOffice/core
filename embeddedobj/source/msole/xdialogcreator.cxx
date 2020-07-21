@@ -110,28 +110,6 @@ static uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence<
 }
 
 
-uno::Sequence< OUString > MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.MSOLEObjectSystemCreator";
-    aRet[1] = "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
-    return aRet;
-}
-
-
-OUString MSOLEDialogObjectCreator::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
-}
-
-
-uno::Reference< uno::XInterface > MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new MSOLEDialogObjectCreator( xServiceManager ) );
-}
-
-
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
@@ -188,7 +166,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     if (io.dwFlags & IOF_SELECTCREATENEW)
     {
-        uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
+        uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( m_xContext );
 
         uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
                                                                                           io.clsid.Data2,
@@ -221,12 +199,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
         // TODO: use config helper for type detection
         uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
-        ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
+        ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
 
         if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
-            xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
+            xEmbCreator = embed::EmbeddedObjectCreator::create( m_xContext );
         else
-            xEmbCreator = embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
+            xEmbCreator = embed::OLEEmbeddedObjectFactory::create( m_xContext );
 
         if ( !xEmbCreator.is() )
             throw uno::RuntimeException();
@@ -298,7 +276,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
                                             2 );
 
     uno::Reference< embed::XEmbeddedObject > xResult(
-                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory ) ),
+                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext ) ),
                     uno::UNO_QUERY );
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
@@ -325,7 +303,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 
 OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
 }
 
 
@@ -337,7 +315,17 @@ sal_Bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& Ser
 
 uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return { "com.sun.star.embed.MSOLEObjectSystemCreator",
+             "com.sun.star.comp.embed.MSOLEObjectSystemCreator" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+embeddedobj_MSOLEDialogObjectCreator_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<MSOLEDialogObjectCreator> g_Instance(new MSOLEDialogObjectCreator(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
