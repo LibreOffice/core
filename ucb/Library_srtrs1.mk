@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_libraries,srtrs1,\
 
 $(eval $(call gb_Library_add_exception_objects,srtrs1,\
 	ucb/source/sorter/sortdynres \
-	ucb/source/sorter/sortmain \
 	ucb/source/sorter/sortresult \
 ))
 
