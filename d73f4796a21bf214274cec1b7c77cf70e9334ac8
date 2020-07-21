@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b3d04b2_bbfba37a",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-21T14:46:17Z",
+      "side": 1,
+      "message": "Why do you change this? Now you are leaking the memory here. I don\u0027t advise you to add a separate cleanup in AttrChangedNotify; instead, either change this back to be by-value, or use std::unique_ptr\u003cTreeNode\u003e as the vector element type.",
+      "range": {
+        "startLine": 58,
+        "startChar": 49,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "d73f4796a21bf214274cec1b7c77cf70e9334ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
