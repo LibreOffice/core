@@ -191,6 +191,7 @@
 #include <core/fpdfapi/render/cpdf_renderoptions.h>
 #include <core/fpdfapi/render/cpdf_rendershading.h>
 #include <core/fpdfapi/render/cpdf_renderstatus.h>
+#include <core/fpdfapi/render/cpdf_rendertiling.h>
 #include <core/fpdfapi/render/cpdf_scaledrenderbuffer.h>
 #include <core/fpdfapi/render/cpdf_textrenderer.h>
 #include <core/fpdfapi/render/cpdf_type3cache.h>
@@ -240,9 +241,7 @@
 #include <core/fxcodec/flate/flatemodule.h>
 #include <core/fxcodec/fx_codec.h>
 #include <core/fxcodec/gif/cfx_gif.h>
-#include <core/fxcodec/gif/cfx_gifcontext.h>
 #include <core/fxcodec/gif/cfx_lzwdecompressor.h>
-#include <core/fxcodec/gif/gifmodule.h>
 #include <core/fxcodec/icc/iccmodule.h>
 #include <core/fxcodec/jbig2/JBig2_ArithDecoder.h>
 #include <core/fxcodec/jbig2/JBig2_ArithIntDecoder.h>
@@ -262,11 +261,11 @@
 #include <core/fxcodec/jbig2/JBig2_Segment.h>
 #include <core/fxcodec/jbig2/JBig2_SymbolDict.h>
 #include <core/fxcodec/jbig2/JBig2_TrdProc.h>
-#include <core/fxcodec/jbig2/jbig2module.h>
+#include <core/fxcodec/jbig2/jbig2_decoder.h>
+#include <core/fxcodec/jpeg/jpeg_common.h>
 #include <core/fxcodec/jpeg/jpegmodule.h>
 #include <core/fxcodec/jpx/cjpx_decoder.h>
 #include <core/fxcodec/jpx/jpx_decode_utils.h>
-#include <core/fxcodec/jpx/jpxmodule.h>
 #include <core/fxcodec/scanlinedecoder.h>
 #include <core/fxcrt/autorestorer.h>
 #include <core/fxcrt/bytestring.h>
@@ -337,6 +336,7 @@
 #include <core/fxge/cfx_defaultrenderdevice.h>
 #include <core/fxge/cfx_drawutils.h>
 #include <core/fxge/cfx_face.h>
+#include <core/fxge/cfx_fillrenderoptions.h>
 #include <core/fxge/cfx_folderfontinfo.h>
 #include <core/fxge/cfx_font.h>
 #include <core/fxge/cfx_fontcache.h>
@@ -350,6 +350,7 @@
 #include <core/fxge/cfx_pathdata.h>
 #include <core/fxge/cfx_renderdevice.h>
 #include <core/fxge/cfx_substfont.h>
+#include <core/fxge/cfx_textrenderoptions.h>
 #include <core/fxge/cfx_unicodeencoding.h>
 #include <core/fxge/dib/cfx_bitmapcomposer.h>
 #include <core/fxge/dib/cfx_bitmapstorer.h>
@@ -433,6 +434,7 @@
 #include <public/fpdf_progressive.h>
 #include <public/fpdf_save.h>
 #include <public/fpdf_searchex.h>
+#include <public/fpdf_signature.h>
 #include <public/fpdf_structtree.h>
 #include <public/fpdf_sysfontinfo.h>
 #include <public/fpdf_text.h>
@@ -462,8 +464,10 @@
 #include <third_party/base/allocator/partition_allocator/spin_lock.h>
 #include <third_party/base/bits.h>
 #include <third_party/base/compiler_specific.h>
+#include <third_party/base/containers/adapters.h>
 #include <third_party/base/debug/alias.h>
 #include <third_party/base/logging.h>
+#include <third_party/base/memory/aligned_memory.h>
 #include <third_party/base/no_destructor.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>

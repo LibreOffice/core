@@ -69,8 +69,8 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-4137.tar.bz2",
-                    "sha256": "9a2f9bddca935a263f06c81003483473a525ccd0f4e517bc75fceb914d4c54b6",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-4203.tar.bz2",
+                    "sha256": "7a0dede6f4113aaa9d5395fd851caab9cf9691470f2d4abdc018773fb5f70e94",
                     "type": "file",
                     "dest-filename": "external/tarballs/pdfium-4137.tar.bz2"
                 },
