@@ -22,6 +22,30 @@
       "revId": "4e30e3cee752cfa1e0aa2edecc1be944993fde54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf5ca59_c8728de2",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-21T20:47:54Z",
+      "side": 1,
+      "message": "Aah..Something is always missed.\nDone !!",
+      "parentUuid": "118aa16a_0faad4b3",
+      "range": {
+        "startLine": 128,
+        "startChar": 25,
+        "endLine": 128,
+        "endChar": 26
+      },
+      "revId": "4e30e3cee752cfa1e0aa2edecc1be944993fde54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
