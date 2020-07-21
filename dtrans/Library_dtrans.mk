@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,dtrans,\
 
 $(eval $(call gb_Library_add_exception_objects,dtrans,\
 	dtrans/source/generic/clipboardmanager \
-	dtrans/source/generic/dtrans \
 	dtrans/source/generic/generic_clipboard \
 ))
 
