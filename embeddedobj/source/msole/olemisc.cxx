@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 
 
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext,
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
 : m_pOleComponent( nullptr )
@@ -52,7 +52,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
 , m_bWaitSaveCompleted( false )
@@ -77,14 +77,14 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, bool bLink )
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext, bool bLink )
 : m_pOleComponent( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_bWaitSaveCompleted( false )
 , m_bNewVisReplInStream( true )
 , m_bStoreLoaded( false )
@@ -106,14 +106,14 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 #ifdef _WIN32
 
 // this constructor let object be initialized from clipboard
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext )
 : m_pOleComponent( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xFactory( xFactory )
+, m_xContext( xContext )
 , m_bWaitSaveCompleted( false )
 , m_bNewVisReplInStream( true )
 , m_bStoreLoaded( false )
@@ -149,10 +149,10 @@ OleEmbeddedObject::~OleEmbeddedObject()
     }
 
     if ( !m_aTempURL.isEmpty() )
-           KillFile_Impl( m_aTempURL, m_xFactory );
+           KillFile_Impl( m_aTempURL, m_xContext );
 
     if ( !m_aTempDumpURL.isEmpty() )
-           KillFile_Impl( m_aTempDumpURL, m_xFactory );
+           KillFile_Impl( m_aTempDumpURL, m_xContext );
 }
 
 
