@@ -35,6 +35,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY_THROW);
+    OUString sPageOneStyle = getProperty<OUString>( xCursor, "PageStyleName" );
+
+    xCursor->jumpToNextPage();
+    OUString sPageTwoStyle = getProperty<OUString>( xCursor, "PageStyleName" );
+    CPPUNIT_ASSERT_MESSAGE("Different page1/page2 styles", sPageOneStyle != sPageTwoStyle);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf131801, "tdf131801.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());

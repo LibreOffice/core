@@ -441,7 +441,7 @@ bool MSWordExportBase::SetCurrentPageDescFromNode(const SwNode &rNd)
  * because that one only exits once for CHP and PAP and therefore end up in
  * the wrong one.
  */
-void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen, bool isTextNodeEmpty)
+void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen )
 {
     if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs )
         return;
@@ -462,14 +462,10 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (m_pCurrentPageDesc != pPageDesc)
     {
-        if ( ( isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() )) ||
-             ( isTextNodeEmpty || m_bPrevTextNodeIsEmpty ))
+        if (isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ))
         {
             /* Do not output a section break in the following scenarios.
                 1) Table cell is open and page header types are different
-                2) PageBreak is present but text node has no string - it is an empty node.
-                3) If the previous node was an empty text node and current node is a non empty text node or vice versa.
-                4) If previous node and current node both are empty text nodes.
                 Converting a page break to section break would cause serious issues while importing
                 the RT files with different first page being set.
             */
@@ -572,8 +568,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     {
                         bNewPageDesc |= SetCurrentPageDescFromNode( rNd );
                     }
-                    if( isTextNodeEmpty )
-                       bNewPageDesc = false;
                 }
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pItem );
@@ -620,7 +614,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pCurrentPageDesc );
     }
     m_bBreakBefore = false;
-    m_bPrevTextNodeIsEmpty = isTextNodeEmpty ;
 }
 
 // #i76300#
