@@ -52,3 +52,16 @@ index 0fb627ba8..dda1fc8bc 100644
  
    uint8_t r;
    uint8_t g;
+diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
+index dbc1b1045..36b72461d 100644
+--- a/core/fxcodec/jpx/cjpx_decoder.cpp
++++ b/core/fxcodec/jpx/cjpx_decoder.cpp
+@@ -70,7 +70,7 @@ Optional<OpjImageRgbData> alloc_rgb(size_t size) {
+   if (!data.b)
+     return {};
+ 
+-  return data;
++  return std::move(data);
+ }
+ 
+ void sycc_to_rgb(int offset,
