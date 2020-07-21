@@ -81,12 +81,7 @@ private:
     std::vector<sal_uInt8>::iterator maDataIter;
 
     std::unique_ptr<Bitmap>    mpBmp;
-    BitmapScopedWriteAccess  mxAcc;
-    std::unique_ptr<Bitmap>    mpMaskBmp;
-    BitmapScopedWriteAccess    mxMaskAcc;
-    std::unique_ptr<AlphaMask> mpAlphaMask;
-    AlphaScopedWriteAccess     mxAlphaAcc;
-    BitmapWriteAccess*         mpMaskAcc;
+    BitmapScopedWriteAccess    mxAcc;
 
     ZCodec              mpZCodec;
     std::unique_ptr<sal_uInt8[]>
@@ -139,21 +134,16 @@ private:
 #if OSL_DEBUG_LEVEL > 0
     // do some checks in debug mode
     sal_Int32           mnAllocSizeScanline;
-    sal_Int32           mnAllocSizeScanlineAlpha;
 #endif
     // the temporary Scanline (and alpha) for direct scanline copy to Bitmap
     std::unique_ptr<sal_uInt8[]>
                         mpScanline;
-    std::unique_ptr<sal_uInt8[]>
-                        mpScanlineAlpha;
 
     bool                ReadNextChunk();
 
-    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
-    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex );
-    void                ImplSetTranspPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, bool bTrans );
+    void                ImplSetTranspPixel( sal_uInt32 y, sal_uInt32 x, Color , bool bTrans );
     void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex, sal_uInt8 nAlpha );
-    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, sal_uInt8 nAlpha );
+    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, Color );
     void                ImplReadIDAT();
     bool                ImplPreparePass();
     void                ImplApplyFilter();
@@ -179,7 +169,6 @@ public:
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
-    mpMaskAcc       ( nullptr ),
     mpScanCurrent   ( nullptr ),
     mpColorTable    ( const_cast<sal_uInt8*>(mpDefaultColorTable) ),
     mnChunkType     ( 0 ),
@@ -215,8 +204,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbIgnoreGammaChunk  ( false ),
     mbIgnoreCRC( utl::ConfigManager::IsFuzzing() )
 #if OSL_DEBUG_LEVEL > 0
-    ,mnAllocSizeScanline(0),
-    mnAllocSizeScanlineAlpha(0)
+    ,mnAllocSizeScanline(0)
 #endif
 {
     // prepare the PNG data stream
@@ -415,9 +403,6 @@ BitmapEx PNGReaderImpl::GetBitmapEx()
 
     // release write access of the bitmaps
     mxAcc.reset();
-    mxMaskAcc.reset();
-    mxAlphaAcc.reset();
-    mpMaskAcc = nullptr;
 
     // return the resulting BitmapEx
     BitmapEx aRet;
@@ -426,12 +411,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx()
         aRet.Clear();
     else
     {
-        if ( mpAlphaMask )
-            aRet = BitmapEx( *mpBmp, *mpAlphaMask );
-        else if ( mpMaskBmp )
-            aRet = BitmapEx( *mpBmp, *mpMaskBmp );
-        else
-            aRet = *mpBmp;
+        aRet = *mpBmp;
 
         if ( mbpHYs && maPhysSize.Width() && maPhysSize.Height() )
         {
@@ -608,6 +588,8 @@ bool PNGReaderImpl::ImplReadHeader()
 
     //round bits up to nearest multiple of 8 and divide by 8 to get num of bytes per pixel
     int nBytesPerPixel = ((mnTargetDepth + 7) & ~7)/8;
+    if (mbAlphaChannel)
+        ++nBytesPerPixel;
 
     //stupidly big, forget about it
     if (maTargetSize.Width() >= SAL_MAX_INT32 / nBytesPerPixel / maTargetSize.Height())
@@ -629,16 +611,6 @@ bool PNGReaderImpl::ImplReadHeader()
     mxAcc = BitmapScopedWriteAccess(*mpBmp);
     if (!mxAcc)
         return false;
-
-    if ( mbAlphaChannel )
-    {
-        mpAlphaMask = std::make_unique<AlphaMask>( maTargetSize );
-        mpAlphaMask->Erase( 128 );
-        mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
-        mpMaskAcc = mxAlphaAcc.get();
-        if (!mpMaskAcc)
-            return false;
-    }
 
     if ( mbGrayScale )
         ImplGetGrayPalette( mnPngDepth );
@@ -692,8 +664,6 @@ bool PNGReaderImpl::ImplReadPalette()
 
 bool PNGReaderImpl::ImplReadTransparent()
 {
-    bool bNeedAlpha = false;
-
     if ( mpTransTab == nullptr )
     {
         switch ( mnColorType )
@@ -736,34 +706,11 @@ bool PNGReaderImpl::ImplReadTransparent()
                     {
                         memcpy( mpTransTab.get(), &(*maDataIter), mnChunkLen );
                         maDataIter += mnChunkLen;
-                        // need alpha transparency if not on/off masking
-                        for( int i = 0; i < mnChunkLen; ++i )
-                           bNeedAlpha |= (mpTransTab[i]!=0x00) && (mpTransTab[i]!=0xFF);
                     }
                 }
             }
             break;
         }
-    }
-
-    if( mbTransparent && !mbAlphaChannel && !mpMaskBmp )
-    {
-        if( bNeedAlpha)
-        {
-            mpAlphaMask = std::make_unique<AlphaMask>( maTargetSize );
-            mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
-            mpMaskAcc = mxAlphaAcc.get();
-        }
-        else
-        {
-            mpMaskBmp = std::make_unique<Bitmap>( maTargetSize, 1 );
-            mxMaskAcc = BitmapScopedWriteAccess(*mpMaskBmp);
-            mpMaskAcc = mxMaskAcc.get();
-        }
-        mbTransparent = (mpMaskAcc != nullptr);
-        if( !mbTransparent )
-            return false;
-        mpMaskAcc->Erase( Color(0,0,0) );
     }
 
     return true;
@@ -1143,7 +1090,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     const sal_uInt32 nY = mnYpos >> mnPreviewShift;
 
     sal_uInt8* pTmp = mpInflateInBuf.get() + 1;
-    if ( mxAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
+    if ( mxAcc->HasPalette() ) // alphachannel is not allowed for pictures including palette entries
     {
         switch ( mxAcc->GetBitCount() )
         {
@@ -1376,7 +1323,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 // ScanlineFormat::N32BitTcRgba
                 // only use DirectScanline when we have no preview shifting stuff and accesses to content and alpha
                 const bool bDoDirectScanline(
-                    !nXStart && 1 == nXAdd && !mnPreviewShift && mpMaskAcc);
+                    !nXStart && 1 == nXAdd && !mnPreviewShift );
                 const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
 
                 if(bDoDirectScanline)
@@ -1385,55 +1332,43 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     if(!mpScanline)
                     {
 #if OSL_DEBUG_LEVEL > 0
-                        mnAllocSizeScanline = maOrigSize.Width() * 3;
+                        mnAllocSizeScanline = maOrigSize.Width() * 4;
 #endif
-                        mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 3] );
+                        mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 4] );
                     }
 
-                    if(!mpScanlineAlpha)
-                    {
-#if OSL_DEBUG_LEVEL > 0
-                        mnAllocSizeScanlineAlpha = maOrigSize.Width();
-#endif
-                        mpScanlineAlpha.reset( new sal_uInt8[maOrigSize.Width()] );
-                    }
                 }
 
                 if(bDoDirectScanline)
                 {
                     OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
-                    OSL_ENSURE(mpScanlineAlpha, "No ScanlineAlpha allocated (!)");
 #if OSL_DEBUG_LEVEL > 0
-                    OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
-                    OSL_ENSURE(mnAllocSizeScanlineAlpha >= maOrigSize.Width(), "Allocated ScanlineAlpha too small (!)");
+                    OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 4, "Allocated Scanline too small (!)");
 #endif
                     sal_uInt8* pScanline(mpScanline.get());
-                    sal_uInt8* pScanlineAlpha(mpScanlineAlpha.get());
 
                     for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
                     {
-                        // prepare content line as BGR by reordering when copying
-                        // do not forget to invert alpha (source is alpha, target is opacity)
+                        // prepare content line as BGRA by reordering when copying
                         if(bCustomColorTable)
                         {
                             *pScanline++ = mpColorTable[pTmp[2]];
                             *pScanline++ = mpColorTable[pTmp[1]];
                             *pScanline++ = mpColorTable[pTmp[0]];
-                            *pScanlineAlpha++ = ~pTmp[3];
+                            *pScanline++ = pTmp[3];
                         }
                         else
                         {
                             *pScanline++ = pTmp[2];
                             *pScanline++ = pTmp[1];
                             *pScanline++ = pTmp[0];
-                            *pScanlineAlpha++ = ~pTmp[3];
+                            *pScanline++ = pTmp[3];
                         }
                     }
 
                     // copy scanlines directly to bitmaps for content and alpha; use the formats which
                     // are able to copy directly to BitmapBuffer
-                    mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
-                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha.get(), ScanlineFormat::N8BitPal, maOrigSize.Width());
+                    mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N32BitTcBgra, maOrigSize.Width() * 4);
                 }
                 else
                 {
@@ -1441,25 +1376,25 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     {
                         if(bCustomColorTable)
                         {
-                            ImplSetAlphaPixel(
+                            ImplSetPixel(
                                 nY,
                                 nX,
-                                BitmapColor(
+                                Color(
                                     mpColorTable[ pTmp[ 0 ] ],
                                     mpColorTable[ pTmp[ 1 ] ],
-                                    mpColorTable[ pTmp[ 2 ] ]),
-                                pTmp[ 3 ]);
+                                    mpColorTable[ pTmp[ 2 ] ],
+                                    pTmp[ 3 ]));
                         }
                         else
                         {
-                            ImplSetAlphaPixel(
+                            ImplSetPixel(
                                 nY,
                                 nX,
-                                BitmapColor(
+                                Color(
                                     pTmp[0],
                                     pTmp[1],
-                                    pTmp[2]),
-                                pTmp[3]);
+                                    pTmp[2],
+                                    pTmp[3]));
                         }
                     }
                 }
@@ -1469,14 +1404,14 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 // BMP_FORMAT_64BIT_TC_RGBA
                 for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 8 )
                 {
-                    ImplSetAlphaPixel(
+                    ImplSetPixel(
                         nY,
                         nX,
-                        BitmapColor(
+                        Color(
                             mpColorTable[ pTmp[ 0 ] ],
                             mpColorTable[ pTmp[ 2 ] ],
-                            mpColorTable[ pTmp[ 4 ] ]),
-                        pTmp[6]);
+                            mpColorTable[ pTmp[ 4 ] ],
+                            pTmp[6]));
                 }
             }
         }
@@ -1495,7 +1430,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                                         && ( nGreen == mnTransGreen )
                                         && ( nBlue == mnTransBlue ) );
 
-                    ImplSetTranspPixel( nY, nX, BitmapColor( mpColorTable[ nRed ],
+                    ImplSetTranspPixel( nY, nX, Color( mpColorTable[ nRed ],
                                                         mpColorTable[ nGreen ],
                                                         mpColorTable[ nBlue ] ), bTransparent );
                 }
@@ -1512,7 +1447,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                                         && ( nGreen == mnTransGreen )
                                         && ( nBlue == mnTransBlue ) );
 
-                    ImplSetTranspPixel( nY, nX, BitmapColor( mpColorTable[ nRed ],
+                    ImplSetTranspPixel( nY, nX, Color( mpColorTable[ nRed ],
                                                         mpColorTable[ nGreen ],
                                                         mpColorTable[ nBlue ] ), bTransparent );
                 }
@@ -1575,7 +1510,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                             ImplSetPixel(
                                 nY,
                                 nX,
-                                BitmapColor(
+                                Color(
                                     mpColorTable[ pTmp[ 0 ] ],
                                     mpColorTable[ pTmp[ 1 ] ],
                                     mpColorTable[ pTmp[ 2 ] ]));
@@ -1612,39 +1547,26 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     }
 }
 
-void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor )
+void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, Color col )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel( nY, nX, col );
 }
 
-void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIndex )
+void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, Color col, bool bTrans )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
-}
-
-void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, bool bTrans )
-{
-    // TODO: get preview mode checks out of inner loop
-    if( nX & mnPreviewMask )
-        return;
-    nX >>= mnPreviewShift;
-
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
-
-    if ( bTrans )
-        mpMaskAcc->SetPixel( nY, nX, mcTranspColor );
-    else
-        mpMaskAcc->SetPixel( nY, nX, mcOpaqueColor );
+    if ( bTrans && col == mcTranspColor)
+        col.SetTransparency(255);
+    mxAcc->SetPixel( nY, nX, col );
 }
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
@@ -1655,22 +1577,9 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
-    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
-}
-
-void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
-    const BitmapColor& rBitmapColor, sal_uInt8 nAlpha )
-{
-    // TODO: get preview mode checks out of inner loop
-    if( nX & mnPreviewMask )
-        return;
-    nX >>= mnPreviewShift;
-
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
-    if (!mpMaskAcc)
-        return;
-    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
+    Color nCol = SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount());
+    nCol.SetTransparency(nAlpha);
+    mxAcc->SetPixel(nY, nX, nCol);
 }
 
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
