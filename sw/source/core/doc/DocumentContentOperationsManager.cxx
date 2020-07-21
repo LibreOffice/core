@@ -5080,10 +5080,10 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         pCopyPam->Move( fnMoveForward, bCanMoveBack ? GoInContent : GoInNode );
     else
     {
-        // Reset the offset to 0 as it was before the insertion
-        pCopyPam->GetPoint()->nContent = 0;
-
         pCopyPam->GetPoint()->nNode++;
+
+        // Reset the offset to 0 as it was before the insertion
+        pCopyPam->GetPoint()->nContent.Assign(pCopyPam->GetPoint()->nNode.GetNode().GetContentNode(), 0);
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
         if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
