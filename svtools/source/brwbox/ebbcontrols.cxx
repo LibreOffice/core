@@ -17,10 +17,7 @@
  */
 
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/virdev.hxx>
 
 namespace svt
@@ -288,20 +285,6 @@ namespace svt
         CallModifyHdls();
     }
 
-    IMPL_LINK_NOARG(EditImplementation, ModifyHdl, Edit&, void)
-    {
-        CallModifyHdls();
-    }
-
-    //= EditCellController
-    EditCellController::EditCellController( Edit* _pEdit )
-        :CellController( _pEdit )
-        ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
-        ,m_bOwnImplementation( true )
-    {
-        m_pEditImplementation->SetModifyHdl( LINK(this, EditCellController, ModifyHdl) );
-    }
-
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
         ,m_pEditImplementation( _pImplementation )
@@ -536,6 +519,25 @@ namespace svt
         FormattedControlBase::dispose();
     }
 
+    PatternControl::PatternControl(BrowserDataWin* pParent)
+        : EditControl(pParent)
+    {
+        m_xWidget->connect_key_press(Link<const KeyEvent&, bool>()); // 1) acknowledge we first remove the old one
+        m_xEntryFormatter.reset(new weld::PatternFormatter(*m_xWidget));
+        m_xEntryFormatter->connect_key_press(LINK(this, ControlBase, KeyInputHdl)); // 2) and here we reattach via the formatter
+    }
+
+    void PatternControl::connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        m_xEntryFormatter->connect_changed(rLink);
+    }
+
+    void PatternControl::dispose()
+    {
+        m_xEntryFormatter.reset();
+        EditControl::dispose();
+    }
+
     EditCellController::EditCellController(EditControlBase* pEdit)
         : CellController(pEdit)
         , m_pEditImplementation(new EntryImplementation(*pEdit))
@@ -596,61 +598,6 @@ namespace svt
     }
 
     IMPL_LINK_NOARG(EditCellController, ModifyHdl, LinkParamNone*, void)
-    {
-        callModifyHdl();
-    }
-
-    //= SpinCellController
-    SpinCellController::SpinCellController(SpinField* pWin)
-                         :CellController(pWin)
-    {
-        GetSpinWindow().SetModifyHdl( LINK(this, SpinCellController, ModifyHdl) );
-    }
-
-    const SpinField& SpinCellController::GetSpinWindow() const
-    {
-        return static_cast<const SpinField &>(GetWindow());
-    }
-
-    SpinField& SpinCellController::GetSpinWindow()
-    {
-        return static_cast<SpinField &>(GetWindow());
-    }
-
-    void SpinCellController::SaveValue()
-    {
-        GetSpinWindow().SaveValue();
-    }
-
-    bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
-    {
-        bool bResult;
-        switch (rEvt.GetKeyCode().GetCode())
-        {
-            case KEY_END:
-            case KEY_RIGHT:
-            {
-                Selection aSel = GetSpinWindow().GetSelection();
-                bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().getLength();
-            }   break;
-            case KEY_HOME:
-            case KEY_LEFT:
-            {
-                Selection aSel = GetSpinWindow().GetSelection();
-                bResult = !aSel && aSel.Min() == 0;
-            }   break;
-            default:
-                bResult = true;
-        }
-        return bResult;
-    }
-
-    bool SpinCellController::IsValueChangedFromSaved() const
-    {
-        return GetSpinWindow().IsValueChangedFromSaved();
-    }
-
-    IMPL_LINK_NOARG(SpinCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
     }
