@@ -18,6 +18,8 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 #include "smplmailsuppl.hxx"
 #include "smplmailclient.hxx"
 
@@ -32,18 +34,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 using com::sun::star::system::XSimpleMailClient;
 
 using namespace cppu;
-
-#define COMP_IMPL_NAME  "com.sun.star.sys.shell.SimpleSystemMail"
-
-namespace
-{
-    Sequence< OUString > Component_getSupportedServiceNames()
-    {
-        Sequence< OUString > aRet { "com.sun.star.system.SimpleSystemMail" };
-        return aRet;
-    }
-
-}
 
 CSmplMailSuppl::CSmplMailSuppl() :
     WeakComponentImplHelper<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)
@@ -72,7 +62,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
 {
-    return COMP_IMPL_NAME;
+    return "com.sun.star.sys.shell.SimpleSystemMail";
 }
 
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
@@ -82,7 +72,16 @@ sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
 
 Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
 {
-    return Component_getSupportedServiceNames();
+    return { "com.sun.star.system.SimpleSystemMail" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+shell_CSmplMailSuppl_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<CSmplMailSuppl> g_Instance(new CSmplMailSuppl());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
