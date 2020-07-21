@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad3f8056_edc5bde4",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-21T11:37:38Z",
+      "side": 1,
+      "message": "alternate style: pull this out before if xObj.is and wrap only this in a try-catch loop. That would only avoid the indenting change on all this code though, but it would clarify/limit the intention of the added try-catch.",
+      "range": {
+        "startLine": 1293,
+        "startChar": 26,
+        "endLine": 1293,
+        "endChar": 61
+      },
+      "revId": "1aeb86d7a6980a0c49b4b322cacb7f98619f2bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
