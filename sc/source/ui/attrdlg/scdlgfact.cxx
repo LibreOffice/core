@@ -921,6 +921,21 @@ OString ScAbstractTabController_Impl::GetScreenshotId() const
     return m_xDlg->GetScreenshotId();
 }
 
+bool ScAsyncTabController_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
+void ScAsyncTabController_Impl::SetCurPageId( const OString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* ScAsyncTabController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
 // =========================Factories  for createdialog ===================
 VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg(weld::Window* pParent,
                                                     const OUString& aDatName,
@@ -1224,9 +1239,9 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScParagraphDlg>(pParent, pAttr));
 }
 
-VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
+std::shared_ptr<ScAsyncTabController> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScSortDlg>(pParent, pArgSet));
+    return std::make_shared<ScAsyncTabController_Impl>(std::make_shared<ScSortDlg>(pParent, pArgSet));
 }
 
 //------------------ Factories for TabPages--------------------

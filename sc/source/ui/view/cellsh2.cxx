@@ -515,64 +515,29 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
+                        std::shared_ptr<ScAsyncTabController> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            const ScSortParam& rOutParam = static_cast<const ScSortItem&>(
-                                pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
-
-                            // subtotal when needed new
-
-                            pTabViewShell->UISort( rOutParam );
-
-                            if ( rOutParam.bInplace )
+                        VclAbstractDialog::AsyncContext aContext;
+                        aContext.maEndDialogFn = [pDlg, pData, pTabViewShell](sal_Int32 nResult)
                             {
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_BYROW,
-                                    rOutParam.bByRow ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
-                                    rOutParam.bHasHeader ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
-                                    rOutParam.bCaseSens ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
-                                            rOutParam.bNaturalSort ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
-                                            rOutParam.bIncludeComments ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_INCIMAGES,
-                                            rOutParam.bIncludeGraphicObjects ) );
-                                rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
-                                    rOutParam.bIncludePattern ) );
-                                sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
-                                rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
-                                if ( rOutParam.maKeyState[0].bDoSort )
+                                if ( nResult == RET_OK )
                                 {
-                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1,
-                                        rOutParam.maKeyState[0].nField + 1 ) );
-                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_2,
-                                        rOutParam.maKeyState[0].bAscending ) );
-                                }
-                                if ( rOutParam.maKeyState[1].bDoSort )
-                                {
-                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_3,
-                                        rOutParam.maKeyState[1].nField + 1 ) );
-                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_4,
-                                        rOutParam.maKeyState[1].bAscending ) );
-                                }
-                                if ( rOutParam.maKeyState[2].bDoSort )
-                                {
-                                    rReq.AppendItem( SfxInt32Item( FN_PARAM_5,
-                                        rOutParam.maKeyState[2].nField + 1 ) );
-                                    rReq.AppendItem( SfxBoolItem( FN_PARAM_6,
-                                        rOutParam.maKeyState[2].bAscending ) );
-                                }
-                            }
+                                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                                    const ScSortParam& rOutParam = static_cast<const ScSortItem&>(
+                                        pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
 
-                            rReq.Done();
-                        }
-                        else
-                            GetViewData()->GetDocShell()->CancelAutoDBRange();
+                                    // subtotal when needed new
+
+                                    pTabViewShell->UISort( rOutParam );
+                                }
+                                else
+                                {
+                                    pData->GetDocShell()->CancelAutoDBRange();
+                                }
+                            };
+
+                        pDlg->StartExecuteAsync(aContext);
                     }
                 }
             }
