@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_exception_objects,embobj,\
 	embeddedobj/source/commonembedding/inplaceobj \
 	embeddedobj/source/commonembedding/miscobj \
 	embeddedobj/source/commonembedding/persistence \
-	embeddedobj/source/commonembedding/register \
 	embeddedobj/source/commonembedding/specialobject \
 	embeddedobj/source/commonembedding/visobj \
 	embeddedobj/source/commonembedding/xfactory \

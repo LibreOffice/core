@@ -43,15 +43,6 @@ public:
         OSL_ENSURE( rxContext.is(), "No service manager is provided!" );
     }
 
-    static css::uno::Sequence< OUString > impl_staticGetSupportedServiceNames();
-
-    static OUString impl_staticGetImplementationName();
-
-    static css::uno::Reference< css::uno::XInterface >
-        impl_staticCreateSelfInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
-
-
     // XEmbedObjectCreator
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceInitNew( const css::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceInitFromEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& aMedDescr, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
