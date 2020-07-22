@@ -2380,7 +2380,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             while ( pLower )
             {
                 if ( pLower->IsSctFrame() &&
-                     !dynamic_cast<const SwSectionFrame*>(pLower)->GetSection() )
+                     !dynamic_cast<const SwSectionFrame&>(*pLower).GetSection() )
                 {
                     pLower = pLower->GetNext();
                     continue;
