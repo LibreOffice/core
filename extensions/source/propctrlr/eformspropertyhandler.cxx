@@ -20,7 +20,6 @@
 #include "eformspropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
-#include "pcrservices.hxx"
 #include <propctrlr.h>
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"
@@ -32,12 +31,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-
-
-extern "C" void createRegistryInfo_EFormsPropertyHandler()
-{
-    ::pcr::EFormsPropertyHandler::registerImplementation();
-}
 
 
 namespace pcr
@@ -59,7 +52,7 @@ namespace pcr
 
 
     EFormsPropertyHandler::EFormsPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :EFormsPropertyHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
         ,m_bSimulatingModelChange( false )
     {
     }
@@ -70,16 +63,15 @@ namespace pcr
     }
 
 
-    OUString EFormsPropertyHandler::getImplementationName_static(  )
+    OUString EFormsPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.EFormsPropertyHandler";
     }
 
 
-    Sequence< OUString > EFormsPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > EFormsPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.XMLFormsPropertyHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.XMLFormsPropertyHandler" };
     }
 
 
@@ -270,7 +262,7 @@ namespace pcr
 
     void EFormsPropertyHandler::onNewComponent()
     {
-        EFormsPropertyHandler_Base::onNewComponent();
+        PropertyHandlerComponent::onNewComponent();
 
         Reference< frame::XModel > xDocument( impl_getContextDocument_nothrow() );
         DBG_ASSERT( xDocument.is(), "EFormsPropertyHandler::onNewComponent: no document!" );
@@ -339,7 +331,7 @@ namespace pcr
         break;
 
         default:
-            aReturn = EFormsPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
+            aReturn = PropertyHandlerComponent::convertToPropertyValue( _rPropertyName, _rControlValue );
             break;
         }
 
@@ -373,7 +365,7 @@ namespace pcr
         break;
 
         default:
-            aReturn = EFormsPropertyHandler_Base::convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
+            aReturn = PropertyHandlerComponent::convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
             break;
         }
 
@@ -531,7 +523,7 @@ namespace pcr
     void SAL_CALL EFormsPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        EFormsPropertyHandler_Base::addPropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::addPropertyChangeListener( _rxListener );
         if (m_pHelper)
             m_pHelper->registerBindingListener( _rxListener );
     }
@@ -542,7 +534,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if (m_pHelper)
             m_pHelper->revokeBindingListener( _rxListener );
-        EFormsPropertyHandler_Base::removePropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::removePropertyChangeListener( _rxListener );
     }
 
 
@@ -596,5 +588,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_EFormsPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::EFormsPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

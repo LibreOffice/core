@@ -34,9 +34,7 @@ namespace pcr
     class CellBindingHelper;
     class IPropertyEnumRepresentation;
 
-    class CellBindingPropertyHandler;
-    typedef HandlerComponentBase< CellBindingPropertyHandler > CellBindingPropertyHandler_Base;
-    class CellBindingPropertyHandler : public CellBindingPropertyHandler_Base
+    class CellBindingPropertyHandler : public PropertyHandlerComponent
     {
     private:
         std::unique_ptr< CellBindingHelper >          m_pHelper;
@@ -47,15 +45,14 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-
     protected:
         virtual ~CellBindingPropertyHandler() override;
 
     protected:
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
         // XPropertyHandler overriables
         virtual css::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;

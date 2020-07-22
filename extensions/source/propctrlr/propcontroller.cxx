@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pcrservices.hxx"
 #include "propcontroller.hxx"
 #include "handlerhelper.hxx"
 #include "standardcontrol.hxx"
@@ -49,12 +48,6 @@
 
 #include <algorithm>
 #include <sal/log.hxx>
-
-// !!! outside the namespace !!!
-extern "C" void createRegistryInfo_OPropertyBrowserController()
-{
-    ::pcr::OAutoRegistration< ::pcr::OPropertyBrowserController > aAutoRegistration;
-}
 
 namespace pcr
 {
@@ -512,7 +505,7 @@ namespace pcr
 
     OUString SAL_CALL OPropertyBrowserController::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "org.openoffice.comp.extensions.ObjectInspector";
     }
 
     sal_Bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName )
@@ -523,25 +516,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    OUString OPropertyBrowserController::getImplementationName_static(  )
-    {
-        return "org.openoffice.comp.extensions.ObjectInspector";
-    }
-
-
-    Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  )
-    {
         return { "com.sun.star.inspection.ObjectInspector" };
-    }
-
-
-    Reference< XInterface > OPropertyBrowserController::Create(const Reference< XComponentContext >& _rxContext)
-    {
-        return *(new OPropertyBrowserController( _rxContext ) );
     }
 
 
@@ -1658,5 +1633,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_OPropertyBrowserController_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::OPropertyBrowserController(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

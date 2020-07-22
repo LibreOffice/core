@@ -19,7 +19,6 @@
 
 
 #include "eventhandler.hxx"
-#include "pcrservices.hxx"
 #include <helpids.h>
 #include <propctrlr.h>
 #include "formbrowsertools.hxx"
@@ -64,11 +63,6 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
-
-extern "C" void createRegistryInfo_EventHandler()
-{
-    ::pcr::OAutoRegistration< ::pcr::EventHandler > aAutoRegistration;
-}
 
 namespace pcr
 {
@@ -444,7 +438,7 @@ namespace pcr
 
     OUString SAL_CALL EventHandler::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "com.sun.star.comp.extensions.EventHandler";
     }
 
     sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName )
@@ -454,23 +448,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-    OUString EventHandler::getImplementationName_static(  )
-    {
-        return "com.sun.star.comp.extensions.EventHandler";
-    }
-
-    Sequence< OUString > EventHandler::getSupportedServiceNames_static(  )
-    {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.EventHandler" };
-        return aSupported;
-    }
-
-    Reference< XInterface > EventHandler::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new EventHandler( _rxContext ) );
+        return { "com.sun.star.form.inspection.EventHandler" };
     }
 
     void SAL_CALL EventHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
@@ -1125,5 +1103,12 @@ namespace pcr
     }
 
 } // namespace pcr
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_EventHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::EventHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

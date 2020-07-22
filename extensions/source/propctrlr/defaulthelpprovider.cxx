@@ -20,7 +20,6 @@
 
 #include "defaulthelpprovider.hxx"
 #include "pcrcommon.hxx"
-#include "pcrservices.hxx"
 #include "modulepcr.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
@@ -29,12 +28,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <tools/diagnose_ex.h>
-
-
-extern "C" void createRegistryInfo_DefaultHelpProvider()
-{
-    ::pcr::OAutoRegistration< ::pcr::DefaultHelpProvider > aAutoRegistration;
-}
+#include <cppuhelper/supportsservice.hxx>
 
 
 namespace pcr
@@ -67,22 +61,19 @@ namespace pcr
     }
 
 
-    OUString DefaultHelpProvider::getImplementationName_static(  )
+    Sequence< OUString > SAL_CALL DefaultHelpProvider::getSupportedServiceNames()
+    {
+        return { "com.sun.star.inspection.DefaultHelpProvider" };
+    }
+
+    OUString SAL_CALL DefaultHelpProvider::getImplementationName()
     {
         return "org.openoffice.comp.extensions.DefaultHelpProvider";
     }
 
-
-    Sequence< OUString > DefaultHelpProvider::getSupportedServiceNames_static(  )
+    sal_Bool SAL_CALL DefaultHelpProvider::supportsService(const OUString& aServiceName)
     {
-        Sequence< OUString > aSupported { "com.sun.star.inspection.DefaultHelpProvider" };
-        return aSupported;
-    }
-
-
-    Reference< XInterface > DefaultHelpProvider::Create( const Reference< XComponentContext >& )
-    {
-        return *new DefaultHelpProvider;
+        return cppu::supportsService(this, aServiceName);
     }
 
 
@@ -183,5 +174,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_DefaultHelpProvider_get_implementation(
+    css::uno::XComponentContext*  , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::DefaultHelpProvider());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

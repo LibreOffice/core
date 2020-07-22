@@ -22,6 +22,7 @@
 
 #include <com/sun/star/inspection/XPropertyControlObserver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -38,6 +39,7 @@ namespace pcr
 
     typedef ::cppu::WeakImplHelper <   css::inspection::XPropertyControlObserver
                                     ,   css::lang::XInitialization
+                                    ,   css::lang::XServiceInfo
                                     >   DefaultHelpProvider_Base;
     class DefaultHelpProvider final : public DefaultHelpProvider_Base
     {
@@ -49,16 +51,13 @@ namespace pcr
     public:
         DefaultHelpProvider();
 
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
     private:
         virtual ~DefaultHelpProvider() override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;

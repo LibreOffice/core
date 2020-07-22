@@ -172,16 +172,6 @@ namespace pcr
     protected:
         virtual ~OPropertyBrowserController() override;
 
-    public:
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
-    protected:
         // IPropertyLineListener
         virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) override;
         virtual void    Commit(     const OUString& _rName, const css::uno::Any& _rVal ) override;

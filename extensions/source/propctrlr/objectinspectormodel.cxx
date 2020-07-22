@@ -19,7 +19,6 @@
 
 #include "modulepcr.hxx"
 #include "pcrcommon.hxx"
-#include "pcrservices.hxx"
 #include "inspectormodelbase.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
@@ -63,14 +62,6 @@ namespace pcr
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-        // XServiceInfo - static versions
-        /// @throws RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_static(  );
-        static Reference< XInterface >
-                        Create(const Reference< XComponentContext >&);
 
     protected:
         void    createDefault();
@@ -150,31 +141,13 @@ namespace pcr
 
     OUString SAL_CALL ObjectInspectorModel::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "org.openoffice.comp.extensions.ObjectInspectorModel";
     }
 
 
     Sequence< OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    OUString ObjectInspectorModel::getImplementationName_static(  )
-    {
-        return "org.openoffice.comp.extensions.ObjectInspectorModel";
-    }
-
-
-    Sequence< OUString > ObjectInspectorModel::getSupportedServiceNames_static(  )
-    {
         return { "com.sun.star.inspection.ObjectInspectorModel" };
-    }
-
-
-    Reference< XInterface > ObjectInspectorModel::Create(const Reference< XComponentContext >& /* _rxContext */ )
-    {
-        return *( new ObjectInspectorModel() );
     }
 
 
@@ -213,10 +186,11 @@ namespace pcr
 
 } // namespace pcr
 
-
-extern "C" void createRegistryInfo_ObjectInspectorModel()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_ObjectInspectorModel_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    ::pcr::OAutoRegistration< ::pcr::ObjectInspectorModel > aObjectInspectorModelRegistration;
+    return cppu::acquire(new pcr::ObjectInspectorModel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,17 +24,11 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/svapp.hxx>
 #include "modulepcr.hxx"
-#include "pcrservices.hxx"
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
 #include "pcrstrings.hxx"
 #include "taborder.hxx"
 #include "pcrcommon.hxx"
-
-extern "C" void createRegistryInfo_OTabOrderDialog()
-{
-    ::pcr::OAutoRegistration< ::pcr::OTabOrderDialog > aAutoRegistration;
-}
 
 
 namespace pcr
@@ -76,20 +70,7 @@ namespace pcr
         return css::uno::Sequence<sal_Int8>();
     }
 
-
-    Reference< XInterface > OTabOrderDialog::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new OTabOrderDialog( _rxContext ) );
-    }
-
-
     OUString SAL_CALL OTabOrderDialog::getImplementationName()
-    {
-        return getImplementationName_static();
-    }
-
-
-    OUString OTabOrderDialog::getImplementationName_static()
     {
         return "org.openoffice.comp.form.ui.OTabOrderDialog";
     }
@@ -97,13 +78,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    css::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames_static()
-    {
-        return css::uno::Sequence<OUString>{ "com.sun.star.form.ui.TabOrderDialog", "com.sun.star.form.TabOrderDialog" };
+        return { "com.sun.star.form.ui.TabOrderDialog", "com.sun.star.form.TabOrderDialog" };
     }
 
 
@@ -156,8 +131,13 @@ namespace pcr
             OTabOrderDialog_DBase::initialize(aArguments);
     }
 
-
 }   // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propcrltr_OTabOrderDialog_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::OTabOrderDialog(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

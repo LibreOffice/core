@@ -19,7 +19,6 @@
 
 
 #include "controltype.hxx"
-#include "pcrservices.hxx"
 #include <propctrlr.h>
 #include <helpids.h>
 #include "fontdialog.hxx"
@@ -106,12 +105,6 @@
 #include <limits>
 #include <memory>
 
-extern "C" void createRegistryInfo_FormComponentPropertyHandler()
-{
-    ::pcr::FormComponentPropertyHandler::registerImplementation();
-}
-
-
 namespace pcr
 {
 
@@ -142,8 +135,8 @@ namespace pcr
 #define PROPERTY_ID_ROWSET 1
 
     FormComponentPropertyHandler::FormComponentPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :FormComponentPropertyHandler_Base( _rxContext )
-        ,::comphelper::OPropertyContainer(FormComponentPropertyHandler_Base::rBHelper)
+        :PropertyHandlerComponent( _rxContext )
+        ,::comphelper::OPropertyContainer(PropertyHandlerComponent::rBHelper)
         ,m_sDefaultValueString( PcrRes(RID_STR_STANDARD) )
         ,m_eComponentClass( eUnknown )
         ,m_bComponentIsSubForm( false )
@@ -159,18 +152,17 @@ namespace pcr
     {
     }
 
-    IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)
+    IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,PropertyHandlerComponent,::comphelper::OPropertyContainer)
 
-    OUString FormComponentPropertyHandler::getImplementationName_static(  )
+    OUString FormComponentPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.FormComponentPropertyHandler";
     }
 
 
-    Sequence< OUString > FormComponentPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > FormComponentPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.FormComponentPropertyHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.FormComponentPropertyHandler" };
     }
 
     namespace {
@@ -575,7 +567,7 @@ namespace pcr
 
         case PROPERTY_ID_WRITING_MODE:
         {
-            aPropertyValue = FormComponentPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
+            aPropertyValue = PropertyHandlerComponent::convertToPropertyValue( _rPropertyName, _rControlValue );
 
             sal_Int16 nNormalizedValue( 2 );
             if( ! (aPropertyValue >>= nNormalizedValue) )
@@ -598,7 +590,7 @@ namespace pcr
         break;
 
         default:
-            aPropertyValue = FormComponentPropertyHandler_Base::convertToPropertyValue( _rPropertyName, _rControlValue );
+            aPropertyValue = PropertyHandlerComponent::convertToPropertyValue( _rPropertyName, _rControlValue );
             break;  // default
 
         }   // switch ( nPropId )
@@ -723,7 +715,7 @@ namespace pcr
                 break;
             }
 
-            aControlValue = FormComponentPropertyHandler_Base::convertToControlValue( _rPropertyName, makeAny( nNormalized ), _rControlValueType );
+            aControlValue = PropertyHandlerComponent::convertToControlValue( _rPropertyName, makeAny( nNormalized ), _rControlValueType );
         }
         break;
 
@@ -774,7 +766,7 @@ namespace pcr
         break;
 
         default:
-            aControlValue = FormComponentPropertyHandler_Base::convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
+            aControlValue = PropertyHandlerComponent::convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
             break;
 
         }   // switch ( nPropId )
@@ -793,7 +785,7 @@ namespace pcr
     void SAL_CALL FormComponentPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        FormComponentPropertyHandler_Base::addPropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::addPropertyChangeListener( _rxListener );
         if ( m_xComponent.is() )
             m_xComponent->addPropertyChangeListener( OUString(), _rxListener );
     }
@@ -803,7 +795,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_xComponent.is() )
             m_xComponent->removePropertyChangeListener( OUString(), _rxListener );
-        FormComponentPropertyHandler_Base::removePropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::removePropertyChangeListener( _rxListener );
     }
 
     Sequence< Property > FormComponentPropertyHandler::doDescribeSupportedProperties() const
@@ -2012,7 +2004,7 @@ namespace pcr
 
     void SAL_CALL FormComponentPropertyHandler::disposing()
     {
-        FormComponentPropertyHandler_Base::disposing();
+        PropertyHandlerComponent::disposing();
         if ( m_xCommandDesigner.is() && m_xCommandDesigner->isActive() )
             m_xCommandDesigner->dispose();
     }
@@ -2028,7 +2020,7 @@ namespace pcr
 
     void FormComponentPropertyHandler::onNewComponent()
     {
-        FormComponentPropertyHandler_Base::onNewComponent();
+        PropertyHandlerComponent::onNewComponent();
         if ( !m_xComponentPropertyInfo.is() && m_xComponent.is() )
             throw NullPointerException();
 
@@ -3304,5 +3296,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_FormComponentPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::FormComponentPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "pcrservices.hxx"
 #include "xsdvalidationpropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
@@ -49,12 +48,6 @@
 #include <limits>
 
 
-extern "C" void createRegistryInfo_XSDValidationPropertyHandler()
-{
-    ::pcr::XSDValidationPropertyHandler::registerImplementation();
-}
-
-
 namespace pcr
 {
 
@@ -74,7 +67,7 @@ namespace pcr
     //= XSDValidationPropertyHandler
 
     XSDValidationPropertyHandler::XSDValidationPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :XSDValidationPropertyHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
     {
     }
 
@@ -84,16 +77,15 @@ namespace pcr
     }
 
 
-    OUString XSDValidationPropertyHandler::getImplementationName_static(  )
+    OUString XSDValidationPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.XSDValidationPropertyHandler";
     }
 
 
-    Sequence< OUString > XSDValidationPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > XSDValidationPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.XSDValidationPropertyHandler" };
-        return aSupported;
+        return{ "com.sun.star.form.inspection.XSDValidationPropertyHandler" };
     }
 
 
@@ -158,7 +150,7 @@ namespace pcr
 
     void XSDValidationPropertyHandler::onNewComponent()
     {
-        XSDValidationPropertyHandler_Base::onNewComponent();
+        PropertyHandlerComponent::onNewComponent();
 
         Reference< frame::XModel > xDocument( impl_getContextDocument_nothrow() );
         DBG_ASSERT( xDocument.is(), "XSDValidationPropertyHandler::onNewComponent: no document!" );
@@ -459,7 +451,7 @@ namespace pcr
     void SAL_CALL XSDValidationPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        XSDValidationPropertyHandler_Base::addPropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::addPropertyChangeListener( _rxListener );
         if (m_pHelper)
             m_pHelper->registerBindingListener( _rxListener );
     }
@@ -470,7 +462,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if (m_pHelper)
             m_pHelper->revokeBindingListener( _rxListener );
-        XSDValidationPropertyHandler_Base::removePropertyChangeListener( _rxListener );
+        PropertyHandlerComponent::removePropertyChangeListener( _rxListener );
     }
 
 
@@ -671,5 +663,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_XSDValidationPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::XSDValidationPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

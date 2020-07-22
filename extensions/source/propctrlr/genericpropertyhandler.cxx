@@ -21,7 +21,6 @@
 #include "genericpropertyhandler.hxx"
 #include "handlerhelper.hxx"
 #include "modulepcr.hxx"
-#include "pcrservices.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -44,11 +43,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-
-extern "C" void createRegistryInfo_GenericPropertyHandler()
-{
-    ::pcr::OAutoRegistration< ::pcr::GenericPropertyHandler > aAutoRegistration;
-}
 
 namespace pcr
 {
@@ -278,7 +272,7 @@ namespace pcr
 
     OUString SAL_CALL GenericPropertyHandler::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "com.sun.star.comp.extensions.GenericPropertyHandler";
     }
 
     sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName )
@@ -288,23 +282,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-    OUString GenericPropertyHandler::getImplementationName_static(  )
-    {
-        return "com.sun.star.comp.extensions.GenericPropertyHandler";
-    }
-
-    Sequence< OUString > GenericPropertyHandler::getSupportedServiceNames_static(  )
-    {
-        Sequence<OUString> aSupported { "com.sun.star.inspection.GenericPropertyHandler" };
-        return aSupported;
-    }
-
-    Reference< XInterface > GenericPropertyHandler::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new GenericPropertyHandler( _rxContext ) );
+        return { "com.sun.star.inspection.GenericPropertyHandler" };
     }
 
     void SAL_CALL GenericPropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
@@ -631,5 +609,12 @@ namespace pcr
     IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
 
 }   // namespace pcr
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_GenericPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::GenericPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

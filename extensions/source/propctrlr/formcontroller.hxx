@@ -30,17 +30,6 @@ namespace pcr
 {
 
 
-    //= ServiceDescriptor
-
-    struct ServiceDescriptor
-    {
-        OUString
-            ( *GetImplementationName )( void );
-        css::uno::Sequence< OUString >
-            ( *GetSupportedServiceNames )( void );
-    };
-
-
     //= FormController
 
     class FormController;
@@ -57,23 +46,17 @@ namespace pcr
                             ,public FormController_PropertyBase2
     {
     private:
-        ServiceDescriptor           m_aServiceDescriptor;
         css::uno::Reference< css::beans::XPropertySet >
                                     m_xCurrentInspectee;
+        OUString                    m_sImplementationName;
+        css::uno::Sequence<OUString> m_aSupportedServiceNames;
     public:
         FormController(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            ServiceDescriptor _aServiceDescriptor,
+            const OUString& sImplementName,
+            const css::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers
         );
-
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:
         virtual ~FormController() override;

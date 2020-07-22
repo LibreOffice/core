@@ -58,14 +58,6 @@ namespace pcr
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-        // XServiceInfo - static methods
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static();
-        static css::uno::Reference< css::uno::XInterface >
-                Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 

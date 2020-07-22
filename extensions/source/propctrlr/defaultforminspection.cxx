@@ -19,7 +19,6 @@
 
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
-#include "pcrservices.hxx"
 #include <helpids.h>
 #include <strings.hrc>
 #include "modulepcr.hxx"
@@ -28,12 +27,6 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/macros.h>
-
-
-extern "C" void createRegistryInfo_DefaultFormComponentInspectorModel()
-{
-    ::pcr::OAutoRegistration< ::pcr::DefaultFormComponentInspectorModel > aAutoRegistration;
-}
 
 
 namespace pcr
@@ -65,32 +58,13 @@ namespace pcr
 
     OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  )
     {
-        return getImplementationName_static();
+        return "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel";
     }
 
 
     Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    OUString DefaultFormComponentInspectorModel::getImplementationName_static(  )
-    {
-        return "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel";
-    }
-
-
-    Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" };
-        return aSupported;
-    }
-
-
-    Reference< XInterface > DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& )
-    {
-        return *new DefaultFormComponentInspectorModel();
+        return { "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" };
     }
 
 
@@ -231,5 +205,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_DefaultFormComponentInspectorModel_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::DefaultFormComponentInspectorModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
