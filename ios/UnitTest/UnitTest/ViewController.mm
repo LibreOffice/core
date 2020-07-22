@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,6 +15,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <sfx2/app.hxx>
+#include <vcl/svapp.hxx>
 
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/TestResult.h>
@@ -44,6 +46,10 @@ extern "C" {
 #define CPPUNIT_PLUGIN_EXPORTED_NAME CppuUnourl
 #include "../../../cppuhelper/qa/unourl/cppu_unourl.cxx"
 
+#undef CPPUNIT_PLUGIN_EXPORTED_NAME
+#define CPPUNIT_PLUGIN_EXPORTED_NAME BitmapTest
+#include "../../../vcl/qa/cppunit/BitmapTest.cxx"
+
 #define main tilebench_main
 #include "../../../libreofficekit/qa/tilebench/tilebench.cxx"
 
@@ -52,22 +58,30 @@ extern "C" {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // First run some normal cppunit tests
+    // Simplest (?) way to do all the tedious initialization
+    lok_init_2(nullptr, nullptr);
 
-    CppUnit::TestResult result;
+    {
+        // First run some normal cppunit tests. Seems that at least the BitmapTest needs to be run
+        // with the SolarMutex held.
 
-    CppUnit::TextTestProgressListener logger;
-    result.addListener(&logger);
+        SolarMutexGuard solarMutexGuard;
 
-    CppUnit::TestResultCollector collector;
-    result.addListener(&collector);
+        CppUnit::TestResult result;
 
-    CppUnit::TestRunner runner;
-    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    runner.run(result);
+        CppUnit::TextTestProgressListener logger;
+        result.addListener(&logger);
 
-    CppUnit::CompilerOutputter outputter(&collector, std::cerr);
-    outputter.write();
+        CppUnit::TestResultCollector collector;
+        result.addListener(&collector);
+
+        CppUnit::TestRunner runner;
+        runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+        runner.run(result);
+
+        CppUnit::CompilerOutputter outputter(&collector, std::cerr);
+        outputter.write();
+    }
 
     // Then some more specific stuff
     tilebench_main(0, nullptr);
