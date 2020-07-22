@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba763949_99b09f77",
+        "filename": "bin/check-implementer-notes.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-22T11:15:42Z",
+      "side": 1,
+      "message": "Doesn\u0027t this (and other similar cases) unintentionally change meaning when the string is turned into a raw string?",
+      "range": {
+        "startLine": 14,
+        "startChar": 34,
+        "endLine": 14,
+        "endChar": 37
+      },
+      "revId": "bd96a6f7b7eb103f97bcd6eadc21908187e94dce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
