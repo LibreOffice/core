@@ -2770,7 +2770,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
         OUString(".uno:FreezePanesColumn"),
-        OUString(".uno:FreezePanesRow")
+        OUString(".uno:FreezePanesRow"),
+        OUString(".uno:ShowResolvedAnnotations")
     };
 
     util::URL aCommandURL;
