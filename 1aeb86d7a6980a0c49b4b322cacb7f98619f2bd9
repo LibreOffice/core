@@ -22,6 +22,30 @@
       "revId": "1aeb86d7a6980a0c49b4b322cacb7f98619f2bd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd2ad40_b146eb79",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-07-22T15:11:26Z",
+      "side": 1,
+      "message": "There are other try.catch blocks in this method so we\u0027ve got try.catch inside try.catch, nothing wrong with that I guess, but it does feel a little \"off\". Your call.",
+      "parentUuid": "ad3f8056_edc5bde4",
+      "range": {
+        "startLine": 1293,
+        "startChar": 26,
+        "endLine": 1293,
+        "endChar": 61
+      },
+      "revId": "1aeb86d7a6980a0c49b4b322cacb7f98619f2bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
