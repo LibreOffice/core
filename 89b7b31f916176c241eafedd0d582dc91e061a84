@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f69ae0b9_350db02b",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T12:57:47Z",
+      "side": 1,
+      "message": "By the way, no need for explicit \".is()\". Better use\n\n    if (xSeekable)\n        ...",
+      "parentUuid": "4d40ec02_0516adb1",
+      "revId": "89b7b31f916176c241eafedd0d582dc91e061a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35ed9003_79e612db",
         "filename": "sw/source/filter/ww8/docxexport.cxx",
         "patchSetId": 2
