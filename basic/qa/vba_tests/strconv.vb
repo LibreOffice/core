@@ -21,21 +21,19 @@ Function verify_testStrConv() as String
 
     Dim testName As String
     Dim srcStr, retStr As String
+    Dim i As Integer
     Dim x() As Byte
     srcStr = "abc EFG hij"
     testName = "Test StrConv function"
     On Error GoTo errorHandler
 
     retStr = StrConv(srcStr, vbUpperCase)
-    'MsgBox retStr
     TestLog_ASSERT retStr = "ABC EFG HIJ", "Converts the string to uppercase characters:" & retStr
 
     retStr = StrConv(srcStr, vbLowerCase)
-    'MsgBox retStr
     TestLog_ASSERT retStr = "abc efg hij", "Converts the string to lowercase characters:" & retStr
 
     retStr = StrConv(srcStr, vbProperCase)
-    'MsgBox retStr
     TestLog_ASSERT retStr = "Abc Efg Hij", "Converts the first letter of every word in string to uppercase:" & retStr
 
     'retStr = StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide)
@@ -54,13 +52,36 @@ Function verify_testStrConv() as String
     'MsgBox retStr
    ' TestLog_ASSERT retStr = "¤Ï¤Ê¤Á¤ã¤ó", "Converts Katakana characters in string to Hiragana characters.." & retStr
 
-    'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
-    'MsgBox retStr
-    'TestLog_ASSERT UBound(x) = 8, "Converts the string from Unicode, the length is : " & UBound(x) + 1
+    x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
+    'FIXME: LibreOffice returns 14 while Excel returns 8
+    'TestLog_ASSERT UBound(x) = 8, "Converts the string from Unicode, the lenght is : " & UBound(x) + 1
 
-   ' retStr = StrConv(x, vbUnicode)
-    'MsgBox retStr
-   ' TestLog_ASSERT retStr = "ÉÏº£ÊÐABC", "Converts the string to Unicode: " & retStr
+    retStr = StrConv(x, vbUnicode)
+    TestLog_ASSERT retStr = "ÉÏº£ÊÐABC", "Converts the string to Unicode: " & retStr
+
+    x = StrConv(srcStr, vbFromUnicode)
+    TestLog_ASSERT UBound(x) = 10, "Converts the string from Unicode, the length is: " & UBound(x) + 1
+
+    TestLog_ASSERT x(0) = 97, "Converts the string from Unicode, first char is: " & x(0)
+    TestLog_ASSERT x(1) = 98, "Converts the string from Unicode, second char is: " & x(1)
+    TestLog_ASSERT x(2) = 99, "Converts the string from Unicode, third char is: " & x(2)
+    TestLog_ASSERT x(3) = 32, "Converts the string from Unicode, forth char is: " & x(3)
+    TestLog_ASSERT x(4) = 69, "Converts the string from Unicode, forth char is: " & x(4)
+    TestLog_ASSERT x(5) = 70, "Converts the string from Unicode, fifth char is: " & x(5)
+    TestLog_ASSERT x(6) = 71, "Converts the string from Unicode, sixth char is: " & x(6)
+    TestLog_ASSERT x(7) = 32, "Converts the string from Unicode, seventh char is: " & x(7)
+    TestLog_ASSERT x(8) = 104, "Converts the string from Unicode, eighth char is: " & x(8)
+    TestLog_ASSERT x(9) = 105, "Converts the string from Unicode, nighth char is: " & x(9)
+    TestLog_ASSERT x(10) = 106, "Converts the string from Unicode, tenth char is: " & x(10)
+
+    ReDim x(Len(srcStr) - 1)
+    For i = 1 To Len(srcStr)
+        x(i - 1) = Asc(Mid(srcStr, i, 1))
+    Next
+
+    retStr = StrConv(x, vbUnicode)
+
+    TestLog_ASSERT retStr = srcStr, "Converts the string to Unicode: " & retStr
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testStrConv = result
