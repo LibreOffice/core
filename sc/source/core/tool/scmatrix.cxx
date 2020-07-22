@@ -2183,8 +2183,9 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
 
             // We assume the result matrix has the same dimension as this matrix.
             const std::vector<double>& rResVal = aFunc.getValues();
+            assert (nSize == rResVal.size());
             if (nSize != rResVal.size())
-                ScMatrixRef();
+                return ScMatrixRef();
 
             return ScMatrixRef(new ScMatrix(aSize.column, aSize.row, rResVal));
         }
@@ -2195,8 +2196,9 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
 
     // We assume the result matrix has the same dimension as this matrix.
     const std::vector<double>& rResVal = aFunc.getValues();
+    assert (nSize == rResVal.size());
     if (nSize != rResVal.size())
-        ScMatrixRef();
+        return ScMatrixRef();
 
     return ScMatrixRef(new ScMatrix(aSize.column, aSize.row, rResVal));
 }
