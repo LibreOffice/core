@@ -469,6 +469,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/navigatortree \
     svx/source/form/navigatortreemodel \
     svx/source/form/ParseContext \
+    svx/source/form/recorditemwindow \
     svx/source/form/sdbdatacolumn \
     svx/source/form/sqlparserclient \
     svx/source/form/typemap \
