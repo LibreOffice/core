@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05faf714_bafa812a",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T21:53:38Z",
+      "side": 1,
+      "message": "fourth :-)",
+      "range": {
+        "startLine": 68,
+        "startChar": 65,
+        "endLine": 68,
+        "endChar": 70
+      },
+      "revId": "6b4cbb70ec7b53c6f76bb1c3f1503c62097ba7f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
