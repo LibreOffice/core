@@ -293,7 +293,10 @@ lcl_CleanStr(const SwTextNode& rNd,
                         if ( bEmpty && nStart == nCurrent )
                         {
                             rArr.push_back( nCurrent );
-                            --rEnd.GetAnyIndex();
+                            if (rEnd.GetAnyIndex() > nCurrent.GetAnyIndex())
+                            {
+                                --rEnd.GetAnyIndex();
+                            }
                             buf.remove(nCurrent.GetAnyIndex(), 1);
                         }
                         else
@@ -309,7 +312,10 @@ lcl_CleanStr(const SwTextNode& rNd,
                         if( bRemoveCommentAnchors )
                         {
                             rArr.push_back( nCurrent );
-                            --rEnd.GetAnyIndex();
+                            if (rEnd.GetAnyIndex() > nCurrent.GetAnyIndex())
+                            {
+                                --rEnd.GetAnyIndex();
+                            }
                             buf.remove( nCurrent.GetAnyIndex(), 1 );
                         }
                     }
@@ -325,7 +331,14 @@ lcl_CleanStr(const SwTextNode& rNd,
         if ( bNewSoftHyphen )
         {
             rArr.push_back( nCurrent );
-            --rEnd.GetAnyIndex();
+
+            // If the soft hyphen to be removed is past the end of the range we're searching in,
+            // don't adjust the end.
+            if (rEnd.GetAnyIndex() > nCurrent.GetAnyIndex())
+            {
+                --rEnd.GetAnyIndex();
+            }
+
             buf.remove(nCurrent.GetAnyIndex(), 1);
             ++nSoftHyphen.GetAnyIndex();
         }
