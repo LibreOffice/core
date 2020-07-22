@@ -13,6 +13,7 @@
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID, sal_uInt64 nLOKWindowId)
     : Control(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
+    , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
@@ -28,6 +29,8 @@ InterimItemWindow::~InterimItemWindow() { disposeOnce(); }
 
 void InterimItemWindow::dispose()
 {
+    m_pWidget = nullptr;
+
     m_xContainer.reset();
     m_xBuilder.reset();
     m_xVclContentArea.disposeAndClear();
@@ -48,8 +51,20 @@ Size InterimItemWindow::GetOptimalSize() const
     return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
+bool InterimItemWindow::ControlHasFocus() const
+{
+    if (!m_pWidget)
+        return false;
+    return m_pWidget->has_focus();
+}
+
+void InterimItemWindow::InitControlBase(weld::Widget* pWidget) { m_pWidget = pWidget; }
+
 void InterimItemWindow::GetFocus()
 {
+    if (m_pWidget)
+        m_pWidget->grab_focus();
+
     /* let toolbox know this item window has focus so it updates its mnHighItemId to point
        to this toolitem in case tab means to move to another toolitem within
        the toolbox
@@ -95,6 +110,18 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
     pToolBox->KeyInput(rKEvt);
 
     return true;
+}
+
+void InterimItemWindow::Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags /*nFlags*/)
+{
+    if (!m_pWidget)
+        return;
+    m_pWidget->draw(*pDevice, tools::Rectangle(rPos, GetSizePixel()));
+}
+
+void InterimItemWindow::ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos)
+{
+    Draw(pTargetOutDev, rPos, DrawFlags::NONE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

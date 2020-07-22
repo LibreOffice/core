@@ -170,21 +170,9 @@ namespace svt
     public:
         ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID);
 
-        bool ControlHasFocus() const;
-
-        virtual void dispose() override;
-
-        virtual void GetFocus() override;
-
         virtual bool ProcessKey(const KeyEvent& rKEvt);
-
-        virtual void Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags nFlags) override;
     protected:
-        void InitControlBase(weld::Widget* pWidget);
-
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    private:
-        weld::Widget* m_pWidget;
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase
