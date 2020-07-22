@@ -33,32 +33,31 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pController)
+RecordItemWindow::RecordItemWindow(vcl::Window* pParent)
     : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
     , m_xWidget(m_xBuilder->weld_entry("entry"))
-    , m_pController(pController)
 {
     InitControlBase(m_xWidget.get());
 
-    m_xWidget->connect_key_press(LINK(this, SvxFmAbsRecWin, KeyInputHdl));
-    m_xWidget->connect_activate(LINK(this, SvxFmAbsRecWin, ActivatedHdl));
-    m_xWidget->connect_focus_out(LINK(this, SvxFmAbsRecWin, FocusOutHdl));
+    m_xWidget->connect_key_press(LINK(this, RecordItemWindow, KeyInputHdl));
+    m_xWidget->connect_activate(LINK(this, RecordItemWindow, ActivatedHdl));
+    m_xWidget->connect_focus_out(LINK(this, RecordItemWindow, FocusOutHdl));
 
     SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-void SvxFmAbsRecWin::dispose()
+void RecordItemWindow::dispose()
 {
     m_xWidget.reset();
     InterimItemWindow::dispose();
 }
 
-SvxFmAbsRecWin::~SvxFmAbsRecWin()
+RecordItemWindow::~RecordItemWindow()
 {
     disposeOnce();
 }
 
-void SvxFmAbsRecWin::FirePosition( bool _bForce )
+void RecordItemWindow::FirePosition( bool _bForce )
 {
     if (!_bForce && !m_xWidget->get_value_changed_from_saved())
         return;
@@ -67,26 +66,17 @@ void SvxFmAbsRecWin::FirePosition( bool _bForce )
     if (nRecord < 1)
         nRecord = 1;
 
-    SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
-
-    Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "Position";
-    aPositionParam.QueryValue( a );
-    aArgs[0].Value = a;
-    m_pController->Dispatch( ".uno:AbsoluteRecord",
-                             aArgs );
-    m_pController->updateStatus();
+    PositionFired(nRecord);
 
     m_xWidget->save_value();
 }
 
-IMPL_LINK_NOARG(SvxFmAbsRecWin, FocusOutHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(RecordItemWindow, FocusOutHdl, weld::Widget&, void)
 {
     FirePosition( false );
 }
 
-IMPL_LINK(SvxFmAbsRecWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(RecordItemWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -108,11 +98,31 @@ IMPL_LINK(SvxFmAbsRecWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return ChildKeyInput(rKEvt);
 }
 
-IMPL_LINK_NOARG(SvxFmAbsRecWin, ActivatedHdl, weld::Entry&, bool)
+IMPL_LINK_NOARG(RecordItemWindow, ActivatedHdl, weld::Entry&, bool)
 {
     if (!m_xWidget->get_text().isEmpty())
         FirePosition( true );
     return true;
+}
+
+SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pController)
+    : RecordItemWindow(pParent)
+    , m_pController(pController)
+{
+}
+
+void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
+{
+    SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
+
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "Position";
+    aPositionParam.QueryValue( a );
+    aArgs[0].Value = a;
+    m_pController->Dispatch( ".uno:AbsoluteRecord",
+                             aArgs );
+    m_pController->updateStatus();
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
