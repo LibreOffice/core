@@ -3079,6 +3079,8 @@ public:
 
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
         xOutput->SetOutputSizePixel(aSize);
+        xOutput->DrawOutDev(Point(), aSize, rRect.TopLeft(), aSize, rOutput);
+
         cairo_surface_t* pSurface = get_underlying_cairo_surface(*xOutput);
         cairo_t* cr = cairo_create(pSurface);
 

@@ -1134,15 +1134,38 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
+namespace
+{
+    void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput)
+    {
+        Size aSize = pWindow->GetSizePixel();
+
+        VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+        xOutput->SetOutputSizePixel(aSize);
+        xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
+
+        pWindow->Paint(*xOutput, tools::Rectangle(Point(), aSize));
+
+        rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
+
+        xOutput.disposeAndClear();
+
+        for (vcl::Window *pChild = pWindow->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+        {
+            if (!pChild->IsVisible())
+                continue;
+            DoRecursivePaint(pChild, rPos + pChild->GetPosPixel(), rOutput);
+        }
+    }
+}
+
 void SalInstanceWidget::draw(OutputDevice& rOutput, const tools::Rectangle& rRect)
 {
     Size aOrigSize(m_xWidget->GetSizePixel());
-    Size aSize = rRect.GetSize();
-    m_xWidget->SetSizePixel(aSize);
-    rOutput.Push(PushFlags::CLIPREGION);
-    rOutput.IntersectClipRegion(rRect);
-    m_xWidget->PaintToDevice(&rOutput, rRect.TopLeft());
-    rOutput.Pop();
+
+    m_xWidget->SetSizePixel(rRect.GetSize());
+    DoRecursivePaint(m_xWidget, rRect.TopLeft(), rOutput);
+
     m_xWidget->SetSizePixel(aOrigSize);
 }
 
