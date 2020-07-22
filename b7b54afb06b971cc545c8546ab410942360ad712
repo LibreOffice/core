@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37b45efa_e85cee5b",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1602,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T09:03:38Z",
+      "side": 1,
+      "message": "Please don\u0027t use the needless explicit global namespace syntax, unless you actually need to disambiguate something existing in several namespaces. We have some effort (don\u0027t have the commit ids ready to mention) to remove these...",
+      "range": {
+        "startLine": 1602,
+        "startChar": 16,
+        "endLine": 1602,
+        "endChar": 18
+      },
+      "revId": "b7b54afb06b971cc545c8546ab410942360ad712",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
