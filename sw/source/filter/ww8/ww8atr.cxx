@@ -450,23 +450,16 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     const SwPageDesc * pPageDesc = rNd.FindPageDesc();
 
-    // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
+    // Even if m_pCurrentPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (m_pCurrentPageDesc != pPageDesc)
     {
         if (isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ))
         {
-            /* Do not output a section break in the following scenarios.
-                1) Table cell is open and page header types are different
-                Converting a page break to section break would cause serious issues while importing
-                the RT files with different first page being set.
-            */
-
             /*
              * If Table cell is open and page header types are different
-             * set pSet to NULL as we don't want to add any section breaks.
+             * set pSet to NULL as we don't want to add any section breaks inside a table.
              */
-            if ( isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ) )
-                pSet = nullptr;
+            pSet = nullptr;
         }
         else if (!sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
