@@ -48,35 +48,6 @@ using namespace com::sun::star::container;
 #endif
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * ucpfile_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * )
-{
-    void * pRet = nullptr;
-
-    Reference< XMultiServiceFactory > xSMgr(
-            static_cast< XMultiServiceFactory * >( pServiceManager ) );
-    Reference< XSingleServiceFactory > xFactory;
-
-
-    // File Content Provider.
-
-
-    if ( fileaccess::TaskManager::getImplementationName_static().
-            equalsAscii( pImplName ) )
-    {
-        xFactory = FileProvider::createServiceFactory( xSMgr );
-    }
-
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
-}
-
 /****************************************************************************/
 /*                                                                          */
 /*                                                                          */
@@ -121,7 +92,7 @@ FileProvider::initialize(
 OUString SAL_CALL
 FileProvider::getImplementationName()
 {
-    return fileaccess::TaskManager::getImplementationName_static();
+    return "com.sun.star.comp.ucb.FileProvider";
 }
 
 sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
@@ -132,28 +103,8 @@ sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 FileProvider::getSupportedServiceNames()
 {
-    return fileaccess::TaskManager::getSupportedServiceNames_static();
+    return { "com.sun.star.ucb.FileContentProvider" };
 }
-
-Reference< XSingleServiceFactory >
-FileProvider::createServiceFactory(
-                   const Reference< XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createSingleFactory(
-        rxServiceMgr,
-        fileaccess::TaskManager::getImplementationName_static(),
-        FileProvider::CreateInstance,
-        fileaccess::TaskManager::getSupportedServiceNames_static() );
-}
-
-Reference< XInterface > SAL_CALL
-FileProvider::CreateInstance(
-    const Reference< XMultiServiceFactory >& xMultiServiceFactory )
-{
-    XServiceInfo* xP = new FileProvider(comphelper::getComponentContext(xMultiServiceFactory));
-    return Reference< XInterface >::query( xP );
-}
-
 
 // XContent
 
@@ -493,4 +444,10 @@ OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const OUString& URL )
     return aSystemPath;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_file_FileProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new FileProvider(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
