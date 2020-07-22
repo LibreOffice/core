@@ -418,6 +418,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
     , m_aSearchDataTimer("SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
+    , m_xButtonClose(m_xBuilder->weld_button("buttonClose"))
     , m_xMenuButtonSettings(m_xBuilder->weld_menu_button("buttonGear"))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
@@ -429,6 +430,8 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
 
     m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));
     m_xEntrySearch->connect_focus_out(LINK(this, AdditionsDialog, FocusOut_Impl));
+
+    m_xButtonClose->connect_clicked(LINK(this, AdditionsDialog, CloseButtonHdl));
 
     m_sTag = OUStringToOString(sAdditionsTag, RTL_TEXTENCODING_UTF8);
 
@@ -528,6 +531,12 @@ IMPL_LINK_NOARG(AdditionsDialog, FocusOut_Impl, weld::Widget&, void)
         m_aSearchDataTimer.Stop();
         m_aSearchDataTimer.Invoke();
     }
+}
+
+IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
+{
+    if (m_pSearchThread.is())
+        m_pSearchThread->StopExecution();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

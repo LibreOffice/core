@@ -63,9 +63,12 @@ private:
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
+    DECL_LINK(CloseButtonHdl, weld::Button&, void);
 
 public:
     std::unique_ptr<weld::Entry> m_xEntrySearch;
+    std::unique_ptr<weld::Button> m_xButtonClose;
+
     std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;
     std::vector<AdditionsItem> m_aAdditionsItems;
 
