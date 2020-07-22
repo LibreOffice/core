@@ -27,8 +27,9 @@
 **********************************************************************-->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpdav1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.WebDAVContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.WebDAVContentProvider"
+    constructor="ucb_webdav_neon_ContentProvider_get_implementation">
     <service name="com.sun.star.ucb.WebDAVContentProvider"/>
   </implementation>
 </component>
