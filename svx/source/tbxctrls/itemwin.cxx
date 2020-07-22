@@ -53,6 +53,8 @@ SvxMetricField::SvxMetricField(
     , eDlgUnit(SfxModule::GetModuleFieldUnit(rFrame))
     , mxFrame(rFrame)
 {
+    InitControlBase(&m_xWidget->get_widget());
+
     m_xWidget->set_range(0, 5000, FieldUnit::NONE);
     m_xWidget->connect_value_changed(LINK(this, SvxMetricField, ModifyHdl));
     m_xWidget->connect_focus_in(LINK(this, SvxMetricField, FocusInHdl));
@@ -166,13 +168,6 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     InterimItemWindow::DataChanged( rDCEvt );
-}
-
-void SvxMetricField::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)

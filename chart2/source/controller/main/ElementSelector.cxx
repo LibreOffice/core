@@ -56,6 +56,8 @@ SelectorListBox::SelectorListBox(vcl::Window* pParent)
     , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     , m_bReleaseFocus(true)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_key_press(LINK(this, SelectorListBox, KeyInputHdl));
     m_xWidget->connect_changed(LINK(this, SelectorListBox, SelectHdl));
     m_xWidget->connect_focus_out(LINK(this, SelectorListBox, FocusOutHdl));
@@ -70,13 +72,6 @@ void SelectorListBox::dispose()
 {
     m_xWidget.reset();
     InterimItemWindow::dispose();
-}
-
-void SelectorListBox::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 SelectorListBox::~SelectorListBox()

@@ -53,14 +53,12 @@ class ParaAboveSpacingWindow : public ParaULSpacingWindow
 {
 public:
     explicit ParaAboveSpacingWindow(vcl::Window* pParent);
-    virtual void GetFocus() override;
 };
 
 class ParaBelowSpacingWindow : public ParaULSpacingWindow
 {
 public:
     explicit ParaBelowSpacingWindow(vcl::Window* pParent);
-    virtual void GetFocus() override;
 };
 
 class ParaLRSpacingWindow : public InterimItemWindow
@@ -94,21 +92,18 @@ class ParaLeftSpacingWindow : public ParaLRSpacingWindow
 {
 public:
     explicit ParaLeftSpacingWindow(vcl::Window* pParent);
-    virtual void GetFocus() override;
 };
 
 class ParaRightSpacingWindow : public ParaLRSpacingWindow
 {
 public:
     explicit ParaRightSpacingWindow(vcl::Window* pParent);
-    virtual void GetFocus() override;
 };
 
 class ParaFirstLineSpacingWindow : public ParaLRSpacingWindow
 {
 public:
     explicit ParaFirstLineSpacingWindow(vcl::Window* pParent);
-    virtual void GetFocus() override;
 };
 }
 

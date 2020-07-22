@@ -53,12 +53,6 @@ public:
     SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarController* pSpinfieldToolbarController);
     virtual ~SpinfieldControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
     Formatter& GetFormatter()
     {
@@ -86,6 +80,8 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
     , m_xWidget(m_xBuilder->weld_formatted_spin_button("spinbutton"))
     , m_pSpinfieldToolbarController(pSpinfieldToolbarController)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_focus_in(LINK(this, SpinfieldControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, SpinfieldControl, FocusOutHdl));
     Formatter& rFormatter = m_xWidget->GetFormatter();
