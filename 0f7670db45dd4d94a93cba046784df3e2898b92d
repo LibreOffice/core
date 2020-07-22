@@ -70,6 +70,30 @@
       "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df611c1b_d471b247",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T22:07:27Z",
+      "side": 1,
+      "message": "Yes this assert does not make sense, and asserting individual bytes too. But even without it, you won\u0027t make the test pass str -\u003e vbFromUnicode -\u003e vbUnicode -\u003e str, because as I said, e.g. on Russian edition of Windows, the conversion \"from Unicode to bytes\" will convert all but last 3 characters into \"?\", and then converting that back will not result in initial string.\n\nIf you were able to define into/from which encoding to convert (third parameter), you would use it here to test some defined scenario...",
+      "parentUuid": "1974d075_c203f292",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
