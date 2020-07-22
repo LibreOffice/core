@@ -83,7 +83,6 @@ public:
     virtual ~ImplGrafControl() override;
     virtual void            dispose() override;
 
-    virtual void            GetFocus() override;
     void Update( const SfxPoolItem* pItem );
     void set_field_text(const OUString& rStr) { mxField->set_text(rStr); }
     void set_sensitive(bool bSensitive)
@@ -201,6 +200,8 @@ ImplGrafControl::ImplGrafControl(
     , mxImage(m_xBuilder->weld_image("image"))
     , mxField(m_xBuilder->weld_metric_spin_button("spinfield", FieldUnit::NONE))
 {
+    InitControlBase(&mxField->get_widget());
+
     OUString sResId(ImplGetRID(rCmd));
     mxImage->set_from_icon_name(sResId);
     mxImage->set_toolbar_background();
@@ -251,13 +252,6 @@ void ImplGrafControl::dispose()
     InterimItemWindow::dispose();
 }
 
-void ImplGrafControl::GetFocus()
-{
-    if (mxField)
-        mxField->grab_focus();
-    InterimItemWindow::GetFocus();
-}
-
 namespace {
 
 class ImplGrafModeControl final : public InterimItemWindow
@@ -277,13 +271,6 @@ public:
     ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
     virtual void dispose() override;
     virtual ~ImplGrafModeControl() override;
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
     void set_sensitive(bool bSensitive)
     {
@@ -307,6 +294,8 @@ ImplGrafModeControl::ImplGrafModeControl(vcl::Window* pParent, const Reference<X
     , mxFrame(rFrame)
     , m_xWidget(m_xBuilder->weld_combo_box("grafmode"))
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_STANDARD  ) );
     m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_GREYS     ) );
     m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_MONO      ) );

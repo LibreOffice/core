@@ -82,6 +82,8 @@ public:
         : InterimItemWindow(pParent, "svx/ui/checkbuttonbox.ui", "CheckButtonBox")
         , m_xWidget(m_xBuilder->weld_check_button("checkbutton"))
     {
+        InitControlBase(m_xWidget.get());
+
         m_xWidget->connect_key_press(LINK(this, CheckButtonItemWindow, KeyInputHdl));
         m_xWidget->set_label(rLabel);
         SetSizePixel(m_xWidget->get_preferred_size());
@@ -101,13 +103,6 @@ public:
     virtual ~CheckButtonItemWindow() override
     {
         disposeOnce();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
 private:

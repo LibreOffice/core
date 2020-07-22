@@ -40,8 +40,6 @@ private:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void GetFocus() override;
-
 public:
     SvxMetricField( vcl::Window* pParent,
                     const css::uno::Reference< css::frame::XFrame >& rFrame );

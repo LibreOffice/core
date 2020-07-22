@@ -46,12 +46,6 @@ public:
     EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController);
     virtual ~EditControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
     OUString get_text() const { return m_xWidget->get_text(); }
     void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
@@ -72,6 +66,8 @@ EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolb
     , m_xWidget(m_xBuilder->weld_entry("entry"))
     , m_pEditToolbarController(pEditToolbarController)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_focus_in(LINK(this, EditControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, EditControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, EditControl, ModifyHdl));

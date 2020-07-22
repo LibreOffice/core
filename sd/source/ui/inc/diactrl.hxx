@@ -45,8 +45,6 @@ public:
     void set_sensitive(bool bSensitive);
     virtual ~SdPagesField() override;
 
-    virtual void GetFocus() override;
-
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
 
