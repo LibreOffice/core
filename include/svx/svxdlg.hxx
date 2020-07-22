@@ -67,6 +67,15 @@ namespace weld{
     class Window;
 }
 
+class AbstractTabController
+{
+public:
+    virtual ~AbstractTabController() = default;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) = 0;
+    virtual void                SetCurPageId( const OString &rName ) = 0;
+    virtual const SfxItemSet*   GetOutputItemSet() const = 0;
+};
+
 class AbstractSvxDistributeDialog :public VclAbstractDialog
 {
 protected:
@@ -461,7 +470,7 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel )=0;
+    virtual std::shared_ptr<AbstractTabController> CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel )=0;
 
     virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
 
