@@ -572,7 +572,7 @@ std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities
 {
     auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
 #ifndef IOS
-    // Note: This code is used for iOS, too. Let's not use 32-bit bitmaps with included apha on iOS for now.
+    // Note: This code is used for iOS, too. Let's not use 32-bit bitmaps with included alpha on iOS for now.
     pBackendCapabilities->mbSupportsBitmap32 = true;
 #endif
     return pBackendCapabilities;
