@@ -21,6 +21,7 @@ public:
 
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
+    virtual void StateChanged(StateChangedType nStateChange) override;
     virtual void GetFocus() override;
 
     bool ControlHasFocus() const;
