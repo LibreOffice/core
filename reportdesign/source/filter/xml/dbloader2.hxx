@@ -29,27 +29,16 @@
 namespace rptxml
 {
 
-    class ORptTypeDetection : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
+class ORptTypeDetection : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
     explicit ORptTypeDetection(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
-    OUString                                     SAL_CALL getImplementationName() override;
-    sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString                        SAL_CALL getImplementationName() override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-
-    // static methods
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static()
-    {
-        return "com.sun.star.comp.report.ORptTypeDetection";
-    }
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };

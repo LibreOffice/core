@@ -63,7 +63,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
 
 OUString SAL_CALL ImportDocumentHandler::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.ImportDocumentHandler";
 }
 
 sal_Bool SAL_CALL ImportDocumentHandler::supportsService( const OUString& ServiceName )
@@ -76,25 +76,17 @@ uno::Sequence< OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNam
     uno::Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
         aSupported = m_xServiceInfo->getSupportedServiceNames();
-    return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
+    return ::comphelper::concatSequences( uno::Sequence<OUString> { "com.sun.star.report.ImportDocumentHandler" }, aSupported);
 }
 
-OUString ImportDocumentHandler::getImplementationName_Static(  )
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ImportDocumentHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.comp.report.ImportDocumentHandler";
+    return cppu::acquire(new ImportDocumentHandler(context));
 }
 
-uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static(  )
-{
-    uno::Sequence< OUString > aSupported { "com.sun.star.report.ImportDocumentHandler" };
-    return aSupported;
-}
-
-
-uno::Reference< uno::XInterface > ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
-{
-    return *(new ImportDocumentHandler( _rxContext ));
-}
 // xml::sax::XDocumentHandler:
 void SAL_CALL ImportDocumentHandler::startDocument()
 {

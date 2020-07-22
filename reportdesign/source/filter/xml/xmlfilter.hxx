@@ -87,17 +87,10 @@ protected:
     virtual ~ORptFilter()  throw() override;
 public:
 
-    ORptFilter( const Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL );
+    ORptFilter( const Reference< XComponentContext >& _rxContext, OUString const & rImplementationName, SvXMLImportFlags nImportFlags );
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
-
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static();
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     const Reference<XReportDefinition>& getReportDefinition() const {
         return m_xReportDefinition;
@@ -131,66 +124,6 @@ public:
     }
 
     bool                        isOldFormat() const;
-};
-
-/** Imports only settings
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptImportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Imports only content
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptContentImportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Imports only styles
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptStylesImportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Imports only meta data
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptMetaImportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
 

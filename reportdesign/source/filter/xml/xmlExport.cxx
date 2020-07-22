@@ -60,88 +60,70 @@ namespace rptxml
     using namespace ::com::sun::star::xml;
 
 
-    Reference< XInterface > ORptExportHelper::create(Reference< XComponentContext > const & xContext)
+    /** Exports only settings
+     * \ingroup reportdesign_source_filter_xml
+     *
+     */
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    reportdesign_ORptExportHelper_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::SETTINGS ));
+        return cppu::acquire(new ORptExport(context,
+            "com.sun.star.comp.report.XMLSettingsExporter",
+            SvXMLExportFlags::SETTINGS ));
     }
 
-    OUString ORptExportHelper::getImplementationName_Static(  )
+    /** Exports only content
+     * \ingroup reportdesign_source_filter_xml
+     *
+     */
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    reportdesign_ORptContentExportHelper_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return "com.sun.star.comp.report.XMLSettingsExporter";
+        return cppu::acquire(new ORptExport(context,
+            "com.sun.star.comp.report.XMLContentExporter",
+            SvXMLExportFlags::CONTENT ));
     }
 
-    Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  )
+    /** Exports only styles
+     * \ingroup reportdesign_source_filter_xml
+     *
+     */
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    reportdesign_ORptStylesExportHelper_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
+        return cppu::acquire(new ORptExport(context,
+            "com.sun.star.comp.report.XMLStylesExporter",
+            SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
+                SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS ));
     }
 
-    Reference< XInterface > ORptContentExportHelper::create(Reference< XComponentContext > const & xContext)
+    /** Exports only meta data
+     * \ingroup reportdesign_source_filter_xml
+     *
+     */
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    reportdesign_ORptMetaExportHelper_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::CONTENT ));
+        return cppu::acquire(new ORptExport(context,
+            "com.sun.star.comp.report.XMLMetaExporter",
+            SvXMLExportFlags::META ));
     }
 
-    OUString ORptContentExportHelper::getImplementationName_Static(  )
+    /** Exports all
+     * \ingroup reportdesign_source_filter_xml
+     *
+     */
+    extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+    reportdesign_ODBFullExportHelper_get_implementation(
+        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
     {
-        return "com.sun.star.comp.report.XMLContentExporter";
-    }
-
-    Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
-    }
-
-
-    Reference< XInterface > ORptStylesExportHelper::create(Reference< XComponentContext > const & xContext)
-    {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
-            SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS ));
-    }
-
-    OUString ORptStylesExportHelper::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.report.XMLStylesExporter";
-    }
-
-    Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
-    }
-
-
-    Reference< XInterface > ORptMetaExportHelper::create(Reference< XComponentContext > const & xContext)
-    {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::META ));
-    }
-
-    OUString ORptMetaExportHelper::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.report.XMLMetaExporter";
-    }
-
-    Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
-    }
-
-
-    Reference< XInterface > ODBFullExportHelper::create(Reference< XComponentContext > const & xContext)
-    {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::ALL));
-    }
-
-    OUString ODBFullExportHelper::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.report.XMLFullExporter";
-    }
-
-    Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
-        return aSupported;
+        return cppu::acquire(new ORptExport(context,
+            "com.sun.star.comp.report.XMLFullExporter",
+            SvXMLExportFlags::ALL));
     }
 
     namespace {
@@ -291,23 +273,13 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
         m_xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 }
 
-Reference< XInterface > ORptExport::create(Reference< XComponentContext > const & xContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ORptExport_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return *(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
-}
-
-
-OUString ORptExport::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.ExportFilter";
-}
-
-
-uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { "com.sun.star.document.ExportFilter" };
-
-    return aServices;
+    return cppu::acquire(new ORptExport(context,
+        "com.sun.star.comp.report.ExportFilter",
+        SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
 
 
