@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/odbc.hxx>
 #include <odbc/odbcbasedllapi.hxx>
@@ -43,24 +43,19 @@ namespace connectivity::odbc
                                                         //  of all the Connection objects
                                                         //  for this Driver
 
-            css::uno::Reference< css::lang::XMultiServiceFactory > m_xORB;
+            css::uno::Reference< css::uno::XComponentContext > m_xContext;
             SQLHANDLE   m_pDriverHandle;
 
             virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) = 0;
 
         public:
 
-            ODBCDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+            ODBCDriver(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
             // only possibility to get the odbc functions
             virtual oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const = 0;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            /// @throws css::uno::RuntimeException
-            static OUString getImplementationName_Static(  );
-            /// @throws css::uno::RuntimeException
-            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -74,7 +69,7 @@ namespace connectivity::odbc
             virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& getORB() const { return m_xORB; }
+            const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
         };
 
 }
