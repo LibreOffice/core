@@ -31,9 +31,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-ODBCDriver::ODBCDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
+ODBCDriver::ODBCDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     :ODriver_BASE(m_aMutex)
-    ,m_xORB(_rxFactory)
+    ,m_xContext(_rxContext)
     ,m_pDriverHandle(SQL_NULL_HANDLE)
 {
 }
@@ -56,7 +56,7 @@ void ODBCDriver::disposing()
 
 // static ServiceInfo
 
-OUString ODBCDriver::getImplementationName_Static(  )
+OUString ODBCDriver::getImplementationName(  )
 {
     return "com.sun.star.comp.sdbc.ODBCDriver";
         // this name is referenced in the configuration and in the odbc.xml
@@ -64,26 +64,15 @@ OUString ODBCDriver::getImplementationName_Static(  )
 }
 
 
-Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  )
+Sequence< OUString > ODBCDriver::getSupportedServiceNames(  )
 {
     return { "com.sun.star.sdbc.Driver" };
 }
 
 
-OUString SAL_CALL ODBCDriver::getImplementationName(  )
-{
-    return getImplementationName_Static();
-}
-
 sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
-}
-
-
-Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  )
-{
-    return getSupportedServiceNames_Static();
 }
 
 
