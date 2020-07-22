@@ -69,7 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,rptxml,\
     reportdesign/source/filter/xml/xmlReportElement \
     reportdesign/source/filter/xml/xmlReportElementBase \
     reportdesign/source/filter/xml/xmlSection \
-    reportdesign/source/filter/xml/xmlservices \
     reportdesign/source/filter/xml/xmlStyleImport \
     reportdesign/source/filter/xml/xmlSubDocument \
     reportdesign/source/filter/xml/xmlTable \

@@ -77,16 +77,10 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
     return OUString();
 }
 
-Reference< XInterface >
-        ORptTypeDetection::create(Reference< XComponentContext > const & xContext)
-{
-    return *(new ORptTypeDetection(xContext));
-}
-
 // XServiceInfo
 OUString SAL_CALL ORptTypeDetection::getImplementationName()
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.ORptTypeDetection";
 }
 
 
@@ -99,18 +93,19 @@ sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSNS { "com.sun.star.document.ExtendedTypeDetection" };
-    return aSNS;
+    return { "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 
 }//rptxml
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ORptTypeDetection_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptxml::ORptTypeDetection(context));
+}
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

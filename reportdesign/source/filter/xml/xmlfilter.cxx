@@ -249,79 +249,62 @@ static ErrCode ReadThroughComponent(
 }
 
 
-uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
+/** Imports only settings
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ORptImportHelper_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext, SvXMLImportFlags::SETTINGS ));
+    return cppu::acquire(new ORptFilter(context,
+        SERVICE_SETTINGSIMPORTER,
+        SvXMLImportFlags::SETTINGS ));
 }
 
-OUString ORptImportHelper::getImplementationName_Static(  )
+/** Imports only content
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_XMLOasisContentImporter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return SERVICE_SETTINGSIMPORTER;
+    return cppu::acquire(new ORptFilter(context,
+        SERVICE_CONTENTIMPORTER,
+        SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS | SvXMLImportFlags::FONTDECLS ));
 }
 
-Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  )
+/** Imports only styles
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ORptStylesImportHelper_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
-    return aSupported;
-}
-
-Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
-{
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext, SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS |
-        SvXMLImportFlags::FONTDECLS ));
-}
-
-OUString ORptContentImportHelper::getImplementationName_Static(  )
-{
-    return SERVICE_CONTENTIMPORTER;
-}
-
-Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  )
-{
-    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
-    return aSupported;
-}
-
-
-Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
-{
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext,
+    return cppu::acquire(new ORptFilter(context,
+        SERVICE_STYLESIMPORTER,
         SvXMLImportFlags::STYLES | SvXMLImportFlags::MASTERSTYLES | SvXMLImportFlags::AUTOSTYLES |
         SvXMLImportFlags::FONTDECLS ));
 }
 
-OUString ORptStylesImportHelper::getImplementationName_Static(  )
+/** Imports only meta data
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ORptMetaImportHelper_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return SERVICE_STYLESIMPORTER;
-}
-
-Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  )
-{
-    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
-    return aSupported;
-}
-
-
-Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
-{
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext,
-        SvXMLImportFlags::META));
-}
-
-OUString ORptMetaImportHelper::getImplementationName_Static(  )
-{
-    return SERVICE_METAIMPORTER;
-}
-
-Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  )
-{
-    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
-    return aSupported;
+    return cppu::acquire(new ORptFilter(context,
+        SERVICE_METAIMPORTER,
+        SvXMLImportFlags::META ));
 }
 
 
-ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags )
-    :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
+ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, OUString const & rImplementationName, SvXMLImportFlags nImportFlags )
+    :SvXMLImport(_rxContext, rImplementationName, nImportFlags)
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
@@ -344,22 +327,13 @@ ORptFilter::~ORptFilter() throw()
 {
 }
 
-uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OReportFilter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return *(new ORptFilter(xContext));
-}
-
-
-OUString ORptFilter::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.OReportFilter";
-}
-
-uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { SERVICE_IMPORTFILTER };
-
-    return aServices;
+    return cppu::acquire(new ORptFilter(context,
+        "com.sun.star.comp.report.OReportFilter",
+        SvXMLImportFlags::ALL ));
 }
 
 sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )

@@ -145,13 +145,6 @@ public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
-    /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static();
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
@@ -160,79 +153,6 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
 };
 
-/** Exports only settings
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptExportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Exports only content
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptContentExportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Exports only styles
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptStylesExportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-
-/** Exports only meta data
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ORptMetaExportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
-/** Exports all
- * \ingroup reportdesign_source_filter_xml
- *
- */
-class ODBFullExportHelper
-{
-public:
-    /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static(  );
-    /// @throws css::uno::RuntimeException
-    static Sequence< OUString > getSupportedServiceNames_Static(  );
-    static css::uno::Reference< css::uno::XInterface >
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-};
 
 } // rptxml
 
