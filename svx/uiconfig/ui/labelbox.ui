@@ -14,6 +14,7 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="expand">False</property>
