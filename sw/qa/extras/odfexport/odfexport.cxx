@@ -981,7 +981,7 @@ DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
 
 DECLARE_ODFEXPORT_TEST(testTdf128188, "footnote-collect-at-end-of-section.fodt")
 {
-    SwDoc *const pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get())->GetDocShell()->GetDoc();
+    SwDoc *const pDoc = dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
     SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
     // Section1

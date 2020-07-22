@@ -845,7 +845,7 @@ void Test::testSkipImages()
 static auto verifyNestedFieldmark(OUString const& rTestName,
         uno::Reference<lang::XComponent> const& xComponent) -> void
 {
-    SwDoc const*const pDoc(dynamic_cast<SwXTextDocument*>(xComponent.get())->GetDocShell()->GetDoc());
+    SwDoc const*const pDoc(dynamic_cast<SwXTextDocument&>(*xComponent).GetDocShell()->GetDoc());
     IDocumentMarkAccess const& rIDMA(*pDoc->getIDocumentMarkAccess());
 
     // no spurious bookmarks have been created

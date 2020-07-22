@@ -816,8 +816,8 @@ void generateDocumentation(std::ostream & o,
             printConstructors(o, options, manager, nucleus);
             generateDocumentation(
                 o, options, manager,
-                u2b(dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
-                        entity.get())->getBase()),
+                u2b(dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity & >(
+                        *entity).getBase()),
                 delegate);
             break;
 
@@ -837,8 +837,8 @@ void generateDocumentation(std::ostream & o,
             o << "; get method:\npublic static ";
             printType(
                 o, options, manager,
-                dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(
-                    entity.get())->getBase(),
+                dynamic_cast< unoidl::InterfaceBasedSingletonEntity & >(
+                    *entity).getBase(),
                 false);
             o << " get(com.sun.star.uno.XComponentContext context);\n";
             break;
