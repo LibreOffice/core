@@ -7,12 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <labelitemwindow.hxx>
+#include <svx/labelitemwindow.hxx>
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
     : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
     , m_xLabel(m_xBuilder->weld_label("label"))
 {
+    InitControlBase(m_xLabel.get());
+
     m_xLabel->set_label(rLabel);
 
     SetOptimalSize();
