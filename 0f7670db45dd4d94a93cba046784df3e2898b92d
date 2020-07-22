@@ -46,6 +46,30 @@
       "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1974d075_c203f292",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-07-22T22:02:12Z",
+      "side": 1,
+      "message": "Should we just removed that assert then? it has been commented out since the day it was introduced -\u003e https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d76c3184813c97224cfd1e114ec13796e1da040d5",
+      "parentUuid": "17f21de6_9ceb769e",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
