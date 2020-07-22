@@ -72,6 +72,7 @@
 #include <bitmaps.hlst>
 #include <calendar.hxx>
 #include <verticaltabctrl.hxx>
+#include <window.h>
 #include <wizdlg.hxx>
 #include <salvtables.hxx>
 
@@ -1144,7 +1145,15 @@ namespace
         xOutput->SetOutputSizePixel(aSize);
         xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
 
+        //set ReallyVisible to match Visible, we restore the original
+        //state after Paint
+        WindowImpl* pImpl = pWindow->ImplGetWindowImpl();
+        bool bRVisible = pImpl->mbReallyVisible;
+        pImpl->mbReallyVisible = pWindow->IsVisible();
+
         pWindow->Paint(*xOutput, tools::Rectangle(Point(), aSize));
+
+        pImpl->mbReallyVisible = bRVisible;
 
         rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
 
