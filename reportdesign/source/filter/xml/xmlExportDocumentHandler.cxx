@@ -90,7 +90,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
 
 OUString SAL_CALL ExportDocumentHandler::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.ExportDocumentHandler";
 }
 
 sal_Bool SAL_CALL ExportDocumentHandler::supportsService( const OUString& ServiceName )
@@ -103,26 +103,9 @@ uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNam
     uno::Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
         aSupported = m_xServiceInfo->getSupportedServiceNames();
-    return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
+    return ::comphelper::concatSequences(uno::Sequence< OUString > { "com.sun.star.report.ExportDocumentHandler" },aSupported);
 }
 
-OUString ExportDocumentHandler::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.ExportDocumentHandler";
-}
-
-
-uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static(  )
-{
-    uno::Sequence< OUString > aSupported { "com.sun.star.report.ExportDocumentHandler" };
-    return aSupported;
-}
-
-
-uno::Reference< uno::XInterface > ExportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
-{
-    return *(new ExportDocumentHandler( _rxContext ));
-}
 // xml::sax::XDocumentHandler:
 void SAL_CALL ExportDocumentHandler::startDocument()
 {
@@ -417,6 +400,14 @@ void ExportDocumentHandler::exportTableRows()
 }
 
 } // namespace rptxml
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ExportDocumentHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptxml::ExportDocumentHandler(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
