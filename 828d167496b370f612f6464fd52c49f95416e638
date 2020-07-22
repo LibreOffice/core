@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f80c00ad_e0c7f0ca",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T20:24:49Z",
+      "side": 1,
+      "message": "Please clang-format all new code. For this long line, using `auto` is a nice thing:\n\n    auto xContext \u003d comphelper::getProcessComponentContext();\n\nbut anyway, lines should be no longer than 100 characters.\nIt\u0027s not recommended to use leading :: to indicate global namespace - unless you actually have a name collision requiring to disambiguate the global namespace...",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 131
+      },
+      "revId": "828d167496b370f612f6464fd52c49f95416e638",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f501a9d9_7033631b",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T20:24:49Z",
+      "side": 1,
+      "message": "You don\u0027t use the offsets - so I suppose better just pass nullptr?",
+      "range": {
+        "startLine": 236,
+        "startChar": 83,
+        "endLine": 236,
+        "endChar": 92
+      },
+      "revId": "828d167496b370f612f6464fd52c49f95416e638",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
