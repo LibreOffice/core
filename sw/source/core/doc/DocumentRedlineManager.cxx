@@ -1318,7 +1318,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             // Overlaps the current one completely,
                             // split the new one
-                            if( *pEnd != *pREnd )
+                            if (*pEnd == *pREnd)
+                            {
+                                pNewRedl->SetEnd(*pRStt, pEnd);
+                            }
+                            else if (*pStt == *pRStt)
+                            {
+                                pNewRedl->SetStart(*pREnd, pStt);
+                            }
+                            else
                             {
                                 SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
                                 pNew->SetStart( *pREnd );
@@ -1327,8 +1335,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 n = 0;      // re-initialize
                                 bDec = true;
                             }
-                            else
-                                pNewRedl->SetEnd( *pRStt, pEnd );
                         }
                         break;
 
@@ -1582,7 +1588,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             {
                                 pRedl->PushData( *pNewRedl );
                                 if( *pEnd == *pREnd )
+                                {
                                     pNewRedl->SetEnd( *pRStt, pEnd );
+                                }
+                                else if (*pStt == *pRStt)
+                                {
+                                    pNewRedl->SetStart(*pREnd, pStt);
+                                }
                                 else
                                 {
                                     pNew = new SwRangeRedline( *pNewRedl );
@@ -1749,20 +1761,23 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     case SwComparePosition::Outside:
                         // Overlaps the current one completely,
                         // split or shorten the new one
-                        if( *pEnd != *pREnd )
+                        if (*pEnd == *pREnd)
                         {
-                            if( *pEnd != *pRStt )
-                            {
-                                SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
-                                pNew->SetStart( *pREnd );
-                                pNewRedl->SetEnd( *pRStt, pEnd );
-                                AppendRedline( pNew, bCallDelete );
-                                n = 0;      // re-initialize
-                                bDec = true;
-                            }
+                            pNewRedl->SetEnd(*pRStt, pEnd);
+                        }
+                        else if (*pStt == *pRStt)
+                        {
+                            pNewRedl->SetStart(*pREnd, pStt);
                         }
                         else
+                        {
+                            SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
+                            pNew->SetStart( *pREnd );
                             pNewRedl->SetEnd( *pRStt, pEnd );
+                            AppendRedline( pNew, bCallDelete );
+                            n = 0;      // re-initialize
+                            bDec = true;
+                        }
                         break;
                     default:
                         break;
