@@ -300,40 +300,7 @@ namespace svt
 
     ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID)
         : InterimItemWindow(pParent, rUIXMLDescription, rID)
-        , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
     {
-    }
-
-    bool ControlBase::ControlHasFocus() const
-    {
-        if (!m_pWidget)
-            return false;
-        return m_pWidget->has_focus();
-    }
-
-    void ControlBase::Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags /*nFlags*/)
-    {
-        if (!m_pWidget)
-            return;
-        m_pWidget->draw(*pDevice, tools::Rectangle(rPos, GetSizePixel()));
-    }
-
-    void ControlBase::dispose()
-    {
-        m_pWidget = nullptr;
-        InterimItemWindow::dispose();
-    }
-
-    void ControlBase::GetFocus()
-    {
-        if (m_pWidget)
-            m_pWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-
-    void ControlBase::InitControlBase(weld::Widget* pWidget)
-    {
-        m_pWidget = pWidget;
     }
 
     EditControlBase::EditControlBase(BrowserDataWin* pParent)

@@ -23,9 +23,15 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void GetFocus() override;
 
+    bool ControlHasFocus() const;
+
+    virtual void Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags nFlags) override;
+
 protected:
     InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
                       sal_uInt64 nLOKWindowId = 0);
+
+    void InitControlBase(weld::Widget* pWidget);
 
     // pass keystrokes from our child window through this to handle focus changes correctly
     // returns true if keystroke is consumed
@@ -34,6 +40,10 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
+    weld::Widget* m_pWidget;
+
+private:
+    virtual void ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
