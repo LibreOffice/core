@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,ado,\
 	connectivity/source/drivers/ado/APreparedStatement \
 	connectivity/source/drivers/ado/AResultSetMetaData \
 	connectivity/source/drivers/ado/ADriver \
-	connectivity/source/drivers/ado/Aservices \
 	connectivity/source/drivers/ado/Awrapado \
 	connectivity/source/drivers/ado/adoimp \
 ))
