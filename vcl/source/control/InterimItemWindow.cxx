@@ -25,6 +25,13 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     SetPaintTransparent(true);
 }
 
+void InterimItemWindow::StateChanged(StateChangedType nStateChange)
+{
+    if (nStateChange == StateChangedType::Enable)
+        m_xContainer->set_sensitive(IsEnabled());
+    Control::StateChanged(nStateChange);
+}
+
 InterimItemWindow::~InterimItemWindow() { disposeOnce(); }
 
 void InterimItemWindow::dispose()
