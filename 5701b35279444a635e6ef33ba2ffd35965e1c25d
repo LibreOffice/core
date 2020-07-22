@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2943d61c_1530d081",
+        "filename": "sw/qa/uitest/writer_tests3/hyperlinkdialog.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-22T06:29:49Z",
+      "side": 1,
+      "message": "Could there be a timing issue here?  More often than not, this fails on (known slow) lo_ubsan, e.g. \u003chttps://ci.libreoffice.org/job/lo_ubsan/1701/consoleFull#-8558327469567f988-cbcf-4519-af05-6000b834f13f\u003e\n\n  FAIL: test_insert_hyperlink (hyperlinkdialog.HyperlinkDialog)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_ubsan/sw/qa/uitest/writer_tests3/hyperlinkdialog.py\", line 66, in test_insert_hyperlink\n      self.assertEqual(get_state_as_dict(xtarget)[\"Text\"], \"http://www.libreoffice.org/\")\n  AssertionError: \u0027\u0027 !\u003d \u0027http://www.libreoffice.org/\u0027\n  + http://www.libreoffice.org/",
+      "revId": "5701b35279444a635e6ef33ba2ffd35965e1c25d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
