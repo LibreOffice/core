@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpext,\
 	ucb/source/ucp/ext/ucpext_datasupplier \
 	ucb/source/ucp/ext/ucpext_provider \
 	ucb/source/ucp/ext/ucpext_resultset \
-	ucb/source/ucp/ext/ucpext_services \
 ))
 
 # vim: set noet sw=4 ts=4:
