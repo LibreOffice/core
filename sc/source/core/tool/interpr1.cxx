@@ -219,6 +219,24 @@ void ScInterpreter::ScIfJump()
     }
 }
 
+/** Convert an OUString to upper (if bUpper is true) or lower case */
+static OUString lcl_convert(const OUString& aOldStr, bool bUpper)
+{
+    sal_Int32 nOldLen = aOldStr.getLength();
+    if( nOldLen == 0 )
+    {
+        return aOldStr;
+    }
+    LanguageType nLanguage = MsLangId::getSystemLanguage();
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    ::utl::TransliterationWrapper aTransliterationWrapper( xContext, bUpper?TransliterationFlags::LOWERCASE_UPPERCASE:TransliterationFlags::UPPERCASE_LOWERCASE );
+
+    aTransliterationWrapper.loadModuleIfNeeded(nLanguage);
+    com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+    return aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+}
+
+
 /** Store a matrix value in another matrix in the context of that other matrix
     is the result matrix of a jump matrix. All arguments must be valid and are
     not checked. */
@@ -3145,7 +3163,8 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
-    OUString aString = ScGlobal::getCharClassPtr()->uppercase(GetString().getString());
+    OUString aOldStr= GetString().getString();
+    OUString aString = lcl_convert(aOldStr, true);
     PushString(aString);
 }
 
@@ -3156,8 +3175,8 @@ void ScInterpreter::ScProper()
     const sal_Int32 nLen = aStr.getLength();
     if ( nLen > 0 )
     {
-        OUString aUpr(ScGlobal::getCharClassPtr()->uppercase(aStr.toString()));
-        OUString aLwr(ScGlobal::getCharClassPtr()->lowercase(aStr.toString()));
+        OUString aUpr(lcl_convert(aStr.toString(), true));
+        OUString aLwr(lcl_convert(aStr.toString(), false));
         aStr[0] = aUpr[0];
         sal_Int32 nPos = 1;
         while( nPos < nLen )
@@ -3175,7 +3194,8 @@ void ScInterpreter::ScProper()
 
 void ScInterpreter::ScLower()
 {
-    OUString aString = ScGlobal::getCharClassPtr()->lowercase(GetString().getString());
+    OUString aOldStr= GetString().getString();
+    OUString aString = lcl_convert(aOldStr, false);
     PushString(aString);
 }
 
