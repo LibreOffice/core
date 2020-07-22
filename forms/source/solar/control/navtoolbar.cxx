@@ -27,6 +27,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
+#include <svx/labelitemwindow.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -224,7 +226,12 @@ namespace frm
 
         vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( static_cast<sal_uInt16>(_nFeatureId) );
         if ( pItemWindow )
-            pItemWindow->SetText( _rText );
+        {
+            if (_nFeatureId == FormFeature::TotalRecords)
+                static_cast<LabelItemWindow*>(pItemWindow)->set_label(_rText);
+            else
+                pItemWindow->SetText( _rText );
+        }
         else
             m_pToolbar->SetItemText( static_cast<sal_uInt16>(_nFeatureId), _rText );
     }
@@ -300,30 +307,14 @@ namespace frm
                         pItemWindow = VclPtr<RecordPositionInput>::Create( m_pToolbar );
                         static_cast< RecordPositionInput* >( pItemWindow )->setDispatcher( m_pDispatcher );
                     }
-                    else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
-                    {
-                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_CENTER | WB_VCENTER );
-                        pItemWindow->SetBackground(Wallpaper(COL_TRANSPARENT));
-                    }
-                    else
-                    {
-                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_VCENTER );
-                        pItemWindow->SetBackground();
-                        pItemWindow->SetPaintTransparent(true);
-                    }
+                    else if (pSupportedFeatures->nId == LID_RECORD_FILLER)
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, getLabelString(RID_STR_LABEL_OF));
+                    else if (pSupportedFeatures->nId == LID_RECORD_LABEL)
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, getLabelString(RID_STR_LABEL_RECORD));
+                    else if (pSupportedFeatures->nId == FormFeature::TotalRecords)
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, "");
+
                     m_aChildWins.emplace_back(pItemWindow );
-
-                    switch ( pSupportedFeatures->nId )
-                    {
-                    case LID_RECORD_LABEL:
-                        pItemWindow->SetText( getLabelString( RID_STR_LABEL_RECORD ) );
-                        break;
-
-                    case LID_RECORD_FILLER:
-                        pItemWindow->SetText( getLabelString( RID_STR_LABEL_OF ) );
-                        break;
-                    }
-
                     m_pToolbar->SetItemWindow( pSupportedFeatures->nId, pItemWindow );
                 }
             }
@@ -642,7 +633,6 @@ namespace frm
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
     }
 
-
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled )
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
@@ -660,12 +650,10 @@ namespace frm
         SetBorderStyle( WindowBorderStyle::MONO );
     }
 
-
     void RecordPositionInput::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
     }
-
 
     void RecordPositionInput::FirePosition( bool _bForce )
     {
