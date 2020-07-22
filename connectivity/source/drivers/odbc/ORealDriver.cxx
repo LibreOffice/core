@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ORealDriver.hxx"
 #include <odbc/ODriver.hxx>
 #include <odbc/OTools.hxx>
 #include <odbc/OFunctions.hxx>
@@ -32,7 +31,7 @@ namespace connectivity::odbc
             virtual oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const override;
             virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) override;
         public:
-            explicit ORealOdbcDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
+            explicit ORealOdbcDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext) : ODBCDriver(_rxContext) {}
         };
 
         }
@@ -259,11 +258,6 @@ oslGenericFunction ORealOdbcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) 
 }
 
 
-css::uno::Reference< css::uno::XInterface > ODBCDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ORealOdbcDriver(_rxFactory));
-}
-
 // ODBC Environment (common for all Connections):
 SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
 {
@@ -286,7 +280,12 @@ SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
     return m_pDriverHandle;
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_odbc_ORealOdbcDriver_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new connectivity::odbc::ORealOdbcDriver(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
