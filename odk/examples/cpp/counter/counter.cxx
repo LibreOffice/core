@@ -86,43 +86,40 @@ public:
         { ++m_nRefCount; }
     virtual void SAL_CALL release() throw ()
         { if (! --m_nRefCount) delete this; }
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw (RuntimeException)
+    virtual Any SAL_CALL queryInterface( const Type & rType )
         { return cppu::queryInterface(rType,
                                       static_cast< XInterface* >( static_cast< XServiceInfo* >( this ) ),
                                       static_cast< XCountable* >( this ),
                                       static_cast< XServiceInfo* >( this ) ); }
 
     // XServiceInfo implementation
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  );
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XCountable implementation
-    virtual sal_Int32 SAL_CALL getCount() throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL getCount()
         { return m_nCount; }
-    virtual void SAL_CALL setCount( sal_Int32 nCount ) throw (RuntimeException)
+    virtual void SAL_CALL setCount( sal_Int32 nCount )
         { m_nCount = nCount; }
-    virtual sal_Int32 SAL_CALL increment() throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL increment()
         { return (++m_nCount); }
-    virtual sal_Int32 SAL_CALL decrement() throw (RuntimeException)
+    virtual sal_Int32 SAL_CALL decrement()
         { return (--m_nCount); }
 };
 
 OUString SAL_CALL MyCounterImpl::getImplementationName(  )
-    throw(RuntimeException)
 {
     return OUString( IMPLNAME );
 }
 
 sal_Bool SAL_CALL MyCounterImpl::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  )
-    throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }

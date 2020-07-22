@@ -71,11 +71,9 @@ protected:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > msUserData;
     ::rtl::OUString msTemplateName;
 
-    sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor );
 
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor );
 
 public:
     FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
@@ -84,38 +82,29 @@ public:
     virtual ~FilterDetect() {}
 
      //XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
-        throw( com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor );
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  );
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  );
 };
 
 
-::rtl::OUString FilterDetect_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+::rtl::OUString FilterDetect_getImplementationName();
 
-sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
+sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceName );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL FilterDetect_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
-    throw ( ::com::sun::star::uno::Exception );
+SAL_CALL FilterDetect_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext);
 
 #endif
 

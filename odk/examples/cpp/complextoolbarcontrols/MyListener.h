@@ -52,20 +52,14 @@ class MyListener : public cppu::WeakImplHelper2< css::task::XJob         ,
         virtual ~MyListener();
 
     // XJob
-    virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
-        throw (css::lang::IllegalArgumentException,
-               css::uno::Exception,
-               css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName();
 
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& sServiceName)
-        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& sServiceName);
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
 
     public:
 
@@ -87,10 +81,8 @@ class CalcListener : public cppu::WeakImplHelper1< css::document::XEventListener
         {}
 
     // document.XEventListener
-    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent);
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent);
 };
 
 class WriterListener : public cppu::WeakImplHelper1< css::document::XEventListener >
@@ -105,10 +97,8 @@ class WriterListener : public cppu::WeakImplHelper1< css::document::XEventListen
         {}
 
         // document.XEventListener
-    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent);
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent);
 };
 
 #endif

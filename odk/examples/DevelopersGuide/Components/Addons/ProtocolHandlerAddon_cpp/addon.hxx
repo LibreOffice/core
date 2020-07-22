@@ -85,47 +85,36 @@ public:
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
             SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL,
-                const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
-                throw( ::com::sun::star::uno::RuntimeException );
+                const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags );
     virtual ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > >
         SAL_CALL queryDispatches(
-            const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )
-            throw( ::com::sun::star::uno::RuntimeException );
+            const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor );
 
     // XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs );
     virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl,
-        const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::util::URL& aURL );
     virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl,
-        const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::util::URL& aURL );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  );
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  );
 };
 
-::rtl::OUString Addon_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+::rtl::OUString Addon_getImplementationName();
 
-sal_Bool SAL_CALL Addon_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
+sal_Bool SAL_CALL Addon_supportsService( const ::rtl::OUString& ServiceName );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames(  );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL Addon_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
-    throw ( ::com::sun::star::uno::Exception );
+SAL_CALL Addon_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext);
 
 #endif // INCLUDED_EXAMPLES_COMPONENTS_ADDONS_PROTOCOLHANDLERADDON_CPP_ADDON_HXX
 

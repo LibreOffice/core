@@ -21,11 +21,11 @@
 #include "MyListener.h"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-void SAL_CALL CalcListener::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
+void SAL_CALL CalcListener::notifyEvent( const ::com::sun::star::document::EventObject& aEvent )
 {
 }
 
-void SAL_CALL CalcListener::disposing( const com::sun::star::lang::EventObject& aSource ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL CalcListener::disposing( const com::sun::star::lang::EventObject& aSource )
 {
 }
 

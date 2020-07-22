@@ -96,39 +96,28 @@ public:
     virtual sal_Bool SAL_CALL importer(
             const Sequence<PropertyValue>& aSourceData,
             const Reference<XDocumentHandler>& xHandler,
-            const Sequence<OUString>& msUserData)
-        throw(RuntimeException);
+            const Sequence<OUString>& msUserData);
 
     // XExportFilter
     virtual sal_Bool SAL_CALL exporter(
             const Sequence<PropertyValue>& aSourceData,
-            const Sequence<OUString>& msUserData)
-        throw(RuntimeException);
+            const Sequence<OUString>& msUserData);
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument()
-        throw (SAXException,RuntimeException);
-    virtual void SAL_CALL endDocument()
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL startElement(const OUString& str, const Reference<XAttributeList>& attriblist)
-        throw (SAXException,RuntimeException);
-    virtual void SAL_CALL endElement(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL characters(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL processingInstruction(const OUString& str, const OUString& str2)
-        throw (com::sun::star::xml::sax::SAXException,RuntimeException);
-    virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& doclocator)
-        throw (SAXException,RuntimeException);
+    virtual void SAL_CALL startDocument();
+    virtual void SAL_CALL endDocument();
+    virtual void SAL_CALL startElement(const OUString& str, const Reference<XAttributeList>& attriblist);
+    virtual void SAL_CALL endElement(const OUString& str);
+    virtual void SAL_CALL characters(const OUString& str);
+    virtual void SAL_CALL ignorableWhitespace(const OUString& str);
+    virtual void SAL_CALL processingInstruction(const OUString& str, const OUString& str2);
+    virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& doclocator);
 };
 
 sal_Bool XFlatXml::importer(
         const Sequence<PropertyValue>& aSourceData,
         const Reference<XDocumentHandler>& xHandler,
         const Sequence<OUString>& msUserData)
-    throw (RuntimeException)
 {
     // get information from media descriptor
     // the input stream that represents the imported file
@@ -189,7 +178,6 @@ sal_Bool XFlatXml::importer(
 sal_Bool XFlatXml::exporter(
         const Sequence<PropertyValue>& aSourceData,
         const Sequence<OUString>& msUserData)
-    throw (RuntimeException)
 {
 
     // read source data
@@ -231,39 +219,35 @@ sal_Bool XFlatXml::exporter(
 // for the DocumentHandler implementation, we just proxy the
 // events to the XML writer that we created upon the output stream
 // that was provided by the XMLFilterAdapter
-void XFlatXml::startDocument() throw (SAXException,RuntimeException){
+void XFlatXml::startDocument(){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->startDocument();
 }
 
-void XFlatXml::endDocument() throw (SAXException,RuntimeException){
+void XFlatXml::endDocument(){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->endDocument();
 }
 
 void XFlatXml::startElement(const OUString& str, const Reference<XAttributeList>& attriblist)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->startElement(str, attriblist);
 }
 
 void XFlatXml::endElement(const OUString& str)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->endElement(str);
 }
 
 void XFlatXml::characters(const OUString& str)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->characters(str);
 }
 
 void XFlatXml::ignorableWhitespace(const OUString& str)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     if (!m_bPrettyPrint) return;
@@ -271,14 +255,12 @@ void XFlatXml::ignorableWhitespace(const OUString& str)
 }
 
 void  XFlatXml::processingInstruction(const OUString& str, const OUString& str2)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->processingInstruction(str, str2);
 }
 
 void XFlatXml::setDocumentLocator(const Reference<XLocator>& doclocator)
-    throw (SAXException, RuntimeException)
 {
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->setDocumentLocator(doclocator);

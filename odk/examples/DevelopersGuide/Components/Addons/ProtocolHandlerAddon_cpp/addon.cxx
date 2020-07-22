@@ -93,7 +93,7 @@ WindowAttribute::CLOSEABLE;
   * One-time initialization. We have to store the context information
   * given, like the frame we are bound to, into our members.
   */
-void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException)
+void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments )
 {
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
@@ -112,7 +112,6 @@ void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments ) throw ( Exc
   * contains an Add-On command.
   */
 Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
-                throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.equalsAscii("org.openoffice.Office.addon.example:") )
@@ -132,7 +131,7 @@ Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::r
   * Called by the Office framework.
   * We are ask to execute the given Add-On command URL.
   */
-void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs ) throw (RuntimeException)
+void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs )
 {
     if ( aURL.Protocol.equalsAscii("org.openoffice.Office.addon.example:") )
     {
@@ -164,7 +163,6 @@ void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >
   * contain Add-On commands.
   */
 Sequence < Reference< XDispatch > > SAL_CALL Addon::queryDispatches( const Sequence < DispatchDescriptor >& seqDescripts )
-            throw( RuntimeException )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     Sequence < Reference < XDispatch > > lDispatcher( nCount );
@@ -180,7 +178,7 @@ Sequence < Reference< XDispatch > > SAL_CALL Addon::queryDispatches( const Seque
   * We are ask to query the given sequence of URLs and return dispatch objects if the URLs
   * contain Add-On commands.
   */
-void SAL_CALL Addon::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
+void SAL_CALL Addon::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
 {
 }
 
@@ -189,19 +187,17 @@ void SAL_CALL Addon::addStatusListener( const Reference< XStatusListener >& xCon
   * We are ask to query the given sequence of URLs and return dispatch objects if the URLs
   * contain Add-On commands.
   */
-void SAL_CALL Addon::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
+void SAL_CALL Addon::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
 {
 }
 
 // Helper functions for the implementation of UNO component interfaces.
 OUString Addon_getImplementationName()
-throw (RuntimeException)
 {
     return OUString ( IMPLEMENTATION_NAME );
 }
 
 Sequence< ::rtl::OUString > SAL_CALL Addon_getSupportedServiceNames()
-throw (RuntimeException)
 {
     Sequence < ::rtl::OUString > aRet(1);
     ::rtl::OUString* pArray = aRet.getArray();
@@ -210,7 +206,6 @@ throw (RuntimeException)
 }
 
 Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XComponentContext > & rContext)
-    throw( Exception )
 {
     return (cppu::OWeakObject*) new Addon( rContext );
 }
@@ -218,19 +213,16 @@ Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XCompone
 // Implementation of the recommended/mandatory interfaces of a UNO component.
 // XServiceInfo
 ::rtl::OUString SAL_CALL Addon::getImplementationName(  )
-    throw (RuntimeException)
 {
     return Addon_getImplementationName();
 }
 
 sal_Bool SAL_CALL Addon::supportsService( const ::rtl::OUString& rServiceName )
-    throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< ::rtl::OUString > SAL_CALL Addon::getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     return Addon_getSupportedServiceNames();
 }

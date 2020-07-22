@@ -47,7 +47,7 @@ namespace connectivity
 {
     namespace skeleton
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SkeletonDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SkeletonDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
         {
             return *(new SkeletonDriver());
         }
@@ -77,14 +77,14 @@ void SkeletonDriver::disposing()
 
 // static ServiceInfo
 
-rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
+rtl::OUString SkeletonDriver::getImplementationName_Static(  )
 {
     return rtl::OUString("com.sun.star.comp.sdbc.SkeletonDriver");
         // this name is referenced in the configuration and in the skeleton.xml
         // Please take care when changing it.
 }
 
-Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  )
 {
     /// which service is supported
     /// for more information @see com.sun.star.sdbc.Driver
@@ -93,22 +93,22 @@ Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) 
     return aSNS;
 }
 
-::rtl::OUString SAL_CALL SkeletonDriver::getImplementationName(  ) throw(RuntimeException)
+::rtl::OUString SAL_CALL SkeletonDriver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL SkeletonDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SkeletonDriver::supportsService( const ::rtl::OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SkeletonDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL SkeletonDriver::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
 {
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
@@ -120,25 +120,24 @@ Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString
 }
 
 sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
-        throw(SQLException, RuntimeException)
 {
     // here we have to look if we support this url format
     // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
     return url.startsWith("sdbc:skeleton:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL SkeletonDriver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL SkeletonDriver::getMajorVersion(  )
 {
     return 0; // depends on you
 }
 
-sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  )
 {
     return 1; // depends on you
 }
@@ -187,7 +186,7 @@ void release(oslInterlockedCount& _refCount,
         osl_atomic_increment( &_refCount );
 }
 
-void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
+void checkDisposed(sal_Bool _bThrow)
 {
     if (_bThrow)
         throw DisposedException();

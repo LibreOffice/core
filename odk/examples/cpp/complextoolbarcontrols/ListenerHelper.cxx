@@ -120,7 +120,7 @@ void ListenerHelper::AddDispatch(
     xFrame->addEventListener( new ListenerItemEventListener( xFrame ) );
 }
 
-void SAL_CALL ListenerItemEventListener::disposing( const EventObject& aEvent) throw (RuntimeException)
+void SAL_CALL ListenerItemEventListener::disposing( const EventObject& aEvent)
 {
     AllListeners::iterator aIter = aListeners.begin();
     while ( aIter != aListeners.end() )
