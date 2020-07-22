@@ -43,9 +43,9 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB)
+ODriver::ODriver(const css::uno::Reference< css::uno::XComponentContext >& _xORB)
     : ODriver_BASE(m_aMutex)
-    ,m_xORB(_xORB)
+    ,m_xContext(_xORB)
     ,mnNbCallCoInitializeExForReinit(0)
 {
      o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
@@ -73,38 +73,20 @@ void ODriver::disposing()
 }
 // static ServiceInfo
 
-OUString ODriver::getImplementationName_Static(  )
+OUString ODriver::getImplementationName( )
 {
     return "com.sun.star.comp.sdbc.ado.ODriver";
 }
 
-Sequence< OUString > ODriver::getSupportedServiceNames_Static(  )
+Sequence< OUString > ODriver::getSupportedServiceNames( )
 {
     return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
-}
-
-css::uno::Reference< css::uno::XInterface > connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ODriver(_rxFactory));
-}
-
-
-OUString SAL_CALL ODriver::getImplementationName(  )
-{
-    return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
-
-
-Sequence< OUString > SAL_CALL ODriver::getSupportedServiceNames(  )
-{
-    return getSupportedServiceNames_Static();
-}
-
 
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
@@ -269,5 +251,10 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
     pErrors->Release();
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+connectivity_ado_ODriver_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ODriver(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection, const OUStrin
 {
     osl_atomic_increment( &m_refCount );
 
-    OSQLParser aParser(comphelper::getComponentContext(_pConnection->getDriver()->getORB()));
+    OSQLParser aParser(_pConnection->getDriver()->getContext());
     OUString sErrorMessage;
     OUString sNewSql;
     std::unique_ptr<OSQLParseNode> pNode = aParser.parseTree(sErrorMessage,sql);
