@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <sal/macros.h>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -41,29 +42,6 @@
 using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
-
-extern "C" SAL_DLLPUBLIC_EXPORT void* analysis_component_getFactory(
-    const char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
-{
-    void* pRet = nullptr;
-
-    if( pServiceManager && OUString::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory >  xFactory( cppu::createOneInstanceFactory(
-                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                AnalysisAddIn::getImplementationName_Static(),
-                AnalysisAddIn_CreateInstance,
-                AnalysisAddIn::getSupportedServiceNames_Static() ) );
-
-        if( xFactory.is() )
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
 
 OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
@@ -141,22 +119,6 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum )
     return pFactDoubles[ nNum ];
 }
 
-OUString AnalysisAddIn::getImplementationName_Static()
-{
-    return MY_IMPLNAME;
-}
-
-uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
-{
-    return { ADDIN_SERVICE, MY_SERVICE };
-}
-
-uno::Reference< uno::XInterface > AnalysisAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
-{
-    return static_cast<cppu::OWeakObject*>(new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) ));
-}
-
 // XServiceName
 OUString SAL_CALL AnalysisAddIn::getServiceName()
 {
@@ -167,7 +129,7 @@ OUString SAL_CALL AnalysisAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL AnalysisAddIn::getImplementationName()
 {
-    return getImplementationName_Static();
+    return MY_IMPLNAME;
 }
 
 sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
@@ -177,7 +139,7 @@ sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL AnalysisAddIn::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XLocalizable
@@ -1088,6 +1050,15 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
 OUString AnalysisAddIn::AnalysisResId(const char* pResId)
 {
     return Translate::get(pResId, aResLocale);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scaddins_AnalysisAddIn_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<AnalysisAddIn> g_Instance(new AnalysisAddIn(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

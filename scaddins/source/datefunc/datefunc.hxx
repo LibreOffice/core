@@ -94,10 +94,6 @@ struct FindScaFuncData
 };
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-
-
 // THE AddIn class for date functions
 
 class ScaDateAddIn : public ::cppu::WeakImplHelper<
@@ -126,9 +122,6 @@ public:
                                 ScaDateAddIn();
 
     OUString ScaResId(const char* pId);
-
-    static OUString      getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
     virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;

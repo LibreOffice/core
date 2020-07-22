@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <algorithm>
@@ -85,39 +86,16 @@ static void InitScaFuncDataList(ScaFuncDataList& rList)
 }
 
 //  entry points for service registration / instantiation
-static uno::Reference< uno::XInterface > ScaDateAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& )
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scaddins_ScaDateAddIn_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<cppu::OWeakObject*>(new ScaDateAddIn());
+    static rtl::Reference<ScaDateAddIn> g_Instance(new ScaDateAddIn());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * date_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void* pRet = nullptr;
-
-    if ( pServiceManager &&
-            OUString::createFromAscii( pImplName ) == ScaDateAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                ScaDateAddIn::getImplementationName_Static(),
-                ScaDateAddIn_CreateInstance,
-                ScaDateAddIn::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
-}   // extern C
 
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn()
@@ -166,16 +144,6 @@ OUString ScaDateAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex
     return ScaResId(pResId[nStrIndex - 1]);
 }
 
-OUString ScaDateAddIn::getImplementationName_Static()
-{
-    return MY_IMPLNAME;
-}
-
-uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
-{
-    return { ADDIN_SERVICE, MY_SERVICE };
-}
-
 // XServiceName
 OUString SAL_CALL ScaDateAddIn::getServiceName()
 {
@@ -186,7 +154,7 @@ OUString SAL_CALL ScaDateAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL ScaDateAddIn::getImplementationName()
 {
-    return getImplementationName_Static();
+    return MY_IMPLNAME;
 }
 
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )
@@ -196,7 +164,7 @@ sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )
 
 uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XLocalizable
