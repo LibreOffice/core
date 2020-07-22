@@ -47,6 +47,17 @@ protected:
         return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
     }
 
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
+    {
+        if (OString(filename) == "combobox-control.docx" )
+        {
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);
+            batch->commit();
+        }
+        return nullptr;
+    }
+
     void verifyComboBoxExport(bool aComboBoxAsDropDown);
 };
 
