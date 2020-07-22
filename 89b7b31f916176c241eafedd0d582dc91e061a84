@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35ed9003_79e612db",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T12:01:07Z",
+      "side": 1,
+      "message": "... and this is the comment I mentioned - mentioning the reason for the seek explicitly in the code.",
+      "range": {
+        "startLine": 1619,
+        "startChar": 32,
+        "endLine": 1619,
+        "endChar": 90
+      },
+      "revId": "89b7b31f916176c241eafedd0d582dc91e061a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
