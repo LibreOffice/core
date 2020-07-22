@@ -128,7 +128,7 @@ public:
 private:
     static constexpr OUStringLiteral m_aPredefinedTargets[6] = {
         "\\b(?:\\d[ -]*?){13,16}\\b", //Credit card numbers
-        "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b", //Email addresses
+        "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b", //Email addresses
         "\\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
         "\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
         "\\b", //IP addresses
