@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpftp1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.FTPContentProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.FTPContentProvider"
+    constructor="ucb_ftp_FTPContentProvider_get_implementation">
     <service name="com.sun.star.ucb.FTPContentProvider"/>
   </implementation>
 </component>

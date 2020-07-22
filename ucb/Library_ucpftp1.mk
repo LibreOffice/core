@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpftp1,\
 	ucb/source/ucp/ftp/ftploaderthread \
 	ucb/source/ucp/ftp/ftpresultsetbase \
 	ucb/source/ucp/ftp/ftpresultsetI \
-	ucb/source/ucp/ftp/ftpservices \
 	ucb/source/ucp/ftp/ftpurl \
 ))
 

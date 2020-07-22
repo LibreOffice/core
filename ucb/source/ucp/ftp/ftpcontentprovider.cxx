@@ -99,11 +99,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
 
 OUString SAL_CALL FTPContentProvider::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString FTPContentProvider::getImplementationName_Static()
-{
     return "com.sun.star.comp.FTPContentProvider";
 }
 
@@ -114,36 +109,10 @@ sal_Bool SAL_CALL FTPContentProvider::supportsService( const OUString& ServiceNa
 
 css::uno::Sequence< OUString > SAL_CALL FTPContentProvider::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { FTP_CONTENT_PROVIDER_SERVICE_NAME };
 }
 
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-FTPContentProvider_CreateInstance( const css::uno::Reference<
-                                   css::lang::XMultiServiceFactory> & rSMgr )
-{
-    css::lang::XServiceInfo* pX = new FTPContentProvider( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
-}
 
-css::uno::Sequence< OUString > FTPContentProvider::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence<OUString> aSNS { FTP_CONTENT_PROVIDER_SERVICE_NAME };
-    return aSNS;
-}
-
-// Service factory implementation.
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-FTPContentProvider::createServiceFactory( const css::uno::Reference<
-            css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                FTPContentProvider::getImplementationName_Static(),
-                FTPContentProvider_CreateInstance,
-                FTPContentProvider::getSupportedServiceNames_Static() );
-}
 
 // XContentProvider methods.
 
@@ -264,6 +233,15 @@ bool  FTPContentProvider::setHost( const OUString& host,
         m_ServerInfo.push_back(inf);
 
     return !present;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_ftp_FTPContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<FTPContentProvider> g_Instance(new FTPContentProvider(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
