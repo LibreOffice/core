@@ -22,6 +22,30 @@
       "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17f21de6_9ceb769e",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T21:58:32Z",
+      "side": 1,
+      "message": "I guess on Windows with language supporting these characters it would also be 8, because its 8-bit codepage would include them. On Linux with UTF-8, it\u0027s normal that they become 14, and that doesn\u0027t need fixing; by the way, some day Windows may get UTF-8 and non-experimental feature (it is already available as experimental).\n\nSo unless you make the test system-independent (which implies implementing third argument), this is gonna fail on any non-UTF8 system (even Linux).",
+      "parentUuid": "2e778892_35f8eb1e",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
