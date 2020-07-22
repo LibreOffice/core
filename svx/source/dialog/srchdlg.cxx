@@ -73,7 +73,7 @@
 
 #include <findtextfield.hxx>
 
-#include <labelitemwindow.hxx>
+#include <svx/labelitemwindow.hxx>
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
 
