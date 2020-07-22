@@ -36,9 +36,6 @@
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::sheet { struct LocalizedName; }
 
-css::uno::Reference< css::uno::XInterface > AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-
-
 class AnalysisAddIn : public cppu::WeakImplHelper<
                             css::sheet::XAddIn,
                             css::sheet::XCompatibilityNames,
@@ -81,9 +78,6 @@ public:
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     double                      FactDouble( sal_Int32 nNum );
-
-    static OUString               getImplementationName_Static();
-    static css::uno::Sequence< OUString >        getSupportedServiceNames_Static();
 
                                 // XAddIn
     virtual OUString SAL_CALL     getProgrammaticFuntionName( const OUString& aDisplayName ) override;
