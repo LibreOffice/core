@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_exception_objects,ucppkg1,\
 	ucb/source/ucp/package/pkgdatasupplier \
 	ucb/source/ucp/package/pkgprovider \
 	ucb/source/ucp/package/pkgresultset \
-	ucb/source/ucp/package/pkgservices \
 	ucb/source/ucp/package/pkguri \
 ))
 
