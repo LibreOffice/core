@@ -20,15 +20,11 @@
 #ifndef INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 #define INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 
-#include <vcl/field.hxx>
-
+#include <svx/recorditemwindow.hxx>
 #include <memory>
-
 
 namespace frm
 {
-
-
     class IFeatureDispatcher;
     class DocumentCommandImageProvider;
     class ICommandDescriptionProvider;
@@ -148,7 +144,7 @@ namespace frm
         static void enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled );
     };
 
-    class RecordPositionInput : public NumericField
+    class RecordPositionInput final : public RecordItemWindow
     {
     private:
         const IFeatureDispatcher*   m_pDispatcher;
@@ -160,18 +156,11 @@ namespace frm
         */
         void    setDispatcher( const IFeatureDispatcher* _pDispatcher );
 
-    protected:
-        // Window overridables
-        virtual void LoseFocus() override;
-        virtual void KeyInput( const KeyEvent& rKeyEvent ) override;
-
     private:
-        void FirePosition( bool _bForce );
+        virtual void PositionFired(sal_Int64 nRecord) override;
     };
 
-
 }   // namespace frm
-
 
 #endif // INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 
