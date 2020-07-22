@@ -46,6 +46,30 @@
       "revId": "1aeb86d7a6980a0c49b4b322cacb7f98619f2bd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d46b14cb_a0a02746",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-07-22T15:27:47Z",
+      "side": 1,
+      "message": "I\u0027ve waffled back and forth a bit, but I keep landing on this version.\nOne of the inside blocks BREAKS - exiting everything and returning a failure. So that one needs to stay.\nThe other one COULD be consolidated, but then if anyone tries to add a section AFTER this block they might not be aware that it has a known chance of causing an exception. At one point I consolidated it, then I decided not to.\n\nIn then end, I thought I might as well catch every exception (not just DisposedException) and allow the for loop to continue without suggesting any error, since that result can hardly be worse than whatever was already happening anyway. (To the detriment of anyone identifying implementation issues and solving the root cause.)\n\nShort answer - I considered it (with the very non-big-picture-view that I have) and this is the one I want.",
+      "parentUuid": "5bd2ad40_b146eb79",
+      "range": {
+        "startLine": 1293,
+        "startChar": 26,
+        "endLine": 1293,
+        "endChar": 61
+      },
+      "revId": "1aeb86d7a6980a0c49b4b322cacb7f98619f2bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
