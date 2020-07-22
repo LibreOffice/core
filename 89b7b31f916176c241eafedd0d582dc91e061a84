@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "96f38d5b_e3cd8c46",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1002532
+      },
+      "writtenOn": "2020-07-22T12:55:13Z",
+      "side": 1,
+      "message": "Hi Mike,\nI think we should use uno::UNO_QUERY instead of uno::UNO_QUERY_THROW and after use xSeekable.is(), beucause in theory the \nclass of embeddingsStream does not need to derive from XSeekable (https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1io_1_1XSeekableInputStream.html).\nWithout this we will skip to call comphelper::OStorageHelper::CopyInputToOutput for no-seekable objects.",
+      "revId": "89b7b31f916176c241eafedd0d582dc91e061a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35ed9003_79e612db",
         "filename": "sw/source/filter/ww8/docxexport.cxx",
         "patchSetId": 2
