@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c5301ff_6b1565a4",
+        "filename": "offapi/com/sun/star/sheet/DocumentSettings.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-22T09:41:05Z",
+      "side": 1,
+      "message": "should this have an appropriate @since tag, or has it effectively been available since forever anyway?",
+      "revId": "cb21c44b01a640fc121c034346d70a02ef67cdb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
