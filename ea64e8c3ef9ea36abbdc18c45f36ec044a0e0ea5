@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89f206d3_8358d9a0",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-07-22T12:53:40Z",
+      "side": 1,
+      "message": "Could you please document this assertion? I mean, the ideal wording is something like:\n\n // Without the accompanying fix in place, this test would have failed with:\n // - Expected ...\n // - Actual ...\n // i.e. the point was rendered on the right side of the vertical line, not on the left side.\n\nOr similar. You get the idea: by the time the test fails, it should be obvious if you got the failure mode that was the old bug or you have a state that is neither the old bad behavior nor the new good one.\n\nWithout this, it\u0027s not easy to manually verify the patch, either.",
+      "revId": "ea64e8c3ef9ea36abbdc18c45f36ec044a0e0ea5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
