@@ -34,39 +34,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pController)
-    : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
-    , m_xWidget(m_xBuilder->weld_entry("entry"))
+    : RecordItemWindow(pParent)
     , m_pController(pController)
 {
-    InitControlBase(m_xWidget.get());
-
-    m_xWidget->connect_key_press(LINK(this, SvxFmAbsRecWin, KeyInputHdl));
-    m_xWidget->connect_activate(LINK(this, SvxFmAbsRecWin, ActivatedHdl));
-    m_xWidget->connect_focus_out(LINK(this, SvxFmAbsRecWin, FocusOutHdl));
-
-    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-void SvxFmAbsRecWin::dispose()
+void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
 {
-    m_xWidget.reset();
-    InterimItemWindow::dispose();
-}
-
-SvxFmAbsRecWin::~SvxFmAbsRecWin()
-{
-    disposeOnce();
-}
-
-void SvxFmAbsRecWin::FirePosition( bool _bForce )
-{
-    if (!_bForce && !m_xWidget->get_value_changed_from_saved())
-        return;
-
-    sal_Int64 nRecord = m_xWidget->get_text().toInt64();
-    if (nRecord < 1)
-        nRecord = 1;
-
     SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
 
     Any a;
@@ -77,42 +51,6 @@ void SvxFmAbsRecWin::FirePosition( bool _bForce )
     m_pController->Dispatch( ".uno:AbsoluteRecord",
                              aArgs );
     m_pController->updateStatus();
-
-    m_xWidget->save_value();
-}
-
-IMPL_LINK_NOARG(SvxFmAbsRecWin, FocusOutHdl, weld::Widget&, void)
-{
-    FirePosition( false );
-}
-
-IMPL_LINK(SvxFmAbsRecWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
-{
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-    bool bUp = (aCode.GetCode() == KEY_UP);
-    bool bDown = (aCode.GetCode() == KEY_DOWN);
-
-    if (!aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() && (bUp || bDown))
-    {
-        sal_Int64 nRecord = m_xWidget->get_text().toInt64();
-        if (bUp)
-            ++nRecord;
-        else
-            --nRecord;
-        if (nRecord < 1)
-            nRecord = 1;
-        m_xWidget->set_text(OUString::number(nRecord));
-        return true;
-    }
-
-    return ChildKeyInput(rKEvt);
-}
-
-IMPL_LINK_NOARG(SvxFmAbsRecWin, ActivatedHdl, weld::Entry&, bool)
-{
-    if (!m_xWidget->get_text().isEmpty())
-        FirePosition( true );
-    return true;
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
