@@ -709,6 +709,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J4FQ687VJK;
 				ENABLE_BITCODE = NO;
@@ -721,6 +722,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
+					../../vcl/inc,
 					../../config_host,
 					../../workdir/UnoApiHeadersTarget/udkapi/comprehensive,
 					../../workdir/UnoApiHeadersTarget/offapi/comprehensive,
@@ -747,6 +749,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J4FQ687VJK;
 				ENABLE_BITCODE = NO;
@@ -757,6 +760,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
+					../../vcl/inc,
 					../../config_host,
 					../../workdir/UnoApiHeadersTarget/udkapi/comprehensive,
 					../../workdir/UnoApiHeadersTarget/offapi/comprehensive,
