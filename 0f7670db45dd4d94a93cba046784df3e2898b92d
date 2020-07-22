@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e778892_35f8eb1e",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T21:51:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is correct. StrConv does locale-specific conversion \"to the default code page of the system\" and \"Not available on the Macintosh\". The result would be rightfully different depending on the thread encoding (e.g., utf-8). On Russian Windows it\u0027s 8, because thread encoding is Win-1252, and non-Win1252 characters become question marks.\n\nStrConv (SbRtl_StrConv) does not use the third argument (LCID), which could be useful here to not depend on system \"codepage\"...",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
