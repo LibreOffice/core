@@ -2943,17 +2943,4 @@ TaskManager::getScheme( OUString& Scheme )
   Scheme = "file";
 }
 
-OUString
-TaskManager::getImplementationName_static()
-{
-  return "com.sun.star.comp.ucb.FileProvider";
-}
-
-
-uno::Sequence< OUString >
-TaskManager::getSupportedServiceNames_static()
-{
-  return { "com.sun.star.ucb.FileContentProvider" };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

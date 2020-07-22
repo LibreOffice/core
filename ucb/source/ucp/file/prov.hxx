@@ -69,14 +69,6 @@ namespace fileaccess {
         getSupportedServiceNames() override;
 
 
-        static css::uno::Reference< css::lang::XSingleServiceFactory >
-        createServiceFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
-
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        CreateInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& xMultiServiceFactory );
-
         // XInitialization
         virtual void SAL_CALL
         initialize(

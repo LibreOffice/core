@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="ucpfile" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ucb.FileProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ucb.FileProvider"
+    constructor="ucb_file_FileProvider_get_implementation">
     <service name="com.sun.star.ucb.FileContentProvider"/>
   </implementation>
 </component>

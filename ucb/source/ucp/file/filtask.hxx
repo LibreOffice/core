@@ -642,10 +642,6 @@ namespace fileaccess
         // Methods for "writeComponentInfo" and "createComponentFactory"
 
         static void getScheme( OUString& Scheme );
-
-        static OUString getImplementationName_static();
-
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     };
 
 } // end namespace TaskHandling

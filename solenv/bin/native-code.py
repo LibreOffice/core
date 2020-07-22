@@ -25,7 +25,6 @@ core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
-    ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
@@ -330,6 +329,8 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
+# ucb/source/ucp/file/ucpfile1.component
+    "ucb_file_FileProvider_get_implementation",
 # ucb/source/ucp/expand/ucpexpand1.component
     ("ucb_expand_ExpandContentProviderImpl_get_implementation.a", "#ifdef ANDROID"),
 # ucb/source/sorter/srtrs1.component
