@@ -20,25 +20,15 @@
 #define INCLUDED_SVX_SOURCE_INC_TBXFORM_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <vcl/InterimItemWindow.hxx>
+#include <svx/recorditemwindow.hxx>
 
-class SvxFmAbsRecWin final : public InterimItemWindow
+class SvxFmAbsRecWin final : public RecordItemWindow
 {
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
-    virtual void dispose() override;
-    virtual ~SvxFmAbsRecWin() override;
-
-    void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
 
 private:
-    std::unique_ptr<weld::Entry> m_xWidget;
-
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(ActivatedHdl, weld::Entry&, bool);
-    DECL_LINK(FocusOutHdl, weld::Widget&, void); // for invalidating our content when losing the focus
-
-    void FirePosition( bool _bForce );
+    virtual void PositionFired(sal_Int64 nRecord) override;
 
     SfxToolBoxControl*  m_pController;
 };
