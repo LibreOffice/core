@@ -745,6 +745,7 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sN
     m_xName->select_region(0, sName.getLength());
 
     m_xType->set_active_id(getTypeID(eTargetType));
+    m_xType->connect_changed(LINK(this, SfxAddTargetDialog, SelectTypeHdl));
 
     if (eTargetType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
