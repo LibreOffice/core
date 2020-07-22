@@ -88,6 +88,23 @@ IMPL_LINK_NOARG(SvxFmAbsRecWin, FocusOutHdl, weld::Widget&, void)
 
 IMPL_LINK(SvxFmAbsRecWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
+    bool bUp = (aCode.GetCode() == KEY_UP);
+    bool bDown = (aCode.GetCode() == KEY_DOWN);
+
+    if (!aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() && (bUp || bDown))
+    {
+        sal_Int64 nRecord = m_xWidget->get_text().toInt64();
+        if (bUp)
+            ++nRecord;
+        else
+            --nRecord;
+        if (nRecord < 1)
+            nRecord = 1;
+        m_xWidget->set_text(OUString::number(nRecord));
+        return true;
+    }
+
     return ChildKeyInput(rKEvt);
 }
 
