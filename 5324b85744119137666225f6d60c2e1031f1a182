@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79f4b855_9a4a6aa5",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1600,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T12:00:06Z",
+      "side": 0,
+      "message": "Balasz: please note the removal of this: it doesn\u0027t make sense to expect xSeekable to be unset here, because this is excluded by UNO_QUERY_THROW.",
+      "range": {
+        "startLine": 1600,
+        "startChar": 16,
+        "endLine": 1600,
+        "endChar": 36
+      },
+      "revId": "5324b85744119137666225f6d60c2e1031f1a182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
