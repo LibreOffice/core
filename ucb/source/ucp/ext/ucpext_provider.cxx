@@ -53,33 +53,15 @@ namespace ucb::ucp::ext
     }
 
 
-    OUString ContentProvider::getImplementationName_static()
+    OUString SAL_CALL ContentProvider::getImplementationName()
     {
         return "org.openoffice.comp.ucp.ext.ContentProvider";
     }
 
 
-    OUString SAL_CALL ContentProvider::getImplementationName()
-    {
-        return getImplementationName_static();
-    }
-
-
-    Sequence< OUString > ContentProvider::getSupportedServiceNames_static(  )
-    {
-        return { "com.sun.star.ucb.ContentProvider", "com.sun.star.ucb.ExtensionContentProvider" };
-    }
-
-
     Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    Reference< XInterface > ContentProvider::Create( const Reference< XComponentContext >& i_rContext )
-    {
-        return *( new ContentProvider( i_rContext ) );
+        return { "com.sun.star.ucb.ContentProvider", "com.sun.star.ucb.ExtensionContentProvider" };
     }
 
 
@@ -177,5 +159,14 @@ namespace ucb::ucp::ext
 
 }   // namespace ucb::ucp::ext
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_ext_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<ucb::ucp::ext::ContentProvider> g_Instance(new ucb::ucp::ext::ContentProvider(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
