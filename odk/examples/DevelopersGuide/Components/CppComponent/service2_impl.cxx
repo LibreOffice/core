@@ -89,25 +89,18 @@ public:
 
     // XInitialization will be called upon
     // createInstanceWithArguments[AndContext]()
-    virtual void SAL_CALL initialize( Sequence< Any > const & args )
-        throw (Exception);
+    virtual void SAL_CALL initialize( Sequence< Any > const & args );
     // XSomething
-    virtual OUString SAL_CALL methodOne( OUString const & str )
-        throw (RuntimeException);
-    virtual OUString SAL_CALL methodTwo( )
-        throw (RuntimeException);
+    virtual OUString SAL_CALL methodOne( OUString const & str );
+    virtual OUString SAL_CALL methodTwo( );
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName();
+    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames();
 };
 
 // XInitialization implementation
 void MyService2Impl::initialize( Sequence< Any > const & args )
-    throw (Exception)
 {
     if (args.getLength() != 1)
     {
@@ -131,34 +124,29 @@ void MyService2Impl::initialize( Sequence< Any > const & args )
 
 // XSomething implementation
 OUString MyService2Impl::methodOne( OUString const & str )
-    throw (RuntimeException)
 {
     m_sData = str;
     return OUString( "called methodOne() of MyService2 implementation: " ) + m_sData;
 }
 
 OUString MyService2Impl::methodTwo( )
-    throw (RuntimeException)
 {
     return OUString( "called methodTwo() of MyService2 implementation: " ) + m_sData;
 }
 
 // XServiceInfo implementation
 OUString MyService2Impl::getImplementationName()
-    throw (RuntimeException)
 {
     // unique implementation name
     return OUString("my_module.my_sc_implementation.MyService2");
 }
 
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
-    throw (RuntimeException)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 Sequence< OUString > MyService2Impl::getSupportedServiceNames()
-    throw (RuntimeException)
 {
     return getSupportedServiceNames_MyService2Impl();
 }

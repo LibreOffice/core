@@ -72,7 +72,7 @@ namespace connectivity
                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                      ::com::sun::star::lang::XComponent* _pObject);
 
-        void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+        void checkDisposed(sal_Bool _bThrow);
 
         template <class SELF, class WEAK> class OSubComponent
         {
@@ -214,22 +214,22 @@ namespace connectivity
 
 
 #define DECLARE_SERVICE_INFO()                                                                                                                      \
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);                                     \
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);                 \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  );                                                                                     \
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )                                               ;                 \
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )                                                \
 
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)                                          \
-    ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
+    ::rtl::OUString SAL_CALL classname::getImplementationName(  )                                                   \
     {                                                                                                               \
         return ::rtl::OUString::createFromAscii(implasciiname);                                                     \
     }                                                                                                               \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  )                                                 \
     {                                                                                                                                                   \
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);                                                                               \
         aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname);                                                                             \
         return aSupported;                                                                                                                              \
     }                                                                                                                                                   \
-    sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
+    sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName )                                                \
     {                                                                                                                                   \
         return cppu::supportsService(this, _rServiceName);                                                                              \
     }

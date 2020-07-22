@@ -39,7 +39,6 @@ using com::sun::star::beans::NamedValue;
 using com::sun::star::document::XEventBroadcaster;
 
 Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
-    throw ( IllegalArgumentException, Exception, RuntimeException )
 {
     Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(
         "com.sun.star.frame.GlobalEventBroadcaster" ), UNO_QUERY );
@@ -51,7 +50,6 @@ Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
 }
 
 OUString MyJob_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.Office.MyJob" );
 }
@@ -59,7 +57,6 @@ OUString MyJob_getImplementationName ()
 #define SERVICE_NAME "com.sun.star.task.Job"
 
 Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -70,26 +67,22 @@ Sequence< OUString > SAL_CALL MyJob_getSupportedServiceNames(  )
 #undef SERVICE_NAME
 
 Reference< XInterface > SAL_CALL MyJob_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return (cppu::OWeakObject*) new MyJob( rSMgr );
 }
 
 // XServiceInfo
 OUString SAL_CALL MyJob::getImplementationName(  )
-    throw (RuntimeException)
 {
     return MyJob_getImplementationName();
 }
 
 sal_Bool SAL_CALL MyJob::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MyJob::getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     return MyJob_getSupportedServiceNames();
 }

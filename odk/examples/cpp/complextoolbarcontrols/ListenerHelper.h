@@ -77,7 +77,7 @@ public:
     ListenerItemEventListener( const com::sun::star::uno::Reference < com::sun::star::frame::XFrame >& xFrame)
         : mxFrame(xFrame)
     {}
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent );
 };
 
 #endif

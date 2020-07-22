@@ -101,7 +101,7 @@ void BaseDispatch::SendCommandTo( const Reference< XStatusListener >& xControl, 
     xControl->statusChanged( aEvent );
 }
 
-void SAL_CALL MyProtocolHandler::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException)
+void SAL_CALL MyProtocolHandler::initialize( const Sequence< Any >& aArguments )
 {
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
@@ -114,7 +114,6 @@ void SAL_CALL MyProtocolHandler::initialize( const Sequence< Any >& aArguments )
 }
 
 Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
-                throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
     if ( !mxFrame.is() )
@@ -151,7 +150,6 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
 }
 
 Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches( const Sequence < DispatchDescriptor >& seqDescripts )
-            throw( RuntimeException )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     Sequence < Reference < XDispatch > > lDispatcher( nCount );
@@ -163,13 +161,11 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
 }
 
 ::rtl::OUString MyProtocolHandler_getImplementationName ()
-    throw (RuntimeException)
 {
     return ::rtl::OUString( MYPROTOCOLHANDLER_IMPLEMENTATIONNAME );
 }
 
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence < ::rtl::OUString > aRet(1);
     aRet[0] = ::rtl::OUString( MYPROTOCOLHANDLER_SERVICENAME );
@@ -179,31 +175,27 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(
 #undef SERVICE_NAME
 
 Reference< XInterface > SAL_CALL MyProtocolHandler_createInstance( const Reference< XComponentContext > & rSMgr)
-    throw( Exception )
 {
     return (cppu::OWeakObject*) new MyProtocolHandler( rSMgr );
 }
 
 // XServiceInfo
 ::rtl::OUString SAL_CALL MyProtocolHandler::getImplementationName(  )
-    throw (RuntimeException)
 {
     return MyProtocolHandler_getImplementationName();
 }
 
 sal_Bool SAL_CALL MyProtocolHandler::supportsService( const ::rtl::OUString& rServiceName )
-    throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler::getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     return MyProtocolHandler_getSupportedServiceNames();
 }
 
-void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs ) throw (RuntimeException)
+void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs )
 {
     /* It's necessary to hold this object alive, till this method finishes.
        May the outside dispatch cache (implemented by the menu/toolbar!)
@@ -330,7 +322,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
     }
 }
 
-void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
+void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
 {
     if ( aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
     {
@@ -449,12 +441,12 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
     }
 }
 
-void SAL_CALL BaseDispatch::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
+void SAL_CALL BaseDispatch::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
 {
     aListenerHelper.RemoveListener( mxFrame, xControl, aURL.Path );
 }
 
-void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (RuntimeException)
+void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event )
 {
     if ( Event.aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
     {

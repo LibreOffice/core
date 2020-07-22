@@ -73,7 +73,6 @@ using ::rtl::OString;
 
 
 OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
-    throw( RuntimeException )
 {
     // type name to return
     OUString sOriginalTypeName;
@@ -174,7 +173,6 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
 // XInitialization
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -201,7 +199,6 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
 }
 
 OUString FilterDetect_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString( "devguide.officedev.samples.filter.FlatXmlDetect" );
 }
@@ -209,7 +206,6 @@ OUString FilterDetect_getImplementationName ()
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
 Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -220,26 +216,22 @@ Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
 #undef SERVICE_NAME2
 
 Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext > & rContext)
-    throw( Exception )
 {
     return (cppu::OWeakObject*) new FilterDetect( rContext );
 }
 
 // XServiceInfo
 OUString SAL_CALL FilterDetect::getImplementationName(  )
-    throw (RuntimeException)
 {
     return FilterDetect_getImplementationName();
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     return FilterDetect_getSupportedServiceNames();
 }

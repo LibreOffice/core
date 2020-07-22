@@ -98,7 +98,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
     release_ChildImpl();
 }
 
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
 {
     Any aRet = OStatement_BASE::queryInterface(rType);
     if(!aRet.hasValue())
@@ -106,7 +106,7 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes(
         ::cppu::UnoType<XMultiPropertySet>::get(),
@@ -117,7 +117,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 }
 
 
-void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
+void SAL_CALL OStatement_Base::cancel(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -125,7 +125,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 }
 
 
-void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement_Base::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -136,12 +136,12 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 }
 
 
-void SAL_CALL OStatement::clearBatch(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement::clearBatch(  )
 {
     // if you support batches clear it here
 }
 
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -151,7 +151,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -165,7 +165,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 }
 
 
-Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -174,13 +174,13 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
     return (Reference< XConnection >)m_pConnection;
 }
 
-sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  )
 {
     return 0;
 }
 
 
-Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OStatement::queryInterface( const Type & rType )
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
     if(!aRet.hasValue())
@@ -189,7 +189,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 
 
-void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -198,7 +198,7 @@ void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLExcept
     m_aBatchVector.push_back(sql);
 }
 
-Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, RuntimeException)
+Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -207,7 +207,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 }
 
 
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -218,7 +218,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -228,7 +228,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLExce
 }
 
 
-sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement_Base::getMoreResults(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 }
 
 
-Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OStatement_Base::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -249,7 +249,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 }
 
 
-void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement_Base::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -300,14 +300,13 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
     // here we have to try to convert
     return bConverted;
 }
 
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     // set the value to whatever is necessary
     switch(nHandle)
@@ -368,7 +367,7 @@ void SAL_CALL OStatement::release() throw()
     OStatement_BASE2::release();
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -23,11 +23,11 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-void SAL_CALL WriterListener::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
+void SAL_CALL WriterListener::notifyEvent( const ::com::sun::star::document::EventObject& aEvent )
 {
 }
 
-void SAL_CALL WriterListener::disposing( const com::sun::star::lang::EventObject& aSource ) throw( com::sun::star::uno::RuntimeException )
+void SAL_CALL WriterListener::disposing( const com::sun::star::lang::EventObject& aSource )
 {
 }
 

@@ -33,9 +33,6 @@ MyListener::~MyListener()
 {}
 
 css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
-    throw (css::lang::IllegalArgumentException,
-           css::uno::Exception,
-           css::uno::RuntimeException)
 {
     css::uno::Sequence< css::beans::NamedValue > lEnv;
 
@@ -105,13 +102,11 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 }
 
 ::rtl::OUString SAL_CALL MyListener::getImplementationName()
-    throw (css::uno::RuntimeException)
 {
     return ::rtl::OUString( MYLISTENER_IMPLEMENTATIONNAME );
 }
 
 css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
     lNames[0] = ::rtl::OUString( MYLISTENER_SERVICENAME );
@@ -119,7 +114,6 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNa
 }
 
 sal_Bool SAL_CALL MyListener::supportsService(const ::rtl::OUString& sServiceName)
-    throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, sServiceName);
 }
