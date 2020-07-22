@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d44e89c_fa635988",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-07-22T12:09:09Z",
+      "side": 1,
+      "message": "This returns a single #REF! formula string for any formula expression that contains a #REF! somewhere, even as a literal string, losing all expression details.\n\nPlease check the hint I gave in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d108673#c14 and understand the code I pointed to. The fix is to be made there, not some workaround here.",
+      "revId": "0beb438bebe2e2688741d94cad2cac256671ad48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
