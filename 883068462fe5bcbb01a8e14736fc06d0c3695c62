@@ -16,6 +16,24 @@
       "revId": "883068462fe5bcbb01a8e14736fc06d0c3695c62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa5e687_3f85df8d",
+        "filename": "external/libffi/ExternalProject_libffi.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-07-22T13:10:17Z",
+      "side": 1,
+      "message": "I don\u0027t know. I just followed the README.md. All this goes through the msvcc.sh script anyway, which doesn\u0027t use these variables, but some $cl and $ml. I had so much trouble with the Python 3.8 stuff, that I simply didn\u0027t further looked into it, after it kind-of worked.",
+      "parentUuid": "a33c7792_4397014a",
+      "revId": "883068462fe5bcbb01a8e14736fc06d0c3695c62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
