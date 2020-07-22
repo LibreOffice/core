@@ -952,8 +952,8 @@ void generateDocumentation(std::ostream & o,
             o << "; get method:\nstatic ";
             printType(
                 o, options, manager,
-                dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(
-                    entity.get())->getBase(),
+                dynamic_cast< unoidl::InterfaceBasedSingletonEntity & >(
+                    *entity).getBase(),
                 1);
             o << " get(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);\n";
             break;

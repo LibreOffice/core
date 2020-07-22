@@ -1707,8 +1707,8 @@ SwXTextCursor::setString(const OUString& aString)
     m_pImpl->GetCursorOrThrow(); // just to check if valid
 
     const bool bForceExpandHints( (CursorType::Meta == m_pImpl->m_eType)
-        && dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())
-                ->CheckForOwnMemberMeta(*GetPaM(), true) );
+        && dynamic_cast<SwXMeta&>(*m_pImpl->m_xParentText)
+                .CheckForOwnMemberMeta(*GetPaM(), true) );
     DeleteAndInsert(aString, bForceExpandHints);
 }
 
