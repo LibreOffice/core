@@ -2743,8 +2743,12 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParaspaceDecrease"),
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
+<<<<<<< HEAD   (d7894d basegfx: remove completly useless namespace opening and clos)
         OUString(".uno:FreezePanesColumn"),
         OUString(".uno:FreezePanesRow")
+=======
+        OUString(".uno:ShowResolvedAnnotations")
+>>>>>>> CHANGE (1e9622 LOK: send state of ShowResolvedAnnotations)
     };
 
     util::URL aCommandURL;
