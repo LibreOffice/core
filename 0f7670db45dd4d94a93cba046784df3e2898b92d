@@ -118,6 +118,30 @@
       "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0f415a4_c38c8dfd",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T22:26:40Z",
+      "side": 1,
+      "message": "Yes...",
+      "parentUuid": "dd53dc80_3b334ff9",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
