@@ -1581,32 +1581,50 @@ void DocxExport::WriteEmbeddings()
         OUString embeddingPath = rEmbedding.Name;
         uno::Reference<io::XInputStream> embeddingsStream;
         rEmbedding.Value >>= embeddingsStream;
+        if (!embeddingsStream)
+            continue;
 
-        OUString contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        // FIXME: this .xlsm hack is silly - if anything the mime-type for an existing embedded object should be read from [Content_Types].xml
-        if (embeddingPath.endsWith(".xlsm"))
-            contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
-        else if (embeddingPath.endsWith(".bin"))
-            contentType = "application/vnd.openxmlformats-officedocument.oleObject";
-
-        if ( embeddingsStream.is() )
+        OUString contentType;
+        if (css::uno::Reference<css::beans::XPropertySet> xProps{ embeddingsStream,
+                                                                  css::uno::UNO_QUERY })
         {
-            uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream(embeddingPath,
-                                    contentType);
             try
             {
-                // tdf#131288: the stream must be seekable for direct access
-                uno::Reference< io::XSeekable > xSeekable(embeddingsStream, uno::UNO_QUERY);
-                if (xSeekable)
-                    xSeekable->seek(0); // tdf#131288: a previous save could position it elsewhere
-                comphelper::OStorageHelper::CopyInputToOutput(embeddingsStream, xOutStream);
+                const css::uno::Any val = xProps->getPropertyValue("MediaType");
+                val >>= contentType;
             }
-            catch(const uno::Exception&)
+            catch (const css::beans::UnknownPropertyException&)
             {
-                TOOLS_WARN_EXCEPTION("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught");
+                TOOLS_WARN_EXCEPTION("sw.ww8", "WriteEmbeddings: Embedding without MediaType");
             }
-            xOutStream->closeOutput();
         }
+
+        if (contentType.isEmpty())
+        {
+            // FIXME: this .xlsm hack is silly - if anything the mime-type for an existing embedded object should be read from [Content_Types].xml
+            if (embeddingPath.endsWith(".xlsm"))
+                contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+            else if (embeddingPath.endsWith(".bin"))
+                contentType = "application/vnd.openxmlformats-officedocument.oleObject";
+            else
+                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        }
+
+        uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream(embeddingPath,
+                                contentType);
+        try
+        {
+            // tdf#131288: the stream must be seekable for direct access
+            uno::Reference<io::XSeekable> xSeekable(embeddingsStream, uno::UNO_QUERY);
+            if (xSeekable)
+                xSeekable->seek(0); // tdf#131288: a previous save could position it elsewhere
+            comphelper::OStorageHelper::CopyInputToOutput(embeddingsStream, xOutStream);
+        }
+        catch(const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught");
+        }
+        xOutStream->closeOutput();
     }
 }
 
