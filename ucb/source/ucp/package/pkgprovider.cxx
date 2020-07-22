@@ -140,36 +140,23 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 // XServiceInfo methods.
 
-XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          "com.sun.star.comp.ucb.PackageContentProvider" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+OUString
+ContentProvider::getImplementationName()
 {
-    css::lang::XServiceInfo* pX = new ContentProvider( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return "com.sun.star.comp.ucb.PackageContentProvider";
+}
+
+sal_Bool
+ContentProvider::supportsService(const OUString& s)
+{
+    return cppu::supportsService(this, s);
 }
 
 css::uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames_Static()
+ContentProvider::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.PackageContentProvider" };
-    return aSNS;
+    return { "com.sun.star.ucb.PackageContentProvider" };
 }
-
-// Service factory implementation.
-
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-ContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                ContentProvider::getImplementationName_Static(),
-                ContentProvider_CreateInstance,
-                ContentProvider::getSupportedServiceNames_Static() );
-}
-
 
 
 // XContentProvider methods.
@@ -274,6 +261,15 @@ void ContentProvider::removePackage( const OUString & rName )
             return;
         }
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_package_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<ContentProvider> g_Instance(new ContentProvider(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
