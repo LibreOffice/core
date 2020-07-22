@@ -264,13 +264,7 @@ private:
     }
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-    void            SetOptimalSize();
+    void  SetOptimalSize();
 };
 
 class SvxFontNameBox_Impl;
@@ -879,6 +873,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , SvxStyleBox_Base(m_xBuilder->weld_combo_box("applystyle"), rCommand, eFamily,
                        rDispatchProvider, _xFrame, rClearFormatKey, rMoreKey, bInSpec, rCtrl)
 {
+    InitControlBase(m_xWidget.get());
+
     set_id("applystyle");
     SetOptimalSize();
 }

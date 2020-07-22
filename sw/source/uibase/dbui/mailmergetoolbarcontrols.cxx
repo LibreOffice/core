@@ -47,6 +47,8 @@ public:
         : InterimItemWindow(pParent, "modules/swriter/ui/editbox.ui", "EditBox")
         , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
+        InitControlBase(m_xWidget.get());
+
         m_xWidget->connect_key_press(LINK(this, CurrentEdit, KeyInputHdl));
         SetSizePixel(m_xWidget->get_preferred_size());
     }
@@ -55,13 +57,6 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_sensitive(bool bSensitive)
@@ -172,6 +167,8 @@ public:
         : InterimItemWindow(pParent, "modules/swriter/ui/checkbox.ui", "CheckBox")
         , m_xWidget(m_xBuilder->weld_check_button("checkbutton"))
     {
+        InitControlBase(m_xWidget.get());
+
         m_xWidget->set_label(SwResId(ST_EXCLUDE));
         m_xWidget->connect_key_press(LINK(this, ExcludeCheckBox, KeyInputHdl));
         SetSizePixel(m_xWidget->get_preferred_size());
@@ -181,13 +178,6 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_sensitive(bool bSensitive)

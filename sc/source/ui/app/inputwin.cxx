@@ -2107,7 +2107,6 @@ void ScTextWnd::TextGrabFocus()
 }
 
 // Position window
-
 ScPosWnd::ScPosWnd(vcl::Window* pParent)
     : InterimItemWindow(pParent, "modules/scalc/ui/posbox.ui", "PosBox")
     , m_xWidget(m_xBuilder->weld_combo_box("pos_window"))
@@ -2115,6 +2114,7 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
     , nTipVisible(nullptr)
     , bFormulaMode(false)
 {
+    InitControlBase(m_xWidget.get());
 
     // Use calculation according to tdf#132338 to align combobox width to width of fontname combobox within formatting toolbar;
     // formatting toolbar is placed above formulabar when using multiple toolbars typically
@@ -2133,13 +2133,6 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
     m_xWidget->connect_changed(LINK(this, ScPosWnd, ModifyHdl));
     m_xWidget->connect_focus_in(LINK(this, ScPosWnd, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, ScPosWnd, FocusOutHdl));
-}
-
-void ScPosWnd::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 ScPosWnd::~ScPosWnd()

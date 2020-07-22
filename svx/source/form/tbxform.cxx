@@ -38,6 +38,8 @@ SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pControl
     , m_xWidget(m_xBuilder->weld_entry("entry"))
     , m_pController(pController)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_key_press(LINK(this, SvxFmAbsRecWin, KeyInputHdl));
     m_xWidget->connect_activate(LINK(this, SvxFmAbsRecWin, ActivatedHdl));
     m_xWidget->connect_focus_out(LINK(this, SvxFmAbsRecWin, FocusOutHdl));
@@ -49,13 +51,6 @@ void SvxFmAbsRecWin::dispose()
 {
     m_xWidget.reset();
     InterimItemWindow::dispose();
-}
-
-void SvxFmAbsRecWin::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 SvxFmAbsRecWin::~SvxFmAbsRecWin()

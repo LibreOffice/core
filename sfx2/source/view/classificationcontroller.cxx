@@ -104,12 +104,6 @@ class SAL_WARN_UNUSED ClassificationControl final : public InterimItemWindow
 
     void SetOptimalSize();
     void DataChanged(const DataChangedEvent& rEvent) override;
-    void GetFocus() override
-    {
-        if (m_xCategory)
-            m_xCategory->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
 public:
     explicit ClassificationControl(vcl::Window* pParent);
@@ -262,6 +256,8 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
     , m_xLabel(m_xBuilder->weld_label("label"))
     , m_xCategory(m_xBuilder->weld_combo_box("combobox"))
 {
+    InitControlBase(m_xCategory.get());
+
     m_xCategory->connect_key_press(LINK(this, ClassificationControl, KeyInputHdl));
 
     // WB_NOLABEL means here that the control won't be replaced with a label

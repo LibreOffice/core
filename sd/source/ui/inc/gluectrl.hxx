@@ -42,8 +42,6 @@ public:
     virtual void dispose() override;
     virtual ~GlueEscDirLB() override;
 
-    virtual void GetFocus() override;
-
     void set_active(int nPos) { m_xWidget->set_active(nPos); }
     void set_sensitive(bool bSensitive);
 

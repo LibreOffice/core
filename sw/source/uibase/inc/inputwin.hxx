@@ -42,6 +42,8 @@ public:
         : InterimItemWindow(pParent, "modules/swriter/ui/inputeditbox.ui", "InputEditBox")
         , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
+        InitControlBase(m_xWidget.get());
+
         m_xWidget->connect_key_press(LINK(this, InputEdit, KeyInputHdl));
         m_xWidget->connect_activate(LINK(this, InputEdit, ActivateHdl));
         SetSizePixel(m_xWidget->get_preferred_size());
@@ -53,13 +55,6 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_text(const OUString& rText)
@@ -110,6 +105,8 @@ public:
         : InterimItemWindow(pParent, "modules/swriter/ui/poseditbox.ui", "PosEditBox")
         , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
+        InitControlBase(m_xWidget.get());
+
         m_xWidget->connect_key_press(LINK(this, PosEdit, KeyInputHdl));
         SetSizePixel(m_xWidget->get_preferred_size());
     }
@@ -118,13 +115,6 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_text(const OUString& rText)

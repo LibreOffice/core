@@ -49,8 +49,6 @@ public:
     virtual void dispose() override;
     virtual ~SelectorListBox() override;
 
-    virtual void GetFocus() override;
-
     void ReleaseFocus_Impl();
 
     void SetChartController( const css::uno::Reference< css::frame::XController >& xChartController );

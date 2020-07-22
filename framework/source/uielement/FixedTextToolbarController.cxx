@@ -39,12 +39,6 @@ public:
     FixedTextControl(vcl::Window* pParent);
     virtual ~FixedTextControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
     OUString get_label() const { return m_xWidget->get_label(); }
     void set_label(const OUString& rLabel) { return m_xWidget->set_label(rLabel); }
     DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
@@ -57,6 +51,8 @@ FixedTextControl::FixedTextControl(vcl::Window* pParent)
     : InterimItemWindow(pParent, "svt/ui/fixedtextcontrol.ui", "FixedTextControl")
     , m_xWidget(m_xBuilder->weld_label("label"))
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_key_press(LINK(this, FixedTextControl, KeyInputHdl));
 }
 

@@ -96,13 +96,6 @@ protected:
     virtual void Select() = 0;
     virtual void FillBox() = 0;
 
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-
     /// key strokes the ComboBox receives
     virtual bool HandleKeyInput(const KeyEvent& rKEvt);
 

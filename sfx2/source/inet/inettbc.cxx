@@ -71,6 +71,8 @@ public:
         : InterimItemWindow(pParent, "sfx/ui/urlbox.ui", "URLBox")
         , m_xWidget(new SvtURLBox(m_xBuilder->weld_combo_box("urlbox")))
     {
+        InitControlBase(m_xWidget->getWidget());
+
         m_xWidget->connect_key_press(LINK(this, URLBoxItemWindow, KeyInputHdl));
 
         int nWidth = GetDesktopRectPixel().GetWidth() > 800 ? 300 : 225;
@@ -86,13 +88,6 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_sensitive(bool bSensitive)

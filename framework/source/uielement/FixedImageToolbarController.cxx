@@ -43,12 +43,6 @@ public:
     FixedImageControl(vcl::Window* pParent, const OUString& rCommand);
     virtual ~FixedImageControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
     DECL_LINK(KeyInputHdl, const ::KeyEvent&, bool);
 
 private:
@@ -59,6 +53,8 @@ FixedImageControl::FixedImageControl(vcl::Window* pParent, const OUString& rComm
     : InterimItemWindow(pParent, "svt/ui/fixedimagecontrol.ui", "FixedImageControl")
     , m_xWidget(m_xBuilder->weld_image("image"))
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_key_press(LINK(this, FixedImageControl, KeyInputHdl));
 
     bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
