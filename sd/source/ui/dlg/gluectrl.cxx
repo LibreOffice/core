@@ -54,6 +54,8 @@ GlueEscDirLB::GlueEscDirLB(vcl::Window* pParent, const Reference<XFrame>& rFrame
     , m_xFrame(rFrame)
     , m_xWidget(m_xBuilder->weld_combo_box("gluetype"))
 {
+    InitControlBase(m_xWidget.get());
+
     Fill();
 
     m_xWidget->connect_changed(LINK(this, GlueEscDirLB, SelectHdl));
@@ -68,13 +70,6 @@ void GlueEscDirLB::dispose()
 {
     m_xWidget.reset();
     InterimItemWindow::dispose();
-}
-
-void GlueEscDirLB::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 GlueEscDirLB::~GlueEscDirLB()

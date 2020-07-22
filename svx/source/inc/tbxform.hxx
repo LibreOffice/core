@@ -31,8 +31,6 @@ public:
 
     void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
 
-    virtual void GetFocus() override;
-
 private:
     std::unique_ptr<weld::Entry> m_xWidget;
 

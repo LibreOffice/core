@@ -566,6 +566,8 @@ FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::fr
     , mnTypeCurPos(0)
     , mnAttrCurPos(0)
 {
+    InitControlBase(mxLbFillType.get());
+
     mxLbFillAttr->connect_key_press(LINK(this, FillControl, AttrKeyInputHdl));
     mxLbFillType->connect_key_press(LINK(this, FillControl, TypeKeyInputHdl));
     mxToolBoxColor->connect_key_press(LINK(this, FillControl, ColorKeyInputHdl));
@@ -645,13 +647,6 @@ IMPL_LINK(FillControl, AttrKeyInputHdl, const KeyEvent&, rKEvt, bool)
 IMPL_LINK(FillControl, ColorKeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     return ChildKeyInput(rKEvt);
-}
-
-void FillControl::GetFocus()
-{
-    if (mxLbFillType)
-        mxLbFillType->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 FillControl::~FillControl()

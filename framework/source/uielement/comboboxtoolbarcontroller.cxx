@@ -47,12 +47,6 @@ public:
     ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController* pComboboxToolbarController);
     virtual ~ComboBoxControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
     void set_active_or_entry_text(const OUString& rText);
     OUString get_active_text() const { return m_xWidget->get_active_text(); }
@@ -80,6 +74,8 @@ ComboBoxControl::ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController
     , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     , m_pComboboxToolbarController(pComboboxToolbarController)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_focus_in(LINK(this, ComboBoxControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, ComboBoxControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, ComboBoxControl, ModifyHdl));

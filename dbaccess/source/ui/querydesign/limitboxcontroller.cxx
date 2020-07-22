@@ -57,6 +57,8 @@ public:
         , m_pControl( pCtrl )
         , m_xWidget(m_xBuilder->weld_combo_box("limit"))
     {
+        InitControlBase(m_xWidget.get());
+
         LoadDefaultLimits();
 
         m_xWidget->connect_key_press(LINK(this, LimitBox, KeyInputHdl));
@@ -81,13 +83,6 @@ public:
     void set_sensitive(bool bSensitive)
     {
         m_xWidget->set_sensitive(bSensitive);
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
     }
 
     void set_value(int nLimit)

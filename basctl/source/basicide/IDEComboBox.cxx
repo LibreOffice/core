@@ -91,6 +91,8 @@ DocListenerBox::DocListenerBox(vcl::Window* pParent)
     , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     , maNotifier(*this)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_changed(LINK(this, DocListenerBox, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, DocListenerBox, KeyInputHdl));
 }

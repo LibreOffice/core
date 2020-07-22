@@ -166,7 +166,6 @@ public:
                     ScPosWnd( vcl::Window* pParent );
     virtual         ~ScPosWnd() override;
     virtual void    dispose() override;
-    virtual void    GetFocus() override;
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );

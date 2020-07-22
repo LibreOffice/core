@@ -53,6 +53,8 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     , m_xWidget(m_xBuilder->weld_spin_button("pagesfield"))
     , m_xFrame(rFrame)
 {
+    InitControlBase(m_xWidget.get());
+
     // set parameter of MetricFields
     m_xWidget->set_digits(0);
     m_xWidget->set_range(1, 15);
@@ -79,13 +81,6 @@ void SdPagesField::dispose()
 {
     m_xWidget.reset();
     InterimItemWindow::dispose();
-}
-
-void SdPagesField::GetFocus()
-{
-    if (m_xWidget)
-        m_xWidget->grab_focus();
-    InterimItemWindow::GetFocus();
 }
 
 SdPagesField::~SdPagesField()

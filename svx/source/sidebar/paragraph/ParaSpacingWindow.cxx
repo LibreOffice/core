@@ -105,43 +105,30 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
 }
 
 // ParaAboveSpacingWindow
-
 ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent)
     : ParaULSpacingWindow(pParent)
 {
+    InitControlBase(&m_xAboveSpacing->get_widget());
+
     m_xAboveContainer->show();
     m_xBelowContainer->hide();
 
     SetSizePixel(get_preferred_size());
 }
 
-void ParaAboveSpacingWindow::GetFocus()
-{
-    if (m_xAboveSpacing)
-        m_xAboveSpacing->grab_focus();
-    ParaULSpacingWindow::GetFocus();
-}
-
 // ParaBelowSpacingWindow
-
 ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent)
     : ParaULSpacingWindow(pParent)
 {
+    InitControlBase(&m_xBelowSpacing->get_widget());
+
     m_xAboveContainer->hide();
     m_xBelowContainer->show();
 
     SetSizePixel(get_preferred_size());
 }
 
-void ParaBelowSpacingWindow::GetFocus()
-{
-    if (m_xBelowSpacing)
-        m_xBelowSpacing->grab_focus();
-    ParaULSpacingWindow::GetFocus();
-}
-
 // ParaLRSpacingWindow
-
 ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent)
     : InterimItemWindow(pParent, "svx/ui/paralrspacing.ui", "ParaLRSpacingWindow")
     , m_eUnit(MapUnit::MapTwip)
@@ -309,10 +296,11 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
 }
 
 // ParaLeftSpacingWindow
-
 ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent)
     : ParaLRSpacingWindow(pParent)
 {
+    InitControlBase(&m_xBeforeSpacing->get_widget());
+
     m_xBeforeContainer->show();
     m_xAfterContainer->hide();
     m_xFirstLineContainer->hide();
@@ -320,18 +308,12 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent)
     SetSizePixel(get_preferred_size());
 }
 
-void ParaLeftSpacingWindow::GetFocus()
-{
-    if (m_xBeforeSpacing)
-        m_xBeforeSpacing->grab_focus();
-    ParaLRSpacingWindow::GetFocus();
-}
-
 // ParaRightSpacingWindow
-
 ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent)
     : ParaLRSpacingWindow(pParent)
 {
+    InitControlBase(&m_xAfterSpacing->get_widget());
+
     m_xBeforeContainer->hide();
     m_xAfterContainer->show();
     m_xFirstLineContainer->hide();
@@ -339,30 +321,17 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent)
     SetSizePixel(get_preferred_size());
 }
 
-void ParaRightSpacingWindow::GetFocus()
-{
-    if (m_xAfterSpacing)
-        m_xAfterSpacing->grab_focus();
-    ParaLRSpacingWindow::GetFocus();
-}
-
 // ParaFirstLineSpacingWindow
-
 ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent)
     : ParaLRSpacingWindow(pParent)
 {
+    InitControlBase(&m_xFLSpacing->get_widget());
+
     m_xBeforeContainer->hide();
     m_xAfterContainer->hide();
     m_xFirstLineContainer->show();
 
     SetSizePixel(get_preferred_size());
-}
-
-void ParaFirstLineSpacingWindow::GetFocus()
-{
-    if (m_xFLSpacing)
-        m_xFLSpacing->grab_focus();
-    ParaLRSpacingWindow::GetFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

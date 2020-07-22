@@ -295,13 +295,6 @@ public:
         InterimItemWindow::dispose();
     }
 
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-
     void save_value()
     {
         m_xWidget->save_value();
@@ -326,6 +319,8 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     , nSlotId(nSlot)
     , bRelease(true)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->set_help_id(HID_PVIEW_ZOOM_LB);
     m_xWidget->set_entry_completion(false);
     m_xWidget->connect_changed(LINK(this, SwZoomBox_Impl, SelectHdl));
@@ -505,12 +500,6 @@ public:
         m_xWidget.reset();
         InterimItemWindow::dispose();
     }
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
     virtual ~SwJumpToSpecificBox_Impl() override
     {
         disposeOnce();
@@ -529,6 +518,8 @@ SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uIn
     , m_xWidget(m_xBuilder->weld_entry("jumppos"))
     , nSlotId(nSlot)
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_key_press(LINK(this, SwJumpToSpecificBox_Impl, KeyInputHdl));
     m_xWidget->connect_activate(LINK(this, SwJumpToSpecificBox_Impl, SelectHdl));
 

@@ -102,8 +102,6 @@ public:
     FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
     virtual void dispose() override;
     virtual ~FillControl() override;
-
-    virtual void GetFocus() override;
 };
 
 #endif // INCLUDED_SVX_FILLCTRL_HXX

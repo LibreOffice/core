@@ -47,12 +47,6 @@ public:
     ListBoxControl(vcl::Window* pParent, DropdownToolbarController* pListBoxListener);
     virtual ~ListBoxControl() override;
     virtual void dispose() override;
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
 
     void set_active(int nPos) { m_xWidget->set_active(nPos); }
     void append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
@@ -78,6 +72,8 @@ ListBoxControl::ListBoxControl(vcl::Window* pParent, DropdownToolbarController* 
     , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
     , m_pListBoxListener( pListBoxListener )
 {
+    InitControlBase(m_xWidget.get());
+
     m_xWidget->connect_focus_in(LINK(this, ListBoxControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, ListBoxControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, ListBoxControl, ModifyHdl));
