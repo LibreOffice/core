@@ -38,24 +38,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <yesno.hrc>
-#include "pcrservices.hxx"
 #include <comphelper/types.hxx>
 #include "modulepcr.hxx"
 
 #include <algorithm>
-
-// component helper namespace
-namespace comp_StringRepresentation {
-
-using namespace ::com::sun::star;
-
-// component and service helper functions:
-static OUString _getImplementationName();
-static uno::Sequence< OUString > _getSupportedServiceNames();
-static uno::Reference< uno::XInterface > _create( uno::Reference< uno::XComponentContext > const & context );
-
-} // closing component helper namespace
-
 
 namespace pcr{
 
@@ -148,7 +134,7 @@ StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContex
 // com.sun.star.uno.XServiceInfo:
 OUString  SAL_CALL StringRepresentation::getImplementationName()
 {
-    return comp_StringRepresentation::_getImplementationName();
+    return "StringRepresentation";
 }
 
 sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
@@ -158,7 +144,7 @@ sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & service
 
 uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
 {
-    return comp_StringRepresentation::_getSupportedServiceNames();
+    return { "com.sun.star.inspection.StringRepresentation" };
 }
 
 // inspection::XStringRepresentation:
@@ -609,36 +595,12 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 } // pcr
 
 
-// component helper namespace
-namespace comp_StringRepresentation {
-
-OUString _getImplementationName() {
-    return
-        "StringRepresentation";
-}
-
-uno::Sequence< OUString > _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_StringRepresentation_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    uno::Sequence< OUString > s { "com.sun.star.inspection.StringRepresentation" };
-    return s;
+    return cppu::acquire(new pcr::StringRepresentation(context));
 }
 
-uno::Reference< uno::XInterface > _create(
-    const uno::Reference< uno::XComponentContext > & context)
-{
-    return static_cast< ::cppu::OWeakObject * >(new pcr::StringRepresentation(context));
-}
-
-} // closing component helper namespace
-
-
-extern "C" void createRegistryInfo_StringRepresentation()
-{
-    ::pcr::PcrModule::getInstance().registerImplementation(
-            comp_StringRepresentation::_getImplementationName(),
-            comp_StringRepresentation::_getSupportedServiceNames(),
-            comp_StringRepresentation::_create
-        );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

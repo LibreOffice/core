@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "pcrservices.hxx"
 #include "propertyhandler.hxx"
 #include "formmetadata.hxx"
 #include "formstrings.hxx"
@@ -211,28 +210,26 @@ namespace pcr
 
     }
 
-    typedef HandlerComponentBase< FormGeometryHandler > FormGeometryHandler_Base;
     /** a property handler for any virtual string properties
     */
 
     namespace {
 
-    class FormGeometryHandler : public FormGeometryHandler_Base
+    class FormGeometryHandler : public PropertyHandlerComponent
     {
     public:
         explicit FormGeometryHandler(
             const Reference< XComponentContext >& _rxContext
         );
 
-        /// @throws RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_static(  );
-
     protected:
         virtual ~FormGeometryHandler() override;
 
     protected:
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
         // XPropertyHandler overriables
         virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) override;
@@ -268,7 +265,7 @@ namespace pcr
 
 
     FormGeometryHandler::FormGeometryHandler( const Reference< XComponentContext >& _rxContext )
-        :FormGeometryHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
     {
     }
 
@@ -294,7 +291,7 @@ namespace pcr
         m_xAssociatedShape.clear();
         m_xShapeProperties.clear();
 
-        FormGeometryHandler_Base::onNewComponent();
+        PropertyHandlerComponent::onNewComponent();
 
         try
         {
@@ -324,16 +321,15 @@ namespace pcr
     }
 
 
-    OUString FormGeometryHandler::getImplementationName_static(  )
+    OUString FormGeometryHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.FormGeometryHandler";
     }
 
 
-    Sequence< OUString > FormGeometryHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > FormGeometryHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.FormGeometryHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.FormGeometryHandler" };
     }
 
 
@@ -576,7 +572,7 @@ namespace pcr
 
     void SAL_CALL FormGeometryHandler::disposing()
     {
-        FormGeometryHandler_Base::disposing();
+        PropertyHandlerComponent::disposing();
 
         if ( m_xChangeNotifier.is() )
         {
@@ -815,10 +811,11 @@ namespace pcr
 
 } // namespace pcr
 
-
-extern "C" void createRegistryInfo_FormGeometryHandler()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_FormGeometryHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    ::pcr::FormGeometryHandler::registerImplementation();
+    return cppu::acquire(new pcr::FormGeometryHandler(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

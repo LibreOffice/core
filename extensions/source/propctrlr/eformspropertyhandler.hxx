@@ -34,8 +34,7 @@ namespace pcr
     //= EFormsPropertyHandler
 
     class EFormsPropertyHandler;
-    typedef HandlerComponentBase< EFormsPropertyHandler > EFormsPropertyHandler_Base;
-    class EFormsPropertyHandler : public EFormsPropertyHandler_Base
+    class EFormsPropertyHandler : public PropertyHandlerComponent
     {
     private:
         std::unique_ptr< EFormsHelper > m_pHelper;
@@ -51,15 +50,14 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-
     protected:
         virtual ~EFormsPropertyHandler() override;
 
     protected:
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
         // XPropertyHandler overriables
         virtual css::uno::Any                       SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;

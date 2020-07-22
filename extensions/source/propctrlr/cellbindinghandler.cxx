@@ -21,7 +21,6 @@
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 #include "cellbindinghelper.hxx"
-#include "pcrservices.hxx"
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -29,12 +28,6 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
-
-extern "C" void createRegistryInfo_CellBindingPropertyHandler()
-{
-    ::pcr::CellBindingPropertyHandler::registerImplementation();
-}
 
 
 namespace pcr
@@ -52,22 +45,21 @@ namespace pcr
     using namespace ::comphelper;
 
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :CellBindingPropertyHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
         ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::cppu::UnoType<sal_Int16>::get(), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
     {
     }
 
 
-    OUString CellBindingPropertyHandler::getImplementationName_static(  )
+    OUString CellBindingPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.CellBindingPropertyHandler";
     }
 
 
-    Sequence< OUString > CellBindingPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > CellBindingPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.CellBindingPropertyHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.CellBindingPropertyHandler" };
     }
 
 
@@ -484,5 +476,11 @@ namespace pcr
 
 }   // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_CellBindingPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::CellBindingPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

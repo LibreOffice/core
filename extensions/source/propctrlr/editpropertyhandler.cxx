@@ -20,7 +20,6 @@
 #include "editpropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
-#include "pcrservices.hxx"
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -29,12 +28,6 @@
 #define TEXTTYPE_SINGLELINE     0
 #define TEXTTYPE_MULTILINE      1
 #define TEXTTYPE_RICHTEXT       2
-
-
-extern "C" void createRegistryInfo_EditPropertyHandler()
-{
-    ::pcr::EditPropertyHandler::registerImplementation();
-}
 
 
 namespace pcr
@@ -53,7 +46,7 @@ namespace pcr
 
 
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :EditPropertyHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
     {
     }
 
@@ -63,16 +56,15 @@ namespace pcr
     }
 
 
-    OUString EditPropertyHandler::getImplementationName_static(  )
+    OUString EditPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.EditPropertyHandler";
     }
 
 
-    Sequence< OUString > EditPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > EditPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.EditPropertyHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.EditPropertyHandler" };
     }
 
 
@@ -306,5 +298,11 @@ namespace pcr
 
 }   // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_EditPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::EditPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

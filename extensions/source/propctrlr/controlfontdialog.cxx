@@ -26,13 +26,6 @@
 #include "formstrings.hxx"
 #include "modulepcr.hxx"
 #include "pcrcommon.hxx"
-#include "pcrservices.hxx"
-
-extern "C" void createRegistryInfo_OControlFontDialog()
-{
-    ::pcr::OAutoRegistration< ::pcr::OControlFontDialog > aAutoRegistration;
-}
-
 
 namespace pcr
 {
@@ -73,19 +66,7 @@ namespace pcr
     }
 
 
-    Reference< XInterface > OControlFontDialog::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new OControlFontDialog( _rxContext ) );
-    }
-
-
     OUString SAL_CALL OControlFontDialog::getImplementationName()
-    {
-        return getImplementationName_static();
-    }
-
-
-    OUString OControlFontDialog::getImplementationName_static()
     {
         return "org.openoffice.comp.form.ui.OControlFontDialog";
     }
@@ -93,14 +74,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames()
     {
-        return getSupportedServiceNames_static();
-    }
-
-
-    css::uno::Sequence<OUString> OControlFontDialog::getSupportedServiceNames_static()
-    {
-        css::uno::Sequence<OUString> aSupported { "com.sun.star.form.ControlFontDialog" };
-        return aSupported;
+        return { "com.sun.star.form.ControlFontDialog" };
     }
 
     void OControlFontDialog::initialize( const Sequence< Any >& aArguments )
@@ -168,5 +142,11 @@ namespace pcr
 
 }   // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_OControlFontDialog_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::OControlFontDialog(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,14 +55,6 @@ namespace pcr
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     public:
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
         explicit DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );
 
     private:

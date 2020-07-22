@@ -51,11 +51,10 @@ namespace pcr
     //= FormComponentPropertyHandler
 
     class FormComponentPropertyHandler;
-    typedef HandlerComponentBase< FormComponentPropertyHandler > FormComponentPropertyHandler_Base;
     typedef ::comphelper::OPropertyArrayUsageHelper<FormComponentPropertyHandler> FormComponentPropertyHandler_PROP;
     /** default ->XPropertyHandler for all form components.
     */
-    class FormComponentPropertyHandler :    public FormComponentPropertyHandler_Base,
+    class FormComponentPropertyHandler :    public PropertyHandlerComponent,
                                             public ::comphelper::OPropertyContainer,
                                             public FormComponentPropertyHandler_PROP
     {
@@ -99,15 +98,14 @@ namespace pcr
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-
     protected:
         virtual ~FormComponentPropertyHandler() override;
 
     protected:
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // XPropertyHandler overridables

@@ -94,20 +94,13 @@ namespace pcr
         sal_Int16                                           m_nGridColumnType;
 
     public:
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
-
-    private:
         explicit EventHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
        );
 
         virtual ~EventHandler() override;
 
+    private:
         // XPropertyHandler overridables
         virtual void                                         SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
         virtual css::uno::Any                                SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;

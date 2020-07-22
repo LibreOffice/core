@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "pcrservices.hxx"
 #include "submissionhandler.hxx"
 #include "formmetadata.hxx"
 #include "formstrings.hxx"
@@ -31,12 +30,6 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
-
-extern "C" void createRegistryInfo_SubmissionPropertyHandler()
-{
-    ::pcr::SubmissionPropertyHandler::registerImplementation();
-}
 
 
 namespace pcr
@@ -90,7 +83,7 @@ namespace pcr
 
 
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
-        :EditPropertyHandler_Base( _rxContext )
+        :PropertyHandlerComponent( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
     {
     }
@@ -102,16 +95,15 @@ namespace pcr
     }
 
 
-    OUString SubmissionPropertyHandler::getImplementationName_static(  )
+    OUString SubmissionPropertyHandler::getImplementationName(  )
     {
         return "com.sun.star.comp.extensions.SubmissionPropertyHandler";
     }
 
 
-    Sequence< OUString > SubmissionPropertyHandler::getSupportedServiceNames_static(  )
+    Sequence< OUString > SubmissionPropertyHandler::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSupported { "com.sun.star.form.inspection.SubmissionPropertyHandler" };
-        return aSupported;
+        return { "com.sun.star.form.inspection.SubmissionPropertyHandler" };
     }
 
 
@@ -240,7 +232,7 @@ namespace pcr
             m_xPropChangeMultiplexer.clear();
         }
 
-        EditPropertyHandler_Base::onNewComponent();
+        PropertyHandlerComponent::onNewComponent();
 
         Reference< frame::XModel > xDocument( impl_getContextDocument_nothrow() );
         DBG_ASSERT( xDocument.is(), "SubmissionPropertyHandler::onNewComponent: no document!" );
@@ -430,5 +422,11 @@ namespace pcr
 
 } // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_SubmissionPropertyHandler_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::SubmissionPropertyHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

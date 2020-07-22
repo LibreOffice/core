@@ -24,12 +24,6 @@
 #include "MasterDetailLinkDialog.hxx"
 #include "formlinkdialog.hxx"
 #include "modulepcr.hxx"
-#include "pcrservices.hxx"
-
-extern "C" void createRegistryInfo_MasterDetailLinkDialog()
-{
-    ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
-}
 
 namespace pcr
 {
@@ -50,31 +44,13 @@ namespace pcr
     }
 
 
-    Reference< XInterface > MasterDetailLinkDialog::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new MasterDetailLinkDialog( _rxContext ) );
-    }
-
-
     OUString SAL_CALL MasterDetailLinkDialog::getImplementationName()
-    {
-        return getImplementationName_static();
-    }
-
-
-    OUString MasterDetailLinkDialog::getImplementationName_static()
     {
         return "org.openoffice.comp.form.ui.MasterDetailLinkDialog";
     }
 
 
     css::uno::Sequence<OUString> SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames()
-    {
-        return getSupportedServiceNames_static();
-    }
-
-
-    css::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames_static()
     {
         return { "com.sun.star.form.MasterDetailLinkDialog" };
     }
@@ -149,5 +125,11 @@ namespace pcr
 
 }   // namespace pcr
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_propctrlr_MasterDetailLinkDialog_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new pcr::MasterDetailLinkDialog(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,11 +26,9 @@
 namespace pcr
 {
 
-    class ButtonNavigationHandler;
-    typedef HandlerComponentBase< ButtonNavigationHandler > ButtonNavigationHandler_Base;
     /** a property handler for any virtual string properties
     */
-    class ButtonNavigationHandler : public ButtonNavigationHandler_Base
+    class ButtonNavigationHandler : public PropertyHandlerComponent
     {
     private:
         css::uno::Reference< css::inspection::XPropertyHandler >
@@ -40,10 +38,6 @@ namespace pcr
         explicit ButtonNavigationHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
 
     protected:
         virtual ~ButtonNavigationHandler() override;
@@ -51,6 +45,10 @@ namespace pcr
         static bool    isNavigationCapableButton( const css::uno::Reference< css::beans::XPropertySet >& _rxComponent );
 
     protected:
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+
         // XPropertyHandler overriables
         virtual void                                    SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
         virtual css::uno::Any                           SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
