@@ -94,6 +94,30 @@
       "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd53dc80_3b334ff9",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-07-22T22:16:51Z",
+      "side": 1,
+      "message": "You are talking about\n\n    x \u003d StrConv(\"ÉÏº£ÊÐABC\", vbFromUnicode)\n    retStr \u003d StrConv(x, vbUnicode)\n    TestLog_ASSERT retStr \u003d \"ÉÏº£ÊÐABC\", \"Converts the string to Unicode: \" \u0026 retStr\n\nright ?",
+      "parentUuid": "df611c1b_d471b247",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "0f7670db45dd4d94a93cba046784df3e2898b92d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
