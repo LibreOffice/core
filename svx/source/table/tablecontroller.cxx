@@ -910,46 +910,51 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
         aNewAttr.Put( aBoxInfoItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSvxFormatCellsDialog(
+        std::shared_ptr<AbstractTabController> xDlg( pFact->CreateSvxFormatCellsDialog(
             rReq.GetFrameWeld(),
             &aNewAttr,
             rModel) );
 
-        // Even Cancel Button is returning positive(101) value,
-        if (xDlg->Execute() == RET_OK)
-        {
-            SfxItemSet aNewSet(*(xDlg->GetOutputItemSet()));
-
-            //Only properties that were unchanged by the dialog appear in this
-            //itemset.  We had constructed these two properties from other
-            //ones, so if they were not changed, then forcible set them back to
-            //their originals in the new result set so we can decompose that
-            //unchanged state back to their input properties
-            if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER, false) != SfxItemState::SET)
+        SvxTableController* pThis = this;
+        VclAbstractDialog::AsyncContext aContext;
+        aContext.maEndDialogFn = [xDlg, pThis, aBoxItem, aBoxInfoItem](int nResult){
+            if (nResult == RET_OK)
             {
-                aNewSet.Put(aBoxItem);
+                SfxItemSet aNewSet(*(xDlg->GetOutputItemSet()));
+
+                //Only properties that were unchanged by the dialog appear in this
+                //itemset.  We had constructed these two properties from other
+                //ones, so if they were not changed, then forcible set them back to
+                //their originals in the new result set so we can decompose that
+                //unchanged state back to their input properties
+                if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER, false) != SfxItemState::SET)
+                {
+                    aNewSet.Put(aBoxItem);
+                }
+                if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) != SfxItemState::SET)
+                {
+                    aNewSet.Put(aBoxInfoItem);
+                }
+
+                SvxBoxItem aNewBoxItem( aNewSet.Get( SDRATTR_TABLE_BORDER ) );
+
+                if( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) != aBoxItem.GetDistance( SvxBoxItemLine::LEFT ) )
+                    aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) ) );
+
+                if( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) != aBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) )
+                    aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) ) );
+
+                if( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) != aBoxItem.GetDistance( SvxBoxItemLine::TOP ) )
+                    aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) ) );
+
+                if( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) != aBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
+                    aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) ) );
+
+                pThis->SetAttrToSelectedCells(aNewSet, false);
             }
-            if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) != SfxItemState::SET)
-            {
-                aNewSet.Put(aBoxInfoItem);
-            }
+        };
 
-            SvxBoxItem aNewBoxItem( aNewSet.Get( SDRATTR_TABLE_BORDER ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) != aBoxItem.GetDistance( SvxBoxItemLine::LEFT ) )
-                aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::LEFT ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) != aBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) )
-                aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) != aBoxItem.GetDistance( SvxBoxItemLine::TOP ) )
-                aNewSet.Put(makeSdrTextUpperDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::TOP ) ) );
-
-            if( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) != aBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
-                aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) ) );
-
-            SetAttrToSelectedCells(aNewSet, false);
-        }
+        xDlg->StartExecuteAsync(aContext);
     }
 }
 

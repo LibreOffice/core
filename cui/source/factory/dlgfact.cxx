@@ -385,6 +385,21 @@ OString CuiAbstractTabController_Impl::GetScreenshotId() const
     return m_xDlg->GetScreenshotId();
 }
 
+bool CuiAsyncAbstractTabController_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
+void CuiAsyncAbstractTabController_Impl::SetCurPageId( const OString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* CuiAsyncAbstractTabController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
 const SfxItemSet* CuiAbstractSingleTabController_Impl::GetOutputItemSet() const
 {
     return m_xDlg->GetOutputItemSet();
@@ -1597,9 +1612,9 @@ VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(wel
     return VclPtr<AbstractLinksDialog_Impl>::Create(std::move(xLinkDlg));
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel)
+std::shared_ptr<AbstractTabController> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_unique<SvxFormatCellsDialog>(pParent, pAttr, rModel));
+    return std::make_shared<CuiAsyncAbstractTabController_Impl>(std::make_unique<SvxFormatCellsDialog>(pParent, pAttr, rModel));
 }
 
 VclPtr<SvxAbstractSplitTableDialog> AbstractDialogFactory_Impl::CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical)
