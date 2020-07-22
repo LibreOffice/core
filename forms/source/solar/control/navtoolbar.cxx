@@ -147,7 +147,6 @@ namespace frm
         implInit( );
     }
 
-
     NavigationToolBar::~NavigationToolBar( )
     {
         disposeOnce();
@@ -161,7 +160,6 @@ namespace frm
         m_pToolbar.disposeAndClear();
         vcl::Window::dispose();
     }
-
 
     void NavigationToolBar::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
@@ -188,7 +186,6 @@ namespace frm
         }
     }
 
-
     void NavigationToolBar::implEnableItem( sal_uInt16 _nItemId, bool _bEnabled )
     {
         m_pToolbar->EnableItem( _nItemId, _bEnabled );
@@ -200,7 +197,6 @@ namespace frm
             m_pToolbar->EnableItem( LID_RECORD_FILLER, _bEnabled );
     }
 
-
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
@@ -209,7 +205,6 @@ namespace frm
         implEnableItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
     }
 
-
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
@@ -217,7 +212,6 @@ namespace frm
 
         m_pToolbar->CheckItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
     }
-
 
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
@@ -229,13 +223,12 @@ namespace frm
         {
             if (_nFeatureId == FormFeature::TotalRecords)
                 static_cast<LabelItemWindow*>(pItemWindow)->set_label(_rText);
-            else
-                pItemWindow->SetText( _rText );
+            else if (_nFeatureId == FormFeature::MoveAbsolute)
+                static_cast<RecordPositionInput*>(pItemWindow)->set_text(_rText);
         }
         else
             m_pToolbar->SetItemText( static_cast<sal_uInt16>(_nFeatureId), _rText );
     }
-
 
     void NavigationToolBar::implInit( )
     {
@@ -488,7 +481,6 @@ namespace frm
         }
     }
 
-
     void NavigationToolBar::Resize()
     {
         // resize/position the toolbox as a whole
@@ -501,7 +493,6 @@ namespace frm
         Window::Resize();
     }
 
-
     void NavigationToolBar::SetControlBackground()
     {
         Window::SetControlBackground();
@@ -510,7 +501,6 @@ namespace frm
 
         implUpdateImages();
     }
-
 
     void NavigationToolBar::SetControlBackground( const Color& _rColor )
     {
@@ -521,7 +511,6 @@ namespace frm
         implUpdateImages();
     }
 
-
     void NavigationToolBar::SetTextLineColor( )
     {
         Window::SetTextLineColor( );
@@ -529,14 +518,12 @@ namespace frm
         forEachItemWindow( &NavigationToolBar::setTextLineColor, nullptr );
     }
 
-
     void NavigationToolBar::SetTextLineColor( const Color& _rColor )
     {
         Window::SetTextLineColor( _rColor );
         m_pToolbar->SetTextLineColor( _rColor );
         forEachItemWindow( &NavigationToolBar::setTextLineColor, &_rColor );
     }
-
 
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler )
     {
@@ -568,7 +555,6 @@ namespace frm
             _pItemWindow->SetControlBackground();
     }
 
-
     void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor )
     {
         if ( _pColor )
@@ -576,14 +562,6 @@ namespace frm
         else
             _pItemWindow->SetTextLineColor();
     }
-#if 0
-
-    void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const
-    {
-        _pItemWindow->SetZoom( GetZoom() );
-        _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
-    }
-#endif
 
     void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow ) const
     {
@@ -592,7 +570,6 @@ namespace frm
         else
             _pItemWindow->SetControlFont( );
     }
-
 
     void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow ) const
     {
@@ -603,9 +580,10 @@ namespace frm
         _pItemWindow->SetTextColor( GetTextColor() );
     }
 
-
     void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow ) const
     {
+        int nHeight = 0;
+
         OUString sItemText;
         switch ( _nItemId )
         {
@@ -619,6 +597,7 @@ namespace frm
 
         case FormFeature::MoveAbsolute:
             sItemText = "12345678";
+            nHeight = _pItemWindow->get_preferred_size().Height();
             break;
 
         case FormFeature::TotalRecords:
@@ -626,7 +605,10 @@ namespace frm
             break;
         }
 
-        Size aSize( _pItemWindow->GetTextWidth( sItemText ), /* _pItemWindow->GetSizePixel( ).Height() */ _pItemWindow->GetTextHeight() + 4 );
+        if (nHeight == 0)
+            nHeight = _pItemWindow->GetTextHeight() + 4;
+
+        Size aSize(_pItemWindow->GetTextWidth(sItemText), nHeight);
         aSize.AdjustWidth(6 );
         _pItemWindow->SetSizePixel( aSize );
 
@@ -638,16 +620,10 @@ namespace frm
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
 
-    RecordPositionInput::RecordPositionInput( vcl::Window* _pParent )
-        :NumericField( _pParent, WB_BORDER | WB_VCENTER )
-        ,m_pDispatcher( nullptr )
+    RecordPositionInput::RecordPositionInput(vcl::Window* pParent)
+        : RecordItemWindow(pParent)
+        , m_pDispatcher( nullptr )
     {
-        SetMin( 1 );
-        SetFirst( 1 );
-        SetSpinSize( 1 );
-        SetDecimalDigits( 0 );
-        SetStrictFormat( true );
-        SetBorderStyle( WindowBorderStyle::MONO );
     }
 
     void RecordPositionInput::setDispatcher( const IFeatureDispatcher* _pDispatcher )
@@ -655,38 +631,13 @@ namespace frm
         m_pDispatcher = _pDispatcher;
     }
 
-    void RecordPositionInput::FirePosition( bool _bForce )
+    void RecordPositionInput::PositionFired(sal_Int64 nRecord)
     {
-        if ( _bForce || IsValueChangedFromSaved() )
-        {
-            sal_Int64 nRecord = GetValue();
-            if ( nRecord < GetMin() || nRecord > GetMax() )
-                return;
-
-            if ( m_pDispatcher )
-                m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( static_cast<sal_Int32>(nRecord) ) );
-
-            SaveValue();
-        }
+        if (!m_pDispatcher)
+            return;
+        m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( static_cast<sal_Int32>(nRecord) ) );
     }
-
-
-    void RecordPositionInput::LoseFocus()
-    {
-        FirePosition( false );
-    }
-
-
-    void RecordPositionInput::KeyInput( const KeyEvent& rKeyEvent )
-    {
-        if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
-            FirePosition( true );
-        else
-            NumericField::KeyInput( rKeyEvent );
-    }
-
 
 }   // namespace frm
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
