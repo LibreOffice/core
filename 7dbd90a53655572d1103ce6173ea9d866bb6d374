@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f435ae8_d05fc7ab",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-22T14:12:19Z",
+      "side": 1,
+      "message": "Oh, how did this come back? ;-)",
+      "range": {
+        "startLine": 133,
+        "startChar": 25,
+        "endLine": 133,
+        "endChar": 26
+      },
+      "revId": "7dbd90a53655572d1103ce6173ea9d866bb6d374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
