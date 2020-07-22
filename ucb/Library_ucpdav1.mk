@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/webdavdatasupplier \
 	ucb/source/ucp/webdav-neon/webdavprovider \
 	ucb/source/ucp/webdav-neon/webdavresultset \
-	ucb/source/ucp/webdav-neon/webdavservices \
 ))
 
 else # WITH_WEBDAV == serf
