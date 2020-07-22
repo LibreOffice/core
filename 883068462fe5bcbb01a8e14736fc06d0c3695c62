@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a33c7792_4397014a",
+        "filename": "external/libffi/ExternalProject_libffi.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-22T12:53:25Z",
+      "side": 1,
+      "message": "Is there are reason to hardcode these to cl?  (Asking for my builds with clang-cl.)",
+      "revId": "883068462fe5bcbb01a8e14736fc06d0c3695c62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
