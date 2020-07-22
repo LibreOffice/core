@@ -511,9 +511,6 @@ math_constructor_list = [
 
 calc_factory_list = [
     ("libsclo.a", "sc_component_getFactory"),
-    ("libanalysislo.a", "analysis_component_getFactory"),
-    ("libdatelo.a", "date_component_getFactory"),
-    ("libpricinglo.a", "pricing_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -527,6 +524,12 @@ calc_constructor_list = [
 # sc/util/scfilt.component
     "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
+# scaddins/source/analysis/analysis.component
+    "scaddins_AnalysisAddIn_get_implementation",
+# scaddins/source/datefunc/date.component
+    "scaddins_ScaDateAddIn_get_implementation"
+# scaddins/source/pricing/pricing.component
+    "scaddins_ScaPricingAddIn_get_implementation",
 # scripting/source/vbaevents/vbaevents.component
     ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # svl/util/svl.component

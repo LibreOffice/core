@@ -114,10 +114,6 @@ struct FindScaFuncData
 } // namespace sca::pricing
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-
-
 // AddIn class for pricing functions
 
 class ScaPricingAddIn : public ::cppu::WeakImplHelper<
@@ -146,9 +142,6 @@ public:
     virtual                     ~ScaPricingAddIn() override;
 
     OUString ScaResId(const char* pResId);
-
-    static OUString      getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
     virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;

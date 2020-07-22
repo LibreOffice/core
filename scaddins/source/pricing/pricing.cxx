@@ -33,6 +33,7 @@
 #include <iostream>
 #include <algorithm>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -87,39 +88,15 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 }
 
 // entry points for service registration / instantiation
-static uno::Reference< uno::XInterface > ScaPricingAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& )
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+scaddins_ScaPricingAddIn_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<cppu::OWeakObject*>(new ScaPricingAddIn());
+    static rtl::Reference<ScaPricingAddIn> g_Instance(new ScaPricingAddIn());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
-
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * pricing_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void* pRet = nullptr;
-
-    if ( pServiceManager &&
-            OUString::createFromAscii( pImplName ) == ScaPricingAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                ScaPricingAddIn::getImplementationName_Static(),
-                ScaPricingAddIn_CreateInstance,
-                ScaPricingAddIn::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
-}   // extern C
 
 //  "normal" service implementation
 ScaPricingAddIn::ScaPricingAddIn()
@@ -166,16 +143,6 @@ OUString ScaPricingAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIn
     return ScaResId(pResId[nStrIndex - 1]);
 }
 
-OUString ScaPricingAddIn::getImplementationName_Static()
-{
-    return MY_IMPLNAME;
-}
-
-uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames_Static()
-{
-    return { ADDIN_SERVICE, MY_SERVICE };
-}
-
 // XServiceName
 OUString SAL_CALL ScaPricingAddIn::getServiceName()
 {
@@ -186,7 +153,7 @@ OUString SAL_CALL ScaPricingAddIn::getServiceName()
 // XServiceInfo
 OUString SAL_CALL ScaPricingAddIn::getImplementationName()
 {
-    return getImplementationName_Static();
+    return MY_IMPLNAME;
 }
 
 sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
@@ -196,7 +163,7 @@ sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName
 
 uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XLocalizable
