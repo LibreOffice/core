@@ -1385,29 +1385,25 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             locale = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
 
         if (!locale.isEmpty()) {
-            // Find best match using an adaptation of RFC 4647 lookup matching
-            // rules, removing "-" or "_" delimited segments from the end:
-            for (;;) {
-                rtl::Reference< ChildAccess > child(getChild(locale));
-                if (child.is()) {
+            // Find the best match using the LanguageTag fallback mechanism
+            std::vector<OUString> aFallbacks = LanguageTag(locale).getFallbackStrings(true);
+            for (const OUString& rFallback : aFallbacks)
+            {
+                rtl::Reference<ChildAccess> child(getChild(rFallback));
+                if (child.is())
                     return child;
-                }
-                sal_Int32 i = locale.getLength() - 1;
-                while (i > 0 && locale[i] != '-' && locale[i] != '_') {
-                    --i;
-                }
-                if (i <= 0) {
-                    break;
-                }
-                locale = locale.copy(0, i);
             }
+
             // As a workaround for broken xcu data that does not use shortest
             // xml:lang attributes, look for the first entry with the same first
             // segment as the requested language tag before falling back to
             // defaults (see fdo#33638):
+            assert(aFallbacks.size() > 0);
+            locale = aFallbacks[aFallbacks.size() - 1];
             assert(
                 !locale.isEmpty() && locale.indexOf('-') == -1 &&
                 locale.indexOf('_') == -1);
+
             std::vector< rtl::Reference< ChildAccess > > children(
                 getAllChildren());
             for (auto const& child : children)
