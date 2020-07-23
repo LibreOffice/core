@@ -25,9 +25,13 @@ namespace dbaui
 {
     class OTableEditorCtrl;
     class OTableDesignHelpBar;
+    class OTableDesignView;
+
     // OTableFieldControl
     class OTableFieldControl : public OFieldDescControl
     {
+        VclPtr<OTableDesignView> m_xView;
+
         OTableEditorCtrl*   GetCtrl() const;
     protected:
         virtual void        ActivateAggregate( EControlType eType ) override;
@@ -46,7 +50,9 @@ namespace dbaui
         virtual OUString                        getAutoIncrementValue() const override;
 
     public:
-        OTableFieldControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
+        OTableFieldControl(weld::Container* pParent, OTableDesignHelpBar* pHelpBar, OTableDesignView* pView);
+        virtual void dispose() override;
+        virtual ~OTableFieldControl() override;
 
         using OFieldDescControl::BoolStringPersistent;
         using OFieldDescControl::BoolStringUI;
