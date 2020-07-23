@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eafab1e3_dd4067df",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "This looks a bit misleading in terms of naming. What about PAGE_SIZE? It perfectly describes what we are doing here (paging).",
+      "range": {
+        "startLine": 51,
+        "startChar": 8,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2da5e735_a2ca590f",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "Item count to be shown for each page?",
+      "range": {
+        "startLine": 51,
+        "startChar": 31,
+        "endLine": 51,
+        "endChar": 49
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26762a5c_e641b4f7",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like it is ever modified inside the method. So maybe make it const?",
+      "range": {
+        "startLine": 291,
+        "startChar": 74,
+        "endLine": 291,
+        "endChar": 96
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c23e4cc8_418f42b2",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "You might want to consider trying to improve naming and comments.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 96
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8d04a21_825003be",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "Where does this come from? Why not just size_t?",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 12
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "915ead59_29c5849a",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T18:44:09Z",
+      "side": 1,
+      "message": "Where does this come from? Why not just size_t?",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 12
+      },
+      "revId": "bf53af35f64b6b5fcfd27e773193b4052d8b15e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
