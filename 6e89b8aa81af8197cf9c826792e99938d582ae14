@@ -22,6 +22,30 @@
       "revId": "6e89b8aa81af8197cf9c826792e99938d582ae14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afc1a99e_bb3e5f56",
+        "filename": "svx/uiconfig/ui/inspectortextpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-23T08:18:11Z",
+      "side": 1,
+      "message": "I thought we might need this.\nworks well without reordering, Done",
+      "parentUuid": "d1b32641_724115e4",
+      "range": {
+        "startLine": 57,
+        "startChar": 36,
+        "endLine": 57,
+        "endChar": 47
+      },
+      "revId": "6e89b8aa81af8197cf9c826792e99938d582ae14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
