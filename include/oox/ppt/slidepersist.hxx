@@ -67,6 +67,7 @@ public:
                     oox::drawingml::ShapePtr const & pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
 
+
     const css::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
@@ -94,6 +95,7 @@ public:
 
     bool isMasterPage() const { return mbMaster; }
     bool isNotesPage() const { return mbNotes; }
+    bool hasSameSubTypeIndex(sal_Int32 checkSubTypeIndex);
 
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
     sal_Int16 getLayoutFromValueToken() const;

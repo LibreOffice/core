@@ -31,6 +31,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/ppt/slidepersist.hxx>
+#include <oox/ppt/pptshape.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -75,6 +76,8 @@ public:
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor ) override;
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
+
+    static std::vector< PPTShape* > maPPTShapes;
 
 #if OSL_DEBUG_LEVEL > 0
     static XmlFilterBase* mpDebugFilterBase;
