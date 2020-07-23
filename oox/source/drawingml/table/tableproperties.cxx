@@ -207,16 +207,25 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     xTableStyleToDelete.reset();
 }
 
-void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth)
+void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex)
 {
     // Create table grid and a single row.
     sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
     std::vector<sal_Int32>& rTableGrid(getTableGrid());
-    sal_Int32 nColWidth = nShapeWidth / nNumCol;
-    for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
-        rTableGrid.push_back(nColWidth);
     std::vector<drawingml::table::TableRow>& rTableRows(getTableRows());
-    rTableRows.emplace_back();
+    sal_Int32 nColWidth = nShapeWidth / nNumCol;
+
+    if(!bhasSameSubTypeIndex)
+    {
+        for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
+            rTableGrid.push_back(nColWidth);
+
+        rTableRows.emplace_back();
+    }
+
+    if(rTableRows.empty())
+        rTableRows.emplace_back();
+
     oox::drawingml::table::TableRow& rTableRow = rTableRows.back();
     std::vector<oox::drawingml::table::TableCell>& rTableCells = rTableRow.getTableCells();
 
@@ -229,7 +238,7 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
     for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
     {
         rTableCells.emplace_back();
-        oox::drawingml::table::TableCell& rTableCell = rTableCells.back();
+        oox::drawingml::table::TableCell& rTableCell = rTableCells.at(nCol);
         TextBodyPtr pCellTextBody = std::make_shared<TextBody>();
         rTableCell.setTextBody(pCellTextBody);
 
