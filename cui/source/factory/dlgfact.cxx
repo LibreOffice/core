@@ -1691,7 +1691,7 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
         std::make_unique<AdditionsDialog>(pParent, sAdditionsTag));
 #else
     (void) pParent;
-    return VclPtr<AbstractAdditionsDialog>(nullptr, sAdditionsTag);
+    return VclPtr<AbstractAdditionsDialog>(nullptr);
 #endif
 }
 
