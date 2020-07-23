@@ -33,6 +33,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -541,6 +542,9 @@ namespace oox::ppt {
                     }
                 }
             }
+
+            if (xAnimate.is() && xAnimate->getValues().getLength() != xAnimate->getKeyTimes().getLength())
+                throw css::io::WrongFormatException();
 
             if( mnNodeType == AnimationNodeType::TRANSITIONFILTER )
             {

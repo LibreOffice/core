@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <comphelper/processfactory.hxx>
@@ -2212,6 +2213,10 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
             aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
         }
     }
+
+    if (aValues.getLength() != aKeyTimes.getLength())
+        throw css::io::WrongFormatException();
+
     xAnim->setKeyTimes( aKeyTimes );
     xAnim->setValues( aValues );
     xAnim->setFormula( aFormula );
