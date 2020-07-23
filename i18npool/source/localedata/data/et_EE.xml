@@ -47,8 +47,8 @@
       <DoubleQuotationStart>„</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>e.l.</TimeAM>
-    <TimePM>p.l.</TimePM>
+    <TimeAM>e.l</TimeAM>
+    <TimePM>p.l</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
@@ -111,7 +111,7 @@
       <FormatCode>DD.MM.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNND. MMMM YYYY</FormatCode>
+      <FormatCode>NNNND. MMMM YYYY". a"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="20">
       <FormatCode>D.M.YYYY</FormatCode>
@@ -122,17 +122,17 @@
     <FormatElement msgid="DateFormatskey10" default="false" type="short" usage="DATE" formatindex="22">
       <FormatCode>D. MMMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="23">
+    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
+      <FormatCode>D. MMM YYYY". a"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="24">
       <FormatCode>D. MMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D. MMM YYYY. a</FormatCode>
-    </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D. MMMM YYYY</FormatCode>
+      <FormatCode>D. MMMM YYYY". a"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D. MMMM YYYY. a</FormatCode>
+      <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="27">
       <FormatCode>NN, D. MMMMM YYYY</FormatCode>
@@ -141,10 +141,10 @@
       <FormatCode>NN, D. MMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D. MMMM YYYY</FormatCode>
+      <FormatCode>NN, D. MMMM YYYY". a"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND. MMMM YYYY. a</FormatCode>
+      <FormatCode>NNNNDD. MMMM YYYY". a"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-DD</FormatCode>
@@ -172,13 +172,13 @@
       <FormatCode>WW</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="66">
-      <FormatCode>WW. "nädal"</FormatCode>
+      <FormatCode>WW". nädal"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="67">
-      <FormatCode>WW. "nädal" YYYY</FormatCode>
+      <FormatCode>WW". nädal "YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="68">
-      <FormatCode>NN, D. MMMM YYYY. a</FormatCode>
+      <FormatCode>NN, D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey27" default="false" type="short" usage="DATE" formatindex="69">
       <FormatCode>D.MM.YYYY</FormatCode>
@@ -250,8 +250,8 @@
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
-    <FollowPageWord> jj.</FollowPageWord>
-    <FollowPageWord> jj.</FollowPageWord>
+    <FollowPageWord> jj</FollowPageWord>
+    <FollowPageWord> jj</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
