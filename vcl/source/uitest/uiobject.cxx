@@ -20,7 +20,7 @@
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
-#include <vcl/spinfld.hxx>
+#include <vcl/toolkit/spinfld.hxx>
 #include <vcl/ivctrl.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
