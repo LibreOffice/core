@@ -1945,6 +1945,7 @@ public:
     virtual OUString get_text() const = 0;
     // if nStartPos or nEndPos is -1 the max available text pos will be used
     virtual void select_region(int nStartPos, int nEndPos) = 0;
+    // returns true if the selection has nonzero length
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void replace_selection(const OUString& rText) = 0;
     virtual void set_editable(bool bEditable) = 0;

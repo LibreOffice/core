@@ -20,19 +20,15 @@
 #include <TableDesignHelpBar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vclmedit.hxx>
 #include <helpids.h>
 
 using namespace dbaui;
-#define STANDARD_MARGIN                 6
-OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
-     TabPage( pParent, WB_3DLOOK )
+
+OTableDesignHelpBar::OTableDesignHelpBar(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/designhelpbox.ui", "DesignHelpBox")
+    , m_xTextWin(m_xBuilder->weld_text_view("textview"))
 {
-    m_pTextWin = VclPtr<VclMultiLineEdit>::Create( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
-    m_pTextWin->SetHelpId(HID_TABLE_DESIGN_HELP_WINDOW);
-    m_pTextWin->SetReadOnly();
-    m_pTextWin->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    m_pTextWin->Show();
+    m_xTextWin->set_help_id(HID_TABLE_DESIGN_HELP_WINDOW);
 }
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
@@ -42,40 +38,21 @@ OTableDesignHelpBar::~OTableDesignHelpBar()
 
 void OTableDesignHelpBar::dispose()
 {
-    m_pTextWin.disposeAndClear();
-    TabPage::dispose();
+    m_xTextWin.reset();
+    InterimItemWindow::dispose();
 }
 
 void OTableDesignHelpBar::SetHelpText( const OUString& rText )
 {
-    if(m_pTextWin)
-        m_pTextWin->SetText( rText );
-    Invalidate();
-}
-
-void OTableDesignHelpBar::Resize()
-{
-    // parent window dimensions
-    Size aOutputSize( GetOutputSizePixel() );
-
-    // adapt the TextWin
-    if(m_pTextWin)
-        m_pTextWin->SetPosSizePixel( Point(STANDARD_MARGIN+1, STANDARD_MARGIN+1),
-            Size(aOutputSize.Width()-(2*STANDARD_MARGIN)-2,
-                 aOutputSize.Height()-(2*STANDARD_MARGIN)-2) );
-
-}
-
-bool OTableDesignHelpBar::PreNotify( NotifyEvent& rNEvt )
-{
-    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
-        SetHelpText(OUString());
-    return TabPage::PreNotify(rNEvt);
+    if (!m_xTextWin)
+        return;
+    m_xTextWin->set_text(rText);
 }
 
 bool OTableDesignHelpBar::isCopyAllowed()
 {
-    return m_pTextWin && !m_pTextWin->GetSelected().isEmpty();
+    int mStartPos, nEndPos;
+    return m_xTextWin && m_xTextWin->get_selection_bounds(mStartPos, nEndPos);
 }
 
 bool OTableDesignHelpBar::isCutAllowed()
@@ -94,8 +71,9 @@ void OTableDesignHelpBar::cut()
 
 void OTableDesignHelpBar::copy()
 {
-    if ( m_pTextWin )
-        m_pTextWin->Copy();
+    if (!m_xTextWin)
+        return;
+    m_xTextWin->copy_clipboard();
 }
 
 void OTableDesignHelpBar::paste()

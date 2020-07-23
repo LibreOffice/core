@@ -28,7 +28,6 @@
 #include <helpids.h>
 #include <core_resource.hxx>
 
-#define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25
 #define CONTROL_SPACING_X   18  // 6
 #define CONTROL_SPACING_Y   5
@@ -111,9 +110,9 @@ void OTableFieldDescWin::Paint(vcl::RenderContext& rRenderContext, const tools::
     rRenderContext.DrawLine(Point(0,0), Point(GetSizePixel().Width(), 0));
 
     // 3D-line for the separation of the header
-    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT));
-    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
     rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT - 1), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT - 1));
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT - 2), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT - 2));
 }
 
 void OTableFieldDescWin::Resize()
@@ -131,10 +130,10 @@ void OTableFieldDescWin::Resize()
     long nPageWidth, nPageHeight;
 
     // do both fit next to each other (margin + page + margin + help)?
-    if (STANDARD_MARGIN + DETAILS_OPT_PAGE_WIDTH + STANDARD_MARGIN + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
+    if (DETAILS_OPT_PAGE_WIDTH + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
     {   // yes -> then we wonder if can give the help its optimum width
         nHelpWidth = DETAILS_OPT_HELP_WIDTH;
-        nPageWidth = nOutputWidth - nHelpWidth - STANDARD_MARGIN - STANDARD_MARGIN;
+        nPageWidth = nOutputWidth - nHelpWidth;
         if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
         {   // rather resize the help from its optimal width to its minimum width
             long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
@@ -143,16 +142,16 @@ void OTableFieldDescWin::Resize()
         }
         nHelpX = nOutputWidth - nHelpWidth;
         // the heights are simple in that case...
-        nHelpY = DETAILS_HEADER_HEIGHT + 1;
+        nHelpY = DETAILS_HEADER_HEIGHT;
         nHelpHeight = nOutputHeight - nHelpY;
-        nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
+        nPageHeight = nOutputHeight - DETAILS_HEADER_HEIGHT;
     }
     else
     {   // doesn't work next to each other, thus below each other (margin + header + page + help)
-        if (STANDARD_MARGIN + DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
+        if (DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
         {   // it's at least enough, to fit both below each other (page optimal, help minimal)
             nHelpHeight = DETAILS_OPT_HELP_HEIGHT;
-            nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
+            nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT;
             if (nPageHeight < DETAILS_OPT_PAGE_HEIGHT)
             {   // like above: page optimal, help gets whatever is left (which is bigger/equal to its minimum)
                 long nTransfer = DETAILS_OPT_PAGE_HEIGHT - nPageHeight;
@@ -163,20 +162,20 @@ void OTableFieldDescWin::Resize()
             // and across the entire width
             nHelpX = 0;                 // without margin, since the HelpCtrl has its own one
             nHelpWidth = nOutputWidth;  // dito
-            nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
+            nPageWidth = nOutputWidth;
         }
         else
         {   // unfortunately that's not even enough, to show page at its optimum and help with minimum width
             nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // thus no help window
-            nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
-            nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;
+            nPageWidth = nOutputWidth;
+            nPageHeight = nOutputHeight - DETAILS_HEADER_HEIGHT;
         }
     }
 
-    m_pHeader->SetPosSizePixel( Point(0, STANDARD_MARGIN), Size(nOutputWidth, 15) );
+    m_pHeader->SetPosSizePixel( Point(0, 0), Size(nOutputWidth, 15) );
 
-    getGenPage()->SetPosSizePixel(Point (   STANDARD_MARGIN,
-                                        STANDARD_MARGIN + DETAILS_HEADER_HEIGHT
+    getGenPage()->SetPosSizePixel(Point (   0,
+                                        DETAILS_HEADER_HEIGHT
                                     ),
                               Size  (   nPageWidth,
                                         nPageHeight

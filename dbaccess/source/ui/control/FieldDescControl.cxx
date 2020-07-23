@@ -732,6 +732,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     pActFieldDescr = pFieldDescr;
     if(!pFieldDescr)
     {
+        if (pHelp)
+            pHelp->SetHelpText( OUString() );
         DeactivateAggregate( tpDefault );
         DeactivateAggregate( tpRequired );
         DeactivateAggregate( tpTextLen );
