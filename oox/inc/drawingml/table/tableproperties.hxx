@@ -59,7 +59,7 @@ public:
         const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle );
 
     /// Distributes text body with multiple columns in table cells.
-    void pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth);
+    void pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth, bool bhasSameSubTypeIndex);
 
 private:
 
