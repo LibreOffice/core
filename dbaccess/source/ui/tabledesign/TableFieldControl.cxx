@@ -33,9 +33,21 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
 
-OTableFieldControl::OTableFieldControl(vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
-    : OFieldDescControl(nullptr, pParent, pHelpBar)
+OTableFieldControl::OTableFieldControl(weld::Container* pParent, OTableDesignHelpBar* pHelpBar, OTableDesignView* pView)
+    : OFieldDescControl(pParent, nullptr, pHelpBar)
+    , m_xView(pView)
 {
+}
+
+void OTableFieldControl::dispose()
+{
+    m_xView.clear();
+    OFieldDescControl::dispose();
+}
+
+OTableFieldControl::~OTableFieldControl()
+{
+    disposeOnce();
 }
 
 void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
@@ -45,9 +57,8 @@ void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
 
 OTableEditorCtrl* OTableFieldControl::GetCtrl() const
 {
-    OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent()->GetParent());
-    OSL_ENSURE(pDesignWin,"no view!");
-    return pDesignWin->GetEditorCtrl();
+    assert(m_xView && "no view!");
+    return m_xView->GetEditorCtrl();
 }
 
 bool OTableFieldControl::IsReadOnly()

@@ -67,7 +67,7 @@ namespace
 
 OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
     :TabPage(pPage ? Application::GetDefDialogParent() : pParent, WB_3DLOOK | WB_DIALOGCONTROL)
-    ,pHelp( pHelpBar )
+    ,m_pHelp( pHelpBar )
     ,m_pLastFocusWindow(nullptr)
     ,m_pActFocusWindow(nullptr)
     ,m_pPreviousType()
@@ -142,7 +142,7 @@ void OFieldDescControl::dispose()
     DeactivateAggregate( tpColumnName );
     DeactivateAggregate( tpType );
     DeactivateAggregate( tpAutoIncrementValue );
-    pHelp.clear();
+    m_pHelp = nullptr;
     m_pLastFocusWindow = nullptr;
     m_pActFocusWindow = nullptr;
     m_xDefaultText.reset();
@@ -732,8 +732,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     pActFieldDescr = pFieldDescr;
     if(!pFieldDescr)
     {
-        if (pHelp)
-            pHelp->SetHelpText( OUString() );
+        if (m_pHelp)
+            m_pHelp->SetHelpText( OUString() );
         DeactivateAggregate( tpDefault );
         DeactivateAggregate( tpRequired );
         DeactivateAggregate( tpTextLen );
@@ -1115,10 +1115,12 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
     else if (m_xFormat && &rControl == m_xFormat.get())
         strHelpText = DBA_RES(STR_HELP_FORMAT_BUTTON);
 
-    if (!strHelpText.isEmpty() && (pHelp != nullptr))
-        pHelp->SetHelpText(strHelpText);
+    if (!strHelpText.isEmpty() && m_pHelp)
+        m_pHelp->SetHelpText(strHelpText);
 
     m_pActFocusWindow = &rControl;
+
+    m_aControlFocusIn.Call(rControl);
 }
 
 IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )
@@ -1205,7 +1207,6 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription const * pFieldDescr
 void OFieldDescControl::GetFocus()
 {
     // Set the Focus to the Control that has been active last
-    TabPage::GetFocus();
     if (m_pLastFocusWindow)
     {
         m_pLastFocusWindow->grab_focus();
@@ -1220,8 +1221,8 @@ void OFieldDescControl::implFocusLost(weld::Widget* _pWhich)
         m_pLastFocusWindow = _pWhich;
 
     // Reset HelpText
-    if (pHelp && !pHelp->HasChildPathFocus())
-        pHelp->SetHelpText( OUString() );
+    if (m_pHelp && !m_pHelp->HasFocus())
+        m_pHelp->SetHelpText( OUString() );
 }
 
 void OFieldDescControl::LoseFocus()
@@ -1250,7 +1251,7 @@ bool OFieldDescControl::IsFocusInEditableWidget() const
     return false;
 }
 
-bool OFieldDescControl::isCopyAllowed() const
+bool OFieldDescControl::isCopyAllowed()
 {
     int nStartPos, nEndPos;
     bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
@@ -1258,7 +1259,7 @@ bool OFieldDescControl::isCopyAllowed() const
     return bAllowed;
 }
 
-bool OFieldDescControl::isCutAllowed() const
+bool OFieldDescControl::isCutAllowed()
 {
     int nStartPos, nEndPos;
     bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget() &&
@@ -1266,7 +1267,7 @@ bool OFieldDescControl::isCutAllowed() const
     return bAllowed;
 }
 
-bool OFieldDescControl::isPasteAllowed() const
+bool OFieldDescControl::isPasteAllowed()
 {
     bool bAllowed = (m_pActFocusWindow != nullptr) && IsFocusInEditableWidget();
     if ( bAllowed )

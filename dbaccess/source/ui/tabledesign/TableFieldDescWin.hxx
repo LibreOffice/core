@@ -19,20 +19,18 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
 
-#include <vcl/tabpage.hxx>
-#include "FieldDescGenWin.hxx"
+#include <vcl/InterimItemWindow.hxx>
 #include <IClipBoardTest.hxx>
+#include "TableFieldControl.hxx"
 
-class FixedText;
 namespace dbaui
 {
-    class OFieldDescGenWin;
     class OTableDesignHelpBar;
+    class OTableDesignView;
     class OFieldDescription;
-    // derivative of TabPage is a trick of TH,
-    // to notice a change in system colours
-    class OTableFieldDescWin : public TabPage
-                                ,public IClipboardTest
+
+    class OTableFieldDescWin final : public InterimItemWindow
+                                   , public IClipboardTest
     {
         enum ChildFocusState
         {
@@ -41,19 +39,21 @@ namespace dbaui
             NONE
         };
     private:
-        VclPtr<OTableDesignHelpBar>    m_pHelpBar;
-        VclPtr<OFieldDescGenWin>       m_pGenPage;
-        VclPtr<FixedText>              m_pHeader;
-        ChildFocusState         m_eChildFocus;
+        std::unique_ptr<OTableDesignHelpBar> m_xHelpBar;
+        std::unique_ptr<weld::Container> m_xBox;
+        VclPtr<OTableFieldControl> m_xFieldControl;
+        std::unique_ptr<weld::Label>   m_xHeader;
+        Link<weld::Widget&, void> m_aFocusInHdl;
+
+        ChildFocusState m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
 
-    protected:
-        virtual void Resize() override;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+        DECL_LINK(HelpFocusIn, weld::Widget&, void);
+        DECL_LINK(FieldFocusIn, weld::Widget&, void);
 
     public:
-        explicit OTableFieldDescWin( vcl::Window* pParent);
+        explicit OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* pView);
         virtual ~OTableFieldDescWin() override;
         virtual void dispose() override;
 
@@ -63,19 +63,14 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetReadOnly( bool bReadOnly );
 
-        // Window overrides
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        void SetControlText( sal_uInt16 nControlId, const OUString& rText )
+                { m_xFieldControl->SetControlText(nControlId,rText); }
+
+        OUString  BoolStringPersistent(const OUString& rUIString) const { return m_xFieldControl->BoolStringPersistent(rUIString); }
+        OUString  BoolStringUI(const OUString& rPersistentString) const { return m_xFieldControl->BoolStringUI(rPersistentString); }
+
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
-
-        void SetControlText( sal_uInt16 nControlId, const OUString& rText )
-                { m_pGenPage->SetControlText(nControlId,rText); }
-
-        // short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
-        // delivers a CAT_xxx (CAT_NUMBER, CAT_DATE ...) value to a Format set in the field
-
-        OUString  BoolStringPersistent(const OUString& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
-        OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
         virtual bool isCutAllowed() override;
@@ -86,8 +81,12 @@ namespace dbaui
         virtual void cut() override;
         virtual void paste() override;
 
-        OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
+        void connect_focus_in(const Link<weld::Widget&, void>& rLink)
+        {
+            m_aFocusInHdl = rLink;
+        }
 
+        OTableFieldControl* getGenPage() const { return m_xFieldControl.get(); }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX

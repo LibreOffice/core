@@ -19,22 +19,27 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 
+#include <vcl/weld.hxx>
 #include "IClipBoardTest.hxx"
-#include <vcl/InterimItemWindow.hxx>
 
 namespace dbaui
 {
-    class OTableDesignHelpBar final : public InterimItemWindow, public IClipboardTest
+    class OTableDesignHelpBar final : public IClipboardTest
     {
     private:
         std::unique_ptr<weld::TextView> m_xTextWin;
 
     public:
-        OTableDesignHelpBar( vcl::Window* pParent );
-        virtual ~OTableDesignHelpBar() override;
-        virtual void dispose() override;
+        OTableDesignHelpBar(std::unique_ptr<weld::TextView> xTextWin);
 
         void SetHelpText( const OUString& rText );
+
+        bool HasFocus() const { return m_xTextWin->has_focus(); }
+
+        void connect_focus_in(const Link<weld::Widget&, void>& rLink)
+        {
+            m_xTextWin->connect_focus_in(rLink);
+        }
 
         // IClipboardTest
         virtual bool isCutAllowed() override;

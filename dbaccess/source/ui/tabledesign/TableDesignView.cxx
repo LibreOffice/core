@@ -36,14 +36,14 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
+OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
 
     ImplInitSettings();
     // create children
     m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
-    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
+    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create(this, pParent);
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 
@@ -170,6 +170,9 @@ OTableDesignView::OTableDesignView( vcl::Window* pParent,
     }
 
     m_pWin = VclPtr<OTableBorderWindow>::Create(this);
+
+    m_pWin->GetDescWin()->connect_focus_in(LINK(this, OTableDesignView, FieldDescFocusIn));
+
     m_pWin->Show();
 }
 
@@ -204,6 +207,11 @@ void OTableDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
+}
+
+IMPL_LINK_NOARG(OTableDesignView, FieldDescFocusIn, weld::Widget&, void)
+{
+    m_eChildFocus = DESCRIPTION;
 }
 
 bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )

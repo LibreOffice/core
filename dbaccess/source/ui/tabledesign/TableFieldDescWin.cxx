@@ -28,38 +28,23 @@
 #include <helpids.h>
 #include <core_resource.hxx>
 
-#define DETAILS_HEADER_HEIGHT           25
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
-#define DETAILS_OPT_PAGE_WIDTH          (CONTROL_WIDTH_1 + CONTROL_SPACING_X + CONTROL_WIDTH_4 + 50)
-#define DETAILS_OPT_PAGE_HEIGHT         ((CONTROL_HEIGHT + CONTROL_SPACING_Y) * 5)
-#define DETAILS_MIN_HELP_WIDTH          100
-#define DETAILS_OPT_HELP_WIDTH          200
-#define DETAILS_MIN_HELP_HEIGHT         50
-#define DETAILS_OPT_HELP_HEIGHT         100
-
 using namespace dbaui;
-OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
-    : TabPage(pParent, WB_3DLOOK)
+
+OTableFieldDescWin::OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* pView)
+    : InterimItemWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
+    , m_xHelpBar(new OTableDesignHelpBar(m_xBuilder->weld_text_view("textview")))
+    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xFieldControl(VclPtr<OTableFieldControl>::Create(m_xBox.get(), m_xHelpBar.get(), pView))
+    , m_xHeader(m_xBuilder->weld_label("header"))
     , m_eChildFocus(NONE)
 {
     // Header
-    m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER );
-    m_pHeader->SetText(DBA_RES(STR_TAB_PROPERTIES));
-    m_pHeader->Show();
+    m_xHeader->set_label(DBA_RES(STR_TAB_PROPERTIES));
 
-    // HelpBar
-    m_pHelpBar = VclPtr<OTableDesignHelpBar>::Create( this );
-    m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
-    m_pHelpBar->Show();
+    m_xFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
 
-    m_pGenPage = VclPtr<OFieldDescGenWin>::Create( this, m_pHelpBar );
-    getGenPage()->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
-    getGenPage()->Show();
+    m_xHelpBar->connect_focus_in(LINK(this, OTableFieldDescWin, HelpFocusIn));
+    m_xFieldControl->connect_focus_in(LINK(this, OTableFieldDescWin, FieldFocusIn));
 }
 
 OTableFieldDescWin::~OTableFieldDescWin()
@@ -70,133 +55,31 @@ OTableFieldDescWin::~OTableFieldDescWin()
 void OTableFieldDescWin::dispose()
 {
     // destroy children
-    m_pHelpBar->Hide();
-    getGenPage()->Hide();
-    m_pHeader->Hide();
-
-    m_pGenPage.disposeAndClear();
-    m_pHeader.disposeAndClear();
-    m_pHelpBar.disposeAndClear();
-    TabPage::dispose();
+    m_xFieldControl.disposeAndClear();
+    m_xBox.reset();
+    m_xHeader.reset();
+    m_xHelpBar.reset();
+    InterimItemWindow::dispose();
 }
 
 void OTableFieldDescWin::Init()
 {
-    OSL_ENSURE(getGenPage() != nullptr, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
-    getGenPage()->Init();
+    m_xFieldControl->Init();
 }
 
 void OTableFieldDescWin::SetReadOnly( bool bRead )
 {
-    getGenPage()->SetReadOnly( bRead );
+    m_xFieldControl->SetReadOnly( bRead );
 }
 
 void OTableFieldDescWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-    getGenPage()->DisplayData( pFieldDescr );
+    m_xFieldControl->DisplayData( pFieldDescr );
 }
 
 void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 {
-    getGenPage()->SaveData( pFieldDescr );
-}
-
-void OTableFieldDescWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
-{
-    // 3D-line at the top window border
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-    rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
-    rRenderContext.DrawLine(Point(0,0), Point(GetSizePixel().Width(), 0));
-
-    // 3D-line for the separation of the header
-    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT - 1), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT - 1));
-    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT - 2), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT - 2));
-}
-
-void OTableFieldDescWin::Resize()
-{
-    // dimensions of the parent window
-    Size aOutputSize( GetOutputSizePixel() );
-    long nOutputWidth = aOutputSize.Width();
-    long nOutputHeight = aOutputSize.Height();
-
-    // since the GenPage can scroll, but I can't, I position the HelpWindow, in case I become too slim,
-    // _below_ the Genpage, not on the right side. But before that I try to make it a bit smaller
-
-    long nHelpX, nHelpY;
-    long nHelpWidth, nHelpHeight;
-    long nPageWidth, nPageHeight;
-
-    // do both fit next to each other (margin + page + margin + help)?
-    if (DETAILS_OPT_PAGE_WIDTH + DETAILS_MIN_HELP_WIDTH <= nOutputWidth)
-    {   // yes -> then we wonder if can give the help its optimum width
-        nHelpWidth = DETAILS_OPT_HELP_WIDTH;
-        nPageWidth = nOutputWidth - nHelpWidth;
-        if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
-        {   // rather resize the help from its optimal width to its minimum width
-            long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
-            nPageWidth += nTransfer;
-            nHelpWidth -= nTransfer;
-        }
-        nHelpX = nOutputWidth - nHelpWidth;
-        // the heights are simple in that case...
-        nHelpY = DETAILS_HEADER_HEIGHT;
-        nHelpHeight = nOutputHeight - nHelpY;
-        nPageHeight = nOutputHeight - DETAILS_HEADER_HEIGHT;
-    }
-    else
-    {   // doesn't work next to each other, thus below each other (margin + header + page + help)
-        if (DETAILS_HEADER_HEIGHT + DETAILS_OPT_PAGE_HEIGHT + DETAILS_MIN_HELP_HEIGHT <= nOutputHeight)
-        {   // it's at least enough, to fit both below each other (page optimal, help minimal)
-            nHelpHeight = DETAILS_OPT_HELP_HEIGHT;
-            nPageHeight = nOutputHeight - nHelpHeight - DETAILS_HEADER_HEIGHT;
-            if (nPageHeight < DETAILS_OPT_PAGE_HEIGHT)
-            {   // like above: page optimal, help gets whatever is left (which is bigger/equal to its minimum)
-                long nTransfer = DETAILS_OPT_PAGE_HEIGHT - nPageHeight;
-                nPageHeight += nTransfer;
-                nHelpHeight -= nTransfer;
-            }
-            nHelpY = nOutputHeight - nHelpHeight;
-            // and across the entire width
-            nHelpX = 0;                 // without margin, since the HelpCtrl has its own one
-            nHelpWidth = nOutputWidth;  // dito
-            nPageWidth = nOutputWidth;
-        }
-        else
-        {   // unfortunately that's not even enough, to show page at its optimum and help with minimum width
-            nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // thus no help window
-            nPageWidth = nOutputWidth;
-            nPageHeight = nOutputHeight - DETAILS_HEADER_HEIGHT;
-        }
-    }
-
-    m_pHeader->SetPosSizePixel( Point(0, 0), Size(nOutputWidth, 15) );
-
-    getGenPage()->SetPosSizePixel(Point (   0,
-                                        DETAILS_HEADER_HEIGHT
-                                    ),
-                              Size  (   nPageWidth,
-                                        nPageHeight
-                                    )
-                             );
-    if (nHelpHeight)
-    {
-        m_pHelpBar->Show();
-        m_pHelpBar->SetPosSizePixel(Point   (   nHelpX,
-                                            nHelpY
-                                        ),
-                                  Size  (   nHelpWidth,
-                                            nHelpHeight
-                                        )
-                                 );
-    }
-    else
-    {
-        m_pHelpBar->Hide();
-    }
-    Invalidate();
+    m_xFieldControl->SaveData( pFieldDescr );
 }
 
 IClipboardTest* OTableFieldDescWin::getActiveChild() const
@@ -205,10 +88,10 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
     switch(m_eChildFocus)
     {
         case DESCRIPTION:
-            pTest = getGenPage();
+            pTest = m_xFieldControl.get();
             break;
         default:
-            pTest = m_pHelpBar;
+            pTest = m_xHelpBar.get();
             break;
     }
     return pTest;
@@ -221,18 +104,18 @@ bool OTableFieldDescWin::isCopyAllowed()
 
 bool OTableFieldDescWin::isCutAllowed()
 {
-    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isCutAllowed());
+    return getActiveChild() && getActiveChild()->isCutAllowed();
 }
 
 bool OTableFieldDescWin::isPasteAllowed()
 {
-    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isPasteAllowed());
+    return getActiveChild() && getActiveChild()->isPasteAllowed();
 }
 
 void OTableFieldDescWin::cut()
 {
-    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
-        getGenPage()->cut();
+    if (getActiveChild())
+        getActiveChild()->cut();
 }
 
 void OTableFieldDescWin::copy()
@@ -243,8 +126,8 @@ void OTableFieldDescWin::copy()
 
 void OTableFieldDescWin::paste()
 {
-    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
-        getGenPage()->paste();
+    if (getActiveChild())
+        getActiveChild()->paste();
 }
 
 void OTableFieldDescWin::GetFocus()
@@ -259,16 +142,16 @@ void OTableFieldDescWin::LoseFocus()
         getGenPage()->LoseFocus();
 }
 
-bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
+IMPL_LINK(OTableFieldDescWin, HelpFocusIn, weld::Widget&, rWidget, void)
 {
-    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
-    {
-        if( getGenPage() && getGenPage()->HasChildPathFocus() )
-            m_eChildFocus = DESCRIPTION;
-        else
-            m_eChildFocus = HELP;
-    }
-    return TabPage::PreNotify(rNEvt);
+    m_eChildFocus = HELP;
+    m_aFocusInHdl.Call(rWidget);
+}
+
+IMPL_LINK(OTableFieldDescWin, FieldFocusIn, weld::Widget&, rWidget, void)
+{
+    m_eChildFocus = DESCRIPTION;
+    m_aFocusInHdl.Call(rWidget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
