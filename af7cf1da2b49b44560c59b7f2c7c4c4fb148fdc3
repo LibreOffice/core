@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8a7dc68_31801c0f",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T20:52:18Z",
+      "side": 1,
+      "message": "I guess we are not writing an API here. :)",
+      "range": {
+        "startLine": 51,
+        "startChar": 24,
+        "endLine": 51,
+        "endChar": 42
+      },
+      "revId": "af7cf1da2b49b44560c59b7f2c7c4c4fb148fdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3673d82b_c84044ba",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T20:52:18Z",
+      "side": 1,
+      "message": "Please remove trailing white space.",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 2
+      },
+      "revId": "af7cf1da2b49b44560c59b7f2c7c4c4fb148fdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f565ac89_6960dc28",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-23T20:52:18Z",
+      "side": 1,
+      "message": "Please remove trailing white space.",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 2
+      },
+      "revId": "af7cf1da2b49b44560c59b7f2c7c4c4fb148fdc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
