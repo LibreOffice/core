@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c6d409d8_2ee9a76d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4209,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-07-23T11:07:24Z",
+      "side": 1,
+      "message": "I changed to use ICU for regex matching, and added another test case with some other characters.",
+      "parentUuid": "3eec9137_f365d5da",
+      "range": {
+        "startLine": 4209,
+        "startChar": 7,
+        "endLine": 4209,
+        "endChar": 74
+      },
+      "revId": "4ba128266dc04829da2e5040f4b37c78a137d685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00d77b38_163b77d2",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "4ba128266dc04829da2e5040f4b37c78a137d685",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be9fce3_34db01eb",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4236,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-07-23T11:07:24Z",
+      "side": 1,
+      "message": "Turns out Word tables don\u0027t accept $ as part of a cell reference like I thought they did. It just gives me a Syntax Error when I use them. So, LibreOffice shouldn\u0027t expect them either.",
+      "parentUuid": "00d77b38_163b77d2",
+      "revId": "4ba128266dc04829da2e5040f4b37c78a137d685",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
