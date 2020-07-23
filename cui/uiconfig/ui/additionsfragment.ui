@@ -8,52 +8,270 @@
     <property name="valign">start</property>
     <child>
       <object class="GtkBox">
-        <property name="width_request">310</property>
-        <property name="height_request">200</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="margin_left">5</property>
-        <property name="hexpand">False</property>
-        <property name="vexpand">False</property>
-        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkImage" id="imageScreenshot">
-            <property name="width_request">60</property>
-            <property name="height_request">60</property>
+          <object class="GtkBox">
+            <property name="width_request">310</property>
+            <property name="height_request">200</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="margin_top">3</property>
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
-            <property name="stock">gtk-missing-image</property>
-            <accessibility>
-              <relation type="labelled-by" target="labelDescription"/>
-            </accessibility>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage" id="imageScreenshot">
+                <property name="width_request">60</property>
+                <property name="height_request">60</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="margin_top">3</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">False</property>
+                <property name="stock">gtk-missing-image</property>
+                <accessibility>
+                  <relation type="labelled-by" target="labelDescription"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonInstall">
+                <property name="label" translatable="yes" context="additionsEntry|buttonInstall">button</property>
+                <property name="width_request">310</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin_top">5</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="buttonInstall">
-            <property name="label" translatable="yes" context="additionsEntry|buttonInstall">button</property>
-            <property name="width_request">310</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="margin_top">5</property>
-            <property name="hexpand">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="orientation">vertical</property>
+            <property name="baseline_position">top</property>
+            <child>
+              <object class="GtkLinkButton" id="linkButtonName">
+                <property name="label" translatable="yes" context="additionsEntry|linkButtonName">button</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">start</property>
+                <property name="relief">none</property>
+                <property name="uri">http://glade.gnome.org</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelAuthor">
+                <property name="height_request">20</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes" context="additionsEntry|labelAuthor">label</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelDesc">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_top">3</property>
+                <property name="label" translatable="yes" context="additionsEntry|labelDesc">Description:</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelDescription">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="additionsEntry|labelDescription">label</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="width_chars">1</property>
+                <property name="max_width_chars">50</property>
+                <accessibility>
+                  <relation type="label-for" target="imageScreenshot"/>
+                  <relation type="label-for" target="imageVoting"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelLicense">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_top">3</property>
+                <property name="label" translatable="yes" context="additionsEntry|labelLicense">label</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="labelVersion">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_top">3</property>
+                <property name="label" translatable="yes" context="additionsEntry|labelVersion">label</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkLabel" id="labelComments">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="additionsEntry|labelComments">Comments:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="linkButtonComments">
+                    <property name="label" translatable="yes" context="additionsEntry|linkButtonComments">button</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="uri">http://glade.gnome.org</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="imageVoting">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="stock">gtk-about</property>
+                <accessibility>
+                  <relation type="labelled-by" target="labelDescription"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin_top">3</property>
+                <child>
+                  <object class="GtkImage" id="imageDownloadNumber">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-directory</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelDownloadNumber"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelDownloadNumber">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="additionsEntry|labelDownloader">label</property>
+                    <accessibility>
+                      <relation type="label-for" target="imageDownloadNumber"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">8</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -65,212 +283,22 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="margin_left">5</property>
-        <property name="orientation">vertical</property>
-        <property name="baseline_position">top</property>
-        <child>
-          <object class="GtkLinkButton" id="linkButtonName">
-            <property name="label" translatable="yes" context="additionsEntry|linkButtonName">button</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="halign">start</property>
-            <property name="relief">none</property>
-            <property name="uri">http://glade.gnome.org</property>
+      <object class="GtkButton" id="buttonShowMore">
+        <property name="label" translatable="yes" context="additionsDialog|buttonShowMore">Show More Extensions</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_left">7</property>
+        <property name="margin_right">7</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="buttonShowMore-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="additionsDialog|buttonShowMore">ButtonShowMore</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="additionsDialog|buttonShowMore">This button shows more extensions.</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelAuthor">
-            <property name="height_request">20</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes" context="additionsEntry|labelAuthor">label</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelDesc">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin_top">3</property>
-            <property name="label" translatable="yes" context="additionsEntry|labelDesc">Description:</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelDescription">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <property name="label" translatable="yes" context="additionsEntry|labelDescription">label</property>
-            <property name="wrap">True</property>
-            <property name="wrap_mode">word-char</property>
-            <property name="width_chars">1</property>
-            <property name="max_width_chars">50</property>
-            <accessibility>
-              <relation type="label-for" target="imageScreenshot"/>
-              <relation type="label-for" target="imageVoting"/>
-            </accessibility>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelLicense">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin_top">3</property>
-            <property name="label" translatable="yes" context="additionsEntry|labelLicense">label</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelVersion">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin_top">3</property>
-            <property name="label" translatable="yes" context="additionsEntry|labelVersion">label</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <child>
-              <object class="GtkLabel" id="labelComments">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="additionsEntry|labelComments">Comments:</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLinkButton" id="linkButtonComments">
-                <property name="label" translatable="yes" context="additionsEntry|linkButtonComments">button</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <property name="uri">http://glade.gnome.org</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage" id="imageVoting">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="stock">gtk-about</property>
-            <accessibility>
-              <relation type="labelled-by" target="labelDescription"/>
-            </accessibility>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="margin_top">3</property>
-            <child>
-              <object class="GtkImage" id="imageDownloadNumber">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="stock">gtk-directory</property>
-                <accessibility>
-                  <relation type="labelled-by" target="labelDownloadNumber"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="labelDownloadNumber">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin_left">5</property>
-                <property name="label" translatable="yes" context="additionsEntry|labelDownloader">label</property>
-                <accessibility>
-                  <relation type="label-for" target="imageDownloadNumber"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
-          </packing>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
   </object>
