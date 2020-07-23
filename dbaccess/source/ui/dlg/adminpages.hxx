@@ -24,8 +24,6 @@
 #include <vcl/wizardmachine.hxx>
 #include <curledit.hxx>
 
-class NumericField;
-class Edit;
 namespace dbaui
 {
     /// helper class to wrap the savevalue and disable call
