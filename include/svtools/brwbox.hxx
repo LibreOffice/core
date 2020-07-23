@@ -39,7 +39,7 @@
 class BrowserColumn;
 class BrowserHeader;
 class ScrollBar;
-class StatusBar;
+class RecordItemWindow;
 
 namespace svt {
     class BrowseBoxImpl;
@@ -275,7 +275,7 @@ private:
     VclPtr<BrowserDataWin> pDataWin;       // window to display data rows
     VclPtr<ScrollBar>      pVScroll;       // vertical scrollbar
     VclPtr<ScrollBar>      aHScroll;       // horizontal scrollbar
-    VclPtr<StatusBar>      aStatusBar;     // statusbar, just to measure its height
+    VclPtr<RecordItemWindow> aStatusBarHeight; // statusbar, just to measure its height
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row

@@ -20,12 +20,13 @@
 #define INCLUDED_SVX_GRIDCTRL_HXX
 
 #include <com/sun/star/util/Date.hpp>
-#include <vcl/field.hxx>
 
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>
+#include <svtools/recorditemwindow.hxx>
 #include <osl/mutex.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vector>
@@ -174,13 +175,13 @@ public:
 
     class SAL_DLLPRIVATE NavigationBar final : public Control
     {
-        class AbsolutePos : public NumericField
+        class AbsolutePos final : public RecordItemWindow
         {
         public:
-            AbsolutePos(vcl::Window* pParent, WinBits nStyle);
+            AbsolutePos(vcl::Window* pParent);
 
-            virtual void KeyInput(const KeyEvent& rEvt) override;
-            virtual void LoseFocus() override;
+            virtual bool DoKeyInput(const KeyEvent& rEvt) override;
+            virtual void PositionFired(sal_Int64 nRecord) override;
         };
 
         friend class NavigationBar::AbsolutePos;

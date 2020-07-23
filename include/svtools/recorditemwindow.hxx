@@ -10,23 +10,28 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
-#include <svx/svxdllapi.h>
+#include <svtools/svtdllapi.h>
 
-class SVXCORE_DLLPUBLIC RecordItemWindow : public InterimItemWindow
+class SVT_DLLPUBLIC RecordItemWindow : public InterimItemWindow
 {
 public:
-    RecordItemWindow(vcl::Window* _pParent);
+    RecordItemWindow(vcl::Window* pParent, bool bHasFrame);
     virtual void dispose() override;
     virtual ~RecordItemWindow() override;
 
     void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
+    void set_font(const vcl::Font& rFont) { m_xWidget->set_font(rFont); }
+
+protected:
+    virtual bool DoKeyInput(const KeyEvent& rEvt);
 
 private:
-    virtual void PositionFired(sal_Int64 nRecord) = 0;
+    virtual void PositionFired(sal_Int64 nRecord);
 
     std::unique_ptr<weld::Entry> m_xWidget;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
     DECL_LINK(ActivatedHdl, weld::Entry&, bool);
     // for invalidating our content when losing the focus
     DECL_LINK(FocusOutHdl, weld::Widget&, void);

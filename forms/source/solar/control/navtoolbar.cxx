@@ -621,7 +621,7 @@ namespace frm
     }
 
     RecordPositionInput::RecordPositionInput(vcl::Window* pParent)
-        : RecordItemWindow(pParent)
+        : RecordItemWindow(pParent, true)
         , m_pDispatcher( nullptr )
     {
     }

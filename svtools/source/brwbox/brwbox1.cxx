@@ -19,6 +19,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <svtools/recorditemwindow.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include "datwin.hxx"
@@ -26,7 +27,6 @@
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/status.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -110,7 +110,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL) )
-    ,aStatusBar( VclPtr<StatusBar>::Create(this) )
+    ,aStatusBarHeight(VclPtr<RecordItemWindow>::Create(this, false))
 {
     ConstructImpl( nMode );
 }
@@ -137,7 +137,7 @@ void BrowseBox::dispose()
     pDataWin.disposeAndClear();
     pVScroll.disposeAndClear();
     aHScroll.disposeAndClear();
-    aStatusBar.disposeAndClear();
+    aStatusBarHeight.disposeAndClear();
 
     // free columns-space
     mvCols.clear();
