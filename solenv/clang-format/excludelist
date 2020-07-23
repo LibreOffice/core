@@ -7413,7 +7413,6 @@ include/vcl/scrbar.hxx
 include/vcl/seleng.hxx
 include/vcl/settings.hxx
 include/vcl/sound.hxx
-include/vcl/spinfld.hxx
 include/vcl/split.hxx
 include/vcl/splitwin.hxx
 include/vcl/status.hxx
@@ -7452,6 +7451,7 @@ include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
 include/vcl/toolkit/spin.hxx
+include/vcl/toolkit/spinfld.hxx
 include/vcl/toolkit/svtabbx.hxx
 include/vcl/toolkit/tabdlg.hxx
 include/vcl/toolkit/throbber.hxx

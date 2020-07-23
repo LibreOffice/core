@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SPINFLD_HXX
-#define INCLUDED_VCL_SPINFLD_HXX
+#pragma once
+
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
 
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>
 #include <config_options.h>
-
 
 class VCL_DLLPUBLIC SpinField : public Edit
 {
@@ -92,7 +94,5 @@ private:
                     mbLowerIn:1,
                     mbInDropDown:1;
 };
-
-#endif // INCLUDED_VCL_SPINFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

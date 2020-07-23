@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:07:23 using:
+ Generated on 2020-07-23 15:08:45 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -148,6 +148,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -308,7 +309,6 @@
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/syswin.hxx>
@@ -318,9 +318,11 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/toolkit/spinfld.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
@@ -331,6 +333,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/vclmedit.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
