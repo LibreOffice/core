@@ -187,21 +187,9 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 }
 
 
-OUString LdapUserProfileBe::getLdapUserProfileBeName() {
-    return "com.sun.star.comp.configuration.backend.LdapUserProfileBe";
-}
-
-
 OUString SAL_CALL LdapUserProfileBe::getImplementationName()
 {
-    return getLdapUserProfileBeName() ;
-}
-
-
-uno::Sequence<OUString> LdapUserProfileBe::getLdapUserProfileBeServiceNames()
-{
-    uno::Sequence<OUString> aServices { "com.sun.star.configuration.backend.LdapUserProfileBe" };
-    return aServices ;
+    return "com.sun.star.comp.configuration.backend.LdapUserProfileBe";
 }
 
 sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceName)
@@ -212,9 +200,16 @@ sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceNam
 uno::Sequence<OUString>
 SAL_CALL LdapUserProfileBe::getSupportedServiceNames()
 {
-    return getLdapUserProfileBeServiceNames() ;
+    return { "com.sun.star.configuration.backend.LdapUserProfileBe" };
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_ldp_LdapUserProfileBe_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new extensions::config::ldap::LdapUserProfileBe(context));
 }
 
 
