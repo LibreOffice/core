@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 #define INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 
-#include <svx/recorditemwindow.hxx>
+#include <svtools/recorditemwindow.hxx>
 #include <memory>
 
 namespace frm

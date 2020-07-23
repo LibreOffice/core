@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <svx/gridctrl.hxx>
+#include <vcl/edit.hxx>
 
 #include "sqlparserclient.hxx"
 
