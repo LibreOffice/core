@@ -22,6 +22,30 @@
       "revId": "31cd43da0d8c54c7ad0b84c71240099cb7e0119c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5579f35c_d76698a9",
+        "filename": "cui/source/factory/dlgfact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-07-23T08:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9db0a9d_97a99309",
+      "range": {
+        "startLine": 1694,
+        "startChar": 43,
+        "endLine": 1694,
+        "endChar": 50
+      },
+      "revId": "31cd43da0d8c54c7ad0b84c71240099cb7e0119c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
