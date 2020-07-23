@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="OptUserPage">
@@ -166,6 +166,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="firstname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="optuserpage|firstname-atkobject">First name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | firstname">Type your first name.</property>
                           </object>
                         </child>
                       </object>
@@ -184,6 +185,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lastname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="lastname-atkobject">Last name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | lastname">Type your last name.</property>
                           </object>
                         </child>
                       </object>
@@ -202,6 +204,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="shortname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="shortname-atkobject">Initials</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | shortname">Type your initials.</property>
                           </object>
                         </child>
                       </object>
@@ -231,6 +234,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="city-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="city-atkobject">City</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | city">Type the city where you live.</property>
                           </object>
                         </child>
                       </object>
@@ -249,6 +253,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="state-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="state-atkobject">State</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | state">Type your state.</property>
                           </object>
                         </child>
                       </object>
@@ -267,6 +272,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zip-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="zip-atkobject">Zip code</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | zip">Type your ZIP in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -297,6 +303,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="title-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="title-atkobject">Title</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | title">Type your title in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -315,6 +322,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="position-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="position-atkobject">Position</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | position">Type your position in the company in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -344,6 +352,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="home-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="home-atkobject">Home telephone number</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | home">Type your private telephone number in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -362,6 +371,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="work-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="work-atkobject">Work telephone number</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | work">Type your work number in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -392,6 +402,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="fax-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="fax-atkobject">Fax number</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | fax">Type your fax number in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -410,6 +421,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="email-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="email-atkobject">email address</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | email">Type your e-mail address.</property>
                           </object>
                         </child>
                       </object>
@@ -433,6 +445,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usefordocprop-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | usefordoprop">Mark to use the data in document properties</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -469,6 +486,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ruslastname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="ruslastname-atkobject">Last name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | ruslastname">Type your last name.</property>
                           </object>
                         </child>
                       </object>
@@ -487,6 +505,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rusfathersname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="rusfathersname-atkobject">Father's name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | rusfathersname">Type your father's name</property>
                           </object>
                         </child>
                       </object>
@@ -505,6 +524,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="russhortname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="russhortname-atkobject">Initials</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | russhortname">Type your initials.</property>
                           </object>
                         </child>
                       </object>
@@ -523,6 +543,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rusfirstname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="rusfirstname-atkobject">First name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | rusfirstname">Type your first name.</property>
                           </object>
                         </child>
                       </object>
@@ -567,6 +588,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="eastlastname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="eastlastname-atkobject">Last name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | eastlastname">Type your last name.</property>
                           </object>
                         </child>
                       </object>
@@ -585,6 +607,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="eastfirstname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="eastfirstname-atkobject">First name</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | eastfirstname">Type your first name.</property>
                           </object>
                         </child>
                       </object>
@@ -603,6 +626,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="eastshortname-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="eastshortname-atkobject">Initials</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | eastshortname">Type your initials.</property>
                           </object>
                         </child>
                       </object>
@@ -647,6 +671,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="russtreet-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="russtreet-atkobject">Street</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | russrteet">Type the name of your street in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -665,6 +690,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="apartnum-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="ruslastname-atkobject">Apartment number</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | apartnum">Type your apartment number</property>
                           </object>
                         </child>
                       </object>
@@ -709,6 +735,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="icity-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="icity-atkobject">City</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | icity">Type the city where you live.</property>
                           </object>
                         </child>
                       </object>
@@ -727,6 +754,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="izip-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="izip-atkobject">Zip code</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | izip">Type your ZIP in this field.</property>
                           </object>
                         </child>
                       </object>
@@ -753,6 +781,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="street-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | street">Type the name of your street in this field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -777,6 +810,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="country-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | country">Type your country and region</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -801,6 +839,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="company-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | company">Type the name of your company in this field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -891,6 +934,11 @@
                     <items>
                       <item translatable="yes" context="optuserpage|liststore1">No key</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="encryptionkey-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | encryptionkey">Select your OpenPGP key from the drop-down list for encrypting ODF documents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -905,6 +953,11 @@
                     <items>
                       <item translatable="yes" context="optuserpage|liststore1">No key</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="signingkey-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | signingkey">Select your OpenPGP key from the drop-down list for signing ODF documents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -920,6 +973,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="encrypttoself-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | encrypttoself">Mark this checkbox to also encrypt the file with your public key, so you can open the document with your private key.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -950,6 +1008,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OptUserPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | OptUserPage">Use this tab page to enter or edit user data.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
