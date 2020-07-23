@@ -96,18 +96,6 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
             css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
-         /**
-          Provides the implementation name.
-          @return   implementation name
-          */
-        static OUString getLdapUserProfileBeName() ;
-        /**
-          Provides the supported services names
-          @return   service names
-          */
-        static uno::Sequence<OUString>
-            getLdapUserProfileBeServiceNames() ;
-
     private:
         /** Check if LDAP is configured */
         static bool readLdapConfiguration(
