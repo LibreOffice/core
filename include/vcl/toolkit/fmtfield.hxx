@@ -24,7 +24,7 @@
 #endif
 
 #include <vcl/formatter.hxx>
-#include <vcl/spinfld.hxx>
+#include <vcl/toolkit/spinfld.hxx>
 
 class VCL_DLLPUBLIC FormattedField : public SpinField
 {
