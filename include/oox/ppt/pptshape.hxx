@@ -66,7 +66,8 @@ public:
             const oox::drawingml::Theme* pTheme,
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
             basegfx::B2DHomMatrix& aTransformation,
-            ::oox::drawingml::ShapeIdMap* pShapeMap );
+            ::oox::drawingml::ShapeIdMap* pShapeMap,
+            bool bhasSameSubTypeIndex = false );
 
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };

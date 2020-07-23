@@ -114,7 +114,8 @@ void PPTShape::addShape(
         const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         basegfx::B2DHomMatrix& aTransformation,
-        ::oox::drawingml::ShapeIdMap* pShapeMap )
+        ::oox::drawingml::ShapeIdMap* pShapeMap,
+        bool bhasSameSubTypeIndex )
 {
     SAL_INFO("oox.ppt","add shape id: " << msId << " location: " << ((meShapeLocation == Master) ? "master" : ((meShapeLocation == Slide) ? "slide" : ((meShapeLocation == Layout) ? "layout" : "other"))) << " subtype: " << mnSubType << " service: " << msServiceName);
     // only placeholder from layout are being inserted
@@ -235,7 +236,7 @@ void PPTShape::addShape(
                     // represent that as a table.
                     sServiceName = "com.sun.star.drawing.TableShape";
                     oox::drawingml::table::TablePropertiesPtr pTableProperties = getTableProperties();
-                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width);
+                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width, bhasSameSubTypeIndex);
                     setTextBody(nullptr);
                 }
             }
