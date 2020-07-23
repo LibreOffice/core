@@ -32,20 +32,22 @@
 namespace dbp
 {
     typedef ::svt::OGenericUnoDialog    OUnoAutoPilot_Base;
-    template <class TYPE, class SERVICEINFO>
+    template <class TYPE>
     class OUnoAutoPilot final
             :public OUnoAutoPilot_Base
-            ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
+            ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE > >
     {
-        explicit OUnoAutoPilot(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
-            : OUnoAutoPilot_Base(_rxORB)
+    public:
+        explicit OUnoAutoPilot(const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+                OUString aImplementationName,
+                const css::uno::Sequence<OUString>& aSupportedServices)
+            : OUnoAutoPilot_Base(_rxORB),
+              m_ImplementationName(aImplementationName),
+              m_SupportedServices(aSupportedServices)
         {
         }
 
 
-        css::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
-
-    public:
         // XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override
         {
@@ -55,31 +57,12 @@ namespace dbp
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override
         {
-            return getImplementationName_Static();
+            return m_ImplementationName;
         }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
-            return getSupportedServiceNames_Static();
-        }
-
-        // XServiceInfo - static methods
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
-        {
-            return SERVICEINFO::getServiceNames();
-        }
-
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static()
-        {
-            return SERVICEINFO::getImplementationName();
-        }
-
-        static css::uno::Reference< css::uno::XInterface >
-                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
-        {
-            return *(new OUnoAutoPilot<TYPE, SERVICEINFO>( comphelper::getComponentContext(_rxFactory) ));
+            return m_SupportedServices;
         }
 
         // XPropertySet
@@ -121,6 +104,11 @@ namespace dbp
 
             OUnoAutoPilot_Base::implInitialize(_rValue);
         }
+
+        css::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
+        OUString m_ImplementationName;
+        css::uno::Sequence<OUString> m_SupportedServices;
+
     };
 
 }   // namespace dbp
