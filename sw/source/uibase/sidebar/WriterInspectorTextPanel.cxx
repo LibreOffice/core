@@ -31,6 +31,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <unotextrange.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotools/intlwrapper.hxx>
+#include <vcl/settings.hxx>
 
 namespace sw::sidebar
 {
@@ -59,6 +63,10 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
 
 static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
 {
+    const comphelper::string::NaturalStringSorter aSorter(
+        comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetUILanguageTag().getLocale());
+
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     svx::sidebar::TreeNode aDFNode;
@@ -94,6 +102,11 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             aDFNode.children.push_back(aTemp);
         }
     }
+    std::sort(
+        aDFNode.children.begin(), aDFNode.children.end(),
+        [&aSorter](svx::sidebar::TreeNode const& rEntry1, svx::sidebar::TreeNode const& rEntry2) {
+            return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
+        });
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -132,6 +145,12 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             }
         }
 
+        std::sort(aCurrentChild.children.begin(), aCurrentChild.children.end(),
+                  [&aSorter](svx::sidebar::TreeNode const& rEntry1,
+                             svx::sidebar::TreeNode const& rEntry2) {
+                      return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
+                  });
+
         aCharNode.children.push_back(aCurrentChild);
     }
 
@@ -168,6 +187,12 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                 aCurrentChild.children.push_back(aTemp);
             }
         }
+
+        std::sort(aCurrentChild.children.begin(), aCurrentChild.children.end(),
+                  [&aSorter](svx::sidebar::TreeNode const& rEntry1,
+                             svx::sidebar::TreeNode const& rEntry2) {
+                      return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
+                  });
 
         aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
