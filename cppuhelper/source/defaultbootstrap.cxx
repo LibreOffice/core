@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
 #include <vector>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -90,7 +89,6 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
             css::uno::Any(
                 OUString("com.sun.star.security.AccessController")),
             true));
-    assert(!context_values.empty());
     css::uno::Reference< css::uno::XComponentContext > context(
         createComponentContext(context_values.data(), context_values.size()));
     smgr->setContext(context);
