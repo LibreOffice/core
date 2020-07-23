@@ -26,7 +26,7 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
-#include <vcl/field.hxx>
+#include <vcl/toolkit/field.hxx>
 
 class LocaleDataWrapper;
 
@@ -62,6 +62,17 @@ private:
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
 
+};
+
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyBox final : public ComboBox, public LongCurrencyFormatter
+{
+public:
+                    LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
+
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+
+    void            Modify() override;
+    void            ReformatAll() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
