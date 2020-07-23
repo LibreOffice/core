@@ -5547,19 +5547,19 @@ void VCLXNumericField::setFirst( double Value )
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    if ( pNumericField )
-        pNumericField->SetFirst(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    if ( pNumericFormatter )
+        pNumericFormatter->SetFirst(
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getFirst()
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    return pNumericField
-        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetFirst()), pNumericField->GetDecimalDigits() )
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    return pNumericFormatter
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetFirst()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5567,19 +5567,19 @@ void VCLXNumericField::setLast( double Value )
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    if ( pNumericField )
-        pNumericField->SetLast(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    if ( pNumericFormatter )
+        pNumericFormatter->SetLast(
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getLast()
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    return pNumericField
-        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetLast()), pNumericField->GetDecimalDigits() )
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    return pNumericFormatter
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetLast()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5593,24 +5593,23 @@ sal_Bool VCLXNumericField::isStrictFormat()
     return VCLXFormattedSpinField::isStrictFormat();
 }
 
-
 void VCLXNumericField::setSpinSize( double Value )
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    if ( pNumericField )
-        pNumericField->SetSpinSize(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() )) );
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    if ( pNumericFormatter )
+        pNumericFormatter->SetSpinSize(
+            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getSpinSize()
 {
     SolarMutexGuard aGuard;
 
-    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
-    return pNumericField
-        ? ImplCalcDoubleValue( static_cast<double>(pNumericField->GetSpinSize()), pNumericField->GetDecimalDigits() )
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+    return pNumericFormatter
+        ? ImplCalcDoubleValue( static_cast<double>(pNumericFormatter->GetSpinSize()), pNumericFormatter->GetDecimalDigits() )
         : 0;
 }
 
@@ -5650,8 +5649,9 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
             {
                 if ( bVoid )
                 {
-                    GetAs< NumericField >()->EnableEmptyFieldValue( true );
-                    GetAs< NumericField >()->SetEmptyFieldValue();
+                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    pNumericFormatter->EnableEmptyFieldValue( true );
+                    pNumericFormatter->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -5693,7 +5693,10 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     GetAs< NumericField >()->SetUseThousandSep( b );
+                {
+                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    pNumericFormatter->SetUseThousandSep( b );
+                }
             }
             break;
             default:
@@ -5737,7 +5740,8 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= GetAs< NumericField >()->IsUseThousandSep();
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                aProp <<= pNumericFormatter->IsUseThousandSep();
             }
             break;
             default:
@@ -5948,7 +5952,10 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno:
             {
                 bool b = false;
                 if ( Value >>= b )
-                     GetAs< NumericField >()->SetUseThousandSep( b );
+                {
+                    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    pNumericFormatter->SetUseThousandSep( b );
+                }
             }
             break;
             case BASEPROPERTY_UNIT:
@@ -5986,8 +5993,11 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
         switch ( nPropType )
         {
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-                aProp <<= GetAs< NumericField >()->IsUseThousandSep();
+            {
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                aProp <<= pNumericFormatter->IsUseThousandSep();
                 break;
+            }
             case BASEPROPERTY_UNIT:
                 aProp <<= static_cast<sal_uInt16>(GetAs< MetricField >()->GetUnit());
                 break;
