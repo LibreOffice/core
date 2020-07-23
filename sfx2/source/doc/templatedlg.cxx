@@ -13,6 +13,7 @@
 #include <templatesearchview.hxx>
 #include <templatesearchviewitem.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
@@ -1031,6 +1032,7 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
 {
     try
     {
+        /*
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
         uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
         {
@@ -1050,9 +1052,13 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
             xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         }
     }
-    catch (const Exception&)
-    {
+    */
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "AdditionsTag";
+        aArgs[0].Value <<= OUString("Templates");
+        comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
     }
+        catch (const Exception&) {}
 }
 
 void SfxTemplateManagerDlg::OnTemplateOpen ()
