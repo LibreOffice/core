@@ -19,80 +19,47 @@
 
 #include <sal/config.h>
 
-#include "dbpservices.hxx"
-#include "wizardservices.hxx"
 #include "unoautopilot.hxx"
 #include "groupboxwiz.hxx"
 #include "listcombowizard.hxx"
 #include "gridwizard.hxx"
 
 // the registration methods
-extern "C" void createRegistryInfo_OGroupBoxWizard()
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_dbp_OGroupBoxWizard_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static compmodule::OMultiInstanceAutoRegistration<
-        ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard, ::dbp::OGroupBoxSI >
-    > aAutoRegistration;
+    return cppu::acquire(
+        new ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard>(
+            context,
+            "org.openoffice.comp.dbp.OGroupBoxWizard",
+            { "com.sun.star.sdb.GroupBoxAutoPilot" }
+            ));
 }
 
-extern "C" void createRegistryInfo_OListComboWizard()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_dbp_OListComboWizard_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static compmodule::OMultiInstanceAutoRegistration<
-        ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard, ::dbp::OListComboSI >
-    > aAutoRegistration;
+    return cppu::acquire(
+        new ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard>(
+            context,
+            "org.openoffice.comp.dbp.OListComboWizard",
+            { "com.sun.star.sdb.ListComboBoxAutoPilot" }
+            ));
 }
 
-extern "C" void createRegistryInfo_OGridWizard()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_dbp_OGridWizard_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static compmodule::OMultiInstanceAutoRegistration<
-        ::dbp::OUnoAutoPilot< ::dbp::OGridWizard, ::dbp::OGridSI >
-    > aAutoRegistration;
+    return cppu::acquire(
+        new ::dbp::OUnoAutoPilot< ::dbp::OGridWizard>(
+            context,
+            "org.openoffice.comp.dbp.OGridWizard",
+            { "com.sun.star.sdb.GridControlAutoPilot" }
+            ));
 }
-
-
-namespace dbp
-{
-
-
-    using namespace ::com::sun::star::uno;
-
-    OUString OGroupBoxSI::getImplementationName()
-    {
-        return "org.openoffice.comp.dbp.OGroupBoxWizard";
-    }
-
-
-    Sequence< OUString > OGroupBoxSI::getServiceNames()
-    {
-        Sequence< OUString > aReturn { "com.sun.star.sdb.GroupBoxAutoPilot" };
-        return aReturn;
-    }
-
-    OUString OListComboSI::getImplementationName()
-    {
-        return "org.openoffice.comp.dbp.OListComboWizard";
-    }
-
-
-    Sequence< OUString > OListComboSI::getServiceNames()
-    {
-        Sequence< OUString > aReturn { "com.sun.star.sdb.ListComboBoxAutoPilot" };
-        return aReturn;
-    }
-
-    OUString OGridSI::getImplementationName()
-    {
-        return "org.openoffice.comp.dbp.OGridWizard";
-    }
-
-
-    Sequence< OUString > OGridSI::getServiceNames()
-    {
-        Sequence< OUString > aReturn { "com.sun.star.sdb.GridControlAutoPilot" };
-        return aReturn;
-    }
-
-
-}   // namespace dbp
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

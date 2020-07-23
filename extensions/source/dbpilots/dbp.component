@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="dbp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.openoffice.comp.dbp.OGridWizard">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.openoffice.comp.dbp.OGridWizard"
+    constructor="extensions_dbp_OGridWizard_get_implementation">
     <service name="com.sun.star.sdb.GridControlAutoPilot"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbp.OGroupBoxWizard">
+  <implementation name="org.openoffice.comp.dbp.OGroupBoxWizard"
+    constructor="extensions_dbp_OGroupBoxWizard_get_implementation">
     <service name="com.sun.star.sdb.GroupBoxAutoPilot"/>
   </implementation>
-  <implementation name="org.openoffice.comp.dbp.OListComboWizard">
+  <implementation name="org.openoffice.comp.dbp.OListComboWizard"
+    constructor="extensions_dbp_OListComboWizard_get_implementation">
     <service name="com.sun.star.sdb.ListComboBoxAutoPilot"/>
   </implementation>
 </component>

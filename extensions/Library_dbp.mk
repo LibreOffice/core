@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_sdk_api,dbp))
 $(eval $(call gb_Library_add_exception_objects,dbp,\
 	extensions/source/dbpilots/commonpagesdbp \
 	extensions/source/dbpilots/controlwizard \
-	extensions/source/dbpilots/dbpservices \
 	extensions/source/dbpilots/dbptools \
 	extensions/source/dbpilots/gridwizard \
 	extensions/source/dbpilots/groupboxwiz \
