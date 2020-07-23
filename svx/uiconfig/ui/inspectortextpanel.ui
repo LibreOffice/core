@@ -54,8 +54,6 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore</property>
-                    <property name="headers_visible">False</property>
-                    <property name="headers_clickable">False</property>
                     <property name="search_column">0</property>
                     <property name="enable_tree_lines">True</property>
                     <child internal-child="selection">
@@ -63,6 +61,8 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <property name="resizable">True</property>
+                        <property name="title" translatable="yes" context="inspectortextpanel|property">Properties</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
@@ -75,6 +75,8 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="resizable">True</property>
+                        <property name="title" translatable="yes" context="inspectortextpanel|value">Values</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>

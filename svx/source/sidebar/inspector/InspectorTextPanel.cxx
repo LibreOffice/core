@@ -51,7 +51,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
     std::vector<int> aWidths;
     aWidths.push_back(fWidth * 34);
-    aWidths.push_back(fWidth * 15);
+    aWidths.push_back(fWidth * 34);
     mpListBoxStyles->set_column_fixed_widths(aWidths);
 }
 
