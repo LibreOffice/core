@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="updatefeed" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="vnd.sun.UpdateInformationProvider">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="vnd.sun.UpdateInformationProvider"
+    constructor="extensions_update_UpdateInformationProvider_get_implementation">
     <service name="com.sun.star.deployment.UpdateInformationProvider"/>
   </implementation>
 </component>
