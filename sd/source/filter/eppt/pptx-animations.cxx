@@ -212,7 +212,7 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
     for (int i = 0; i < aKeyTimes.getLength(); i++)
     {
         SAL_INFO("sd.eppt", "animate value " << i << ": " << aKeyTimes[i]);
-        if (aValues[i].hasValue())
+        if (i < aValues.getLength() && aValues[i].hasValue())
         {
             pFS->startElementNS(XML_p, XML_tav, XML_fmla,
                                 sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
