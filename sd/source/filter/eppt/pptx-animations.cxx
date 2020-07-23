@@ -207,6 +207,8 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
 
     SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
 
+    assert(aValues.getLength() == aKeyTimes.getLength());
+
     pFS->startElementNS(XML_p, XML_tavLst);
 
     for (int i = 0; i < aKeyTimes.getLength(); i++)
