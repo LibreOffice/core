@@ -16,6 +16,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
+class AdditionsDialog;
+class SearchAndParseThread;
+
 struct AdditionsItem
 {
     AdditionsItem(weld::Widget* pParent)
@@ -34,8 +37,12 @@ struct AdditionsItem
         , m_xImageVoting(m_xBuilder->weld_image("imageVoting"))
         , m_xImageDownloadNumber(m_xBuilder->weld_image("imageDownloadNumber"))
         , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
+        , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
     {
+        m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     }
+
+    DECL_LINK(ShowMoreHdl, weld::Button&, void);
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
@@ -52,8 +59,28 @@ struct AdditionsItem
     std::unique_ptr<weld::Image> m_xImageVoting;
     std::unique_ptr<weld::Image> m_xImageDownloadNumber;
     std::unique_ptr<weld::Label> m_xLabelDownloadNumber;
+    std::unique_ptr<weld::Button> m_xButtonShowMore;
+    AdditionsDialog* m_pParentDialog;
 };
-class SearchAndParseThread;
+
+struct AdditionInfo
+{
+    OUString sExtensionID;
+    OUString sName;
+    OUString sAuthorName;
+    OUString sExtensionURL;
+    OUString sScreenshotURL;
+    OUString sIntroduction;
+    OUString sDescription;
+    OUString sCompatibleVersion;
+    OUString sReleaseVersion;
+    OUString sLicense;
+    OUString sCommentNumber;
+    OUString sCommentURL;
+    OUString sRating;
+    OUString sDownloadNumber;
+    OUString sDownloadURL;
+};
 
 class AdditionsDialog : public weld::GenericDialogController
 {
@@ -68,9 +95,9 @@ private:
 public:
     std::unique_ptr<weld::Entry> m_xEntrySearch;
     std::unique_ptr<weld::Button> m_xButtonClose;
-
     std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;
-    std::vector<AdditionsItem> m_aAdditionsItems;
+    std::vector<AdditionsItem> m_aAdditionsItems; // UI components
+    std::vector<AdditionInfo> m_aAllExtensionsVector; //
 
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentGrid;
@@ -78,7 +105,12 @@ public:
     std::unique_ptr<weld::Label> m_xLabelProgress;
     ::rtl::Reference<SearchAndParseThread> m_pSearchThread;
 
+    OString m_sURL;
     OString m_sTag;
+    size_t
+        m_nMaxItemCount; // Max number of item which will appear on the list before the press to the show more button.
+    size_t m_nCurrentListItemCount; // Current number of item on the list
+
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
 
@@ -90,7 +122,6 @@ class SearchAndParseThread : public salhelper::Thread
 {
 private:
     AdditionsDialog* m_pAdditionsDialog;
-    OUString m_aURL;
     std::atomic<bool> m_bExecute;
     bool m_bIsFirstLoading;
 
@@ -98,8 +129,14 @@ private:
     virtual void execute() override;
 
 public:
-    SearchAndParseThread(AdditionsDialog* pDialog, const OUString& rURL,
-                         const bool& bIsFirstLoading);
+    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
+
+    std::vector<AdditionInfo> CreateInfoVectorToLoading(const size_t startNumber);
+
+    void LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem,
+                  const size_t nGridPositionY);
+
+    void UpdateUI(const std::vector<AdditionInfo>& additionInfos);
 
     void StopExecution() { m_bExecute = false; }
 };
