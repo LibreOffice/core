@@ -45,6 +45,7 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
@@ -206,6 +207,9 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
     const OUString& rAttributeName = rXAnimate->getAttributeName();
 
     SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
+
+    if (aKeyTimes.getLength() != aValues.getLength())
+        throw css::io::WrongFormatException();
 
     pFS->startElementNS(XML_p, XML_tavLst);
 
