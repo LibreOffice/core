@@ -28,8 +28,8 @@
 #include <tools/fldunit.hxx>
 #include <tools/time.hxx>
 #include <tools/link.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolkit/spinfld.hxx>
 
 namespace com::sun::star::lang { struct Locale; }
 
