@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,scn,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scn,\
-	extensions/source/scanner/scnserv \
 	extensions/source/scanner/scanner \
 ))
 

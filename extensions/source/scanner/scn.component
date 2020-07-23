@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="scn" xmlns="http://openoffice.org/2010/uno-components">
-   <implementation name="com.sun.star.scanner.ScannerManager">
+    xmlns="http://openoffice.org/2010/uno-components">
+   <implementation name="com.sun.star.scanner.ScannerManager"
+    constructor="extensions_ScannerManager_get_implementation">
     <service name="com.sun.star.scanner.ScannerManager"/>
   </implementation>
 </component>
