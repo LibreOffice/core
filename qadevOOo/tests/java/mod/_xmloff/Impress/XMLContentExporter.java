@@ -41,7 +41,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.comp.Impress.XMLContentExporter</code>. <p>
+ * <code>com.sun.star.comp.Impress.XMLOasisContentExporter</code>. <p>
  * Object implements the following interfaces :
  * <ul>
  *  <li><code>com::sun::star::lang::XInitialization</code></li>
@@ -89,7 +89,7 @@ public class XMLContentExporter extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
-    * <code>com.sun.star.comp.Impress.XMLContentExporter</code> with
+    * <code>com.sun.star.comp.Impress.XMLOasisContentExporter</code> with
     * argument which is an implementation of <code>XDocumentHandler</code>
     * and which can check if required tags and character data is
     * exported. <p>
@@ -119,7 +119,7 @@ public class XMLContentExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
         oObj = (XInterface) xMSF.createInstanceWithArguments(
-            "com.sun.star.comp.Impress.XMLContentExporter",
+            "com.sun.star.comp.Impress.XMLOasisContentExporter",
             new Object[] {arg});
         XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
         xEx.setSourceDocument(xImpressDoc);

@@ -403,7 +403,6 @@ core_constructor_list = [
     "com_sun_star_comp_Impress_XMLOasisStylesImporter_get_implementation",
     "com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation",
-    "com_sun_star_comp_Impress_XMLContentExporter_get_implementation",
     "com_sun_star_comp_Impress_XMLSettingsExporter_get_implementation",
     "com_sun_star_comp_Impress_XMLExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLExporter_get_implementation",
