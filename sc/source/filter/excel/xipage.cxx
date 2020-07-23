@@ -118,13 +118,17 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 
     switch( rStrm.GetRecId() )
     {
-        case EXC_ID_HEADER:     maData.maHeader = aString;  break;
-        case EXC_ID_FOOTER:     maData.maFooter = aString;  break;
+        case EXC_ID_HEADER:          maData.maHeader = aString;  break;
+        case EXC_ID_FOOTER:          maData.maFooter = aString;  break;
+        case EXC_ID_HEADER_EVEN:     maData.maHeaderEven = aString;  break;
+        case EXC_ID_FOOTER_EVEN:     maData.maFooterEven = aString;  break;
         default:    OSL_FAIL( "XclImpPageSettings::ReadHeaderFooter - unknown record" );
     }
 
     if (maData.maHeader.getLength() > 10 && utl::ConfigManager::IsFuzzing())
         maData.maHeader = maData.maHeader.copy(0, 10);
+    if (maData.maHeaderEven.getLength() > 10 && utl::ConfigManager::IsFuzzing())
+        maData.maHeaderEven = maData.maHeaderEven.copy(0, 10);
 }
 
 void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
