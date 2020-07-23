@@ -45,6 +45,7 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
@@ -62,6 +63,7 @@
 
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::uno;
 using namespace ::ppt;
@@ -206,6 +208,9 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
     const OUString& rAttributeName = rXAnimate->getAttributeName();
 
     SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
+
+    if (aKeyTimes.getLength() != aValues.getLength())
+        throw IllegalAccessException();
 
     pFS->startElementNS(XML_p, XML_tavLst);
 

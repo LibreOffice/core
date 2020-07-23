@@ -542,6 +542,8 @@ namespace oox::ppt {
                 }
             }
 
+            assert(xAnimate->getValues().getLength() == xAnimate->getKeyTimes().getLength());
+
             if( mnNodeType == AnimationNodeType::TRANSITIONFILTER )
             {
 
