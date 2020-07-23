@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="updchkui" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="vnd.sun.UpdateCheckUI">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="vnd.sun.UpdateCheckUI"
+    constructor="extensions_update_UpdateCheckUI_get_implementation">
     <service name="com.sun.star.setup.UpdateCheckUI"/>
   </implementation>
 </component>

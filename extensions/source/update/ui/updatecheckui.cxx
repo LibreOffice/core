@@ -56,19 +56,6 @@
 using namespace ::com::sun::star;
 
 
-static uno::Sequence< OUString > getServiceNames()
-{
-    uno::Sequence< OUString > aServiceList { "com.sun.star.setup.UpdateCheckUI" };
-    return aServiceList;
-}
-
-
-static OUString getImplementationName()
-{
-    return "vnd.sun.UpdateCheckUI";
-}
-
-
 namespace
 {
 
@@ -218,13 +205,13 @@ UpdateCheckUI::~UpdateCheckUI()
 OUString SAL_CALL
 UpdateCheckUI::getImplementationName()
 {
-    return ::getImplementationName();
+    return "vnd.sun.UpdateCheckUI";
 }
 
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckUI::getSupportedServiceNames()
 {
-    return ::getServiceNames();
+    return { "com.sun.star.setup.UpdateCheckUI" };
 }
 
 sal_Bool SAL_CALL
@@ -891,35 +878,15 @@ void BubbleWindow::RecalcTextRects()
 } // anonymous namespace
 
 
-static uno::Reference<uno::XInterface>
-createInstance(const uno::Reference<uno::XComponentContext>& xContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_update_UpdateCheckUI_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     SolarMutexGuard aGuard;
-    return  *new UpdateCheckUI(xContext);
+    return cppu::acquire(new UpdateCheckUI(context));
 }
 
 
-const cppu::ImplementationEntry kImplementations_entries[] =
-{
-    {
-        createInstance,
-        getImplementationName,
-        getServiceNames,
-        cppu::createSingleComponentFactory,
-        nullptr,
-        0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-} ;
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * updchkui_component_getFactory(const char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
-{
-    return cppu::component_getFactoryHelper(
-        pszImplementationName,
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries) ;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
