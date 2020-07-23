@@ -24,11 +24,18 @@
 #include <vcl/split.hxx>
 #include "IClipBoardTest.hxx"
 
+namespace weld
+{
+    class Widget;
+}
+
 namespace dbaui
 {
     class OTableController;
+    class OTableDesignView;
     class OTableFieldDescWin;
     class OTableEditorCtrl;
+
     class OTableBorderWindow : public vcl::Window
     {
         VclPtr<Splitter>                    m_aHorzSplitter;
@@ -40,7 +47,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTableBorderWindow(vcl::Window* pParent);
+        OTableBorderWindow(OTableDesignView* pParent);
         virtual ~OTableBorderWindow() override;
         // Window overrides
         virtual void dispose() override;
@@ -50,6 +57,7 @@ namespace dbaui
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
     };
+
     class OTableDesignView : public ODataView
                             ,public IClipboardTest
     {
@@ -66,6 +74,8 @@ namespace dbaui
         ChildFocusState                     m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
+
+        DECL_LINK( FieldDescFocusIn, weld::Widget&, void );
     protected:
 
         // return the Rectangle where I can paint myself

@@ -3407,8 +3407,6 @@ dbaccess/source/ui/relationdesign/RTableWindow.hxx
 dbaccess/source/ui/relationdesign/RelationController.cxx
 dbaccess/source/ui/relationdesign/RelationDesignView.cxx
 dbaccess/source/ui/relationdesign/RelationTableView.cxx
-dbaccess/source/ui/tabledesign/FieldDescGenWin.cxx
-dbaccess/source/ui/tabledesign/FieldDescGenWin.hxx
 dbaccess/source/ui/tabledesign/FieldDescriptions.cxx
 dbaccess/source/ui/tabledesign/TEditControl.cxx
 dbaccess/source/ui/tabledesign/TEditControl.hxx

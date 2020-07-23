@@ -17,6 +17,7 @@ dbaccess/uiconfig/ui/dbwizmysqlintropage.ui://GtkLabel[@id='label2'] orphan-labe
 dbaccess/uiconfig/ui/dbwizmysqlnativepage.ui://GtkLabel[@id='helptext'] orphan-label
 dbaccess/uiconfig/ui/dbwizspreadsheetpage.ui://GtkLabel[@id='helptext'] orphan-label
 dbaccess/uiconfig/ui/dbwiztextpage.ui://GtkLabel[@id='helptext'] orphan-label
+dbaccess/uiconfig/ui/fielddescpanel.ui://GtkTextView[@id='textview'] no-labelled-by
 dbaccess/uiconfig/ui/fielddialog.ui://GtkLabel[@id='alttitle'] orphan-label
 dbaccess/uiconfig/ui/finalpagewizard.ui://GtkLabel[@id='headerText'] orphan-label
 dbaccess/uiconfig/ui/finalpagewizard.ui://GtkLabel[@id='helpText'] orphan-label

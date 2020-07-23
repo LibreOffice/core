@@ -23,6 +23,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/weld.hxx>
+#include "IClipBoardTest.hxx"
 #include "QEnumTypes.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -66,6 +67,7 @@ namespace dbaui
     class OPropColumnEditCtrl;
 
     class OFieldDescControl : public TabPage
+                            , public IClipboardTest
     {
     private:
         Idle m_aLayoutIdle;
@@ -73,7 +75,7 @@ namespace dbaui
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Container> m_xContainer;
 
-        VclPtr<OTableDesignHelpBar>    pHelp;
+        OTableDesignHelpBar* m_pHelp;
         weld::Widget* m_pLastFocusWindow;
         weld::Widget* m_pActFocusWindow;
 
@@ -104,6 +106,8 @@ namespace dbaui
         std::unique_ptr<OPropEditCtrl> m_xAutoIncrementValue;
 
         std::unique_ptr<weld::Button>  m_xFormat;
+
+        Link<weld::Widget&, void> m_aControlFocusIn;
 
         TOTypeInfoSP            m_pPreviousType;
         short                   m_nPos;
@@ -174,14 +178,18 @@ namespace dbaui
         void                SetControlText( sal_uInt16 nControlId, const OUString& rText );
         void                SetReadOnly( bool bReadOnly );
 
-        // when resize is called
-        bool                isCutAllowed() const;
-        bool                isCopyAllowed() const;
-        bool                isPasteAllowed() const;
+        virtual bool        isCutAllowed() override;
+        virtual bool        isCopyAllowed() override;
+        virtual bool        isPasteAllowed() override;
 
-        void                cut();
-        void                copy();
-        void                paste();
+        virtual void        cut() override;
+        virtual void        copy() override;
+        virtual void        paste() override;
+
+        void connect_focus_in(const Link<weld::Widget&, void>& rLink)
+        {
+            m_aControlFocusIn = rLink;
+        }
 
         void                Init();
         virtual void        GetFocus() override;
