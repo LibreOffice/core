@@ -28,38 +28,20 @@
 #include <helpids.h>
 #include <core_resource.hxx>
 
-#define DETAILS_HEADER_HEIGHT           25
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
-#define DETAILS_OPT_PAGE_WIDTH          (CONTROL_WIDTH_1 + CONTROL_SPACING_X + CONTROL_WIDTH_4 + 50)
-#define DETAILS_OPT_PAGE_HEIGHT         ((CONTROL_HEIGHT + CONTROL_SPACING_Y) * 5)
-#define DETAILS_MIN_HELP_WIDTH          100
-#define DETAILS_OPT_HELP_WIDTH          200
-#define DETAILS_MIN_HELP_HEIGHT         50
-#define DETAILS_OPT_HELP_HEIGHT         100
-
 using namespace dbaui;
-OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
-    : TabPage(pParent, WB_3DLOOK)
+
+OTableFieldDescWin::OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* pView)
+    : InterimItemWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
+    , m_xHelpBar(new OTableDesignHelpBar(m_xBuilder->weld_text_view("textview")))
+    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xFieldControl(VclPtr<OTableFieldControl>::Create(m_xBox.get(), m_xHelpBar.get(), pView))
+    , m_xHeader(m_xBuilder->weld_label("header"))
     , m_eChildFocus(NONE)
 {
     // Header
-    m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER );
-    m_pHeader->SetText(DBA_RES(STR_TAB_PROPERTIES));
-    m_pHeader->Show();
+    m_xHeader->set_label(DBA_RES(STR_TAB_PROPERTIES));
 
-    // HelpBar
-    m_pHelpBar = VclPtr<OTableDesignHelpBar>::Create( this );
-    m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
-    m_pHelpBar->Show();
-
-    m_pGenPage = VclPtr<OFieldDescGenWin>::Create( this, m_pHelpBar );
-    getGenPage()->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
-    getGenPage()->Show();
+    m_xFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
 }
 
 OTableFieldDescWin::~OTableFieldDescWin()
@@ -70,37 +52,34 @@ OTableFieldDescWin::~OTableFieldDescWin()
 void OTableFieldDescWin::dispose()
 {
     // destroy children
-    m_pHelpBar->Hide();
-    getGenPage()->Hide();
-    m_pHeader->Hide();
-
-    m_pGenPage.disposeAndClear();
-    m_pHeader.disposeAndClear();
-    m_pHelpBar.disposeAndClear();
-    TabPage::dispose();
+    m_xFieldControl.disposeAndClear();
+    m_xBox.reset();
+    m_xHeader.reset();
+    m_xHelpBar.reset();
+    InterimItemWindow::dispose();
 }
 
 void OTableFieldDescWin::Init()
 {
-    OSL_ENSURE(getGenPage() != nullptr, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
-    getGenPage()->Init();
+    m_xFieldControl->Init();
 }
 
 void OTableFieldDescWin::SetReadOnly( bool bRead )
 {
-    getGenPage()->SetReadOnly( bRead );
+    m_xFieldControl->SetReadOnly( bRead );
 }
 
 void OTableFieldDescWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-    getGenPage()->DisplayData( pFieldDescr );
+    m_xFieldControl->DisplayData( pFieldDescr );
 }
 
 void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 {
-    getGenPage()->SaveData( pFieldDescr );
+    m_xFieldControl->SaveData( pFieldDescr );
 }
 
+#if 0
 void OTableFieldDescWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     // 3D-line at the top window border
@@ -198,6 +177,7 @@ void OTableFieldDescWin::Resize()
     }
     Invalidate();
 }
+#endif
 
 IClipboardTest* OTableFieldDescWin::getActiveChild() const
 {
@@ -205,10 +185,10 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
     switch(m_eChildFocus)
     {
         case DESCRIPTION:
-            pTest = getGenPage();
+            pTest = m_xFieldControl.get();
             break;
         default:
-            pTest = m_pHelpBar;
+            pTest = m_xHelpBar.get();
             break;
     }
     return pTest;
@@ -221,18 +201,18 @@ bool OTableFieldDescWin::isCopyAllowed()
 
 bool OTableFieldDescWin::isCutAllowed()
 {
-    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isCutAllowed());
+    return m_xFieldControl->HasChildPathFocus() && m_xFieldControl->isCutAllowed();
 }
 
 bool OTableFieldDescWin::isPasteAllowed()
 {
-    return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isPasteAllowed());
+    return m_xFieldControl->HasChildPathFocus() && m_xFieldControl->isPasteAllowed();
 }
 
 void OTableFieldDescWin::cut()
 {
-    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
-        getGenPage()->cut();
+    if (m_xFieldControl->HasChildPathFocus())
+        m_xFieldControl->cut();
 }
 
 void OTableFieldDescWin::copy()
@@ -243,10 +223,11 @@ void OTableFieldDescWin::copy()
 
 void OTableFieldDescWin::paste()
 {
-    if ( getGenPage() && getGenPage()->HasChildPathFocus() )
-        getGenPage()->paste();
+    if (m_xFieldControl->HasChildPathFocus())
+        m_xFieldControl->paste();
 }
 
+#if 0
 void OTableFieldDescWin::GetFocus()
 {
     if ( getGenPage() )
@@ -270,5 +251,6 @@ bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
     }
     return TabPage::PreNotify(rNEvt);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

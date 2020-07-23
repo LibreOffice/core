@@ -216,7 +216,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/relationdesign/RelationTableView \
     dbaccess/source/ui/relationdesign/RTableConnection \
     dbaccess/source/ui/relationdesign/RTableConnectionData \
-    dbaccess/source/ui/tabledesign/FieldDescGenWin \
     dbaccess/source/ui/tabledesign/FieldDescriptions \
     dbaccess/source/ui/tabledesign/TableController \
     dbaccess/source/ui/tabledesign/TableDesignControl \

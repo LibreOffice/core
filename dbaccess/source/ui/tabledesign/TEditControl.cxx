@@ -932,7 +932,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
 
         case FIELD_PROPERTY_DEFAULT:
             pFieldDescr->SetControlDefault( _rNewData );
-            sValue = GetView()->GetDescWin()->getGenPage()->getFieldControl()->getControlDefault(pFieldDescr);
+            sValue = GetView()->GetDescWin()->getGenPage()->getControlDefault(pFieldDescr);
             break;
 
         case FIELD_PROPERTY_REQUIRED:

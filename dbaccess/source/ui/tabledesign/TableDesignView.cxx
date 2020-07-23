@@ -36,14 +36,14 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
+OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
 {
 
     ImplInitSettings();
     // create children
     m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
-    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
+    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create(this, pParent);
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 

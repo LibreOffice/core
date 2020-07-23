@@ -24,22 +24,10 @@
 
 using namespace dbaui;
 
-OTableDesignHelpBar::OTableDesignHelpBar(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "dbaccess/ui/designhelpbox.ui", "DesignHelpBox")
-    , m_xTextWin(m_xBuilder->weld_text_view("textview"))
+OTableDesignHelpBar::OTableDesignHelpBar(std::unique_ptr<weld::TextView> xTextWin)
+    : m_xTextWin(std::move(xTextWin))
 {
-    m_xTextWin->set_help_id(HID_TABLE_DESIGN_HELP_WINDOW);
-}
-
-OTableDesignHelpBar::~OTableDesignHelpBar()
-{
-    disposeOnce();
-}
-
-void OTableDesignHelpBar::dispose()
-{
-    m_xTextWin.reset();
-    InterimItemWindow::dispose();
+    m_xTextWin->set_help_id(HID_TAB_DESIGN_HELP_TEXT_FRAME);
 }
 
 void OTableDesignHelpBar::SetHelpText( const OUString& rText )

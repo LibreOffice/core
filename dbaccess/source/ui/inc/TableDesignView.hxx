@@ -27,8 +27,10 @@
 namespace dbaui
 {
     class OTableController;
+    class OTableDesignView;
     class OTableFieldDescWin;
     class OTableEditorCtrl;
+
     class OTableBorderWindow : public vcl::Window
     {
         VclPtr<Splitter>                    m_aHorzSplitter;
@@ -40,7 +42,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTableBorderWindow(vcl::Window* pParent);
+        OTableBorderWindow(OTableDesignView* pParent);
         virtual ~OTableBorderWindow() override;
         // Window overrides
         virtual void dispose() override;
@@ -50,6 +52,7 @@ namespace dbaui
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
     };
+
     class OTableDesignView : public ODataView
                             ,public IClipboardTest
     {
