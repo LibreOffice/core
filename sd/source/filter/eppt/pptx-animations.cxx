@@ -209,29 +209,32 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
 
     pFS->startElementNS(XML_p, XML_tavLst);
 
-    for (int i = 0; i < aKeyTimes.getLength(); i++)
+    if (aKeyTimes.getLength() == aValues.getLength())
     {
-        SAL_INFO("sd.eppt", "animate value " << i << ": " << aKeyTimes[i]);
-        if (aValues[i].hasValue())
+        for (int i = 0; i < aKeyTimes.getLength(); i++)
         {
-            pFS->startElementNS(XML_p, XML_tav, XML_fmla,
-                                sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()), XML_tm,
-                                OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
-            pFS->startElementNS(XML_p, XML_val);
-            ValuePair aPair;
-            if (aValues[i] >>= aPair)
+            SAL_INFO("sd.eppt", "animate value " << i << ": " << aKeyTimes[i]);
+            if (aValues[i].hasValue())
             {
-                WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aPair.First, rAttributeName));
-                WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aPair.Second, rAttributeName));
-            }
-            else
-                WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aValues[i], rAttributeName));
+                pFS->startElementNS(
+                    XML_p, XML_tav, XML_fmla, sax_fastparser::UseIf(sFormula, !sFormula.isEmpty()),
+                    XML_tm, OString::number(static_cast<sal_Int32>(aKeyTimes[i] * 100000.0)));
+                pFS->startElementNS(XML_p, XML_val);
+                ValuePair aPair;
+                if (aValues[i] >>= aPair)
+                {
+                    WriteAnimationProperty(
+                        pFS, AnimationExporter::convertAnimateValue(aPair.First, rAttributeName));
+                    WriteAnimationProperty(
+                        pFS, AnimationExporter::convertAnimateValue(aPair.Second, rAttributeName));
+                }
+                else
+                    WriteAnimationProperty(
+                        pFS, AnimationExporter::convertAnimateValue(aValues[i], rAttributeName));
 
-            pFS->endElementNS(XML_p, XML_val);
-            pFS->endElementNS(XML_p, XML_tav);
+                pFS->endElementNS(XML_p, XML_val);
+                pFS->endElementNS(XML_p, XML_tav);
+            }
         }
     }
 

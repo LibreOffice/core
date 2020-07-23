@@ -2212,6 +2212,9 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
             aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
         }
     }
+
+    assert(aValues.getLength() == aKeyTimes.getLength());
+
     xAnim->setKeyTimes( aKeyTimes );
     xAnim->setValues( aValues );
     xAnim->setFormula( aFormula );
