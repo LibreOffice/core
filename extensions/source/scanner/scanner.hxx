@@ -73,10 +73,6 @@ public:
 
     virtual void SAL_CALL                   initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
-    // Misc
-    static OUString                         getImplementationName_Static() throw();
-    static Sequence< OUString >             getSupportedServiceNames_Static() throw();
-
 #ifdef _WIN32
     void*                                   GetData() const { return mpData; }
 #endif
