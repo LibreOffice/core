@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1b32641_724115e4",
+        "filename": "svx/uiconfig/ui/inspectortextpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-23T07:10:44Z",
+      "side": 1,
+      "message": "Why reorder? we only need to resize. Reordering would only confuse. Or is this a requirement to resize (would be unexpected)?",
+      "range": {
+        "startLine": 57,
+        "startChar": 36,
+        "endLine": 57,
+        "endChar": 47
+      },
+      "revId": "6e89b8aa81af8197cf9c826792e99938d582ae14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
