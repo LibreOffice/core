@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="PrivateUserPage">
@@ -26,10 +26,10 @@
               <object class="GtkLabel" id="nameft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|nameft">First/last _name/initials:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">firstname</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -40,10 +40,10 @@
               <object class="GtkLabel" id="streetft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|streetft">_Street:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">street</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -54,10 +54,10 @@
               <object class="GtkLabel" id="countryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|countryft">Co_untry/state:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">country</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -68,10 +68,10 @@
               <object class="GtkLabel" id="titleft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|titleft">_Title/profession:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">title</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -82,10 +82,10 @@
               <object class="GtkLabel" id="phoneft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|phoneft">Fa_x:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">fax</property>
+                <property name="xalign">0</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="phoneft-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="privateuserpage|phoneft-atkobject">Home telephone number</property>
@@ -101,10 +101,10 @@
               <object class="GtkLabel" id="faxft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|faxft">Homepage/email:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">url</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -125,6 +125,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="firstname-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|firstname-atkobject">First name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | firstname">Type your first name.</property>
                       </object>
                     </child>
                   </object>
@@ -142,6 +143,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="lastname-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|lastname-atkobject">Last name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | lastname">Type your last name.</property>
                       </object>
                     </child>
                   </object>
@@ -159,6 +161,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="shortname-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|shortname-atkobject">Initials</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | shortname">Type your initials.</property>
                       </object>
                     </child>
                   </object>
@@ -188,6 +191,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="title-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|title-atkobject">Title</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | title">Type your title in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -205,6 +209,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="job-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|job-atkobject">Position</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | job">Type your profession</property>
                       </object>
                     </child>
                   </object>
@@ -233,6 +238,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fax-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|fax-atkobject">Home telephone number</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | fax">Type your fax number in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -263,6 +269,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="url-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|url-atkobject">Fax number</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | url">Enter your home page</property>
                       </object>
                     </child>
                   </object>
@@ -280,6 +287,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="email-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|email-atkobject">email address</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | email">Type your e-mail address.</property>
                       </object>
                     </child>
                   </object>
@@ -298,10 +306,10 @@
               <object class="GtkLabel" id="eastnameft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|eastnameft">First/last _name/initials 2:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">firstname2</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -322,6 +330,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="firstname2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|firstname2-atkobject">Last name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | firstname2">Type your first name</property>
                       </object>
                     </child>
                   </object>
@@ -339,6 +348,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="lastname2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|lastname2-atkobject">First name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | lastname2">Type your last name </property>
                       </object>
                     </child>
                   </object>
@@ -356,6 +366,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="shortname2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|shortname2-atkobject">Initials</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | shortname2">Type your initials</property>
                       </object>
                     </child>
                   </object>
@@ -374,10 +385,10 @@
               <object class="GtkLabel" id="icityft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|icityft">_Zip/city:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">izip</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -398,6 +409,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="icity-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|icity-atkobject">City</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | icity">Type the city where you live.</property>
                       </object>
                     </child>
                   </object>
@@ -415,6 +427,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="izip-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|izip-atkobject">Zip code</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | izip">Type your ZIP in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -440,6 +453,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="street-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | street">Type the name of your street in this field.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -464,6 +482,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="country-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | country">Type the country name</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -476,6 +499,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="state-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | state">Type your state.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -492,10 +520,10 @@
               <object class="GtkLabel" id="titleft1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="privateuserpage|titleft1">Phone/mobile:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">phone</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -517,6 +545,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="phone-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|phone-atkobject">Title</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | phone">Type your phone number</property>
                       </object>
                     </child>
                   </object>
@@ -534,6 +563,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mobile-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="privateuserpage|mobile-atkobject">Position</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | mobile">Type your mobile phone number</property>
                       </object>
                     </child>
                   </object>
