@@ -2596,7 +2596,7 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
 #else
     bool isMobileDevice = false;
     if (const SfxViewShell* pCurrentViewShell = SfxViewShell::Current())
-        isMobileDevice = pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKMobilePhone();
+        isMobileDevice = pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKTablet();
 #endif
 
     if (eObjKind == PRESOBJ_TITLE)
