@@ -120,11 +120,6 @@ class UpdateInformationProvider :
     OUString getUserAgent(bool bExtended);
     bool isUserAgentExtended() const;
 public:
-    static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
-
-    static uno::Sequence< OUString > getServiceNames();
-    static OUString getImplName();
-
     uno::Reference< xml::dom::XElement > getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode);
     uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, const OUString& rName);
 
@@ -161,6 +156,11 @@ public:
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
+                              const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
+                              const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
+                              const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
+
 protected:
 
     virtual ~UpdateInformationProvider() override;
@@ -172,11 +172,6 @@ private:
 
     void storeCommandInfo( sal_Int32 nCommandId,
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
-
-    UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
-                              const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
-                              const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
-                              const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
 
     const uno::Reference< uno::XComponentContext> m_xContext;
 
@@ -393,22 +388,6 @@ uno::Sequence< beans::StringPair > SAL_CALL UpdateInformationProvider::getUserRe
 
     return aPair;
 };
-
-uno::Reference< uno::XInterface >
-UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
-{
-    uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker =
-        ucb::UniversalContentBroker::create(xContext);
-
-    uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
-        xml::dom::DocumentBuilder::create(xContext));
-
-    uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create( xContext );
-
-    xXPath->registerNS( "atom", "http://www.w3.org/2005/Atom" );
-
-    return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
-}
 
 UpdateInformationProvider::~UpdateInformationProvider()
 {
@@ -729,32 +708,18 @@ UpdateInformationProvider::getInteractionHandler()
 }
 
 
-uno::Sequence< OUString >
-UpdateInformationProvider::getServiceNames()
-{
-    uno::Sequence< OUString > aServiceList { "com.sun.star.deployment.UpdateInformationProvider" };
-    return aServiceList;
-};
-
-
-OUString
-UpdateInformationProvider::getImplName()
-{
-    return "vnd.sun.UpdateInformationProvider";
-}
-
 
 OUString SAL_CALL
 UpdateInformationProvider::getImplementationName()
 {
-    return getImplName();
+    return "vnd.sun.UpdateInformationProvider";
 }
 
 
 uno::Sequence< OUString > SAL_CALL
 UpdateInformationProvider::getSupportedServiceNames()
 {
-    return getServiceNames();
+    return { "com.sun.star.deployment.UpdateInformationProvider" };
 }
 
 sal_Bool SAL_CALL
@@ -765,35 +730,23 @@ UpdateInformationProvider::supportsService( OUString const & serviceName )
 
 } // anonymous namespace
 
-
-static uno::Reference<uno::XInterface>
-createInstance(uno::Reference<uno::XComponentContext> const & xContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_update_UpdateInformationProvider_get_implementation(
+    css::uno::XComponentContext* xContext , css::uno::Sequence<css::uno::Any> const&)
 {
-    return UpdateInformationProvider::createInstance(xContext);
+    uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker =
+        ucb::UniversalContentBroker::create(xContext);
+
+    uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
+        xml::dom::DocumentBuilder::create(xContext));
+
+    uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create( xContext );
+
+    xXPath->registerNS( "atom", "http://www.w3.org/2005/Atom" );
+
+    return cppu::acquire(
+        new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath));
 }
 
-
-const cppu::ImplementationEntry kImplementations_entries[] =
-{
-    {
-        createInstance,
-        UpdateInformationProvider::getImplName,
-        UpdateInformationProvider::getServiceNames,
-        cppu::createSingleComponentFactory,
-        nullptr,
-        0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-} ;
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * updatefeed_component_getFactory(const char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
-{
-    return cppu::component_getFactoryHelper(
-        pszImplementationName,
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries) ;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
