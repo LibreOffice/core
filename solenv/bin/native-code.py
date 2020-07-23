@@ -332,7 +332,7 @@ core_constructor_list = [
 # ucb/source/ucp/file/ucpfile1.component
     "ucb_file_FileProvider_get_implementation",
 # ucb/source/ucp/expand/ucpexpand1.component
-    ("ucb_expand_ExpandContentProviderImpl_get_implementation.a", "#ifdef ANDROID"),
+    ("ucb_expand_ExpandContentProviderImpl_get_implementation", "#ifdef ANDROID"),
 # ucb/source/sorter/srtrs1.component
     "ucb_SortedDynamicResultSetFactory_get_implementation",
 # ucb/source/tdoc/ucptdoc1.component
