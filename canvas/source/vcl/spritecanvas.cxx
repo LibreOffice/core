@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "spritecanvas.hxx"
@@ -129,6 +130,20 @@ namespace vclcanvas
     OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
         return "com.sun.star.rendering.SpriteCanvas.VCL";
+    }
+
+    // XServiceInfo
+    css::uno::Sequence<OUString> SpriteCanvas::getSupportedServiceNames()
+    {
+        return { SpriteCanvas::getServiceName() };
+    }
+    OUString SpriteCanvas::getImplementationName()
+    {
+        return "com.sun.star.comp.rendering.SpriteCanvas.VCL";
+    }
+    sal_Bool SpriteCanvas::supportsService(const OUString& sServiceName)
+    {
+        return cppu::supportsService(this, sServiceName);
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
