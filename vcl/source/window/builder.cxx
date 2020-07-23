@@ -1877,18 +1877,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (extractHasFrame(rMap))
             nBits |= WB_BORDER;
 
-        if (m_bLegacy)
-        {
-            connectNumericFormatterAdjustment(id, sAdjustment);
-            xWindow = VclPtr<NumericField>::Create(pParent, nBits);
-        }
-        else
-        {
-            connectFormattedFormatterAdjustment(id, sAdjustment);
-            VclPtrInstance<FormattedField> xField(pParent, nBits);
-            xField->GetFormatter().SetMinValue(0);
-            xWindow = xField;
-        }
+        connectFormattedFormatterAdjustment(id, sAdjustment);
+        VclPtrInstance<FormattedField> xField(pParent, nBits);
+        xField->GetFormatter().SetMinValue(0);
+        xWindow = xField;
     }
     else if (name == "GtkLinkButton")
         xWindow = VclPtr<FixedHyperlink>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
