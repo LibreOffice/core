@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ae287d5_4a2faa14",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-23T18:15:50Z",
+      "side": 1,
+      "message": "Didn\u0027t I say to do this in the constructor of GalleryBinaryEngine?",
+      "revId": "885bc781708c47e13aeea82a092be217651717cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26f97369_0197697f",
+        "filename": "svx/source/gallery2/galtheme.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-23T18:15:50Z",
+      "side": 1,
+      "message": "Didn\u0027t I say to do this destructor of GalleryBinaryEngine?",
+      "range": {
+        "startLine": 88,
+        "startChar": 27,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "885bc781708c47e13aeea82a092be217651717cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
