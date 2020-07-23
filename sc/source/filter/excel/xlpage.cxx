@@ -180,6 +180,8 @@ void XclPageData::SetDefaults()
     mxBrushItem.reset();
     maHeader.clear();
     maFooter.clear();
+    maHeaderEven.clear();
+    maFooterEven.clear();
     mfLeftMargin    = mfRightMargin    = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_LR );
     mfTopMargin     = mfBottomMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_TB );
     mfHeaderMargin  = mfFooterMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HF );
@@ -193,6 +195,7 @@ void XclPageData::SetDefaults()
     mnScaling = 100;
     mnFitToWidth = mnFitToHeight = 1;
     mnHorPrintRes = mnVerPrintRes = 300;
+    mbUseEvenHF = /*mbUseFirstHF =*/ false;
     mbValid = false;
     mbPortrait = true;
     mbPrintInRows = mbBlackWhite = mbDraftQuality = mbPrintNotes = mbManualStart = mbFitToPages = false;

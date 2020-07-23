@@ -252,6 +252,7 @@ public:
     void testTdf81470();
     void testTdf122331();
     void testTdf83779();
+    void testTdf121716_ExportEvenHeaderFooterXLSX();
     void testTdf134459_HeaderFooterColorXLSX();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testHeaderFontStyleXLSX();
@@ -405,6 +406,7 @@ public:
     CPPUNIT_TEST(testTdf81470);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
+    CPPUNIT_TEST(testTdf121716_ExportEvenHeaderFooterXLSX);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
@@ -5146,6 +5148,40 @@ void ScExportTest::testTdf83779()
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf121716_ExportEvenHeaderFooterXLSX()
+{
+    // Header and footer on even pages should be exported properly
+    // If there are separate odd/even header, but only 1 footer for all pages (this is possible only in LibreOffice)
+    //  then the footer will be duplicated to have the same footer separately for even/odd pages
+
+    ScDocShellRef xShell = loadDoc("tdf121716_EvenHeaderFooter.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:headerFooter", "differentOddEven", "true");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&Lodd/right&Cpage&Rheader");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Lboth&C&12page&Rfooter");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenHeader", "&Lpage&Cheader&Reven/left");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenFooter", "&Lboth&C&12page&Rfooter");
+
+    pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet2.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:headerFooter", "differentOddEven", "true");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&Coddh");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Coddf");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenHeader", "&Cevenh");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenFooter", "&Levenf");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
