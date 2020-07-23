@@ -27,7 +27,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolkit/field.hxx>
+#include <vcl/toolkit/longcurr.hxx>
 #include <vcl/weldutils.hxx>
 
 #include <unotools/localedatawrapper.hxx>

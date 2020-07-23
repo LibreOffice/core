@@ -24,8 +24,160 @@
 #endif
 
 #include <config_options.h>
+#include <tools/date.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/time.hxx>
+#include <tools/link.hxx>
+#include <vcl/spinfld.hxx>
 #include <vcl/toolkit/combobox.hxx>
-#include <vcl/toolkit/longcurr.hxx>
+
+namespace com::sun::star::lang { struct Locale; }
+
+class CalendarWrapper;
+class LocaleDataWrapper;
+class LanguageTag;
+
+class VCL_DLLPUBLIC FormatterBase
+{
+private:
+    VclPtr<Edit>            mpField;
+    std::unique_ptr<LocaleDataWrapper>
+                            mpLocaleDataWrapper;
+    bool                    mbReformat;
+    bool                    mbStrictFormat;
+    bool                    mbEmptyFieldValue;
+    bool                    mbEmptyFieldValueEnabled;
+
+protected:
+    SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection const * pNewSel = nullptr );
+    SAL_DLLPRIVATE bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
+
+    void                    SetEmptyFieldValueData( bool bValue ) { mbEmptyFieldValue = bValue; }
+
+    SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
+
+    Edit*                   GetField() const            { return mpField; }
+    void                    ClearField() { mpField.clear(); }
+
+public:
+    explicit                FormatterBase(Edit* pField);
+    virtual                 ~FormatterBase();
+
+    const LocaleDataWrapper& GetLocaleDataWrapper() const;
+
+    bool                    MustBeReformatted() const   { return mbReformat; }
+    void                    MarkToBeReformatted( bool b ) { mbReformat = b; }
+
+    void                    SetStrictFormat( bool bStrict );
+    bool                    IsStrictFormat() const { return mbStrictFormat; }
+
+    virtual void            Reformat();
+    virtual void            ReformatAll();
+
+    const css::lang::Locale& GetLocale() const;
+    const LanguageTag&      GetLanguageTag() const;
+
+    void                    SetEmptyFieldValue();
+    bool                    IsEmptyFieldValue() const;
+
+    void                    EnableEmptyFieldValue( bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
+    bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
+};
+
+class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
+{
+public:
+    virtual                 ~NumericFormatter() override;
+
+    virtual void            Reformat() override;
+
+    void                    SetMin( sal_Int64 nNewMin );
+    sal_Int64               GetMin() const { return mnMin; }
+    void                    SetMax( sal_Int64 nNewMax );
+    sal_Int64               GetMax() const { return mnMax; }
+
+    sal_Int64               ClipAgainstMinMax(sal_Int64 nValue) const;
+
+    void                    SetFirst( sal_Int64 nNewFirst )   { mnFirst = nNewFirst; }
+    sal_Int64               GetFirst() const                  { return mnFirst; }
+    void                    SetLast( sal_Int64 nNewLast )     { mnLast = nNewLast; }
+    sal_Int64               GetLast() const                   { return mnLast; }
+    void                    SetSpinSize( sal_Int64 nNewSize ) { mnSpinSize = nNewSize; }
+    sal_Int64               GetSpinSize() const               { return mnSpinSize; }
+
+    void                    SetDecimalDigits( sal_uInt16 nDigits );
+    sal_uInt16                  GetDecimalDigits() const { return mnDecimalDigits;}
+
+    void                    SetUseThousandSep( bool b );
+    bool                    IsUseThousandSep() const { return mbThousandSep; }
+
+    void                    SetUserValue( sal_Int64 nNewValue );
+    virtual void            SetValue( sal_Int64 nNewValue );
+    sal_Int64               GetValue() const;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
+
+    sal_Int64               Normalize( sal_Int64 nValue ) const;
+    sal_Int64               Denormalize( sal_Int64 nValue ) const;
+
+    OUString                GetValueString() const;
+    void                    SetValueFromString(const OUString& rStr);
+
+protected:
+    sal_Int64               mnLastValue;
+    sal_Int64               mnMin;
+    sal_Int64               mnMax;
+    bool                    mbWrapOnLimits;
+    bool                    mbFormatting;
+
+    // the members below are used in all derivatives of NumericFormatter
+    // not in NumericFormatter itself.
+    sal_Int64               mnSpinSize;
+    sal_Int64               mnFirst;
+    sal_Int64               mnLast;
+
+                            NumericFormatter(Edit* pEdit);
+
+    void                    FieldUp();
+    void                    FieldDown();
+    void                    FieldFirst();
+    void                    FieldLast();
+    void                    FormatValue(Selection const * pNewSelection = nullptr);
+
+    SAL_DLLPRIVATE void     ImplNumericReformat();
+    SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
+    SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
+
+    virtual sal_Int64       GetValueFromString(const OUString& rStr) const;
+
+private:
+    sal_uInt16              mnDecimalDigits;
+    bool                    mbThousandSep;
+
+};
+
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericField : public SpinField, public NumericFormatter
+{
+public:
+    explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
+
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
+
+    virtual Size            CalcMinimumSize() const override;
+
+    virtual void            Modify() override;
+
+    virtual void            Up() override;
+    virtual void            Down() override;
+    virtual void            First() override;
+    virtual void            Last() override;
+    virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
+    virtual void            dispose() override;
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+};
+
 
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
@@ -488,17 +640,6 @@ public:
 
     virtual void            ReformatAll() override;
     virtual void            dispose() override;
-};
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyBox final : public ComboBox, public LongCurrencyFormatter
-{
-public:
-                    LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    void            Modify() override;
-    void            ReformatAll() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

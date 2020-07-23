@@ -97,6 +97,7 @@
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/toolkit/longcurr.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/scrbar.hxx>
