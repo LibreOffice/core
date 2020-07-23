@@ -257,6 +257,11 @@ public:
     void testTdf131372();
     void testTdf122331();
     void testTdf83779();
+<<<<<<< HEAD   (521e35 tdf#131070 DOCX import: fix indentation of direct numbering)
+=======
+    void testTdf121716_ExportEvenHeaderFooterXLSX();
+    void testTdf134459_HeaderFooterColorXLSX();
+>>>>>>> CHANGE (a85828 tdf#121716 XLSX export: fix loss of left header (footer))
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testTdf134459_HeaderFooterColorXLSX();
     void testHeaderFontStyleXLSX();
@@ -414,6 +419,11 @@ public:
     CPPUNIT_TEST(testTdf131372);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
+<<<<<<< HEAD   (521e35 tdf#131070 DOCX import: fix indentation of direct numbering)
+=======
+    CPPUNIT_TEST(testTdf121716_ExportEvenHeaderFooterXLSX);
+    CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
+>>>>>>> CHANGE (a85828 tdf#121716 XLSX export: fix loss of left header (footer))
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
@@ -5195,6 +5205,61 @@ void ScExportTest::testTdf83779()
     xShell->DoClose();
 }
 
+<<<<<<< HEAD   (521e35 tdf#131070 DOCX import: fix indentation of direct numbering)
+=======
+void ScExportTest::testTdf121716_ExportEvenHeaderFooterXLSX()
+{
+    // Header and footer on even pages should be exported properly
+    // If there are separate odd/even header, but only 1 footer for all pages (this is possible only in LibreOffice)
+    //  then the footer will be duplicated to have the same footer separately for even/odd pages
+
+    ScDocShellRef xShell = loadDoc("tdf121716_EvenHeaderFooter.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:headerFooter", "differentOddEven", "true");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&Lodd/right&Cpage&Rheader");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Lboth&C&12page&Rfooter");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenHeader", "&Lpage&Cheader&Reven/left");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenFooter", "&Lboth&C&12page&Rfooter");
+
+    pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet2.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:headerFooter", "differentOddEven", "true");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&Coddh");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Coddf");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenHeader", "&Cevenh");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenFooter", "&Levenf");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
+{
+    // Colors in header and footer should be exported, and imported properly
+    ScDocShellRef xShell = loadDoc("tdf134459_HeaderFooterColor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader", "&L&Kc06040l&C&K4c3789c&Rr");
+    assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter", "&Ll&C&K64cf5fc&R&Kcd15aar");
+
+    xDocSh->DoClose();
+}
+
+>>>>>>> CHANGE (a85828 tdf#121716 XLSX export: fix loss of left header (footer))
 void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 {
     // Header/footer text with multiple selection should be exported, and imported properly
