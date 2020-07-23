@@ -155,30 +155,6 @@ private:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericField : public SpinField, public NumericFormatter
-{
-public:
-    explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual Size            CalcMinimumSize() const override;
-
-    virtual void            Modify() override;
-
-    virtual void            Up() override;
-    virtual void            Down() override;
-    virtual void            First() override;
-    virtual void            Last() override;
-    virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
-    virtual void            dispose() override;
-
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-};
-
-
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
 public:

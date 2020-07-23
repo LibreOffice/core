@@ -776,109 +776,6 @@ sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
     return nValue;
 }
 
-NumericField::NumericField(vcl::Window* pParent, WinBits nWinStyle)
-    : SpinField(pParent, nWinStyle)
-    , NumericFormatter(this)
-{
-    Reformat();
-}
-
-void NumericField::dispose()
-{
-    ClearField();
-    SpinField::dispose();
-}
-
-bool NumericField::set_property(const OString &rKey, const OUString &rValue)
-{
-    if (rKey == "digits")
-        SetDecimalDigits(rValue.toInt32());
-    else if (rKey == "spin-size")
-        SetSpinSize(rValue.toInt32());
-    else if (rKey == "wrap")
-        mbWrapOnLimits = toBool(rValue);
-    else
-        return SpinField::set_property(rKey, rValue);
-    return true;
-}
-
-bool NumericField::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
-    {
-        if ( ImplNumericProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return true;
-    }
-
-    return SpinField::PreNotify( rNEvt );
-}
-
-bool NumericField::EventNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
-        MarkToBeReformatted( false );
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-        if ( MustBeReformatted() && (!GetText().isEmpty() || !IsEmptyFieldValueEnabled()) )
-            Reformat();
-    }
-
-    return SpinField::EventNotify( rNEvt );
-}
-
-void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SpinField::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::LOCALE) )
-    {
-        OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
-        OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
-        OUString sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
-        OUString sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
-        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
-        ReformatAll();
-    }
-}
-
-void NumericField::Modify()
-{
-    MarkToBeReformatted( true );
-    SpinField::Modify();
-}
-
-void NumericField::Up()
-{
-    FieldUp();
-    SpinField::Up();
-}
-
-void NumericField::Down()
-{
-    FieldDown();
-    SpinField::Down();
-}
-
-void NumericField::First()
-{
-    FieldFirst();
-    SpinField::First();
-}
-
-void NumericField::Last()
-{
-    FieldLast();
-    SpinField::Last();
-}
-
-void NumericField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    SpinField::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("min", GetMin());
-    rJsonWriter.put("max", GetMax());
-}
-
 namespace
 {
     Size calcMinimumSize(const Edit &rSpinField, const NumericFormatter &rFormatter)
@@ -913,11 +810,6 @@ namespace
 
         return aRet;
     }
-}
-
-Size NumericField::CalcMinimumSize() const
-{
-    return calcMinimumSize(*this, *this);
 }
 
 NumericBox::NumericBox(vcl::Window* pParent, WinBits nWinStyle)
