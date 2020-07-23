@@ -30,7 +30,11 @@ RecordItemWindow::RecordItemWindow(vcl::Window* pParent)
     m_xWidget->connect_activate(LINK(this, RecordItemWindow, ActivatedHdl));
     m_xWidget->connect_focus_out(LINK(this, RecordItemWindow, FocusOutHdl));
 
-    SetSizePixel(m_xWidget->get_preferred_size());
+    auto aPrefSize(m_xWidget->get_preferred_size());
+
+    m_xWidget->set_width_chars(1); // so a smaller than default width can be used later
+
+    SetSizePixel(aPrefSize);
 }
 
 void RecordItemWindow::dispose()
