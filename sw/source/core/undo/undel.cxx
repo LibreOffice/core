@@ -1058,19 +1058,22 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     if (m_bDisableMakeFrames) // tdf#132944
     {
         assert(!m_bDelFullPara);
-        SwTextNode *const pEndNode(aIdx.GetNodes()[m_nEndNode]->GetTextNode());
-        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
-        for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        if (m_nSttNode != m_nEndNode) // never delete start node's frame!
         {
-            o3tl::sorted_vector<SwRootFrame *> layouts;
-            if (pFrame->getRootFrame()->IsHideRedlines())
+            SwTextNode *const pEndNode(aIdx.GetNodes()[m_nEndNode]->GetTextNode());
+            SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+            for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
             {
-                assert(pFrame->GetTextNodeFirst() == pEndNode); // can't be merged with previous
-                layouts.insert(pFrame->getRootFrame());
-            }
-            for (SwRootFrame const*const pLayout : layouts)
-            {
-                pEndNode->DelFrames(pLayout); // SwUndoRedlineDelete will create it
+                o3tl::sorted_vector<SwRootFrame *> layouts;
+                if (pFrame->getRootFrame()->IsHideRedlines())
+                {
+                    assert(pFrame->GetTextNodeFirst() == pEndNode); // can't be merged with previous
+                    layouts.insert(pFrame->getRootFrame());
+                }
+                for (SwRootFrame const*const pLayout : layouts)
+                {
+                    pEndNode->DelFrames(pLayout); // SwUndoRedlineDelete will create it
+                }
             }
         }
     }

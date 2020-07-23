@@ -1640,13 +1640,35 @@ void SwUiWriterTest::testTdf83260()
     {
         rUndoManager.Undo();
     }
+    // check that every text node has a layout frame
+    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
+    }
     for (auto i = nActions; 0 < i; --i)
     {
         rUndoManager.Redo();
     }
+    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
+    }
     for (auto i = nActions; 0 < i; --i)
     {
         rUndoManager.Undo();
+    }
+    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
     }
 }
 
