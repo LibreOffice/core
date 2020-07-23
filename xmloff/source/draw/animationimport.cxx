@@ -38,6 +38,7 @@
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
@@ -1124,7 +1125,14 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
 
             if( !aValues.isEmpty() )
                 xAnimate->setValues( mpHelper->convertValueSequence( meAttributeName, aValues ) );
+
+            if (xAnimate->getValues().getLength() != xAnimate->getKeyTimes().getLength())
+                throw css::io::WrongFormatException();
         }
+    }
+    catch (const css::io::WrongFormatException&)
+    {
+        throw;
     }
     catch (const RuntimeException&)
     {
