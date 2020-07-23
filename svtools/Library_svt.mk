@@ -74,6 +74,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/brwbox/ebbcontrols \
     svtools/source/brwbox/editbrowsebox \
     svtools/source/brwbox/editbrowsebox2 \
+    svtools/source/brwbox/recorditemwindow \
     svtools/source/config/accessibilityoptions \
     svtools/source/config/apearcfg \
     svtools/source/config/colorcfg \

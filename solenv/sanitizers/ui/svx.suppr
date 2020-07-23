@@ -1,4 +1,5 @@
-svx/uiconfig/ui/absrecbox.ui://GtkEntry[@id='entry'] no-labelled-by
+svx/uiconfig/ui/absrecbox.ui://GtkEntry[@id='entry-frame'] no-labelled-by
+svx/uiconfig/ui/absrecbox.ui://GtkEntry[@id='entry-noframe'] no-labelled-by
 svx/uiconfig/ui/addinstancedialog.ui://GtkLabel[@id='alttitle'] orphan-label
 svx/uiconfig/ui/addmodeldialog.ui://GtkLabel[@id='alttitle'] orphan-label
 svx/uiconfig/ui/addnamespacedialog.ui://GtkLabel[@id='alttitle'] orphan-label

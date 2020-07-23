@@ -22,13 +22,13 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svtools/brwbox.hxx>
+#include <svtools/recorditemwindow.hxx>
 #include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/status.hxx>
 
 #include <tools/multisel.hxx>
 #include <tools/fract.hxx>
@@ -1037,7 +1037,7 @@ long BrowseBox::GetBarHeight() const
     // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
     // resized - which is done in UpdateScrollbars)
 
-    return std::max(aStatusBar->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
+    return std::max(aStatusBarHeight->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
 }
 
 void BrowseBox::UpdateScrollbars()

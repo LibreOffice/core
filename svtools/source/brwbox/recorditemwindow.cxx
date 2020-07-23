@@ -17,18 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svtools/recorditemwindow.hxx>
 #include <vcl/event.hxx>
-#include <tbxform.hxx>
 
-RecordItemWindow::RecordItemWindow(vcl::Window* pParent)
+RecordItemWindow::RecordItemWindow(vcl::Window* pParent, bool bHasFrame)
     : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
-    , m_xWidget(m_xBuilder->weld_entry("entry"))
+    , m_xWidget(m_xBuilder->weld_entry(bHasFrame ? "entry-frame" : "entry-noframe"))
 {
     InitControlBase(m_xWidget.get());
 
     m_xWidget->connect_key_press(LINK(this, RecordItemWindow, KeyInputHdl));
     m_xWidget->connect_activate(LINK(this, RecordItemWindow, ActivatedHdl));
     m_xWidget->connect_focus_out(LINK(this, RecordItemWindow, FocusOutHdl));
+
+    m_xWidget->show();
 
     auto aPrefSize(m_xWidget->get_preferred_size());
 
@@ -61,7 +63,7 @@ void RecordItemWindow::FirePosition(bool _bForce)
 
 IMPL_LINK_NOARG(RecordItemWindow, FocusOutHdl, weld::Widget&, void) { FirePosition(false); }
 
-IMPL_LINK(RecordItemWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+bool RecordItemWindow::DoKeyInput(const KeyEvent& rKEvt)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -82,6 +84,10 @@ IMPL_LINK(RecordItemWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     return ChildKeyInput(rKEvt);
 }
+
+void RecordItemWindow::PositionFired(sal_Int64 /*nRecord*/) {}
+
+IMPL_LINK(RecordItemWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool) { return DoKeyInput(rKEvt); }
 
 IMPL_LINK_NOARG(RecordItemWindow, ActivatedHdl, weld::Entry&, bool)
 {

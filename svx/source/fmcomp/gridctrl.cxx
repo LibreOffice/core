@@ -274,44 +274,26 @@ void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt)
         m_pParent->DataSourcePropertyChanged(evt);
 }
 
-DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(vcl::Window* pParent, WinBits nStyle)
-                   :NumericField(pParent, nStyle)
+DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(vcl::Window* pParent)
+    : RecordItemWindow(pParent, false)
 {
-    SetMin(1);
-    SetFirst(1);
-    SetSpinSize(1);
-
-    SetDecimalDigits(0);
-    SetStrictFormat(true);
 }
 
-void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
+bool DbGridControl::NavigationBar::AbsolutePos::DoKeyInput(const KeyEvent& rEvt)
 {
-    if (rEvt.GetKeyCode() == KEY_RETURN && !GetText().isEmpty())
+    if (rEvt.GetKeyCode() == KEY_TAB)
     {
-        sal_Int64 nRecord = GetValue();
-        if (nRecord < GetMin() || nRecord > GetMax())
-            return;
-        else
-            static_cast<NavigationBar*>(GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
-    }
-    else if (rEvt.GetKeyCode() == KEY_TAB)
         GetParent()->GetParent()->GrabFocus();
-    else
-        NumericField::KeyInput(rEvt);
+        return true;
+    }
+    return RecordItemWindow::DoKeyInput(rEvt);
 }
 
-void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
+void DbGridControl::NavigationBar::AbsolutePos::PositionFired(sal_Int64 nRecord)
 {
-    NumericField::LoseFocus();
-    sal_Int64 nRecord = GetValue();
-    if (nRecord < GetMin() || nRecord > GetMax())
-        return;
-    else
-    {
-        static_cast<NavigationBar*>(GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
-        static_cast<NavigationBar*>(GetParent())->InvalidateState(DbGridControlNavigationBarState::Absolute);
-    }
+    NavigationBar* pBar = static_cast<NavigationBar*>(GetParent());
+    pBar->PositionDataSource(nRecord);
+    pBar->InvalidateState(DbGridControlNavigationBarState::Absolute);
 }
 
 void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
@@ -328,7 +310,7 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
           :Control(pParent, 0)
           ,m_aRecordText(VclPtr<FixedText>::Create(this, WB_VCENTER))
-          ,m_aAbsolute(VclPtr<DbGridControl::NavigationBar::AbsolutePos>::Create(this, WB_CENTER | WB_VCENTER))
+          ,m_aAbsolute(VclPtr<DbGridControl::NavigationBar::AbsolutePos>::Create(this))
           ,m_aRecordOf(VclPtr<FixedText>::Create(this, WB_VCENTER))
           ,m_aRecordCount(VclPtr<FixedText>::Create(this, WB_VCENTER))
           ,m_aFirstBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
@@ -392,7 +374,6 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
     m_aAbsolute->Show();
 }
 
-
 DbGridControl::NavigationBar::~NavigationBar()
 {
     disposeOnce();
@@ -428,6 +409,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     // calculate base size
     tools::Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
     long nH = aRect.GetSize().Height();
+
     long nW = GetParent()->GetOutputSizePixel().Width();
     Size aBorder = LogicToPixel(Size(2, 2), MapMode(MapUnit::MapAppFont));
     aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
@@ -436,7 +418,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     {
         vcl::Font aApplFont(GetSettings().GetStyleSettings().GetToolFont());
-        m_aAbsolute->SetControlFont( aApplFont );
+        m_aAbsolute->set_font(aApplFont);
         aApplFont.SetTransparent( true );
         m_aRecordText->SetControlFont( aApplFont );
         m_aRecordOf->SetControlFont( aApplFont );
@@ -451,7 +433,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     // count an extra hairspace (U+200A) left and right
-    const OUString sevenDigits(m_aAbsolute->CreateFieldText(6000000));
+    const OUString sevenDigits(OUString::number(6000000));
     const OUString hairSpace(u'\x200A');
     OUString textPattern = hairSpace + sevenDigits + hairSpace;
     nTextWidth = m_aAbsolute->GetTextWidth(textPattern);
@@ -691,21 +673,9 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
         case DbGridControlNavigationBarState::Absolute:
             pWnd = m_aAbsolute.get();
             if (bAvailable)
-            {
-                if (pParent->m_nTotalCount >= 0)
-                {
-                    if (pParent->IsCurrentAppending())
-                        m_aAbsolute->SetMax(pParent->m_nTotalCount + 1);
-                    else
-                        m_aAbsolute->SetMax(pParent->m_nTotalCount);
-                }
-                else
-                    m_aAbsolute->SetMax(LONG_MAX);
-
-                m_aAbsolute->SetValue(m_nCurrentPos + 1);
-            }
+                m_aAbsolute->set_text(OUString::number(m_nCurrentPos + 1));
             else
-                m_aAbsolute->SetText(OUString());
+                m_aAbsolute->set_text(OUString());
             break;
         case DbGridControlNavigationBarState::Text:
             pWnd = m_aRecordText.get();
@@ -722,12 +692,12 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
                 if (pParent->GetOptions() & DbGridControlOptions::Insert)
                 {
                     if (pParent->IsCurrentAppending() && !pParent->IsModified())
-                        aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount());
+                        aText = OUString::number(pParent->GetRowCount());
                     else
-                        aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount() - 1);
+                        aText = OUString::number(pParent->GetRowCount() - 1);
                 }
                 else
-                    aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount());
+                    aText = OUString::number(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
                     aText += " *";
             }
@@ -738,7 +708,7 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
             if (pParent->GetSelectRowCount())
             {
                 OUString aExtendedInfo = aText + " (" +
-                    m_aAbsolute->CreateFieldText(pParent->GetSelectRowCount()) + ")";
+                    OUString::number(pParent->GetSelectRowCount()) + ")";
                 pWnd->SetText(aExtendedInfo);
             }
             else
