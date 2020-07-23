@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="BusinessDataPage">
@@ -26,10 +26,10 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|label5">Company:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">company</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -40,10 +40,10 @@
               <object class="GtkLabel" id="streetft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|streetft">Slogan:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">slogan</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -54,10 +54,10 @@
               <object class="GtkLabel" id="countryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|countryft">Co_untry/state:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">country</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -68,10 +68,10 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|label8">Position:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">position</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -82,10 +82,10 @@
               <object class="GtkLabel" id="phoneft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|phoneft">Fa_x:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">fax</property>
+                <property name="xalign">1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="phoneft-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="businessdatapage|phoneft-atkobject">Home telephone number</property>
@@ -101,10 +101,10 @@
               <object class="GtkLabel" id="faxft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|faxft">Homepage/email:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">url</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -125,6 +125,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company-atkobject">First name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | company">Type the name of your company in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -154,6 +155,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="position-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|position-atkobject">Title</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | position">Type your position in the company in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -182,6 +184,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fax-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|fax-atkobject">Home telephone number</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | fax">Type company fax number in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -212,6 +215,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="url-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|url-atkobject">Fax number</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | url">Company homepage</property>
                       </object>
                     </child>
                   </object>
@@ -229,6 +233,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="email-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|email-atkobject">email address</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | email">Type your company e-mail address.</property>
                       </object>
                     </child>
                   </object>
@@ -247,10 +252,10 @@
               <object class="GtkLabel" id="eastnameft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|eastnameft">Company 2nd line:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">company2</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -271,6 +276,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company2-atkobject">Last name</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | company2">Company second line</property>
                       </object>
                     </child>
                   </object>
@@ -289,10 +295,10 @@
               <object class="GtkLabel" id="icityft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|icityft">_Zip/city:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">izip</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -313,6 +319,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="icity-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|icity-atkobject">City</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | icity">Type the company city</property>
                       </object>
                     </child>
                   </object>
@@ -330,6 +337,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="izip-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|izip-atkobject">Zip code</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | izip">Type company ZIP in this field.</property>
                       </object>
                     </child>
                   </object>
@@ -355,6 +363,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="slogan-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | slogan">Company slogan</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -379,6 +392,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="country-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | country">Company country</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -391,6 +409,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="state-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | state">Type company state.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -407,10 +430,10 @@
               <object class="GtkLabel" id="titleft1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|titleft1">Phone/mobile:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">phone</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -432,6 +455,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="phone-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|phone-atkobject">Title</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | phone">Type business phone</property>
                       </object>
                     </child>
                   </object>
@@ -449,6 +473,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mobile-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|mobile-atkobject">Position</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tips | mobile">Type company mobile</property>
                       </object>
                     </child>
                   </object>
@@ -467,10 +492,10 @@
               <object class="GtkLabel" id="streetft1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="businessdatapage|streetft1">Street:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">street</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -488,6 +513,11 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="street-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | street">Type the name of company street in this field.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
