@@ -19,22 +19,15 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNHELPBAR_HXX
 
-#include <vcl/tabpage.hxx>
 #include "IClipBoardTest.hxx"
-
-class VclMultiLineEdit;
+#include <vcl/InterimItemWindow.hxx>
 
 namespace dbaui
 {
-    // Deriving from TabPage is a trick to notice changes
-    // of the system colors
-    class OTableDesignHelpBar : public TabPage, public IClipboardTest
+    class OTableDesignHelpBar final : public InterimItemWindow, public IClipboardTest
     {
     private:
-        VclPtr<VclMultiLineEdit>  m_pTextWin;
-
-    protected:
-        virtual void Resize() override;
+        std::unique_ptr<weld::TextView> m_xTextWin;
 
     public:
         OTableDesignHelpBar( vcl::Window* pParent );
@@ -42,8 +35,6 @@ namespace dbaui
         virtual void dispose() override;
 
         void SetHelpText( const OUString& rText );
-
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
         // IClipboardTest
         virtual bool isCutAllowed() override;
