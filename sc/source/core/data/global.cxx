@@ -441,8 +441,6 @@ void ScGlobal::Init()
     // FIXME: So remove this variable?
     eLnge = LANGUAGE_SYSTEM;
 
-    // FIXME: If the sort-order etc. should depend the installed Office version
-    //        use Application::GetSettings().GetUILanguage() here
     pSysLocale = new SvtSysLocale;
 
     pEmptyBrushItem = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
