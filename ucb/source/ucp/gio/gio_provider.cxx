@@ -94,31 +94,19 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       css::lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
-XSERVICEINFO_COMMOM_IMPL( ContentProvider,
-                          "com.sun.star.comp.GIOContentProvider" )
-/// @throws css::uno::Exception
-static css::uno::Reference< css::uno::XInterface >
-ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
 {
-    css::lang::XServiceInfo* pX = new ContentProvider( ucbhelper::getComponentContext(rSMgr) );
-    return css::uno::Reference< css::uno::XInterface >::query( pX );
+    return { "com.sun.star.ucb.GIOContentProvider" };
 }
 
-css::uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames_Static()
+OUString SAL_CALL ContentProvider::getImplementationName()
 {
-    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.GIOContentProvider" };
-    return aSNS;
+    return "com.sun.star.comp.GIOContentProvider";
 }
 
-css::uno::Reference< css::lang::XSingleServiceFactory >
-ContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+sal_Bool SAL_CALL ContentProvider::supportsService(const OUString& aServiceName)
 {
-    return cppu::createOneInstanceFactory(
-                rxServiceMgr,
-                ContentProvider::getImplementationName_Static(),
-                ContentProvider_CreateInstance,
-                ContentProvider::getSupportedServiceNames_Static() );
+    return cppu::supportsService(this, aServiceName);
 }
 
 
@@ -134,32 +122,23 @@ static bool isDisabled()
     return aDisable.indexOf("ucpgio1") >= 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * ucpgio1_component_getFactory( const char *pImplName,
-    void *pServiceManager, void * )
-{
-    void * pRet = nullptr;
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_gio_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
     static bool bDisabled = isDisabled();
     if (bDisabled)
         return nullptr;
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMgr
-        (static_cast< css::lang::XMultiServiceFactory * >( pServiceManager ) );
-    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
-
-#if !GLIB_CHECK_VERSION(2,36,0)
-    g_type_init();
-#endif
-    if ( ::gio::ContentProvider::getImplementationName_Static().equalsAscii( pImplName ) )
-        xFactory = ::gio::ContentProvider::createServiceFactory( xSMgr );
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
+    static rtl::Reference<gio::ContentProvider> g_Instance = [&]() {
+        #if !GLIB_CHECK_VERSION(2,36,0)
+            g_type_init();
+        #endif
+        return new gio::ContentProvider(context);
+    }();
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
