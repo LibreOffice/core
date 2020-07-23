@@ -203,6 +203,11 @@ bool Edit::set_property(const OString &rKey, const OUString &rValue)
     }
     else if (rKey == "placeholder-text")
         SetPlaceholderText(rValue);
+    else if (rKey == "shadow-type")
+    {
+        if (GetStyle() | WB_BORDER)
+            SetBorderStyle(rValue == "none" ? WindowBorderStyle::MONO : WindowBorderStyle::NORMAL);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
