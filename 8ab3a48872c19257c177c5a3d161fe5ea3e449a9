@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3519c987_badf3e02",
+        "filename": "sd/source/filter/eppt/pptx-animations.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-07-23T22:50:29Z",
+      "side": 1,
+      "message": "That\u0027s not a good place to check this.\n\nIf you _must_ fix it here (but see below) - move it out of the loop, and assert that size(aKeytimes) \u003d size(aValues)\n\nBut I believe this is a corrupted document, so would be great to check (and assert) keytime \u003d\u003d keyvalues during import\n- oox/source/ppt/timenode.cxx:377\n- xmloff/source/draw/animationimport.cxx:844\n- sd/source/filter/ppt/pptinanimations.cxx:2215\n\nPerhaps if loading fails with an error, we\u0027d have a chance to see the actual bugdoc?",
+      "revId": "8ab3a48872c19257c177c5a3d161fe5ea3e449a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
