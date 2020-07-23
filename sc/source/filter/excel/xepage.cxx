@@ -58,7 +58,14 @@ XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrS
 void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    sal_Int32 nElement = GetRecId() == EXC_ID_HEADER ?  XML_oddHeader : XML_oddFooter;
+    sal_Int32 nElement;
+    switch(GetRecId()) {
+        case EXC_ID_HEADER_EVEN: nElement = XML_evenHeader; break;
+        case EXC_ID_FOOTER_EVEN: nElement = XML_evenFooter; break;
+        case EXC_ID_HEADER:      nElement = XML_oddHeader; break;
+        case EXC_ID_FOOTER:
+        default:                 nElement = XML_oddFooter;
+    }
     rWorksheet->startElement(nElement);
     rWorksheet->writeEscaped( maHdrString );
     rWorksheet->endElement( nElement );
@@ -252,7 +259,6 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             maData.mnFitToWidth = rScaleToItem.GetWidth();
             maData.mnFitToHeight = rScaleToItem.GetHeight();
             maData.mbFitToPages = true;
-
         }
         else if( ScfTools::CheckItem( rItemSet, ATTR_PAGE_SCALETOPAGES, false ) && nPages )
         {
@@ -267,6 +273,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         }
 
         maData.mxBrushItem.reset( new SvxBrushItem( rItemSet.Get( ATTR_BACKGROUND ) ) );
+        maData.mbUseEvenHF = false;
 
         // *** header and footer ***
 
@@ -279,6 +286,18 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             const ScPageHFItem& rHFItem = rItemSet.Get( ATTR_PAGE_HEADERRIGHT );
             aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
             maData.maHeader = aHFConv.GetHFString();
+            if ( rHdrItemSet.HasItem(ATTR_PAGE_SHARED) && !rHdrItemSet.Get(ATTR_PAGE_SHARED).GetValue())
+            {
+                const ScPageHFItem& rHFItemLeft = rItemSet.Get( ATTR_PAGE_HEADERLEFT );
+                aHFConv.GenerateString( rHFItemLeft.GetLeftArea(), rHFItemLeft.GetCenterArea(), rHFItemLeft.GetRightArea() );
+                maData.maHeaderEven = aHFConv.GetHFString();
+                maData.mbUseEvenHF = true;
+            }
+            else
+            {
+                // If maData.mbUseEvenHF become true, then we will need a copy of maHeader in maHeaderEven.
+                maData.maHeaderEven = maData.maHeader;
+            }
             // header height (Excel excludes header from top margin)
             sal_Int32 nHdrHeight = rHdrItemSet.Get( ATTR_PAGE_DYNAMIC ).GetValue() ?
                 // dynamic height: calculate header height, add header <-> sheet area distance
@@ -296,6 +315,17 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             const ScPageHFItem& rHFItem = rItemSet.Get( ATTR_PAGE_FOOTERRIGHT );
             aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
             maData.maFooter = aHFConv.GetHFString();
+            if (rFtrItemSet.HasItem(ATTR_PAGE_SHARED) && !rFtrItemSet.Get(ATTR_PAGE_SHARED).GetValue())
+            {
+                const ScPageHFItem& rHFItemLeft = rItemSet.Get( ATTR_PAGE_FOOTERLEFT );
+                aHFConv.GenerateString( rHFItemLeft.GetLeftArea(), rHFItemLeft.GetCenterArea(), rHFItemLeft.GetRightArea() );
+                maData.maFooterEven = aHFConv.GetHFString();
+                maData.mbUseEvenHF = true;
+            }
+            else
+            {
+                maData.maFooterEven = maData.maFooter;
+            }
             // footer height (Excel excludes footer from bottom margin)
             sal_Int32 nFtrHeight = rFtrItemSet.Get( ATTR_PAGE_DYNAMIC ).GetValue() ?
                 // dynamic height: calculate footer height, add sheet area <-> footer distance
@@ -340,10 +370,12 @@ namespace {
 class XclExpXmlStartHeaderFooterElementRecord : public XclExpXmlElementRecord
 {
 public:
-    explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement)
-         : XclExpXmlElementRecord(nElement) {}
+    explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement, bool const bDifferentOddEven = false)
+         : XclExpXmlElementRecord(nElement), mbDifferentOddEven(bDifferentOddEven) {}
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
+private:
+    bool            mbDifferentOddEven;
 };
 
 }
@@ -356,7 +388,7 @@ void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
     rStream->startElement( mnElement,
             // OOXTODO: XML_alignWithMargins,
             XML_differentFirst,     "false",    // OOXTODO
-            XML_differentOddEven,   "false"     // OOXTODO
+            XML_differentOddEven,   mbDifferentOddEven ? "true" : "false"
             // OOXTODO: XML_scaleWithDoc
     );
 }
@@ -404,9 +436,14 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
 
     XclExpSetup( maData ).SaveXml( rStrm );
 
-    XclExpXmlStartHeaderFooterElementRecord(XML_headerFooter).SaveXml(rStrm);
+    XclExpXmlStartHeaderFooterElementRecord(XML_headerFooter, maData.mbUseEvenHF).SaveXml(rStrm);
     XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).SaveXml( rStrm );
     XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).SaveXml( rStrm );
+    if (maData.mbUseEvenHF)
+    {
+        XclExpHeaderFooter( EXC_ID_HEADER_EVEN, maData.maHeaderEven ).SaveXml( rStrm );
+        XclExpHeaderFooter( EXC_ID_FOOTER_EVEN, maData.maFooterEven ).SaveXml( rStrm );
+    }
     XclExpXmlEndElementRecord( XML_headerFooter ).SaveXml( rStrm );
 
     XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks,
