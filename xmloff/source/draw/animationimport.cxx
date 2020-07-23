@@ -1092,6 +1092,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
         }
 
+        assert(xAnimate->getValues().getLength() == xAnimate->getKeyTimes().getLength());
+
         if (!sXmlId.isEmpty())
         {
             Reference< XInterface > const xRef( mxNode, UNO_QUERY );
