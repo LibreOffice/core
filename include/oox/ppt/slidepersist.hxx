@@ -67,6 +67,7 @@ public:
                     oox::drawingml::ShapePtr const & pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
 
+
     const css::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
