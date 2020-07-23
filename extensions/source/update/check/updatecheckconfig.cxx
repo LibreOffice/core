@@ -18,6 +18,7 @@
  */
 
 #include "updatecheckconfig.hxx"
+#include "updatecheck.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -428,19 +429,6 @@ UpdateCheckConfig::clearUpdateFound()
     commitChanges();
 }
 
-uno::Sequence< OUString >
-UpdateCheckConfig::getServiceNames()
-{
-    uno::Sequence< OUString > aServiceList { "com.sun.star.setup.UpdateCheckConfig" };
-    return aServiceList;
-}
-
-OUString
-UpdateCheckConfig::getImplName()
-{
-    return "vnd.sun.UpdateCheckConfig";
-}
-
 uno::Type SAL_CALL
 UpdateCheckConfig::getElementType()
 {
@@ -651,7 +639,7 @@ bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
 OUString SAL_CALL
 UpdateCheckConfig::getImplementationName()
 {
-    return getImplName();
+    return "vnd.sun.UpdateCheckConfig";
 }
 
 sal_Bool SAL_CALL
@@ -663,7 +651,15 @@ UpdateCheckConfig::supportsService(OUString const & serviceName)
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckConfig::getSupportedServiceNames()
 {
-    return getServiceNames();
+    return { "com.sun.star.setup.UpdateCheckConfig" };
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_update_UpdateCheckConfig_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(UpdateCheckConfig::get(context, *UpdateCheck::get()).get());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

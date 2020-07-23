@@ -18,11 +18,13 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="updchk" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="vnd.sun.UpdateCheck">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="vnd.sun.UpdateCheck"
+    constructor="extensions_update_UpdateCheckJob_get_implementation">
     <service name="com.sun.star.setup.UpdateCheck"/>
   </implementation>
-  <implementation name="vnd.sun.UpdateCheckConfig">
+  <implementation name="vnd.sun.UpdateCheckConfig"
+    constructor="extensions_update_UpdateCheckConfig_get_implementation">
     <service name="com.sun.star.setup.UpdateCheckConfig"/>
   </implementation>
 </component>

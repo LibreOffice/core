@@ -90,9 +90,6 @@ class UpdateCheckConfig : public ::cppu::WeakImplHelper<
 
 public:
 
-    static css::uno::Sequence< OUString > getServiceNames();
-    static OUString getImplName();
-
     static ::rtl::Reference< UpdateCheckConfig > get(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const ::rtl::Reference< UpdateCheckConfigListener >& rListener = ::rtl::Reference< UpdateCheckConfigListener >());
