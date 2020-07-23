@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05175573_5907f11b",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-23T18:06:16Z",
+      "side": 1,
+      "message": "Here you have a forward declaration AND include the header where GalleryObjectCollection is defined.",
+      "revId": "c4b5e5eabe74989118fb87fda1411758a9f4a9aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
