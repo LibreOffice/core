@@ -38,6 +38,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libpng,\
 	    UnpackedTarball/libpng/arm/filter_neon_intrinsics \
 	    UnpackedTarball/libpng/arm/palette_neon_intrinsics \
 	) \
+	$(if $(filter POWERPC POWERPC64,$(CPUNAME)), \
+	    UnpackedTarball/libpng/powerpc/powerpc_init \
+	    UnpackedTarball/libpng/powerpc/filter_vsx_intrinsics \
+	) \
 ))
 
 # vim: set noet sw=4 ts=4:
