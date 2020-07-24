@@ -23,10 +23,122 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/// Turns an array of floats into offset + length pairs.
+bool GetByteRangesFromPDF(vcl::filter::PDFArrayElement& rArray,
+                          std::vector<std::pair<size_t, size_t>>& rByteRanges)
+{
+    size_t nByteRangeOffset = 0;
+    const std::vector<vcl::filter::PDFElement*>& rByteRangeElements = rArray.GetElements();
+    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    {
+        auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rByteRangeElements[i]);
+        if (!pNumber)
+        {
+            SAL_WARN("xmlsecurity.pdfio",
+                     "ValidateSignature: signature offset and length has to be a number");
+            return false;
+        }
+
+        if (i % 2 == 0)
+        {
+            nByteRangeOffset = pNumber->GetValue();
+            continue;
+        }
+        size_t nByteRangeLength = pNumber->GetValue();
+        rByteRanges.emplace_back(nByteRangeOffset, nByteRangeLength);
+    }
+
+    return true;
+}
+
+/// Determines the last position that is covered by a signature.
+bool GetEOFOfSignature(vcl::filter::PDFObjectElement* pSignature, size_t& rEOF)
+{
+    vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
+    if (!pValue)
+    {
+        return false;
+    }
+
+    auto pByteRange = dynamic_cast<vcl::filter::PDFArrayElement*>(pValue->Lookup("ByteRange"));
+    if (!pByteRange || pByteRange->GetElements().size() < 2)
+    {
+        return false;
+    }
+
+    std::vector<std::pair<size_t, size_t>> aByteRanges;
+    if (!GetByteRangesFromPDF(*pByteRange, aByteRanges))
+    {
+        return false;
+    }
+
+    rEOF = aByteRanges[1].first + aByteRanges[1].second;
+    return true;
+}
+
+/// Checks if there are unsigned incremental updates between the signatures or after the last one.
+bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
+                         vcl::filter::PDFObjectElement* pSignature)
+{
+    std::set<size_t> aSignedEOFs;
+    for (const auto& i : rDocument.GetSignatureWidgets())
+    {
+        size_t nEOF = 0;
+        if (!GetEOFOfSignature(i, nEOF))
+        {
+            return false;
+        }
+
+        aSignedEOFs.insert(nEOF);
+    }
+
+    size_t nSignatureEOF = 0;
+    if (!GetEOFOfSignature(pSignature, nSignatureEOF))
+    {
+        return false;
+    }
+
+    const std::vector<size_t>& rAllEOFs = rDocument.GetEOFs();
+    bool bFoundOwn = false;
+    for (const auto& rEOF : rAllEOFs)
+    {
+        if (rEOF == nSignatureEOF)
+        {
+            bFoundOwn = true;
+            continue;
+        }
+
+        if (!bFoundOwn)
+        {
+            continue;
+        }
+
+        if (aSignedEOFs.find(rEOF) == aSignedEOFs.end())
+        {
+            // Unsigned incremental update found.
+            return false;
+        }
+    }
+
+    // Make sure we find the incremental update of the signature itself.
+    if (!bFoundOwn)
+    {
+        return false;
+    }
+
+    // No additional content after the last incremental update.
+    rStream.Seek(STREAM_SEEK_TO_END);
+    size_t nFileEnd = rStream.Tell();
+    return std::find(rAllEOFs.begin(), rAllEOFs.end(), nFileEnd) != rAllEOFs.end();
+}
+}
+
 namespace xmlsecurity::pdfio
 {
 bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature,
-                       SignatureInformation& rInformation, bool bLast)
+                       SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument)
 {
     vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
@@ -108,25 +220,9 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
 
     // Build a list of offset-length pairs, representing the signed bytes.
     std::vector<std::pair<size_t, size_t>> aByteRanges;
-    size_t nByteRangeOffset = 0;
-    const std::vector<vcl::filter::PDFElement*>& rByteRangeElements = pByteRange->GetElements();
-    for (size_t i = 0; i < rByteRangeElements.size(); ++i)
+    if (!GetByteRangesFromPDF(*pByteRange, aByteRanges))
     {
-        auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rByteRangeElements[i]);
-        if (!pNumber)
-        {
-            SAL_WARN("xmlsecurity.pdfio",
-                     "ValidateSignature: signature offset and length has to be a number");
-            return false;
-        }
-
-        if (i % 2 == 0)
-        {
-            nByteRangeOffset = pNumber->GetValue();
-            continue;
-        }
-        size_t nByteRangeLength = pNumber->GetValue();
-        aByteRanges.emplace_back(nByteRangeOffset, nByteRangeLength);
+        return false;
     }
 
     // Detect if the byte ranges don't cover everything, but the signature itself.
@@ -148,11 +244,7 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
                  "ValidateSignature: second range start is not the end of the signature");
         return false;
     }
-    rStream.Seek(STREAM_SEEK_TO_END);
-    size_t nFileEnd = rStream.Tell();
-    if (bLast && (aByteRanges[1].first + aByteRanges[1].second) != nFileEnd)
-        // Second range end is not the end of the file.
-        rInformation.bPartialDocumentSignature = true;
+    rInformation.bPartialDocumentSignature = !IsCompleteSignature(rStream, rDocument, pSignature);
 
     // At this point there is no obviously missing info to validate the
     // signature.
