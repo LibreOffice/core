@@ -46,6 +46,30 @@
       "revId": "45226a26e022c1c06534fd0dead26af3eca1ae76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9248a708_b07bb748",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T11:30:50Z",
+      "side": 1,
+      "message": "Well it\u0027s of course the expected result. I had pushed some commits that caused such expected \"regressions\", as you know.\n\nUnless there\u0027s something reasonable and safe to do for such cases (which would fix the broken data, and not introduce new bugs) - please do. Otherwise it\u0027s good to avoid importing data that makes internal state of program inconsistent.",
+      "parentUuid": "4262872c_4c8e5c9f",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "45226a26e022c1c06534fd0dead26af3eca1ae76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
