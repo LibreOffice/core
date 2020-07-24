@@ -15,6 +15,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
+#include <i18nutil/searchopt.hxx>
 
 class AdditionsDialog;
 class SearchAndParseThread;
@@ -111,10 +112,10 @@ public:
     size_t
         m_nMaxItemCount; // Max number of item which will appear on the list before the press to the show more button.
     size_t m_nCurrentListItemCount; // Current number of item on the list
+    i18nutil::SearchOptions2 m_searchOptions;
 
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
-
     void SetProgress(const OUString& rProgress);
     void ClearList();
 };
@@ -132,12 +133,12 @@ private:
 public:
     SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
 
-    std::vector<AdditionInfo> CreateInfoVectorToLoading(const size_t startNumber);
+    void LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem);
+    void Search();
 
-    void LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem,
-                  const size_t nGridPositionY);
+    void Append(const AdditionInfo& additionInfo);
 
-    void UpdateUI(const std::vector<AdditionInfo>& additionInfos);
+    void AppendAllExtensions();
 
     void StopExecution() { m_bExecute = false; }
 };
