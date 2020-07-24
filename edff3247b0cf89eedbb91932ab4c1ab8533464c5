@@ -22,6 +22,30 @@
       "revId": "edff3247b0cf89eedbb91932ab4c1ab8533464c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29056d54_be2d7d5f",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-24T13:04:42Z",
+      "side": 1,
+      "message": "I did that so that line 33 would make sense to compiler.. I also included (svx/gallerybinaryengine.hxx) so line 34 would make sense to compiler....",
+      "parentUuid": "64bb10af_8ecd4138",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "edff3247b0cf89eedbb91932ab4c1ab8533464c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
