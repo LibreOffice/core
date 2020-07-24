@@ -35,6 +35,11 @@ void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
     // stop processing
 }
 
+void ShapeCreationVisitor::visit(RuleAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
@@ -143,6 +148,11 @@ void ShapeTemplateVisitor::visit(ConstraintAtom& /*rAtom*/)
     // stop processing
 }
 
+void ShapeTemplateVisitor::visit(RuleAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
 void ShapeTemplateVisitor::visit(AlgAtom& /*rAtom*/)
 {
     // stop processing
@@ -182,6 +192,12 @@ void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)
         rAtom.parseConstraint(maConstraints, /*bRequireForName=*/true);
 }
 
+void ShapeLayoutingVisitor::visit(RuleAtom& rAtom)
+{
+    if (meLookFor == RULE)
+        rAtom.parseRule(maRules);
+}
+
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
@@ -189,7 +205,7 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
         const PresPointShapeMap aMap = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
         auto pShape = aMap.find(mpCurrentNode);
         if (pShape != aMap.end())
-            rAtom.layoutShape(pShape->second, maConstraints);
+            rAtom.layoutShape(pShape->second, maConstraints, maRules);
     }
 }
 
@@ -226,6 +242,8 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 
     // process alg atoms first, nested layout nodes afterwards
     meLookFor = CONSTRAINT;
+    defaultVisit(rAtom);
+    meLookFor = RULE;
     defaultVisit(rAtom);
     meLookFor = ALGORITHM;
     defaultVisit(rAtom);
