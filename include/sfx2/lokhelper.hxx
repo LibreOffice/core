@@ -51,7 +51,7 @@ public:
     /// Set a view shell as current one.
     static void setView(int nId);
     /// Get the currently active view.
-    static int getView(SfxViewShell* pViewShell = nullptr);
+    static int getView(const SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current object shell.
     static std::size_t getViewsCount();
     /// Get viewIds of views of the current object shell.
@@ -72,17 +72,24 @@ public:
     static LOKDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
     static void setDeviceFormFactor(const OUString& rDeviceFormFactor);
+
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
+
     /// Invoke the LOK callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
-    static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
+    static void notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
+                                 const OString& rPayload);
     /// Invoke the LOK callback of all views except pThisView, with a JSON payload created from the given property tree.
-    static void notifyOtherViews(SfxViewShell* pThisView, int nType, const boost::property_tree::ptree& rTree);
+    static void notifyOtherViews(const SfxViewShell* pThisView, int nType,
+                                 const boost::property_tree::ptree& rTree);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
-    static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
+    static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
+                                int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
-    static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const boost::property_tree::ptree& rTree);
+    static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
+                                int nType, const boost::property_tree::ptree& rTree);
+
     /// Emits a LOK_CALLBACK_STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
     /// Emits a LOK_CALLBACK_WINDOW

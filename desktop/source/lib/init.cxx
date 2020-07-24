@@ -2195,7 +2195,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
-    OUString aURL(getAbsoluteURL(pURL));
+    const OUString aURL(getAbsoluteURL(pURL));
     if (aURL.isEmpty())
     {
         pLib->maLastExceptionMsg = "Filename to load was not provided.";
@@ -2291,7 +2291,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nDocumentIdCounter++);
 
-        // Do we know that after loading the document, its initial view is the "current" view?
+        // After loading the document, its initial view is the "current" view.
         SfxLokHelper::setDocumentIdOfView(pDocument->mnDocumentId);
         if (pLib->mpCallback)
         {
