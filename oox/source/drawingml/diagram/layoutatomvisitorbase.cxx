@@ -142,6 +142,11 @@ void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)
     // stop processing
 }
 
+void ShallowPresNameVisitor::visit(RuleAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
 void ShallowPresNameVisitor::visit(AlgAtom& /*rAtom*/)
 {
     // stop processing

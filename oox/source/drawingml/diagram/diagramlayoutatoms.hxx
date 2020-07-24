@@ -62,6 +62,7 @@ struct ConditionAttr
     sal_Int32 mnVal;
 };
 
+/// Constraints allow you to specify an ideal (or starting point) size for each shape.
 struct Constraint
 {
     sal_Int32 mnFor;
@@ -75,6 +76,12 @@ struct Constraint
     double mfFactor;
     double mfValue;
     sal_Int32 mnOperator;
+};
+
+/// Rules allow you to specify what to do when constraints can't be fully satisfied.
+struct Rule
+{
+    OUString msForName;
 };
 
 typedef std::map<sal_Int32, sal_Int32> LayoutProperty;
@@ -145,6 +152,20 @@ private:
     Constraint maConstraint;
 };
 
+/// Represents one <dgm:rule> element.
+class RuleAtom
+    : public LayoutAtom
+{
+public:
+    RuleAtom(LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode) {}
+    virtual void accept( LayoutAtomVisitor& ) override;
+    Rule& getRule()
+        { return maRule; }
+    void parseRule(std::vector<Rule>& rRules) const;
+private:
+    Rule maRule;
+};
+
 class AlgAtom
     : public LayoutAtom
 {
@@ -161,7 +182,8 @@ public:
         { maMap[nType]=nVal; }
     sal_Int32 getVerticalShapesCount(const ShapePtr& rShape);
     void layoutShape( const ShapePtr& rShape,
-                      const std::vector<Constraint>& rConstraints );
+                      const std::vector<Constraint>& rConstraints,
+                      const std::vector<Rule>& rRules );
 
     void setAspectRatio(double fAspectRatio) { mfAspectRatio = fAspectRatio; }
 
