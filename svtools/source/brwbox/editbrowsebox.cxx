@@ -1026,7 +1026,6 @@ namespace svt
         CellModified();
     }
 
-
     void EditBrowseBox::ColumnResized( sal_uInt16 )
     {
         if (IsEditing())
@@ -1034,10 +1033,13 @@ namespace svt
             tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
             CellControllerRef aControllerRef = Controller();
             ResizeController(aControllerRef, aRect);
+            // don't grab focus if Field Properties panel is being
+            // resized by split pane drag resizing
+            if (Application::IsUICaptured())
+                return;
             Controller()->GetWindow().GrabFocus();
         }
     }
-
 
     sal_uInt16 EditBrowseBox::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos, sal_uInt16 nId)
     {
