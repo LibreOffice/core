@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cfd4b2a_37ccc9e9",
+        "filename": "solenv/bin/native-code.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-24T05:54:15Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/99344\u003e \"Blind fix for Android\"",
+      "revId": "c049d5336c110196886480330dba9238faee0e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
