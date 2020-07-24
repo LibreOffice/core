@@ -15,6 +15,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
+#include <i18nutil/searchopt.hxx>
 
 class AdditionsDialog;
 class SearchAndParseThread;
@@ -98,6 +99,7 @@ public:
     std::unique_ptr<weld::MenuButton> m_xMenuButtonSettings;
     std::vector<AdditionsItem> m_aAdditionsItems; // UI components
     std::vector<AdditionInfo> m_aAllExtensionsVector; //
+    std::vector<AdditionInfo> m_aSearchResultVector; //
 
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentGrid;
@@ -111,11 +113,15 @@ public:
         m_nMaxItemCount; // Max number of item which will appear on the list before the press to the show more button.
     size_t m_nCurrentListItemCount; // Current number of item on the list
 
+    // For search
+    i18nutil::SearchOptions2 m_searchOptions;
+
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
 
     void SetProgress(const OUString& rProgress);
     void ClearList();
+    void FillListWithSearchResult(const OUString& filterTerm);
 };
 
 class SearchAndParseThread : public salhelper::Thread
@@ -129,7 +135,10 @@ private:
     virtual void execute() override;
 
 public:
-    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading);
+    bool m_bIsSearching;
+
+    SearchAndParseThread(AdditionsDialog* pDialog, const bool& bIsFirstLoading,
+                         const bool& bIsSearching);
 
     std::vector<AdditionInfo> CreateInfoVectorToLoading(const size_t startNumber);
 

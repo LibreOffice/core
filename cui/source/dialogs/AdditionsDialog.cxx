@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mnemonic.hxx>
+#include <unotools/textsearch.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -299,11 +300,13 @@ void LoadImage(const OUString& rPreviewFile, const AdditionsItem& rCurrentItem)
 
 } // End of the anonymous namespace
 
-SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool& isFirstLoading)
+SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool& isFirstLoading,
+                                           const bool& isSearching)
     : Thread("cuiAdditionsSearchThread")
     , m_pAdditionsDialog(pDialog)
     , m_bExecute(true)
     , m_bIsFirstLoading(isFirstLoading)
+    , m_bIsSearching(isSearching)
 {
 }
 
@@ -311,12 +314,16 @@ SearchAndParseThread::~SearchAndParseThread() {}
 
 std::vector<AdditionInfo> SearchAndParseThread::CreateInfoVectorToLoading(const size_t startNumber)
 {
+    std::vector<AdditionInfo> aExtensionSource = m_pAdditionsDialog->m_aAllExtensionsVector;
+    if (m_bIsSearching)
+        aExtensionSource = m_pAdditionsDialog->m_aSearchResultVector;
+
     std::vector<AdditionInfo> additionInfos;
     for (size_t i = startNumber; i < m_pAdditionsDialog->m_nMaxItemCount; i++)
     {
-        if (i == m_pAdditionsDialog->m_aAllExtensionsVector.size())
+        if (i >= aExtensionSource.size())
             break;
-        additionInfos.push_back(m_pAdditionsDialog->m_aAllExtensionsVector[i]);
+        additionInfos.push_back(aExtensionSource[i]);
     }
 
     return additionInfos;
@@ -459,7 +466,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     OString rURL = sPrefixURL + m_sTag + sSuffixURL;
     m_sURL = rURL;
 
-    m_pSearchThread = new SearchAndParseThread(this, true);
+    m_pSearchThread = new SearchAndParseThread(this, true, false);
     m_pSearchThread->launch();
 }
 
@@ -474,6 +481,45 @@ AdditionsDialog::~AdditionsDialog()
         SolarMutexReleaser aReleaser;
         m_pSearchThread->join();
     }
+}
+
+void AdditionsDialog::FillListWithSearchResult(const OUString& filterTerm)
+{
+    this->ClearList();
+    // Setup search filter parameters
+    m_searchOptions.searchString = filterTerm;
+    utl::TextSearch textSearch(m_searchOptions);
+
+    std::vector<AdditionInfo> aSearchResultVector;
+
+    for (const auto& rInfo : m_aAllExtensionsVector)
+    {
+        OUString sExtensionName = rInfo.sName;
+        OUString sExtensionDescription = rInfo.sDescription;
+
+        // Apply the search filter
+        if (!filterTerm.isEmpty() && !textSearch.searchForward(sExtensionName)
+            && !textSearch.searchForward(sExtensionDescription)
+            && !textSearch.searchForward(sExtensionName.toAsciiLowerCase())
+            && !textSearch.searchForward(sExtensionName.toAsciiUpperCase())
+            && !textSearch.searchForward(sExtensionDescription.toAsciiLowerCase())
+            && !textSearch.searchForward(sExtensionDescription.toAsciiUpperCase()))
+        {
+            continue;
+        }
+        aSearchResultVector.push_back(rInfo);
+    }
+
+    m_aSearchResultVector = aSearchResultVector;
+
+    if (m_pSearchThread.is())
+        m_pSearchThread->StopExecution();
+
+    if (filterTerm.isEmpty())
+        m_aSearchResultVector = m_aAllExtensionsVector;
+
+    m_pSearchThread = new SearchAndParseThread(this, false, true);
+    m_pSearchThread->launch();
 }
 
 void AdditionsDialog::SetProgress(const OUString& rProgress)
@@ -503,27 +549,10 @@ void AdditionsDialog::ClearList()
 
 IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
 {
-    this->ClearList();
+    m_nCurrentListItemCount = 0;
     OUString aSearchTerm(m_xEntrySearch->get_text());
-    /* OPTIONAL
-    if (aSearchTerm.isEmpty())
-        return;
-    */
-    if (m_pSearchThread.is())
-        m_pSearchThread->StopExecution();
 
-    OString rURL = "https://yusufketen.com/extensionTest.json"; // + q=aSearchTerm
-    OUString finalURL = OStringToOUString(rURL + "?q=", RTL_TEXTENCODING_UTF8) + aSearchTerm;
-
-    // Search Test
-    if (aSearchTerm == "2")
-    {
-        rURL = "https://yusufketen.com/extensionTest2.json";
-    }
-
-    this->SetProgress(finalURL);
-    m_pSearchThread = new SearchAndParseThread(this, false);
-    m_pSearchThread->launch();
+    FillListWithSearchResult(aSearchTerm);
 }
 
 IMPL_LINK_NOARG(AdditionsDialog, SearchUpdateHdl, weld::Entry&, void)
@@ -553,7 +582,8 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
     m_pParentDialog->m_nMaxItemCount += PAGE_SIZE;
     if (m_pParentDialog->m_pSearchThread.is())
         m_pParentDialog->m_pSearchThread->StopExecution();
-    m_pParentDialog->m_pSearchThread = new SearchAndParseThread(m_pParentDialog, false);
+    m_pParentDialog->m_pSearchThread = new SearchAndParseThread(
+        m_pParentDialog, false, m_pParentDialog->m_pSearchThread->m_bIsSearching);
     m_pParentDialog->m_pSearchThread->launch();
 }
 
