@@ -389,7 +389,7 @@ public class CheckXComponentLoader
         }
     }
 
-    /** TODo document me
+    /** TODO document me
      */
     @Test public void checkStreamLoading() throws Exception
     {
