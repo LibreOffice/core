@@ -93,15 +93,6 @@ namespace pcr
     */
     class DialogController
     {
-    public:
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
     private:
         DialogController( const DialogController& ) = delete;
         DialogController& operator=( const DialogController& ) = delete;
