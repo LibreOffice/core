@@ -2687,6 +2687,94 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129173)
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[22]/text", "56");
 }
 
+<<<<<<< HEAD   (0f8f64 tdf#124430 Writer Editing: Fix textbox aligning)
+=======
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134866)
+{
+    SwDoc* pDoc = createDoc("tdf134866.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the data label of pie chart.
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[2]/text", "100%");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130031)
+{
+    SwDoc* pDoc = createDoc("tdf130031.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4339
+    // - Actual  : 2182
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4339, nY, 50);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130242)
+{
+    SwDoc* pDoc = createDoc("tdf130242.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4958
+    // - Actual  : 3352
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4958, nY, 50);
+
+    nY = getXPath(pXmlDoc, "//textarray[13]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3018
+    // - Actual  : 2343
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130380)
+{
+    SwDoc* pDoc = createDoc("tdf130380.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc,
+                            "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/polypolygon/"
+                            "polygon/point[1]",
+                            "y")
+                       .toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6727
+    // - Actual  : 4411
+    // - Delta   : 50
+    // i.e. the area chart shrank.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6727, nY, 50);
+}
+
+>>>>>>> CHANGE (c0fac9 tdf#134866 Chart OOXML import: fix percentage in custom pie )
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129095)
 {
     SwDoc* pDoc = createDoc("tdf129095.docx");
