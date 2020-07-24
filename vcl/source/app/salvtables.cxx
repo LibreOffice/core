@@ -5622,6 +5622,11 @@ int SalInstanceTextView::vadjustment_get_page_size() const
     return rVertScrollBar.GetVisibleSize();
 }
 
+bool SalInstanceTextView::has_focus() const
+{
+    return m_xTextView->HasChildPathFocus();
+}
+
 SalInstanceTextView::~SalInstanceTextView()
 {
     if (!m_xTextView->IsDisposed())
