@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="javavm" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.stoc.JavaVirtualMachine">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.stoc.JavaVirtualMachine"
+    constructor="stoc_JavaVM_get_implementation">
     <service name="com.sun.star.java.JavaVirtualMachine"/>
     <singleton name="com.sun.star.java.theJavaVirtualMachine"/>
   </implementation>
