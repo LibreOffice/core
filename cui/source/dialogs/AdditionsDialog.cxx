@@ -37,6 +37,11 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mnemonic.hxx>
 
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <tools/diagnose_ex.h>
+#include <unotools/textsearch.hxx>
+
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -47,6 +52,12 @@
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
+
+// FIXME
+// This preprocessor command is written to prevent the error caused by "css::util::SearchAlgorithms2::ABSOLUTE" in the AdditionsDialog().
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
 
 #define PAGE_SIZE 30
 
@@ -309,26 +320,13 @@ SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool&
 
 SearchAndParseThread::~SearchAndParseThread() {}
 
-std::vector<AdditionInfo> SearchAndParseThread::CreateInfoVectorToLoading(const size_t startNumber)
-{
-    std::vector<AdditionInfo> additionInfos;
-    for (size_t i = startNumber; i < m_pAdditionsDialog->m_nMaxItemCount; i++)
-    {
-        if (i == m_pAdditionsDialog->m_aAllExtensionsVector.size())
-            break;
-        additionInfos.push_back(m_pAdditionsDialog->m_aAllExtensionsVector[i]);
-    }
-
-    return additionInfos;
-}
-
-void SearchAndParseThread::LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem,
-                                    const size_t nGridPositionY)
+void SearchAndParseThread::LoadInfo(const AdditionInfo& additionInfo, AdditionsItem& rCurrentItem)
 {
     SolarMutexGuard aGuard;
 
     rCurrentItem.m_xContainer->set_grid_left_attach(0);
-    rCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
+    rCurrentItem.m_xContainer->set_grid_top_attach(m_pAdditionsDialog->m_aAdditionsItems.size()
+                                                   - 1);
 
     rCurrentItem.m_xLinkButtonName->set_label(additionInfo.sName);
     rCurrentItem.m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
@@ -346,44 +344,76 @@ void SearchAndParseThread::LoadInfo(const AdditionInfo& additionInfo, AdditionsI
     rCurrentItem.m_pParentDialog = m_pAdditionsDialog;
 }
 
-void SearchAndParseThread::UpdateUI(const std::vector<AdditionInfo>& aAdditionInfos)
+void SearchAndParseThread::Append(const AdditionInfo& additionInfo)
 {
-    //Get Preview Files
-    for (auto& additionInfo : aAdditionInfos)
-    {
-        if (!m_bExecute)
-            return;
-        OUString aPreviewFile;
-        bool bResult = getPreviewFile(additionInfo, aPreviewFile); // info vector json data
+    if (!m_bExecute)
+        return;
+    OUString aPreviewFile;
+    bool bResult = getPreviewFile(additionInfo, aPreviewFile); // info vector json data
 
-        if (!bResult)
+    if (!bResult)
+    {
+        SAL_INFO("cui.dialogs", "Couldn't get the preview file. Skipping: " << aPreviewFile);
+        return;
+    }
+
+    SolarMutexGuard aGuard;
+
+    m_pAdditionsDialog->m_aAdditionsItems.emplace_back(m_pAdditionsDialog->m_xContentGrid.get());
+    AdditionsItem& aCurrentItem = m_pAdditionsDialog->m_aAdditionsItems.back();
+
+    LoadInfo(additionInfo, aCurrentItem);
+    LoadImage(aPreviewFile, aCurrentItem);
+    m_pAdditionsDialog->m_nCurrentListItemCount++;
+
+    if (m_pAdditionsDialog->m_nCurrentListItemCount == m_pAdditionsDialog->m_nMaxItemCount)
+    {
+        if (m_pAdditionsDialog->m_nCurrentListItemCount
+            != m_pAdditionsDialog->m_aAllExtensionsVector.size())
+            aCurrentItem.m_xButtonShowMore->set_visible(true);
+    }
+}
+
+void SearchAndParseThread::AppendAllExtensions()
+{
+    for (auto& additionInfo : m_pAdditionsDialog->m_aAllExtensionsVector)
+    {
+        Append(additionInfo);
+    }
+}
+
+void SearchAndParseThread::Search()
+{
+    m_pAdditionsDialog->m_searchOptions.searchString
+        = m_pAdditionsDialog->m_xEntrySearch->get_text();
+    utl::TextSearch textSearch(m_pAdditionsDialog->m_searchOptions);
+
+    size_t nIteration = 0;
+    for (auto& rInfo : m_pAdditionsDialog->m_aAllExtensionsVector)
+    {
+        if (m_pAdditionsDialog->m_nCurrentListItemCount == m_pAdditionsDialog->m_nMaxItemCount)
+            break;
+
+        OUString sExtensionName = rInfo.sName;
+        OUString sExtensionDescription = rInfo.sDescription;
+
+        if (!m_pAdditionsDialog->m_xEntrySearch->get_text().isEmpty()
+            && !textSearch.searchForward(sExtensionName)
+            && !textSearch.searchForward(sExtensionDescription))
         {
-            SAL_INFO("cui.dialogs", "Couldn't get the preview file. Skipping: " << aPreviewFile);
             continue;
         }
-
-        SolarMutexGuard aGuard;
-        AdditionsDialog* rDialog = m_pAdditionsDialog;
-
-        rDialog->m_aAdditionsItems.emplace_back(rDialog->m_xContentGrid.get());
-        AdditionsItem& aCurrentItem = rDialog->m_aAdditionsItems.back();
-
-        LoadInfo(additionInfo, aCurrentItem, rDialog->m_nCurrentListItemCount);
-        LoadImage(aPreviewFile, aCurrentItem);
-
-        rDialog->m_nCurrentListItemCount++;
-        if (rDialog->m_nCurrentListItemCount == rDialog->m_nMaxItemCount)
+        else
         {
-            if (rDialog->m_nCurrentListItemCount != rDialog->m_aAllExtensionsVector.size())
-                aCurrentItem.m_xButtonShowMore->set_visible(true);
-            break;
+            if (nIteration >= m_pAdditionsDialog->m_nCurrentListItemCount)
+                Append(rInfo);
+            nIteration++;
         }
     }
 }
 
 void SearchAndParseThread::execute()
 {
-    //m_pAdditionsDialog->ClearSearchResults();
     OUString sProgress;
     if (m_bIsFirstLoading)
         sProgress = CuiResId(RID_SVXSTR_ADDITIONS_LOADING);
@@ -397,20 +427,11 @@ void SearchAndParseThread::execute()
     {
         std::string sResponse = curlGet(m_pAdditionsDialog->m_sURL);
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
+        Search();
     }
-
-    std::vector<AdditionInfo> currentVector
-        = CreateInfoVectorToLoading(m_pAdditionsDialog->m_nCurrentListItemCount);
-
-    if (currentVector.empty())
+    else // Searching
     {
-        sProgress = CuiResId(RID_SVXSTR_ADDITIONS_NORESULTS);
-        m_pAdditionsDialog->SetProgress(sProgress);
-        return;
-    }
-    else
-    {
-        UpdateUI(currentVector);
+        Search();
     }
 
     if (!m_bExecute)
@@ -459,6 +480,11 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     OString rURL = sPrefixURL + m_sTag + sSuffixURL;
     m_sURL = rURL;
 
+    //Initialize search util
+    m_searchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    m_searchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    m_searchOptions.searchFlag |= (css::util::SearchFlags::REG_NOT_BEGINOFLINE
+                                   | css::util::SearchFlags::REG_NOT_ENDOFLINE);
     m_pSearchThread = new SearchAndParseThread(this, true);
     m_pSearchThread->launch();
 }
@@ -503,25 +529,11 @@ void AdditionsDialog::ClearList()
 
 IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
 {
-    this->ClearList();
-    OUString aSearchTerm(m_xEntrySearch->get_text());
-    /* OPTIONAL
-    if (aSearchTerm.isEmpty())
-        return;
-    */
     if (m_pSearchThread.is())
         m_pSearchThread->StopExecution();
-
-    OString rURL = "https://yusufketen.com/extensionTest.json"; // + q=aSearchTerm
-    OUString finalURL = OStringToOUString(rURL + "?q=", RTL_TEXTENCODING_UTF8) + aSearchTerm;
-
-    // Search Test
-    if (aSearchTerm == "2")
-    {
-        rURL = "https://yusufketen.com/extensionTest2.json";
-    }
-
-    this->SetProgress(finalURL);
+    ClearList();
+    m_nCurrentListItemCount = 0;
+    m_nMaxItemCount = PAGE_SIZE;
     m_pSearchThread = new SearchAndParseThread(this, false);
     m_pSearchThread->launch();
 }
