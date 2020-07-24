@@ -194,30 +194,32 @@ editeng/source/editeng/impedit.hxx:504
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:104
     OCommonEmbeddedObject m_aClassName class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:124
+embeddedobj/source/inc/oleembobj.hxx:125
     OleEmbeddedObject m_pOleComponent class OleComponent *
-embeddedobj/source/inc/oleembobj.hxx:144
+embeddedobj/source/inc/oleembobj.hxx:145
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:166
-    OleEmbeddedObject m_bHasSizeToSet _Bool
 embeddedobj/source/inc/oleembobj.hxx:167
-    OleEmbeddedObject m_aSizeToSet css::awt::Size
+    OleEmbeddedObject m_bHasSizeToSet _Bool
 embeddedobj/source/inc/oleembobj.hxx:168
+    OleEmbeddedObject m_aSizeToSet css::awt::Size
+embeddedobj/source/inc/oleembobj.hxx:169
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:173
-    OleEmbeddedObject m_bGotStatus _Bool
 embeddedobj/source/inc/oleembobj.hxx:174
-    OleEmbeddedObject m_nStatus sal_Int64
+    OleEmbeddedObject m_bGotStatus _Bool
 embeddedobj/source/inc/oleembobj.hxx:175
+    OleEmbeddedObject m_nStatus sal_Int64
+embeddedobj/source/inc/oleembobj.hxx:176
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:183
+embeddedobj/source/inc/oleembobj.hxx:184
     OleEmbeddedObject m_aLinkURL class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:189
+embeddedobj/source/inc/oleembobj.hxx:190
     OleEmbeddedObject m_bFromClipboard _Bool
 extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
+extensions/source/update/check/updatehdl.hxx:86
+    UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/eps/eps.cxx:114
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:58
@@ -362,8 +364,10 @@ include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
-include/vcl/toolkit/button.hxx:96
-    CheckBox mbLegacyNoTextAlign _Bool
+include/vcl/toolkit/field.hxx:129
+    NumericFormatter mbWrapOnLimits _Bool
+include/vcl/toolkit/longcurr.hxx:61
+    LongCurrencyFormatter maCurrencySymbol class rtl::OUString
 io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:558
@@ -566,9 +570,9 @@ svx/source/inc/datanavi.hxx:488
     svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:489
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
-svx/source/inc/gridcell.hxx:527
-    DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
+    DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
+svx/source/inc/gridcell.hxx:529
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/svdpdf.hxx:71
     ImpSdrPdfImport maDash class XDash
@@ -628,7 +632,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:116
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:434
+toolkit/source/awt/vclxtoolkit.cxx:435
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass

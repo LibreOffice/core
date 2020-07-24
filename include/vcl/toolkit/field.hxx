@@ -126,7 +126,6 @@ protected:
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
     sal_Int64               mnMax;
-    bool                    mbWrapOnLimits;
     bool                    mbFormatting;
 
     // the members below are used in all derivatives of NumericFormatter

@@ -36,14 +36,14 @@ cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:60
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
-cui/source/dialogs/AdditionsDialog.cxx:82
-    (anonymous namespace)::AdditionInfo sDescription class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:84
-    (anonymous namespace)::AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:88
-    (anonymous namespace)::AdditionInfo sRating class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:90
-    (anonymous namespace)::AdditionInfo sDownloadURL class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:74
+    AdditionInfo sDescription class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:76
+    AdditionInfo sReleaseVersion class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:80
+    AdditionInfo sRating class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:82
+    AdditionInfo sDownloadURL class rtl::OUString
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
@@ -161,21 +161,21 @@ include/sfx2/msg.hxx:143
 include/sfx2/msg.hxx:143
     SfxType13 nAttribs sal_uInt16
 include/sfx2/msg.hxx:144
+    SfxType14 pType const std::type_info *
+include/sfx2/msg.hxx:144
     SfxType14 aAttrib struct SfxTypeAttrib [14]
 include/sfx2/msg.hxx:144
     SfxType14 nAttribs sal_uInt16
 include/sfx2/msg.hxx:144
-    SfxType14 pType const std::type_info *
-include/sfx2/msg.hxx:144
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:145
+    SfxType16 nAttribs sal_uInt16
 include/sfx2/msg.hxx:145
     SfxType16 aAttrib struct SfxTypeAttrib [16]
 include/sfx2/msg.hxx:145
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
     SfxType16 pType const std::type_info *
-include/sfx2/msg.hxx:145
-    SfxType16 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
     SfxType17 pType const std::type_info *
 include/sfx2/msg.hxx:146
@@ -260,7 +260,7 @@ pyuno/source/module/pyuno_impl.hxx:137
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/filter/xml/xmlExport.cxx:1230
+reportdesign/source/filter/xml/xmlExport.cxx:1202
       sal_Int32
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
@@ -458,11 +458,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5179
+vcl/unx/gtk3/gtk3gtkinst.cxx:5181
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5322
+vcl/unx/gtk3/gtk3gtkinst.cxx:5324
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5330
+vcl/unx/gtk3/gtk3gtkinst.cxx:5332
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

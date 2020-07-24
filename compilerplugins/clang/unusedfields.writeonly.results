@@ -4,7 +4,7 @@ basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:183
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/IDEComboBox.hxx:121
+basctl/source/inc/IDEComboBox.hxx:114
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
     basegfx::(anonymous namespace)::Triangulator maNewEdgeEntries std::vector<std::unique_ptr<EdgeEntry> >
@@ -106,6 +106,8 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
+comphelper/qa/container/comphelper_ifcontainer.cxx:44
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
@@ -214,8 +216,6 @@ cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:40
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
-cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -284,23 +284,23 @@ drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:45
     drawinglayer::attribute::ImpSdrFillGraphicAttribute mbLogSize _Bool
 drawinglayer/source/attribute/sdrsceneattribute3d.cxx:30
     drawinglayer::attribute::ImpSdrSceneAttribute mfDistance double
-embeddedobj/source/inc/oleembobj.hxx:132
+embeddedobj/source/inc/oleembobj.hxx:133
     OleEmbeddedObject m_nTargetState sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:144
+embeddedobj/source/inc/oleembobj.hxx:145
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:166
-    OleEmbeddedObject m_bHasSizeToSet _Bool
 embeddedobj/source/inc/oleembobj.hxx:167
-    OleEmbeddedObject m_aSizeToSet css::awt::Size
+    OleEmbeddedObject m_bHasSizeToSet _Bool
 embeddedobj/source/inc/oleembobj.hxx:168
+    OleEmbeddedObject m_aSizeToSet css::awt::Size
+embeddedobj/source/inc/oleembobj.hxx:169
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:173
-    OleEmbeddedObject m_bGotStatus _Bool
 embeddedobj/source/inc/oleembobj.hxx:174
-    OleEmbeddedObject m_nStatus sal_Int64
+    OleEmbeddedObject m_bGotStatus _Bool
 embeddedobj/source/inc/oleembobj.hxx:175
+    OleEmbeddedObject m_nStatus sal_Int64
+embeddedobj/source/inc/oleembobj.hxx:176
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:189
+embeddedobj/source/inc/oleembobj.hxx:190
     OleEmbeddedObject m_bFromClipboard _Bool
 emfio/inc/mtftools.hxx:512
     emfio::MtfTools mrclBounds tools::Rectangle
@@ -402,7 +402,7 @@ include/svx/galctrl.hxx:39
     GalleryPreview mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 include/svx/galctrl.hxx:92
     GalleryIconView mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
-include/svx/gridctrl.hxx:256
+include/svx/gridctrl.hxx:257
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
@@ -424,10 +424,6 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/edit.hxx:71
-    Edit mbModified _Bool
-include/vcl/menu.hxx:451
-    MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:54
     AddonNotebookBarItem sTarget class rtl::OUString
 include/vcl/NotebookBarAddonsMerger.hxx:55
@@ -450,8 +446,6 @@ include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame void *
 include/vcl/textrectinfo.hxx:32
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/toolkit/button.hxx:89
-    CheckBox meSaveValue enum TriState
 include/vcl/vclenum.hxx:202
     ItalicMatrix yy double
 include/vcl/vclenum.hxx:202
@@ -526,7 +520,7 @@ sc/inc/compiler.hxx:265
     ScCompiler::AddInMap pUpper const char *
 sc/inc/compressedarray.hxx:70
     ScCompressedArray::RangeData mnRow2 A
-sc/inc/document.hxx:2639
+sc/inc/document.hxx:2644
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/patattr.hxx:55
     ScPatternAttr mxHashCode std::optional<size_t>
@@ -872,7 +866,7 @@ svx/source/sidebar/text/TextPropertyPanel.hxx:68
     svx::sidebar::TextPropertyPanel mxPositionBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/text/TextPropertyPanel.hxx:70
     svx::sidebar::TextPropertyPanel mxSpacingBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/tbxctrls/tbcontrl.cxx:312
+svx/source/tbxctrls/tbcontrl.cxx:306
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -1132,7 +1126,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13066
+vcl/unx/gtk3/gtk3gtkinst.cxx:13078
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1140,10 +1134,8 @@ vcl/unx/gtk3/gtk3hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
 vcl/workben/vcldemo.cxx:1748
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
-writerfilter/source/dmapper/DomainMapperTableHandler.cxx:226
+writerfilter/source/dmapper/DomainMapperTableHandler.cxx:227
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
-writerfilter/source/dmapper/DomainMapperTableManager.hxx:42
-    writerfilter::dmapper::DomainMapperTableManager m_nGridAfter sal_uInt32
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 writerfilter/source/dmapper/SettingsTable.cxx:264
