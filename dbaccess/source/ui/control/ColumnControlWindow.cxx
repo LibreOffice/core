@@ -34,10 +34,33 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
+OColumnControlTopLevel::OColumnControlTopLevel(vcl::Window* pParent,
+                                               const Reference<XComponentContext>& _rxContext)
+    : InterimItemWindow(pParent, "dbaccess/ui/colcontrolbox.ui", "ColControlBox")
+    , m_xControl(new OColumnControlWindow(m_xContainer.get(), _rxContext))
+{
+}
+
+void OColumnControlTopLevel::dispose()
+{
+    m_xControl.reset();
+    InterimItemWindow::dispose();
+}
+
+void OColumnControlTopLevel::GetFocus()
+{
+    m_xControl->GetFocus();
+}
+
+void OColumnControlTopLevel::LoseFocus()
+{
+    m_xControl->LoseFocus();
+}
+
 // OColumnControlWindow
-OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
-                                           ,const Reference<XComponentContext>& _rxContext)
-            : OFieldDescControl(nullptr, pParent, nullptr)
+OColumnControlWindow::OColumnControlWindow(weld::Container* pParent,
+                                           const Reference<XComponentContext>& _rxContext)
+            : OFieldDescControl(pParent, nullptr)
             , m_xContext(_rxContext)
             , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)

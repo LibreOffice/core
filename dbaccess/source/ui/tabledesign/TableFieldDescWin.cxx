@@ -34,7 +34,7 @@ OTableFieldDescWin::OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* p
     : InterimItemWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
     , m_xHelpBar(new OTableDesignHelpBar(m_xBuilder->weld_text_view("textview")))
     , m_xBox(m_xBuilder->weld_container("box"))
-    , m_xFieldControl(VclPtr<OTableFieldControl>::Create(m_xBox.get(), m_xHelpBar.get(), pView))
+    , m_xFieldControl(new OTableFieldControl(m_xBox.get(), m_xHelpBar.get(), pView))
     , m_xHeader(m_xBuilder->weld_label("header"))
     , m_eChildFocus(NONE)
 {
@@ -55,7 +55,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
 void OTableFieldDescWin::dispose()
 {
     // destroy children
-    m_xFieldControl.disposeAndClear();
+    m_xFieldControl.reset();
     m_xBox.reset();
     m_xHeader.reset();
     m_xHelpBar.reset();

@@ -41,7 +41,7 @@ namespace dbaui
     private:
         std::unique_ptr<OTableDesignHelpBar> m_xHelpBar;
         std::unique_ptr<weld::Container> m_xBox;
-        VclPtr<OTableFieldControl> m_xFieldControl;
+        std::unique_ptr<OTableFieldControl> m_xFieldControl;
         std::unique_ptr<weld::Label>   m_xHeader;
         Link<weld::Widget&, void> m_aFocusInHdl;
 

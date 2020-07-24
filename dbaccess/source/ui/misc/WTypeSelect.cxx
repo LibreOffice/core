@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include <tools/stream.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>
 #include <FieldControls.hxx>
@@ -39,7 +40,7 @@ using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
 OWizTypeSelectControl::OWizTypeSelectControl(weld::Container* pPage, OWizTypeSelect* pParentTabPage)
-    : OFieldDescControl(pPage, nullptr, nullptr)
+    : OFieldDescControl(pPage, nullptr)
     , m_pParentTabPage(pParentTabPage)
 {
 }
@@ -206,7 +207,7 @@ OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard
     , m_xColumnNames(new OWizTypeSelectList(m_xBuilder->weld_tree_view("columnnames")))
     , m_xColumns(m_xBuilder->weld_label("columns"))
     , m_xControlContainer(m_xBuilder->weld_container("control_container"))
-    , m_xTypeControl(VclPtr<OWizTypeSelectControl>::Create(m_xControlContainer.get(), this))
+    , m_xTypeControl(new OWizTypeSelectControl(m_xControlContainer.get(), this))
     , m_xAutoType(m_xBuilder->weld_label("autotype"))
     , m_xAutoFt(m_xBuilder->weld_label("autolabel"))
     , m_xAutoEt(m_xBuilder->weld_spin_button("auto"))
@@ -218,7 +219,6 @@ OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard
 {
     m_xColumnNames->connect_changed(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    m_xTypeControl->Show();
     m_xTypeControl->Init();
 
     m_xAutoEt->set_text("10");
@@ -239,7 +239,6 @@ OWizTypeSelect::OWizTypeSelect(weld::Container* pPage, OCopyTableWizard* pWizard
 
 OWizTypeSelect::~OWizTypeSelect()
 {
-    m_xTypeControl.disposeAndClear();
 }
 
 OUString OWizTypeSelect::GetTitle() const

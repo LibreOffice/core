@@ -65,70 +65,28 @@ namespace
     }
 }
 
-OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
-    :TabPage(pPage ? Application::GetDefDialogParent() : pParent, WB_3DLOOK | WB_DIALOGCONTROL)
-    ,m_pHelp( pHelpBar )
-    ,m_pLastFocusWindow(nullptr)
-    ,m_pActFocusWindow(nullptr)
-    ,m_pPreviousType()
-    ,m_nPos(-1)
-    ,aYes(DBA_RES(STR_VALUE_YES))
-    ,aNo(DBA_RES(STR_VALUE_NO))
-    ,m_nEditWidth(50)
-    ,m_bAdded(false)
-    ,pActFieldDescr(nullptr)
+OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar)
+    : m_xBuilder(Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui"))
+    , m_xContainer(m_xBuilder->weld_container("FieldDescPage"))
+    , m_pHelp( pHelpBar )
+    , m_pLastFocusWindow(nullptr)
+    , m_pActFocusWindow(nullptr)
+    , m_pPreviousType()
+    , m_nPos(-1)
+    , aYes(DBA_RES(STR_VALUE_YES))
+    , aNo(DBA_RES(STR_VALUE_NO))
+    , m_nEditWidth(50)
+    , pActFieldDescr(nullptr)
 {
-    if (pPage)
-        m_xBuilder.reset(Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui"));
-    else
-    {
-        m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-        m_xVclContentArea->Show();
-        m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "dbaccess/ui/fielddescpage.ui"));
-
-        m_aLayoutIdle.SetPriority(TaskPriority::RESIZE);
-        m_aLayoutIdle.SetInvokeHandler( LINK( this, OFieldDescControl, ImplHandleLayoutTimerHdl ) );
-        m_aLayoutIdle.SetDebugName( "OFieldDescControl m_aLayoutIdle" );
-    }
-
-    m_xContainer = m_xBuilder->weld_container("FieldDescPage");
-}
-
-void OFieldDescControl::queue_resize(StateChangedType eReason)
-{
-    TabPage::queue_resize(eReason);
-    if (!m_xVclContentArea)
-        return;
-    if (m_aLayoutIdle.IsActive())
-        return;
-    m_aLayoutIdle.Start();
-}
-
-void OFieldDescControl::Resize()
-{
-    TabPage::Resize();
-    if (!m_xVclContentArea)
-        return;
-    queue_resize();
-}
-
-IMPL_LINK_NOARG(OFieldDescControl, ImplHandleLayoutTimerHdl, Timer*, void)
-{
-    m_xVclContentArea->SetPosSizePixel(Point(0,0), GetSizePixel());
 }
 
 OFieldDescControl::~OFieldDescControl()
 {
-    disposeOnce();
+    dispose();
 }
 
 void OFieldDescControl::dispose()
 {
-    m_aLayoutIdle.Stop();
-
-    if ( m_bAdded )
-        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-
     // Destroy children
     DeactivateAggregate( tpDefault );
     DeactivateAggregate( tpRequired );
@@ -172,8 +130,6 @@ void OFieldDescControl::dispose()
     m_xFormat.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-    TabPage::dispose();
 }
 
 OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) const
@@ -626,8 +582,6 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_xBoolDefault->show();
         break;
     }
-
-    queue_resize();
 }
 
 void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
@@ -646,7 +600,7 @@ void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OString& 
 
     if (dynamic_cast<weld::Entry*>(pControl))
     {
-        int nWidthRequest = LogicToPixel(Size(m_nEditWidth, 0), MapMode(MapUnit::MapAppFont)).Width();
+        int nWidthRequest = Application::GetDefaultDevice()->LogicToPixel(Size(m_nEditWidth, 0), MapMode(MapUnit::MapAppFont)).Width();
         pControl->set_size_request(nWidthRequest, -1);
     }
 }
@@ -723,8 +677,6 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         lcl_HideAndDeleteControl(m_nPos,m_xBoolDefault,m_xBoolDefaultText);
         break;
     }
-
-    queue_resize();
 }
 
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
@@ -749,18 +701,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         m_pPreviousType = TOTypeInfoSP();
         // Reset the saved focus' pointer
         m_pLastFocusWindow = nullptr;
-        if ( m_bAdded )
-        {
-            ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-            m_bAdded = false;
-        }
         return;
-    }
-
-    if ( !m_bAdded )
-    {
-        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-        m_bAdded = true;
     }
 
     TOTypeInfoSP pFieldType(pFieldDescr->getTypeInfo());
@@ -1228,8 +1169,6 @@ void OFieldDescControl::implFocusLost(weld::Widget* _pWhich)
 void OFieldDescControl::LoseFocus()
 {
     implFocusLost(nullptr);
-
-    TabPage::LoseFocus();
 }
 
 bool OFieldDescControl::IsFocusInEditableWidget() const

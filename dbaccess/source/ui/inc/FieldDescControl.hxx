@@ -19,9 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
 
-#include <vcl/idle.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/weld.hxx>
 #include "IClipBoardTest.hxx"
 #include "QEnumTypes.hxx"
@@ -66,12 +63,9 @@ namespace dbaui
     class OFieldDescription;
     class OPropColumnEditCtrl;
 
-    class OFieldDescControl : public TabPage
-                            , public IClipboardTest
+    class OFieldDescControl : public IClipboardTest
     {
     private:
-        Idle m_aLayoutIdle;
-        VclPtr<VclVBox> m_xVclContentArea;
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Container> m_xContainer;
 
@@ -116,13 +110,10 @@ namespace dbaui
 
         sal_Int32               m_nEditWidth;
 
-        bool                m_bAdded;
-
         OFieldDescription*      pActFieldDescr;
 
         DECL_LINK(FormatClickHdl, weld::Button&, void);
         DECL_LINK(ChangeHdl, weld::ComboBox&, void);
-        DECL_LINK(ImplHandleLayoutTimerHdl, Timer*, void);
 
         // used by ActivatePropertyField
         DECL_LINK( OnControlFocusLost, weld::Widget&, void );
@@ -137,6 +128,7 @@ namespace dbaui
 
         bool                IsFocusInEditableWidget() const;
 
+        void                dispose();
     protected:
         void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
         OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
@@ -167,9 +159,8 @@ namespace dbaui
         void    implFocusLost(weld::Widget* _pWhich);
 
     public:
-        OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
-        virtual ~OFieldDescControl() override;
-        virtual void        dispose() override;
+        OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar* pHelpBar);
+        virtual ~OFieldDescControl();
 
         void                DisplayData(OFieldDescription* pFieldDescr );
 
@@ -177,6 +168,9 @@ namespace dbaui
 
         void                SetControlText( sal_uInt16 nControlId, const OUString& rText );
         void                SetReadOnly( bool bReadOnly );
+
+        void                Enable(bool bEnable) { m_xContainer->set_sensitive(bEnable); }
+        void                SetHelpId(const OString& rId) { m_xContainer->set_help_id(rId); }
 
         virtual bool        isCutAllowed() override;
         virtual bool        isCopyAllowed() override;
@@ -191,12 +185,10 @@ namespace dbaui
             m_aControlFocusIn = rLink;
         }
 
-        void                Init();
-        virtual void        GetFocus() override;
-        virtual void        LoseFocus() override;
-        virtual void        Resize() override;
+        void Init();
 
-        virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+        void GetFocus();
+        void LoseFocus();
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;
