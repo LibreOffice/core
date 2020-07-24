@@ -22,6 +22,30 @@
       "revId": "45226a26e022c1c06534fd0dead26af3eca1ae76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4262872c_4c8e5c9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-07-24T11:26:47Z",
+      "side": 1,
+      "message": "I\u0027m wondering if changing the import asserts to throw would get us reports like, document foo no longer opens in LibreOffice while it does in MSO Powerpoint, giving the impression it\u0027s a regression",
+      "parentUuid": "47a34887_dc8a480d",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "45226a26e022c1c06534fd0dead26af3eca1ae76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
