@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47a34887_dc8a480d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T11:17:21Z",
+      "side": 1,
+      "message": "Asserts on import time are wrong, as I mentioned: an assert is \"having something different is a program error, and we need to fix this in code\". But for a user file, we must not assert anything: any garbage may come from outside. On import, we must validate things and either block import (throw; I\u0027d prefer this), or try to be \"smart\" and workaround the problem somehow (e.g., add dummy missing values - bad option IMO...)",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "45226a26e022c1c06534fd0dead26af3eca1ae76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
