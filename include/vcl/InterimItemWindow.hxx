@@ -11,6 +11,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
 class VCL_DLLPUBLIC InterimItemWindow : public Control
@@ -22,6 +23,7 @@ public:
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
     virtual void StateChanged(StateChangedType nStateChange) override;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void GetFocus() override;
 
     bool ControlHasFocus() const;
@@ -44,6 +46,12 @@ protected:
     weld::Widget* m_pWidget;
 
 private:
+    Idle m_aLayoutIdle;
+
+    void StartIdleLayout();
+
+    DECL_LINK(DoResize, Timer*, void);
+
     virtual void ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos) override;
 };
 
