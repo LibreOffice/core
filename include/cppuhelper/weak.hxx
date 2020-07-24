@@ -149,6 +149,11 @@ public:
     */
     SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
+
+#ifdef DBG_UTIL
+    /** for debugging purposes in cppu */
+    oslInterlockedCount getRefCount() const { return m_refCount; }
+#endif
 };
 
 /// @cond INTERNAL

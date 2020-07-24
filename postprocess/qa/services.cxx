@@ -38,6 +38,7 @@
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/strbuf.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -323,6 +324,17 @@ void Test::createInstance(
             + msg(name) + "\" returned null reference")
          .getStr()),
         inst.is());
+#ifdef DBG_UTIL
+    // Prevent silly mistakes where we forget to call acquire before returning object
+    // leading to horrible debugging.
+    if (auto p = dynamic_cast<cppu::OWeakObject*>(inst.get()))
+        CPPUNIT_ASSERT_MESSAGE(
+            OString(
+                "instantiating \"" + msg(implementationName) + "\" via \""
+                + msg(name) + "\" "
+                "returned object with a ref count of " + OString::number(p->getRefCount())).getStr(),
+            p->getRefCount() >= 1);
+#endif
     css::uno::Reference<css::lang::XComponent> comp(inst, css::uno::UNO_QUERY);
     if (comp.is()) {
         components->push_back(comp);
