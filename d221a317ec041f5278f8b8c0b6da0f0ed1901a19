@@ -22,6 +22,29 @@
       "revId": "d221a317ec041f5278f8b8c0b6da0f0ed1901a19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d07e73f_66c6fbfa",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T09:15:11Z",
+      "side": 1,
+      "message": "I suppose it\u0027s more correct to use GetUILanguageTag here.",
+      "range": {
+        "startLine": 68,
+        "startChar": 35,
+        "endLine": 68,
+        "endChar": 49
+      },
+      "revId": "d221a317ec041f5278f8b8c0b6da0f0ed1901a19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
