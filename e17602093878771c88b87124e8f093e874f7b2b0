@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "144bf47f_0b3ac603",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-24T13:40:56Z",
+      "side": 1,
+      "message": "This is supposed to be pen drive and not pendrive: https://www.thestar.com.my/news/nation/2012/07/17/father-of-pen-drive-now-a-datuk",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 8
+      },
+      "revId": "e17602093878771c88b87124e8f093e874f7b2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f8807e1_c5fd8a6c",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-24T13:40:56Z",
+      "side": 1,
+      "message": "Is \"text\" a technical term?",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 4
+      },
+      "revId": "e17602093878771c88b87124e8f093e874f7b2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
