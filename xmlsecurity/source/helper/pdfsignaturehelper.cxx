@@ -143,8 +143,7 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
     {
         SignatureInformation aInfo(i);
 
-        bool bLast = i == aSignatures.size() - 1;
-        if (!xmlsecurity::pdfio::ValidateSignature(*pStream, aSignatures[i], aInfo, bLast))
+        if (!xmlsecurity::pdfio::ValidateSignature(*pStream, aSignatures[i], aInfo, aDocument))
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
 
         m_aSignatureInfos.push_back(aInfo);

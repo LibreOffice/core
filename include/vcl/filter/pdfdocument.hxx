@@ -422,6 +422,8 @@ public:
     std::vector<PDFObjectElement*> GetSignatureWidgets();
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
+    /// Get byte offsets of the end of incremental updates.
+    const std::vector<size_t>& GetEOFs() const;
     //@}
 
     /// See vcl::PDFObjectContainer::createObject().

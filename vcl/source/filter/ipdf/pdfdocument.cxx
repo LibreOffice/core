@@ -156,6 +156,8 @@ bool PDFDocument::RemoveSignature(size_t nPosition)
     return m_aEditBuffer.good();
 }
 
+const std::vector<size_t>& PDFDocument::GetEOFs() const { return m_aEOFs; }
+
 sal_Int32 PDFDocument::createObject()
 {
     sal_Int32 nObject = m_aXRef.size();
@@ -2154,7 +2156,16 @@ bool PDFCommentElement::Read(SvStream& rStream)
             m_aComment = aBuf.makeStringAndClear();
 
             if (m_aComment.startsWith("%%EOF"))
-                m_rDoc.PushBackEOF(rStream.Tell());
+            {
+                sal_uInt64 nPos = rStream.Tell();
+                if (ch == '\r')
+                {
+                    // If the comment ends with a \r\n, count the \n as well to match Adobe Acrobat
+                    // behavior.
+                    nPos += 1;
+                }
+                m_rDoc.PushBackEOF(nPos);
+            }
 
             SAL_INFO("vcl.filter", "PDFCommentElement::Read: m_aComment is '" << m_aComment << "'");
             return true;
