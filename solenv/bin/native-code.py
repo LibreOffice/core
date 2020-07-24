@@ -20,7 +20,6 @@ import xml.etree.ElementTree as ET
 # referenced in lo_get_constructor_map().
 
 core_factory_list = [
-    ("libembobj.a", "embobj_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
@@ -127,6 +126,10 @@ core_constructor_list = [
     "drawinglayer_XPrimitive2DRenderer",
 # dtrans/util/mcnttype.component
     "dtrans_CMimeContentTypeFactory_get_implementation",
+# embeddedobj/util/embobj.component
+    "embeddedobj_UNOEmbeddedObjectCreator_get_implementation",
+    "embeddedobj_OOoEmbeddedObjectFactory_get_implementation",
+    "embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation",
 # emfio/emfio.component
     "emfio_emfreader_XEmfParser_get_implementation",
 # eventattacher/source/evtatt.component
