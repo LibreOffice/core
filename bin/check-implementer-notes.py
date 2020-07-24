@@ -11,7 +11,7 @@ wiki_pages = [
 
 # get all commit hashes mentioned in implementer notes
 wiki_commit_hashes = {}
-query = re.compile(r'\{\{commit\|(\\w+)\|\\w*\|\\w*\}\}', re.IGNORECASE)
+query = re.compile(r'\{\{commit\|(\w+)\|\w*\|\w*\}\}', re.IGNORECASE)
 for page in wiki_pages:
     r = http.request('GET', page)
     data = json.loads(r.data.decode('utf-8'))
