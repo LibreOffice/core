@@ -108,111 +108,6 @@ class NoJavaIniException: public css::uno::Exception
 {
 };
 
-class SingletonFactory:
-    private cppu::WeakImplHelper< css::lang::XEventListener >
-{
-public:
-    static css::uno::Reference< css::uno::XInterface > getSingleton(
-        css::uno::Reference< css::uno::XComponentContext > const & rContext);
-
-private:
-    SingletonFactory() {}
-
-    virtual ~SingletonFactory() override {}
-
-    SingletonFactory(const SingletonFactory&) = delete;
-    SingletonFactory& operator=(const SingletonFactory&) = delete;
-
-    virtual void SAL_CALL disposing(css::lang::EventObject const &) override;
-
-    static void dispose();
-
-    // TODO ok to keep these static?
-    static osl::Mutex m_aMutex;
-    static css::uno::Reference< css::uno::XInterface > m_xSingleton;
-    static bool m_bDisposed;
-};
-
-css::uno::Reference< css::uno::XInterface > SingletonFactory::getSingleton(
-    css::uno::Reference< css::uno::XComponentContext > const & rContext)
-{
-    css::uno::Reference< css::uno::XInterface > xSingleton;
-    css::uno::Reference< css::lang::XComponent > xComponent;
-    {
-        osl::MutexGuard aGuard(m_aMutex);
-        if (!m_xSingleton.is())
-        {
-            if (m_bDisposed)
-                throw css::lang::DisposedException();
-            xComponent.set( rContext, css::uno::UNO_QUERY_THROW);
-            m_xSingleton = static_cast< cppu::OWeakObject * >(
-                new JavaVirtualMachine(rContext));
-        }
-        xSingleton = m_xSingleton;
-    }
-    if (xComponent.is())
-        try
-        {
-            xComponent->addEventListener(new SingletonFactory);
-        }
-        catch (...)
-        {
-            dispose();
-            throw;
-        }
-    return xSingleton;
-}
-
-void SAL_CALL SingletonFactory::disposing(css::lang::EventObject const &)
-{
-    dispose();
-}
-
-void SingletonFactory::dispose()
-{
-    css::uno::Reference< css::lang::XComponent > xComponent;
-    {
-        osl::MutexGuard aGuard(m_aMutex);
-        xComponent.set( m_xSingleton, css::uno::UNO_QUERY);
-        m_xSingleton.clear();
-        m_bDisposed = true;
-    }
-    if (xComponent.is())
-        xComponent->dispose();
-}
-
-osl::Mutex SingletonFactory::m_aMutex;
-css::uno::Reference< css::uno::XInterface > SingletonFactory::m_xSingleton;
-bool SingletonFactory::m_bDisposed = false;
-
-OUString serviceGetImplementationName()
-{
-    return "com.sun.star.comp.stoc.JavaVirtualMachine";
-}
-
-css::uno::Sequence< OUString > serviceGetSupportedServiceNames()
-{
-    return css::uno::Sequence< OUString > { "com.sun.star.java.JavaVirtualMachine" };
-}
-
-css::uno::Reference< css::uno::XInterface > serviceCreateInstance(
-    css::uno::Reference< css::uno::XComponentContext > const & rContext)
-{
-    // Only one single instance of this service is ever constructed, and is
-    // available until the component context used to create this instance is
-    // disposed.  Afterwards, this function throws a DisposedException (as do
-    // all relevant methods on the single service instance).
-    return SingletonFactory::getSingleton(rContext);
-}
-
-cppu::ImplementationEntry const aServiceImplementation[]
-    = { { serviceCreateInstance,
-          serviceGetImplementationName,
-          serviceGetSupportedServiceNames,
-          cppu::createSingleComponentFactory,
-          nullptr, 0 },
-        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
-
 typedef std::stack< jvmaccess::VirtualMachine::AttachGuard * > GuardStack;
 
 extern "C" {
@@ -577,15 +472,6 @@ private:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * javavm_component_getFactory(char const * pImplName,
-                                                void * pServiceManager,
-                                                void * pRegistryKey)
-{
-    return cppu::component_getFactoryHelper(pImplName, pServiceManager,
-                                            pRegistryKey,
-                                            aServiceImplementation);
-}
-
 JavaVirtualMachine::JavaVirtualMachine(
     css::uno::Reference< css::uno::XComponentContext > const & rContext):
     JavaVirtualMachine_Impl(m_aMutex),
@@ -654,7 +540,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
 
 OUString SAL_CALL JavaVirtualMachine::getImplementationName()
 {
-    return serviceGetImplementationName();
+    return "com.sun.star.comp.stoc.JavaVirtualMachine";
 }
 
 sal_Bool SAL_CALL
@@ -666,7 +552,7 @@ JavaVirtualMachine::supportsService(OUString const & rServiceName)
 css::uno::Sequence< OUString > SAL_CALL
 JavaVirtualMachine::getSupportedServiceNames()
 {
-    return serviceGetSupportedServiceNames();
+    return { "com.sun.star.java.JavaVirtualMachine" };
 }
 
 css::uno::Any SAL_CALL
@@ -1591,5 +1477,32 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
         "JNI exception occurred",
         static_cast< cppu::OWeakObject * >(this));
 }
+
+
+static osl::Mutex m_aMutex;
+static rtl::Reference< JavaVirtualMachine > m_xSingleton;
+
+
+void JavaVirtualMachine::dispose() {
+    JavaVirtualMachine_Impl::dispose();
+    osl::MutexGuard aGuard(m_aMutex);
+    m_xSingleton.clear();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+stoc_JavaVM_get_implementation(
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+{
+    // Only one single instance of this service is ever constructed, and is
+    // available until the component context used to create this instance is
+    // disposed.  Afterwards, this function throws a DisposedException (as do
+    // all relevant methods on the single service instance).
+    osl::MutexGuard aGuard(m_aMutex);
+    if (!m_xSingleton.is())
+        m_xSingleton.set(new JavaVirtualMachine(context));
+    m_xSingleton->acquire();
+    return static_cast<cppu::OWeakObject*>(m_xSingleton.get());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
