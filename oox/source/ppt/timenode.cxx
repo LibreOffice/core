@@ -250,24 +250,6 @@ namespace oox::ppt {
                     xNode->setEnd( aAny );
                 }
             }
-#if 0  // FIXME even the binary filter has this disabled.
-            if( !maNextCondList.empty() )
-            {
-                Any aAny = AnimationCondition::convertList( pSlide, maNextCondList );
-                if( aAny.hasValue() )
-                {
-                    xNode->setNext( aAny );
-                }
-            }
-            if( !maPrevCondList.empty() )
-            {
-                Any aAny = AnimationCondition::convertList( pSlide, maPrevCondList );
-                if( aAny.hasValue() )
-                {
-                    xNode->setPrev( aAny );
-                }
-            }
-#endif
             if( mbHasEndSyncValue )
             {
                 Any aValue = maEndSyncValue.convert( pSlide );
