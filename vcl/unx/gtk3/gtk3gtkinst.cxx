@@ -12462,8 +12462,18 @@ private:
     gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
-    gulong m_nHasSelectionSignalId; // we don't disable/enable this one, it's to implement auto-scroll to cursor on losing selection
+    gulong m_nHasSelectionSignalId; // we don't disable/enable this one, it's to implement
+                                    // auto-scroll to cursor on losing selection
     gulong m_nVAdjustChangedSignalId;
+    gulong m_nButtonPressEvent; // we don't disable/enable this one, it's to block mouse
+                                // click down from getting to (potential) toplevel
+                                // GtkSalFrame parent, which grabs focus away
+
+    static gboolean signalButtonPressEvent(GtkWidget*, GdkEventButton*, gpointer)
+    {
+        // e.g. on clicking on the help TextView in OTableDesignHelpBar the currently displayed text shouldn't disappear
+        return true;
+    }
 
     static void signalChanged(GtkTextBuffer*, gpointer widget)
     {
@@ -12542,6 +12552,7 @@ public:
         , m_nCursorPosSignalId(g_signal_connect(m_pTextBuffer, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
         , m_nHasSelectionSignalId(g_signal_connect(m_pTextBuffer, "notify::has-selection", G_CALLBACK(signalHasSelection), this))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
+        , m_nButtonPressEvent(g_signal_connect_after(m_pTextView, "button-press-event", G_CALLBACK(signalButtonPressEvent), this))
     {
     }
 
@@ -12743,6 +12754,7 @@ public:
 
     virtual ~GtkInstanceTextView() override
     {
+        g_signal_handler_disconnect(m_pTextView, m_nButtonPressEvent);
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pTextBuffer, m_nChangedSignalId);
