@@ -6195,10 +6195,6 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
         return;
     }
 
-    // nothing to do for covered table cells:
-    if( IsCellFrame() && IsCoveredCell() )
-        return;
-
     SwViewShell *pSh = gProp.pSGlobalShell;
 
     // #i16816# tagged pdf support
