@@ -533,7 +533,13 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     }
                     case DataPointCustomLabelFieldType_PERCENTAGE:
                     {
-                        aTextList[i] = getLabelTextForValue( rDataSeries, nPointIndex, fValue, true );
+                        if(fSumValue == 0.0)
+                           fSumValue = 1.0;
+                        fValue /= fSumValue;
+                        if(fValue < 0)
+                           fValue *= -1.0;
+
+                        aTextList[i] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
                         break;
                     }
                     case DataPointCustomLabelFieldType_CELLREF:
