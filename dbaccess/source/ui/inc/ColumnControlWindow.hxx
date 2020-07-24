@@ -23,6 +23,7 @@
 #include "TypeInfo.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include <vcl/InterimItemWindow.hxx>
 
 namespace dbaui
 {
@@ -53,8 +54,8 @@ namespace dbaui
         virtual void                CellModified(long nRow, sal_uInt16 nColId ) override;
 
     public:
-        OColumnControlWindow(vcl::Window* pParent
-                            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+        OColumnControlWindow(weld::Container* pParent,
+                             const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
 
@@ -63,6 +64,21 @@ namespace dbaui
         virtual const OTypeInfoMap* getTypeInfo() const override;
         TOTypeInfoSP const & getDefaultTyp() const;
     };
+
+    class OColumnControlTopLevel final : public InterimItemWindow
+    {
+        std::unique_ptr<OColumnControlWindow> m_xControl;
+    public:
+        OColumnControlTopLevel(vcl::Window* pParent,
+                               const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+        virtual void dispose() override;
+
+        OColumnControlWindow& GetControl() { return *m_xControl; }
+
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
+    };
+
 }   // namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX
 

@@ -33,6 +33,9 @@ namespace dbaui
         VclPtr<OTableDesignView> m_xView;
 
         OTableEditorCtrl*   GetCtrl() const;
+
+        void dispose();
+
     protected:
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
@@ -51,7 +54,6 @@ namespace dbaui
 
     public:
         OTableFieldControl(weld::Container* pParent, OTableDesignHelpBar* pHelpBar, OTableDesignView* pView);
-        virtual void dispose() override;
         virtual ~OTableFieldControl() override;
 
         using OFieldDescControl::BoolStringPersistent;

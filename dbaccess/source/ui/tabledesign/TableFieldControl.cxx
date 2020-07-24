@@ -34,7 +34,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
 
 OTableFieldControl::OTableFieldControl(weld::Container* pParent, OTableDesignHelpBar* pHelpBar, OTableDesignView* pView)
-    : OFieldDescControl(pParent, nullptr, pHelpBar)
+    : OFieldDescControl(pParent, pHelpBar)
     , m_xView(pView)
 {
 }
@@ -42,12 +42,11 @@ OTableFieldControl::OTableFieldControl(weld::Container* pParent, OTableDesignHel
 void OTableFieldControl::dispose()
 {
     m_xView.clear();
-    OFieldDescControl::dispose();
 }
 
 OTableFieldControl::~OTableFieldControl()
 {
-    disposeOnce();
+    dispose();
 }
 
 void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )

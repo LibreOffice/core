@@ -41,6 +41,7 @@
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
