@@ -32,6 +32,7 @@ struct LayoutAtomVisitor
 {
     virtual ~LayoutAtomVisitor() {}
     virtual void visit(ConstraintAtom& rAtom) = 0;
+    virtual void visit(RuleAtom& rAtom) = 0;
     virtual void visit(AlgAtom& rAtom) = 0;
     virtual void visit(ForEachAtom& rAtom) = 0;
     virtual void visit(ConditionAtom& rAtom) = 0;
@@ -68,7 +69,7 @@ protected:
     sal_Int32 mnCurrIdx;
     sal_Int32 mnCurrStep;
     sal_Int32 mnCurrCnt;
-    enum {LAYOUT_NODE, CONSTRAINT, ALGORITHM} meLookFor;
+    enum {LAYOUT_NODE, CONSTRAINT, ALGORITHM, RULE} meLookFor;
 };
 
 class ShallowPresNameVisitor : public LayoutAtomVisitorBase
@@ -81,6 +82,7 @@ public:
 
     using LayoutAtomVisitorBase::visit;
     virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;

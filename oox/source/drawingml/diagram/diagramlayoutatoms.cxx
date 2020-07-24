@@ -338,6 +338,11 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
+void RuleAtom::accept( LayoutAtomVisitor& rVisitor )
+{
+    rVisitor.visit(*this);
+}
+
 void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                                      bool bRequireForName) const
 {
@@ -364,6 +369,14 @@ void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
         && maConstraint.mnType != XML_none)
     {
         rConstraints.push_back(maConstraint);
+    }
+}
+
+void RuleAtom::parseRule(std::vector<Rule>& rRules) const
+{
+    if (!maRule.msForName.isEmpty())
+    {
+        rRules.push_back(maRule);
     }
 }
 
@@ -467,7 +480,8 @@ void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& r
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const std::vector<Constraint>& rConstraints )
+                           const std::vector<Constraint>& rConstraints,
+                           const std::vector<Rule>& /*rRules*/ )
 {
     switch(mnType)
     {

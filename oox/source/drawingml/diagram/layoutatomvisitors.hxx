@@ -41,6 +41,7 @@ public:
 
     using LayoutAtomVisitorBase::visit;
     virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
     virtual void visit(ShapeAtom& rAtom) override;
@@ -58,6 +59,7 @@ public:
 
     using LayoutAtomVisitorBase::visit;
     virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
@@ -79,12 +81,14 @@ public:
 
     using LayoutAtomVisitorBase::visit;
     virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(RuleAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
     virtual void visit(ShapeAtom& rAtom) override;
 
 private:
     std::vector<Constraint> maConstraints;
+    std::vector<Rule> maRules;
 };
 
 } }
