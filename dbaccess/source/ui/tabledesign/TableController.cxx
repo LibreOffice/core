@@ -176,13 +176,13 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
 
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = isEditable() && m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
+            aReturn.bEnabled = isEditable() && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
+            aReturn.bEnabled = getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = isEditable() && m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isPasteAllowed();
+            aReturn.bEnabled = isEditable() && getView() && static_cast<OTableDesignView*>(getView())->isPasteAllowed();
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
