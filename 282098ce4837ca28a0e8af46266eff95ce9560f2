@@ -22,6 +22,30 @@
       "revId": "282098ce4837ca28a0e8af46266eff95ce9560f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "456d0ce6_27b3d2bc",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-24T21:30:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "372fa0c6_3d932f5d",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 12
+      },
+      "revId": "282098ce4837ca28a0e8af46266eff95ce9560f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
