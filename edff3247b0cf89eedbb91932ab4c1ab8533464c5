@@ -46,6 +46,30 @@
       "revId": "edff3247b0cf89eedbb91932ab4c1ab8533464c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414aca5f_227b8191",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T13:09:25Z",
+      "side": 1,
+      "message": "The lines do make sense to compiler without these inclusions. I mentioned the relevant standard part on IRC: https://timsong-cpp.github.io/cppwp/n4140/class.friend#11. With these inclusions, you make those headers to be processed before the following part of your header, and they expect to know GalleryObjectCollection already.",
+      "parentUuid": "29056d54_be2d7d5f",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "edff3247b0cf89eedbb91932ab4c1ab8533464c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
