@@ -2517,11 +2517,11 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     // No autowidth defined for columned frames
     if ( !pFrame || pFrame->IsColumnFrame() )
         return nRet;
-    // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PagePrintArea) if it contains at least 2 paragraphs.
+    // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PrintArea of the frame it anchored to) if it contains at least 2 paragraphs.
     if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA) && pFrame && pFrame->GetNext())
     {
-        const SwPageFrame* pPage = pFrame->FindPageFrame();
-        return pFrame->GetUpper()->IsVertical() ? pPage->getFramePrintArea().Height() : pPage->getFramePrintArea().Width();
+        const SwFrame* pFrameRect = rFrame.IsFlyFrame() ? static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame() : pFrame->FindPageFrame();
+        return rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
     }
 
     while ( pFrame )
