@@ -527,7 +527,7 @@ calc_constructor_list = [
 # scaddins/source/analysis/analysis.component
     "scaddins_AnalysisAddIn_get_implementation",
 # scaddins/source/datefunc/date.component
-    "scaddins_ScaDateAddIn_get_implementation"
+    "scaddins_ScaDateAddIn_get_implementation",
 # scaddins/source/pricing/pricing.component
     "scaddins_ScaPricingAddIn_get_implementation",
 # scripting/source/vbaevents/vbaevents.component
