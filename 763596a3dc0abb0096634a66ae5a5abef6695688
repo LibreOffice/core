@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a719e94c_dae458b7",
+        "filename": "sd/source/filter/eppt/pptx-animations.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T10:36:49Z",
+      "side": 1,
+      "message": "Please no new \"using namespace\" :-)",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 39
+      },
+      "revId": "763596a3dc0abb0096634a66ae5a5abef6695688",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "781efebb_330a95c0",
+        "filename": "sd/source/filter/eppt/pptx-animations.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T10:36:49Z",
+      "side": 1,
+      "message": "throw css::io:WrongFormatException()",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 213,
+        "endChar": 39
+      },
+      "revId": "763596a3dc0abb0096634a66ae5a5abef6695688",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
