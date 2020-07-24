@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d29c19ff_72c7cb11",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T13:19:25Z",
+      "side": 1,
+      "message": "This looks unused",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "f10a5a23dfd93a202b0b14e29690e62ddae8cd66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "289c7d20_203fdbe4",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T13:19:25Z",
+      "side": 1,
+      "message": "Please avoid leading \"::\" unless you need to disambiguate with something actually existing in the global namespace.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 6
+      },
+      "revId": "f10a5a23dfd93a202b0b14e29690e62ddae8cd66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84f7b862_f10e37c1",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T13:19:25Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 37,
+        "startChar": 10,
+        "endLine": 37,
+        "endChar": 12
+      },
+      "revId": "f10a5a23dfd93a202b0b14e29690e62ddae8cd66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
