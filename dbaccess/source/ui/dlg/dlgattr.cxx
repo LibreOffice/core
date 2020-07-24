@@ -31,7 +31,7 @@
 using namespace dbaui;
 
 
-SbaSbAttrDlg::SbaSbAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs,
+SbaSbAttrDlg::SbaSbAttrDlg(weld::Widget* pParent, const SfxItemSet* pCellAttrs,
     SvNumberFormatter* pFormatter, bool bHasFormat)
     : SfxTabDialogController(pParent, "dbaccess/ui/fielddialog.ui", "FieldDialog", pCellAttrs)
 {

@@ -791,7 +791,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
 
     // get the field the column is bound to
     Reference< XPropertySet >  xField = getField(nModelPos);
-    ::dbaui::callColumnFormatDialog(xAffectedCol,xField,pFormatter,this);//(Window::GetSettings().GetLanguage());
+    ::dbaui::callColumnFormatDialog(xAffectedCol,xField,pFormatter,GetFrameWeld());
 }
 
 void SbaGridControl::SetBrowserAttrs()

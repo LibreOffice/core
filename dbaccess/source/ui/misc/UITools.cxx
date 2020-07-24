@@ -720,7 +720,7 @@ SvxCellHorJustify mapTextJustify(sal_Int32 _nAlignment)
 void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
                             const Reference<XPropertySet>& xField,
                             SvNumberFormatter* _pFormatter,
-                            const vcl::Window* _pParent)
+                            weld::Widget* _pParent)
 {
     if (!(xAffectedCol.is() && xField.is()))
         return;
@@ -753,7 +753,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
     }
 }
 
-bool callColumnFormatDialog(const vcl::Window* _pParent,
+bool callColumnFormatDialog(weld::Widget* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
@@ -805,7 +805,7 @@ bool callColumnFormatDialog(const vcl::Window* _pParent,
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, true));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
-                _nFormatKey = _pFormatter->GetStandardFormat(SvNumFormatType::TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());
+                _nFormatKey = _pFormatter->GetStandardFormat(SvNumFormatType::TEXT, Application::GetSettings().GetLanguageTag().getLanguageType());
         }
 
         pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, _nFormatKey));
@@ -818,7 +818,7 @@ bool callColumnFormatDialog(const vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        SbaSbAttrDlg aDlg(_pParent->GetFrameWeld(), pFormatDescriptor.get(), _pFormatter, _bHasFormat);
+        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor.get(), _pFormatter, _bHasFormat);
         if (RET_OK == aDlg.run())
         {
             // ItemSet->UNO
