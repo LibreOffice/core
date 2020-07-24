@@ -24,6 +24,7 @@
 #include <drawingml/customshapeproperties.hxx>
 #include "diagramdefinitioncontext.hxx"
 #include "constraintlistcontext.hxx"
+#include "rulelistcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
@@ -262,8 +263,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     }
     case DGM_TOKEN( ruleLst ):
         // CT_Rules
-        // TODO
-        break;
+        return new RuleListContext( *this, mpNode );
     case DGM_TOKEN( varLst ):
     {
         LayoutNodePtr pNode(std::dynamic_pointer_cast<LayoutNode>(mpNode));
