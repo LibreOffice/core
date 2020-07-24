@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fa83bcb_df62139d",
+        "filename": "postprocess/qa/services.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-24T13:45:36Z",
+      "side": 1,
+      "message": "This fails e.g. for com.sun.star.comp.sdbc.JDBCDriver (with environment\u003d\"@CPPU_ENV@:affine\", connectivity/source/drivers/jdbc/jdbc.component), as generated C++ proxies for binary UNO typically lack RTTI (see e.g. bridges::cpp_uno::shared::VtableFactory::initializeBlock in bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx, which only sets up RTTI if ENABLE_RUNTIME_OPTIMIZATIONS; and bridges for other arches don\u0027t do it at all).",
+      "range": {
+        "startLine": 330,
+        "startChar": 17,
+        "endLine": 330,
+        "endChar": 29
+      },
+      "revId": "2f9db4c0b0cd398607ad821115ef928dec10059d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
