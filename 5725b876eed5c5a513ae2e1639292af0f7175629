@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5fb0ce4_1ab7f019",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T16:05:12Z",
+      "side": 1,
+      "message": "Looks like this is out of place. The times are set in ln845; the values are set in ln1130. Likely we only need to check the correct state after the \"// convert values\" block...",
+      "range": {
+        "startLine": 1096,
+        "startChar": 8,
+        "endLine": 1098,
+        "endChar": 0
+      },
+      "revId": "5725b876eed5c5a513ae2e1639292af0f7175629",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
