@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64bb10af_8ecd4138",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T12:58:21Z",
+      "side": 1,
+      "message": "Why do you need this include? if you include \nsvx/galleryobjectcollection.hxx somewhere before svx/galtheme.hxx, this will lead to GalleryTheme being defined before this",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "edff3247b0cf89eedbb91932ab4c1ab8533464c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
