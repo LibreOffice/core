@@ -2990,7 +2990,6 @@ namespace svxform
             std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                      VclMessageType::Warning, VclButtonsType::Ok,
                                                                      SvxResId(RID_STR_EMPTY_SUBMISSIONNAME)));
-            xErrorBox->set_primary_text(Application::GetDisplayName());
             xErrorBox->run();
             return;
         }
