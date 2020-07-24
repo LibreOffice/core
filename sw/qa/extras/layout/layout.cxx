@@ -2687,6 +2687,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129173)
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[22]/text", "56");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134866)
+{
+    SwDoc* pDoc = createDoc("tdf134866.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the data label of pie chart.
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[2]/text", "100%");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129095)
 {
     SwDoc* pDoc = createDoc("tdf129095.docx");
