@@ -149,6 +149,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/diagram/layoutatomvisitorbase \
     oox/source/drawingml/diagram/layoutatomvisitors \
     oox/source/drawingml/diagram/layoutnodecontext \
+    oox/source/drawingml/diagram/rulelistcontext \
     oox/source/drawingml/drawingmltypes \
     oox/source/drawingml/effectproperties \
     oox/source/drawingml/effectpropertiescontext \
