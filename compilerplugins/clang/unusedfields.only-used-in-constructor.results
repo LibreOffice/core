@@ -128,18 +128,20 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/dialogs/AdditionsDialog.cxx:82
-    (anonymous namespace)::AdditionInfo sDescription class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:84
-    (anonymous namespace)::AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:88
-    (anonymous namespace)::AdditionInfo sRating class rtl::OUString
-cui/source/dialogs/AdditionsDialog.cxx:90
-    (anonymous namespace)::AdditionInfo sDownloadURL class rtl::OUString
 cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1410
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
+cui/source/inc/AdditionsDialog.hxx:74
+    AdditionInfo sDescription class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:76
+    AdditionInfo sReleaseVersion class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:80
+    AdditionInfo sRating class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:82
+    AdditionInfo sDownloadURL class rtl::OUString
+cui/source/inc/AdditionsDialog.hxx:109
+    AdditionsDialog m_sTag class rtl::OString
 cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:224
@@ -438,7 +440,7 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:236
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
-reportdesign/source/filter/xml/xmlExport.cxx:1230
+reportdesign/source/filter/xml/xmlExport.cxx:1202
       sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
@@ -806,7 +808,7 @@ vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
 vcl/inc/salvtables.hxx:559
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:935
+vcl/inc/salvtables.hxx:939
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:121
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -854,17 +856,17 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4806
+vcl/unx/gtk3/gtk3gtkinst.cxx:4808
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5179
+vcl/unx/gtk3/gtk3gtkinst.cxx:5181
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5322
+vcl/unx/gtk3/gtk3gtkinst.cxx:5324
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5330
+vcl/unx/gtk3/gtk3gtkinst.cxx:5332
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:13056
+vcl/unx/gtk3/gtk3gtkinst.cxx:13068
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13062
+vcl/unx/gtk3/gtk3gtkinst.cxx:13074
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

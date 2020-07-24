@@ -291,7 +291,7 @@ LongCurrencyFormatter::~LongCurrencyFormatter()
 
 OUString const & LongCurrencyFormatter::GetCurrencySymbol() const
 {
-    return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
+    return GetLocaleDataWrapper().getCurrSymbol();
 }
 
 void LongCurrencyFormatter::SetValue(const BigInt& rNewValue)

@@ -546,7 +546,6 @@ NumericFormatter::NumericFormatter(Edit* pEdit)
     // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
     // overflow in computations using this "dummy" value
     , mnMax(SAL_MAX_INT32)
-    , mbWrapOnLimits(false)
     , mbFormatting(false)
     , mnSpinSize(1)
     // for fields
@@ -768,11 +767,9 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 {
     if (nValue > mnMax)
-        nValue = mbWrapOnLimits ? ((nValue - mnMin) % (mnMax + 1)) + mnMin
-                                : mnMax;
+        nValue = mnMax;
     else if (nValue < mnMin)
-        nValue = mbWrapOnLimits ? ((nValue + mnMax + 1 - mnMin) % (mnMax + 1)) + mnMin
-                                : mnMin;
+        nValue = mnMin;
     return nValue;
 }
 
