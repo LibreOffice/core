@@ -68,7 +68,10 @@ namespace svt
 }
 
 namespace vcl { class Window; }
-namespace weld {class Window; }
+namespace weld {
+    class Widget;
+    class Window;
+}
 class ToolBox;
 namespace vcl { class Font; }
 class SvNumberFormatter;
@@ -181,11 +184,11 @@ namespace dbaui
     void callColumnFormatDialog(const css::uno::Reference< css::beans::XPropertySet>& _xAffectedCol,
                                 const css::uno::Reference< css::beans::XPropertySet>& _xField,
                                 SvNumberFormatter* _pFormatter,
-                                const vcl::Window* _pParent);
+                                weld::Widget* _pParent);
 
     /** second variant of the function before
     */
-    bool callColumnFormatDialog(const vcl::Window* _pParent,
+    bool callColumnFormatDialog(weld::Widget* _pParent,
                                     SvNumberFormatter* _pFormatter,
                                     sal_Int32 _nDataType,
                                     sal_Int32& _nFormatKey,

@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(OFieldDescControl, FormatClickHdl, weld::Button&, void)
         return;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-    if(!::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
+    if(!::dbaui::callColumnFormatDialog(m_xContainer.get(),pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
         return;
 
     bool bModified = false;

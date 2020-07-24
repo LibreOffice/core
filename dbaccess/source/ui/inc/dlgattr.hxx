@@ -32,7 +32,7 @@ namespace dbaui
         std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     public:
-        SbaSbAttrDlg(weld::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
+        SbaSbAttrDlg(weld::Widget* pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
         virtual ~SbaSbAttrDlg() override;
 
         virtual void  PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
