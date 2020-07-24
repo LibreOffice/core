@@ -22,6 +22,30 @@
       "revId": "bd96a6f7b7eb103f97bcd6eadc21908187e94dce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3dbe17_17127bf0",
+        "filename": "bin/check-implementer-notes.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-24T07:50:41Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/99348",
+      "parentUuid": "ba763949_99b09f77",
+      "range": {
+        "startLine": 14,
+        "startChar": 34,
+        "endLine": 14,
+        "endChar": 37
+      },
+      "revId": "bd96a6f7b7eb103f97bcd6eadc21908187e94dce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
