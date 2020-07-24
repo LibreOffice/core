@@ -18,6 +18,7 @@ namespace vcl
 namespace filter
 {
 class PDFObjectElement;
+class PDFDocument;
 }
 }
 struct SignatureInformation;
@@ -29,12 +30,13 @@ namespace pdfio
 {
 /**
  * @param rInformation The actual result.
- * @param bLast If this is the last signature in the file, so it covers the whole file physically.
+ * @param rDocument the parsed document to see if the signature is partial.
  * @return If we can determinate a result.
  */
 XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream,
                                              vcl::filter::PDFObjectElement* pSignature,
-                                             SignatureInformation& rInformation, bool bLast);
+                                             SignatureInformation& rInformation,
+                                             vcl::filter::PDFDocument& rDocument);
 
 } // namespace pdfio
 } // namespace xmlsecurity
