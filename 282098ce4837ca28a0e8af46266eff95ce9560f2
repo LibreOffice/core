@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "372fa0c6_3d932f5d",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2020-07-24T13:45:31Z",
+      "side": 1,
+      "message": "It\u0027s \"Diners Club\" and \"Discover Card\". Btw. while you\u0027re at it, you could update the casing of MasterCard to mastercard as they apparently changed it in 2016: https://en.wikipedia.org/wiki/Mastercard",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 12
+      },
+      "revId": "282098ce4837ca28a0e8af46266eff95ce9560f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
