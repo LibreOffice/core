@@ -67,38 +67,6 @@ namespace comphelper
         m_pImpl->m_aRegisteredComponents.push_back( _rComp );
     }
 
-    void OModule::registerImplementation( const OUString& _rImplementationName, const css::uno::Sequence< OUString >& _rServiceNames,
-        ::cppu::ComponentFactoryFunc _pCreateFunction )
-    {
-        ComponentDescription aComponent( _rImplementationName, _rServiceNames, _pCreateFunction, ::cppu::createSingleComponentFactory );
-        registerImplementation( aComponent );
-    }
-
-    Reference< XInterface > OModule::getComponentFactory( const OUString& _rImplementationName )
-    {
-        Reference< XInterface > xReturn;
-
-        for (const auto& rComponent : m_pImpl->m_aRegisteredComponents)
-        {
-            if ( rComponent.sImplementationName == _rImplementationName )
-            {
-                xReturn = rComponent.pFactoryCreationFunc(
-                    rComponent.pComponentCreationFunc,
-                    rComponent.sImplementationName,
-                    rComponent.aSupportedServices,
-                    nullptr
-                );
-                if ( xReturn.is() )
-                {
-                    xReturn->acquire();
-                    return xReturn.get();
-                }
-            }
-        }
-
-        return nullptr;
-    }
-
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

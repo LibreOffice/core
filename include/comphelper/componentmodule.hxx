@@ -89,72 +89,14 @@ namespace comphelper
 
         virtual ~OModule();
 
-        /** register a component implementing a service with the given data.
-            @param _rImplementationName
-                the implementation name of the component
-            @param _rServiceNames
-                the services the component supports
-            @param _pCreateFunction
-                a function for creating an instance of the component
-            @param _pFactoryFunction
-                a function for creating a factory for that component
-        */
-        void registerImplementation(
-            const OUString& _rImplementationName,
-            const css::uno::Sequence< OUString >& _rServiceNames,
-            ::cppu::ComponentFactoryFunc _pCreateFunction );
-
         /** registers a component given by ComponentDescription
         */
         void registerImplementation( const ComponentDescription& _rComp );
-
-        /** creates a Factory for the component with the given implementation name.
-            <p>Usually used from within component_getFactory.<p/>
-            @param _pImplementationName
-                the implementation name of the component
-            @return
-                the XInterface access to a factory for the component
-        */
-        css::uno::Reference< css::uno::XInterface > getComponentFactory(
-            const OUString& _rImplementationName );
 
     private:
         OModule( const OModule& ) = delete;
         OModule& operator=( const OModule& ) = delete;
     };
-
-
-    //= OAutoRegistration
-
-    template <class TYPE>
-    class OAutoRegistration
-    {
-    public:
-        /** automatically provides all component information to an OModule instance
-            <p>Assumed that the template argument has the three methods
-                <ul>
-                    <li><code>static OUString getImplementationName_static()</code><li/>
-                    <li><code>static css::uno::Sequence< OUString > getSupportedServiceNames_static()</code><li/>
-                    <li><code>static css::uno::Reference< css::uno::XInterface >
-                        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)</code>
-                        </li>
-                <ul/>
-            the instantiation of this object will automatically register the class via <member>OModule::registerImplementation</member>.
-            <p/>
-            The factory creation function used is <code>::cppu::createSingleComponentFactory</code>.
-        */
-        OAutoRegistration( OModule& _rModule );
-    };
-
-    template <class TYPE>
-    OAutoRegistration<TYPE>::OAutoRegistration( OModule& _rModule )
-    {
-        _rModule.registerImplementation(
-            TYPE::getImplementationName_static(),
-            TYPE::getSupportedServiceNames_static(),
-            TYPE::Create
-        );
-    }
 
 } // namespace comphelper
 
