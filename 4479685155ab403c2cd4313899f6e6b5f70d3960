@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a44ca59f_4062ae39",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T13:05:30Z",
+      "side": 1,
+      "message": "Also please move this to the end, and move interface to the first position; otherwise, the function usage looks like you want to insert the values you pass as the first parameter, while in fact you want the opposite. Also rename xPropertiesStyle to something like xSource - I feel \"xPropertiesStyle\" is confusing, and not everything we pass here is a style.",
+      "range": {
+        "startLine": 66,
+        "startChar": 25,
+        "endLine": 66,
+        "endChar": 69
+      },
+      "revId": "4479685155ab403c2cd4313899f6e6b5f70d3960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "678eba52_afcacf54",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 4
