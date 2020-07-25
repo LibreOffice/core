@@ -220,12 +220,16 @@ extensions/source/propctrlr/listselectiondlg.hxx:38
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/taborder.hxx:59
     void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
-    const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> & _rxControlCont
-    impl_getContextControlContainer_nothrow()
-extensions/source/propctrlr/taborder.hxx:59
-    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
     class weld::Window * pParent
     impl_getDefaultDialogFrame_nothrow()
+extensions/source/propctrlr/taborder.hxx:59
+    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> & _rxControlCont
+    impl_getContextControlContainer_nothrow()
+extensions/source/update/check/updateprotocol.hxx:30
+    _Bool checkForUpdates(struct UpdateInfo &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XInteractionHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> &)
+    const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> & rxProvider
+    createProvider()
 forms/source/component/ListBox.cxx:1541
     class com::sun::star::uno::Any lcl_getSingleSelectedEntryAny(const class com::sun::star::uno::Sequence<short> &,const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > &)
     const class std::__debug::vector<class connectivity::ORowSetValue, class std::allocator<class connectivity::ORowSetValue> > & _rStringList
@@ -450,8 +454,8 @@ include/svx/colorwindow.hxx:115
     void ColorWindow::ColorWindow(const class rtl::OUString &,const class std::shared_ptr<class PaletteManager> &,class ColorStatus &,unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,class weld::Window *,const class MenuOrToolMenuButton &,const class std::function<void (const class rtl::OUString &, const struct std::pair<class Color, class rtl::OUString> &)> &)
     const class rtl::OUString & rCommand
     ""
-include/svx/gallerybinaryengine.hxx:43
-    void GalleryBinaryEngine::galleryThemeInit(_Bool)
+include/svx/gallerybinaryengine.hxx:52
+    void GalleryBinaryEngine::ImplCreateSvDrawStorage(_Bool)
     _Bool bReadOnly
     IsReadOnly()
 include/svx/svdtrans.hxx:62
@@ -490,7 +494,7 @@ include/vcl/graphictools.hxx:278
     void SvtGraphicFill::SvtGraphicFill(const class tools::PolyPolygon &,class Color,double,enum SvtGraphicFill::FillRule,enum SvtGraphicFill::FillType,const struct SvtGraphicFill::Transform &,_Bool,enum SvtGraphicFill::HatchType,class Color,enum SvtGraphicFill::GradientType,class Color,class Color,int,const class Graphic &)
     class Color aFillColor
     Color()
-include/vcl/outdev.hxx:1573
+include/vcl/outdev.hxx:1571
     class Bitmap OutputDevice::GetDownsampledBitmap(const class Size &,const class Point &,const class Size &,const class Bitmap &,long,long)
     const class Point & rSrcPt
     Point()
@@ -514,14 +518,18 @@ include/vcl/toolbox.hxx:413
     void ToolBox::SetHelpText(unsigned short,const class rtl::OUString &)
     const class rtl::OUString & rText
     ""
-include/vcl/toolkit/field.hxx:187
+include/vcl/toolkit/field.hxx:315
     class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,const class rtl::OUString &,int,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-include/vcl/toolkit/field.hxx:187
+include/vcl/toolkit/field.hxx:315
     class tools::Time TimeFormatter::SpinTime(_Bool,const class tools::Time &,enum TimeFieldFormat,_Bool,const class rtl::OUString &,int,const class LocaleDataWrapper &)
     _Bool bDuration
     IsDuration()
+include/vcl/toolkit/field.hxx:420
+    int DateFormatter::GetDateArea(enum ExtDateFieldFormat,const class rtl::OUString &,int,const class LocaleDataWrapper &)
+    const class LocaleDataWrapper & rLocaleDataWrapper
+    ImplGetLocaleDataWrapper()
 include/vcl/toolkit/unowrap.hxx:66
     class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> UnoWrapperBase::CreateAccessible(class Menu *,_Bool)
     _Bool bIsMenuBar
@@ -634,7 +642,7 @@ sal/qa/osl/file/osl_File.cxx:379
     class rtl::OString outputError(const class rtl::OString &,const class rtl::OString &,const char *)
     const char * msg
     ""
-sc/inc/table.hxx:783
+sc/inc/table.hxx:785
     void ScTable::SetOptimalHeightOnly(class sc::RowHeightContext &,int,int,class ScProgress *,unsigned long)
     int nEndRow
     MaxRow()
@@ -1018,59 +1026,43 @@ vcl/qa/cppunit/svm/svmtest.cxx:44
     class GDIMetaFile SvmTest::writeAndReadStream(class GDIMetaFile &,const class rtl::OUString &)
     const class rtl::OUString & rName
     ""
-vcl/source/control/field2.cxx:364
+vcl/source/control/field2.cxx:393
     void ImplPatternProcessStrictModify(class Edit *,const class rtl::OString &,const class rtl::OUString &,_Bool)
     _Bool bSameMask
     ImplIsSameMask()
-vcl/source/control/field2.cxx:450
-    _Bool ImplPatternProcessKeyInput(class Edit *,const class KeyEvent &,const class rtl::OString &,const class rtl::OUString &,_Bool,_Bool,_Bool &)
-    _Bool bStrictFormat
-    IsStrictFormat()
-vcl/source/control/field2.cxx:450
-    _Bool ImplPatternProcessKeyInput(class Edit *,const class KeyEvent &,const class rtl::OString &,const class rtl::OUString &,_Bool,_Bool,_Bool &)
-    _Bool & rbInKeyInput
-    ImplGetInPattKeyInput()
-vcl/source/control/field2.cxx:450
-    _Bool ImplPatternProcessKeyInput(class Edit *,const class KeyEvent &,const class rtl::OString &,const class rtl::OUString &,_Bool,_Bool,_Bool &)
-    _Bool bSameMask
-    ImplIsSameMask()
-vcl/source/control/field2.cxx:994
+vcl/source/control/field2.cxx:1230
     _Bool ImplDateProcessKeyInput(const class KeyEvent &,enum ExtDateFieldFormat,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field2.cxx:1006
-    _Bool ImplDateGetValue(const class rtl::OUString &,class Date &,enum ExtDateFieldFormat,const class LocaleDataWrapper &,const class CalendarWrapper &)
+vcl/source/control/field2.cxx:2228
+    _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rLocaleDataWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field2.cxx:1884
-    _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
-    _Bool bDuration
-    IsDuration()
-vcl/source/control/field2.cxx:1884
+vcl/source/control/field2.cxx:2228
     _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
     _Bool bStrictFormat
     IsStrictFormat()
-vcl/source/control/field2.cxx:1884
+vcl/source/control/field2.cxx:2228
     _Bool ImplTimeProcessKeyInput(const class KeyEvent &,_Bool,_Bool,enum TimeFieldFormat,const class LocaleDataWrapper &)
-    const class LocaleDataWrapper & rLocaleDataWrapper
-    ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:1024
+    _Bool bDuration
+    IsDuration()
+vcl/source/control/field.cxx:916
     _Bool ImplMetricProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:1024
+vcl/source/control/field.cxx:916
     _Bool ImplMetricProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     _Bool bUseThousandSep
     IsUseThousandSep()
-vcl/source/control/field.cxx:1820
-    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
-    const class LocaleDataWrapper & rWrapper
-    ImplGetLocaleDataWrapper()
-vcl/source/control/field.cxx:1820
+vcl/source/control/field.cxx:1712
     _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
     _Bool bUseThousandSep
     IsUseThousandSep()
-vcl/source/control/field.cxx:1827
+vcl/source/control/field.cxx:1712
+    _Bool ImplCurrencyProcessKeyInput(const class KeyEvent &,_Bool,const class LocaleDataWrapper &)
+    const class LocaleDataWrapper & rWrapper
+    ImplGetLocaleDataWrapper()
+vcl/source/control/field.cxx:1719
     _Bool ImplCurrencyGetValue(const class rtl::OUString &,long &,unsigned short,const class LocaleDataWrapper &)
     const class LocaleDataWrapper & rWrapper
     ImplGetLocaleDataWrapper()
@@ -1082,7 +1074,7 @@ vcl/source/edit/vclmedit.cxx:99
     void ImpVclMEdit::Enable(_Bool)
     _Bool bEnable
     IsEnabled()
-vcl/unx/gtk3/gtk3gtkinst.cxx:9096
+vcl/unx/gtk3/gtk3gtkinst.cxx:9108
     _Bool (anonymous namespace)::CompareGtkTreePath::operator()(const struct _GtkTreePath *,const struct _GtkTreePath *) const
     const struct _GtkTreePath * lhs
     Compare()
