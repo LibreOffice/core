@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sm" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Math.FormulaDocument">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Math.FormulaDocument"
+    constructor="Math_FormulaDocument_get_implementation">
     <service name="com.sun.star.formula.FormulaProperties"/>
   </implementation>
   <implementation name="com.sun.star.comp.Math.XMLContentExporter"
