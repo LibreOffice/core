@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-21 21:30:38 using:
+ Generated on 2020-07-25 14:55:53 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,6 +65,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -111,7 +112,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
@@ -137,7 +137,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
-#include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
