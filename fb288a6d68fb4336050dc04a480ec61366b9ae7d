@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20dcc22_4920db04",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T10:37:47Z",
+      "side": 1,
+      "message": "We can also include sort in the InsertValues method as it gets called multiple times.\nFor that we will need to define Sorter everytime inside the InsertValues method, is that acceptable from runtime point of view ?",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 21
+      },
+      "revId": "fb288a6d68fb4336050dc04a480ec61366b9ae7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
