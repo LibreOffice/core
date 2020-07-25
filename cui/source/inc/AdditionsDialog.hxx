@@ -38,6 +38,7 @@ struct AdditionsItem
         , m_xImageDownloadNumber(m_xBuilder->weld_image("imageDownloadNumber"))
         , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
         , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
+        , m_pParentDialog(nullptr)
     {
         m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     }
