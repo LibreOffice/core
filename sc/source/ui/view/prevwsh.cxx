@@ -39,6 +39,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewfac.hxx>
+#include <uno/current_context.hxx>
 
 #include <drwlayer.hxx>
 #include <prevwsh.hxx>
@@ -916,6 +917,14 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
 
 void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq)
 {
+    if (auto xContext = css::uno::getCurrentContext())
+    {
+        // tdf#130559: don't export preview view data if active
+        bool bNoPreviewData = false;
+        xContext->getValueByName("NoPreviewData") >>= bNoPreviewData;
+        if (bNoPreviewData)
+            return;
+    }
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
     sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
