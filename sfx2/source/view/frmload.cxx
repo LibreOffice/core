@@ -696,7 +696,13 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // ensure the ID of the to-be-created view is in the descriptor, if possible
         const SfxInterfaceId nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
         const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
-        const OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
+        OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
+        if (sViewName == "PrintPreview")
+        {
+            // tdf#130559: don't try to create preview shell in the loader
+            assert(nViewNo > 0); // At least "Default" at index 0 is also available
+            sViewName = xDoc->GetFactory().GetViewFactory().GetAPIViewName();
+        }
 
         // plug the document into the frame
         Reference<XController2> xController =
