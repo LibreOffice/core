@@ -16,6 +16,24 @@
       "revId": "c4b5e5eabe74989118fb87fda1411758a9f4a9aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d7c5832_c3a834df",
+        "filename": "include/svx/gallerybinaryengine.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-25T07:44:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05175573_5907f11b",
+      "revId": "c4b5e5eabe74989118fb87fda1411758a9f4a9aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "22d7a3718e17be919be7b004482c2b480a49ec1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b540fb2a_1444ec2b",
+        "filename": "include/svx/galleryobjectcollection.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-07-25T07:44:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9edb4d02_372b19bc",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "22d7a3718e17be919be7b004482c2b480a49ec1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
