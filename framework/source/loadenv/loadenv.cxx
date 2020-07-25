@@ -34,6 +34,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 
@@ -1154,7 +1155,11 @@ bool LoadEnv::impl_loadContent()
     }
     else if (xSyncLoader.is())
     {
-        bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
+        bool bResult;
+        {
+            const css::uno::ContextLayer layer(comphelper::NewFlagContext("NoPreviewData"));
+            bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
+        }
         // react for the result here, so the outside waiting
         // code can ask for it later.
         impl_setResult(bResult);
