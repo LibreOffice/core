@@ -66,24 +66,7 @@ static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >
         return true; // allow to create a storage based on empty stream
 }
 
-uno::Sequence< OUString > OStorageFactory::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.StorageFactory";
-    aRet[1] = "com.sun.star.comp.embed.StorageFactory";
-    return aRet;
-}
 
-OUString OStorageFactory::impl_staticGetImplementationName()
-{
-    return "com.sun.star.comp.embed.StorageFactory";
-}
-
-uno::Reference< uno::XInterface > OStorageFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
-}
 
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
@@ -285,7 +268,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
 OUString SAL_CALL OStorageFactory::getImplementationName()
 {
-    return impl_staticGetImplementationName();
+    return "com.sun.star.comp.embed.StorageFactory";
 }
 
 sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
@@ -295,7 +278,18 @@ sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
 {
-    return impl_staticGetSupportedServiceNames();
+    return  { "com.sun.star.embed.StorageFactory",
+                "com.sun.star.comp.embed.StorageFactory" };
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+package_OStorageFactory_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<OStorageFactory> g_Instance(new OStorageFactory(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
