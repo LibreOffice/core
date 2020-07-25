@@ -305,7 +305,7 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if (!m_xResPopupMenu)
     {
-        m_xBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", ""));
+        m_xBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/convertmenu.ui", ""));
         m_xResPopupMenu = m_xBuilder->get_menu("menu");
         updateImagesPopupMenu(m_xResPopupMenu);
     }

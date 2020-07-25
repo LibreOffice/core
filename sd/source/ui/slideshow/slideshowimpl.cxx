@@ -1933,7 +1933,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     if( !mbWasPaused )
         pause();
 
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/slidecontextmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/simpress/ui/slidecontextmenu.ui", "");
     VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
 
     // Adding button to display if in Pen  mode

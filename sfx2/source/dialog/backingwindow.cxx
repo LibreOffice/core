@@ -71,7 +71,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     maButtonsTextColor(Color(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get())),
     mbInitControls( false )
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
+    m_pUIBuilder.reset(new VclBuilder(this, AllSettings::GetUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
 
     get(mpOpenButton, "open_all");
     get(mpRemoteButton, "open_remote");

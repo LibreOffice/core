@@ -74,7 +74,7 @@ TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXM
     , IContext()
 {
     ImplInit(pParent, 0);
-    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID) );
+    m_pUIBuilder.reset( new VclBuilder(this, AllSettings::GetUIRootDir(), rUIXMLDescription, rID) );
     set_hexpand(true);
     set_vexpand(true);
     set_expand(true);

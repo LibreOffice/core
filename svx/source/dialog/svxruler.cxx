@@ -3322,7 +3322,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         }
         else
         {
-            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rulermenu.ui", "");
+            VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rulermenu.ui", "");
             VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
             aMenu->SetSelectHdl(LINK(this, SvxRuler, MenuSelect));
             FieldUnit eUnit = GetUnit();

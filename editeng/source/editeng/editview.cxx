@@ -906,7 +906,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     if ( !(xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true )) )
         return;
 
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "editeng/ui/spellmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "editeng/ui/spellmenu.ui", "");
     VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
     const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
     PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
