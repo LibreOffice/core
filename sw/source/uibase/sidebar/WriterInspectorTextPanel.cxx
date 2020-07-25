@@ -178,7 +178,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
             {
                 const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
                 svx::sidebar::TreeNode aTemp;
-                // Already defined in "Default Formatting" or "Character Styles" or any child Paragraph Style ?
+                // Already defined in "Direct Formatting" or "Character Styles" or any child Paragraph Style ?
                 if (aIsDefined[sPropName])
                     aTemp.isGrey = true;
                 aIsDefined[sPropName] = true;
@@ -205,7 +205,7 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     Display Order :-
     PARAGRAPH STYLE
     CHARACTER STYLE
-    DEFAULT FORMATTING
+    DIRECT FORMATTING
     */
     aStore.push_back(aParaNode);
     aStore.push_back(aCharNode);
