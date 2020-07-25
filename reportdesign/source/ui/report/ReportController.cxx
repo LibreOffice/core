@@ -234,29 +234,12 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
 
 OUString SAL_CALL OReportController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-
-OUString OReportController::getImplementationName_Static()
-{
     return "com.sun.star.report.comp.ReportDesign";
-}
-
-Sequence< OUString> OReportController::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSupported { "com.sun.star.sdb.ReportDesign" };
-    return aSupported;
 }
 
 Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
-}
-
-Reference< XInterface > OReportController::create(Reference< XComponentContext > const & xContext)
-{
-    return *(new OReportController(xContext));
+    return { "com.sun.star.sdb.ReportDesign" };
 }
 
 #define PROPERTY_ID_ZOOMVALUE   1
@@ -4362,4 +4345,13 @@ void OReportController::addUndoAction( std::unique_ptr<SfxUndoAction> i_pAction 
     InvalidateFeature( SID_UNDO );
     InvalidateFeature( SID_REDO );
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OReportController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new OReportController(context));
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

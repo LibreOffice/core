@@ -61,7 +61,7 @@ namespace rptui
 
     OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  )
     {
-        return getImplementationName_Static();
+        return "com.sun.star.comp.report.DefaultComponentInspectorModel";
     }
 
     sal_Bool SAL_CALL DefaultComponentInspectorModel::supportsService( const OUString& ServiceName )
@@ -71,25 +71,8 @@ namespace rptui
 
     Sequence< OUString > SAL_CALL DefaultComponentInspectorModel::getSupportedServiceNames(  )
     {
-        return getSupportedServiceNames_static();
+        return { "com.sun.star.report.inspection.DefaultComponentInspectorModel" };
     }
-
-    OUString DefaultComponentInspectorModel::getImplementationName_Static(  )
-    {
-        return "com.sun.star.comp.report.DefaultComponentInspectorModel";
-    }
-
-    Sequence< OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  )
-    {
-        Sequence< OUString > aSupported { "com.sun.star.report.inspection.DefaultComponentInspectorModel" };
-        return aSupported;
-    }
-
-    Reference< XInterface > DefaultComponentInspectorModel::create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *(new DefaultComponentInspectorModel( _rxContext ));
-    }
-
 
     Sequence< Any > SAL_CALL DefaultComponentInspectorModel::getHandlerFactories()
     {
@@ -221,5 +204,11 @@ namespace rptui
 
 } // namespace rptui
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_DefaultComponentInspectorModel_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptui::DefaultComponentInspectorModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

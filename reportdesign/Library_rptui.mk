@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,rptui,\
     reportdesign/source/ui/inspection/ReportComponentHandler \
     reportdesign/source/ui/misc/ColorListener \
     reportdesign/source/ui/misc/FunctionHelper \
-    reportdesign/source/ui/misc/rptuiservices \
     reportdesign/source/ui/misc/RptUndo \
     reportdesign/source/ui/misc/statusbarcontroller \
     reportdesign/source/ui/misc/UITools \
