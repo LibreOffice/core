@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -916,6 +917,10 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
 
 void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq)
 {
+    // tdf#130559: don't export preview view data if active
+    if (comphelper::IsContextFlagActive("NoPreviewData"))
+        return;
+
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
     sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());

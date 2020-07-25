@@ -81,6 +81,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <PropertySetMerger.hxx>
 
 #include <unotools/docinfohelper.hxx>
@@ -1735,7 +1736,11 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     {
         uno::Reference<container::XIndexAccess> xIndexAccess;
         xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
-        xIndexAccess = xViewDataSupplier->getViewData();
+        {
+            // tdf#130559: don't export preview view data if active
+            css::uno::ContextLayer layer(comphelper::NewFlagContext("NoPreviewData"));
+            xIndexAccess = xViewDataSupplier->getViewData();
+        }
         bool bAdd = false;
         uno::Any aAny;
         if(xIndexAccess.is() && xIndexAccess->hasElements() )
