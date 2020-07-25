@@ -154,10 +154,21 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 {
     Construct( &pViewFrame->GetWindow() );
 
-    SfxShell::SetContextBroadcasterEnabled(true);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
-    SfxShell::BroadcastContextForActivation(true);
-
+    try
+    {
+        SfxShell::SetContextBroadcasterEnabled(true);
+        SfxShell::SetContextName(
+            vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
+        SfxShell::BroadcastContextForActivation(true);
+    }
+    catch (const css::uno::RuntimeException& e)
+    {
+        // tdf#130559: allow BackingComp to fail adding listener when opening document
+        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(e.Context, css::uno::UNO_QUERY);
+        if (!xServiceInfo || !xServiceInfo->supportsService("com.sun.star.frame.StartModule"))
+            throw;
+        SAL_WARN("sc.ui", "Opening file from StartModule straight into print preview");
+    }
 
     auto& pNotebookBar = pViewFrame->GetWindow().GetSystemWindow()->GetNotebookBar();
     if (pNotebookBar)
