@@ -16,6 +16,24 @@
       "revId": "63c28a21fdd820e25ffd6750d5103c9a957e2af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "502b06d7_02b7767b",
+        "filename": "i18npool/source/collator/data/ja_charset.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-07-25T21:48:47Z",
+      "side": 1,
+      "message": "why the difference isn\u0027t",
+      "parentUuid": "907c408e_00208d53",
+      "revId": "63c28a21fdd820e25ffd6750d5103c9a957e2af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
