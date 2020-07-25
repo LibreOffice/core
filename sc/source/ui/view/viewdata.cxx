@@ -4149,7 +4149,8 @@ void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
     }
 
     ScViewDataTable* pViewTable = maTabData[nForTab].get();
-    assert(pViewTable);
+    if (!pViewTable)
+        return;
 
     bool bConvertToFreezeX = false;
     bool bConvertToFreezeY = false;
