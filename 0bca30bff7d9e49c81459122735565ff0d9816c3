@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0dc34295_1289dc44",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T05:11:25Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 221,
+        "startChar": 43,
+        "endLine": 221,
+        "endChar": 50
+      },
+      "revId": "0bca30bff7d9e49c81459122735565ff0d9816c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f57d04ff_9295451f",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 10
