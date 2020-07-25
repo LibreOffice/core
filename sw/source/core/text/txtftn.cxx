@@ -783,10 +783,11 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "NewFootnotePortion with unswapped frame" );
 
-    if( !m_pFrame->IsFootnoteAllowed() )
-        return nullptr;
-
     SwTextFootnote  *pFootnote = static_cast<SwTextFootnote*>(pHint);
+
+    if( !m_pFrame->IsFootnoteAllowed() )
+        return new SwFootnotePortion("", pFootnote);
+
     const SwFormatFootnote& rFootnote = pFootnote->GetFootnote();
     SwDoc *const pDoc = &m_pFrame->GetDoc();
 
