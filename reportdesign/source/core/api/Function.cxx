@@ -25,11 +25,6 @@ namespace reportdesign
 
     using namespace com::sun::star;
 
-uno::Reference< uno::XInterface > OFunction::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OFunction(xContext));
-}
-
 
 OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
 :FunctionBase(m_aMutex)
@@ -52,27 +47,14 @@ void SAL_CALL OFunction::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-OUString OFunction::getImplementationName_Static(  )
+OUString SAL_CALL OFunction::getImplementationName(  )
 {
     return "com.sun.star.comp.report.OFunction";
 }
 
-
-OUString SAL_CALL OFunction::getImplementationName(  )
-{
-    return getImplementationName_Static();
-}
-
-uno::Sequence< OUString > OFunction::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { SERVICE_FUNCTION };
-
-    return aServices;
-}
-
 uno::Sequence< OUString > SAL_CALL OFunction::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
+    return { SERVICE_FUNCTION };
 }
 
 sal_Bool SAL_CALL OFunction::supportsService(const OUString& ServiceName)
@@ -196,6 +178,13 @@ void SAL_CALL OFunction::setParent( const uno::Reference< uno::XInterface >& Par
 
 
 } // namespace reportdesign
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OFunction_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new reportdesign::OFunction(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,7 +66,6 @@ $(eval $(call gb_Library_add_exception_objects,rpt,\
     reportdesign/source/core/api/ReportEngineJFree \
     reportdesign/source/core/api/ReportVisitor \
     reportdesign/source/core/api/Section \
-    reportdesign/source/core/api/services \
     reportdesign/source/core/api/Shape \
     reportdesign/source/core/api/Tools \
     reportdesign/source/core/misc/conditionalexpression \

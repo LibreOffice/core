@@ -107,33 +107,17 @@ void SAL_CALL OShape::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OShape(xContext));
-}
-
-
-OUString OShape::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.Shape";
-}
-
 
 OUString SAL_CALL OShape::getImplementationName(  )
 {
-    return getImplementationName_Static();
-}
-
-uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  )
-{
-    return { SERVICE_SHAPE };
+    return "com.sun.star.comp.report.Shape";
 }
 
 uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  )
 {
     if(m_sServiceName.isEmpty())
     {
-        return getSupportedServiceNames_Static();
+        return { SERVICE_SHAPE };
     }
     else
     {
@@ -497,6 +481,13 @@ void SAL_CALL OShape::setCustomShapeGeometry( const uno::Sequence< beans::Proper
 
 
 }// namespace reportdesign
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OShape_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new reportdesign::OShape(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
