@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "907c408e_00208d53",
+        "filename": "i18npool/source/collator/data/ja_charset.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-07-25T21:47:55Z",
+      "side": 1,
+      "message": "I don\u0027t know why isn\u0027t the difference detected from this line?",
+      "revId": "63c28a21fdd820e25ffd6750d5103c9a957e2af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
