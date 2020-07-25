@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -78,6 +80,10 @@ namespace sfx2
         // XSingleServiceFactory
         virtual Reference< XInterface > SAL_CALL createInstance(  ) override;
         virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) override;
+
+        static css::uno::Reference<css::uno::XInterface> create(
+            const css::uno::Sequence<css::uno::Any> & rxArgs,
+            std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -142,7 +148,18 @@ namespace sfx2
     }
 
 
-    Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments )
+    Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >&  _rArguments )
+    {
+        return create(_rArguments,
+            [&](SfxModelFlags _nCreationFlags)
+            {
+                return m_pComponentFactoryFunc(m_xServiceFactory, _nCreationFlags).get();
+            });
+    }
+
+    css::uno::Reference<css::uno::XInterface> SfxModelFactory::create(
+            const css::uno::Sequence<css::uno::Any> & _rArguments,
+            std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
         const bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", false );
@@ -154,7 +171,7 @@ namespace sfx2
             |   ( bScriptSupport ? SfxModelFlags::NONE : SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS )
             |   ( bDocRecoverySupport ? SfxModelFlags::NONE : SfxModelFlags::DISABLE_DOCUMENT_RECOVERY );
 
-        Reference< XInterface > xInstance( (*m_pComponentFactoryFunc)( m_xServiceFactory, nCreationFlags ) );
+        Reference< XInterface > xInstance( creationFunc(nCreationFlags ) );
 
         // to mimic the behaviour of the default factory's createInstanceWithArguments, we initialize
         // the object with the given arguments, stripped by the three special ones
@@ -192,6 +209,13 @@ namespace sfx2
     Sequence< OUString > SAL_CALL SfxModelFactory::getSupportedServiceNames(  )
     {
         return m_aServiceNames;
+    }
+
+    css::uno::Reference<css::uno::XInterface> createSfxModelInstance(
+        const css::uno::Sequence<css::uno::Any> & rxArgs,
+        std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
+    {
+        return SfxModelFactory::create(rxArgs, creationFunc);
     }
 
     Reference< XSingleServiceFactory > createSfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
