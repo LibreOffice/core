@@ -40,8 +40,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 class Button;
-class ImageButton;
-class FixedText;
 
 class CursorWrapper;
 
@@ -172,31 +170,34 @@ class SVXCORE_DLLPUBLIC DbGridControl : public svt::EditBrowseBox
 public:
 
     // NavigationBar
-
-    class SAL_DLLPRIVATE NavigationBar final : public Control
+    class SAL_DLLPRIVATE NavigationBar final : public InterimItemWindow
     {
-        class AbsolutePos final : public RecordItemWindow
+        class AbsolutePos final : public RecordItemWindowBase
         {
         public:
-            AbsolutePos(vcl::Window* pParent);
+            AbsolutePos(std::unique_ptr<weld::Entry> xEntry, NavigationBar* pBar);
 
             virtual bool DoKeyInput(const KeyEvent& rEvt) override;
             virtual void PositionFired(sal_Int64 nRecord) override;
+
+            weld::Entry* GetWidget() { return m_xWidget.get(); }
+        private:
+            VclPtr<NavigationBar> m_xParent;
         };
 
         friend class NavigationBar::AbsolutePos;
 
         //  additional controls
-        VclPtr<FixedText>    m_aRecordText;
-        VclPtr<AbsolutePos>  m_aAbsolute;            // absolute positioning
-        VclPtr<FixedText>    m_aRecordOf;
-        VclPtr<FixedText>    m_aRecordCount;
+        std::unique_ptr<weld::Label> m_xRecordText;
+        std::unique_ptr<AbsolutePos> m_xAbsolute;         // absolute positioning
+        std::unique_ptr<weld::Label> m_xRecordOf;
+        std::unique_ptr<weld::Label> m_xRecordCount;
 
-        VclPtr<ImageButton>  m_aFirstBtn;            // ImageButton for 'go to the first record'
-        VclPtr<ImageButton>  m_aPrevBtn;         // ImageButton for 'go to the previous record'
-        VclPtr<ImageButton>  m_aNextBtn;         // ImageButton for 'go to the next record'
-        VclPtr<ImageButton>  m_aLastBtn;         // ImageButton for 'go to the last record'
-        VclPtr<ImageButton>  m_aNewBtn;          // ImageButton for 'go to a new record'
+        std::unique_ptr<weld::Button> m_xFirstBtn;        // Button for 'go to the first record'
+        std::unique_ptr<weld::Button> m_xPrevBtn;         // Button for 'go to the previous record'
+        std::unique_ptr<weld::Button> m_xNextBtn;         // Button for 'go to the next record'
+        std::unique_ptr<weld::Button> m_xLastBtn;         // Button for 'go to the last record'
+        std::unique_ptr<weld::Button> m_xNewBtn;          // Button for 'go to a new record'
         sal_Int32            m_nCurrentPos;
 
         bool                 m_bPositioning;     // protect PositionDataSource against recursion
@@ -214,11 +215,13 @@ public:
         sal_uInt16 ArrangeControls();
 
     private:
+#if 0
         virtual void Resize() override;
         virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void StateChanged( StateChangedType nType ) override;
+#endif
 
-        DECL_LINK(OnClick, Button*, void);
+        DECL_LINK(OnClick, weld::Button&, void);
 
         void PositionDataSource(sal_Int32 nRecord);
     };

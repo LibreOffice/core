@@ -45,8 +45,6 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -274,8 +272,9 @@ void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt)
         m_pParent->DataSourcePropertyChanged(evt);
 }
 
-DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(vcl::Window* pParent)
-    : RecordItemWindow(pParent, false)
+DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(std::unique_ptr<weld::Entry> xEntry, NavigationBar* pBar)
+    : RecordItemWindowBase(std::move(xEntry))
+    , m_xParent(pBar)
 {
 }
 
@@ -283,17 +282,16 @@ bool DbGridControl::NavigationBar::AbsolutePos::DoKeyInput(const KeyEvent& rEvt)
 {
     if (rEvt.GetKeyCode() == KEY_TAB)
     {
-        GetParent()->GetParent()->GrabFocus();
+        m_xParent->GetParent()->GrabFocus();
         return true;
     }
-    return RecordItemWindow::DoKeyInput(rEvt);
+    return RecordItemWindowBase::DoKeyInput(rEvt);
 }
 
 void DbGridControl::NavigationBar::AbsolutePos::PositionFired(sal_Int64 nRecord)
 {
-    NavigationBar* pBar = static_cast<NavigationBar*>(GetParent());
-    pBar->PositionDataSource(nRecord);
-    pBar->InvalidateState(DbGridControlNavigationBarState::Absolute);
+    m_xParent->PositionDataSource(nRecord);
+    m_xParent->InvalidateState(DbGridControlNavigationBarState::Absolute);
 }
 
 void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
@@ -308,70 +306,53 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 }
 
 DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
-          :Control(pParent, 0)
-          ,m_aRecordText(VclPtr<FixedText>::Create(this, WB_VCENTER))
-          ,m_aAbsolute(VclPtr<DbGridControl::NavigationBar::AbsolutePos>::Create(this))
-          ,m_aRecordOf(VclPtr<FixedText>::Create(this, WB_VCENTER))
-          ,m_aRecordCount(VclPtr<FixedText>::Create(this, WB_VCENTER))
-          ,m_aFirstBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_aPrevBtn(VclPtr<ImageButton>::Create(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_aNextBtn(VclPtr<ImageButton>::Create(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_aLastBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_aNewBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_nCurrentPos(-1)
-          ,m_bPositioning(false)
+    : InterimItemWindow(pParent, "svx/ui/navigationbar.ui", "NavigationBar")
+    , m_xRecordText(m_xBuilder->weld_label("recordtext"))
+    , m_xAbsolute(new DbGridControl::NavigationBar::AbsolutePos(m_xBuilder->weld_entry("entry-noframe"), this))
+    , m_xRecordOf(m_xBuilder->weld_label("recordof"))
+    , m_xRecordCount(m_xBuilder->weld_label("recordcount"))
+    , m_xFirstBtn(m_xBuilder->weld_button("first"))
+    , m_xPrevBtn(m_xBuilder->weld_button("prev"))
+    , m_xNextBtn(m_xBuilder->weld_button("next"))
+    , m_xLastBtn(m_xBuilder->weld_button("last"))
+    , m_xNewBtn(m_xBuilder->weld_button("new"))
+    , m_nCurrentPos(-1)
+    , m_bPositioning(false)
 {
-    m_aFirstBtn->SetSymbol(SymbolType::FIRST);
-    m_aPrevBtn->SetSymbol(SymbolType::PREV);
-    m_aNextBtn->SetSymbol(SymbolType::NEXT);
-    m_aLastBtn->SetSymbol(SymbolType::LAST);
-    m_aNewBtn->SetModeImage(static_cast<DbGridControl*>(pParent)->GetImage(EditBrowseBox::NEW));
+    vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
+    m_xAbsolute->set_font(aApplFont);
+    aApplFont.SetTransparent(true);
+    m_xRecordText->set_font(aApplFont);
+    m_xRecordOf->set_font(aApplFont);
+    m_xRecordCount->set_font(aApplFont);
 
-    m_aFirstBtn->SetHelpId(HID_GRID_TRAVEL_FIRST);
-    m_aPrevBtn->SetHelpId(HID_GRID_TRAVEL_PREV);
-    m_aNextBtn->SetHelpId(HID_GRID_TRAVEL_NEXT);
-    m_aLastBtn->SetHelpId(HID_GRID_TRAVEL_LAST);
-    m_aNewBtn->SetHelpId(HID_GRID_TRAVEL_NEW);
-    m_aAbsolute->SetHelpId(HID_GRID_TRAVEL_ABSOLUTE);
-    m_aRecordCount->SetHelpId(HID_GRID_NUMBEROFRECORDS);
+    m_xFirstBtn->set_help_id(HID_GRID_TRAVEL_FIRST);
+    m_xPrevBtn->set_help_id(HID_GRID_TRAVEL_PREV);
+    m_xNextBtn->set_help_id(HID_GRID_TRAVEL_NEXT);
+    m_xLastBtn->set_help_id(HID_GRID_TRAVEL_LAST);
+    m_xNewBtn->set_help_id(HID_GRID_TRAVEL_NEW);
+    m_xAbsolute->set_help_id(HID_GRID_TRAVEL_ABSOLUTE);
+    m_xRecordCount->set_help_id(HID_GRID_NUMBEROFRECORDS);
 
     // set handlers for buttons
-    m_aFirstBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aPrevBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aNextBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aLastBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
-    m_aNewBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
+    m_xFirstBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
+    m_xPrevBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
+    m_xNextBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
+    m_xLastBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
+    m_xNewBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
 
-    m_aRecordText->SetText(SvxResId(RID_STR_REC_TEXT));
-    m_aRecordOf->SetText(SvxResId(RID_STR_REC_FROM_TEXT));
-    m_aRecordCount->SetText(OUString('?'));
+    m_xRecordText->set_label(SvxResId(RID_STR_REC_TEXT));
+    m_xRecordOf->set_label(SvxResId(RID_STR_REC_FROM_TEXT));
+    m_xRecordCount->set_label(OUString('?'));
 
-    m_aFirstBtn->Disable();
-    m_aPrevBtn->Disable();
-    m_aNextBtn->Disable();
-    m_aLastBtn->Disable();
-    m_aNewBtn->Disable();
-    m_aRecordText->Disable();
-    m_aRecordOf->Disable();
-    m_aRecordCount->Disable();
-    m_aAbsolute->Disable();
-
+#if 0
     AllSettings aSettings = m_aNextBtn->GetSettings();
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);
     m_aNextBtn->SetSettings(aSettings, true);
     m_aPrevBtn->SetSettings(aSettings, true);
-
-    m_aFirstBtn->Show();
-    m_aPrevBtn->Show();
-    m_aNextBtn->Show();
-    m_aLastBtn->Show();
-    m_aNewBtn->Show();
-    m_aRecordText->Show();
-    m_aRecordOf->Show();
-    m_aRecordCount->Show();
-    m_aAbsolute->Show();
+#endif
 }
 
 DbGridControl::NavigationBar::~NavigationBar()
@@ -381,169 +362,39 @@ DbGridControl::NavigationBar::~NavigationBar()
 
 void DbGridControl::NavigationBar::dispose()
 {
-    m_aRecordText.disposeAndClear();
-    m_aAbsolute.disposeAndClear();
-    m_aRecordOf.disposeAndClear();
-    m_aRecordCount.disposeAndClear();
-    m_aFirstBtn.disposeAndClear();
-    m_aPrevBtn.disposeAndClear();
-    m_aNextBtn.disposeAndClear();
-    m_aLastBtn.disposeAndClear();
-    m_aNewBtn.disposeAndClear();
-    Control::dispose();
-}
-
-namespace
-{
-    void SetPosAndSize(Button& _rButton,Point& _rPos,const Size& _rSize)
-    {
-        _rButton.SetPosPixel( _rPos );
-        _rButton.SetSizePixel( _rSize );
-        _rPos.AdjustX(static_cast<sal_uInt16>(_rSize.Width()) );
-    }
+    m_xRecordText.reset();
+    m_xAbsolute.reset();
+    m_xRecordOf.reset();
+    m_xRecordCount.reset();
+    m_xFirstBtn.reset();
+    m_xPrevBtn.reset();
+    m_xNextBtn.reset();
+    m_xLastBtn.reset();
+    m_xNewBtn.reset();
+    InterimItemWindow::dispose();
 }
 
 sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
-    // positioning of the controls
-    // calculate base size
-    tools::Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
-    long nH = aRect.GetSize().Height();
-
-    long nW = GetParent()->GetOutputSizePixel().Width();
-    Size aBorder = LogicToPixel(Size(2, 2), MapMode(MapUnit::MapAppFont));
-    aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
-    sal_uInt16      nX = 1;
-    sal_uInt16      nY = 0;
-
-    {
-        vcl::Font aApplFont(GetSettings().GetStyleSettings().GetToolFont());
-        m_aAbsolute->set_font(aApplFont);
-        aApplFont.SetTransparent( true );
-        m_aRecordText->SetControlFont( aApplFont );
-        m_aRecordOf->SetControlFont( aApplFont );
-        m_aRecordCount->SetControlFont( aApplFont );
-    }
-
-    // set size and position of the control
-    OUString aText = m_aRecordText->GetText();
-    long nTextWidth = m_aRecordText->GetTextWidth(aText);
-    m_aRecordText->SetPosPixel(Point(nX,nY));
-    m_aRecordText->SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    // count an extra hairspace (U+200A) left and right
-    const OUString sevenDigits(OUString::number(6000000));
-    const OUString hairSpace(u'\x200A');
-    OUString textPattern = hairSpace + sevenDigits + hairSpace;
-    nTextWidth = m_aAbsolute->GetTextWidth(textPattern);
-    m_aAbsolute->SetPosPixel(Point(nX,nY));
-    m_aAbsolute->SetSizePixel(Size(nTextWidth, nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    aText      = m_aRecordOf->GetText();
-    nTextWidth = m_aRecordOf->GetTextWidth(aText);
-    m_aRecordOf->SetPosPixel(Point(nX,nY));
-    m_aRecordOf->SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    textPattern = sevenDigits + " * (" + sevenDigits + ")";
-    nTextWidth = m_aRecordCount->GetTextWidth(textPattern);
-    m_aRecordCount->SetPosPixel(Point(nX,nY));
-    m_aRecordCount->SetSizePixel(Size(nTextWidth,nH));
-    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
-
-    Point aButtonPos(nX,nY);
-    const Size  aButtonSize(nH,nH);
-    SetPosAndSize(*m_aFirstBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aPrevBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aNextBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aLastBtn, aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aNewBtn, aButtonPos, aButtonSize);
-
-    nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
-
-    nW = std::max(nW - GetSettings().GetStyleSettings().GetScrollBarSize(), 0L);
-
-    if (nX > nW)
-    {
-        aButtonPos.setX( nW-nH );
-        m_aNewBtn->SetPosPixel(aButtonPos);
-        aButtonPos.AdjustX( -nH );
-        m_aLastBtn->SetPosPixel(aButtonPos);
-        aButtonPos.AdjustX( -nH );
-        m_aNextBtn->SetPosPixel(aButtonPos);
-        aButtonPos.AdjustX( -nH );
-        m_aPrevBtn->SetPosPixel(aButtonPos);
-        aButtonPos.AdjustX( -nH );
-        m_aFirstBtn->SetPosPixel(aButtonPos);
-
-        auto nDiff = nX - nW;
-
-        Size aSize = m_aAbsolute->GetSizePixel();
-        aSize.AdjustWidth( -(nDiff/3.0) );
-        m_aAbsolute->SetSizePixel(aSize);
-
-        aSize = m_aRecordCount->GetSizePixel();
-        aSize.AdjustWidth( -(nDiff/3.0*2) );
-        m_aRecordCount->SetSizePixel(aSize);
-
-        Point aPos = m_aRecordOf->GetPosPixel();
-        aPos.AdjustX( -(nDiff/3.0) );
-        m_aRecordOf->SetPosPixel(aPos);
-
-        aPos = m_aRecordCount->GetPosPixel();
-        aPos.AdjustX( -(nDiff/3.0) );
-        m_aRecordCount->SetPosPixel(aPos);
-
-        vcl::Window* pWindows[] =
-        {
-            m_aRecordText.get(),
-            m_aAbsolute.get(),
-            m_aRecordOf.get(),
-            m_aRecordCount.get(),
-            m_aFirstBtn.get(),
-            m_aPrevBtn.get(),
-            m_aNextBtn.get(),
-            m_aLastBtn.get(),
-            m_aNewBtn.get()
-        };
-
-        for (vcl::Window* pWindow : pWindows)
-        {
-            if (pWindow->GetPosPixel().X() < 0)
-                pWindow->SetSizePixel(Size(0, nH));
-            aSize = pWindow->GetSizePixel();
-            auto nExcess = (pWindow->GetPosPixel().X() + aSize.Width()) - nW;
-            if (nExcess > 0)
-            {
-                aSize.AdjustWidth( -nExcess );
-                pWindow->SetSizePixel(aSize);
-            }
-        }
-
-        nX = nW;
-    }
-
-    return nX;
+    return m_xContainer->get_preferred_size().Width();
 }
 
-IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
+IMPL_LINK(DbGridControl::NavigationBar, OnClick, weld::Button&, rButton, void)
 {
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
     if (pParent->m_aMasterSlotExecutor.IsSet())
     {
         bool lResult = false;
-        if (pButton == m_aFirstBtn.get())
+        if (&rButton == m_xFirstBtn.get())
             lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::First);
-        else if( pButton == m_aPrevBtn.get() )
+        else if( &rButton == m_xPrevBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Prev);
-        else if( pButton == m_aNextBtn.get() )
+        else if( &rButton == m_xNextBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Next);
-        else if( pButton == m_aLastBtn.get() )
+        else if( &rButton == m_xLastBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Last);
-        else if( pButton == m_aNewBtn.get() )
+        else if( &rButton == m_xNewBtn.get() )
             lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::New);
 
         if (lResult)
@@ -551,15 +402,15 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
             return;
     }
 
-    if (pButton == m_aFirstBtn.get())
+    if (&rButton == m_xFirstBtn.get())
         pParent->MoveToFirst();
-    else if( pButton == m_aPrevBtn.get() )
+    else if( &rButton == m_xPrevBtn.get() )
         pParent->MoveToPrev();
-    else if( pButton == m_aNextBtn.get() )
+    else if( &rButton == m_xNextBtn.get() )
         pParent->MoveToNext();
-    else if( pButton == m_aLastBtn.get() )
+    else if( &rButton == m_xLastBtn.get() )
         pParent->MoveToLast();
-    else if( pButton == m_aNewBtn.get() )
+    else if( &rButton == m_xNewBtn.get() )
         pParent->AppendNew();
 }
 
@@ -652,40 +503,40 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
 {
     bool bAvailable = GetState(nWhich);
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
-    vcl::Window* pWnd = nullptr;
+    weld::Widget* pWnd = nullptr;
     switch (nWhich)
     {
         case DbGridControlNavigationBarState::First:
-            pWnd = m_aFirstBtn.get();
+            pWnd = m_xFirstBtn.get();
             break;
         case DbGridControlNavigationBarState::Prev:
-            pWnd = m_aPrevBtn.get();
+            pWnd = m_xPrevBtn.get();
             break;
         case DbGridControlNavigationBarState::Next:
-            pWnd = m_aNextBtn.get();
+            pWnd = m_xNextBtn.get();
             break;
         case DbGridControlNavigationBarState::Last:
-            pWnd = m_aLastBtn.get();
+            pWnd = m_xLastBtn.get();
             break;
         case DbGridControlNavigationBarState::New:
-            pWnd = m_aNewBtn.get();
+            pWnd = m_xNewBtn.get();
             break;
         case DbGridControlNavigationBarState::Absolute:
-            pWnd = m_aAbsolute.get();
+            pWnd = m_xAbsolute->GetWidget();
             if (bAvailable)
-                m_aAbsolute->set_text(OUString::number(m_nCurrentPos + 1));
+                m_xAbsolute->set_text(OUString::number(m_nCurrentPos + 1));
             else
-                m_aAbsolute->set_text(OUString());
+                m_xAbsolute->set_text(OUString());
             break;
         case DbGridControlNavigationBarState::Text:
-            pWnd = m_aRecordText.get();
+            pWnd = m_xRecordText.get();
             break;
         case DbGridControlNavigationBarState::Of:
-            pWnd = m_aRecordOf.get();
+            pWnd = m_xRecordOf.get();
             break;
         case DbGridControlNavigationBarState::Count:
         {
-            pWnd = m_aRecordCount.get();
+            pWnd = m_xRecordCount.get();
             OUString aText;
             if (bAvailable)
             {
@@ -709,30 +560,27 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
             {
                 OUString aExtendedInfo = aText + " (" +
                     OUString::number(pParent->GetSelectRowCount()) + ")";
-                pWnd->SetText(aExtendedInfo);
+                m_xRecordCount->set_label(aExtendedInfo);
             }
             else
-                pWnd->SetText(aText);
+                m_xRecordCount->set_label(aText);
 
             pParent->SetRealRowCount(aText);
         }   break;
         default: break;
     }
     DBG_ASSERT(pWnd, "no window");
-    if (pWnd && (pWnd->IsEnabled() != bAvailable))
+    if (pWnd && (pWnd->get_sensitive() != bAvailable))
+    {
         // this "pWnd->IsEnabled() != bAvailable" is a little hack : Window::Enable always generates a user
         // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
         // do this check.
         // For further explanation see Bug 69900.
-        pWnd->Enable(bAvailable);
+        pWnd->set_sensitive(bAvailable);
+    }
 }
 
-void DbGridControl::NavigationBar::Resize()
-{
-    Control::Resize();
-    ArrangeControls();
-}
-
+#if 0
 void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
@@ -797,6 +645,7 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
         default:;
     }
 }
+#endif
 
 DbGridRow::DbGridRow():m_eStatus(GridRowStatus::Clean), m_bIsNew(true)
 {}
