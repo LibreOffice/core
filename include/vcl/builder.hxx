@@ -463,8 +463,6 @@ public:
     virtual         ~VclBuilderContainer();
     void            disposeBuilder();
 
-    static OUString getUIRootDir();
-
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);

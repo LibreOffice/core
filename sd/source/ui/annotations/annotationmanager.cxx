@@ -1081,7 +1081,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
         sUIFile = "modules/simpress/ui/annotationmenu.ui";
     else
         sUIFile = "modules/simpress/ui/annotationtagmenu.ui";
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), sUIFile, "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), sUIFile, "");
     VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
 
     SvtUserOptions aUserOptions;

@@ -2746,7 +2746,7 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 
 void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
 {
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rowsmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
     PreExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu );
@@ -2789,7 +2789,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
             else if (canCopyCellText(nRow, nColId))
             {
-                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/cellmenu.ui", "");
+                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/cellmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                     copyCellText(nRow, nColId);

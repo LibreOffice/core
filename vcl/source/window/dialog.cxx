@@ -543,7 +543,7 @@ void VclBuilderContainer::disposeBuilder()
         m_pUIBuilder->disposeBuilder();
 }
 
-OUString VclBuilderContainer::getUIRootDir()
+OUString AllSettings::GetUIRootDir()
 {
     OUString sShareLayer("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/");
     rtl::Bootstrap::expandMacros(sShareLayer);

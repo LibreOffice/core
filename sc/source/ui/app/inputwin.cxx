@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
     EndSelection();
     if (nCurID == SID_INPUT_SUM)
     {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/autosum.ui", "");
+        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/scalc/ui/autosum.ui", "");
         VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
         aPopMenu->SetSelectHdl(LINK(this, ScInputWindow, MenuHdl));
         aPopMenu->Execute(this, GetItemRect(SID_INPUT_SUM), PopupMenuFlags::NoMouseUpClose);

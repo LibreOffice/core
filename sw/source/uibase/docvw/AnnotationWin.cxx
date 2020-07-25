@@ -73,7 +73,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
     : Window(&rEditWin)
-    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
+    , maBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , mnEventId(nullptr)

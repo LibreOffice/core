@@ -101,7 +101,7 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/xmlsecstatmenu.ui", "");
+        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/xmlsecstatmenu.ui", "");
         VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
         if (aPopupMenu->Execute(&GetStatusBar(), rCEvt.GetMousePosPixel()))
         {

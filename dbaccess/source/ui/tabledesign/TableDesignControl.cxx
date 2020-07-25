@@ -109,7 +109,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 long nSelectRowCount = GetSelectRowCount();
                 aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), nSelectRowCount != 0);

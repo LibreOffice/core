@@ -78,7 +78,7 @@ sal_uInt16 SelectionTypePopup::state_to_id(sal_uInt16 nState) const
 }
 
 SelectionTypePopup::SelectionTypePopup(sal_uInt16 nCurrent)
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/selectionmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/selectionmenu.ui", "")
     , m_xMenu(m_aBuilder.get_menu("menu"))
 {
     m_xMenu->CheckItem(state_to_id(nCurrent));

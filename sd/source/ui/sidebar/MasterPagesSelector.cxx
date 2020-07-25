@@ -209,7 +209,7 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
             aPosition = *pPos;
 
         // Setup the menu.
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), GetContextMenuUIFile(), "");
+        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), GetContextMenuUIFile(), "");
         VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
         FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
         if (pMenuWindow != nullptr)
