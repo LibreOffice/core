@@ -46,7 +46,7 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
 
 OUString SAL_CALL ReportComponentHandler::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.ReportComponentHandler";
 }
 
 sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& ServiceName )
@@ -56,24 +56,9 @@ sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& Servi
 
 uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.report.inspection.ReportComponentHandler" };
 }
 
-OUString ReportComponentHandler::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.ReportComponentHandler";
-}
-
-uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_static(  )
-{
-    uno::Sequence< OUString > aSupported { "com.sun.star.report.inspection.ReportComponentHandler" };
-    return aSupported;
-}
-
-uno::Reference< uno::XInterface > ReportComponentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
-{
-    return *(new ReportComponentHandler( _rxContext ));
-}
 // override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
@@ -201,6 +186,14 @@ sal_Bool SAL_CALL ReportComponentHandler::suspend(sal_Bool Suspend)
 
 
 } // namespace rptui
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_ReportComponentHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptui::ReportComponentHandler(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

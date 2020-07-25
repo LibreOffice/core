@@ -37,13 +37,6 @@ namespace rptui
     public:
         OStatusbarController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static();
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-        static css::uno::Reference< css::uno::XInterface >
-            create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-
     private:
         void SAL_CALL dispose() override;
         // XInterface

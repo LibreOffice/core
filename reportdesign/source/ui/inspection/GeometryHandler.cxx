@@ -218,7 +218,7 @@ GeometryHandler::~GeometryHandler()
 
 OUString SAL_CALL GeometryHandler::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.GeometryHandler";
 }
 
 sal_Bool SAL_CALL GeometryHandler::supportsService( const OUString& ServiceName )
@@ -228,24 +228,9 @@ sal_Bool SAL_CALL GeometryHandler::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL GeometryHandler::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.report.inspection.GeometryHandler" };
 }
 
-OUString GeometryHandler::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.GeometryHandler";
-}
-
-uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  )
-{
-    uno::Sequence< OUString > aSupported { "com.sun.star.report.inspection.GeometryHandler" };
-    return aSupported;
-}
-
-uno::Reference< uno::XInterface > GeometryHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
-{
-    return *(new GeometryHandler( _rxContext ));
-}
 // override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
@@ -2216,5 +2201,11 @@ void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& 
 
 } // namespace rptui
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_GeometryHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptui::GeometryHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

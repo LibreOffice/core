@@ -64,7 +64,7 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
 
 OUString SAL_CALL DataProviderHandler::getImplementationName(  )
 {
-    return getImplementationName_Static();
+    return "com.sun.star.comp.report.DataProviderHandler";
 }
 
 sal_Bool SAL_CALL DataProviderHandler::supportsService( const OUString& ServiceName )
@@ -74,24 +74,9 @@ sal_Bool SAL_CALL DataProviderHandler::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.report.inspection.DataProviderHandler" };
 }
 
-OUString DataProviderHandler::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.DataProviderHandler";
-}
-
-uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static(  )
-{
-    uno::Sequence< OUString > aSupported { "com.sun.star.report.inspection.DataProviderHandler" };
-    return aSupported;
-}
-
-uno::Reference< uno::XInterface > DataProviderHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
-{
-    return *(new DataProviderHandler( _rxContext ));
-}
 // override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
@@ -512,5 +497,12 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 
 } // namespace rptui
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_DataProviderHandler_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptui::DataProviderHandler(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
