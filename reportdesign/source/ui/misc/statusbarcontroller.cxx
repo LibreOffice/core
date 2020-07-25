@@ -45,18 +45,7 @@ namespace rptui
 
 OUString SAL_CALL OStatusbarController::getImplementationName()
 {
-    return getImplementationName_Static();
-}
-
-OUString OStatusbarController::getImplementationName_Static()
-{
     return "com.sun.star.report.comp.StatusbarController";
-}
-
-Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static()
-{
-    Sequence<OUString> aSupported { "com.sun.star.frame.StatusbarController" };
-    return aSupported;
 }
 
 sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& ServiceName )
@@ -66,13 +55,9 @@ sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& Service
 
 Sequence< OUString> SAL_CALL OStatusbarController::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.frame.StatusbarController" };
 }
 
-Reference< XInterface > OStatusbarController::create(Reference< XComponentContext > const & xContext)
-{
-    return *(new OStatusbarController(xContext));
-}
 IMPLEMENT_FORWARD_XINTERFACE2(OStatusbarController, ::svt::StatusbarController,OStatusbarController_BASE)
 
 OStatusbarController::OStatusbarController(const Reference< XComponentContext >& rxContext)
@@ -225,6 +210,13 @@ void SAL_CALL OStatusbarController::dispose()
 }
 
 } // rptui
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OStatusbarController_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new rptui::OStatusbarController(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

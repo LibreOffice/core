@@ -42,15 +42,6 @@ namespace rptui
         public ReportComponentHandler_Base
     {
     public:
-        // XServiceInfo - static versions
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
-        static css::uno::Reference< css::uno::XInterface >
-                        create(const css::uno::Reference< css::uno::XComponentContext >&);
-
-    public:
         explicit ReportComponentHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
 
         // XServiceInfo

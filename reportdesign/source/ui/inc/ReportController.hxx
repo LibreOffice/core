@@ -346,13 +346,6 @@ namespace rptui
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
-        // need by registration
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static();
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-        static css::uno::Reference< css::uno::XInterface >
-            create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
         // css::container::XContainerListener
         virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;

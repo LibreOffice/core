@@ -18,23 +18,29 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="rptui" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.report.DataProviderHandler">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.report.DataProviderHandler"
+    constructor="reportdesign_DataProviderHandler_get_implementation">
     <service name="com.sun.star.report.inspection.DataProviderHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.DefaultComponentInspectorModel">
+  <implementation name="com.sun.star.comp.report.DefaultComponentInspectorModel"
+    constructor="reportdesign_DefaultComponentInspectorModel_get_implementation">
     <service name="com.sun.star.report.inspection.DefaultComponentInspectorModel"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.GeometryHandler">
+  <implementation name="com.sun.star.comp.report.GeometryHandler"
+    constructor="reportdesign_GeometryHandler_get_implementation">
     <service name="com.sun.star.report.inspection.GeometryHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.ReportComponentHandler">
+  <implementation name="com.sun.star.comp.report.ReportComponentHandler"
+    constructor="reportdesign_ReportComponentHandler_get_implementation">
     <service name="com.sun.star.report.inspection.ReportComponentHandler"/>
   </implementation>
-  <implementation name="com.sun.star.report.comp.ReportDesign">
+  <implementation name="com.sun.star.report.comp.ReportDesign"
+    constructor="reportdesign_OReportController_get_implementation">
     <service name="com.sun.star.sdb.ReportDesign"/>
   </implementation>
-  <implementation name="com.sun.star.report.comp.StatusbarController">
+  <implementation name="com.sun.star.report.comp.StatusbarController"
+    constructor="reportdesign_OStatusbarController_get_implementation">
     <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
 </component>
