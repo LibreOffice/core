@@ -56,6 +56,14 @@ inline css::uno::Reference<css::uno::XCurrentContext> NoEnableJavaInteractionCon
     return NewFlagContext("DontEnableJava");
 }
 
+inline bool IsContextFlagActive(const OUString& sName)
+{
+    bool bFlag = false;
+    if (const auto xContext = css::uno::getCurrentContext())
+        xContext->getValueByName(sName) >>= bFlag;
+    return bFlag;
+}
+
 } // namespace comphelper
 
 #endif // INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
