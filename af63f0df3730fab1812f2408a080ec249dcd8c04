@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d665d73_d4a38140",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-25T07:39:13Z",
+      "side": 1,
+      "message": "uses",
+      "range": {
+        "startLine": 9,
+        "startChar": 62,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "af63f0df3730fab1812f2408a080ec249dcd8c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f44a8f3_05e27453",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-25T07:39:13Z",
+      "side": 1,
+      "message": "What is \"local extensions\"? Are they the already installed ones? Do we no longer use JSON response from the web? If so, how do you get the data about the available extensions?",
+      "range": {
+        "startLine": 9,
+        "startChar": 66,
+        "endLine": 9,
+        "endChar": 111
+      },
+      "revId": "af63f0df3730fab1812f2408a080ec249dcd8c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a80dea21_9b01dcac",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-07-25T07:39:13Z",
+      "side": 1,
+      "message": "Please properly initialize search options. Then you can use TransliterationFlags::IGNORE_CASE instead of all this. Please check how the search is done in the customize dialog. (i.e. search options are initialized in CommandCategoryListBox::CommandCategoryListBox located at cui/source/customize/CommandCategoryListBox.cxx)",
+      "range": {
+        "startLine": 503,
+        "startChar": 12,
+        "endLine": 506,
+        "endChar": 83
+      },
+      "revId": "af63f0df3730fab1812f2408a080ec249dcd8c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
