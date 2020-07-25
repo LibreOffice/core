@@ -5650,6 +5650,8 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
                 if ( bVoid )
                 {
                     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    if (!pNumericFormatter)
+                        return;
                     pNumericFormatter->EnableEmptyFieldValue( true );
                     pNumericFormatter->SetEmptyFieldValue();
                 }
@@ -5695,6 +5697,8 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
                 if ( Value >>= b )
                 {
                     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    if (!pNumericFormatter)
+                        return;
                     pNumericFormatter->SetUseThousandSep( b );
                 }
             }
@@ -5954,6 +5958,8 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const css::uno:
                 if ( Value >>= b )
                 {
                     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                    if (!pNumericFormatter)
+                        return;
                     pNumericFormatter->SetUseThousandSep( b );
                 }
             }
