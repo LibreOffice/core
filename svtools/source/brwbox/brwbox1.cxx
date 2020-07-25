@@ -27,6 +27,7 @@
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -105,12 +106,59 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
                 ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
 }
 
+// we're just measuring the "real" NavigationBar
+class MeasureStatusBar final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::Label> m_xRecordText;
+    std::unique_ptr<weld::Entry> m_xAbsolute;
+    std::unique_ptr<weld::Label> m_xRecordOf;
+    std::unique_ptr<weld::Label> m_xRecordCount;
+public:
+    MeasureStatusBar(vcl::Window *pParent)
+        : InterimItemWindow(pParent, "svx/ui/navigationbar.ui", "NavigationBar")
+        , m_xRecordText(m_xBuilder->weld_label("recordtext"))
+        , m_xAbsolute(m_xBuilder->weld_entry("entry-noframe"))
+        , m_xRecordOf(m_xBuilder->weld_label("recordof"))
+        , m_xRecordCount(m_xBuilder->weld_label("recordcount"))
+    {
+        vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
+        m_xAbsolute->set_font(aApplFont);
+        m_xRecordText->set_font(aApplFont);
+        m_xRecordOf->set_font(aApplFont);
+        m_xRecordCount->set_font(aApplFont);
+
+        SetSizePixel(get_preferred_size());
+    }
+
+    virtual void dispose() override
+    {
+        m_xRecordCount.reset();
+        m_xRecordOf.reset();
+        m_xAbsolute.reset();
+        m_xRecordText.reset();
+        InterimItemWindow::dispose();
+    }
+};
+
+long BrowseBox::GetBarHeight() const
+{
+    // tdf#115941 because some platforms have things like overlay scrollbars, take a max
+    // of a statusbar height and a scrollbar height as the control area height
+
+    // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
+    // resized - which is done in UpdateScrollbars)
+
+    return std::max(aStatusBarHeight->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
+}
+
 BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL) )
-    ,aStatusBarHeight(VclPtr<RecordItemWindow>::Create(this, false))
+    // see NavigationBar ctor, here we just want to know its height
+    ,aStatusBarHeight(VclPtr<MeasureStatusBar>::Create(this))
 {
     ConstructImpl( nMode );
 }
