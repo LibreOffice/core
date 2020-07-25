@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c5efede_6dcd9bfc",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T12:31:16Z",
+      "side": 1,
+      "message": "You don\u0027t use this?",
+      "range": {
+        "startLine": 66,
+        "startChar": 54,
+        "endLine": 66,
+        "endChar": 74
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "559983dd_2408f1a6",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T12:31:16Z",
+      "side": 1,
+      "message": "const auto aProperties",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 34
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82428926_924d76f3",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T12:31:16Z",
+      "side": 1,
+      "message": "No need in this. Just call InsertValues like this:\n\n    InsertValues({\"Ignore1\", \"Ignore2\", ...}, aIsDefined, ...);",
+      "range": {
+        "startLine": 122,
+        "startChar": 4,
+        "endLine": 122,
+        "endChar": 42
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b91af590_b0492599",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T12:31:16Z",
+      "side": 1,
+      "message": "Why is this necessary? Maybe simply use xStyleFamily-\u003egetByName(sCurrentCharStyle) in the next line\u0027s xPropertiesSet.set(xStyleFamily-\u003egetByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW)?",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 77
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63600b7a_154415c9",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T12:31:16Z",
+      "side": 1,
+      "message": "The same here",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
