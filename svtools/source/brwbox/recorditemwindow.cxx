@@ -20,17 +20,23 @@
 #include <svtools/recorditemwindow.hxx>
 #include <vcl/event.hxx>
 
-RecordItemWindow::RecordItemWindow(vcl::Window* pParent, bool bHasFrame)
-    : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
-    , m_xWidget(m_xBuilder->weld_entry(bHasFrame ? "entry-frame" : "entry-noframe"))
+RecordItemWindowBase::RecordItemWindowBase(std::unique_ptr<weld::Entry> xEntry)
+    : m_xWidget(std::move(xEntry))
 {
-    InitControlBase(m_xWidget.get());
-
-    m_xWidget->connect_key_press(LINK(this, RecordItemWindow, KeyInputHdl));
-    m_xWidget->connect_activate(LINK(this, RecordItemWindow, ActivatedHdl));
-    m_xWidget->connect_focus_out(LINK(this, RecordItemWindow, FocusOutHdl));
+    m_xWidget->connect_key_press(LINK(this, RecordItemWindowBase, KeyInputHdl));
+    m_xWidget->connect_activate(LINK(this, RecordItemWindowBase, ActivatedHdl));
+    m_xWidget->connect_focus_out(LINK(this, RecordItemWindowBase, FocusOutHdl));
 
     m_xWidget->show();
+}
+
+RecordItemWindowBase::~RecordItemWindowBase() {}
+
+RecordItemWindow::RecordItemWindow(vcl::Window* pParent, bool bHasFrame)
+    : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
+    , RecordItemWindowBase(m_xBuilder->weld_entry(bHasFrame ? "entry-frame" : "entry-noframe"))
+{
+    InitControlBase(m_xWidget.get());
 
     auto aPrefSize(m_xWidget->get_preferred_size());
 
@@ -47,7 +53,7 @@ void RecordItemWindow::dispose()
 
 RecordItemWindow::~RecordItemWindow() { disposeOnce(); }
 
-void RecordItemWindow::FirePosition(bool _bForce)
+void RecordItemWindowBase::FirePosition(bool _bForce)
 {
     if (!_bForce && !m_xWidget->get_value_changed_from_saved())
         return;
@@ -61,9 +67,9 @@ void RecordItemWindow::FirePosition(bool _bForce)
     m_xWidget->save_value();
 }
 
-IMPL_LINK_NOARG(RecordItemWindow, FocusOutHdl, weld::Widget&, void) { FirePosition(false); }
+IMPL_LINK_NOARG(RecordItemWindowBase, FocusOutHdl, weld::Widget&, void) { FirePosition(false); }
 
-bool RecordItemWindow::DoKeyInput(const KeyEvent& rKEvt)
+bool RecordItemWindowBase::DoKeyInput(const KeyEvent& rKEvt)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
@@ -82,14 +88,22 @@ bool RecordItemWindow::DoKeyInput(const KeyEvent& rKEvt)
         return true;
     }
 
-    return ChildKeyInput(rKEvt);
+    return false;
 }
 
-void RecordItemWindow::PositionFired(sal_Int64 /*nRecord*/) {}
+bool RecordItemWindow::DoKeyInput(const KeyEvent& rKEvt)
+{
+    return RecordItemWindowBase::DoKeyInput(rKEvt) || ChildKeyInput(rKEvt);
+}
 
-IMPL_LINK(RecordItemWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool) { return DoKeyInput(rKEvt); }
+void RecordItemWindowBase::PositionFired(sal_Int64 /*nRecord*/) {}
 
-IMPL_LINK_NOARG(RecordItemWindow, ActivatedHdl, weld::Entry&, bool)
+IMPL_LINK(RecordItemWindowBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return DoKeyInput(rKEvt);
+}
+
+IMPL_LINK_NOARG(RecordItemWindowBase, ActivatedHdl, weld::Entry&, bool)
 {
     if (!m_xWidget->get_text().isEmpty())
         FirePosition(true);

@@ -1029,17 +1029,6 @@ void BrowseBox::PaintData( vcl::Window const & rWin, vcl::RenderContext& rRender
     ImplPaintData(rRenderContext, rRect, false);
 }
 
-long BrowseBox::GetBarHeight() const
-{
-    // tdf#115941 because some platforms have things like overlay scrollbars, take a max
-    // of a statusbar height and a scrollbar height as the control area height
-
-    // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
-    // resized - which is done in UpdateScrollbars)
-
-    return std::max(aStatusBarHeight->GetSizePixel().Height(), GetSettings().GetStyleSettings().GetScrollBarSize());
-}
-
 void BrowseBox::UpdateScrollbars()
 {
 

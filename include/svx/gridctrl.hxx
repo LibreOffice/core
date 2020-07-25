@@ -39,10 +39,6 @@ namespace com::sun::star::sdb { class XRowsChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
-class Button;
-class ImageButton;
-class FixedText;
-
 class CursorWrapper;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
@@ -163,6 +159,70 @@ enum class DbGridControlNavigationBarState
 
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
+
+// NavigationBar
+class NavigationBar final : public InterimItemWindow
+{
+    class AbsolutePos final : public RecordItemWindowBase
+    {
+    public:
+        AbsolutePos(std::unique_ptr<weld::Entry> xEntry, NavigationBar* pBar);
+
+        virtual bool DoKeyInput(const KeyEvent& rEvt) override;
+        virtual void PositionFired(sal_Int64 nRecord) override;
+
+        weld::Entry* GetWidget() { return m_xWidget.get(); }
+    private:
+        VclPtr<NavigationBar> m_xParent;
+    };
+
+    friend class NavigationBar::AbsolutePos;
+
+    //  additional controls
+    std::unique_ptr<weld::Label> m_xRecordText;
+    std::unique_ptr<AbsolutePos> m_xAbsolute;         // absolute positioning
+    std::unique_ptr<weld::Label> m_xRecordOf;
+    std::unique_ptr<weld::Label> m_xRecordCount;
+
+    std::unique_ptr<weld::Button> m_xFirstBtn;        // Button for 'go to the first record'
+    std::unique_ptr<weld::Button> m_xPrevBtn;         // Button for 'go to the previous record'
+    std::unique_ptr<weld::Button> m_xNextBtn;         // Button for 'go to the next record'
+    std::unique_ptr<weld::Button> m_xLastBtn;         // Button for 'go to the last record'
+    std::unique_ptr<weld::Button> m_xNewBtn;          // Button for 'go to a new record'
+
+    AutoTimer m_aNextRepeat;
+    AutoTimer m_aPrevRepeat;
+
+    sal_Int32            m_nCurrentPos;
+
+    bool                 m_bPositioning;     // protect PositionDataSource against recursion
+
+public:
+    NavigationBar(vcl::Window* pParent);
+    virtual ~NavigationBar() override;
+    virtual void dispose() override;
+
+    // Status methods for Controls
+    void InvalidateAll(sal_Int32 nCurrentPos, bool bAll = false);
+    void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
+    void SetState(DbGridControlNavigationBarState nWhich);
+    bool GetState(DbGridControlNavigationBarState nWhich) const;
+    sal_uInt16 ArrangeControls();
+
+private:
+
+    DECL_LINK(OnClick, weld::Button&, void);
+
+    DECL_LINK(PrevMousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(PrevMouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(NextMousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(NextMouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(PrevRepeatTimerHdl, Timer*, void);
+    DECL_LINK(NextRepeatTimerHdl, Timer*, void);
+
+    void PositionDataSource(sal_Int32 nRecord);
+};
+
 class SVXCORE_DLLPUBLIC DbGridControl : public svt::EditBrowseBox
 {
     friend class FmXGridSourcePropListener;
@@ -171,59 +231,7 @@ class SVXCORE_DLLPUBLIC DbGridControl : public svt::EditBrowseBox
 
 public:
 
-    // NavigationBar
-
-    class SAL_DLLPRIVATE NavigationBar final : public Control
-    {
-        class AbsolutePos final : public RecordItemWindow
-        {
-        public:
-            AbsolutePos(vcl::Window* pParent);
-
-            virtual bool DoKeyInput(const KeyEvent& rEvt) override;
-            virtual void PositionFired(sal_Int64 nRecord) override;
-        };
-
-        friend class NavigationBar::AbsolutePos;
-
-        //  additional controls
-        VclPtr<FixedText>    m_aRecordText;
-        VclPtr<AbsolutePos>  m_aAbsolute;            // absolute positioning
-        VclPtr<FixedText>    m_aRecordOf;
-        VclPtr<FixedText>    m_aRecordCount;
-
-        VclPtr<ImageButton>  m_aFirstBtn;            // ImageButton for 'go to the first record'
-        VclPtr<ImageButton>  m_aPrevBtn;         // ImageButton for 'go to the previous record'
-        VclPtr<ImageButton>  m_aNextBtn;         // ImageButton for 'go to the next record'
-        VclPtr<ImageButton>  m_aLastBtn;         // ImageButton for 'go to the last record'
-        VclPtr<ImageButton>  m_aNewBtn;          // ImageButton for 'go to a new record'
-        sal_Int32            m_nCurrentPos;
-
-        bool                 m_bPositioning;     // protect PositionDataSource against recursion
-
-    public:
-        NavigationBar(vcl::Window* pParent);
-        virtual ~NavigationBar() override;
-        virtual void dispose() override;
-
-        // Status methods for Controls
-        void InvalidateAll(sal_Int32 nCurrentPos, bool bAll = false);
-        void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
-        void SetState(DbGridControlNavigationBarState nWhich);
-        bool GetState(DbGridControlNavigationBarState nWhich) const;
-        sal_uInt16 ArrangeControls();
-
-    private:
-        virtual void Resize() override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-        virtual void StateChanged( StateChangedType nType ) override;
-
-        DECL_LINK(OnClick, Button*, void);
-
-        void PositionDataSource(sal_Int32 nRecord);
-    };
-
-    friend class DbGridControl::NavigationBar;
+    friend class NavigationBar;
 
 private:
     Link<DbGridControlNavigationBarState,int>    m_aMasterStateProvider;

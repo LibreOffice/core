@@ -69,6 +69,7 @@ svx/uiconfig/ui/mediawindow.ui://GtkLabel[@id='url'] orphan-label
 svx/uiconfig/ui/mediawindow.ui://GtkScale[@id='timeslider'] no-labelled-by
 svx/uiconfig/ui/mediawindow.ui://GtkScale[@id='volumeslider'] no-labelled-by
 svx/uiconfig/ui/metricfieldbox.ui://GtkSpinButton[@id='metricfield'] no-labelled-by
+svx/uiconfig/ui/navigationbar.ui://GtkEntry[@id='entry-noframe'] no-labelled-by
 svx/uiconfig/ui/numberingwindow.ui://GtkButton[@id='more'] button-no-label
 svx/uiconfig/ui/optgridpage.ui://GtkLabel[@id='label4'] orphan-label
 svx/uiconfig/ui/optgridpage.ui://GtkLabel[@id='label5'] orphan-label
