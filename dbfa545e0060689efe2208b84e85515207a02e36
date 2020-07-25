@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "de8beda2_adbe23a4",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c5efede_6dcd9bfc",
+      "range": {
+        "startLine": 66,
+        "startChar": 54,
+        "endLine": 66,
+        "endChar": 74
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "559983dd_2408f1a6",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8354967_d49c644d",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "559983dd_2408f1a6",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 34
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a7cd97d5_f27c9c51",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82428926_924d76f3",
+      "range": {
+        "startLine": 122,
+        "startChar": 4,
+        "endLine": 122,
+        "endChar": 42
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b91af590_b0492599",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "7d655555_25ac51c3",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b91af590_b0492599",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 77
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63600b7a_154415c9",
         "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
         "patchSetId": 3
@@ -110,6 +206,53 @@
         "startChar": 8,
         "endLine": 159,
         "endChar": 77
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9acdbb72_fe48c3fe",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "This is used ..",
+      "parentUuid": "63600b7a_154415c9",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "864d6ea6_9b639803",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-25T12:54:14Z",
+      "side": 1,
+      "message": "..here.\nxPropertiesSet-\u003egetPropertyValue(\"ParentStyle\") crashes LO, so had to use this method.",
+      "range": {
+        "startLine": 162,
+        "startChar": 36,
+        "endLine": 162,
+        "endChar": 52
       },
       "revId": "dbfa545e0060689efe2208b84e85515207a02e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
