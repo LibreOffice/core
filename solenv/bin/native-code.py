@@ -20,7 +20,6 @@ import xml.etree.ElementTree as ET
 # referenced in lo_get_constructor_map().
 
 core_factory_list = [
-    ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
@@ -142,6 +141,7 @@ core_constructor_list = [
 # extensions/source/bibliography/bib.component
     "extensions_BibliographyLoader_get_implementation",
 # filter/source/config/cache/filterconfig1.component
+    "filter_ConfigFlush_get_implementation",
     "filter_TypeDetection_get_implementation",
     "filter_FrameLoaderFactory_get_implementation",
     "filter_FilterFactory_get_implementation",

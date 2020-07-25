@@ -55,7 +55,6 @@ $(eval $(call gb_Library_add_exception_objects,filterconfig,\
 	filter/source/config/cache/filterfactory \
 	filter/source/config/cache/frameloaderfactory \
 	filter/source/config/cache/querytokenizer \
-	filter/source/config/cache/registration \
 	filter/source/config/cache/typedetection \
 ))
 

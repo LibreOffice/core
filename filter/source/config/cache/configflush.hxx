@@ -84,12 +84,6 @@ class ConfigFlush final : public BaseLock
         virtual void SAL_CALL addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
 
         virtual void SAL_CALL removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
-
-
-        // interface to register/create this instance as a UNO service
-        static OUString impl_getImplementationName();
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
-        static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };
 
 } // namespace filter::config

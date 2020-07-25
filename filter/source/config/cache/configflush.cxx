@@ -19,6 +19,8 @@
 
 #include "configflush.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 
 
 namespace filter::config{
@@ -35,7 +37,7 @@ ConfigFlush::~ConfigFlush()
 
 OUString SAL_CALL ConfigFlush::getImplementationName()
 {
-    return impl_getImplementationName();
+    return "com.sun.star.comp.filter.config.ConfigFlush";
     // <- SAFE
 }
 
@@ -46,7 +48,7 @@ sal_Bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
 {
-    return impl_getSupportedServiceNames();
+    return  { "com.sun.star.document.FilterConfigRefresh" };
 }
 
 void SAL_CALL ConfigFlush::refresh()
@@ -99,24 +101,15 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 }
 
 
-OUString ConfigFlush::impl_getImplementationName()
-{
-    return "com.sun.star.comp.filter.config.ConfigFlush";
-}
-
-
-css::uno::Sequence< OUString > ConfigFlush::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.document.FilterConfigRefresh" };
-}
-
-
-css::uno::Reference< css::uno::XInterface > ConfigFlush::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
-{
-    ConfigFlush* pNew = new ConfigFlush;
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::util::XRefreshable* >(pNew), css::uno::UNO_QUERY);
-}
-
 } // namespace filter::config
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_ConfigFlush_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    static rtl::Reference<filter::config::ConfigFlush> g_Instance(new filter::config::ConfigFlush());
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

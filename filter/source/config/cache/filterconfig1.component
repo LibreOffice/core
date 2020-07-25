@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="filterconfig1" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.filter.config.ConfigFlush">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.filter.config.ConfigFlush"
+    constructor="filter_ConfigFlush_get_implementation">
     <service name="com.sun.star.document.FilterConfigRefresh"/>
   </implementation>
   <implementation name="com.sun.star.comp.filter.config.ContentHandlerFactory"
