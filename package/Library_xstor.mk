@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_exception_objects,xstor,\
 	package/source/xstor/ohierarchyholder \
 	package/source/xstor/oseekinstream \
 	package/source/xstor/owriteablestream \
-	package/source/xstor/register \
 	package/source/xstor/selfterminatefilestream \
 	package/source/xstor/switchpersistencestream \
 	package/source/xstor/xfactory \

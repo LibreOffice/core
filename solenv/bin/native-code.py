@@ -23,7 +23,6 @@ core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
-    ("libxstor.a", "xstor_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ]
@@ -245,6 +244,8 @@ core_constructor_list = [
     ("lingucomponent_SpellChecker_get_implementation", "#ifndef IOS"),
     "lingucomponent_LangGuess_get_implementation",
     "lingucomponent_Hyphenator_get_implementation",
+# package/source/xstor/xstor.component
+    "package_OStorageFactory_get_implementation",
 # package/util/package2.component
     "package_OZipFileAccess_get_implementation",
     "package_ZipPackage_get_implementation",
