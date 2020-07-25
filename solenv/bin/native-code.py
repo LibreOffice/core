@@ -21,7 +21,6 @@ import xml.etree.ElementTree as ET
 
 core_factory_list = [
     ("libi18npoollo.a", "i18npool_component_getFactory"),
-    ("libsmlo.a", "sm_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
@@ -280,6 +279,18 @@ core_constructor_list = [
     "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
+# starmath/util/sm.component
+    "Math_FormulaDocument_get_implementation",
+    "Math_XMLContentExporter_get_implementation",
+    "Math_XMLExporter_get_implementation",
+    "Math_XMLImporter_get_implementation",
+    "Math_XMLMetaExporter_get_implementation",
+    "Math_XMLOasisMetaExporter_get_implementation",
+    "Math_XMLOasisMetaImporter_get_implementation",
+    "Math_XMLOasisSettingsExporter_get_implementation",
+    "Math_XMLOasisSettingsImporter_get_implementation",
+    "Math_XMLSettingsExporter_get_implementation",
+    "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
 # svl/source/fsstor/fsstorage.component
     "svl_FSStorageFactory_get_implementation",
 # svtools/util/svt.component
