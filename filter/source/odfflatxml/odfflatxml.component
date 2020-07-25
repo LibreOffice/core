@@ -8,8 +8,9 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="odfflatxml" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.filter.OdfFlatXml">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.filter.OdfFlatXml"
+    constructor="filter_OdfFlatXml_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
