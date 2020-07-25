@@ -199,33 +199,14 @@ void SAL_CALL OFixedLine::dispose()
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-OUString OFixedLine::getImplementationName_Static(  )
+OUString SAL_CALL OFixedLine::getImplementationName(  )
 {
     return "com.sun.star.comp.report.OFixedLine";
 }
 
-
-OUString SAL_CALL OFixedLine::getImplementationName(  )
-{
-    return getImplementationName_Static();
-}
-
-uno::Sequence< OUString > OFixedLine::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { SERVICE_FIXEDLINE };
-
-    return aServices;
-}
-
-uno::Reference< uno::XInterface > OFixedLine::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OFixedLine(xContext));
-}
-
-
 uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
+    return { SERVICE_FIXEDLINE };
 }
 
 sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName)
@@ -560,5 +541,12 @@ void SAL_CALL OFixedLine::setPrintRepeatedValues( sal_Bool /*_printrepeatedvalue
 
 } // namespace reportdesign
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OFixedLine_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new reportdesign::OFixedLine(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -672,21 +672,9 @@ void SAL_CALL OReportDefinition::disposing()
 }
 
 
-OUString OReportDefinition::getImplementationName_Static(  )
-{
-    return "com.sun.star.comp.report.OReportDefinition";
-}
-
 OUString SAL_CALL OReportDefinition::getImplementationName(  )
 {
-    return getImplementationName_Static();
-}
-
-uno::Sequence< OUString > OReportDefinition::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { SERVICE_REPORTDEFINITION };
-
-    return aServices;
+    return "com.sun.star.comp.report.OReportDefinition";
 }
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames(  )
@@ -729,11 +717,6 @@ uno::Sequence< uno::Type > SAL_CALL OReportDefinition::getTypes(  )
             m_aProps->m_xTypeProvider->getTypes()
         );
     return ReportDefinitionBase::getTypes();
-}
-
-uno::Reference< uno::XInterface > OReportDefinition::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OReportDefinition(xContext));
 }
 
 // XReportDefinition
@@ -2670,5 +2653,12 @@ uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoMana
 }
 
 }// namespace reportdesign
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OReportDefinition_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new reportdesign::OReportDefinition(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
