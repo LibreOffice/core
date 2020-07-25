@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "678eba52_afcacf54",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T13:00:55Z",
+      "side": 1,
+      "message": "please move this to the place the variable is used (in the end). It made sense to create in in the beginning, when it was re-used in multiple places; but now it would look better when defined when used.",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 67
+      },
+      "revId": "4479685155ab403c2cd4313899f6e6b5f70d3960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b317378_f7a8f72b",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-25T13:00:55Z",
+      "side": 1,
+      "message": "This should be before the first \"if\", to not try getting property state for the value that is not used.",
+      "range": {
+        "startLine": 86,
+        "startChar": 12,
+        "endLine": 88,
+        "endChar": 25
+      },
+      "revId": "4479685155ab403c2cd4313899f6e6b5f70d3960",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
