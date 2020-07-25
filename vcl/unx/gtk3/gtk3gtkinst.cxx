@@ -1929,7 +1929,7 @@ protected:
         m_aFocusOutHdl.Call(*this);
     }
 
-    void ensureMouseEventWidget()
+    virtual void ensureMouseEventWidget()
     {
         if (!m_pMouseEventBox)
             m_pMouseEventBox = ::ensureEventWidget(m_pWidget);
@@ -6660,6 +6660,13 @@ private:
         GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_clicked();
+    }
+
+    virtual void ensureMouseEventWidget() override
+    {
+        // The GtkButton is sufficient to get mouse events without an intermediate GtkEventBox
+        if (!m_pMouseEventBox)
+            m_pMouseEventBox = m_pWidget;
     }
 
 public:
