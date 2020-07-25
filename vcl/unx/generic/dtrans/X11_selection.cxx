@@ -4141,7 +4141,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName()
 {
-    return XDND_IMPLEMENTATION_NAME;
+    return "com.sun.star.datatransfer.dnd.XdndSupport";
 }
 
 sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )

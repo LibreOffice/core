@@ -40,8 +40,6 @@
 
 #include <X11/Xlib.h>
 
-#define XDND_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndSupport"
-#define XDND_DROPTARGET_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndDropTarget"
 
 namespace x11 {
 
