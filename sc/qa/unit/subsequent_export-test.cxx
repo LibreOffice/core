@@ -224,6 +224,7 @@ public:
     void testKeepSettingsOfBlankRows();
 
     void testTdf133595();
+    void testTdf134769();
     void testTdf105272();
     void testTdf118990();
     void testTdf121612();
@@ -375,6 +376,7 @@ public:
     CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
     CPPUNIT_TEST(testTdf133595);
+    CPPUNIT_TEST(testTdf134769);
     CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
@@ -4589,6 +4591,25 @@ void ScExportTest::testTdf133595()
 
     // without the fix in place, mc:AlternateContent would have been added to sheet1
     assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 0);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf134769()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf134769.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // without the fix in place, the legacyDrawing would have been exported after the checkbox
+    // and Excel would have claimed the document is corrupted
+    // Use their ids to check the order
+    assertXPath(pSheet, "/x:worksheet/x:drawing", "id", "rId2");
+    assertXPath(pSheet, "/x:worksheet/x:legacyDrawing", "id", "rId3");
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control", "id", "rId4");
 
     xDocSh->DoClose();
 }
