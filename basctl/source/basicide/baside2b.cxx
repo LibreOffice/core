@@ -1493,7 +1493,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         return;
 
     if (!mpUIBuilder)
-        mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
+        mpUIBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
 
     Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
     Point aEventPos( PixelToLogic( aPos ) );

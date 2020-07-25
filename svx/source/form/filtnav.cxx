@@ -1582,7 +1582,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     aSelectList.clear();
             }
 
-            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/filtermenu.ui", "");
+            VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/filtermenu.ui", "");
             VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
             // every condition could be deleted except the first one if it's the only one

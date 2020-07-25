@@ -196,7 +196,7 @@ SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
         const OUString &rParaText)
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
     , m_xPopupMenu(m_aBuilder.get_menu("menu"))
     , m_nIgnoreWordId(m_xPopupMenu->GetItemId("ignoreall"))
     , m_nAddMenuId(m_xPopupMenu->GetItemId("addmenu"))
@@ -409,7 +409,7 @@ SwSpellPopup::SwSpellPopup(
     sal_Int32 nErrorInResult,
     const uno::Sequence< OUString > &rSuggestions,
     const OUString &rParaText )
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
     , m_xPopupMenu(m_aBuilder.get_menu("menu"))
     , m_nIgnoreWordId(m_xPopupMenu->GetItemId("ignoreall"))
     , m_nAddMenuId(m_xPopupMenu->GetItemId("addmenu"))

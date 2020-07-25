@@ -63,7 +63,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     mxFrame = rFrame;
 
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    OUString sUIDir = getUIRootDir();
+    OUString sUIDir = AllSettings::GetUIRootDir();
     bool doesCustomizedUIExist = doesFileExist(getCustomizedUIRootDir(), rUIXMLDescription);
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();

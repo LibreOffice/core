@@ -175,9 +175,9 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     }
 
     if (bUseJSBuilder)
-        return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+        return new JSInstanceBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
     else
-        return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+        return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId)
@@ -186,10 +186,10 @@ weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUS
         && (rUIFile == "svx/ui/stylespreview.ui"
         || rUIFile == "modules/scalc/ui/numberbox.ui"))
     {
-        return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
+        return new JSInstanceBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, nLOKWindowId);
+    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,

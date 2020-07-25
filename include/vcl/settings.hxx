@@ -705,6 +705,7 @@ public:
     const LanguageTag&                      GetUILanguageTag() const;
     static bool                             GetLayoutRTL();   // returns true if UI language requires right-to-left Text Layout
     static bool                             GetMathLayoutRTL();   // returns true if UI language requires right-to-left Math Layout
+    static OUString                         GetUIRootDir();
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
     const LocaleDataWrapper&                GetNeutralLocaleDataWrapper() const;

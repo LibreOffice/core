@@ -163,7 +163,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
     SwFrameMenuButtonBase( pEditWin, pFrame ),
-    m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/headerfootermenu.ui", ""),
+    m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/headerfootermenu.ui", ""),
     m_bIsHeader( bHeader ),
     m_pPopupMenu(m_aBuilder.get_menu("menu")),
     m_pLine( nullptr ),

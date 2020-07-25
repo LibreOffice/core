@@ -600,7 +600,7 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     }
 
     // Setup the menu.
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/layoutmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/simpress/ui/layoutmenu.ui", "");
     VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
     if (pMenuWindow != nullptr)

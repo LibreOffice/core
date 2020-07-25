@@ -1118,7 +1118,7 @@ bool OJoinTableView::IsAddAllowed()
 
 void OJoinTableView::executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection)
 {
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/joinviewmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/joinviewmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
     aContextMenu->Execute(this, _aPos);
     OString sIdent = aContextMenu->GetCurItemIdent();
