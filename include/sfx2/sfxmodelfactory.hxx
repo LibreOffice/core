@@ -24,10 +24,12 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <functional>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::lang { class XSingleServiceFactory; }
 namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
 enum class SfxModelFlags
@@ -68,6 +70,16 @@ namespace sfx2
             const css::uno::Sequence< OUString >& _rServiceNames
         );
 
+    /**
+     * Intended to be called from UNO constructor functions
+     * This evaluates certain creation arguments (passed to createInstanceWithArguments)
+     * and passes them to the factory function of the derived class.
+     */
+    css::uno::Reference<css::uno::XInterface>
+        SFX2_DLLPUBLIC createSfxModelInstance(
+            const css::uno::Sequence<css::uno::Any> & rxArgs,
+            std::function<css::uno::Reference<css::uno::XInterface>( SfxModelFlags )> creationFunc
+        );
 
 } // namespace sfx2
 

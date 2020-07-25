@@ -19,7 +19,6 @@
 
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include "register.hxx"
 #include <smdll.hxx>
 #include <document.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -27,23 +26,20 @@
 
 using namespace ::com::sun::star;
 
-OUString SmDocument_getImplementationName() throw()
-{
-    return "com.sun.star.comp.Math.FormulaDocument";
-}
-
-uno::Sequence< OUString > SmDocument_getSupportedServiceNames() throw()
-{
-    return uno::Sequence<OUString>{ "com.sun.star.formula.FormulaProperties" };
-}
-
-uno::Reference< uno::XInterface > SmDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/, SfxModelFlags _nCreationFlags )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Math_FormulaDocument_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SmGlobals::ensure();
-    SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+        [&](SfxModelFlags _nCreationFlags)
+        {
+            SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
+            return pShell->GetModel();
+        });
+    xInterface->acquire();
+    return xInterface.get();
 }
 
 
