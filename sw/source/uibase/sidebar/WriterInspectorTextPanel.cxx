@@ -23,6 +23,8 @@
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -35,6 +37,17 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/settings.hxx>
+
+OUString aHiddenProperties[] = { UNO_NAME_RSID,
+                                 UNO_NAME_PARA_IS_NUMBERING_RESTART,
+                                 UNO_NAME_PARA_STYLE_NAME,
+                                 UNO_NAME_PARA_CONDITIONAL_STYLE_NAME,
+                                 UNO_NAME_PAGE_STYLE_NAME,
+                                 UNO_NAME_NUMBERING_START_VALUE,
+                                 UNO_NAME_NUMBERING_IS_NUMBER,
+                                 UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
+                                 UNO_NAME_CHAR_STYLE_NAME,
+                                 UNO_NAME_NUMBERING_LEVEL };
 
 namespace sw::sidebar
 {
@@ -61,6 +74,14 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
         pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
 }
 
+static bool NotHidden(const OUString aPropName)
+{
+    for (OUString& rStr : aHiddenProperties)
+        if (rStr == aPropName)
+            return false;
+
+    return true;
+}
 static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
 {
     const comphelper::string::NaturalStringSorter aSorter(
@@ -92,7 +113,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     std::unordered_map<OUString, bool> aIsDefined;
     for (const beans::Property& rProperty : std::as_const(aProperties))
     {
-        if (xPropertiesState->getPropertyState(rProperty.Name) == beans::PropertyState_DIRECT_VALUE)
+        if (xPropertiesState->getPropertyState(rProperty.Name) == beans::PropertyState_DIRECT_VALUE
+            && NotHidden(rProperty.Name))
         {
             const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
             aIsDefined[rProperty.Name] = true;
