@@ -23,6 +23,8 @@
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -61,12 +63,49 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
         pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
 }
 
-static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
+static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
+                         std::unordered_map<OUString, bool>& rIsDefined,
+                         svx::sidebar::TreeNode& rNode, const bool& isRoot,
+                         const std::vector<OUString>& rHiddenProperty)
 {
+    uno::Reference<beans::XPropertySet> xPropertiesSet(rSource, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertyState> xPropertiesState(rSource, uno::UNO_QUERY_THROW);
+    const uno::Sequence<beans::Property> aProperties
+        = xPropertiesSet->getPropertySetInfo()->getProperties();
+
+    for (const beans::Property& rProperty : aProperties)
+    {
+        if (std::find(rHiddenProperty.begin(), rHiddenProperty.end(), rProperty.Name)
+            != rHiddenProperty.end())
+            continue;
+        if (isRoot
+            || xPropertiesState->getPropertyState(rProperty.Name)
+                   == beans::PropertyState_DIRECT_VALUE)
+        {
+            const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
+            svx::sidebar::TreeNode aTemp;
+            if (rIsDefined[rProperty.Name])
+                aTemp.isGrey = true;
+            rIsDefined[rProperty.Name] = true;
+            aTemp.sNodeName = rProperty.Name;
+            aTemp.aValue = aAny;
+            rNode.children.push_back(aTemp);
+        }
+    }
+
     const comphelper::string::NaturalStringSorter aSorter(
         comphelper::getProcessComponentContext(),
         Application::GetSettings().GetUILanguageTag().getLocale());
 
+    std::sort(
+        rNode.children.begin(), rNode.children.end(),
+        [&aSorter](svx::sidebar::TreeNode const& rEntry1, svx::sidebar::TreeNode const& rEntry2) {
+            return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
+        });
+}
+
+static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore)
+{
     SwDoc* pDoc = pDocSh->GetDoc();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     svx::sidebar::TreeNode aDFNode;
@@ -82,31 +121,15 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-
     uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertyState> xPropertiesState(xRange, uno::UNO_QUERY_THROW);
-
-    uno::Sequence<beans::Property> aProperties
-        = xPropertiesSet->getPropertySetInfo()->getProperties();
-
     std::unordered_map<OUString, bool> aIsDefined;
-    for (const beans::Property& rProperty : std::as_const(aProperties))
-    {
-        if (xPropertiesState->getPropertyState(rProperty.Name) == beans::PropertyState_DIRECT_VALUE)
-        {
-            const uno::Any aAny = xPropertiesSet->getPropertyValue(rProperty.Name);
-            aIsDefined[rProperty.Name] = true;
-            svx::sidebar::TreeNode aTemp;
-            aTemp.sNodeName = rProperty.Name;
-            aTemp.aValue = aAny;
-            aDFNode.children.push_back(aTemp);
-        }
-    }
-    std::sort(
-        aDFNode.children.begin(), aDFNode.children.end(),
-        [&aSorter](svx::sidebar::TreeNode const& rEntry1, svx::sidebar::TreeNode const& rEntry2) {
-            return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
-        });
+
+    InsertValues(xRange, aIsDefined, aDFNode, false,
+                 { UNO_NAME_RSID, UNO_NAME_PARA_IS_NUMBERING_RESTART, UNO_NAME_PARA_STYLE_NAME,
+                   UNO_NAME_PARA_CONDITIONAL_STYLE_NAME, UNO_NAME_PAGE_STYLE_NAME,
+                   UNO_NAME_NUMBERING_START_VALUE, UNO_NAME_NUMBERING_IS_NUMBER,
+                   UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE, UNO_NAME_CHAR_STYLE_NAME,
+                   UNO_NAME_NUMBERING_LEVEL });
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -122,34 +145,12 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     if (!sCurrentCharStyle.isEmpty())
     {
         xPropertiesSet.set(xStyleFamily->getByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW);
-        xPropertiesState.set(xPropertiesSet, css::uno::UNO_QUERY_THROW);
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
-        aProperties = xPropertiesSet->getPropertySetInfo()->getProperties();
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        for (const beans::Property& rProperty : std::as_const(aProperties))
-        {
-            OUString sPropName = rProperty.Name;
-            if (xPropertiesState->getPropertyState(sPropName) == beans::PropertyState_DIRECT_VALUE)
-            {
-                const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
-                svx::sidebar::TreeNode aTemp;
-                if (aIsDefined[sPropName]) // Already defined in "Direct Formatting" ?
-                    aTemp.isGrey = true;
-                aIsDefined[sPropName] = true;
-                aTemp.sNodeName = sPropName;
-                aTemp.aValue = aAny;
-                aCurrentChild.children.push_back(aTemp);
-            }
-        }
-
-        std::sort(aCurrentChild.children.begin(), aCurrentChild.children.end(),
-                  [&aSorter](svx::sidebar::TreeNode const& rEntry1,
-                             svx::sidebar::TreeNode const& rEntry2) {
-                      return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
-                  });
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, {});
 
         aCharNode.children.push_back(aCurrentChild);
     }
@@ -161,38 +162,13 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         uno::Reference<style::XStyle> xPropertiesStyle(xStyleFamily->getByName(sCurrentParaStyle),
                                                        uno::UNO_QUERY_THROW);
         xPropertiesSet.set(xPropertiesStyle, css::uno::UNO_QUERY_THROW);
-        xPropertiesState.set(xPropertiesSet, css::uno::UNO_QUERY_THROW);
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
-        aProperties = xPropertiesSet->getPropertySetInfo()->getProperties();
         OUString aParentParaStyle = xPropertiesStyle->getParentStyle();
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        for (const beans::Property& rProperty : std::as_const(aProperties))
-        {
-            OUString sPropName = rProperty.Name;
-            if (aParentParaStyle.isEmpty() // root of style hierarchy
-                || xPropertiesState->getPropertyState(sPropName)
-                       == beans::PropertyState_DIRECT_VALUE)
-            {
-                const uno::Any aAny = xPropertiesSet->getPropertyValue(sPropName);
-                svx::sidebar::TreeNode aTemp;
-                // Already defined in "Direct Formatting" or "Character Styles" or any child Paragraph Style ?
-                if (aIsDefined[sPropName])
-                    aTemp.isGrey = true;
-                aIsDefined[sPropName] = true;
-                aTemp.sNodeName = sPropName;
-                aTemp.aValue = aAny;
-                aCurrentChild.children.push_back(aTemp);
-            }
-        }
-
-        std::sort(aCurrentChild.children.begin(), aCurrentChild.children.end(),
-                  [&aSorter](svx::sidebar::TreeNode const& rEntry1,
-                             svx::sidebar::TreeNode const& rEntry2) {
-                      return aSorter.compare(rEntry1.sNodeName, rEntry2.sNodeName) < 0;
-                  });
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(), {});
 
         aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;
