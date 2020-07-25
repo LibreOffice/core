@@ -24,7 +24,6 @@ core_factory_list = [
     ("libsmlo.a", "sm_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ]
@@ -146,6 +145,8 @@ core_constructor_list = [
     "filter_FrameLoaderFactory_get_implementation",
     "filter_FilterFactory_get_implementation",
     "filter_ContentHandlerFactory_get_implementation",
+# filter/source/odfflatxml/odfflatxml.component
+    "filter_OdfFlatXml_get_implementation",
 # filter/source/pdf/pdffilter.component
     "filter_PdfDecomposer_get_implementation",
     "filter_PDFExportInteractionHandler_get_implementation",

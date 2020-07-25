@@ -14,6 +14,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
@@ -92,13 +93,6 @@ namespace filter::odfflatxml {
                         "com.sun.star.document.ExportFilter"};
             }
 
-            // UNO component helper methods
-
-            static OUString impl_getImplementationName();
-
-            static Sequence< OUString > impl_getSupportedServiceNames();
-
-            static Reference< XInterface > SAL_CALL impl_createInstance(const Reference< XMultiServiceFactory >& fact);
         };
 
         }
@@ -199,49 +193,13 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
     return true;
 }
 
-
-OUString OdfFlatXml::impl_getImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_OdfFlatXml_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return "com.sun.star.comp.filter.OdfFlatXml";
-}
-
-Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
-}
-
-Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference< XMultiServiceFactory >& fact)
-{
-    return Reference<XInterface> (static_cast<OWeakObject *>(new OdfFlatXml( comphelper::getComponentContext(fact) )));
-
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void*
-odfflatxml_component_getFactory( const char* pImplementationName,
-                      void* pServiceManager,
-                      void* /* pRegistryKey */ )
-{
-    if ((!pImplementationName) || (!pServiceManager))
-        return nullptr;
-
-    css::uno::Reference< css::lang::XMultiServiceFactory >
-        xSMGR = static_cast< css::lang::XMultiServiceFactory* >(pServiceManager);
-    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
-    OUString sImplName = OUString::createFromAscii(pImplementationName);
-
-    if (OdfFlatXml::impl_getImplementationName() == sImplName)
-        xFactory = cppu::createOneInstanceFactory( xSMGR,
-                                                   OdfFlatXml::impl_getImplementationName(),
-                                                   OdfFlatXml::impl_createInstance,
-                                                   OdfFlatXml::impl_getSupportedServiceNames() );
-
-    if (xFactory.is())
-    {
-        xFactory->acquire();
-        return xFactory.get();
-    }
-
-    return nullptr;
+    static rtl::Reference<OdfFlatXml> g_Instance(new OdfFlatXml(context));
+    g_Instance->acquire();
+    return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
