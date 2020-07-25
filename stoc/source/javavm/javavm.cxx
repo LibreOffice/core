@@ -48,6 +48,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -652,11 +653,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_JAVA_DISABLED:
         {
-            bool bDontEnableJava = false;
-            auto xContext(css::uno::getCurrentContext());
-            if (xContext.is())
-                xContext->getValueByName("DontEnableJava") >>= bDontEnableJava;
-            if (bDontEnableJava)
+            if (comphelper::IsContextFlagActive("DontEnableJava"))
                 return css::uno::Any();
 
             //QueryBox:
