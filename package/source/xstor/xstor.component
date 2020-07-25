@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xstor" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.embed.StorageFactory">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.embed.StorageFactory"
+    constructor="package_OStorageFactory_get_implementation">
     <service name="com.sun.star.comp.embed.StorageFactory"/>
     <service name="com.sun.star.embed.StorageFactory"/>
   </implementation>
