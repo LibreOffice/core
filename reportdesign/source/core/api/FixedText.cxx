@@ -88,33 +88,14 @@ void SAL_CALL OFixedText::dispose()
     uno::Reference< report::XFixedText> xHoldAlive = this;
 }
 
-OUString OFixedText::getImplementationName_Static(  )
+OUString SAL_CALL OFixedText::getImplementationName(  )
 {
     return "com.sun.star.comp.report.OFixedText";
 }
 
-
-OUString SAL_CALL OFixedText::getImplementationName(  )
-{
-    return getImplementationName_Static();
-}
-
-uno::Sequence< OUString > OFixedText::getSupportedServiceNames_Static(  )
-{
-    uno::Sequence< OUString > aServices { SERVICE_FIXEDTEXT };
-
-    return aServices;
-}
-
-uno::Reference< uno::XInterface > OFixedText::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OFixedText(xContext));
-}
-
-
 uno::Sequence< OUString > SAL_CALL OFixedText::getSupportedServiceNames(  )
 {
-    return getSupportedServiceNames_Static();
+    return { SERVICE_FIXEDTEXT };
 }
 
 sal_Bool SAL_CALL OFixedText::supportsService(const OUString& ServiceName)
@@ -318,6 +299,13 @@ OUString SAL_CALL OFixedText::getShapeType(  )
 
 
 } // namespace reportdesign
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+reportdesign_OFixedText_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new reportdesign::OFixedText(context));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

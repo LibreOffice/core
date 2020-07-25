@@ -173,13 +173,6 @@ namespace reportdesign
                                   ,const css::uno::Reference< css::lang::XMultiServiceFactory > & _xFactory
                                   ,css::uno::Reference< css::drawing::XShape >& _xShape);
 
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static();
-        static css::uno::Reference< css::uno::XInterface >
-            create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-
         css::uno::Reference< css::uno::XComponentContext > getContext();
 
     private:

@@ -18,32 +18,41 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="rpt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.report.OFixedLine">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.report.OFixedLine"
+    constructor="reportdesign_OFixedLine_get_implementation">
     <service name="com.sun.star.report.FixedLine"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OFixedText">
+  <implementation name="com.sun.star.comp.report.OFixedText"
+    constructor="reportdesign_OFixedText_get_implementation">
     <service name="com.sun.star.report.FixedText"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OFormatCondition">
+  <implementation name="com.sun.star.comp.report.OFormatCondition"
+    constructor="reportdesign_OFormatCondition_get_implementation">
     <service name="com.sun.star.report.FormatCondition"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OFormattedField">
+  <implementation name="com.sun.star.comp.report.OFormattedField"
+    constructor="reportdesign_OFormattedField_get_implementation">
     <service name="com.sun.star.report.FormattedField"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OFunction">
+  <implementation name="com.sun.star.comp.report.OFunction"
+    constructor="reportdesign_OFunction_get_implementation">
     <service name="com.sun.star.report.Function"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OImageControl">
+  <implementation name="com.sun.star.comp.report.OImageControl"
+    constructor="reportdesign_OImageControl_get_implementation">
     <service name="com.sun.star.report.ImageControl"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OReportDefinition">
+  <implementation name="com.sun.star.comp.report.OReportDefinition"
+    constructor="reportdesign_OReportDefinition_get_implementation">
     <service name="com.sun.star.report.ReportDefinition"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.OReportEngineJFree">
+  <implementation name="com.sun.star.comp.report.OReportEngineJFree"
+    constructor="reportdesign_OReportEngineJFree_get_implementation">
     <service name="com.sun.star.report.ReportEngine"/>
   </implementation>
-  <implementation name="com.sun.star.comp.report.Shape">
+  <implementation name="com.sun.star.comp.report.Shape"
+    constructor="reportdesign_OShape_get_implementation">
     <service name="com.sun.star.report.Shape"/>
   </implementation>
 </component>
