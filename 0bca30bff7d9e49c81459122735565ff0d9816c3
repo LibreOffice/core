@@ -45,6 +45,30 @@
       "revId": "0bca30bff7d9e49c81459122735565ff0d9816c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98f33961_b29055d3",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-07-25T07:36:59Z",
+      "side": 1,
+      "message": "Me too :-)",
+      "parentUuid": "f57d04ff_9295451f",
+      "range": {
+        "startLine": 246,
+        "startChar": 4,
+        "endLine": 246,
+        "endChar": 12
+      },
+      "revId": "0bca30bff7d9e49c81459122735565ff0d9816c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
