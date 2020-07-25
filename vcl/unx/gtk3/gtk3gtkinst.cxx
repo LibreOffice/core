@@ -1929,7 +1929,7 @@ protected:
         m_aFocusOutHdl.Call(*this);
     }
 
-    void ensureEventWidget()
+    void ensureMouseEventWidget()
     {
         if (!m_pMouseEventBox)
             m_pMouseEventBox = ::ensureEventWidget(m_pWidget);
@@ -1939,7 +1939,7 @@ protected:
     {
         if (!m_nButtonPressSignalId)
         {
-            ensureEventWidget();
+            ensureMouseEventWidget();
             m_nButtonPressSignalId = g_signal_connect(m_pMouseEventBox, "button-press-event", G_CALLBACK(signalButton), this);
         }
     }
@@ -2439,7 +2439,7 @@ public:
 
     virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensureEventWidget();
+        ensureMouseEventWidget();
         if (!m_nMotionSignalId)
             m_nMotionSignalId = g_signal_connect(m_pMouseEventBox, "motion-notify-event", G_CALLBACK(signalMotion), this);
         if (!m_nLeaveSignalId)
@@ -2451,7 +2451,7 @@ public:
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
-        ensureEventWidget();
+        ensureMouseEventWidget();
         if (!m_nButtonReleaseSignalId)
             m_nButtonReleaseSignalId = g_signal_connect(m_pMouseEventBox, "button-release-event", G_CALLBACK(signalButton), this);
         weld::Widget::connect_mouse_release(rLink);
