@@ -64,13 +64,13 @@ class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
 public:
     explicit XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
 
-protected:
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
     virtual Any SAL_CALL queryAggregation( Type const & rType ) override;
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
 
+protected:
     // XTypeProvider
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
     virtual Sequence< Type > SAL_CALL getTypes() override;
@@ -158,28 +158,10 @@ void SAL_CALL XMLFilterDialogComponent::release() throw ()
     OComponentHelper::release();
 }
 
-/// @throws RuntimeException
-static OUString XMLFilterDialogComponent_getImplementationName()
-{
-    return "com.sun.star.comp.ui.XSLTFilterDialog";
-}
-
-/// @throws RuntimeException
-static Sequence< OUString > XMLFilterDialogComponent_getSupportedServiceNames()
-{
-    Sequence< OUString > aSupported { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
-    return aSupported;
-}
-
-/// @throws Exception
-static Reference< XInterface > XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<OWeakObject*>(new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) ));
-}
 
 OUString SAL_CALL XMLFilterDialogComponent::getImplementationName()
 {
-    return XMLFilterDialogComponent_getImplementationName();
+    return "com.sun.star.comp.ui.XSLTFilterDialog";
 }
 
 namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
@@ -222,7 +204,7 @@ Sequence< Type > XMLFilterDialogComponent::getTypes()
 
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames()
 {
-    return XMLFilterDialogComponent_getSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
 }
 
 sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName)
@@ -313,36 +295,13 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
     }
 }
 
-extern "C"
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+filter_XSLTFilterDialog_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-SAL_DLLPUBLIC_EXPORT void * xsltdlg_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
-{
-    void * pRet = nullptr;
-
-    if( pServiceManager )
-    {
-        Reference< XSingleServiceFactory > xFactory;
-
-        OUString implName = OUString::createFromAscii( pImplName );
-        if ( implName == XMLFilterDialogComponent_getImplementationName() )
-        {
-            xFactory = createOneInstanceFactory(
-                static_cast< XMultiServiceFactory * >( pServiceManager ),
-                OUString::createFromAscii( pImplName ),
-                XMLFilterDialogComponent_createInstance, XMLFilterDialogComponent_getSupportedServiceNames() );
-
-        }
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new XMLFilterDialogComponent(context)));
 }
-}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
