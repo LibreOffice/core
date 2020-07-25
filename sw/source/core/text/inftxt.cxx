@@ -1335,7 +1335,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                  && ( PortionType::Number != nWhich
                       || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
             {
-                bDraw = true;
+                bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
             }
             break;
         case PortionType::Bookmark:
