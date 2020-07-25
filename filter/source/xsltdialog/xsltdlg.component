@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xsltdlg" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.ui.XSLTFilterDialog">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.ui.XSLTFilterDialog"
+    constructor="filter_XSLTFilterDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.XSLTFilterDialog"/>
   </implementation>
 </component>
