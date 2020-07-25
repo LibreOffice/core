@@ -574,7 +574,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                         ptWhere = m_xTitle->GetPosPixel();
                 }
 
-                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/jointablemenu.ui", "");
+                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/jointablemenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 if (aContextMenu->Execute(this, ptWhere))
                     Remove();

@@ -1940,7 +1940,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
                     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                     sal_uInt16 nItemId = aContextMenu->Execute(this, aMenuPos);
                     if (nItemId == aContextMenu->GetItemId("delete"))
@@ -1953,7 +1953,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             {
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/queryfuncmenu.ui", "");
+                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/queryfuncmenu.ui", "");
                     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                     aContextMenu->CheckItem("functions", m_bVisibleRow[BROW_FUNCTION_ROW]);
                     aContextMenu->CheckItem("tablename", m_bVisibleRow[BROW_TABLE_ROW]);

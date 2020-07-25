@@ -151,7 +151,7 @@ sal_uInt16 FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc) const
 }
 
 FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/functionmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/functionmenu.ui", "")
     , m_xMenu(m_aBuilder.get_menu("menu"))
     , m_nSelected(nCheckEncoded)
 {

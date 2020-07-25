@@ -13048,7 +13048,7 @@ namespace {
 
 GtkBuilder* makeComboBoxBuilder()
 {
-    OUString aUri(VclBuilderContainer::getUIRootDir() + "vcl/ui/combobox.ui");
+    OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/combobox.ui");
     OUString aPath;
     osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
     return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());

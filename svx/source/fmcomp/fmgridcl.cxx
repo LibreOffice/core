@@ -493,7 +493,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             OString sPreferredType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
-                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/colsmenu.ui", "");
+                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/colsmenu.ui", "");
                 VclPtr<PopupMenu> aInsertMenu(aBuilder.get_menu("menu"));
                 PopupMenu* pTypeMenu = aInsertMenu->GetPopupMenu(aInsertMenu->GetItemId("insert"));
                 pTypeMenu->ShowItem(pTypeMenu->GetItemId("dateandtimefield"));
@@ -987,7 +987,7 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     sal_uInt16 nColId = GetItemId( _rPreferredPos );
 
     // the menu
-    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/colsmenu.ui", "");
+    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/colsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
     // let derivatives modify the menu

@@ -689,7 +689,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = true;
                     nIndex = NextSelectedRow();
                 }
-                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/dbreport/ui/groupsortmenu.ui", "");
+                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/dbreport/ui/groupsortmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed() && bEnable);
                 if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))

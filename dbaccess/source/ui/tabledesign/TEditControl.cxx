@@ -1385,7 +1385,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                             if ( !IsColumnSelected( nColId ) )
                                 SelectColumnId( nColId );
 
-                            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                            VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
                             VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                             aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), false);
                             aContextMenu->RemoveDisabledEntries(true, true);
@@ -1396,7 +1396,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else
                 {
-                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
+                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
                     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
                     aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed());

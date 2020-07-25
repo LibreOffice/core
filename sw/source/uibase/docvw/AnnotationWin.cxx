@@ -29,6 +29,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/undo.hxx>
@@ -73,7 +74,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
     : Window(&rEditWin)
-    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
+    , maBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , mnEventId(nullptr)

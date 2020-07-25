@@ -23,8 +23,8 @@
 #include <CustomNotebookbarGenerator.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <vcl/builder.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/confignode.hxx>
@@ -113,7 +113,7 @@ OUString CustomNotebookbarGenerator::getOriginalUIPath()
 {
     OUString sAppName, sNotebookbarUIFileName;
     CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    return VclBuilderContainer::getUIRootDir() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
+    return AllSettings::GetUIRootDir() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
            + sNotebookbarUIFileName;
 }
 

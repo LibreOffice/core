@@ -97,7 +97,7 @@ namespace
 
 SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     SwFrameMenuButtonBase( pEditWin, pFrame ),
-    m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/pagebreakmenu.ui", ""),
+    m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/pagebreakmenu.ui", ""),
     m_pPopupMenu(m_aBuilder.get_menu("menu")),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),

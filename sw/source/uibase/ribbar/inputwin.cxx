@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
     EndSelection(); // reset back CurItemId !
     if (nCurID == FN_FORMULA_CALC)
     {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/inputwinmenu.ui", "");
+        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/inputwinmenu.ui", "");
         VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
         aPopMenu->SetSelectHdl(LINK(this, SwInputWindow, MenuHdl));
         aPopMenu->Execute(this, GetItemRect(FN_FORMULA_CALC), PopupMenuFlags::NoMouseUpClose);

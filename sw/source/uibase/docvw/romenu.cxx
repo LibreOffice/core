@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 
 #include <svl/eitem.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -75,7 +76,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher con
 #define MN_READONLY_BACKGROUNDTOGALLERY 2000
 
 SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/readonlymenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/readonlymenu.ui", "")
     , m_xMenu(m_aBuilder.get_menu("menu"))
     , m_nReadonlyOpenurl(m_xMenu->GetItemId("openurl"))
     , m_nReadonlyOpendoc(m_xMenu->GetItemId("opendoc"))

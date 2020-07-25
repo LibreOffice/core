@@ -64,7 +64,7 @@ private:
 }
 
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
-    : m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/zoommenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/zoommenu.ui", "")
     , m_xMenu(m_aBuilder.get_menu("menu"))
     , nZoom(nZ)
 {
