@@ -19,7 +19,7 @@
 umask 022
 
 if [ "${KDEMAINDIR}" ]; then
-  for i in `cd "${ICON_SOURCE_DIR}"; find ${ICON_THEMES:-hicolor/???x??? hicolor/??x?? hicolor/scalable locolor} -name "*.png" -o -name "*.svg"`
+  for i in `cd "${ICON_SOURCE_DIR}"; find ${ICON_THEMES:-hicolor/???x??? hicolor/??x??} -name "*.png"; find hicolor/scalable/apps -name "*.svg"`
   do
     targetdir=${DESTDIR}/${KDEMAINDIR}/share/icons/`dirname ${i}`
     mkdir -p "${targetdir}"
