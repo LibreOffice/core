@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sw" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="lo.writer.NavElementToolBoxController"
       constructor="lo_writer_NavElementToolBoxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
@@ -75,7 +75,8 @@
       constructor="com_sun_star_comp_Writer_GlobalDocument_get_implementation">
     <service name="com.sun.star.text.GlobalDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.TextDocument">
+  <implementation name="com.sun.star.comp.Writer.TextDocument"
+    constructor="Writer_SwTextDocument_get_implementation">
     <service name="com.sun.star.text.TextDocument"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.WebDocument"

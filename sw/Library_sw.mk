@@ -740,7 +740,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/uno/unodefaults \
     sw/source/uibase/uno/unodispatch \
     sw/source/uibase/uno/unodoc \
-    sw/source/uibase/uno/unofreg \
     sw/source/uibase/uno/unomailmerge \
     sw/source/uibase/uno/unomod \
     sw/source/uibase/uno/unomodule \
