@@ -92,17 +92,6 @@ public:
     {
     }
 
-    /**
-      Provides the implementation name.
-      @return   implementation name
-    */
-    static OUString getWinUserInfoBeName();
-    /**
-      Provides the supported services names
-      @return   service names
-    */
-    static css::uno::Sequence<OUString> getWinUserInfoBeServiceNames();
-
 private:
     std::unique_ptr<WinUserInfoBe_Impl> m_pImpl;
 };
