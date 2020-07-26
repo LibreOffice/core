@@ -8,8 +8,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="WinUserInfoBe" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.configuration.backend.WinUserInfoBe">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.configuration.backend.WinUserInfoBe"
+    constructor="extensions_WinUserInfoBe_get_implementation">
     <service name="com.sun.star.configuration.backend.WinUserInfoBe"/>
   </implementation>
 </component>

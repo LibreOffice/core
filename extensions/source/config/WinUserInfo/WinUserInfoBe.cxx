@@ -448,17 +448,9 @@ css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
         !sValue.isEmpty(), sValue.isEmpty() ? css::uno::Any() : css::uno::makeAny(sValue)));
 }
 
-OUString WinUserInfoBe::getWinUserInfoBeName()
+OUString SAL_CALL WinUserInfoBe::getImplementationName()
 {
     return "com.sun.star.comp.configuration.backend.WinUserInfoBe";
-}
-
-OUString SAL_CALL WinUserInfoBe::getImplementationName() { return getWinUserInfoBeName(); }
-
-css::uno::Sequence<OUString> WinUserInfoBe::getWinUserInfoBeServiceNames()
-{
-    css::uno::Sequence<OUString> aServices{ "com.sun.star.configuration.backend.WinUserInfoBe" };
-    return aServices;
 }
 
 sal_Bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
@@ -468,10 +460,17 @@ sal_Bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
 {
-    return getWinUserInfoBeServiceNames();
+    return { "com.sun.star.configuration.backend.WinUserInfoBe" };
 }
 }
 }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extensions_WinUserInfoBe_get_implementation(css::uno::XComponentContext* context,
+                                            css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
