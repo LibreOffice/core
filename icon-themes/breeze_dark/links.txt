@@ -2223,6 +2223,8 @@ res/lc10853.png cmd/lc_recsearch.png
 res/library_16.png cmd/sc_viewdatasourcebrowser.png
 res/lx03131.png res/lx03126.png
 res/lx03137.png res/lx03125.png
+res/lx03139.png cmd/lc_newhtmldoc.png
+res/lx03139_32.png cmd/32/newhtmldoc.png
 res/lx03140.png res/lx03125.png
 res/lx03144.png res/odf_32_8.png
 res/lx03145.png res/otf_32_8.png
@@ -2291,7 +2293,7 @@ res/sc10869.png cmd/sc_graftransparence.png
 res/sc_helperdialog.png cmd/sc_helpindex.png
 res/sx03131.png res/sx03126.png
 res/sx03137.png res/sx03125.png
-res/sx03139.png cmd/sc_questionanswers.png
+res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03140.png res/sx03125.png
 res/sx03144.png res/odf_16_8.png
 res/sx03145.png res/otf_16_8.png
