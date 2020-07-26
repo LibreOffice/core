@@ -270,7 +270,8 @@ protected:
 public:
     ScXMLImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        OUString const & implementationName, SvXMLImportFlags nImportFlag);
+        OUString const & implementationName, SvXMLImportFlags nImportFlag,
+        const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
     virtual ~ScXMLImport() throw() override;
 
