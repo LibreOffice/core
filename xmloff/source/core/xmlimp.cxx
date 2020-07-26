@@ -288,6 +288,7 @@ public:
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
     OUString implementationName;
+    css::uno::Sequence< OUString > maSupportedServiceNames;
 
     uno::Reference< embed::XStorage > mxSourceStorage;
 
@@ -296,7 +297,8 @@ public:
     std::unique_ptr< DocumentInfo > mpDocumentInfo;
 
     SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext,
-                      OUString const & theImplementationName)
+                      OUString const & theImplementationName,
+                      const css::uno::Sequence< OUString > & sSupportedServiceNames = {})
         : hBatsFontConv( nullptr )
         , hMathFontConv( nullptr )
         , mbOwnGraphicResolver( false )
@@ -307,11 +309,14 @@ public:
         , mbTextDocInOOoFileFormat( false )
         , mxComponentContext( rxContext )
         , implementationName(theImplementationName)
+        , maSupportedServiceNames(sSupportedServiceNames)
         , mpRDFaHelper() // lazy
         , mpDocumentInfo() // lazy
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
+        if (!maSupportedServiceNames.hasElements())
+            maSupportedServiceNames = { "com.sun.star.document.ImportFilter", "com.sun.star.xml.XMLImportFilter" };
     }
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
@@ -390,8 +395,10 @@ void SvXMLImport::InitCtor_()
 
 SvXMLImport::SvXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    OUString const & implementationName, SvXMLImportFlags nImportFlags )
-:   mpImpl( new SvXMLImport_Impl(xContext, implementationName) ),
+    OUString const & implementationName,
+    SvXMLImportFlags nImportFlags,
+    const css::uno::Sequence< OUString > & sSupportedServiceNames )
+:   mpImpl( new SvXMLImport_Impl(xContext, implementationName, sSupportedServiceNames) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     mpUnitConv( new SvXMLUnitConverter( xContext,
@@ -1150,7 +1157,7 @@ sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.xml.XMLImportFilter" };
+    return mpImpl->maSupportedServiceNames;
 }
 
 XMLTextImportHelper* SvXMLImport::CreateTextImport()

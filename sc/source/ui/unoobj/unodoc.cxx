@@ -29,24 +29,20 @@
 
 using namespace ::com::sun::star;
 
-OUString ScDocument_getImplementationName() throw()
-{
-    return "com.sun.star.comp.Calc.SpreadsheetDocument";
-}
-
-uno::Sequence< OUString > ScDocument_getSupportedServiceNames() throw()
-{
-    uno::Sequence<OUString> aSeq { "com.sun.star.sheet.SpreadsheetDocument" };
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > ScDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, SfxModelFlags _nCreationFlags )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_SpreadsheetDocument_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+        [&](SfxModelFlags _nCreationFlags)
+        {
+            SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
+            return uno::Reference< uno::XInterface >( pShell->GetModel() );
+        });
+    xInterface->acquire();
+    return xInterface.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
