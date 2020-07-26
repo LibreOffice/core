@@ -88,84 +88,6 @@ SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "stardiv.StarCalc.ScFunctionListObj",
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "stardiv.StarCalc.ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "stardiv.StarCalc.ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
 
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * sc_component_getFactory(
-    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
-{
-    if (!pServiceManager)
-        return nullptr;
-
-    uno::Reference<lang::XSingleServiceFactory> xFactory;
-    OUString aImpl(OUString::createFromAscii(pImplName));
-
-    if ( aImpl == ScSpreadsheetSettings::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScSpreadsheetSettings::getImplementationName_Static(),
-                ScSpreadsheetSettings_CreateInstance,
-                ScSpreadsheetSettings::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScXMLImport_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_getImplementationName(),
-                ScXMLImport_createInstance,
-                ScXMLImport_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Meta_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Meta_getImplementationName(),
-                ScXMLImport_Meta_createInstance,
-                ScXMLImport_Meta_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Styles_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Styles_getImplementationName(),
-                ScXMLImport_Styles_createInstance,
-                ScXMLImport_Styles_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Content_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Content_getImplementationName(),
-                ScXMLImport_Content_createInstance,
-                ScXMLImport_Content_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Settings_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Settings_getImplementationName(),
-                ScXMLImport_Settings_createInstance,
-                ScXMLImport_Settings_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScDocument_getImplementationName() )
-    {
-        xFactory.set(sfx2::createSfxModelFactory(
-                static_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScDocument_getImplementationName(),
-                ScDocument_createInstance,
-                ScDocument_getSupportedServiceNames() ));
-    }
-
-    void* pRet = nullptr;
-    if (xFactory.is())
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
-}   // extern C
 
 ScSpreadsheetSettings::ScSpreadsheetSettings() :
     aPropSet( lcl_GetSettingsPropertyMap() )
@@ -176,23 +98,15 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 {
 }
 
-uno::Reference<uno::XInterface> ScSpreadsheetSettings_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScSpreadsheetSettings_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return static_cast<cppu::OWeakObject*>(new ScSpreadsheetSettings());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ScSpreadsheetSettings()));
 }
 
-OUString ScSpreadsheetSettings::getImplementationName_Static()
-{
-    return "stardiv.StarCalc.ScSpreadsheetSettings";
-}
-
-uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
-{
-    return { SCSPREADSHEETSETTINGS_SERVICE };
-}
 
 bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName)
 {

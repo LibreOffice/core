@@ -525,7 +525,6 @@ math_constructor_list = [
     ]
 
 calc_factory_list = [
-    ("libsclo.a", "sc_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -533,6 +532,13 @@ calc_constructor_list = [
     "com_sun_star_comp_framework_SoundHandler_get_implementation",
 # sc/util/sc.component
     "ScPanelFactory_get_implementation",
+    "Calc_SpreadsheetDocument_get_implementation",
+    "Calc_XMLOasisContentImporter_get_implementation",
+    "Calc_XMLOasisImporter_get_implementation",
+    "Calc_XMLOasisMetaImporter_get_implementation",
+    "Calc_XMLOasisSettingsImporter_get_implementation",
+    "Calc_XMLOasisStylesImporter_get_implementation",
+    "Calc_ScSpreadsheetSettings_get_implementation",
 # sc/util/scd.component
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
     "com_sun_star_comp_calc_FormatDetector_get_implementation",

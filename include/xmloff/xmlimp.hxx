@@ -288,10 +288,14 @@ protected:
 
 public:
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
+    /**
+     * @param sSupportedServiceNames if this is empty we default to our normal supported service names
+     */
     SvXMLImport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL );
+        SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL,
+        const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
     void cleanup() throw();
 

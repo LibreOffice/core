@@ -44,39 +44,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL
     ScFunctionListObj_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
 
-// Calc document
-css::uno::Sequence< OUString > ScDocument_getSupportedServiceNames() throw();
-OUString ScDocument_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScDocument_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags );
-
-// Calc XML import
-css::uno::Sequence< OUString > ScXMLImport_getSupportedServiceNames() throw();
-OUString ScXMLImport_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScXMLImport_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > ScXMLImport_Meta_getSupportedServiceNames() throw();
-OUString ScXMLImport_Meta_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScXMLImport_Meta_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > ScXMLImport_Styles_getSupportedServiceNames() throw();
-OUString ScXMLImport_Styles_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScXMLImport_Styles_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > ScXMLImport_Content_getSupportedServiceNames() throw();
-OUString ScXMLImport_Content_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScXMLImport_Content_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
-css::uno::Sequence< OUString > ScXMLImport_Settings_getSupportedServiceNames() throw();
-OUString ScXMLImport_Settings_getImplementationName() throw();
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > ScXMLImport_Settings_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr );
 
 class ScSpreadsheetSettings final : public cppu::WeakImplHelper<
                                         css::sheet::XGlobalSheetSettings,
@@ -99,9 +66,6 @@ private:
 public:
                             ScSpreadsheetSettings();
     virtual                 ~ScSpreadsheetSettings() override;
-
-    static OUString  getImplementationName_Static();
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XGlobalSheetSettings
     virtual sal_Bool SAL_CALL getMoveSelection() override
