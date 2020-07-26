@@ -2019,6 +2019,14 @@ res/lx03165.png cmd/lc_save.png
 res/lx03167.png cmd/lc_openremote.png
 res/lx03188.png cmd/32/dbviewtables.png
 res/lx03189.png cmd/lc_open.png
+res/lx03248.png res/odm_24_8.png
+res/lx03245_32.png res/odb_32_8.png
+res/lx03246_32.png res/odg_32_8.png
+res/lx03247_32.png res/odf_32_8.png
+res/lx03248_32.png res/odm_32_8.png
+res/lx03249_32.png res/odp_32_8.png
+res/lx03250_32.png res/ods_32_8.png
+res/lx03251_32.png res/odt_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/mainapp_16_8.png cmd/sc_adddirect.png
 res/mainapp_32.png res/mainapp_32_8.png

@@ -740,9 +740,7 @@ void SAL_CALL NewToolbarController::updateImage()
 
     INetURLObject aURLObj( aImageId.isEmpty() ? aURL : aImageId );
     vcl::ImageType eImageType( pToolBox->GetImageSize() );
-    bool bBig( eImageType != vcl::ImageType::Small );
-    Size aPreferredSize( bBig ? pToolBox->GetDefaultImageSize() : Size() );
-    Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, bBig, aPreferredSize );
+    Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, eImageType );
     if ( !aImage )
         aImage = vcl::CommandInfoProvider::GetImageForCommand( aURL, m_xFrame, eImageType );
 
