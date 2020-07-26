@@ -263,7 +263,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
     Reference< XFilePicker > xFilePicker(
         g_xFactory->createInstanceWithArguments(
-            FILE_PICKER_SERVICE_NAME, arguments ), UNO_QUERY );
+            "com.sun.star.ui.dialogs.SystemFilePicker", arguments ), UNO_QUERY );
 
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(

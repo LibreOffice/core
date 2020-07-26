@@ -69,7 +69,7 @@ public:
     // ctor/dtor
 
 
-    explicit VistaFilePicker( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, bool bFolderPicker );
+    explicit VistaFilePicker( bool bFolderPicker );
     virtual ~VistaFilePicker() override;
 
 
@@ -210,20 +210,13 @@ public:
 
     private:
 
-
-        /// service manager to create own used uno services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
-
         css::uno::Sequence< OUString > m_lLastFiles;
-
 
         /** execute the COM dialog within a STA thread
          *  Must be used on the heap ... because it's implemented as OSL thread .-)
          */
         RequestHandlerRef m_rDialog;
         AsyncRequests m_aAsyncExecute;
-
 
         oslThreadIdentifier m_nFilePickerThreadId;
 

@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="fps_win32" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.ui.dialogs.Win32FilePicker">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.ui.dialogs.Win32FilePicker"
+    constructor="fpicker_win32_FilePicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.SystemFilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.ui.dialogs.Win32FolderPicker">
+  <implementation name="com.sun.star.ui.dialogs.Win32FolderPicker"
+    constructor="fpicker_win32_FolderPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.SystemFolderPicker"/>
   </implementation>
 </component>
