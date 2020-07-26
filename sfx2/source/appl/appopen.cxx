@@ -431,6 +431,10 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
 }
 
+void SfxApplication::NewDocDirectState_Impl( SfxItemSet &rSet )
+{
+    rSet.Put(SfxStringItem(SID_NEWDOCDIRECT, "private:factory/" + SvtModuleOptions().GetDefaultModuleName()));
+}
 
 void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {

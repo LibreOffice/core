@@ -500,14 +500,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           </prop>
         </node>
       </node>
-      <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
-        <node oor:name="N_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">private:factory/sdatabase?Interactive</value>
-          </prop>
-        </node>
-      </node>
+      <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace"/>
       <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
         <node oor:name="F_MOD1" oor:op="replace">
           <prop oor:name="Command">
