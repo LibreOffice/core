@@ -24,7 +24,6 @@
 #include "VistaFilePicker.hxx"
 
 #include "WinImplHelper.hxx"
-#include "FPServiceInfo.hxx"
 #include "shared.hxx"
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -47,20 +46,8 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-namespace
-{
-    css::uno::Sequence< OUString > VistaFilePicker_getSupportedServiceNames()
-    {
-        return {
-            "com.sun.star.ui.dialogs.FilePicker",
-            "com.sun.star.ui.dialogs.SystemFilePicker",
-            "com.sun.star.ui.dialogs.SystemFolderPicker" };
-    }
-}
-
-VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, bool bFolderPicker)
+VistaFilePicker::VistaFilePicker(bool bFolderPicker)
     : TVistaFilePickerBase  (m_aMutex                 )
-    , m_xSMGR               (xSMGR                    )
     , m_rDialog             (std::make_shared<VistaFilePickerImpl>())
     , m_aAsyncExecute       (m_rDialog                )
     , m_nFilePickerThreadId (0                        )
@@ -533,9 +520,9 @@ void SAL_CALL VistaFilePicker::setDescription( const OUString& aDescription )
 OUString SAL_CALL VistaFilePicker::getImplementationName()
 {
     if (m_bFolderPicker)
-        return FOLDER_PICKER_IMPL_NAME;
+        return "com.sun.star.ui.dialogs.Win32FolderPicker";
     else
-        return FILE_PICKER_IMPL_NAME;
+        return "com.sun.star.ui.dialogs.Win32FilePicker";
 }
 
 sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
@@ -545,11 +532,29 @@ sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceNames()
 {
-    return VistaFilePicker_getSupportedServiceNames();
+        return {
+            "com.sun.star.ui.dialogs.FilePicker",
+            "com.sun.star.ui.dialogs.SystemFilePicker",
+            "com.sun.star.ui.dialogs.SystemFolderPicker" };
 }
 
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_win32_FilePicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ::fpicker::win32::vista::VistaFilePicker(false));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+fpicker_win32_FolderPicker_get_implementation(
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new ::fpicker::win32::vista::VistaFilePicker(true));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
