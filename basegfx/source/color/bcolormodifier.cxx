@@ -29,10 +29,7 @@ namespace basegfx
     BColorModifier::~BColorModifier()
     {
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_gray::~BColorModifier_gray()
     {
     }
@@ -48,10 +45,7 @@ namespace basegfx
 
         return ::basegfx::BColor(fLuminance, fLuminance, fLuminance);
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_invert::~BColorModifier_invert()
     {
     }
@@ -65,10 +59,7 @@ namespace basegfx
     {
         return ::basegfx::BColor(1.0 - aSourceColor.getRed(), 1.0 - aSourceColor.getGreen(), 1.0 - aSourceColor.getBlue());
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_luminance_to_alpha::~BColorModifier_luminance_to_alpha()
     {
     }
@@ -84,10 +75,7 @@ namespace basegfx
 
         return ::basegfx::BColor(fAlpha, fAlpha, fAlpha);
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_replace::~BColorModifier_replace()
     {
     }
@@ -108,10 +96,7 @@ namespace basegfx
     {
         return maBColor;
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_interpolate::~BColorModifier_interpolate()
     {
     }
@@ -132,10 +117,7 @@ namespace basegfx
     {
         return interpolate(maBColor, aSourceColor, mfValue);
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_black_and_white::~BColorModifier_black_and_white()
     {
     }
@@ -165,10 +147,7 @@ namespace basegfx
             return ::basegfx::BColor(1.0, 1.0, 1.0);
         }
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_gamma::BColorModifier_gamma(double fValue)
     :   BColorModifier(),
         mfValue(fValue),
@@ -215,10 +194,7 @@ namespace basegfx
             return aSourceColor;
         }
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     BColorModifier_RGBLuminanceContrast::BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast)
     :   BColorModifier(),
         mfRed(std::clamp(fRed, -1.0, 1.0)),
@@ -296,10 +272,7 @@ namespace basegfx
             return aSourceColor;
         }
     }
-} // end of namespace basegfx
 
-namespace basegfx
-{
     ::basegfx::BColor BColorModifierStack::getModifiedColor(const ::basegfx::BColor& rSource) const
     {
         if(maBColorModifiers.empty())
