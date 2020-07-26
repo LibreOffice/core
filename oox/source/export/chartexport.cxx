@@ -429,6 +429,14 @@ static sal_Int32 lcl_generateRandomValue()
     return comphelper::rng::uniform_int_distribution(0, 100000000-1);
 }
 
+static sal_Int32 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool bStart)
+{
+    // Our alpha is a gray color value.
+    sal_uInt8 nRed = ::Color(bStart ? rGradient.StartColor : rGradient.EndColor).GetRed();
+    // drawingML alpha is a percentage on a 0..100000 scale.
+    return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
+}
+
 ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel > const & xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( std::move(pFS), pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
@@ -1560,12 +1568,38 @@ void ChartExport::exportManualLayout(const css::chart2::RelativePosition& rPos,
 
 void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
 {
-    if ( !GetProperty( xPropSet, "FillStyle" ) )
+    // Similar to DrawingML::WriteFill, but gradient access via name
+    if (!GetProperty( xPropSet, "FillStyle" ))
         return;
-    FillStyle aFillStyle( FillStyle_NONE );
-    xPropSet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
+    FillStyle aFillStyle(FillStyle_NONE);
+    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+
+    // map full transparent background to no fill
+    if (aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ))
+    {
+        sal_Int16 nVal = 0;
+        xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
+        if ( nVal == 100 )
+            aFillStyle = FillStyle_NONE;
+    }
+    OUString sFillTransparenceGradientName;
+    if (aFillStyle == FillStyle_SOLID
+        && (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName)
+        && !sFillTransparenceGradientName.isEmpty())
+    {
+        awt::Gradient aTransparenceGradient;
+        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+        uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        rTransparenceValue >>= aTransparenceGradient;
+        if (aTransparenceGradient.StartColor == 0xffffff && aTransparenceGradient.EndColor == 0xffffff)
+            aFillStyle = FillStyle_NONE;
+    }
     switch( aFillStyle )
     {
+        case FillStyle_SOLID:
+            exportSolidFill(xPropSet);
+            break;
         case FillStyle_GRADIENT :
             exportGradientFill( xPropSet );
             break;
@@ -1574,10 +1608,69 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
             break;
         case FillStyle_HATCH:
             exportHatch(xPropSet);
-        break;
+            break;
+        case FillStyle_NONE:
+            mpFS->singleElementNS(XML_a, XML_noFill);
+            break;
         default:
-            WriteFill( xPropSet );
+            ;
     }
+}
+
+void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
+{
+    // Similar to DrawingML::WriteSolidFill, but gradient access via name
+    // and currently no InteropGrabBag
+    // get fill color
+    if (!GetProperty( xPropSet, "FillColor" ))
+        return;
+    sal_uInt32 nFillColor = mAny.get<sal_uInt32>();
+
+    sal_Int32 nAlpha = MAX_PERCENT;
+    if (GetProperty( xPropSet, "FillTransparence" ))
+    {
+        sal_Int32 nTransparency = 0;
+        mAny >>= nTransparency;
+        // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+        nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+    }
+    // OOXML has no separate transparence gradient but uses transparency in the gradient stops.
+    // So we merge transparency and color and use gradient fill in such case.
+    awt::Gradient aTransparenceGradient;
+    bool bNeedGradientFill(false);
+    OUString sFillTransparenceGradientName;
+    if ((xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName)
+        && !sFillTransparenceGradientName.isEmpty())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+        uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        rTransparenceValue >>= aTransparenceGradient;
+        if (aTransparenceGradient.StartColor != aTransparenceGradient.EndColor)
+            bNeedGradientFill = true;
+        else if (aTransparenceGradient.StartColor != 0)
+            nAlpha = lcl_getAlphaFromTransparenceGradient(aTransparenceGradient, true);
+    }
+    // write XML
+    if (bNeedGradientFill)
+    {
+        awt::Gradient aPseudoColorGradient;
+        aPseudoColorGradient.XOffset = aTransparenceGradient.XOffset;
+        aPseudoColorGradient.YOffset = aTransparenceGradient.YOffset;
+        aPseudoColorGradient.StartIntensity = 100;
+        aPseudoColorGradient.EndIntensity = 100;
+        aPseudoColorGradient.Angle = aTransparenceGradient.Angle;
+        aPseudoColorGradient.Border = aTransparenceGradient.Border;
+        aPseudoColorGradient.Style = aTransparenceGradient.Style;
+        aPseudoColorGradient.StartColor = nFillColor;
+        aPseudoColorGradient.EndColor = nFillColor;
+        aPseudoColorGradient.StepCount = aTransparenceGradient.StepCount;
+        mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
+        WriteGradientFill(aPseudoColorGradient, aTransparenceGradient);
+        mpFS->endElementNS(XML_a, XML_gradFill);
+    }
+    else
+        WriteSolidFill(::Color(nFillColor & 0xffffff), nAlpha);
 }
 
 void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )

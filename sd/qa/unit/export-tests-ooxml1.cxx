@@ -98,6 +98,9 @@ public:
     void testTdf128345GradientRadial();
     void testTdf128345GradientAxial();
     void testTdf134969TransparencyOnColorGradient();
+    void testTdf128345ChartArea_CG_TS();
+    void testTdf128345Chart_CS_TG();
+    void testTdf128345Legend_CS_TG_axial();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -145,6 +148,9 @@ public:
     CPPUNIT_TEST(testTdf128345GradientRadial);
     CPPUNIT_TEST(testTdf128345GradientAxial);
     CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
+    CPPUNIT_TEST(testTdf128345ChartArea_CG_TS);
+    CPPUNIT_TEST(testTdf128345Chart_CS_TG);
+    CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -167,6 +173,11 @@ public:
             { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
             { "wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" },
+            // ODF
+            { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+            { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"},
+            { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
+            { "chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0" },
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
         {
@@ -1228,6 +1239,115 @@ void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
+}
+
+void SdOOXMLExportTest1::testTdf128345ChartArea_CG_TS()
+{
+    // chart area with color gradient and solid transparency
+    // Without the patch the transparency was lost.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_ChartArea_CG_TS.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    // Make sure the chart area has a transparency in gradient stops in saved file.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/charts/chart1.xml"); // <-- does not exists, is chart2.xml ??
+    OString sPathStart("//c:chartSpace/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "30000");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "30000");
+
+    // Make sure chart area has transparency in the reloaded document. Currently transparency is
+    // always imported as gradient. Change test, when import creates solid transparency.
+    // I use the saved odp file for testing, because I don't know how to access the chart
+    // from the active document in a unit test.
+    utl::TempFile tempFile2;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile2);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(tempFile2, "Object 1/styles.xml");
+    sPathStart = "//office:document-styles/office:styles";
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:start='30%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:end='30%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:border='20%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:name='msTransGradient_20_1']");
+
+    xmlDocUniquePtr pXmlDoc3 = parseExport(tempFile2, "Object 1/content.xml");
+    sPathStart = "//office:document-content/office:automatic-styles/style:style[@style:name='ch1']";
+    assertXPath(pXmlDoc3, sPathStart + "/style:graphic-properties[@draw:opacity-name='msTransGradient_20_1']");
+    sPathStart = "//office:document-content/office:body/office:chart";
+    assertXPath(pXmlDoc3, sPathStart + "/chart:chart[@chart:style-name='ch1']");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf128345Chart_CS_TG()
+{
+    // chart with solid color and transparency gradient
+    // Without the patch the transparency was lost.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_Chart_CS_TG.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    // Make sure the chart area has a transparency in gradient stops in saved file.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/charts/chart2.xml"); // <-- why not chart1.xml ??
+    OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2); //linear
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "0"); // 100% transparent
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", 0); // no element for 0% transparent
+
+    // Make sure chart has transparency in the reloaded document.
+    // I use the saved odp file for testing, because I don't know how to access the chart
+    // from the active document in a unit test.
+    utl::TempFile tempFile2;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile2);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(tempFile2, "Object 1/styles.xml");
+    sPathStart = "//office:document-styles/office:styles";
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:style='linear']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:start='0%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:end='100%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:name='msTransGradient_20_1']");
+
+    xmlDocUniquePtr pXmlDoc3 = parseExport(tempFile2, "Object 1/content.xml");
+    sPathStart = "//office:document-content/office:automatic-styles/style:style[@style:name='ch8']";
+    assertXPath(pXmlDoc3, sPathStart + "/style:graphic-properties[@draw:opacity-name='msTransGradient_20_1']");
+    sPathStart = "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area";
+    assertXPath(pXmlDoc3, sPathStart + "/chart:wall[@chart:style-name='ch8']");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf128345Legend_CS_TG_axial()
+{
+    // legend with solid color and transparency gradient
+    // Without the patch the transparency was lost.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf128345_Legend_CS_TG_axial.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    // Make sure the legend has a transparency in gradient stops in saved file.
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/charts/chart3.xml");
+    OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",3); // axial
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", 0); // no element for 0% transparent
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "0"); // 100% transparent
+    assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[3]/a:srgbClr/a:alpha", 0); // no element for 0% transparent
+
+    // Make sure legend has axial transparency in the reloaded document.
+    // I use the saved odp file for testing, because I don't know how to access the chart
+    // from the active document in a unit test.
+    utl::TempFile tempFile2;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile2);
+    xmlDocUniquePtr pXmlDoc2 = parseExport(tempFile2, "Object 1/styles.xml");
+    sPathStart = "//office:document-styles/office:styles";
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:style='axial']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:start='0%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:end='100%']");
+    assertXPath(pXmlDoc2, sPathStart + "/draw:opacity[@draw:name='msTransGradient_20_1']");
+
+    xmlDocUniquePtr pXmlDoc3 = parseExport(tempFile2, "Object 1/content.xml");
+    sPathStart = "//office:document-content/office:automatic-styles/style:style[@style:name='ch2']";
+    assertXPath(pXmlDoc3, sPathStart + "/style:graphic-properties[@draw:opacity-name='msTransGradient_20_1']");
+    sPathStart = "//office:document-content/office:body/office:chart/chart:chart";
+    assertXPath(pXmlDoc3, sPathStart + "/chart:legend[@chart:style-name='ch2']");
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
