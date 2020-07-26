@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vbahelper/helperdecl.hxx>
-#include "service.hxx"
 #include "vbaglobals.hxx"
 #include <sal/log.hxx>
 
@@ -139,11 +138,7 @@ SwVbaGlobals::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< OUString > const aServiceNames
-        {
-            "ooo.vba.word.Globals"
-        };
-        return aServiceNames;
+    return { "ooo.vba.word.Globals" };
 }
 
 uno::Sequence< OUString >
@@ -161,14 +156,11 @@ SwVbaGlobals::getAvailableServiceNames(  )
     return serviceNames;
 }
 
-namespace globals
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Writer_SwVbaGlobals_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaGlobals, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "SwVbaGlobals",
-    "ooo.vba.word.Globals" );
+    return cppu::acquire(new SwVbaGlobals(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

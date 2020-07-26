@@ -19,11 +19,10 @@
 
 #include <sal/config.h>
 
-#include "service.hxx"
 #include "vbaeventshelper.hxx"
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <comphelper/servicedecl.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
@@ -82,14 +81,26 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
     return "ThisDocument";
 }
 
-namespace vbaeventshelper
+    // XServiceInfo
+OUString SwVbaEventsHelper::getImplementationName()
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::inheritingClass_<SwVbaEventsHelper, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "SwVbaEventsHelper",
-    "com.sun.star.document.vba.VBATextEventProcessor" );
+    return "SwVbaEventsHelper";
+}
+sal_Bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+css::uno::Sequence< OUString > SwVbaEventsHelper::getSupportedServiceNames()
+{
+    return { "com.sun.star.document.vba.VBATextEventProcessor" };
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Writer_SwVbaEventsHelper_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+{
+    return cppu::acquire(new SwVbaEventsHelper(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
