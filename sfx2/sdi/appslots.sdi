@@ -222,6 +222,7 @@ shell SfxApplication
     SID_NEWDOCDIRECT // ole(no) api(no)
     [
         ExecMethod = NewDocDirectExec_Impl ;
+        StateMethod = NewDocDirectState_Impl ;
     ]
     SID_CLOSEDOCS
     [

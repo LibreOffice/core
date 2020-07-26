@@ -206,6 +206,12 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_NEWDOCDIRECT
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
     SID_SAVEDOC
     [
         ExecMethod  = ExecuteGlobal;
