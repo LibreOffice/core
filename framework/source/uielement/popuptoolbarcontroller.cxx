@@ -799,7 +799,19 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     {
         aImage = !!aMenuImage ? aMenuImage : SvFileInformationManager::GetImage(aURLObj, bBig, aPreferredSize);
     }
+<<<<<<< HEAD   (ad4f81 oox: VML export: for rotated text shape, produce bottom-to-t)
     // if everything failed, just use the image associated with the toolbar item command
+=======
+    else
+        aURL = m_aCommandURL;
+
+    INetURLObject aURLObj( aImageId.isEmpty() ? aURL : aImageId );
+    vcl::ImageType eImageType( pToolBox->GetImageSize() );
+    Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, eImageType );
+    if ( !aImage )
+        aImage = vcl::CommandInfoProvider::GetImageForCommand( aURL, m_xFrame, eImageType );
+
+>>>>>>> CHANGE (789f67 tdf#134887 NewToolbarController: Use different icons for ext)
     if ( !aImage )
         return;
 
