@@ -102,6 +102,8 @@
 #include <sfx2/app.hxx>
 #endif
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
@@ -713,6 +715,28 @@ std::string extractPrivateKey(const std::string & privateKey)
     pos2 = pos2 - pos1;
 
     return privateKey.substr(pos1, pos2);
+}
+
+OUString lcl_getCurrentDocumentMimeType(LibLODocument_Impl* pDocument)
+{
+    OUString aMimeType;
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return aMimeType;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    if (!pObjectShell)
+        return aMimeType;
+
+    SfxMedium* pMedium = pObjectShell->GetMedium();
+    if (!pMedium)
+        return aMimeType;
+
+    auto pFilter = pMedium->GetFilter();
+    if (!pFilter)
+        return aMimeType;
+
+    return pFilter->GetMimeType();
 }
 
 // Gets an undo manager to enter and exit undo context. Needed by ToggleOrientation
@@ -2430,6 +2454,9 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
     OUString sFormat = getUString(pFormat);
     OUString aURL(getAbsoluteURL(sUrl));
+
+    uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+
     if (aURL.isEmpty())
     {
         SetLastExceptionMsg("Filename to save to was not provided.");
@@ -2569,7 +2596,6 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteraction;
         }
 
-        uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
         if (bTakeOwnership)
             xStorable->storeAsURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
@@ -3731,6 +3757,30 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
     {
+        // Check if saving a PDF file
+        OUString aMimeType = lcl_getCurrentDocumentMimeType(pDocument);
+        if (aMimeType == "application/pdf")
+        {
+            // If we have a PDF file (for saving annotations for example), we need
+            // to run save-as to the same file as the opened document. Plain save
+            // doesn't work as the PDF is not a "native" format.
+            uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+            OUString aURL = xStorable->getLocation();
+            OString aURLUtf8 = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
+            bool bResult = doc_saveAs(pThis, aURLUtf8.getStr(), "pdf", nullptr);
+
+            // Send the result of save
+            boost::property_tree::ptree aTree;
+            aTree.put("commandName", pCommand);
+            aTree.put("success", bResult);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            OString aPayload = aStream.str().c_str();
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
+            return;
+        }
+
+
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("save", gImpl, pDocument));
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
