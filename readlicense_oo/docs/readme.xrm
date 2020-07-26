@@ -160,8 +160,8 @@
 		</div>
 
 		<div class="WIN" id="Mapi">
-			<h2 id="gfh6w1" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</h2>
-			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as E-mail' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="https://www.microsoft.com">https://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
+			<h2 id="gfh6w1" xml:lang="en-US">Problems When Sending Documents as Emails From ${PRODUCTNAME}</h2>
+			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as Email' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="https://www.microsoft.com">https://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
 		</div>
 
 		<div id="A11y">
