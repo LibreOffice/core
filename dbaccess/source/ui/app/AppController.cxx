@@ -532,6 +532,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     {
         switch (_nId)
         {
+            case SID_NEWDOCDIRECT:
+                aReturn.bEnabled = true;
+                aReturn.sTitle = "private:factory/sdatabase";
+                break;
             case SID_OPENURL:
                 aReturn.bEnabled = true;
                 if ( m_xModel.is() )
@@ -1031,17 +1035,25 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     }
                 }
                 break;
+            case SID_NEWDOCDIRECT:
             case SID_OPENDOC:
                 {
                     Reference < XDispatchProvider > xProv( getFrame(), UNO_QUERY );
                     if ( xProv.is() )
                     {
                         URL aURL;
-                        aURL.Complete = ".uno:Open";
+                        OUString aTarget;
+                        if ( _nId == SID_NEWDOCDIRECT )
+                        {
+                            aURL.Complete = "private:factory/sdatabase?Interactive";
+                            aTarget = "_default";
+                        }
+                        else
+                            aURL.Complete = ".uno:Open";
 
                         if ( m_xUrlTransformer.is() )
                             m_xUrlTransformer->parseStrict( aURL );
-                        Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
+                        Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, aTarget, 0 );
                         if ( xDisp.is() )
                             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
                     }
@@ -1340,6 +1352,7 @@ void OApplicationController::describeSupportedFeatures()
 {
     OGenericUnoController::describeSupportedFeatures();
 
+    implDescribeSupportedFeature( ".uno:AddDirect",          SID_NEWDOCDIRECT,          CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SendMail",           SID_MAIL_SENDDOC,          CommandGroup::DOCUMENT );

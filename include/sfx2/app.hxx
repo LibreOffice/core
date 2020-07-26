@@ -188,6 +188,7 @@ public:
     // Slot Methods
     // TODO/CLEANUP: still needed?
     SAL_DLLPRIVATE void         NewDocDirectExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE static void  NewDocDirectState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         NewDocExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OpenDocExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OpenRemoteExec_Impl(SfxRequest &);

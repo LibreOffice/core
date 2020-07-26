@@ -40,6 +40,7 @@
 #include <svl/srchdefs.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -270,6 +271,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_NEWDOCDIRECT:
+        {
+            // we do not have a new document factory,
+            // so just forward to a fallback method.
+            SfxGetpApp()->ExecuteSlot(rReq);
+        }
+        break;
+
         case SID_BASICSTOP:
         {
             // maybe do not simply stop if on breakpoint!
@@ -770,6 +779,13 @@ void Shell::GetState(SfxItemSet &rSet)
     {
         switch ( nWh )
         {
+            case SID_NEWDOCDIRECT:
+            {
+                // we do not have a new document factory,
+                // so just forward to a fallback method.
+                SfxGetpApp()->GetSlotState(nWh, nullptr, &rSet);
+            }
+            break;
             case SID_DOCINFO:
             {
                 rSet.DisableItem( nWh );

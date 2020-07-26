@@ -396,7 +396,7 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XSubToolbarController
-    // Ugly HACK to cause ToolBarManager ask our controller for updated image, in case of icon theme change.
+    // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
     virtual sal_Bool SAL_CALL opensSubToolbar() override;
     virtual OUString SAL_CALL getSubToolbarName() override;
     virtual void SAL_CALL functionSelected( const OUString& aCommand ) override;
@@ -580,7 +580,7 @@ css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
     return {"com.sun.star.frame.ToolbarController"};
 }
 
-class NewToolbarController : public PopupMenuToolbarController
+class NewToolbarController : public cppu::ImplInheritanceHelper<PopupMenuToolbarController, css::frame::XSubToolbarController>
 {
 public:
     explicit NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -594,18 +594,26 @@ public:
 
     void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
+    // XSubToolbarController
+    // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
+    sal_Bool SAL_CALL opensSubToolbar() override { return true; }
+    OUString SAL_CALL getSubToolbarName() override { return OUString(); }
+    void SAL_CALL functionSelected( const OUString& ) override {}
+    void SAL_CALL updateImage() override;
+
 private:
     void functionExecuted( const OUString &rCommand ) override;
     void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
     void SAL_CALL execute( sal_Int16 KeyModifier ) override;
-    void setItemImage( const OUString &rCommand );
+    sal_uInt16 getMenuIdForCommand( const OUString &rCommand );
 
-    OUString m_aLastURL;
+    sal_uInt16 m_nMenuId;
 };
 
 NewToolbarController::NewToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : PopupMenuToolbarController( xContext )
+    : ImplInheritanceHelper( xContext )
+    , m_nMenuId( 0 )
 {
 }
 
@@ -641,8 +649,8 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
         try
         {
             // set the image even if the state is not a string
-            // this will set the image of the default module
-            setItemImage( aState );
+            // the toolbar item command will be used as a fallback
+            functionExecuted( aState );
         }
         catch (const css::ucb::CommandFailedException&)
         {
@@ -658,154 +666,90 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
 void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    if ( !m_aLastURL.getLength() )
-        return;
 
-    OUString aTarget( "_default" );
-    if ( m_xPopupMenu.is() )
+    OUString aURL, aTarget;
+    if ( m_xPopupMenu.is() && m_nMenuId )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
-        MenuAttributes* pMenuAttributes( nullptr );
-        VCLXPopupMenu*  pTkPopupMenu =
-            static_cast<VCLXPopupMenu *>( comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu ) );
-
         SolarMutexGuard aSolarMutexGuard;
-        PopupMenu* pVCLPopupMenu = pTkPopupMenu ?
-            dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : nullptr;
+        Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
+        aURL = pVclMenu->GetItemCommand( m_nMenuId );
 
-        if ( pVCLPopupMenu )
-            pMenuAttributes = static_cast< MenuAttributes* >(
-                pVCLPopupMenu->GetUserValue( pVCLPopupMenu->GetCurItemId() ) );
-
+        MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
         if ( pMenuAttributes )
             aTarget = pMenuAttributes->aTargetFrame;
+        else
+            aTarget = "_default";
     }
+    else
+        aURL = m_aCommandURL;
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = "Referer";
     aArgs[0].Value <<= OUString( "private:user" );
 
-    dispatchCommand( m_aLastURL, aArgs, aTarget );
+    dispatchCommand( aURL, aArgs, aTarget );
 }
 
 void NewToolbarController::functionExecuted( const OUString &rCommand )
 {
-    setItemImage( rCommand );
+    m_nMenuId = getMenuIdForCommand( rCommand );
+    updateImage();
 }
 
-/**
-    it return the existing state of the given URL in the popupmenu of this toolbox control.
-
-    If the given URL can be located as an action command of one menu item of the
-    popup menu of this control, we return sal_True. Otherwise we return sal_False.
-    Further we return a fallback URL, in case we have to return sal_False. Because
-    the outside code must select a valid item of the popup menu every time ...
-    and we define it here. By the way this method was written to handle
-    error situations gracefully. E.g. it can be called during creation time
-    but then we have no valid menu. For this case we know another fallback URL.
-    Then we return the private:factory/ URL of the default factory.
-
-    @param  rPopupMenu
-                points to the popup menu, on which item we try to locate the given URL
-                Can be NULL! Search will be suppressed then.
-
-    @param  sURL
-                the URL for searching
-
-    @param  sFallback
-                contains the fallback URL in case we return FALSE
-                Must point to valid memory!
-
-    @param  aImage
-                contains the image of the menu for the URL.
-
-    @return sal_True - if URL could be located as an item of the popup menu.
-            sal_False - otherwise.
-*/
-bool Impl_ExistURLInMenu(
-    const css::uno::Reference< css::awt::XPopupMenu > &rPopupMenu,
-    OUString &sURL,
-    OUString &sFallback,
-    Image &aImage )
+sal_uInt16 NewToolbarController::getMenuIdForCommand( const OUString &rCommand )
 {
-    bool bValidFallback( false );
-    sal_uInt16 nCount( 0 );
-    if ( rPopupMenu.is() )
+    if ( m_xPopupMenu.is() && !rCommand.isEmpty() )
     {
-        nCount = rPopupMenu->getItemCount();
-        if (nCount != 0 && sURL.getLength() )
+        Menu* pVclMenu( comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu() );
+        sal_uInt16 nCount = pVclMenu->GetItemCount();
+        for ( sal_uInt16 n = 0; n < nCount; ++n )
         {
-            for ( sal_uInt16 n = 0; n < nCount; ++n )
-            {
-                sal_uInt16 nId = rPopupMenu->getItemId( n );
-                OUString aCmd( rPopupMenu->getCommand( nId ) );
+            sal_uInt16 nId = pVclMenu->GetItemId( n );
+            OUString aCmd( pVclMenu->GetItemCommand( nId ) );
 
-                if ( !bValidFallback && aCmd.getLength() )
-                {
-                    sFallback = aCmd;
-                    bValidFallback = true;
-                }
-
-                // match even if the menu command is more detailed
-                // (maybe an additional query) #i28667#
-                if ( aCmd.match( sURL ) )
-                {
-                    sURL = aCmd;
-                    const css::uno::Reference< css::graphic::XGraphic > xGraphic(
-                        rPopupMenu->getItemImage( nId ) );
-                    if ( xGraphic.is() )
-                        aImage = Image( xGraphic );
-                    return true;
-                }
-            }
+            // match even if the menu command is more detailed
+            // (maybe an additional query) #i28667#
+            if ( aCmd.match( rCommand ) )
+                return nId;
         }
     }
 
-    if ( !bValidFallback )
-    {
-        OUStringBuffer aBuffer;
-        aBuffer.append( "private:factory/" );
-        aBuffer.append( SvtModuleOptions().GetDefaultModuleName() );
-        sFallback = aBuffer.makeStringAndClear();
-    }
-
-    return false;
+    return 0;
 }
 
-/** We accept URL's here only, which exist as items of our internal popup menu.
-    All other ones will be ignored and a fallback is used.
- */
-void NewToolbarController::setItemImage( const OUString &rCommand )
+void SAL_CALL NewToolbarController::updateImage()
 {
     SolarMutexGuard aSolarLock;
     VclPtr< ToolBox> pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if ( !pToolBox )
         return;
 
-    OUString aURL = rCommand;
-    OUString sFallback;
-    Image aMenuImage;
-
-    bool bValid( Impl_ExistURLInMenu( m_xPopupMenu, aURL, sFallback, aMenuImage ) );
-    if ( !bValid )
-        aURL = sFallback;
-
-    bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
-
-    INetURLObject aURLObj( aURL );
-    Size aPreferredSize(bBig ? pToolBox->GetDefaultImageSize() : Size());
-    Image aImage = SvFileInformationManager::GetImageNoDefault(aURLObj, bBig, aPreferredSize);
-    if (!aImage)
+    OUString aURL, aImageId;
+    if ( m_xPopupMenu.is() && m_nMenuId )
     {
-        aImage = !!aMenuImage ? aMenuImage : SvFileInformationManager::GetImage(aURLObj, bBig, aPreferredSize);
+        Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
+        aURL = pVclMenu->GetItemCommand( m_nMenuId );
+
+        MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
+        if ( pMenuAttributes )
+            aImageId = pMenuAttributes->aImageId;
     }
-    // if everything failed, just use the image associated with the toolbar item command
+    else
+        aURL = m_aCommandURL;
+
+    INetURLObject aURLObj( aImageId.isEmpty() ? aURL : aImageId );
+    vcl::ImageType eImageType( pToolBox->GetImageSize() );
+    bool bBig( eImageType != vcl::ImageType::Small );
+    Size aPreferredSize( bBig ? pToolBox->GetDefaultImageSize() : Size() );
+    Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, bBig, aPreferredSize );
+    if ( !aImage )
+        aImage = vcl::CommandInfoProvider::GetImageForCommand( aURL, m_xFrame, eImageType );
+
     if ( !aImage )
         return;
 
     pToolBox->SetItemImage( m_nToolBoxId, aImage );
-
-    m_aLastURL = aURL;
 }
 
 }
