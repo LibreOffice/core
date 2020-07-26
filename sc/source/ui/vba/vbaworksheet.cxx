@@ -61,7 +61,6 @@
 
 #include <tabprotection.hxx>
 #include "excelvbahelper.hxx"
-#include "service.hxx"
 #include "vbaoutline.hxx"
 #include "vbarange.hxx"
 #include "vbacomments.hxx"
@@ -1050,14 +1049,11 @@ ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId)
     return 0;
 }
 
-namespace worksheet
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScVbaWorksheet_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWorksheet, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaWorksheet",
-    "ooo.vba.excel.Worksheet" );
+    return cppu::acquire(new ScVbaWorksheet(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

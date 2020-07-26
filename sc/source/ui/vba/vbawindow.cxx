@@ -18,7 +18,6 @@
  */
 #include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
-#include "service.hxx"
 #include "vbawindow.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworksheet.hxx"
@@ -889,14 +888,12 @@ ScVbaWindow::getServiceNames()
     };
     return aServiceNames;
 }
-namespace window
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScVbaWindow_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWindow, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaWindow",
-    "ooo.vba.excel.Window" );
+    return cppu::acquire(new ScVbaWindow(args, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

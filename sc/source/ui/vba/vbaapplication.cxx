@@ -35,7 +35,6 @@
 #include <ooo/vba/office/MsoShapeType.hpp>
 #include <ooo/vba/office/MsoAutoShapeType.hpp>
 
-#include "service.hxx"
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
 #include "vbaworkbook.hxx"
@@ -1480,15 +1479,14 @@ ScVbaApplication::getServiceNames()
     return aServiceNames;
 }
 
-namespace application
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScVbaApplication_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaApplication, sdecl::with_args<false> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaApplication",
-    "ooo.vba.excel.Application" );
+    return cppu::acquire(new ScVbaApplication(context));
 }
+
 
 // ScVbaApplicationOutgoingConnectionPoint
 
