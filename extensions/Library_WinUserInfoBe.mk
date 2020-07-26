@@ -16,7 +16,6 @@ $(eval $(call gb_Library_set_componentfile,WinUserInfoBe,extensions/source/confi
 $(eval $(call gb_Library_use_sdk_api,WinUserInfoBe))
 
 $(eval $(call gb_Library_add_exception_objects,WinUserInfoBe,\
-	extensions/source/config/WinUserInfo/componentdef \
 	extensions/source/config/WinUserInfo/WinUserInfoBe \
 ))
 
