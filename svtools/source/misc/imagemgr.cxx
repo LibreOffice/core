@@ -482,9 +482,34 @@ static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
     return pRet;
 }
 
-static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
+static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType )
 {
-    if (bBig)
+    if (eImageType == vcl::ImageType::Size32)
+    {
+        switch (nImageId)
+        {
+            case SvImageId::HTML:
+                return BMP_HTML_32;
+            case SvImageId::OO_DatabaseDoc:
+                return BMP_OO_DATABASE_DOC_32;
+            case SvImageId::OO_DrawDoc:
+                return BMP_OO_DRAW_DOC_32;
+            case SvImageId::OO_MathDoc:
+                return BMP_OO_MATH_DOC_32;
+            case SvImageId::OO_GlobalDoc:
+                return BMP_OO_GLOBAL_DOC_32;
+            case SvImageId::OO_ImpressDoc:
+                return BMP_OO_IMPRESS_DOC_32;
+            case SvImageId::OO_CalcDoc:
+                return BMP_OO_CALC_DOC_32;
+            case SvImageId::OO_WriterDoc:
+                return BMP_OO_WRITER_DOC_32;
+            case SvImageId::OO_WriterTemplate:
+                return BMP_OO_WRITER_TEMPLATE_32;
+            default: break;
+        }
+    }
+    else if (eImageType == vcl::ImageType::Size26)
     {
         switch (nImageId)
         {
@@ -640,7 +665,6 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
             case SvImageId::Table:
                 return BMP_TABLE_SC;
             case SvImageId::Folder:
-                // if not bBig, then return our new small folder image (256 colors)
                 return RID_BMP_FOLDER;
             case SvImageId::DXF:
                 return BMP_DXF_SC;
@@ -687,9 +711,9 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
     return OUString();
 }
 
-static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig, Size aSize = Size())
+static Image GetImageFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType, Size aSize = Size())
 {
-    OUString sImageName(GetImageNameFromList_Impl(nImageId, bBig));
+    OUString sImageName(GetImageNameFromList_Impl(nImageId, eImageType));
     if (!sImageName.isEmpty())
         return Image(StockImage::Yes, sImageName, aSize);
     return Image();
@@ -761,24 +785,24 @@ OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool
 {
     SvImageId nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageNameFromList_Impl(nImage, bBig);
+    return GetImageNameFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
 Image SvFileInformationManager::GetImage(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
 {
     SvImageId nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageFromList_Impl(nImage, bBig, rPreferredSize);
+    return GetImageFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16, rPreferredSize);
 }
 
 OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
 {
     SvImageId nImage = GetImageId_Impl( rObject, false );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageNameFromList_Impl(nImage, /*bBig*/false);
+    return GetImageNameFromList_Impl(nImage, vcl::ImageType::Size16);
 }
 
-Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
+Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, vcl::ImageType eImageType)
 {
     SvImageId nImage = GetImageId_Impl(rObject, true);
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
@@ -786,7 +810,7 @@ Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, 
     if ( nImage == SvImageId::File )
         return Image();
 
-    return GetImageFromList_Impl(nImage, bBig, rPreferredSize);
+    return GetImageFromList_Impl(nImage, eImageType);
 }
 
 OUString SvFileInformationManager::GetFolderImageId( const svtools::VolumeInfo& rInfo )
@@ -803,7 +827,7 @@ OUString SvFileInformationManager::GetFolderImageId( const svtools::VolumeInfo& 
     else if ( rInfo.m_bIsVolume )
         nImage = SvImageId::FixedDevice;
 
-    return GetImageNameFromList_Impl(nImage, false/*bBig*/);
+    return GetImageNameFromList_Impl(nImage, vcl::ImageType::Size16);
 }
 
 OUString SvFileInformationManager::GetDescription( const INetURLObject& rObject )

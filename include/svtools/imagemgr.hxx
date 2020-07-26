@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/gen.hxx>
+#include <vcl/vclenum.hxx>
 
 enum class SvImageId {
     NONE                   =    0,
@@ -122,7 +123,7 @@ public:
     SVT_DLLPUBLIC static OUString GetImageId( const INetURLObject& rURL, bool bBig = false );
     SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, bool bBig = false, Size const & rPreferredSize = Size());
     SVT_DLLPUBLIC static OUString GetFileImageId( const INetURLObject& rURL );
-    SVT_DLLPUBLIC static Image  GetImageNoDefault(const INetURLObject& rURL, bool bBig = false, Size const & rPreferredSize = Size());
+    SVT_DLLPUBLIC static Image  GetImageNoDefault(const INetURLObject& rURL, vcl::ImageType eImageType = vcl::ImageType::Small);
     SVT_DLLPUBLIC static OUString GetFolderImageId( const svtools::VolumeInfo& rInfo );
 
     SVT_DLLPUBLIC static OUString GetDescription( const INetURLObject& rObject );
