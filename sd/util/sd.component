@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.DrawingDocument">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.DrawingDocument"
+    constructor="sd_DrawingDocument_get_implementation">
     <service name="com.sun.star.drawing.DrawingDocument"/>
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
   </implementation>
@@ -27,7 +28,8 @@
       constructor="com_sun_star_comp_Draw_DrawingModule_get_implementation">
     <service name="com.sun.star.drawing.ModuleDispatcher"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresentationDocument">
+  <implementation name="com.sun.star.comp.Draw.PresentationDocument"
+    constructor="sd_PresentationDocument_get_implementation">
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
     <service name="com.sun.star.presentation.PresentationDocument"/>
   </implementation>

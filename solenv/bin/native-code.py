@@ -559,7 +559,6 @@ calc_constructor_list = [
     ]
 
 draw_factory_list = [
-    ("libsdlo.a", "sd_component_getFactory"),
     ]
 
 draw_constructor_list = [
@@ -592,6 +591,19 @@ draw_constructor_list = [
     "filter_SVGFilter_get_implementation",
     "filter_SVGWriter_get_implementation",
 # sd/util/sd.component
+    "sd_DrawingDocument_get_implementation",
+    "com_sun_star_comp_Draw_DrawingModule_get_implementation",
+    "sd_PresentationDocument_get_implementation",
+    "com_sun_star_comp_Draw_PresenterHelper_get_implementation",
+    "com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation",
+    "com_sun_star_comp_Draw_PresenterTextView_get_implementation",
+    "com_sun_star_comp_Draw_SlideRenderer_get_implementation",
+    "com_sun_star_comp_Draw_SlideSorter_get_implementation",
+    "com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation",
+    "com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation",
+    "com_sun_star_comp_sd_InsertSlideController_get_implementation",
+    "com_sun_star_comp_sd_SlideLayoutController_get_implementation",
+    "com_sun_star_comp_sd_DisplayModeController_get_implementation",
     "RandomAnimationNode_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation",
     "com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation",
