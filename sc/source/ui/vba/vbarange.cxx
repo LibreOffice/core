@@ -123,7 +123,6 @@
 #include <unonames.hxx>
 
 #include "excelvbahelper.hxx"
-#include "service.hxx"
 #include "vbaapplication.hxx"
 #include "vbafont.hxx"
 #include "vbacomment.hxx"
@@ -5618,11 +5617,7 @@ ScVbaRange::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaRange::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
-    {
-        "ooo.vba.excel.Range"
-    };
-    return aServiceNames;
+    return { "ooo.vba.excel.Range" };
 }
 
 sal_Bool SAL_CALL
@@ -5641,14 +5636,13 @@ ScVbaRange::hasError()
     return dResult > 0.0;
 }
 
-namespace range
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScVbaRange_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaRange, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "SvVbaRange",
-    "ooo.vba.excel.Range" );
+    return cppu::acquire(new ScVbaRange(args, context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

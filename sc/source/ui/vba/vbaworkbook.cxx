@@ -29,7 +29,6 @@
 #include <ooo/vba/excel/XlFileFormat.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 
-#include "service.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworkbook.hxx"
@@ -417,14 +416,12 @@ ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId )
     return 0;
 }
 
-namespace workbook
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Calc_ScVbaWorkbook_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaWorkbook, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaWorkbook",
-    "ooo.vba.excel.Workbook" );
+    return cppu::acquire(new ScVbaWorkbook(args, context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

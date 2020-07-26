@@ -56,7 +56,6 @@ $(eval $(call gb_Library_use_libraries,vbaobj,\
 
 $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/excelvbahelper \
-	sc/source/ui/vba/service \
 	sc/source/ui/vba/vbaapplication \
 	sc/source/ui/vba/vbaassistant \
 	sc/source/ui/vba/vbaaxes \

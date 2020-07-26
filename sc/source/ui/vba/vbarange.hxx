@@ -34,6 +34,7 @@ namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
 namespace com::sun::star::table { class XCell; }
 namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::table { struct CellRangeAddress; }
+namespace com::sun::star::lang { class XServiceInfo; }
 namespace ooo::vba { class XCollection; }
 namespace ooo::vba::excel { class XComment; }
 namespace ooo::vba::excel { class XFont; }
@@ -44,8 +45,6 @@ class ScCellRangeObj;
 class ScDocShell;
 class ScDocument;
 class ScRangeList;
-
-typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
 
 class ArrayVisitor
 {
@@ -68,6 +67,8 @@ public:
     virtual void processValue( const css::uno::Any& aValue ) = 0;
     virtual const css::uno::Any& getValue() const = 0;
 };
+
+typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
 
 class ScVbaRange : public ScVbaRange_BASE
 {

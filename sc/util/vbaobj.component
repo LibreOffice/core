@@ -18,8 +18,8 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="vbaobj" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="ScVbaApplication">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="ScVbaApplication" constructor="Calc_ScVbaApplication_get_implementation">
     <service name="ooo.vba.excel.Application"/>
   </implementation>
   <implementation name="ScVbaEventsHelper"
@@ -30,23 +30,23 @@
       constructor="ScVbaGlobals_get_implementation">
     <service name="ooo.vba.excel.Globals"/>
   </implementation>
-  <implementation name="ScVbaHyperlink">
+  <implementation name="ScVbaHyperlink" constructor="Calc_ScVbaHyperlink_get_implementation">
     <service name="ooo.vba.excel.Hyperlink"/>
   </implementation>
   <implementation name="ScVbaTextFrame"
       constructor="ScVbaTextFrame_get_implementation">
     <service name="ooo.vba.excel.TextFrame"/>
   </implementation>
-  <implementation name="ScVbaWindow">
+  <implementation name="ScVbaWindow" constructor="Calc_ScVbaWindow_get_implementation">
     <service name="ooo.vba.excel.Window"/>
   </implementation>
-  <implementation name="ScVbaWorkbook">
+  <implementation name="ScVbaWorkbook" constructor="Calc_ScVbaWorkbook_get_implementation">
     <service name="ooo.vba.excel.Workbook"/>
   </implementation>
-  <implementation name="ScVbaWorksheet">
+  <implementation name="ScVbaWorksheet" constructor="Calc_ScVbaWorksheet_get_implementation">
     <service name="ooo.vba.excel.Worksheet"/>
   </implementation>
-  <implementation name="SvVbaRange">
+  <implementation name="SvVbaRange" constructor="Calc_ScVbaRange_get_implementation">
     <service name="ooo.vba.excel.Range"/>
   </implementation>
 </component>
