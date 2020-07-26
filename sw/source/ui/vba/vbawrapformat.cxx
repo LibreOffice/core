@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include "service.hxx"
 #include "vbawrapformat.hxx"
 #include <ooo/vba/word/WdWrapSideType.hpp>
 #include <ooo/vba/word/WdWrapType.hpp>
@@ -234,14 +233,12 @@ SwVbaWrapFormat::getServiceNames()
     return aServiceNames;
 }
 
-namespace wrapformat
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Writer_SwVbaWrapFormat_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaWrapFormat, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "SwVbaWrapFormat",
-    "ooo.vba.word.WrapFormat" );
+    return cppu::acquire(new SwVbaWrapFormat(args, context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

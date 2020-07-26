@@ -62,7 +62,6 @@ $(eval $(call gb_Library_use_externals,vbaswobj,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
-    sw/source/ui/vba/service \
     sw/source/ui/vba/vbarange \
     sw/source/ui/vba/vbacell \
     sw/source/ui/vba/vbacells \

@@ -18,17 +18,18 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="vbaswobj" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="SwVbaDocument">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="SwVbaDocument" constructor="Writer_SwVbaDocument_get_implementation">
     <service name="ooo.vba.word.Document"/>
   </implementation>
-  <implementation name="SwVbaEventsHelper">
+  <implementation name="SwVbaEventsHelper" constructor="Writer_SwVbaEventsHelper_get_implementation">
     <service name="com.sun.star.document.vba.VBATextEventProcessor"/>
   </implementation>
-  <implementation name="SwVbaGlobals">
+  <implementation name="SwVbaGlobals" constructor="Writer_SwVbaGlobals_get_implementation">
     <service name="ooo.vba.word.Globals"/>
   </implementation>
-  <implementation name="SwVbaWrapFormat">
+  <implementation name="SwVbaWrapFormat"
+    constructor="Writer_SwVbaWrapFormat_get_implementation">
     <service name="ooo.vba.word.WrapFormat"/>
   </implementation>
 </component>

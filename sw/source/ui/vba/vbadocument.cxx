@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include "service.hxx"
 #include "vbafilterpropsfromformat.hxx"
 #include "vbadocument.hxx"
 #include "vbarange.hxx"
@@ -708,14 +707,12 @@ SwVbaDocument::getServiceNames()
     return aServiceNames;
 }
 
-namespace document
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+Writer_SwVbaDocument_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<SwVbaDocument, sdecl::with_args<true> > const serviceImpl;
-sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "SwVbaDocument",
-    "ooo.vba.word.Document" );
+    return cppu::acquire(new SwVbaDocument(args, context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
