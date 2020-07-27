@@ -33,6 +33,24 @@
       "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dcc930f_53255d8c",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-07-27T11:17:14Z",
+      "side": 1,
+      "message": "It is not, I just get a very weird failure in the STOC code that tries to read the binary format",
+      "parentUuid": "5a7df2cd_17293e65",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
