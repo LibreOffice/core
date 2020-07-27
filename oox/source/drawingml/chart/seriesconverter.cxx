@@ -571,6 +571,8 @@ TrendlineLabelConverter::~TrendlineLabelConverter()
 void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
 {
     // formatting
+    // tdf#135184 Chart currently does not interpret linecap 'round' and 'square'.
+    mrModel.mxShapeProp->getLineProperties().moLineCap.set(XML_flat);
     getFormatter().convertFormatting( rPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
 }
 
@@ -635,6 +637,8 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
 
             // trendline formatting
+            // tdf#135184 Chart currently does not interpret linecap 'round' and 'square'.
+            mrModel.mxShapeProp->getLineProperties().moLineCap.set(XML_flat);
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );
 
             // #i83100# show equation and correlation coefficient
