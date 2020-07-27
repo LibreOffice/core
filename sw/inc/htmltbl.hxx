@@ -82,14 +82,14 @@ public:
 
 class SwHTMLTableLayoutCell
 {
-    std::shared_ptr<SwHTMLTableLayoutCnts> xContents;  ///< Content of cell.
+    std::shared_ptr<SwHTMLTableLayoutCnts> m_xContents;  ///< Content of cell.
 
-    sal_uInt16 nRowSpan;               ///< ROWSPAN of cell.
-    sal_uInt16 nColSpan;               ///< COLSPAN of cell.
-    sal_uInt16 nWidthOption;           ///< Given width of cell in Twip or %.
+    sal_uInt16 m_nRowSpan;               ///< ROWSPAN of cell.
+    sal_uInt16 m_nColSpan;               ///< COLSPAN of cell.
+    sal_uInt16 m_nWidthOption;           ///< Given width of cell in Twip or %.
 
-    bool bPercentWidthOption : 1;  ///< nWidth is %-value.
-    bool bNoWrapOption : 1;        ///< NOWRAP-option.
+    bool m_bPercentWidthOption : 1;  ///< nWidth is %-value.
+    bool m_bNoWrapOption : 1;        ///< NOWRAP-option.
 
 public:
 
@@ -99,20 +99,20 @@ public:
                          bool bNWrapOpt );
 
     /// Set or get content of a cell.
-    void SetContents(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts) { xContents = rCnts; }
-    const std::shared_ptr<SwHTMLTableLayoutCnts>& GetContents() const { return xContents; }
+    void SetContents(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts) { m_xContents = rCnts; }
+    const std::shared_ptr<SwHTMLTableLayoutCnts>& GetContents() const { return m_xContents; }
 
     inline void SetProtected();
 
     /// Set or get ROWSPAN/COLSPAN of cell.
-    void SetRowSpan( sal_uInt16 nRSpan ) { nRowSpan = nRSpan; }
-    sal_uInt16 GetRowSpan() const { return nRowSpan; }
-    sal_uInt16 GetColSpan() const { return nColSpan; }
+    void SetRowSpan( sal_uInt16 nRSpan ) { m_nRowSpan = nRSpan; }
+    sal_uInt16 GetRowSpan() const { return m_nRowSpan; }
+    sal_uInt16 GetColSpan() const { return m_nColSpan; }
 
-    sal_uInt16 GetWidthOption() const { return nWidthOption; }
-    bool IsPercentWidthOption() const { return bPercentWidthOption; }
+    sal_uInt16 GetWidthOption() const { return m_nWidthOption; }
+    bool IsPercentWidthOption() const { return m_bPercentWidthOption; }
 
-    bool HasNoWrapOption() const { return bNoWrapOption; }
+    bool HasNoWrapOption() const { return m_bNoWrapOption; }
 };
 
 class SwHTMLTableLayoutColumn
@@ -340,9 +340,9 @@ public:
 
 inline void SwHTMLTableLayoutCell::SetProtected()
 {
-    nRowSpan = 1;
-    nColSpan = 1;
-    xContents.reset();
+    m_nRowSpan = 1;
+    m_nColSpan = 1;
+    m_xContents.reset();
 }
 
 inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
