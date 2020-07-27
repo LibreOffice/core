@@ -30,13 +30,17 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
+#include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 
@@ -612,6 +616,48 @@ void GalleryBinaryEngine::updateTheme()
     }
 
     KillFile(aTmpURL);
+}
+
+void GalleryBinaryEngine::insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
+                                             std::vector<INetURLObject>& rURLVector)
+{
+    INetURLObject aURL;
+    try
+    {
+        ::ucbhelper::Content aCnt(rFileOrDirURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                                  uno::Reference<ucb::XCommandEnvironment>(),
+                                  comphelper::getProcessComponentContext());
+        bool bFolder = false;
+
+        aCnt.getPropertyValue("IsFolder") >>= bFolder;
+
+        if (bFolder)
+        {
+            uno::Sequence<OUString> aProps{ "Url" };
+            uno::Reference<sdbc::XResultSet> xResultSet(
+                aCnt.createCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
+            uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY);
+            if (xContentAccess.is())
+            {
+                while (xResultSet->next())
+                {
+                    aURL.SetSmartURL(xContentAccess->queryContentIdentifierString());
+                    rURLVector.push_back(aURL);
+                }
+            }
+        }
+        else
+            rURLVector.push_back(rFileOrDirURL);
+    }
+    catch (const ucb::ContentCreationException&)
+    {
+    }
+    catch (const uno::RuntimeException&)
+    {
+    }
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme)
