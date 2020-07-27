@@ -11,6 +11,13 @@
 #include <Box2D/Box2D.h>
 
 #include <shapemanager.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+
+#include <svx/svdobj.hxx>
+#include <svx/svdoashp.hxx>
 
 #define BOX2D_SLIDE_SIZE_IN_METERS 100.00f
 
@@ -61,6 +68,134 @@ b2Vec2 convertB2DPointToBox2DVec2(const basegfx::B2DPoint& aPoint, const double 
 {
     return { static_cast<float>(aPoint.getX() * fScaleFactor),
              static_cast<float>(aPoint.getY() * -fScaleFactor) };
+}
+
+// expects rTriangleVector to have coordinates relative to the shape's bounding box center
+void addTriangleVectorToBody(const basegfx::triangulator::B2DTriangleVector& rTriangleVector,
+                             b2Body* aBody, const float fDensity, const float fFriction,
+                             const float fRestitution, const double fScaleFactor)
+{
+    for (const basegfx::triangulator::B2DTriangle& aTriangle : rTriangleVector)
+    {
+        b2FixtureDef aFixture;
+        b2PolygonShape aPolygonShape;
+        b2Vec2 aTriangleVertices[3]
+            = { convertB2DPointToBox2DVec2(aTriangle.getA(), fScaleFactor),
+                convertB2DPointToBox2DVec2(aTriangle.getB(), fScaleFactor),
+                convertB2DPointToBox2DVec2(aTriangle.getC(), fScaleFactor) };
+
+        bool bValidPointDistance = true;
+        for (int nPointIndexA = 0; nPointIndexA < 3; nPointIndexA++)
+        {
+            for (int nPointIndexB = 0; nPointIndexB < 3; nPointIndexB++)
+            {
+                if (nPointIndexA == nPointIndexB)
+                    continue;
+
+                // check whether the triangle would be a degenerately small one
+                if (b2DistanceSquared(aTriangleVertices[nPointIndexA],
+                                      aTriangleVertices[nPointIndexB])
+                    < 0.003f)
+                {
+                    bValidPointDistance = false;
+                }
+            }
+        }
+        if (bValidPointDistance)
+        {
+            aPolygonShape.Set(aTriangleVertices, 3);
+            aFixture.shape = &aPolygonShape;
+            aFixture.density = fDensity;
+            aFixture.friction = fFriction;
+            aFixture.restitution = fRestitution;
+            aBody->CreateFixture(&aFixture);
+        }
+    }
+}
+
+// expects rPolygon to have coordinates relative to it's center
+void addEdgeShapeToBody(const basegfx::B2DPolygon& rPolygon, b2Body* aBody, const float fDensity,
+                        const float fFriction, const float fRestitution, const double fScaleFactor)
+{
+    // make sure there's no bezier curves on the polygon
+    assert(!rPolygon.areControlPointsUsed());
+    basegfx::B2DPolygon aPolygon = basegfx::utils::removeNeutralPoints(rPolygon);
+
+    // value that somewhat defines half width of the quadrilateral
+    // that will be representing edge segment in the box2d world
+    const float fHalfWidth = 0.1f;
+    bool bHasPreviousQuadrilateralEdge = false;
+    b2Vec2 aQuadrilateralVertices[4];
+
+    for (sal_uInt32 nIndex = 0; nIndex < aPolygon.count(); nIndex++)
+    {
+        b2FixtureDef aFixture;
+        b2PolygonShape aPolygonShape;
+
+        basegfx::B2DPoint aPointA;
+        basegfx::B2DPoint aPointB;
+        if (nIndex != 0)
+        {
+            aPointA = aPolygon.getB2DPoint(nIndex - 1);
+            aPointB = aPolygon.getB2DPoint(nIndex);
+        }
+        else if (aPolygon.isClosed())
+        {
+            // start by connecting the last point to the first one
+            aPointA = aPolygon.getB2DPoint(aPolygon.count() - 1);
+            aPointB = aPolygon.getB2DPoint(nIndex);
+        }
+        else // the polygon isn't closed, won't connect last and first points
+        {
+            continue;
+        }
+
+        b2Vec2 aEdgeUnitVec(convertB2DPointToBox2DVec2(aPointB, fScaleFactor)
+                            - convertB2DPointToBox2DVec2(aPointA, fScaleFactor));
+        aEdgeUnitVec.Normalize();
+
+        b2Vec2 aEdgeNormal(-aEdgeUnitVec.y, aEdgeUnitVec.x);
+
+        if (!bHasPreviousQuadrilateralEdge)
+        {
+            aQuadrilateralVertices[0]
+                = convertB2DPointToBox2DVec2(aPointA, fScaleFactor) + fHalfWidth * aEdgeNormal;
+            aQuadrilateralVertices[1]
+                = convertB2DPointToBox2DVec2(aPointA, fScaleFactor) + -fHalfWidth * aEdgeNormal;
+            bHasPreviousQuadrilateralEdge = true;
+        }
+        aQuadrilateralVertices[2]
+            = convertB2DPointToBox2DVec2(aPointB, fScaleFactor) + fHalfWidth * aEdgeNormal;
+        aQuadrilateralVertices[3]
+            = convertB2DPointToBox2DVec2(aPointB, fScaleFactor) + -fHalfWidth * aEdgeNormal;
+
+        bool bValidPointDistance
+            = b2DistanceSquared(aQuadrilateralVertices[0], aQuadrilateralVertices[2]) > 0.003f;
+
+        if (bValidPointDistance)
+        {
+            aPolygonShape.Set(aQuadrilateralVertices, 4);
+            aFixture.shape = &aPolygonShape;
+            aFixture.density = fDensity;
+            aFixture.friction = fFriction;
+            aFixture.restitution = fRestitution;
+            aBody->CreateFixture(&aFixture);
+
+            // prepare the quadrilateral edge for next connection
+            aQuadrilateralVertices[0] = aQuadrilateralVertices[2];
+            aQuadrilateralVertices[1] = aQuadrilateralVertices[3];
+        }
+    }
+}
+
+void addEdgeShapeToBody(const basegfx::B2DPolyPolygon& rPolyPolygon, b2Body* aBody,
+                        const float fDensity, const float fFriction, const float fRestitution,
+                        const double fScaleFactor)
+{
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+    {
+        addEdgeShapeToBody(rPolygon, aBody, fDensity, fFriction, fRestitution, fScaleFactor);
+    }
 }
 }
 
@@ -224,7 +359,8 @@ void box2DWorld::initateAllShapesAsStaticBodies(
         slideshow::internal::ShapeSharedPtr pShape = aIt->second;
         if (pShape->isForeground())
         {
-            Box2DBodySharedPtr pBox2DBody = createStaticBodyFromBoundingBox(pShape);
+            Box2DBodySharedPtr pBox2DBody = createStaticBody(pShape);
+
             mpXShapeToBodyMap.insert(std::make_pair(pShape->getXShape(), pBox2DBody));
             if (!pShape->isVisible())
             {
@@ -392,14 +528,12 @@ Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
     return pBox2DBody;
 }
 
-Box2DBodySharedPtr
-box2DWorld::createStaticBodyFromBoundingBox(const slideshow::internal::ShapeSharedPtr& rShape,
-                                            const float fDensity, const float fFriction)
+Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::ShapeSharedPtr& rShape,
+                                                const float fDensity, const float fFriction)
 {
     assert(mpBox2DWorld);
+
     ::basegfx::B2DRectangle aShapeBounds = rShape->getBounds();
-    double fShapeWidth = aShapeBounds.getWidth() * mfScaleFactor;
-    double fShapeHeight = aShapeBounds.getHeight() * mfScaleFactor;
 
     b2BodyDef aBodyDef;
     aBodyDef.type = b2_staticBody;
@@ -409,16 +543,63 @@ box2DWorld::createStaticBodyFromBoundingBox(const slideshow::internal::ShapeShar
         pB2Body->GetWorld()->DestroyBody(pB2Body);
     });
 
-    b2PolygonShape aDynamicBox;
-    aDynamicBox.SetAsBox(static_cast<float>(fShapeWidth / 2), static_cast<float>(fShapeHeight / 2));
+    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape(rShape->getXShape());
 
-    b2FixtureDef aFixtureDef;
-    aFixtureDef.shape = &aDynamicBox;
-    aFixtureDef.density = fDensity;
-    aFixtureDef.friction = fFriction;
-    aFixtureDef.restitution = 0.1f;
+    rtl::OUString aShapeType = rShape->getXShape()->getShapeType();
 
-    pBody->CreateFixture(&aFixtureDef);
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    // workaround:
+    // TakeXorPoly() doesn't return beziers for CustomShapes and we want the beziers
+    // so that we can decide the complexity of the polygons generated from them
+    if (aShapeType == "com.sun.star.drawing.CustomShape")
+    {
+        aPolyPolygon = static_cast<SdrObjCustomShape*>(pSdrObject)->GetLineGeometry(true);
+    }
+    else
+    {
+        aPolyPolygon = pSdrObject->TakeXorPoly();
+    }
+
+    // make beziers into polygons, using a high degree angle as fAngleBound in
+    // adaptiveSubdivideByAngle reduces complexity of the resulting polygon shapes
+    aPolyPolygon = aPolyPolygon.areControlPointsUsed()
+                       ? basegfx::utils::adaptiveSubdivideByAngle(aPolyPolygon, 20)
+                       : aPolyPolygon;
+    aPolyPolygon.removeDoublePoints();
+
+    // make polygon coordinates relative to the center of the shape instead of top left of the slide
+    aPolyPolygon
+        = basegfx::utils::distort(aPolyPolygon, aPolyPolygon.getB2DRange(),
+                                  { -aShapeBounds.getWidth() / 2, -aShapeBounds.getHeight() / 2 },
+                                  { aShapeBounds.getWidth() / 2, -aShapeBounds.getHeight() / 2 },
+                                  { -aShapeBounds.getWidth() / 2, aShapeBounds.getHeight() / 2 },
+                                  { aShapeBounds.getWidth() / 2, aShapeBounds.getHeight() / 2 });
+
+    if (pSdrObject->IsClosedObj() && !pSdrObject->IsEdgeObj() && pSdrObject->HasFillStyle())
+    {
+        basegfx::triangulator::B2DTriangleVector aTriangleVector;
+        for (auto& rPolygon : aPolyPolygon)
+        {
+            if (rPolygon.isClosed())
+            {
+                basegfx::triangulator::B2DTriangleVector aTempTriangleVector(
+                    basegfx::triangulator::triangulate(rPolygon));
+                aTriangleVector.insert(aTriangleVector.end(), aTempTriangleVector.begin(),
+                                       aTempTriangleVector.end());
+            }
+            else
+            {
+                addEdgeShapeToBody(rPolygon, pBody.get(), fDensity, fFriction, 0.1f, mfScaleFactor);
+            }
+        }
+        addTriangleVectorToBody(aTriangleVector, pBody.get(), fDensity, fFriction, 0.1f,
+                                mfScaleFactor);
+    }
+    else
+    {
+        addEdgeShapeToBody(aPolyPolygon, pBody.get(), fDensity, fFriction, 0.1f, mfScaleFactor);
+    }
+
     return std::make_shared<box2DBody>(pBody, mfScaleFactor);
 }
 

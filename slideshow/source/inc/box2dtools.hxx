@@ -211,10 +211,9 @@ public:
      */
     Box2DBodySharedPtr makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape);
 
-    /// Create a static body from the given shape's bounding box
-    Box2DBodySharedPtr
-    createStaticBodyFromBoundingBox(const slideshow::internal::ShapeSharedPtr& rShape,
-                                    const float fDensity = 1.0f, const float fFriction = 0.3f);
+    /// Create a static body from the given shape's geometry
+    Box2DBodySharedPtr createStaticBody(const slideshow::internal::ShapeSharedPtr& rShape,
+                                        const float fDensity = 1.0f, const float fFriction = 0.3f);
 
     /// Initiate all the shapes in the current slide in the box2DWorld as static ones
     void
