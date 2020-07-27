@@ -22,6 +22,30 @@
       "revId": "7d19fc956be2f4f3b32eb7b68acfabbdcfcece75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12a4dada_5e184d0b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-07-27T09:29:14Z",
+      "side": 1,
+      "message": "There is the same line in cui/source/customize/CommandCategoryListBox.cxx:58 but it does not give an error there. Why?",
+      "parentUuid": "f8278159_5ccd9c31",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 76
+      },
+      "revId": "7d19fc956be2f4f3b32eb7b68acfabbdcfcece75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
