@@ -48,18 +48,22 @@ protected:
     OUString hangingCharacters;
 };
 
-#define BREAKITERATOR_CJK( lang ) \
-class BreakIterator_##lang final : public BreakIterator_CJK {\
-public:\
-    BreakIterator_##lang (); \
+class BreakIterator_zh final : public BreakIterator_CJK {
+public:
+    BreakIterator_zh();
 };
-
-BREAKITERATOR_CJK( zh )
-BREAKITERATOR_CJK( zh_TW )
-BREAKITERATOR_CJK( ja )
-BREAKITERATOR_CJK( ko )
-
-#undef BREAKITERATOR__CJK
+class BreakIterator_zh_TW final : public BreakIterator_CJK {
+public:
+    BreakIterator_zh_TW();
+};
+class BreakIterator_ja final : public BreakIterator_CJK {
+public:
+    BreakIterator_ja();
+};
+class BreakIterator_ko final : public BreakIterator_CJK {
+public:
+    BreakIterator_ko();
+};
 
 }
 
