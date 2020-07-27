@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc4ca398_f3ec23e6",
+        "filename": "i18npool/source/localedata/data/hu_HU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2020-07-27T06:41:13Z",
+      "side": 1,
+      "message": "Dang, I assumed Excel would NOT abbreviate September as \"s.\". Whelp, it does :(.",
+      "range": {
+        "startLine": 410,
+        "startChar": 10,
+        "endLine": 410,
+        "endChar": 51
+      },
+      "revId": "2aa519fbd428c903c092681008cfffe210d41912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
