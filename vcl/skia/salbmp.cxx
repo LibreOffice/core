@@ -586,7 +586,23 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     SkiaZone zone;
     sk_sp<SkImage> image = SkiaHelper::createSkImage(GetAsSkBitmap());
     assert(image);
-    const_cast<sk_sp<SkImage>&>(mImage) = image;
+    SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+    thisPtr->mImage = image;
+    // The data is now stored both in the SkImage and in our mBuffer, which with large
+    // images can waste quite a lot of memory. Ideally we should store the data in Skia's
+    // SkBitmap, but LO wants us to support data formats that Skia doesn't support.
+    // So just drop our buffer, it usually won't be needed anyway, and it'll be converted
+    // back by EnsureBitmapData() if yes. Do this only with raster, to avoid GPU->CPU
+    // transfer in GPU mode. Also don't do this with paletted bitmaps, where EnsureBitmapData()
+    // would be expensive.
+    // Ideally SalBitmap should be able to say which bitmap formats it supports
+    // and VCL code should oblige, which would allow reusing the same data.
+    static bool keepBitmapBuffer = getenv("SAL_SKIA_KEEP_BITMAP_BUFFER") != nullptr;
+    constexpr long maxBufferSize = 2000 * 2000 * 4;
+    if (!keepBitmapBuffer && SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster
+        && mPixelsSize.Height() * mScanlineSize > maxBufferSize
+        && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit())))
+        thisPtr->ResetToSkImage(mImage);
     SAL_INFO("vcl.skia.trace", "getskimage(" << this << ")");
     return mImage;
 }
