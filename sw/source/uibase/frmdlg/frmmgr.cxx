@@ -27,6 +27,8 @@
 #include <editeng/shaditem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/xdef.hxx>
+#include <tools/globname.hxx>
+#include <comphelper/classids.hxx>
 #include <fmtclds.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -59,7 +61,7 @@ static sal_uInt16 aFrameMgrRange[] = {
                             0};
 
 // determine frame attributes via Shell
-SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType ) :
+SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName ) :
     m_aSet( static_cast<SwAttrPool&>(pSh->GetAttrPool()), aFrameMgrRange ),
     m_pOwnSh( pSh ),
     m_bAbsPos( false ),
@@ -85,7 +87,11 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
 
         if (nType == Frmmgr_Type::GRF || nType == Frmmgr_Type::OLE)
         {
-            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
+            if (!pName || *pName != SvGlobalName( SO3_SM_CLASSID ))
+            {
+                // Default anchor for new graphics and objects is at-char, except for Math objects.
+                m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
+            }
         }
     }
     else if ( nType == Frmmgr_Type::NONE )

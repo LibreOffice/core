@@ -251,7 +251,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case FN_DRAW_WRAP_DLG:
         {
             SwFlyFrameAttrMgr aMgr( false, &rSh, rSh.IsFrameSelected() ?
-                                               Frmmgr_Type::NONE : Frmmgr_Type::GRF);
+                                               Frmmgr_Type::NONE : Frmmgr_Type::GRF, nullptr);
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
@@ -932,7 +932,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
         SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
         rShell.GetCurAttr( aSet );
         const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-        SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
+        SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF, nullptr);
 
         // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
         if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)

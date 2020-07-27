@@ -395,7 +395,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->ChgCurPageDesc(*pDesc);
 
         // Insert Frame
-        SwFlyFrameAttrMgr aMgr(false, pSh, Frmmgr_Type::ENVELP);
+        SwFlyFrameAttrMgr aMgr(false, pSh, Frmmgr_Type::ENVELP, nullptr);
         SwFieldMgr aFieldMgr;
         aMgr.SetHeightSizeType(SwFrameSize::Variable);
 

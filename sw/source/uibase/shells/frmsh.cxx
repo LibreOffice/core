@@ -276,7 +276,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         return;
     }
 
-    SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
+    SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
     bool bUpdateMgr = true;
     bool bCopyToFormat = false;
     switch ( nSlot )
@@ -749,7 +749,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
         bProtect |= bParentCntProt;
 
         const FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
-        SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
+        SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE, nullptr );
 
         SfxWhichIter aIter( rSet );
         sal_uInt16 nWhich = aIter.FirstWhich();
