@@ -1516,9 +1516,9 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         SetQuickHelpText(rValue);
     else if (rKey == "border-width")
         set_border_width(rValue.toInt32());
-    else if (rKey == "margin-left")
+    else if (rKey == "margin-start" || rKey == "margin-left")
         set_margin_left(rValue.toInt32());
-    else if (rKey == "margin-right")
+    else if (rKey == "margin-end" || rKey == "margin-right")
         set_margin_right(rValue.toInt32());
     else if (rKey == "margin-top")
         set_margin_top(rValue.toInt32());
