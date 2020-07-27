@@ -356,13 +356,6 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
     m_aRecordCount->Disable();
     m_aAbsolute->Disable();
 
-    AllSettings aSettings = m_aNextBtn->GetSettings();
-    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-    aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
-    aSettings.SetMouseSettings(aMouseSettings);
-    m_aNextBtn->SetSettings(aSettings, true);
-    m_aPrevBtn->SetSettings(aSettings, true);
-
     m_aFirstBtn->Show();
     m_aPrevBtn->Show();
     m_aNextBtn->Show();
