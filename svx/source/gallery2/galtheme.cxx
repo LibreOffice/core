@@ -545,43 +545,9 @@ bool GalleryTheme::InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos)
 
 bool GalleryTheme::InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uInt32 nInsertPos)
 {
-    INetURLObject                   aURL;
-    ::std::vector< INetURLObject >  aURLVector;
-    bool                            bRet = false;
-
-    try
-    {
-        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        bool        bFolder = false;
-
-        aCnt.getPropertyValue("IsFolder") >>= bFolder;
-
-        if( bFolder )
-        {
-            uno::Sequence<OUString> aProps { "Url" };
-            uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
-            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-            if( xContentAccess.is() )
-            {
-                while( xResultSet->next() )
-                {
-                    aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-                    aURLVector.push_back( aURL );
-                }
-            }
-        }
-        else
-            aURLVector.push_back( rFileOrDirURL );
-    }
-    catch( const ucb::ContentCreationException& )
-    {
-    }
-    catch( const uno::RuntimeException& )
-    {
-    }
-    catch( const uno::Exception& )
-    {
-    }
+    bool bRet = false;
+    std::vector< INetURLObject > aURLVector;
+    GalleryBinaryEngine::insertFileOrDirURL(rFileOrDirURL, aURLVector);
 
     for( const auto& rURL : aURLVector )
         bRet = bRet || InsertURL( rURL, nInsertPos );

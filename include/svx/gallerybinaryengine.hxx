@@ -88,6 +88,8 @@ public:
     SgaObjectSvDraw updateSvDrawObject(GalleryObject* pEntry);
 
     void updateTheme();
+    static void insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
+                                   std::vector<INetURLObject>& rURLVector);
 };
 
 SvStream& WriteGalleryTheme(SvStream& rOut, const GalleryTheme& rTheme);
