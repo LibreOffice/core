@@ -1315,6 +1315,8 @@ void RecreateStartTextFrames(SwTextNode & rNode)
             ? *pFrame->GetMergedPara()->pFirstNode
             : rNode);
         assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+        // clear old one first to avoid DelFrames confusing updates & asserts...
+        pFrame->SetMergedPara(nullptr);
         pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                     *pFrame, rFirstNode, eMode));
         eMode = sw::FrameMode::New; // Existing is not idempotent!
