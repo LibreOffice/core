@@ -46,6 +46,30 @@
       "revId": "6f55a64f002d80a19201e2a9b0171725fb71a7fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ec6b60d_e93a223e",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-27T08:22:34Z",
+      "side": 1,
+      "message": "Ah; so as I said, excuse me for not fully understand the problem. (Still, the filter approach could still work, with an exception that it could only be \"also export\" only when in Online case, but that likely would be a bigger task ...)",
+      "parentUuid": "a04751b5_696c8d6a",
+      "range": {
+        "startLine": 3765,
+        "startChar": 71,
+        "endLine": 3766,
+        "endChar": 64
+      },
+      "revId": "6f55a64f002d80a19201e2a9b0171725fb71a7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
