@@ -1755,9 +1755,6 @@ ScTabViewShell::~ScTabViewShell()
     if (mpInputHandler)
     {
         mpInputHandler->SetDocumentDisposing(true);
-        // We end edit mode, before destroying the input handler and the edit engine
-        // and before end listening (in order to call ScTabViewShell::KillEditView())
-        mpInputHandler->EnterHandler();
     }
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -1769,6 +1766,9 @@ ScTabViewShell::~ScTabViewShell()
 
     RemoveSubShell();           // all
     SetWindow(nullptr);
+
+    // need kill editview or we will touch the editengine after it has been freed by the ScInputHandler
+    KillEditView(true);
 
     pFontworkBarShell.reset();
     pExtrusionBarShell.reset();

@@ -12,6 +12,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -37,20 +38,34 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     try {
         context = comphelper::getProcessComponentContext();
     } catch (css::uno::RuntimeException &) {}
-    if (context.is()) {
-        css::uno::Reference<css::lang::XMultiServiceFactory> config;
-        try {
-            config = css::configuration::theDefaultProvider::get(context);
-        } catch (css::uno::DeploymentException &) {}
-        if (config.is()) {
-            utl::ConfigManager::storeConfigItems();
-            css::uno::Reference<css::util::XFlushable>(
-                config, css::uno::UNO_QUERY_THROW)->flush();
-        }
-        css::uno::Reference<css::lang::XComponent>(
-            context, css::uno::UNO_QUERY_THROW)->dispose();
-        comphelper::setProcessServiceFactory(nullptr);
+
+    if (!context)
+        return;
+
+    css::uno::Reference<css::lang::XMultiServiceFactory> config;
+    try {
+        config = css::configuration::theDefaultProvider::get(context);
+    } catch (css::uno::DeploymentException &) {}
+    if (config) {
+        utl::ConfigManager::storeConfigItems();
+        css::uno::Reference<css::util::XFlushable>(
+            config, css::uno::UNO_QUERY_THROW)->flush();
     }
+
+    // the desktop has to be terminate() before it can be dispose()
+    css::uno::Reference<css::frame::XDesktop> xDesktop;
+    try {
+        xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    } catch (css::uno::DeploymentException &) {}
+    if (xDesktop)
+        try {
+            xDesktop->terminate();
+        } catch (css::uno::DeploymentException &) {}
+
+    css::uno::Reference<css::lang::XComponent>(
+        context, css::uno::UNO_QUERY_THROW)->dispose();
+
+    comphelper::setProcessServiceFactory(nullptr);
 }
 
 }
