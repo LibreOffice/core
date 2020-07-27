@@ -132,6 +132,8 @@ namespace
             eRet = SymbolType::HELP;
         else if (sType == "gtk-close")
             eRet = SymbolType::CLOSE;
+        else if (sType == "gtk-new")
+            eRet = SymbolType::PLUS;
         else if (!mapStockToImageResource(sType).isEmpty())
             eRet = SymbolType::IMAGE;
         return eRet;
