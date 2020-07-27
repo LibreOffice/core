@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c47f3cf_96c91414",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-27T11:06:28Z",
+      "side": 1,
+      "message": "A warning is unfortunate here, as it will routinely false-fire for legacy rdb files (e.g., from extensions).\n\nTo me, this issue looks rare enough to just not bother.",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a7df2cd_17293e65",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-27T11:06:28Z",
+      "side": 1,
+      "message": "This code already reports failure via an exception.  Wouldn\u0027t it be more useful to have that exception be reported more readably (assuming it isn\u0027t already)?",
+      "revId": "4cfc75a79a4b370bda01751257de74cccc6d150e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
