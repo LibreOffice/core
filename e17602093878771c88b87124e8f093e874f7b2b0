@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dee0dd56_1a18934c",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-27T17:46:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "144bf47f_0b3ac603",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 8
+      },
+      "revId": "e17602093878771c88b87124e8f093e874f7b2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f8807e1_c5fd8a6c",
         "filename": "extras/source/wordbook/technical.dic",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "e17602093878771c88b87124e8f093e874f7b2b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ff1af39_a2b721b9",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-07-27T17:46:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f8807e1_c5fd8a6c",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 4
+      },
+      "revId": "e17602093878771c88b87124e8f093e874f7b2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
