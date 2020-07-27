@@ -43,6 +43,7 @@ namespace svx
         : mbWideButton(bWideButton)
         , mbWasHiContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         , maCurColor(COL_TRANSPARENT)
+        , meImageType(vcl::ImageType::Size16)
         , maCommandLabel(rCommandLabel)
         , maCommandURL(rCommandURL)
         , mxFrame(rFrame)
@@ -116,26 +117,11 @@ namespace svx
         return mpTbx->GetImageSize();
     }
 
-    Size VclToolboxButtonColorUpdater::GetItemSize() const
+    Size VclToolboxButtonColorUpdater::GetItemSize(const Size& rImageSize) const
     {
         if (mbWideButton)
             return mpTbx->GetItemContentSize(mnBtnId);
-        vcl::ImageType eImageType = GetImageSize();
-        int nHeight(16);
-        switch (eImageType)
-        {
-            case vcl::ImageType::Size16:
-                nHeight = 16;
-                break;
-            case vcl::ImageType::Size26:
-                nHeight = 26;
-                break;
-            case vcl::ImageType::Size32:
-                nHeight = 32;
-                break;
-        }
-        int nWidth = nHeight;
-        return Size(nWidth, nHeight);
+        return rImageSize;
     }
 
     ToolboxButtonColorUpdaterBase::~ToolboxButtonColorUpdaterBase()
@@ -156,22 +142,14 @@ namespace svx
 
     void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdate)
     {
-        Size aItemSize(GetItemSize());
+        vcl::ImageType eImageType = GetImageSize();
 
 #ifdef IOS // tdf#126966
-        // Oddly enough, it is in the "not wide button" case that we want the larger ones, hmm.
-        if (!mbWideButton)
-        {
-            // usually the normal size is 16
-            const long nIOSSize = 32;
-            if (aItemSize.getWidth() < nIOSSize)
-            {
-                aItemSize.setWidth(nIOSSize);
-                aItemSize.setHeight(nIOSSize);
-            }
-        }
+        eImageType = vcl::ImageType::Size32;
 #endif
-        const bool bSizeChanged = (maBmpSize != aItemSize);
+
+        const bool bSizeChanged = (meImageType != eImageType);
+        meImageType = eImageType;
         const bool bDisplayModeChanged = (mbWasHiContrastMode != Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         Color aColor(rColor);
 
@@ -182,6 +160,10 @@ namespace svx
         if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)
             return;
 
+        auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(maCommandURL, mxFrame, meImageType);
+        Image aImage(xImage);
+
+        Size aItemSize = GetItemSize(aImage.GetSizePixel());
         if (!aItemSize.Width() || !aItemSize.Height())
             return;
 
@@ -189,8 +171,7 @@ namespace svx
         pVirDev->SetOutputSizePixel(aItemSize);
         maBmpSize = aItemSize;
 
-        auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(maCommandURL, mxFrame, GetImageSize());
-        pVirDev->DrawImage(Point(0, 0), Image(xImage));
+        pVirDev->DrawImage(Point(0, 0), aImage);
 
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         mbWasHiContrastMode = rStyleSettings.GetHighContrastMode();
@@ -272,24 +253,12 @@ namespace svx
         return mpTbx->get_icon_size();
     }
 
-    Size ToolboxButtonColorUpdater::GetItemSize() const
+    Size ToolboxButtonColorUpdater::GetItemSize(const Size& rImageSize) const
     {
-        vcl::ImageType eImageType = GetImageSize();
-        int nHeight(16);
-        switch (eImageType)
-        {
-            case vcl::ImageType::Size16:
-                nHeight = 16;
-                break;
-            case vcl::ImageType::Size26:
-                nHeight = 26;
-                break;
-            case vcl::ImageType::Size32:
-                nHeight = 32;
-                break;
-        }
-        int nWidth = mbWideButton ? nHeight * 5 : nHeight;
-        return Size(nWidth, nHeight);
+        auto nWidth = rImageSize.Width();
+        if (mbWideButton)
+            nWidth = nWidth * 5;
+        return Size(nWidth, rImageSize.Height());
     }
 
     ToolboxButtonLineStyleUpdater::ToolboxButtonLineStyleUpdater()
