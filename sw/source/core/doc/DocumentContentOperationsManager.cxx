@@ -2913,12 +2913,6 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
         if (SotExchange::IsMath(aClassName))
         {
             nId = RES_POOLFRM_FORMEL;
-            if (pFlyAttrSet && pFlyAttrSet->HasItem(RES_ANCHOR))
-            {
-                // Clear the at-char anchor set in the SwFlyFrameAttrMgr ctor, so the as-char one
-                // set later in pFrameFormat is considered.
-                pFlyAttrSet->ClearItem(RES_ANCHOR);
-            }
         }
     }
 

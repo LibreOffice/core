@@ -33,6 +33,7 @@ struct  SvxSwFrameValidation;
 struct  SwPosition;
 
 class   SwFormatCol;
+class SvGlobalName;
 
 const SwTwips   DFLT_WIDTH      = MM50 * 4;
 const SwTwips   DFLT_HEIGHT     = MM50;
@@ -67,7 +68,7 @@ class SW_DLLPUBLIC SwFlyFrameAttrMgr
     SAL_DLLPRIVATE void UpdateFlyFrame_(); // post-treatment after insert or update
 
 public:
-    SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType );
+    SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName );
 
     //CopyCtor for dialogs to check the metrics
     SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );

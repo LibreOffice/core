@@ -245,7 +245,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             }
         }
 
-        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), Frmmgr_Type::GRF );
+        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), Frmmgr_Type::GRF, nullptr );
         SwWrtShell& rShell = GetWrtShell();
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
@@ -1968,7 +1968,7 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
 {
     if ( m_pWrtShell->HasWholeTabSelection() )
     {
-        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell.get(), Frmmgr_Type::TEXT );
+        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell.get(), Frmmgr_Type::TEXT, nullptr );
 
         const SwFrameFormat &rPageFormat =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();

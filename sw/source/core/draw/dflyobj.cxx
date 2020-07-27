@@ -397,7 +397,7 @@ void SwVirtFlyDrawObj::Rotate(const Point& rRef, long nAngle, double sn, double 
             // RotGrfFlyFrame: Add transformation to placeholder object
             Size aSize;
             const sal_uInt16 nOldRot(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
-            SwFlyFrameAttrMgr aMgr(false, pShForAngle, Frmmgr_Type::NONE);
+            SwFlyFrameAttrMgr aMgr(false, pShForAngle, Frmmgr_Type::NONE, nullptr);
 
             aMgr.SetRotation(nOldRot, (nOldRot + static_cast<sal_uInt16>(nAngle)) % 3600, aSize);
         }
