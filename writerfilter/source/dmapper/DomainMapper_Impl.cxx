@@ -2319,11 +2319,11 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
                 uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                 uno::makeAny( sal_Int32(size.Height())));
+            xStarMathProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
+                    uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
             // mimic the treatment of graphics here... it seems anchoring as character
             // gives a better ( visually ) result
             appendTextContent(xStarMath, uno::Sequence<beans::PropertyValue>());
-            xStarMathProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
-                    uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
         }
         catch( const uno::Exception& )
         {

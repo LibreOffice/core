@@ -287,7 +287,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     if ( !pFrameMgr )
     {
         bOwnMgr = true;
-        pFrameMgr = new SwFlyFrameAttrMgr( true, this, Frmmgr_Type::GRF );
+        pFrameMgr = new SwFlyFrameAttrMgr( true, this, Frmmgr_Type::GRF, nullptr );
 
         // CAUTION
         // GetAttrSet makes an adjustment
@@ -523,7 +523,14 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 
     EnterSelFrameMode();
 
-    SwFlyFrameAttrMgr aFrameMgr( true, this, Frmmgr_Type::OLE );
+    const SvGlobalName* pName = nullptr;
+    SvGlobalName aObjClsId;
+    if (xRef.is())
+    {
+        aObjClsId = SvGlobalName(xRef.GetObject()->getClassID());
+        pName = &aObjClsId;
+    }
+    SwFlyFrameAttrMgr aFrameMgr( true, this, Frmmgr_Type::OLE, pName );
     aFrameMgr.SetHeightSizeType(SwFrameSize::Fixed);
 
     SwRect aBound;
