@@ -1009,6 +1009,11 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
             rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
             rMerged.pParaPropsNode->AddToListRLHidden();
         }
+        // called from SwRangeRedline::InvalidateRange()
+        if (rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            const_cast<SwTextNode&>(rNode).SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+        }
     }
     rMerged.mergedText = text.makeStringAndClear();
     return TextFrameIndex(nInserted);
