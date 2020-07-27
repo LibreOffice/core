@@ -45,7 +45,8 @@ namespace LinePropertiesHelper
         PROP_LINE_COLOR,
         PROP_LINE_TRANSPARENCE,
         PROP_LINE_WIDTH,
-        PROP_LINE_JOINT
+        PROP_LINE_JOINT,
+        PROP_LINE_CAP
     };
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
