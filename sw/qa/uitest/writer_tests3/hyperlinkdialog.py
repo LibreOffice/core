@@ -63,6 +63,7 @@ class HyperlinkDialog(UITestCase):
 
         xtarget = xDialog.getChild("target")
         xtarget.executeAction("TYPE", mkPropertyValues({"TEXT": "http://www.libreoffice.org/"}))
+        self.ui_test.wait_until_property_is_updated(xtarget, "Text", "http://www.libreoffice.org/")
         self.assertEqual(get_state_as_dict(xtarget)["Text"], "http://www.libreoffice.org/")
 
         xindication = xDialog.getChild("indication")
