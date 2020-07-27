@@ -25,8 +25,6 @@
 #include <fmtfld.hxx>
 #include <frmtool.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <UndoManager.hxx>
-#include <UndoDelete.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
@@ -935,21 +933,6 @@ namespace
             static_cast<SwPaM&>(m_rRedline) = *m_pCursor;
         }
     };
-
-    auto UndoDeleteDisableFrames(SwDoc & rDoc) -> void
-    {
-        // inside AppendRedline(), a SwUndoDelete was created;
-        // prevent it from creating duplicate layout frames on Undo
-        auto & rUndo(rDoc.GetUndoManager());
-        if (rUndo.DoesUndo())
-        {
-            SwUndo *const pUndo(rUndo.GetLastUndo());
-            assert(pUndo);
-            SwUndoDelete *const pUndoDel(dynamic_cast<SwUndoDelete*>(pUndo));
-            assert(pUndoDel);
-            pUndoDel->DisableMakeFrames(); // tdf#132944
-        }
-    }
 }
 
 namespace sw
@@ -1625,14 +1608,12 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 }
                                 else
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
-                                UndoDeleteDisableFrames(m_rDoc); // tdf#132944
 
                                 bCompress = true;
                             }
                             if( !bCallDelete && !bDec && *pEnd == *pREnd )
                             {
                                 m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
-                                UndoDeleteDisableFrames(m_rDoc);
                                 bCompress = true;
                             }
                             else if ( bCallDelete || !bDec )
@@ -1652,7 +1633,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 {
                                     TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
-                                    UndoDeleteDisableFrames(m_rDoc);
                                     n = 0;      // re-initialize
                                 }
                                 delete pRedl;
@@ -1677,7 +1657,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 {
                                     TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    UndoDeleteDisableFrames(m_rDoc);
                                     n = 0;      // re-initialize
                                 }
                                 bDec = true;
@@ -1700,7 +1679,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 {
                                     TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    UndoDeleteDisableFrames(m_rDoc);
                                     n = 0;      // re-initialize
                                     bDec = true;
                                 }
