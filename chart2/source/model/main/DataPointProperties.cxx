@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -219,6 +220,12 @@ void DataPointProperties::AddPropertiesToVector(
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "LineCap",
+                  ::chart::LinePropertiesHelper::PROP_LINE_CAP,
+                  cppu::UnoType<drawing::LineCap>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // FillProperties
     // bitmap properties
@@ -466,6 +473,7 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, LinePropertiesHelper::PROP_LINE_WIDTH, 0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH, drawing::LineDash());
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH_NAME );
+    PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_CAP, drawing::LineCap_BUTT);
 
     //fill bitmap
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );

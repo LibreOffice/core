@@ -737,6 +737,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
     aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineDashName","BorderDashName","LineDashName", this ) );
     aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineTransparence","BorderTransparency","Transparency", this ) );
     aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineWidth","BorderWidth","LineWidth", this ) );
+    aWrappedProperties.emplace_back( new WrappedSeriesAreaOrLineProperty("LineCap","LineCap","LineCap", this ) );
     aWrappedProperties.emplace_back( new WrappedProperty("FillStyle","FillStyle" ) );
     aWrappedProperties.emplace_back( new WrappedProperty("FillTransparence","Transparency") );
 

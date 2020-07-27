@@ -2029,6 +2029,11 @@ uno::Reference< drawing::XShape >
                 if(pLineProperties->DashName.hasValue())
                     xProp->setPropertyValue( "LineDashName"
                         , pLineProperties->DashName );
+
+                //LineCap
+                if(pLineProperties->LineCap.hasValue())
+                    xProp->setPropertyValue( UNO_NAME_LINECAP
+                        , pLineProperties->LineCap );
             }
         }
         catch( const uno::Exception& )
