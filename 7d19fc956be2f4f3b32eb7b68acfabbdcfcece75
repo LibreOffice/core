@@ -46,6 +46,30 @@
       "revId": "7d19fc956be2f4f3b32eb7b68acfabbdcfcece75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08eedcd5_86b5aff2",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-27T09:38:00Z",
+      "side": 1,
+      "message": "Have you read what I proposed? I didn\u0027t tell I know the reason; the advise was to see if these identifiers were somehow #define\u0027d in some header and now the #define gives you a headache. A difference in an include may make one CXX to work, while another break. Please try to comprehend.",
+      "parentUuid": "12a4dada_5e184d0b",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 76
+      },
+      "revId": "7d19fc956be2f4f3b32eb7b68acfabbdcfcece75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
