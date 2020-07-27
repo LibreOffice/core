@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8278159_5ccd9c31",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-27T07:25:00Z",
+      "side": 1,
+      "message": "https://ci.libreoffice.org/job/gerrit_windows/70956/consoleFull#-1928707341cbd6b0d4-2729-45f4-a019-828721d0af3e :\n\n\u003e C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/cui/source/dialogs/AdditionsDialog.cxx(480): error C2589: \u0027constant\u0027: illegal token on right side of \u0027::\u0027\n\u003e C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/cui/source/dialogs/AdditionsDialog.cxx(480): error C2062: type \u0027unknown-type\u0027 unexpected\n\nhttps://docs.microsoft.com/en-us/cpp/error-messages/compiler-errors-2/compiler-error-c2589?view\u003dvs-2019\nhttps://stackoverflow.com/questions/1904635/warning-c4003-and-errors-c2589-and-c2059-on-x-stdnumeric-limitsintmax#1904659\n\nTry to add several blocks before this line:\n\n    #ifdef ABSOLUTE\n    #error ABSOLUTE defined\n    #endif\n    #ifdef SearchAlgorithms2\n    #error SearchAlgorithms2 defined\n    #endif\n\nso that you see which is giving you the unexpected resulting string. E.g., if there is a define for ABSOLUTE, then your line results in\n\n    m_searchOptions.AlgorithmType2 \u003d css::util::SearchAlgorithms2::\u003csomething unexpected here from preprocessor\u003e;",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 76
+      },
+      "revId": "7d19fc956be2f4f3b32eb7b68acfabbdcfcece75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
