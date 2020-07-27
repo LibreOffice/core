@@ -58,7 +58,7 @@ class SwContourCache
         std::unique_ptr<TextRanger> mxTextRanger;
     };
     std::vector<CacheItem> mvItems;
-    long nPntCnt;
+    long mnPointCount;
     SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
         const SwTextFrame* pFrame, const SwRect &rLine, const long nXPos,
         const bool bRight );

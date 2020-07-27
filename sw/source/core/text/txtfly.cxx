@@ -116,7 +116,7 @@ namespace
 }
 
 SwContourCache::SwContourCache() :
-    nPntCnt( 0 )
+    mnPointCount( 0 )
 {
 }
 
@@ -126,7 +126,7 @@ SwContourCache::~SwContourCache()
 
 void SwContourCache::ClrObject( sal_uInt16 nPos )
 {
-    nPntCnt -= mvItems[ nPos ].mxTextRanger->GetPointCount();
+    mnPointCount -= mvItems[ nPos ].mxTextRanger->GetPointCount();
     mvItems.erase(mvItems.begin() + nPos);
 }
 
@@ -146,7 +146,7 @@ void ClrContourCache()
     if( pContourCache )
     {
         pContourCache->mvItems.clear();
-        pContourCache->nPntCnt = 0;
+        pContourCache->mnPointCount = 0;
     }
 }
 
@@ -211,7 +211,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
     {
         if( GetCount() == POLY_CNT )
         {
-            nPntCnt -= mvItems.back().mxTextRanger->GetPointCount();
+            mnPointCount -= mvItems.back().mxTextRanger->GetPointCount();
             mvItems.pop_back();
         }
         ::basegfx::B2DPolyPolygon aPolyPolygon;
@@ -252,10 +252,10 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 
         pPolyPolygon.reset();
 
-        nPntCnt += mvItems[0].mxTextRanger->GetPointCount();
-        while( nPntCnt > POLY_MAX && mvItems.size() > POLY_MIN )
+        mnPointCount += mvItems[0].mxTextRanger->GetPointCount();
+        while( mnPointCount > POLY_MAX && mvItems.size() > POLY_MIN )
         {
-            nPntCnt -= mvItems.back().mxTextRanger->GetPointCount();
+            mnPointCount -= mvItems.back().mxTextRanger->GetPointCount();
             mvItems.pop_back();
         }
     }

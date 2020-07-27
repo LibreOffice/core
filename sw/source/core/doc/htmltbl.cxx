@@ -52,26 +52,26 @@ namespace {
 
 class SwHTMLTableLayoutConstraints
 {
-    sal_uInt16 nRow;                    // start row
-    sal_uInt16 nCol;                    // start column
-    sal_uInt16 nColSpan;                // the column's COLSPAN
+    sal_uInt16 m_nRow; // start row
+    sal_uInt16 m_nCol; // start column
+    sal_uInt16 m_nColSpan; // the column's COLSPAN
 
-    std::unique_ptr<SwHTMLTableLayoutConstraints> pNext;        // the next constraint
+    std::unique_ptr<SwHTMLTableLayoutConstraints> m_pNext; // the next constraint
 
-    sal_uLong nMinNoAlign, nMaxNoAlign; // provisional result of AL-Pass 1
+    sal_uLong m_nMinNoAlign, m_nMaxNoAlign; // provisional result of AL-Pass 1
 
 public:
     SwHTMLTableLayoutConstraints( sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRow,
                                 sal_uInt16 nCol, sal_uInt16 nColSp );
 
-    sal_uLong GetMinNoAlign() const { return nMinNoAlign; }
-    sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
+    sal_uLong GetMinNoAlign() const { return m_nMinNoAlign; }
+    sal_uLong GetMaxNoAlign() const { return m_nMaxNoAlign; }
 
     SwHTMLTableLayoutConstraints *InsertNext( SwHTMLTableLayoutConstraints *pNxt );
-    SwHTMLTableLayoutConstraints* GetNext() const { return pNext.get(); }
+    SwHTMLTableLayoutConstraints* GetNext() const { return m_pNext.get(); }
 
-    sal_uInt16 GetColSpan() const { return nColSpan; }
-    sal_uInt16 GetColumn() const { return nCol; }
+    sal_uInt16 GetColSpan() const { return m_nColSpan; }
+    sal_uInt16 GetColumn() const { return m_nCol; }
 };
 
 }
@@ -93,10 +93,10 @@ SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCn
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                                           sal_uInt16 nWidth, bool bPercentWidth,
                                           bool bNWrapOpt ) :
-    xContents(rCnts),
-    nRowSpan( nRSpan ), nColSpan( nCSpan ),
-    nWidthOption( nWidth ), bPercentWidthOption( bPercentWidth ),
-    bNoWrapOption( bNWrapOpt )
+    m_xContents(rCnts),
+    m_nRowSpan( nRSpan ), m_nColSpan( nCSpan ),
+    m_nWidthOption( nWidth ), m_bPercentWidthOption( bPercentWidth ),
+    m_bNoWrapOption( bNWrapOpt )
 {}
 
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
@@ -109,10 +109,14 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
     bLeftBorder( bLBorder )
 {}
 
-SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
-    sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRw, sal_uInt16 nColumn, sal_uInt16 nColSp ):
-    nRow( nRw ), nCol( nColumn ), nColSpan( nColSp ),
-    nMinNoAlign( nMin ), nMaxNoAlign( nMax )
+SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(sal_uLong nMin, sal_uLong nMax,
+                                                           sal_uInt16 nRw, sal_uInt16 nColumn,
+                                                           sal_uInt16 nColSp)
+    : m_nRow(nRw)
+    , m_nCol(nColumn)
+    , m_nColSpan(nColSp)
+    , m_nMinNoAlign(nMin)
+    , m_nMaxNoAlign(nMax)
 {}
 
 SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
@@ -122,8 +126,7 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     SwHTMLTableLayoutConstraints *pConstr = this;
     while( pConstr )
     {
-        if( pConstr->nRow > pNxt->nRow ||
-            pConstr->GetColumn() > pNxt->GetColumn() )
+        if (pConstr->m_nRow > pNxt->m_nRow || pConstr->GetColumn() > pNxt->GetColumn())
             break;
         pPrev = pConstr;
         pConstr = pConstr->GetNext();
@@ -131,13 +134,13 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 
     if( pPrev )
     {
-        pNxt->pNext = std::move(pPrev->pNext);
-        pPrev->pNext.reset( pNxt );
+        pNxt->m_pNext = std::move(pPrev->m_pNext);
+        pPrev->m_pNext.reset(pNxt);
         pConstr = this;
     }
     else
     {
-        pNxt->pNext.reset( this );
+        pNxt->m_pNext.reset(this);
         pConstr = pNxt;
     }
 
