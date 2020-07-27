@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08e14f2e_42aa0b42",
+        "filename": "sc/source/filter/excel/xlpage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-27T12:59:19Z",
+      "side": 1,
+      "message": "It\u0027s better to comment unused future code parts\n\n    mbUseEvenHF \u003d /* mbUseFirstHF \u003d*/ false;",
+      "range": {
+        "startLine": 198,
+        "startChar": 17,
+        "endLine": 198,
+        "endChar": 31
+      },
+      "revId": "9281fb854e9e3c034cdd507821aa842b7e39b8a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "699f43a8_23e212ea",
+        "filename": "sc/source/filter/inc/xlpage.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-07-27T12:59:19Z",
+      "side": 1,
+      "message": "It\u0027s better to comment unused future code parts\n// bool ...",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 38
+      },
+      "revId": "9281fb854e9e3c034cdd507821aa842b7e39b8a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
