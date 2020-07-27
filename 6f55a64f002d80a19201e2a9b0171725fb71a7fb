@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d99d17b8_3091d419",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-27T07:36:02Z",
+      "side": 1,
+      "message": "I might misunderstand the problem here, so excuse me if I write nonsense. IIUC, the problem when you can\u0027t simply \"save\" a format is when the filter used to import is import-only. It likely isn\u0027t related to \"native\", as in various formats like OOXML that are also not native. So possibly it could help to make the pdf import format to be import+export (so reducing special-casing)? Of course, the old import and export filter names should still work (redirect to the new import+export filter?), because they are used very intensively in user scripts...",
+      "range": {
+        "startLine": 3765,
+        "startChar": 71,
+        "endLine": 3766,
+        "endChar": 64
+      },
+      "revId": "6f55a64f002d80a19201e2a9b0171725fb71a7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
