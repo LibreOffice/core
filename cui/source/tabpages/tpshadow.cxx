@@ -45,9 +45,11 @@ const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
     SDRATTR_SHADOWTRANSPARENCE,
+    SDRATTR_SHADOWBLUR,
     SID_ATTR_FILL_SHADOW,
     SID_ATTR_FILL_SHADOW,
     SID_ATTR_SHADOW_TRANSPARENCE,
+    SID_ATTR_SHADOW_BLUR,
     SID_ATTR_SHADOW_YDISTANCE,
     0
 };
@@ -66,6 +68,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("MTR_FLD_DISTANCE", FieldUnit::CM))
     , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), pController->getDialog()))
     , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button("MTR_SHADOW_TRANSPARENT", FieldUnit::PERCENT))
+    , m_xLbShadowBlurMetric(m_xBuilder->weld_metric_spin_button("LB_SHADOW_BLUR", FieldUnit::POINT))
     , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
     , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_COLOR_PREVIEW", m_aCtlXRectPreview))
 {
@@ -151,6 +154,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     m_xTsbShowShadow->connect_toggled(LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl));
     m_xLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
     Link<weld::MetricSpinButton&,void> aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );
+    m_xLbShadowBlurMetric->connect_value_changed(aLink);
     m_xMtrTransparent->connect_value_changed(aLink);
     m_xMtrDistance->connect_value_changed(aLink);
 }
@@ -160,6 +164,7 @@ SvxShadowTabPage::~SvxShadowTabPage()
     m_xCtlXRectPreview.reset();
     m_xLbShadowColor.reset();
     m_xCtlPosition.reset();
+    m_xLbShadowBlurMetric.reset();
 }
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -315,6 +320,17 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
+    if (m_xLbShadowBlurMetric->get_value_changed_from_saved())
+    {
+        SdrMetricItem aItem(SDRATTR_SHADOWBLUR, m_xLbShadowBlurMetric->get_value(FieldUnit::MM_100TH));
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWBLUR );
+        if ( !pOld || !( *static_cast<const SdrMetricItem*>(pOld) == aItem ) )
+        {
+            rAttrs->Put( aItem );
+            bModified = true;
+        }
+    }
+
     rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, static_cast<sal_uInt16>(m_nPageType)));
 
     return bModified;
@@ -398,10 +414,19 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
     else
         m_xMtrTransparent->set_text("");
 
+    if( rAttrs->GetItemState( SDRATTR_SHADOWBLUR ) != SfxItemState::DONTCARE )
+    {
+        sal_uInt16 nBlur = rAttrs->Get( SDRATTR_SHADOWBLUR ).GetValue();
+        m_xLbShadowBlurMetric->set_value(nBlur, FieldUnit::MM_100TH);
+    }
+    else
+        m_xLbShadowBlurMetric->set_text("");
+
     //aCtlPosition
     m_xMtrDistance->save_value();
     m_xLbShadowColor->SaveValue();
     m_xTsbShowShadow->save_state();
+    m_xLbShadowBlurMetric->save_value();
 
     // #66832# This field was not saved, but used to determine changes.
     // Why? Seems to be the error.
