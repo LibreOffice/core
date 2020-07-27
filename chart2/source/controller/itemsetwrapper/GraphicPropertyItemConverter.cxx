@@ -80,7 +80,8 @@ ItemPropertyMapType & lcl_GetLinePropertyMap()
         {XATTR_LINESTYLE, {"LineStyle", 0}},
         {XATTR_LINEWIDTH, {"LineWidth", 0}},
         {XATTR_LINECOLOR, {"LineColor", 0}},
-        {XATTR_LINEJOINT, {"LineJoint", 0}}};
+        {XATTR_LINEJOINT, {"LineJoint", 0}},
+        {XATTR_LINECAP, {"LineCap", 0}}};
     return aLinePropertyMap;
 }
 ItemPropertyMapType & lcl_GetFillPropertyMap()
