@@ -7529,11 +7529,11 @@ if test "$ENABLE_JAVA" != ""; then
             if test -n "$regvalue"; then
                 ver=$regvalue
                 reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
-                _jdk_home=$regvalue
+                reg_jdk_home=$regvalue
             fi
 
-            if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
-                with_jdk_home="$_jdk_home"
+            if test -f "$reg_jdk_home/lib/jvm.lib" -a -f "$reg_jdk_home/bin/java.exe"; then
+                with_jdk_home="$reg_jdk_home"
                 howfound="found automatically"
             else
                 AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $bitness-bit JDK >= 9])
@@ -7571,7 +7571,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test "$BITNESS_OVERRIDE" = 64 -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
             AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
-        elif test "$BITNESS_OVERRIDE" = "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
+        elif test "$BITNESS_OVERRIDE" = "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
             AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
         fi
