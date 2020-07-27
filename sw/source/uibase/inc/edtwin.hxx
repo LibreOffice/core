@@ -288,6 +288,8 @@ public:
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
 
+    void SetOutlineContentVisiblityButtons() {(void)this;}
+
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
