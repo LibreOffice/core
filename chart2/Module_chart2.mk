@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_trendcalculators \
     CppunitTest_chart2_dump \
     CppunitTest_chart2_pivot_chart_test \
+    CppunitTest_chart2_geometry \
 ))
 
 ifeq ($(ENABLE_CHART_TESTS),TRUE)

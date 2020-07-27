@@ -941,7 +941,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             {
                 nDistance -= 99;
                 nDotLen += 99;
-                nDashLen += 99;
+                if (nDashLen > 0)
+                    nDashLen += 99;
             }
             // LO uses length 0 for 100%, if the attribute is missing in ODF.
             // Other applications might write 100%. Make is unique for the conditions.
@@ -950,43 +951,43 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             if (nDashLen == 0 && aLineDash.Dashes > 0)
                 nDashLen = 100;
             bIsConverted = true;
-            if (nDotLen == 100 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 300)
+            if (nDotLen == 100 && aLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dot");
             }
-            else if (nDotLen == 400 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 300)
+            else if (nDotLen == 400 && aLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash");
             }
-            else if (nDotLen == 400 && aLineDash.Dashes == 1 && nDashLen == 100 && aLineDash.Distance == 300)
+            else if (nDotLen == 400 && aLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dashDot");
             }
-            else if (nDotLen == 800 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 300)
+            else if (nDotLen == 800 && aLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDash");
             }
-            else if (nDotLen == 800 && aLineDash.Dashes == 1 && nDashLen == 100 && aLineDash.Distance == 300)
+            else if (nDotLen == 800 && aLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDot");
             }
-            else if (nDotLen == 800 && aLineDash.Dashes == 2 && nDashLen == 100 && aLineDash.Distance == 300)
+            else if (nDotLen == 800 && aLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 300)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "lgDashDotDot");
             }
-            else if (nDotLen == 100 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 100)
+            else if (nDotLen == 100 && aLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDot");
             }
-            else if (nDotLen == 300 && aLineDash.Dashes == 0 && nDashLen == 0 && aLineDash.Distance == 100)
+            else if (nDotLen == 300 && aLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDash");
             }
-            else if (nDotLen == 300 && aLineDash.Dashes == 1 && nDashLen == 100 && aLineDash.Distance == 100)
+            else if (nDotLen == 300 && aLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 100)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDashDot");
             }
-            else if (nDotLen == 300 && aLineDash.Dashes == 2 && nDashLen == 100 && aLineDash.Distance == 100)
+            else if (nDotLen == 300 && aLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 100)
             {
                 mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, "sysDashDotDot");
             }

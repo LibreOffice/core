@@ -19,6 +19,7 @@
 
 #include <VLineProperties.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -34,6 +35,7 @@ VLineProperties::VLineProperties()
     LineStyle <<= drawing::LineStyle_SOLID; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
     Transparence <<= sal_Int16(0);//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
     Width <<= sal_Int32(0);//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    LineCap <<= drawing::LineCap_BUTT; //type drawing::LineCap for property UNO_NAME_LINECAP
 }
 
 void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
@@ -47,6 +49,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
             Transparence = xProp->getPropertyValue( "LineTransparence" );
             Width = xProp->getPropertyValue( "LineWidth" );
             DashName = xProp->getPropertyValue( "LineDashName" );
+            LineCap = xProp->getPropertyValue( "LineCap" );
         }
         catch( const uno::Exception& )
         {

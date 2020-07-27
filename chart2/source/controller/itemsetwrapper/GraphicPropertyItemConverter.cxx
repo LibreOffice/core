@@ -71,7 +71,8 @@ ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
     static ItemPropertyMapType aDataPointPropertyLineMap{
         {XATTR_LINECOLOR, {"Color", 0}},
         {XATTR_LINESTYLE, {"LineStyle", 0}},
-        {XATTR_LINEWIDTH, {"LineWidth", 0}}};
+        {XATTR_LINEWIDTH, {"LineWidth", 0}},
+        {XATTR_LINECAP, {"LineCap", 0}}};
     return aDataPointPropertyLineMap;
 }
 ItemPropertyMapType & lcl_GetLinePropertyMap()
@@ -80,7 +81,8 @@ ItemPropertyMapType & lcl_GetLinePropertyMap()
         {XATTR_LINESTYLE, {"LineStyle", 0}},
         {XATTR_LINEWIDTH, {"LineWidth", 0}},
         {XATTR_LINECOLOR, {"LineColor", 0}},
-        {XATTR_LINEJOINT, {"LineJoint", 0}}};
+        {XATTR_LINEJOINT, {"LineJoint", 0}},
+        {XATTR_LINECAP, {"LineCap", 0}}};
     return aLinePropertyMap;
 }
 ItemPropertyMapType & lcl_GetFillPropertyMap()
