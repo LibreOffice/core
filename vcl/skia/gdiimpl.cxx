@@ -1363,7 +1363,27 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
     // a very large image only to not use most of it.
     if (targetSize.Width() > GetWidth() || targetSize.Height() > GetHeight())
-        return image;
+    {
+        // This is a bit tricky. The condition above just checks that at least a part of the resulting
+        // image will not be used (it's larger then our drawing area). But this may often happen
+        // when just scrolling a document with a large image, where the caching may very well be worth it.
+        // Since the problem is mainly the cost of upscaling and then the size of the resulting bitmap,
+        // compute a ratio of how much this is going to be scaled up, how much this is larger than
+        // the drawing area, and then refuse to cache if it's too much.
+        const double upscaleRatio = 1.0 * targetSize.Width() / bitmap.GetSize().Width()
+                                    * targetSize.Height() / bitmap.GetSize().Height();
+        const double oversizeRatio
+            = 1.0 * targetSize.Width() / GetWidth() * targetSize.Height() / GetHeight();
+        const double ratio = upscaleRatio * oversizeRatio;
+        if (ratio > 10)
+        {
+            SAL_INFO("vcl.skia.trace", "mergecachebitmaps("
+                                           << this << "): not caching upscaling, ratio:" << ratio
+                                           << ", " << bitmap.GetSize() << "->" << targetSize
+                                           << " in " << Size(GetWidth(), GetHeight()));
+            return image;
+        }
+    }
     OString key;
     OStringBuffer keyBuf;
     keyBuf.append(targetSize.Width())
