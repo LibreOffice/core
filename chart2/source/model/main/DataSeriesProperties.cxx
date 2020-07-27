@@ -21,6 +21,7 @@
 #include "DataPointProperties.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 using namespace ::com::sun::star;
 
@@ -68,6 +69,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "LineCap",
+                  LinePropertiesHelper::PROP_LINE_CAP,
+                  cppu::UnoType<drawing::LineCap>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
