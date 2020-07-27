@@ -312,6 +312,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
     std::unique_ptr<ColorListBox> m_xLbShadowColor;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
+    std::unique_ptr<weld::MetricSpinButton> m_xLbShadowBlurMetric;
     std::unique_ptr<weld::CustomWeld> m_xCtlPosition;
     std::unique_ptr<weld::CustomWeld> m_xCtlXRectPreview;
 
