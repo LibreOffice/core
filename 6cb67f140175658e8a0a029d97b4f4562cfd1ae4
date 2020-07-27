@@ -70,6 +70,24 @@
       "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a046d76f_85d77a65",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-07-27T08:00:06Z",
+      "side": 1,
+      "message": "\u003e Here are the warnings printed by clang:\n\u003e \n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:349:9: warning: variable \u0027functionIndex\u0027 is uninitialized when used here [-Wuninitialized]\n\u003e         functionIndex, vtableOffset, gpr,\n\u003e         ^~~~~~~~~~~~~\n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:325:46: note: initialize the variable \u0027functionIndex\u0027 to silence this warning\n\u003e     register sal_Int32 volatile functionIndex asm (\"x9\");\n\u003e                                              ^\n\u003e                                               \u003d 0\n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:349:24: warning: variable \u0027vtableOffset\u0027 is uninitialized when used here [-Wuninitialized]\n\u003e         functionIndex, vtableOffset, gpr,\n\u003e                        ^~~~~~~~~~~~\n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:326:45: note: initialize the variable \u0027vtableOffset\u0027 to silence this warning\n\u003e     register sal_Int32 volatile vtableOffset asm (\"x10\");\n\u003e                                             ^\n\u003e                                              \u003d 0\n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:353:9: warning: variable \u0027indirectRet\u0027 is uninitialized when used here [-Wuninitialized]\n\u003e         indirectRet);\n\u003e         ^~~~~~~~~~~\n\u003e /usr/ports/editors/libreoffice/work/libreoffice-6.4.4.2/bridges/source/cpp_uno/gcc3_linux_aarch64/cpp2uno.cxx:324:41: note: initialize the variable \u0027indirectRet\u0027 to silence this warning\n\u003e     register void * volatile indirectRet asm (\"x8\");\n\u003e                                         ^\n\u003e                                          \u003d nullptr\n\nDo you build with \u003chttps://git.libreoffice.org/core/+/23b384ee3b0ecde3e30dfd8c4fcb13aab9e65c04%5E!/\u003e \"Silence -Werror,-Wuninitialized\" included?  (Asking because your mention of \"libreoffice-6.4.4.2\" and the specific line numbers above make it look like you likely don\u0027t.)",
+      "parentUuid": "c9ea8d11_8aca55f6",
+      "revId": "6cb67f140175658e8a0a029d97b4f4562cfd1ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
