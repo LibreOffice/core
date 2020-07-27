@@ -27,7 +27,8 @@
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include "analysishelper.hxx"
 
@@ -36,12 +37,14 @@
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::sheet { struct LocalizedName; }
 
-class AnalysisAddIn : public cppu::WeakImplHelper<
+typedef cppu::WeakComponentImplHelper<
                             css::sheet::XAddIn,
                             css::sheet::XCompatibilityNames,
                             css::sheet::addin::XAnalysis,
                             css::lang::XServiceName,
-                            css::lang::XServiceInfo >
+                            css::lang::XServiceInfo > AnalysisAddIn_Base;
+
+class AnalysisAddIn : private cppu::BaseMutex, public AnalysisAddIn_Base
 {
 private:
     css::lang::Locale           aFuncLoc;
@@ -74,6 +77,9 @@ public:
     OUString AnalysisResId(const char* pId);
 
     virtual                     ~AnalysisAddIn() override;
+
+    // XComponent
+    virtual void SAL_CALL       dispose() override;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException

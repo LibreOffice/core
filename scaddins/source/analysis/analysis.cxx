@@ -43,6 +43,10 @@ using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
 
+static osl::Mutex g_InstanceMutex;
+static rtl::Reference<AnalysisAddIn> g_Instance;
+static bool g_Disposed;
+
 OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
     return AnalysisResId(pResId[nStrIndex - 1]);
@@ -59,12 +63,21 @@ void AnalysisAddIn::InitData()
 }
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
+    AnalysisAddIn_Base(m_aMutex),
     aAnyConv( xContext )
 {
 }
 
 AnalysisAddIn::~AnalysisAddIn()
 {
+}
+
+void AnalysisAddIn::dispose()
+{
+    AnalysisAddIn_Base::dispose();
+    osl::MutexGuard aGuard(g_InstanceMutex);
+    g_Instance.clear();
+    g_Disposed = true;
 }
 
 sal_Int32 AnalysisAddIn::getDateMode(
@@ -1056,7 +1069,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_AnalysisAddIn_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<AnalysisAddIn> g_Instance(new AnalysisAddIn(context));
+    osl::MutexGuard aGuard(g_InstanceMutex);
+    if (g_Disposed)
+        return nullptr;
+    if (!g_Instance)
+        g_Instance.set(new AnalysisAddIn(context));
     g_Instance->acquire();
     return static_cast<cppu::OWeakObject*>(g_Instance.get());
 }
