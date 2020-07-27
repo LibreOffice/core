@@ -282,7 +282,8 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
         {"LineJoint",              "LineJoint"},
         {"LineStyle",              "LineStyle"},
         {"LineTransparence",       "LineTransparence"},
-        {"LineWidth",              "LineWidth"}};
+        {"LineWidth",              "LineWidth"},
+        {"LineCap",                "LineCap"}};
     return s_aShapePropertyMapForLineProperties;
 }
 
@@ -329,7 +330,8 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPropertie
         {"LineDashName",        "LineDashName"},
         {"LineStyle",           "LineStyle"},
         {"LineTransparence",    "Transparency"},
-        {"LineWidth",           "LineWidth"}};
+        {"LineWidth",           "LineWidth"},
+        {"LineCap",             "LineCap"}};
     return s_aShapePropertyMapForLineSeriesProperties;
 }
 

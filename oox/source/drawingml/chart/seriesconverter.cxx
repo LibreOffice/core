@@ -570,7 +570,6 @@ TrendlineLabelConverter::~TrendlineLabelConverter()
 
 void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
 {
-    // formatting
     getFormatter().convertFormatting( rPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
 }
 
@@ -634,7 +633,6 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             if (mrModel.mfBackward.has())
                 aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
 
-            // trendline formatting
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );
 
             // #i83100# show equation and correlation coefficient

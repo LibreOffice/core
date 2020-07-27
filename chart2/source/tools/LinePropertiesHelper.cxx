@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -79,6 +80,12 @@ void LinePropertiesHelper::AddPropertiesToVector(
                   cppu::UnoType<drawing::LineJoint>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "LineCap",
+                  PROP_LINE_CAP,
+                  cppu::UnoType<drawing::LineCap>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void LinePropertiesHelper::AddDefaultsToMap(
@@ -89,6 +96,7 @@ void LinePropertiesHelper::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  // black
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_LINE_TRANSPARENCE, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_CAP, drawing::LineCap_BUTT );
 }
 
 bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
