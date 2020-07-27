@@ -1333,6 +1333,8 @@ void cppuhelper::ServiceManager::readRdbFile(
         }
         SAL_INFO("cppuhelper", "Ignored optional " << uri);
     } catch (css::registry::InvalidRegistryException & e) {
+        SAL_WARN("cppuhelper", "could not read component file " << uri
+                << " as XML, trying to read as binary XML format, exception=" << e);
         if (!readLegacyRdbFile(uri)) {
             throw css::uno::DeploymentException(
                 "InvalidRegistryException: " + e.Message,
@@ -1494,6 +1496,8 @@ void cppuhelper::ServiceManager::insertRdbFiles(
                 rUri + ": no such file", static_cast< cppu::OWeakObject * >(this),
                 0);
         } catch (css::registry::InvalidRegistryException & e) {
+            SAL_WARN("cppuhelper", "could not read component file " << rUri
+                    << " as XML, exception=" << e);
             throw css::lang::IllegalArgumentException(
                 "InvalidRegistryException: " + e.Message,
                 static_cast< cppu::OWeakObject * >(this), 0);
