@@ -73,6 +73,7 @@ namespace svx
         Color       maCurColor;
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
+        vcl::ImageType meImageType;
         OUString    maCommandLabel;
         OUString    maCommandURL;
         css::uno::Reference<css::frame::XFrame> mxFrame;
@@ -84,7 +85,7 @@ namespace svx
         virtual void SetImage(VirtualDevice* pVirDev) = 0;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const = 0;
         virtual vcl::ImageType GetImageSize() const = 0;
-        virtual Size GetItemSize() const = 0;
+        virtual Size GetItemSize(const Size& rImageSize) const = 0;
     };
 
     class VclToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
@@ -104,7 +105,7 @@ namespace svx
         virtual void SetImage(VirtualDevice* pVirDev) override;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
         virtual vcl::ImageType GetImageSize() const override;
-        virtual Size GetItemSize() const override;
+        virtual Size GetItemSize(const Size& rImageSize) const override;
     };
 
     class ToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
@@ -122,7 +123,7 @@ namespace svx
         virtual void SetImage(VirtualDevice* pVirDev) override;
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
         virtual vcl::ImageType GetImageSize() const override;
-        virtual Size GetItemSize() const override;
+        virtual Size GetItemSize(const Size& rImageSize) const override;
     };
 
     class ToolboxButtonLineStyleUpdater
