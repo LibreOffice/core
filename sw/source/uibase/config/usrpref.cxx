@@ -102,7 +102,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Update/Field",                         // 18
         "Update/Chart",                         // 19
         "Display/ShowInlineTooltips",           // 20
-        "Display/UseHeaderFooterMenu"           // 21
+        "Display/UseHeaderFooterMenu",          // 21
+        "Display/ShowOutlineContentVisibilityButton" // 22
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -170,6 +171,7 @@ void SwContentViewConfig::ImplCommit()
             case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
             case 20: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
             case 21: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
+            case 22: bVal = rParent.IsShowOutlineContentVisibilityButton(); break;// "Display/ShowOutlineContnetVisibilityButton"
         }
         if (nProp != g_UpdateLinkIndex)
             pValues[nProp] <<= bVal;
@@ -220,6 +222,7 @@ void SwContentViewConfig::Load()
                     case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
                     case 20: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
                     case 21: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
+                    case 22: rParent.SetShowOutlineContentVisibilityButton(bSet); break;// "Display/ShowOutlineContententVisibilityButton"
                 }
             }
         }
