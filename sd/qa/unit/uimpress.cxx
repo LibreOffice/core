@@ -31,7 +31,6 @@ namespace {
 class Test : public CppUnit::TestFixture {
 public:
     Test();
-    virtual ~Test() override;
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -74,11 +73,6 @@ void Test::setUp()
 void Test::tearDown()
 {
     m_pDoc.reset();
-}
-
-Test::~Test()
-{
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::testAddPage()

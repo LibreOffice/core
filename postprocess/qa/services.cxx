@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/strbuf.hxx>
@@ -286,7 +287,9 @@ void Test::test() {
     }
     SolarMutexReleaser rel;
     for (auto const & i: comps) {
-        i->dispose();
+        // cannot call dispose() on XDesktop before calling terminate()
+        if (!css::uno::Reference<css::frame::XDesktop>(i, css::uno::UNO_QUERY))
+            i->dispose();
     }
 }
 
