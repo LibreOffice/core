@@ -7897,6 +7897,24 @@ SfxBoolItem UseHeaderFooterMenu FN_USE_HEADERFOOTERMENU
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+SfxBoolItem ShowOutlineContentVisibilityButton FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem TextFormField FN_INSERT_TEXT_FORMFIELD
 
 [
