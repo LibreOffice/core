@@ -751,6 +751,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
 
     if (nDrawFlags & DrawFlags::Mono)
         aColor = COL_BLACK;
+    else if (IsControlForeground())
+        aColor = GetControlForeground();
 
     // Button types with possibly different text coloring are flat buttons and regular buttons. Regular buttons may be action
     // buttons and may have an additional default status. Moreover all buttons may have an additional pressed and rollover
