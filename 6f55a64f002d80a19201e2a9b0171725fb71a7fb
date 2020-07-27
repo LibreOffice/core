@@ -22,6 +22,30 @@
       "revId": "6f55a64f002d80a19201e2a9b0171725fb71a7fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04751b5_696c8d6a",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-07-27T08:19:23Z",
+      "side": 1,
+      "message": "I don\u0027t want to allow saving PDF on the desktop, only special cased in online.",
+      "parentUuid": "d99d17b8_3091d419",
+      "range": {
+        "startLine": 3765,
+        "startChar": 71,
+        "endLine": 3766,
+        "endChar": 64
+      },
+      "revId": "6f55a64f002d80a19201e2a9b0171725fb71a7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
