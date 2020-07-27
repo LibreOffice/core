@@ -346,9 +346,9 @@ SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
 
     m_xOKButton->connect_clicked(LINK(this, SwMMResultEmailDialog, SendDocumentsHdl_Impl));
 
-    m_xPasswordCB->hide();
-    m_xPasswordFT->hide();
-    m_xPasswordLB->hide();
+    m_xPasswordCB->set_sensitive(false);
+    m_xPasswordFT->set_sensitive(false);
+    m_xPasswordLB->set_sensitive(false);
 
     FillInEmailSettings();
 }
@@ -860,17 +860,16 @@ IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, weld::ComboBox&, rBox, void)
 
     if(bIsPDF)
     {
-        m_xPasswordCB->show();
-        m_xPasswordFT->show();
-        m_xPasswordLB->show();
+        m_xPasswordCB->set_sensitive(true);
+        m_xPasswordFT->set_sensitive(true);
+        m_xPasswordLB->set_sensitive(true);
         CheckHdl(*m_xPasswordCB);
     }
     else
     {
-        m_xPasswordCB->hide();
-        m_xPasswordFT->hide();
-        m_xPasswordLB->hide();
-
+        m_xPasswordCB->set_sensitive(false);
+        m_xPasswordFT->set_sensitive(false);
+        m_xPasswordLB->set_sensitive(false);
     }
 }
 
