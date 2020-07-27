@@ -1755,9 +1755,6 @@ ScTabViewShell::~ScTabViewShell()
     if (mpInputHandler)
     {
         mpInputHandler->SetDocumentDisposing(true);
-        // We end edit mode, before destroying the input handler and the edit engine
-        // and before end listening (in order to call ScTabViewShell::KillEditView())
-        mpInputHandler->EnterHandler();
     }
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
