@@ -19,7 +19,6 @@
 
 #ifndef INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 #define INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
-#define SVTOOLS_IN_EDITBROWSEBOX_HXX
 
 #include <config_options.h>
 #include <memory>
@@ -945,7 +944,6 @@ namespace svt
 }   // namespace svt
 
 
-#undef SVTOOLS_IN_EDITBROWSEBOX_HXX
 #endif // INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
