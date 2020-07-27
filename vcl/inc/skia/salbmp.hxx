@@ -96,7 +96,9 @@ private:
     // Call before changing the data.
     void EnsureBitmapUniqueData();
     // Allocate mBuffer (with uninitialized contents).
-    bool CreateBitmapData();
+    void CreateBitmapData();
+    // Should be called whenever mPixelsSize or mBitCount is set/changed.
+    bool ComputeScanlineSize();
     void EraseInternal();
     SkBitmap GetAsSkBitmap() const;
 #ifdef DBG_UTIL
@@ -131,7 +133,7 @@ private:
     // is reset by ResetCachedImage(). But sometimes only mImage will be set and in that case
     // mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
     boost::shared_ptr<sal_uInt8[]> mBuffer;
-    int mScanlineSize; // size of one row in mBuffer
+    int mScanlineSize; // size of one row in mBuffer (based on mPixelsSize)
     sk_sp<SkImage> mImage; // possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
     // Actual scaling triggered by scale() is done on-demand. This is the size of the pixel

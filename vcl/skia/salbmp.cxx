@@ -65,6 +65,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
     mPalette = BitmapPalette();
     mBitCount = 32;
     mSize = mPixelsSize = Size(image->width(), image->height());
+    ComputeScanlineSize();
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
@@ -83,10 +84,11 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
-    if (!CreateBitmapData())
+    if (!ComputeScanlineSize())
     {
         mBitCount = 0;
         mSize = mPixelsSize = Size();
+        mScanlineSize = 0;
         mPalette = BitmapPalette();
         return false;
     }
@@ -94,9 +96,23 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
     return true;
 }
 
-bool SkiaSalBitmap::CreateBitmapData()
+bool SkiaSalBitmap::ComputeScanlineSize()
+{
+    int bitScanlineWidth;
+    if (o3tl::checked_multiply<int>(mPixelsSize.Width(), mBitCount, bitScanlineWidth))
+    {
+        SAL_WARN("vcl.skia", "checked multiply failed");
+        return false;
+    }
+    mScanlineSize = AlignedWidth4Bytes(bitScanlineWidth);
+    return true;
+}
+
+void SkiaSalBitmap::CreateBitmapData()
 {
     assert(!mBuffer);
+    // Make sure code has not missed calling ComputeScanlineSize().
+    assert(mScanlineSize == int(AlignedWidth4Bytes(mPixelsSize.Width() * mBitCount)));
     // The pixels could be stored in SkBitmap, but Skia only supports 8bit gray, 16bit and 32bit formats
     // (e.g. 24bpp is actually stored as 32bpp). But some of our code accessing the bitmap assumes that
     // when it asked for 24bpp, the format really will be 24bpp (e.g. the png loader), so we cannot use
@@ -104,16 +120,9 @@ bool SkiaSalBitmap::CreateBitmapData()
     // and a VCL bitmap can change its grayscale status simply by changing the palette.
     // Moreover creating SkImage from SkBitmap does a data copy unless the bitmap is immutable.
     // So just always store pixels in our buffer and convert as necessary.
-    int bitScanlineWidth;
-    if (o3tl::checked_multiply<int>(mSize.Width(), mBitCount, bitScanlineWidth))
+    if (mScanlineSize != 0 && mPixelsSize.Height() != 0)
     {
-        SAL_WARN("vcl.skia", "checked multiply failed");
-        return false;
-    }
-    mScanlineSize = AlignedWidth4Bytes(bitScanlineWidth);
-    if (mScanlineSize != 0 && mSize.Height() != 0)
-    {
-        size_t allocate = mScanlineSize * mSize.Height();
+        size_t allocate = mScanlineSize * mPixelsSize.Height();
 #ifdef DBG_UTIL
         allocate += sizeof(CANARY);
 #endif
@@ -126,7 +135,6 @@ bool SkiaSalBitmap::CreateBitmapData()
         memcpy(buffer + allocate - sizeof(CANARY), CANARY, sizeof(CANARY));
 #endif
     }
-    return true;
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
@@ -195,11 +203,13 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             EnsureBitmapUniqueData();
             if (!mBuffer)
                 return nullptr;
+            assert(mPixelsSize == mSize);
             break;
         case BitmapAccessMode::Read:
             EnsureBitmapData();
             if (!mBuffer)
                 return nullptr;
+            assert(mPixelsSize == mSize);
             break;
         case BitmapAccessMode::Info:
             break;
@@ -215,7 +225,20 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
     buffer->mnBitCount = mBitCount;
     buffer->maPalette = mPalette;
     buffer->mpBits = mBuffer.get();
-    buffer->mnScanlineSize = mScanlineSize;
+    if (mPixelsSize == mSize)
+        buffer->mnScanlineSize = mScanlineSize;
+    else
+    {
+        // The value of mScanlineSize is based on internal mPixelsSize, but the outside
+        // world cares about mSize, the size that the report as the size of the bitmap,
+        // regardless of any internal state. So report scanline size for that size.
+        Size savedPixelsSize = mPixelsSize;
+        mPixelsSize = mSize;
+        ComputeScanlineSize();
+        buffer->mnScanlineSize = mScanlineSize;
+        mPixelsSize = savedPixelsSize;
+        ComputeScanlineSize();
+    }
     switch (mBitCount)
     {
         case 1:
@@ -380,6 +403,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         paint.setColorFilter(SkColorFilters::Matrix(toGray));
         surface->getCanvas()->drawImage(mImage, 0, 0, &paint);
         mBitCount = 8;
+        ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(surface->makeImageSnapshot());
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
@@ -407,6 +431,7 @@ bool SkiaSalBitmap::InterpretAs8Bit()
     if (!mBuffer && mImage)
     {
         mBitCount = 8;
+        ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(mImage); // keep mImage, it will be interpreted as 8bit if needed
         SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ")");
@@ -421,6 +446,7 @@ bool SkiaSalBitmap::Erase(const Color& color)
     // which may save having to do format conversions (e.g. GetSkImage()
     // may directly erase the SkImage).
     ResetCachedData();
+    mBuffer.reset();
     mEraseColorSet = true;
     mEraseColor = color;
     return true;
@@ -769,11 +795,12 @@ void SkiaSalBitmap::EnsureBitmapData()
         if (mPixelsSize != mSize)
         {
             mPixelsSize = mSize;
+            ComputeScanlineSize();
             mBuffer.reset();
         }
         mScaleQuality = kHigh_SkFilterQuality;
-        if (!mBuffer && !CreateBitmapData())
-            abort();
+        if (!mBuffer)
+            CreateBitmapData();
         // Unset now, so that repeated call will return mBuffer.
         mEraseColorSet = false;
         EraseInternal();
@@ -798,13 +825,15 @@ void SkiaSalBitmap::EnsureBitmapData()
         ResetToSkImage(SkImage::MakeFromBitmap(GetAsSkBitmap()));
         mSize = savedSize;
     }
-    // Try to fill mBuffer from mImage.
     if (!mImage)
+    {
+        // No data at all, create uninitialized data.
+        CreateBitmapData();
         return;
+    }
+    // Try to fill mBuffer from mImage.
     assert(mImage->colorType() == kN32_SkColorType);
     SkiaZone zone;
-    if (!CreateBitmapData())
-        abort();
     SkAlphaType alphaType = kUnpremul_SkAlphaType;
 #if SKIA_USE_BITMAP32
     if (mBitCount == 32)
@@ -826,6 +855,7 @@ void SkiaSalBitmap::EnsureBitmapData()
                                                        << "->" << mSize << ":"
                                                        << static_cast<int>(mScaleQuality));
         mPixelsSize = mSize;
+        ComputeScanlineSize();
         mScaleQuality = kHigh_SkFilterQuality;
         // Information about the pending scaling has been discarded, so make sure we do not
         // keep around any cached images that would still need scaling.
@@ -835,7 +865,9 @@ void SkiaSalBitmap::EnsureBitmapData()
         canvas.drawImage(mImage, 0, 0, &paint);
     canvas.flush();
     bitmap.setImmutable();
+    CreateBitmapData();
     assert(mBuffer != nullptr);
+    assert(mPixelsSize == mSize);
     if (mBitCount == 32)
     {
         if (int(bitmap.rowBytes()) == mScanlineSize)
@@ -910,6 +942,7 @@ void SkiaSalBitmap::EnsureBitmapData()
 void SkiaSalBitmap::EnsureBitmapUniqueData()
 {
     EnsureBitmapData();
+    assert(mPixelsSize == mSize);
     if (mBuffer.use_count() > 1)
     {
         sal_uInt32 allocate = mScanlineSize * mSize.Height();
