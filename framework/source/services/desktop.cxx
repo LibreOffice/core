@@ -1040,7 +1040,7 @@ void SAL_CALL Desktop::disposing()
 
     // But if you just ignore the assertion (which happens in unit
     // tests for instance in sc/qa/unit) nothing bad happens.
-    SAL_WARN_IF(!m_bIsShutdown, "fwk.desktop", "Desktop disposed before terminating it");
+    assert(m_bIsShutdown && "Desktop disposed before terminating it");
 
     {
         SolarMutexGuard aWriteLock;

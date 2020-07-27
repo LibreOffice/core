@@ -18,6 +18,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <tools/urlobj.hxx>
 #include <vcl/vclmain.hxx>
@@ -308,6 +309,8 @@ int GalApp::Main()
 
 void GalApp::DeInit()
 {
+    auto xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    xDesktop->terminate();
     uno::Reference< lang::XComponent >(
         comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW )-> dispose();
