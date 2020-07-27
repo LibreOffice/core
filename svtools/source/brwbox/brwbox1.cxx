@@ -2072,10 +2072,11 @@ bool BrowseBox::ReserveControlArea(sal_uInt16 nWidth)
 tools::Rectangle BrowseBox::GetControlArea() const
 {
     auto nHeight = aHScroll->GetSizePixel().Height();
+    auto nEndRight = aHScroll->IsVisible() ? aHScroll->GetPosPixel().X() : GetOutputSizePixel().Width();
+
     return tools::Rectangle(
         Point( 0, GetOutputSizePixel().Height() - nHeight ),
-        Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
-             nHeight ) );
+        Size( nEndRight, nHeight ) );
 }
 
 void BrowseBox::SetMode( BrowserMode nMode )
