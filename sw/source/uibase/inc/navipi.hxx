@@ -107,6 +107,7 @@ class SwNavigationPI : public PanelLayout
     DECL_LINK( GlobalMenuSelectHdl, const OString&, void );
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
+    DECL_LINK( EditActionHdl, weld::Entry&, bool );
     bool EditAction();
     void UsePage();
 
