@@ -4089,6 +4089,67 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
+{
+    load(DATA_DIRECTORY, "tdf134250.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    uno::Reference<text::XTextContent> xTextContent(xSections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    // select all with table at start -> 3 times
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    // this would crash in 2 different ways
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    // Without the fix in place, section's content would have been gone after undo
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+}
+
 void SwUiWriterTest::testDde()
 {
 #if HAVE_FEATURE_UI
