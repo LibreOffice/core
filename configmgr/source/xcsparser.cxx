@@ -28,7 +28,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "data.hxx"
@@ -119,7 +118,7 @@ xmlreader::XmlReader::Text XcsParser::getTextMode() {
 }
 
 bool XcsParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, int nsId, std::string_view name,
     std::set< OUString > const * /*existingDependencies*/)
 {
     if (valueParser_.startElement(reader, nsId, name)) {
@@ -247,7 +246,7 @@ bool XcsParser::startElement(
         }
     }
     throw css::uno::RuntimeException(
-        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
+        "bad member <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " + reader.getUrl());
 }
 
 void XcsParser::endElement(xmlreader::XmlReader const & reader) {
@@ -315,7 +314,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
     }
 }
 
-void XcsParser::characters(xmlreader::Span const & text) {
+void XcsParser::characters(std::string_view text) {
     valueParser_.characters(text);
 }
 
@@ -327,7 +326,7 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
     bool hasName = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
@@ -339,8 +338,8 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
                     reader.getUrl());
             }
             hasPackage = true;
-            xmlreader::Span s(reader.getAttributeValue(false));
-            buf.insert(0, s.begin, s.length);
+            std::string_view s(reader.getAttributeValue(false));
+            buf.insert(0, s.data(), s.size());
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "name")
         {
@@ -350,8 +349,8 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
                     reader.getUrl());
             }
             hasName = true;
-            xmlreader::Span s(reader.getAttributeValue(false));
-            buf.append(s.begin, s.length);
+            std::string_view s(reader.getAttributeValue(false));
+            buf.append(s.data(), s.size());
         }
     }
     if (!hasPackage) {
@@ -362,8 +361,7 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
         throw css::uno::RuntimeException(
             "no component-schema name attribute in " + reader.getUrl());
     }
-    componentName_ = xmlreader::Span(buf.getStr(), buf.getLength()).
-        convertFromUtf8();
+    componentName_ = xmlreader::XmlReader::convertFromUtf8(std::string_view(buf.getStr(), buf.getLength()));
 }
 
 void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
@@ -374,22 +372,22 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
     OUString nodeType;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "component")
         {
-            component = reader.getAttributeValue(false).convertFromUtf8();
+            component = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "node-type")
         {
             hasNodeType = true;
-            nodeType = reader.getAttributeValue(false).convertFromUtf8();
+            nodeType = reader.getAttributeValueUtf8(false);
         }
     }
     if (!hasName) {
@@ -420,13 +418,13 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
     bool nillable = true;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "type")
         {
@@ -466,10 +464,10 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
 void XcsParser::handlePropValue(
     xmlreader::XmlReader & reader, rtl::Reference< Node > const & property)
 {
-    xmlreader::Span attrSeparator;
+    std::string_view attrSeparator;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
@@ -477,14 +475,14 @@ void XcsParser::handlePropValue(
             attrLn == "separator")
         {
             attrSeparator = reader.getAttributeValue(false);
-            if (attrSeparator.length == 0) {
+            if (attrSeparator.size() == 0) {
                 throw css::uno::RuntimeException(
                     "bad oor:separator attribute in " + reader.getUrl());
             }
         }
     }
     valueParser_.separator_ = OString(
-        attrSeparator.begin, attrSeparator.length);
+        attrSeparator.data(), attrSeparator.size());
     valueParser_.start(property);
 }
 
@@ -494,13 +492,13 @@ void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
     bool extensible = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "extensible")
         {
@@ -530,22 +528,22 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
     OUString nodeType;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "component")
         {
-            component = reader.getAttributeValue(false).convertFromUtf8();
+            component = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "node-type")
         {
             hasNodeType = true;
-            nodeType = reader.getAttributeValue(false).convertFromUtf8();
+            nodeType = reader.getAttributeValueUtf8(false);
         }
     }
     if (!hasName) {
@@ -571,19 +569,19 @@ void XcsParser::handleSetItem(xmlreader::XmlReader & reader, SetNode * set) {
     OUString nodeType;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR &&
             attrLn == "component")
         {
-            component = reader.getAttributeValue(false).convertFromUtf8();
+            component = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "node-type")
         {
             hasNodeType = true;
-            nodeType = reader.getAttributeValue(false).convertFromUtf8();
+            nodeType = reader.getAttributeValueUtf8(false);
         }
     }
     set->getAdditionalTemplateNames().push_back(

@@ -2601,7 +2601,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -2617,7 +2617,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                     if (name == "id")
                     {
                         name = reader.getAttributeValue(false);
-                        OString sID(name.begin, name.length);
+                        OString sID(name.data(), name.size());
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                         {
@@ -2758,7 +2758,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     vcl::Window *pCurrentChild = nullptr;
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
     OString sType, sInternalChild;
 
@@ -2767,12 +2767,12 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
         if (name == "type")
         {
             name = reader.getAttributeValue(false);
-            sType = OString(name.begin, name.length);
+            sType = OString(name.data(), name.size());
         }
         else if (name == "internal-child")
         {
             name = reader.getAttributeValue(false);
-            sInternalChild = OString(name.begin, name.length);
+            sInternalChild = OString(name.data(), name.size());
         }
     }
 
@@ -2870,7 +2870,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                     if (name == "domain")
                     {
                         name = reader.getAttributeValue(false);
-                        sType = OString(name.begin, name.length);
+                        sType = OString(name.data(), name.size());
                         m_pParserState->m_aResLocale = Translate::Create(sType.getStr());
                     }
                 }
@@ -2893,7 +2893,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 
 void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
 {
-    xmlreader::Span span;
+    std::string_view span;
     int nsId;
 
     OString sProperty;
@@ -2904,12 +2904,12 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
         if (span == "name")
         {
             span = reader.getAttributeValue(false);
-            sProperty = OString(span.begin, span.length);
+            sProperty = OString(span.data(), span.size());
         }
         else if (span == "value")
         {
             span = reader.getAttributeValue(false);
-            sValue = OString(span.begin, span.length);
+            sValue = OString(span.data(), span.size());
         }
     }
 
@@ -2919,7 +2919,7 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
 
 void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
 {
-    xmlreader::Span span;
+    std::string_view span;
     int nsId;
 
     OString sProperty;
@@ -2930,12 +2930,12 @@ void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, strin
         if (span == "type")
         {
             span = reader.getAttributeValue(false);
-            sProperty = OString(span.begin, span.length);
+            sProperty = OString(span.data(), span.size());
         }
         else if (span == "target")
         {
             span = reader.getAttributeValue(false);
-            sValue = OString(span.begin, span.length);
+            sValue = OString(span.data(), span.size());
             sal_Int32 nDelim = sValue.indexOf(':');
             if (nDelim != -1)
                 sValue = sValue.copy(0, nDelim);
@@ -2948,7 +2948,7 @@ void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, strin
 
 void VclBuilder::collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
 {
-    xmlreader::Span span;
+    std::string_view span;
     int nsId;
 
     OString sProperty;
@@ -2958,7 +2958,7 @@ void VclBuilder::collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap
         if (span == "type")
         {
             span = reader.getAttributeValue(false);
-            sProperty = OString(span.begin, span.length);
+            sProperty = OString(span.data(), span.size());
         }
     }
 
@@ -2974,7 +2974,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -2997,7 +2997,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                     if (name == "id")
                     {
                         name = reader.getAttributeValue(false);
-                        nId = OString(name.begin, name.length).toInt32();
+                        nId = OString(name.data(), name.size()).toInt32();
                     }
                     else if (nId == 0 && name == "translatable" && reader.getAttributeValue(false) == "yes")
                     {
@@ -3006,14 +3006,14 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                     else if (name == "context")
                     {
                         name = reader.getAttributeValue(false);
-                        sContext = OString(name.begin, name.length);
+                        sContext = OString(name.data(), name.size());
                     }
                 }
 
                 (void)reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                OString sValue(name.begin, name.length);
+                OString sValue(name.data(), name.size());
                 OUString sFinalValue;
                 if (bTranslated)
                 {
@@ -3049,7 +3049,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3091,7 +3091,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWin
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3136,7 +3136,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3162,19 +3162,19 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                     else if (name == "context")
                     {
                         name = reader.getAttributeValue(false);
-                        sContext = OString(name.begin, name.length);
+                        sContext = OString(name.data(), name.size());
                     }
                     else if (name == "id")
                     {
                         name = reader.getAttributeValue(false);
-                        sId = OString(name.begin, name.length);
+                        sId = OString(name.data(), name.size());
                     }
                 }
 
                 (void)reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                OString sValue(name.begin, name.length);
+                OString sValue(name.data(), name.size());
                 OUString sFinalValue;
                 if (bTranslated)
                 {
@@ -3218,7 +3218,7 @@ VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString 
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3257,7 +3257,7 @@ VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString 
 
 void VclBuilder::handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     int nLevel = 1;
@@ -3294,7 +3294,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
     OUString sCustomProperty;
     PopupMenu *pSubMenu = nullptr;
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     while (reader.nextAttribute(&nsId, &name))
@@ -3302,12 +3302,12 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
         if (name == "class")
         {
             name = reader.getAttributeValue(false);
-            sClass = OString(name.begin, name.length);
+            sClass = OString(name.data(), name.size());
         }
         else if (name == "id")
         {
             name = reader.getAttributeValue(false);
-            sID = OString(name.begin, name.length);
+            sID = OString(name.data(), name.size());
             sal_Int32 nDelim = sID.indexOf(':');
             if (nDelim != -1)
             {
@@ -3373,7 +3373,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
 
     while(true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -3392,7 +3392,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
                     if (name == "name")
                     {
                         name = reader.getAttributeValue(false);
-                        OString sWidget(name.begin, name.length);
+                        OString sWidget(name.data(), name.size());
                         sal_Int32 nDelim = sWidget.indexOf(':');
                         if (nDelim != -1)
                             sWidget = sWidget.copy(0, nDelim);
@@ -3564,7 +3564,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     OString sID;
     OUString sCustomProperty;
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     while (reader.nextAttribute(&nsId, &name))
@@ -3572,12 +3572,12 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
         if (name == "class")
         {
             name = reader.getAttributeValue(false);
-            sClass = OString(name.begin, name.length);
+            sClass = OString(name.data(), name.size());
         }
         else if (name == "id")
         {
             name = reader.getAttributeValue(false);
-            sID = OString(name.begin, name.length);
+            sID = OString(name.data(), name.size());
             if (m_bLegacy)
             {
                 sal_Int32 nDelim = sID.indexOf(':');
@@ -3722,7 +3722,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
 
 void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     int nLevel = 1;
@@ -3765,7 +3765,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
     if (pCurrent == pParent)
         pToolBoxParent = dynamic_cast<ToolBox*>(pParent);
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     if (pCurrent->GetType() == WindowType::SCROLLWINDOW)
@@ -3783,11 +3783,11 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
         if (name == "name")
         {
             name = reader.getAttributeValue(false);
-            OString sKey(name.begin, name.length);
+            OString sKey(name.data(), name.size());
             sKey = sKey.replace('_', '-');
             (void)reader.nextItem(
                 xmlreader::XmlReader::Text::Raw, &name, &nsId);
-            OString sValue(name.begin, name.length);
+            OString sValue(name.data(), name.size());
 
             if (sKey == "expand" || sKey == "resize")
             {
@@ -3860,7 +3860,7 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
 {
     std::vector<vcl::EnumContext::Context> aContext;
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     int nLevel = 1;
@@ -3913,7 +3913,7 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
 
 OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
     OString aRet;
 
@@ -3922,7 +3922,7 @@ OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
         if (name == "name")
         {
             name = reader.getAttributeValue(false);
-            aRet = OString (name.begin, name.length);
+            aRet = OString (name.data(), name.size());
         }
     }
 
@@ -3931,7 +3931,7 @@ OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
 
 void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) const
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     OString sProperty, sContext;
@@ -3943,12 +3943,12 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
         if (name == "name")
         {
             name = reader.getAttributeValue(false);
-            sProperty = OString(name.begin, name.length);
+            sProperty = OString(name.data(), name.size());
         }
         else if (name == "context")
         {
             name = reader.getAttributeValue(false);
-            sContext = OString(name.begin, name.length);
+            sContext = OString(name.data(), name.size());
         }
         else if (name == "translatable" && reader.getAttributeValue(false) == "yes")
         {
@@ -3957,7 +3957,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     }
 
     (void)reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    OString sValue(name.begin, name.length);
+    OString sValue(name.data(), name.size());
     OUString sFinalValue;
     if (bTranslated)
     {
@@ -3979,7 +3979,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
 
 void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     OString sResponse;
@@ -3989,12 +3989,12 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
         if (name == "response")
         {
             name = reader.getAttributeValue(false);
-            sResponse = OString(name.begin, name.length);
+            sResponse = OString(name.data(), name.size());
         }
     }
 
     (void)reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    OString sID(name.begin, name.length);
+    OString sID(name.data(), name.size());
     sal_Int32 nDelim = sID.indexOf(':');
     if (nDelim != -1)
         sID = sID.copy(0, nDelim);
@@ -4003,7 +4003,7 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
 
 void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     OString sProperty;
@@ -4015,17 +4015,17 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap
         if (name == "key")
         {
             name = reader.getAttributeValue(false);
-            sValue = OString(name.begin, name.length);
+            sValue = OString(name.data(), name.size());
         }
         else if (name == "signal")
         {
             name = reader.getAttributeValue(false);
-            sProperty = OString(name.begin, name.length);
+            sProperty = OString(name.data(), name.size());
         }
         else if (name == "modifiers")
         {
             name = reader.getAttributeValue(false);
-            sModifiers = OString(name.begin, name.length);
+            sModifiers = OString(name.data(), name.size());
         }
     }
 

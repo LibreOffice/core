@@ -25,7 +25,6 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "parsemanager.hxx"
@@ -50,7 +49,7 @@ xmlreader::XmlReader::Text XcdParser::getTextMode() {
 }
 
 bool XcdParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, int nsId, std::string_view name,
     std::set< OUString > const * existingDependencies)
 {
     if (nestedParser_.is()) {
@@ -72,10 +71,10 @@ bool XcdParser::startElement(
         {
             if (dependencyFile_.isEmpty()) {
                 dependencyOptional_ = false;
-                xmlreader::Span attrFile;
+                std::string_view attrFile;
                 for (;;) {
                     int attrNsId;
-                    xmlreader::Span attrLn;
+                    std::string_view attrLn;
                     if (!reader.nextAttribute(&attrNsId, &attrLn)) {
                         break;
                     }
@@ -92,11 +91,11 @@ bool XcdParser::startElement(
                             reader.getAttributeValue(true));
                     }
                 }
-                if (!attrFile.is()) {
+                if (attrFile.data() == nullptr) {
                     throw css::uno::RuntimeException(
                         "no dependency file attribute in " + reader.getUrl());
                 }
-                dependencyFile_ = attrFile.convertFromUtf8();
+                dependencyFile_ = xmlreader::XmlReader::convertFromUtf8(attrFile);
                 if (dependencyFile_.isEmpty()) {
                     throw css::uno::RuntimeException(
                         "bad dependency file attribute in " + reader.getUrl());
@@ -139,7 +138,7 @@ bool XcdParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
+        "bad member <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " + reader.getUrl());
 }
 
 void XcdParser::endElement(xmlreader::XmlReader const & reader) {
@@ -163,7 +162,7 @@ void XcdParser::endElement(xmlreader::XmlReader const & reader) {
     }
 }
 
-void XcdParser::characters(xmlreader::Span const & text) {
+void XcdParser::characters(std::string_view text) {
     if (nestedParser_.is()) {
         nestedParser_->characters(text);
     }

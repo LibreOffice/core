@@ -28,15 +28,14 @@
 
 namespace xmlreader {
     class XmlReader;
-    struct Span;
 }
 
 namespace configmgr::xmldata {
 
 Type parseType(
-    xmlreader::XmlReader const & reader, xmlreader::Span const & text);
+    xmlreader::XmlReader const & reader, std::string_view text);
 
-bool parseBoolean(xmlreader::Span const & text);
+bool parseBoolean(std::string_view text);
 
 OUString parseTemplateReference(
     OUString const & component, bool hasNodeType,
