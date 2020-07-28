@@ -1278,11 +1278,13 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             && IsAttrAtPos::Outline & rContentAtPos.eContentAtPos
             && !rNds.GetOutLineNds().empty() )
         {
-            const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel(MAXLEVEL-1, GetLayout());
-            if( pONd )
+            // only for nodes in outline nodes
+            SwOutlineNodes::size_type nPos;
+            if(rNds.GetOutLineNds().Seek_Entry(pTextNd, &nPos))
             {
                 rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
-                rContentAtPos.sStr = sw::GetExpandTextMerged(GetLayout(), *pONd, true, false, ExpandMode::ExpandFootnote);
+                rContentAtPos.sStr = sw::GetExpandTextMerged(GetLayout(), *pTextNd, true, false, ExpandMode::ExpandFootnote);
+                rContentAtPos.aFnd.pNode = pTextNd;
                 bRet = true;
             }
         }
