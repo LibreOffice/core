@@ -3175,6 +3175,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127606)
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127118)
+{
+    createDoc("tdf127118.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was Horizontal: merged cell split between pages didn't keep vertical writing direction
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]/txt[1]", "WritingMode", "VertBTLR");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134685)
 {
     createDoc("tdf134685.docx");
