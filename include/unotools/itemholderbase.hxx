@@ -37,7 +37,6 @@ enum class EItem
     CmdOptions                    ,
     ColorConfig                   ,   // 2
     Compatibility                 ,
-    CompatibilityView             ,
     CTLOptions                    ,   // 2
 
     DefaultOptions                ,

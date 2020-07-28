@@ -22,7 +22,6 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <unotools/compatibility.hxx>
-#include <unotools/compatibilityviewoptions.hxx>
 #include <rtl/ustring.hxx>
 
 class SwWrtShell;
@@ -33,8 +32,6 @@ class SwCompatibilityOptPage : public SfxTabPage
 private:
     // config item
     SvtCompatibilityOptions m_aConfigItem;
-    // config item
-    SvtCompatibilityViewOptions m_aViewConfigItem;
     // text of the user entry
     OUString                m_sUserEntry;
     // shell of the current document
