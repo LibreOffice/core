@@ -199,12 +199,14 @@ private:
             return nullptr;
         }
         // Filter out e.g. `size_t(-1)`:
-        APSInt val;
-        if (!e2->isValueDependent() && e2->isIntegerConstantExpr(val, compiler.getASTContext()))
+        if (!e2->isValueDependent())
         {
-            if (val.isNegative())
+            if (auto const val = compat::getIntegerConstantExpr(e2, compiler.getASTContext()))
             {
-                return nullptr;
+                if (val->isNegative())
+                {
+                    return nullptr;
+                }
             }
         }
         auto loc = compat::getBeginLoc(e);
