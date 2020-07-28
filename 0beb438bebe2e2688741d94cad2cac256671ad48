@@ -16,6 +16,24 @@
       "revId": "0beb438bebe2e2688741d94cad2cac256671ad48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c324ccab_c30fe81c",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2020-07-28T14:35:37Z",
+      "side": 1,
+      "message": "If we assume, following formulas are correct:\n* OFFSET(#REF!!A2;-1;0)\n* \u003d#REF!!A2\nwhy should we return just \"#REF!\" directly from ConventionXL_OOX::makeRefStr() and ConventionXL_A1::makeRefStr() and loose some significant formula parts in all LO corners where this functionality is used?! In this case me fix up is OK. But,\n\nQ: Should pass [bAllowErrRef] there? The call stack could be to long...\nQ: Should we for XLSX always return \"#REF!\" as result when one of the formula part is is #REF! ?",
+      "parentUuid": "4d44e89c_fa635988",
+      "revId": "0beb438bebe2e2688741d94cad2cac256671ad48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
