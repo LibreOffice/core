@@ -77,7 +77,6 @@
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/data.h>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

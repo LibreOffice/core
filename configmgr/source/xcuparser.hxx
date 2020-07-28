@@ -36,8 +36,6 @@
 #include "type.hxx"
 #include "valueparser.hxx"
 
-namespace xmlreader { struct Span; }
-
 namespace configmgr {
 
 class GroupNode;
@@ -60,17 +58,17 @@ private:
     virtual xmlreader::XmlReader::Text getTextMode() override;
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        xmlreader::XmlReader & reader, int nsId, std::string_view name,
         std::set< OUString > const * existingDependencies) override;
 
     virtual void endElement(xmlreader::XmlReader const & reader) override;
 
-    virtual void characters(xmlreader::Span const & span) override;
+    virtual void characters(std::string_view span) override;
 
     enum Operation {
         OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };
 
-    static Operation parseOperation(xmlreader::Span const & text);
+    static Operation parseOperation(std::string_view text);
 
     void handleComponentData(xmlreader::XmlReader & reader);
 
