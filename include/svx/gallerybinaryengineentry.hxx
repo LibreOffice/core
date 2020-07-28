@@ -27,7 +27,7 @@
 
 class GalleryStorageLocations;
 
-class SVXCORE_DLLPUBLIC GalleryBinaryEngineEntry
+class GalleryBinaryEngineEntry
 {
 private:
     GalleryStorageLocations& m_rGalleryStorageLocations;
@@ -43,8 +43,7 @@ public:
     const INetURLObject& GetSdvURL() const { return m_rGalleryStorageLocations.GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return m_rGalleryStorageLocations.GetStrURL(); }
 
-    SAL_DLLPRIVATE static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL,
-                                                              bool bReadOnly);
+    static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

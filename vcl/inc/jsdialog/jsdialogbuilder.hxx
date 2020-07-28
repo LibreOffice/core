@@ -135,7 +135,7 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
+class JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
 {
 public:
     JSDialog(VclPtr<vcl::Window> aOwnedToplevel, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,

@@ -63,7 +63,6 @@ ScFormatEntry
 ScPaintHint
 ScPreviewShell
 ScRefreshTimer
-SdAbstractDialogFactory
 SdOptionsItem
 SdOptionsLayout
 SdOptionsMisc
@@ -170,6 +169,8 @@ basegfx::MinimalSystemDependentDataManager
 canvas
 chart::PopupRequest
 comphelper::RefCountedMutex
+comphelper::service_decl
+comphelper::service_decl::ServiceDecl
 comphelper::service_decl::ServiceDecl::Factory
 connectivity::component::OComponentPreparedStatement
 connectivity::component::OComponentStatement
@@ -220,6 +221,16 @@ formula::FormulaMissingToken
 formula::FormulaTokenIterator::Item
 formula::FormulaTypedDoubleToken
 formula::FormulaUnknownToken
+framework::AddonMenuManager
+framework::ConfigAccess
+framework::ConstItemContainer
+framework::Converter
+framework::HandlerCache
+framework::MenuConfiguration
+framework::SaxNamespaceFilter
+framework::StatusBarConfiguration
+framework::ToolBoxConfiguration
+framework::TransactionManager
 jvmaccess::UnoVirtualMachine::CreationException
 jvmaccess::VirtualMachine::AttachGuard::CreationException
 linguistic::PropertyChgHelper
@@ -243,9 +254,6 @@ sdr::animation::primitiveAnimator
 sdr::contact::ObjectContactPainter
 sfx2::sidebar::Panel
 sfx2::sidebar::SidebarToolBox
-svt::ControlBase
-svt::EditControlBase
-svt::MultiLineTextCell
 svtools::ToolbarPopup
 svx::CommonStyleManager
 svx::PropertyValueProvider
@@ -265,4 +273,3 @@ writerperfect::DirectoryStream::Impl
 xmloff::OControlBorderHandler
 xmloff::OFontWidthHandler
 xmloff::ORotationAngleHandler
-xmlsecurity::pdfio
