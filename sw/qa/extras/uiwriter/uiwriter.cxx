@@ -287,6 +287,7 @@ public:
     void testTdf135260();
     void testRedlineParam();
     void testRedlineViewAuthor();
+    void testTdf132911();
     void testTdf91292();
     void testTdf78727();
     void testRedlineTimestamp();
@@ -498,6 +499,7 @@ public:
     CPPUNIT_TEST(testTdf135260);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
+    CPPUNIT_TEST(testTdf132911);
     CPPUNIT_TEST(testTdf91292);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testRedlineTimestamp);
@@ -5476,6 +5478,80 @@ void SwUiWriterTest::testRedlineViewAuthor()
     //Reset the redline author after using it, otherwise, it might interfere with other unittests
     pView->SetRedlineAuthor("Unknown Author");
     pDocShell->SetView(pView);
+}
+
+void SwUiWriterTest::testTdf132911()
+{
+    load(DATA_DIRECTORY, "tdf132911.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    auto getShapes = [&]() -> int
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+        return xDraws->getCount();
+    };
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    // Without the fix in place, it would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    //FIXME: tdf#135247
+    //lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    //Scheduler::ProcessEventsToIdle();
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    //CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 void SwUiWriterTest::testTdf91292()
