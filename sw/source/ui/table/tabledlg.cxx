@@ -299,7 +299,6 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
                     nLeft = 0;
                     nCurWidth = pTableData->GetSpace();
                 }
-
             }
         }
         //centered: change both sides equally
@@ -357,10 +356,22 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
             nCurWidth = pTableData->GetSpace() - nLeft - nRight;
         }
     }
-    if (nCurWidth != nPrevWidth )
-        m_xWidthMF->set_value( m_xWidthMF->NormalizePercent( nCurWidth ), FieldUnit::TWIP );
+
     m_xRightMF->set_value( m_xRightMF->NormalizePercent( nRight ), FieldUnit::TWIP );
     m_xLeftMF->set_value( m_xLeftMF->NormalizePercent( nLeft ), FieldUnit::TWIP );
+
+    if (nCurWidth != nPrevWidth )
+    {
+        m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(nCurWidth), FieldUnit::TWIP);
+
+        // tdf#135021 if the user changed the width spinbutton, and in this
+        // ModifyHdl we changed the value of that width spinbutton, then rerun
+        // the ModifyHdl on the replaced value so the left/right/width value
+        // relationships are consistent
+        if (&rEdit == m_xWidthMF->get())
+            ModifyHdl(rEdit);
+    }
+
     bModified = true;
 }
 
