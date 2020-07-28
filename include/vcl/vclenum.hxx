@@ -319,6 +319,9 @@ namespace o3tl
 
 namespace vcl
 {
+    // The exact sizes of the icons in each size grouping are not necessarily
+    // the exact size indicated by the name, but the upper limit of their size.
+    // e.g. many Size26 icons are often 24x24px and only some 26x26px
     enum class ImageType
     {
         Size16,
