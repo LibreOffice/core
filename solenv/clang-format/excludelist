@@ -7234,7 +7234,6 @@ include/unotools/fltrcfg.hxx
 include/unotools/fontcfg.hxx
 include/unotools/fontcvt.hxx
 include/unotools/fontdefs.hxx
-include/unotools/fontoptions.hxx
 include/unotools/historyoptions.hxx
 include/unotools/intlwrapper.hxx
 include/unotools/itemholderbase.hxx
@@ -16272,7 +16271,6 @@ unotools/source/config/eventcfg.cxx
 unotools/source/config/extendedsecurityoptions.cxx
 unotools/source/config/fltrcfg.cxx
 unotools/source/config/fontcfg.cxx
-unotools/source/config/fontoptions.cxx
 unotools/source/config/historyoptions.cxx
 unotools/source/config/itemholder1.cxx
 unotools/source/config/itemholder1.hxx
