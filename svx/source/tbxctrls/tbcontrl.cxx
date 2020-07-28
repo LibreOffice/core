@@ -3341,10 +3341,10 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
 
 sal_Bool SvxColorToolBoxControl::opensSubToolbar()
 {
-    // For a split button, we mark this controller as a sub-toolbar controller,
-    // so we get notified (through updateImage method) on button image changes,
-    // and could redraw the last used color on top of it.
-    return m_bSplitButton;
+    // We mark this controller as a sub-toolbar controller, so we get notified
+    // (through updateImage method) on button image changes, and could redraw
+    // the last used color on top of it.
+    return true;
 }
 
 void SvxColorToolBoxControl::updateImage()
