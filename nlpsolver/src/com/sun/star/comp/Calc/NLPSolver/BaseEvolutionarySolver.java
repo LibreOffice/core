@@ -161,7 +161,7 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
     private final ArrayList<Variable> m_variables = new ArrayList<Variable>();
 
     //properties
-    protected PropertyInfo<Integer> m_swarmSize = new PropertyInfo<Integer>("SwarmSize", 70, "Size of Swam");
+    protected PropertyInfo<Integer> m_swarmSize = new PropertyInfo<Integer>("SwarmSize", 70, "Size of Swarm");
     protected PropertyInfo<Integer> m_librarySize = new PropertyInfo<Integer>("LibrarySize", 210, "Size of Library");
     protected PropertyInfo<Integer> m_learningCycles = new PropertyInfo<Integer>("LearningCycles", 2000, "Learning Cycles");
     private final PropertyInfo<Boolean> m_guessVariableRange = new PropertyInfo<Boolean>("GuessVariableRange", true, "Variable Bounds Guessing");
