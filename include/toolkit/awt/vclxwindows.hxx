@@ -623,7 +623,7 @@ public:
 
 //  class VCLXEdit
 
-class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXEdit :  public css::awt::XTextComponent,
+class VCLXEdit :  public css::awt::XTextComponent,
                     public css::awt::XTextEditField,
                     public css::awt::XTextLayoutConstrains,
                     public VCLXWindow
@@ -831,8 +831,7 @@ public:
 
 //  class VCLXSpinField
 
-class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXSpinField : public css::awt::XSpinField,
-                        public VCLXEdit
+class VCLXSpinField : public css::awt::XSpinField, public VCLXEdit
 {
 private:
     SpinListenerMultiplexer maSpinListeners;
@@ -897,7 +896,7 @@ public:
 
 //  class VCLXDateField
 
-class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXDateField : public css::awt::XDateField,
+class VCLXDateField : public css::awt::XDateField,
                         public VCLXFormattedSpinField
 {
 protected:
