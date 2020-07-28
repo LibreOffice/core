@@ -468,14 +468,14 @@ public:
     bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateField : public SpinField, public DateFormatter
+class DateField : public SpinField, public DateFormatter
 {
 private:
     Date                    maFirst;
     Date                    maLast;
 
 protected:
-    SAL_DLLPRIVATE void     ImplDateSpinArea( bool bUp );
+    void                    ImplDateSpinArea( bool bUp );
 
 public:
     explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );

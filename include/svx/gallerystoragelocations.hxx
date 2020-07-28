@@ -22,7 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
 
-class SVXCORE_DLLPUBLIC GalleryStorageLocations
+class GalleryStorageLocations
 {
 private:
     INetURLObject maThmURL;
