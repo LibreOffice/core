@@ -104,4 +104,31 @@ class ConfigureDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_gear_button_menu(self):
+        self.ui_test.create_doc_in_start_center("writer")
+
+        self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog")
+
+        # Open the New Menu Dialog with id = 0
+        xDialog = self.xUITest.getTopFocusWindow()
+        xmenugearbtn=xDialog.getChild("menugearbtn")
+        self.ui_test.execute_dialog_through_action( xmenugearbtn , "OPENFROMLIST" , mkPropertyValues({"POS": "0" }) )
+        MoveMenuDialog  = self.xUITest.getTopFocusWindow()
+        CancelBtn = MoveMenuDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(CancelBtn)
+
+        # Open the Rename Menu Dialog with id = 2
+        xDialog = self.xUITest.getTopFocusWindow()
+        xmenugearbtn=xDialog.getChild("menugearbtn")
+        self.ui_test.execute_dialog_through_action( xmenugearbtn , "OPENFROMLIST" , mkPropertyValues({"POS": "2" }) )
+        RenameMenuDialog  = self.xUITest.getTopFocusWindow()
+        CancelBtn = RenameMenuDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(CancelBtn)
+
+        xDialog = self.xUITest.getTopFocusWindow()
+        xcancBtn = xDialog.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xcancBtn)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
