@@ -24,7 +24,6 @@
 
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "parsemanager.hxx"
@@ -38,18 +37,11 @@ ParseManager::ParseManager(
 {
     assert(parser.is());
     int id;
-    id = reader_.registerNamespaceIri(
-        xmlreader::Span(
-            RTL_CONSTASCII_STRINGPARAM("http://openoffice.org/2001/registry")));
+    id = reader_.registerNamespaceIri("http://openoffice.org/2001/registry");
     assert(id == NAMESPACE_OOR);
-    id = reader_.registerNamespaceIri(
-        xmlreader::Span(
-            RTL_CONSTASCII_STRINGPARAM("http://www.w3.org/2001/XMLSchema")));
+    id = reader_.registerNamespaceIri("http://www.w3.org/2001/XMLSchema");
     assert(id == NAMESPACE_XS);
-    id = reader_.registerNamespaceIri(
-        xmlreader::Span(
-            RTL_CONSTASCII_STRINGPARAM(
-                "http://www.w3.org/2001/XMLSchema-instance")));
+    id = reader_.registerNamespaceIri("http://www.w3.org/2001/XMLSchema-instance");
     assert(id == NAMESPACE_XSI);
     (void)id;
 }
@@ -57,7 +49,7 @@ ParseManager::ParseManager(
 bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
     sal_uInt32 startTime( osl_getGlobalTimer() );
     for (;;) {
-        switch (itemData_.is()
+        switch (itemData_.data()
                 ? xmlreader::XmlReader::Result::Begin
                 : reader_.nextItem(
                     parser_->getTextMode(), &itemData_, &itemNamespaceId_))
@@ -80,7 +72,7 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
             SAL_INFO("configmgr", "parsing " << reader_.getUrl() << " took " << (osl_getGlobalTimer() - startTime) << " ms, success");
             return true;
         }
-        itemData_.clear();
+        itemData_ = {};
     }
 }
 

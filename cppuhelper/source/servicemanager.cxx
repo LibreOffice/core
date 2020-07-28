@@ -139,21 +139,19 @@ Parser::Parser(
 {
     assert(data != nullptr);
     int ucNsId = reader_.registerNamespaceIri(
-        xmlreader::Span(
-            RTL_CONSTASCII_STRINGPARAM(
-                "http://openoffice.org/2010/uno-components")));
+                "http://openoffice.org/2010/uno-components");
     enum State {
         STATE_BEGIN, STATE_END, STATE_COMPONENTS, STATE_COMPONENT_INITIAL,
         STATE_COMPONENT, STATE_IMPLEMENTATION, STATE_SERVICE, STATE_SINGLETON };
     for (State state = STATE_BEGIN;;) {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
         xmlreader::XmlReader::Result res = reader_.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
         switch (state) {
         case STATE_BEGIN:
             if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
-                && name.equals(RTL_CONSTASCII_STRINGPARAM("components")))
+                && name == "components")
             {
                 state = STATE_COMPONENTS;
                 break;
@@ -172,7 +170,7 @@ Parser::Parser(
                 break;
             }
             if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
-                && name.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+                && name == "component")
             {
                 handleComponent();
                 state = STATE_COMPONENT_INITIAL;
@@ -188,7 +186,7 @@ Parser::Parser(
             [[fallthrough]];
         case STATE_COMPONENT_INITIAL:
             if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
-                && name.equals(RTL_CONSTASCII_STRINGPARAM("implementation")))
+                && name == "implementation")
             {
                 handleImplementation();
                 state = STATE_IMPLEMENTATION;
@@ -202,14 +200,14 @@ Parser::Parser(
                 break;
             }
             if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
-                && name.equals(RTL_CONSTASCII_STRINGPARAM("service")))
+                && name == "service")
             {
                 handleService();
                 state = STATE_SERVICE;
                 break;
             }
             if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
-                && name.equals(RTL_CONSTASCII_STRINGPARAM("singleton")))
+                && name == "singleton")
             {
                 handleSingleton();
                 state = STATE_SINGLETON;
@@ -240,61 +238,60 @@ void Parser::handleComponent() {
     attrUri_ = OUString();
     attrEnvironment_ = OUString();
     attrPrefix_ = OUString();
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-            && name.equals(RTL_CONSTASCII_STRINGPARAM("loader")))
+            && name == "loader")
         {
             if (!attrLoader_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has multiple \"loader\" attributes");
             }
-            attrLoader_ = reader_.getAttributeValue(false).convertFromUtf8();
+            attrLoader_ = reader_.getAttributeValueUtf8(false);
             if (attrLoader_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has empty \"loader\" attribute");
             }
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-                   && name.equals(RTL_CONSTASCII_STRINGPARAM("uri")))
+                   && name == "uri")
         {
             if (!attrUri_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has multiple \"uri\" attributes");
             }
-            attrUri_ = reader_.getAttributeValue(false).convertFromUtf8();
+            attrUri_ = reader_.getAttributeValueUtf8(false);
             if (attrUri_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <component> has empty \"uri\" attribute");
             }
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-                   && name.equals(RTL_CONSTASCII_STRINGPARAM("environment")))
+                   && name == "environment")
         {
             if (!attrEnvironment_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has multiple \"environment\" attributes");
             }
-            attrEnvironment_ = reader_.getAttributeValue(false)
-                .convertFromUtf8();
+            attrEnvironment_ = reader_.getAttributeValueUtf8(false);
             if (attrEnvironment_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has empty \"environment\" attribute");
             }
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-                   && name.equals(RTL_CONSTASCII_STRINGPARAM("prefix")))
+                   && name == "prefix")
         {
             if (!attrPrefix_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl() +
                      ": <component> has multiple \"prefix\" attributes");
             }
-            attrPrefix_ = reader_.getAttributeValue(false).convertFromUtf8();
+            attrPrefix_ = reader_.getAttributeValueUtf8(false);
             if (attrPrefix_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl() +
@@ -303,7 +300,7 @@ void Parser::handleComponent() {
         } else {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected attribute \""
-                 + name.convertFromUtf8() + "\" in <component>");
+                 + xmlreader::XmlReader::convertFromUtf8(name) + "\" in <component>");
         }
     }
     if (attrLoader_.isEmpty()) {
@@ -327,25 +324,25 @@ void Parser::handleComponent() {
 void Parser::handleImplementation() {
     OUString attrName;
     OUString attrConstructor;
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-            && name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+            && name == "name")
         {
             if (!attrName.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                      + ": <implementation> has multiple \"name\" attributes");
             }
-            attrName = reader_.getAttributeValue(false).convertFromUtf8();
+            attrName = reader_.getAttributeValueUtf8(false);
             if (attrName.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
                     + ": <implementation> has empty \"name\" attribute");
             }
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-                   && name.equals(RTL_CONSTASCII_STRINGPARAM("constructor")))
+                   && name == "constructor")
         {
             if (!attrConstructor.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
@@ -353,8 +350,7 @@ void Parser::handleImplementation() {
                      + ": <implementation> has multiple \"constructor\""
                         " attributes");
             }
-            attrConstructor = reader_.getAttributeValue(false)
-                .convertFromUtf8();
+            attrConstructor = reader_.getAttributeValueUtf8(false);
             if (attrConstructor.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     reader_.getUrl()
@@ -369,7 +365,7 @@ void Parser::handleImplementation() {
         } else {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected element attribute \""
-                 + name.convertFromUtf8() + "\" in <implementation>");
+                 + xmlreader::XmlReader::convertFromUtf8(name) + "\" in <implementation>");
         }
     }
     if (attrName.isEmpty()) {
@@ -404,11 +400,11 @@ void Parser::handleSingleton() {
 
 OUString Parser::getNameAttribute() {
     OUString attrName;
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
         if (nsId != xmlreader::XmlReader::NAMESPACE_NONE
-            || !name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+            || name != "name")
         {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": expected element attribute \"name\"");
@@ -418,7 +414,7 @@ OUString Parser::getNameAttribute() {
                 reader_.getUrl()
                  + ": element has multiple \"name\" attributes");
         }
-        attrName = reader_.getAttributeValue(false).convertFromUtf8();
+        attrName = reader_.getAttributeValueUtf8(false);
         if (attrName.isEmpty()) {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": element has empty \"name\" attribute");

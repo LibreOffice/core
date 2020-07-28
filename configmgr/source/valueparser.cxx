@@ -29,7 +29,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "localizedvaluenode.hxx"
@@ -61,7 +60,7 @@ bool parseHexDigit(char c, int * value) {
     return false;
 }
 
-bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
+bool parseValue(std::string_view text, sal_Bool * value) {
     assert(text.is() && value != nullptr);
     if (text == "true" || text == "1") {
         *value = true;
@@ -74,18 +73,18 @@ bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
     return false;
 }
 
-bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
+bool parseValue(std::string_view text, sal_Int16 * value) {
     assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     sal_Int32 n =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            text.data(), text.size(), RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
         static_cast< sal_Int32 >(
             OString(
-                text.begin + RTL_CONSTASCII_LENGTH("0X"),
-                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
-        OString(text.begin, text.length).toInt32();
+                text.data() + RTL_CONSTASCII_LENGTH("0X"),
+                text.size() - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
+        OString(text.data(), text.size()).toInt32();
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
@@ -94,64 +93,64 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
     return false;
 }
 
-bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
+bool parseValue(std::string_view text, sal_Int32 * value) {
     assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            text.data(), text.size(), RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
         static_cast< sal_Int32 >(
             OString(
-                text.begin + RTL_CONSTASCII_LENGTH("0X"),
-                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
-        OString(text.begin, text.length).toInt32();
+                text.data() + RTL_CONSTASCII_LENGTH("0X"),
+                text.size() - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
+        OString(text.data(), text.size()).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
+bool parseValue(std::string_view text, sal_Int64 * value) {
     assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-            text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
+            text.data(), text.size(), RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
         static_cast< sal_Int64 >(
             OString(
-                text.begin + RTL_CONSTASCII_LENGTH("0X"),
-                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt64(16)) :
-        OString(text.begin, text.length).toInt64();
+                text.data() + RTL_CONSTASCII_LENGTH("0X"),
+                text.size() - RTL_CONSTASCII_LENGTH("0X")).toUInt64(16)) :
+        OString(text.data(), text.size()).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseValue(xmlreader::Span const & text, double * value) {
+bool parseValue(std::string_view text, double * value) {
     assert(text.is() && value != nullptr);
-    *value = OString(text.begin, text.length).toDouble();
+    *value = OString(text.data(), text.size()).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseValue(xmlreader::Span const & text, OUString * value) {
+bool parseValue(std::string_view text, OUString * value) {
     assert(text.is() && value != nullptr);
-    *value = text.convertFromUtf8();
+    *value = xmlreader::XmlReader::convertFromUtf8(text);
     return true;
 }
 
 bool parseValue(
-    xmlreader::Span const & text, css::uno::Sequence< sal_Int8 > * value)
+    std::string_view text, css::uno::Sequence< sal_Int8 > * value)
 {
     assert(text.is() && value != nullptr);
-    if ((text.length & 1) != 0) {
+    if ((text.size() & 1) != 0) {
         return false;
     }
     std::vector< sal_Int8 > seq;
-    for (sal_Int32 i = 0; i != text.length;) {
+    for (sal_Int32 i = 0; i != static_cast<sal_Int32>(text.size());) {
         int n1;
         int n2;
-        if (!parseHexDigit(text.begin[i++], &n1) ||
-            !parseHexDigit(text.begin[i++], &n2))
+        if (!parseHexDigit(text.data()[i++], &n1) ||
+            !parseHexDigit(text.data()[i++], &n2))
         {
             return false;
         }
@@ -161,8 +160,7 @@ bool parseValue(
     return true;
 }
 
-template< typename T > css::uno::Any parseSingleValue(
-    xmlreader::Span const & text)
+template< typename T > css::uno::Any parseSingleValue(std::string_view text)
 {
     T val;
     if (!parseValue(text, &val)) {
@@ -172,22 +170,22 @@ template< typename T > css::uno::Any parseSingleValue(
 }
 
 template< typename T > css::uno::Any parseListValue(
-    OString const & separator, xmlreader::Span const & text)
+    OString const & separator, std::string_view text)
 {
     std::vector< T > seq;
-    xmlreader::Span sep;
+    std::string_view sep;
     if (separator.isEmpty()) {
-        sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
+        sep = " ";
     } else {
-        sep = xmlreader::Span(separator.getStr(), separator.getLength());
+        sep = std::string_view(separator.getStr(), separator.getLength());
     }
-    if (text.length != 0) {
-        for (xmlreader::Span t(text);;) {
+    if (text.size() != 0) {
+        for (std::string_view t(text);;) {
             sal_Int32 i = rtl_str_indexOfStr_WithLength(
-                t.begin, t.length, sep.begin, sep.length);
+                t.data(), t.size(), sep.data(), sep.size());
             T val;
             if (!parseValue(
-                    xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
+                    std::string_view(t.data(), i == -1 ? t.size() : i), &val))
             {
                 throw css::uno::RuntimeException("invalid value");
             }
@@ -195,15 +193,14 @@ template< typename T > css::uno::Any parseListValue(
             if (i < 0) {
                 break;
             }
-            t.begin += i + sep.length;
-            t.length -= i + sep.length;
+            t = std::string_view(t.data() + i + sep.size(), t.size() - i + sep.size());
         }
     }
     return css::uno::Any(comphelper::containerToSequence(seq));
 }
 
 css::uno::Any parseValue(
-    OString const & separator, xmlreader::Span const & text, Type type)
+    OString const & separator, std::string_view text, Type type)
 {
     switch (type) {
     case TYPE_ANY:
@@ -271,7 +268,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
 }
 
 bool ValueParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
+    xmlreader::XmlReader & reader, int nsId, std::string_view name)
 {
     if (!node_.is()) {
         return false;
@@ -281,7 +278,7 @@ bool ValueParser::startElement(
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name == "it" &&
             isListType(type_) && separator_.isEmpty())
         {
-            pad_.clear();
+            pad_.setLength(0);
                 // before first <it>, characters are not ignored; assume they
                 // are only whitespace
             state_ = State::IT;
@@ -296,7 +293,7 @@ bool ValueParser::startElement(
             sal_Int32 scalar = -1;
             for (;;) {
                 int attrNsId;
-                xmlreader::Span attrLn;
+                std::string_view attrLn;
                 if (!reader.nextAttribute(&attrNsId, &attrLn)) {
                     break;
                 }
@@ -313,11 +310,11 @@ bool ValueParser::startElement(
                 scalar != 0x0A && scalar != 0x0D)
             {
                 char c = static_cast< char >(scalar);
-                pad_.add(&c, 1);
+                pad_.append(&c, 1);
             } else if (scalar == 0xFFFE) {
-                pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBE"));
+                pad_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBE"));
             } else if (scalar == 0xFFFF) {
-                pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
+                pad_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
                 throw css::uno::RuntimeException(
                     "bad unicode scalar attribute in " + reader.getUrl());
@@ -330,7 +327,7 @@ bool ValueParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
+        "bad member <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " + reader.getUrl());
 }
 
 bool ValueParser::endElement() {
@@ -367,8 +364,8 @@ bool ValueParser::endElement() {
             }
 
             if (items_.empty()) {
-                *pValue = parseValue(separator_, pad_.get(), type_);
-                pad_.clear();
+                *pValue = parseValue(separator_, pad_.getStr(), type_);
+                pad_.setLength(0);
             } else {
                 switch (type_) {
                 case TYPE_BOOLEAN_LIST:
@@ -410,18 +407,18 @@ bool ValueParser::endElement() {
         break;
     case State::IT:
         items_.push_back(
-            parseValue(OString(), pad_.get(), elementType(type_)));
-        pad_.clear();
+            parseValue(OString(), pad_.getStr(), elementType(type_)));
+        pad_.setLength(0);
         state_ = State::Text;
         break;
     }
     return true;
 }
 
-void ValueParser::characters(xmlreader::Span const & text) {
+void ValueParser::characters(std::string_view text) {
     if (node_.is()) {
         assert(state_ == State::Text || state_ == State::IT);
-        pad_.add(text.begin, text.length);
+        pad_.append(text.data(), text.size());
     }
 }
 

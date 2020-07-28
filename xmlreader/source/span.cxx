@@ -27,15 +27,14 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <xmlreader/span.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 namespace xmlreader {
 
-OUString Span::convertFromUtf8() const {
-    assert(is());
+OUString XmlReader::convertFromUtf8(std::string_view from) {
     rtl_uString * s = nullptr;
     if (!rtl_convertStringToUString(
-            &s, begin, length, RTL_TEXTENCODING_UTF8,
+            &s, from.data(), from.size(), RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))

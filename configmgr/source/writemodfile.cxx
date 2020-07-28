@@ -38,7 +38,6 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <xmlreader/span.hxx>
 
 #include "data.hxx"
 #include "groupnode.hxx"
@@ -281,23 +280,23 @@ void writeNode(
     rtl::Reference< Node > const & parent, std::u16string_view name,
     rtl::Reference< Node > const & node)
 {
-    static xmlreader::Span const typeNames[] = {
-        xmlreader::Span(), xmlreader::Span(), xmlreader::Span(),
+    static std::string_view const typeNames[] = {
+        std::string_view(), std::string_view(), std::string_view(),
             // TYPE_ERROR, TYPE_NIL, TYPE_ANY
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:boolean")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:short")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:int")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:long")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:double")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:string")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:hexBinary")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:boolean-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:short-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:int-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:long-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:double-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:string-list")),
-        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:hexBinary-list")) };
+        std::string_view("xs:boolean"),
+        std::string_view("xs:short"),
+        std::string_view("xs:int"),
+        std::string_view("xs:long"),
+        std::string_view("xs:double"),
+        std::string_view("xs:string"),
+        std::string_view("xs:hexBinary"),
+        std::string_view("oor:boolean-list"),
+        std::string_view("oor:short-list"),
+        std::string_view("oor:int-list"),
+        std::string_view("oor:long-list"),
+        std::string_view("oor:double-list"),
+        std::string_view("oor:string-list"),
+        std::string_view("oor:hexBinary-list") };
     switch (node->kind()) {
     case Node::KIND_PROPERTY:
         {
@@ -314,7 +313,7 @@ void writeNode(
                     handle.writeString(" oor:type=\"");
                     handle.writeString(
                         std::string_view(
-                            typeNames[type].begin, typeNames[type].length));
+                            typeNames[type].data(), typeNames[type].size()));
                     handle.writeString("\"");
                 }
             }
@@ -357,7 +356,7 @@ void writeNode(
                     handle.writeString(" oor:type=\"");
                     handle.writeString(
                         std::string_view(
-                            typeNames[type].begin, typeNames[type].length));
+                            typeNames[type].data(), typeNames[type].size()));
                     handle.writeString("\"");
                 }
             }

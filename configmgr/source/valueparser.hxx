@@ -27,7 +27,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <xmlreader/pad.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "type.hxx"
@@ -35,7 +34,6 @@
 namespace com::sun::star::uno {
     class Any;
 }
-namespace xmlreader { struct Span; }
 
 namespace configmgr {
 
@@ -50,11 +48,11 @@ public:
     xmlreader::XmlReader::Text getTextMode() const;
 
     bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        xmlreader::XmlReader & reader, int nsId, std::string_view name);
 
     bool endElement();
 
-    void characters(xmlreader::Span const & text);
+    void characters(std::string_view text);
 
     void start(
         rtl::Reference< Node > const & property,
@@ -77,7 +75,7 @@ private:
     rtl::Reference< Node > node_;
     OUString localizedName_;
     State state_;
-    xmlreader::Pad pad_;
+    OStringBuffer pad_;
     std::vector< css::uno::Any > items_;
 };
 

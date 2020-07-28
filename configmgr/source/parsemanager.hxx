@@ -26,7 +26,6 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 
@@ -48,7 +47,7 @@ private:
 
     xmlreader::XmlReader reader_;
     rtl::Reference< Parser > parser_;
-    xmlreader::Span itemData_;
+    std::string_view itemData_;
     int itemNamespaceId_;
 };
 

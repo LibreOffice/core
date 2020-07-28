@@ -30,7 +30,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "data.hxx"
@@ -67,7 +66,7 @@ xmlreader::XmlReader::Text XcuParser::getTextMode() {
 }
 
 bool XcuParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    xmlreader::XmlReader & reader, int nsId, std::string_view name,
     std::set< OUString > const * /*existingDependencies*/)
 {
     if (valueParser_.startElement(reader, nsId, name)) {
@@ -83,7 +82,7 @@ bool XcuParser::startElement(
             state_.push(State::Modify(rtl::Reference< Node >()));
         } else {
             throw css::uno::RuntimeException(
-                "bad root element <" + name.convertFromUtf8() + "> in " +
+                "bad root element <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " +
                 reader.getUrl());
         }
     } else if (state_.top().ignore) {
@@ -92,7 +91,7 @@ bool XcuParser::startElement(
         if (nsId != xmlreader::XmlReader::NAMESPACE_NONE || name != "item")
         {
             throw css::uno::RuntimeException(
-                "bad items node member <" + name.convertFromUtf8() + "> in " +
+                "bad items node member <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " +
                 reader.getUrl());
         }
         handleItem(reader);
@@ -103,7 +102,7 @@ bool XcuParser::startElement(
                 name != "value")
             {
                 throw css::uno::RuntimeException(
-                    "bad property node member <" + name.convertFromUtf8() +
+                    "bad property node member <" + xmlreader::XmlReader::convertFromUtf8(name) +
                     "> in " + reader.getUrl());
             }
             handlePropValue(
@@ -116,7 +115,7 @@ bool XcuParser::startElement(
             {
                 throw css::uno::RuntimeException(
                     "bad localized property node member <" +
-                    name.convertFromUtf8() + "> in " + reader.getUrl());
+                    xmlreader::XmlReader::convertFromUtf8(name) + "> in " + reader.getUrl());
             }
             handleLocpropValue(
                 reader,
@@ -125,7 +124,7 @@ bool XcuParser::startElement(
             break;
         case Node::KIND_LOCALIZED_VALUE:
             throw css::uno::RuntimeException(
-                "bad member <" + name.convertFromUtf8() + "> in " +
+                "bad member <" + xmlreader::XmlReader::convertFromUtf8(name) + "> in " +
                 reader.getUrl());
         case Node::KIND_GROUP:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
@@ -140,7 +139,7 @@ bool XcuParser::startElement(
                 handleGroupNode(reader, state_.top().node);
             } else {
                 throw css::uno::RuntimeException(
-                    "bad group node member <" + name.convertFromUtf8() +
+                    "bad group node member <" + xmlreader::XmlReader::convertFromUtf8(name) +
                     "> in " + reader.getUrl());
             }
             break;
@@ -160,7 +159,7 @@ bool XcuParser::startElement(
                 state_.push(State::Ignore(false));
             } else {
                 throw css::uno::RuntimeException(
-                    "bad set node member <" + name.convertFromUtf8() +
+                    "bad set node member <" + xmlreader::XmlReader::convertFromUtf8(name) +
                     "> in " + reader.getUrl());
             }
             break;
@@ -197,11 +196,11 @@ void XcuParser::endElement(xmlreader::XmlReader const &) {
     }
 }
 
-void XcuParser::characters(xmlreader::Span const & text) {
+void XcuParser::characters(std::string_view text) {
     valueParser_.characters(text);
 }
 
-XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
+XcuParser::Operation XcuParser::parseOperation(std::string_view text) {
     assert(text.is());
     if (text == "modify") {
         return OPERATION_MODIFY;
@@ -216,7 +215,7 @@ XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
         return OPERATION_REMOVE;
     }
     throw css::uno::RuntimeException(
-        "invalid op " + text.convertFromUtf8());
+        "invalid op " + xmlreader::XmlReader::convertFromUtf8(text));
 }
 
 void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
@@ -228,7 +227,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     bool finalized = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
@@ -240,8 +239,8 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
                     reader.getUrl());
             }
             hasPackage = true;
-            xmlreader::Span s(reader.getAttributeValue(false));
-            buf.insert(0, s.begin, s.length);
+            std::string_view s(reader.getAttributeValue(false));
+            buf.insert(0, s.data(), s.size());
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "name")
         {
@@ -251,8 +250,8 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
                     reader.getUrl());
             }
             hasName = true;
-            xmlreader::Span s(reader.getAttributeValue(false));
-            buf.append(s.begin, s.length);
+            std::string_view s(reader.getAttributeValue(false));
+            buf.append(s.data(), s.size());
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "op")
         {
@@ -271,8 +270,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         throw css::uno::RuntimeException(
             "no component-data name attribute in " + reader.getUrl());
     }
-    componentName_ = xmlreader::Span(buf.getStr(), buf.getLength()).
-        convertFromUtf8();
+    componentName_ = xmlreader::XmlReader::convertFromUtf8(std::string_view(buf.getStr(), buf.getLength()));
     if (trackPath_) {
         assert(path_.empty());
         path_.push_back(componentName_);
@@ -313,10 +311,10 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
 }
 
 void XcuParser::handleItem(xmlreader::XmlReader & reader) {
-    xmlreader::Span attrPath;
+    std::string_view attrPath;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
@@ -324,11 +322,11 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
             attrPath = reader.getAttributeValue(false);
         }
     }
-    if (!attrPath.is()) {
+    if (attrPath.data() == nullptr) {
         throw css::uno::RuntimeException(
             "missing path attribute in " + reader.getUrl());
     }
-    OUString path(attrPath.convertFromUtf8());
+    OUString path(xmlreader::XmlReader::convertFromUtf8(attrPath));
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_.resolvePathRepresentation(
@@ -382,7 +380,7 @@ void XcuParser::handlePropValue(
     OUString external;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
@@ -401,16 +399,16 @@ void XcuParser::handlePropValue(
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "separator")
         {
-            xmlreader::Span s(reader.getAttributeValue(false));
-            if (s.length == 0) {
+            std::string_view s(reader.getAttributeValue(false));
+            if (s.size() == 0) {
                 throw css::uno::RuntimeException(
                     "bad oor:separator attribute in " + reader.getUrl());
             }
-            separator = OString(s.begin, s.length);
+            separator = OString(s.data(), s.size());
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "external")
         {
-            external = reader.getAttributeValue(true).convertFromUtf8();
+            external = reader.getAttributeValueUtf8(true);
             if (external.isEmpty()) {
                 throw css::uno::RuntimeException(
                     "bad oor:external attribute value in " + reader.getUrl());
@@ -447,14 +445,14 @@ void XcuParser::handleLocpropValue(
     Operation op = OPERATION_FUSE;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == xmlreader::XmlReader::NAMESPACE_XML &&
             attrLn == "lang")
         {
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_XSI &&
                    attrLn == "nil")
         {
@@ -472,12 +470,12 @@ void XcuParser::handleLocpropValue(
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "separator")
         {
-            xmlreader::Span s(reader.getAttributeValue(false));
-            if (s.length == 0) {
+            std::string_view s(reader.getAttributeValue(false));
+            if (s.size() == 0) {
                 throw css::uno::RuntimeException(
                     "bad oor:separator attribute in " + reader.getUrl());
             }
-            separator = OString(s.begin, s.length);
+            separator = OString(s.data(), s.size());
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "op")
         {
@@ -555,13 +553,13 @@ void XcuParser::handleGroupProp(
     bool finalized = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "type")
         {
@@ -750,13 +748,13 @@ void XcuParser::handleGroupNode(
     bool finalized = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "op")
         {
@@ -820,22 +818,22 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     bool mandatory = false;
     for (;;) {
         int attrNsId;
-        xmlreader::Span attrLn;
+        std::string_view attrLn;
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn == "name") {
             hasName = true;
-            name = reader.getAttributeValue(false).convertFromUtf8();
+            name = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "component")
         {
-            component = reader.getAttributeValue(false).convertFromUtf8();
+            component = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "node-type")
         {
             hasNodeType = true;
-            nodeType = reader.getAttributeValue(false).convertFromUtf8();
+            nodeType = reader.getAttributeValueUtf8(false);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn == "op")
         {

@@ -319,7 +319,7 @@ void Parser::handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 
     while (true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res
@@ -343,7 +343,7 @@ void Parser::handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
                     if (name == "id")
                     {
                         name = rReader.getAttributeValue(false);
-                        OString aDeviceId(name.begin, name.length);
+                        OString aDeviceId(name.data(), name.size());
                         rDriver.maDevices.push_back(
                             OStringToOUString(aDeviceId, RTL_TEXTENCODING_UTF8));
                     }
@@ -363,7 +363,7 @@ void Parser::handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
         {
             if (bInMsg)
             {
-                OString sMsg(name.begin, name.length);
+                OString sMsg(name.data(), name.size());
                 rDriver.maMsg = OStringToOUString(sMsg, RTL_TEXTENCODING_UTF8);
             }
         }
@@ -385,7 +385,7 @@ void Parser::handleEntry(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
         throw InvalidFileException();
     }
 
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     while (rReader.nextAttribute(&nsId, &name))
@@ -393,42 +393,42 @@ void Parser::handleEntry(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
         if (name == "os")
         {
             name = rReader.getAttributeValue(false);
-            OString sOS(name.begin, name.length);
+            OString sOS(name.data(), name.size());
             rDriver.meOperatingSystem = getOperatingSystem(sOS);
         }
         else if (name == "vendor")
         {
             name = rReader.getAttributeValue(false);
-            OString sVendor(name.begin, name.length);
+            OString sVendor(name.data(), name.size());
             rDriver.maAdapterVendor = GetVendorId(sVendor);
         }
         else if (name == "compare")
         {
             name = rReader.getAttributeValue(false);
-            OString sCompare(name.begin, name.length);
+            OString sCompare(name.data(), name.size());
             rDriver.meComparisonOp = getComparison(sCompare);
         }
         else if (name == "version")
         {
             name = rReader.getAttributeValue(false);
-            OString sVersion(name.begin, name.length);
+            OString sVersion(name.data(), name.size());
             rDriver.mnDriverVersion = getVersion(sVersion);
         }
         else if (name == "minVersion")
         {
             name = rReader.getAttributeValue(false);
-            OString sMinVersion(name.begin, name.length);
+            OString sMinVersion(name.data(), name.size());
             rDriver.mnDriverVersion = getVersion(sMinVersion);
         }
         else if (name == "maxVersion")
         {
             name = rReader.getAttributeValue(false);
-            OString sMaxVersion(name.begin, name.length);
+            OString sMaxVersion(name.data(), name.size());
             rDriver.mnDriverVersionMax = getVersion(sMaxVersion);
         }
         else
         {
-            OString aAttrName(name.begin, name.length);
+            OString aAttrName(name.data(), name.size());
             SAL_WARN("vcl.driver", "unsupported attribute: " << aAttrName);
         }
     }
@@ -438,7 +438,7 @@ void Parser::handleEntry(DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 
 void Parser::handleList(xmlreader::XmlReader& rReader)
 {
-    xmlreader::Span name;
+    std::string_view name;
     int nsId;
 
     while (true)
@@ -476,7 +476,7 @@ void Parser::handleContent(xmlreader::XmlReader& rReader)
 {
     while (true)
     {
-        xmlreader::Span name;
+        std::string_view name;
         int nsId;
 
         xmlreader::XmlReader::Result res

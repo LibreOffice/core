@@ -30,8 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <xmlreader/pad.hxx>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 namespace xmlreader {
@@ -85,7 +83,7 @@ XmlReader::XmlReader(OUString const & fileUrl)
             "cannot mmap " + fileUrl_ + " (" + OUString::number(e) + ")" );
     }
     namespaceIris_.emplace_back("http://www.w3.org/XML/1998/namespace");
-    namespaces_.emplace_back(Span("xml"), NAMESPACE_XML);
+    namespaces_.emplace_back("xml", NAMESPACE_XML);
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
     state_ = State::Content;
@@ -109,7 +107,7 @@ XmlReader::~XmlReader() {
     }
 }
 
-int XmlReader::registerNamespaceIri(Span const & iri) {
+int XmlReader::registerNamespaceIri(std::string_view iri) {
     int id = toNamespaceId(namespaceIris_.size());
     namespaceIris_.push_back(iri);
     if (iri == "http://www.w3.org/2001/XMLSchema-instance") {
@@ -118,12 +116,12 @@ int XmlReader::registerNamespaceIri(Span const & iri) {
         // those files during migration would fail without this hack that can be
         // removed once migration is no longer relevant (see
         // configmgr::Components::parseModificationLayer):
-        namespaces_.emplace_back(Span("xsi"), id);
+        namespaces_.emplace_back("xsi", id);
     }
     return id;
 }
 
-XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
+XmlReader::Result XmlReader::nextItem(Text reportText, std::string_view * data, int * nsId)
 {
     switch (state_) {
     case State::Content:
@@ -147,7 +145,7 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
     }
 }
 
-bool XmlReader::nextAttribute(int * nsId, Span * localName) {
+bool XmlReader::nextAttribute(int * nsId, std::string_view * localName) {
     assert(nsId != nullptr && localName != nullptr);
     if (firstAttribute_) {
         currentAttribute_ = attributes_.begin();
@@ -160,28 +158,32 @@ bool XmlReader::nextAttribute(int * nsId, Span * localName) {
     }
     if (currentAttribute_->nameColon == nullptr) {
         *nsId = NAMESPACE_NONE;
-        *localName = Span(
+        *localName = std::string_view(
             currentAttribute_->nameBegin,
             currentAttribute_->nameEnd - currentAttribute_->nameBegin);
     } else {
         *nsId = getNamespaceId(
-            Span(
+            std::string_view(
                 currentAttribute_->nameBegin,
                 currentAttribute_->nameColon - currentAttribute_->nameBegin));
-        *localName = Span(
+        *localName = std::string_view(
             currentAttribute_->nameColon + 1,
             currentAttribute_->nameEnd - (currentAttribute_->nameColon + 1));
     }
     return true;
 }
 
-Span XmlReader::getAttributeValue(bool fullyNormalize) {
+std::string_view XmlReader::getAttributeValue(bool fullyNormalize) {
     return handleAttributeValue(
         currentAttribute_->valueBegin, currentAttribute_->valueEnd,
         fullyNormalize);
 }
 
-int XmlReader::getNamespaceId(Span const & prefix) const {
+OUString XmlReader::getAttributeValueUtf8(bool fullyNormalize) {
+    return convertFromUtf8(getAttributeValue(fullyNormalize));
+}
+
+int XmlReader::getNamespaceId(std::string_view prefix) const {
     auto i = std::find_if(namespaces_.crbegin(), namespaces_.crend(),
         [&prefix](const NamespaceData& rNamespaceData) { return prefix == rNamespaceData.prefix; });
 
@@ -192,22 +194,22 @@ int XmlReader::getNamespaceId(Span const & prefix) const {
 }
 
 
-void XmlReader::normalizeLineEnds(Span const & text) {
-    char const * p = text.begin;
-    sal_Int32 n = text.length;
+void XmlReader::normalizeLineEnds(std::string_view text) {
+    char const * p = text.data();
+    sal_Int32 n = text.size();
     for (;;) {
         sal_Int32 i = rtl_str_indexOfChar_WithLength(p, n, '\x0D');
         if (i < 0) {
             break;
         }
-        pad_.add(p, i);
+        pad_.append(p, i);
         p += i + 1;
         n -= i + 1;
         if (n == 0 || *p != '\x0A') {
-            pad_.add("\x0A");
+            pad_.append("\x0A");
         }
     }
-    pad_.add(p, n);
+    pad_.append(p, n);
 }
 
 void XmlReader::skipSpace() {
@@ -323,13 +325,13 @@ void XmlReader::skipDocumentTypeDeclaration() {
     }
 }
 
-Span XmlReader::scanCdataSection() {
+std::string_view XmlReader::scanCdataSection() {
     if (rtl_str_shortenedCompare_WithLength(
             pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("[CDATA["),
             RTL_CONSTASCII_LENGTH("[CDATA[")) !=
         0)
     {
-        return Span();
+        return std::string_view();
     }
     pos_ += RTL_CONSTASCII_LENGTH("[CDATA[");
     char const * begin = pos_;
@@ -340,7 +342,7 @@ Span XmlReader::scanCdataSection() {
             "premature end (within CDATA section) of " + fileUrl_ );
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("]]>");
-    return Span(begin, i);
+    return std::string_view(begin, i);
 }
 
 bool XmlReader::scanName(char const ** nameColon) {
@@ -367,7 +369,7 @@ bool XmlReader::scanName(char const ** nameColon) {
 
 int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
     assert(begin != nullptr && begin <= end);
-    Span iri(handleAttributeValue(begin, end, false));
+    std::string_view iri(handleAttributeValue(begin, end, false));
     for (NamespaceIris::size_type i = 0; i < namespaceIris_.size(); ++i) {
         if (namespaceIris_[i] == iri) {
             return toNamespaceId(i);
@@ -450,7 +452,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
             buf[3] = static_cast< char >((val & 0x3F) | 0x80);
             len = 4;
         }
-        pad_.addEphemeral(buf, len);
+        pad_.append(buf, len);
         return position;
     } else {
         struct EntityRef {
@@ -477,7 +479,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                 0)
             {
                 position += ref.inLength;
-                pad_.add(ref.outBegin, ref.outLength);
+                pad_.append(ref.outBegin, ref.outLength);
                 return position;
             }
         }
@@ -486,10 +488,10 @@ char const * XmlReader::handleReference(char const * position, char const * end)
     }
 }
 
-Span XmlReader::handleAttributeValue(
+std::string_view XmlReader::handleAttributeValue(
     char const * begin, char const * end, bool fullyNormalize)
 {
-    pad_.clear();
+    pad_.setLength(0);
     if (fullyNormalize) {
         while (begin != end && isSpace(*begin)) {
             ++begin;
@@ -509,12 +511,12 @@ Span XmlReader::handleAttributeValue(
             case '\x0D':
                 switch (space) {
                 case SPACE_NONE:
-                    pad_.add(begin, p - begin);
-                    pad_.add(" ");
+                    pad_.append(begin, p - begin);
+                    pad_.append(" ");
                     space = SPACE_BREAK;
                     break;
                 case SPACE_SPAN:
-                    pad_.add(begin, p - begin);
+                    pad_.append(begin, p - begin);
                     space = SPACE_BREAK;
                     break;
                 case SPACE_BREAK:
@@ -529,7 +531,7 @@ Span XmlReader::handleAttributeValue(
                     space = SPACE_SPAN;
                     break;
                 case SPACE_SPAN:
-                    pad_.add(begin, p - begin);
+                    pad_.append(begin, p - begin);
                     begin = ++p;
                     space = SPACE_BREAK;
                     break;
@@ -539,7 +541,7 @@ Span XmlReader::handleAttributeValue(
                 }
                 break;
             case '&':
-                pad_.add(begin, p - begin);
+                pad_.append(begin, p - begin);
                 p = handleReference(p, end);
                 begin = p;
                 space = SPACE_NONE;
@@ -550,28 +552,28 @@ Span XmlReader::handleAttributeValue(
                 break;
             }
         }
-        pad_.add(begin, p - begin);
+        pad_.append(begin, p - begin);
     } else {
         char const * p = begin;
         while (p != end) {
             switch (*p) {
             case '\x09':
             case '\x0A':
-                pad_.add(begin, p - begin);
+                pad_.append(begin, p - begin);
                 begin = ++p;
-                pad_.add(" ");
+                pad_.append(" ");
                 break;
             case '\x0D':
-                pad_.add(begin, p - begin);
+                pad_.append(begin, p - begin);
                 ++p;
                 if (peek() == '\x0A') {
                     ++p;
                 }
                 begin = p;
-                pad_.add(" ");
+                pad_.append(" ");
                 break;
             case '&':
-                pad_.add(begin, p - begin);
+                pad_.append(begin, p - begin);
                 p = handleReference(p, end);
                 begin = p;
                 break;
@@ -580,12 +582,12 @@ Span XmlReader::handleAttributeValue(
                 break;
             }
         }
-        pad_.add(begin, p - begin);
+        pad_.append(begin, p - begin);
     }
-    return pad_.get();
+    return std::string_view(pad_.getStr(), pad_.getLength());
 }
 
-XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
+XmlReader::Result XmlReader::handleStartTag(int * nsId, std::string_view * localName) {
     assert(nsId != nullptr && localName);
     char const * nameBegin = pos_;
     char const * nameColon = nullptr;
@@ -635,16 +637,16 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         char const * valueEnd = pos_ + i;
         pos_ += i + 1;
         if (attrNameColon == nullptr &&
-            Span(attrNameBegin, attrNameEnd - attrNameBegin) == "xmlns")
+            std::string_view(attrNameBegin, attrNameEnd - attrNameBegin) == "xmlns")
         {
             hasDefaultNs = true;
             defaultNsId = scanNamespaceIri(valueBegin, valueEnd);
         } else if (attrNameColon != nullptr &&
-                   Span(attrNameBegin, attrNameColon - attrNameBegin) ==
+                   std::string_view(attrNameBegin, attrNameColon - attrNameBegin) ==
                        "xmlns")
         {
             namespaces_.emplace_back(
-                    Span(attrNameColon + 1, attrNameEnd - (attrNameColon + 1)),
+                    std::string_view(attrNameColon + 1, attrNameEnd - (attrNameColon + 1)),
                     scanNamespaceIri(valueBegin, valueEnd));
         } else {
             attributes_.emplace_back(
@@ -669,14 +671,14 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
     ++pos_;
     elements_.push(
         ElementData(
-            Span(nameBegin, nameEnd - nameBegin), inheritedNamespaces,
+            std::string_view(nameBegin, nameEnd - nameBegin), inheritedNamespaces,
             defaultNsId));
     if (nameColon == nullptr) {
         *nsId = defaultNsId;
-        *localName = Span(nameBegin, nameEnd - nameBegin);
+        *localName = std::string_view(nameBegin, nameEnd - nameBegin);
     } else {
-        *nsId = getNamespaceId(Span(nameBegin, nameColon - nameBegin));
-        *localName = Span(nameColon + 1, nameEnd - (nameColon + 1));
+        *nsId = getNamespaceId(std::string_view(nameBegin, nameColon - nameBegin));
+        *localName = std::string_view(nameColon + 1, nameEnd - (nameColon + 1));
     }
     return Result::Begin;
 }
@@ -689,7 +691,7 @@ XmlReader::Result XmlReader::handleEndTag() {
     char const * nameBegin = pos_;
     char const * nameColon = nullptr;
     if (!scanName(&nameColon) ||
-        !elements_.top().name.equals(nameBegin, pos_ - nameBegin))
+        elements_.top().name != std::string_view(nameBegin, pos_ - nameBegin))
     {
         throw css::uno::RuntimeException(
             "tag mismatch in " + fileUrl_ );
@@ -712,7 +714,7 @@ void XmlReader::handleElementEnd() {
     state_ = elements_.empty() ? State::Done : State::Content;
 }
 
-XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
+XmlReader::Result XmlReader::handleSkippedText(std::string_view * data, int * nsId) {
     for (;;) {
         sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, '<');
         if (i < 0) {
@@ -723,7 +725,7 @@ XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
         switch (peek()) {
         case '!':
             ++pos_;
-            if (!skipComment() && !scanCdataSection().is()) {
+            if (!skipComment() && scanCdataSection().data() != nullptr) {
                 skipDocumentTypeDeclaration();
             }
             break;
@@ -740,35 +742,35 @@ XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
     }
 }
 
-XmlReader::Result XmlReader::handleRawText(Span * text) {
-    pad_.clear();
+XmlReader::Result XmlReader::handleRawText(std::string_view * text) {
+    pad_.setLength(0);
     for (char const * begin = pos_;;) {
         switch (peek()) {
         case '\0': // i.e., EOF
             throw css::uno::RuntimeException(
                 "premature end of " + fileUrl_ );
         case '\x0D':
-            pad_.add(begin, pos_ - begin);
+            pad_.append(begin, pos_ - begin);
             ++pos_;
             if (peek() != '\x0A') {
-                pad_.add("\x0A");
+                pad_.append("\x0A");
             }
             begin = pos_;
             break;
         case '&':
-            pad_.add(begin, pos_ - begin);
+            pad_.append(begin, pos_ - begin);
             pos_ = handleReference(pos_, end_);
             begin = pos_;
             break;
         case '<':
-            pad_.add(begin, pos_ - begin);
+            pad_.append(begin, pos_ - begin);
             ++pos_;
             switch (peek()) {
             case '!':
                 ++pos_;
                 if (!skipComment()) {
-                    Span cdata(scanCdataSection());
-                    if (cdata.is()) {
+                    std::string_view cdata(scanCdataSection());
+                    if (cdata.data() != nullptr) {
                         normalizeLineEnds(cdata);
                     } else {
                         skipDocumentTypeDeclaration();
@@ -777,7 +779,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
                 begin = pos_;
                 break;
             case '/':
-                *text = pad_.get();
+                *text = std::string_view(pad_.getStr(), pad_.getLength());
                 ++pos_;
                 state_ = State::EndTag;
                 return Result::Text;
@@ -787,7 +789,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
                 begin = pos_;
                 break;
             default:
-                *text = pad_.get();
+                *text = std::string_view(pad_.getStr(), pad_.getLength());
                 state_ = State::StartTag;
                 return Result::Text;
             }
@@ -799,8 +801,8 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
     }
 }
 
-XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
-    pad_.clear();
+XmlReader::Result XmlReader::handleNormalizedText(std::string_view * text) {
+    pad_.setLength(0);
     char const * flowBegin = pos_;
     char const * flowEnd = pos_;
     enum Space { SPACE_START, SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
@@ -846,11 +848,11 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 break;
             case SPACE_NONE:
             case SPACE_SPAN:
-                pad_.add(flowBegin, pos_ - flowBegin);
+                pad_.append(flowBegin, pos_ - flowBegin);
                 break;
             case SPACE_BREAK:
-                pad_.add(flowBegin, flowEnd - flowBegin);
-                pad_.add(" ");
+                pad_.append(flowBegin, flowEnd - flowBegin);
+                pad_.append(" ");
                 break;
             }
             pos_ = handleReference(pos_, end_);
@@ -866,8 +868,8 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 if (skipComment()) {
                     space = SPACE_BREAK;
                 } else {
-                    Span cdata(scanCdataSection());
-                    if (cdata.is()) {
+                    std::string_view cdata(scanCdataSection());
+                    if (cdata.data() != nullptr) {
                         // CDATA is not normalized (similar to character
                         // references; it keeps the code simple), but it might
                         // arguably be better to normalize it:
@@ -876,11 +878,11 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                             break;
                         case SPACE_NONE:
                         case SPACE_SPAN:
-                            pad_.add(flowBegin, pos_ - flowBegin);
+                            pad_.append(flowBegin, pos_ - flowBegin);
                             break;
                         case SPACE_BREAK:
-                            pad_.add(flowBegin, flowEnd - flowBegin);
-                            pad_.add(" ");
+                            pad_.append(flowBegin, flowEnd - flowBegin);
+                            pad_.append(" ");
                             break;
                         }
                         normalizeLineEnds(cdata);
@@ -894,8 +896,8 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 break;
             case '/':
                 ++pos_;
-                pad_.add(flowBegin, flowEnd - flowBegin);
-                *text = pad_.get();
+                pad_.append(flowBegin, flowEnd - flowBegin);
+                *text = std::string_view(pad_.getStr(), pad_.getLength());
                 state_ = State::EndTag;
                 return Result::Text;
             case '?':
@@ -904,8 +906,8 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 space = SPACE_BREAK;
                 break;
             default:
-                pad_.add(flowBegin, flowEnd - flowBegin);
-                *text = pad_.get();
+                pad_.append(flowBegin, flowEnd - flowBegin);
+                *text = std::string_view(pad_.getStr(), pad_.getLength());
                 state_ = State::StartTag;
                 return Result::Text;
             }
@@ -919,8 +921,8 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             case SPACE_SPAN:
                 break;
             case SPACE_BREAK:
-                pad_.add(flowBegin, flowEnd - flowBegin);
-                pad_.add(" ");
+                pad_.append(flowBegin, flowEnd - flowBegin);
+                pad_.append(" ");
                 flowBegin = pos_;
                 break;
             }

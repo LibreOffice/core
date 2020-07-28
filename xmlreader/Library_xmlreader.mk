@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,xmlreader,\
     # cppu is only needed due to the cppumaker -C hack
 
 $(eval $(call gb_Library_add_exception_objects,xmlreader,\
-	xmlreader/source/pad \
 	xmlreader/source/span \
 	xmlreader/source/xmlreader \
 ))

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::beans;
 static void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 {
     int nsId;
-    xmlreader::Span name;
+    std::string_view name;
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::Result::End);
@@ -45,17 +45,17 @@ static void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 }
 
 static OUString lcl_getValue(xmlreader::XmlReader& reader,
-                                    const xmlreader::Span& span)
+                                    std::string_view span)
 {
     int nsId;
-    xmlreader::Span name;
+    std::string_view name;
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::Result::Begin && name == span);
     res = reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     assert(res == xmlreader::XmlReader::Result::Text);
     (void) res; (void) span;
-    OUString sTmp = name.convertFromUtf8();
+    OUString sTmp = xmlreader::XmlReader::convertFromUtf8(name);
     lcl_assertEndingItem(reader);
     return sTmp;
 }
@@ -78,7 +78,7 @@ SwLabelConfig::SwLabelConfig() :
     rtl::Bootstrap::expandMacros(uri);
     xmlreader::XmlReader reader(uri);
     int nsId;
-    xmlreader::Span name;
+    std::string_view name;
     xmlreader::XmlReader::Result res;
     OUString sManufacturer;
     OUString sName;
@@ -103,7 +103,7 @@ SwLabelConfig::SwLabelConfig() :
         assert(
             nsId == xmlreader::XmlReader::NAMESPACE_NONE
             && name == "name");
-        sManufacturer = reader.getAttributeValue(false).convertFromUtf8();
+        sManufacturer = reader.getAttributeValueUtf8(false);
 
         for(;;) {
             // Opening label or ending manufacturer
@@ -115,9 +115,9 @@ SwLabelConfig::SwLabelConfig() :
                 res == xmlreader::XmlReader::Result::Begin
                 && name == "label");
             // Get name value
-            sName = lcl_getValue(reader, xmlreader::Span("name"));
+            sName = lcl_getValue(reader, "name");
             // Get measure value
-            sMeasure = lcl_getValue(reader, xmlreader::Span("measure"));
+            sMeasure = lcl_getValue(reader, "measure");
             // Ending label mark
             lcl_assertEndingItem(reader);
             if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )

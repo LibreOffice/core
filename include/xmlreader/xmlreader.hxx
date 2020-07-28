@@ -27,10 +27,9 @@
 
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <sal/types.h>
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
-#include <xmlreader/pad.hxx>
-#include <xmlreader/span.hxx>
 
 namespace xmlreader {
 
@@ -46,20 +45,23 @@ public:
 
     enum class Result { Begin, End, Text, Done };
 
-    int registerNamespaceIri(Span const & iri);
+    int registerNamespaceIri(std::string_view iri);
 
     // RESULT_BEGIN: data = localName, ns = ns
     // RESULT_END: data, ns unused
     // RESULT_TEXT: data = text, ns unused
-    Result nextItem(Text reportText, Span * data, int * nsId);
+    Result nextItem(Text reportText, std::string_view * data, int * nsId);
 
-    bool nextAttribute(int * nsId, Span * localName);
+    bool nextAttribute(int * nsId, std::string_view * localName);
 
     // the span returned by getAttributeValue is only valid until the next call
     // to nextItem or getAttributeValue
-    Span getAttributeValue(bool fullyNormalize);
+    std::string_view getAttributeValue(bool fullyNormalize);
+    OUString getAttributeValueUtf8(bool fullyNormalize);
 
-    int getNamespaceId(Span const & prefix) const;
+    static OUString convertFromUtf8(std::string_view s);
+
+    int getNamespaceId(std::string_view prefix) const;
 
     const OUString& getUrl() const { return fileUrl_;}
 
@@ -67,7 +69,7 @@ private:
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
 
-    typedef std::vector< Span > NamespaceIris;
+    typedef std::vector< std::string_view > NamespaceIris;
 
     // If NamespaceData (and similarly ElementData and AttributeData) is made
     // SAL_DLLPRIVATE, at least gcc 4.2.3 erroneously warns about
@@ -76,25 +78,25 @@ private:
     // elements_ and attributes_):
 
     struct NamespaceData {
-        Span prefix;
+        std::string_view prefix;
         int nsId;
 
         NamespaceData():
             nsId(-1) {}
 
-        NamespaceData(Span const & thePrefix, int theNsId):
+        NamespaceData(std::string_view thePrefix, int theNsId):
             prefix(thePrefix), nsId(theNsId) {}
     };
 
     typedef std::vector< NamespaceData > NamespaceList;
 
     struct ElementData {
-        Span name;
+        std::string_view name;
         NamespaceList::size_type inheritedNamespaces;
         int defaultNamespaceId;
 
         ElementData(
-            Span const & theName,
+            std::string_view theName,
             NamespaceList::size_type theInheritedNamespaces,
             int theDefaultNamespaceId):
             name(theName), inheritedNamespaces(theInheritedNamespaces),
@@ -129,7 +131,7 @@ private:
 
     SAL_DLLPRIVATE char peek() const { return pos_ == end_ ? '\0' : *pos_; }
 
-    SAL_DLLPRIVATE void normalizeLineEnds(Span const & text);
+    SAL_DLLPRIVATE void normalizeLineEnds(std::string_view text);
 
     SAL_DLLPRIVATE void skipSpace();
 
@@ -139,7 +141,7 @@ private:
 
     SAL_DLLPRIVATE void skipDocumentTypeDeclaration();
 
-    SAL_DLLPRIVATE Span scanCdataSection();
+    SAL_DLLPRIVATE std::string_view scanCdataSection();
 
     SAL_DLLPRIVATE bool scanName(char const ** nameColon);
 
@@ -149,20 +151,20 @@ private:
     SAL_DLLPRIVATE char const * handleReference(
         char const * position, char const * end);
 
-    SAL_DLLPRIVATE Span handleAttributeValue(
+    SAL_DLLPRIVATE std::string_view handleAttributeValue(
         char const * begin, char const * end, bool fullyNormalize);
 
-    SAL_DLLPRIVATE Result handleStartTag(int * nsId, Span * localName);
+    SAL_DLLPRIVATE Result handleStartTag(int * nsId, std::string_view * localName);
 
     SAL_DLLPRIVATE Result handleEndTag();
 
     SAL_DLLPRIVATE void handleElementEnd();
 
-    SAL_DLLPRIVATE Result handleSkippedText(Span * data, int * nsId);
+    SAL_DLLPRIVATE Result handleSkippedText(std::string_view * data, int * nsId);
 
-    SAL_DLLPRIVATE Result handleRawText(Span * text);
+    SAL_DLLPRIVATE Result handleRawText(std::string_view * text);
 
-    SAL_DLLPRIVATE Result handleNormalizedText(Span * text);
+    SAL_DLLPRIVATE Result handleNormalizedText(std::string_view * text);
 
     SAL_DLLPRIVATE static int toNamespaceId(NamespaceIris::size_type pos);
 
@@ -179,7 +181,7 @@ private:
     Attributes attributes_;
     Attributes::iterator currentAttribute_;
     bool firstAttribute_;
-    Pad pad_;
+    rtl::OStringBuffer pad_;
 };
 
 }

@@ -25,7 +25,6 @@
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
 #include "data.hxx"
@@ -36,13 +35,13 @@
 namespace configmgr::xmldata {
 
 Type parseType(
-    xmlreader::XmlReader const & reader, xmlreader::Span const & text)
+    xmlreader::XmlReader const & reader, std::string_view text)
 {
     assert(text.is());
-    sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
+    sal_Int32 i = rtl_str_indexOfChar_WithLength(text.data(), text.size(), ':');
     if (i >= 0) {
-        xmlreader::Span token(text.begin + i + 1, text.length - (i + 1));
-        switch (reader.getNamespaceId(xmlreader::Span(text.begin, i))) {
+        std::string_view token(text.data() + i + 1, text.size() - (i + 1));
+        switch (reader.getNamespaceId(std::string_view(text.data(), i))) {
         case ParseManager::NAMESPACE_OOR:
             if (token == "any")
             {
@@ -99,10 +98,10 @@ Type parseType(
         }
     }
     throw css::uno::RuntimeException(
-        "invalid type " + text.convertFromUtf8());
+        "invalid type " + xmlreader::XmlReader::convertFromUtf8(text));
 }
 
-bool parseBoolean(xmlreader::Span const & text) {
+bool parseBoolean(std::string_view text) {
     assert(text.is());
     if (text == "true") {
         return true;
@@ -111,7 +110,7 @@ bool parseBoolean(xmlreader::Span const & text) {
         return false;
     }
     throw css::uno::RuntimeException(
-        "invalid boolean " + text.convertFromUtf8());
+        "invalid boolean " + xmlreader::XmlReader::convertFromUtf8(text));
 }
 
 OUString parseTemplateReference(
