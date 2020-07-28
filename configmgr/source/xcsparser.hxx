@@ -33,8 +33,6 @@
 #include "parser.hxx"
 #include "valueparser.hxx"
 
-namespace xmlreader { struct Span; }
-
 namespace configmgr {
 
 class SetNode;
@@ -50,12 +48,12 @@ private:
     virtual xmlreader::XmlReader::Text getTextMode() override;
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        xmlreader::XmlReader & reader, int nsId, std::string_view name,
         std::set< OUString > const * existingDependencies) override;
 
     virtual void endElement(xmlreader::XmlReader const & reader) override;
 
-    virtual void characters(xmlreader::Span const & text) override;
+    virtual void characters(std::string_view text) override;
 
     void handleComponentSchema(xmlreader::XmlReader & reader);
 
