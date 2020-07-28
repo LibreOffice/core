@@ -1482,6 +1482,17 @@ void SwFrame::SetDirFlags( bool bVert )
 
                 if ( !pAsk->mbInvalidVert )
                     mbInvalidVert = false;
+
+                if ( IsCellFrame() )
+                {
+                    SwCellFrame* pPrv = static_cast<SwCellFrame*>(this)->GetPreviousCell();
+                    if ( pPrv && !mbVertical && pPrv->IsVertical() )
+                    {
+                        mbVertical = pPrv->IsVertical();
+                        mbVertLR  = pPrv->IsVertLR();
+                        mbVertLRBT = pPrv->IsVertLRBT();
+                    }
+                }
             }
         }
         else
@@ -1637,14 +1648,14 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
 
     // find most upper row frame
     const SwFrame* pRow = GetUpper();
-    while( !pRow->IsRowFrame() || !pRow->GetUpper()->IsTabFrame() )
+    while( !pRow->IsRowFrame() || (pRow->GetUpper() && !pRow->GetUpper()->IsTabFrame()) )
         pRow = pRow->GetUpper();
 
     OSL_ENSURE( pRow->GetUpper() && pRow->GetUpper()->IsTabFrame(), "GetPreviousCell without Table" );
 
     const SwTabFrame* pTab = static_cast<const SwTabFrame*>(pRow->GetUpper());
 
-    if ( pTab->IsFollow() )
+    if ( pTab && pTab->IsFollow() )
     {
         const SwFrame* pTmp = pTab->GetFirstNonHeadlineRow();
         const bool bIsInFirstLine = ( pTmp == pRow );
