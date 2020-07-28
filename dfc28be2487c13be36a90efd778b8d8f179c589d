@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74e08618_98b17033",
+        "filename": "solenv/bin/modules/installer/scriptitems.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-07-28T14:58:48Z",
+      "side": 0,
+      "message": "The change claims to be noop, but certainly is not. With that you end up with an entry \"BuildVersion\u003d\u003cbuildversion\u003e\" in versionrc\n\nscp2/source/ooo/common_brand.scp needs to be adjusted as well to remove that key/set it to empty string if having the key in the rc is considered important for compatibility.",
+      "revId": "dfc28be2487c13be36a90efd778b8d8f179c589d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
