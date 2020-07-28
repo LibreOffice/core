@@ -20,6 +20,7 @@
 
 #include <sfx2/weldutils.hxx>
 #include <svx/sidebar/InspectorTextPanel.hxx>
+#include <wrtsh.hxx>
 
 namespace sw::sidebar
 {
@@ -32,7 +33,12 @@ public:
     WriterInspectorTextPanel(vcl::Window* pParent,
                              const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    // virtual ~WriterInspectorTextPanel();
+    virtual ~WriterInspectorTextPanel() override;
+    virtual void dispose() override;
+
+private:
+    Link<LinkParamNone*, void> m_oldLink;
+    SwWrtShell* m_pShell;
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
