@@ -31,7 +31,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/compatibility.hxx>
-#include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -801,7 +800,6 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
-    SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
 
     bool bModified = false;
@@ -905,7 +903,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xFontShowCB->get_state_changed_from_saved())
     {
-        aFontOpt.EnableFontWYSIWYG(m_xFontShowCB->get_active());
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(m_xFontShowCB->get_active(), batch);
+        batch->commit();
         bModified = true;
     }
 
@@ -1060,8 +1060,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xAAPointLimit->set_value(pAppearanceCfg->GetFontAntialiasingMinPixelHeight(), FieldUnit::PIXEL);
 
     // WorkingSet
-    SvtFontOptions aFontOpt;
-    m_xFontShowCB->set_active( aFontOpt.IsFontWYSIWYGEnabled() );
+    m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
     SvtMenuOptions aMenuOpt;
     m_xMenuIconsLB->set_active(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
     m_xMenuIconsLB->save_value();
