@@ -59,7 +59,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/instance.hxx>
-#include <unotools/compatibilityviewoptions.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -143,8 +143,7 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
     SolarMutexGuard aWriteLock;
 
     // Create a customized menu if compatibility mode is on
-    SvtCompatibilityViewOptions aCompOptions;
-    if( aCompOptions.HasMSOCompatibleFormsMenu() && m_aModuleIdentifier == "com.sun.star.text.TextDocument" )
+    if (m_aModuleIdentifier == "com.sun.star.text.TextDocument" && officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::get())
     {
         implts_createMSCompatibleMenuBar(rMenuBarName);
     }

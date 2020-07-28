@@ -85,7 +85,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
     m_xGlobalOptionsCLB->set_sensitive(!bReadOnly);
 
     m_xGlobalOptionsCLB->append();
-    const bool bChecked = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
+    const bool bChecked = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::get();
     m_xGlobalOptionsCLB->set_toggle(0, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xGlobalOptionsCLB->set_text(0, m_xGlobalOptionsLB->get_text(0), 0);
 
@@ -432,7 +432,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     bool bNewMSFormsMenuOption = m_xGlobalOptionsCLB->get_toggle(0);
     if (m_bSavedMSFormsMenuOption != bNewMSFormsMenuOption)
     {
-        m_aViewConfigItem.SetMSOCompatibleFormsMenu(bNewMSFormsMenuOption);
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::set(bNewMSFormsMenuOption, batch);
+        batch->commit();
+
         m_bSavedMSFormsMenuOption = bNewMSFormsMenuOption;
         bModified = true;
 
@@ -458,8 +461,8 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 
-    m_xGlobalOptionsCLB->set_toggle(0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() ? TRISTATE_TRUE : TRISTATE_FALSE);
-    m_bSavedMSFormsMenuOption = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
+    m_bSavedMSFormsMenuOption = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::get();
+    m_xGlobalOptionsCLB->set_toggle(0, m_bSavedMSFormsMenuOption ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
