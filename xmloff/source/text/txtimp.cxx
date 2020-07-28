@@ -314,6 +314,7 @@ const SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
+    { XML_NAMESPACE_LO_EXT, XML_OUTLINE_CONTENT_VISIBLE, XML_TOK_TEXT_P_OUTLINE_CONTENT_VISIBLE },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
     { XML_NAMESPACE_TEXT, XML_IS_LIST_HEADER,XML_TOK_TEXT_P_IS_LIST_HEADER },
     { XML_NAMESPACE_TEXT, XML_RESTART_NUMBERING,XML_TOK_TEXT_P_RESTART_NUMBERING },
@@ -1510,7 +1511,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         bool bOutlineLevelAttrFound,
         sal_Int8 nOutlineLevel,
         // Numberings/Bullets in table not visible after save/reload (#i80724#)
-        bool bSetListAttrs )
+        bool bSetListAttrs,
+        bool bOutlineContentVisible)
 {
     static const char s_NumberingRules[] = "NumberingRules";
     static const char s_NumberingIsNumber[] = "NumberingIsNumber";
@@ -1865,7 +1867,16 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         makeAny( static_cast<sal_Int16>(nOutlineLevel) ) );
                 }
             }
-
+            if (!bOutlineContentVisible)
+            {
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                xPropSet->getPropertyValue("ParaInteropGrabBag") >>= aGrabBag;
+                sal_Int32 length = aGrabBag.getLength();
+                aGrabBag.realloc(length + 1);
+                aGrabBag[length].Name = "OutlineContentVisibleAttr";
+                aGrabBag[length].Value <<= bool(bOutlineContentVisible);
+                xPropSet->setPropertyValue("ParaInteropGrabBag", uno::makeAny(aGrabBag));
+            }
             // RFE: inserting headings into text documents (#i70748#)
             if ( bApplyOutlineLevelAsListLevel )
             {

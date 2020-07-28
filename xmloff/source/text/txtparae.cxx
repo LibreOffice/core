@@ -374,6 +374,7 @@ static const char* aParagraphPropertyNames[] =
     "ParaConditionalStyleName",
     "ParaStyleName",
     "TextSection",
+    "OutlineContentVisible",
     nullptr
 };
 
@@ -386,7 +387,8 @@ enum eParagraphPropertyNamesEnum
     PARA_OUTLINE_LEVEL=2,
     PARA_CONDITIONAL_STYLE_NAME = 3,
     PARA_STYLE_NAME = 4,
-    TEXT_SECTION = 5
+    TEXT_SECTION = 5,
+    PARA_OUTLINE_CONTENT_VISIBLE = 6
 };
 
 }
@@ -1986,6 +1988,33 @@ void XMLTextParagraphExport::exportParagraph(
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
                                   OUString::number( sal_Int32( nOutlineLevel) ) );
+
+                    if ( rPropSetHelper.hasProperty( PARA_OUTLINE_CONTENT_VISIBLE ) )
+                    {
+                        uno::Sequence<beans::PropertyValue> propList;
+                        bool bIsOutlineContentVisible = true;
+                        if( xMultiPropSet.is() )
+                            rPropSetHelper.getValue(
+                                       PARA_OUTLINE_CONTENT_VISIBLE, xMultiPropSet ) >>= propList;
+                        else
+                            rPropSetHelper.getValue(
+                                       PARA_OUTLINE_CONTENT_VISIBLE, xPropSet ) >>= propList;
+                        for (const auto& rProp : std::as_const(propList))
+                        {
+                            OUString propName = rProp.Name;
+                            if (propName == "OutlineContentVisibleAttr")
+                            {
+                                rProp.Value >>= bIsOutlineContentVisible;
+                                break;
+                            }
+                        }
+                        if (!bIsOutlineContentVisible)
+                        {
+                            GetExport().AddAttribute( XML_NAMESPACE_LO_EXT,
+                                              XML_OUTLINE_CONTENT_VISIBLE,
+                                              XML_FALSE);
+                        }
+                    }
 
                     if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
                     {

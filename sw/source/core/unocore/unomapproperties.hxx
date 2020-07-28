@@ -96,7 +96,8 @@
         { OUString(UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE), FN_UNO_PARA_CONT_PREV_SUBTREE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0 }, \
         { OUString(UNO_NAME_PARA_LIST_LABEL_STRING), FN_UNO_PARA_NUM_STRING, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 }, \
         { OUString(UNO_NAME_PARA_LIST_AUTO_FORMAT), FN_UNO_PARA_NUM_AUTO_FORMAT, cppu::UnoType<cppu::UnoSequenceType<css::beans::NamedValue>>::get(), PropertyAttribute::MAYBEVOID, 0 }, \
-        { OUString(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        cppu::UnoType<sal_Int16>::get(),                PropertyAttribute::MAYBEVOID,     0},
+        { OUString(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,        cppu::UnoType<sal_Int16>::get(),                PropertyAttribute::MAYBEVOID,     0}, \
+        { OUString(UNO_NAME_OUTLINE_CONTENT_VISIBLE), RES_PARATR_GRABBAG, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0 },
 
 #define COMMON_HYPERLINK_PROPERTIES \
         { OUString(UNO_NAME_HYPER_LINK_U_R_L), RES_TXTATR_INETFMT,          cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_URL},                \

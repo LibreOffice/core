@@ -1870,6 +1870,7 @@ XMLParaContext::XMLParaContext(
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     // Lost outline numbering in master document (#i73509#)
     mbOutlineLevelAttrFound( false ),
+    mbOutlineContentVisible(true),
     bIgnoreLeadingSpace( true ),
     bHeading( bHead ),
     bIsListHeader( false ),
@@ -1932,6 +1933,12 @@ XMLParaContext::XMLParaContext(
                 }
                 // Lost outline numbering in master document (#i73509#)
                 mbOutlineLevelAttrFound = true;
+            }
+            break;
+        case XML_TOK_TEXT_P_OUTLINE_CONTENT_VISIBLE:
+            {
+                mbOutlineContentVisible = true;
+                ::sax::Converter::convertBool(mbOutlineContentVisible, rValue);
             }
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
@@ -2056,7 +2063,9 @@ void XMLParaContext::EndElement()
                                                sStyleName,
                                                true,
                                                mbOutlineLevelAttrFound,
-                                               bHeading ? nOutlineLevel : -1 );
+                                               bHeading ? nOutlineLevel : -1,
+                                               true,
+                                               mbOutlineContentVisible);
 
     // handle list style header
     if (bHeading && (bIsListHeader || bIsRestart))
