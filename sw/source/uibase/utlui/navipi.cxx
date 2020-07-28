@@ -412,13 +412,7 @@ bool SwNavigationPI::EditAction()
     SwWrtShell &rSh = m_pCreateView->GetWrtShell();
     sal_uInt16 nNewPage = m_xEdit->get_value();
 
-    sal_uInt16 nPhyPage, nVirPage;
-    rSh.GetPageNum(nPhyPage, nVirPage);
-    if (nPhyPage == nNewPage)
-        return false;
-
     rSh.GotoPage(nNewPage, true);
-    m_pCreateView->GetEditWin().GrabFocus();
     m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
 
     return true;
@@ -554,6 +548,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     // Insert the numeric field in the toolbox.
     m_xEdit->set_accessible_name(m_xEdit->get_tooltip_text());
     m_xEdit->set_width_chars(3);
+    m_xEdit->connect_activate(LINK(this, SwNavigationPI, EditActionHdl));
     m_xEdit->connect_value_changed(LINK(this, SwNavigationPI, PageEditModifyHdl));
     m_xEdit->set_help_id("modules/swriter/ui/navigatorpanel/numericfield");
 
@@ -1054,8 +1049,20 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 {
     if (IsDisposed())
         return;
+    // tdf#134959 if the SpinButton changed value this Timer was launched, now
+    // change to the desired page, but we leave focus where it currently is,
+    // i.e. typically remaining in the spinbutton, or whatever other widget the
+    // user moved to in the meantime
+    EditAction();
+}
+
+IMPL_LINK_NOARG(SwNavigationPI, EditActionHdl, weld::Entry&, bool)
+{
+    // tdf#134959 if the user presses enter to activate the Entry
+    // go to the page, and on success we move focus to the document
     if (EditAction())
-        m_xEdit->grab_focus();
+        m_pCreateView->GetEditWin().GrabFocus();
+    return true;
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, weld::SpinButton&, void)
