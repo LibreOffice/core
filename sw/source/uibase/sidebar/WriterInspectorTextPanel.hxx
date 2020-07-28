@@ -21,6 +21,8 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
+class SwWrtShell;
+
 namespace sw::sidebar
 {
 class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
@@ -32,7 +34,12 @@ public:
     WriterInspectorTextPanel(vcl::Window* pParent,
                              const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    // virtual ~WriterInspectorTextPanel();
+    virtual ~WriterInspectorTextPanel() override;
+    virtual void dispose() override;
+
+private:
+    SwWrtShell* m_pShell;
+    Link<LinkParamNone*, void> m_oldLink;
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
