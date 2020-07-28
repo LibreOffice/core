@@ -5057,6 +5057,10 @@ void SwUiWriterTest::testRedlineViewAuthor()
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+
+    //Reset the redline author after using it, otherwise, it might interfere with other unittests
+    pView->SetRedlineAuthor("Unknown Author");
+    pDocShell->SetView(pView);
 }
 
 void SwUiWriterTest::testTdf91292()
