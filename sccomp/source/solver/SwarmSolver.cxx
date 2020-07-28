@@ -501,6 +501,8 @@ void SAL_CALL SwarmSolver::solve()
 
     maStatus.clear();
     mbSuccess = false;
+    if (!maVariables.getLength())
+        return;
 
     maBounds.resize(maVariables.getLength());
 
