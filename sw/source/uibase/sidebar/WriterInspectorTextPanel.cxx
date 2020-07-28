@@ -60,7 +60,21 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     SwWrtShell* pShell = pDocSh->GetWrtShell();
     if (pShell)
+    {
+        m_oldLink = pShell->GetChgLnk();
         pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
+    }
+}
+
+WriterInspectorTextPanel::~WriterInspectorTextPanel() { disposeOnce(); }
+
+void WriterInspectorTextPanel::dispose()
+{
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwWrtShell* pShell = pDocSh->GetWrtShell();
+    pShell->SetChgLnk(m_oldLink);
+
+    InspectorTextPanel::dispose();
 }
 
 static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
@@ -190,6 +204,9 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
 IMPL_LINK_NOARG(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, void)
 {
+    if (m_oldLink.IsSet())
+        m_oldLink.GetInstance();
+
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     std::vector<svx::sidebar::TreeNode> aStore;
 

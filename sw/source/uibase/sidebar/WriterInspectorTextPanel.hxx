@@ -32,7 +32,11 @@ public:
     WriterInspectorTextPanel(vcl::Window* pParent,
                              const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    // virtual ~WriterInspectorTextPanel();
+    virtual ~WriterInspectorTextPanel() override;
+    virtual void dispose() override;
+
+private:
+    Link<LinkParamNone*, void> m_oldLink;
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
