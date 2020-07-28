@@ -4383,6 +4383,10 @@ external/redland/raptor/raptor_config.h
 external/redland/rasqal/rasqal.h
 external/redland/redland/librdf.h
 external/sane/inc/sane/sane.h
+external/skia/inc/skia_opts.hxx
+external/skia/source/skia_opts.cxx
+external/skia/source/skia_opts_internal.hxx
+external/skia/source/skia_opts_ssse3.cxx
 external/unixODBC/inc/odbc/sql.h
 external/unixODBC/inc/odbc/sqlext.h
 external/unixODBC/inc/odbc/sqltypes.h

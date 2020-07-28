@@ -38,6 +38,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <SkSurface.h>
 #include <SkGraphics.h>
 #include <skia_compiler.hxx>
+#include <skia_opts.hxx>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -239,6 +240,7 @@ bool isVCLSkiaEnabled()
     {
         bRet = true;
         SkGraphics::Init();
+        SkLoOpts::Init();
         // don't actually block if denylisted, but log it if enabled, and also get the vendor id
         checkDeviceDenylisted(true);
     }

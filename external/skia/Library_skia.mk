@@ -91,6 +91,11 @@ $(eval $(call gb_Library_set_include,skia,\
 $(eval $(call gb_Library_add_exception_objects,skia,\
     external/skia/source/SkMemory_malloc \
     external/skia/source/skia_compiler \
+    external/skia/source/skia_opts \
+))
+
+$(eval $(call gb_Library_add_exception_objects,skia,\
+    external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
