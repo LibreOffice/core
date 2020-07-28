@@ -152,8 +152,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
-			$(WORKDIR)/installation/$(PRODUCTNAME)/msi/install/*/*.msi \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)-$(LIBO_VERSION_PATCH) \
+			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)/msi/install/*/*.msi \
 	&& touch $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done:
@@ -164,8 +164,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_helppack/msi/install/*/*.msi \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)-$(LIBO_VERSION_PATCH)\ Helppack \
+			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)_helppack/msi/install/*/*.msi \
 	&& touch $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done:
@@ -176,8 +176,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.don
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_SDK/msi/install/*/*.msi \
+			-d Collabora\ Office\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)-$(LIBO_VERSION_PATCH)\ SDK \
+			$(WORKDIR)/installation/$(PRODUCTNAME_no_spaces)_SDK/msi/install/*/*.msi \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:
