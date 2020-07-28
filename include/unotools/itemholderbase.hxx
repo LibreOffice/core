@@ -45,8 +45,6 @@ enum class EItem
     EventConfig                   ,
     ExtendedSecurityOptions       ,
 
-    FontOptions                   ,
-
     HelpOptions                   ,   // 2
     HistoryOptions                ,
 
