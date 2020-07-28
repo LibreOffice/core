@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fff27c7_dc19ba85",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-28T15:32:40Z",
+      "side": 1,
+      "message": "Why 0? We need to pass the same argument that was passed to ourself. We didn\u0027t need the argument previously, so we used IMPL_LINK_NOARG, which \"hides\" passed argument. But since you need the argument now to pass to chained link, you need to use IMPL_LINK, and provide a name for the previously-unused argument.",
+      "range": {
+        "startLine": 206,
+        "startChar": 23,
+        "endLine": 206,
+        "endChar": 24
+      },
+      "revId": "b8c2e66e6a2451d37f36af3daa44d2417956f645",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a718cf6a_ddb35ab7",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-07-28T15:32:40Z",
+      "side": 1,
+      "message": "Don\u0027t include it here, just forward-declare.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 20
+      },
+      "revId": "b8c2e66e6a2451d37f36af3daa44d2417956f645",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
