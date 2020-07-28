@@ -645,6 +645,8 @@
 #define STR_OUTLINE_TRACKING_OFF                NC_("STR_OUTLINE_TRACKING_OFF", "Off")
 #define STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY       NC_("STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY", "Toggle Outline Content Visibility")
 #define STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT   NC_("STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT", "hold Ctrl or right-click to include sub levels")
+#define STR_ClICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY     NC_("STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY", "Click to Toggle Outline Content Visibility")
+#define STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT NC_("STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT", "right-click to include sub levels")
 
 #define STR_EXPANDALL                           NC_("STR_EXPANDALL", "Expand All")
 #define STR_COLLAPSEALL                         NC_("STR_COLLAPSEALL", "Collapse All")
