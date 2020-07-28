@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Warn about checks whether a container is empty done via an (expensive) call to obtain the
@@ -72,15 +73,19 @@ private:
         {
             return;
         }
-        APSInt val;
-        if (rhs->isValueDependent() || !rhs->isIntegerConstantExpr(val, compiler.getASTContext()))
+        if (rhs->isValueDependent())
+        {
+            return;
+        }
+        auto const val = compat::getIntegerConstantExpr(rhs, compiler.getASTContext());
+        if (!val)
         {
             return;
         }
         switch (op)
         {
             case BO_LT:
-                if (val.getExtValue() == 1)
+                if (val->getExtValue() == 1)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) < 1' with 'e[0] == '\\0''",
@@ -89,7 +94,7 @@ private:
                 }
                 break;
             case BO_GT:
-                if (val.getExtValue() == 0)
+                if (val->getExtValue() == 0)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) > 0' with 'e[0] != '\\0''",
@@ -98,7 +103,7 @@ private:
                 }
                 break;
             case BO_LE:
-                if (val.getExtValue() == 0)
+                if (val->getExtValue() == 0)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) <= 0' with 'e[0] == '\\0''",
@@ -107,7 +112,7 @@ private:
                 }
                 break;
             case BO_GE:
-                if (val.getExtValue() == 1)
+                if (val->getExtValue() == 1)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) >= 1' with 'e[0] != '\\0''",
@@ -116,7 +121,7 @@ private:
                 }
                 break;
             case BO_EQ:
-                if (val.getExtValue() == 0)
+                if (val->getExtValue() == 0)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) == 0' with 'e[0] == '\\0''",
@@ -125,7 +130,7 @@ private:
                 }
                 break;
             case BO_NE:
-                if (val.getExtValue() == 0)
+                if (val->getExtValue() == 0)
                 {
                     report(DiagnosticsEngine::Warning,
                            "replace a comparison like 'strlen(e) != 0' with 'e[0] != '\\0''",

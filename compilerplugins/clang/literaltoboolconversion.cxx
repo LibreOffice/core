@@ -125,23 +125,25 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         handleImplicitCastSubExpr(castExpr, op->getFalseExpr());
         return;
     }
-    APSInt res;
-    if (!subExpr->isValueDependent()
-        && subExpr->isIntegerConstantExpr(res, compiler.getASTContext())
-        && res.getLimitedValue() <= 1)
-    {
-        SourceLocation loc { compat::getBeginLoc(subExpr) };
-        while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
-            loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
-        }
-        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
-            StringRef name { Lexer::getImmediateMacroName(
-                loc, compiler.getSourceManager(), compiler.getLangOpts()) };
-            if (name == "sal_False" || name == "sal_True") {
-                loc = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc).first;
-            }
-            if (isSharedCAndCppCode(loc)) {
-                return;
+    if (!subExpr->isValueDependent()) {
+        if (auto const res = compat::getIntegerConstantExpr(subExpr, compiler.getASTContext())) {
+            if (res->getLimitedValue() <= 1)
+            {
+                SourceLocation loc { compat::getBeginLoc(subExpr) };
+                while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+                    loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+                }
+                if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
+                    StringRef name { Lexer::getImmediateMacroName(
+                            loc, compiler.getSourceManager(), compiler.getLangOpts()) };
+                    if (name == "sal_False" || name == "sal_True") {
+                        loc = compat::getImmediateExpansionRange(compiler.getSourceManager(), loc)
+                            .first;
+                    }
+                    if (isSharedCAndCppCode(loc)) {
+                        return;
+                    }
+                }
             }
         }
     }
@@ -209,17 +211,17 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
             compat::getBeginLoc(expr2))
             << castExpr->getCastKindName() << subExpr->getType()
             << castExpr->getType() << expr2->getSourceRange();
-    } else if (!subExpr->isValueDependent()
-               && subExpr->isIntegerConstantExpr(res, compiler.getASTContext()))
-    {
-        report(
-            DiagnosticsEngine::Warning,
-            ("implicit conversion (%0) of integer constant expression of type"
-             " %1 with value %2 to %3"),
-            compat::getBeginLoc(expr2))
-            << castExpr->getCastKindName() << subExpr->getType()
-            << res.toString(10) << castExpr->getType()
-            << expr2->getSourceRange();
+    } else if (!subExpr->isValueDependent()) {
+        if (auto const res = compat::getIntegerConstantExpr(subExpr, compiler.getASTContext())) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("implicit conversion (%0) of integer constant expression of type"
+                 " %1 with value %2 to %3"),
+                compat::getBeginLoc(expr2))
+                << castExpr->getCastKindName() << subExpr->getType()
+                << res->toString(10) << castExpr->getType()
+                << expr2->getSourceRange();
+        }
     }
 }
 

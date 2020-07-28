@@ -174,6 +174,17 @@ inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const 
 #endif
 }
 
+inline llvm::Optional<llvm::APSInt> getIntegerConstantExpr(
+    clang::Expr const * expr, clang::ASTContext const & context)
+{
+#if CLANG_VERSION >= 120000
+    return expr->getIntegerConstantExpr(context);
+#else
+    llvm::APSInt res;
+    return expr->isIntegerConstantExpr(res, context) ? res : llvm::Optional<llvm::APSInt>();
+#endif
+}
+
 inline clang::Expr * getSubExpr(clang::MaterializeTemporaryExpr const * expr) {
 #if CLANG_VERSION >= 100000
     return expr->getSubExpr();
