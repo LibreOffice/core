@@ -139,6 +139,11 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
+#include <txtfrm.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -1327,6 +1332,32 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         {
             pWindow->KeyInput(rKEvt);
             return;
+        }
+    }
+
+    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // not allowed if outline content is folded
+        sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
+        if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT))
+                || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN || nKey == KEY_RIGHT)))
+        {
+            SwContentNode* pContentNode = rSh.GetCurrentShellCursor().GetContentNode();
+            SwOutlineNodes::size_type nPos;
+            if (rSh.GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pContentNode, &nPos))
+            {
+                bool bOutlineContentVisibleAttr = true;
+                pContentNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
+                    return; // outline node is folded
+                if (rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT) && (nPos-1 != SwOutlineNodes::npos))
+                {
+                    bOutlineContentVisibleAttr = true;
+                    rSh.GetDoc()->GetNodes().GetOutLineNds()[nPos-1]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    if (!bOutlineContentVisibleAttr)
+                        return; // previous outline node is folded
+                }
+            }
         }
     }
 
@@ -2628,6 +2659,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
         }
     }
 
+    // x11 backend doesn't like not having this
+    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        GetFrameControlsManager().SetOutlineContentVisibilityButtons();
+
     // update the page number in the statusbar
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if( KEY_UP == nKey || KEY_DOWN == nKey || KEY_PAGEUP == nKey || KEY_PAGEDOWN == nKey )
@@ -3813,6 +3848,52 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if( rSh.ActionPend() )
         return ;
 
+    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // add/remove outline collapse button
+        SwContentAtPos aSwContentAtPos(IsAttrAtPos::Outline);
+        if (rSh.GetContentAtPos(PixelToLogic(rMEvt.GetPosPixel()), aSwContentAtPos))
+        {
+            if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
+            {
+                const SwNodes& rNds = rSh.GetDoc()->GetNodes();
+                SwOutlineNodes::size_type nPos;
+                SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
+                if (pContentFrame != m_pSavedOutlineFrame)
+                {
+                    // remove collapse button when saved frame is not frame at mouse position
+                    if (m_pSavedOutlineFrame && /* is it possible that m_pSavedOutlineFrame is removed? */ !m_pSavedOutlineFrame->IsInDtor() &&
+                            rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
+                            !rSh.IsOutlineContentFolded(nPos))
+                    {
+                        GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+                    }
+                    m_pSavedOutlineFrame = pContentFrame;
+                }
+                // show collapse button
+                if (rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos) &&
+                        !rSh.IsOutlineContentFolded(nPos))
+                {
+                    GetFrameControlsManager().SetOutlineContentVisibilityButton(aSwContentAtPos.aFnd.pNode->GetTextNode());
+                }
+            }
+        }
+        else if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor())
+        {
+            // current pointer pos is not over an outline frame
+            // previous frame was an outline frame
+            // remove collapse button if showing
+            const SwNodes& rNds = rSh.GetDoc()->GetNodes();
+            SwOutlineNodes::size_type nPos;
+            if (rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
+                    !rSh.IsOutlineContentFolded(nPos))
+            {
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            }
+            m_pSavedOutlineFrame = nullptr;
+        }
+    }
+
     if( m_pShadCursor && 0 != (rMEvt.GetModifier() + rMEvt.GetButtons() ) )
     {
         m_pShadCursor.reset();
@@ -3846,6 +3927,21 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     const Point aOldPt( rSh.VisArea().Pos() );
     const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
+
+    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        if (m_pSavedOutlineFrame && !bInsWin)
+        {
+            // the mouse pointer has left the building
+            // 86 the collapse button if showing
+            const SwNodes& rNds = rSh.GetDoc()->GetNodes();
+            SwOutlineNodes::size_type nPos;
+            rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos);
+            if (!rSh.IsOutlineContentFolded(nPos))
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            m_pSavedOutlineFrame = nullptr;
+        }
+    }
 
     if( m_pShadCursor && !bInsWin )
     {
@@ -5275,6 +5371,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     case CommandEventId::Wheel:
     case CommandEventId::StartAutoScroll:
     case CommandEventId::AutoScroll:
+            if (m_pSavedOutlineFrame && rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+                m_pSavedOutlineFrame = nullptr;
+            }
             m_pShadCursor.reset();
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
@@ -6419,6 +6520,38 @@ void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
         MouseButtonUp(aClickEvent);
     }
+}
+
+void SwEditWin::SetOutlineContentVisiblityButtons()
+{
+    SwWrtShell& rSh = m_rView.GetWrtShell();
+    const SwOutlineNodes& rOutlineNodes = rSh.GetDoc()->GetNodes().GetOutLineNds();
+    if (!rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+        {
+            bool bOutlineContentVisibleAttr = true;
+            rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+            if (!bOutlineContentVisibleAttr)
+            {
+                // unfold and then set outline content visible attr to false for persistence
+                rSh.ToggleOutlineContentVisibility(nPos);
+                rOutlineNodes[nPos]->GetTextNode()->SetAttrOutlineContentVisible(false);
+            }
+        }
+        GetFrameControlsManager().HideControls(FrameControlType::Outline);
+    }
+    else
+    {
+        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
+        {
+            bool bOutlineContentVisibleAttr = true;
+            rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+            if (!bOutlineContentVisibleAttr)
+                rSh.ToggleOutlineContentVisibility(nPos, true);
+        }
+    }
+    GetView().Invalidate(); // set state of dependent slots (FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY)
 }
 
 SwFrameControlsManager& SwEditWin::GetFrameControlsManager()
