@@ -167,4 +167,19 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
+class VCL_DLLPUBLIC ImageButton final : public PushButton
+{
+protected:
+    using PushButton::ImplInitStyle;
+
+private:
+    SAL_DLLPRIVATE void     ImplInitStyle();
+
+                            ImageButton( const ImageButton & ) = delete;
+                            ImageButton & operator= ( const ImageButton & ) = delete;
+
+public:
+                 ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
