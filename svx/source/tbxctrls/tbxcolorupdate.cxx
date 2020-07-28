@@ -171,7 +171,24 @@ namespace svx
         pVirDev->SetOutputSizePixel(aItemSize);
         maBmpSize = aItemSize;
 
+        if (maBmpSize.Width() == maBmpSize.Height())
+            // tdf#84985 align color bar with icon bottom edge; integer arithmetic e.g. 26 - 26/4 <> 26 * 3/4
+            maUpdRect = tools::Rectangle(Point( 0, maBmpSize.Height() - maBmpSize.Height() / 4), Size(maBmpSize.Width(), maBmpSize.Height() / 4));
+        else
+            maUpdRect = tools::Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
+
+        pVirDev->Push(PushFlags::CLIPREGION);
+
+        // tdf#135121 don't include the part of the image which we will
+        // overwrite with the target color so that for the transparent color
+        // case the original background of the device is shown
+        vcl::Region aRegion(tools::Rectangle(Point(0, 0), maBmpSize));
+        aRegion.Exclude(maUpdRect);
+        pVirDev->SetClipRegion(aRegion);
+
         pVirDev->DrawImage(Point(0, 0), aImage);
+
+        pVirDev->Pop();
 
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         mbWasHiContrastMode = rStyleSettings.GetHighContrastMode();
@@ -194,12 +211,6 @@ namespace svx
         {
             pVirDev->SetFillColor(maCurColor);
         }
-
-        if (maBmpSize.Width() == maBmpSize.Height())
-            // tdf#84985 align color bar with icon bottom edge; integer arithmetic e.g. 26 - 26/4 <> 26 * 3/4
-            maUpdRect = tools::Rectangle(Point( 0, maBmpSize.Height() - maBmpSize.Height() / 4), Size(maBmpSize.Width(), maBmpSize.Height() / 4));
-        else
-            maUpdRect = tools::Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
 
         pVirDev->DrawRect(maUpdRect);
 
