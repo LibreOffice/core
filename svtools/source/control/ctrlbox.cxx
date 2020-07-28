@@ -21,6 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/customweld.hxx>
@@ -36,7 +37,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/fontoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <svtools/borderline.hxx>
@@ -390,8 +390,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
     if (aFontMRUEntriesFile.isEmpty())
         return;
 
-    SvtFontOptions aFontOpt;
-    if (!aFontOpt.IsFontHistoryEnabled())
+    if (!officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get())
         return;
 
     SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );

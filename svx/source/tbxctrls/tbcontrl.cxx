@@ -41,7 +41,6 @@
 #include <sfx2/sfxstatuslistener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <unotools/fontoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
