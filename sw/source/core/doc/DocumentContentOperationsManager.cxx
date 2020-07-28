@@ -4788,7 +4788,14 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     if( rPos.nNode != aInsPos )
     {
         pCopyPam->GetMark()->nNode = aInsPos;
-        pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetContentNode(false), 0);
+        if (aInsPos < rPos.nNode)
+        {   // tdf#134250 decremented in (pEndTextNd && !pDestTextNd) above
+            pCopyPam->GetContentNode(false)->MakeEndIndex(&pCopyPam->GetMark()->nContent);
+        }
+        else // incremented in (!pSttTextNd && pDestTextNd) above
+        {
+            pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetContentNode(false), 0);
+        }
         rPos = *pCopyPam->GetMark();
     }
     else
