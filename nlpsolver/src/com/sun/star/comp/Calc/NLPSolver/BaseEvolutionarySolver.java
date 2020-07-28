@@ -189,6 +189,10 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
     protected void initializeSolve() {
         super.initializeSolve();
 
+        if (m_variableCount == 0)
+        {
+            return;
+        }
         if (m_enhancedSolverStatus.getValue())
             m_solverStatusDialog = new EvolutionarySolverStatusUno(m_xContext);
         else

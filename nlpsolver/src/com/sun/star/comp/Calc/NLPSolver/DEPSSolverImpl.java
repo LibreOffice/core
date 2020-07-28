@@ -119,6 +119,10 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             Logger.getLogger(DEPSSolverImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         initializeSolve();
+        if (m_problemEncoder == null)
+        {
+            return;
+        }
 
         //Init:
         DEPSAgent[] agents = new DEPSAgent[m_swarmSize.getValue()];
