@@ -36,6 +36,9 @@ public:
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
+
+private:
+    Link<LinkParamNone*, void> oldLink;
 };
 
 } // end of namespace svx::sidebar
