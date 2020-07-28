@@ -31,7 +31,6 @@
 #include <unotools/defaultoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <unotools/fontoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -148,10 +147,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case EItem::ExtendedSecurityOptions :
             rItem.pItem.reset( new SvtExtendedSecurityOptions() );
-            break;
-
-        case EItem::FontOptions :
-            rItem.pItem.reset( new SvtFontOptions() );
             break;
 
         case EItem::HistoryOptions :
