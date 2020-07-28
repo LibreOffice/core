@@ -20,6 +20,7 @@
 #include <typeinfo>
 #include <utility>
 
+#include <comphelper/configurationlistener.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
@@ -302,8 +303,27 @@ private:
     SvxFontNameBox_Base* m_pBox;
 };
 
+class FontOptionsListener final : public comphelper::ConfigurationListenerProperty<bool>
+{
+private:
+    SvxFontNameBox_Base& m_rBox;
+
+    virtual void setProperty(const css::uno::Any &rProperty) override;
+public:
+    FontOptionsListener(const rtl::Reference<comphelper::ConfigurationListener>& rListener, const OUString& rProp, SvxFontNameBox_Base& rBox)
+        : comphelper::ConfigurationListenerProperty<bool>(rListener, rProp)
+        , m_rBox(rBox)
+    {
+    }
+};
+
 class SvxFontNameBox_Base
 {
+private:
+    rtl::Reference<comphelper::ConfigurationListener> m_xListener;
+    FontOptionsListener m_aWYSIWYG;
+    FontOptionsListener m_aHistory;
+
 protected:
     SvxFontNameToolBoxControl& m_rCtrl;
 
@@ -318,7 +338,6 @@ protected:
     bool            mbCheckingUnknownFont;
 
     void            ReleaseFocus_Impl();
-    void            EnableControls_Impl();
 
     void            Select(bool bNonTravelSelect);
 
@@ -336,6 +355,7 @@ public:
                         const Reference<XFrame>& rFrame, SvxFontNameToolBoxControl& rCtrl);
     virtual ~SvxFontNameBox_Base()
     {
+        m_xListener->dispose();
     }
 
     void            FillList();
@@ -361,6 +381,8 @@ public:
 
     virtual bool DoKeyInput(const KeyEvent& rKEvt);
 
+    void EnableControls();
+
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
@@ -368,6 +390,12 @@ public:
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_LINK(DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
 };
+
+void FontOptionsListener::setProperty(const css::uno::Any &rProperty)
+{
+    comphelper::ConfigurationListenerProperty<bool>::setProperty(rProperty);
+    m_rBox.EnableControls();
+}
 
 class SvxFontNameBox_Impl final : public InterimItemWindow
                                 , public SvxFontNameBox_Base
@@ -1445,7 +1473,10 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
                                          const Reference<XDispatchProvider>& rDispatchProvider,
                                          const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
-    : m_rCtrl(rCtrl)
+    : m_xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Common/Font/View"))
+    , m_aWYSIWYG(m_xListener, "ShowFontBoxWYSIWYG", *this)
+    , m_aHistory(m_xListener, "History", *this)
+    , m_rCtrl(rCtrl)
     , m_xWidget(new FontNameBox(std::move(xWidget)))
     , pFontList(nullptr)
     , nFtCount(0)
@@ -1454,7 +1485,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     , m_xFrame(rFrame)
     , mbCheckingUnknownFont(false)
 {
-    EnableControls_Impl();
+    EnableControls();
 
     m_xWidget->connect_changed(LINK(this, SvxFontNameBox_Base, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, SvxFontNameBox_Base, KeyInputHdl));
@@ -1543,7 +1574,6 @@ void SvxFontNameBox_Base::set_active_or_entry_text(const OUString& rText)
 
 IMPL_LINK_NOARG(SvxFontNameBox_Base, FocusInHdl, weld::Widget&, void)
 {
-    EnableControls_Impl();
     FillList();
 }
 
@@ -1632,13 +1662,12 @@ void SvxFontNameBox_Base::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-void SvxFontNameBox_Base::EnableControls_Impl()
+void SvxFontNameBox_Base::EnableControls()
 {
-    SvtFontOptions aFontOpt;
-    bool bEnableMRU = aFontOpt.IsFontHistoryEnabled();
+    bool bEnableMRU = m_aHistory.get();
     sal_uInt16 nEntries = bEnableMRU ? MAX_MRU_FONTNAME_ENTRIES : 0;
 
-    bool bNewWYSIWYG = aFontOpt.IsFontWYSIWYGEnabled();
+    bool bNewWYSIWYG = m_aWYSIWYG.get();
     bool bOldWYSIWYG = m_xWidget->IsWYSIWYGEnabled();
 
     if (m_xWidget->get_max_mru_count() != nEntries || bNewWYSIWYG != bOldWYSIWYG)
