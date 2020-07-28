@@ -341,7 +341,7 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     m_xLastBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
     m_xNewBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
 
-    // instead of connect_clicked because we want a a button held down to
+    // instead of connect_clicked because we want a button held down to
     // repeat the next/prev
     m_xPrevBtn->connect_mouse_press(LINK(this, NavigationBar, PrevMousePressHdl));
     m_xNextBtn->connect_mouse_press(LINK(this, NavigationBar, NextMousePressHdl));
