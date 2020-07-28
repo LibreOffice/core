@@ -37,6 +37,7 @@
 #include <SkSwizzle.h>
 #include <SkColorFilter.h>
 #include <SkColorMatrix.h>
+#include <skia_opts.hxx>
 
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
@@ -450,7 +451,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 #endif
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(), alphaType),
-                    data.release(), mPixelsSize.Width() * 4,
+                    data.release(), mScanlineSize,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
             bitmap.setImmutable();
@@ -461,13 +462,18 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
             std::unique_ptr<uint32_t[]> data(
                 new uint32_t[mPixelsSize.Height() * mPixelsSize.Width()]);
             uint32_t* dest = data.get();
-            for (long y = 0; y < mPixelsSize.Height(); ++y)
+            // SkConvertRGBToRGBA() also works as BGR to BGRA (the function extends 3 bytes to 4
+            // by adding 0xFF alpha, so position of B and R doesn't matter).
+            if (mPixelsSize.Width() * 3 == mScanlineSize)
+                SkConvertRGBToRGBA(dest, mBuffer.get(), mPixelsSize.Height() * mPixelsSize.Width());
+            else
             {
-                const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
-                // This also works as BGR to BGRA (the function extends 3 bytes to 4
-                // by adding 0xFF alpha, so position of B and R doesn't matter).
-                SkExtendRGBToRGBA(dest, src, mPixelsSize.Width());
-                dest += mPixelsSize.Width();
+                for (long y = 0; y < mPixelsSize.Height(); ++y)
+                {
+                    const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
+                    SkConvertRGBToRGBA(dest, src, mPixelsSize.Width());
+                    dest += mPixelsSize.Width();
+                }
             }
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(),
@@ -486,11 +492,17 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
             std::unique_ptr<uint32_t[]> data(
                 new uint32_t[mPixelsSize.Height() * mPixelsSize.Width()]);
             uint32_t* dest = data.get();
-            for (long y = 0; y < mPixelsSize.Height(); ++y)
+            if (mPixelsSize.Width() * 1 == mScanlineSize)
+                SkConvertGrayToRGBA(dest, mBuffer.get(),
+                                    mPixelsSize.Height() * mPixelsSize.Width());
+            else
             {
-                const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
-                SkExtendGrayToRGBA(dest, src, mPixelsSize.Width());
-                dest += mPixelsSize.Width();
+                for (long y = 0; y < mPixelsSize.Height(); ++y)
+                {
+                    const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
+                    SkConvertGrayToRGBA(dest, src, mPixelsSize.Width());
+                    dest += mPixelsSize.Width();
+                }
             }
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(),
@@ -826,37 +838,50 @@ void SkiaSalBitmap::EnsureBitmapData()
     assert(mBuffer != nullptr);
     if (mBitCount == 32)
     {
-        for (long y = 0; y < mSize.Height(); ++y)
+        if (int(bitmap.rowBytes()) == mScanlineSize)
+            memcpy(mBuffer.get(), bitmap.getPixels(), mSize.Height() * mScanlineSize);
+        else
         {
-            const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
-            sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
-            memcpy(dest, src, mScanlineSize);
+            for (long y = 0; y < mSize.Height(); ++y)
+            {
+                const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
+                sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
+                memcpy(dest, src, mScanlineSize);
+            }
         }
     }
     else if (mBitCount == 24) // non-paletted
     {
-        for (long y = 0; y < mSize.Height(); ++y)
+        if (int(bitmap.rowBytes()) == mSize.Width() * 4 && mSize.Width() * 3 == mScanlineSize)
         {
-            const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
-            sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
-            for (long x = 0; x < mSize.Width(); ++x)
+            SkConvertRGBAToRGB(mBuffer.get(), bitmap.getAddr32(0, 0),
+                               mSize.Height() * mSize.Width());
+        }
+        else
+        {
+            for (long y = 0; y < mSize.Height(); ++y)
             {
-                *dest++ = *src++;
-                *dest++ = *src++;
-                *dest++ = *src++;
-                ++src; // skip alpha
+                const uint32_t* src = bitmap.getAddr32(0, y);
+                sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
+                SkConvertRGBAToRGB(dest, src, mSize.Width());
             }
         }
     }
     else if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
-    {
-        for (long y = 0; y < mSize.Height(); ++y)
+    { // no actual data conversion, use one color channel as the gray value
+        if (int(bitmap.rowBytes()) == mSize.Width() * 4 && mSize.Width() * 1 == mScanlineSize)
         {
-            const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
-            sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
-            // no actual data conversion, use one color channel as the gray value
-            for (long x = 0; x < mSize.Width(); ++x)
-                dest[x] = src[x * 4];
+            SkConvertRGBAToGrayFast(mBuffer.get(), bitmap.getAddr32(0, 0),
+                                    mSize.Height() * mSize.Width());
+        }
+        else
+        {
+            for (long y = 0; y < mSize.Height(); ++y)
+            {
+                const uint32_t* src = bitmap.getAddr32(0, y);
+                sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
+                SkConvertRGBAToGrayFast(dest, src, mSize.Width());
+            }
         }
     }
     else
