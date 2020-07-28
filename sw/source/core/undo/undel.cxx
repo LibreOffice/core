@@ -880,7 +880,17 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_aEndStr )
         {
             // discard attributes since they all saved!
-            SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode();
+            SwTextNode * pTextNd;
+            if (!m_bDelFullPara && aPos.nNode.GetNode().IsSectionNode())
+            {   // tdf#134250 section node wasn't deleted; but aPos must point to it in bNodeMove case below
+                assert(nSttContent == 0);
+                assert(!m_aSttStr);
+                pTextNd = rDoc.GetNodes()[aPos.nNode.GetIndex() + 1]->GetTextNode();
+            }
+            else
+            {
+                pTextNd = aPos.nNode.GetNode().GetTextNode();
+            }
 
             if( pTextNd && pTextNd->HasSwAttrSet() )
                 pTextNd->ResetAllAttr();
@@ -900,6 +910,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
                 pTextNd = aPos.nNode.GetNode().GetTextNode();
             }
+            assert(pTextNd); // else where does m_aEndStr come from?
             if( pTextNd )
             {
                 OUString const ins( pTextNd->InsertText(*m_aEndStr, aPos.nContent,
